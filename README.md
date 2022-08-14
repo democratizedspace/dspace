@@ -1,1 +1,1 @@
-**d**emocratized **s**pace **a**ll **c**an **e**njoy
+The gateway to the cosmos
