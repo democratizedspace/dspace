@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+
+export interface Props {
+	title: string;
+	body: string;
+	href: string;
+}
+
+const { href, title, body } = Astro.props as Props;
+---
+
+<Card
+href="/settings"
+title=""
+body="Change settings"
+/>
+
+<style>
+    .main-grid {
+        list-style-type: none;
+    }
+</style>

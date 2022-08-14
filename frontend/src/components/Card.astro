@@ -1,4 +1,6 @@
 ---
+import Layout from '../layouts/Layout.astro';
+
 export interface Props {
 	title: string;
 	body: string;
@@ -11,8 +13,9 @@ const { href, title, body } = Astro.props as Props;
 <li class="link-card">
 	<a href={href}>
 		<h2>
+			<Image />
+			<span><aside>x</aside></span>
 			{title}
-			<span>&rarr;</span>
 		</h2>
 		<p>
 			{body}
@@ -21,7 +24,7 @@ const { href, title, body } = Astro.props as Props;
 </li>
 <style>
 	:root {
-		--link-gradient: linear-gradient(45deg, #4f39fa, #da62c4 30%, var(--color-border) 60%);
+		--link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
 	}
 
 	.link-card {
@@ -31,6 +34,7 @@ const { href, title, body } = Astro.props as Props;
 		background-image: var(--link-gradient);
 		background-size: 400%;
 		border-radius: 0.5rem;
+		border:none;
 		background-position: 100%;
 		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 	}
@@ -42,7 +46,7 @@ const { href, title, body } = Astro.props as Props;
 		padding: 1em 1.3em;
 		border-radius: 0.35rem;
 		color: var(--text-color);
-		background-color: white;
+		background-color: #003a03;
 		opacity: 0.8;
 	}
 
@@ -66,11 +70,11 @@ const { href, title, body } = Astro.props as Props;
 	}
 
 	.link-card:is(:hover, :focus-within) h2 {
-		color: #4f39fa;
+		color: #00ff22;
 	}
 
 	.link-card:is(:hover, :focus-within) h2 span {
 		will-change: transform;
-		transform: translateX(2px);
+		transform: translateX(5);
 	}
 </style>
