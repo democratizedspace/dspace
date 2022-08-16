@@ -13,8 +13,7 @@ const { href, title, body } = Astro.props as Props;
 <li class="link-card">
 	<a href={href}>
 		<h2>
-			<Image />
-			<span><aside>x</aside></span>
+			<span><aside>Edit</aside></span>
 			{title}
 		</h2>
 		<p>
@@ -76,5 +75,11 @@ const { href, title, body } = Astro.props as Props;
 	.link-card:is(:hover, :focus-within) h2 span {
 		will-change: transform;
 		transform: translateX(5);
+	}
+
+	span {
+		color: rgb(116, 161, 175);
+		font-family: ui-monospace;
+		font-size: large;
 	}
 </style>

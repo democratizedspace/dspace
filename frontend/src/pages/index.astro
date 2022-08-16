@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Page from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
 import Settings from '../components/SettingsContainer.astro';
 import Logo from '../components/Logo.astro';
@@ -15,8 +14,8 @@ import "../../assets/style/global.css";
 <Layout title="DSPACE">
 	<main>
 		<ul role="list" class="link-card-grid main-grid">
-			<Settings />
-			<Logo />
+			<Logo title="Logo" body="" href="" />
+			<Settings title="Settings" body="" href="" />
 			<Card
 				href="/3dprint"
 				title="3D print a rocket"

@@ -4,7 +4,7 @@ import Card from '../components/Card.astro';
 import Settings from '../components/SettingsContainer.astro';
 ---
 
-<Layout title="page title">
+<Layout title="DSPACE">
 	<main>
 		<h1 class="text-right"><span class="text-gradient">DSPACE</span></h1>
 		<ul role="list" class="link-card-grid">
@@ -13,7 +13,12 @@ import Settings from '../components/SettingsContainer.astro';
 				title="Back to home"
 				body="Go to the main menu."
 			/>
-			<Settings />
+			<Settings href = "/settings" title="Settings" body="" />
+			<li class="main-grid"></li>
+			<li class="main-grid"></li>
+			<li class="main-grid"></li>
+			<br />
+			<br />
 			<slot />
 		</ul>
 	</main>
@@ -76,5 +81,10 @@ import Settings from '../components/SettingsContainer.astro';
 		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
 		gap: 1rem;
 		padding: 0;
+	}
+	
+	.main-grid {
+		list-style-type: none;
+		
 	}
 </style>
