@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
-
-// https://astro.build/config
-export default defineConfig({});
+import netlify from '@astrojs/netlify/edge-functions';
+export default defineConfig({
+	adapter: netlify()
+});
