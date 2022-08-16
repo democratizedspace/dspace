@@ -8,8 +8,15 @@ export interface Props {
 const { href, title, body } = Astro.props as Props;
 ---
 
-<div title="Gap">
-    <li />
-    <li />
-	<li />
+<div>
+	<li class="main-grid"></li>
+	<li class="main-grid"></li>
+	<li class="main-grid"></li>
+	<br />
 </div>
+
+<style>
+	.main-grid {
+		list-style-type: none;
+	}
+</style>
