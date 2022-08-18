@@ -1,0 +1,15 @@
+---
+import Page from '../components/Page.astro';
+import Card from '../components/Card.astro';
+---
+
+<script src="../../assets/scripts/netlify-identity-widget.js"></script>
+
+<div data-netlify-identity-menu></div>
+<Page>
+    <Card
+    href="/login"
+    title="hello"
+    body="world"
+    />
+</Page>
