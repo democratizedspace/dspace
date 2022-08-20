@@ -1,13 +1,12 @@
 ---
 import Page from '../components/Page.astro';
 import Card from '../components/Card.astro';
-import Gap from '../components/Card.astro';
 ---
 
-<Page>
-    <!-- <Card
+<Page hideSettings={true} title="Settings">
+    <Card
     href="/settings"
-    title="Dev"
-    body="Dev settings (you shouldn't see this)"
-    /> -->
+    title="Account settings"
+    body="Username, login, password, etc."
+    />
 </Page>

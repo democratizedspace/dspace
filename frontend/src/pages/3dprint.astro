@@ -1,82 +1,17 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Page from '../components/Page.astro';
 import Card from '../components/Card.astro';
 ---
 
-<Layout title="DSPACE">
-	<main>
-		<h1 class="text-right"><span class="text-gradient">DSPACE</span></h1>
-		<ul role="list" class="link-card-grid">
-			<Card
-				href="/3dprinter-assemble"
-				title="Accept 3D printer"
-				body="Someone offers you a 3D printer. Do you accept?"
-			/>
-			<Card
-				href="/"
-				title="Reject offer"
-				body="Go back home."
-			/>
-		</ul>
-	</main>
-</Layout>
-
-<style>
-	:root {
-		--astro-gradient: linear-gradient(0deg, #2c5837, #00ff22);
-	}
-
-	h1 {
-		margin: 2rem 0;
-	}
-
-	main {
-		margin: auto;
-		padding: 1em;
-		max-width: 60ch;
-	}
-
-	.text-gradient {
-		font-weight: 900;
-		background-image: var(--astro-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 100% 200%;
-		background-position-y: 100%;
-		border-radius: 0.4rem;
-		animation: pulse 4s ease-in-out infinite;
-	}
-
-	@keyframes pulse {
-		0%,
-		100% {
-			background-position-y: 0%;
-		}
-		50% {
-			background-position-y: 25%;
-		}
-	}
-
-	.instructions {
-		line-height: 1.6;
-		margin: 1rem 0;
-		background: #003a03;
-		padding: 1rem;
-		border-radius: 0.4rem;
-		color: #00ff22;
-	}
-
-	.instructions code {
-		font-size: 0.875em;
-		border: 0.1em solid var(--color-border);
-		border-radius: 4px;
-		padding: 0.15em 0.25em;
-	}
-
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
-	}
-</style>
+<Page hideHome={true} hideSettings={true}>
+	<Card
+		href="/3dprinter-assemble"
+		title="Accept 3D printer"
+		body="Someone offers you a 3D printer. Do you accept?"
+	/>
+	<Card
+		href="/"
+		title="Reject offer"
+		body="Go back home."
+	/>
+</Page>
