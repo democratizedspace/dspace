@@ -1,6 +1,17 @@
 ---
 import Page from '../components/Page.astro';
 import Card from '../components/Card.astro';
+import { parseBool, getCookieValue } from '../utils';
+
+const cookie = Astro.request.headers.get('cookie');
+
+let acceptedCookies;
+
+try {
+	acceptedCookies = parseBool(getCookieValue(cookie, 'acceptedCookies'));
+} catch {
+	acceptedCookies = false;
+}
 ---
 
 <Page hideHome={true} title="Home">
@@ -14,4 +25,10 @@ import Card from '../components/Card.astro';
 		title="Launch a rocket"
 		body="Not for real. Not yet. This one is virtual."
 	/>
+
+	{ acceptedCookies && <Card
+		href="/task"
+		title="Do a long-running task"
+		body="Completely abstract task that doesn't mean anything and is intended to demonstrate future functionality."
+	/>}
 </Page>

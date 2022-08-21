@@ -1,7 +1,9 @@
 ---
 import Page from '../components/Page.astro';
 import Card from '../components/Card.astro';
-import Gap from '../components/Gap.astro';
+
+Astro.response.headers.append('Set-Cookie', 'acceptedCookies=true; expires=Fri, 31 Dec 9999 23:59:59 GMT');
+Astro.response.headers.append('Set-Cookie', 'accepted3DPrinter=true; expires=Fri, 31 Dec 9999 23:59:59 GMT');
 ---
 
 <Page message="You accept the 3D printer.">
