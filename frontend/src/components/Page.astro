@@ -2,12 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
 import Settings from '../components/SettingsContainer.astro';
+
 const { hideHome, hideSettings, title, message } = Astro.props;
 const hideAll = hideHome && hideSettings;
 ---
 
 <Layout title="DSPACE">
 	<main>
+		<img src="/assets/logo.png" alt="A logo of a rocket lifting off from Mars, minimalistic. Made with DALL-E 2." style="width:100px; padding-left:90px; margin-bottom:-60px" />
 		<h1 class="text-right"><span class="text-gradient">DSPACE</span></h1>
 		<h2>{title}</h2>
 		
