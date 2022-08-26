@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
 import Settings from '../components/SettingsContainer.astro';
+import Header from '../components/Header.astro';
 
 const { hideHome, hideSettings, title, message } = Astro.props;
 const hideAll = hideHome && hideSettings;
@@ -9,8 +10,7 @@ const hideAll = hideHome && hideSettings;
 
 <Layout title="DSPACE">
 	<main>
-		<img src="/assets/logo.png" alt="A logo of a rocket lifting off from Mars, minimalistic. Made with DALL-E 2." style="width:100px; padding-left:90px; margin-bottom:-60px" />
-		<h1 class="text-right"><span class="text-gradient">DSPACE</span></h1>
+		<Header title="" body="" href="" />
 		<h2>{title}</h2>
 		
 		{
@@ -21,15 +21,23 @@ const hideAll = hideHome && hideSettings;
 							href="/"
 							title="Back to home"
 							body="Go to the main menu."
+							textbox={false}
+							disabled={false}
 						/>}
 					{!(hideSettings) && 
 						<Settings
 							href="/settings"
 							title="Settings"
 							body="Personalize your experience." />}
-		</ul>}
-		{!(hideAll) && <br /> <br />}
-		<h2>{message}</h2>
+				</ul>
+		}
+		{
+			!(hideAll) && 
+				<br /> <br />
+		}
+		<h2>
+			{message}
+		</h2>
 		<ul role="list" class="link-card-grid">
 			<slot />
 		</ul>

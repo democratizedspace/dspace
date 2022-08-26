@@ -1,6 +1,7 @@
 ---
 import Page from '../components/Page.astro';
 import Card from '../components/Card.astro';
+import Hazard from '../components/Card.astro';
 ---
 
 <Page hideSettings={true} title="Settings">
@@ -8,5 +9,15 @@ import Card from '../components/Card.astro';
     href="/settings"
     title="Account settings"
     body="Username, login, password, etc."
+    textbox={false}
+    disabled={true}
+    hazard={false}
+    />
+    <div />
+    <Hazard 
+        href="/reset"
+        title="Warning"
+        body="Reset all progress. This will delete all your progress and reset your account to its default state."
+        disabled={true}
     />
 </Page>

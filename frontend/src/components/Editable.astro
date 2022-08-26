@@ -1,0 +1,16 @@
+---
+export interface Props {
+	title: string;
+	body: string;
+	href: string;
+    editable: boolean;
+}
+
+const { href, title, body, editable } = Astro.props as Props;
+---
+
+{ editable && <span>Edit</span> }
+
+<style>
+
+</style>

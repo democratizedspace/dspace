@@ -1,15 +1,29 @@
 ---
 import Page from '../components/Page.astro';
 import Card from '../components/Card.astro';
+import { parseBool, getCookieValue } from '../utils';
+
+let message = "You accept the 3D printer."
 
 Astro.response.headers.append('Set-Cookie', 'acceptedCookies=true; expires=Fri, 31 Dec 9999 23:59:59 GMT');
 Astro.response.headers.append('Set-Cookie', 'accepted3DPrinter=true; expires=Fri, 31 Dec 9999 23:59:59 GMT');
+
+const cookie = Astro.request.headers.get('cookie');
+const accepted3DPrinter = parseBool(getCookieValue(cookie, 'accepted3DPrinter'));
+const unboxed3DPrinter = parseBool(getCookieValue(cookie, 'unboxed3DPrinter'));
+
+if (unboxed3DPrinter) {
+	return Astro.redirect('/3dprinter-removed-pieces');
+}
 ---
 
-<Page message="You accept the 3D printer.">
+<Page message={message}>
     <Card
     href="/3dprinter-remove-pieces"
     title="Start assembly"
     body="Batteries not included. Well, mostly because it runs on AC power."
+    textbox={false}
+    disabled={false}
+    hazard={false}
     />
 </Page>

@@ -1,0 +1,34 @@
+---
+import Logo from '../components/Logo.astro';
+
+export interface Props {
+	title: string;
+	body: string;
+	href: string;
+}
+---
+
+<a href="/">
+	<Logo title="" href="" body="" />
+	<span class="text-gradient title">DSPACE</span>
+</a>
+
+<style>
+	a {
+		text-decoration: none;
+	}
+
+	.text-gradient {
+		font-weight: 900;
+		background-image: var(--astro-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 100% 200%;
+		background-position-y: 100%;
+		border-radius: 0.4rem;
+		animation: pulse 4s ease-in-out infinite;
+		display: table;
+		margin: 0 auto;
+		font-size: 2em;
+	}
+</style>

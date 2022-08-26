@@ -19,16 +19,47 @@ try {
 		href="/3dprint"
 		title="3D print a rocket"
 		body="Someone offers you a 3D printer. Do you accept?"
+		textbox={false}
+		disabled={false}
 	/>
+
 	<Card
 		href="/launch"
 		title="Launch a rocket"
 		body="Not for real. Not yet. This one is virtual."
+		textbox={false}
+		disabled={false}
 	/>
 
 	{ acceptedCookies && <Card
 		href="/task"
 		title="Do a long-running task"
 		body="Completely abstract task that doesn't mean anything and is intended to demonstrate future functionality."
+		textbox={false}
+		disabled={false}
 	/>}
+
+	<Card
+		href="/hydroponics"
+		title="Grow basil hydroponically"
+		body="Hydroponics is a technique by which you grow plants in a liquid nutrition solution. No soil required. Very water-efficient."
+		textbox={false}
+		disabled={true}
+	/>
+
+	<Card
+		href="/solar"
+		title="Buy a solar panel"
+		body="They're getting cheaper and cheaper. Current price: $2.94/watt."
+		textbox={false}
+		disabled={true}
+	/>
+
+	<Card
+		href="/ev"
+		title="Buy an EV"
+		body="Might I recommend the Edison Model M?"
+		textbox={false}
+		disabled={true}
+	/>
 </Page>
