@@ -1,6 +1,6 @@
 ---
-title: Page 4
-description: Lorem ipsum dolor sit amet - 4
+title: Mission
+description: Lorem ipsum dolor sit amet - 3
 layout: ../../layouts/MainLayout.astro
 ---
 

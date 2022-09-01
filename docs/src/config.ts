@@ -47,11 +47,10 @@ export type Sidebar = Record<
 >;
 export const SIDEBAR: Sidebar = {
 	en: {
-		'Section Header': [
-			{ text: 'Introduction', link: 'en/introduction' },
-			{ text: 'Page 2', link: 'en/page-2' },
-			{ text: 'Page 3', link: 'en/page-3' },
-		],
-		'Another Section': [{ text: 'Page 4', link: 'en/page-4' }],
+		'The basics': [
+			{ text: 'About DSPACE', link: 'en/about' },
+			{ text: 'Mission', link: 'en/mission' },
+			{ text: 'Roadmap', link: 'en/roadmap' },
+		]
 	},
 };
