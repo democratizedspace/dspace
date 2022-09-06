@@ -7,7 +7,7 @@ const cookie = Astro.request.headers.get('cookie');
 const acceptedCookies = parseBool(getCookieValue(cookie, 'acceptedCookies'));
 ---
 
-<Page hideHome={true} hideSettings={true} hideQuests={true} message="hello" message="This site currently uses cookies to save progress. Just letting you know. No personal information is collected right now, and if it is in the future, it'll be done with the upmost respect of your privacy. By accepting the 3D printer, you agree to this website storing cookies.">
+<Page hideHome={true} hideSettings={true} hideQuests={true} message="This site currently uses cookies to save progress. Just letting you know. No personal information is collected right now, and if it is in the future, it'll be done with the upmost respect of your privacy. By accepting the 3D printer, you agree to this website storing cookies.">
     <Card
         href="/accepted_cookies"
         title="Accept cookies"
