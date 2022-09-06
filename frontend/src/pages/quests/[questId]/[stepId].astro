@@ -1,0 +1,46 @@
+---
+import Page from '../../../components/Page.astro';
+import Card from '../../../components/Card.astro';
+import quests from '../../../config/quests.json';
+import { getCookieValue, requiresCookies, acceptCookiesPath } from '../../../utils';
+
+if (requiresCookies(Astro.request)) {
+    return Astro.redirect(acceptCookiesPath);
+}
+
+const { questId, stepId } = Astro.params;
+let quest, questStep;
+
+try {
+    quest = quests[questId];
+    questStep = quest.steps[stepId];
+} catch (e) {
+    questStep = '';
+}
+
+if (questStep.checkpoint === true) {
+    Astro.response.headers.append('Set-Cookie', `checkpoint-${questId}=${parseInt(questStep.id)}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`);
+}
+
+const getAction = (questOption) => {
+    switch (questOption.action) {
+        case 'quest':
+            return `/quests/${questId}/${questOption.next}`;
+        case 'path':
+            return questOption.path;
+        default:
+            return '';
+    }
+}
+
+---
+
+<Page message = {questStep.message || ""}>
+    {questStep.options && questStep.options.map((option) => (
+        <Card
+            href={getAction(option)}
+            title={option.title}
+            body={option.body}
+            disabled={option.action === 'none'} />
+    ))}
+</Page>

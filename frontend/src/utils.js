@@ -26,3 +26,11 @@ export const parseBool = (value) => {
     }
     return false;
 }
+
+export const requiresCookies = (req) => {
+    const cookie = req.headers.get('cookie');
+    const acceptedCookies = parseBool(getCookieValue(cookie, 'acceptedCookies'));
+    return !acceptedCookies;
+};
+
+export const acceptCookiesPath = '/accept_cookies';
