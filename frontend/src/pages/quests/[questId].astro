@@ -12,11 +12,8 @@ if (requiresCookies(Astro.request)) {
 }
 
 const cookieKey = `checkpoint-${questId}`;
-console.log('cookieKey', cookieKey);
 const checkpointForQuest = getCookieValue(cookie, cookieKey);
-console.log('checkpointForQuest', checkpointForQuest);
 const checkpoint = parseInt(checkpointForQuest);
-console.log(checkpoint, 'checkpoint');
 
 
 if (checkpointForQuest === undefined) {
