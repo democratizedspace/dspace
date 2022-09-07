@@ -1,0 +1,95 @@
+[
+    {
+        "id": 0,
+        "title": "3D print a rocket",
+        "body": "Someone offers you a 3D printer. Do you accept?",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Accept 3D printer",
+                        "body": "You graciously accept the big box they're offering you.",
+                        "action": "quest",
+                        "next": 1
+                    },
+                    {
+                        "id": 1,
+                        "title": "Reject offer",
+                        "body": "Maybe later.",
+                        "action": "path",
+                        "path": "/"
+                    }
+                ]
+            },
+            {
+                "id": 1,
+                "message": "You accept the 3D printer.",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Start assembly",
+                        "body": "Batteries not included. Well, mostly because it runs on AC power.",
+                        "action": "quest",
+                        "next": 2
+                    }
+                ],
+                "checkpoint": true
+            },
+            {
+                "id": 2,
+                "message": "It's still in the box.",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Remove contents from the box",
+                        "body": "Unboxing video? Unboxing video",
+                        "action": "quest",
+                        "next": 3
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "message": "You removed all the items and placed them on the table.",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Check your inventory",
+                        "body": "",
+                        "action": "path",
+                        "path": "/inventory"
+                    },
+                    {
+                        "id": 1,
+                        "title": "Check the manual",
+                        "body": "",
+                        "action": "none"
+                    }
+                ],
+                "checkpoint": true
+            }
+        ]   
+    },
+    {
+        "id": 1,
+        "title": "Launch a rocket",
+        "body": "Not for real. Not yet. This one is virtual.",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "You'll need permission from the FAA.",
+                        "body": "Look into the process.",
+                        "action": "none"
+                    }
+                ]
+            }
+        ]   
+    }
+]

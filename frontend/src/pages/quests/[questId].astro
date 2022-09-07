@@ -1,0 +1,27 @@
+---
+import Page from '../../components/Page.astro';
+import Card from '../../components/Card.astro';
+import quests from '../../config/quests.json';
+import { getCookieValue, requiresCookies, acceptCookiesPath } from '../../utils';
+
+const { questId } = Astro.params;
+const cookie = Astro.request.headers.get('cookie');
+
+if (requiresCookies(Astro.request)) {
+    return Astro.redirect(acceptCookiesPath);
+}
+
+const cookieKey = `checkpoint-${questId}`;
+const checkpointForQuest = getCookieValue(cookie, cookieKey);
+const checkpoint = parseInt(checkpointForQuest);
+
+
+if (checkpointForQuest === undefined) {
+    return Astro.redirect(`/quests/${questId}/0`);
+} else {
+    return Astro.redirect(`/quests/${questId}/${checkpoint}`);
+}
+---
+
+<Page message="Redirecting...">
+</Page>

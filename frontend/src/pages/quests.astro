@@ -1,0 +1,20 @@
+---
+import Page from '../components/Page.astro';
+import Card from '../components/Card.astro';
+import quests from '../config/quests.json';
+import { getCookieValue, requiresCookies, acceptCookiesPath } from '../utils';
+
+if (requiresCookies(Astro.request)) {
+    return Astro.redirect(acceptCookiesPath);
+}
+---
+
+<Page hideQuests={true}>
+    {quests.map(quest => (
+        <Card
+            href={`/quests/${quest.id}`} 
+            title={quest.title}
+            body={quest.body}
+            />
+    ))}
+</Page>
