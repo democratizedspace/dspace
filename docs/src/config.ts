@@ -48,9 +48,16 @@ export type Sidebar = Record<
 export const SIDEBAR: Sidebar = {
 	en: {
 		'The basics': [
-			{ text: 'About DSPACE', link: 'en/about' },
+			{ text: 'About', link: 'en/about' },
 			{ text: 'Mission', link: 'en/mission' },
 			{ text: 'Roadmap', link: 'en/roadmap' },
+			{ text: 'FAQ', link: 'en/faq' },
+			{ text: 'Glossary', link: 'en/glossary' },
+			{ text: 'Contribute', link: 'en/contribute' },
+		],
+		'Concepts': [
+			{ text: 'Hyperstructures', link: 'en/hyperstructures' },
+			{ text: 'Spaces', link: 'en/spaces' },
 		]
 	},
 };
