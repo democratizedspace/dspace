@@ -30,7 +30,7 @@ export const KNOWN_LANGUAGES = {
 } as const;
 export const KNOWN_LANGUAGE_CODES = Object.values(KNOWN_LANGUAGES);
 
-export const GITHUB_EDIT_URL = `https://github.com/withastro/astro/tree/main/examples/docs`;
+export const GITHUB_EDIT_URL = `https://github.com/democratizedspace/dspace/tree/main/docs`;
 
 export const COMMUNITY_INVITE_URL = `https://astro.build/chat`;
 
@@ -57,7 +57,33 @@ export const SIDEBAR: Sidebar = {
 		],
 		'Concepts': [
 			{ text: 'Hyperstructures', link: 'en/hyperstructures' },
-			{ text: 'Spaces', link: 'en/spaces' },
-		]
+			{ text: 'Decentralized science', link: 'en/desci' },
+			{ text: 'Credible neutrality', link: 'en/desci' },
+			{ text: 'Gradual decentralization', link: 'en/desci' },
+		],
+		'Skills': [
+			{ text: '3D printing', link: 'en/3dprinting' },
+			{ text: 'Solar panels', link: 'en/solar' },
+			{ text: 'Hydroponics', link: 'en/solar' },
+			{ text: 'Rockets', link: 'en/rockets' },
+			{ text: 'Make simulations', link: 'en/simulations' },
+			{ text: 'Make a quest', link: 'https://unlockable.quest/make' },
+		],
+		'Game systems': [
+			{ text: 'Everything is real-time', link: 'en/realtime' },
+			{ text: 'Space progression', link: 'en/space-progression' },
+			{ text: 'Web3', link: 'en/web3' },
+			{ text: 'Inventory', link: 'en/inventory' },
+			{ text: 'Quests', link: 'en/quests' },
+			{ text: 'Skills', link: 'en/skills' },
+			{ text: 'Badges', link: 'en/badges' },
+			{ text: 'Perks', link: 'en/perks' },
+		],
+		'Moderation': [
+			{ text: 'Reviews', link: 'en/reviews' },
+			{ text: 'Validators', link: 'en/validators' },
+			{ text: 'Slashing', link: 'en/slashing' },
+			{ text: 'Blocklist', link: 'en/blocklist' },
+		],
 	},
 };
