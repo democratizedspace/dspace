@@ -8,9 +8,10 @@ export interface Props {
 	textbox: boolean;
 	disabled: boolean;
 	hazard: boolean;
+	image: string;
 }
 
-const { href, title, body, textbox, disabled } = Astro.props as Props;
+const { href, title, body, textbox, disabled, image } = Astro.props as Props;
 ---
 
 {
@@ -21,6 +22,7 @@ disabled
 		<li class="link-card disabled">
 			<span>
 				<Editable  title="" href="" body="" editable={false} />
+				<img src={image} class="img" />
 				<h2>
 					{title}
 				</h2>
@@ -35,6 +37,7 @@ disabled
 		<li class="link-card">
 			<a href={href}>
 				<Editable title="" href="" body="" editable={false} /> 
+				<img src={image} class="img" />
 				<h2>
 					{title}
 				</h2>
@@ -50,6 +53,10 @@ disabled
 	:root {
 		--link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
 		border-color: red;
+	}
+
+	.img {
+		width: 100%;
 	}
 
 	.link-card {

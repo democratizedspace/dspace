@@ -3,6 +3,7 @@
         "id": 0,
         "title": "3D print a rocket",
         "body": "Someone offers you a 3D printer. Do you accept?",
+        "image": "assets/3dprinter.jpg",
         "steps": [
             {
                 "id": 0,
@@ -77,6 +78,7 @@
         "id": 1,
         "title": "Launch a rocket",
         "body": "Not for real. Not yet. This one is virtual.",
+        "image": "assets/launch.jpg",
         "steps": [
             {
                 "id": 0,
