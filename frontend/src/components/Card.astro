@@ -10,7 +10,7 @@ export interface Props {
 	hazard: boolean;
 }
 
-const { href, title, body, textbox, disabled } = Astro.props as Props;
+const { href, title, body, textbox, disabled, image } = Astro.props as Props;
 ---
 
 {
@@ -35,6 +35,7 @@ disabled
 		<li class="link-card">
 			<a href={href}>
 				<Editable title="" href="" body="" editable={false} /> 
+				<img src={image} class="img" />
 				<h2>
 					{title}
 				</h2>
@@ -50,6 +51,11 @@ disabled
 	:root {
 		--link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
 		border-color: red;
+	}
+
+	.img {
+		width: 100%;
+		filter: drop-shadow(1px 1px 10px #000000);
 	}
 
 	.link-card {
@@ -125,7 +131,7 @@ disabled
 	
 	.textbox {
 		background-color: #7d9b7e;
-		border-color: #00ff22;
+		border-color: #d400ff;
 		border-radius: 0.35rem;
 		padding: 0.1em 0.1em;
 		color: red);
