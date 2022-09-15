@@ -93,5 +93,65 @@
                 ]
             }
         ]   
+    },
+    {
+        "id": 2,
+        "title": "Grow basil hydroponically",
+        "body": "Hydroponics is a technique by which you grow plants in a liquid nutrition solution. No soil required. Very water-efficient.",
+        "image": "assets/hydroponics.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Order a hydroponics kit from Amazing",
+                        "body": "Free 1-day shipping!",
+                        "action": "none"
+                    }
+                ]
+            }
+        ]   
+    },
+    {
+        "id": 3,
+        "title": "Buy a solar panel",
+        "body": "They're getting cheaper and cheaper. Current price: $2.94/watt.",
+        "image": "assets/solar.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Order a small foldable solar panel from Amazing",
+                        "body": "Gotta start somewhere!",
+                        "action": "none"
+                    }
+                ]
+            }
+        ]   
+    },
+    {
+        "id": 4,
+        "title": "Buy an EV",
+        "body": "Might I recommend the Edison Model M?",
+        "image": "assets/ev.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Put down a refundable $100 deposit to reserve your Model M",
+                        "body": "Estimated delivery time: 2 months.",
+                        "action": "none"
+                    }
+                ]
+            }
+        ]   
     }
 ]
