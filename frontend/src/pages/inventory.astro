@@ -4,28 +4,6 @@ import Card from '../components/Card.astro';
 import List from '../components/List.astro';
 ---
 
-<Page message="Here are the contents of your inventory:">
-    <List listItems={
-            [
-                "Printer base",
-                "(2) 20x40 aluminum extrusions (Z axis)",
-                "20x20 aluminum extrusion (X axis)",
-                "LCD screen",
-                "Power supply",
-                "Z-Limit switch",
-                "X-Limit switch",
-                "Z Motor",
-                "X-axis belt",
-                "(2) M5x45 screws",
-                "(2) M5x8 screws",
-                "(2) M4x20 screws",
-                "(2) M4x18 screws",
-                "(4) M4x16 screws",
-                "(2) M5x25 screws",
-                "Power cable",
-                "X-axis motor cable",
-                "Z-axis motor cable",
-                "Extruder motor cable",
-            ]
-        } />
+<Page message="Here are the contents of your inventory:" title="Inventory">
+    <List listItems={["Ender 3 Pro", "", ""]} />
 </Page>

@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import MenuCard from '../components/MenuCard.astro';
 import Card from '../components/Card.astro';
 import Header from '../components/Header.astro';
 
@@ -10,38 +11,23 @@ const hideAll = hideHome && hideSettings && hideQuests;
 <Layout title="DSPACE">
 	<main>
 		<Header title="" body="" href="" />
-		<h2>{title}</h2>
 		
+		<nav>
+			<a href="/">Home</a>
+			<a href="/profile">Profile</a>
+			<a href="/settings">Settings</a>
+			<a href="/quests">Quests</a>
+			<a href="/inventory">Inventory</a>
+			<a href="/docs">Docs</a>
+			<a href="/chat">Chat</a>
+			<a href="/shop">Shop</a>
+		</nav>
+
+		<h2>{title}</h2>
+
 		{
 			!(hideAll) &&
 				<ul role="list" class="link-card-grid">
-					{!(hideHome) &&
-						<Card
-							href="/"
-							title="Back to home"
-							body="Go to the main menu."
-							textbox={false}
-							disabled={false}
-							hazard={false}
-						/>}
-					{!(hideSettings) && 
-						<Card
-							href="/settings"
-							title="Settings"
-							body="Personalize your experience."
-							textbox={false}
-							disabled={false}
-							hazard={false}
-						/>}
-					{!(hideQuests) && 
-						<Card
-							href="/quests"
-							title="Quests"
-							body="Explore the quests available to you."
-							textbox={false}
-							disabled={false}
-							hazard={false}
-						/>}
 				</ul>
 		}
 		{
@@ -60,10 +46,7 @@ const hideAll = hideHome && hideSettings && hideQuests;
 <style>
 	:root {
 		--astro-gradient: linear-gradient(0deg, #2c5837, #00ff22);
-	}
-
-	h1 {
-		margin: 2rem 0;
+		--link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
 	}
 
 	main {
@@ -118,5 +101,27 @@ const hideAll = hideHome && hideSettings && hideQuests;
 	
 	.main-grid {
 		list-style-type: none;
+	}
+
+	/* Navbar */
+
+	nav {
+		text-align: center;
+		display: flex;
+	}
+
+	nav a {
+		opacity: 0.8;
+		background-color: hsl(123, 100%, 22%);
+		border-radius: 0.4rem;
+		color: white;
+		text-decoration: none;
+		flex-direction: row;
+		margin: 1px;
+		padding: 5px;
+	}
+
+	nav a:hover {
+		opacity: 1;
 	}
 </style>

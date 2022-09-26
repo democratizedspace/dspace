@@ -9,7 +9,7 @@ if (requiresCookies(Astro.request)) {
 }
 ---
 
-<Page hideQuests={true}>
+<Page hideQuests={true} title="Quests">
     {quests.map(quest => (
         <Card
             href={`/quests/${quest.id}`} 

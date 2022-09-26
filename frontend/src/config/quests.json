@@ -1,7 +1,7 @@
 [
     {
         "id": 0,
-        "title": "3D print a rocket",
+        "title": "Build your first 3D printer",
         "body": "Someone offers you a 3D printer. Do you accept?",
         "image": "assets/3dprinter.jpg",
         "steps": [
@@ -64,11 +64,43 @@
                         "path": "/inventory"
                     },
                     {
-                        "id": 1,
-                        "title": "Check the manual",
+                        "id": 2,
+                        "title": "Magically assemble the printer with the push of a button.",
                         "body": "",
-                        "action": "none"
+                        "action": "quest",
+                        "next": 4
+
                     }
+                ],
+                "checkpoint": true
+            },
+            {
+                "id": 4,
+                "message": "3D printer created!. You can find it in your inventory.",
+                "addItem": "0",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Make a test print",
+                        "body": "",
+                        "action": "none"  
+                    }
+                ],
+                "checkpoint": true
+            },
+            {
+                "id": 5,
+                "message": "Make a test print.",
+                "addItem": "2",
+                "duration": "1h",
+                "costItem": "3",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Make a test print",
+                        "body": "",
+                        "action": "none"      
+                    }            
                 ],
                 "checkpoint": true
             }

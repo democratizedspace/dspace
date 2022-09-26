@@ -1,2 +1,5 @@
 [build]
-    base = "frontend/"
+    base = "/frontend/"
+
+[docs]
+    base = "/docs/"
