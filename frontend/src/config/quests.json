@@ -76,7 +76,7 @@
             },
             {
                 "id": 4,
-                "message": "3D printer created!. You can find it in your inventory.",
+                "message": "3D printer created! You can find it in your inventory.",
                 "addItem": "0",
                 "options": [
                     {
@@ -97,7 +97,7 @@
                 "options": [
                     {
                         "id": 0,
-                        "title": "Make a test print",
+                        "title": "Print time: 20 minutes",
                         "body": "",
                         "action": "none"      
                     }            
