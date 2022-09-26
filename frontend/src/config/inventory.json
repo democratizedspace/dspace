@@ -1,0 +1,10 @@
+[
+    {
+        "id": "0",
+        "name": "Ender 3 Pro",
+        "description": "A basic cheap printer that is easy to use and has a large community of users.",
+        "prerequisite": [
+            "0/4"
+        ]
+    }
+]

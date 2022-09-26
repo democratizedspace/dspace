@@ -36,14 +36,9 @@ disabled
 		<div>
 		<li class="link-card">
 			<a href={href}>
-				<Editable title="" href="" body="" editable={false} /> 
-				<img src={image} class="img" />
 				<h2>
 					{title}
 				</h2>
-				<p>
-					{body}
-				</p>
 			</a>
 		</li>
 		</div>
@@ -59,10 +54,13 @@ disabled
 		width: 100%;
 	}
 
+	div {
+		width: 50%;
+	}
+
 	.link-card {
 		list-style: none;
 		display: flex;
-		padding: 0.15rem;
 		background-image: var(--link-gradient);
 		background-size: 400%;
 		border-radius: 0.5rem;
@@ -73,27 +71,25 @@ disabled
 	}
 
 	.link-card > a {
-		width: 100%;
+		width: 50%;
 		text-decoration: none;
 		line-height: 1.4;
-		padding: 1em 1.3em;
 		border-radius: 0.35rem;
 		color: var(--text-color);
 		background-color: #003a03;
 		opacity: 0.8;
 		border-color: red;
+		padding: 5px;
+		margin: 1px;
 	}
 
 	h2 {
-		margin: 0;
 		transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 		border-color: red;
 		font-size: 1rem;
 	}
 
 	p {
-		margin-top: 0.75rem;
-		margin-bottom: 0;
 		border-color: red;
 	}
 
@@ -135,7 +131,6 @@ disabled
 		background-color: #7d9b7e;
 		border-color: #997529;
 		border-radius: 0.35rem;
-		padding: 0.1em 0.1em;
 		color: red);
 		opacity: 1;
 		border-color: red;
@@ -145,7 +140,6 @@ disabled
 	    width: 100%;
 		text-decoration: none;
 		line-height: 1.4;
-		padding: 1em 1.3em;
 		border-radius: 0.35rem;
 		color: var(--text-color);
 		background-color: #003a03;
