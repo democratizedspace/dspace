@@ -16,14 +16,14 @@ const hideAll = hideHome && hideSettings && hideQuests;
 			<a href="/">Home</a>
 			<a href="/quests">Quests</a>
 			<a href="/inventory">Inventory</a>
-                        <a href="/wallet">Wallet
-                        <a href="/guilds">Guilds</a>
+			<a href="/wallet">Wallet</a>
+			<a href="/guilds">Guilds</a>
 			<a href="/chat">Chat</a>
 			<a href="/shop">Shop</a>
-                        <a href="/profile">Profile</a>
-                        <a href="/leaderboard">Leaderboard</a>
-                        <a href="/settings">Settings</a>
-                        <a href="/docs">Docs</a>
+			<a href="/profile">Profile</a>
+			<a href="/leaderboard">Leaderboard</a>
+			<a href="/settings">Settings</a>
+			<a href="/docs">Docs</a>
 		</nav>
 
 		<h2>{title}</h2>
@@ -35,7 +35,7 @@ const hideAll = hideHome && hideSettings && hideQuests;
 		}
 		{
 			!(hideAll) && 
-				<br /> <br />
+				<span />
 		}
 		<h2>
 			{message}
@@ -111,7 +111,8 @@ const hideAll = hideHome && hideSettings && hideQuests;
 	nav {
 		text-align: center;
 		display: flex;
-                flex-wrap: wrap;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 
 	nav a {
@@ -123,6 +124,7 @@ const hideAll = hideHome && hideSettings && hideQuests;
 		flex-direction: row;
 		margin: 1px;
 		padding: 5px;
+		text-align: center;
 	}
 
 	nav a:hover {
