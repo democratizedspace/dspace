@@ -3,6 +3,10 @@ import Page from '../../../components/Page.astro';
 import Card from '../../../components/Card.astro';
 import quests from '../../../config/quests.json';
 import { getCookieValue, requiresCookies, acceptCookiesPath } from '../../../utils';
+import prettyDate from 'pretty-date';
+
+const HOURS = 1000 * 60 * 60;
+const DURATION = 1 * HOURS;
 
 if (requiresCookies(Astro.request)) {
     return Astro.redirect(acceptCookiesPath);
@@ -33,14 +37,40 @@ const getAction = (questOption) => {
     }
 }
 
+const startTime = new Date(Date.now());
+
+// print startTime in a human readable format
+console.log(new Date(startTime).toLocaleString());
+
+// Date.now() plus one hour as a Date type
+const endTime = new Date(startTime.getTime() + DURATION);
+
+// print doneTime in a human readable format
+console.log(new Date(endTime).toLocaleString());
+
+let hoursFromNow = endTime.getTime() - startTime.getTime();
+hoursFromNow = hoursFromNow / 1000 / 60 / 60;
+console.log(hoursFromNow);
+
+let output;
+if (hoursFromNow === 1) {
+    output = `in 1 hour`;
+} else {
+    output = `in ${hoursFromNow} hours`;
+}
+console.log(output);
+
 ---
 
 <Page message = {questStep.message || ""}>
     {questStep.options && questStep.options.map((option) => (
         <Card
+            image={option.image}
             href={getAction(option)}
             title={option.title}
             body={option.body}
-            disabled={option.action === 'none'} />
+            disabled={option.action === 'none'}
+            duration={option.duration}
+        />
     ))}
 </Page>

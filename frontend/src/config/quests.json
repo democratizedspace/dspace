@@ -46,7 +46,7 @@
                     {
                         "id": 0,
                         "title": "Remove contents from the box",
-                        "body": "Unboxing video? Unboxing video",
+                        "body": "Unboxing video? Unboxing video.",
                         "action": "quest",
                         "next": 3
                     }
@@ -56,13 +56,6 @@
                 "id": 3,
                 "message": "You removed all the items and placed them on the table.",
                 "options": [
-                    {
-                        "id": 0,
-                        "title": "Check your inventory",
-                        "body": "",
-                        "action": "path",
-                        "path": "/inventory"
-                    },
                     {
                         "id": 2,
                         "title": "Magically assemble the printer with the push of a button.",
@@ -77,30 +70,33 @@
             {
                 "id": 4,
                 "message": "3D printer created! You can find it in your inventory.",
-                "addItem": "0",
                 "options": [
                     {
                         "id": 0,
                         "title": "Make a test print",
                         "body": "",
-                        "action": "none"  
+                        "action": "none",
+                        "duration": "1h",
+                        "addItems": ["2"], 
+                        "image": "/assets/benchy.jpg"
                     }
                 ],
                 "checkpoint": true
             },
             {
                 "id": 5,
-                "message": "Make a test print.",
-                "addItem": "2",
-                "duration": "1h",
-                "costItem": "3",
+                "message": "Print a rocket",
+                "addItem": "0",
                 "options": [
                     {
                         "id": 0,
-                        "title": "Print time: 20 minutes",
+                        "title": "3D print a rocket",
                         "body": "",
-                        "action": "none"      
-                    }            
+                        "action": "none",
+                        "duration": "3h",
+                        "addItems": ["2"], 
+                        "image": "/assets/modelrocket.jpg"
+                    }
                 ],
                 "checkpoint": true
             }
@@ -120,7 +116,8 @@
                         "id": 0,
                         "title": "You'll need permission from the FAA.",
                         "body": "Look into the process.",
-                        "action": "none"
+                        "action": "none",
+                        "image": "/assets/paperwork.jpg"
                     }
                 ]
             }
@@ -140,7 +137,23 @@
                         "id": 0,
                         "title": "Order a hydroponics kit from Amazing",
                         "body": "Free 1-day shipping!",
-                        "action": "none"
+                        "action": "none",
+                        "next": 1,
+                        "image": "/assets/cart.jpg",
+                        "duration": "1d"
+                    }
+                ]
+            },
+            {
+                "id": 1,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "It arrived at your doorstep!",
+                        "body": "That was fast!",
+                        "action": "none",
+                        "image": "/assets/amazing1.jpg"
                     }
                 ]
             }
@@ -160,7 +173,8 @@
                         "id": 0,
                         "title": "Order a small foldable solar panel from Amazing",
                         "body": "Gotta start somewhere!",
-                        "action": "none"
+                        "action": "none",
+                        "image": "/assets/cart.jpg"
                     }
                 ]
             }
