@@ -9,9 +9,10 @@ export interface Props {
 	disabled: boolean;
 	hazard: boolean;
 	image: string;
+	duration: string;
 }
 
-const { href, title, body, textbox, disabled, image } = Astro.props as Props;
+const { href, title, body, textbox, disabled, image, duration } = Astro.props as Props;
 ---
 
 {
@@ -29,6 +30,7 @@ disabled
 				<p>
 					{body}
 				</p>
+				{duration && <p class="duration">Duration: {duration}</p>}
 			</span>
 		</li>
 		</div>
@@ -44,6 +46,7 @@ disabled
 				<p>
 					{body}
 				</p>
+				<slot />
 			</a>
 		</li>
 		</div>

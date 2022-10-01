@@ -3,8 +3,17 @@
         "id": "0",
         "name": "Ender 3 Pro",
         "description": "A basic cheap printer that is easy to use and has a large community of users.",
-        "prerequisite": [
-            "0/4"
-        ]
+        "image": "/assets/3dprinter.jpg"
+    },
+    {
+        "id": "1",
+        "name": "Benchy",
+        "description": "A basic test print that is used to test the quality of a printer.",
+        "image": "/assets/benchy.jpg"
+    },
+    {
+        "id": "2",
+        "name": "Hydroponics kit",
+        "description": "A kit that allows you to grow plants without soil."
     }
 ]

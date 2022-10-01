@@ -1,6 +1,5 @@
 ---
-import Page from '../components/Page.astro';
-import Card from '../components/Card.astro';
+import WhatsNew from '../components/WhatsNew.astro';
 import { parseBool, getCookieValue } from '../utils';
 
 const cookie = Astro.request.headers.get('cookie');
@@ -14,12 +13,4 @@ try {
 }
 ---
 
-<Page hideHome={true} title="Home">
-	{ acceptedCookies && <Card
-		href="/task"
-		title="Do a long-running task"
-		body="Completely abstract task that doesn't mean anything and is intended to demonstrate future functionality."
-		textbox={false}
-		disabled={false}
-	/>}
-</Page>
+<WhatsNew />

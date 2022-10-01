@@ -1,0 +1,44 @@
+---
+import Card from '../../components/Card.astro';
+import Page from '../../components/Page.astro';
+import docs from '../../config/docs.json';
+
+const { path, stepId } = Astro.params;
+
+let title, sections;
+
+const doc = docs[path];
+
+if (doc !== undefined) {
+    title = doc.title;
+    sections = doc.sections;
+}
+---
+
+<Page title={title}>
+{
+    doc ? (
+        // For each section, render a card
+        sections.map((section, i) => {
+            console.log(section);
+            return (
+                <span><p>{section.body}</p></span>
+            );
+        })
+    ) : (
+        <Card
+            title="Doc not found"
+            body={`Should something exist here? Add a file on Github and submit a pull request.`}
+            href="https://github.com/democratizedspace/dspace/new/main/frontend/pages/docs"
+            image="/assets/quill.jpg"
+        />
+    )
+}
+</Page>
+
+<style>
+    span {
+		background-color: hsl(215, 15%, 16%);
+        padding: 20px;
+    }
+</style>

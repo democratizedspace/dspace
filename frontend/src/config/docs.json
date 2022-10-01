@@ -1,0 +1,17 @@
+{
+    "about": {
+        "title": "About",
+        "sections": [
+            {
+                "title": "",
+                "body": "DSPACE is an incremental simulation game about resource management and space exploration. In the game, you'll learn skills, work on quests, and build your own presence in the solar system."
+            },
+            {
+                "body": "The game is designed to be easy to pick up and play, with a gradual learning curve that will let you get the hang of the mechanics at your own pace. Whether you're looking for a casual game to idle, or a more in-depth experience to really sink your teeth into, DSPACE is sure to have something for you."
+            },
+            {
+                "body": "The game is still very much under development. If you’d like to get involved in the creation of the game, please join the Discord server and say hello!"
+            }
+        ]
+    }
+}

@@ -1,0 +1,104 @@
+---
+import Page from '../../components/Page.astro';
+import Card from '../../components/Card.astro';
+
+// TODO: create page dynamically with JSON
+---
+
+<Page title="Docs">
+    <span>
+        <h2>The basics</h2>
+        <nav>
+            <a href="/docs/about">About</a>
+            <a href="/docs/mission">Mission</a>
+            <a href="/docs/roadmap">Roadmap</a>
+            <a href="/docs/faq">FAQ</a>
+            <a href="/docs/glossary">Glossary</a>
+            <a href="/docs/contribute">Contribute</a>
+        </nav>
+    </span>
+    
+    <span>
+        <h2>Concepts</h2>
+        <nav>
+            <a href="/docs/hyperstructures">Hyperstructures</a>
+            <a href="/docs/desci">Decentralized Science</a>
+            <a href="/docs/credible_neutrality">Credible Neutrality</a>
+            <a href="/docs/gradual_decentralization">Gradual Decentralization</a>
+        </nav>
+    </span>    
+    <span>
+        <h2>Skills</h2>
+        <nav>
+            <a href="/docs/3dprinting">3D printing</a>
+            <a href="/docs/solar">Solar panels</a>
+            <a href="/docs/hydroponics">Hydroponics</a>
+            <a href="/docs/rockets">Rockets</a>
+            <a href="/docs/make_simulations">Make simulations</a>
+            <a href="/docs/make_quests">Make quests</a>
+        </nav>
+    </span>
+    <span>
+        <h2>Game systems</h2>
+        <nav>
+            <a href="/docs/realtime">Everything is real-time</a>
+            <a href="/docs/space-progression">Space progression</a>
+            <a href="/docs/web3">Web3</a>
+            <a href="/docs/inventory">Inventory</a>
+            <a href="/docs/quests">Quests</a>
+            <a href="/docs/skills">Skills</a>
+            <a href="/docs/badges">Badges</a>
+            <a href="/docs/perks">Perks</a>
+        </nav>
+    </span>
+     <span>
+        <h2>Moderation</h2>
+        <nav>
+            <a href="/docs/reviews">Reviews</a>
+            <a href="/docs/validators">Validators</a>
+            <a href="/docs/slashing">Slashing</a>
+            <a href="/docs/blocklist">Blocklist</a>
+        </nav>
+     </span>
+</Page>
+
+<style>
+    span {
+		background-color: hsl(215, 15%, 16%);
+        padding: 10px;
+    }
+
+    h2 {
+        color: hsl(0, 0%, 100%);
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    /* Navbar */
+
+	nav {
+		text-align: center;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	nav a {
+		opacity: 0.8;
+		background-color: hsl(123, 100%, 22%);
+		border-radius: 0.4rem;
+		color: white;
+		text-decoration: none;
+		flex-direction: row;
+		margin: 1px;
+		padding: 5px;
+		text-align: center;
+	}
+
+	nav a:hover {
+		opacity: 1;
+	}
+</style>
