@@ -5,6 +5,8 @@ import Header from '../components/Header.astro';
 
 const { hideHome, hideSettings, hideQuests, title, message } = Astro.props;
 const hideAll = hideHome && hideSettings && hideQuests;
+
+// TODO: Add breadcrumbs to the top of the page
 ---
 
 <Layout title="DSPACE">
@@ -13,6 +15,7 @@ const hideAll = hideHome && hideSettings && hideQuests;
 		
 		<nav>
 			<a href="/">Home</a>
+			<a href="/docs">Docs</a>
 			<a href="/quests">Quests</a>
 			<a href="/inventory">Inventory</a>
 			<a href="/wallet">Wallet</a>
@@ -20,9 +23,10 @@ const hideAll = hideHome && hideSettings && hideQuests;
 			<a href="/chat">Chat</a>
 			<a href="/shop">Shop</a>
 			<a href="/profile">Profile</a>
+			<a href="/stats">Stats</a>
+			<a href="/achievements">Achievements</a>
 			<a href="/leaderboard">Leaderboard</a>
 			<a href="/settings">Settings</a>
-			<a href="/docs">Docs</a>
 		</nav>
 
 		<h2>{title}</h2>

@@ -15,9 +15,10 @@ let output = "foo";
 ---
 
 <Page title="What's new">
-    <h3>September 27, 2022</h3>
+    <h3>September 30, 2022</h3>
     <br />
-    <p>You can now make a test print with your 3D printer.</p>
+
+    <p>Implemented a basic documentation system. Visit the <a href="/docs">docs</a> page and check out the first iteration! More documentation will be added soon.</p>
 
     <p>Added images for all <a href="/quests">quests</a> for all existing steps.</p>
 
@@ -28,14 +29,19 @@ let output = "foo";
 <style>
     a {
         opacity: 0.8;
-		background-color: hsl(123, 100%, 22%);
+		background-color: #84d484;
 		border-radius: 0.4rem;
-		color: white;
+		color: black;
 		text-decoration: none;
 		flex-direction: row;
-		margin: 1px;
-		padding: 5px;
-		text-align: center;
+		padding-left: 5px;
+		padding-right: 5px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    a:hover {
+        opacity: 1;
     }
 
     p {

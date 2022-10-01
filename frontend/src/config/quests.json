@@ -194,7 +194,8 @@
                         "id": 0,
                         "title": "Put down a refundable $100 deposit to reserve your Model M",
                         "body": "Estimated delivery time: 2 months.",
-                        "action": "none"
+                        "action": "none",
+                        "image": "/assets/coins.jpg"
                     }
                 ]
             }
