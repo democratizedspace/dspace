@@ -18,7 +18,7 @@
 </script>
 
 <span>
-    <p>Initial version. This will be fleshed out more soon.</p>
+    <p>No item is actually created just yet. This page will be improved soon.</p>
     <button on:click={startProcess}>Start process</button>
     <progress value={$progress}></progress>
 </span>
