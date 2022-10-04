@@ -3,17 +3,21 @@
         "id": "0",
         "name": "Ender 3 Pro",
         "description": "A basic cheap printer that is easy to use and has a large community of users.",
-        "image": "/assets/3dprinter.jpg"
+        "image": "/assets/3dprinter.jpg",
+        "creationTitle": "Build an Ender 3 Pro"
     },
     {
         "id": "1",
         "name": "Benchy",
         "description": "A basic test print that is used to test the quality of a printer.",
-        "image": "/assets/benchy.jpg"
+        "creationTitle": "Make a test print",
+        "image": "/assets/benchy.jpg",
+        "createdWith": "0"
     },
     {
         "id": "2",
         "name": "Hydroponics kit",
-        "description": "A kit that allows you to grow plants without soil."
+        "description": "A kit that allows you to grow plants without soil.",
+        "creationTitle": "Assemble hydroponics kit"
     }
 ]

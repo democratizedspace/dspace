@@ -75,9 +75,9 @@
                         "id": 0,
                         "title": "Make a test print",
                         "body": "",
-                        "action": "none",
+                        "action": "longtask",
                         "duration": "1h",
-                        "addItems": ["2"], 
+                        "addItem": "1", 
                         "image": "/assets/benchy.jpg"
                     }
                 ],
@@ -94,7 +94,6 @@
                         "body": "",
                         "action": "none",
                         "duration": "3h",
-                        "addItems": ["2"], 
                         "image": "/assets/modelrocket.jpg"
                     }
                 ],

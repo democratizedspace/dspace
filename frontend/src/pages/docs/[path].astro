@@ -1,4 +1,5 @@
 ---
+import { type } from 'node:os';
 import Card from '../../components/Card.astro';
 import Page from '../../components/Page.astro';
 import docs from '../../config/docs.json';
@@ -13,6 +14,20 @@ if (doc !== undefined) {
     title = doc.title;
     sections = doc.sections;
 }
+
+
+sections = sections.map((section) => {
+    return {
+        ...section,
+        content: section.components.map(function(component) {
+            if (component.type === "link") {
+                return component.text;
+            }
+            return component.content;
+        }).join(''),
+    };
+
+});
 ---
 
 <Page title={title}>
@@ -20,9 +35,14 @@ if (doc !== undefined) {
     doc ? (
         // For each section, render a card
         sections.map((section, i) => {
-            console.log(section);
             return (
-                <span><p>{section.body}</p></span>
+                <span>
+                    <h3>{section.title}</h3>
+                    <img src={section.image} />
+                    <p
+                        set:html={section.content}
+                        class:list={['link']}></p>
+                </span>
             );
         })
     ) : (
@@ -37,8 +57,64 @@ if (doc !== undefined) {
 </Page>
 
 <style>
+    h2 {
+        color: white;
+    }
+
+    a:hover {
+        opacity: 1;
+    }
+
     span {
-		background-color: hsl(215, 15%, 16%);
-        padding: 20px;
+        background-color: #2f5b2f;
+		border-radius: 2rem;
+        text-align: center;
+        color: white;
+        padding: 10px;
+    }
+    /* Navbar */
+
+	nav {
+		text-align: center;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	nav a {
+        opacity: 0.8;
+		background-color: #84d484;
+		border-radius: 100px;
+		color: black;
+		text-decoration: none;
+		flex-direction: row;
+		padding-left: 5px;
+		padding-right: 5px;
+        text-align: center;
+        white-space: nowrap;
+        margin: 5px;
+        padding: 10px;
+    }
+
+	nav a:hover {
+		opacity: 1;
+	}
+
+    p {
+        background-color: #2f5b2f;
+		border-radius: 2rem;
+    }
+
+    span img {
+        width: 100%;
+        max-width: 200px;
+        filter: drop-shadow(2px 2px 2px black);
+        transition-duration: 500ms;
+        margin-top: 15px;
+    }
+
+    span > img:hover {
+        filter: drop-shadow(2px 3px 5px black);
+        transition-duration: 200ms;
     }
 </style>

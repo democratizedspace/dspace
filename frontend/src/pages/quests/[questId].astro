@@ -7,10 +7,6 @@ import { getCookieValue, requiresCookies, acceptCookiesPath } from '../../utils'
 const { questId } = Astro.params;
 const cookie = Astro.request.headers.get('cookie');
 
-if (requiresCookies(Astro.request)) {
-    return Astro.redirect(acceptCookiesPath);
-}
-
 const cookieKey = `checkpoint-${questId}`;
 const checkpointForQuest = getCookieValue(cookie, cookieKey);
 const checkpoint = parseInt(checkpointForQuest);

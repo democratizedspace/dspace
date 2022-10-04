@@ -1,19 +1,18 @@
 ---
 import Page from '../../../components/Page.astro';
 import Card from '../../../components/Card.astro';
+import ProgressBar from '../../../components/svelte/ProgressBar.svelte';
 import quests from '../../../config/quests.json';
-import { getCookieValue, requiresCookies, acceptCookiesPath } from '../../../utils';
-import prettyDate from 'pretty-date';
+import SuggestCookies from '../../../components/SuggestCookies.astro';
+import { hasAcceptedCookies } from '../../../utils';
 
 const HOURS = 1000 * 60 * 60;
 const DURATION = 1 * HOURS;
 
-if (requiresCookies(Astro.request)) {
-    return Astro.redirect(acceptCookiesPath);
-}
-
 const { questId, stepId } = Astro.params;
 let quest, questStep;
+
+const shouldAcceptCookies = !hasAcceptedCookies(Astro.request);
 
 try {
     quest = quests[questId];
@@ -22,9 +21,11 @@ try {
     questStep = '';
 }
 
-if (questStep.checkpoint === true) {
+if (!(shouldAcceptCookies) && questStep.checkpoint === true) {
     Astro.response.headers.append('Set-Cookie', `checkpoint-${questId}=${parseInt(questStep.id)}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`);
 }
+
+
 
 const getAction = (questOption) => {
     switch (questOption.action) {
@@ -32,6 +33,8 @@ const getAction = (questOption) => {
             return `/quests/${questId}/${questOption.next}`;
         case 'path':
             return questOption.path;
+        case 'longtask':
+            return `/addItem/${questOption.addItem}/for/${questOption.duration}`;
         default:
             return '';
     }
@@ -49,7 +52,7 @@ const endTime = new Date(startTime.getTime() + DURATION);
 console.log(new Date(endTime).toLocaleString());
 
 let hoursFromNow = endTime.getTime() - startTime.getTime();
-hoursFromNow = hoursFromNow / 1000 / 60 / 60;
+hoursFromNow = hoursFromNow / HOURS;
 console.log(hoursFromNow);
 
 let output;
@@ -63,6 +66,7 @@ console.log(output);
 ---
 
 <Page message = {questStep.message || ""}>
+    <SuggestCookies />
     {questStep.options && questStep.options.map((option) => (
         <Card
             image={option.image}
@@ -71,6 +75,7 @@ console.log(output);
             body={option.body}
             disabled={option.action === 'none'}
             duration={option.duration}
-        />
+        >
+        </Card>
     ))}
 </Page>

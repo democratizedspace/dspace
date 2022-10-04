@@ -1,0 +1,33 @@
+---
+import Page from '../../../../components/Page.astro';
+import items from '../../../../config/items.json';
+import ProgressBar from '../../../../components/svelte/ProgressBar.svelte';
+
+const HOURS = 1000 * 60 * 60;
+
+const { itemId, duration } = Astro.params;
+
+const getDurationInMs = (duration) => {
+    const value = parseInt(duration.match(/(\d+)/)[0]);
+    const unit = duration.match(/([a-z])/)[0];
+
+    console.log("ms: ", value * HOURS);
+    console.log("unit: ", unit);
+    
+    switch (unit) {
+        case 'h':
+            return value * HOURS;
+        default:
+            return value;
+    }
+};
+
+const durationMs = getDurationInMs(duration);
+console.log(durationMs);
+
+const title = items[itemId].creationTitle;
+---
+
+<Page hideSettings={true} title={title}>
+    <ProgressBar duration={durationMs} client:idle />
+</Page>

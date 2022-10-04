@@ -10,7 +10,9 @@
     "astro": "astro"
   },
   "devDependencies": {
-    "astro": "^1.0.3"
+    "@astrojs/svelte": "^1.0.1",
+    "astro": "^1.0.3",
+    "svelte": "^3.50.1"
   },
   "dependencies": {
     "@algolia/client-search": "^4.13.1",

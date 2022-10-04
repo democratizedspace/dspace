@@ -1,0 +1,33 @@
+---
+import { hasAcceptedCookies } from '../utils';
+export interface Props {
+}
+
+const shouldSuggestCookies = !hasAcceptedCookies(Astro.request);
+console.log("should suggest cookies: ", shouldSuggestCookies);
+---
+
+{shouldSuggestCookies && <p>To save your progress, you must <a href="/accept_cookies">accept cookies</a>.</p><br />}
+
+<style>
+    a {
+        opacity: 0.8;
+		background-color: #84d484;
+		border-radius: 100px;
+		color: black;
+		text-decoration: none;
+		flex-direction: row;
+		padding-left: 5px;
+		padding-right: 5px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    a:hover {
+        opacity: 1;
+    }
+
+    p {
+        color: white;
+    }
+</style>
