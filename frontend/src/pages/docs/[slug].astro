@@ -1,0 +1,46 @@
+---
+import Page from '../../components/Page.astro';
+import Card from '../../components/Card.astro';
+
+const { slug } = Astro.params;
+let html;
+
+const docs = await Astro.glob('./md/*.md');
+
+const doc = docs.find((doc) => doc.frontmatter.slug === slug);
+
+if (doc) {
+    html = doc.compiledContent();
+}
+
+---
+
+{
+    doc
+    ?
+    <div>
+        <Page title={doc.frontmatter.title}>
+            <span set:html={html} />
+        </Page>
+    </div>
+     : 
+    <div>
+        <Page title="Doc not found">
+            <Card
+            body={`Should something exist here? Add a file on Github and submit a pull request.`}
+            href="https://github.com/democratizedspace/dspace/new/main/frontend/pages/docs"
+            image="/assets/quill.jpg"
+        />
+        </Page>
+    </div>
+    
+}
+
+<style>
+    span {
+        background-color: white;
+        color: black; 
+        padding: 10px;
+        border-radius: 20px;
+    }
+</style>
