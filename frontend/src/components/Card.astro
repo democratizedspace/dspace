@@ -1,18 +1,7 @@
 ---
 import Editable from './Editable.astro';
 
-export interface Props {
-	title: string;
-	body: string;
-	href: string;
-	textbox: boolean;
-	disabled: boolean;
-	hazard: boolean;
-	image: string;
-	duration: string;
-}
-
-const { href, title, body, textbox, disabled, image, duration } = Astro.props as Props;
+const { href, title, body, textbox, disabled, image, duration } = Astro.props;
 ---
 
 {

@@ -3,8 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
 import Header from '../components/Header.astro';
 
-const { hideHome, hideSettings, hideQuests, title, message } = Astro.props;
+const { hideHome, hideSettings, hideQuests, title, message, columns } = Astro.props;
 const hideAll = hideHome && hideSettings && hideQuests;
+
+let columnNumber = 2;
+if (columns) {
+	columnNumber = parseInt(columns);
+}
 
 // TODO: Add breadcrumbs to the top of the page
 ---
@@ -17,6 +22,7 @@ const hideAll = hideHome && hideSettings && hideQuests;
 			<a href="/">Home</a>
 			<a href="/docs">Docs</a>
 			<a href="/quests">Quests</a>
+			<a href="/skills">Skills</a>
 			<a href="/inventory">Inventory</a>
 			<a href="/wallet">Wallet</a>
 			<a href="/guilds">Guilds</a>
@@ -27,6 +33,7 @@ const hideAll = hideHome && hideSettings && hideQuests;
 			<a href="/achievements">Achievements</a>
 			<a href="/leaderboard">Leaderboard</a>
 			<a href="/settings">Settings</a>
+			<a href="/changelog">Changelog</a>
 		</nav>
 
 		<h2>{title}</h2>
@@ -43,9 +50,15 @@ const hideAll = hideHome && hideSettings && hideQuests;
 		<h2>
 			{message}
 		</h2>
-		<ul role="list" class="link-card-grid">
-			<slot />
-		</ul>
+		{ (columnNumber == 1) ?
+			<ul role="list" class="link-card-grid-1">
+				<slot />
+			</ul>
+			:
+			<ul role="list" class="link-card-grid-2">
+				<slot />
+			</ul>
+		}
 	</main>
 </Layout>
 
@@ -98,11 +111,32 @@ const hideAll = hideHome && hideSettings && hideQuests;
 		padding: 0.15em 0.25em;
 	}
 
-	.link-card-grid {
+	.link-card-grid-1 {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(24ch, 1fr));
 		gap: 1rem;
 		padding: 0;
+		grid-template-columns: 1fr;
+	}
+	
+	.link-card-grid-2 {
+		display: grid;
+		gap: 1rem;
+		padding: 0;
+		grid-template-columns: 1fr 1fr;
+	}
+
+	@media only screen and (max-width: 768px) {
+		.link-card-grid-2 {
+		grid-template-columns: 1fr;
+		margin: auto;
+		}
+	}
+	
+	@media only screen and (max-width: 768px) {
+		.link-card-grid-2 {
+		grid-template-columns: 1fr;
+		margin: auto;
+		}
 	}
 	
 	.main-grid {

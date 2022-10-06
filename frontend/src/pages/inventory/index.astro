@@ -1,0 +1,20 @@
+---
+import Page from '../../components/Page.astro';
+import Card from '../../components/Card.astro';
+
+// import items.json from the config directory
+import items from '../../config/items.json';
+---
+
+<Page title="Inventory" columns="2">
+    {items.map((item) => (
+        <Card
+            title={item.name}
+            body={item.description}
+            image={item.image}
+            href={`/inventory/${item.id}`}
+        >
+            <p>Count: 0</p>
+        </Card>
+    ))}
+</Page>

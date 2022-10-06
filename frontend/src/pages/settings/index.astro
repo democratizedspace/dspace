@@ -1,0 +1,81 @@
+---
+import Page from '../../components/Page.astro';
+---
+
+<Page title="Settings">
+    <span>
+        <h2>Account</h2>
+        <nav>
+            <a href="/settings/profile">Profile</a>
+            <a href="/settings/cloud">Cloud saves</a>
+            <a href="/settings/wallet">Wallet</a>
+            <a href="/settings/pin">Create a PIN</a>
+            <a class="foo" href="/settings/delete">Delete account</a>
+        </nav>
+    </span>
+    
+    <span>
+        <h2>Preferences</h2>
+        <nav>
+            <a href="/settings/theme">Theme</a>
+            <a href="/settings/cookies">Cookies</a>
+            <a href="/settings/tutorials">Tutorials</a>
+        </nav>
+    </span>
+</Page>
+
+<style>
+    h2 {
+        color: white;
+    }
+
+    a:hover {
+        opacity: 1;
+    }
+
+    span {
+        background-color: #2f5b2f;
+		border-radius: 2rem;
+        text-align: justify;
+        text-justify: inter-word;
+        text-align: center;
+        padding: 1rem;
+    }
+    /* Navbar */
+
+	nav {
+		text-align: center;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+        padding: 0px;
+	}
+
+	nav a {
+        opacity: 0.8;
+		background-color: #84d484;
+		border-radius: 100px;
+		color: black;
+		text-decoration: none;
+		flex-direction: row;
+        text-align: center;
+        white-space: nowrap;
+        margin: 5px;
+        padding: 10px;
+    }
+
+	nav a:hover {
+		opacity: 1;
+	}
+
+    p {
+        background-color: #2f5b2f;
+        padding: 15px;
+		border-radius: 2rem;
+    }
+
+    .foo {
+        background-color: red;
+        color: white;
+    }
+</style>

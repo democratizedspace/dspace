@@ -1,0 +1,23 @@
+---
+import Page from '../components/Page.astro';
+
+const changelogs = await Astro.glob('./docs/md/changelog/*.md');
+
+const changelogsReversed = changelogs.reverse();
+---
+
+<Page columns="1">
+    {changelogsReversed.map(doc => (
+        <h3>{doc.frontmatter.title}</h3>
+        <span set:html={doc.compiledContent()}></span>
+    ))}
+</Page>
+
+<style>
+    span {
+        background-color: white;
+        color: black; 
+        padding: 10px;
+        border-radius: 20px;
+    }
+</style>

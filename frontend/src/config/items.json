@@ -18,6 +18,7 @@
         "id": "2",
         "name": "Hydroponics kit",
         "description": "A kit that allows you to grow plants without soil.",
-        "creationTitle": "Assemble hydroponics kit"
+        "creationTitle": "Assemble hydroponics kit",
+        "image": "/assets/hydroponics.jpg"
     }
 ]

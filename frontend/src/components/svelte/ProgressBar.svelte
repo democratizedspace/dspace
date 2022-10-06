@@ -4,10 +4,8 @@
 
     export let duration;
 
-    console.log("progress bar duration: ", duration);
 
     function startProcess() {
-        console.log("process duration: ", duration);
         progress.set(100);
     }
 

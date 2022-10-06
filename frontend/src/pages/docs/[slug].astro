@@ -19,18 +19,18 @@ if (doc) {
     doc
     ?
     <div>
-        <Page title={doc.frontmatter.title}>
+        <Page title={doc.frontmatter.title} columns="1">
             <span set:html={html} />
         </Page>
     </div>
      : 
     <div>
-        <Page title="Doc not found">
+        <Page title="Doc not found" columns="1">
             <Card
-            body={`Should something exist here? Add a file on Github and submit a pull request.`}
-            href="https://github.com/democratizedspace/dspace/new/main/frontend/pages/docs"
-            image="/assets/quill.jpg"
-        />
+                body={`Should something exist here? Add a file on Github and submit a pull request.`}
+                href="https://github.com/democratizedspace/dspace/new/main/frontend/pages/settings/json"
+                image="/assets/quill.jpg"
+            />
         </Page>
     </div>
     

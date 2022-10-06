@@ -1,9 +1,19 @@
 ---
-export interface Props {
-	title: string;
-	body: string;
-	href: string;
-}
-
-const { href, title, body } = Astro.props as Props;
+const { text, href } = Astro.props;
 ---
+
+<a href={href}>{text}</a>
+
+<style>
+	a {
+        background-color: #2f5b2f;
+		color: white;
+		border-radius: 100px;
+		text-decoration: none;
+        white-space: nowrap;
+        padding: 10px;
+        margin: 50px;
+		display: flex;
+		justify-content: center;
+	}
+</style>

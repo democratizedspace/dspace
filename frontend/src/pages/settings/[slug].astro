@@ -1,0 +1,69 @@
+---
+import Page from '../../components/Page.astro'
+import Card from '../../components/Card.astro';
+
+let title, severity, severityMessage, type, text;
+
+const { slug } = Astro.params;
+
+// import a file named slug.json
+try {
+    const data = await import(`./json/${slug}.json`);
+    title = data.title;
+    severity = data.severity;
+    severityMessage = data.severityMessage;
+    
+    try {
+        type = data.items[0].type;
+        text = data.items[0].text;
+    } catch (err) {
+        console.error(err);
+    }
+} catch (err) {
+}
+
+
+---
+
+<Page title={title} columns="1">
+    {
+        severity == 'high'
+        ?
+            <span class="severe">
+                <h2>Warning</h2>
+                <p>{severityMessage}</p>
+            </span>
+        :
+            <Fragment />
+    }
+
+    {
+        type == 'text'
+        ?
+            <p>{text}</p>
+        :
+            <Card
+                body={`Should something exist here? Add a file on Github and submit a pull request.`}
+                href="https://github.com/democratizedspace/dspace/new/main/frontend/pages/docs"
+                image="/assets/settings.jpg"
+            />
+    }
+
+</Page>
+
+<style>
+    .severe > h2 {
+        text-align: center;
+    }
+
+    .severe > p {
+        text-align: center;
+    }
+
+    .severe {
+        background-color: #f44336;
+        color: white;
+        padding: 20px;
+        border-radius: 20px;
+    }
+</style>

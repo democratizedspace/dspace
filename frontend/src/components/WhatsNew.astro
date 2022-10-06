@@ -1,6 +1,7 @@
 ---
 import Page from './Page.astro';
 import Card from './Card.astro';
+import Button from './Button.astro';
 
 export interface Props {
 	title: string;
@@ -12,53 +13,33 @@ export interface Props {
 const { href, title, body, disabled } = Astro.props as Props;
 
 let output = "foo";
+
+const changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
+
+const changelogsReversed = changelogs.reverse();
 ---
 
-<Page title="What's new">
-    <h3>October 3, 2022</h3>
-    <br />
-
-    <p><a href="/docs">Docs</a> overhaul. Much nicer looking navigation menu.</p>
-
-    <p>Create a page for crafting new items. Looks for them in the <a href="/quests">Quests</a>!</p>
-
-    <h3>September 30, 2022</h3>
-    <br />
-
-    <p>Implemented a basic documentation system. Visit the <a href="/docs">Docs</a> page and check out the first iteration! More documentation will be added soon.</p>
-
-    <p>Added images for all <a href="/quests">Quests</a> for all existing steps.</p>
-
-    <p>Created the "What's new" page.</p>
+<Page title="What's new" columns="1">
+    <span class="wrapper">
+        <h2>Changelog</h2>
+        {changelogsReversed.slice(0, 1).map(doc => (
+            <h3>{doc.frontmatter.title}</h3>
+            <span set:html={doc.compiledContent()}></span>
+        ))}
+        <Button href="/changelog" text="View all changelog entries" />
+    </span>
 
 </Page>
 
 <style>
-    a {
-        opacity: 0.8;
-		background-color: #84d484;
-		border-radius: 100px;
-		color: black;
-		text-decoration: none;
-		flex-direction: row;
-		padding-left: 5px;
-		padding-right: 5px;
-        text-align: center;
-        white-space: nowrap;
+    span {
+        color: black; 
+        padding: 10px;
+        border-radius: 20px;
     }
 
-    a:hover {
-        opacity: 1;
-    }
-
-    p {
-        background-color: #2f5b2f;
-        padding: 15px;
-		border-radius: 2rem;
-        color: white;
-    }
-
-    h3 {
-        color: white;
+    .wrapper {
+		background-color: white;
+        padding: 20px;
     }
 </style>

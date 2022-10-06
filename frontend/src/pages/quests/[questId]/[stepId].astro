@@ -25,8 +25,6 @@ if (!(shouldAcceptCookies) && questStep.checkpoint === true) {
     Astro.response.headers.append('Set-Cookie', `checkpoint-${questId}=${parseInt(questStep.id)}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`);
 }
 
-
-
 const getAction = (questOption) => {
     switch (questOption.action) {
         case 'quest':
@@ -34,7 +32,7 @@ const getAction = (questOption) => {
         case 'path':
             return questOption.path;
         case 'longtask':
-            return `/addItem/${questOption.addItem}/for/${questOption.duration}`;
+            return `/inventory/add/${questOption.addItem}/for/${questOption.duration}`;
         default:
             return '';
     }
@@ -42,18 +40,11 @@ const getAction = (questOption) => {
 
 const startTime = new Date(Date.now());
 
-// print startTime in a human readable format
-console.log(new Date(startTime).toLocaleString());
-
 // Date.now() plus one hour as a Date type
 const endTime = new Date(startTime.getTime() + DURATION);
 
-// print doneTime in a human readable format
-console.log(new Date(endTime).toLocaleString());
-
 let hoursFromNow = endTime.getTime() - startTime.getTime();
 hoursFromNow = hoursFromNow / HOURS;
-console.log(hoursFromNow);
 
 let output;
 if (hoursFromNow === 1) {
@@ -61,12 +52,11 @@ if (hoursFromNow === 1) {
 } else {
     output = `in ${hoursFromNow} hours`;
 }
-console.log(output);
 
 ---
 
 <Page message = {questStep.message || ""}>
-    <SuggestCookies />
+    <SuggestCookies shouldSuggestCookies={shouldAcceptCookies} />
     {questStep.options && questStep.options.map((option) => (
         <Card
             image={option.image}
