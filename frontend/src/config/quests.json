@@ -75,9 +75,8 @@
                         "id": 0,
                         "title": "Make a test print",
                         "body": "",
-                        "action": "longtask",
-                        "duration": "1h",
-                        "addItem": "1", 
+                        "action": "path",
+                        "path": "/inventory/add/1",
                         "image": "/assets/benchy.jpg"
                     }
                 ],

@@ -1,0 +1,21 @@
+---
+import Page from '../../../../components/Page.astro';
+import Chip from '../../../../components/Chip.astro';
+import items from '../../json/items.json';
+
+const { itemId } = Astro.params;
+
+const item = items.find((item) => item.id === itemId);
+---
+
+<Page title="Hello World" columns="1">
+    <h1>Added 1 <img width="50" src={item.image} /> {item.name} to your inventory!</h1>
+    <Chip text="Go to your inventory" href="/inventory" />
+</Page>
+
+<style>
+    img {
+        width: 50px;
+        border-radius: 10px;
+    }
+</style>

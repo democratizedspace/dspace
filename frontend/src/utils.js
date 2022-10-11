@@ -33,4 +33,28 @@ export const hasAcceptedCookies = (req) => {
     return acceptedCookies || false;
 };
 
+export const prettyPrintDuration = (durationSeconds) => {
+    const days = Math.floor(durationSeconds / 86400);
+    const hours = Math.floor((durationSeconds % 86400) / 3600);
+    const minutes = Math.floor((durationSeconds % 3600) / 60);
+    const seconds = (durationSeconds % 60).toFixed(1);
+    const duration = [];
+    if (days > 0) {
+        duration.push(`${days}d`);
+    }
+    if (hours > 0) {
+        duration.push(`${hours}h`);
+    }
+    if (minutes > 0) {
+        duration.push(`${minutes}m`);
+    }
+    if (seconds > 0) {
+        duration.push(`${seconds}s`);
+    }
+    if (seconds == 0) {
+        duration.push(`Done`);
+    }
+    return duration.join(' ');
+}
+
 export const acceptCookiesPath = '/accept_cookies';

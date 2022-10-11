@@ -1,0 +1,54 @@
+---
+import Page from '../../../components/Page.astro';
+import Chip from '../../../components/Chip.astro';
+import items from '../json/items.json';
+import AddItem from './AddItem.svelte';
+import Item from '../../../components/Item.astro';
+
+const SECONDS = 1000;
+
+const { itemId } = Astro.params;
+let item, printInfo, machineInfo;
+
+try {
+    item = items.find((item) => item.id === itemId);
+
+    if (!item) {
+        throw new Error('Item not found');
+    }
+
+    if (item.type === '3dprint') {
+        console.log("Item is a 3D print.");
+        console.log("path: ", item.json);
+        const prints = await Astro.glob('../json/3dprinting/prints/*.json');
+        printInfo = prints.find((print) => print.id === item.id);
+        console.log("printInfo: ", printInfo);
+        const machines = await Astro.glob('../json/3dprinting/printers/*.json');
+        machineInfo = machines.find((machine) => machine.id === printInfo.machineId);
+        console.log("machineInfo: ", machineInfo);
+    }
+} catch (err) {
+    console.error(err);
+}
+---
+
+<Page hideSettings={true} title={item.creationTitle} columns="1">
+    <img src={item.image} alt={item.name} />
+
+    {
+        item.type === '3dprint' && (
+            <div>
+                <Chip text={item.name} href={`/inventory/${item.id}`} />
+                <p>{item.description}</p>
+                <p>Filament: {printInfo.filamentGrams}g</p>
+                <AddItem printInfo={printInfo} machineInfo={machineInfo} client:idle />
+            </div>
+        )
+    }
+</Page>
+
+<style>
+    img {
+        width: 200px;
+    }
+</style>
