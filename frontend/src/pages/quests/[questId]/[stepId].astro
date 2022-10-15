@@ -53,7 +53,7 @@ if (hoursFromNow === 1) {
 ---
 
 <Page message = {questStep.message || ""}>
-    <SuggestCookies shouldSuggestCookies={shouldAcceptCookies} />
+    <SuggestCookies shouldSuggestCookies={shouldAcceptCookies} redirect={`/quests/${questId}/${stepId}`} />
     {questStep.options && questStep.options.map((option) => (
         <Card
             image={option.image}

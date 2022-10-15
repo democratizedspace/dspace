@@ -1,8 +1,18 @@
 ---
 import Page from '../components/Page.astro';
+import Chip from '../components/Chip.astro';
 
 Astro.response.headers.append('Set-Cookie', 'acceptedCookies=true; expires=Fri, 31 Dec 9999 23:59:59 GMT');
+
+let url;
+
+const redirect = Astro.url.searchParams.get('redirect');
+
+if (redirect !== undefined) {
+    url = redirect;
+}
 ---
 
 <Page message="You've accepted cookies.">
+    {(url !== undefined) && <Chip text="Go back" href={url} />}
 </Page>

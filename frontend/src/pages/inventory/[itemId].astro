@@ -2,12 +2,16 @@
 import Page from '../../components/Page.astro';
 import items from './json/items.json';
 import Chip from '../../components/Chip.astro';
+import { getCookie } from '../../utils';
 
 const { itemId } = Astro.params;
 
 const item = items.find((item) => item.id === itemId);
 
 const { id, name, description, image, creationTitle } = item;
+
+const itemCount = getCookie(Astro.request, `item-${itemId}`);
+console.log("count: ", itemCount);
 ---
 
 <Page columns="1"> 
@@ -15,6 +19,7 @@ const { id, name, description, image, creationTitle } = item;
     <img src={image} alt={name} />
     <p>{description}</p>
     <Chip text={creationTitle} href={`/inventory/add/${id}`} />
+    <p>Count: {itemCount}</p>
 </Page>
 
 <style>

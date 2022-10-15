@@ -1,14 +1,30 @@
 ---
 import Page from '../../../components/Page.astro';
 import Chip from '../../../components/Chip.astro';
+import Warning from '../../../components/Warning.astro';
 import items from '../json/items.json';
 import AddItem from './AddItem.svelte';
-import Item from '../../../components/Item.astro';
-
-const SECONDS = 1000;
+import { getCookie, prettyPrintDuration } from '../../../utils.js';
 
 const { itemId } = Astro.params;
-let item, printInfo, machineInfo;
+let item, printInfo, machineInfo, cooldownDate, cooldownSeconds;
+
+let cooldown  = Astro.url.searchParams.get('cooldown') || false;
+
+if (itemId) {
+    const key = `item-${itemId}-cooldown`;
+    console.log(key);
+    cooldown = getCookie(Astro.request, `item-${itemId}-cooldown`);
+    cooldownDate = new Date(cooldown);
+    // number of seconds until cooldownDate
+    cooldownSeconds = (cooldownDate - Date.now()) / 1000;
+    console.log(cooldownSeconds);
+    if (cooldownSeconds > 0) {
+        cooldownDate = prettyPrintDuration(cooldownSeconds, true);
+    } else {
+        cooldown = false;
+    }
+}
 
 try {
     item = items.find((item) => item.id === itemId);
@@ -18,14 +34,10 @@ try {
     }
 
     if (item.type === '3dprint') {
-        console.log("Item is a 3D print.");
-        console.log("path: ", item.json);
         const prints = await Astro.glob('../json/3dprinting/prints/*.json');
         printInfo = prints.find((print) => print.id === item.id);
-        console.log("printInfo: ", printInfo);
         const machines = await Astro.glob('../json/3dprinting/printers/*.json');
         machineInfo = machines.find((machine) => machine.id === printInfo.machineId);
-        console.log("machineInfo: ", machineInfo);
     }
 } catch (err) {
     console.error(err);
@@ -33,6 +45,7 @@ try {
 ---
 
 <Page hideSettings={true} title={item.creationTitle} columns="1">
+    {(cooldown && cooldownSeconds > 1) && <Warning title="Still on cooldown" text={`Still on cooldown for another ${cooldownDate}`} />}
     <img src={item.image} alt={item.name} />
 
     {
@@ -41,7 +54,7 @@ try {
                 <Chip text={item.name} href={`/inventory/${item.id}`} />
                 <p>{item.description}</p>
                 <p>Filament: {printInfo.filamentGrams}g</p>
-                <AddItem printInfo={printInfo} machineInfo={machineInfo} client:idle />
+                <AddItem printInfo={printInfo} machineInfo={machineInfo} cooldown={cooldownSeconds} client:idle />
             </div>
         )
     }

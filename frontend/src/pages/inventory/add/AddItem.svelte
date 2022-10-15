@@ -1,11 +1,11 @@
 <script>
     import { tweened } from "svelte/motion";
     import { prettyPrintDuration } from "../../../utils.js";
-    export let printInfo, machineInfo;
+    export let printInfo, machineInfo, cooldown;
     let traversed = {};
     let discovered = {};
     let nodes = {};
-    let edges = [];
+    let edges = {};
 
     for (const k in machineInfo.nodes) {
         const node = machineInfo.nodes[k];
@@ -20,11 +20,7 @@
         edges[edge.from].push(edge);
     }
 
-    console.log(nodes);
-    console.log(edges);
-
     function removeElementById(id) {
-        console.log("removing element: ", id);
         const element = document.getElementById(id);
         element.parentNode.removeChild(element);
     }
@@ -39,12 +35,9 @@
 
         if (id !== undefined) {
             newElement.id = id;
-            console.log("adding id to element: ", id);
         }
 
-        console.log("addElement: ", newElement);
-
-        document.getElementById("addItem").appendChild(newElement);
+        document.getElementById("addItem").prepend(newElement);
     }
 
     function addButton(id, text, href) {
@@ -60,15 +53,11 @@
         link.setAttribute("href", href);
         link.appendChild(linkText);
         link.className = "btn";
-        document.getElementById("addItem").appendChild(link);
+        document.getElementById("addItem").prepend(link);
     }
 
     function addTimedTask(id, text, duration, callback) {
-        addElement("div", text, "timed-task", `timed-task-${id}`);
-        addElement("div", "", "progress-bar", `progress-bar-${id}`);
-        addElement("div", "", "progress-bar-text", `progress-bar-text-${id}`);
 
-        console.log(`Creating a progress bar with duration ${duration}`);
 
         const progress = tweened(0, {
             duration: duration * 1000
@@ -86,17 +75,17 @@
                     id: node.id,
                     afterElapsed: afterElapsed
                 };
-                console.log(`Adding milestone: ${node.id}`);
                 milestones.push(milestone);
             }
         }
 
-        console.log("milestones: ", milestones);
-
         const progressBar = document.createElement("progress");
         progressBar.id=`progress-${id}`;
         progressBar.value = 0;
-        document.getElementById("addItem").appendChild(progressBar);
+        document.getElementById("addItem").prepend(progressBar);
+        addElement("div", "", "progress-bar-text", `progress-bar-text-${id}`);
+        addElement("div", "", "progress-bar", `progress-bar-${id}`);
+        addElement("div", text, "timed-task", `timed-task-${id}`);
 
         progress.set(1);
         progress.subscribe(value => {
@@ -111,9 +100,7 @@
             }
 
             if (milestones.length > 0) {
-                console.log(secondsElapsed);
                 if (secondsElapsed >= milestones[0].afterElapsed) {
-                    console.log(`Milestone reached: ${milestones[0].id}`);
                     const milestone = milestones.shift();
                     addButton(milestone.id, nodes[milestone.id].title);
                 }
@@ -130,11 +117,38 @@
         addElement("p", `${timestamp}: ${text}`);
     }
 
+    function pruneUnexplored(id) {
+        const edgeList = edges[id];
+        console.log("pruning candidates: ", edgeList);
+        try {
+            edgeList.forEach(edge => {
+                console.log(`should ${edge.to} be pruned?`);
+                console.log(`checking if ${edge.to} has property pruneIfUnexplored: ${nodes[edge.to].pruneIfUnexplored}`);
+                if (nodes[edge.to].pruneIfUnexplored) {
+                    console.log(`yes, pruning ${edge.to}`);
+                    removeButtonById(edge.to);
+                } else {
+                    console.log(`no, ${edge.to} should not pruned`);
+                }
+            });
+        } catch (e) {}
+    }
+
     function onStart() {
-        console.log('onStart');
         removeElementById("start");
-        addElement("h3", "Build log");
+        
         addLog("Checking for available printers...");
+
+        if (cooldown) {
+            console.log("cooldown: ", cooldown);
+            if (cooldown >= 0) {
+                addLog("No available printers.");
+                return;
+            }
+        } else {
+            console.log("No cooldown");
+        }
+
         addLog("Printer found: " + machineInfo.name);
 
 
@@ -147,25 +161,9 @@
     }
 
     function onTraverse(id) {
-        console.log('onTraverse: ', id);
-
         removeButtonById(id);
 
-
-        if (id == machineInfo.end) {
-            addLog("Finished!");
-            addLink('Claim your item', `/inventory/${printInfo.id}/confirmation`);
-            for (const k in discovered) {
-                const id = nodes[k].id;
-                console.log("removing button: ", id);
-                try {
-                    removeButtonById(nodes[k].id);
-                } catch (e) {
-                    console.log(`couldn't remove button with id: ${id}`);
-                }
-            }
-            return;
-        }
+        console.log("traversing: ", id);
 
         const node = nodes[id];
 
@@ -180,9 +178,18 @@
                         const edge = edges[id][k];
                         if (traversed[edge.to] === undefined) {
                             discovered[edge.to] = true;
-                            addButton(edge.to, nodes[edge.to].title);
+                            if (nodes[edge.to].afterElapsed === undefined) {
+                                addButton(edge.to, nodes[edge.to].title);
+                            }
                         }
                     }
+                }
+                console.log("pruning unexplored nodes starting from: ", id);
+                pruneUnexplored(id);
+
+                if (id == machineInfo.end) {
+                    addLog("Finished!");
+                    addLink('Claim your item', `/inventory/add/${printInfo.id}/confirmation`);
                 }
             });
         }
@@ -190,8 +197,10 @@
     }
 </script>
 
-<div id="addItem">
+<div>
     <p>The timing of each step is not final yet. It will eventually be as close to realtime as possible.</p> 
+    <h3>Build log</h3>
+    <span id="addItem" />
     <button id="start" class="btn" on:click|once={onStart}>Start</button>
 </div>
 

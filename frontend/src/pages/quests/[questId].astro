@@ -2,7 +2,7 @@
 import Page from '../../components/Page.astro';
 import Card from '../../components/Card.astro';
 import quests from '../../config/quests.json';
-import { getCookieValue, requiresCookies, acceptCookiesPath } from '../../utils';
+import { getCookieValue, acceptCookiesPath } from '../../utils';
 
 const { questId } = Astro.params;
 const cookie = Astro.request.headers.get('cookie');
