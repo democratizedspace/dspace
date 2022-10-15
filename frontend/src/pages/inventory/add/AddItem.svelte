@@ -119,16 +119,10 @@
 
     function pruneUnexplored(id) {
         const edgeList = edges[id];
-        console.log("pruning candidates: ", edgeList);
         try {
             edgeList.forEach(edge => {
-                console.log(`should ${edge.to} be pruned?`);
-                console.log(`checking if ${edge.to} has property pruneIfUnexplored: ${nodes[edge.to].pruneIfUnexplored}`);
                 if (nodes[edge.to].pruneIfUnexplored) {
-                    console.log(`yes, pruning ${edge.to}`);
                     removeButtonById(edge.to);
-                } else {
-                    console.log(`no, ${edge.to} should not pruned`);
                 }
             });
         } catch (e) {}
@@ -140,13 +134,10 @@
         addLog("Checking for available printers...");
 
         if (cooldown) {
-            console.log("cooldown: ", cooldown);
             if (cooldown >= 0) {
                 addLog("No available printers.");
                 return;
             }
-        } else {
-            console.log("No cooldown");
         }
 
         addLog("Printer found: " + machineInfo.name);
@@ -162,8 +153,6 @@
 
     function onTraverse(id) {
         removeButtonById(id);
-
-        console.log("traversing: ", id);
 
         const node = nodes[id];
 
@@ -184,7 +173,6 @@
                         }
                     }
                 }
-                console.log("pruning unexplored nodes starting from: ", id);
                 pruneUnexplored(id);
 
                 if (id == machineInfo.end) {
