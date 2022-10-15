@@ -1,7 +1,6 @@
 ---
 import Page from '../../../components/Page.astro';
 import Card from '../../../components/Card.astro';
-import ProgressBar from '../../../components/svelte/ProgressBar.svelte';
 import quests from '../../../config/quests.json';
 import SuggestCookies from '../../../components/SuggestCookies.astro';
 import { hasAcceptedCookies } from '../../../utils';
@@ -31,8 +30,6 @@ const getAction = (questOption) => {
             return `/quests/${questId}/${questOption.next}`;
         case 'path':
             return questOption.path;
-        case 'longtask':
-            return `/inventory/add/${questOption.addItem}/for/${questOption.duration}`;
         default:
             return '';
     }
@@ -56,7 +53,7 @@ if (hoursFromNow === 1) {
 ---
 
 <Page message = {questStep.message || ""}>
-    <SuggestCookies shouldSuggestCookies={shouldAcceptCookies} />
+    <SuggestCookies shouldSuggestCookies={shouldAcceptCookies} redirect={`/quests/${questId}/${stepId}`} />
     {questStep.options && questStep.options.map((option) => (
         <Card
             image={option.image}

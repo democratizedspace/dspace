@@ -4,19 +4,16 @@
 
     export let duration;
 
-
     function startProcess() {
-        progress.set(100);
+        progress.set(1);
     }
 
     const progress = tweened(0, {
-		duration: duration,
-		easing: cubicOut
+		duration: duration
 	});
 </script>
 
 <span>
-    <p>No item is actually created just yet. This page will be improved soon.</p>
     <button on:click={startProcess}>Start process</button>
     <progress value={$progress}></progress>
 </span>

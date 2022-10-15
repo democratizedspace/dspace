@@ -1,6 +1,7 @@
 ---
 import Page from '../../components/Page.astro'
 import Card from '../../components/Card.astro';
+import Warning from '../../components/Warning.astro';
 
 let title, severity, severityMessage, type, text;
 
@@ -29,10 +30,7 @@ try {
     {
         severity == 'high'
         ?
-            <span class="severe">
-                <h2>Warning</h2>
-                <p>{severityMessage}</p>
-            </span>
+            <Warning title="Warning" text={severityMessage} />
         :
             <Fragment />
     }
@@ -48,22 +46,4 @@ try {
                 image="/assets/settings.jpg"
             />
     }
-
 </Page>
-
-<style>
-    .severe > h2 {
-        text-align: center;
-    }
-
-    .severe > p {
-        text-align: center;
-    }
-
-    .severe {
-        background-color: #f44336;
-        color: white;
-        padding: 20px;
-        border-radius: 20px;
-    }
-</style>

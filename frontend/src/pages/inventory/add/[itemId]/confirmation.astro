@@ -1,0 +1,41 @@
+---
+import Page from '../../../../components/Page.astro';
+import Chip from '../../../../components/Chip.astro';
+import SuggestCookies from '../../../../components/SuggestCookies.astro';
+import items from '../../json/items.json';
+import { hasAcceptedCookies, addItemToInventory } from '../../../../utils';
+
+const { itemId } = Astro.params;
+const shouldAcceptCookies = !hasAcceptedCookies(Astro.request);
+const showConfirmation = !shouldAcceptCookies;
+
+if (showConfirmation) {
+    const success = addItemToInventory(Astro.request, Astro.response, itemId);
+    if (!success) {
+        return Astro.redirect(`/inventory/add/${itemId}?cooldown=true`);
+    }
+}
+
+const item = items.find((item) => item.id === itemId);
+---
+
+<Page title="" columns="1">
+    {
+        shouldAcceptCookies &&
+            <SuggestCookies shouldSuggestCookies={shouldAcceptCookies} redirect={Astro.url.pathname} />
+    }
+    
+    {
+        showConfirmation && 
+            <h2>Added 1 <img src={item.image} /> {item.name} to your inventory!</h2>
+            <Chip text="Go to your inventory" href="/inventory" />
+    }
+</Page>
+
+<style>
+    img {
+        vertical-align: middle;
+        width: 30px;
+        border-radius: 10px;
+    }
+</style>

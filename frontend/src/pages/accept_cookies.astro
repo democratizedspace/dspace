@@ -3,20 +3,26 @@ import Page from '../components/Page.astro';
 import Card from '../components/Card.astro';
 import { parseBool, getCookieValue } from '../utils';
 
-const cookie = Astro.request.headers.get('cookie');
-const acceptedCookies = parseBool(getCookieValue(cookie, 'acceptedCookies'));
+let acceptUrl = '/accepted_cookies';
+let denyUrl = '/';
+
+const redirect = Astro.url.searchParams.get('redirect');
+
+if (redirect !== undefined) {
+  acceptUrl = `/accepted_cookies?redirect=${redirect}`;
+  denyUrl = redirect;
+}
 ---
 
 <Page hideHome={true} hideSettings={true} hideQuests={true} message="This site currently uses cookies to save progress.">
     <Card
-        href="/accepted_cookies"
+        href={acceptUrl}
         title="Accept cookies"
         body=""
     />
 
     <Card
-        href="/"
+        href={denyUrl}
         title="Maybe later."
-        body="Go back home."
     />
 </Page>

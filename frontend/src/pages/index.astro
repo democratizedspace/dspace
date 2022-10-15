@@ -1,16 +1,5 @@
 ---
 import WhatsNew from '../components/WhatsNew.astro';
-import { parseBool, getCookieValue } from '../utils';
-
-const cookie = Astro.request.headers.get('cookie');
-
-let acceptedCookies;
-
-try {
-	acceptedCookies = parseBool(getCookieValue(cookie, 'acceptedCookies'));
-} catch {
-	acceptedCookies = false;
-}
 ---
 
 <WhatsNew />

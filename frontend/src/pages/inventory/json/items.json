@@ -1,10 +1,12 @@
 [
     {
         "id": "0",
-        "name": "Ender 3 Pro",
+        "name": "Real Printer 1",
         "description": "A basic cheap printer that is easy to use and has a large community of users.",
+        "creationTitle": "Build your own Real Printer 1",
         "image": "/assets/3dprinter.jpg",
-        "creationTitle": "Build an Ender 3 Pro"
+        "type": "machine",
+        "json": "3dprinting/printers/real-printer-1.json"
     },
     {
         "id": "1",
@@ -12,7 +14,8 @@
         "description": "A basic test print that is used to test the quality of a printer.",
         "creationTitle": "Make a test print",
         "image": "/assets/benchy.jpg",
-        "createdWith": "0"
+        "type": "3dprint",
+        "json": "3dprinting/prints/benchy.json"
     },
     {
         "id": "2",
@@ -20,5 +23,12 @@
         "description": "A kit that allows you to grow plants without soil.",
         "creationTitle": "Assemble hydroponics kit",
         "image": "/assets/hydroponics.jpg"
+    },
+    {
+        "id": "3",
+        "name": "White PLA filament",
+        "description": "A 1kg spool of white PLA filament for an FDM printer.",
+        "creationTitle": "Recycle PLA into a spool of filament",
+        "image": "/assets/pla_white.jpg"
     }
 ]
