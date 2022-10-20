@@ -126,12 +126,13 @@ switch (sortOrder) {
         width: 100px;
         height: 100px;
         border-radius: 20px;
-        margin-right: 20px;
+        margin-right: 5px;
     }
 
     a {
         text-decoration: none;
         color: white;
+        width: 100%;
     }
 
     p {
@@ -139,7 +140,7 @@ switch (sortOrder) {
         opacity: 0.8;
         color: black;
         padding: 20px;
-        margin: 20px;
+        margin: 5px;
         border-radius: 20px;
     }
 
@@ -168,4 +169,11 @@ switch (sortOrder) {
     nav :global() {
         margin: 10px;
     }
+
+    @media only screen and (max-width: 768px) {
+		img {
+            width: 50px;
+            height: 50px;
+        }
+	}
 </style>
