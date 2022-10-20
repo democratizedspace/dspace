@@ -1,0 +1,104 @@
+---
+import Page from '../../../components/Page.astro';
+import Chip from '../../../components/Chip.astro';
+import SuggestCookies from '../../../components/SuggestCookies.astro';
+import items from '../../inventory/json/items.json';
+import quests from '../../../config/quests.json';
+import { hasAcceptedCookies, setCookieValue, getCookie, addItemToInventory } from '../../../utils';
+
+export interface Props {
+    questId: string;
+}
+
+const { questId } = Astro.params;
+let questData = {}, questFinished = false;
+
+const finished = getCookie(Astro.request, `quest-${questId}-finished`);
+
+if (finished) {
+    questFinished = true;
+}
+
+const shouldAcceptCookies = !hasAcceptedCookies(Astro.request);
+
+// find the quest with id questId
+const quest = quests.find((quest) => quest.id === parseInt(questId));
+
+if (quest && !questFinished) {
+    questData = {
+        image: quest.image,
+        rewards: quest.rewards.map((reward) => {
+            const item = items.find((item) => item.id === reward.id);
+            return {
+                id: reward.id,
+                name: item.name,
+                count: reward.count,
+            };
+        })
+    };
+    
+    if (!(shouldAcceptCookies)) {
+        setCookieValue(Astro.response, `quest-${questId}-finished`, new Date(Date.now()));
+    } else {
+    }
+
+    // for each reward in questData.rewards, add the reward to the user's inventory
+    try {
+        questData['rewards'].forEach((reward) => {
+            addItemToInventory(Astro.request, Astro.response, reward.id, reward.count, true);
+        });   
+    } catch {
+    }
+}
+
+---
+
+<Page>
+    <div class="parent">
+        {shouldAcceptCookies ? (
+            questFinished ?
+                <p>Quest already finished.</p>
+            :
+                <SuggestCookies shouldSuggestCookies={shouldAcceptCookies} redirect={Astro.url.pathname} />
+        ) : (
+            questFinished ? (
+                <p>Quest already finished.</p>
+            ) :
+                questData['image'] && <img src={questData['image']} />
+                <p>Done! You finished the quest!</p>
+                <p>The following items have been added to your inventory:</p>
+                <div class="horizontal">
+                    {questData['rewards'].map((reward) => (
+                        <Chip
+                            text={`${reward.count} x ${items.find((item) => item.id === reward.id).name}`}
+                        />
+                    ))}
+                </div>
+        )}
+    </div>
+</Page>
+
+<style>
+    .parent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto;
+    }
+
+    img {
+        width: 200px;
+        border-radius: 20px;
+    }
+
+    p {
+        margin: 20px;
+        min-width: 130px;
+    }
+    
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+</style>

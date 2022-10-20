@@ -11,7 +11,6 @@ const item = items.find((item) => item.id === itemId);
 const { id, name, description, image, creationTitle } = item;
 
 const itemCount = getCookie(Astro.request, `item-${itemId}`);
-console.log("count: ", itemCount);
 ---
 
 <Page columns="1"> 
@@ -19,7 +18,8 @@ console.log("count: ", itemCount);
     <img src={image} alt={name} />
     <p>{description}</p>
     <Chip text={creationTitle} href={`/inventory/add/${id}`} />
-    <p>Count: {itemCount}</p>
+    <Chip text="Just create the item (skip creation minigame)" href={`/inventory/add/${id}/confirmation`} />
+    <p>Count: {itemCount || 0}</p>
 </Page>
 
 <style>

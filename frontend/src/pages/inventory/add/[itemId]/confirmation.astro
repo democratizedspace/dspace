@@ -3,7 +3,7 @@ import Page from '../../../../components/Page.astro';
 import Chip from '../../../../components/Chip.astro';
 import SuggestCookies from '../../../../components/SuggestCookies.astro';
 import items from '../../json/items.json';
-import { hasAcceptedCookies, addItemToInventory } from '../../../../utils';
+import { hasAcceptedCookies, addItemToInventory, getItemCount } from '../../../../utils';
 
 const { itemId } = Astro.params;
 const shouldAcceptCookies = !hasAcceptedCookies(Astro.request);
@@ -17,6 +17,8 @@ if (showConfirmation) {
 }
 
 const item = items.find((item) => item.id === itemId);
+
+const itemCount = getItemCount(Astro.request, itemId) + 1;
 ---
 
 <Page title="" columns="1">
@@ -28,6 +30,7 @@ const item = items.find((item) => item.id === itemId);
     {
         showConfirmation && 
             <h2>Added 1 <img src={item.image} /> {item.name} to your inventory!</h2>
+            <p>Count: {itemCount}</p>
             <Chip text="Go to your inventory" href="/inventory" />
     }
 </Page>

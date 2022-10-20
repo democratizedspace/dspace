@@ -3,7 +3,7 @@
         "id": 0,
         "title": "Build your first 3D printer",
         "body": "Someone offers you a 3D printer. Do you accept?",
-        "image": "assets/3dprinter.jpg",
+        "image": "/assets/3dprinter.jpg",
         "steps": [
             {
                 "id": 0,
@@ -78,33 +78,33 @@
                         "action": "path",
                         "path": "/inventory/add/1",
                         "image": "/assets/benchy.jpg"
-                    }
-                ],
-                "checkpoint": true
-            },
-            {
-                "id": 5,
-                "message": "Print a rocket",
-                "addItem": "0",
-                "options": [
+                    },
                     {
-                        "id": 0,
-                        "title": "3D print a rocket",
-                        "body": "",
-                        "action": "none",
-                        "duration": "3h",
-                        "image": "/assets/modelrocket.jpg"
+                        "id": 1,
+                        "title": "Finish the quest and collect your reward",
+                        "action": "finish",
+                        "image": "/assets/door.jpg"
                     }
                 ],
                 "checkpoint": true
             }
-        ]   
+        ],
+        "rewards": [
+            {
+                "id": "0",
+                "count": 1
+            },
+            {
+                "id": "3",
+                "count": 1000
+            }
+        ]
     },
     {
         "id": 1,
         "title": "Launch a rocket",
         "body": "Not for real. Not yet. This one is virtual.",
-        "image": "assets/launch.jpg",
+        "image": "/assets/launch.jpg",
         "steps": [
             {
                 "id": 0,
@@ -119,13 +119,13 @@
                     }
                 ]
             }
-        ]   
+        ]
     },
     {
         "id": 2,
         "title": "Grow basil hydroponically",
         "body": "Hydroponics is a technique by which you grow plants in a liquid nutrition solution. No soil required. Very water-efficient.",
-        "image": "assets/hydroponics.jpg",
+        "image": "/assets/hydroponics.jpg",
         "steps": [
             {
                 "id": 0,
@@ -161,7 +161,7 @@
         "id": 3,
         "title": "Buy a solar panel",
         "body": "They're getting cheaper and cheaper. Current price: $2.94/watt.",
-        "image": "assets/solar.jpg",
+        "image": "/assets/solar.jpg",
         "steps": [
             {
                 "id": 0,
@@ -182,7 +182,7 @@
         "id": 4,
         "title": "Buy an EV",
         "body": "Might I recommend the Edison Model M?",
-        "image": "assets/ev.jpg",
+        "image": "/assets/ev.jpg",
         "steps": [
             {
                 "id": 0,

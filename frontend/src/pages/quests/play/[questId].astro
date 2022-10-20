@@ -1,0 +1,26 @@
+---
+import Page from '../../../components/Page.astro';
+import { getCookie } from '../../../utils';
+
+const { questId } = Astro.params;
+
+const questFinished = getCookie(Astro.request, `quest-${questId}-finished`);
+
+if (questFinished !== undefined) {
+    return Astro.redirect(`/quests/finish/${questId}`);
+}
+
+const cookieKey = `checkpoint-${questId}`;
+const checkpointForQuest = getCookie(Astro.request, cookieKey);
+const checkpoint = parseInt(checkpointForQuest);
+
+
+if (checkpointForQuest === undefined) {
+    return Astro.redirect(`/quests/play/${questId}/0`);
+} else {
+    return Astro.redirect(`/quests/play/${questId}/${checkpoint}`);
+}
+---
+
+<Page message="Redirecting...">
+</Page>

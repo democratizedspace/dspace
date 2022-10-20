@@ -19,9 +19,8 @@ const changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
 const changelogsReversed = changelogs.reverse();
 ---
 
-<Page title="What's new" columns="1">
+<Page title="Changelog" columns="1">
     <span class="wrapper">
-        <h2>Changelog</h2>
         {changelogsReversed.slice(0, 1).map(doc => (
             <h3>{doc.frontmatter.title}</h3>
             <span set:html={doc.compiledContent()}></span>

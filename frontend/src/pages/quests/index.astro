@@ -2,15 +2,79 @@
 import Page from '../../components/Page.astro';
 import Card from '../../components/Card.astro';
 import quests from '../../config/quests.json';
+import { getCookie } from '../../utils';
+
+const incompleteQuests = quests.filter((quest) => getCookie(Astro.request, `quest-${quest.id}-finished`) === undefined);
+const completedQuests = quests.filter((quest) => getCookie(Astro.request, `quest-${quest.id}-finished`) !== undefined);
 ---
 
-<Page hideQuests={true} title="Quests">
-    {quests.map(quest => (
-        <Card
-            href={`/quests/${quest.id}`} 
-            title={quest.title}
-            body={quest.body}
-            image={quest.image}
-            />
-    ))}
+<Page title="Quests" columns="1">
+    <h2>In progress</h2>
+
+    <div class="vertical">
+        {incompleteQuests.map(quest => (
+            <a href={`/quests/play/${quest.id}`}>
+                <div class="horizontal container">
+                    <img src={quest.image} />
+                    <div class="vertical">
+                        <h3>{quest.title}</h3>
+                        <p>{quest.body}</p>
+                    </div>
+                </div>
+            </a>
+        ))}
+    </div>
+
+    {(completedQuests.length > 0) && <h2>Complete</h2>}
+
+    <div class="vertical">
+        {completedQuests.map(quest => (
+            <a>
+                <div class="horizontal container">
+                    <img src={quest.image} />
+                    <div class="vertical">
+                        <h3>{quest.title}</h3>
+                        <p>{quest.body}</p>
+                    </div>
+                </div>
+            </a>
+        ))}
+    </div>
 </Page>
+
+<style>
+    img {
+        width: 150px;
+        height: 150px;
+        border-radius: 20px;
+        margin-right: 20px;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .vertical {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container {
+        background-color: #84d484;
+        padding: 10px;
+        margin: 5px;
+        border-radius: 20px;
+        opacity: 0.8;
+    }
+
+    .container:hover {
+        opacity: 1;
+    }
+</style>
