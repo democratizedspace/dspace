@@ -6,7 +6,9 @@
         "creationTitle": "Build your own Real Printer 1",
         "image": "/assets/3dprinter.jpg",
         "type": "machine",
-        "json": "3dprinting/printers/real-printer-1.json"
+        "json": "3dprinting/printers/real-printer-1.json",
+        "price": "200 dUSD",
+        "cooldown": "1d"
     },
     {
         "id": "1",
@@ -15,20 +17,34 @@
         "creationTitle": "Make a test print",
         "image": "/assets/benchy.jpg",
         "type": "3dprint",
-        "json": "3dprinting/prints/benchy.json"
+        "json": "3dprinting/prints/benchy.json",
+        "price": "5 dUSD",
+        "cooldown": "20m"
     },
     {
         "id": "2",
-        "name": "Hydroponics kit",
-        "description": "A kit that allows you to grow plants without soil.",
+        "name": "Real Hydroponics Kit 1",
+        "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
         "creationTitle": "Assemble hydroponics kit",
-        "image": "/assets/hydroponics.jpg"
+        "image": "/assets/hydroponics.jpg",
+        "cooldown": "1d",
+        "price": "30 dUSD"
     },
     {
         "id": "3",
         "name": "White PLA filament",
-        "description": "A 1kg spool of white PLA filament for an FDM printer.",
+        "description": "1 gram of white PLA filament for an FDM printer.",
         "creationTitle": "Recycle PLA into a spool of filament",
-        "image": "/assets/pla_white.jpg"
+        "image": "/assets/pla_white.jpg",
+        "price": "0.02499 dUSD"
+    },
+    {
+        "id": "4",
+        "name": "Edison Model M",
+        "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities.",
+        "creationTitle": "Build your own Edison Model M",
+        "image": "/assets/ev.jpg",
+        "cooldown": "365d",
+        "price": "40000 dUSD"
     }
 ]

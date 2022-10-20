@@ -13,12 +13,10 @@ let cooldown  = Astro.url.searchParams.get('cooldown') || false;
 
 if (itemId) {
     const key = `item-${itemId}-cooldown`;
-    console.log(key);
     cooldown = getCookie(Astro.request, `item-${itemId}-cooldown`);
     cooldownDate = new Date(cooldown);
     // number of seconds until cooldownDate
     cooldownSeconds = (cooldownDate - Date.now()) / 1000;
-    console.log(cooldownSeconds);
     if (cooldownSeconds > 0) {
         cooldownDate = prettyPrintDuration(cooldownSeconds, true);
     } else {

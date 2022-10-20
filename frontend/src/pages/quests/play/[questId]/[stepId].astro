@@ -1,0 +1,111 @@
+---
+import Page from '../../../../components/Page.astro';
+import Card from '../../../../components/Card.astro';
+import quests from '../../../../config/quests.json';
+import SuggestCookies from '../../../../components/SuggestCookies.astro';
+import { hasAcceptedCookies } from '../../../../utils';
+
+const HOURS = 1000 * 60 * 60;
+const DURATION = 1 * HOURS;
+
+const { questId, stepId } = Astro.params;
+let quest, questStep;
+
+const shouldAcceptCookies = !hasAcceptedCookies(Astro.request);
+
+try {
+    quest = quests[questId];
+    questStep = quest.steps[stepId];
+} catch (e) {
+    questStep = '';
+}
+
+if (!(shouldAcceptCookies) && questStep.checkpoint === true) {
+    Astro.response.headers.append('Set-Cookie', `checkpoint-${questId}=${parseInt(questStep.id)}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`);
+}
+
+const getAction = (questOption) => {
+    switch (questOption.action) {
+        case 'quest':
+            return `/quests/play/${questId}/${questOption.next}`;
+        case 'path':
+            return questOption.path;
+        case 'finish':
+            return `/quests/finish/${questId}`;
+        default:
+            return '';
+    }
+}
+
+const startTime = new Date(Date.now());
+
+// Date.now() plus one hour as a Date type
+const endTime = new Date(startTime.getTime() + DURATION);
+
+let hoursFromNow = endTime.getTime() - startTime.getTime();
+hoursFromNow = hoursFromNow / HOURS;
+
+let output;
+if (hoursFromNow === 1) {
+    output = `in 1 hour`;
+} else {
+    output = `in ${hoursFromNow} hours`;
+}
+
+---
+
+<Page message = {questStep.message || ""}>
+    <SuggestCookies shouldSuggestCookies={shouldAcceptCookies} redirect={`/quests/play/${questId}/${stepId}`} />
+    <div class="vertical base">
+        {questStep.options && questStep.options.map((option) => (
+            <a href={getAction(option)}>
+                <div class="horizontal container">
+                    {option.image && <img src={option.image} />}
+                    <div class="vertical">
+                        <h2>{option.title}</h2>
+                        <p>{option.body}</p>
+                    </div>
+                </div>
+            </a>
+        ))}
+    </div>
+</Page>
+
+
+<style>
+    img {
+        width: 150px;
+        height: 150px;
+        border-radius: 20px;
+        margin-right: 20px;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .vertical {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container {
+        background-color: #84d484;
+        padding: 20px;
+        margin: 5px;
+        border-radius: 20px;
+        opacity: 0.8;
+        width: 100%;
+    }
+
+    .container:hover {
+        opacity: 1;
+    }
+</style>

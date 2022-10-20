@@ -1,21 +1,94 @@
 ---
 import Page from '../../components/Page.astro';
-import Card from '../../components/Card.astro';
-import Warning from '../../components/Warning.astro';
-
-// import items.json from the config directory
+import Chip from '../../components/Chip.astro';
+import { getItemCount, durationInSeconds, prettyPrintDuration, SECOND, DEFAULT_COOLDOWN } from '../../utils.js';
 import items from './json/items.json';
+
+let itemsFiltered = items, itemsSorted, itemInfo = {};
+
+const getItemCountById = (itemId) => {
+
+    const itemCount = getItemCount(Astro.request, itemId);
+
+    return itemCount;
+};
+
+for (let item of items) {
+    let price = 0
+    // get item.price in number and unit
+    try {
+        price = parseInt(item.price.split(' ')[0]);   
+    } catch (e) {
+    }
+
+    itemInfo[item.id] = {
+        count: getItemCountById(item.id),
+        cooldown: durationInSeconds(item.cooldown) * SECOND || DEFAULT_COOLDOWN,    
+        price: price
+    };
+}
+
+const filter = Astro.url.searchParams.get('search') || '';
+const sortOrder = Astro.url.searchParams.get('sort') || 'az';
+
+if (filter !== undefined && filter !== '') {
+    itemsFiltered = items.filter((item) => {
+        return item.name.toLowerCase().includes(filter.toLowerCase());
+    });
+}
+
+switch (sortOrder) {
+    case 'az':
+        itemsSorted = itemsFiltered.sort((a,b)=>a.name.localeCompare(b.name));
+        break;
+    case 'za':
+        itemsSorted = itemsFiltered.sort((a,b)=>b.name.localeCompare(a.name));
+        break;
+    case 'countdescending':
+        itemsSorted = itemsFiltered.sort((a,b)=>itemInfo[b.id].count - itemInfo[a.id].count);
+        break;
+    case 'countascending':
+        itemsSorted = itemsFiltered.sort((a,b)=>itemInfo[a.id].count - itemInfo[b.id].count);
+        break;
+    case 'cooldownascending':
+        itemsSorted = itemsFiltered.sort((a,b)=>itemInfo[a.id].cooldown - itemInfo[b.id].cooldown);
+        break;
+    case 'cooldowndescending':
+        itemsSorted = itemsFiltered.sort((a,b)=>itemInfo[b.id].cooldown - itemInfo[a.id].cooldown);
+        break;
+    case 'priceascending':
+        itemsSorted = itemsFiltered.sort((a,b)=>itemInfo[a.id].price - itemInfo[b.id].price);
+        break;
+    default:
+        itemsSorted = itemsFiltered.sort((a,b)=>itemInfo[b.id].price - itemInfo[a.id].price);
+        break;
+} 
 ---
 
 <Page title="Inventory" columns="1">
-    <Warning title="Warning" text="Until the inventory, profile, and leaderboard systems are implemented, expect item counts to reset. This is because right now inventory management is fully client-side and can be abused to progress your account without cooldowns. Once there are sufficient server-side checks to ensure fairness, your inventory will only be changed with your explicit consent." />
-    {items.map((item) => (
+    <nav>
+        <Chip text="a-z" href={`/inventory?sort=az`} />
+        <Chip text="z-a" href={`/inventory?sort=za`} />
+        <Chip text="highest count" href={`/inventory?sort=countdescending`} />
+        <Chip text="lowest count" href={`/inventory?sort=countascending`} />
+        <Chip text="shortest cooldown" href={`/inventory?sort=cooldownascending`} />
+        <Chip text="longest cooldown" href={`/inventory?sort=cooldowndescending`} />
+        <Chip text="least expensive" href={`/inventory?sort=priceascending`} />
+        <Chip text="most expensive" href={`/inventory?sort=pricedescending`} />
+    </nav>
+
+    {itemsFiltered.map((item) => (
         <a href={`/inventory/${item.id}`}>
             <div class="item">
                 <h3>{item.name}</h3>
-                <div>
+                <div class="parent">
                     <img src={item.image} />
-                    <p>{item.description}</p>
+                    <p class="nobackground">{item.description}</p>
+                    <div class="parent vertical">
+                        <p class="compact nowrap"><strong>Count:</strong> {getItemCountById(item.id)}</p>
+                        <p class="compact nowrap"><strong>Price:</strong> {item.price || 'Free'}</p>
+                        <p class="compact nowrap"><strong>Cooldown:</strong> {item.cooldown || prettyPrintDuration(DEFAULT_COOLDOWN/SECOND, true)}</p>
+                    </div>
                 </div>
             </div>
         </a>
@@ -23,11 +96,19 @@ import items from './json/items.json';
 </Page>
 
 <style>
+
+    .parent {
+        display: flex;
+        align-items: center;
+    }
+
+    .vertical {
+        flex-direction: column;
+    }
+
     .item {
         background-color: #2f5b2f;
         padding: 20px;
-        padding-top: 10px;
-        min-height: 100px;
         border-radius: 20px;
         opacity: 0.8;
     }
@@ -38,18 +119,53 @@ import items from './json/items.json';
 
     .item h3 {
         margin: 0px;
-        margin-bottom: 20px;
+        text-align: center;
     }
 
     img {
-        width: 50px;
-        float: left;
-        margin-right: 20px;
+        width: 100px;
+        height: 100px;
         border-radius: 20px;
+        margin-right: 20px;
     }
 
     a {
         text-decoration: none;
         color: white;
+    }
+
+    p {
+        background-color: #84d484;
+        opacity: 0.8;
+        color: black;
+        padding: 20px;
+        margin: 20px;
+        border-radius: 20px;
+    }
+
+    .compact {
+        font-size: 0.8em;
+        margin: 2px;
+        padding: 5px;
+    }
+
+    .nowrap {
+        margin-right: 20px;
+        white-space: nowrap;
+    }
+
+    .nobackground {
+        background: none;
+        color: white;
+    }
+
+	nav {
+		text-align: center;
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+    nav :global() {
+        margin: 10px;
     }
 </style>
