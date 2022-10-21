@@ -5,7 +5,7 @@ slug: "faq"
 
 ## What can I do?
 
-Not much yet, but you can submit bug reports and feature requests [here](https://github.com/democratizedspace/dspace/issues/new).
+You can currently create any item in your [inventory](/inventory) as long as it's not on cooldown! Eventually it will require raw materials, which must be extracted (i.e. mined) or purchased from [Amazing](/docs/amazing). 
 
 ## Where can I learn more?
 
