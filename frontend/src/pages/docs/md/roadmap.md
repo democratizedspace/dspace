@@ -10,11 +10,14 @@ slug: "roadmap"
 
 ### 3D Printing
 
-- [ ] test print
+- [x] test print
 - [ ] build printer
 - [ ] print model rocket
 - [ ] auto bed leveling upgrade
 - [ ] remove print upgrade
+
+## October 2022
+- [x] [Make a test print](/inventory/add/1)
 
 ## September 2022
 

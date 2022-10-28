@@ -1,9 +1,10 @@
 ---
 import Page from '../../components/Page.astro';
+import Chip from '../../components/Chip.astro';
 import Card from '../../components/Card.astro';
 
 const { slug } = Astro.params;
-let html;
+let title, html;
 
 const docs = await Astro.glob('./md/*.md');
 
@@ -11,6 +12,7 @@ const doc = docs.find((doc) => doc.frontmatter.slug === slug);
 
 if (doc) {
     html = doc.compiledContent();
+    title = doc.frontmatter.title;
 }
 
 ---
@@ -20,12 +22,18 @@ if (doc) {
     ?
     <div>
         <Page title={doc.frontmatter.title} columns="1">
+            <div>
+            <Chip text="Docs" href="/docs" />
+            <span>-></span>
+            <Chip text={title} href={`/docs/${slug}`} />
+            </div>
             <span set:html={html} />
         </Page>
     </div>
      : 
     <div>
         <Page title="Doc not found" columns="1">
+            <Chip text="Docs" href="/docs" />
             <Card
                 body={`Should something exist here? Add a file on Github and submit a pull request.`}
                 href="https://github.com/democratizedspace/dspace/new/main/frontend/pages/settings/json"
