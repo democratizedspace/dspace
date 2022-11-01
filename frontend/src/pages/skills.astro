@@ -1,7 +1,20 @@
 ---
 import Page from '../components/Page.astro';
-import Card from '../components/Card.astro';
+import Chip from '../components/Chip.astro';
 ---
 
-<Page message="This page is coming soon." title="Skills">
+<Page title="Skills" columns="1">
+    <nav>
+        <Chip text="3D printing" />
+        <Chip text="Hydroponics" />
+        <Chip text="Electronics" />
+        <Chip text="CNC" />
+    </nav>
 </Page>
+
+<style>
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+    }
+</style>
