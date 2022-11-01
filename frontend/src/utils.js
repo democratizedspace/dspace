@@ -151,6 +151,12 @@ export const getItemCount = (req, itemId) => {
     return 0;
 }
 
+export const fixMarkdownText = (text) => {
+    // replace ’ with '
+    const fixedText = text.replace(/’/g, '\'');
+    return fixedText;
+};
+
 export const acceptCookiesPath = '/accept_cookies';
 
 export const MS = 1000;

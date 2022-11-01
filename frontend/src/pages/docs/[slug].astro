@@ -2,6 +2,7 @@
 import Page from '../../components/Page.astro';
 import Chip from '../../components/Chip.astro';
 import Card from '../../components/Card.astro';
+import { fixMarkdownText } from '../../utils';
 
 const { slug } = Astro.params;
 let title, html;
@@ -11,10 +12,9 @@ const docs = await Astro.glob('./md/*.md');
 const doc = docs.find((doc) => doc.frontmatter.slug === slug);
 
 if (doc) {
-    html = doc.compiledContent();
+    html = fixMarkdownText(doc.compiledContent());
     title = doc.frontmatter.title;
 }
-
 ---
 
 {
@@ -41,7 +41,6 @@ if (doc) {
             />
         </Page>
     </div>
-    
 }
 
 <style>

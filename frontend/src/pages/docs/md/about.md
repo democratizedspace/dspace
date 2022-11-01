@@ -9,7 +9,7 @@ DSPACE is an incremental simulation game about resource management and space exp
 
 ## Start with the basics
 
-Learn [skills](/skills) related to space exploration and resource management, and [be](/quests/play/4) an early adopter of (virtual) futuristic tech.
+Learn skills related to space exploration and resource management, and [be](/quests/play/4) an early adopter of (virtual) futuristic tech.
 
 ## Gain momentum
 
@@ -21,7 +21,7 @@ Use in-situ resource utilization. Mine the moon for water and oxygen. Use the wa
 
 ## Make your own quests
 
-Make your [quests](/quests) locally and then share them with the community. Each quest is [reviewed by a human](/docs/reviews) to ensure that it is not spammy or malicious. The quests will be ERC-1155 tokens minted for free, minus gas fees. Starting with Polygon. Participation is optional, but this feature is avaialble for those who are interested. For more info, check out the [web3](/docs/web3) page.
+Make your [quests](/quests) locally and then share them with the community.
 
 ## Where to go next
 

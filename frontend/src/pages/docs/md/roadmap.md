@@ -17,6 +17,7 @@ slug: "roadmap"
 - [ ] remove print upgrade
 
 ## October 2022
+- [x] Big [docs](/docs) update
 - [x] [Make a test print](/inventory/add/1)
 
 ## September 2022
