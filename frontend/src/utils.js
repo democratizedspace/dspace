@@ -1,4 +1,5 @@
 import items from './pages/inventory/json/items.json';
+import quests from './pages/quests/json/quests.json';
 
 export const parseCookie = (cookie) => {
     try {
@@ -129,7 +130,7 @@ export const addItemToInventory = (req, res, itemId, count = 1, bypass = false) 
     }
 
     if (itemCount !== undefined && !isNaN(itemCount)) {
-        setCookieValue(res, `item-${itemId}`, itemCount + count);
+        setCookieValue(res, `item-${itemId}`, parseInt(itemCount) + parseInt(count));
     } else {
         setCookieValue(res, `item-${itemId}`, count);
     }
@@ -151,11 +152,105 @@ export const getItemCount = (req, itemId) => {
     return 0;
 }
 
+export const getWalletBalance = (req, symbol) => {
+    const cookie = req.headers.get('cookie');
+    const balance = parseFloat(getCookieValue(cookie, `currency-balance-${symbol}`));
+    if (balance !== undefined && !isNaN(balance)) {
+        return balance;
+    }
+    return 0;
+}
+
+export const addWalletBalance = (req, res, symbol, addBalance) => {
+    console.log("addBalance: ", addBalance);
+    const balance = getWalletBalance(req, symbol);
+    console.log("old balance: ", balance);
+    const newBalance = Math.max(0, balance + addBalance);
+    console.log("new balance: ", newBalance);
+    // TODO: start here
+    setCookieValue(res, `currency-balance-${symbol}`, newBalance);
+};
+
+export const isQuestCompleted = (req, questId) => {
+    const cookie = req.headers.get('cookie');
+    return getCookieValue(cookie, `quest-${questId}-finished`) !== undefined;
+}
+
+export const questRequirementsMet = (req, questId) => {
+    const quest = quests.find((quest) => quest.id === questId);
+    if (quest) {
+        const requires = quest.requiresQuests;
+        if (requires) {
+            for (const requirement of requires) {
+                if (!isQuestCompleted(req, requirement)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+export const burnItem = (req, res, itemId, count = 1) => {
+    const itemCount = getItemCount(req, itemId);
+
+    const newItemCount = Math.max(0, itemCount - count);
+
+    setCookieValue(res, `item-${itemId}`, newItemCount);
+};
+
 export const fixMarkdownText = (text) => {
     // replace ’ with '
     const fixedText = text.replace(/’/g, '\'');
     return fixedText;
 };
+
+export const getPriceStringComponents = (currency) => {
+    // parse a string like '10 dUSD' into a number and a symbol
+    const priceString = currency.split(' ');
+    const price = parseFloat(priceString[0]);
+    const symbol = priceString[1];
+
+    return {
+        price, symbol
+    };
+};
+
+export const buyItem = (req, res, itemId, count = 1) => {
+    const item = items.find((item) => item.id === itemId);
+    if (item) {
+        const { price, symbol } = getPriceStringComponents(item.price);
+        console.log(price, symbol);
+        const totalPrice = price * count;
+        console.log(totalPrice);
+        const walletBalance = getWalletBalance(req, symbol);
+        console.log(walletBalance);
+        if (walletBalance >= totalPrice) {
+            console.log("enough money");
+            if (addItemToInventory(req, res, itemId, count, true)) {
+                setCookieValue(res, `currency-balance-${symbol}`, Math.max(0, walletBalance - totalPrice));
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+export const sellItem = (req, res, itemId, count = 1) => {
+    const item = items.find((item) => item.id === itemId);
+    if (item) {
+        const { price, symbol } = getPriceStringComponents(item.price);
+        const totalPrice = price * count;
+        const itemCount = getItemCount(req, itemId);
+        if (itemCount >= count) {
+            addWalletBalance(req, res, symbol, totalPrice);
+            burnItem(req, res, itemId, count);
+            return true;
+        }
+    }
+    return false;
+}
 
 export const acceptCookiesPath = '/accept_cookies';
 

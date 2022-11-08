@@ -177,7 +177,7 @@
 
                 if (id == machineInfo.end) {
                     addLog("Finished!");
-                    addLink('Claim your item', `/inventory/add/${printInfo.id}/confirmation`);
+                    addLink('Claim your item', `/inventory/add/${printInfo.itemId}/confirmation`);
                 }
             });
         }

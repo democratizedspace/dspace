@@ -1,0 +1,15 @@
+---
+import Page from '../../components/Page.astro';
+import { getWalletBalance } from '../../utils.js';
+
+const balances = {
+    dusd: getWalletBalance(Astro.request, 'dUSD'),
+}
+---
+
+<Page columns="1">
+    <h3>Balances</h3>
+    <ul>
+        <li>dUSD: {balances.dusd}</li>
+    </ul>
+</Page>

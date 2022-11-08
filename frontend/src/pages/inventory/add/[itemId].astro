@@ -3,7 +3,7 @@ import Page from '../../../components/Page.astro';
 import Chip from '../../../components/Chip.astro';
 import Warning from '../../../components/Warning.astro';
 import items from '../json/items.json';
-import AddItem from './AddItem.svelte';
+import Print from './3DPrint.svelte';
 import { getCookie, prettyPrintDuration } from '../../../utils.js';
 
 const { itemId } = Astro.params;
@@ -33,7 +33,7 @@ try {
 
     if (item.type === '3dprint') {
         const prints = await Astro.glob('../json/3dprinting/prints/*.json');
-        printInfo = prints.find((print) => print.id === item.id);
+        printInfo = prints.find((print) => print.itemId === item.id);
         const machines = await Astro.glob('../json/3dprinting/printers/*.json');
         machineInfo = machines.find((machine) => machine.id === printInfo.machineId);
     }
@@ -52,7 +52,8 @@ try {
                 <Chip text={item.name} href={`/inventory/${item.id}`} />
                 <p>{item.description}</p>
                 <p>Filament: {printInfo.filamentGrams}g</p>
-                <AddItem printInfo={printInfo} machineInfo={machineInfo} cooldown={cooldownSeconds} client:idle />
+                <p>Duration: {printInfo.timeToPrint}</p>
+                <Print printInfo={printInfo} machineInfo={machineInfo} cooldown={cooldownSeconds} client:idle />
             </div>
         )
     }

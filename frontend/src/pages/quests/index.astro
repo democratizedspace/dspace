@@ -1,11 +1,12 @@
 ---
 import Page from '../../components/Page.astro';
 import Card from '../../components/Card.astro';
-import quests from '../../config/quests.json';
-import { getCookie } from '../../utils';
+import quests from './json/quests.json';
+import { getCookie, questRequirementsMet } from '../../utils';
 
-const incompleteQuests = quests.filter((quest) => getCookie(Astro.request, `quest-${quest.id}-finished`) === undefined);
-const completedQuests = quests.filter((quest) => getCookie(Astro.request, `quest-${quest.id}-finished`) !== undefined);
+const requirementsMet = quests.filter((quest) => questRequirementsMet(Astro.request, quest.id));
+const incompleteQuests = requirementsMet.filter((quest) => getCookie(Astro.request, `quest-${quest.id}-finished`) === undefined);
+const completedQuests = requirementsMet.filter((quest) => getCookie(Astro.request, `quest-${quest.id}-finished`) !== undefined);
 ---
 
 <Page title="Quests" columns="1">

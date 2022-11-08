@@ -1,0 +1,18 @@
+---
+import Page from '../../../../components/Page.astro';
+import items from '../../../inventory/json/items.json';
+import { sellItem } from '../../../../utils.js';
+
+const { itemId, count } = Astro.params;
+
+const sellConfirmation = sellItem(Astro.request, Astro.response, itemId, parseFloat(count.toString()));
+
+if (!sellConfirmation) {
+  return Astro.redirect(`/shop/sell/${itemId}/${count}/insufficient_items`);
+}
+
+const item = items.find((item) => item.id === itemId);
+---
+
+<Page title={`Purchase successful!`} columns="1">
+</Page>

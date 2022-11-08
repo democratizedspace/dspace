@@ -83,7 +83,7 @@ switch (sortOrder) {
                 <h3>{item.name}</h3>
                 <div class="parent">
                     <img src={item.image} />
-                    <p class="nobackground">{item.description}</p>
+                    <p class="nobackground description">{item.description}</p>
                     <div class="parent vertical">
                         <p class="compact nowrap"><strong>Count:</strong> {getItemCountById(item.id)}</p>
                         <p class="compact nowrap"><strong>Price:</strong> {item.price || 'Free'}</p>
@@ -170,10 +170,19 @@ switch (sortOrder) {
         margin: 10px;
     }
 
+    .description {
+        width: 295px;
+    }
+
     @media only screen and (max-width: 768px) {
 		img {
             width: 50px;
             height: 50px;
+        }
+
+        .description {
+            min-width: 100px;
+            width: auto;
         }
 	}
 </style>

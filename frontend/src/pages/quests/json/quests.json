@@ -1,7 +1,7 @@
 [
     {
         "id": 0,
-        "title": "Build your first 3D printer",
+        "title": "Set up your first 3D printer",
         "body": "Someone offers you a 3D printer. Do you accept?",
         "image": "/assets/3dprinter.jpg",
         "steps": [
@@ -72,14 +72,6 @@
                 "message": "3D printer created! You can find it in your inventory.",
                 "options": [
                     {
-                        "id": 0,
-                        "title": "Make a test print",
-                        "body": "",
-                        "action": "path",
-                        "path": "/inventory/add/1",
-                        "image": "/assets/benchy.jpg"
-                    },
-                    {
                         "id": 1,
                         "title": "Finish the quest and collect your reward",
                         "action": "finish",
@@ -97,6 +89,12 @@
             {
                 "id": "3",
                 "count": 1000
+            }
+        ],
+        "addBalance": [
+            {
+                "currency": "dUSD",
+                "count": 20
             }
         ]
     },
@@ -135,10 +133,30 @@
                         "id": 0,
                         "title": "Order a hydroponics kit from Amazing",
                         "body": "Free 1-day shipping!",
-                        "action": "none",
                         "next": 1,
+                        "action": "path",
+                        "path": "/shop/buy/2",
                         "image": "/assets/cart.jpg",
-                        "duration": "1d"
+                        "redirect": "/quests/2/1"
+                    },
+                    {
+                        "id": 1,
+                        "title": "Assemble your kit.",
+                        "body": "No tools required!",
+                        "requiresItems": [
+                            {
+                                "id": "2",
+                                "count": 1
+                            }
+                        ],
+                        "addItems": [
+                            {
+                                "id": "9",
+                                "count": 1
+                            }
+                        ],
+                        "action": "quest",
+                        "next": 1
                     }
                 ]
             },
@@ -148,13 +166,54 @@
                 "options": [
                     {
                         "id": 0,
-                        "title": "It arrived at your doorstep!",
-                        "body": "That was fast!",
-                        "action": "none",
-                        "image": "/assets/amazing1.jpg"
+                        "title": "Unbox your kit",
+                        "body": "",
+                        "action": "quest",
+                        "next": 2,
+                        "image": "/assets/hydroponics_tub.jpg",
+                        "consumes": [
+                            {
+                                "id": "2",
+                                "count": 1
+                            }
+                        ],
+                        "creates": [
+                            {
+                                "id": "9",
+                                "count": 1
+                            }
+                        ]
                     }
                 ]
+            },
+            {
+                "id": 2,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Order some basil seeds",
+                        "body": "",
+                        "action": "path",
+                        "path": "/shop/buy/10",
+                        "image": "/assets/basil_seeds.jpg",
+                        "consumes": [
+                            {
+                                "id": "2",
+                                "count": 1
+                            }
+                        ],
+                        "creates": [
+                            {
+                                "id": "9",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ],
+                "checkpoint": true
             }
+
         ]   
     },
     {
@@ -171,7 +230,8 @@
                         "id": 0,
                         "title": "Order a small foldable solar panel from Amazing",
                         "body": "Gotta start somewhere!",
-                        "action": "none",
+                        "action": "path",
+                        "path": "/shop/buy/5",
                         "image": "/assets/cart.jpg"
                     }
                 ]
@@ -190,13 +250,75 @@
                 "options": [
                     {
                         "id": 0,
-                        "title": "Put down a refundable $100 deposit to reserve your Model M",
-                        "body": "Estimated delivery time: 2 months.",
-                        "action": "none",
-                        "image": "/assets/coins.jpg"
+                        "title": "Order an Edison Model M from Amazing",
+                        "body": "Driven to your door.",
+                        "action": "path",
+                        "itemId": "2",
+                        "image": "/assets/cart.jpg",
+                        "duration": "1d",
+                        "path": "/shop/buy/4",
+                        "image": "/assets/cart.jpg",
+                        "redirect": "/quests/4/1"
                     }
                 ]
             }
         ]   
+    },
+    {
+        "id": 5,
+        "title": "Make a test print",
+        "body": "You can use the 3D printer you received in the previous quest.",
+        "image": "/assets/benchy.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Print a Benchy",
+                        "body": "A popular test print.",
+                        "action": "path",
+                        "path": "/inventory/add/1",
+                        "image": "/assets/3dprinter.jpg",
+                        "duration": "1d"
+                    },
+                    {
+                        "id": 1,
+                        "title": "Turn in your benchy for a benchy award",
+                        "body": "Shiny!",
+                        "requiresItems": [
+                            {
+                                "id": "1",
+                                "count": 1
+                            }
+                        ],
+                        "action": "finish",
+                        "image": "/assets/door.jpg"
+                    }
+                ]
+            }
+        ],
+        "requiresQuests": [
+            "0"
+        ],
+        "requiresItems": [
+            {
+                "id": "1",
+                "count": 1
+            }
+        ],
+        "burnsItems": [
+            {
+                "id": "1",
+                "count": 1
+            }
+        ],
+        "rewards": [
+            {
+                "id": "8",
+                "count": 1
+            }
+        ]
     }
 ]

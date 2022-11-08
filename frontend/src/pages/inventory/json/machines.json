@@ -1,0 +1,10 @@
+[
+    {
+        "id": "0",
+        "name": "3D printer",
+        "description": "A machine that prints 3D objects",
+        "itemIds": [
+            "0"
+        ]
+    }
+]
