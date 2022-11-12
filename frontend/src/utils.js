@@ -217,6 +217,15 @@ export const getPriceStringComponents = (currency) => {
     };
 };
 
+export const getSymbolFromId = (itemId) => {
+    const item = items.find((item) => item.id === itemId);
+    if (item) {
+        const { _, symbol } = getPriceStringComponents(item.price);
+        return symbol;
+    }
+    return undefined;
+}
+
 export const buyItem = (req, res, itemId, count = 1) => {
     const item = items.find((item) => item.id === itemId);
     if (item) {

@@ -17,8 +17,10 @@ const itemCount = getCookie(Astro.request, `item-${itemId}`);
     <h3>{name}</h3>
     <img src={image} alt={name} />
     <p>{description}</p>
-    {price && <Chip text="Buy" href={`/shop/buy/${id}`}></Chip>}
-    {price && <Chip text="Sell" href={`/shop/sell/${id}`}></Chip>}
+    <div class="horizontal">
+        {price && <Chip text="Buy" href={`/shop/buy/${id}`}></Chip>}
+        {price && <Chip text="Sell" href={`/shop/sell/${id}`}></Chip>}
+    </div>
     {creationTitle && <Chip text={creationTitle} href={`/inventory/add/${id}`} />}
     <p>Count: {itemCount || 0}</p>
 </Page>
@@ -30,5 +32,10 @@ const itemCount = getCookie(Astro.request, `item-${itemId}`);
 
     a {
         text-decoration: none;
+    }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
     }
 </style>

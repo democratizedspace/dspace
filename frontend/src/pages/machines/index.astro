@@ -1,0 +1,39 @@
+---
+import { machine } from 'os';
+import Page from '../../components/Page.astro';
+import Chip from '../../components/Chip.astro';
+import items from '../inventory/json/items.json';
+
+const machines = items.filter(item => item.type === 'machine');
+machines.map((machine) => {
+  return {
+    ...machine,
+    name: machine.name.replace(' (Machine)', ''),
+  };
+});
+---
+
+<Page columns="1">
+    Available machines:
+
+    {machines && machines.map((machine) => (
+        <div>
+            <img src={machine.image} />
+            <div class="horizontal">
+                <Chip text="make a test print" href="/inventory/add/1" />
+                <Chip text="print a model rocket" href="/inventory/add/11" />
+            </div>
+        </div>
+    ))}
+</Page>
+
+<style>
+    img {
+        width: 200px;
+    }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+    }
+</style>

@@ -22,9 +22,9 @@
     },
     {
         "id": "2",
-        "name": "Real Hydroponics Kit 1",
+        "name": "Hydroponics Kit",
         "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
-        "image": "/assets/hydroponics.jpg",
+        "image": "/assets/amazing1.jpg",
         "cooldown": "1d",
         "price": "30 dUSD"
     },
@@ -85,5 +85,66 @@
         "description": "A packet of basil seeds.",
         "image": "/assets/basil_seeds.jpg",
         "price": "5 dUSD"
+    },
+    {
+        "id": "11",
+        "name": "Rocket",
+        "description": "A 3D-printed rocket that can be used to launch small payloads into space.",
+        "image": "/assets/modelrocket.jpg",
+        "json": "3dprinting/prints/rocket.json"
+    },
+    {
+        "id": "12",
+        "name": "Green PLA filament",
+        "description": "1 gram of green PLA filament for an FDM printer.",
+        "image": "/assets/pla_green.jpg",
+        "price": "0.02499 dUSD",
+        "unit": "g"
+    },
+    {
+        "id": "13",
+        "name": "Rockwool Starter Plug",
+        "description": "1 starter plug for hydroponic seed germination. Dunk it in water for 5 minutes, then place some seeds in the planting hole.",
+        "image": "/assets/rockwool.jpg",
+        "price": "0.35 dUSD"
+    },
+    {
+        "id": "14",
+        "name": "Hydroponics nutrients",
+        "description": "A bottle of hydroponics nutrients that can be used to grow plants. NPK: 9-3-6",
+        "image": "/assets/hydroponics_nutrients.jpg",
+        "price": "25 dUSD",
+        "unit": "L"
+    },
+    {
+        "id": "15",
+        "name": "3D printing kit",
+        "description": "A kit that contains all the parts you need to get started with 3D printing. Everything is fully assembled.",
+        "image": "/assets/amazing1.jpg"
+    },
+    {
+        "id": "16",
+        "name": "5 gallon bucket",
+        "description": "A 5 gallon bucket that can be used to store water or other liquids.",
+        "image": "/assets/bucket.jpg",
+        "price": "8 dUSD"
+    },
+    {
+        "id": "17",
+        "name": "5 gallon bucket of water",
+        "description": "A 5 gallon bucket of water.",
+        "image": "/assets/bucket_water.jpg"
+    },
+    {
+        "id": "18",
+        "name": "Motor award",
+        "description": "A trophy granted for being one of the first people to buy an Edison Model M",
+        "image": "/assets/motor_award.jpg"
+    },
+    {
+        "id": "19",
+        "name": "Rocket award",
+        "description": "A trophy granted for printing your first model rocket.",
+        "image": "/assets/rocket_award.jpg"
     }
 ]

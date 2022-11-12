@@ -6,15 +6,12 @@ import ShoppingForm from '../ShoppingForm.svelte';
 const { itemId } = Astro.params;
 
 const item = items.find((item) => item.id === itemId);
-const image = item.image;
-
 
 ---
 
 <Page title="Buy" columns="1">
-    <ShoppingForm client:idle item={item} />
-
-
+    <ShoppingForm client:idle item={item} request={Astro.request} />
+    <br /><br /><br /><br /><br /><br />
 </Page>
 
 <style>

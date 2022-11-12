@@ -100,9 +100,9 @@
     },
     {
         "id": 1,
-        "title": "Launch a rocket",
-        "body": "Not for real. Not yet. This one is virtual.",
-        "image": "/assets/launch.jpg",
+        "title": "Launch an amateur rocket",
+        "body": "One small step for humankind.",
+        "image": "/assets/amateur_rocket.jpg",
         "steps": [
             {
                 "id": 0,
@@ -110,8 +110,8 @@
                 "options": [
                     {
                         "id": 0,
-                        "title": "You'll need permission from the FAA.",
-                        "body": "Look into the process.",
+                        "title": "Before we get started, let's make sure we're complying with the FAA.",
+                        "body": "Even in amateur rocketry, above a certain threshold, you need to register your rocket with the FAA and obtain a certificate.",
                         "action": "none",
                         "image": "/assets/paperwork.jpg"
                     }
@@ -137,7 +137,13 @@
                         "action": "path",
                         "path": "/shop/buy/2",
                         "image": "/assets/cart.jpg",
-                        "redirect": "/quests/2/1"
+                        "redirect": "/quests/2/1",
+                        "hideIfOwned": [
+                            {
+                                "id": "2",
+                                "count": 1
+                            }
+                        ]
                     },
                     {
                         "id": 1,
@@ -192,28 +198,106 @@
                 "options": [
                     {
                         "id": 0,
-                        "title": "Order some basil seeds",
-                        "body": "",
-                        "action": "path",
-                        "path": "/shop/buy/10",
-                        "image": "/assets/basil_seeds.jpg",
+                        "title": "Fill the bucket with water",
+                        "body": "1 packet of seeds should be enough!",
+                        "action": "quest",
+                        "next": 3,
+                        "image": "/assets/bucket.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "16",
+                                "count": 1
+                            }
+                        ],
                         "consumes": [
                             {
-                                "id": "2",
+                                "id": "16",
                                 "count": 1
                             }
                         ],
                         "creates": [
                             {
-                                "id": "9",
+                                "id": "17",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Order some basil seeds",
+                        "body": "1 packet of seeds should be enough!",
+                        "action": "path",
+                        "path": "/shop/buy/10",
+                        "image": "/assets/basil_seeds.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "10",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Order some rockwool",
+                        "body": "The Real Hydroponics Tub 1 has 11 slots for rockwool. That's how many you'll need.",
+                        "action": "path",
+                        "path": "/shop/buy/13",
+                        "image": "/assets/rockwool.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "13",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "Order some hydroponics nutrients",
+                        "body": "Your plant will need this to grow and stay alive.",
+                        "action": "path",
+                        "path": "/shop/buy/14",
+                        "image": "/assets/hydroponics_nutrients.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "14",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "title": "Buy a bucket",
+                        "body": "You'll need a bucket to hold water outside in sunlight for 48 hours.",
+                        "action": "path",
+                        "path": "/shop/buy/16",
+                        "image": "/assets/bucket.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "16",
+                                "count": 1
+                            },
+                            {
+                                "id": "17",
                                 "count": 1
                             }
                         ]
                     }
                 ],
                 "checkpoint": true
+            },
+            {
+                "id": 3,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Add tap water to the bucket",
+                        "action": "path",
+                        "path": "/inventory/add/17",
+                        "image": "/assets/tap.jpg"
+                    }
+                ]
             }
-
         ]   
     },
     {
@@ -259,10 +343,29 @@
                         "path": "/shop/buy/4",
                         "image": "/assets/cart.jpg",
                         "redirect": "/quests/4/1"
+                    },
+                    {
+                        "id": 1,
+                        "title": "Receive a commemorative award for your purchase of an Edison Model M",
+                        "body": "You're an early adopter!",
+                        "action": "finish",
+                        "image": "/assets/motor_award.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "4",
+                                "count": 1
+                            }
+                        ]
                     }
                 ]
             }
-        ]   
+        ],
+        "rewards": [
+            {
+                "id": "18",
+                "count": 1
+            }
+        ]
     },
     {
         "id": 5,
@@ -281,7 +384,13 @@
                         "action": "path",
                         "path": "/inventory/add/1",
                         "image": "/assets/3dprinter.jpg",
-                        "duration": "1d"
+                        "duration": "1d",
+                        "hideIfOwned": [
+                            {
+                                "id": "1",
+                                "count": 1
+                            }
+                        ]
                     },
                     {
                         "id": 1,
@@ -317,6 +426,69 @@
         "rewards": [
             {
                 "id": "8",
+                "count": 1
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "title": "3D print a model rocket",
+        "body": "A nice knick knack for your shelf or desk.",
+        "image": "/assets/modelrocket.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Print a model rocket",
+                        "body": "",
+                        "action": "path",
+                        "path": "/inventory/add/11",
+                        "image": "/assets/modelrocket.jpg",
+                        "duration": "1d",
+                        "hideIfOwned": [
+                            {
+                                "id": "11",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Turn in your 3D printed rocket for a trophy!",
+                        "body": "(I'm basically implementing achievements as items until I build a proper achievement system)",
+                        "requiresItems": [
+                            {
+                                "id": "11",
+                                "count": 1
+                            }
+                        ],
+                        "action": "finish",
+                        "image": "/assets/rocket_award.jpg"
+                    }
+                ]
+            }
+        ],
+        "requiresQuests": [
+            "0"
+        ],
+        "requiresItems": [
+            {
+                "id": "11",
+                "count": 1
+            }
+        ],
+        "burnsItems": [
+            {
+                "id": "11",
+                "count": 1
+            }
+        ],
+        "rewards": [
+            {
+                "id": "19",
                 "count": 1
             }
         ]

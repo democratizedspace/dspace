@@ -57,10 +57,10 @@ switch (sortOrder) {
         itemsSorted = itemsFiltered.sort((a,b)=>itemInfo[b.id].cooldown - itemInfo[a.id].cooldown);
         break;
     case 'priceascending':
-        itemsSorted = itemsFiltered.sort((a,b)=>itemInfo[a.id].price - itemInfo[b.id].price);
+        itemsSorted = itemsFiltered.sort((a,b)=>(itemInfo[a.id].price || 0) - (itemInfo[b.id].price || 0));
         break;
     default:
-        itemsSorted = itemsFiltered.sort((a,b)=>itemInfo[b.id].price - itemInfo[a.id].price);
+        itemsSorted = itemsFiltered.sort((a,b)=>(itemInfo[b.id].price || 0) - (itemInfo[a.id].price || 0));
         break;
 } 
 ---
@@ -86,7 +86,7 @@ switch (sortOrder) {
                     <p class="nobackground description">{item.description}</p>
                     <div class="parent vertical">
                         <p class="compact nowrap"><strong>Count:</strong> {getItemCountById(item.id)}</p>
-                        <p class="compact nowrap"><strong>Price:</strong> {item.price || 'Free'}</p>
+                        <p class="compact nowrap"><strong>Price:</strong> {item.price || 'Soulbound'}</p>
                         <p class="compact nowrap"><strong>Cooldown:</strong> {item.cooldown || prettyPrintDuration(DEFAULT_COOLDOWN/SECOND, true)}</p>
                     </div>
                 </div>

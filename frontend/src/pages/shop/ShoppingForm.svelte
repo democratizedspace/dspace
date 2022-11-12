@@ -1,6 +1,6 @@
 <script>
-    import { getPriceStringComponents } from '../../utils.js';
-    export let item, count = 1, shopAction = 'buy';
+    import { getPriceStringComponents, getWalletBalance } from '../../utils.js';
+    export let item, request, count = 1, shopAction = 'buy';
 
     if (item === undefined) {
         console.error(`Item with id ${item.id} not found`);
@@ -9,11 +9,11 @@
     const name = item.name;
 
     const priceComponents = getPriceStringComponents(item.price);
+    const symbol = priceComponents.symbol;
     const price = priceComponents.price;
-    const totalPrice = (price * count).toPrecision(4);
 
     function generateBuyLink () {
-        const totalPrice = (price * count).toPrecision(4);
+        const totalPrice = parseFloat((price * count).toPrecision(4));
         let href;
 
         const existingBuyLink = document.getElementById('buylink-link');
@@ -41,7 +41,7 @@
         
         buyLink.setAttribute("href", href);
         
-        buyLink.style.cssText = "color: white; background-color: green; text-decoration: none; padding: 10px;";
+        buyLink.style.cssText = "color: white; background-color: green; text-decoration: none; padding: 10px; border-radius: 20px;";
 
         buyLink.className = "buylink";
         buyLink.id = "buylink-link";
@@ -58,8 +58,9 @@
     
     <img class="img" src={item.image} />
 
+    <p class="price">You currently have: {0} {symbol}</p>
     <p class="price">Price per unit: {item.price}</p>
-    <p class="price">Total price: {(count * priceComponents.price).toPrecision(4)} {priceComponents.symbol}</p>
+    <p class="price">Total price: {(parseFloat((count * priceComponents.price).toPrecision(4)))} {symbol}</p>
 
     <!-- A button that will be used to purchase the item -->
     <button class="buy" type="button" id="purchase" on:click={generateBuyLink}>Generate {shopAction === 'buy' ? "buy" : "sell"} link</button>
@@ -111,5 +112,14 @@
     .img {
         width: 200px;
         width: var(--form-width);
+        border-radius: 20px;
+    }
+
+    button {
+        border-radius: 20px;
+    }
+
+    input {
+        border-radius: 20px;
     }
 </style>
