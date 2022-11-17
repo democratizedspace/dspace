@@ -1,11 +1,18 @@
 <script>
     import { tweened } from "svelte/motion";
+    import { writable, get } from "svelte/store";
     import { prettyPrintDuration } from "../../../utils.js";
     export let printInfo, machineInfo, cooldown;
     let traversed = {};
     let discovered = {};
     let nodes = {};
     let edges = {};
+
+    const store = writable(localStorage.getItem("process-1") || JSON.stringify({stepId: ""}));
+
+    store.subscribe((value) => {
+        localStorage.setItem("process-1", value);
+    });
 
     for (const k in machineInfo.nodes) {
         const node = machineInfo.nodes[k];
@@ -18,6 +25,19 @@
             edges[edge.from] = [];
         }
         edges[edge.from].push(edge);
+    }
+
+    function updateStoreKey(key, callback) {
+        store.update((storeJson) => {
+            const store = JSON.parse(storeJson);
+            const newValue = callback(store[key]);
+            store[key] = newValue;
+            return JSON.stringify(store);
+        });
+    }
+
+    function getStoreValue(key) {
+        return JSON.parse(get(store))[key];
     }
 
     function removeElementById(id) {
@@ -128,7 +148,13 @@
         } catch (e) {}
     }
 
+    function simulateSteps(stepList) {
+        // TOOD: implement
+    }
+
     function onStart() {
+        
+
         removeElementById("start");
         
         addLog("Checking for available printers...");
@@ -147,7 +173,19 @@
         if (start === undefined) {
             addLog("Could not find machine instructions.");
         } else {
-            addButton(start.id, start.title);
+            const stepId = getStoreValue("stepId");
+            console.log(stepId);
+            console.log(nodes[stepId]);
+
+            console.log(stepId);
+            if (stepId === "") {
+                console.log("start");
+                addButton(start.id, start.title);
+            } else {
+                simulateSteps();
+                console.log("continue");
+                addButton(stepId, nodes[stepId].title);
+            }
         }
     }
 
@@ -168,6 +206,9 @@
                         if (traversed[edge.to] === undefined) {
                             discovered[edge.to] = true;
                             if (nodes[edge.to].afterElapsed === undefined) {
+                                updateStoreKey("stepId", (_) => {
+                                    return edge.to;
+                                });
                                 addButton(edge.to, nodes[edge.to].title);
                             }
                         }
@@ -176,6 +217,7 @@
                 pruneUnexplored(id);
 
                 if (id == machineInfo.end) {
+                    updateStoreKey("stepId", (_) => "");
                     addLog("Finished!");
                     addLink('Claim your item', `/inventory/add/${printInfo.itemId}/confirmation`);
                 }
