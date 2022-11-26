@@ -1,14 +1,24 @@
 <script>
     import { tweened } from "svelte/motion";
     import { writable, get } from "svelte/store";
+    import { onMount } from "svelte";
     import { prettyPrintDuration } from "../../../utils.js";
     export let printInfo, machineInfo, cooldown;
     let traversed = {};
     let discovered = {};
     let nodes = {};
     let edges = {};
+    let startButtonText = "Loading...";
 
-    const store = writable(localStorage.getItem("process-1") || JSON.stringify({stepId: ""}));
+    const processInfo = {
+        stepId: "",
+        stepInfo: {}
+    };
+
+    // Grab timestamp from server to ensure local client time doesn't affect calculations
+    const serverTimeStamp = new Date().getTime();
+
+    const store = writable(localStorage.getItem("process-1") || JSON.stringify(processInfo));
 
     store.subscribe((value) => {
         localStorage.setItem("process-1", value);
@@ -26,6 +36,18 @@
         }
         edges[edge.from].push(edge);
     }
+
+    // Callback is called once SSR is done and Svelte can read from localStorage.
+    onMount(async () => {
+        // Determine if the process is partially completed and change startButtonText accordingly.
+        console.log("onMount");
+        const process = JSON.parse(localStorage.getItem("process-1"));
+        if (process.stepId === "") {
+            startButtonText = "Start";
+        } else {
+            startButtonText = "Continue";
+        }
+    });
 
     function updateStoreKey(key, callback) {
         store.update((storeJson) => {
@@ -60,11 +82,17 @@
         document.getElementById("addItem").prepend(newElement);
     }
 
-    function addButton(id, text, href) {
-        addElement("button", text, "btn", `button-${id}`);
-        document.getElementById(`button-${id}`).addEventListener("click", () => {
-            onTraverse(id);
-        });
+    function addButton(id, text, href, traverse = true) {
+        if (href) {
+            
+        } else {
+            addElement("button", text, "btn", `button-${id}`);
+            document.getElementById(`button-${id}`).addEventListener("click", () => {
+                if (traverse) {
+                    onTraverse(id)
+                };
+            });
+        }
     }
 
     function addLink(text, href) {
@@ -153,8 +181,6 @@
     }
 
     function onStart() {
-        
-
         removeElementById("start");
         
         addLog("Checking for available printers...");
@@ -168,31 +194,50 @@
 
         addLog("Printer found: " + machineInfo.name);
 
-
         const start = nodes[machineInfo.start];
         if (start === undefined) {
             addLog("Could not find machine instructions.");
         } else {
             const stepId = getStoreValue("stepId");
-            console.log(stepId);
-            console.log(nodes[stepId]);
-
-            console.log(stepId);
+            console.log("stepId", stepId);
             if (stepId === "") {
                 console.log("start");
                 addButton(start.id, start.title);
             } else {
                 simulateSteps();
-                console.log("continue");
-                addButton(stepId, nodes[stepId].title);
+                const step = getStoreValue("stepInfo")[stepId];
+                console.log(step);
+
+                if (step === undefined) {
+                    addButton(stepId, nodes[stepId].title);
+                } else {
+                    const finishTime = step.finishTime;
+                    if (serverTimeStamp >= finishTime) {
+                        console.log("already completed step, skipping");
+                        onTraverse(stepId);
+                        return;
+                    } else {
+                        console.log("still in progress");
+                        addButton(stepId, nodes[stepId].title);
+                    }
+                }
             }
         }
     }
 
     function onTraverse(id) {
-        removeButtonById(id);
+        try {
+            removeButtonById(id);
+        } catch (e) {}
 
         const node = nodes[id];
+
+        updateStoreKey("stepInfo", (stepInfo) => {
+            return { ...stepInfo, [id]: {
+                startTime: new Date().getTime(),
+                finishTime: new Date().getTime() + node.durationSeconds * 1000 
+            }};
+        });
 
         if (node === undefined) {
             addLog("Could not find machine instructions.");
@@ -223,7 +268,6 @@
                 }
             });
         }
-
     }
 </script>
 
@@ -231,7 +275,7 @@
     <p>The timing of each step is not final yet. It will eventually be as close to realtime as possible.</p> 
     <h3>Build log</h3>
     <span id="addItem" />
-    <button id="start" class="btn" on:click|once={onStart}>Start</button>
+        <button id="start" class="btn" on:click|once={onStart}>{startButtonText}</button>
 </div>
 
 <style>

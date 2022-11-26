@@ -22,7 +22,7 @@
     },
     {
         "id": "2",
-        "name": "Hydroponics Kit",
+        "name": "Hydroponics kit",
         "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
         "image": "/assets/amazing1.jpg",
         "cooldown": "1d",
@@ -30,7 +30,7 @@
     },
     {
         "id": "3",
-        "name": "White PLA filament",
+        "name": "white PLA filament",
         "description": "1 gram of white PLA filament for an FDM printer.",
         "image": "/assets/pla_white.jpg",
         "price": "0.02499 dUSD"
@@ -45,7 +45,7 @@
     },
     {
         "id": "5",
-        "name": "Portable solar panel",
+        "name": "portable solar panel",
         "description": "A portable solar panel that can be used to charge your devices. Supports USB-A and USB-C ports, and it has a 110V AC outlet, with support for 200W at peak sunpower.",
         "price": "200 dUSD",
         "image": "/assets/solar.jpg",
@@ -69,7 +69,7 @@
     },
     {
         "id": "8",
-        "name": "Benchy award",
+        "name": "Benchy Award",
         "description": "A trophy granted for printing your first Benchy.",
         "image": "/assets/benchy_award.jpg"
     },
@@ -81,21 +81,21 @@
     },
     {
         "id": "10",
-        "name": "Basil Seeds",
+        "name": "basil seeds",
         "description": "A packet of basil seeds.",
         "image": "/assets/basil_seeds.jpg",
         "price": "5 dUSD"
     },
     {
         "id": "11",
-        "name": "Rocket",
+        "name": "rocket",
         "description": "A 3D-printed rocket that can be used to launch small payloads into space.",
         "image": "/assets/modelrocket.jpg",
         "json": "3dprinting/prints/rocket.json"
     },
     {
         "id": "12",
-        "name": "Green PLA filament",
+        "name": "green PLA filament",
         "description": "1 gram of green PLA filament for an FDM printer.",
         "image": "/assets/pla_green.jpg",
         "price": "0.02499 dUSD",
@@ -103,14 +103,14 @@
     },
     {
         "id": "13",
-        "name": "Rockwool Starter Plug",
+        "name": "rockwool starter plug",
         "description": "1 starter plug for hydroponic seed germination. Dunk it in water for 5 minutes, then place some seeds in the planting hole.",
         "image": "/assets/rockwool.jpg",
         "price": "0.35 dUSD"
     },
     {
         "id": "14",
-        "name": "Hydroponics nutrients",
+        "name": "hydroponics nutrients",
         "description": "A bottle of hydroponics nutrients that can be used to grow plants. NPK: 9-3-6",
         "image": "/assets/hydroponics_nutrients.jpg",
         "price": "25 dUSD",
@@ -137,14 +137,20 @@
     },
     {
         "id": "18",
-        "name": "Motor award",
+        "name": "Motor Award",
         "description": "A trophy granted for being one of the first people to buy an Edison Model M",
         "image": "/assets/motor_award.jpg"
     },
     {
         "id": "19",
-        "name": "Rocket award",
+        "name": "Rocket Award",
         "description": "A trophy granted for printing your first model rocket.",
         "image": "/assets/rocket_award.jpg"
+    },
+    {
+        "id": "20",
+        "name": "dCarbon",
+        "description": "A semi-fungible token that is generated for every 1 kg of carbon dioxide generated in-game.",
+        "image": "/assets/Dcarbon.jpg"
     }
 ]

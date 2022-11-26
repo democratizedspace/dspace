@@ -3,10 +3,12 @@ import Page from '../../../components/Page.astro';
 import Chip from '../../../components/Chip.astro';
 import Warning from '../../../components/Warning.astro';
 import items from '../json/items.json';
-import Print from './3DPrint.svelte';
+import Process from '../../processes/process.svelte';
 import { getCookie, prettyPrintDuration } from '../../../utils.js';
 
 const { itemId } = Astro.params;
+const Watts = 231.25;
+
 let item, printInfo, machineInfo, cooldownDate, cooldownSeconds;
 
 let cooldown  = Astro.url.searchParams.get('cooldown') || false;
@@ -14,7 +16,7 @@ let cooldown  = Astro.url.searchParams.get('cooldown') || false;
 if (itemId) {
     const key = `item-${itemId}-cooldown`;
     cooldown = getCookie(Astro.request, `item-${itemId}-cooldown`);
-    cooldownDate = new Date(cooldown);
+    cooldownDate = new Date(cooldown.toString());
     // number of seconds until cooldownDate
     cooldownSeconds = (cooldownDate - Date.now()) / 1000;
     if (cooldownSeconds > 0) {
@@ -46,21 +48,101 @@ try {
     {(cooldown && cooldownSeconds > 1) && <Warning title="Still on cooldown" text={`Still on cooldown for another ${cooldownDate}`} />}
     <img src={item.image} alt={item.name} />
 
-    {
-        item.type === '3dprint' && (
-            <div>
-                <Chip text={item.name} href={`/inventory/${item.id}`} />
-                <p>{item.description}</p>
-                <p>Filament: {printInfo.filamentGrams}g</p>
-                <p>Duration: {printInfo.timeToPrint}</p>
-                <Print printInfo={printInfo} machineInfo={machineInfo} cooldown={cooldownSeconds} client:idle />
-            </div>
-        )
-    }
+    <div>
+        <p>Total Time: 1h 51m</p>
+        Items Consumed:
+        <div class="itemlist">
+            <li>33g of <a href="/inventory/12"><img class="icon" src="/assets/pla_green.jpg" /></a> green PLA filament</li>
+            <li>{Watts} Watts</li>    
+        </div>
+        Items Created:
+        <div class="itemlist">
+                <li>1 x <a href="/inventory/1"><img class="icon" src="/assets/benchy.jpg" /></a> Benchy</li>
+                <li>0.1 <a href="/inventory/20"><img class="icon" src="/assets/dCarbon.jpg" /></a> dCarbon</li>
+        </div>
+        <Process machineInfo={machineInfo} process={{id: 0}} item={item} client:idle />
+    </div>
 </Page>
 
 <style>
     img {
         width: 200px;
+    }
+
+    .itemlist {
+        display: flex;
+        flex-direction: column;
+        color: black;
+        font-size: x-large;
+        padding: 10px;
+        margin: 20px;
+        list-style-type: none;
+        background-color: #46a446;
+        border-radius: 10px;
+    }
+
+    .item {
+        opacity: 1;
+        -webkit-transition: opacity 1000ms linear;
+        transition: opacity 1000ms linear;
+    }
+
+    .icon {
+        margin-bottom: -8px;
+        border-radius: 10px;
+        width: 30px;
+        transition: 0.2s;
+    }
+
+    .icon:hover {
+        width: 75px;
+        border-radius: 100px;
+        margin-bottom: -20px;
+        box-shadow: 0 0 50px 15px #245224;
+        
+        /* Start the shake animation and make the animation last for 0.5 seconds */
+        animation: shake 20s;
+
+        /* When the animation is finished, start again */
+        animation-iteration-count: infinite;
+    }
+
+	@media only screen and (max-width: 768px) {
+		.icon {
+            width: 75px;
+            border-radius: 100px;
+            margin-bottom: -20px;
+            box-shadow: 0 0 50px 15px #245224;
+            
+            /* Start the shake animation and make the animation last for 0.5 seconds */
+            animation: shake 20s;
+
+            /* When the animation is finished, start again */
+            animation-iteration-count: infinite;
+		}
+	}
+
+    li {
+        list-style-type: none;
+        padding: 20px;
+        width: 100%;
+
+    }
+
+    img:hover {
+    }
+
+    @keyframes shake {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        10% { transform: translate(-1px, -2px) rotate(-1deg); }
+        20% { transform: translate(-2px, 0px) rotate(1deg); }
+        30% { transform: translate(2px, 2px) rotate(0deg); }
+        40% { transform: translate(1px, -1px) rotate(1deg); }
+        50% { transform: translate(-1px, 2px) rotate(-1deg); }
+        60% { transform: translate(-2px, 1px) rotate(0deg); }
+        70% { transform: translate(2px, 1px) rotate(-1deg); }
+        80% { transform: translate(-1px, -1px) rotate(1deg); }
+        90% { transform: translate(1px, 2px) rotate(0deg); }
+        100% { transform: translate(1px, -2px) rotate(-1deg); }
     }
 </style>
