@@ -1,30 +1,12 @@
 ---
 import Page from '../../../components/Page.astro';
-import Chip from '../../../components/Chip.astro';
-import Warning from '../../../components/Warning.astro';
 import items from '../json/items.json';
 import Process from '../../processes/process.svelte';
-import { getCookie, prettyPrintDuration } from '../../../utils.js';
 
 const { itemId } = Astro.params;
 const Watts = 231.25;
 
-let item, printInfo, machineInfo, cooldownDate, cooldownSeconds;
-
-let cooldown  = Astro.url.searchParams.get('cooldown') || false;
-
-if (itemId) {
-    const key = `item-${itemId}-cooldown`;
-    cooldown = getCookie(Astro.request, `item-${itemId}-cooldown`);
-    cooldownDate = new Date(cooldown.toString());
-    // number of seconds until cooldownDate
-    cooldownSeconds = (cooldownDate - Date.now()) / 1000;
-    if (cooldownSeconds > 0) {
-        cooldownDate = prettyPrintDuration(cooldownSeconds, true);
-    } else {
-        cooldown = false;
-    }
-}
+let item, printInfo, machineInfo;
 
 try {
     item = items.find((item) => item.id === itemId);
@@ -45,7 +27,6 @@ try {
 ---
 
 <Page hideSettings={true} title={item.creationTitle} columns="1">
-    {(cooldown && cooldownSeconds > 1) && <Warning title="Still on cooldown" text={`Still on cooldown for another ${cooldownDate}`} />}
     <img src={item.image} alt={item.name} />
 
     <div>
@@ -60,7 +41,7 @@ try {
                 <li>1 x <a href="/inventory/1"><img class="icon" src="/assets/benchy.jpg" /></a> Benchy</li>
                 <li>0.1 <a href="/inventory/20"><img class="icon" src="/assets/dCarbon.jpg" /></a> dCarbon</li>
         </div>
-        <!-- <Process machineInfo={machineInfo} process={{id: 0}} item={item} client:idle /> -->
+        <Process machineInfo={machineInfo} process={{id: 0}} item={item} client:idle />
     </div>
 </Page>
 
