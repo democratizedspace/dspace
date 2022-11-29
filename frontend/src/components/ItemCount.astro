@@ -1,0 +1,83 @@
+---
+import GrowableImage from './GrowableImage.astro';
+import { getItemCountString } from '../utils.js';
+
+const { itemIds, itemCounts } = Astro.props;
+import itemsJson from '../pages/inventory/json/items.json';
+
+console.log("itemIds", itemIds);
+console.log("itemCounts", itemCounts);
+
+// create a list of items based on the itemIds list
+
+const items = generateItemList(itemIds);
+
+// create an object with the following properties:
+// key: each itemId in itemIds
+// value: the count of that itemId in itemCounts. If not found, default to 1.
+const counts = itemIds.reduce((acc, id) => {
+    const count = itemCounts[id] || 1;
+    return { ...acc, [id]: count };
+}, {});
+
+console.log("counts", counts);
+
+function generateItemList(itemIds) {
+    const items = itemIds.map((id) => {
+        const item = itemsJson.find((item) => item.id === id);
+        return item;
+    });
+    console.log("items: ", items);
+    return items;
+}
+---
+
+<div class="itemlist">
+    <div class="itemlist">
+        {items.map((item) => (
+            <li>
+                {getItemCountString(item.id, counts[item.id])}
+                <GrowableImage imageSrc={item.image} href={`/inventory/${item.id}`} />
+                <span class="name">{item.name}</span>
+            </li>
+        ))}
+    </div>
+</div>
+
+<style>
+    img {
+        width: 200px;
+    }
+
+    .itemlist {
+        display: flex;
+        flex-direction: column;
+        color: black;
+        font-size: x-large;
+        padding: 10px;
+        margin: 20px;
+        list-style-type: none;
+        background-color: #46a446;
+        border-radius: 10px;
+    }
+
+    .item {
+        opacity: 1;
+        -webkit-transition: opacity 1000ms linear;
+        transition: opacity 1000ms linear;
+    }
+
+    .icon {
+        margin-bottom: -8px;
+        border-radius: 10px;
+        width: 30px;
+        transition: 0.2s;
+    }
+    
+    li {
+        list-style-type: none;
+        padding: 20px;
+        width: 100%;
+
+    }
+</style>

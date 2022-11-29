@@ -71,8 +71,6 @@ switch (sortOrder) {
         <Chip text="z-a" href={`/inventory?sort=za`} />
         <Chip text="highest count" href={`/inventory?sort=countdescending`} />
         <Chip text="lowest count" href={`/inventory?sort=countascending`} />
-        <Chip text="shortest cooldown" href={`/inventory?sort=cooldownascending`} />
-        <Chip text="longest cooldown" href={`/inventory?sort=cooldowndescending`} />
         <Chip text="least expensive" href={`/inventory?sort=priceascending`} />
         <Chip text="most expensive" href={`/inventory?sort=pricedescending`} />
     </nav>
@@ -87,7 +85,6 @@ switch (sortOrder) {
                     <div class="parent vertical">
                         <p class="compact nowrap"><strong>Count:</strong> {getItemCountById(item.id)}</p>
                         <p class="compact nowrap"><strong>Price:</strong> {item.price || 'Soulbound'}</p>
-                        <p class="compact nowrap"><strong>Cooldown:</strong> {item.cooldown || prettyPrintDuration(DEFAULT_COOLDOWN/SECOND, true)}</p>
                     </div>
                 </div>
             </div>

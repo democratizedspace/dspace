@@ -261,6 +261,42 @@ export const sellItem = (req, res, itemId, count = 1) => {
     return false;
 }
 
+export const constructLink = (astroRedirect, url, redirectLink) => {
+    if (redirectLink) {
+        return `${url}?redirect=${redirectLink}`;
+    }
+    return url;
+};
+
+export const base64ToObject = (base64) => {
+    try {
+        // decode base64 string
+        const urlEncoded = atob(base64);
+
+        // URL decode
+        const urlDecoded = decodeURIComponent(urlEncoded);
+
+        // parse JSON
+        const json = JSON.parse(urlDecoded);
+
+        if (json) {
+            console.log(`decoded ${base64} to ${JSON.stringify(json)}`);
+            return json;
+        }
+    } catch (e) {}
+    return {};
+};
+
+export const getItemCountString = (itemId, count) => {
+    const item = items.find((item) => item.id === itemId);
+    if (item) {
+        if (item.unit) {
+            return `${count} ${item.unit}`;
+        }
+    }
+    return `${count} x`;
+}
+
 export const acceptCookiesPath = '/accept_cookies';
 
 export const MS = 1000;

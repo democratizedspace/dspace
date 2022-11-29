@@ -105,9 +105,8 @@
         opacity: 1;
         transition-duration: 0.1s;
         cursor: pointer;
-        font-size: 2em;
+        font-size: 1.1em;
         box-shadow: 0 0 5px 2px #245224;
-        margin-left: -5px;
         
         /* Start the shake animation and make the animation last for 0.5 seconds */
         animation: shake 20s;

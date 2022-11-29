@@ -1,0 +1,68 @@
+---
+import Page from '../../../../components/Page.astro';
+import ItemCount from '../../../../components/ItemCount.astro';
+import SuggestCookies from '../../../../components/SuggestCookies.astro';
+import { hasAcceptedCookies, base64ToObject, getItemCount } from '../../../../utils';
+
+const { itemIds } = Astro.params;
+
+const addItemIds = (itemIds.toString()).split(',');
+console.log("addItemIds", addItemIds);
+const shouldAcceptCookies = !hasAcceptedCookies(Astro.request);
+const showConfirmation = !shouldAcceptCookies;
+
+// get search param consumeIds, which is a comma separated list of item ids
+const consumeIds = Astro.url.searchParams.get('consumeIds');
+const consumeIdList = consumeIds ? consumeIds.toString().split(',') : [];
+
+// get search param consumeCounts, an object mapping between itemIds and count
+const consumeCountsBase64 = Astro.url.searchParams.get('consumeCounts');
+const consumeCounts = base64ToObject(consumeCountsBase64);
+
+if (showConfirmation) {
+    // For each itemId in consumeIdList, make sure actualCount is higher than consumeCount
+    console.log("verifying consume list");
+    consumeIdList.forEach((itemId) => {
+        console.log("itemId", itemId);
+        const actualCount = getItemCountById(itemId);
+        const consumeCount = consumeCounts[itemId] || 1;
+        console.log(`actualCount: ${actualCount}, consumeCount: ${consumeCount}`);
+
+        if (actualCount < consumeCount) {
+            console.log("not enough items");
+        } else {
+            console.log("enough items");
+        }
+    });
+}
+
+function getItemCountById(itemId) {
+    return getItemCount(Astro.request, itemId) || 1;
+}
+---
+
+<Page title="" columns="1">
+    {
+        shouldAcceptCookies &&
+            <SuggestCookies shouldSuggestCookies={shouldAcceptCookies} redirect={Astro.url.pathname} />
+    }
+    
+    {
+        showConfirmation &&
+            <div>
+                <h3>Consumes:</h3>
+                <ItemCount itemIds={consumeIdList} itemCounts={consumeCounts} />
+                <h3>Creates:</h3> 
+                <ItemCount itemIds={addItemIds} itemCounts={{}} />
+                On cooldown for 1h
+            </div>
+    }
+</Page>
+
+<style>
+    img {
+        vertical-align: middle;
+        width: 30px;
+        border-radius: 10px;
+    }
+</style>
