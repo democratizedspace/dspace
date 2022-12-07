@@ -3,7 +3,8 @@ import Page from '../../../../components/Page.astro';
 import Card from '../../../../components/Card.astro';
 import quests from '../../json/quests.json';
 import SuggestCookies from '../../../../components/SuggestCookies.astro';
-import { hasAcceptedCookies, getItemCount, isQuestCompleted } from '../../../../utils';
+import { hasAcceptedCookies, isQuestCompleted } from '../../../../utils';
+import { getItemCount } from '../../../inventory/utils';
 
 const HOURS = 1000 * 60 * 60;
 const DURATION = 1 * HOURS;
@@ -14,7 +15,7 @@ let quest, questStep, showOption = {};
 const shouldAcceptCookies = !hasAcceptedCookies(Astro.request);
 
 try {
-    quest = quests[questId];
+    quest = quests.find(q => q.id === questId);
     questStep = quest.steps[stepId];
 } catch (e) {
     questStep = '';

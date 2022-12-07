@@ -1,131 +1,144 @@
 <script>
-    import { writable, get } from "svelte/store";
     import { onMount } from "svelte";
+    import { prettyPrintDuration, durationInSeconds } from "../../utils";
+    import processes from './processes.json';
 
-    export let machineInfo, process, item;
-    let storeId, store;
+    export let processId;
 
-    console.log("machineInfo", machineInfo);
-    console.log("process", process);
-    console.log("item", item);
+    const process = processes.find(p => p.id === processId);
 
-    const serverTimestamp = new Date().getTime();
-    const machineId = machineInfo.id;
+    const duration = durationInSeconds(process.duration);
 
-    const processInfoTemplate = {
-        stepId: "",
-        stepInfo: {}
-    };
+    let progressBar, progressPercent = 0, startTime, progressIntervalId;
+    let timeLeftDuration = getTimeLeftDuration();
 
     onMount(async () => {
-        try {
-            console.log("generating storeId");
-            storeId = `machine-${machineInfo.id}-process-${process.id}-item-${item.id}`;
-            console.log("storeId", storeId);
-            store = writable(localStorage.getItem(storeId) || JSON.stringify(processInfoTemplate));
+        // Get a reference to the progress bar element
+        progressBar = document.getElementById('progress');
 
-            store.subscribe((value) => {
-                localStorage.setItem(storeId, value);
-            });
+        // Check localStorage for a saved start time
+        startTime = localStorage.getItem(`process-${processId}-starttime`);
 
-            const processInfo = JSON.parse(localStorage.getItem(storeId));
-
-            if (processInfo.stepId === "") {
-                console.log("processInfo.stepId is empty");
-
-                addButton("Start", () => {
-                    console.log("Start");
-                });
-            } else {
-                addButton("Continue"), () => {
-                    console.log("continue");
-                };
-            }
-        } catch (e) { 
-            console.log(e);
+        // if startTime is set, remove the Start button and start the progress bar
+        if (startTime) {
+            initializeProgressBar();
+        } else {
+            // add a Start button to #actionlist
+            const startButton = document.createElement("button");
+            startButton.id = "start";
+            startButton.innerHTML = "Start Process";
+            startButton.onclick = startProcess;
+            startButton.style.cssText = "color: black; background-color: #4CAF50; text-decoration: none; padding: 5px; border-radius: 10px; font-size: 16px; border: none;";
+            
+            document.getElementById('actionlist').appendChild(startButton);
         }
     });
 
-    // function that prepends an HTML button to the log div
-    function addButton(buttonText, buttonCallback) {
-        const logDiv = document.getElementById("log");
-        const button = document.createElement("button");
-        button.innerHTML = buttonText;
-        button.className = "btn";
 
-        button.onclick = buttonCallback;
-        logDiv.prepend(button);
+    // Function to start the task
+    function startProcess() {
+        startTime = new Date().getTime();
+        
+        // save the start time to localStorage so we can resume the task later
+        localStorage.setItem(`process-${processId}-starttime`, startTime);
+
+        // delete the start button from #container
+        document.getElementById('actionlist').removeChild(document.getElementById('start'));
+
+        // Update the progress bar every second
+        initializeProgressBar();
     }
 
-    function hideElement(elementId) {
-        const element = document.getElementById(elementId);
-        element.style.opacity = '0';
+    function getTimeLeftDuration() {
+        // estimate time left in seconds based on duration and progressPercent
+        const timeLeft = duration - (duration * (progressPercent / 100));
+        return prettyPrintDuration(timeLeft);
     }
 
-    function log(message) {
-        const logDiv = document.getElementById("log");
-        const p = document.createElement("p");
-        p.innerHTML = message;
-        logDiv.prepend(p);
+    function initializeProgressBar() {
+        progressIntervalId = setInterval(function() {
+            if (progressPercent >= 100) {
+                progressPercent = 100;
+                progressBar.style.width = progressPercent + '%';
+                timeLeftDuration = getTimeLeftDuration();
+
+                clearInterval(progressIntervalId);
+
+                // create a finalize button that calls finalize() when clicked
+                const finalizeButton = document.createElement("button");
+                finalizeButton.id = "finalize";
+                finalizeButton.innerHTML = "Finalize";
+                finalizeButton.onclick = finalize;
+                finalizeButton.style.cssText = "color: black; background-color: #4CAF50; text-decoration: none; padding: 5px; border-radius: 10px; font-size: 16px; border: none;";
+                document.getElementById('actionlist').appendChild(finalizeButton);
+            } else {
+                const currentTime = new Date().getTime();
+                const elapsedSeconds = (currentTime - startTime) / 1000;
+
+                progressPercent = (elapsedSeconds / duration) * 100;
+                progressBar.style.width = progressPercent + '%';
+                
+                timeLeftDuration = getTimeLeftDuration();
+            }
+        }, 100);
+    }
+
+    function finalize() {
+        // remove the finalize button
+        document.getElementById('actionlist').removeChild(document.getElementById('finalize'));
+
+        // remove the time left element
+        document.getElementById('container').removeChild(document.getElementById('duration'));
+
+        // remove the progress bar
+        document.getElementById('container').removeChild(document.getElementById('progress'));
+
+        // remove the start time from localStorage
+        localStorage.removeItem(`process-${processId}-starttime`);
+
+        
+        const claimLink = document.createElement("a");
+        claimLink.href = `/processes/${processId}/confirm`;
+        
+        // Add the folowing CSS to the div:
+        claimLink.style.cssText = "color: black; background-color: #4CAF50; text-decoration: none; padding: 5px; border-radius: 10px; font-size: 16px;";
+
+        claimLink.innerHTML = "Claim your items!";
+
+        document.getElementById('actionlist').prepend(claimLink);
     }
 </script>
 
-<div class="main">
-    <div id="log" />
+<div id="container">
+    <div id="duration">Time left: {timeLeftDuration}</div>
+    <div id="progress" />
+    <div id="actionlist">
+    </div>
 </div>
 
 <style>
-    #log {
-        display: flex;
-        flex-direction: column;
+    #progress {
+        width: 0%;
+        height: 20px;
+        background-color: #4CAF50;
     }
-    
-	:global(.btn) {
-        background-color: #2f5b2f;
-		color: white;
-		border-radius: 100px;
-		text-decoration: none;
-        padding: 10px;
-        margin: 5px;
-        width: fit-content;
-        opacity: 0.8;
-        -webkit-transition: 200ms linear;
-        transition: 200ms linear;
+
+    button {
+        background-color: #4CAF50;
         border: none;
-        font-size: 1em;
-        
-        /* Start the shake animation and make the animation last for 0.5 seconds */
-        animation: shake 20s;
-
-        /* When the animation is finished, start again */
-        animation-iteration-count: infinite;
-	}
-
-    :global(.btn):hover {
-        opacity: 1;
-        transition-duration: 0.1s;
+        color: black;
+        padding: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
         cursor: pointer;
-        font-size: 1.1em;
-        box-shadow: 0 0 5px 2px #245224;
-        
-        /* Start the shake animation and make the animation last for 0.5 seconds */
-        animation: shake 20s;
-
-        /* When the animation is finished, start again */
-        animation-iteration-count: infinite;
+        border-radius: 10px;
     }
-    
-    @keyframes shake {
-        0% { transform: translate(1px, 1px) rotate(0deg); }
-        10% { transform: translate(-1px, -2px) rotate(-1deg); }
-        20% { transform: translate(-2px, 0px) rotate(1deg); }
-        30% { transform: translate(2px, 2px) rotate(0deg); }
-        40% { transform: translate(1px, -1px) rotate(1deg); }
-        50% { transform: translate(-1px, 2px) rotate(-1deg); }
-        60% { transform: translate(-2px, 1px) rotate(0deg); }
-        70% { transform: translate(2px, 1px) rotate(-1deg); }
-        80% { transform: translate(-1px, -1px) rotate(1deg); }
-        90% { transform: translate(1px, 2px) rotate(0deg); }
-        100% { transform: translate(1px, -2px) rotate(-1deg); }
+
+    #actionlist {
+        display: flex;
+        flex-direction: row;
+        margin-top: 20px;
     }
 </style>

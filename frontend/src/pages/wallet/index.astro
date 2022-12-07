@@ -1,15 +1,19 @@
 ---
 import Page from '../../components/Page.astro';
-import { getWalletBalance } from '../../utils.js';
+import ItemCount from '../../components/ItemCount.astro';
+import { getItemCount } from '../inventory/utils';
 
-const balances = {
-    dusd: getWalletBalance(Astro.request, 'dUSD'),
-}
+const currencies = [
+    {
+        "id": "24", // dUSD
+        "count": getItemCount(Astro.request, "24"),
+    }
+];
 ---
 
 <Page columns="1">
     <h3>Balances</h3>
     <ul>
-        <li>dUSD: {balances.dusd}</li>
+        <ItemCount itemList={currencies} />
     </ul>
 </Page>

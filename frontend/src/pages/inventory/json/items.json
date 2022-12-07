@@ -88,8 +88,8 @@
     },
     {
         "id": "11",
-        "name": "rocket",
-        "description": "A 3D-printed rocket that can be used to launch small payloads into space.",
+        "name": "3D printed model rocket",
+        "description": "A 3D-printed model rocket that can be used to launch small payloads into space.",
         "image": "/assets/modelrocket.jpg",
         "json": "items/prints/rocket.json",
         "type": "3dprint"
@@ -115,7 +115,7 @@
         "description": "A bottle of hydroponics nutrients that can be used to grow plants. NPK: 9-3-6",
         "image": "/assets/hydroponics_nutrients.jpg",
         "price": "25 dUSD",
-        "unit": "L"
+        "unit": " L"
     },
     {
         "id": "15",
@@ -132,8 +132,8 @@
     },
     {
         "id": "17",
-        "name": "5 gallon bucket of water",
-        "description": "A 5 gallon bucket of water.",
+        "name": "5 gallon bucket of tap water (chlorinated)",
+        "description": "A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics.",
         "image": "/assets/bucket_water.jpg"
     },
     {
@@ -151,7 +151,7 @@
     {
         "id": "20",
         "name": "dCarbon",
-        "description": "A semi-fungible token that is generated for every 1 kg of carbon dioxide generated in-game.",
+        "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
         "image": "/assets/Dcarbon.jpg"
     },
     {
@@ -164,9 +164,30 @@
     {
         "id": "22",
         "name": "dWatt",
-        "description": "A semi-fungible token that represents 1 watt of electricity that can be consumed by machines. To acquire 1 dWatt, you need to either prepay the dCarbon cost, or generate and store it in a battery without accruing dCarbon.",
+        "description": "A token that represents 1 watt of electricity that can be consumed by machines. To acquire 1 dWatt, you need to either prepay the dCarbon cost, or generate and store it in a battery without accruing dCarbon.",
         "image": "/assets/dWatts.jpg",
-        "unit": "W",
+        "unit": " W",
         "price": "0.00018 dUSD"
+    },
+    {
+        "id": "23",
+        "name": "Hypervan",
+        "description": "A futuristic electric van with Fully Supervised Driving (FSD) capabilities.",
+        "image": "/assets/hypervan.jpg",
+        "price": "75000 dUSD"
+    },
+    {
+        "id": "24",
+        "name": "dUSD",
+        "description": "An in-game tokenized version of the USD currency. Not backed by or in any way associated with actual USD.",
+        "image": "/assets/dUSD.jpg",
+        "type": "currency",
+        "symbol": "dUSD"
+    },
+    {
+        "id": "25",
+        "name": "5 gallon bucket of tap water (dechlorinated)",
+        "description": "A 5 gallon bucket of water. This water is dechlorinated and can be used for hydroponics.",
+        "image": "/assets/bucket_water.jpg"
     }
 ]

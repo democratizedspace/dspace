@@ -69,8 +69,11 @@ export const prettyPrintDuration = (durationSeconds, integer) => {
     return duration.join(' ');
 }
 
-const datetimeAfterDuration = (durationSeconds) => {
-    return new Date(Date.now() + durationSeconds);
+export const datetimeAfterDuration = (durationSeconds) => {
+    console.log("creating datetime after duration", durationSeconds);
+    const futureDatetime = new Date(Date.now() + durationSeconds);
+    console.log("future datetime", futureDatetime);
+    return new Date(Date.now() + durationSeconds * 1000);
 }
 
 export const durationInSeconds = (durationString) => {
@@ -109,49 +112,6 @@ export const durationInSeconds = (durationString) => {
     }
 }
 
-export const addItemToInventory = (req, res, itemId, count = 1, bypass = false) => {
-    const cookie = req.headers.get('cookie');
-    const itemCount = getItemCount(req, itemId);
-    let cooldownDuration = DEFAULT_COOLDOWN;
-
-    const item = items.find((item) => item.id === itemId);
-    if (item && item.cooldown) {
-        cooldownDuration = durationInSeconds(item.cooldown) * SECOND; 
-    }
-
-    const cooldown = getCookieValue(cookie, `item-${itemId}-cooldown`);
-    if (cooldown) {
-        const cooldownDate = new Date(cooldown);
-        if (cooldownDate > Date.now()) {
-            if (!bypass) {
-                return false;
-            }
-        }
-    }
-
-    if (itemCount !== undefined && !isNaN(itemCount)) {
-        setCookieValue(res, `item-${itemId}`, parseInt(itemCount) + parseInt(count));
-    } else {
-        setCookieValue(res, `item-${itemId}`, count);
-    }
-
-    // create a cookie saving a cooldown of 1 hour
-    if (!bypass) {
-        setCookieValue(res, `item-${itemId}-cooldown`, datetimeAfterDuration(cooldownDuration));
-    }
-
-    return true;
-};
-
-export const getItemCount = (req, itemId) => {
-    const cookie = req.headers.get('cookie');
-    const itemCount = parseInt(getCookieValue(cookie, `item-${itemId}`));
-    if (itemCount !== undefined && !isNaN(itemCount)) {
-        return itemCount;
-    }
-    return 0;
-}
-
 export const getWalletBalance = (req, symbol) => {
     const cookie = req.headers.get('cookie');
     const balance = parseFloat(getCookieValue(cookie, `currency-balance-${symbol}`));
@@ -161,12 +121,19 @@ export const getWalletBalance = (req, symbol) => {
     return 0;
 }
 
-export const addWalletBalance = (req, res, symbol, addBalance) => {
-    console.log("addBalance: ", addBalance);
+export const burnCurrency = (req, res, symbol, burnAmount) => {
     const balance = getWalletBalance(req, symbol);
-    console.log("old balance: ", balance);
+    const newBalance = balance - burnAmount;
+    if (newBalance < 0) {
+        return false;
+    }
+    setCookieValue(res, `currency-balance-${symbol}`, newBalance);
+    return true;
+}
+
+export const addWalletBalance = (req, res, symbol, addBalance) => {
+    const balance = getWalletBalance(req, symbol);
     const newBalance = Math.max(0, balance + addBalance);
-    console.log("new balance: ", newBalance);
     // TODO: start here
     setCookieValue(res, `currency-balance-${symbol}`, newBalance);
 };
@@ -191,14 +158,6 @@ export const questRequirementsMet = (req, questId) => {
     }
     return false;
 }
-
-export const burnItem = (req, res, itemId, count = 1) => {
-    const itemCount = getItemCount(req, itemId);
-
-    const newItemCount = Math.max(0, itemCount - count);
-
-    setCookieValue(res, `item-${itemId}`, newItemCount);
-};
 
 export const fixMarkdownText = (text) => {
     // replace ’ with '
@@ -226,41 +185,6 @@ export const getSymbolFromId = (itemId) => {
     return undefined;
 }
 
-export const buyItem = (req, res, itemId, count = 1) => {
-    const item = items.find((item) => item.id === itemId);
-    if (item) {
-        const { price, symbol } = getPriceStringComponents(item.price);
-        console.log(price, symbol);
-        const totalPrice = price * count;
-        console.log(totalPrice);
-        const walletBalance = getWalletBalance(req, symbol);
-        console.log(walletBalance);
-        if (walletBalance >= totalPrice) {
-            console.log("enough money");
-            if (addItemToInventory(req, res, itemId, count, true)) {
-                setCookieValue(res, `currency-balance-${symbol}`, Math.max(0, walletBalance - totalPrice));
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-export const sellItem = (req, res, itemId, count = 1) => {
-    const item = items.find((item) => item.id === itemId);
-    if (item) {
-        const { price, symbol } = getPriceStringComponents(item.price);
-        const totalPrice = price * count;
-        const itemCount = getItemCount(req, itemId);
-        if (itemCount >= count) {
-            addWalletBalance(req, res, symbol, totalPrice);
-            burnItem(req, res, itemId, count);
-            return true;
-        }
-    }
-    return false;
-}
-
 export const constructLink = (astroRedirect, url, redirectLink) => {
     if (redirectLink) {
         return `${url}?redirect=${redirectLink}`;
@@ -280,22 +204,23 @@ export const base64ToObject = (base64) => {
         const json = JSON.parse(urlDecoded);
 
         if (json) {
-            console.log(`decoded ${base64} to ${JSON.stringify(json)}`);
             return json;
         }
     } catch (e) {}
     return {};
 };
 
-export const getItemCountString = (itemId, count) => {
-    const item = items.find((item) => item.id === itemId);
-    if (item) {
-        if (item.unit) {
-            return `${count} ${item.unit}`;
-        }
-    }
-    return `${count} x`;
-}
+// convert a json object to a base64 encoded string
+export const jsonToQuery = (query) => {
+    const queryStr = JSON.stringify(query);
+    return Buffer.from(queryStr).toString('base64');
+};
+
+// convert a base64 encoded string to a json object
+export const queryToJson = (query) => {
+    const queryStr = Buffer.from(query, 'base64').toString('utf8');
+    return JSON.parse(queryStr);
+};
 
 export const acceptCookiesPath = '/accept_cookies';
 

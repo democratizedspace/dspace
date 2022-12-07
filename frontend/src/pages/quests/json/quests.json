@@ -1,6 +1,6 @@
 [
     {
-        "id": 0,
+        "id": "0",
         "title": "Set up your first 3D printer",
         "body": "Someone offers you a 3D printer. Do you accept?",
         "image": "/assets/3dprinter.jpg",
@@ -87,7 +87,11 @@
                 "count": 1
             },
             {
-                "id": "3",
+                "id": "12",
+                "count": 1000
+            },
+            {
+                "id": "22",
                 "count": 1000
             }
         ],
@@ -99,7 +103,7 @@
         ]
     },
     {
-        "id": 1,
+        "id": "1",
         "title": "Launch an amateur rocket",
         "body": "One small step for humankind.",
         "image": "/assets/amateur_rocket.jpg",
@@ -120,7 +124,7 @@
         ]
     },
     {
-        "id": 2,
+        "id": "2",
         "title": "Grow basil hydroponically",
         "body": "Hydroponics is a technique by which you grow plants in a liquid nutrition solution. No soil required. Very water-efficient.",
         "image": "/assets/hydroponics.jpg",
@@ -208,18 +212,6 @@
                                 "id": "16",
                                 "count": 1
                             }
-                        ],
-                        "consumes": [
-                            {
-                                "id": "16",
-                                "count": 1
-                            }
-                        ],
-                        "creates": [
-                            {
-                                "id": "17",
-                                "count": 1
-                            }
                         ]
                     },
                     {
@@ -291,39 +283,43 @@
                 "options": [
                     {
                         "id": 0,
+                        "title": "Congrats for making it this far!",
+                        "body": "This quest will be finished in a future update."
+                    },
+                    {
+                        "id": 1,
+                        "title": "Place the bucket in direct sunlight for 48 hours",
+                        "body": "This will dechlorinate the water and make it suitable for hydroponics.",
+                        "action": "path",
+                        "path": "/processes/bucket-water-dechlorinated",
+                        "image": "/assets/bucket_water_sunlight.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "17",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
                         "title": "Add tap water to the bucket",
                         "action": "path",
-                        "path": "/inventory/add/17",
-                        "image": "/assets/tap.jpg"
+                        "path": "/processes/bucket-water-chlorinated",
+                        "image": "/assets/tap.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "17",
+                                "count": 1
+                            }
+                        ]
                     }
-                ]
+                ],
+                "checkpoint": true
             }
         ]   
     },
     {
-        "id": 3,
-        "title": "Buy a solar panel",
-        "body": "They're getting cheaper and cheaper. Current price: $2.94/watt.",
-        "image": "/assets/solar.jpg",
-        "steps": [
-            {
-                "id": 0,
-                "message": "",
-                "options": [
-                    {
-                        "id": 0,
-                        "title": "Order a small foldable solar panel from Amazing",
-                        "body": "Gotta start somewhere!",
-                        "action": "path",
-                        "path": "/shop/buy/5",
-                        "image": "/assets/cart.jpg"
-                    }
-                ]
-            }
-        ]   
-    },
-    {
-        "id": 4,
+        "id": "4",
         "title": "Buy an EV",
         "body": "Might I recommend the Edison Model M?",
         "image": "/assets/ev.jpg",
@@ -341,7 +337,6 @@
                         "image": "/assets/cart.jpg",
                         "duration": "1d",
                         "path": "/shop/buy/4",
-                        "image": "/assets/cart.jpg",
                         "redirect": "/quests/4/1"
                     },
                     {
@@ -368,7 +363,7 @@
         ]
     },
     {
-        "id": 5,
+        "id": "5",
         "title": "Make a test print",
         "body": "You can use the 3D printer you received in the previous quest.",
         "image": "/assets/benchy.jpg",
@@ -382,7 +377,7 @@
                         "title": "Print a Benchy",
                         "body": "A popular test print.",
                         "action": "path",
-                        "path": "/inventory/add/1",
+                        "path": "/processes/3dprint-benchy",
                         "image": "/assets/3dprinter.jpg",
                         "duration": "1d",
                         "hideIfOwned": [
@@ -431,7 +426,7 @@
         ]
     },
     {
-        "id": 6,
+        "id": "6",
         "title": "3D print a model rocket",
         "body": "A nice knick knack for your shelf or desk.",
         "image": "/assets/modelrocket.jpg",
@@ -445,7 +440,7 @@
                         "title": "Print a model rocket",
                         "body": "",
                         "action": "path",
-                        "path": "/inventory/add/11",
+                        "path": "/processes/3dprint-rocket",
                         "image": "/assets/modelrocket.jpg",
                         "duration": "1d",
                         "hideIfOwned": [

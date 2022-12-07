@@ -4,7 +4,8 @@ import Chip from '../../../components/Chip.astro';
 import SuggestCookies from '../../../components/SuggestCookies.astro';
 import items from '../../inventory/json/items.json';
 import quests from '../json/quests.json';
-import { hasAcceptedCookies, setCookieValue, getCookie, addItemToInventory, burnItem } from '../../../utils';
+import { hasAcceptedCookies, setCookieValue, getCookie } from '../../../utils';
+import { addItemToInventory, burnItem } from '../../inventory/utils';
 
 export interface Props {
     questId: string;
@@ -18,7 +19,7 @@ questFinished = getCookie(Astro.request, `quest-${questId}-finished`) || false;
 const shouldAcceptCookies = !hasAcceptedCookies(Astro.request);
 
 // find the quest with id questId
-const quest = quests.find((quest) => quest.id === parseInt(questId.toString()));
+const quest = quests.find((quest) => quest.id === questId);
 
 if (quest && !questFinished) {
     questData = {

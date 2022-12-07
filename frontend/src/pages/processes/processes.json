@@ -1,0 +1,100 @@
+[
+    {
+        "id": "outlet-dWatt",
+        "title": "generate dWatt using your outlet",
+        "consumeItems": [
+            {
+                "id": "24",
+                "count": 0.18
+            }
+        ],
+        "createItems": [
+            {
+                "id": "22",
+                "count": 1000
+            },
+            {
+                "id": "20",
+                "count": 0.4325943029
+            }
+        ],
+        "fungible": true,
+        "duration": "5s"
+    },
+    {
+        "id": "bucket-water-chlorinated",
+        "title": "fill a bucket with tap water",
+        "consumeItems": [
+            {
+                "id": "16",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "17",
+                "count": 1
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "3dprint-benchy",
+        "title": "Make a test print",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 33
+            },
+            {
+                "id": "22",
+                "count": 231.25
+            }
+        ],
+        "createItems": [
+            {
+                "id": "1",
+                "count": 1
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "3dprint-rocket",
+        "title": "3D print a model rocket",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 91
+            },
+            {
+                "id": "22",
+                "count": 1610.10417
+            }
+        ],
+        "createItems": [
+            {
+                "id": "11",
+                "count": 1
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "bucket-water-dechlorinated",
+        "title": "dechlorinate a bucket of water",
+        "consumeItems": [
+            {
+                "id": "17",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "25",
+                "count": 1
+            }
+        ],
+        "duration": "5s"
+    }
+]

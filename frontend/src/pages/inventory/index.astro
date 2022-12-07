@@ -1,7 +1,8 @@
 ---
 import Page from '../../components/Page.astro';
 import Chip from '../../components/Chip.astro';
-import { getItemCount, durationInSeconds, prettyPrintDuration, SECOND, DEFAULT_COOLDOWN } from '../../utils.js';
+import { durationInSeconds, SECOND, DEFAULT_COOLDOWN } from '../../utils.js';
+import { getItemCount, getItemCountString } from './utils';
 import items from './json/items.json';
 
 let itemsFiltered = items, itemsSorted, itemInfo = {};
@@ -69,21 +70,21 @@ switch (sortOrder) {
     <nav>
         <Chip text="a-z" href={`/inventory?sort=az`} />
         <Chip text="z-a" href={`/inventory?sort=za`} />
-        <Chip text="highest count" href={`/inventory?sort=countdescending`} />
         <Chip text="lowest count" href={`/inventory?sort=countascending`} />
+        <Chip text="highest count" href={`/inventory?sort=countdescending`} />
         <Chip text="least expensive" href={`/inventory?sort=priceascending`} />
         <Chip text="most expensive" href={`/inventory?sort=pricedescending`} />
     </nav>
 
     {itemsFiltered.map((item) => (
-        <a href={`/inventory/${item.id}`}>
+        <a href={`/inventory/item/${item.id}`}>
             <div class="item">
                 <h3>{item.name}</h3>
                 <div class="parent">
                     <img src={item.image} />
                     <p class="nobackground description">{item.description}</p>
                     <div class="parent vertical">
-                        <p class="compact nowrap"><strong>Count:</strong> {getItemCountById(item.id)}</p>
+                        <p class="compact nowrap"><strong>Count:</strong> {getItemCountString(Astro.request, item.id, true)}</p>
                         <p class="compact nowrap"><strong>Price:</strong> {item.price || 'Soulbound'}</p>
                     </div>
                 </div>
@@ -158,9 +159,10 @@ switch (sortOrder) {
     }
 
 	nav {
-		text-align: center;
-		display: flex;
-		flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        justify-items: center;
+        grid-row-gap: 10px;
 	}
 
     nav :global() {

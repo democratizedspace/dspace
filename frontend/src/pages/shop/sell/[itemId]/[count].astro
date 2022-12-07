@@ -2,15 +2,12 @@
 import Page from '../../../../components/Page.astro';
 import Chip from '../../../../components/Chip.astro';
 import items from '../../../inventory/json/items.json';
-import { sellItem, getWalletBalance, getSymbolFromId } from '../../../../utils.js';
+import { getWalletBalance, getSymbolFromId } from '../../../../utils.js';
+import { sellItem } from '../../../inventory/utils';
 
 const { itemId, count } = Astro.params;
 
-console.log(itemId, count);
-
 const saleConfirmation = sellItem(Astro.request, Astro.response, itemId, parseInt(count.toString()));
-
-console.log("saleConfirmation", saleConfirmation);
 
 if (!saleConfirmation) {
   return Astro.redirect(`/shop/sell/${itemId}/${count}/insufficient_items`);
