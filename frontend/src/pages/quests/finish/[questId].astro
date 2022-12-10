@@ -57,7 +57,7 @@ if (quest && !questFinished) {
 
 ---
 
-<Page>
+<Page columns="1">
     <div class="parent">
         {shouldAcceptCookies ? (
             questFinished ?
@@ -81,7 +81,7 @@ if (quest && !questFinished) {
                 </div>
 
                 <p>The following items have been added to your inventory:</p>
-                <div class="horizontal">
+                <div class="vertical">
                     {questData['rewards'].map((reward) => (
                         <Chip
                             text={`${reward.count} x ${items.find((item) => item.id === reward.id).name}`}
@@ -110,9 +110,10 @@ if (quest && !questFinished) {
         min-width: 130px;
     }
     
-    .horizontal {
+    .vertical {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
+        gap: 10px;
     }
 </style>

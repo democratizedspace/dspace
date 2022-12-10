@@ -43,7 +43,7 @@ const title = process ? process.title : 'Process not found';
 
 <Page title={title} columns="1">
     { errorMessage && <Warning title={errorMessage} /> }
-    <Process processId={processId} client:idle />
+    <Process processId={processId} client:idle machineCount={getItemCount(Astro.request, process.machine)} />
     <h3>Consumes:</h3>
     <ItemCount itemList={process.consumeItems} />
     <h3>Creates:</h3>

@@ -3,9 +3,10 @@
     import { prettyPrintDuration, durationInSeconds } from "../../utils";
     import processes from './processes.json';
 
-    export let processId;
+    export let processId, machineCount = 0;
 
     const process = processes.find(p => p.id === processId);
+    const machineLockKey = `machine-lock-${process.machine}`;
 
     const duration = durationInSeconds(process.duration);
 
@@ -23,14 +24,23 @@
         if (startTime) {
             initializeProgressBar();
         } else {
-            // add a Start button to #actionlist
-            const startButton = document.createElement("button");
-            startButton.id = "start";
-            startButton.innerHTML = "Start Process";
-            startButton.onclick = startProcess;
-            startButton.style.cssText = "color: black; background-color: #4CAF50; text-decoration: none; padding: 5px; border-radius: 10px; font-size: 16px; border: none;";
-            
-            document.getElementById('actionlist').appendChild(startButton);
+            if (isMachineAvailable(process.machineId)) {
+                // add a Start button to #actionlist
+                const startButton = document.createElement("button");
+                startButton.id = "start";
+                startButton.innerHTML = "Start Process";
+                startButton.onclick = startProcess;
+                startButton.style.cssText = "color: black; background-color: #4CAF50; text-decoration: none; padding: 5px; border-radius: 10px; font-size: 16px; border: none;";
+                
+                document.getElementById('actionlist').appendChild(startButton);
+            } else {
+                // add a message to #actionlist
+                const message = document.createElement("div");
+                message.innerHTML = "This machine is currently unavailable. Please try again later.";
+                
+                
+                document.getElementById('actionlist').appendChild(message);
+            }
         }
     });
 
@@ -41,6 +51,9 @@
         
         // save the start time to localStorage so we can resume the task later
         localStorage.setItem(`process-${processId}-starttime`, startTime);
+
+        // lock the machine
+        lockMachine(process.machine);
 
         // delete the start button from #container
         document.getElementById('actionlist').removeChild(document.getElementById('start'));
@@ -96,6 +109,8 @@
         // remove the start time from localStorage
         localStorage.removeItem(`process-${processId}-starttime`);
 
+        // unlock the machine
+        unlockMachine(process.machine);
         
         const claimLink = document.createElement("a");
         claimLink.href = `/processes/${processId}/confirm`;
@@ -106,6 +121,26 @@
         claimLink.innerHTML = "Claim your items!";
 
         document.getElementById('actionlist').prepend(claimLink);
+    }
+
+    function isMachineAvailable () {
+        const machineLock = parseInt(localStorage.getItem(machineLockKey)) | 0;
+
+        const machineAvailable = Math.max(machineCount - machineLock, 0);
+
+        return machineAvailable > 0;
+    }
+
+    function lockMachine () {
+        const machineLock = parseInt(localStorage.getItem(machineLockKey)) | 0;
+
+        localStorage.setItem(machineLockKey, machineLock + 1);
+    }
+
+    function unlockMachine () {
+        const machineLock = parseInt(localStorage.getItem(machineLockKey)) | 0;
+
+        localStorage.setItem(machineLockKey, Math.max(machineLock - 1, 0));
     }
 </script>
 

@@ -18,7 +18,7 @@ for (let item of items) {
     let price = 0
     // get item.price in number and unit
     try {
-        price = parseInt(item.price.split(' ')[0]);   
+        price = parseFloat(item.price.split(' ')[0]);   
     } catch (e) {
     }
 

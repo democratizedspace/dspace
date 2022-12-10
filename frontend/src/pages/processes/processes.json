@@ -15,11 +15,12 @@
             },
             {
                 "id": "20",
-                "count": 0.4325943029
+                "count": 0.977023939064
             }
         ],
         "fungible": true,
-        "duration": "5s"
+        "duration": "5s",
+        "machine": "29"
     },
     {
         "id": "bucket-water-chlorinated",
@@ -36,7 +37,8 @@
                 "count": 1
             }
         ],
-        "duration": "5s"
+        "duration": "5s",
+        "machine": "28"
     },
     {
         "id": "3dprint-benchy",
@@ -57,7 +59,8 @@
                 "count": 1
             }
         ],
-        "duration": "5s"
+        "duration": "1h 51m",
+        "machine": "0"
     },
     {
         "id": "3dprint-rocket",
@@ -78,7 +81,8 @@
                 "count": 1
             }
         ],
-        "duration": "5s"
+        "duration": "12h 52m 51s",
+        "machine": "0"
     },
     {
         "id": "bucket-water-dechlorinated",
@@ -95,6 +99,54 @@
                 "count": 1
             }
         ],
-        "duration": "5s"
+        "duration": "48h",
+        "machine": "17"
+    },
+    {
+        "id": "rockwool-soak",
+        "title": "soak your hydroponic starter plugs",
+        "consumeItems": [
+            {
+                "id": "25",
+                "count": 1
+            },
+            {
+                "id": "13",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "25",
+                "count": 1
+            },
+            {
+                "id": "26",
+                "count": 11
+            }
+        ],
+        "duration": "15m",
+        "machine": "25"
+    },
+    {
+        "id": "germinate-basil",
+        "title": "place a few basil seeds in each hydroponic starter plug",
+        "consumeItems": [
+            {
+                "id": "10",
+                "count": 1
+            },
+            {
+                "id": "26",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "27",
+                "count": 11
+            }
+        ],
+        "duration": "7d"
     }
 ]

@@ -70,9 +70,7 @@ export const prettyPrintDuration = (durationSeconds, integer) => {
 }
 
 export const datetimeAfterDuration = (durationSeconds) => {
-    console.log("creating datetime after duration", durationSeconds);
     const futureDatetime = new Date(Date.now() + durationSeconds);
-    console.log("future datetime", futureDatetime);
     return new Date(Date.now() + durationSeconds * 1000);
 }
 

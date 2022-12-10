@@ -92,20 +92,21 @@
         "description": "A 3D-printed model rocket that can be used to launch small payloads into space.",
         "image": "/assets/modelrocket.jpg",
         "json": "items/prints/rocket.json",
-        "type": "3dprint"
+        "type": "3dprint",
+        "price": "25 dUSD"
     },
     {
         "id": "12",
         "name": "green PLA filament",
-        "description": "1+ gram of green PLA filament for an FDM printer.",
+        "description": "1 gram of green PLA filament for an FDM printer.",
         "image": "/assets/pla_green.jpg",
         "price": "0.02499 dUSD",
         "unit": "g"
     },
     {
         "id": "13",
-        "name": "rockwool starter plug",
-        "description": "1 starter plug for hydroponic seed germination. Dunk it in water for 5 minutes, then place some seeds in the planting hole.",
+        "name": "hydroponic starter plug",
+        "description": "1 rockwool starter plug for hydroponic seed germination.",
         "image": "/assets/rockwool.jpg",
         "price": "0.35 dUSD"
     },
@@ -134,7 +135,8 @@
         "id": "17",
         "name": "5 gallon bucket of tap water (chlorinated)",
         "description": "A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics.",
-        "image": "/assets/bucket_water.jpg"
+        "image": "/assets/bucket_water.jpg",
+        "type": "machine"
     },
     {
         "id": "18",
@@ -166,8 +168,7 @@
         "name": "dWatt",
         "description": "A token that represents 1 watt of electricity that can be consumed by machines. To acquire 1 dWatt, you need to either prepay the dCarbon cost, or generate and store it in a battery without accruing dCarbon.",
         "image": "/assets/dWatts.jpg",
-        "unit": " W",
-        "price": "0.00018 dUSD"
+        "unit": " W"
     },
     {
         "id": "23",
@@ -188,6 +189,33 @@
         "id": "25",
         "name": "5 gallon bucket of tap water (dechlorinated)",
         "description": "A 5 gallon bucket of water. This water is dechlorinated and can be used for hydroponics.",
-        "image": "/assets/bucket_water.jpg"
+        "image": "/assets/bucket_water.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "26",
+        "name": "soaked hydroponic starter plug",
+        "description": "A hydroponic starter plug soaked in water. Used to germinate seeds.",
+        "image": "/assets/rockwool_wet.jpg"
+    },
+    {
+        "id": "27",
+        "name": "basil seedling",
+        "description": "A basil seedling that has been germinated in a rockwool cube.",
+        "image": "/assets/basil_seedlings.jpg"
+    },
+    {
+        "id": "28",
+        "name": "sink",
+        "description": "Generates tap water.",
+        "image": "/assets/tap.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "29",
+        "name": "smart plug",
+        "description": "A smart plug that plugs into a wall outlet to measure energy usage.",
+        "image": "/assets/smart_plug.jpg",
+        "type": "machine"
     }
 ]

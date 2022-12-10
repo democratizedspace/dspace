@@ -1,20 +1,48 @@
 ---
 import Page from '../../components/Page.astro';
 import Chip from '../../components/Chip.astro';
+
 import items from '../inventory/json/items.json';
+import processes from '../processes/processes.json';
+
+import { getItemCount } from '../inventory/utils.js';
 
 const machines = items.filter(item => item.type === 'machine');
+
+// create a map from machine id to a list of processes
+const processesByMachine = machines.map((machine) => {
+    const processesForMachine = processes.filter(process => process.machine === machine.id);
+
+    // get `machine-lock-${machine.id}}` from localStorage
+    // if it's not there, set it to 0
+    const key = `machine-lock-${machine.id}`;
+    
+    // TODO: split this into astro+svelte so that we have access to localStorage
+    const machineLock = parseInt(localStorage.getItem(key)) || 0;
+    const machineCount = getItemCount(Astro.request, machine.id);
+
+    const machinesAvailable = machineCount - machineLock;
+
+    return {
+        id: machine.id,
+        name: machine.name,
+        image: machine.image,
+        processes: processesForMachine,
+        machinesAvailable,
+    }
+});
 ---
 
-<Page columns="1">
-    Available machines:
-
-    {machines && machines.map((machine) => (
-        <div>
+<Page title="Machines" columns="1">
+    {processesByMachine && processesByMachine.map((machine) => (
+        <div class="item">
+            <Chip text={machine.name} href={`/inventory/item/${machine.id}`} />
+            <h4>Machines available: {machine.machinesAvailable}</h4>
             <img src={machine.image} />
-            <div class="horizontal">
-                <Chip text="make a test print" href="/processes/3dprint-benchy" />
-                <Chip text="print a model rocket" href="/processes/3dprint-rocket" />
+            <div class="vertical">
+                {machine.processes.map((process) => (
+                    <Chip text={process.title} href={`/processes/${process.id}`} />
+                ))}
             </div>
         </div>
     ))}
@@ -27,6 +55,10 @@ const machines = items.filter(item => item.type === 'machine');
 
     .horizontal {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
+    }
+
+    .item {
+        margin-bottom: 5rem;
     }
 </style>

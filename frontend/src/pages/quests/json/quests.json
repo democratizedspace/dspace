@@ -93,6 +93,10 @@
             {
                 "id": "22",
                 "count": 1000
+            },
+            {
+                "id": "29",
+                "count": 1
             }
         ],
         "addBalance": [
@@ -283,11 +287,50 @@
                 "options": [
                     {
                         "id": 0,
-                        "title": "Congrats for making it this far!",
-                        "body": "This quest will be finished in a future update."
+                        "title": "If you've made it this far, congrats! The rest of this quest will be available soon.",
+                        "body": "Hang tight!",
+                        "image": "/assets/hydroponics.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "27",
+                                "count": 11
+                            }
+                        ]
+                    },
+                    {
+                        "id": 0,
+                        "title": "Place a few basil seeds in each of the 11 hydroponic starter plugs.",
+                        "body": "They should turn into seedlings in 14 days.",
+                        "action": "path",
+                        "path": "/processes/germinate-basil",
+                        "image": "/assets/basil_seedlings.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "26",
+                                "count": 11
+                            }
+                        ]
                     },
                     {
                         "id": 1,
+                        "title": "Dip 11 hydroponic starter plugs in the dechlorinated bucket of water.",
+                        "body": "This will help the water soak through them for germination.",
+                        "image": "/assets/rockwool_wet.jpg",
+                        "action": "path",
+                        "path": "/processes/rockwool-soak",
+                        "requiresItems": [
+                            {
+                                "id": "13",
+                                "count": 11
+                            },
+                            {
+                                "id": "25",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
                         "title": "Place the bucket in direct sunlight for 48 hours",
                         "body": "This will dechlorinate the water and make it suitable for hydroponics.",
                         "action": "path",
@@ -301,7 +344,7 @@
                         ]
                     },
                     {
-                        "id": 2,
+                        "id": 3,
                         "title": "Add tap water to the bucket",
                         "action": "path",
                         "path": "/processes/bucket-water-chlorinated",
@@ -309,6 +352,10 @@
                         "hideIfOwned": [
                             {
                                 "id": "17",
+                                "count": 1
+                            },
+                            {
+                                "id": "25",
                                 "count": 1
                             }
                         ]

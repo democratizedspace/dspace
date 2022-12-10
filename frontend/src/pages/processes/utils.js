@@ -34,8 +34,6 @@ export const setProcessCooldown = (req, res, processId) => {
         return false;
     }
 
-    console.log("setting process cooldown");
-
     const process = processes.find((process) => process.id === processId);
     if (!process) {
         return false;
@@ -44,12 +42,8 @@ export const setProcessCooldown = (req, res, processId) => {
     const cooldownDuration = process.duration;
     const cooldownDurationInSeconds = durationInSeconds(cooldownDuration);
 
-    console.log("cooldown duration in seconds: " + cooldownDurationInSeconds);
-
     // get the current date and add the cooldown duration to it
     const cooldownDate = datetimeAfterDuration(cooldownDurationInSeconds);
-
-    console.log("cooldown date: " + cooldownDate);
 
     // set the cookie to the new cooldown date
     setCookieValue(res, `process-${processId}-cooldown`, cooldownDate);
@@ -80,17 +74,13 @@ export const finalizeProcess = (req, res, processId) => {
         };
     }
 
-    console.log("checking process cooldown");
     // check process cooldown
     if (processOnCooldown(req, processId)) {
-        console.log("process on cooldown");
         return {
             success: false,
             reason: 'cooldown'
         }
     }
-
-    console.log("process not on cooldown");
 
     const { consumeItems, createItems } = process;
 
@@ -114,8 +104,6 @@ export const finalizeProcess = (req, res, processId) => {
     for (const createItem of createItems) {
         addItemToInventory(req, res, createItem.id, createItem.count);
     }
-
-    console.log("setting cooldown");
 
     // create a cooldown based on the process duration
     setProcessCooldown(req, res, processId);
