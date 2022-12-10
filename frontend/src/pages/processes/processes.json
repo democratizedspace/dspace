@@ -148,5 +148,17 @@
             }
         ],
         "duration": "7d"
-    }
+    },
+    {
+        "id": "sink",
+        "title": "find your sink",
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "28",
+                "count": 1
+            }
+        ]
+    },
+    "duration": "10s"
 ]
