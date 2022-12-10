@@ -8,17 +8,34 @@ const { text, href } = Astro.props;
 	a {
         background-color: #2f5b2f;
 		color: white;
-		border-radius: 100px;
+		border-radius: 5px;
 		text-decoration: none;
-        padding: 10px;
-        margin: 5px;
+        padding-left: 20px;
+        padding-right: 10px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        margin: 0px;
+        margin-left: 4px;
+        margin-right: 4px;
+        display: inline-block;
         width: fit-content;
         opacity: 0.8;
         white-space: nowrap;
+        -webkit-transition: 200ms linear;
+        transition: 200ms linear;
 	}
 
     a:hover {
         opacity: 1;
-        transition-duration: 0.5s;
+        font-size: 1.1em;
+        box-shadow: 0 0 25px 0px #245224;
     }
+    
+	@media only screen and (max-width: 768px) {
+		a {
+            opacity: 1;
+            font-size: 1.1em;
+            box-shadow: 0 0 25px 0px #245224;
+		}
+	}
 </style>

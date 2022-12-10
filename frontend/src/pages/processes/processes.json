@@ -1,0 +1,164 @@
+[
+    {
+        "id": "outlet-dWatt",
+        "title": "generate dWatt using your outlet",
+        "consumeItems": [
+            {
+                "id": "24",
+                "count": 0.18
+            }
+        ],
+        "createItems": [
+            {
+                "id": "22",
+                "count": 1000
+            },
+            {
+                "id": "20",
+                "count": 0.977023939064
+            }
+        ],
+        "fungible": true,
+        "duration": "5s",
+        "machine": "29"
+    },
+    {
+        "id": "bucket-water-chlorinated",
+        "title": "fill a bucket with tap water",
+        "consumeItems": [
+            {
+                "id": "16",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "17",
+                "count": 1
+            }
+        ],
+        "duration": "5s",
+        "machine": "28"
+    },
+    {
+        "id": "3dprint-benchy",
+        "title": "Make a test print",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 33
+            },
+            {
+                "id": "22",
+                "count": 231.25
+            }
+        ],
+        "createItems": [
+            {
+                "id": "1",
+                "count": 1
+            }
+        ],
+        "duration": "1h 51m",
+        "machine": "0"
+    },
+    {
+        "id": "3dprint-rocket",
+        "title": "3D print a model rocket",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 91
+            },
+            {
+                "id": "22",
+                "count": 1610.10417
+            }
+        ],
+        "createItems": [
+            {
+                "id": "11",
+                "count": 1
+            }
+        ],
+        "duration": "12h 52m 51s",
+        "machine": "0"
+    },
+    {
+        "id": "bucket-water-dechlorinated",
+        "title": "dechlorinate a bucket of water",
+        "consumeItems": [
+            {
+                "id": "17",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "25",
+                "count": 1
+            }
+        ],
+        "duration": "48h",
+        "machine": "17"
+    },
+    {
+        "id": "rockwool-soak",
+        "title": "soak your hydroponic starter plugs",
+        "consumeItems": [
+            {
+                "id": "25",
+                "count": 1
+            },
+            {
+                "id": "13",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "25",
+                "count": 1
+            },
+            {
+                "id": "26",
+                "count": 11
+            }
+        ],
+        "duration": "15m",
+        "machine": "25"
+    },
+    {
+        "id": "germinate-basil",
+        "title": "grow basil seedlings",
+        "consumeItems": [
+            {
+                "id": "10",
+                "count": 1
+            },
+            {
+                "id": "26",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "27",
+                "count": 11
+            }
+        ],
+        "duration": "7d"
+    },
+    {
+        "id": "sink",
+        "title": "find your sink",
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "28",
+                "count": 1
+            }
+        ],
+        "duration": "10s"
+    }
+]

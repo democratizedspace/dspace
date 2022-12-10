@@ -1,0 +1,79 @@
+---
+import Chip from './Chip.astro'
+
+const { title, text, href, image } = Astro.props;
+---
+
+<a href={href}>
+    <div class="item">
+        <h3>{title}</h3>
+        <div class="section horizontal">
+            <img src={image} />
+            <div class="section vertical">
+                <p class="nobackground">{text}</p>
+                <div class="section horizontal">
+                    <Chip href="/shop/buy/1" text="Buy" />
+                     <Chip href="/shop/sell/1" text="Sell" />
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<style>
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    .section {
+        align-items: center;
+    }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .vertical {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .item {
+        background-color: #2f5b2f;
+        padding: 20px;
+        border-radius: 20px;
+        opacity: 0.8;
+    }
+    
+    .item h3 {
+        margin: 0px;
+        text-align: center;
+    }
+    
+    img {
+        width: 100px;
+        height: 100px;
+        border-radius: 20px;
+        margin-right: 5px;
+    }
+    
+    p {
+        background-color: #84d484;
+        opacity: 0.8;
+        color: black;
+        padding: 5px;
+        margin: 5px;
+        border-radius: 20px;
+    }
+    
+    .nobackground {
+        background: none;
+        color: white;
+    }
+    
+    button {
+
+    }
+</style>

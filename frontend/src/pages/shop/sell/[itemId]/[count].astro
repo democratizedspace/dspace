@@ -1,0 +1,40 @@
+---
+import Page from '../../../../components/Page.astro';
+import Chip from '../../../../components/Chip.astro';
+import items from '../../../inventory/json/items.json';
+import { getWalletBalance, getSymbolFromId } from '../../../../utils.js';
+import { sellItem } from '../../../inventory/utils';
+
+const { itemId, count } = Astro.params;
+
+const saleConfirmation = sellItem(Astro.request, Astro.response, itemId, parseInt(count.toString()));
+
+if (!saleConfirmation) {
+  return Astro.redirect(`/shop/sell/${itemId}/${count}/insufficient_items`);
+}
+
+const item = items.find((item) => item.id === itemId);
+const symbol = getSymbolFromId(item.id);
+
+const totalCost = parseFloat(item.price) * parseFloat(count.toString());
+const previousWalletBalance = getWalletBalance(Astro.request, symbol);
+const currentWalletBalance = previousWalletBalance + totalCost;
+---
+
+<Page title={`Sale successful!`} columns="1">
+  <div class="horizontal">
+    Sold <Chip text={`${count} x ${item.name}`} />.
+  </div>
+  Your wallet balance went from
+  <div class="horizontal">
+    <Chip text={`${previousWalletBalance} ${symbol}`} /> to <Chip text={`${currentWalletBalance} ${symbol}`} />.
+  </div>
+</Page>
+
+<style>
+  .horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+import GrowableImage from './GrowableImage.astro';
+import { getItemCountString } from '../pages/inventory/utils.js';
+
+import items from '../pages/inventory/json/items.json';
+
+const { itemList, hideName = false, unlink = false } = Astro.props;
+
+const itemMetadata = itemList.reduce((acc, item) => {
+    const metadata = items.find((i) => i.id === item.id);
+    const image = metadata.image;
+    const name = metadata.name;
+
+    acc[item.id] = { ...item, image, name };
+    return acc;
+}, {});
+---
+
+<div class="itemlist">
+    <div class="itemlist">
+        {itemList.map((item) => (
+            <li>
+                {getItemCountString(Astro.request, item.id, false, item.count)}
+                <GrowableImage imageSrc={itemMetadata[item.id].image} href={unlink ? undefined : `/inventory/item/${item.id}`} />
+                {!hideName && <span>{itemMetadata[item.id].name}</span>}
+            </li>
+        ))}
+    </div>
+</div>
+
+<style>
+    img {
+        width: 200px;
+    }
+
+    .itemlist {
+        display: flex;
+        flex-direction: column;
+        color: black;
+        font-size: x-large;
+        padding: 10px;
+        margin: 20px;
+        list-style-type: none;
+        background-color: #46a446;
+        border-radius: 10px;
+    }
+
+    .item {
+        opacity: 1;
+        -webkit-transition: opacity 1000ms linear;
+        transition: opacity 1000ms linear;
+    }
+
+    .icon {
+        margin-bottom: -8px;
+        border-radius: 10px;
+        width: 30px;
+        transition: 0.2s;
+    }
+    
+    li {
+        list-style-type: none;
+        padding: 20px;
+        width: 100%;
+
+    }
+</style>

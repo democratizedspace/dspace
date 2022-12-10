@@ -1,10 +1,12 @@
 ---
 import Page from '../../../components/Page.astro';
 import Chip from '../../../components/Chip.astro';
+import ItemCount from '../../../components/ItemCount.astro';
 import SuggestCookies from '../../../components/SuggestCookies.astro';
 import items from '../../inventory/json/items.json';
-import quests from '../../../config/quests.json';
-import { hasAcceptedCookies, setCookieValue, getCookie, addItemToInventory } from '../../../utils';
+import quests from '../json/quests.json';
+import { hasAcceptedCookies, setCookieValue, getCookie } from '../../../utils';
+import { addItemToInventory, burnItem } from '../../inventory/utils';
 
 export interface Props {
     questId: string;
@@ -13,47 +15,50 @@ export interface Props {
 const { questId } = Astro.params;
 let questData = {}, questFinished = false;
 
-const finished = getCookie(Astro.request, `quest-${questId}-finished`);
-
-if (finished) {
-    questFinished = true;
-}
+questFinished = getCookie(Astro.request, `quest-${questId}-finished`) || false;
 
 const shouldAcceptCookies = !hasAcceptedCookies(Astro.request);
 
 // find the quest with id questId
-const quest = quests.find((quest) => quest.id === parseInt(questId));
+const quest = quests.find((quest) => quest.id === questId);
 
 if (quest && !questFinished) {
     questData = {
+        id: quest.id,
         image: quest.image,
         rewards: quest.rewards.map((reward) => {
             const item = items.find((item) => item.id === reward.id);
+
+            addItemToInventory(Astro.request, Astro.response, reward.id, reward.count, true);
+
             return {
                 id: reward.id,
                 name: item.name,
                 count: reward.count,
             };
-        })
+        }),
+        burns: quest.burnsItems ? quest.burnsItems.map((burn) => {
+            const item = items.find((item) => item.id === burn.id);
+
+            burnItem(Astro.request, Astro.response, burn.id);            
+
+            return {
+                id: burn.id,
+                name: item.name,
+                count: burn.count,
+            };
+        }) : []
     };
-    
+
     if (!(shouldAcceptCookies)) {
         setCookieValue(Astro.response, `quest-${questId}-finished`, new Date(Date.now()));
     } else {
-    }
-
-    // for each reward in questData.rewards, add the reward to the user's inventory
-    try {
-        questData['rewards'].forEach((reward) => {
-            addItemToInventory(Astro.request, Astro.response, reward.id, reward.count, true);
-        });   
-    } catch {
     }
 }
 
 ---
 
-<Page>
+<Page columns="1">
     <div class="parent">
         {shouldAcceptCookies ? (
             questFinished ?
@@ -66,14 +71,18 @@ if (quest && !questFinished) {
             ) :
                 questData['image'] && <img src={questData['image']} />
                 <p>Done! You finished the quest!</p>
-                <p>The following items have been added to your inventory:</p>
+
+                <p>{questData['burns'].length > 0 && "The following items have been consumed:"}</p>
                 <div class="horizontal">
-                    {questData['rewards'].map((reward) => (
+                    {questData && questData['burns'].map((burn) => (
                         <Chip
-                            text={`${reward.count} x ${items.find((item) => item.id === reward.id).name}`}
+                            text={`${burn.name} x ${burn.count}`}
                         />
                     ))}
                 </div>
+
+                <p>The following items have been added to your inventory:</p>
+                <ItemCount itemList={questData['rewards']} />
         )}
     </div>
 </Page>
@@ -96,9 +105,10 @@ if (quest && !questFinished) {
         min-width: 130px;
     }
     
-    .horizontal {
+    .vertical {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
+        gap: 10px;
     }
 </style>

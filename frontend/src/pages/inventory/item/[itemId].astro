@@ -1,0 +1,50 @@
+---
+import Page from '../../../components/Page.astro';
+import items from '../json/items.json';
+import Chip from '../../../components/Chip.astro';
+import ItemCount from '../../../components/ItemCount.astro';
+import { getItemCount } from '../utils';
+
+const { itemId } = Astro.params;
+
+const item = items.find((item) => item.id === itemId);
+
+const { id, name, description, image, creationTitle, price } = item;
+
+const itemCount = getItemCount(Astro.request, itemId);
+
+const isCurrency = item.type === 'currency';
+---
+
+<Page columns="1"> 
+    <h3>{name}</h3>
+    <img src={image} alt={name} />
+    <p>{description}</p>
+    <div class="horizontal">
+        {price && <Chip text="Buy" href={`/shop/buy/${id}`}></Chip>}
+        {price && <Chip text="Sell" href={`/shop/sell/${id}`}></Chip>}
+    </div>
+    {creationTitle && <Chip text={creationTitle} href={`/inventory/add/${id}`} />}
+    <h3>Count:</h3>
+    <ItemCount itemList={[
+        {
+            "id": itemId,
+            "count": itemCount
+        }
+    ]} />
+</Page>
+
+<style>
+    img {
+        width: 100%;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+    }
+</style>

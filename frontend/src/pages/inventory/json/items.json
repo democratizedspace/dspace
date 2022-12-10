@@ -3,10 +3,9 @@
         "id": "0",
         "name": "Real Printer 1",
         "description": "A basic cheap printer that is easy to use and has a large community of users.",
-        "creationTitle": "Build your own Real Printer 1",
         "image": "/assets/3dprinter.jpg",
         "type": "machine",
-        "json": "3dprinting/printers/real-printer-1.json",
+        "json": "items/printers/real-printer-1.json",
         "price": "200 dUSD",
         "cooldown": "1d"
     },
@@ -17,34 +16,206 @@
         "creationTitle": "Make a test print",
         "image": "/assets/benchy.jpg",
         "type": "3dprint",
-        "json": "3dprinting/prints/benchy.json",
-        "price": "5 dUSD",
-        "cooldown": "20m"
+        "json": "items/prints/benchy.json",
+        "price": "5 dUSD"
     },
     {
         "id": "2",
-        "name": "Real Hydroponics Kit 1",
+        "name": "hydroponics kit",
         "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
-        "creationTitle": "Assemble hydroponics kit",
-        "image": "/assets/hydroponics.jpg",
+        "image": "/assets/amazing1.jpg",
         "cooldown": "1d",
         "price": "30 dUSD"
     },
     {
         "id": "3",
-        "name": "White PLA filament",
+        "name": "white PLA filament",
         "description": "1 gram of white PLA filament for an FDM printer.",
-        "creationTitle": "Recycle PLA into a spool of filament",
         "image": "/assets/pla_white.jpg",
-        "price": "0.02499 dUSD"
+        "price": "0.02499 dUSD",
+        "unit": "g"
     },
     {
         "id": "4",
         "name": "Edison Model M",
         "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities.",
-        "creationTitle": "Build your own Edison Model M",
         "image": "/assets/ev.jpg",
         "cooldown": "365d",
         "price": "40000 dUSD"
+    },
+    {
+        "id": "5",
+        "name": "portable solar panel",
+        "description": "A portable solar panel that can be used to charge your devices. Supports USB-A and USB-C ports, and it has a 110V AC outlet, with support for 200W at peak sunpower.",
+        "price": "200 dUSD",
+        "image": "/assets/solar.jpg",
+        "cooldown": "7d"
+    },
+    {
+        "id": "6",
+        "name": "1 kWh battery pack",
+        "description": "A 1 kWh battery pack that can be used to store energy from a solar panel or a wind turbine.",
+        "price": "800 dUSD",
+        "image": "/assets/battery.jpg",
+        "cooldown": "7d"
+    },
+    {
+        "id": "7",
+        "name": "500W wind turbine",
+        "description": "A 500W wind turbine that can be used to generate electricity.",
+        "price": "200 dUSD",
+        "image": "/assets/turbine.jpg",
+        "cooldown": "7d"
+    },
+    {
+        "id": "8",
+        "name": "Benchy Award",
+        "description": "A trophy granted for printing your first Benchy.",
+        "image": "/assets/benchy_award.jpg"
+    },
+    {
+        "id": "9",
+        "name": "Real Hydroponics Tub 1",
+        "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
+        "image": "/assets/hydroponics_tub.jpg"
+    },
+    {
+        "id": "10",
+        "name": "basil seeds",
+        "description": "A packet of basil seeds.",
+        "image": "/assets/basil_seeds.jpg",
+        "price": "5 dUSD"
+    },
+    {
+        "id": "11",
+        "name": "3D printed model rocket",
+        "description": "A 3D-printed model rocket that can be used to launch small payloads into space.",
+        "image": "/assets/modelrocket.jpg",
+        "json": "items/prints/rocket.json",
+        "type": "3dprint",
+        "price": "25 dUSD"
+    },
+    {
+        "id": "12",
+        "name": "green PLA filament",
+        "description": "1 gram of green PLA filament for an FDM printer.",
+        "image": "/assets/pla_green.jpg",
+        "price": "0.02499 dUSD",
+        "unit": "g"
+    },
+    {
+        "id": "13",
+        "name": "hydroponic starter plug",
+        "description": "1 rockwool starter plug for hydroponic seed germination.",
+        "image": "/assets/rockwool.jpg",
+        "price": "0.35 dUSD"
+    },
+    {
+        "id": "14",
+        "name": "hydroponics nutrients",
+        "description": "A bottle of hydroponics nutrients that can be used to grow plants. NPK: 9-3-6",
+        "image": "/assets/hydroponics_nutrients.jpg",
+        "price": "25 dUSD",
+        "unit": " L"
+    },
+    {
+        "id": "15",
+        "name": "3D printing kit",
+        "description": "A kit that contains all the parts you need to get started with 3D printing. Everything is fully assembled.",
+        "image": "/assets/amazing1.jpg"
+    },
+    {
+        "id": "16",
+        "name": "5 gallon bucket",
+        "description": "A 5 gallon bucket that can be used to store water or other liquids.",
+        "image": "/assets/bucket.jpg",
+        "price": "8 dUSD"
+    },
+    {
+        "id": "17",
+        "name": "5 gallon bucket of tap water (chlorinated)",
+        "description": "A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics.",
+        "image": "/assets/bucket_water.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "18",
+        "name": "Motor Award",
+        "description": "A trophy granted for being one of the first people to buy an Edison Model M",
+        "image": "/assets/motor_award.jpg"
+    },
+    {
+        "id": "19",
+        "name": "Rocket Award",
+        "description": "A trophy granted for printing your first model rocket.",
+        "image": "/assets/rocket_award.jpg"
+    },
+    {
+        "id": "20",
+        "name": "dCarbon",
+        "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
+        "image": "/assets/Dcarbon.jpg"
+    },
+    {
+        "id": "21",
+        "name": "Hypercar",
+        "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities.",
+        "image": "/assets/hypercar.jpg",
+        "price": "40000 dUSD"
+    },
+    {
+        "id": "22",
+        "name": "dWatt",
+        "description": "A token that represents 1 watt of electricity that can be consumed by machines. To acquire 1 dWatt, you need to either prepay the dCarbon cost, or generate and store it in a battery without accruing dCarbon.",
+        "image": "/assets/dWatts.jpg",
+        "unit": " W"
+    },
+    {
+        "id": "23",
+        "name": "Hypervan",
+        "description": "A futuristic electric van with Fully Supervised Driving (FSD) capabilities.",
+        "image": "/assets/hypervan.jpg",
+        "price": "75000 dUSD"
+    },
+    {
+        "id": "24",
+        "name": "dUSD",
+        "description": "An in-game tokenized version of the USD currency. Not backed by or in any way associated with actual USD.",
+        "image": "/assets/dUSD.jpg",
+        "type": "currency",
+        "symbol": "dUSD"
+    },
+    {
+        "id": "25",
+        "name": "5 gallon bucket of tap water (dechlorinated)",
+        "description": "A 5 gallon bucket of water. This water is dechlorinated and can be used for hydroponics.",
+        "image": "/assets/bucket_water.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "26",
+        "name": "soaked hydroponic starter plug",
+        "description": "A hydroponic starter plug soaked in water. Used to germinate seeds.",
+        "image": "/assets/rockwool_wet.jpg"
+    },
+    {
+        "id": "27",
+        "name": "basil seedling",
+        "description": "A basil seedling that has been germinated in a rockwool cube.",
+        "image": "/assets/basil_seedlings.jpg"
+    },
+    {
+        "id": "28",
+        "name": "sink",
+        "description": "Generates tap water.",
+        "image": "/assets/tap.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "29",
+        "name": "smart plug",
+        "description": "A smart plug that plugs into a wall outlet to measure energy usage.",
+        "image": "/assets/smart_plug.jpg",
+        "type": "machine"
     }
 ]

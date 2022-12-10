@@ -1,0 +1,561 @@
+[
+    {
+        "id": "0",
+        "title": "Set up your first 3D printer",
+        "body": "Someone offers you a 3D printer. Do you accept?",
+        "image": "/assets/3dprinter.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Accept 3D printer",
+                        "body": "You graciously accept the big box they're offering you.",
+                        "action": "quest",
+                        "next": 1
+                    },
+                    {
+                        "id": 1,
+                        "title": "Reject offer",
+                        "body": "Maybe later.",
+                        "action": "path",
+                        "path": "/"
+                    }
+                ]
+            },
+            {
+                "id": 1,
+                "message": "You accept the 3D printer.",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Start assembly",
+                        "body": "Batteries not included. Well, mostly because it runs on AC power.",
+                        "action": "quest",
+                        "next": 2
+                    }
+                ],
+                "checkpoint": true
+            },
+            {
+                "id": 2,
+                "message": "It's still in the box.",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Remove contents from the box",
+                        "body": "Unboxing video? Unboxing video.",
+                        "action": "quest",
+                        "next": 3
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "message": "You removed all the items and placed them on the table.",
+                "options": [
+                    {
+                        "id": 2,
+                        "title": "Magically assemble the printer with the push of a button.",
+                        "body": "",
+                        "action": "quest",
+                        "next": 4
+
+                    }
+                ],
+                "checkpoint": true
+            },
+            {
+                "id": 4,
+                "message": "3D printer created! You can find it in your inventory.",
+                "options": [
+                    {
+                        "id": 1,
+                        "title": "Finish the quest and collect your reward",
+                        "action": "finish",
+                        "image": "/assets/door.jpg"
+                    }
+                ],
+                "checkpoint": true
+            }
+        ],
+        "rewards": [
+            {
+                "id": "0",
+                "count": 1
+            },
+            {
+                "id": "12",
+                "count": 1000
+            },
+            {
+                "id": "22",
+                "count": 1000
+            },
+            {
+                "id": "29",
+                "count": 1
+            }
+        ],
+        "addBalance": [
+            {
+                "currency": "dUSD",
+                "count": 20
+            }
+        ]
+    },
+    {
+        "id": "1",
+        "title": "Launch an amateur rocket",
+        "body": "One small step for humankind.",
+        "image": "/assets/amateur_rocket.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Before we get started, let's make sure we're complying with the FAA.",
+                        "body": "Even in amateur rocketry, above a certain threshold, you need to register your rocket with the FAA and obtain a certificate.",
+                        "action": "none",
+                        "image": "/assets/paperwork.jpg"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "2",
+        "title": "Grow basil hydroponically",
+        "body": "Hydroponics is a technique by which you grow plants in a liquid nutrition solution. No soil required. Very water-efficient.",
+        "image": "/assets/hydroponics.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Order a hydroponics kit from Amazing",
+                        "body": "Free 1-day shipping!",
+                        "next": 1,
+                        "action": "path",
+                        "path": "/shop/buy/2",
+                        "image": "/assets/cart.jpg",
+                        "redirect": "/quests/2/1",
+                        "hideIfOwned": [
+                            {
+                                "id": "2",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Assemble your kit.",
+                        "body": "No tools required!",
+                        "requiresItems": [
+                            {
+                                "id": "2",
+                                "count": 1
+                            }
+                        ],
+                        "addItems": [
+                            {
+                                "id": "9",
+                                "count": 1
+                            }
+                        ],
+                        "action": "quest",
+                        "next": 1
+                    }
+                ]
+            },
+            {
+                "id": 1,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Unbox your kit",
+                        "body": "",
+                        "action": "quest",
+                        "next": 2,
+                        "image": "/assets/hydroponics_tub.jpg",
+                        "consumes": [
+                            {
+                                "id": "2",
+                                "count": 1
+                            }
+                        ],
+                        "creates": [
+                            {
+                                "id": "9",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Fill the bucket with water",
+                        "body": "1 packet of seeds should be enough!",
+                        "action": "quest",
+                        "next": 3,
+                        "image": "/assets/bucket.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "16",
+                                "count": 1
+                            },
+                            {
+                                "id": "28",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Find your sink",
+                        "action": "path",
+                        "path": "/processes/sink",
+                        "image": "/assets/tap.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "16",
+                                "count": 1
+                            }
+                        ],
+                        "hideIfOwned": [
+                            {
+                                "id": "28",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Order some basil seeds",
+                        "body": "1 packet of seeds should be enough!",
+                        "action": "path",
+                        "path": "/shop/buy/10",
+                        "image": "/assets/basil_seeds.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "10",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Order some rockwool",
+                        "body": "The Real Hydroponics Tub 1 has 11 slots for rockwool. That's how many you'll need.",
+                        "action": "path",
+                        "path": "/shop/buy/13",
+                        "image": "/assets/rockwool.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "13",
+                                "count": 11
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "Order some hydroponics nutrients",
+                        "body": "Your plant will need this to grow and stay alive.",
+                        "action": "path",
+                        "path": "/shop/buy/14",
+                        "image": "/assets/hydroponics_nutrients.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "14",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "title": "Buy a bucket",
+                        "body": "You'll need a bucket to hold water outside in sunlight for 48 hours.",
+                        "action": "path",
+                        "path": "/shop/buy/16",
+                        "image": "/assets/bucket.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "16",
+                                "count": 1
+                            },
+                            {
+                                "id": "17",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ],
+                "checkpoint": true
+            },
+            {
+                "id": 3,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "If you've made it this far, congrats! The rest of this quest will be available soon.",
+                        "body": "Hang tight!",
+                        "image": "/assets/hydroponics.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "27",
+                                "count": 11
+                            }
+                        ]
+                    },
+                    {
+                        "id": 0,
+                        "title": "Place a few basil seeds in each of the 11 hydroponic starter plugs.",
+                        "body": "They should turn into seedlings in 14 days.",
+                        "action": "path",
+                        "path": "/processes/germinate-basil",
+                        "image": "/assets/basil_seedlings.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "26",
+                                "count": 11
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Dip 11 hydroponic starter plugs in the dechlorinated bucket of water.",
+                        "body": "This will help the water soak through them for germination.",
+                        "image": "/assets/rockwool_wet.jpg",
+                        "action": "path",
+                        "path": "/processes/rockwool-soak",
+                        "requiresItems": [
+                            {
+                                "id": "13",
+                                "count": 11
+                            },
+                            {
+                                "id": "25",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Place the bucket in direct sunlight for 48 hours",
+                        "body": "This will dechlorinate the water and make it suitable for hydroponics.",
+                        "action": "path",
+                        "path": "/processes/bucket-water-dechlorinated",
+                        "image": "/assets/bucket_water_sunlight.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "17",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "Add tap water to the bucket",
+                        "action": "path",
+                        "path": "/processes/bucket-water-chlorinated",
+                        "image": "/assets/tap.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "17",
+                                "count": 1
+                            },
+                            {
+                                "id": "25",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ],
+                "checkpoint": true
+            }
+        ]   
+    },
+    {
+        "id": "4",
+        "title": "Buy an EV",
+        "body": "Might I recommend the Edison Model M?",
+        "image": "/assets/ev.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Order an Edison Model M from Amazing",
+                        "body": "Driven to your door.",
+                        "action": "path",
+                        "itemId": "2",
+                        "image": "/assets/cart.jpg",
+                        "duration": "1d",
+                        "path": "/shop/buy/4",
+                        "redirect": "/quests/4/1"
+                    },
+                    {
+                        "id": 1,
+                        "title": "Receive a commemorative award for your purchase of an Edison Model M",
+                        "body": "You're an early adopter!",
+                        "action": "finish",
+                        "image": "/assets/motor_award.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "4",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "18",
+                "count": 1
+            }
+        ]
+    },
+    {
+        "id": "5",
+        "title": "Make a test print",
+        "body": "You can use the 3D printer you received in the previous quest.",
+        "image": "/assets/benchy.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Print a Benchy",
+                        "body": "A popular test print.",
+                        "action": "path",
+                        "path": "/processes/3dprint-benchy",
+                        "image": "/assets/3dprinter.jpg",
+                        "duration": "1d",
+                        "hideIfOwned": [
+                            {
+                                "id": "1",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Turn in your benchy for a benchy award",
+                        "body": "Shiny!",
+                        "requiresItems": [
+                            {
+                                "id": "1",
+                                "count": 1
+                            }
+                        ],
+                        "action": "finish",
+                        "image": "/assets/door.jpg"
+                    }
+                ]
+            }
+        ],
+        "requiresQuests": [
+            "0"
+        ],
+        "requiresItems": [
+            {
+                "id": "1",
+                "count": 1
+            }
+        ],
+        "burnsItems": [
+            {
+                "id": "1",
+                "count": 1
+            }
+        ],
+        "rewards": [
+            {
+                "id": "8",
+                "count": 1
+            }
+        ]
+    },
+    {
+        "id": "6",
+        "title": "3D print a model rocket",
+        "body": "A nice knick knack for your shelf or desk.",
+        "image": "/assets/modelrocket.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Print a model rocket",
+                        "body": "",
+                        "action": "path",
+                        "path": "/processes/3dprint-rocket",
+                        "image": "/assets/modelrocket.jpg",
+                        "duration": "1d",
+                        "hideIfOwned": [
+                            {
+                                "id": "11",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Turn in your 3D printed rocket for a trophy!",
+                        "body": "(I'm basically implementing achievements as items until I build a proper achievement system)",
+                        "requiresItems": [
+                            {
+                                "id": "11",
+                                "count": 1
+                            }
+                        ],
+                        "action": "finish",
+                        "image": "/assets/rocket_award.jpg"
+                    }
+                ]
+            }
+        ],
+        "requiresQuests": [
+            "0"
+        ],
+        "requiresItems": [
+            {
+                "id": "11",
+                "count": 1
+            }
+        ],
+        "burnsItems": [
+            {
+                "id": "11",
+                "count": 1
+            }
+        ],
+        "rewards": [
+            {
+                "id": "19",
+                "count": 1
+            }
+        ]
+    }
+]

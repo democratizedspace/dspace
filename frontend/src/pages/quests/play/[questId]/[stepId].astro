@@ -1,26 +1,27 @@
 ---
 import Page from '../../../../components/Page.astro';
 import Card from '../../../../components/Card.astro';
-import quests from '../../../../config/quests.json';
+import quests from '../../json/quests.json';
 import SuggestCookies from '../../../../components/SuggestCookies.astro';
-import { hasAcceptedCookies } from '../../../../utils';
+import { hasAcceptedCookies, isQuestCompleted } from '../../../../utils';
+import { getItemCount } from '../../../inventory/utils';
 
 const HOURS = 1000 * 60 * 60;
 const DURATION = 1 * HOURS;
 
 const { questId, stepId } = Astro.params;
-let quest, questStep;
+let quest, questStep, showOption = {};
 
 const shouldAcceptCookies = !hasAcceptedCookies(Astro.request);
 
 try {
-    quest = quests[questId];
+    quest = quests.find(q => q.id === questId);
     questStep = quest.steps[stepId];
 } catch (e) {
     questStep = '';
 }
 
-if (!(shouldAcceptCookies) && questStep.checkpoint === true) {
+if (!(shouldAcceptCookies) && questStep && questStep.checkpoint === true) {
     Astro.response.headers.append('Set-Cookie', `checkpoint-${questId}=${parseInt(questStep.id)}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`);
 }
 
@@ -35,6 +36,32 @@ const getAction = (questOption) => {
         default:
             return '';
     }
+}
+
+const requirementsMet = (questOption) => {
+    if (questOption.requiresItems) {
+        for (const r of questOption.requiresItems) {
+            const actualCount = getItemCount(Astro.request, r.id);
+            const requiredCount = r.count;
+            if (actualCount < requiredCount) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+const shouldShowOption = (questOption) => {
+    if (questOption.hideIfOwned) {
+        for (const r of questOption.hideIfOwned) {
+            const itemCount = getItemCount(Astro.request, r.id);
+            if (itemCount >= r.count) {
+                return false;
+            }
+        }
+    }
+
+    return requirementsMet(questOption);
 }
 
 const startTime = new Date(Date.now());
@@ -52,12 +79,16 @@ if (hoursFromNow === 1) {
     output = `in ${hoursFromNow} hours`;
 }
 
+let options = questStep ? questStep.options : [];
+
+options = options.filter(option => shouldShowOption(option));
 ---
 
-<Page message = {questStep.message || ""}>
+<Page message = {questStep ? questStep.message : ""} columns="1">
     <SuggestCookies shouldSuggestCookies={shouldAcceptCookies} redirect={`/quests/play/${questId}/${stepId}`} />
     <div class="vertical base">
-        {questStep.options && questStep.options.map((option) => (
+        <!-- for each questStep.options, check whether there's a requiresItems property -->        
+        {options && options.map((option) => (
             <a href={getAction(option)}>
                 <div class="horizontal container">
                     {option.image && <img src={option.image} />}
@@ -102,10 +133,10 @@ if (hoursFromNow === 1) {
         margin: 5px;
         border-radius: 20px;
         opacity: 0.8;
-        width: 100%;
+        width: 90%;
     }
 
-    .container:hover {
+    .container2:hover {
         opacity: 1;
     }
 </style>

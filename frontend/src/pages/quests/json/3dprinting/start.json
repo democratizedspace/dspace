@@ -1,0 +1,19 @@
+{
+    "steps": [
+        {
+            "id": "0",
+            "title": "To continue, you need the following items:",
+            "requirements": [
+                {
+                    "itemId": "5",
+                    "quantity": 1
+                }
+            ],
+            "unlocks": "1"
+        },
+        {
+            "id": "1",
+            "title": ""
+        }
+    ]
+}

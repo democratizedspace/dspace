@@ -1,4 +1,5 @@
 import items from './pages/inventory/json/items.json';
+import quests from './pages/quests/json/quests.json';
 
 export const parseCookie = (cookie) => {
     try {
@@ -68,8 +69,9 @@ export const prettyPrintDuration = (durationSeconds, integer) => {
     return duration.join(' ');
 }
 
-const datetimeAfterDuration = (durationSeconds) => {
-    return new Date(Date.now() + durationSeconds);
+export const datetimeAfterDuration = (durationSeconds) => {
+    const futureDatetime = new Date(Date.now() + durationSeconds);
+    return new Date(Date.now() + durationSeconds * 1000);
 }
 
 export const durationInSeconds = (durationString) => {
@@ -108,53 +110,114 @@ export const durationInSeconds = (durationString) => {
     }
 }
 
-export const addItemToInventory = (req, res, itemId, count = 1, bypass = false) => {
+export const getWalletBalance = (req, symbol) => {
     const cookie = req.headers.get('cookie');
-    const itemCount = getItemCount(req, itemId);
-    let cooldownDuration = DEFAULT_COOLDOWN;
-
-    const item = items.find((item) => item.id === itemId);
-    if (item && item.cooldown) {
-        cooldownDuration = durationInSeconds(item.cooldown) * SECOND; 
-    }
-
-    const cooldown = getCookieValue(cookie, `item-${itemId}-cooldown`);
-    if (cooldown) {
-        const cooldownDate = new Date(cooldown);
-        if (cooldownDate > Date.now()) {
-            if (!bypass) {
-                return false;
-            }
-        }
-    }
-
-    if (itemCount !== undefined && !isNaN(itemCount)) {
-        setCookieValue(res, `item-${itemId}`, itemCount + count);
-    } else {
-        setCookieValue(res, `item-${itemId}`, count);
-    }
-
-    // create a cookie saving a cooldown of 1 hour
-    if (!bypass) {
-        setCookieValue(res, `item-${itemId}-cooldown`, datetimeAfterDuration(cooldownDuration));
-    }
-
-    return true;
-};
-
-export const getItemCount = (req, itemId) => {
-    const cookie = req.headers.get('cookie');
-    const itemCount = parseInt(getCookieValue(cookie, `item-${itemId}`));
-    if (itemCount !== undefined && !isNaN(itemCount)) {
-        return itemCount;
+    const balance = parseFloat(getCookieValue(cookie, `currency-balance-${symbol}`));
+    if (balance !== undefined && !isNaN(balance)) {
+        return balance;
     }
     return 0;
+}
+
+export const burnCurrency = (req, res, symbol, burnAmount) => {
+    const balance = getWalletBalance(req, symbol);
+    const newBalance = balance - burnAmount;
+    if (newBalance < 0) {
+        return false;
+    }
+    setCookieValue(res, `currency-balance-${symbol}`, newBalance);
+    return true;
+}
+
+export const addWalletBalance = (req, res, symbol, addBalance) => {
+    const balance = getWalletBalance(req, symbol);
+    const newBalance = Math.max(0, balance + addBalance);
+    // TODO: start here
+    setCookieValue(res, `currency-balance-${symbol}`, newBalance);
+};
+
+export const isQuestCompleted = (req, questId) => {
+    const cookie = req.headers.get('cookie');
+    return getCookieValue(cookie, `quest-${questId}-finished`) !== undefined;
+}
+
+export const questRequirementsMet = (req, questId) => {
+    const quest = quests.find((quest) => quest.id === questId);
+    if (quest) {
+        const requires = quest.requiresQuests;
+        if (requires) {
+            for (const requirement of requires) {
+                if (!isQuestCompleted(req, requirement)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 export const fixMarkdownText = (text) => {
     // replace ’ with '
     const fixedText = text.replace(/’/g, '\'');
     return fixedText;
+};
+
+export const getPriceStringComponents = (currency) => {
+    // parse a string like '10 dUSD' into a number and a symbol
+    const priceString = currency.split(' ');
+    const price = parseFloat(priceString[0]);
+    const symbol = priceString[1];
+
+    return {
+        price, symbol
+    };
+};
+
+export const getSymbolFromId = (itemId) => {
+    const item = items.find((item) => item.id === itemId);
+    if (item) {
+        const { _, symbol } = getPriceStringComponents(item.price);
+        return symbol;
+    }
+    return undefined;
+}
+
+export const constructLink = (astroRedirect, url, redirectLink) => {
+    if (redirectLink) {
+        return `${url}?redirect=${redirectLink}`;
+    }
+    return url;
+};
+
+export const base64ToObject = (base64) => {
+    try {
+        // decode base64 string
+        const urlEncoded = atob(base64);
+
+        // URL decode
+        const urlDecoded = decodeURIComponent(urlEncoded);
+
+        // parse JSON
+        const json = JSON.parse(urlDecoded);
+
+        if (json) {
+            return json;
+        }
+    } catch (e) {}
+    return {};
+};
+
+// convert a json object to a base64 encoded string
+export const jsonToQuery = (query) => {
+    const queryStr = JSON.stringify(query);
+    return Buffer.from(queryStr).toString('base64');
+};
+
+// convert a base64 encoded string to a json object
+export const queryToJson = (query) => {
+    const queryStr = Buffer.from(query, 'base64').toString('utf8');
+    return JSON.parse(queryStr);
 };
 
 export const acceptCookiesPath = '/accept_cookies';
