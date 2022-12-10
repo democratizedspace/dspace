@@ -42,7 +42,7 @@ export const addItemToInventory = (req, res, itemId, count = 1) => {
 
 export const getItemCount = (req, itemId) => {
     const item = items.find((item) => item.id === itemId);
-    if (item.type === "currency") {
+    if (item && item.type === "currency") {
         const symbol = item.symbol;
         return getWalletBalance(req, symbol);
     }
