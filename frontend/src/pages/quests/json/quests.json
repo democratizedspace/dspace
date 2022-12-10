@@ -215,9 +215,7 @@
                             {
                                 "id": "16",
                                 "count": 1
-                            }
-                        ],
-                        "hideIfOwned": [
+                            },
                             {
                                 "id": "28",
                                 "count": 1
@@ -238,7 +236,7 @@
                         ],
                         "hideIfOwned": [
                             {
-                                "id:": "28",
+                                "id": "28",
                                 "count": 1
                             }
                         ]
@@ -267,7 +265,7 @@
                         "hideIfOwned": [
                             {
                                 "id": "13",
-                                "count": 1
+                                "count": 11
                             }
                         ]
                     },

@@ -130,7 +130,7 @@
     },
     {
         "id": "germinate-basil",
-        "title": "place a few basil seeds in each hydroponic starter plug",
+        "title": "grow basil seedlings",
         "consumeItems": [
             {
                 "id": "10",

@@ -1,6 +1,7 @@
 ---
 import Page from '../../../components/Page.astro';
 import Chip from '../../../components/Chip.astro';
+import ItemCount from '../../../components/ItemCount.astro';
 import SuggestCookies from '../../../components/SuggestCookies.astro';
 import items from '../../inventory/json/items.json';
 import quests from '../json/quests.json';
@@ -81,13 +82,7 @@ if (quest && !questFinished) {
                 </div>
 
                 <p>The following items have been added to your inventory:</p>
-                <div class="vertical">
-                    {questData['rewards'].map((reward) => (
-                        <Chip
-                            text={`${reward.count} x ${items.find((item) => item.id === reward.id).name}`}
-                        />
-                    ))}
-                </div>
+                <ItemCount itemList={questData['rewards']} />
         )}
     </div>
 </Page>

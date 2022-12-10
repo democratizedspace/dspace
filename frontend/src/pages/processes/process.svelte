@@ -24,7 +24,7 @@
         if (startTime) {
             initializeProgressBar();
         } else {
-            if (isMachineAvailable(process.machineId)) {
+            if (isMachineAvailable(process.machine) || !process.machine) {
                 // add a Start button to #actionlist
                 const startButton = document.createElement("button");
                 startButton.id = "start";
