@@ -216,7 +216,26 @@
                                 "id": "16",
                                 "count": 1
                             }
+                        ],
+                        "hideIfOwned": [
+                            {
+                                "id": "28",
+                                "count": 1
+                            }
                         ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Find your sink",
+                        "action": "path",
+                        "path": "/processes/sink",
+                        "image": "/assets/tap.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "16",
+                                "count": 1
+                            },
+                            "hide
                     },
                     {
                         "id": 1,
