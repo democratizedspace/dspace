@@ -93,10 +93,6 @@
             {
                 "id": "22",
                 "count": 1000
-            },
-            {
-                "id": "29",
-                "count": 1
             }
         ],
         "addBalance": [
@@ -225,6 +221,7 @@
                     {
                         "id": 1,
                         "title": "Find your sink",
+                        "body": "It's gotta be in here somewhere...",
                         "action": "path",
                         "path": "/processes/sink",
                         "image": "/assets/tap.jpg",
@@ -531,7 +528,7 @@
                             }
                         ],
                         "action": "finish",
-                        "image": "/assets/rocket_award.jpg"
+                        "image": "/assets/door.jpg"
                     }
                 ]
             }
@@ -554,6 +551,33 @@
         "rewards": [
             {
                 "id": "19",
+                "count": 1
+            }
+        ]
+    },
+    {
+        "id": "7",
+        "title": "Here, have a smart plug",
+        "body": "You'll need this to generate dWatt.",
+        "image": "/assets/smart_plug.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Take the smart plug",
+                        "body": "",
+                        "action": "finish",
+                        "image": "/assets/door.jpg"
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "29",
                 "count": 1
             }
         ]
