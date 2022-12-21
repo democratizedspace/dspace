@@ -108,16 +108,59 @@ export const burnItem = (req, res, itemId, count = 1) => {
     setCookieValue(res, `item-${itemId}`, newItemCount);
 };
 
+export const bigIntegerString = (integerString) => {
+    let bigString = integerString;
+
+    const suffixes = {
+        3: 'K',
+        6: 'M',
+        9: 'B',
+        12: 'T',
+        15: 'Qa',
+        18: 'Qi',
+    };
+
+    // convert the number to a string and attach a suffix if necessary
+    for (const suffix in suffixes) {
+        if (bigString.length > suffix) {
+            bigString = bigString.slice(0, -suffix) + suffixes[suffix];
+        }
+    }
+
+    return bigString;
+};
+
+export const prettyPrintNumber = ({number, maxDigits = 4}) => {
+    // split the number into the integer and decimal parts
+    let [integer, decimal] = number.toString().split('.');
+
+    // if the integer string has more than maxDigits characters, replace each remaining character with a 0
+    if (integer.length > maxDigits) {
+        integer = integer.slice(0, maxDigits) + '0'.repeat(integer.length - maxDigits);
+        return bigIntegerString(integer);
+    }
+    
+    if (decimal !== undefined) {
+        // otherwise, return `${integer}.${decimal}` with the decimal part truncated to the remaining number of digits
+        return `${integer}.${decimal.slice(0, maxDigits - integer.length)}`;
+    }
+
+    return integer;
+};
+
 export const getItemCountString = (req, itemId, onlyCount = false, customCount) => {
     const count = customCount ? customCount : getItemCount(req, itemId);
+    
+    const countString = prettyPrintNumber({number: count});
+
     const item = items.find((item) => item.id === itemId);
     if (item) {
         if (item.unit) {
-            return `${count}${item.unit}`;
+            return `${countString} ${item.unit}`;
         }
     }
     if (onlyCount) { 
-        return count;
+        return countString;
     }
-    return `${count} x`;
+    return `${countString}`;
 }

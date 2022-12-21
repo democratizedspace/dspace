@@ -220,6 +220,10 @@ export const queryToJson = (query) => {
     return JSON.parse(queryStr);
 };
 
+export const removeCookie = (res, key) => {
+    res.headers.append('Set-Cookie', `${key}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`);
+}
+
 export const acceptCookiesPath = '/accept_cookies';
 
 export const MS = 1000;

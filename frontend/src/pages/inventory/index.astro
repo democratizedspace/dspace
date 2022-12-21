@@ -2,7 +2,7 @@
 import Page from '../../components/Page.astro';
 import Chip from '../../components/Chip.astro';
 import { durationInSeconds, SECOND, DEFAULT_COOLDOWN } from '../../utils.js';
-import { getItemCount, getItemCountString } from './utils';
+import { getItemCount, prettyPrintNumber } from './utils';
 import items from './json/items.json';
 
 let itemsFiltered = items, itemsSorted, itemInfo = {};
@@ -70,118 +70,96 @@ switch (sortOrder) {
     <nav>
         <Chip text="a-z" href={`/inventory?sort=az`} />
         <Chip text="z-a" href={`/inventory?sort=za`} />
-        <Chip text="lowest count" href={`/inventory?sort=countascending`} />
-        <Chip text="highest count" href={`/inventory?sort=countdescending`} />
-        <Chip text="least expensive" href={`/inventory?sort=priceascending`} />
-        <Chip text="most expensive" href={`/inventory?sort=pricedescending`} />
+        <Chip text="count ↑" href={`/inventory?sort=countascending`} />
+        <Chip text="count ↓" href={`/inventory?sort=countdescending`} />
+        <Chip text="price ↑" href={`/inventory?sort=priceascending`} />
+        <Chip text="price ↓" href={`/inventory?sort=pricedescending`} />
     </nav>
 
-    {itemsFiltered.map((item) => (
-        <a href={`/inventory/item/${item.id}`}>
-            <div class="item">
-                <h3>{item.name}</h3>
-                <div class="parent">
-                    <img src={item.image} />
-                    <p class="nobackground description">{item.description}</p>
-                    <div class="parent vertical">
-                        <p class="compact nowrap"><strong>Count:</strong> {getItemCountString(Astro.request, item.id, true)}</p>
-                        <p class="compact nowrap"><strong>Price:</strong> {item.price || 'Soulbound'}</p>
+    <div class="container">
+        <!-- for each item, create a card that shows the image, title, description, and count in a mobile friendly way -->
+        {itemsSorted.map((item) => {
+            return (
+                <a href={`/inventory/item/${item.id}`}>
+                    <div class="card">
+                        <div class="vertical">
+                            <img src={item.image} alt={item.name} />
+                            <h5>{item.name}</h5>
+                            <p>Count: {prettyPrintNumber({number: itemInfo[item.id].count})}</p>
+                            <p>Price: {item.price ? item.price : "Soulbound"}</p>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </a>
-    ))}
+                </a>
+            );
+        })}
+    </div>
 </Page>
 
 <style>
-
-    .parent {
-        display: flex;
-        align-items: center;
-    }
-
-    .vertical {
-        flex-direction: column;
-    }
-
-    .item {
-        background-color: #2f5b2f;
-        padding: 20px;
-        border-radius: 20px;
-        opacity: 0.8;
-    }
-
-    .item:hover {
-        opacity: 1;
-    }
-
-    .item h3 {
-        margin: 0px;
-        text-align: center;
-    }
-
-    img {
-        width: 100px;
-        height: 100px;
-        border-radius: 20px;
-        margin-right: 5px;
-    }
-
-    a {
-        text-decoration: none;
-        color: white;
-        width: 100%;
-    }
-
-    p {
-        background-color: #84d484;
-        opacity: 0.8;
-        color: black;
-        padding: 5px;
-        margin: 5px;
-        border-radius: 20px;
-    }
-
-    .compact {
-        font-size: 0.8em;
-        margin: 2px;
-        padding: 5px;
-    }
-
-    .nowrap {
-        margin-right: 5px;
-        white-space: nowrap;
-    }
-
-    .nobackground {
-        background: none;
-        color: white;
-    }
-
 	nav {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         justify-items: center;
         grid-row-gap: 10px;
+        grid-column-gap: 0px;
 	}
 
-    nav :global() {
+    .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto 1fr;
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    .card {
+        background-color: #2f5b2f;
+        margin: 5px;
+        padding: 5px;
+        border-radius: 20px;
+        transition: 0.5s;
+    }
+
+    /* mobile .card */
+    @media only screen and (max-width: 768px) {
+        .container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .card:hover {
+        background-color: #3f6b3f;
+    }
+
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 20px;
+        margin-top: 5px;
+    }
+
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-align: center;
+    }
+
+    h5 {
         margin: 10px;
     }
 
-    .description {
-        width: 295px;
+    p {
+        margin: 0px;
     }
-
-    @media only screen and (max-width: 768px) {
-		img {
-            width: 50px;
-            height: 50px;
-        }
-
-        .description {
-            min-width: 100px;
-            width: auto;
-        }
-	}
 </style>

@@ -1,51 +1,51 @@
 ---
 import Page from '../../components/Page.astro';
-import ItemCount from '../../components/ItemCount.astro';
-import Warning from '../../components/Warning.astro';
 import Process from './process.svelte';
 
-import { getProcess } from './utils.js';
-import { getItemCount } from '../inventory/utils.js';
+import processes from './processes.json';
+
+import { getItemCount, burnItem } from '../inventory/utils.js';
 
 const { processId } = Astro.params;
+let success = true;
 
-let errorMessage, hideProcess = false, error;
+const process = processes.find((p) => p.id === processId);
+const title = process.title || 'Process not found';
 
-const process = getProcess(processId);
+const machine = process.machine;
+let machineCount = 0;
 
-for (const item of process.consumeItems) {
-    const actualCount = getItemCount(Astro.request, item.id);
-    if (actualCount < item.count) {
-        error = 'notenoughitems';
+if (machine) {
+    machineCount = getItemCount(Astro.request, machine);
+}
+
+const action = Astro.url.searchParams.get('action');
+
+switch (action) {
+    case 'start':
+        onStart();
         break;
+}
+
+function onStart() {
+    // Check each item in process.consumeItems to make sure we have enough
+    for (const item of process.consumeItems) {
+        const count = getItemCount(Astro.request, item.id);
+        if (count < item.count) {
+            console.log(`Not enough ${item.id} to start process`);
+            // Not enough of this item
+            return;
+        }
+    }
+
+    // call burnItem for each item in process.consumeItems
+    for (const item of process.consumeItems) {
+        burnItem(Astro.request, Astro.response, item.id, item.count);
+        console.log(`burned ${item.count} ${item.id}`);
     }
 }
-
-if (!error) { 
-    error = Astro.url.searchParams.get('error');
-}
-
-if (error) {
-    switch (error) {
-        case 'cooldown':
-            errorMessage = "You're still on cooldown!";
-            break;
-        case 'notenoughitems':
-            errorMessage = "You don't have the required items!";
-            break;
-        default:
-            errorMessage = "Something went wrong!"
-    }
-}
-
-const title = process ? process.title : 'Process not found';
 ---
 
 <Page title={title} columns="1">
-    { errorMessage && <Warning title={errorMessage} /> }
-    <Process processId={processId} client:idle machineCount={getItemCount(Astro.request, process.machine)} />
-    <h3>Consumes:</h3>
-    <ItemCount itemList={process.consumeItems} />
-    <h3>Creates:</h3>
-    <ItemCount itemList={process.createItems} />
+    <Process processId={processId} machineCount={machineCount} client:idle />
 </Page>

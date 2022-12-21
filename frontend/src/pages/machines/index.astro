@@ -1,64 +1,99 @@
 ---
 import Page from '../../components/Page.astro';
-import Chip from '../../components/Chip.astro';
 
 import items from '../inventory/json/items.json';
 import processes from '../processes/processes.json';
 
-import { getItemCount } from '../inventory/utils.js';
-
 const machines = items.filter(item => item.type === 'machine');
 
-// create a map from machine id to a list of processes
-const processesByMachine = machines.map((machine) => {
-    const processesForMachine = processes.filter(process => process.machine === machine.id);
-
-    // get `machine-lock-${machine.id}}` from localStorage
-    // if it's not there, set it to 0
-    const key = `machine-lock-${machine.id}`;
-    
-    // TODO: split this into astro+svelte so that we have access to localStorage
-    const machineLock = parseInt(localStorage.getItem(key)) || 0;
-    const machineCount = getItemCount(Astro.request, machine.id);
-
-    const machinesAvailable = machineCount - machineLock;
-
-    return {
-        id: machine.id,
-        name: machine.name,
-        image: machine.image,
-        processes: processesForMachine,
-        machinesAvailable,
+// create a map from machine ID to list of processes that reference that machine
+const machineProcesses = new Map();
+processes.forEach(process => {
+    if (process.machine) {
+        if (!machineProcesses.has(process.machine)) {
+            machineProcesses.set(process.machine, []);
+        }
+        machineProcesses.get(process.machine).push(process);
     }
 });
+
+console.log(machineProcesses);
 ---
 
 <Page title="Machines" columns="1">
-    {processesByMachine && processesByMachine.map((machine) => (
-        <div class="item">
-            <Chip text={machine.name} href={`/inventory/item/${machine.id}`} />
-            <h4>Machines available: {machine.machinesAvailable}</h4>
-            <img src={machine.image} />
-            <div class="vertical">
-                {machine.processes.map((process) => (
-                    <Chip text={process.title} href={`/processes/${process.id}`} />
-                ))}
-            </div>
-        </div>
-    ))}
+    <div class="vertical">
+        {machines.map(machine => {
+            return (
+                <div>
+                    <div class="header">
+                        <img src={machine.image} />
+                        <p>{machine.name}</p>
+                    </div>
+                    <div class="processes">
+                        {
+                            machineProcesses.has(machine.id) ?
+                                machineProcesses.get(machine.id).map(process => {
+                                    return (
+                                        <div>
+                                            <a href={`/processes/${process.id}`}>
+                                                {process.title}
+                                            </a>
+                                        </div>
+                                    );
+                                }) :
+                                <p>No processes</p>
+                        }
+                    </div>
+                </div>
+            );
+        })}
+    </div>
 </Page>
 
 <style>
     img {
-        width: 200px;
+        /* 50px width and height and fill the entire vertical part of the container */
+        width: 75px;
+        height: 75px;
+        object-fit: cover;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
     }
 
-    .horizontal {
+    .vertical {
         display: flex;
         flex-direction: column;
+        gap: 2rem;
     }
 
-    .item {
-        margin-bottom: 5rem;
+    .header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+        /* horizontal linear gradient of red and blue */
+        background: linear-gradient(90deg, #007006, #24232a);
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+    }
+
+    .processes {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 1rem;
+        background: #24232a;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        width: 100%;
+    }
+
+    .processes a {
+        color: white;
+        /* make it look like the menu chips */
+        border-radius: 20px;
+        padding: 0.5rem;
+        text-decoration: none;
+        background: #007006;
     }
 </style>
