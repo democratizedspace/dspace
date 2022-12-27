@@ -1,0 +1,89 @@
+---
+import Page from '../../components/Page.astro';
+import items from '../inventory/json/items.json';
+import FinishQuest from './FinishQuest.svelte';
+
+const { questId } = Astro.params;
+let q, quest, startNode, nodeListString;
+
+const quests = await Astro.glob(`../../config/quests/**/*.json`);
+
+console.log(JSON.stringify(quests, null, 2));
+
+if (quests) {
+    // find the quest where the start property is equal to questId
+    q = quests.find((quest) => {
+        if (quest.default) {
+            console.log("quest.default: ", quest.default);
+            // find the item in quest.default where the start property is equal to questId
+            return quest.default.find((q) => q.id === questId);
+        }
+        return false;
+    });
+}
+
+console.log("one");
+
+if (q && q.default) {
+    console.log("two");
+    quest = q.default[0];
+    if (quest && quest.nodes) {
+        console.log("nodes: ", quest.nodes);
+        startNode = quest.nodes.find((node) => node.id === quest.start);
+        console.log("node: ", startNode);
+
+        if (startNode && startNode.finish) {
+            nodeListString = startNode.finish.addItems.map((item) => {
+                const itemData = items.find((i) => i.id === item.id);
+                return `${item.count} x ${itemData.name}`;
+            }).join(", ");
+        }
+
+        console.log("nodeListString: ", nodeListString);
+    }
+} else {
+    console.log("quest not found: " + questId);
+}
+---
+
+<Page columns="1">
+    <p>
+        {
+            startNode && startNode.finish
+        ?
+            <FinishQuest client:load />
+        :
+            ""
+        }
+    </p>
+    <h3>{startNode ? startNode.title : ""}</h3>
+    <p>{startNode && startNode.image ? <img src={startNode.image} /> : <span />}</p>
+    <p>{startNode ? startNode.description : ""}</p>
+    <p>{startNode && startNode.finish ? `You'll receive the following items: : ${nodeListString}` : ""}</p>
+
+</Page>
+
+<style>
+    img {
+        max-width: 100px;
+    }
+
+    button {
+        background-color: #007006;
+        border: none;
+        color: white;
+        padding: 5px 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 8px;
+        opacity: 0.8;
+    }
+
+    button:hover {
+        opacity: 1.0
+    }
+</style>

@@ -1,0 +1,77 @@
+---
+import Page from '../../components/Page.astro';
+import quests from '../../config/quests/start.json';
+---
+
+<Page columns="1">
+    <h1>Quests</h1>
+    <div class="container">
+        {quests.map((quest) => (
+            <a href={`/quests2/${quest.id}`}>
+                <div class="vertical item">
+                    <div class="vertical">
+                        <img src={quest.image} />
+                        <h3>{quest.title}</h3>
+                        <p>{quest.description}</p>
+                    </div>
+                </div>
+            </a>
+        ))}
+    </div>
+</Page>
+
+<style>
+    .container {
+        /* make sure it wraps correctly and doesn't overlap other rows */
+        display: flex;
+        /* make sure there's enough of a gap between items */
+        gap: 1rem;
+        /* shrink text if it's too big */
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
+
+    h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .item {
+        background-color: #84d484;
+        padding: 20px;
+        border-radius: 0.5rem;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        /* center */
+        align-items: center;
+    }
+
+    img {
+        width: 100%;
+        border-radius: 0.5rem;
+    }
+
+    /* iphone width img */
+    @media (max-width: 280px) {
+        img {
+            width: 100%;
+        }
+    }
+</style>

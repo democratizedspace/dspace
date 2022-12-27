@@ -1,0 +1,25 @@
+[
+    {
+        "id": "model-rocket",
+        "start": "faa-compliance",
+        "nodes": [
+            {
+                "id": "faa-compliance",
+                "title": "Before we get started, let's make sure we're complying with the FAA.",
+                "description": "Even in amateur rocketry, above a certain threshold, you need to register your rocket with the FAA and obtain a certificate.",
+                "image": "/assets/paperwork.jpg",
+                "edges": [
+                    "constraints"
+                ]
+            },
+            {
+                "id": "constraints",
+                "title": "According to the FAA, the rocket may weigh no more than 1500 grams, with a maximum weight of 125g of propellant.",
+                "description": "Let's try 3D printing one and choosing parts that comply with FAA regulations.",
+                "requirequests": [
+                    "3dprint-model-rocket"
+                ]
+            }
+        ]
+    }
+]

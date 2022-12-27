@@ -1,0 +1,32 @@
+[
+    {
+        "id": "3dprinter-delivered",
+        "start": "assembled",
+        "nodes": [
+            {
+                "id": "assembled",
+                "title": "Oh, it's fully assembled!",
+                "description": "Batteries not included. Well, mostly because it runs on AC power.",
+                "finish": {
+                    "addItems": [
+                        {
+                            "id": "0",
+                            "count": 1
+                        },
+                        {
+                            "id": "12",
+                            "count": 1000
+                        },
+                        {
+                            "id": "22",
+                            "count": 1000
+                        }
+                    ]
+                },
+                "image": "/assets/3dprinter.jpg"
+            }
+        ],
+        "edges": [],
+        "image": "/assets/robot_package.jpg"
+    }
+]

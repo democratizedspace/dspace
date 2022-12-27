@@ -1,0 +1,23 @@
+[
+    {
+        "id": "take-this",
+        "title": "You look around the room and see a few items and add them to your inventory",
+        "description": "It's dangerous to go alone! Take this.",
+        "quest": "freebies/take-this.json",
+        "image": "/assets/robot_package.jpg"
+    },
+    {
+        "id": "3dprinter-delivered",
+        "title": "You ordered a 3D printer and some filament. It was just dropped off at your door.",
+        "description": "Unbox the package",
+        "quest": "3dprinting/3dprinter-delivered.json",
+        "image": "/assets/amazing1.jpg"
+    },
+    {
+        "id": "model-rocket",
+        "title": "Launch a model rocket",
+        "description": "One small step for humankind.",
+        "quest": "rocketry/model_rocket.json",
+        "image": "/assets/amateur_rocket.jpg"
+    }
+]

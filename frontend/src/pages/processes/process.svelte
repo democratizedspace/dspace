@@ -2,6 +2,8 @@
     import { onMount } from "svelte";
     import { getProcessStatus, ProcessStatus, machineAvailable } from './utils.js';
 
+    import FinishQuest from './FinishQuest.svelte';
+
     import processes from './processes.json';
 
     export let processId, machineCount = 0;

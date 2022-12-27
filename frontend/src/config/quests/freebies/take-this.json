@@ -1,0 +1,29 @@
+[{
+    "id": "take-this",
+    "start": "take-this",
+    "nodes": [
+        {
+            "id": "take-this",
+            "title": "Take this!",
+            "description": "These will come in handy later.",
+            "finish": {
+                "addItems": [
+                    {
+                        "id": "29",
+                        "count": 1
+                    },
+                    {
+                        "id": "28",
+                        "count": 1
+                    },
+                    {
+                        "id": "24",
+                        "count": 100
+                    }
+                ]
+            },
+            "image": "/assets/smart_plug.jpg"
+        }
+    ],
+    "edges": []
+}]
