@@ -160,5 +160,153 @@
             }
         ],
         "duration": "10s"
+    },
+    {
+        "id": "3dprint-rocket-body-tube",
+        "title": "3D Print a rocket body tube",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 18.48
+            },
+            {
+                "id": "22",
+                "count": 266.67
+            }
+        ],
+        "createItems": [
+            {
+                "id": "31",
+                "count": 1
+            }
+        ],
+        "duration": "2h 8m 11s",
+        "machine": "0"
+    },
+    {
+        "id": "3dprint-rocket-nosecone-coupler",
+        "title": "3D print a rocket nosecone coupler",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 6.32
+            },
+            {
+                "id": "22",
+                "count": 112.92
+            }
+        ],
+        "createItems": [
+            {
+                "id": "33",
+                "count": 1
+            }
+        ],
+        "duration": "54m 12s",
+        "machine": "0"
+    },
+    {
+        "id": "3dprint-rocket-nosecone",
+        "title": "3D print a rocket nosecone",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 13.9
+            },
+            {
+                "id": "22",
+                "count": 223.4375
+            }
+        ],
+        "createItems": [
+            {
+                "id": "30",
+                "count": 1
+            }
+        ],
+        "duration": "1h 47m 15s",
+        "machine": "0"
+    },
+    {
+        "id": "3dprint-rocket-fincan",
+        "title": "3D print a rocket fincan",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 52.3
+            },
+            {
+                "id": "22",
+                "count": 1006.70139
+            }
+        ],
+        "createItems": [
+            {
+                "id": "32",
+                "count": 1
+            }
+        ],
+        "duration": "8h 3m 13s",
+        "machine": "0"
+    },
+    {
+        "id": "assemble-rocket",
+        "title": "Assemble your rocket",
+        "consumeItems": [
+            {
+                "id": "30",
+                "count": 1
+            },
+            {
+                "id": "31",
+                "count": 1
+            },
+            {
+                "id": "32",
+                "count": 1
+            },
+            {
+                "id": "33",
+                "count": 1
+            },
+            {
+                "id": "34",
+                "count": 2
+            },
+            {
+                "id": "35",
+                "count": 0.1
+            },
+            {
+                "id": "36",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "39",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "image": "/assets/rocket_field.jpg"
+    },
+    {
+        "id": "launch-rocket",
+        "title": "Assemble your rocket",
+        "consumeItems": [
+            {
+                "id": "39",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "40",
+                "count": 1
+            }
+        ],
+        "duration": "30s",
+        "image": "/assets/rocket_field.jpg"
     }
 ]

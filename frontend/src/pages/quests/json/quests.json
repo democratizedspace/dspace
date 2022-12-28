@@ -116,10 +116,265 @@
                         "id": 0,
                         "title": "Before we get started, let's make sure we're complying with the FAA.",
                         "body": "Even in amateur rocketry, above a certain threshold, you need to register your rocket with the FAA and obtain a certificate.",
-                        "action": "none",
+                        "action": "quest",
+                        "next": 1,
                         "image": "/assets/paperwork.jpg"
                     }
                 ]
+            },
+            {
+                "id": 1,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "According to the FAA, the rocket may weigh no more than 1500 grams, with a maximum weight of 125g of propellant.",
+                        "body": "Let's try 3D printing one and choosing parts that comply with FAA regulations.",
+                        "action": "quest",
+                        "next": 2,
+                        "image": "/assets/paperwork.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "message": "We're gonna 3D print the rocket and buy a couple hobby rocket motors from Amazing.",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "3D print a nosecone",
+                        "body": "It needs to be pointy!",
+                        "action": "path",
+                        "path": "/processes/3dprint-rocket-nosecone",
+                        "image": "/assets/3dprinted_rocket_nosecone.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "30",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "3D print a body tube",
+                        "body": "You could technically print multiple body tubes to make a longer rocket, but let's not get that fancy just yet.",
+                        "action": "path",
+                        "path": "/processes/3dprint-rocket-body-tube",
+                        "image": "/assets/3dprinted_rocket_body_tube.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "31",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "3D print a fincan",
+                        "body": "The fincan has holes for 2 rocket motors.",
+                        "action": "path",
+                        "path": "/processes/3dprint-rocket-fincan",
+                        "image": "/assets/3dprinted_rocket_fincan.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "32",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "3D print a nosecone coupler",
+                        "body": "This'll be superglued to the nosecone and fastened to the body tube using non-flammable cord.",
+                        "action": "path",
+                        "path": "/processes/3dprint-rocket-nosecone-coupler",
+                        "image": "/assets/3dprinted_rocket_nosecone_coupler.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "33",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "title": "Buy 2 motors",
+                        "body": "Each of these weighs 58.1 grams, so combined, they'll just barely be within the 125g FAA limit.",
+                        "action": "path",
+                        "path": "/shop/buy/34",
+                        "image": "/assets/rocket_motor.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "34",
+                                "count": 2
+                            }
+                        ]
+                    },
+                    {
+                        "id": 5,
+                        "title": "Great! We're gonna need a few more things:",
+                        "body": "Some superglue, some non-flammable cord, an igniter, and a launch controller.",
+                        "action": "quest",
+                        "next": 3,
+                        "requiresItems": [
+                            {
+                                "id": "30",
+                                "count": 1
+                            },
+                            {
+                                "id": "31",
+                                "count": 1
+                            },
+                            {
+                                "id": "32",
+                                "count": 1
+                            },
+                            {
+                                "id": "33",
+                                "count": 1
+                            },
+                            {
+                                "id": "34",
+                                "count": 2
+                            }
+                        ]
+                    }
+                ],
+                "checkpoint": true
+            },
+            {
+                "id": 3,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Buy superglue",
+                        "body": "This'll be used to glue the nosecone to the nosecone coupler.",
+                        "action": "path",
+                        "path": "/shop/buy/35",
+                        "image": "/assets/superglue.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "35",
+                                "count": -1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Buy kevlar cord",
+                        "body": "This'll be used to fasten the nosecone coupler to the body tube. 1 meter should do it.",
+                        "action": "path",
+                        "path": "/shop/buy/36",
+                        "image": "/assets/kevlar_cord.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "36",
+                                "count": -1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Buy an igniter",
+                        "body": "This'll be used to ignite the rocket motors.",
+                        "action": "path",
+                        "path": "/shop/buy/37",
+                        "image": "/assets/rocket_igniter.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "37",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "Buy a launch controller",
+                        "body": "This'll be used to control the launch sequence.",
+                        "action": "path",
+                        "path": "/shop/buy/38",
+                        "image": "/assets/launch_controller.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "38",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "title": "Great! We're almost ready to launch.",
+                        "body": "Let's assemble the rocket and launch it.",
+                        "action": "path",
+                        "path": "/processes/assemble-rocket",
+                        "requiresItems": [
+                            {
+                                "id": "35",
+                                "count": 1
+                            },
+                            {
+                                "id": "36",
+                                "count": 1
+                            },
+                            {
+                                "id": "37",
+                                "count": 1
+                            },
+                            {
+                                "id": "38",
+                                "count": 1
+                            }
+                        ],
+                        "image": "/assets/rocket_field.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "title": "Let's find a suitable location to launch it from.",
+                        "body": "Make sure you don't break any laws.",
+                        "action": "quest",
+                        "next": 4
+                    }
+                ],
+                "checkpoint": true
+            },
+            {
+                "id": 4,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Launch the rocket!",
+                        "body": "Make sure you don't break any laws.",
+                        "action": "path",
+                        "path": "/processes/launch-rocket",
+                        "image": "/assets/rocket_launch.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "39",
+                                "count": 1
+                            },
+                            {
+                                "id": "40",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "You did it! Maybe next time we'll use a parachute to recover the rocket.",
+                        "body": "Click here to finish the request and receive your award.",
+                        "action": "finish",
+                        "image": "/assets/rocketeer_award.jpg"
+                    }
+                ],
+                "checkpoint": true
+            }
+        ],
+        "rewards": [
+            {
+                "id": "41",
+                "count": 1
             }
         ]
     },
@@ -404,7 +659,12 @@
                         "image": "/assets/cart.jpg",
                         "duration": "1d",
                         "path": "/shop/buy/4",
-                        "redirect": "/quests/4/1"
+                        "hideIfOwned": [
+                            {
+                                "id": "4",
+                                "count": 1
+                            }
+                        ]
                     },
                     {
                         "id": 1,

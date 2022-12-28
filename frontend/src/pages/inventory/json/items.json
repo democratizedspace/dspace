@@ -217,5 +217,83 @@
         "description": "A smart plug that plugs into a wall outlet to measure energy usage.",
         "image": "/assets/smart_plug.jpg",
         "type": "machine"
+    },
+    {
+        "id": "30",
+        "name": "3D printed nosecone",
+        "description": "A nosecone for a modular model rocket.",
+        "image": "/assets/3dprinted_rocket_nosecone.jpg"
+    },
+    {
+        "id": "31",
+        "name": "3D printed body tube",
+        "description": "A body tube for a modular model rocket.",
+        "image": "/assets/3dprinted_rocket_body_tube.jpg"
+    },
+    {
+        "id": "32",
+        "name": "3D printed fincan",
+        "description": "A fincan for a modular model rocket.",
+        "image": "/assets/3dprinted_rocket_fincan.jpg"
+    },
+    {
+        "id": "33",
+        "name": "3D printed nosecone coupler",
+        "description": "A nosecone coupler for a modular model rocket.",
+        "image": "/assets/3dprinted_rocket_nosecone_coupler.jpg"
+    },
+    {
+        "id": "34",
+        "name": "hobbyist solid rocket motor",
+        "description": "24mm in diameter, 95mm long, weighing 58.1g. Max thrust: 31.3 Newtons.",
+        "image": "/assets/rocket_motor.jpg",
+        "price": "10 dUSD"
+    },
+    {
+        "id": "35",
+        "name": "superglue",
+        "description": "Don't get it on your hands!",
+        "image": "/assets/superglue.jpg",
+        "price": "10 dUSD"
+    },
+    {
+        "id": "36",
+        "name": "kevlar cord",
+        "description": "Perfect for model rocketry.",
+        "image": "/assets/kevlar_cord.jpg",
+        "price": "0.3 dUSD",
+        "unit": " m"
+    },
+    {
+        "id": "37",
+        "name": "rocket igniter",
+        "description": "Ignite a rocket motor with electricity.",
+        "image": "/assets/rocket_igniter.jpg",
+        "price": "0.1 dUSD"
+    },
+    {
+        "id": "38",
+        "name": "launch controller",
+        "description": "A controller for launching model rockets.",
+        "image": "/assets/launch_controller.jpg",
+        "price": "20 dUSD"
+    },
+    {
+        "id": "39",
+        "name": "launch-capable model rocket",
+        "description": "A model rocket ready for launch. Ignite remotely using the launch controller.",
+        "image": "/assets/rocket_field.jpg"
+    },
+    {
+        "id": "40",
+        "name": "damaged model rocket",
+        "description": "Badly damaged and broken in several places.",
+        "image": "/assets/rocket_damaged.jpg"
+    },
+    {
+        "id": "41",
+        "name": "Rocketeer Award",
+        "description": "Awarded for launching your first rocket!",
+        "image": "/assets/rocketeer_award.jpg"
     }
 ]
