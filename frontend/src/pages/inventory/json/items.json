@@ -295,5 +295,56 @@
         "name": "Rocketeer Award",
         "description": "Awarded for launching your first rocket!",
         "image": "/assets/rocketeer_award.jpg"
+    },
+    {
+        "id": "42",
+        "name": "harvestable basil plant",
+        "description": "A basil plant that is ready to be harvested. Growing medium: rockwool.",
+        "image": "/assets/hydroponic_basil_adult.jpg"
+    },
+    {
+        "id": "43",
+        "name": "hydroponic grow lamp",
+        "description": "Nice pink lighting that completely changes the vibe of your room. Also used for growing plants. Energy consumption: 36W.",
+        "image": "/assets/hydroponic_lamp.jpg",
+        "price": "50 dUSD"
+    },
+    {
+        "id": "44",
+        "name": "Real Hydroponics Tub 1 (ready)",
+        "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
+        "image": "/assets/hydroponics_tub.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "45",
+        "name": "Real Hydroponics Tub 1 (nutrient deficient)",
+        "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
+        "image": "/assets/hydroponics_tub.jpg"
+    },
+    {
+        "id": "46",
+        "name": "bundle of basil leaves",
+        "description": "A bundle of basil leaves. Maybe we can make pesto in the future? For now, maybe just sell it.",
+        "image": "/assets/basil_harvested.jpg",
+        "price": "3 dUSD"
+    },
+    {
+        "id": "47",
+        "name": "harvested basil plant",
+        "description": "A basil plant that has been freshly harvested. Don't worry, it'll grow back eventually!",
+        "image": "/assets/hydroponic_basil_harvested.jpg"
+    },
+    {
+        "id": "48",
+        "name": "Green Thumb Award",
+        "description": "Awarded for growing and harvesting your first batch of hydroponic basil!",
+        "image": "/assets/green_thumb_award.jpg"
+    },
+    {
+        "id": "49",
+        "name": "Solarpunk Award",
+        "description": "Awarded for generating dWatt using solar panels!",
+        "image": "/assets/solarpunk_award.jpg"
     }
 ]

@@ -29,7 +29,7 @@ if (quest && !questFinished) {
         rewards: quest.rewards.map((reward) => {
             const item = items.find((item) => item.id === reward.id);
 
-            addItemToInventory(Astro.request, Astro.response, reward.id, reward.count, true);
+            addItemToInventory(Astro.request, Astro.response, reward.id, reward.count);
 
             return {
                 id: reward.id,

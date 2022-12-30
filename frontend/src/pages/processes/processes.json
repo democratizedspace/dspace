@@ -150,6 +150,82 @@
         "duration": "7d"
     },
     {
+        "id": "prepare-hydroponic-tub",
+        "title": "prepare your hydroponic tub",
+        "consumeItems": [
+            {
+                "id": "9",
+                "count": 1
+            },
+            {
+                "id": "25",
+                "count": 1
+            },
+            {
+                "id": "14",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "44",
+                "count": 1
+            }
+        ],
+        "duration": "2m"
+    },
+    {
+        "id": "grow-basil",
+        "title": "grow basil until it's ready to harvest",
+        "consumeItems": [
+            {
+                "id": "27",
+                "count": 11
+            },
+            {
+                "id": "44",
+                "count": 1
+            },
+            {
+                "id": "22",
+                "count": 16128
+            }
+        ],
+        "createItems": [
+            {
+                "id": "42",
+                "count": 11
+            },
+            {
+                "id": "45",
+                "count": 1
+            }
+        ],
+        "duration": "28d",
+        "machine": "44"
+    },
+    {
+        "id": "harvest-basil",
+        "title": "Harvest your hydroponic basil plants",
+        "consumeItems": [
+            {
+                "id": "42",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "46",
+                "count": 11
+            },
+            {
+                "id": "47",
+                "count": 11
+            }
+        ],
+        "duration": "1m"
+    },
+    {
         "id": "sink",
         "title": "find your sink",
         "consumeItems": [],
@@ -308,5 +384,34 @@
         ],
         "duration": "30s",
         "image": "/assets/rocket_field.jpg"
+    },
+    {
+        "id": "solar-dWatt",
+        "title": "Generate dWatt using solar",
+        "consumeItems": [
+            {
+                "id": "5",
+                "count": 1
+            },
+            {
+                "id": "6",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5",
+                "count": 1
+            },
+            {
+                "id": "6",
+                "count": 1
+            },
+            {
+                "id": "22",
+                "count": 1000
+            }
+        ],
+        "duration": "5h"
     }
 ]

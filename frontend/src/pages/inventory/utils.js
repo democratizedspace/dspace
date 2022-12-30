@@ -31,6 +31,13 @@ export const getAddItemComponents = (query) => {
 export const addItemToInventory = (req, res, itemId, count = 1) => {
     const itemCount = getItemCount(req, itemId);
 
+    const item = items.find((item) => item.id === itemId);
+    if (item.type === 'currency') {
+        const symbol = item.symbol;
+        addWalletBalance(req, res, symbol, count);
+        return true;
+    }
+
     if (itemCount !== undefined && !isNaN(itemCount)) {
         setCookieValue(res, `item-${itemId}`, parseFloat(itemCount) + parseFloat(count));
     } else {

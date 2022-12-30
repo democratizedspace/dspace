@@ -5,15 +5,26 @@ import Chip from '../../components/Chip.astro';
 
 <Page columns="1">
     <div class="vertical list">
-        <div class="horizontal list">
-            <p>Wall outlet</p>
-            <img src="/assets/outlet.jpg" />
-            <p>Energy source: Coal</p>
+        <div class="item">
+            <div class="horizontal list">
+                <p>Wall outlet</p>
+                <img src="/assets/outlet.jpg" />
+                <p>Energy source: Coal</p>
+            </div>
+            <p><Chip text="Generate dWatt" href={`/processes/outlet-dWatt`} />, the consumable energy token that represents 1 Watt of energy.</p> 
+            <p>Generating energy from a wall outlet assumes the outlet uses coal, which causes <Chip text="dCarbon" href={`/docs/dCarbon`} /> to accrue. Use an alternate energy source, like <Chip text="solar" href={`/docs/solar`} />, to avoid accruing dCarbon.</p>
+            <p>dCarbon per dWatt: {.0000004325943029.toFixed(10)}</p>
+            <p>price per kWh: 0.18 dUSD</p>
         </div>
-        <p><Chip text="Generate dWatt" href={`/processes/outlet-dWatt`} />, the consumable energy token that represents 1 Watt of energy.</p> 
-        <p>Generating energy from a wall outlet assumes the outlet uses coal, which causes <Chip text="dCarbon" href={`/docs/dCarbon`} /> to accrue. Use an alternate energy source, like <Chip text="solar" href={`/docs/solar`} />, to avoid accruing dCarbon.</p>
-        <p>dCarbon per dWatt: {.0000004325943029.toFixed(10)}</p>
-        <p>price per kWh: 0.18 dUSD</p>
+        <div class="item">
+            <div class="horizontal list">
+                <p>Solar Panels</p>
+                <img src="/assets/solar.jpg" />
+                <p>Energy source: the Sun</p>
+            </div>
+            <p><Chip text="Generate dWatt" href={`/processes/solar-dWatt`} />, using solar panel!</p> 
+            <p>Generating dWatt in this wway does not generate dCarbon!</p>
+        </div>
     </div>
 </Page>
 
@@ -36,5 +47,12 @@ import Chip from '../../components/Chip.astro';
 
     .horizontal {
         flex-direction: row;
+    }
+
+    .item {
+        padding: 10px;
+        background-color: #84d484;
+        color: black;
+        border-radius: 20px;
     }
 </style>
