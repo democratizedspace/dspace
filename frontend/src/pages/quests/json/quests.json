@@ -741,6 +741,18 @@
                     }
                 ],
                 "checkpoint": true
+            },
+            {
+                "id": 3,
+                "message": "This checkpoint no longer exists.",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Go back",
+                        "action": "quest",
+                        "next": "0"
+                    }
+                ]
             }
         ],
         "requiresQuests": [
