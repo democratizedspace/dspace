@@ -21,7 +21,7 @@ const itemMetadata = itemList.reduce((acc, item) => {
         {itemList.map((item) => (
             <li>
                 {getItemCountString(Astro.request, item.id, false, item.count)}
-                <GrowableImage imageSrc={itemMetadata[item.id].image} href={unlink ? undefined : `/inventory/item/${item.id}`} />
+                <a href={unlink ? undefined : `/inventory/item/${item.id}`}><img src={itemMetadata[item.id].image} /></a>
                 {!hideName && <span>{itemMetadata[item.id].name}</span>}
             </li>
         ))}
@@ -30,7 +30,17 @@ const itemMetadata = itemList.reduce((acc, item) => {
 
 <style>
     img {
-        width: 200px;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        margin-top: -10px;
+        /* make it level with text */
+        vertical-align: middle;
+    }
+
+    img:hover {
+        /* black drop shadow */
+        box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.2);
     }
 
     .itemlist {

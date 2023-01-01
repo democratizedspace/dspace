@@ -1,5 +1,6 @@
 ---
 import Page from '../../../components/Page.astro';
+import Chip from '../../../components/Chip.astro';
 import ItemCount from '../../../components/ItemCount.astro';
 
 import { getProcess, finalizeProcess } from '../utils.js';
@@ -25,6 +26,8 @@ const process = getProcess(processId);
 ---
 
 <Page title="Confirmed!" columns="1">
+    <Chip text="Restart" href={`/processes/${processId}`} />
+
     You consumed the following items:
     <ItemCount itemList={process.consumeItems} />
     You created the following items:

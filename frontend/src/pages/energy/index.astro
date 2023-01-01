@@ -11,7 +11,7 @@ import Chip from '../../components/Chip.astro';
                 <img src="/assets/outlet.jpg" />
                 <p>Energy source: Coal</p>
             </div>
-            <p><Chip text="Generate dWatt" href={`/processes/outlet-dWatt`} />, the consumable energy token that represents 1 Watt of energy.</p> 
+            <p>generate <Chip text="1000 dWatt" href={`/processes/outlet-dWatt`} /> or <Chip text="1E4 kWh dWatt" href={`/processes/outlet-dWatt-1e4`} /> 
             <p>Generating energy from a wall outlet assumes the outlet uses coal, which causes <Chip text="dCarbon" href={`/docs/dCarbon`} /> to accrue. Use an alternate energy source, like <Chip text="solar" href={`/docs/solar`} />, to avoid accruing dCarbon.</p>
             <p>dCarbon per dWatt: {.0000004325943029.toFixed(10)}</p>
             <p>price per kWh: 0.18 dUSD</p>

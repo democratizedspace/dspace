@@ -1,8 +1,10 @@
 ---
 const { text, href } = Astro.props;
+
+let textString = text;
 ---
 
-<a href={href}>{text}</a>
+<a href={href}>{textString}</a>
 
 <style>
 	a {

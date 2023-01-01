@@ -1,6 +1,19 @@
 import items from './pages/inventory/json/items.json';
 import quests from './pages/quests/json/quests.json';
 
+export const prettyPrintNumber = (number) => {
+    const n = parseFloat(number);
+
+    if (n !== 0 && (n < 0.005 || n > 9999)) {
+        return n.toExponential(2)
+            .replace('e', 'E').
+            replace(/\+/, '')
+            .replace(/\.?0*$/, '')
+            .replace(/0*E/, 'E');
+    }
+    return n.toFixed(3).replace(/\.?0*$/, '');
+};
+
 export const parseCookie = (cookie) => {
     try {
         return cookie.split(/[;] */).reduce(function(result, pairStr) {

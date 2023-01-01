@@ -1,8 +1,10 @@
 ---
 import Page from '../../../../components/Page.astro';
 import Chip from '../../../../components/Chip.astro';
+import ItemCount from '../../../../components/ItemCount.astro';
 import items from '../../../inventory/json/items.json';
-import { getWalletBalance, getSymbolFromId } from '../../../../utils.js';
+
+import { getWalletBalance, getSymbolFromId, prettyPrintNumber } from '../../../../utils.js';
 import { buyItem } from '../../../inventory/utils.js';
 
 const { itemId, count } = Astro.params;
@@ -18,20 +20,30 @@ const symbol = getSymbolFromId(item.id);
 
 const totalCost = parseFloat(item.price) * parseFloat(count.toString());
 const previousWalletBalance = getWalletBalance(Astro.request, symbol);
-const currentWalletBalance = previousWalletBalance - totalCost;
+const currentWalletBalance = prettyPrintNumber(previousWalletBalance - totalCost);
 ---
 
 <Page title={`Purchase successful!`} columns="1">
-  <div class="horizontal">
-    Added <Chip text={`${count} x ${item.name}`} /> to your inventory.
+  <div class="vertical">
+    <p>Added</p>
+    <ItemCount itemList={[{
+      id: item.id,
+      count: parseInt(count.toString()),
+    }]} />
   </div>
   Your wallet balance went from
   <div class="horizontal">
-    <Chip text={`${previousWalletBalance} ${symbol}`} /> to <Chip text={`${currentWalletBalance} ${symbol}`} />.
+    <Chip text={`${prettyPrintNumber(previousWalletBalance)} ${symbol}`} /> to <Chip text={`${currentWalletBalance} ${symbol}`} />.
   </div>
 </Page>
 
 <style>
+  .vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .horizontal {
     display: flex;
     flex-direction: row;

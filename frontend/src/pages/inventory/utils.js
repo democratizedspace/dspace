@@ -1,4 +1,4 @@
-import { getCookieValue, getWalletBalance, addWalletBalance, burnCurrency, setCookieValue, getPriceStringComponents } from '../../utils.js';
+import { getCookieValue, getWalletBalance, addWalletBalance, burnCurrency, setCookieValue, getPriceStringComponents, prettyPrintNumber } from '../../utils.js';
 import items from './json/items.json';
 
 export const getAddItemComponents = (query) => {
@@ -116,7 +116,7 @@ export const burnItem = (req, res, itemId, count = 1) => {
 };
 
 export const getItemCountString = (req, itemId, onlyCount = false, customCount) => {
-    const count = customCount ? customCount : getItemCount(req, itemId);
+    const count = customCount ? prettyPrintNumber(customCount) : prettyPrintNumber(getItemCount(req, itemId));
     const item = items.find((item) => item.id === itemId);
     if (item) {
         if (item.unit) {

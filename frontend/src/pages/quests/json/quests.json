@@ -106,7 +106,7 @@
         "id": "1",
         "title": "Launch an amateur rocket",
         "body": "One small step for humankind.",
-        "image": "/assets/amateur_rocket.jpg",
+        "image": "/assets/rocket_launch.jpg",
         "steps": [
             {
                 "id": 0,
@@ -401,82 +401,15 @@
         "image": "/assets/hydroponics.jpg",
         "steps": [
             {
-                "id": 0,
+                "id": 0 ,
                 "message": "",
                 "options": [
                     {
                         "id": 0,
-                        "title": "Order a hydroponics kit from Amazing",
-                        "body": "Free 1-day shipping!",
+                        "title": "Next we're gonna prepare some some water for hydroponics.",
+                        "body": "The simplest way to do this is to fill a bucket with tap water and set it outside for a couple days to dechlorinate.",
+                        "action": "quest",
                         "next": 1,
-                        "action": "path",
-                        "path": "/shop/buy/2",
-                        "image": "/assets/cart.jpg",
-                        "redirect": "/quests/2/1",
-                        "hideIfOwned": [
-                            {
-                                "id": "2",
-                                "count": 1
-                            }
-                        ]
-                    },
-                    {
-                        "id": 1,
-                        "title": "Assemble your kit.",
-                        "body": "No tools required!",
-                        "requiresItems": [
-                            {
-                                "id": "2",
-                                "count": 1
-                            }
-                        ],
-                        "addItems": [
-                            {
-                                "id": "9",
-                                "count": 1
-                            }
-                        ],
-                        "action": "quest",
-                        "next": 1
-                    }
-                ]
-            },
-            {
-                "id": 1,
-                "message": "",
-                "options": [
-                    {
-                        "id": 0,
-                        "title": "Unbox your kit",
-                        "body": "",
-                        "action": "quest",
-                        "next": 2,
-                        "image": "/assets/hydroponics_tub.jpg",
-                        "consumes": [
-                            {
-                                "id": "2",
-                                "count": 1
-                            }
-                        ],
-                        "creates": [
-                            {
-                                "id": "9",
-                                "count": 1
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "id": 2,
-                "message": "",
-                "options": [
-                    {
-                        "id": 0,
-                        "title": "Fill the bucket with water",
-                        "body": "1 packet of seeds should be enough!",
-                        "action": "quest",
-                        "next": 3,
                         "image": "/assets/bucket.jpg",
                         "requiresItems": [
                             {
@@ -619,7 +552,7 @@
                 "checkpoint": true
             },
             {
-                "id": 3,
+                "id": 1,
                 "message": "",
                 "options": [
                     {
@@ -627,7 +560,7 @@
                         "title": "Let's do a back of the envelope calculation to make sure we have enough dWatt.",
                         "body": "We'll need to let the basil grow for around 4 weeks, and we need lighting for roughly 16 hours per day. The lamp we just bought uses 36W, so that comes out to 16128W! Yikes! Let's make sure we have that much.",
                         "action": "quest",
-                        "next": 4,
+                        "next": 2,
                         "image": "/assets/dWatts.jpg",
                         "requiresItems": [
                             {
@@ -703,7 +636,7 @@
                 "checkpoint": true
             },
             {
-                "id": 4,
+                "id": 2,
                 "message": "",
                 "options": [
                     {
@@ -720,11 +653,15 @@
                             },
                             {
                                 "id": "42",
-                                "count": 1 
+                                "count": 11
                             },
                             {
-                                "id": "45",
-                                "count": 1
+                                "id": "46",
+                                "count": 11
+                            },
+                            {
+                                "id": "47",
+                                "count": 11
                             }
                         ]
                     },
