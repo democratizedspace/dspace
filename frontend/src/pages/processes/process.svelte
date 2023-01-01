@@ -140,7 +140,13 @@
     function unlockMachine () {
         const machineLock = parseInt(localStorage.getItem(machineLockKey)) | 0;
 
-        localStorage.setItem(machineLockKey, Math.max(machineLock - 1, 0));
+        const newLockValue = Math.max(machineLock - 1, 0);
+
+        if (newLockValue <= 0) {
+            localStorage.removeItem(machineLockKey);
+        } else {
+            localStorage.setItem(machineLockKey, newLockValue);
+        }
     }
 </script>
 

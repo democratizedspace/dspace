@@ -1,7 +1,7 @@
 [
     {
         "id": "outlet-dWatt",
-        "title": "generate dWatt using your outlet",
+        "title": "generate 1000 dWatt using your outlet",
         "consumeItems": [
             {
                 "id": "24",
@@ -16,6 +16,29 @@
             {
                 "id": "20",
                 "count": 0.977023939064
+            }
+        ],
+        "fungible": true,
+        "duration": "5s",
+        "machine": "29"
+    },
+    {
+        "id": "outlet-dWatt-1e4",
+        "title": "generate 1E4 dWatt using your outlet",
+        "consumeItems": [
+            {
+                "id": "24",
+                "count": 1.8
+            }
+        ],
+        "createItems": [
+            {
+                "id": "22",
+                "count": 10000
+            },
+            {
+                "id": "20",
+                "count": 9.77023939064
             }
         ],
         "fungible": true,
@@ -147,7 +170,138 @@
                 "count": 11
             }
         ],
-        "duration": "7d"
+        "duration": "7d",
+        "machine": "26"
+    },
+    {
+        "id": "prepare-hydroponic-tub",
+        "title": "prepare your hydroponic tub",
+        "consumeItems": [
+            {
+                "id": "9",
+                "count": 1
+            },
+            {
+                "id": "25",
+                "count": 1
+            },
+            {
+                "id": "14",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "44",
+                "count": 1
+            }
+        ],
+        "duration": "2m",
+        "machine": "9"
+    },
+    {
+        "id": "refresh-hydroponic-tub",
+        "title": "refresh the nutrient solution",
+        "consumeItems": [
+            {
+                "id": "45",
+                "count": 1
+            },
+            {
+                "id": "14",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "44",
+                "count": 1
+            }
+        ],
+        "duration": "30s",
+        "machine": "45"
+    },
+    {
+        "id": "grow-basil",
+        "title": "grow basil until it's ready to harvest",
+        "consumeItems": [
+            {
+                "id": "27",
+                "count": 11
+            },
+            {
+                "id": "44",
+                "count": 1
+            },
+            {
+                "id": "22",
+                "count": 16128
+            }
+        ],
+        "createItems": [
+            {
+                "id": "42",
+                "count": 11
+            },
+            {
+                "id": "45",
+                "count": 1
+            }
+        ],
+        "duration": "28d",
+        "machine": "44"
+    },
+    {
+        "id": "regrow-basil",
+        "title": "regrow basil after harvest",
+        "consumeItems": [
+            {
+                "id": "47",
+                "count": 11
+            },
+            {
+                "id": "44",
+                "count": 1
+            },
+            {
+                "id": "22",
+                "count": 8064
+            }
+        ],
+        "createItems": [
+            {
+                "id": "42",
+                "count": 11
+            },
+            {
+                "id": "45",
+                "count": 1
+            }
+        ],
+        "duration": "14d",
+        "machine": "44"
+    },
+    {
+        "id": "harvest-basil",
+        "title": "Harvest your hydroponic basil plants",
+        "consumeItems": [
+            {
+                "id": "42",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "46",
+                "count": 11
+            },
+            {
+                "id": "47",
+                "count": 11
+            }
+        ],
+        "duration": "1m",
+        "machine": "42"
     },
     {
         "id": "sink",
@@ -160,5 +314,184 @@
             }
         ],
         "duration": "10s"
+    },
+    {
+        "id": "3dprint-rocket-body-tube",
+        "title": "3D Print a rocket body tube",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 18.48
+            },
+            {
+                "id": "22",
+                "count": 266.67
+            }
+        ],
+        "createItems": [
+            {
+                "id": "31",
+                "count": 1
+            }
+        ],
+        "duration": "2h 8m 11s",
+        "machine": "0"
+    },
+    {
+        "id": "3dprint-rocket-nosecone-coupler",
+        "title": "3D print a rocket nosecone coupler",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 6.32
+            },
+            {
+                "id": "22",
+                "count": 112.92
+            }
+        ],
+        "createItems": [
+            {
+                "id": "33",
+                "count": 1
+            }
+        ],
+        "duration": "54m 12s",
+        "machine": "0"
+    },
+    {
+        "id": "3dprint-rocket-nosecone",
+        "title": "3D print a rocket nosecone",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 13.9
+            },
+            {
+                "id": "22",
+                "count": 223.4375
+            }
+        ],
+        "createItems": [
+            {
+                "id": "30",
+                "count": 1
+            }
+        ],
+        "duration": "1h 47m 15s",
+        "machine": "0"
+    },
+    {
+        "id": "3dprint-rocket-fincan",
+        "title": "3D print a rocket fincan",
+        "consumeItems": [
+            {
+                "id": "12",
+                "count": 52.3
+            },
+            {
+                "id": "22",
+                "count": 1006.70139
+            }
+        ],
+        "createItems": [
+            {
+                "id": "32",
+                "count": 1
+            }
+        ],
+        "duration": "8h 3m 13s",
+        "machine": "0"
+    },
+    {
+        "id": "assemble-rocket",
+        "title": "Assemble your rocket",
+        "consumeItems": [
+            {
+                "id": "30",
+                "count": 1
+            },
+            {
+                "id": "31",
+                "count": 1
+            },
+            {
+                "id": "32",
+                "count": 1
+            },
+            {
+                "id": "33",
+                "count": 1
+            },
+            {
+                "id": "34",
+                "count": 2
+            },
+            {
+                "id": "35",
+                "count": 0.1
+            },
+            {
+                "id": "36",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "39",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "machine": "35"
+    },
+    {
+        "id": "launch-rocket",
+        "title": "Launch your rocket!",
+        "consumeItems": [
+            {
+                "id": "39",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "40",
+                "count": 1
+            }
+        ],
+        "duration": "30s",
+        "image": "/assets/rocket_field.jpg",
+        "machine": "39"
+    },
+    {
+        "id": "solar-dWatt",
+        "title": "Generate dWatt using solar",
+        "consumeItems": [
+            {
+                "id": "5",
+                "count": 1
+            },
+            {
+                "id": "6",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5",
+                "count": 1
+            },
+            {
+                "id": "6",
+                "count": 1
+            },
+            {
+                "id": "22",
+                "count": 200
+            }
+        ],
+        "duration": "1h",
+        "machine": "5"
     }
 ]

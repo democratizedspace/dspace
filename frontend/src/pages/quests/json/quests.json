@@ -106,7 +106,7 @@
         "id": "1",
         "title": "Launch an amateur rocket",
         "body": "One small step for humankind.",
-        "image": "/assets/amateur_rocket.jpg",
+        "image": "/assets/rocket_launch.jpg",
         "steps": [
             {
                 "id": 0,
@@ -116,10 +116,281 @@
                         "id": 0,
                         "title": "Before we get started, let's make sure we're complying with the FAA.",
                         "body": "Even in amateur rocketry, above a certain threshold, you need to register your rocket with the FAA and obtain a certificate.",
-                        "action": "none",
+                        "action": "quest",
+                        "next": 1,
                         "image": "/assets/paperwork.jpg"
                     }
                 ]
+            },
+            {
+                "id": 1,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "According to the FAA, the rocket may weigh no more than 1500 grams, with a maximum weight of 125g of propellant.",
+                        "body": "Let's try 3D printing one and choosing parts that comply with FAA regulations.",
+                        "action": "quest",
+                        "next": 2,
+                        "image": "/assets/paperwork.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "message": "We're gonna 3D print the rocket and buy a couple hobby rocket motors from Amazing.",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "3D print a nosecone",
+                        "body": "It needs to be pointy!",
+                        "action": "path",
+                        "path": "/processes/3dprint-rocket-nosecone",
+                        "image": "/assets/3dprinted_rocket_nosecone.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "30",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "3D print a body tube",
+                        "body": "You could technically print multiple body tubes to make a longer rocket, but let's not get that fancy just yet.",
+                        "action": "path",
+                        "path": "/processes/3dprint-rocket-body-tube",
+                        "image": "/assets/3dprinted_rocket_body_tube.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "31",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "3D print a fincan",
+                        "body": "The fincan has holes for 2 rocket motors.",
+                        "action": "path",
+                        "path": "/processes/3dprint-rocket-fincan",
+                        "image": "/assets/3dprinted_rocket_fincan.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "32",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "3D print a nosecone coupler",
+                        "body": "This'll be superglued to the nosecone and fastened to the body tube using non-flammable cord.",
+                        "action": "path",
+                        "path": "/processes/3dprint-rocket-nosecone-coupler",
+                        "image": "/assets/3dprinted_rocket_nosecone_coupler.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "33",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "title": "Buy 2 motors",
+                        "body": "Each of these weighs 58.1 grams, so combined, they'll just barely be within the 125g FAA limit.",
+                        "action": "path",
+                        "path": "/shop/buy/34",
+                        "image": "/assets/rocket_motor.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "34",
+                                "count": 2
+                            }
+                        ]
+                    },
+                    {
+                        "id": 5,
+                        "title": "Great! We're gonna need a few more things:",
+                        "body": "Some superglue, some non-flammable cord, an igniter, and a launch controller.",
+                        "action": "quest",
+                        "next": 3,
+                        "requiresItems": [
+                            {
+                                "id": "30",
+                                "count": 1
+                            },
+                            {
+                                "id": "31",
+                                "count": 1
+                            },
+                            {
+                                "id": "32",
+                                "count": 1
+                            },
+                            {
+                                "id": "33",
+                                "count": 1
+                            },
+                            {
+                                "id": "34",
+                                "count": 2
+                            }
+                        ]
+                    }
+                ],
+                "checkpoint": true
+            },
+            {
+                "id": 3,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Buy superglue",
+                        "body": "This'll be used to glue the nosecone to the nosecone coupler.",
+                        "action": "path",
+                        "path": "/shop/buy/35",
+                        "image": "/assets/superglue.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "35",
+                                "count": 1
+                            },
+                            {
+                                "id": "39",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Buy kevlar cord",
+                        "body": "This'll be used to fasten the nosecone coupler to the body tube. 1 meter should do it.",
+                        "action": "path",
+                        "path": "/shop/buy/36",
+                        "image": "/assets/kevlar_cord.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "36",
+                                "count": 1
+                            },
+                            {
+                                "id": "39",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Buy an igniter",
+                        "body": "This'll be used to ignite the rocket motors.",
+                        "action": "path",
+                        "path": "/shop/buy/37",
+                        "image": "/assets/rocket_igniter.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "37",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "Buy a launch controller",
+                        "body": "This'll be used to control the launch sequence.",
+                        "action": "path",
+                        "path": "/shop/buy/38",
+                        "image": "/assets/launch_controller.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "38",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "title": "Great! We're almost ready to launch.",
+                        "body": "Let's assemble the rocket and launch it.",
+                        "action": "path",
+                        "path": "/processes/assemble-rocket",
+                        "requiresItems": [
+                            {
+                                "id": "35",
+                                "count": 1
+                            },
+                            {
+                                "id": "36",
+                                "count": 1
+                            },
+                            {
+                                "id": "37",
+                                "count": 1
+                            },
+                            {
+                                "id": "38",
+                                "count": 1
+                            }
+                        ],
+                        "image": "/assets/rocket_field.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "title": "Let's find a suitable location to launch it from.",
+                        "body": "Make sure you don't break any laws.",
+                        "action": "quest",
+                        "next": 4,
+                        "requiresItems": [
+                            {
+                                "id": "39",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ],
+                "checkpoint": true
+            },
+            {
+                "id": 4,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Launch the rocket!",
+                        "body": "Make sure you don't break any laws.",
+                        "action": "path",
+                        "path": "/processes/launch-rocket",
+                        "image": "/assets/rocket_launch.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "40",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "You did it! Maybe next time we'll use a parachute to recover the rocket.",
+                        "body": "Click here to finish the request and receive your award.",
+                        "action": "finish",
+                        "image": "/assets/rocketeer_award.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "40",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ],
+                "checkpoint": true
+            }
+        ],
+        "rewards": [
+            {
+                "id": "41",
+                "count": 1
             }
         ]
     },
@@ -130,86 +401,35 @@
         "image": "/assets/hydroponics.jpg",
         "steps": [
             {
-                "id": 0,
+                "id": 0 ,
                 "message": "",
                 "options": [
                     {
                         "id": 0,
-                        "title": "Order a hydroponics kit from Amazing",
-                        "body": "Free 1-day shipping!",
+                        "title": "Next we're gonna prepare some some water for hydroponics.",
+                        "body": "The simplest way to do this is to fill a bucket with tap water and set it outside for a couple days to dechlorinate.",
+                        "action": "quest",
                         "next": 1,
-                        "action": "path",
-                        "path": "/shop/buy/2",
-                        "image": "/assets/cart.jpg",
-                        "redirect": "/quests/2/1",
-                        "hideIfOwned": [
-                            {
-                                "id": "2",
-                                "count": 1
-                            }
-                        ]
-                    },
-                    {
-                        "id": 1,
-                        "title": "Assemble your kit.",
-                        "body": "No tools required!",
-                        "requiresItems": [
-                            {
-                                "id": "2",
-                                "count": 1
-                            }
-                        ],
-                        "addItems": [
-                            {
-                                "id": "9",
-                                "count": 1
-                            }
-                        ],
-                        "action": "quest",
-                        "next": 1
-                    }
-                ]
-            },
-            {
-                "id": 1,
-                "message": "",
-                "options": [
-                    {
-                        "id": 0,
-                        "title": "Unbox your kit",
-                        "body": "",
-                        "action": "quest",
-                        "next": 2,
-                        "image": "/assets/hydroponics_tub.jpg",
-                        "consumes": [
-                            {
-                                "id": "2",
-                                "count": 1
-                            }
-                        ],
-                        "creates": [
-                            {
-                                "id": "9",
-                                "count": 1
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "id": 2,
-                "message": "",
-                "options": [
-                    {
-                        "id": 0,
-                        "title": "Fill the bucket with water",
-                        "body": "1 packet of seeds should be enough!",
-                        "action": "quest",
-                        "next": 3,
                         "image": "/assets/bucket.jpg",
                         "requiresItems": [
                             {
+                                "id": "10",
+                                "count": 1
+                            },
+                            {
+                                "id": "13",
+                                "count": 11
+                            },
+                            {
+                                "id": "14",
+                                "count": 1
+                            },
+                            {
                                 "id": "16",
+                                "count": 1
+                            },
+                            {
+                                "id": "43",
                                 "count": 1
                             },
                             {
@@ -227,7 +447,23 @@
                         "image": "/assets/tap.jpg",
                         "requiresItems": [
                             {
+                                "id": "10",
+                                "count": 1
+                            },
+                            {
+                                "id": "13",
+                                "count": 11
+                            },
+                            {
+                                "id": "14",
+                                "count": 1
+                            },
+                            {
                                 "id": "16",
+                                "count": 1
+                            },
+                            {
+                                "id": "43",
                                 "count": 1
                             }
                         ],
@@ -283,7 +519,7 @@
                     {
                         "id": 4,
                         "title": "Buy a bucket",
-                        "body": "You'll need a bucket to hold water outside in sunlight for 48 hours.",
+                        "body": "You're gonna need to set a bucket of water outside for a few days to dechlorinate.",
                         "action": "path",
                         "path": "/shop/buy/16",
                         "image": "/assets/bucket.jpg",
@@ -297,19 +533,35 @@
                                 "count": 1
                             }
                         ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Oh yeah, you'll also need artificial lighting since we're growing indoors for now.",
+                        "body": "This lamp is perfect for growing basil indoors. You only need one.",
+                        "image": "/assets/hydroponic_lamp.jpg",
+                        "action": "path",
+                        "path": "/shop/buy/43",
+                        "hideIfOwned": [
+                            {
+                                "id": "43",
+                                "count": 1
+                            }
+                        ]
                     }
                 ],
                 "checkpoint": true
             },
             {
-                "id": 3,
+                "id": 1,
                 "message": "",
                 "options": [
                     {
                         "id": 0,
-                        "title": "If you've made it this far, congrats! The rest of this quest will be available soon.",
-                        "body": "Hang tight!",
-                        "image": "/assets/hydroponics.jpg",
+                        "title": "Let's do a back of the envelope calculation to make sure we have enough dWatt.",
+                        "body": "We'll need to let the basil grow for around 4 weeks, and we need lighting for roughly 16 hours per day. The lamp we just bought uses 36W, so that comes out to 16128W! Yikes! Let's make sure we have that much.",
+                        "action": "quest",
+                        "next": 2,
+                        "image": "/assets/dWatts.jpg",
                         "requiresItems": [
                             {
                                 "id": "27",
@@ -318,9 +570,9 @@
                         ]
                     },
                     {
-                        "id": 0,
+                        "id": 2,
                         "title": "Place a few basil seeds in each of the 11 hydroponic starter plugs.",
-                        "body": "They should turn into seedlings in 14 days.",
+                        "body": "They should turn into seedlings in 7 days. You can place them in a sunny window.",
                         "action": "path",
                         "path": "/processes/germinate-basil",
                         "image": "/assets/basil_seedlings.jpg",
@@ -332,7 +584,7 @@
                         ]
                     },
                     {
-                        "id": 1,
+                        "id": 3,
                         "title": "Dip 11 hydroponic starter plugs in the dechlorinated bucket of water.",
                         "body": "This will help the water soak through them for germination.",
                         "image": "/assets/rockwool_wet.jpg",
@@ -350,7 +602,7 @@
                         ]
                     },
                     {
-                        "id": 2,
+                        "id": 4,
                         "title": "Place the bucket in direct sunlight for 48 hours",
                         "body": "This will dechlorinate the water and make it suitable for hydroponics.",
                         "action": "path",
@@ -364,7 +616,7 @@
                         ]
                     },
                     {
-                        "id": 3,
+                        "id": 5,
                         "title": "Add tap water to the bucket",
                         "action": "path",
                         "path": "/processes/bucket-water-chlorinated",
@@ -382,8 +634,124 @@
                     }
                 ],
                 "checkpoint": true
+            },
+            {
+                "id": 2,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Generate dWatt until we have at least 16,128.",
+                        "body": "The dCarbon we're generating isn't ideal, but we'll fix that later.",
+                        "action": "path",
+                        "path": "/processes/outlet-dWatt",
+                        "image": "/assets/dWatts.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "22",
+                                "count": 16128
+                            },
+                            {
+                                "id": "42",
+                                "count": 11
+                            },
+                            {
+                                "id": "46",
+                                "count": 11
+                            },
+                            {
+                                "id": "47",
+                                "count": 11
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Alright, we've got everything we need!",
+                        "body": "Let's set everything up and start growing! Starting with the the hydroponic tub...",
+                        "action": "path",
+                        "path": "/processes/prepare-hydroponic-tub",
+                        "image": "/assets/hydroponics_tub.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "22",
+                                "count": 16128
+                            }
+                        ],
+                        "hideIfOwned": [
+                            {
+                                "id": "44",
+                                "count": 1
+                            },
+                            {
+                                "id": "42",
+                                "count": 11
+                            },
+                            {
+                                "id": "47",
+                                "count": 11
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Now that our tub is ready, let's start the growing process!",
+                        "body": "The lights are set to stay on for 16 hours a day, so you don't have to worry about that.",
+                        "action": "path",
+                        "path": "/processes/grow-basil",
+                        "image": "/assets/hydroponic_basil_adult.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "44",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "Finally, let's harvest the basil, which should be ready to sell!",
+                        "body": "Harvest all 11 plants to proceed and finish the quest.",
+                        "action": "path",
+                        "path": "/processes/harvest-basil",
+                        "hideIfOwned": [
+                            {
+                                "id": "46",
+                                "count": 11
+                            }
+                        ],
+                        "requiresItems": [
+                            {
+                                "id": "42",
+                                "count": 11
+                            }
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "title": "Done! You can continue growing basil on the Machines page!",
+                        "body": "Click here to finish the quest and receive your reward.",
+                        "action": "finish",
+                        "image": "/assets/door.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "46",
+                                "count": 11
+                            }
+                        ]
+                    }
+                ],
+                "checkpoint": true
             }
-        ]   
+        ],
+        "requiresQuests": [
+            "8"
+        ],
+        "rewards": [
+            {
+                "id": "48",
+                "count": 1
+            }
+        ]
     },
     {
         "id": "4",
@@ -404,7 +772,12 @@
                         "image": "/assets/cart.jpg",
                         "duration": "1d",
                         "path": "/shop/buy/4",
-                        "redirect": "/quests/4/1"
+                        "hideIfOwned": [
+                            {
+                                "id": "4",
+                                "count": 1
+                            }
+                        ]
                     },
                     {
                         "id": 1,
@@ -578,6 +951,143 @@
         "rewards": [
             {
                 "id": "29",
+                "count": 1
+            }
+        ]
+    },
+    {
+        "id": "8",
+        "title": "A stranger offers you a box and says there's a hydroponics tub inside.",
+        "body": "Why are people just giving you things???",
+        "image": "/assets/hydroponics_tub.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Take the box and unbox it.",
+                        "body": "",
+                        "action": "finish",
+                        "image": "/assets/door.jpg"
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "9",
+                "count": 1
+            }
+        ]
+    },
+    {
+        "id": "9",
+        "title": "A stranger hands you a crisp 1000 dUSD bill.",
+        "body": "This is because there's no good dUSD farm in the game yet and I want you to have nice things now! Future balance update me will hate this.",
+        "image": "/assets/dusd.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Put the money in your wallet",
+                        "body": "",
+                        "action": "finish",
+                        "image": "/assets/door.jpg"
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "24",
+                "count": 1000
+            }
+        ]
+    },
+    {
+        "id": "10",
+        "title": "Let's make things more sustainable.",
+        "body": "Generating dWatt using your outlet is a great way to get started, but unfortunately your utility company uses fossil fuels for electricity generation. This means that you're also generating dCarbon! Let's fix that.",
+        "image": "/assets/solar.jpg",
+        "steps": [
+            {
+                "id": 0,
+                "message": "",
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Buy a solar panel.",
+                        "body": "This 200W one should do!",
+                        "action": "path",
+                        "path": "/shop/buy/5",
+                        "image": "/assets/solar.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "5",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Buy a battery pack.",
+                        "body": "This one is a bit pricey, but it'll allow you to generate up to 1000 dWatt at a time.",
+                        "action": "path",
+                        "path": "/shop/buy/6",
+                        "image": "/assets/battery.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "6",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Place the solar panel outside, connect the battery, and generate 1000 dWatt.",
+                        "body": "",
+                        "action": "path",
+                        "path": "/processes/solar-dWatt",
+                        "image": "/assets/solar_outside.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "5",
+                                "count": 1
+                            },
+                            {
+                                "id": "6",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "When you're ready, finish this quest for a commemorative trophy!",
+                        "body": "You can generate dWatt using solar anytime on the Energy page!",
+                        "action": "finish",
+                        "image": "/assets/door.jpg",
+                        "requiresItems": [
+                            {
+                                "id": "5",
+                                "count": 1
+                            },
+                            {
+                                "id": "6",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "49",
                 "count": 1
             }
         ]

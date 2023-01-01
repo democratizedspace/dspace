@@ -6,8 +6,7 @@
         "image": "/assets/3dprinter.jpg",
         "type": "machine",
         "json": "items/printers/real-printer-1.json",
-        "price": "200 dUSD",
-        "cooldown": "1d"
+        "price": "200 dUSD"
     },
     {
         "id": "1",
@@ -24,7 +23,6 @@
         "name": "hydroponics kit",
         "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
         "image": "/assets/amazing1.jpg",
-        "cooldown": "1d",
         "price": "30 dUSD"
     },
     {
@@ -40,7 +38,6 @@
         "name": "Edison Model M",
         "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities.",
         "image": "/assets/ev.jpg",
-        "cooldown": "365d",
         "price": "40000 dUSD"
     },
     {
@@ -49,23 +46,21 @@
         "description": "A portable solar panel that can be used to charge your devices. Supports USB-A and USB-C ports, and it has a 110V AC outlet, with support for 200W at peak sunpower.",
         "price": "200 dUSD",
         "image": "/assets/solar.jpg",
-        "cooldown": "7d"
+        "type": "machine"
     },
     {
         "id": "6",
-        "name": "1 kWh battery pack",
-        "description": "A 1 kWh battery pack that can be used to store energy from a solar panel or a wind turbine.",
-        "price": "800 dUSD",
-        "image": "/assets/battery.jpg",
-        "cooldown": "7d"
+        "name": "200 Wh battery pack",
+        "description": "A 200 Wh battery pack that can be used to store energy from a solar panel or a wind turbine.",
+        "price": "130 dUSD",
+        "image": "/assets/battery.jpg"
     },
     {
         "id": "7",
         "name": "500W wind turbine",
         "description": "A 500W wind turbine that can be used to generate electricity.",
         "price": "200 dUSD",
-        "image": "/assets/turbine.jpg",
-        "cooldown": "7d"
+        "image": "/assets/turbine.jpg"
     },
     {
         "id": "8",
@@ -77,7 +72,9 @@
         "id": "9",
         "name": "Real Hydroponics Tub 1",
         "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
-        "image": "/assets/hydroponics_tub.jpg"
+        "image": "/assets/hydroponics_tub.jpg",
+        "price": "30 dUSD",
+        "type": "machine"
     },
     {
         "id": "10",
@@ -167,8 +164,7 @@
         "id": "22",
         "name": "dWatt",
         "description": "A token that represents 1 watt of electricity that can be consumed by machines. To acquire 1 dWatt, you need to either prepay the dCarbon cost, or generate and store it in a battery without accruing dCarbon.",
-        "image": "/assets/dWatts.jpg",
-        "unit": " W"
+        "image": "/assets/dWatts.jpg"
     },
     {
         "id": "23",
@@ -196,7 +192,8 @@
         "id": "26",
         "name": "soaked hydroponic starter plug",
         "description": "A hydroponic starter plug soaked in water. Used to germinate seeds.",
-        "image": "/assets/rockwool_wet.jpg"
+        "image": "/assets/rockwool_wet.jpg",
+        "type": "machine"
     },
     {
         "id": "27",
@@ -217,5 +214,138 @@
         "description": "A smart plug that plugs into a wall outlet to measure energy usage.",
         "image": "/assets/smart_plug.jpg",
         "type": "machine"
+    },
+    {
+        "id": "30",
+        "name": "3D printed nosecone",
+        "description": "A nosecone for a modular model rocket.",
+        "image": "/assets/3dprinted_rocket_nosecone.jpg"
+    },
+    {
+        "id": "31",
+        "name": "3D printed body tube",
+        "description": "A body tube for a modular model rocket.",
+        "image": "/assets/3dprinted_rocket_body_tube.jpg"
+    },
+    {
+        "id": "32",
+        "name": "3D printed fincan",
+        "description": "A fincan for a modular model rocket.",
+        "image": "/assets/3dprinted_rocket_fincan.jpg"
+    },
+    {
+        "id": "33",
+        "name": "3D printed nosecone coupler",
+        "description": "A nosecone coupler for a modular model rocket.",
+        "image": "/assets/3dprinted_rocket_nosecone_coupler.jpg"
+    },
+    {
+        "id": "34",
+        "name": "hobbyist solid rocket motor",
+        "description": "24mm in diameter, 95mm long, weighing 58.1g. Max thrust: 31.3 Newtons.",
+        "image": "/assets/rocket_motor.jpg",
+        "price": "10 dUSD"
+    },
+    {
+        "id": "35",
+        "name": "superglue",
+        "description": "Don't get it on your hands!",
+        "image": "/assets/superglue.jpg",
+        "price": "10 dUSD",
+        "type": "machine"
+    },
+    {
+        "id": "36",
+        "name": "kevlar cord",
+        "description": "Perfect for model rocketry.",
+        "image": "/assets/kevlar_cord.jpg",
+        "price": "0.3 dUSD",
+        "unit": " m"
+    },
+    {
+        "id": "37",
+        "name": "rocket igniter",
+        "description": "Ignite a rocket motor with electricity.",
+        "image": "/assets/rocket_igniter.jpg",
+        "price": "0.1 dUSD"
+    },
+    {
+        "id": "38",
+        "name": "launch controller",
+        "description": "A controller for launching model rockets.",
+        "image": "/assets/launch_controller.jpg",
+        "price": "20 dUSD"
+    },
+    {
+        "id": "39",
+        "name": "launch-capable model rocket",
+        "description": "A model rocket ready for launch. Ignite remotely using the launch controller.",
+        "image": "/assets/rocket_field.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "40",
+        "name": "damaged model rocket",
+        "description": "Badly damaged and broken in several places.",
+        "image": "/assets/rocket_damaged.jpg"
+    },
+    {
+        "id": "41",
+        "name": "Rocketeer Award",
+        "description": "Awarded for launching your first rocket!",
+        "image": "/assets/rocketeer_award.jpg"
+    },
+    {
+        "id": "42",
+        "name": "harvestable basil plant",
+        "description": "A basil plant that is ready to be harvested. Growing medium: rockwool.",
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "43",
+        "name": "hydroponic grow lamp",
+        "description": "Nice pink lighting that completely changes the vibe of your room. Also used for growing plants. Energy consumption: 36W.",
+        "image": "/assets/hydroponic_lamp.jpg",
+        "price": "50 dUSD"
+    },
+    {
+        "id": "44",
+        "name": "Real Hydroponics Tub 1 (ready)",
+        "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
+        "image": "/assets/hydroponics_tub.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "45",
+        "name": "Real Hydroponics Tub 1 (nutrient deficient)",
+        "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
+        "image": "/assets/hydroponics_tub.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "46",
+        "name": "bundle of basil leaves",
+        "description": "A bundle of basil leaves. Maybe we can make pesto in the future? For now, maybe just sell it.",
+        "image": "/assets/basil_harvested.jpg",
+        "price": "3 dUSD"
+    },
+    {
+        "id": "47",
+        "name": "harvested basil plant",
+        "description": "A basil plant that has been freshly harvested. Don't worry, it'll grow back eventually!",
+        "image": "/assets/hydroponic_basil_harvested.jpg"
+    },
+    {
+        "id": "48",
+        "name": "Green Thumb Award",
+        "description": "Awarded for growing and harvesting your first batch of hydroponic basil!",
+        "image": "/assets/green_thumb_award.jpg"
+    },
+    {
+        "id": "49",
+        "name": "Solarpunk Award",
+        "description": "Awarded for generating dWatt using solar panels!",
+        "image": "/assets/solarpunk_award.jpg"
     }
 ]
