@@ -60,6 +60,7 @@ if (quest && !questFinished) {
 
 <Page columns="1">
     <div class="parent">
+        <img src={quest.image} />
         {shouldAcceptCookies ? (
             questFinished ?
                 <p>Quest already finished.</p>
@@ -68,8 +69,15 @@ if (quest && !questFinished) {
         ) : (
             questFinished ? (
                 <p>Quest already finished.</p>
+
+                <div>
+                    {questData && (
+                        <div class="vertical">
+                            Quest: <Chip text={quest.title} />
+                        </div>
+                    )}
+                </div>
             ) :
-                questData['image'] && <img src={questData['image']} />
                 <p>Done! You finished the quest!</p>
 
                 <p>{questData['burns'].length > 0 && "The following items have been consumed:"}</p>
