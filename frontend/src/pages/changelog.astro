@@ -4,16 +4,34 @@ import Page from '../components/Page.astro';
 const changelogs = await Astro.glob('./docs/md/changelog/*.md');
 
 const changelogsReversed = changelogs.reverse();
+
+console.log(JSON.stringify(changelogsReversed));
+
+function prepareHtml(html) {
+    return html + `
+        <style>
+            img {
+                width: 100%;
+                border-radius: 20px;
+            }
+        </style>
+    `;
+}
 ---
 
 <Page columns="1">
     {changelogsReversed.map(doc => (
         <h3>{doc.frontmatter.title}</h3>
-        <span set:html={doc.compiledContent()}></span>
+        <span set:html={prepareHtml(doc.compiledContent())}></span>
     ))}
 </Page>
 
 <style>
+    img {
+        width: 100%;
+        border-radius: 20px;
+    }
+
     span {
         background-color: white;
         color: black; 

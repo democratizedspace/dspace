@@ -30,7 +30,7 @@ const completedQuests = requirementsMet.filter((quest) => getCookie(Astro.reques
 
     <div class="vertical">
         {completedQuests.map(quest => (
-            <a>
+            <a href={`/quests/play/${quest.id}`}>
                 <div class="horizontal container">
                     <img src={quest.image} />
                     <div class="vertical">

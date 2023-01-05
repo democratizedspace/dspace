@@ -17,13 +17,24 @@ let output = "foo";
 const changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
 
 const changelogsReversed = changelogs.reverse();
+
+function prepareHtml(html) {
+    return html + `
+        <style>
+            img {
+                width: 100%;
+                border-radius: 20px;
+            }
+        </style>
+    `;
+}
 ---
 
 <Page title="Changelog" columns="1">
     <span class="wrapper">
         {changelogsReversed.slice(0, 1).map(doc => (
             <h3>{doc.frontmatter.title}</h3>
-            <span set:html={doc.compiledContent()}></span>
+            <span set:html={prepareHtml(doc.compiledContent())}></span>
         ))}
         <Button href="/changelog" text="View all changelog entries" />
     </span>
@@ -31,7 +42,13 @@ const changelogsReversed = changelogs.reverse();
 </Page>
 
 <style>
+    img {
+        width: 100%;
+        border-radius: 20px;
+    }
+
     span {
+        background-color: white;
         color: black; 
         padding: 10px;
         border-radius: 20px;
