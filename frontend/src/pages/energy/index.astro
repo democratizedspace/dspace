@@ -1,19 +1,28 @@
 ---
 import Page from '../../components/Page.astro';
 import Chip from '../../components/Chip.astro';
+import ItemCount from '../../components/ItemCount.astro';
 ---
 
 <Page columns="1">
     <div class="vertical list">
+        <ItemCount itemList={[
+            {
+                "id": "22"
+            },
+            {
+                "id": "20"
+            }
+        ]} />
         <div class="item">
             <div class="horizontal list">
                 <p>Wall outlet</p>
                 <img src="/assets/outlet.jpg" />
                 <p>Energy source: Coal</p>
             </div>
-            <p>generate <Chip text="1000 dWatt" href={`/processes/outlet-dWatt`} /> or <Chip text="1E4 dWatt" href={`/processes/outlet-dWatt-1e4`} /> 
+            <p>generate <Chip text="1000 dWatt" href={`/processes/outlet-dWatt`} />, <Chip text="1E4 dWatt" href={`/processes/outlet-dWatt-1e4`} />, or <Chip text="1E5 dWatt" href={`/processes/outlet-dWatt-1e5`} /></p>
             <p>Generating energy from a wall outlet assumes the outlet uses coal, which causes <Chip text="dCarbon" href={`/docs/dCarbon`} /> to accrue. Use an alternate energy source, like <Chip text="solar" href={`/docs/solar`} />, to avoid accruing dCarbon.</p>
-            <p>dCarbon per dWatt: {.0000004325943029.toFixed(10)}</p>
+            <p>dCarbon per dWatt: {.4325943029.toFixed(10)}</p>
             <p>price per kWh: 0.18 dUSD</p>
         </div>
         <div class="item">
@@ -22,7 +31,7 @@ import Chip from '../../components/Chip.astro';
                 <img src="/assets/solar.jpg" />
                 <p>Energy source: the Sun</p>
             </div>
-            <p><Chip text="Generate dWatt" href={`/processes/solar-dWatt`} />, using solar panel!</p> 
+            <p>generate <Chip text="200 dWatt" href={`/processes/solar-dWatt`} /> using solar panels</p> 
             <p>Generating dWatt in this wway does not generate dCarbon!</p>
         </div>
     </div>
@@ -51,8 +60,12 @@ import Chip from '../../components/Chip.astro';
 
     .item {
         padding: 10px;
-        background-color: #84d484;
+        background-color: #46a446;
         color: black;
         border-radius: 20px;
+    }
+    
+    .item p {
+        /* double line height */
     }
 </style>
