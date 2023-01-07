@@ -1,66 +1,33 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
 import Header from '../components/Header.astro';
+import Menu from '../components/svelte/Menu.svelte';
 
-const { hideHome, hideSettings, hideQuests, title, message, columns } = Astro.props;
-const hideAll = hideHome && hideSettings && hideQuests;
+const {title, message } = Astro.props;
 
-let columnNumber = 2;
-if (columns) {
-	columnNumber = parseInt(columns);
-}
-
-// TODO: Add breadcrumbs to the top of the page
+// get path of URL
+const pathname = Astro.url.pathname;
 ---
 
 <Layout title="DSPACE">
 	<main>
 		<Header title="" body="" href="" />
-		
-		<nav>
-			<a href="/">Home</a>
-			<a href="/docs">Docs</a>
-			<a href="/quests">Quests</a>
-			<a href="/inventory">Inventory</a>
-			<a href="/machines">Machines</a>
-			<a href="/energy">Energy</a>
-			<a href="/wallet">Wallet</a>
-			<a href="/guilds">Guilds</a>
-			<a href="/profile">Profile</a>
-			<a href="/stats">Stats</a>
-			<a href="/achievements">Achievements</a>
-			<a href="/leaderboard">Leaderboard</a>
-			<a href="/settings">Settings</a>
-			<a href="/changelog">Changelog</a>
-			<a href="https://discord.gg/A3UAfYvnxM" target="_blank">Discord</a>
-			<a href="https://twitter.com/dspacegame" target="_blank">Twitter</a>
-			<a href="https://github.com/democratizedspace/dspace" target="_blank">Source code</a>
-		</nav>
+
+		<!-- for each item in menu, if  -->
+		<Menu pathname={pathname} client:idle />
 
 		<h2>{title}</h2>
 
-		{
-			!(hideAll) &&
-				<ul role="list" class="link-card-grid">
-				</ul>
-		}
-		{
-			!(hideAll) && 
-				<span />
-		}
+		<ul role="list" class="link-card-grid">
+		</ul>
+		<span />
 		<h2>
 			{message}
 		</h2>
-		{ (columnNumber == 1) ?
-			<ul role="list" class="link-card-grid-1">
-				<slot />
-			</ul>
-			:
-			<ul role="list" class="link-card-grid-2">
-				<slot />
-			</ul>
-		}
+
+		<ul role="list" class="link-card-grid-1">
+			<slot />
+		</ul>
 	</main>
 </Layout>
 
@@ -97,48 +64,11 @@ if (columns) {
 		}
 	}
 
-	.instructions {
-		line-height: 1.6;
-		margin: 1rem 0;
-		background: #003a03;
-		padding: 1rem;
-		border-radius: 0.4rem;
-		color: #00ff22;
-	}
-
-	.instructions code {
-		font-size: 0.875em;
-		border: 0.1em solid var(--color-border);
-		border-radius: 4px;
-		padding: 0.15em 0.25em;
-	}
-
 	.link-card-grid-1 {
 		display: grid;
 		gap: 1rem;
 		padding: 0;
 		grid-template-columns: 1fr;
-	}
-	
-	.link-card-grid-2 {
-		display: grid;
-		gap: 1rem;
-		padding: 0;
-		grid-template-columns: 1fr 1fr;
-	}
-
-	@media only screen and (max-width: 768px) {
-		.link-card-grid-2 {
-		grid-template-columns: 1fr;
-		margin: auto;
-		}
-	}
-	
-	@media only screen and (max-width: 768px) {
-		.link-card-grid-2 {
-		grid-template-columns: 1fr;
-		margin: auto;
-		}
 	}
 	
 	.main-grid {
@@ -159,7 +89,7 @@ if (columns) {
 
 	nav a {
 		opacity: 0.8;
-		background-color: hsl(123, 100%, 22%);
+		background-color: #007006;
 		border-radius: 0.4rem;
 		color: white;
 		text-decoration: none;

@@ -1,0 +1,79 @@
+[
+    {
+        "name": "Home",
+        "href": "/",
+        "pinned": true
+    },
+    {
+        "name": "Docs",
+        "href": "/docs",
+        "pinned": true
+    },
+    {
+        "name": "Quests",
+        "href": "/quests",
+        "pinned": true
+    },
+    {
+        "name": "Inventory",
+        "href": "/inventory",
+        "pinned": true
+    },
+    {
+        "name": "Machines",
+        "href": "/machines",
+        "pinned": true
+    },
+    {
+        "name": "Energy",
+        "href": "/energy",
+        "pinned": true
+    },
+    {
+        "name": "Wallet",
+        "href": "/wallet",
+        "pinned": true
+    },
+    {
+        "name": "Guilds",
+        "href": "/guilds"
+    },
+    {
+        "name": "Profile",
+        "href": "/profile"
+    },
+    {
+        "name": "Stats",
+        "href": "/stats"
+    },
+    {
+        "name": "Achievements",
+        "href": "/achievements"
+    },
+    {
+        "name": "Leaderboard",
+        "href": "/leaderboard"
+    },
+    {
+        "name": "Settings",
+        "href": "/settings",
+        "pinned": true
+    },
+    {
+        "name": "Changelog",
+        "href": "/changelog",
+        "pinned": true
+    },
+    {
+        "name": "Discord",
+        "href": "https://discord.gg/A3UAfYvnxM"
+    },
+    {
+        "name": "Twitter",
+        "href": "https://twitter.com/dspacegame"
+    },
+    {
+        "name": "Github",
+        "href": "https://github.com/democratizedspace/dspace"
+    }
+]
