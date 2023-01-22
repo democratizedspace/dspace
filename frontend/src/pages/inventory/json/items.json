@@ -353,5 +353,109 @@
         "name": "Completionist Award",
         "description": "Awarded for completing all of the quests avaialble on January 1, 2023.",
         "image": "/assets/completionist_award.jpg"
+    },
+    {
+        "id": "51",
+        "name": "aquarium (150 L)",
+        "description": "A glass tank for housing fish.",
+        "image": "/assets/aquarium_empty.jpg",
+        "price": "60 dUSD",
+        "type": "machine"
+    },
+    {
+        "id": "52",
+        "name": "aquarium (goldfish) (150 L)",
+        "description": "An aquarium containing a goldfish.",
+        "image": "/assets/aquarium_goldfish.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "53",
+        "name": "goldfish",
+        "description": "A goldfish.",
+        "image": "/assets/goldfish.jpg",
+        "price": "10 dUSD"
+    },
+    {
+        "id": "54",
+        "name": "goldfish food",
+        "description": "Food suitable for a goldfish.",
+        "image": "/assets/goldfish_food.jpg",
+        "price": "10 dUSD"
+    },
+    {
+        "id": "55",
+        "name": "aquarium filter",
+        "description": "A filter for a fish tank.",
+        "image": "/assets/aquarium_filter.jpg",
+        "price": "30 dUSD"
+    },
+    {
+        "id": "56",
+        "name": "aquarium heater",
+        "description": "A heater for a fish tank.",
+        "image": "/assets/aquarium_heater.jpg",
+        "price": "20 dUSD"
+    },
+    {
+        "id": "57",
+        "name": "aquarium light",
+        "description": "A light for a fish tank.",
+        "image": "/assets/aquarium_light.jpg",
+        "price": "15 dUSD"
+    },
+    {
+        "id": "58",
+        "name": "Thermometer",
+        "description": "A thermometer for measuring temperature.",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "price": "15 dUSD"
+    },
+    {
+        "id": "59",
+        "name": "pH strip",
+        "description": "A pH strip for measuring pH.",
+        "image": "/assets/pH_strip.jpg",
+        "price": "0.15 dUSD"
+    },
+    {
+        "id": "60",
+        "name": "7 pH freshwater aquarium (150 L)",
+        "description": "An freshwater aquarium with a pH of 7.",
+        "image": "/assets/aquarium_filled.jpg",
+        "type": "machine"
+    },
+    {
+        "id": "61",
+        "name": "dSolar",
+        "description": "a token that represents 1 Watt of energy generated using a solar panel.",
+        "image": "/assets/dSolar.jpg"
+    },
+    {
+        "id": "62",
+        "name": "gravel",
+        "description": "Loose gravel suitable for use in an aquarium.",
+        "image": "/assets/gravel.jpg",
+        "price": "1 dUSD",
+        "unit": " kg"
+    },
+    {
+        "id": "63",
+        "name": "aquarium net",
+        "description": "A net for catching fish.",
+        "image": "/assets/aquarium_net.jpg",
+        "price": "5 dUSD"
+    },
+    {
+        "id": "64",
+        "name": "dGoldfish",
+        "description": "A token granted for feeding a goldfish",
+        "image": "/assets/dGoldfish.jpg"
+    },
+    {
+        "id": "65",
+        "name": "Fish Friend Award",
+        "description": "An award given for setting up your first goldfish aquarium.",
+        "image": "/assets/fish_friend_award.jpg"
     }
 ]
