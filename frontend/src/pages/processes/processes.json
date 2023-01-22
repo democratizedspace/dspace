@@ -516,9 +516,115 @@
             {
                 "id": "22",
                 "count": 200
+            },
+            {
+                "id": "61",
+                "count": 200
             }
         ],
         "duration": "1h",
         "machine": "5"
+    },
+    {
+        "id": "prepare-aquarium",
+        "title": "Prepare your aquarium",
+        "consumeItems": [
+            {
+                "id": "51",
+                "count": 1
+            },
+            {
+                "id": "25",
+                "count": 1
+            },
+            {
+                "id": "55",
+                "count": 1
+            },
+            {
+                "id": "56",
+                "count": 1
+            },
+            {
+                "id": "57",
+                "count": 1
+            },
+            {
+                "id": "58",
+                "count": 1
+            },
+            {
+                "id": "62",
+                "count": 20
+            }
+        ],
+        "createItems": [
+            {
+                "id": "16",
+                "count": 1
+            },
+            {
+                "id": "60",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "machine": "51"
+    },
+    {
+        "id": "add-goldfish",
+        "title": "Add a goldfish to your aquarium",
+        "consumeItems": [
+            {
+                "id": "60",
+                "count": 1
+            },
+            {
+                "id": "53",
+                "count": 1
+            },
+            {
+                "id": "63",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "52",
+                "count": 1
+            },
+            {
+                "id": "63",
+                "count": 1
+            }
+        ],
+        "duration": "1m",
+        "machine": "60"
+    },
+    {
+        "id": "feed-goldfish",
+        "title": "Feed your goldfish",
+        "consumeItems": [
+            {
+                "id": "52",
+                "count": 1
+            },
+            {
+                "id": "54",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "52",
+                "count": 1
+            },
+            {
+                "id": "64",
+                "count": 1
+            }
+        ],
+        "machine": "52",
+        "duration": "8h"
     }
 ]
