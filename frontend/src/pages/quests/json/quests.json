@@ -1340,5 +1340,139 @@
         "requiresQuests": [
             "2"
         ]
+    },
+    {
+        "id": "14",
+        "title": "Let's launch another rocket, but this time with a parachute.",
+        "body": "That thing took a lot of time and resources, and it would be a shame to have to print another one every time.",
+        "image": "/assets/rocket_min.gif",
+        "steps": [
+            {
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "A parachute should reduce our velocity and prevent substantial damage to the rocket.",
+                        "body": "The parachute is reusable too!",
+                        "image": "/assets/parachute.jpg",
+                        "action": "path",
+                        "path": "/shop/buy/66",
+                        "hideIfOwned": [
+                            {
+                                "id": "66",
+                                "count": 1
+                            },
+                            {
+                                "id": "67",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "We'll just combine a parachute with an otherwise fully assembled model rocket.",
+                        "body": "",
+                        "image": "/assets/rocket_min.gif",
+                        "action": "path",
+                        "path": "/processes/rocket-attach-parachute",
+                        "requiresItems": [
+                            {
+                                "id": "66",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Ok, we're ready for launch. Let's do this!",
+                        "body": "If you are missing an item you can either click on it and buy it, or manufacture it on the Machines page.",
+                        "image": "/assets/rocket_min.gif",
+                        "action": "path",
+                        "path": "/processes/launch-rocket-parachute",
+                        "requiresItems": [
+                            {
+                                "id": "67",
+                                "count": 1
+                            }
+                        ],
+                        "hideIfOwned": [
+                            {
+                                "id": "69",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "Finish the quest",
+                        "body": "You can always use the machines page to make and launch more rockets.",
+                        "image": "/assets/door.jpg",
+                        "action": "finish",
+                        "requiresItems": [
+                            {
+                                "id": "69",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "68",
+                "count": 1
+            }
+        ]
+    },
+    {
+        "id": "15",
+        "title": "You've probably accumulated dCarbon.",
+        "body": "If so, you can convert it to dOffset using dUSD. You can do that any time on the Machines page as well, but let's get started converting it now.",
+        "image": "/assets/dCarbon.jpg",
+        "steps": [
+            {
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Convert dCarbon to dOffset",
+                        "body": "All you need is some dUSD, and of course, dCarbon.",
+                        "image": "/assets/dUSD.jpg",
+                        "action": "path",
+                        "path": "/processes/dCarbon-dOffset-1",
+                        "hideIfOwned": [
+                            {
+                                "id": "70",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "You did it! That money will help other people offset their carbon emissions with solar and wind.",
+                        "body": "You can always use the Energy page to convert more dCarbon.",
+                        "image": "/assets/door.jpg",
+                        "action": "finish",
+                        "requiresItems": [
+                            {
+                                "id": "70",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "71",
+                "count": 1
+            }
+        ]
+    },
+    {
+        "id": "16",
+        "title": "Did you know you can earn some basic income?",
+        "body": "It's not much, but you can earn income every week, no strings attached. Just start the 7-day process on the Wallet page and you'll get your dUSD at the end.",
+        "image": "/assets/dBI.jpg"
     }
 ]

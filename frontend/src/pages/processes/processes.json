@@ -485,11 +485,64 @@
             {
                 "id": "40",
                 "count": 1
+            },
+            {
+                "id": "69",
+                "count": 1
             }
         ],
         "duration": "30s",
         "image": "/assets/rocket_field.jpg",
         "machine": "38"
+    },
+    {
+        "id": "launch-rocket-parachute",
+        "title": "rocket with parachute",
+        "consumeItems": [
+            {
+                "id": "67",
+                "count": 1
+            },
+            {
+                "id": "37",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "67",
+                "count": 1
+            },
+            {
+                "id": "69",
+                "count": 1
+            }
+        ],
+        "duration": "45s",
+        "image": "/assets/rocket_field.jpg",
+        "machine": "38"
+    },
+    {
+        "id": "rocket-attach-parachute",
+        "title": "Attach parachute to rocket",
+        "consumeItems": [
+            {
+                "id": "39",
+                "count": 1
+            },
+            {
+                "id": "66",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "67",
+                "count": 1
+            }
+        ],
+        "duration": "60s",
+        "image": "/assets/rocket_field.jpg"
     },
     {
         "id": "solar-dWatt",
@@ -626,5 +679,60 @@
         ],
         "machine": "52",
         "duration": "8h"
+    },
+    {
+        "id": "dCarbon-dOffset-1",
+        "title": "dCarbon to dOffset",
+        "consumeItems": [
+            {
+                "id": "20",
+                "count": 1
+            },
+            {
+                "id": "24",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "70",
+                "count": 1
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "dCarbon-dOffset-10",
+        "title": "dCarbon to dOffset",
+        "consumeItems": [
+            {
+                "id": "20",
+                "count": 10
+            },
+            {
+                "id": "24",
+                "count": 100
+            }
+        ],
+        "createItems": [
+            {
+                "id": "70",
+                "count": 10
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "basic-income",
+        "title": "basic income",
+        "consumeItems": [
+        ],
+        "createItems": [
+            {
+                "id": "24",
+                "count": 100
+            }
+        ],
+        "duration": "7d"
     }
 ]

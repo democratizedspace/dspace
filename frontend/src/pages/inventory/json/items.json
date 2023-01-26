@@ -457,5 +457,48 @@
         "name": "Fish Friend Award",
         "description": "An award given for setting up your first goldfish aquarium.",
         "image": "/assets/fish_friend_award.jpg"
+    },
+    {
+        "id": "66",
+        "name": "parachute",
+        "description": "A parachute for model rockets.",
+        "image": "/assets/parachute.jpg",
+        "price": "30 dUSD"
+    },
+    {
+        "id": "67",
+        "name": "launch-capable model rocket (parachute)",
+        "description": "A reusable rocket with a parachute",
+        "image": "/assets/rocket_field.jpg"
+    },
+    {
+        "id": "68",
+        "name": "Rocket Descent (animated)",
+        "description": "A rocket descending to the ground with a parachute.",
+        "image": "/assets/rocket_min.gif"
+    },
+    {
+        "id": "69",
+        "name": "dLaunch",
+        "description": "1 dLaunch = 1 launch of a rocket. Any launch counts, even a model rocket launch.",
+        "image": "/assets/dLaunch.jpg"
+    },
+    {
+        "id": "70",
+        "name": "dOffset",
+        "description": "1 dOffset is granted for reducing dCarbon with dUSD. ",
+        "image": "/assets/dOffset.jpg"
+    },
+    {
+        "id": "71",
+        "name": "Tree Hugger Award",
+        "description": "Awarded for converting dCarbon to dOffset.",
+        "image": "/assets/tree_hugger_award.jpg"
+    },
+    {
+        "id": "72",
+        "name": "dBI",
+        "description": "Awarded for every dUSD earned through Basic Income. See the Wallet page for more details.",
+        "image": "/assets/dBI.jpg"
     }
 ]

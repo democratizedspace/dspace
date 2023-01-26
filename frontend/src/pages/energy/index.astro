@@ -34,6 +34,14 @@ import ItemCount from '../../components/ItemCount.astro';
             <p>generate <Chip text="200 dWatt" href={`/processes/solar-dWatt`} /> using solar panels</p> 
             <p>Generating dWatt in this wway does not generate dCarbon!</p>
         </div>
+        <div class="item">
+            <div class="horizontal list">
+                <p>Convert dCarbon to dOffset</p>
+                <img src="/assets/solar.jpg" />
+            </div>
+            <p>convert <Chip text="1 dCarbon" href={`/processes/dCarbon-dOffset-1`} /> or <Chip text="10 dCarbon" href={`/processes/dCarbon-dOffset-10`} /> to <Chip text="dOffset" href="/inventory/item/70" /></p> 
+            <p>Cost per dOffset: 10 <Chip text="dUSD" href="/wallet" /></p>
+        </div>
     </div>
 </Page>
 
