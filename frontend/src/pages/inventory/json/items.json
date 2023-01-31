@@ -526,5 +526,11 @@
         "description": "A 1kWh Wh battery pack that can be used to store energy from a solar panel or a wind turbine.",
         "price": "1000 dUSD",
         "image": "/assets/battery_1kwh.jpg"
+    },
+    {
+        "id": "77",
+        "name": "The grass is always greener (still)",
+        "description": "A still image of a Hypercar on a grassy field.",
+        "image": "/assets/hypercar_grassy.jpg"
     }
 ]
