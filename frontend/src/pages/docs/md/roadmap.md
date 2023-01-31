@@ -3,18 +3,36 @@ title: "Roadmap"
 slug: "roadmap"
 ---
 
-## Upcoming
+## March 2023
 
-- [ ] Achievement page
-- [ ] Profile page
+- [ ] DSPACE v2
 
-### 3D Printing
+## February 2023
 
-- [x] test print
-- [ ] build printer
-- [ ] print model rocket
-- [ ] auto bed leveling upgrade
-- [ ] remove print upgrade
+- [ ] reusable rocket v2
+    - [ ] 3D printed launchpad
+    - [ ] 3d printed launch controller
+- [ ] hydroponic lettuce, spinach, mint, andstrawberries
+- [ ] aquaponics
+- [ ] deliver hydroponics locally
+
+## January 2023
+
+- [x] golfish aquarium
+- [x] rocket with a parachute
+- [x] dSolar
+- [x] basic income
+- [x] EV charger
+- [x] carbon offsets
+- [x] 1kwh battery
+
+## December 2022
+
+- [ ] 
+
+### November 2022
+
+- [ ] 
 
 ## October 2022
 - [x] Big [docs](/docs) update

@@ -8,10 +8,16 @@ import ItemCount from '../../components/ItemCount.astro';
     <div class="vertical list">
         <ItemCount itemList={[
             {
-                "id": "22"
+                "id": "22" // dWatt
             },
             {
-                "id": "20"
+                "id": "20" // dCarbon
+            },
+            {
+                "id": "61" // dSolar
+            },
+            {
+                "id": "70" // dOffset
             }
         ]} />
         <div class="item">
@@ -31,8 +37,16 @@ import ItemCount from '../../components/ItemCount.astro';
                 <img src="/assets/solar.jpg" />
                 <p>Energy source: the Sun</p>
             </div>
-            <p>generate <Chip text="200 dWatt" href={`/processes/solar-dWatt`} /> using solar panels</p> 
+            <p>generate <Chip text="200 dWatt" href={`/processes/solar-dWatt`} /> or <Chip text="1000 dWatt" href="/processes/solar-dWatt-1e3" /> using solar panels</p> 
             <p>Generating dWatt in this wway does not generate dCarbon!</p>
+        </div>
+        <div class="item">
+            <div class="horizontal list">
+                <p>Convert dCarbon to dOffset</p>
+                <img src="/assets/solar.jpg" />
+            </div>
+            <p>convert <Chip text="1 dCarbon" href={`/processes/dCarbon-dOffset-1`} /> or <Chip text="10 dCarbon" href={`/processes/dCarbon-dOffset-10`} /> to <Chip text="dOffset" href="/inventory/item/70" /></p> 
+            <p>Cost per dOffset: 10 <Chip text="dUSD" href="/wallet" /></p>
         </div>
     </div>
 </Page>

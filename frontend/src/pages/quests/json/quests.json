@@ -49,7 +49,7 @@
     },
     {
         "id": "1",
-        "title": "Launch an amateur rocket",
+        "title": "Launch a 3D printed rocket",
         "body": "One small step for humankind.",
         "image": "/assets/rocket_launch.jpg",
         "steps": [
@@ -345,7 +345,8 @@
         ],
         "requiresQuests": [
             "0",
-            "7"
+            "7",
+            "6"
         ]
     },
     {
@@ -572,6 +573,12 @@
                                 "id": "26",
                                 "count": 11
                             }
+                        ],
+                        "hideIfOwned": [
+                            {
+                                "id": "27",
+                                "count": 11
+                            }
                         ]
                     },
                     {
@@ -589,6 +596,12 @@
                             {
                                 "id": "25",
                                 "count": 1
+                            }
+                        ],
+                        "hideIfOwned": [
+                            {
+                                "id": "26",
+                                "count": 11
                             }
                         ]
                     },
@@ -788,7 +801,8 @@
             }
         ],
         "requiresQuests": [
-            "8"
+            "8",
+            "7"
         ],
         "rewards": [
             {
@@ -799,9 +813,9 @@
     },
     {
         "id": "4",
-        "title": "Buy an EV",
-        "body": "Might I recommend the Edison Model M?",
-        "image": "/assets/ev.jpg",
+        "title": "Buy the Hypercar",
+        "body": "It's c̶y̶b̶e̶r̶ hyper, but not a truck.",
+        "image": "/assets/hypercar.jpg",
         "steps": [
             {
                 "id": 0,
@@ -809,29 +823,29 @@
                 "options": [
                     {
                         "id": 0,
-                        "title": "Order an Edison Model M from Amazing",
+                        "title": "Order a Hypercar from Amazing",
                         "body": "Driven to your door.",
                         "action": "path",
                         "itemId": "2",
                         "image": "/assets/cart.jpg",
                         "duration": "1d",
-                        "path": "/shop/buy/4",
+                        "path": "/shop/buy/74",
                         "hideIfOwned": [
                             {
-                                "id": "4",
+                                "id": "74",
                                 "count": 1
                             }
                         ]
                     },
                     {
                         "id": 1,
-                        "title": "Receive a commemorative award for your purchase of an Edison Model M",
+                        "title": "Receive a commemorative award for your purchase of the Hypercar",
                         "body": "You're an early adopter!",
                         "action": "finish",
                         "image": "/assets/motor_award.jpg",
                         "requiresItems": [
                             {
-                                "id": "4",
+                                "id": "74",
                                 "count": 1
                             }
                         ]
@@ -846,7 +860,8 @@
             }
         ],
         "requiresQuests": [
-            "9"
+            "9",
+            "7"
         ]
     },
     {
@@ -916,7 +931,7 @@
     {
         "id": "6",
         "title": "3D print a model rocket",
-        "body": "A nice knick knack for your shelf or desk.",
+        "body": "A nice (non-functioning) knick knack for your shelf or desk.",
         "image": "/assets/modelrocket.jpg",
         "steps": [
             {
@@ -998,7 +1013,8 @@
         ],
         "requiresQuests": [
             "0",
-            "7"
+            "7",
+            "5"
         ],
         "requiresItems": [
             {
@@ -1101,6 +1117,10 @@
                 "id": "24",
                 "count": 1000
             }
+        ],
+        "requiresQuests": [
+            "0",
+            "8"
         ]
     },
     {
@@ -1225,5 +1245,439 @@
             "9",
             "10"
         ]
+    },
+    {
+        "id": "13",
+        "title": "Set up an aquarium for a goldfish",
+        "body": "A nice addition to any room. Plus, aquaria plays an important symbiotic role with hydroponics, which we'll explore later.",
+        "image": "/assets/goldfish.jpg",
+        "steps": [
+            {
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Set up an aquarium",
+                        "body": "You can click on each item on the process page to buy it. If there's no buy link, you need to complete some other process on the Machines page.",
+                        "image": "/assets/aquarium_filled.jpg",
+                        "action": "path",
+                        "path": "/processes/prepare-aquarium",
+                        "hideIfOwned": [
+                            {
+                                "id": "60",
+                                "count": 1
+                            },
+                            {
+                                "id": "52",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Add a goldfish",
+                        "body": "",
+                        "image": "/assets/goldfish.jpg",
+                        "action": "path",
+                        "path": "/processes/add-goldfish",
+                        "hideIfOwned": [
+                            {
+                                "id": "52",
+                                "count": 1
+                            }
+                        ],
+                        "requiresItems": [
+                            {
+                                "id": "60",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Feed your goldfish",
+                        "body": "You should feed your goldfish 2-3 times per day.",
+                        "image": "/assets/goldfish_food.jpg",
+                        "action": "path",
+                        "path": "/processes/feed-goldfish",
+                        "hideIfOwned": [
+                            {
+                                "id": "64",
+                                "count": 1
+                            }
+                        ],
+                        "requiresItems": [
+                            {
+                                "id": "52",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Receive your reward",
+                        "body": "Make sure to take care of it!",
+                        "image": "/assets/door.jpg",
+                        "action": "finish",
+                        "requiresItems": [
+                            {
+                                "id": "52",
+                                "count": 1
+                            },
+                            {
+                                "id": "64",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "65",
+                "count": 1
+            }
+        ],
+        "requiresQuests": [
+            "2"
+        ]
+    },
+    {
+        "id": "14",
+        "title": "Let's launch another rocket, but this time with a parachute.",
+        "body": "",
+        "image": "/assets/rocket_min.gif",
+        "steps": [
+            {
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "A parachute should reduce our velocity and prevent substantial damage to the rocket.",
+                        "body": "The parachute is reusable too!",
+                        "image": "/assets/parachute.jpg",
+                        "action": "path",
+                        "path": "/shop/buy/66",
+                        "hideIfOwned": [
+                            {
+                                "id": "66",
+                                "count": 1
+                            },
+                            {
+                                "id": "67",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "We'll just combine a parachute with an otherwise fully assembled model rocket.",
+                        "body": "",
+                        "image": "/assets/rocket_min.gif",
+                        "action": "path",
+                        "path": "/processes/rocket-attach-parachute",
+                        "requiresItems": [
+                            {
+                                "id": "66",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Ok, we're ready for launch. Let's do this!",
+                        "body": "If you are missing an item you can either click on it and buy it, or manufacture it on the Machines page.",
+                        "image": "/assets/rocket_min.gif",
+                        "action": "path",
+                        "path": "/processes/launch-rocket-parachute",
+                        "requiresItems": [
+                            {
+                                "id": "67",
+                                "count": 1
+                            }
+                        ],
+                        "hideIfOwned": [
+                            {
+                                "id": "69",
+                                "count": 2
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "Finish the quest",
+                        "body": "You can always use the machines page to make and launch more rockets.",
+                        "image": "/assets/door.jpg",
+                        "action": "finish",
+                        "requiresItems": [
+                            {
+                                "id": "69",
+                                "count": 2
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "68",
+                "count": 1
+            }
+        ],
+        "requiresQuests": [
+            "1"
+        ]
+    },
+    {
+        "id": "15",
+        "title": "You've probably accumulated dCarbon.",
+        "body": "If so, you can convert it to dOffset using dUSD. You can do that any time on the Machines page as well, but let's get started converting it now.",
+        "image": "/assets/dCarbon.jpg",
+        "steps": [
+            {
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Convert dCarbon to dOffset",
+                        "body": "All you need is some dUSD, and of course, dCarbon.",
+                        "image": "/assets/dUSD.jpg",
+                        "action": "path",
+                        "path": "/processes/dCarbon-dOffset-1",
+                        "hideIfOwned": [
+                            {
+                                "id": "70",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "You did it! That money will help other people offset their carbon emissions with solar and wind.",
+                        "body": "You can always use the Energy page to convert more dCarbon.",
+                        "image": "/assets/door.jpg",
+                        "action": "finish",
+                        "requiresItems": [
+                            {
+                                "id": "70",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "71",
+                "count": 1
+            }
+        ],
+        "requiresQuests": [
+            "1",
+            "2"
+        ]
+    },
+    {
+        "id": "16",
+        "title": "Did you know you can earn some basic income?",
+        "body": "It's not much, but you can earn income every week, no strings attached. Just start the 7-day process on the Wallet page and you'll get your dUSD at the end.",
+        "image": "/assets/dBI.jpg",
+        "steps": [
+            {
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Just start the process and your 100 dUSD will be ready to collect after 7 days!",
+                        "body": "The amount per week is subject to change.",
+                        "image": "/assets/dBI.jpg",
+                        "action": "path",
+                        "path": "/processes/basic-income",
+                        "hideIfOwned": [
+                            {
+                                "id": "72",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "You did it! You earned some basic income.",
+                        "body": "You can always use the Wallet page to start the process again.",
+                        "image": "/assets/door.jpg",
+                        "action": "finish",
+                        "requiresItems": [
+                            {
+                                "id": "72",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "24",
+                "count": 100
+            },
+            {
+                "id": "72",
+                "count": 100
+            }
+        ],
+        "requiresQuests": [
+            "0",
+            "8"
+        ]
+    },
+    {
+        "id": "18",
+        "title": "Charge your EV at home",
+        "body": "Now that you've got an EV, you can charge at home with an EV charger. This'll be much more economical long term than relying on public chargers.",
+        "image": "/assets/ev_charger.jpg",
+        "steps": [
+            {
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Buy an EV charger",
+                        "action": "path",
+                        "path": "/shop/buy/73",
+                        "image": "/assets/ev_charger.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "73",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Now that you've got a charger, you can charge your EV using dWatt.",
+                        "body": "You can also find the charger on the Machines page.",
+                        "image": "/assets/ev_charger.jpg",
+                        "action": "path",
+                        "path": "/processes/charge-hypercar",
+                        "requiresItems": [
+                            {
+                                "id": "73",
+                                "count": 1
+                            }
+                        ],
+                        "hideIfOwned": [
+                            {
+                                "id": "21",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "You did it! You charged your EV at home.",
+                        "body": "You can always use the EV charger on the Machines page to charge your EV again.",
+                        "image": "/assets/door.jpg",
+                        "action": "finish",
+                        "requiresItems": [
+                            {
+                                "id": "21",
+                                "count": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "22",
+                "count": 100
+            }
+        ],
+        "requiresQuests": [
+            "4"
+        ]
+    },
+    {
+        "id": "19",
+        "title": "Let's scale up our solar panel grid.",
+        "body": "Let's set up 5 solar panels and buy a 1kWh battery to store the energy.",
+        "image": "/assets/battery_1kwh.jpg",
+        "steps": [
+            {
+                "options": [
+                    {
+                        "id": 0,
+                        "title": "Buy a 1kWh battery",
+                        "action": "path",
+                        "path": "/shop/buy/76",
+                        "image": "/assets/battery_1kwh.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "76",
+                                "count": 1
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "Make sure you have at least 1kW of solar panels total.",
+                        "action": "path",
+                        "path": "/shop/buy/5",
+                        "image": "/assets/solar.jpg",
+                        "hideIfOwned": [
+                            {
+                                "id": "5",
+                                "count": 5
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Now that we've got the required materials, we can generate more dWatt per hour with solar.",
+                        "body": "Start the process",
+                        "image": "/assets/dWatts.jpg",
+                        "action": "path",
+                        "path": "/processes/solar-dWatt-1e3",
+                        "requiresItems": [
+                            {
+                                "id": "76",
+                                "count": 1
+                            },
+                            {
+                                "id": "5",
+                                "count": 5
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "title": "Whenever you're ready, you can finish the quest and collect your rewards.",
+                        "body": "You can always use the Energy page to generate more dWatt with solar.",
+                        "image": "/assets/door.jpg",
+                        "action": "finish",
+                        "requiresItems": [
+                            {
+                                "id": "76",
+                                "count": 1
+                            },
+                            {
+                                "id": "5",
+                                "count": 5
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "rewards": [
+            {
+                "id": "22",
+                "count": 200
+            }
+        ],
+        "requiresQuests": [
+            "10"
+        ]
     }
+
 ]
