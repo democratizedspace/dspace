@@ -579,6 +579,40 @@
         "machine": "5"
     },
     {
+        "id": "solar-dWatt-1e3",
+        "title": "Generate dWatt using solar",
+        "consumeItems": [
+            {
+                "id": "5",
+                "count": 5
+            },
+            {
+                "id": "76",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5",
+                "count": 5
+            },
+            {
+                "id": "76",
+                "count": 1
+            },
+            {
+                "id": "22",
+                "count": 1000
+            },
+            {
+                "id": "61",
+                "count": 1000
+            }
+        ],
+        "duration": "1h",
+        "machine": "5"
+    },
+    {
         "id": "prepare-aquarium",
         "title": "Prepare your aquarium",
         "consumeItems": [
@@ -731,8 +765,34 @@
             {
                 "id": "24",
                 "count": 100
+            },
+            {
+                "id": "72",
+                "count": 100
             }
         ],
         "duration": "7d"
+    },
+    {
+        "id": "charge-hypercar",
+        "title": "Charge your Hypercar",
+        "consumeItems": [
+            {
+                "id": "74",
+                "count": 1
+            },
+            {
+                "id": "22",
+                "count": 32400
+            }
+        ],
+        "createItems": [
+            {
+                "id": "21",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "machine": "73"
     }
 ]

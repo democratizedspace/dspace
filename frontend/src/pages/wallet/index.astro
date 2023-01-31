@@ -1,19 +1,26 @@
 ---
 import Page from '../../components/Page.astro';
 import ItemCount from '../../components/ItemCount.astro';
-import { getItemCount } from '../inventory/utils';
+import Chip from '../../components/Chip.astro';
 
 const currencies = [
     {
-        "id": "24", // dUSD
-        "count": getItemCount(Astro.request, "24"),
+        "id": "24" // dUSD
+    },
+    {
+        "id": "72" // dBI
     }
 ];
 ---
 
 <Page columns="1">
     <h3>Balances</h3>
-    <ul>
+    <div>
         <ItemCount itemList={currencies} />
-    </ul>
+    </div>
+
+    <h3>Basic Income</h3> 
+    <div>
+        <Chip text="Earn basic income" href="/processes/basic-income" />
+    </div>
 </Page>

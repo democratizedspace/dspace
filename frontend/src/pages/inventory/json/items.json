@@ -155,10 +155,9 @@
     },
     {
         "id": "21",
-        "name": "Hypercar",
-        "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities.",
-        "image": "/assets/hypercar.jpg",
-        "price": "40000 dUSD"
+        "name": "Hypercar (80% charge)",
+        "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 80% charged.",
+        "image": "/assets/hypercar.jpg"
     },
     {
         "id": "22",
@@ -500,5 +499,32 @@
         "name": "dBI",
         "description": "Awarded for every dUSD earned through Basic Income. See the Wallet page for more details.",
         "image": "/assets/dBI.jpg"
+    },
+    {
+        "id": "73",
+        "name": "EV charger",
+        "description": "A charger for electric vehicles.",
+        "image": "/assets/ev_charger.jpg",
+        "price": "500 dUSD"
+    },
+    {
+        "id": "74",
+        "name": "Hypercar (20% charge)",
+        "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 20% charged.",
+        "image": "/assets/hypercar.jpg",
+        "price": "30000 dUSD"
+    },
+    {
+        "id": "75",
+        "name": "Hypercar (animated)",
+        "description": "A hypercar driving down the road.",
+        "image": "/assets/hypercar.gif"
+    },
+    {
+        "id": "76",
+        "name": "1 kWh battery pack",
+        "description": "A 1kWh Wh battery pack that can be used to store energy from a solar panel or a wind turbine.",
+        "price": "1000 dUSD",
+        "image": "/assets/battery_1kwh.jpg"
     }
 ]
