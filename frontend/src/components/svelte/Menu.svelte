@@ -49,14 +49,21 @@
 			{#if isActive(item)}
 				<a class="active" href={item.href}>{item.name}</a>
 			{:else}
-				<a href={item.href}>{item.name}</a>
+				{#if item.comingSoon === true}
+					<a class="disabled" href={item.href}>{item.name}</a>
+				{:else}
+					<a href={item.href}>{item.name}</a>
+				{/if}
 			{/if}
-				
     {/each}
 
 	{#if showUnpinned}
 		{#each unpinned as item}
-			<a href={item.href}>{item.name}</a>
+			{#if item.comingSoon === true}
+				<button class="disabled" href={""}>{item.name}</button>
+			{:else}
+				<a href={item.href}>{item.name}</a>
+			{/if}
 		{/each}
 	{/if}
 	
@@ -116,5 +123,20 @@
 		/* background color slightly lighter than #007006 */
 		background-color: #68d46d;
 		color: black;
+	}
+
+	.disabled {
+        background-color: #004603;
+        color: rgb(138, 138, 138);
+		font-size: 1rem;
+		padding-left: 5px;
+		padding-right: 5px;
+		padding-top: 2px;
+		padding-bottom: 10px;
+	}
+
+	.disabled:hover {
+		/* make the cursor normal */
+		cursor: default;
 	}
 </style>

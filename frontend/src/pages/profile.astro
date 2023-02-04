@@ -1,7 +1,8 @@
 ---
 import Page from '../components/Page.astro';
 import { randomBytes } from 'node:crypto';
-import { parseBool, getCookieValue } from '../utils';
+import { getCookieValue } from '../utils';
+import EthProfile from '../components/svelte/EthProfile.svelte';
 
 let token;
 
@@ -25,4 +26,5 @@ const tokenPreview = `${token.slice(0, 3)}...${token.slice(-3)}`;
 ---
 
 <Page message={`Token: ${tokenPreview}`} title="Profile">
+    <EthProfile client:idle />
 </Page>

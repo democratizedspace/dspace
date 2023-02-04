@@ -1,18 +1,5 @@
 ---
-import Page from './Page.astro';
-import Card from './Card.astro';
 import Button from './Button.astro';
-
-export interface Props {
-	title: string;
-	body: string;
-	href: string;
-	disabled: boolean;
-}
-
-const { href, title, body, disabled } = Astro.props as Props;
-
-let output = "foo";
 
 const changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
 
@@ -30,16 +17,13 @@ function prepareHtml(html) {
 }
 ---
 
-<Page title="Changelog" columns="1">
-    <span class="wrapper">
-        {changelogsReversed.slice(0, 1).map(doc => (
-            <h3>{doc.frontmatter.title}</h3>
-            <span set:html={prepareHtml(doc.compiledContent())}></span>
-        ))}
-        <Button href="/changelog" text="View all changelog entries" />
-    </span>
-
-</Page>
+<span class="wrapper">   
+    {changelogsReversed.slice(0, 1).map(doc => (
+        <h3>Latest update: {doc.frontmatter.title}</h3>
+        <span set:html={prepareHtml(doc.compiledContent())}></span>
+    ))}
+    <Button href="/changelog" text="View all updates" />
+</span>
 
 <style>
     img {

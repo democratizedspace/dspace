@@ -1,5 +1,7 @@
 ---
 import Logo from '../components/Logo.astro';
+import Chip from '../components/Chip.astro';
+import { ChipVariants, ChipSize } from '../components/Chip.astro';
 
 export interface Props {
 	title: string;
@@ -9,26 +11,69 @@ export interface Props {
 ---
 
 <a href="/">
-	<Logo title="" href="" body="" />
+	<Logo />
+	
 	<span class="text-gradient title">DSPACE</span>
 </a>
 
 <style>
+	:root {
+		--astro-gradient: linear-gradient(0deg, #80df98, #00ff22);
+	}
+
 	a {
 		text-decoration: none;
 	}
 
 	.text-gradient {
 		font-weight: 900;
-		background-image: var(--astro-gradient);
+		background: var(--astro-gradient);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-size: 100% 200%;
 		background-position-y: 100%;
 		border-radius: 0.4rem;
-		animation: pulse 4s ease-in-out infinite;
+		animation: pulse 2s ease-in-out infinite;
 		display: table;
 		margin: 0 auto;
 		font-size: 2em;
+	}
+
+	.default-size {
+		font-size: 1em;
+	}
+
+	@keyframes pulse {
+		0% {
+			background-position-y: 0%;
+		}
+		100% {
+			background-position-y: 200%;
+		}
+	}
+
+	.horizontal {
+		display: flex;
+		flex-direction: row;
+	}
+
+	.vertical {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.item {
+		gap: 2px;
+	}
+
+	.right {
+		align-items: flex-end;
+	}
+
+	.container {
+		background: rgb(20, 20, 20);
+		padding: 10px;
+		border-radius: 10px;
+		margin-top: 20px;
 	}
 </style>
