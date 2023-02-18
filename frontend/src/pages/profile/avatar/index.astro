@@ -1,0 +1,12 @@
+---
+import Page from '../../../components/Page.astro';
+import AvatarPicker from '../../../components/svelte/AvatarPicker.svelte';
+
+const defaultPFPs = await Astro.glob('../../../../public/assets/pfp/*.jpg');
+
+const randomizedPFPs = defaultPFPs.sort(() => Math.random() - 0.5);
+---
+
+<Page title="Choose your PFP">
+    <AvatarPicker defaultPFPs={randomizedPFPs} client:idle />
+</Page>

@@ -532,5 +532,33 @@
         "name": "The grass is always greener (still)",
         "description": "A still image of a Hypercar on a grassy field.",
         "image": "/assets/hypercar_grassy.jpg"
+    },
+    {
+        "id": "78",
+        "name": "Basil",
+        "description": "Grow basil hydroponically",
+        "image": "/assets/blueprints/basil.jpg",
+        "type": "blueprint"
+    },
+    {
+        "id": "79",
+        "name": "Basil seedlings",
+        "description": "Basil seedlings",
+        "image": "/assets/blueprints/basil_seedlings.jpg",
+        "type": "blueprint"
+    },
+    {
+        "id": "80",
+        "name": "Solar (200 W)",
+        "description": "Generate 200 W of electricity using solar panels.",
+        "image": "/assets/blueprints/solar_200W.jpg",
+        "type": "blueprint"
+    },
+    {
+        "id": "81",
+        "name": "Solar (1 kW)",
+        "description": "Generate 1 kW of electricity using solar panels.",
+        "image": "/assets/blueprints/solar_1kW.jpg",
+        "type": "blueprint"
     }
 ]

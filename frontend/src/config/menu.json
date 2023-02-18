@@ -5,6 +5,11 @@
         "pinned": true
     },
     {
+        "name": "Profile",
+        "href": "/profile",
+        "pinned": true
+    },
+    {
         "name": "Docs",
         "href": "/docs",
         "pinned": true
@@ -17,6 +22,11 @@
     {
         "name": "Inventory",
         "href": "/inventory",
+        "pinned": true
+    },
+    {
+        "name": "Blueprints",
+        "href": "/blueprints",
         "pinned": true
     },
     {
@@ -45,10 +55,6 @@
         "pinned": true
     },
     {
-        "name": "Profile",
-        "href": "/profile"
-    },
-    {
         "name": "Guilds",
         "href": "/guilds",
         "comingSoon": true
@@ -74,12 +80,19 @@
         "comingSoon": true
     },
     {
+        "name": "Titles",
+        "href": "/titles",
+        "comingSoon": true
+    },
+    {
         "name": "Discord",
-        "href": "https://discord.gg/A3UAfYvnxM"
+        "href": "https://discord.gg/A3UAfYvnxM",
+        "pinned": true
     },
     {
         "name": "Twitter",
-        "href": "https://twitter.com/dspacegame"
+        "href": "https://twitter.com/dspacegame",
+        "pinned": true
     },
     {
         "name": "Github",
