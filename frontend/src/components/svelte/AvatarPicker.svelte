@@ -1,96 +1,103 @@
 <script>
     export let defaultPFPs;
+  
+    let selectedIndex = -1;
 
-    function chooseAvatar(url) {
-        console.log(url);
-
-        // remove the item with id "noneselected"
-        let noneselected = document.getElementById("noneselected");
-        
-        if (noneselected) {
-            noneselected.remove();
-        }
-
-        // add an image with the url to the "preview" div
-        let preview = document.getElementById("preview");
-
-        if (preview) {
-            preview.innerHTML = "";
-        }
-
-        let img = document.createElement("img");
-        img.src = url;
-        img.className = "item";
-        
-        // style the image
-        img.style.width = "100px";
-        img.style.height = "100px";
-        img.style.borderRadius = "50%";
-
-        // center
-        img.style.display = "flex";
-        img.style.justifyContent = "center";
-        img.style.alignItems = "center";
-
-        preview.appendChild(img);
+    function setSelectedAvatar(index) {
+      localStorage.setItem('avatarUrl', defaultPFPs[index]);
+      if (window) {
+        window.location.href="/profile";
+      }
     }
-</script>
 
-<div class="vertical">
-    <div class="horizontal">
-        <div class="item horizontal" id="preview">
-            <p id="noneselected">None selected</p>
-        </div>
-        <button class="item">Select</button>
+    function setHighlighted(index) {
+      selectedIndex = index;
+    }
+  </script>
+  
+  <div class="vertical">
+    <div class="horizontal selector">
+      <div class="item horizontal previewcontainer" id="preview">
+        {#if selectedIndex >= 0}
+          <img class="preview" src={defaultPFPs[selectedIndex]} alt="Selected Avatar" />
+        {:else}
+          <img class="preview hidden" alt="" />
+        {/if}
+      </div>
+      <button class="item selectbutton" on:click={() => setSelectedAvatar(selectedIndex)}>Select</button>
     </div>
     <div class="horizontal">
-        {#each defaultPFPs as pfp}
-            <img class="item" src={pfp.default} alt="pfp" on:click={() => chooseAvatar(pfp.default)} />
-        {/each}
+      {#each defaultPFPs as pfp, i}
+        <img class="item" class:highlighted={selectedIndex===i} id={`img-${i}`} src={pfp} alt="Avatar" on:click={() => setHighlighted(i)} />
+      {/each}
     </div>
-</div>
-
-<style>
+  </div>
+  
+  <style>
     .horizontal {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
+        align-items: flex-start;
     }
-
+  
     .vertical {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: center;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-
+  
     .item {
-        width: 40%;
-        margin: 10px;
-        border-radius: 20px;
+      width: 40%;
+      margin: 5px;
+      border-radius: 20px;
+      opacity: 0.8;
+      border: 2px solid transparent;
+    }
+  
+    .previewcontainer {
+        margin: 0px;
+        margin-left: 10px;
     }
 
-    p {
-        font-size: 20px;
-        /* center in div */
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .preview {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      cursor: default;
     }
-
+  
+    .item:hover {
+      cursor: pointer;
+      opacity: 1;
+    }
+  
+    .highlighted {
+      /* add a green border radius */
+      border: 2px solid #68d46d;
+    }
+  
     button {
-        width: 40%;
-        margin: 10px;
-        border-radius: 20px;
-        height: 100px;
-        font-size: 20px;
-        background-color: #68d46d;
-        opacity: 0.8;
+      width: 40%;
+      margin: 10px;
+      border-radius: 20px;
+      height: 100px;
+      font-size: 20px;
+      background-color: #68d46d;
+      opacity: 0.8;
+      color: black;
+    }
+  
+    button:hover {
+      cursor: pointer;
+      opacity: 1;
     }
 
-    button:hover {
-        cursor: pointer;
-        opacity: 1;
+    .hidden {
+      /* hide the element but still block out the space */
+        visibility: hidden;
     }
-</style>
+  </style>
+  

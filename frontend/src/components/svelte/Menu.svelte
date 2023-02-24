@@ -3,6 +3,9 @@
 
 	export let pathname;
 
+	// get avatarUrl from localStorage key of same name
+	let avatarUrl = localStorage.getItem('avatarUrl');
+
 	const toggleShowUnpinned = () => {
 		console.log("toggling showUnpinned");
 		showUnpinned = !showUnpinned;
@@ -44,31 +47,36 @@
 	}
 </script>
 
-<nav>
-    {#each pinned as item}
-			{#if isActive(item)}
-				<a class="active" href={item.href}>{item.name}</a>
-			{:else}
+<div>
+	{#if avatarUrl}
+		<a href="/profile"><img class="pfp" src={avatarUrl} alt="logo" /></a>
+	{/if}
+	<nav>
+		{#each pinned as item}
+				{#if isActive(item)}
+					<a class="active" href={item.href}>{item.name}</a>
+				{:else}
+					{#if item.comingSoon === true}
+						<a class="disabled" href={item.href}>{item.name}</a>
+					{:else}
+						<a href={item.href}>{item.name}</a>
+					{/if}
+				{/if}
+		{/each}
+
+		{#if showUnpinned}
+			{#each unpinned as item}
 				{#if item.comingSoon === true}
-					<a class="disabled" href={item.href}>{item.name}</a>
+					<button class="disabled" href={""}>{item.name}</button>
 				{:else}
 					<a href={item.href}>{item.name}</a>
 				{/if}
-			{/if}
-    {/each}
-
-	{#if showUnpinned}
-		{#each unpinned as item}
-			{#if item.comingSoon === true}
-				<button class="disabled" href={""}>{item.name}</button>
-			{:else}
-				<a href={item.href}>{item.name}</a>
-			{/if}
-		{/each}
-	{/if}
-	
-	<button id="unpinned-toggle" on:click={toggleShowUnpinned}>{LABEL_MORE}</button>
-</nav>
+			{/each}
+		{/if}
+		
+		<button id="unpinned-toggle" on:click={toggleShowUnpinned}>{LABEL_MORE}</button>
+	</nav>
+</div>
 
 <style>
 	nav {
@@ -138,5 +146,21 @@
 	.disabled:hover {
 		/* make the cursor normal */
 		cursor: default;
+	}
+
+	.pfp {
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		opacity: 0.8;
+		transition: 1s;
+		border: 2px solid rgb(67, 255, 76);
+	}
+
+	.pfp:hover {
+		opacity: 1;
 	}
 </style>

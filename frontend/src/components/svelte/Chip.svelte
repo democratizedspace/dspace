@@ -1,12 +1,12 @@
 <script>
-    export let href, text, onClick;
+    export let href, text, onClick, disabled = false;
 </script>
 
 <nav>
 	{#if href}
 		<a href={href}>{text}</a>
 	{:else}
-		<button on:click={onClick}>{text}</button>
+		<button class:disabled={disabled === true} on:click={onClick}>{text}</button>
 	{/if}
 </nav>
 
@@ -44,5 +44,10 @@
 
 	nav button:hover {
 		cursor: pointer;
+	}
+
+	.disabled {
+		background-color: #004603;
+		color: #8a8a8a;
 	}
 </style>

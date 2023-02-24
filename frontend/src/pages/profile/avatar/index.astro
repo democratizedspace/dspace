@@ -4,9 +4,14 @@ import AvatarPicker from '../../../components/svelte/AvatarPicker.svelte';
 
 const defaultPFPs = await Astro.glob('../../../../public/assets/pfp/*.jpg');
 
-const randomizedPFPs = defaultPFPs.sort(() => Math.random() - 0.5);
+const assetUrls = defaultPFPs.map((url) => url.default.replace('/public', ''));
+
+const randomizedPFPs = assetUrls.sort(() => Math.random() - 0.5);
+
+const filteredPFPs = randomizedPFPs.filter((url) => url !== '/assets/pfp/default.jpg');
+console.log("filteredPFPs: ", filteredPFPs);
 ---
 
 <Page title="Choose your PFP">
-    <AvatarPicker defaultPFPs={randomizedPFPs} client:idle />
+    <AvatarPicker defaultPFPs={filteredPFPs} client:idle />
 </Page>
