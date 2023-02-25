@@ -1,5 +1,4 @@
 import items from './pages/inventory/json/items.json';
-import quests from './pages/quests/json/quests.json';
 
 export const prettyPrintNumber = (number) => {
     const n = parseFloat(number);
@@ -148,27 +147,6 @@ export const addWalletBalance = (req, res, symbol, addBalance) => {
     // TODO: start here
     setCookieValue(res, `currency-balance-${symbol}`, newBalance);
 };
-
-export const isQuestCompleted = (req, questId) => {
-    const cookie = req.headers.get('cookie');
-    return getCookieValue(cookie, `quest-${questId}-finished`) !== undefined;
-}
-
-export const questRequirementsMet = (req, questId) => {
-    const quest = quests.find((quest) => quest.id === questId);
-    if (quest) {
-        const requires = quest.requiresQuests;
-        if (requires) {
-            for (const requirement of requires) {
-                if (!isQuestCompleted(req, requirement)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    return false;
-}
 
 export const fixMarkdownText = (text) => {
     // replace ’ with '

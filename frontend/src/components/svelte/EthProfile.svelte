@@ -6,7 +6,7 @@
 
     const signedIn = writable(false);
     const signedInConfirmed = writable(false);
-    let ethAddress, gm = false;
+    let ethAddress;
 
     onMount(() => {
         console.log('mounted');

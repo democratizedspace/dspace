@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "The unique identifier for the rewards program."
+      },
+      "rewards": {
+        "type": "array",
+        "description": "An array of reward objects.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The unique identifier for the reward."
+            },
+            "count": {
+              "type": "integer",
+              "description": "The number of rewards offered."
+            }
+          },
+          "required": ["id", "count"]
+        }
+      }
+    },
+    "required": ["id", "rewards"]
+  }
+  

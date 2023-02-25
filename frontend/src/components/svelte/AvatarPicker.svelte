@@ -25,6 +25,7 @@
         {/if}
       </div>
       <button class="item selectbutton" on:click={() => setSelectedAvatar(selectedIndex)}>Select</button>
+      Refresh the page to see more random avatars!
     </div>
     <div class="horizontal">
       {#each defaultPFPs as pfp, i}

@@ -1,19 +1,30 @@
 {
-    "steps": [
+    "id": "3dprinting/start",
+    "dialogue": [
+        [
+            {
+              "id": "hello",
+              "text": "Hello, my friend! I couldn't help but notice your interest in 3D printing. If you don't mind me asking, what's your experience with it?",
+              "options": [
+                {
+                  "goto": "interested",
+                  "text": "I've been interested in it for a while but haven't had the chance to get started."
+                },
+                {
+                    "goto": ""
+                }
+              ]
+            }
+        ] 
+    ],
+    "rewards": [
         {
             "id": "0",
-            "title": "To continue, you need the following items:",
-            "requirements": [
-                {
-                    "itemId": "5",
-                    "quantity": 1
-                }
-            ],
-            "unlocks": "1"
+            "count": 1
         },
         {
             "id": "1",
-            "title": ""
+            "count": 1000
         }
     ]
 }
