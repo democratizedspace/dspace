@@ -57,7 +57,7 @@
         },
         {
             "id": "end",
-            "text": ""You've finished the quest!,
+            "text": "You've finished the quest!",
             "options": [
             ]
         }
