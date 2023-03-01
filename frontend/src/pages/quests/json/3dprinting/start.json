@@ -9,13 +9,13 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "interested",
-                    "text": "Definitely! A free 3D printer and filament sounds amazing."
+                    "goto": "learnmore",
+                    "text": "What's 3D printing?"
                 },
                 {
                     "type": "goto",
-                    "goto": "learnmore",
-                    "text": "What's 3D printing?"
+                    "goto": "interested",
+                    "text": "Definitely! A free 3D printer and filament sounds amazing."
                 },
                 {
                     "type": "dismiss",
