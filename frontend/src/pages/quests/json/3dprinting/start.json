@@ -13,8 +13,28 @@
                     "text": "Definitely! A free 3D printer and filament sounds amazing."
                 },
                 {
+                    "type": "goto",
+                    "goto": "learnmore",
+                    "text": "What's 3D printing?"
+                },
+                {
                     "type": "dismiss",
                     "text": "No, I don't think a 3D printer would be of use to me. Thanks anyway."
+                }
+            ]
+        },
+        {
+            "id": "learnmore",
+            "text": "3D printing is a technology that creates physical objects from digital models by laying down successive layers of material. Its applications are diverse, from decor to machine parts to rockets. In rocketry, 3D printing is particularly useful for creating lightweight parts that were previously difficult to make, saving time and money.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interested",
+                    "text": "That sounds really interesting! I'm in!"
+                },
+                {
+                    "type": "dismiss",
+                    "text": "I'm still not quite sure it's right for me at this time. Thanks though."
                 }
             ]
         },
@@ -33,22 +53,12 @@
             "id": "not-interested",
             "text": "Oh, that's too bad. Well, if you change your mind, the offer still stands.",
             "options": [
-                {
-                    "type": "goto",
-                    "goto": "end",
-                    "text": "Okay, thanks!"
-                }
             ]
         },
         {
-            "id": "no-answer",
-            "text": "Take your time to think about it. The 3D printer will be here whenever you're ready.",
+            "id": "end",
+            "text": ""You've finished the quest!,
             "options": [
-                {
-                    "type": "goto",
-                    "goto": "end",
-                    "text": "Okay, thanks!"
-                }
             ]
         }
     ],
