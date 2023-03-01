@@ -1,0 +1,51 @@
+{
+    "id": "3dprinting/testprint",
+    "title": "Print a Benchy",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Congratulations on getting your 3D printer! To help you get started, we'd like to give you a free schematic for printing Benchy, a popular test print shaped like a boat. It's a great way to test your printer's capabilities.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interested",
+                    "text": "Great, I'm interested in printing Benchy!"
+                },
+                {
+                    "type": "dismiss",
+                    "text": "No thanks, I don't want to print Benchy right now."
+                }
+            ]
+        },
+        {
+            "id": "interested",
+            "text": "Awesome! Here's the schematic you need to print Benchy. Happy printing!",
+            "options": [
+                {
+                    "type": "reward",
+                    "id": "0",
+                    "count": 1,
+                    "text": "Thank you!"
+                }
+            ]
+        },
+        {
+            "id": "not-interested",
+            "text": "No problem, if you change your mind later, feel free to come back and get the schematic.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "end",
+                    "text": "Okay, thanks!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "0",
+            "count": 1
+        }
+    ]
+}

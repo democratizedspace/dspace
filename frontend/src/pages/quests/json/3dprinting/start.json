@@ -1,21 +1,56 @@
 {
     "id": "3dprinting/start",
+    "title": "Free 3D printer",
+    "start": "hello",
     "dialogue": [
-        [
-            {
-              "id": "hello",
-              "text": "Hello, my friend! I couldn't help but notice your interest in 3D printing. If you don't mind me asking, what's your experience with it?",
-              "options": [
+        {
+            "id": "hello",
+            "text": "Greetings! We believe that 3D printing is the future of manufacturing, and we want to help you be a part of that future. That's why we're offering you a free 3D printer and some filament. It's yours to keep",
+            "options": [
                 {
-                  "goto": "interested",
-                  "text": "I've been interested in it for a while but haven't had the chance to get started."
+                    "type": "goto",
+                    "goto": "interested",
+                    "text": "Definitely! A free 3D printer and filament sounds amazing."
                 },
                 {
-                    "goto": ""
+                    "type": "dismiss",
+                    "text": "No, I don't think a 3D printer would be of use to me. Thanks anyway."
                 }
-              ]
-            }
-        ] 
+            ]
+        },
+        {
+            "id": "interested",
+            "text": "Great! Here's your 3D printer and some filament to get you started. Have fun printing!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "end",
+                    "text": "Thank you!"
+                }
+            ]
+        },
+        {
+            "id": "not-interested",
+            "text": "Oh, that's too bad. Well, if you change your mind, the offer still stands.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "end",
+                    "text": "Okay, thanks!"
+                }
+            ]
+        },
+        {
+            "id": "no-answer",
+            "text": "Take your time to think about it. The 3D printer will be here whenever you're ready.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "end",
+                    "text": "Okay, thanks!"
+                }
+            ]
+        }
     ],
     "rewards": [
         {
