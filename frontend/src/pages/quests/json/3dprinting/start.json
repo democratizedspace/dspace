@@ -1,10 +1,12 @@
 {
     "id": "3dprinting/start",
-    "title": "Free 3D printer",
+    "title": "Free 3D printer!",
+    "description": "Experience the future of manufacturing with our free 3D printer offer! This interactive dialogue-based experience gives you the chance to claim a 3D printer and some filament to start your own printing projects. Simply choose your options as the dialogue unfolds to receive your reward. Don't miss out on this opportunity to join the 3D printing revolution!",
+    "image": "/assets/quests/start.png",
     "start": "hello",
     "dialogue": [
         {
-            "id": "hello",
+            "id": "start",
             "text": "Greetings! We believe that 3D printing is the future of manufacturing, and we want to help you be a part of that future. That's why we're offering you a free 3D printer and some filament. It's yours to keep",
             "options": [
                 {
@@ -32,17 +34,6 @@
         {
             "id": "not-interested",
             "text": "Oh, that's too bad. Well, if you change your mind, the offer still stands.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "end",
-                    "text": "Okay, thanks!"
-                }
-            ]
-        },
-        {
-            "id": "no-answer",
-            "text": "Take your time to think about it. The 3D printer will be here whenever you're ready.",
             "options": [
                 {
                     "type": "goto",

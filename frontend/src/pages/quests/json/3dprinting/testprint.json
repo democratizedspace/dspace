@@ -1,6 +1,8 @@
 {
     "id": "3dprinting/testprint",
     "title": "Print a Benchy",
+    "image": "/assets/quests/testprint.png",
+    "description": "Welcome to the world of 3D printing! This interactive experience offers you a chance to test your new printer's capabilities with a free schematic for printing Benchy, a popular test print shaped like a boat. Simply choose your options as the dialogue unfolds to receive the schematic and start printing. Join the community of 3D printing enthusiasts and see what your printer can do!",
     "start": "start",
     "dialogue": [
         {

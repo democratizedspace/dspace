@@ -11,9 +11,13 @@ export interface Props {
 ---
 
 <a href="/">
-	<Logo />
+
+	<div class="vertical">
+		<Logo />
+		<span class="text-gradient title">DSPACE</span>
+		<p class="domain">democratized.space</p>
+	</div>
 	
-	<span class="text-gradient title">DSPACE</span>
 </a>
 
 <style>
@@ -60,6 +64,8 @@ export interface Props {
 	.vertical {
 		display: flex;
 		flex-direction: column;
+		/* center */
+		align-items: center;
 	}
 
 	.item {
@@ -75,5 +81,11 @@ export interface Props {
 		padding: 10px;
 		border-radius: 10px;
 		margin-top: 20px;
+	}
+
+	.domain {
+		font-size: 0.8em;
+		color: #00ff22;
+		margin-top: 0px;
 	}
 </style>
