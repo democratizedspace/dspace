@@ -4,6 +4,7 @@
     "description": "Experience the future of manufacturing with our free 3D printer offer! This interactive dialogue-based experience gives you the chance to claim a 3D printer and some filament to start your own printing projects. Simply choose your options as the dialogue unfolds to receive your reward. Don't miss out on this opportunity to join the 3D printing revolution!",
     "image": "/assets/quests/start.png",
     "start": "start",
+    "npc": "/assets/npc/794f0915-4d04-4cb9-91fa-9441e66cf0e5.jpg",
     "dialogue": [
         {
             "id": "start",

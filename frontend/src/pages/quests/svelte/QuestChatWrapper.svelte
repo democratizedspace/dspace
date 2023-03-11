@@ -5,6 +5,9 @@
 
     export let quest, pointer, currentDialogue;
 
+    const npc = quest.npc;
+    const avatar = localStorage.getItem('avatarUrl');
+
     // create a map of reward ids (from quest.rewards) to images using the items list
     let rewardItems = quest.rewards.map(reward => {
         let item = items.find(item => item.id === reward.id);
@@ -46,13 +49,28 @@
     </div>
     <div class="chat">
         <div class="vertical">
-        <img src={quest.image} alt={quest.image} />
-        <QuestChat quest={quest} />
-        {dialogueMap.get(pointer).text}
-
-        {#each dialogueMap.get(pointer).options as option}
-            <Chip text={option.text} onClick={() => onOptionClick(option)}>{option.text}</Chip>
-        {/each}
+            <div>
+                <img class="banner" src={quest.image} alt={quest.image} />
+            </div>
+            <QuestChat quest={quest} />
+            <div class="left">
+                <div class="vertical">
+                    <div class="left">
+                        <img src={npc} alt={npc} />
+                    </div>
+                    <p class="npcDialogue">
+                        {dialogueMap.get(pointer).text}
+                    </p>
+                </div>
+            </div>
+            <div class="right">
+                <img src={avatar} alt={avatar} />
+            </div>
+            {#each dialogueMap.get(pointer).options as option}
+                <div class="right">
+                    <Chip text={option.text} onClick={() => onOptionClick(option)}>{option.text}</Chip>
+                </div>
+            {/each}
         </div>
     </div>
     <h5>Status:</h5>
@@ -86,15 +104,6 @@
         margin: 10px;
     }
 
-    .avatar {
-        width: 400px;
-        height: 400px;
-        border-radius: 20px;
-        /* green border */
-        border: 2px solid #68d46d;
-        margin: 10px;
-    }
-
     .horizontal {
         display: flex;
         flex-direction: row;
@@ -109,5 +118,40 @@
 
     .orange {
         color: orange;
+    }
+
+    .left {
+        background-color: #68d46d;
+        color: black;
+        border-radius: 20px;
+        margin-left: -50%;
+        width: 50%;
+        text-align: left;
+        margin-top: 25px;
+    }
+
+    .right {
+        background-color: #68d46d;
+        color: black;
+        border-radius: 20px;
+        padding: 5px;
+        margin-right: -50%;
+        width: 50%;
+        text-align: right;
+    }
+
+    .npcDialogue {
+        background-color: #68d46d;
+        color: black;
+        border-radius: 20px;
+        margin-left: -30%;
+        width: 66%;
+        text-align: left;
+    }
+
+    .banner {
+        width: 110%;
+        height: auto;
+        margin: -5%;
     }
 </style>

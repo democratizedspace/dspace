@@ -49,10 +49,6 @@
 <div id="container">
     {#if $signedIn }
         <p>gm, {ethAddress.slice(0, 6)}...{ethAddress.slice(-4)}!</p>
-        
-        <Chip text="say gm" href="/gm" />
-        <Chip text="choose NFT as avatar" href="/profile/avatar/nft" />
-        <Chip text="change your username" href="/profile/username/edit" />
 
         <div style="height: 100px;"></div>
 

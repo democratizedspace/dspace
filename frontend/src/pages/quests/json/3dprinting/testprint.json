@@ -3,6 +3,7 @@
     "title": "Print Benchy",
     "description": "Test your 3D printer's capabilities by printing Benchy, a popular test print.",
     "image": "/assets/quests/testprint.png",
+    "npc": "/assets/npc/794f0915-4d04-4cb9-91fa-9441e66cf0e5.jpg",
     "start": "start",
     "dialogue": [
         {
