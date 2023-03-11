@@ -1,25 +1,15 @@
 ---
 import Page from '../../components/Page.astro';
-import ItemCount from '../../components/ItemCount.astro';
 import Warning from '../../components/Warning.astro';
 import Process from './process.svelte';
 
 import { getProcess } from './utils.js';
-import { getItemCount } from '../inventory/utils.js';
 
 const { processId } = Astro.params;
 
 let errorMessage, hideProcess = false, error;
 
 const process = getProcess(processId);
-
-for (const item of process.consumeItems) {
-    const actualCount = getItemCount(Astro.request, item.id);
-    if (actualCount < item.count) {
-        error = 'notenoughitems';
-        break;
-    }
-}
 
 if (!error) { 
     error = Astro.url.searchParams.get('error');
@@ -43,9 +33,6 @@ const title = process ? process.title : 'Process not found';
 
 <Page title={title} columns="1">
     { errorMessage && <Warning title={errorMessage} /> }
-    <Process processId={processId} client:idle machineCount={getItemCount(Astro.request, process.machine)} />
     <h3>Consumes:</h3>
-    <ItemCount itemList={process.consumeItems} />
     <h3>Creates:</h3>
-    <ItemCount itemList={process.createItems} />
 </Page>

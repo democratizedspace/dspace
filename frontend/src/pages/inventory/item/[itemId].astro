@@ -2,16 +2,12 @@
 import Page from '../../../components/Page.astro';
 import items from '../json/items.json';
 import Chip from '../../../components/Chip.astro';
-import ItemCount from '../../../components/ItemCount.astro';
-import { getItemCount } from '../utils';
 
 const { itemId } = Astro.params;
 
 const item = items.find((item) => item.id === itemId);
 
 const { id, name, description, image, creationTitle, price } = item;
-
-const itemCount = getItemCount(Astro.request, itemId);
 
 const isCurrency = item.type === 'currency';
 ---
@@ -26,12 +22,6 @@ const isCurrency = item.type === 'currency';
     </div>
     {creationTitle && <Chip text={creationTitle} href={`/inventory/add/${id}`} />}
     <h3>Count:</h3>
-    <ItemCount itemList={[
-        {
-            "id": itemId,
-            "count": itemCount
-        }
-    ]} />
 </Page>
 
 <style>

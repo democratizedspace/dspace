@@ -1,6 +1,5 @@
 import processes from './processes.json';
 import { getCookieValue, setCookieValue, datetimeAfterDuration, durationInSeconds } from '../../utils.js';
-import { getItemCount, burnItem, addItemToInventory } from '../inventory/utils.js';
 
 export const getProcess = (processId) => {
     const process = processes.find((process) => process.id === processId);
@@ -84,25 +83,8 @@ export const finalizeProcess = (req, res, processId) => {
 
     const { consumeItems, createItems } = process;
 
-    // check if the user has enough of each item in the consumeItems list
-    for (const consumeItem of consumeItems) {
-        const actualCount = getItemCount(req, consumeItem.id);
-        if (actualCount < consumeItem.count) {
-            return {
-                success: false,
-                reason: 'notenoughitems'
-            };
-        }
-    }
-
     // consume the items in the consumeItems list
     for (const consumeItem of consumeItems) {
-        burnItem(req, res, consumeItem.id, consumeItem.count);
-    }
-
-    // add the items in the createItems list
-    for (const createItem of createItems) {
-        addItemToInventory(req, res, createItem.id, createItem.count);
     }
 
     // create a cooldown based on the process duration
