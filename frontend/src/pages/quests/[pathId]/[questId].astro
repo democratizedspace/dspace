@@ -9,11 +9,14 @@ const { pathId, questId } = Astro.params;
 
 quests = await Astro.glob('../json/*/*.json');
 
-for (const q of quests) {
-    const id = q.default.id;
-    const parentQuestId = `${pathId}/${questId}`;
-    quest = q.default;
-}
+console.log("questId", questId);
+console.log("pathId", pathId);
+console.log("quests", quests);
+quest = quests.find((quest) => {
+    console.log("quest.default.id", quest.default.id);
+    return quest.default.id === `${pathId}/${questId}`;
+});
+console.log("quest", quest);
 ---
 
 <Page>

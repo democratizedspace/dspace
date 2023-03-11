@@ -6,6 +6,7 @@
     export let quest, pointer, currentDialogue;
 
     const npc = quest.npc;
+    console.log("npc: " + npc);
     const avatar = localStorage.getItem('avatarUrl');
 
     // create a map of reward ids (from quest.rewards) to images using the items list
