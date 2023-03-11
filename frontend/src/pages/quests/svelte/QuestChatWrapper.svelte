@@ -80,7 +80,7 @@
     <div class="vertical">
         {#each rewardItems as item}
             <div class="horizontal">
-                <img src={item.image} alt={item.image} />
+                <img class="item" src={item.image} alt={item.image} />
                 <p>{item.count} x {item.name}</p>
             </div>
         {/each}
@@ -97,8 +97,17 @@
     }
 
     img {
-        width: 40px;
-        height: 40px;
+        width: 200px;
+        height: 200px;
+        border-radius: 20px;
+        /* green border */
+        border: 2px solid #68d46d;
+        margin: 10px;
+    }
+
+    .item {
+        width: 50px;
+        height: 50px;
         border-radius: 20px;
         /* green border */
         border: 2px solid #68d46d;
