@@ -123,10 +123,9 @@
 
     .left {
         background-color: #68d46d;
-        color: black;
         border-radius: 20px;
-        margin-left: -50%;
-        width: 50%;
+        margin-left: -10%;
+        width: 90%;
         text-align: left;
         margin-top: 25px;
     }
@@ -136,18 +135,22 @@
         color: black;
         border-radius: 20px;
         padding: 5px;
-        margin-right: -50%;
-        width: 50%;
+        margin-right: -30%;
+        width: 70%;
         text-align: right;
     }
 
     .npcDialogue {
-        background-color: #68d46d;
-        color: black;
+        background-color: #004603;
+        /* background-color to a complimentary color of above */
+
+        color: white;
+        padding: 10px;
         border-radius: 20px;
         margin-left: -30%;
         width: 66%;
         text-align: left;
+        opacity: 0.8;
     }
 
     .banner {
