@@ -28,5 +28,6 @@
 <style>
     a {
         text-decoration: none;
+        margin: 50px;
     }
 </style>

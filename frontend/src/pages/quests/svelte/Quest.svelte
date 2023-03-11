@@ -41,8 +41,8 @@
         margin: -10px;
         /* preserve aspect ratio */
         object-fit: cover;
-        /* zoom out */
-
+        /* green border */
+        border: 5px solid #68d46d;
     }
 
     p {

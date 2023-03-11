@@ -7,7 +7,6 @@
 	let avatarUrl = localStorage.getItem('avatarUrl');
 
 	const toggleShowUnpinned = () => {
-		console.log("toggling showUnpinned");
 		showUnpinned = !showUnpinned;
 
 		// edit unpinned-toggle button text

@@ -1,30 +1,75 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-      "id": {
-        "type": "string",
-        "description": "The unique identifier for the rewards program."
-      },
-      "rewards": {
-        "type": "array",
-        "description": "An array of reward objects.",
-        "items": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "The unique identifier for the reward."
-            },
-            "count": {
-              "type": "integer",
-              "description": "The number of rewards offered."
-            }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string"
+    },
+    "start": {
+      "type": "string"
+    },
+    "dialogue": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
           },
-          "required": ["id", "count"]
-        }
+          "text": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["goto", "dismiss"]
+                },
+                "goto": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": ["type", "text"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["id", "text", "options"],
+        "additionalProperties": false
       }
     },
-    "required": ["id", "rewards"]
-  }
-  
+    "rewards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "required": ["id", "count"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "title", "description", "image", "start", "dialogue", "rewards"],
+  "additionalProperties": false
+}

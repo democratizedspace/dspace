@@ -2,6 +2,8 @@
     import items from '../../pages/inventory/json/items.json';
     import ItemCard from './ItemCard.svelte';
 
+    import { count } from '../../pages/inventory/utils.js';
+
     export let itemType, includeTypes;
 
     let filteredItems = items.filter(item => item.type === itemType);
@@ -9,8 +11,6 @@
     if (includeTypes) {
         filteredItems = filteredItems.filter(item => includeTypes.includes(item.type));
     }
-
-    console.log(filteredItems);
 </script>
 
 <div class="horizontal">
@@ -23,7 +23,6 @@
 <style>
     img {
         /* small icon */
-        width: 80%;
         margin: 5px;
         border-radius: 20px;
         /* nice green color for game rarity */
@@ -38,7 +37,6 @@
         width: 25%;
         /* wrap content */
         flex-wrap: wrap;
-        min-height: 200px;
         opacity: 0.8;
         padding: 20px;
     }

@@ -9,35 +9,26 @@
     let ethAddress;
 
     onMount(() => {
-        console.log('mounted');
         const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
 
-        if (web3.currentProvider.isMetaMask === true) {
-            console.log("MetaMask is available.");
-        } else {
+        if (web3.currentProvider.isMetaMask !== true) {
             console.error("MetaMask is not available.");
         }
 
         ethAddress = localStorage.getItem('ethAddress');
-        console.log("ethAddress:", ethAddress);
         if (ethAddress) {
-            console.log("Found ethAddress in localStorage:", ethAddress);
             signedIn.set(true);
             signedInConfirmed.set(true);
         } else {
-            console.log("No ethAddress in localStorage.");
             signedInConfirmed.set(true);
         }
     });
 
     function handleSignIn() {
-        console.log('clicked');
-
         if (window.ethereum) {
             window.ethereum.request({ method: 'eth_requestAccounts' }).then(function (accounts) {
                 ethAddress = accounts[0];
                 localStorage.setItem('ethAddress', ethAddress);
-                console.log("Signed in with account:", ethAddress);
                 signedIn.set(true);
 
             }).catch(function (error) {
@@ -49,7 +40,6 @@
     }
 
     function handleSignOut() {
-        console.log('clicked');
         localStorage.removeItem('ethAddress');
         signedIn.set(false);
 

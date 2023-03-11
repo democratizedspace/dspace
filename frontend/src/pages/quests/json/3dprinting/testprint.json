@@ -1,52 +1,103 @@
 {
     "id": "3dprinting/testprint",
-    "title": "Print a Benchy",
+    "title": "Print Benchy",
+    "description": "Test your 3D printer's capabilities by printing Benchy, a popular test print.",
     "image": "/assets/quests/testprint.png",
-    "description": "Welcome to the world of 3D printing! This interactive experience offers you a chance to test your new printer's capabilities with a free schematic for printing Benchy, a popular test print shaped like a boat. Simply choose your options as the dialogue unfolds to receive the schematic and start printing. Join the community of 3D printing enthusiasts and see what your printer can do!",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Congratulations on getting your 3D printer! To help you get started, we'd like to give you a free schematic for printing Benchy, a popular test print shaped like a boat. It's a great way to test your printer's capabilities.",
+            "text": "Welcome to Print Benchy, the ultimate 3D printing challenge! Are you ready to show off your skills and produce a beautiful Benchy?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "interested",
-                    "text": "Great, I'm interested in printing Benchy!"
+                    "goto": "instructions",
+                    "text": "Let's do it!"
                 },
                 {
                     "type": "dismiss",
-                    "text": "No thanks, I don't want to print Benchy right now."
+                    "text": "Not now, maybe next time!"
                 }
             ]
         },
         {
-            "id": "interested",
-            "text": "Awesome! Here's the schematic you need to print Benchy. Happy printing!",
-            "options": [
-                {
-                    "type": "reward",
-                    "id": "0",
-                    "count": 1,
-                    "text": "Thank you!"
-                }
-            ]
-        },
-        {
-            "id": "not-interested",
-            "text": "No problem, if you change your mind later, feel free to come back and get the schematic.",
+            "id": "instructions",
+            "text": "To produce a great Benchy, you'll need to follow some key guidelines. First, make sure your printer is calibrated correctly. Second, choose the right filament and print settings. And third, be patient and careful during the print process. Ready to get started?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "end",
-                    "text": "Okay, thanks!"
+                    "goto": "print",
+                    "text": "I'm ready!"
+                },
+                {
+                    "type": "dismiss",
+                    "text": "Thanks anyway, not up for the challenge!"
                 }
             ]
+        },
+        {
+            "id": "print",
+            "text": "Follow these steps to produce a perfect Benchy:",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "step1",
+                    "text": "Step 1: Calibrate your printer"
+                },
+                {
+                    "type": "goto",
+                    "goto": "step2",
+                    "text": "Step 2: Choose the right filament and settings"
+                },
+                {
+                    "type": "goto",
+                    "goto": "step3",
+                    "text": "Step 3: Print with care"
+                }
+            ]
+        },
+        {
+            "id": "step1",
+            "text": "Calibrate your printer correctly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Back to printing instructions"
+                }
+            ]
+        },
+        {
+            "id": "step2",
+            "text": "Choose the right filament and print settings.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Back to printing instructions"
+                }
+            ]
+        },
+        {
+            "id": "step3",
+            "text": "Print with care following these tips.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "I'm ready to print!"
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Congratulations on completing the Print Benchy quest!",
+            "options": []
         }
     ],
     "rewards": [
         {
-            "id": "0",
+            "id": "1",
             "count": 1
         }
     ]
