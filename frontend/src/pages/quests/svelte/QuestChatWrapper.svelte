@@ -150,7 +150,7 @@
         margin-left: -30%;
         width: 66%;
         text-align: left;
-        opacity: 0.8;
+        opacity: 0.6;
     }
 
     .banner {
