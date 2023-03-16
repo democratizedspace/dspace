@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Greetings! We believe that 3D printing is the future of manufacturing, and we want to help you be a part of that future. That's why we're offering you a free 3D printer and some filament. It's yours to keep",
+            "text": "Hello! We believe that democratized 3D printing is the future of manufacturing, and we want to help you be a part of that future. That's why we're offering you a free 3D printer and some filament. It's yours to keep, no strings attached.",
             "options": [
                 {
                     "type": "goto",
@@ -42,16 +42,9 @@
             "text": "Great! Here's your 3D printer and some filament to get you started. Have fun printing!",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "end",
+                    "type": "finish",
                     "text": "Thank you!"
                 }
-            ]
-        },
-        {
-            "id": "end",
-            "text": "You've finished the quest!",
-            "options": [
             ]
         }
     ],
@@ -64,5 +57,8 @@
             "id": "12",
             "count": 1000
         }
+    ],
+    "requiresQuests": [
+        "welcome/howtodoquests"
     ]
 }

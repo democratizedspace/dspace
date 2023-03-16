@@ -560,5 +560,33 @@
         "description": "Generate 1 kW of electricity using solar panels.",
         "image": "/assets/blueprints/solar_1kW.jpg",
         "type": "blueprint"
+    },
+    {
+        "id": "82",
+        "name": "3D printed nosecone",
+        "description": "A 3D printed nosecone for a model rocket.",
+        "image": "/assets/blueprints/nosecone.jpg",
+        "type": "blueprint"
+    },
+    {
+        "id": "83",
+        "name": "3D printed body tube",
+        "description": "A 3D printed body tube for a model rocket.",
+        "image": "/assets/blueprints/body_tube.jpg",
+        "type": "blueprint"
+    },
+    {
+        "id": "84",
+        "name": "3D printed fincan",
+        "description": "A 3D printed fincan for a model rocket.",
+        "image": "/assets/blueprints/fincan.jpg",
+        "type": "blueprint"
+    },
+    {
+        "id": "85",
+        "name": "3D printed coupler",
+        "description": "A 3D printed coupler for a model rocket.",
+        "image": "/assets/blueprints/coupler.jpg",
+        "type": "blueprint"
     }
 ]

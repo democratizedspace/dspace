@@ -15,9 +15,11 @@
 </script>
 
 <div class="vertical item">
-    <img alt={item.title} src={item.image} />
-    <h4 class="name">{item.name}</h4>
-    <p class="description">{truncateString(item.description)}</p>
+    <div class="horizontal">
+        <img alt={item.title} src={item.image} />
+        <h4 class="name">{item.name}</h4>
+    </div>
+    <p>{truncateString(item.description)}</p>
     <p><strong>Count:</strong> 0</p>
     <p><strong>Price:</strong> 0 dUSD</p>
 </div>
@@ -25,10 +27,11 @@
 <style>
     img {
         /* small icon */
-        width: 100%;
+        width: 50px;
+        height: 50px;
         border-radius: 20px;
-        /* nice green color for game rarity */
-        border: 5px solid rgb(0, 89, 255);
+        object-fit: cover;
+        margin: 10px;
     }
 
     p {
@@ -38,12 +41,7 @@
     }
 
     .name {
-        min-height: 80px;
         text-align: center;
-    }
-
-    .description {
-        min-height: 80px;
     }
 
     .item {
@@ -51,18 +49,9 @@
         border-radius: 10px;
         background-color: #68d46d;
         color: black;
-        width: 30%;
+        width: 100%;
         opacity: 0.8;
-        padding: 20px;
-        padding-left: 10px;
-        padding-top: 10px;
-    }
-
-    /* for mobile devices, make the description text smaller */
-    @media only screen and (max-width: 600px) {
-        .description {
-            font-size: 0.6rem;
-        }
+        padding: 10px;
     }
 
     .item:hover {
@@ -78,8 +67,6 @@
     .horizontal {
         display: flex;
         flex-direction: row;
-        justify-content: center;
-        align-items: center;
         flex-wrap: wrap;
     }
   </style>

@@ -1,9 +1,8 @@
 <script>
-    import QuestChat from './QuestChat.svelte';
     import items from '../../inventory/json/items.json';
     import Chip from '../../../components/svelte/Chip.svelte';
 
-    export let quest, pointer, currentDialogue;
+    export let quest, pointer, currentDialogue, finished;
 
     const npc = quest.npc;
     console.log("npc: " + npc);
@@ -34,6 +33,26 @@
 
         if (option.type === "dismiss") {
             window.location.pathname = '/quests';
+            return;
+        }
+
+        if (option.type === "finish") {
+            localStorage.setItem(`quest-${quest.id}-finished`, true);
+
+            // add rewards to inventory
+            rewardItems.forEach(item => {
+                let inventoryItem = JSON.parse(localStorage.getItem(`inventory-${item.id}`));
+                if (inventoryItem) {
+                    inventoryItem.count += item.count;
+                    localStorage.setItem(`inventory-${item.id}`, JSON.stringify(inventoryItem));
+                } else {
+                    localStorage.setItem(`inventory-${item.id}`, JSON.stringify(item));
+                }
+            });
+
+            window.location.pathname = `/quests/${quest.id}/finished`;
+
+            return;
         }
 
         pointer = option.goto;
@@ -48,36 +67,46 @@
             <h3>{quest.title}</h3>
         </div>
     </div>
-    <div class="chat">
-        <div class="vertical">
-            <div>
-                <img class="banner" src={quest.image} alt={quest.image} />
+    {#if finished}
+        <div class="chat">
+            <div class="vertical">
+                <h4>Quest Complete!</h4>
+                <p>You have completed this quest. You can now return to the Quests page to start another quest.</p>
             </div>
-            <QuestChat quest={quest} />
-            <div class="left">
-                <div class="vertical">
-                    <div class="left">
-                        <img src={npc} alt={npc} />
-                    </div>
-                    <p class="npcDialogue">
-                        {dialogueMap.get(pointer).text}
-                    </p>
-                </div>
-            </div>
-            <div class="right">
-                <img src={avatar} alt={avatar} />
-            </div>
-            {#each dialogueMap.get(pointer).options as option}
-                <div class="right">
-                    <Chip text={option.text} onClick={() => onOptionClick(option)}>{option.text}</Chip>
-                </div>
-            {/each}
         </div>
+    {:else}
+        <div class="chat">
+            <div class="vertical">
+                <div>
+                    <img class="banner" src={quest.image} alt={quest.image} />
+                </div>
+
+                <div class="left">
+                    <div class="vertical">
+                        <div class="left">
+                            <img src={npc} alt={npc} />
+                        </div>
+                        <p class="npcDialogue">
+                            {dialogueMap.get(pointer).text}
+                        </p>
+                    </div>
+                </div>
+                <div class="right">
+                    <img src={avatar} alt={avatar} />
+                    {#each dialogueMap.get(pointer).options as option}
+                        <div class="right option">
+                            <Chip text={option.text} onClick={() => onOptionClick(option)}>{option.text}</Chip>
+                        </div>
+                    {/each}
+                </div>
+            </div>
+        </div>
+    {/if}
     </div>
-    <h5>Status:</h5>
-    <p class="orange">In Progress</p>
-    <h5>Rewards:</h5>
     <div class="vertical">
+        <h5>Status:</h5>
+        <p class="green">Complete</p>
+        <h5>Rewards:</h5>
         {#each rewardItems as item}
             <div class="horizontal">
                 <img class="item" src={item.image} alt={item.image} />
@@ -85,7 +114,6 @@
             </div>
         {/each}
     </div>
-</div>
 
 <style>
     .chat {
@@ -93,16 +121,15 @@
         background-color: #68d46d;
         color: black;
         border-radius: 20px;
-        padding: 20px;
+        padding: 10px;
     }
 
     img {
-        width: 200px;
-        height: 200px;
+        width: 100px;
+        height: 100px;
         border-radius: 20px;
         /* green border */
         border: 2px solid #68d46d;
-        margin: 10px;
     }
 
     .item {
@@ -111,7 +138,7 @@
         border-radius: 20px;
         /* green border */
         border: 2px solid #68d46d;
-        margin: 10px;
+        margin: 5px;
     }
 
     .horizontal {
@@ -133,8 +160,6 @@
     .left {
         background-color: #68d46d;
         border-radius: 20px;
-        margin-left: -10%;
-        width: 90%;
         text-align: left;
         margin-top: 25px;
     }
@@ -145,26 +170,38 @@
         border-radius: 20px;
         padding: 5px;
         margin-right: -30%;
-        width: 70%;
         text-align: right;
     }
 
     .npcDialogue {
-        background-color: #004603;
-        /* background-color to a complimentary color of above */
-
+        background-color: #545854;
+        margin: 20px;
         color: white;
         padding: 10px;
         border-radius: 20px;
-        margin-left: -30%;
-        width: 66%;
         text-align: left;
-        opacity: 0.6;
+        opacity: 0.9;
+        border: 2px solid #29472b;
+    }
+
+    .npcDialogue:hover {
+        opacity: 1;
     }
 
     .banner {
-        width: 110%;
-        height: auto;
-        margin: -5%;
+        width: 200px;
+        height: 200px;
+        margin-top: -15px;
+    }
+
+    .option {
+        max-width: 100%;
+    }
+
+    .green {
+        color: white;
+        background-color: green;
+        padding: 30px;
+        border-radius: 20px;
     }
 </style>

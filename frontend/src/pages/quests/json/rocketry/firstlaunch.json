@@ -1,0 +1,73 @@
+{
+    "id": "3dprinting/firstlaunch",
+    "title": "First rocket launch!",
+    "description": "Print and launch your own model rocket. Follow the steps to print, assemble, and launch the rocket. Get ready for liftoff!",
+    "image": "/assets/quests/firstlaunch.png",
+    "npc": "/assets/npc/794f0915-4d04-4cb9-91fa-9441e66cf0e5.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Welcome to the first rocket launch quest! Are you ready to print and launch your own model rocket?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "instructions",
+                    "text": "Yes, let's do it!"
+                },
+                {
+                    "type": "dismiss",
+                    "text": "Not interested at this time."
+                }
+            ]
+        },
+        {
+            "id": "instructions",
+            "text": "To launch your model rocket, print and assemble the rocket, prepare the launch site, and launch the rocket.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "I'm ready to print!"
+                },
+                {
+                    "type": "dismiss",
+                    "text": "Not up for the challenge."
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Print and assemble the rocket, and prepare the launch site.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "launch",
+                    "text": "I'm ready to launch!"
+                }
+            ]
+        },
+        {
+            "id": "launch",
+            "text": "Launch the rocket following these tips and guidelines.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Congratulations!"
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Congratulations on launching your first model rocket!",
+            "options": []
+        }
+    ],
+    "rewards": [
+        {
+            "id": "6",
+            "count": 1
+        }
+    ]
+}

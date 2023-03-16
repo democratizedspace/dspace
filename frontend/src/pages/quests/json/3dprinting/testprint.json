@@ -93,7 +93,12 @@
         {
             "id": "done",
             "text": "Congratulations on completing the Print Benchy quest!",
-            "options": []
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks!"
+                }
+            ]
         }
     ],
     "rewards": [

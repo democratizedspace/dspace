@@ -1,0 +1,84 @@
+{
+    "id": "3dprinting/parachute",
+    "title": "Print a parachute",
+    "description": "Print a functioning parachute and learn about the science behind it. Follow the instructions to print and assemble your parachute, and then test it out!",
+    "image": "/assets/quests/parachute.png",
+    "npc": "/assets/npc/794f0915-4d04-4cb9-91fa-9441e66cf0e5.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Welcome to the parachute quest! Are you ready to print and assemble a functioning parachute?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "instructions",
+                    "text": "Yes, let's do it!"
+                },
+                {
+                    "type": "dismiss",
+                    "text": "Not interested at this time."
+                }
+            ]
+        },
+        {
+            "id": "instructions",
+            "text": "To print and assemble your parachute, follow these steps: 1) Print the parachute and its components, 2) Assemble the parachute, 3) Test the parachute. Are you ready to proceed?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "I'm ready to print!"
+                },
+                {
+                    "type": "dismiss",
+                    "text": "Not up for the challenge."
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Print the parachute and its components following these guidelines.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "I'm ready to assemble!"
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Assemble the parachute according to the instructions.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "test",
+                    "text": "I'm ready to test!"
+                }
+            ]
+        },
+        {
+            "id": "test",
+            "text": "Test the parachute and observe how it works.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Congratulations!"
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Congratulations on printing and testing your own parachute!",
+            "options": []
+        }
+    ],
+    "rewards": [
+        {
+            "id": "4",
+            "count": 1
+        }
+    ]
+}
