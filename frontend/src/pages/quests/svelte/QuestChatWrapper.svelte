@@ -76,25 +76,21 @@
         </div>
     {:else}
         <div class="chat">
-            <div class="vertical">
+            <div>
                 <div>
                     <img class="banner" src={quest.image} alt={quest.image} />
                 </div>
 
                 <div class="left">
-                    <div class="vertical">
-                        <div class="left">
-                            <img src={npc} alt={npc} />
-                        </div>
-                        <p class="npcDialogue">
-                            {dialogueMap.get(pointer).text}
-                        </p>
-                    </div>
+                    <img src={npc} alt={npc} />
+                    <p class="npcDialogue left">
+                        {dialogueMap.get(pointer).text}
+                    </p>
                 </div>
-                <div class="right">
+                <div class="right options">
                     <img src={avatar} alt={avatar} />
                     {#each dialogueMap.get(pointer).options as option}
-                        <div class="right option">
+                        <div class="option">
                             <Chip text={option.text} onClick={() => onOptionClick(option)}>{option.text}</Chip>
                         </div>
                     {/each}
@@ -105,7 +101,11 @@
     </div>
     <div class="vertical">
         <h5>Status:</h5>
-        <p class="green">Complete</p>
+        {#if finished}
+            <p class="green">Complete</p>
+        {:else}
+            <p class="orange">In Progress</p>
+        {/if}
         <h5>Rewards:</h5>
         {#each rewardItems as item}
             <div class="horizontal">
@@ -121,7 +121,11 @@
         background-color: #68d46d;
         color: black;
         border-radius: 20px;
-        padding: 10px;
+        padding: 30px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 30px;
     }
 
     img {
@@ -141,47 +145,16 @@
         margin: 5px;
     }
 
-    .horizontal {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .vertical {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .orange {
-        color: orange;
-    }
-
-    .left {
-        background-color: #68d46d;
-        border-radius: 20px;
-        text-align: left;
-        margin-top: 25px;
-    }
-
-    .right {
-        background-color: #68d46d;
-        color: black;
-        border-radius: 20px;
-        padding: 5px;
-        margin-right: -30%;
-        text-align: right;
-    }
-
     .npcDialogue {
-        background-color: #545854;
-        margin: 20px;
-        color: white;
+        background-color: #a4f1b1;
+        color: black;
         padding: 10px;
         border-radius: 20px;
         text-align: left;
         opacity: 0.9;
-        border: 2px solid #29472b;
+        border: 1px solid #24cf2f;
+        width: 80%;
+        margin-top: 10px;
     }
 
     .npcDialogue:hover {
@@ -189,19 +162,55 @@
     }
 
     .banner {
-        width: 200px;
-        height: 200px;
-        margin-top: -15px;
+        width: 120%;
+        height: 300px;
+        object-fit: cover;
+        margin-left: -10%;
+        margin-top: -10%;
+    }
+
+    /* mobile */
+    @media only screen and (max-width: 600px) {
+        .banner {
+            width: 120%;
+            margin: -10%;
+            margin-bottom: 0px;
+        }
+    }
+
+    .left {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .right {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .option {
-        max-width: 100%;
+        margin: 5px;
     }
 
-    .green {
-        color: white;
-        background-color: green;
-        padding: 30px;
-        border-radius: 20px;
+    .options > img {
+        margin: 5px;
     }
 </style>

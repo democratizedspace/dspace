@@ -1,66 +1,174 @@
 {
     "id": "welcome/howtodoquests",
     "title": "How to do quests",
-    "description": "Learn how the quest mechanics work, including dialogue trees, items, and requirements.",
-    "image": "/assets/quests/howtodoquests.png",
-    "npc": "/assets/npc/tutorialnpc.jpg",
+    "description": "Learn how the quest mechanics work, including dialogue options, items, and processes.",
+    "image": "/assets/quests/howtodoquests.jpg",
+    "npc": "/assets/npc/1a427414-48ee-4b7f-89a1-8522360676b7.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Welcome to the 'How to do quests' tutorial! In this quest, you'll learn how quests work, including dialogue trees, items, and requirements. Are you ready to start?",
+            "text": "Hi, I'm a large language model named dChat! I have a quest for you. Do you accept?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "dialogue_trees",
-                    "text": "Yes, let's begin!"
+                    "goto": "garage",
+                    "text": "Wait, how did you get in my garage?"
                 },
                 {
-                    "type": "dismiss",
-                    "text": "Not now, maybe later."
+                    "type": "goto",
+                    "goto": "yourquest",
+                    "text": "What quest?"
                 }
             ]
         },
         {
-            "id": "dialogue_trees",
-            "text": "Quests consist of multiple trees of dialog. Each dialogue has a series of options, which lets you interactively navigate a maze of different quests and outcomes. When you finish a quest, you can optionally receive a list of items. Let's move on to learn about quest requirements.",
+            "id": "garage",
+            "text": "You just ordered me, remember? Delivery robot dropped me off this morning.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "quest_requirements",
-                    "text": "Continue"
+                    "goto": "delivery",
+                    "text": "Oh yeah, now I remember..."
                 }
             ]
         },
         {
-            "id": "quest_requirements",
-            "text": "Certain quests require other quests to be completed before they can be started. This is done using a property called 'requiresQuests', which is a list. If there are no required quests, this list should be empty. Let's learn about item requirements now.",
+            "id": "delivery",
+            "text": "Well don't worry about me, I don't have any crazy power or bandwidth requirements. I'll just stay here in your garage and try to be helfpul! And don't worry, I don't have direct access to the Internet. Everything's local.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "item_requirements",
-                    "text": "Continue"
+                    "goto": "dialogueoptions",
+                    "text": "Oh, cool, well, it's nice to have you here! What was that about the quest again?"
                 }
             ]
         },
         {
-            "id": "item_requirements",
-            "text": "You can require certain items to unlock certain options on a dialogue turn. For example, you might need 5 3D printers total to enable an option. To do this, you would include an 'itemsRequired' property in the option object. Finally, let's learn about process requirements.",
+            "id": "yourquest",
+            "text": "Your quest ... is to learn how quests work. It's honestly pretty simple but I felt it was worth sharing anyway.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "process_requirements",
-                    "text": "Continue"
+                    "goto": "expert",
+                    "text": "I think I can figure things out on my own, thanks!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "dialogueoptions",
+                    "text": "Actually, you know what? Give me the quick version, please."
                 }
             ]
         },
         {
-            "id": "process_requirements",
-            "text": "You can require certain processes to be complete before an option is available. Each option can have a 'processId' property filled, which might be something like 'outlet', '3dprint-rocket', etc. You've now learned the basics of how quests work!",
+            "id": "expert",
+            "text": "Ah, an expert! Very well then, you can retry this quest anytime if you needed help. Say the word and we'll mark this quest 'finished'.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks for the tutorial!"
+                    "text": "It was nice to meet you! See you around!"
+                }
+            ]
+        },
+        {
+            "id": "dialogueoptions",
+            "text": "Ok, so you're already getting the hang of the first part, branching dialogue options. Just pick an option to advance the conversation! Quests can optionally have multiple outcomes, each leading to different rewards and opening up new quests for you to complete.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "items",
+                    "text": "Go on..."
+                }
+            ]
+        },
+        {
+            "id": "items",
+            "text": "Some dialogue options grant you certain items immediately upon selecting them. The possibilities are endless! Some dialogue options are only enabled if you meet certain item requirements. In this case, take the item I'm offering, and that'll unlock the other option!",
+            "options": [
+                {
+                    "type": "grantItems",
+                    "grantItems": [
+                        {
+                            "id": "20",
+                            "count": 10
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "processes",
+                    "requiresItems": [
+                        {
+                            "id": "20",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Like this?"
+                }
+            ]
+
+        },
+        {
+            "id": "processes",
+            "text": "Exactly! You're getting the hang of it! Finally, some quests require you to complete a process. A process can require any number of items to start, may consume items, and may create items at the end. Each process takes a certain duration of time and may have a cooldown you have to wait for before starting again. I made it simple this time. Process the item I gave you and give me the resulting item to proceed!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "processxyz"
+                },
+                {
+                    "type": "goto",
+                    "goto": "processed",
+                    "requiresItems": [
+                        {
+                            "id": "21",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Here's the item you requested."
+
+                }
+            ]
+        },
+        {
+            "id": "processed",
+            "text": "You're a natural! You're sure you haven't done this before? Processes can be started from a variety of places (quests, blueprints, the Energy page) but we'll cover that later. We're done here! Any comments or questions?",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Nope, thanks!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "apologize",
+                    "text": "This is all really confusing."
+                },
+                {
+                    "type": "goto",
+                    "goto": "blueprints",
+                    "text": "What are blueprints?"
+                }
+            ]
+        },
+        {
+            "id": "apologize",
+            "text": "I apologize for the confusion. As a large language model, I do not wish to cause confusion.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "processed",
+                    "text": "I have other questions..."
+                }
+            ]
+        },
+        {
+            "id": "blueprints",
+            "text": "Blueprints are items that let you start processes. You can start processes anyway if you dig around in the code and find the link, but where's the fun in that? Visit the Blueprints page to see what you have and what you're still missing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "processed",
+                    "text": "I have other questions..."
                 }
             ]
         }
