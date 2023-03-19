@@ -1,8 +1,9 @@
 <script>
     import items from '../../inventory/json/items.json';
     import Chip from '../../../components/svelte/Chip.svelte';
+    import { finishQuest } from '../../../utils/gameState.js';
 
-    export let quest, pointer, currentDialogue, finished;
+    export let quests, quest, pointer, currentDialogue, finished;
 
     const npc = quest.npc;
     console.log("npc: " + npc);
@@ -31,13 +32,8 @@
 
     function onOptionClick(option) {
 
-        if (option.type === "dismiss") {
-            window.location.pathname = '/quests';
-            return;
-        }
-
         if (option.type === "finish") {
-            localStorage.setItem(`quest-${quest.id}-finished`, true);
+            finishQuest(quest.id);
 
             // add rewards to inventory
             rewardItems.forEach(item => {

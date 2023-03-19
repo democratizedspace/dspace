@@ -69,5 +69,8 @@
             "id": "6",
             "count": 1
         }
+    ],
+    "requiresQuests": [
+        "3dprinting/start"
     ]
 }

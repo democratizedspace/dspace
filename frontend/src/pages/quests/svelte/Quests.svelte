@@ -1,6 +1,7 @@
 <script>
     import Quest from './Quest.svelte';
     import { onMount } from 'svelte';
+    import { questFinished, canStartQuest } from '../../../utils/gameState.js';
 
     export let quests = [];
     let filteredQuests = [];
@@ -11,19 +12,13 @@
     });
 
     quests.forEach(quest => {
-        const finished = localStorage.getItem(`quest-${quest.id}-finished`) === 'true';
+        const finished = questFinished(quest.id);
         console.log("finished: ", finished);
         if (!finished) {
-            const requiredQuests = quest.requiredQuests;
-            if (requiredQuests) {
-                requiredQuests.forEach(requiredQuest => {
-                    if (!localStorage.getItem(`quest-${requiredQuest}-finished`) !== 'true') {
-                        return;
-                    }
-                });
-
+            if (canStartQuest(quest)) {
+                console.log("can start quest: ", quest);
+                filteredQuests.push(quest);
             }
-            filteredQuests.push(quest);
         }
 
     });
