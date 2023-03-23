@@ -49,5 +49,10 @@
 	.disabled {
 		background-color: #004603;
 		color: #8a8a8a;
+		opacity: 1;
+	}
+
+	.disabled:hover {
+		cursor: default;
 	}
 </style>

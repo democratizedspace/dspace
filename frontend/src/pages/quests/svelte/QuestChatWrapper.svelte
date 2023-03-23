@@ -1,9 +1,12 @@
 <script>
+    import { writable } from 'svelte/store';
     import items from '../../inventory/json/items.json';
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { finishQuest } from '../../../utils/gameState.js';
+    import { finishQuest, addItems, getItemCounts } from '../../../utils/gameState.js';
 
     export let quests, quest, pointer, currentDialogue, finished;
+    
+    const requirementsCheckStatus = writable({});
 
     const npc = quest.npc;
     console.log("npc: " + npc);
@@ -32,29 +35,78 @@
 
     function onOptionClick(option) {
 
-        if (option.type === "finish") {
-            finishQuest(quest.id);
+        console.log(`option: ${option.text}`);
+        switch (option.type) {
+            case "finish": {
+                finishQuest(quest.id);
 
-            // add rewards to inventory
-            rewardItems.forEach(item => {
-                let inventoryItem = JSON.parse(localStorage.getItem(`inventory-${item.id}`));
-                if (inventoryItem) {
-                    inventoryItem.count += item.count;
-                    localStorage.setItem(`inventory-${item.id}`, JSON.stringify(inventoryItem));
-                } else {
-                    localStorage.setItem(`inventory-${item.id}`, JSON.stringify(item));
-                }
-            });
+                // add rewards to inventory
+                rewardItems.forEach(item => {
+                    let inventoryItem = JSON.parse(localStorage.getItem(`inventory-${item.id}`));
+                    if (inventoryItem) {
+                        inventoryItem.count += item.count;
+                        localStorage.setItem(`inventory-${item.id}`, JSON.stringify(inventoryItem));
+                    } else {
+                        localStorage.setItem(`inventory-${item.id}`, JSON.stringify(item));
+                    }
+                });
 
-            window.location.pathname = `/quests/${quest.id}/finished`;
+                window.location.pathname = `/quests/${quest.id}/finished`;
 
-            return;
+                return;
+            }
+            case "grantItems": {
+                console.log("grantItems");
+                addItems(option.grantItems);
+                updateRequirementsCheckStatus();
+                return;
+            }
         }
 
         pointer = option.goto;
         currentDialogue = dialogueMap.get(pointer);
+        updateRequirementsCheckStatus();
     }
-    
+
+    function prettyPrintItemList(itemList) {
+        console.log(`pretty print items: ${JSON.stringify(itemList)}}`);
+        let result = "";
+        itemList.forEach(item => {
+            const i = items.find(i => i.id === item.id);
+            console.log(`i: ${JSON.stringify(i)}`);
+            result += `${item.count} x ${i.name}, `;
+        });
+        return result.substring(0, result.length - 2);
+    }
+
+    function itemRequirementsMet(itemList) {
+        let requirementsMet = true;
+        const actualItemCounts = getItemCounts(itemList);
+
+        itemList.forEach(requiredItem => {
+            console.log(`left: ${actualItemCounts[requiredItem.id]}, right: ${requiredItem.count}`);
+            if (actualItemCounts[requiredItem.id] < requiredItem.count) {
+                requirementsMet = false;
+            }
+        });
+        return requirementsMet;
+    }
+
+    function updateRequirementsCheckStatus() {
+        const optionRequirementsMet = {};
+
+        dialogueMap.get(pointer).options.forEach((option, index) => {
+            if (option.requiresItems) {
+                optionRequirementsMet[index] = itemRequirementsMet(option.requiresItems);
+            } else {
+                optionRequirementsMet[index] = true;
+            }
+        });
+
+        requirementsCheckStatus.set(optionRequirementsMet);
+    }
+
+    updateRequirementsCheckStatus();
 </script>
 
 <div class="vertical">
@@ -85,9 +137,19 @@
                 </div>
                 <div class="right options">
                     <img src={avatar} alt={avatar} />
-                    {#each dialogueMap.get(pointer).options as option}
+                    {#each dialogueMap.get(pointer).options as option, index}
                         <div class="option">
-                            <Chip text={option.text} onClick={() => onOptionClick(option)}>{option.text}</Chip>
+                        {#if option.type === "grantItems"}
+                            <Chip text={`${option.text} (grants: ${prettyPrintItemList(option.grantItems)})`} onClick={() => onOptionClick(option)}></Chip>
+                        {:else if option.requiresItems}
+                            {#if $requirementsCheckStatus[index]}
+                            <Chip text={`${option.text} (requires: ${prettyPrintItemList(option.requiresItems)})`} onClick={() => onOptionClick(option)}></Chip>
+                            {:else}
+                            <Chip text={`${option.text} (requires: ${prettyPrintItemList(option.requiresItems)})`} disabled={true}></Chip>
+                            {/if}
+                        {:else}
+                            <Chip text={option.text} onClick={() => onOptionClick(option)}></Chip>
+                        {/if}
                         </div>
                     {/each}
                 </div>

@@ -24,7 +24,6 @@ const initializeGameState = () => {
 let gameState = loadGameState();
 
 // QUESTS
-// import questData from '../../pages/quests/json';
 
 export const finishQuest = (questId) => {
   gameState.quests[questId] = { finished: true };
@@ -60,6 +59,7 @@ export const canStartQuest = (quest) => {
 
 // INVENTORY
 export const addItems = (items) => {
+  console.log("adding items: ", JSON.stringify(items));
   items.forEach(({ id, count }) => {
     gameState.inventory[id] = (gameState.inventory[id] || 0) + count;
   });
@@ -77,6 +77,14 @@ export const burnItems = (items) => {
   });
   saveGameState(gameState);
 };
+
+export const getItemCounts = (itemList) => {
+  const counts = {};
+  itemList.forEach((item) => {
+    counts[item.id] = gameState.inventory[item.id] || 0;
+  });
+  return counts;
+}
 
 // PROCESSES
 export const startProcess = (processId, consumeItems) => {
