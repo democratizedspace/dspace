@@ -794,5 +794,29 @@
         ],
         "duration": "30m",
         "machine": "73"
+    },
+    {
+        "id": "tutorial-1",
+        "title": "Tutorial 1",
+        "description": "This is a tutorial. You can do it to learn how to play the game.",
+        "requiresItems": [
+            {
+                "id": "24",
+                "count": 2
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "24",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "20",
+                "count": 0.1
+            }
+        ],
+        "duration": "1s"
     }
 ]

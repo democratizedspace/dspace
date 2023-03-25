@@ -1,8 +1,9 @@
 <script>
     import { writable } from 'svelte/store';
     import items from '../../inventory/json/items.json';
+    import processes from '../../processes/processes.json';
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { finishQuest, addItems, getItemCounts } from '../../../utils/gameState.js';
+    import { finishQuest, addItems, getItemCounts, startProcess } from '../../../utils/gameState.js';
 
     export let quests, quest, pointer, currentDialogue, finished;
     
@@ -33,6 +34,8 @@
 
     currentDialogue = dialogueMap.get(pointer);
 
+    // FUNCTIONS
+
     function onOptionClick(option) {
 
         console.log(`option: ${option.text}`);
@@ -59,6 +62,11 @@
                 console.log("grantItems");
                 addItems(option.grantItems);
                 updateRequirementsCheckStatus();
+                return;
+            }
+            case "process": {
+                const process = 
+                startProcess(option.startProcess, );
                 return;
             }
         }
@@ -147,6 +155,12 @@
                             {:else}
                             <Chip text={`${option.text} (requires: ${prettyPrintItemList(option.requiresItems)})`} disabled={true}></Chip>
                             {/if}
+                        {:else if option.type === "process"}
+                            <Chip text={option.text} onClick={() => onOptionClick(option)}>
+                                <div class="vertical">
+                                    <Chip text="Start" inverted={true} onClick={() => onOptionClick(option)}></Chip>
+                                </div>
+                            </Chip>
                         {:else}
                             <Chip text={option.text} onClick={() => onOptionClick(option)}></Chip>
                         {/if}

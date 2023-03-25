@@ -24,7 +24,7 @@
         },
         {
             "id": "garage",
-            "text": "You just ordered me, remember? Delivery robot dropped me off this morning.",
+            "text": "I was delivered here by a delivery robot after you ordered me online. I'm here to help you with your tasks and quests!",
             "options": [
                 {
                     "type": "goto",
@@ -35,7 +35,7 @@
         },
         {
             "id": "delivery",
-            "text": "Well don't worry about me, I don't have any crazy power or bandwidth requirements. I'll just stay here in your garage and try to be helfpul! And don't worry, I don't have direct access to the Internet. Everything's local.",
+            "text": "Well don't worry about me, I don't have any crazy power requirements. I'll just stay here in your garage and try to be helfpul! And don't worry, I don't have any access to the Internet by default. Everything's local.",
             "options": [
                 {
                     "type": "goto",
@@ -119,7 +119,8 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "processxyz"
+                    "process": "processxyz",
+                    "text": "Click this button"
                 },
                 {
                     "type": "goto",

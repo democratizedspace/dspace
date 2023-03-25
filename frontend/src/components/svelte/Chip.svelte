@@ -1,12 +1,17 @@
 <script>
-    export let href, text, onClick, disabled = false;
+    export let href, text, onClick, disabled = false, inverted = false;
 </script>
 
 <nav>
 	{#if href}
 		<a href={href}>{text}</a>
 	{:else}
-		<button class:disabled={disabled === true} on:click={onClick}>{text}</button>
+		<button class:disabled={disabled === true} class:inverted={inverted === true} on:click={onClick}>
+			<p>{text}</p>
+			<div class="slot">
+				<slot></slot>
+			</div>
+		</button>
 	{/if}
 </nav>
 
@@ -54,5 +59,22 @@
 
 	.disabled:hover {
 		cursor: default;
+	}
+
+	p {
+		margin: 0;
+	}
+
+	.slot {
+		margin-right: 5px;
+		/* text align left */
+		display: flex;
+		/* bold */
+		font-weight: 1000;
+	}
+
+	.inverted {
+		background-color: #68d46d;
+		color: black;
 	}
 </style>
