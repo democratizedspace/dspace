@@ -25,7 +25,6 @@
 </script>
 
 <div class="container">
-    <h3>Up Next</h3>
     {#if mounted}
         {#each filteredQuests as quest}
             <a href="/quests/{quest.id}">
