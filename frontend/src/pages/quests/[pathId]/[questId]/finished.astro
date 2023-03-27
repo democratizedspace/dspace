@@ -1,6 +1,6 @@
 ---
 import Page from '../../../../components/Page.astro';
-import QuestChatWrapper from '../../svelte/QuestChatWrapper.svelte';
+import QuestChat from '../../svelte/QuestChat.svelte';
 
 let quests;
 let quest;
@@ -20,5 +20,5 @@ console.log("quest", quest);
 ---
 
 <Page>
-    <QuestChatWrapper quests={quests} quest={quest} client:load finished={true} />
+    <QuestChat quests={quests} quest={quest} client:load finished={true} />
 </Page>

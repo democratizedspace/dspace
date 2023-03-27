@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import { createStarryNight } from '../scripts/starry.js';
 import Menu from '../components/svelte/Menu.svelte';
 
 const {title, message } = Astro.props;
@@ -11,23 +12,25 @@ const pathname = Astro.url.pathname;
 
 <Layout title="DSPACE">
 	<main>
-		<Header title="" body="" href="" />
+		<div>
+			<Header title="" body="" href="" />
 
-		<!-- for each item in menu, if  -->
-		<Menu pathname={pathname} client:idle />
+			<!-- for each item in menu, if  -->
+			<Menu pathname={pathname} client:idle />
 
-		<h2>{title}</h2>
+			<h2>{title}</h2>
 
-		<ul role="list" class="link-card-grid">
-		</ul>
-		<span />
-		<h2>
-			{message}
-		</h2>
+			<ul role="list" class="link-card-grid">
+			</ul>
+			<span />
+			<h2>
+				{message}
+			</h2>
 
-		<ul role="list" class="link-card-grid-1">
-			<slot />
-		</ul>
+			<ul role="list" class="link-card-grid-1">
+				<slot />
+			</ul>
+		</div>
 	</main>
 </Layout>
 
@@ -36,6 +39,8 @@ const pathname = Astro.url.pathname;
 		--astro-gradient: linear-gradient(0deg, #2c5837, #00ff22);
 		--link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
 	}
+
+	
 
 	main {
 		margin: auto;
@@ -103,4 +108,14 @@ const pathname = Astro.url.pathname;
 	nav a:hover {
 		opacity: 1;
 	}
+
+	canvas {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+	}
+
 </style>

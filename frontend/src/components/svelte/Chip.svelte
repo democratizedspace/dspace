@@ -7,10 +7,10 @@
 		<a href={href}>{text}</a>
 	{:else}
 		<button class:disabled={disabled === true} class:inverted={inverted === true} on:click={onClick}>
-			<p>{text}</p>
 			<div class="slot">
 				<slot></slot>
 			</div>
+			<p>{text}</p>
 		</button>
 	{/if}
 </nav>

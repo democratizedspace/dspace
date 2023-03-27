@@ -127,8 +127,8 @@
                     "goto": "processed",
                     "requiresItems": [
                         {
-                            "id": "20",
-                            "count": 1
+                            "id": "22",
+                            "count": 5
                         }
                     ],
                     "text": "Here's the item you requested."
