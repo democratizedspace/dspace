@@ -1,3 +1,6 @@
+import processes from '../pages/processes/processes.json';
+import { durationInSeconds } from '../utils.js';
+
 // INTERNAL: GAMESTATE
 const gameStateKey = 'gameState';
 
@@ -57,6 +60,39 @@ export const canStartQuest = (quest) => {
   return true;
 };
 
+export const setCurrentDialogueStep = (questId, stepId) => {
+  gameState.quests[questId] = { stepId };
+  saveGameState(gameState);
+};
+
+export const getCurrentDialogueStep = (questId) => {
+  return gameState.quests[questId] ? gameState.quests[questId].stepId : 0;
+};
+
+const setItemsGranted = ( questId, stepId ) => {
+  const key = `${questId}-${stepId}`;
+  gameState.quests[questId] = { ...gameState.quests[questId], itemsClaimed: [...(gameState.quests[questId].itemsClaimed || []), key] };
+  saveGameState(gameState);
+};
+
+export const getItemsGranted = ( questId, stepId ) => {
+  try {
+  const key = `${questId}-${stepId}`;
+  return gameState.quests[questId].itemsClaimed.includes(key);
+  } catch (e) {
+    console.log("error getting items granted: ", e);
+    return false;
+  }
+};
+
+export const grantItems = (questId, stepId, grantsItems) => {
+  if (getItemsGranted(questId, stepId)) {
+    return;
+  }
+  addItems(grantsItems);
+  setItemsGranted(questId, stepId);
+}
+
 // INVENTORY
 export const addItems = (items) => {
   console.log("adding items: ", JSON.stringify(items));
@@ -87,26 +123,40 @@ export const getItemCounts = (itemList) => {
 }
 
 // PROCESSES
-export const startProcess = (processId, consumeItems) => {
+export const startProcess = (processId) => {
+  console.log("starting process: ", processId);
+  const process = processes.find((p) => p.id === processId);
+
   gameState.processes[processId] = {
     startedAt: Date.now(),
   };
-  burnItems(consumeItems);
+  burnItems(process.consumeItems);
   saveGameState(gameState);
 };
 
-export const processFinished = (processId, duration) => {
+export const getRemainingProcessTime = (processId) => {
   const process = gameState.processes[processId];
-  if (!process) return false;
-  return Date.now() >= process.startedAt + duration;
+  if (!process) return 0;
+  return Math.max(0, process.startedAt + duration - Date.now());
 };
 
-export const finishProcess = (processId, createItems) => {
-  if (processFinished(processId)) {
-    gameState.processes[processId] = undefined;
-    addItems(createItems);
-    saveGameState(gameState);
+export const processFinished = (processId) => {
+  const process = gameState.processes[processId];
+  if (!process) return false;
+  return process.startedAt + durationInSeconds(process.duration) * 1000 < Date.now();
+};
+
+export const finishProcess = (processId) => {
+  if (!processFinished(processId)) {
+    return;
   }
+
+  const process = processes.find((p) => p.id === processId);
+  const createItems = process.createItems;
+  
+  gameState.processes[processId] = undefined;
+  addItems(createItems);
+  saveGameState(gameState);
 };
 
 export const cancelProcess = (processId, consumeItems) => {

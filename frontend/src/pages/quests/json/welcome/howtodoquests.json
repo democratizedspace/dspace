@@ -86,8 +86,8 @@
             "text": "Some dialogue options grant you certain items immediately upon selecting them. The possibilities are endless! Some dialogue options are only enabled if you meet certain item requirements. In this case, take the item I'm offering, and that'll unlock the other option!",
             "options": [
                 {
-                    "type": "grantItems",
-                    "grantItems": [
+                    "type": "grantsItems",
+                    "grantsItems": [
                         {
                             "id": "20",
                             "count": 10
@@ -119,8 +119,18 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "processxyz",
-                    "text": "Click this button"
+                    "process": "outlet-dWatt-1e3",
+                    "text": ""
+                },
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "29",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Oh, it looks like I need this to complete the process."
                 },
                 {
                     "type": "goto",
@@ -128,7 +138,7 @@
                     "requiresItems": [
                         {
                             "id": "22",
-                            "count": 5
+                            "count": 5000
                         }
                     ],
                     "text": "Here's the item you requested."

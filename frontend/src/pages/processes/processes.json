@@ -1,7 +1,13 @@
 [
     {
-        "id": "outlet-dWatt",
-        "title": "generate 1000 dWatt using your outlet",
+        "id": "outlet-dWatt-1e3",
+        "title": "Generate 1000 dWatt using your outlet.",
+        "requireItems": [
+            {
+                "id": "29",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "24",
@@ -18,9 +24,7 @@
                 "count": 0.977023939064
             }
         ],
-        "fungible": true,
-        "duration": "5s",
-        "machine": "29"
+        "duration": "5s"
     },
     {
         "id": "outlet-dWatt-1e4",
@@ -794,29 +798,5 @@
         ],
         "duration": "30m",
         "machine": "73"
-    },
-    {
-        "id": "tutorial-1",
-        "title": "Tutorial 1",
-        "description": "This is a tutorial. You can do it to learn how to play the game.",
-        "requiresItems": [
-            {
-                "id": "24",
-                "count": 2
-            }
-        ],
-        "consumeItems": [
-            {
-                "id": "24",
-                "count": 1
-            }
-        ],
-        "createItems": [
-            {
-                "id": "20",
-                "count": 0.1
-            }
-        ],
-        "duration": "1s"
     }
 ]

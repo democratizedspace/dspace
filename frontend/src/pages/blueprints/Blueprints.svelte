@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import items from '../inventory/json/items.json';
-  import ItemList from '../../components/svelte/ItemList.svelte';
+  import ItemList from '../../components/svelte/InventoryItemList.svelte';
 
   const filteredItems = items.filter(item => item.type === 'blueprint');
 

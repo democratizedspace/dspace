@@ -2,8 +2,6 @@
     import items from '../../pages/inventory/json/items.json';
     import ItemCard from './ItemCard.svelte';
 
-    import { count } from '../../pages/inventory/utils.js';
-
     export let itemType, includeTypes;
 
     let filteredItems = items.filter(item => item.type === itemType);

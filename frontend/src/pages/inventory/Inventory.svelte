@@ -1,7 +1,7 @@
 <script>
     import items from '../inventory/json/items.json';
     import ItemCard from '../../components/svelte/ItemCard.svelte';
-    import ItemList from '../../components/svelte/ItemList.svelte';
+    import ItemList from '../../components/svelte/InventoryItemList.svelte';
 </script>
 
 <ItemList />

@@ -51,8 +51,13 @@
 		cursor: pointer;
 	}
 
+	.inverted {
+		background-color: #68d46d;
+		color: black;
+	}
+
 	.disabled {
-		background-color: #004603;
+		background-color: #575f57;
 		color: #8a8a8a;
 		opacity: 1;
 	}
@@ -73,8 +78,4 @@
 		font-weight: 1000;
 	}
 
-	.inverted {
-		background-color: #68d46d;
-		color: black;
-	}
 </style>

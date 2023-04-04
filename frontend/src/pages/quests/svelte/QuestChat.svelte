@@ -1,13 +1,24 @@
 <script>
+    import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import items from '../../inventory/json/items.json';
-    import processes from '../../processes/processes.json';
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { finishQuest, addItems, getItemCounts, startProcess } from '../../../utils/gameState.js';
+    import Process from '../../../components/svelte/Process.svelte';
+    import {
+        finishQuest,
+        getItemCounts,
+        startProcess,
+        setCurrentDialogueStep,
+        getCurrentDialogueStep,
+        getItemsGranted,
+        grantItems,
+    } from '../../../utils/gameState.js';
+    import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
 
     export let quests, quest, pointer, currentDialogue, finished;
     
     const requirementsCheckStatus = writable({});
+    const clientSideRendered = writable(false);
 
     const npc = quest.npc;
     console.log("npc: " + npc);
@@ -37,6 +48,9 @@
     // FUNCTIONS
 
     function onOptionClick(option) {
+        if (option.type === "process") {
+            return;
+        }
 
         console.log(`option: ${option.text}`);
         switch (option.type) {
@@ -58,9 +72,10 @@
 
                 return;
             }
-            case "grantItems": {
-                console.log("grantItems");
-                addItems(option.grantItems);
+            case "grantsItems": {
+                console.log("grantsItems");
+                grantItems(quest.id, pointer, option.grantsItems);
+                console.log("granted items");
                 updateRequirementsCheckStatus();
                 return;
             }
@@ -69,10 +84,14 @@
                 startProcess(option.startProcess, );
                 return;
             }
+            case "goto": {
+                pointer = option.goto;
+                currentDialogue = dialogueMap.get(pointer);
+                setCurrentDialogueStep(quest.id, pointer);
+                break;
+            }
         }
 
-        pointer = option.goto;
-        currentDialogue = dialogueMap.get(pointer);
         updateRequirementsCheckStatus();
     }
 
@@ -102,15 +121,25 @@
 
     function getItemQuantity(item) {
         const itemCount = getItemCounts([item]);
-        return `${itemCount[item.id]}/${item.count}}`
+        return `${itemCount[item.id]}/${item.count}`
     }
 
     function updateRequirementsCheckStatus() {
         const optionRequirementsMet = {};
 
         dialogueMap.get(pointer).options.forEach((option, index) => {
+            console.log(`option: ${JSON.stringify(option)}`);
+            console.log(`index: ${index}`);
             if (option.requiresItems) {
                 optionRequirementsMet[index] = itemRequirementsMet(option.requiresItems);
+            } else if (option.grantsItems) {
+                console.log("checking to make sure the items haven't already been granted");
+                if (getItemsGranted(quest.id, pointer)) {
+                    console.log("items have already been granted");
+                    optionRequirementsMet[index] = false;
+                } else {
+                    optionRequirementsMet[index] = true;
+                }
             } else {
                 optionRequirementsMet[index] = true;
             }
@@ -119,81 +148,94 @@
         requirementsCheckStatus.set(optionRequirementsMet);
     }
 
+    const currentDialogueStep = getCurrentDialogueStep(quest.id);
+    console.log("currentDialogueStep: " + currentDialogueStep);
+    if (currentDialogueStep) {
+        pointer = currentDialogueStep;
+        currentDialogue = dialogueMap.get(pointer);
+    }
+    
     updateRequirementsCheckStatus();
+
+    onMount(() => {
+        clientSideRendered.set(true);
+    });
 </script>
 
 <div class="vertical">
     <div class="horizontal">
-        <div class="vertical">
-            <h3>{quest.title}</h3>
-        </div>
+      <div class="vertical">
+        <h3>{quest.title}</h3>
+      </div>
     </div>
     {#if finished}
-        <div class="chat">
-            <div class="vertical">
-                <h4>Quest Complete!</h4>
-                <p>You have completed this quest. You can now return to the Quests page to start another quest.</p>
-            </div>
-        </div>
-    {:else}
-        <div class="chat">
-            <div>
-                <div>
-                    <img class="banner" src={quest.image} alt={quest.image} />
-                </div>
-
-                <div class="left">
-                    <img src={npc} alt={npc} />
-                    <p class="npcDialogue left">
-                        {dialogueMap.get(pointer).text}
-                    </p>
-                </div>
-                <div class="right options">
-                    <img src={avatar} alt={avatar} />
-                    {#each dialogueMap.get(pointer).options as option, index}
-                        <div class="option">
-                        {#if option.type === "grantItems"}
-                            <Chip text={`${option.text} (grants: ${prettyPrintItemList(option.grantItems)})`} onClick={() => onOptionClick(option)}></Chip>
-                        {:else if option.requiresItems}
-                            {#if $requirementsCheckStatus[index]}
-                                <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                                    <div class="vertical">
-                                        <div>Requires:</div>
-                                        <div class="horizontal">
-                                            {#each option.requiresItems as item}
-                                                <div>{getItemQuantity(item)} <img class="tiny" src={items.find(i => i.id === item.id).image} alt={items.find(i => i.id === item.id).image} /></div>
-                                            {/each}
-                                        </div>
-                                    </div>
-                                </Chip>
-                            {:else}
-                                <Chip text={option.text} disabled={true}>
-                                    <div class="vertical">
-                                        <div>Requires:</div>
-                                        <div class="horizontal">
-                                            {#each option.requiresItems as item}
-                                                <div>{getItemQuantity(item)} <img class="tiny" src={items.find(i => i.id === item.id).image} alt={items.find(i => i.id === item.id).image} /></div>
-                                            {/each}
-                                        </div>
-                                    </div>
-                                </Chip>
-                            {/if}
-                        {:else if option.type === "process"}
-                            <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                                <div class="vertical">
-                                    <Chip text="Start" inverted={true} onClick={() => onOptionClick(option)}></Chip>
-                                </div>
-                            </Chip>
-                        {:else}
-                            <Chip text={option.text} onClick={() => onOptionClick(option)}></Chip>
-                        {/if}
-                        </div>
-                    {/each}
-                </div>
-            </div>
-        </div>
-    {/if}
+    <div class="chat">
+      <div class="vertical">
+        <h4>Quest Complete!</h4>
+        <p>You have completed this quest. You can now return to the Quests page to start another quest.</p>
+      </div>
     </div>
+    {:else}
+    <div class="chat">
+      <div>
+        {#if $clientSideRendered}
+            <div>
+            <img class="banner" src={quest.image} alt={quest.image} />
+            </div>
+            <div class="left">
+            <img src={npc} alt={npc} />
+            <p class="npcDialogue left">
+                {dialogueMap.get(pointer).text}
+            </p>
+            </div>
+            <div class="right options">
+            <img src={avatar} alt={avatar} />
+            {#each dialogueMap.get(pointer).options as option, index}
+            <div class="option">
+                {#if option.type === "grantsItems"}
+                    {#if !$requirementsCheckStatus[index]}
+                        <Chip text={option.text} disabled={true}>
+                            <CompactItemList itemList={option.grantsItems} disabled={true} />
+                        </Chip>
+                    {:else}
+                        <Chip text={option.text} onClick={() => onOptionClick(option)}>
+                            <CompactItemList itemList={option.grantsItems} increase={true} />
+                        </Chip>
+                    {/if}
+                {:else if option.requiresItems}
+                    {#if $requirementsCheckStatus[index]}
+                        <Chip text={option.text} onClick={() => onOptionClick(option)}>
+                            <div class="vertical">
+                                <p>Requires:</p>
+                                <CompactItemList itemList={option.requiresItems} />
+                            </div>
+                        </Chip>
+                    {:else}
+                        <Chip text={option.text} disabled={true}>
+                            <div class="vertical">
+                                <p>Requires:</p>
+                                <CompactItemList itemList={option.requiresItems} disabled={true} />
+                            </div>
+                        </Chip>
+                    {/if}
+                {:else if option.type === "process"}
+                <Chip text={option.text} onClick={() => onOptionClick(option)}>
+                <div class="vertical">
+                    <Process processId={option.process} />
+                </div>
+                </Chip>
+                {:else}
+                    <Chip text={option.text} onClick={() => onOptionClick(option)}></Chip>
+                {/if}
+            </div>
+            {/each}
+            </div>
+        {:else}
+            <div class="temp-container" />
+        {/if}
+      </div>
+    </div>
+    {/if}
     <div class="vertical">
         <h5>Status:</h5>
         {#if finished}
@@ -209,6 +251,7 @@
             </div>
         {/each}
     </div>
+</div>
 
 <style>
     .chat {
@@ -221,11 +264,16 @@
         flex-direction: row;
         justify-content: space-between;
         margin-top: 30px;
+        width: 70%;
+    }
+
+    .temp-container {
+        height: 50vh;
     }
 
     img {
-        width: 100px;
-        height: 100px;
+        width: 50px;
+        height: 50px;
         border-radius: 20px;
         /* green border */
         border: 2px solid #68d46d;
