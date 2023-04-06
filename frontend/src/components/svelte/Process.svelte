@@ -2,10 +2,10 @@
   import { onDestroy } from 'svelte';
   import { writable } from 'svelte/store';
   import Chip from './Chip.svelte';
+  import { state, getItemCounts, startProcess, processFinished, finishProcess } from '../../utils/gameState.js';
   import processes from '../../pages/processes/processes.json';
   import { prettyPrintDuration, durationInSeconds } from '../../utils.js';
   import CompactItemList from './CompactItemList.svelte';
-  import { startProcess, processFinished, finishProcess, cancelProcess } from '../../utils/gameState.js';
 
   export let processId;
 
@@ -15,7 +15,21 @@
   let timeLeft = writable(durationInSeconds(process.duration) * 1000);
   let interval;
 
+  const requiredItemsCounts = getItemCounts(process.requireItems);
+
+  const hasAllRequiredItems = () => {
+    const requiredItemsCounts = getItemCounts(process.requireItems);
+    const inventory = $state.inventory;
+    return Object.keys(requiredItemsCounts).every((itemId) => {
+      return inventory[itemId] >= requiredItemsCounts[itemId];
+    });
+  }
+
   function startProgressBar() {
+    if (!hasAllRequiredItems()) {
+      return;
+    }
+
     progress.set(0);
     clearInterval(interval);
 
@@ -61,7 +75,11 @@
     <p>Progress: {($progress).toFixed(2)}%</p>
   </div>
 
+  {#if $state.inventory && hasAllRequiredItems() && process.requireItems.length > 0}
   <Chip inverted={true} text="Start" onClick={() => startProgressBar()} />
+{:else}
+  <Chip inverted={true} text="Start" disabled={true} />
+{/if}
 
   <div class="progress-container">
     <div class="progress-bar" style="width: {$progress}%"></div>
@@ -71,10 +89,10 @@
 <style>
   .progress-container {
     height: 20px;
-    width: 100%;
+    width: 90%;
     background-color: #f3f3f3;
     position: relative;
-    margin: 20px;
+    margin: 5%;
   }
 
   .progress-bar {
@@ -89,17 +107,7 @@
   .vertical {
     display: flex;
     flex-direction: column;
-    align-items: center;
-  }
-
-  .left-aligned {
-    align-items: flex-start;
-    width: 100%;
-  }
-
-  .right-aligned {
-    align-items: flex-end;
-    width: 100%;
+    align-items: left;
   }
 
   p {

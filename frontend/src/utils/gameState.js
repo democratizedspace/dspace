@@ -1,11 +1,19 @@
+import { writable } from 'svelte/store';
 import processes from '../pages/processes/processes.json';
 import { durationInSeconds } from '../utils.js';
 
-// INTERNAL: GAMESTATE
+// ---------------------
+// INTERNAL: GAME STATE
+// ---------------------
+
 const gameStateKey = 'gameState';
 
-const saveGameState = (gameState) => {
-  localStorage.setItem(gameStateKey, JSON.stringify(gameState));
+const initializeGameState = () => {
+  return {
+    quests: {},
+    inventory: {},
+    processes: {},
+  };
 };
 
 const loadGameState = () => {
@@ -16,17 +24,19 @@ const loadGameState = () => {
   return initializeGameState();
 };
 
-const initializeGameState = () => {
-  return {
-    quests: {},
-    inventory: {},
-    processes: {},
-  };
+const saveGameState = (gameState) => {
+  localStorage.setItem(gameStateKey, JSON.stringify(gameState));
+  state.set(gameState); // Update the state store directly
 };
 
 let gameState = loadGameState();
 
+// Create the state store and set the initial value
+export const state = writable(gameState);
+
+// ---------------------
 // QUESTS
+// ---------------------
 
 export const finishQuest = (questId) => {
   gameState.quests[questId] = { finished: true };
@@ -34,15 +44,11 @@ export const finishQuest = (questId) => {
 };
 
 export const questFinished = (questId) => {
-  console.log(`is ${questId} finished?}`);
   const finished = gameState.quests[questId] ? gameState.quests[questId].finished : false;
-  console.log("finished? ", finished);
   return finished;
 };
 
 export const canStartQuest = (quest) => {
-  console.log("can start quest? ", quest.id);
-
   if (questFinished(quest.id)) {
     return false;
   }
@@ -69,16 +75,16 @@ export const getCurrentDialogueStep = (questId) => {
   return gameState.quests[questId] ? gameState.quests[questId].stepId : 0;
 };
 
-const setItemsGranted = ( questId, stepId ) => {
+const setItemsGranted = (questId, stepId) => {
   const key = `${questId}-${stepId}`;
   gameState.quests[questId] = { ...gameState.quests[questId], itemsClaimed: [...(gameState.quests[questId].itemsClaimed || []), key] };
   saveGameState(gameState);
 };
 
-export const getItemsGranted = ( questId, stepId ) => {
+export const getItemsGranted = (questId, stepId) => {
   try {
-  const key = `${questId}-${stepId}`;
-  return gameState.quests[questId].itemsClaimed.includes(key);
+    const key = `${questId}-${stepId}`;
+    return gameState.quests[questId].itemsClaimed.includes(key);
   } catch (e) {
     console.log("error getting items granted: ", e);
     return false;
@@ -93,9 +99,11 @@ export const grantItems = (questId, stepId, grantsItems) => {
   setItemsGranted(questId, stepId);
 }
 
+// ---------------------
 // INVENTORY
+// ---------------------
+
 export const addItems = (items) => {
-  console.log("adding items: ", JSON.stringify(items));
   items.forEach(({ id, count }) => {
     gameState.inventory[id] = (gameState.inventory[id] || 0) + count;
   });
@@ -122,9 +130,11 @@ export const getItemCounts = (itemList) => {
   return counts;
 }
 
+// ---------------------
 // PROCESSES
+// ---------------------
+
 export const startProcess = (processId) => {
-  console.log("starting process: ", processId);
   const process = processes.find((p) => p.id === processId);
 
   gameState.processes[processId] = {

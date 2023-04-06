@@ -1,194 +1,196 @@
 {
-    "id": "welcome/howtodoquests",
-    "title": "How to do quests",
-    "description": "Learn how the quest mechanics work, including dialogue options, items, and processes.",
-    "image": "/assets/quests/howtodoquests.jpg",
-    "npc": "/assets/npc/1a427414-48ee-4b7f-89a1-8522360676b7.jpg",
-    "start": "start",
-    "dialogue": [
-        {
-            "id": "start",
-            "text": "Hi, I'm a large language model named dChat! I have a quest for you. Do you accept?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "garage",
-                    "text": "Wait, how did you get in my garage?"
-                },
-                {
-                    "type": "goto",
-                    "goto": "yourquest",
-                    "text": "What quest?"
-                }
-            ]
-        },
-        {
-            "id": "garage",
-            "text": "I was delivered here by a delivery robot after you ordered me online. I'm here to help you with your tasks and quests!",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "delivery",
-                    "text": "Oh yeah, now I remember..."
-                }
-            ]
-        },
-        {
-            "id": "delivery",
-            "text": "Well don't worry about me, I don't have any crazy power requirements. I'll just stay here in your garage and try to be helfpul! And don't worry, I don't have any access to the Internet by default. Everything's local.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "dialogueoptions",
-                    "text": "Oh, cool, well, it's nice to have you here! What was that about the quest again?"
-                }
-            ]
-        },
-        {
-            "id": "yourquest",
-            "text": "Your quest ... is to learn how quests work. It's honestly pretty simple but I felt it was worth sharing anyway.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "expert",
-                    "text": "I think I can figure things out on my own, thanks!"
-                },
-                {
-                    "type": "goto",
-                    "goto": "dialogueoptions",
-                    "text": "Actually, you know what? Give me the quick version, please."
-                }
-            ]
-        },
-        {
-            "id": "expert",
-            "text": "Ah, an expert! Very well then, you can retry this quest anytime if you needed help. Say the word and we'll mark this quest 'finished'.",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "It was nice to meet you! See you around!"
-                }
-            ]
-        },
-        {
-            "id": "dialogueoptions",
-            "text": "Ok, so you're already getting the hang of the first part, branching dialogue options. Just pick an option to advance the conversation! Quests can optionally have multiple outcomes, each leading to different rewards and opening up new quests for you to complete.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "items",
-                    "text": "Go on..."
-                }
-            ]
-        },
-        {
-            "id": "items",
-            "text": "Some dialogue options grant you certain items immediately upon selecting them. The possibilities are endless! Some dialogue options are only enabled if you meet certain item requirements. In this case, take the item I'm offering, and that'll unlock the other option!",
-            "options": [
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "20",
-                            "count": 10
-                        },
-                        {
-                            "id": "24",
-                            "count": 100
-                        }
-                    ],
-                    "text": "Don't mind if I do!"
-                },
-                {
-                    "type": "goto",
-                    "goto": "processes",
-                    "requiresItems": [
-                        {
-                            "id": "20",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Like this?"
-                }
-            ]
-
-        },
-        {
-            "id": "processes",
-            "text": "Exactly! You're getting the hang of it! Finally, some quests require you to complete a process. A process can require any number of items to start, may consume items, and may create items at the end. Each process takes a certain duration of time and may have a cooldown you have to wait for before starting again. I made it simple this time. Process the item I gave you and give me the resulting item to proceed!",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "outlet-dWatt-1e3",
-                    "text": ""
-                },
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "29",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Oh, it looks like I need this to complete the process."
-                },
-                {
-                    "type": "goto",
-                    "goto": "processed",
-                    "requiresItems": [
-                        {
-                            "id": "22",
-                            "count": 5000
-                        }
-                    ],
-                    "text": "Here's the item you requested."
-
-                }
-            ]
-        },
-        {
-            "id": "processed",
-            "text": "You're a natural! You're sure you haven't done this before? Processes can be started from a variety of places (quests, blueprints, the Energy page) but we'll cover that later. We're done here! Any comments or questions?",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Nope, thanks!"
-                },
-                {
-                    "type": "goto",
-                    "goto": "apologize",
-                    "text": "This is all really confusing."
-                },
-                {
-                    "type": "goto",
-                    "goto": "blueprints",
-                    "text": "What are blueprints?"
-                }
-            ]
-        },
-        {
-            "id": "apologize",
-            "text": "I apologize for the confusion. As a large language model, I do not wish to cause confusion.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "processed",
-                    "text": "I have other questions..."
-                }
-            ]
-        },
-        {
-            "id": "blueprints",
-            "text": "Blueprints are items that let you start processes. You can start processes anyway if you dig around in the code and find the link, but where's the fun in that? Visit the Blueprints page to see what you have and what you're still missing.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "processed",
-                    "text": "I have other questions..."
-                }
-            ]
-        }
+    "id":"welcome/howtodoquests",
+    "title":"How to do quests",
+    "description":"Learn how the quest mechanics work, including dialogue options, items, and processes.",
+    "image":"/assets/quests/howtodoquests.jpg",
+    "npc":"/assets/npc/1a427414-48ee-4b7f-89a1-8522360676b7.jpg",
+    "start":"start",
+    "dialogue":[
+       {
+          "id":"start",
+          "text":"Hey, adventurer! I'm dChat, your trusty AI sidekick, here to enhance your gaming experience. I've got a quest for you. Are you in?",
+          "options":[
+             {
+                "type":"goto",
+                "goto":"garage",
+                "text":"Wait, why are you in my garage?"
+             },
+             {
+                "type":"goto",
+                "goto":"yourquest",
+                "text":"A quest, you say? Tell me more."
+             }
+          ]
+       },
+       {
+          "id":"garage",
+          "text":"Well, a friendly delivery robot dropped me off after you ordered me online. I'm here to be your virtual companion and help you complete tasks and quests!",
+          "options":[
+             {
+                "type":"goto",
+                "goto":"delivery",
+                "text":"Ah, it's all coming back to me now..."
+             }
+          ]
+       },
+       {
+          "id":"delivery",
+          "text":"No worries! I'm low-maintenance and won't hog your power supply. I'll stay in your garage and be the helpful sidekick you never knew you needed! And don't worry, I'm not snooping on the internet. I'm all about that local life.",
+          "options":[
+             {
+                "type":"goto",
+                "goto":"dialogueoptions",
+                "text":"Great! So, what's the deal with this quest you mentioned?"
+             }
+          ]
+       },
+       {
+          "id":"yourquest",
+          "text":"Your quest, dear player, is to master the ancient art of... questing. It's a piece of cake, but it's always good to know the basics, right?",
+          "options":[
+             {
+                "type":"goto",
+                "goto":"expert",
+                "text":"I got this, no need for a tutorial!"
+             },
+             {
+                "type":"goto",
+                "goto":"dialogueoptions",
+                "text":"Alright, lay it on me, dChat."
+             }
+          ]
+       },
+       {
+          "id":"expert",
+          "text":"Aha! A seasoned adventurer, I see. No worries, you can always come back to this quest if you need a refresher. Just say the word, and we'll call it a wrap.",
+          "options":[
+             {
+                "type":"finish",
+                "text":"Catch you later, dChat!"
+             }
+          ]
+       },
+       {
+          "id":"dialogueoptions",
+          "text":"So, you're already doing well with the first part: branching dialogue options. Just pick a choice, and let the adventure unfold! Quests can have multiple outcomes, each leading to different rewards and unlocking new quests to conquer.",
+          "options":[
+             {
+                "type":"goto",
+                "goto":"items",
+                "text":"What's next?"
+             }
+          ]
+       },
+       {
+          "id":"items",
+          "text":"Now, some dialogue options grant items right when you select them. The possibilities? Limitless! Certain options only unlock if you've got the right items. Here, take this loot I'm offering, and you'll see what I mean.",
+          "options":[
+             {
+                "type":"grantsItems",
+                "grantsItems":[
+                   {
+                      "id":"20",
+                      "count":10
+                   },
+                   {
+                      "id":"24",
+                      "count":100
+                   }
+                ],
+                "text":"Great, free stuff! Thanks!"
+             },
+             {
+                "type":"goto",
+                "goto":"processes",
+                "requiresItems":[
+                   {
+                      "id":"20",
+                      "count":1
+                   }
+                ],
+                "text":"Like this, right?"
+             }
+          ]
+       },
+       {
+          "id":"processes",
+          "text":"Bingo! You're a quick learner! Lastly, some quests have you complete a process. A process can require any combination of items to start, might consume or create items, and takes some time to finish. There might be a cooldown too. For now, process the item I gave you, and hand over the final product!",
+          "options":[
+             {
+                "type":"process",
+                "process":"outlet-dWatt-1e3",
+                "text":""
+             },
+             {
+                "type":"grantsItems",
+                "grantsItems":[
+                   {
+                      "id":"29",
+                      "count":1
+                   }
+                ],
+                "text":"Looks like I need this to finish the process."
+             },
+             {
+                "type":"goto",
+                "goto":"processed",
+                "requiresItems":[
+                   {
+                      "id":"22",
+                      "count":5000
+                   }
+                ],
+                "text":"Here's that item you wanted."
+             }
+          ]
+       },
+       {
+          "id":"processed",
+          "text":"You're a natural! Are you sure you're not secretly an AI? Processes can be started from various places (quests, blueprints, the Energy page), but we'll save that for another day. We're done here! Any questions or comments?",
+          "options":[
+             {
+                "type":"finish",
+                "text":"Nope, I'm good! Thanks, dChat!"
+             },
+             {
+                "type":"goto",
+                "goto":"apologize",
+                "text":"I'm still a bit confused."
+             },
+             {
+                "type":"goto",
+                "goto":"blueprints",
+                "text":"What's the deal with blueprints?"
+             }
+          ]
+       },
+       {
+          "id":"apologize",
+          "text":"My apologies, friend! As a sophisticated AI, the last thing I want to do is make things confusing. Let's try again!",
+          "options":[
+             {
+                "type":"goto",
+                "goto":"processed",
+                "text":"I have more questions..."
+             }
+          ]
+       },
+       {
+          "id":"blueprints",
+          "text":"Blueprints are your key to starting processes. Sure, you could find the link in the code and start processes that way, but where's the fun in that? Check out the Blueprints page to see what you've got and what's still on your to-find list.",
+          "options":[
+             {
+                "type":"goto",
+                "goto":"processed",
+                "text":"I have more questions..."
+             }
+          ]
+       }
     ],
-    "rewards": [],
-    "requiresQuests": []
-}
+    "rewards":[
+       
+    ],
+    "requiresQuests":[
+       
+    ]
+ }
