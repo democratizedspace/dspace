@@ -41,7 +41,7 @@
   {#if $isMounted}
     <div class="vertical">
         {#if $isEditing}
-            <p>Enter your OpenAI API Key to integrate GPT-3.5.</p>
+            <p>Enter your <a href="https://platform.openai.com/account/api-keys">OpenAI API Key</a> to integrate GPT-3.5. Make sure you place <a href="https://platform.openai.com/account/billing/limits">usage limits</a>.  You can monitor your usage <a href="https://platform.openai.com/account/usage">here.</a></p>
             <form on:submit|preventDefault={handleSubmit}>
             <input type="text" bind:value={$apiKey} />
             <div class="horizontal">
