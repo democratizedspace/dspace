@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import processes from '../pages/processes/processes.json';
-import { durationInSeconds } from '../utils.js';
+import { durationInSeconds, getPriceStringComponents } from '../utils.js';
 
 // ---------------------
 // INTERNAL: GAME STATE
@@ -16,7 +16,7 @@ const initializeGameState = () => {
   };
 };
 
-const loadGameState = () => {
+export const loadGameState = () => {
   const storedGameState = localStorage.getItem(gameStateKey);
   if (storedGameState) {
     return JSON.parse(storedGameState);
@@ -24,7 +24,7 @@ const loadGameState = () => {
   return initializeGameState();
 };
 
-const saveGameState = (gameState) => {
+export const saveGameState = (gameState) => {
   localStorage.setItem(gameStateKey, JSON.stringify(gameState));
   state.set(gameState); // Update the state store directly
 };
@@ -129,6 +129,46 @@ export const getItemCounts = (itemList) => {
   });
   return counts;
 }
+
+export const buyItems = (items) => {
+  console.log("buyItems: ", items);
+  items.forEach(item => {
+    const { price, symbol } = getPriceStringComponents(item.price);
+    const currencyId = symbol.toLowerCase(); // Assuming the symbol matches the id of the currency in the inventory
+
+    if (gameState.inventory[currencyId] && gameState.inventory[currencyId] >= price) {
+      // Deduct the price from the player's currency
+      gameState.inventory[currencyId] -= price;
+
+      // Add the purchased item to the player's inventory
+      gameState.inventory[item.id] = (gameState.inventory[item.id] || 0) + 1;
+    } else {
+      console.log("Not enough currency to buy the item.");
+    }
+  });
+
+  saveGameState(gameState);
+};
+
+export const sellItems = (items) => {
+  items.forEach(item => {
+    const { price, symbol } = getPriceStringComponents(item.price);
+    const currencyId = symbol.toLowerCase(); // Assuming the symbol matches the id of the currency in the inventory
+
+    if (gameState.inventory[item.id] && gameState.inventory[item.id] > 0) {
+      // Remove the sold item from the player's inventory
+      gameState.inventory[item.id] -= 1;
+
+      // Add the price to the player's currency
+      gameState.inventory[currencyId] = (gameState.inventory[currencyId] || 0) + price;
+    } else {
+      console.log("No items available to sell.");
+    }
+  });
+
+  saveGameState(gameState);
+};
+
 
 // ---------------------
 // PROCESSES

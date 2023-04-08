@@ -1,0 +1,19 @@
+---
+import Page from '../../components/Page.astro';
+import Integrations from './svelte/Integrations.svelte';
+---
+
+<Page title="dChat" columns="1">
+    <img src="/assets/npc/1a427414-48ee-4b7f-89a1-8522360676b7.jpg" alt="dChat" />
+    <Integrations client:idle />
+</Page>
+
+<style>
+    img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 20px;
+        margin-bottom: -25px;
+    }
+</style>

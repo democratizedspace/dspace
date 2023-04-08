@@ -3,6 +3,7 @@
     import { writable } from 'svelte/store';
     import items from '../../inventory/json/items.json';
     import Chip from '../../../components/svelte/Chip.svelte';
+    import BuyItems from '../../../components/svelte/BuyItems.svelte';
     import Process from '../../../components/svelte/Process.svelte';
     import {
         finishQuest,
@@ -12,6 +13,7 @@
         getCurrentDialogueStep,
         getItemsGranted,
         grantItems,
+        buyItems,
     } from '../../../utils/gameState.js';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
 
@@ -90,20 +92,13 @@
                 setCurrentDialogueStep(quest.id, pointer);
                 break;
             }
+            case "buyItems": {
+                buyItems(option.buyItems);
+                break;
+            }
         }
 
         updateRequirementsCheckStatus();
-    }
-
-    function prettyPrintItemList(itemList) {
-        console.log(`pretty print items: ${JSON.stringify(itemList)}}`);
-        let result = "";
-        itemList.forEach(item => {
-            const i = items.find(i => i.id === item.id);
-            console.log(`i: ${JSON.stringify(i)}`);
-            result += `${item.count} x ${i.name}, `;
-        });
-        return result.substring(0, result.length - 2);
     }
 
     function itemRequirementsMet(itemList) {
@@ -118,12 +113,7 @@
         });
         return requirementsMet;
     }
-
-    function getItemQuantity(item) {
-        const itemCount = getItemCounts([item]);
-        return `${itemCount[item.id]}/${item.count}`
-    }
-
+    
     function updateRequirementsCheckStatus() {
         const optionRequirementsMet = {};
 
@@ -219,11 +209,15 @@
                         </Chip>
                     {/if}
                 {:else if option.type === "process"}
-                <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                <div class="vertical">
-                    <Process processId={option.process} />
-                </div>
-                </Chip>
+                    <Chip text={option.text} onClick={() => onOptionClick(option)}>
+                        <div class="vertical">
+                            <Process processId={option.process} />
+                        </div>
+                    </Chip>
+                {:else if option.type === "buyItems"}
+                    <Chip text={option.text} onClick={() => onOptionClick(option)}>
+                        <BuyItems itemList={option.buyItems} />
+                    </Chip>
                 {:else}
                     <Chip text={option.text} onClick={() => onOptionClick(option)}></Chip>
                 {/if}

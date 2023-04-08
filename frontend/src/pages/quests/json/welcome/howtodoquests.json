@@ -133,36 +133,56 @@
              },
              {
                 "type":"goto",
-                "goto":"processed",
+                "goto":"buyitems",
                 "requiresItems":[
                    {
                       "id":"22",
                       "count":5000
                    }
                 ],
-                "text":"Here's that item you wanted."
+                "text":"dWatt...? What's this?"
              }
           ]
        },
        {
-          "id":"processed",
-          "text":"You're a natural! Are you sure you're not secretly an AI? Processes can be started from various places (quests, blueprints, the Energy page), but we'll save that for another day. We're done here! Any questions or comments?",
-          "options":[
-             {
-                "type":"finish",
-                "text":"Nope, I'm good! Thanks, dChat!"
-             },
-             {
-                "type":"goto",
-                "goto":"apologize",
-                "text":"I'm still a bit confused."
-             },
-             {
-                "type":"goto",
-                "goto":"blueprints",
-                "text":"What's the deal with blueprints?"
-             }
-          ]
+         "id": "buyitems",
+         "text": "Great! Now, let's practice buying items. Use the dUSD I gave you earlier to buy these two items:",
+         "options": [
+           {
+             "type": "buyItems",
+             "buyItems": [
+               {
+                 "id": "0",
+                 "count": 1
+               },
+               {
+                  "id": "12",
+                  "count": 1000
+               }
+             ],
+             "text": "I'd like to buy these items!"
+           }
+         ]
+       },
+       {
+         "id": "processed",
+         "text": "Now that you've learned how to buy items, let's quickly review. We've covered branching dialogue options, acquiring items, and starting processes. Remember, some quests might require you to buy items or complete processes before progressing. You're well-equipped to handle any challenge that comes your way! Any questions or comments?",
+         "options": [
+           {
+             "type": "finish",
+             "text": "Nope, I'm good! Thanks, dChat!"
+           },
+           {
+             "type": "goto",
+             "goto": "apologize",
+             "text": "I'm still a bit confused."
+           },
+           {
+             "type": "goto",
+             "goto": "blueprints",
+             "text": "What's the deal with blueprints?"
+           }
+         ]
        },
        {
           "id":"apologize",

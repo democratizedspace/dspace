@@ -50,6 +50,11 @@
         "pinned": true
     },
     {
+        "name": "dChat",
+        "href": "/dChat",
+        "pinned": true
+    },
+    {
         "name": "Guilds",
         "href": "/guilds",
         "comingSoon": true
