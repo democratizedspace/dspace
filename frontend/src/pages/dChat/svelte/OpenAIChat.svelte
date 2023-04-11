@@ -7,10 +7,16 @@
 
     async function submitMessage() {
         const userMessage = { role: "user", content: $message };
+        
+        // Add the user message to the chat history immediately
+        messageHistory.update(history => [...history, userMessage]);
 
         try {
-            const aiMessage = { role: "assistant", content: await GPT35Turbo([...$messageHistory, userMessage]) };
-            messageHistory.update(history => [...history, userMessage, aiMessage]);
+            const aiResponse = await GPT35Turbo([...$messageHistory, userMessage]);
+            const aiMessage = { role: "assistant", content: aiResponse };
+            
+            // Update the chat history with the assistant's message
+            messageHistory.update(history => [...history, aiMessage]);
 
         } catch (error) {
             if (error.response) {
@@ -24,15 +30,12 @@
         message.set(''); // clear text area
     }
 
-
-
-
-function handleKeyDown(event) {
-    if (event.key === 'Enter' && event.target.tagName === 'TEXTAREA') {
-        event.preventDefault();
-        submitMessage();
+    function handleKeyDown(event) {
+        if (event.key === 'Enter' && event.target.tagName === 'TEXTAREA') {
+            event.preventDefault();
+            submitMessage();
+        }
     }
-}
 </script>
 
 <div class="chat">
