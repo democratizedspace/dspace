@@ -3,10 +3,12 @@
     import Web3 from 'web3';
     import { writable } from 'svelte/store';
     import Chip from './Chip.svelte';
+    import GitcoinPassport from './GitcoinPassport.svelte';
 
-    const signedIn = writable(false);
-    const signedInConfirmed = writable(false);
-    let ethAddress;
+    export const signedIn = writable(false);
+    export const signedInConfirmed = writable(false);
+    export let ethAddress;
+    let passportStamps = [];
 
     onMount(() => {
         const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
@@ -30,7 +32,6 @@
                 ethAddress = accounts[0];
                 localStorage.setItem('ethAddress', ethAddress);
                 signedIn.set(true);
-
             }).catch(function (error) {
                 console.error("Error signing in with MetaMask:", error);
             });
@@ -42,7 +43,7 @@
     function handleSignOut() {
         localStorage.removeItem('ethAddress');
         signedIn.set(false);
-
+        passportStamps = [];
     }
 </script>
 
@@ -50,7 +51,8 @@
     {#if $signedIn }
         <p>gm, {ethAddress.slice(0, 6)}...{ethAddress.slice(-4)}!</p>
 
-        <div style="height: 100px;"></div>
+        <!-- TODO: uncomment once this is ported to the backend -->
+        <!-- <GitcoinPassport {ethAddress} /> -->
 
         <Chip text="Sign out" onClick={handleSignOut} />
 
@@ -59,9 +61,8 @@
     {#if !$signedIn && $signedInConfirmed }
         <Chip text="Sign in with Ethereum" onClick={handleSignIn} />
     {/if}
-
 </div>
-
+    
 <style>
     #container {
         background-color: #68d46d;

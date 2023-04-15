@@ -1,62 +1,36 @@
 <script>
-    import items from '../../pages/inventory/json/items.json';
     import ItemCard from './ItemCard.svelte';
-
-    export let itemType, includeTypes;
-
-    let filteredItems = items.filter(item => item.type === itemType);
- 
-    if (includeTypes) {
-        filteredItems = filteredItems.filter(item => includeTypes.includes(item.type));
+    import items from '../../pages/inventory/json/items.json';
+    import SearchBar from './SearchBar.svelte';
+  
+    export let inventory;
+  
+    let fullItemList = items.map(item => ({ ...item }));
+    let filteredItems = fullItemList; // Initially, filteredItems is the entire list
+  
+    function handleSearch(event) {
+      filteredItems = event.detail;
     }
-</script>
-
-<div class="horizontal">
-    {#each items as item}
-        <!-- <ItemCard itemId={item.id} /> -->
-        <ItemCard itemId={item.id} />
+  </script>
+  
+  <!-- Pass the entire original data set (fullItemList) as the data prop -->
+  <SearchBar data={fullItemList} on:search="{handleSearch}" />
+  
+  <div class="horizontal">
+    {#each filteredItems as item (item.id)}
+      {#if inventory[item.id]}
+        <ItemCard itemId={item.id} count={inventory[item.id]} />
+      {/if}
     {/each}
-</div>
-
-<style>
-    img {
-        /* small icon */
-        margin: 5px;
-        border-radius: 20px;
-        /* nice green color for game rarity */
-        border: 5px solid rgb(0, 89, 255);
-    }
-
-    .item {
-        margin: 10px;
-        border-radius: 10px;
-        background-color: #68d46d;
-        color: black;
-        width: 25%;
-        /* wrap content */
-        flex-wrap: wrap;
-        opacity: 0.8;
-        padding: 20px;
-    }
-
-    .item:hover {
-        opacity: 1;
-        cursor: pointer;
-    }
-
-    .vertical {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
+  </div>
+  
+  <style>
     .horizontal {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
     }
   </style>
   

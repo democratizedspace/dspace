@@ -20,10 +20,15 @@
     "svelte-switch-case": "^2.0.0"
   },
   "dependencies": {
+    "@3id/connect": "^0.4.1",
     "@algolia/client-search": "^4.13.1",
     "@astrojs/netlify": "^1.0.1",
     "@astrojs/preact": "^2.0.2",
     "@astrojs/react": "^1.1.0",
+    "@ceramicnetwork/ceramic-http-client": "^0.7.5",
+    "@ceramicstudio/idx": "^0.12.2",
+    "@ceramicstudio/idx-constants": "^1.0.0",
+    "@ceramicstudio/idx-tools": "^0.11.0",
     "@docsearch/css": "^3.1.0",
     "@docsearch/react": "^3.1.0",
     "@types/node": "^18.0.0",
@@ -31,6 +36,7 @@
     "@types/react-dom": "^18.0.0",
     "astro": "^1.1.3",
     "ipfs-http-client": "^60.0.0",
+    "node-fetch": "^3.3.1",
     "openai": "^3.2.1",
     "preact": "^10.7.3",
     "pretty-date": "^0.2.0",

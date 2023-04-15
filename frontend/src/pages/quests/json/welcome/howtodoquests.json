@@ -3,7 +3,7 @@
     "title":"How to do quests",
     "description":"Learn how the quest mechanics work, including dialogue options, items, and processes.",
     "image":"/assets/quests/howtodoquests.jpg",
-    "npc":"/assets/npc/1a427414-48ee-4b7f-89a1-8522360676b7.jpg",
+    "npc":"/assets/npc/dChat.jpg",
     "start":"start",
     "dialogue":[
        {
@@ -133,7 +133,7 @@
              },
              {
                 "type":"goto",
-                "goto":"buyitems",
+                "goto":"hangofthis",
                 "requiresItems":[
                    {
                       "id":"22",
@@ -145,70 +145,21 @@
           ]
        },
        {
-         "id": "buyitems",
-         "text": "Great! Now, let's practice buying items. Use the dUSD I gave you earlier to buy these two items:",
+         "id": "hangofthis",
+         "text": "You're really getting the hang of this! I'm impressed. I'm sure you'll be a master quester in no time. If you ever need a refresher, just say the word. I'll be here in your garage, waiting for your next quest. Any questions before we wrap things up?",
          "options": [
-           {
-             "type": "buyItems",
-             "buyItems": [
-               {
-                 "id": "0",
-                 "count": 1
-               },
-               {
-                  "id": "12",
-                  "count": 1000
-               }
-             ],
-             "text": "I'd like to buy these items!"
-           }
+            {
+               "type": "finish",
+               "text": "Nope, I'm good. Thanks for the help!"
+            }
          ]
-       },
-       {
-         "id": "processed",
-         "text": "Now that you've learned how to buy items, let's quickly review. We've covered branching dialogue options, acquiring items, and starting processes. Remember, some quests might require you to buy items or complete processes before progressing. You're well-equipped to handle any challenge that comes your way! Any questions or comments?",
-         "options": [
-           {
-             "type": "finish",
-             "text": "Nope, I'm good! Thanks, dChat!"
-           },
-           {
-             "type": "goto",
-             "goto": "apologize",
-             "text": "I'm still a bit confused."
-           },
-           {
-             "type": "goto",
-             "goto": "blueprints",
-             "text": "What's the deal with blueprints?"
-           }
-         ]
-       },
-       {
-          "id":"apologize",
-          "text":"My apologies, friend! As a sophisticated AI, the last thing I want to do is make things confusing. Let's try again!",
-          "options":[
-             {
-                "type":"goto",
-                "goto":"processed",
-                "text":"I have more questions..."
-             }
-          ]
-       },
-       {
-          "id":"blueprints",
-          "text":"Blueprints are your key to starting processes. Sure, you could find the link in the code and start processes that way, but where's the fun in that? Check out the Blueprints page to see what you've got and what's still on your to-find list.",
-          "options":[
-             {
-                "type":"goto",
-                "goto":"processed",
-                "text":"I have more questions..."
-             }
-          ]
        }
     ],
     "rewards":[
-       
+      {
+         "id": "86",
+         "count": 1
+      }
     ],
     "requiresQuests":[
        

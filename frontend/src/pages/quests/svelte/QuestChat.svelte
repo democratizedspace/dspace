@@ -4,6 +4,7 @@
     import items from '../../inventory/json/items.json';
     import Chip from '../../../components/svelte/Chip.svelte';
     import BuyItems from '../../../components/svelte/BuyItems.svelte';
+    import ShoppingList from '../../../components/svelte/ShoppingList.svelte';
     import Process from '../../../components/svelte/Process.svelte';
     import {
         finishQuest,
@@ -13,7 +14,7 @@
         getCurrentDialogueStep,
         getItemsGranted,
         grantItems,
-        buyItems,
+        addItems,
     } from '../../../utils/gameState.js';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
 
@@ -50,25 +51,18 @@
     // FUNCTIONS
 
     function onOptionClick(option) {
-        if (option.type === "process") {
+        if (option.type === "process" || (option.requiresItems && !hasRequiredItems(option.requiresItems))) {
             return;
         }
+
+        console.log(`option: ${option.text}`);
 
         console.log(`option: ${option.text}`);
         switch (option.type) {
             case "finish": {
                 finishQuest(quest.id);
 
-                // add rewards to inventory
-                rewardItems.forEach(item => {
-                    let inventoryItem = JSON.parse(localStorage.getItem(`inventory-${item.id}`));
-                    if (inventoryItem) {
-                        inventoryItem.count += item.count;
-                        localStorage.setItem(`inventory-${item.id}`, JSON.stringify(inventoryItem));
-                    } else {
-                        localStorage.setItem(`inventory-${item.id}`, JSON.stringify(item));
-                    }
-                });
+                addItems(quest.rewards);
 
                 window.location.pathname = `/quests/${quest.id}/finished`;
 
@@ -92,14 +86,25 @@
                 setCurrentDialogueStep(quest.id, pointer);
                 break;
             }
-            case "buyItems": {
-                buyItems(option.buyItems);
-                break;
-            }
         }
 
         updateRequirementsCheckStatus();
     }
+
+    const hasRequiredItems = (requirements) => {
+        const inventoryCounts = getItemCounts(requirements);
+        return requirements.every(({ id, count }) => inventoryCounts[id] >= count);
+        };
+
+        $: requirementsMet = currentDialogue.options.map((option) => {
+        if (option.requiresItems) {
+            return hasRequiredItems(option.requiresItems);
+        } else if (option.grantsItems) {
+            return !getItemsGranted(quest.id, pointer);
+        } else {
+            return true;
+        }
+    });
 
     function itemRequirementsMet(itemList) {
         let requirementsMet = true;
@@ -183,7 +188,7 @@
             {#each dialogueMap.get(pointer).options as option, index}
             <div class="option">
                 {#if option.type === "grantsItems"}
-                    {#if !$requirementsCheckStatus[index]}
+                    {#if !requirementsMet[index]}
                         <Chip text={option.text} disabled={true}>
                             <CompactItemList itemList={option.grantsItems} disabled={true} />
                         </Chip>
@@ -193,7 +198,7 @@
                         </Chip>
                     {/if}
                 {:else if option.requiresItems}
-                    {#if $requirementsCheckStatus[index]}
+                    {#if requirementsMet[index]}
                         <Chip text={option.text} onClick={() => onOptionClick(option)}>
                             <div class="vertical">
                                 <p>Requires:</p>
@@ -216,11 +221,12 @@
                     </Chip>
                 {:else if option.type === "buyItems"}
                     <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                        <BuyItems itemList={option.buyItems} />
+                        <ShoppingList itemList={option.buyItems} />
                     </Chip>
                 {:else}
                     <Chip text={option.text} onClick={() => onOptionClick(option)}></Chip>
                 {/if}
+            
             </div>
             {/each}
             </div>
@@ -240,7 +246,7 @@
         <h5>Rewards:</h5>
         {#each rewardItems as item}
             <div class="horizontal">
-                <img class="item" src={item.image} alt={item.image} />
+                <a href={`/inventory/item/${item.id}`}><img class="item" src={item.image} alt={item.image} /></a>
                 <p>{item.count} x {item.name}</p>
             </div>
         {/each}

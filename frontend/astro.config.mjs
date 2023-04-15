@@ -7,5 +7,12 @@ import svelte from "@astrojs/svelte";
 export default defineConfig({
   output: 'server',
   adapter: netlify(),
-  integrations: [svelte()]
+  integrations: [svelte()],
+  vite: {
+    resolve: {
+      alias: {
+        "node-domexception": "/domexception-shim.js",
+      },
+    },
+  },
 });

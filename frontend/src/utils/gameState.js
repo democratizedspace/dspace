@@ -82,9 +82,13 @@ const setItemsGranted = (questId, stepId) => {
 };
 
 export const getItemsGranted = (questId, stepId) => {
+  console.log(`getItemsGranted: questId=${questId}, stepId=${stepId}`);
   try {
     const key = `${questId}-${stepId}`;
-    return gameState.quests[questId].itemsClaimed.includes(key);
+    console.log(`key=${key}`);
+    const itemsClaimed = gameState.quests[questId].itemsClaimed;
+    console.log(`itemsClaimed=${itemsClaimed}`);
+    return itemsClaimed.includes(key);
   } catch (e) {
     console.log("error getting items granted: ", e);
     return false;
@@ -130,6 +134,7 @@ export const getItemCounts = (itemList) => {
   return counts;
 }
 
+
 export const buyItems = (items) => {
   console.log("buyItems: ", items);
   items.forEach(item => {
@@ -168,7 +173,6 @@ export const sellItems = (items) => {
 
   saveGameState(gameState);
 };
-
 
 // ---------------------
 // PROCESSES

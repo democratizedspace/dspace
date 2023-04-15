@@ -25,11 +25,6 @@
         "pinned": true
     },
     {
-        "name": "Blueprints",
-        "href": "/blueprints",
-        "pinned": true
-    },
-    {
         "name": "Machines",
         "href": "/machines",
         "pinned": true
