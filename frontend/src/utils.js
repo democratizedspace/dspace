@@ -155,6 +155,10 @@ export const fixMarkdownText = (text) => {
 };
 
 export const getPriceStringComponents = (currency) => {
+    if (!currency || typeof currency !== 'string') {
+        return { price: 0, symbol: '' };
+    }
+
     // parse a string like '10 dUSD' into a number and a symbol
     const priceString = currency.split(' ');
     const price = parseFloat(priceString[0]);
@@ -164,6 +168,7 @@ export const getPriceStringComponents = (currency) => {
         price, symbol
     };
 };
+
 
 export const getSymbolFromId = (itemId) => {
     const item = items.find((item) => item.id === itemId);

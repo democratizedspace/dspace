@@ -174,12 +174,28 @@ export const sellItems = (items) => {
   saveGameState(gameState);
 };
 
+export const hasItems = (itemList) => {
+  for (let i = 0; i < itemList.length; i++) {
+    const { id, count } = itemList[i];
+    if (!gameState.inventory[id] || gameState.inventory[id] < count) {
+      return false;
+    }
+  }
+  return true;
+};
+
+
 // ---------------------
 // PROCESSES
 // ---------------------
 
 export const startProcess = (processId) => {
   const process = processes.find((p) => p.id === processId);
+
+  if (!hasItems(process.consumeItems)) {
+    console.log("Not enough items to start the process.");
+    return;
+  }
 
   gameState.processes[processId] = {
     startedAt: Date.now(),

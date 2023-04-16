@@ -1,9 +1,8 @@
 <script>
     import { onMount } from 'svelte';
-    import { writable } from 'svelte/store';
+    import { writable, derived } from 'svelte/store';
     import items from '../../inventory/json/items.json';
     import Chip from '../../../components/svelte/Chip.svelte';
-    import BuyItems from '../../../components/svelte/BuyItems.svelte';
     import ShoppingList from '../../../components/svelte/ShoppingList.svelte';
     import Process from '../../../components/svelte/Process.svelte';
     import {
@@ -17,6 +16,7 @@
         addItems,
     } from '../../../utils/gameState.js';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
+    import RequireItems from '../../../components/svelte/RequireItems.svelte';
 
     export let quests, quest, pointer, currentDialogue, finished;
     
@@ -26,6 +26,8 @@
     const npc = quest.npc;
     console.log("npc: " + npc);
     const avatar = localStorage.getItem('avatarUrl');
+    // create a derived store for requiredItemsMet
+    const requiredItemsMet = writable({});
 
     // create a map of reward ids (from quest.rewards) to images using the items list
     let rewardItems = quest.rewards.map(reward => {
@@ -143,6 +145,12 @@
         requirementsCheckStatus.set(optionRequirementsMet);
     }
 
+    $: {
+        if (currentDialogue) {
+            requiredItemsMet.set(hasRequiredItems(currentDialogue.options.map(option => option.requiresItems || [])));
+        }
+}
+
     const currentDialogueStep = getCurrentDialogueStep(quest.id);
     console.log("currentDialogueStep: " + currentDialogueStep);
     if (currentDialogueStep) {
@@ -159,82 +167,73 @@
 
 <div class="vertical">
     <div class="horizontal">
-      <div class="vertical">
-        <h3>{quest.title}</h3>
-      </div>
+        <div class="vertical">
+            <h3>{quest.title}</h3>
+        </div>
     </div>
     {#if finished}
-    <div class="chat">
-      <div class="vertical">
-        <h4>Quest Complete!</h4>
-        <p>You have completed this quest. You can now return to the Quests page to start another quest.</p>
-      </div>
-    </div>
+        <div class="chat">
+            <div class="vertical">
+                <h4>Quest Complete!</h4>
+                <p>You have completed this quest. You can now return to the Quests page to start another quest.</p>
+            </div>
+        </div>
     {:else}
-    <div class="chat">
-      <div>
-        {#if $clientSideRendered}
+        <div class="chat">
             <div>
-            <img class="banner" src={quest.image} alt={quest.image} />
-            </div>
-            <div class="left">
-            <img src={npc} alt={npc} />
-            <p class="npcDialogue left">
-                {dialogueMap.get(pointer).text}
-            </p>
-            </div>
-            <div class="right options">
-            <img src={avatar} alt={avatar} />
-            {#each dialogueMap.get(pointer).options as option, index}
-            <div class="option">
-                {#if option.type === "grantsItems"}
-                    {#if !requirementsMet[index]}
-                        <Chip text={option.text} disabled={true}>
-                            <CompactItemList itemList={option.grantsItems} disabled={true} />
-                        </Chip>
-                    {:else}
-                        <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                            <CompactItemList itemList={option.grantsItems} increase={true} />
-                        </Chip>
-                    {/if}
-                {:else if option.requiresItems}
-                    {#if requirementsMet[index]}
-                        <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                            <div class="vertical">
-                                <p>Requires:</p>
-                                <CompactItemList itemList={option.requiresItems} />
+                {#if $clientSideRendered}
+                    <div>
+                        <img class="banner" src={quest.image} alt={quest.image} />
+                    </div>
+                    <div class="left">
+                        <img src={npc} alt={npc} />
+                        <p class="npcDialogue left">
+                            {dialogueMap.get(pointer).text}
+                        </p>
+                    </div>
+                    <div class="right options">
+                        <img src={avatar} alt={avatar} />
+                            {#each dialogueMap.get(pointer).options as option, index}
+                            <div class="option">
+                                {#if option.type === "grantsItems"}
+                                    {#if !requirementsMet[index]}
+                                        <Chip text={option.text} disabled={true}>
+                                            <CompactItemList itemList={option.grantsItems} disabled={true} />
+                                        </Chip>
+                                    {:else}
+                                        <Chip text={option.text} onClick={() => onOptionClick(option)}>
+                                            <CompactItemList itemList={option.grantsItems} increase={true} />
+                                        </Chip>
+                                    {/if}
+                                {:else if option.requiresItems}
+                                    {#if requiredItemsMet[index]}
+                                        <Chip text={option.text} onClick={() => onOptionClick(option)} />
+                                    {:else}
+                                        <Chip text={option.text} disabled={true}>
+                                            <CompactItemList itemList={option.requiresItems} disabled={true} />
+                                        </Chip>
+                                    {/if}
+                                {:else if option.type === "process"}
+                                    <Chip text={option.text} onClick={() => onOptionClick(option)}>
+                                        <div class="vertical">
+                                            <Process processId={option.startProcess} />
+                                        </div>
+                                    </Chip>
+                                {:else if option.type === "buyItems"}
+                                    <Chip text={option.text} onClick={() => onOptionClick(option)}>
+                                        <ShoppingList itemList={option.buyItems} />
+                                    </Chip>
+                                {:else}
+                                    <Chip text={option.text} onClick={() => onOptionClick(option)}></Chip>
+                                {/if}
                             </div>
-                        </Chip>
-                    {:else}
-                        <Chip text={option.text} disabled={true}>
-                            <div class="vertical">
-                                <p>Requires:</p>
-                                <CompactItemList itemList={option.requiresItems} disabled={true} />
-                            </div>
-                        </Chip>
-                    {/if}
-                {:else if option.type === "process"}
-                    <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                        <div class="vertical">
-                            <Process processId={option.process} />
-                        </div>
-                    </Chip>
-                {:else if option.type === "buyItems"}
-                    <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                        <ShoppingList itemList={option.buyItems} />
-                    </Chip>
+                        {/each}
+                    </div>
                 {:else}
-                    <Chip text={option.text} onClick={() => onOptionClick(option)}></Chip>
+                    <div class="temp-container" />
                 {/if}
-            
             </div>
-            {/each}
-            </div>
-        {:else}
-            <div class="temp-container" />
-        {/if}
-      </div>
-    </div>
+        </div>
     {/if}
     <div class="vertical">
         <h5>Status:</h5>

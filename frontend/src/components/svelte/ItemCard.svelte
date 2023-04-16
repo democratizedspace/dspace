@@ -16,17 +16,21 @@
 </script>
 
 <div class="item">
-  <div class="item-image">
-    <img alt={item.title} src={item.image} />
-  </div>
-  <div class="item-info">
-    <h4 class="name">{item.name}</h4>
-    <p class="description">{truncateString(item.description)}</p>
-    <p><strong>Count:</strong> {count}</p>
-    {#if item.price && item.price > 0}
-      <p><strong>Price:</strong> {item.price} dUSD</p>
-    {/if}
-  </div>
+  <a href={`/inventory/item/${item.id}`}>
+    <div class="horizontal">
+      <div class="item-image">
+        <img alt={item.title} src={item.image} />
+      </div>
+      <div class="vertical">
+        <h4 class="name">{item.name}</h4>
+        <p class="description">{truncateString(item.description)}</p>
+        <p><strong>Count:</strong> {count}</p>
+        {#if item.price}
+          <p><strong>Price:</strong> {item.price}</p>
+        {/if}
+      </div>
+    </div>
+  </a>
 </div>
   
   <style>
@@ -55,13 +59,20 @@
     }
   
     img {
-      width: 50px;
-      height: 50px;
+      width: 100px;
+      height: 100px;
       border-radius: 20px;
       object-fit: cover;
     }
+
+    .horizontal {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
   
-    .item-info {
+    .vertical {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -82,6 +93,12 @@
       text-align: left;
       font-size: 0.8rem;
       margin: 0px;
+    }
+
+    a {
+      color: black;
+      text-decoration: none;
+      margin: 5px;
     }
   </style>
   
