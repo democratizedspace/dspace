@@ -135,6 +135,9 @@ export const getItemCounts = (itemList) => {
   return counts;
 }
 
+export const getItemCount = (itemId) => {
+  return getItemCounts([{ id: itemId }])[itemId];
+}
 
 export const buyItems = (items) => {
   console.log("buyItems: ", items);

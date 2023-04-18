@@ -5,11 +5,16 @@
   import SearchBar from './SearchBar.svelte';
   import Sorter from './Sorter.svelte';
   import { getPriceStringComponents } from '../../utils.js';
+  import { getItemCount } from '../../utils/gameState.js';
 
   export let inventory;
 
   let fullItemList = items.map(item => ({ ...item }));
-  const filteredItems = writable(fullItemList); // Use writable store
+  
+  // Create a derived list from fullItemList based on inventory prop
+  let inventoryItemList = fullItemList.filter(item => inventory[item.id] !== undefined);
+
+  const filteredItems = writable(inventoryItemList); // Use writable store
 
   function handleSearch(event) {
     $filteredItems = event.detail;
@@ -41,7 +46,19 @@
         return price;
       },
     },
+    {
+      field: 'count',
+      func: (item) => {
+          return getItemCount(item.id);
+      },
+    }
   ];
+
+  // Update the inventoryItemList when the inventory prop changes
+  $: {
+    inventoryItemList = fullItemList.filter(item => inventory[item.id] !== undefined);
+    filteredItems.set(inventoryItemList);
+  }
 </script>
 
 <div class="vertical">
@@ -56,16 +73,19 @@
           return item.price ? getPriceStringComponents(item.price).price : 0;
         },
       },
+      {
+        field: 'count',
+        func: (item) => {
+          return getItemCount(item.id);
+        },
+      },
     ]}
     on:sort="{handleSort}"
   />
 
-
   <div class="horizontal">
-    {#each $filteredItems as item (item.id)} <!-- Access the store using $ -->
-      {#if inventory[item.id]}
-        <ItemCard itemId={item.id} count={inventory[item.id]} />
-      {/if}
+    {#each $filteredItems as item (item.id)}
+      <ItemCard itemId={item.id} count={inventory[item.id]} />
     {/each}
   </div>
 </div>

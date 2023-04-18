@@ -535,54 +535,6 @@
     },
     {
         "id": "78",
-        "name": "Basil",
-        "description": "Grow basil hydroponically",
-        "image": "/assets/blueprints/basil.jpg"
-    },
-    {
-        "id": "79",
-        "name": "Basil seedlings",
-        "description": "Basil seedlings",
-        "image": "/assets/blueprints/basil_seedlings.jpg"
-    },
-    {
-        "id": "80",
-        "name": "Solar (200 W)",
-        "description": "Generate 200 W of electricity using solar panels.",
-        "image": "/assets/blueprints/solar_200W.jpg"
-    },
-    {
-        "id": "81",
-        "name": "Solar (1 kW)",
-        "description": "Generate 1 kW of electricity using solar panels.",
-        "image": "/assets/blueprints/solar_1kW.jpg"
-    },
-    {
-        "id": "82",
-        "name": "3D printed nosecone",
-        "description": "A 3D printed nosecone for a model rocket.",
-        "image": "/assets/blueprints/nosecone.jpg"
-    },
-    {
-        "id": "83",
-        "name": "3D printed body tube",
-        "description": "A 3D printed body tube for a model rocket.",
-        "image": "/assets/blueprints/body_tube.jpg"
-    },
-    {
-        "id": "84",
-        "name": "3D printed fincan",
-        "description": "A 3D printed fincan for a model rocket.",
-        "image": "/assets/blueprints/fincan.jpg"
-    },
-    {
-        "id": "85",
-        "name": "3D printed coupler",
-        "description": "A 3D printed coupler for a model rocket.",
-        "image": "/assets/blueprints/coupler.jpg"
-    },
-    {
-        "id": "86",
         "name": "dChat",
         "description": "An offline-first conversational digital assistant. You ask it questions, it answers! Powered by LLMs!",
         "image": "/assets/npc/dChat.jpg"

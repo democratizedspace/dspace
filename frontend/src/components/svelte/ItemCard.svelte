@@ -1,8 +1,9 @@
 <script>
+  import items from '../../pages/inventory/json/items.json';
+  import { getItemCount } from '../../utils/gameState.js';
+  
   export let itemId;
   export let count;
-
-  import items from '../../pages/inventory/json/items.json';
 
   const item = items.find(item => item.id === itemId);
 
@@ -24,7 +25,7 @@
       <div class="vertical">
         <h4 class="name">{item.name}</h4>
         <p class="description">{truncateString(item.description)}</p>
-        <p><strong>Count:</strong> {count}</p>
+        <p><strong>Count:</strong> {getItemCount(item.id)}</p>
         {#if item.price}
           <p><strong>Price:</strong> {item.price}</p>
         {/if}
