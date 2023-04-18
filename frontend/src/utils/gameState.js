@@ -38,8 +38,9 @@ export const state = writable(gameState);
 // QUESTS
 // ---------------------
 
-export const finishQuest = (questId) => {
+export const finishQuest = (questId, rewardItems) => {
   gameState.quests[questId] = { finished: true };
+  addItems(rewardItems);
   saveGameState(gameState);
 };
 
@@ -75,16 +76,16 @@ export const getCurrentDialogueStep = (questId) => {
   return gameState.quests[questId] ? gameState.quests[questId].stepId : 0;
 };
 
-const setItemsGranted = (questId, stepId) => {
-  const key = `${questId}-${stepId}`;
+const setItemsGranted = (questId, stepId, optionIndex) => {
+  const key = `${questId}-${stepId}-${optionIndex}`;
+  console.log(`granting items for key=${key}`);
   gameState.quests[questId] = { ...gameState.quests[questId], itemsClaimed: [...(gameState.quests[questId].itemsClaimed || []), key] };
   saveGameState(gameState);
 };
 
-export const getItemsGranted = (questId, stepId) => {
-  console.log(`getItemsGranted: questId=${questId}, stepId=${stepId}`);
+export const getItemsGranted = (questId, stepId, optionIndex) => {
   try {
-    const key = `${questId}-${stepId}`;
+    const key = `${questId}-${stepId}-${optionIndex}`;
     console.log(`key=${key}`);
     const itemsClaimed = gameState.quests[questId].itemsClaimed;
     console.log(`itemsClaimed=${itemsClaimed}`);
@@ -95,12 +96,12 @@ export const getItemsGranted = (questId, stepId) => {
   }
 };
 
-export const grantItems = (questId, stepId, grantsItems) => {
-  if (getItemsGranted(questId, stepId)) {
+export const grantItems = (questId, stepId, optionIndex, itemList) => {
+  if (getItemsGranted(questId, stepId, optionIndex)) {
     return;
   }
-  addItems(grantsItems);
-  setItemsGranted(questId, stepId);
+  addItems(itemList);
+  setItemsGranted(questId, stepId, optionIndex);
 }
 
 // ---------------------
@@ -189,48 +190,76 @@ export const hasItems = (itemList) => {
 // PROCESSES
 // ---------------------
 
+export const hasRequiredAndConsumedItems = (processId) => {
+  const process = processes.find((p) => p.id === processId);
+  if (!process) {
+    return false;
+  }
+  return hasItems(process.requireItems) && hasItems(process.consumeItems);
+};
+
 export const startProcess = (processId) => {
   const process = processes.find((p) => p.id === processId);
 
-  if (!hasItems(process.consumeItems)) {
+  if (!hasRequiredAndConsumedItems(processId)) {
     console.log("Not enough items to start the process.");
     return;
   }
 
   gameState.processes[processId] = {
     startedAt: Date.now(),
+    duration: durationInSeconds(process.duration) * 1000,
   };
   burnItems(process.consumeItems);
   saveGameState(gameState);
 };
 
-export const getRemainingProcessTime = (processId) => {
-  const process = gameState.processes[processId];
-  if (!process) return 0;
-  return Math.max(0, process.startedAt + duration - Date.now());
+export const ProcessStates = {
+  NOT_STARTED: "not started",
+  IN_PROGRESS: "in progress",
+  FINISHED: "finished",
 };
 
-export const processFinished = (processId) => {
+export const getProcessState = (processId) => {
   const process = gameState.processes[processId];
-  if (!process) return false;
-  return process.startedAt + durationInSeconds(process.duration) * 1000 < Date.now();
+  if (!process || !process.startedAt) {
+    return { state: ProcessStates.NOT_STARTED, progress: 0 };
+  }
+
+  const elapsed = Date.now() - process.startedAt;
+  const progress = Math.min(1, elapsed / process.duration);
+
+  if (process.startedAt + process.duration <= Date.now()) {
+    return { state: ProcessStates.FINISHED, progress: progress * 100 };
+  }
+
+  return { state: ProcessStates.IN_PROGRESS, progress: progress * 100 };
+};
+
+export const getProcessProgress = (processId) => {
+  const process = gameState.processes[processId];
+  if (!process || !process.startedAt) return 0;
+  const elapsed = Date.now() - process.startedAt;
+  const progress = Math.min(1, elapsed / process.duration);
+  return progress * 100;
 };
 
 export const finishProcess = (processId) => {
-  if (!processFinished(processId)) {
-    return;
-  }
+  if (getProcessState(processId).state === ProcessStates.FINISHED) {
+    const process = processes.find((p) => p.id === processId);
+    const createItems = process.createItems;
 
-  const process = processes.find((p) => p.id === processId);
-  const createItems = process.createItems;
-  
-  gameState.processes[processId] = undefined;
-  addItems(createItems);
-  saveGameState(gameState);
+    gameState.processes[processId] = undefined;
+    addItems(createItems);
+    saveGameState(gameState);
+  }
 };
+
 
 export const cancelProcess = (processId, consumeItems) => {
   gameState.processes[processId] = undefined;
+  // Return the consumed items to the player's inventory
   addItems(consumeItems);
   saveGameState(gameState);
 };
+

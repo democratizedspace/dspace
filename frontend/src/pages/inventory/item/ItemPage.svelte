@@ -22,16 +22,18 @@
 
 {#if $mounted}
     <Chip inverted={true} text="">
-        <div class="horizontal">
-            <img src={item.image} alt={item.name} />
-            <div class="vertical">
-                <h2>{item.name}</h2>
-                <p>Count: {$count}</p>
+        <div class="vertical">
+            <div class="horizontal">
+                <img src={item.image} alt={item.name} />
+                <div class="vertical">
+                    <h2>{item.name}</h2>
+                    <p>Count: {$count}</p>
+                </div>
             </div>
+            <BuySell itemId={itemId} />
         </div>
     </Chip>
 
-    <BuySell itemId={itemId} />
 {/if}
 
 <style>

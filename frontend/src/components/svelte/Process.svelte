@@ -1,58 +1,67 @@
 <script>
-  import { onDestroy } from 'svelte';
-  import { writable } from 'svelte/store';
-  import Chip from './Chip.svelte';
-  import { state, getItemCounts, startProcess, processFinished, finishProcess } from '../../utils/gameState.js';
+  import { writable, derived } from 'svelte/store';
+  import { onMount} from 'svelte';
   import processes from '../../pages/processes/processes.json';
-  import { prettyPrintDuration, durationInSeconds } from '../../utils.js';
   import CompactItemList from './CompactItemList.svelte';
+  import ProgressBar from './ProgressBar.svelte';
+  import Chip from './Chip.svelte';
+  import { durationInSeconds } from '../../utils.js';
+  import {
+    startProcess as startProcessInGameState,
+    finishProcess,
+    cancelProcess,
+    getProcessState,
+    ProcessStates,
+    hasRequiredAndConsumedItems,
+    state
+  } from '../../utils/gameState.js';
 
   export let processId;
 
   const process = processes.find((process) => process.id === processId);
+  const processStateInfo = writable(getProcessState(processId));
+  const canStartProcess = writable(false);
 
-  let progress = writable(0);
-  let timeLeft = writable(durationInSeconds(process.duration) * 1000);
-  let interval;
+  let progressBar;
 
-  const requiredItemsCounts = getItemCounts(process.requireItems);
-
-  const hasAllRequiredItems = () => {
-    const requiredItemsCounts = getItemCounts(process.requireItems);
-    const inventory = $state.inventory;
-    return Object.keys(requiredItemsCounts).every((itemId) => {
-      return inventory[itemId] >= requiredItemsCounts[itemId];
-    });
+  function startProcess() {
+    startProcessInGameState(processId);
+    progressBar.startProgressBar();
+    processStateInfo.set(getProcessState(processId));
   }
 
-  function startProgressBar() {
-    if (!hasAllRequiredItems()) {
-      return;
+  function handleProcessComplete() {
+    processStateInfo.set(getProcessState(processId));
+  }
+
+  function claimItems() {
+    finishProcess(processId);
+    processStateInfo.set(getProcessState(processId));
+    progressBar.resetProgressBar();
+  }
+
+  function cancel() {
+    cancelProcess(processId, process.consumeItems);
+    processStateInfo.set(getProcessState(processId));
+    // Reset the progress bar and stop its motion
+    progressBar.resetProgressBar();
+  }
+
+  
+  $: {
+    processStateInfo.set(getProcessState(processId));
+  }
+
+  $: {
+    if ($state) {
+      canStartProcess.set(hasRequiredAndConsumedItems(processId));
     }
-
-    progress.set(0);
-    clearInterval(interval);
-
-    let start = Date.now();
-    let duration = durationInSeconds(process.duration) * 1000;
-    interval = setInterval(() => {
-      const elapsed = Date.now() - start;
-      const percentage = Math.min((elapsed / duration) * 100, 100);
-      progress.set(parseFloat(percentage.toFixed(2)));
-
-      timeLeft.set(duration - elapsed);
-
-      if (elapsed >= duration) {
-        finishProcess(processId);
-        clearInterval(interval);
-      }
-    }, 10);
-
-    startProcess(processId);
   }
 
-  onDestroy(() => {
-    clearInterval(interval);
+  onMount(() => {
+    if ($processStateInfo.state === ProcessStates.IN_PROGRESS) {
+      progressBar.startProgressBar();
+    }
   });
 </script>
 
@@ -70,44 +79,28 @@
     <CompactItemList itemList={process.createItems} increase={true} />
   </div>
 
-  <div class="vertical left-aligned">
-    <p>Time left: {prettyPrintDuration($timeLeft / 1000, true)}</p>
-    <p>Progress: {($progress).toFixed(2)}%</p>
-  </div>
+  {#if $processStateInfo.state === ProcessStates.NOT_STARTED}
+    <Chip inverted={true} text="Start" onClick={() => startProcess()} disabled={!$canStartProcess} />
+  {:else if $processStateInfo.state === ProcessStates.IN_PROGRESS}
+    <Chip inverted={true} text="Cancel" onClick={() => cancel()} />
+  {:else}
+    <Chip inverted={true} text="Claim your items" onClick={() => claimItems()} />
+  {/if}
 
-  {#if $state.inventory && hasAllRequiredItems() && process.requireItems.length > 0}
-  <Chip inverted={true} text="Start" onClick={() => startProgressBar()} />
-{:else}
-  <Chip inverted={true} text="Start" disabled={true} />
-{/if}
-
-  <div class="progress-container">
-    <div class="progress-bar" style="width: {$progress}%"></div>
-  </div>
+  <ProgressBar
+    bind:this={progressBar}
+    startValue={$processStateInfo.progress / 100}
+    totalDurationInSeconds={durationInSeconds(process.duration)}
+    on:processcomplete={handleProcessComplete}
+  />
 </div>
 
 <style>
-  .progress-container {
-    height: 20px;
-    width: 90%;
-    background-color: #f3f3f3;
-    position: relative;
-    margin: 5%;
-  }
-
-  .progress-bar {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background-color: #4caf50;
-  }
-
   .vertical {
     display: flex;
     flex-direction: column;
     align-items: left;
+    gap: 10px;
   }
 
   p {

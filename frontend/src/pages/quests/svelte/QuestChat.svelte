@@ -1,33 +1,17 @@
 <script>
     import { onMount } from 'svelte';
-    import { writable, derived } from 'svelte/store';
+    import { writable } from 'svelte/store';
     import items from '../../inventory/json/items.json';
-    import Chip from '../../../components/svelte/Chip.svelte';
-    import ShoppingList from '../../../components/svelte/ShoppingList.svelte';
-    import Process from '../../../components/svelte/Process.svelte';
-    import {
-        finishQuest,
-        getItemCounts,
-        startProcess,
-        setCurrentDialogueStep,
-        getCurrentDialogueStep,
-        getItemsGranted,
-        grantItems,
-        addItems,
-    } from '../../../utils/gameState.js';
-    import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
-    import RequireItems from '../../../components/svelte/RequireItems.svelte';
+    import QuestChatOption from './QuestChatOption.svelte';
+    import { state, questFinished } from '../../../utils/gameState.js';
 
-    export let quests, quest, pointer, currentDialogue, finished;
-    
-    const requirementsCheckStatus = writable({});
+    export let quest, pointer, currentDialogue;
+
     const clientSideRendered = writable(false);
+    const finished = writable(false);
 
     const npc = quest.npc;
-    console.log("npc: " + npc);
     const avatar = localStorage.getItem('avatarUrl');
-    // create a derived store for requiredItemsMet
-    const requiredItemsMet = writable({});
 
     // create a map of reward ids (from quest.rewards) to images using the items list
     let rewardItems = quest.rewards.map(reward => {
@@ -50,119 +34,21 @@
 
     currentDialogue = dialogueMap.get(pointer);
 
-    // FUNCTIONS
-
-    function onOptionClick(option) {
-        if (option.type === "process" || (option.requiresItems && !hasRequiredItems(option.requiresItems))) {
-            return;
-        }
-
-        console.log(`option: ${option.text}`);
-
-        console.log(`option: ${option.text}`);
-        switch (option.type) {
-            case "finish": {
-                finishQuest(quest.id);
-
-                addItems(quest.rewards);
-
-                window.location.pathname = `/quests/${quest.id}/finished`;
-
-                return;
-            }
-            case "grantsItems": {
-                console.log("grantsItems");
-                grantItems(quest.id, pointer, option.grantsItems);
-                console.log("granted items");
-                updateRequirementsCheckStatus();
-                return;
-            }
-            case "process": {
-                const process = 
-                startProcess(option.startProcess, );
-                return;
-            }
-            case "goto": {
-                pointer = option.goto;
-                currentDialogue = dialogueMap.get(pointer);
-                setCurrentDialogueStep(quest.id, pointer);
-                break;
-            }
-        }
-
-        updateRequirementsCheckStatus();
-    }
-
-    const hasRequiredItems = (requirements) => {
-        const inventoryCounts = getItemCounts(requirements);
-        return requirements.every(({ id, count }) => inventoryCounts[id] >= count);
-        };
-
-        $: requirementsMet = currentDialogue.options.map((option) => {
-        if (option.requiresItems) {
-            return hasRequiredItems(option.requiresItems);
-        } else if (option.grantsItems) {
-            return !getItemsGranted(quest.id, pointer);
-        } else {
-            return true;
-        }
-    });
-
-    function itemRequirementsMet(itemList) {
-        let requirementsMet = true;
-        const actualItemCounts = getItemCounts(itemList);
-
-        itemList.forEach(requiredItem => {
-            console.log(`left: ${actualItemCounts[requiredItem.id]}, right: ${requiredItem.count}`);
-            if (actualItemCounts[requiredItem.id] < requiredItem.count) {
-                requirementsMet = false;
-            }
-        });
-        return requirementsMet;
-    }
-    
-    function updateRequirementsCheckStatus() {
-        const optionRequirementsMet = {};
-
-        dialogueMap.get(pointer).options.forEach((option, index) => {
-            console.log(`option: ${JSON.stringify(option)}`);
-            console.log(`index: ${index}`);
-            if (option.requiresItems) {
-                optionRequirementsMet[index] = itemRequirementsMet(option.requiresItems);
-            } else if (option.grantsItems) {
-                console.log("checking to make sure the items haven't already been granted");
-                if (getItemsGranted(quest.id, pointer)) {
-                    console.log("items have already been granted");
-                    optionRequirementsMet[index] = false;
-                } else {
-                    optionRequirementsMet[index] = true;
-                }
-            } else {
-                optionRequirementsMet[index] = true;
-            }
-        });
-
-        requirementsCheckStatus.set(optionRequirementsMet);
-    }
-
-    $: {
-        if (currentDialogue) {
-            requiredItemsMet.set(hasRequiredItems(currentDialogue.options.map(option => option.requiresItems || [])));
-        }
-}
-
-    const currentDialogueStep = getCurrentDialogueStep(quest.id);
-    console.log("currentDialogueStep: " + currentDialogueStep);
-    if (currentDialogueStep) {
-        pointer = currentDialogueStep;
-        currentDialogue = dialogueMap.get(pointer);
-    }
-    
-    updateRequirementsCheckStatus();
-
     onMount(() => {
         clientSideRendered.set(true);
     });
+
+    $: {
+        if ($state) {
+            if ($state.quests[quest.id]) {
+                pointer = $state.quests[quest.id].stepId;
+                currentDialogue = dialogueMap.get(pointer);
+            }
+            if (questFinished(quest.id)) {
+                finished.set(true);
+            }
+        }
+    }
 </script>
 
 <div class="vertical">
@@ -171,7 +57,7 @@
             <h3>{quest.title}</h3>
         </div>
     </div>
-    {#if finished}
+    {#if $finished}
         <div class="chat">
             <div class="vertical">
                 <h4>Quest Complete!</h4>
@@ -193,40 +79,8 @@
                     </div>
                     <div class="right options">
                         <img src={avatar} alt={avatar} />
-                            {#each dialogueMap.get(pointer).options as option, index}
-                            <div class="option">
-                                {#if option.type === "grantsItems"}
-                                    {#if !requirementsMet[index]}
-                                        <Chip text={option.text} disabled={true}>
-                                            <CompactItemList itemList={option.grantsItems} disabled={true} />
-                                        </Chip>
-                                    {:else}
-                                        <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                                            <CompactItemList itemList={option.grantsItems} increase={true} />
-                                        </Chip>
-                                    {/if}
-                                {:else if option.requiresItems}
-                                    {#if requiredItemsMet[index]}
-                                        <Chip text={option.text} onClick={() => onOptionClick(option)} />
-                                    {:else}
-                                        <Chip text={option.text} disabled={true}>
-                                            <CompactItemList itemList={option.requiresItems} disabled={true} />
-                                        </Chip>
-                                    {/if}
-                                {:else if option.type === "process"}
-                                    <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                                        <div class="vertical">
-                                            <Process processId={option.startProcess} />
-                                        </div>
-                                    </Chip>
-                                {:else if option.type === "buyItems"}
-                                    <Chip text={option.text} onClick={() => onOptionClick(option)}>
-                                        <ShoppingList itemList={option.buyItems} />
-                                    </Chip>
-                                {:else}
-                                    <Chip text={option.text} onClick={() => onOptionClick(option)}></Chip>
-                                {/if}
-                            </div>
+                        {#each dialogueMap.get(pointer).options as option, index}
+                            <QuestChatOption {quest} {option} questId={quest.id} stepId={pointer} optionIndex={index} />
                         {/each}
                     </div>
                 {:else}
@@ -348,19 +202,7 @@
         align-items: center;
     }
 
-    .option {
-        margin: 5px;
-    }
-
     .options > img {
         margin: 5px;
-    }
-
-    .tiny {
-        width: 20px;
-        height: 20px;
-        border-radius: 20px;
-        /* green border */
-        border: 2px solid #68d46d;
     }
 </style>

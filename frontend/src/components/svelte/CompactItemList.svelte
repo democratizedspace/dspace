@@ -53,7 +53,7 @@
                 <div class="horizontal">
                     <a href={`/inventory/item/${item.id}`}><img src={item.image} class="icon" alt={item.name} /></a>
                     {#if increase}
-                        <del class="disabled"><p>{prettyPrintNumber($itemCounts[item.id])}<span class="green">+{prettyPrintNumber(item.count)}</span> x {item.name}</p></del>
+                        <del class="disabled"><p>{prettyPrintNumber($itemCounts[item.id])}<span>+{prettyPrintNumber(item.count)}</span> x {item.name}</p></del>
                     {:else}
                         {#if ($itemCounts[item.id] < item.count)}
                             <del class="disabled"><p><span>{prettyPrintNumber(item.count)}</span>/{prettyPrintNumber($itemCounts[item.id])} x {item.name}</p></del>
@@ -72,7 +72,7 @@
                 <div class="horizontal">
                     <a href={`/inventory/item/${item.id}`}><img src={item.image} class="icon" alt={item.name} /></a>
                     {#if increase}
-                        <p>{prettyPrintNumber($itemCounts[item.id])}<span class="green">+{prettyPrintNumber(item.count)}</span> x {item.name}</p>
+                        <p>{prettyPrintNumber($itemCounts[item.id])}<span class="blue">+{prettyPrintNumber(item.count)}</span> x {item.name}</p>
                     {:else}
                         {#if ($itemCounts[item.id] < item.count)}
                             <p>{prettyPrintNumber(item.count)}/<span class="red">{prettyPrintNumber($itemCounts[item.id])}</span> x {item.name}</p>
@@ -114,7 +114,7 @@
         margin: 0px;
     }
 
-    .green {
+    .blue {
         color: rgb(0, 99, 180);
     }
 
