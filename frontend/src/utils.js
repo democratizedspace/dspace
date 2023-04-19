@@ -61,7 +61,7 @@ export const prettyPrintDuration = (durationSeconds, integer) => {
     const days = Math.floor(durationSeconds / 86400);
     const hours = Math.floor((durationSeconds % 86400) / 3600);
     const minutes = Math.floor((durationSeconds % 3600) / 60);
-    const seconds = !(integer) ? (durationSeconds % 60).toFixed(1) : Math.floor(durationSeconds % 60);
+    const seconds = Math.floor(durationSeconds % 60);
     const duration = [];
     if (days > 0) {
         duration.push(`${days}d`);

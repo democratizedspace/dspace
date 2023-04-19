@@ -13,18 +13,22 @@
     // }
     export let itemList = [], increase = false, disabled = false;
 
-    let fullItemList = [];
     const itemCounts = writable(getItemCounts(itemList));
+
+    let fullItemList = [];
+    let isMounted = false;
 
     function generateFullItemList() {
         return itemList.map((item) => {
             const fullItem = items.find((i) => i.id === item.id);
-            const count = Number(item.count.toFixed(5));
+            const count = item.hasOwnProperty('count') ? Number(item.count.toFixed(5)) : null;
             return { ...fullItem, count: count, total: $itemCounts[item.id] };
         });
     }
 
     onMount(() => {
+        isMounted = true;
+
         // Poll localStorage every 1 second and update itemCounts
         const intervalId = setInterval(() => {
             itemCounts.set(getItemCounts(itemList));
@@ -46,44 +50,54 @@
 
 </script>
 
-{#if disabled}
-    <Chip inverted={true} disabled={true} text="">
-        <div class="vertical">
-            {#each fullItemList as item (item.id)}
-                <div class="horizontal">
-                    <a href={`/inventory/item/${item.id}`}><img src={item.image} class="icon" alt={item.name} /></a>
-                    {#if increase}
-                        <del class="disabled"><p>{prettyPrintNumber($itemCounts[item.id])}<span>+{prettyPrintNumber(item.count)}</span> x {item.name}</p></del>
-                    {:else}
-                        {#if ($itemCounts[item.id] < item.count)}
-                            <del class="disabled"><p><span>{prettyPrintNumber(item.count)}</span>/{prettyPrintNumber($itemCounts[item.id])} x {item.name}</p></del>
+{#if isMounted}
+    {#if disabled}
+        <Chip inverted={true} disabled={true} text="">
+            <div class="vertical">
+                {#each fullItemList as item (item.id)}
+                    <div class="horizontal">
+                        <a href={`/inventory/item/${item.id}`}><img src={item.image} class="icon" alt={item.name} /></a>
+                        {#if item.count === null}
+                            <del class="disabled"><p>{prettyPrintNumber($itemCounts[item.id])} x {item.name}</p></del>
                         {:else}
-                            <p><span>{prettyPrintNumber(item.count)}</span>/{prettyPrintNumber($itemCounts[item.id])} x {item.name}</p>
+                            {#if increase}
+                                <del class="disabled"><p>{prettyPrintNumber($itemCounts[item.id])}<span>+{prettyPrintNumber(item.count)}</span> x {item.name}</p></del>
+                            {:else}
+                                {#if ($itemCounts[item.id] < item.count)}
+                                    <del class="disabled"><p><span>{prettyPrintNumber(item.count)}</span>/{prettyPrintNumber($itemCounts[item.id])} x {item.name}</p></del>
+                                {:else}
+                                    <p><span>{prettyPrintNumber(item.count)}</span>/{prettyPrintNumber($itemCounts[item.id])} x {item.name}</p>
+                                {/if}
+                            {/if}
                         {/if}
-                    {/if}
-                </div>
-            {/each}
-        </div>
-    </Chip>
-{:else}
-    <Chip inverted={true} text="">
-        <div class="vertical">
-            {#each fullItemList as item (item.id)}
-                <div class="horizontal">
-                    <a href={`/inventory/item/${item.id}`}><img src={item.image} class="icon" alt={item.name} /></a>
-                    {#if increase}
-                        <p>{prettyPrintNumber($itemCounts[item.id])}<span class="blue">+{prettyPrintNumber(item.count)}</span> x {item.name}</p>
-                    {:else}
-                        {#if ($itemCounts[item.id] < item.count)}
-                            <p>{prettyPrintNumber(item.count)}/<span class="red">{prettyPrintNumber($itemCounts[item.id])}</span> x {item.name}</p>
+                    </div>
+                {/each}
+            </div>
+        </Chip>
+    {:else}
+        <Chip inverted={true} text="">
+            <div class="vertical">
+                {#each fullItemList as item (item.id)}
+                    <div class="horizontal">
+                        <a href={`/inventory/item/${item.id}`}><img src={item.image} class="icon" alt={item.name} /></a>
+                        {#if item.count === null}
+                            <p>{prettyPrintNumber($itemCounts[item.id])} x {item.name}</p>
                         {:else}
-                            <p><span>{prettyPrintNumber(item.count)}</span>/{prettyPrintNumber($itemCounts[item.id])} x {item.name}</p>
+                            {#if increase}
+                                <p>{prettyPrintNumber($itemCounts[item.id])}<span class="blue">+{prettyPrintNumber(item.count)}</span> x {item.name}</p>
+                            {:else}
+                                {#if ($itemCounts[item.id] < item.count)}
+                                    <p>{prettyPrintNumber(item.count)}/<span class="red">{prettyPrintNumber($itemCounts[item.id])}</span> x {item.name}</p>
+                                {:else}
+                                    <p><span>{prettyPrintNumber(item.count)}</span>/{prettyPrintNumber($itemCounts[item.id])} x {item.name}</p>
+                                {/if}
+                            {/if}
                         {/if}
-                    {/if}
-                </div>
-            {/each}
-        </div>
-    </Chip>
+                    </div>
+                {/each}
+            </div>
+        </Chip>
+    {/if}
 {/if}
 
 <style>

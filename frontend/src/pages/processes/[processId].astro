@@ -1,38 +1,10 @@
 ---
 import Page from '../../components/Page.astro';
-import Warning from '../../components/Warning.astro';
-import Process from './process.svelte';
-
-import { getProcess } from './utils.js';
+import Process from '../../components/svelte/Process.svelte';
 
 const { processId } = Astro.params;
-
-let errorMessage, hideProcess = false, error;
-
-const process = getProcess(processId);
-
-if (!error) { 
-    error = Astro.url.searchParams.get('error');
-}
-
-if (error) {
-    switch (error) {
-        case 'cooldown':
-            errorMessage = "You're still on cooldown!";
-            break;
-        case 'notenoughitems':
-            errorMessage = "You don't have the required items!";
-            break;
-        default:
-            errorMessage = "Something went wrong!"
-    }
-}
-
-const title = process ? process.title : 'Process not found';
 ---
 
-<Page title={title} columns="1">
-    { errorMessage && <Warning title={errorMessage} /> }
-    <h3>Consumes:</h3>
-    <h3>Creates:</h3>
+<Page columns="1">
+    <Process processId={processId.toString()} client:load />
 </Page>

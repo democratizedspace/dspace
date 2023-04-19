@@ -16,13 +16,14 @@
     state
   } from '../../utils/gameState.js';
 
-  export let processId;
+  export let processId, inverted = true;
 
   const process = processes.find((process) => process.id === processId);
   const processStateInfo = writable(getProcessState(processId));
   const canStartProcess = writable(false);
 
   let progressBar;
+  let isMounted;
 
   function startProcess() {
     startProcessInGameState(processId);
@@ -59,41 +60,47 @@
   }
 
   onMount(() => {
+    isMounted = true;
+
     if ($processStateInfo.state === ProcessStates.IN_PROGRESS) {
       progressBar.startProgressBar();
     }
   });
 </script>
 
-<div class="vertical">
-  <p>{process.title}</p>
+{#if isMounted}
+  <Chip {inverted} text="">
+    <div class="vertical">
+      <p>{process.title}</p>
 
-  <div class="right-aligned">
-    <p>Requires:</p>
-    <CompactItemList itemList={process.requireItems} />
+      <div class="right-aligned">
+        <p>Requires:</p>
+        <CompactItemList itemList={process.requireItems} />
 
-    <p>Consumes:</p>
-    <CompactItemList itemList={process.consumeItems} />
-    
-    <p>Creates:</p>
-    <CompactItemList itemList={process.createItems} increase={true} />
-  </div>
+        <p>Consumes:</p>
+        <CompactItemList itemList={process.consumeItems} />
+        
+        <p>Creates:</p>
+        <CompactItemList itemList={process.createItems} increase={true} />
+      </div>
 
-  {#if $processStateInfo.state === ProcessStates.NOT_STARTED}
-    <Chip inverted={true} text="Start" onClick={() => startProcess()} disabled={!$canStartProcess} />
-  {:else if $processStateInfo.state === ProcessStates.IN_PROGRESS}
-    <Chip inverted={true} text="Cancel" onClick={() => cancel()} />
-  {:else}
-    <Chip inverted={true} text="Claim your items" onClick={() => claimItems()} />
-  {/if}
+      {#if $processStateInfo.state === ProcessStates.NOT_STARTED}
+        <Chip inverted={!inverted} text="Start" onClick={() => startProcess()} disabled={!$canStartProcess} />
+      {:else if $processStateInfo.state === ProcessStates.IN_PROGRESS}
+        <Chip inverted={!inverted} text="Cancel" onClick={() => cancel()} />
+      {:else}
+        <Chip inverted={!inverted} text="Claim your items" onClick={() => claimItems()} />
+      {/if}
 
-  <ProgressBar
-    bind:this={progressBar}
-    startValue={$processStateInfo.progress / 100}
-    totalDurationInSeconds={durationInSeconds(process.duration)}
-    on:processcomplete={handleProcessComplete}
-  />
-</div>
+      <ProgressBar
+        bind:this={progressBar}
+        startValue={$processStateInfo.progress / 100}
+        totalDurationInSeconds={durationInSeconds(process.duration)}
+        on:processcomplete={handleProcessComplete}
+      />
+    </div>
+  </Chip>
+{/if}
 
 <style>
   .vertical {

@@ -3,8 +3,9 @@
     import { writable } from 'svelte/store';
     import Chip from '../../../components/svelte/Chip.svelte';
     import BuySell from '../../../components/svelte/BuySell.svelte';
-    import { getItemCounts } from '../../../utils/gameState.js';
+    import { getItemCounts, getProcessesForItem, ProcessItemTypes } from '../../../utils/gameState.js';
     import items from '../json/items.json';
+    import Process from '../../../components/svelte/Process.svelte';
     
     export let itemId;
     
@@ -12,6 +13,9 @@
     const count = writable(0);
 
     const item = items.find(item => item.id === itemId);
+
+    const processes = getProcessesForItem(itemId);
+    console.log(processes);
     
     onMount(() => {
         const itemCount = getItemCounts([{ id: itemId }])[itemId];
@@ -23,14 +27,27 @@
 {#if $mounted}
     <Chip inverted={true} text="">
         <div class="vertical">
-            <div class="horizontal">
-                <img src={item.image} alt={item.name} />
-                <div class="vertical">
-                    <h2>{item.name}</h2>
-                    <p>Count: {$count}</p>
-                </div>
-            </div>
+            <img src={item.image} alt={item.name} />
+            <h2>{item.name}</h2>
+            <p>Count: {$count}</p>
+            {item.description}
             <BuySell itemId={itemId} />
+            <p>Processes:</p>
+            {#if processes[ProcessItemTypes.REQUIRE_ITEM]}
+                {#each processes[ProcessItemTypes.REQUIRE_ITEM] as processId}
+                    <Process inverted={false} {processId} />
+                {/each}
+            {/if}
+            {#if processes[ProcessItemTypes.CONSUME_ITEM]}
+                {#each processes[ProcessItemTypes.CONSUME_ITEM] as processId}
+                    <Process inverted={false} {processId} />
+                {/each}
+            {/if}
+            {#if processes[ProcessItemTypes.CREATE_ITEM]}
+                {#each processes[ProcessItemTypes.CREATE_ITEM] as processId}
+                    <Process inverted={false} {processId} />
+                {/each}
+            {/if}
         </div>
     </Chip>
 

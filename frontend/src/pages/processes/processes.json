@@ -29,6 +29,12 @@
     {
         "id": "outlet-dWatt-1e4",
         "title": "generate 1E4 dWatt using your outlet",
+        "requireItems": [
+            {
+                "id": "29",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "24",
@@ -45,13 +51,17 @@
                 "count": 9.77023939064
             }
         ],
-        "fungible": true,
-        "duration": "5s",
-        "machine": "29"
+        "duration": "5s"
     },
     {
         "id": "outlet-dWatt-1e5",
         "title": "generate 1E5 dWatt using your outlet",
+        "requireItems": [
+            {
+                "id": "29",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "24",
@@ -68,13 +78,17 @@
                 "count": 97.7023939064
             }
         ],
-        "fungible": true,
-        "duration": "5s",
-        "machine": "29"
+        "duration": "5s"
     },
     {
         "id": "bucket-water-chlorinated",
         "title": "fill a bucket with tap water",
+        "requireItems": [
+            {
+                "id": "28",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "16",
@@ -87,12 +101,17 @@
                 "count": 1
             }
         ],
-        "duration": "5s",
-        "machine": "28"
+        "duration": "5s"
     },
     {
         "id": "3dprint-benchy",
         "title": "Make a test print",
+        "requireItems": [
+            {
+                "id": "0",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "12",
@@ -109,12 +128,17 @@
                 "count": 1
             }
         ],
-        "duration": "1h 51m",
-        "machine": "0"
+        "duration": "1h 51m"
     },
     {
         "id": "3dprint-rocket",
         "title": "3D print a model rocket",
+        "requireItems": [
+            {
+                "id": "0",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "12",
@@ -131,12 +155,13 @@
                 "count": 1
             }
         ],
-        "duration": "12h 52m 51s",
-        "machine": "0"
+        "duration": "12h 52m 51s"
     },
     {
         "id": "bucket-water-dechlorinated",
         "title": "dechlorinate a bucket of water",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "17",
@@ -149,12 +174,13 @@
                 "count": 1
             }
         ],
-        "duration": "48h",
-        "machine": "17"
+        "duration": "48h"
     },
     {
         "id": "rockwool-soak",
         "title": "soak your hydroponic starter plugs",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "25",
@@ -175,12 +201,13 @@
                 "count": 11
             }
         ],
-        "duration": "15m",
-        "machine": "25"
+        "duration": "15m"
     },
     {
         "id": "germinate-basil",
         "title": "grow basil seedlings",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "10",
@@ -197,12 +224,13 @@
                 "count": 11
             }
         ],
-        "duration": "7d",
-        "machine": "26"
+        "duration": "7d"
     },
     {
         "id": "prepare-hydroponic-tub",
         "title": "prepare your hydroponic tub",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "9",
@@ -223,12 +251,13 @@
                 "count": 1
             }
         ],
-        "duration": "2m",
-        "machine": "9"
+        "duration": "2m"
     },
     {
         "id": "refresh-hydroponic-tub",
         "title": "refresh the nutrient solution",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "45",
@@ -245,12 +274,13 @@
                 "count": 1
             }
         ],
-        "duration": "30s",
-        "machine": "45"
+        "duration": "30s"
     },
     {
         "id": "grow-basil",
         "title": "grow basil until it's ready to harvest",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "27",
@@ -275,12 +305,13 @@
                 "count": 1
             }
         ],
-        "duration": "28d",
-        "machine": "44"
+        "duration": "28d"
     },
     {
         "id": "regrow-basil",
         "title": "regrow basil after harvest",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "47",
@@ -305,12 +336,13 @@
                 "count": 1
             }
         ],
-        "duration": "14d",
-        "machine": "44"
+        "duration": "14d"
     },
     {
         "id": "harvest-basil",
         "title": "Harvest your hydroponic basil plants",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "42",
@@ -327,12 +359,13 @@
                 "count": 11
             }
         ],
-        "duration": "1m",
-        "machine": "42"
+        "duration": "1m"
     },
     {
         "id": "sink",
         "title": "find your sink",
+        "requireItems": [
+        ],
         "consumeItems": [],
         "createItems": [
             {
@@ -345,6 +378,12 @@
     {
         "id": "3dprint-rocket-body-tube",
         "title": "3D Print a rocket body tube",
+        "requireItems": [
+            {
+                "id": "0",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "12",
@@ -361,12 +400,17 @@
                 "count": 1
             }
         ],
-        "duration": "2h 8m 11s",
-        "machine": "0"
+        "duration": "2h 8m 11s"
     },
     {
         "id": "3dprint-rocket-nosecone-coupler",
         "title": "3D print a rocket nosecone coupler",
+        "requireItems": [
+            {
+                "id": "0",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "12",
@@ -383,12 +427,17 @@
                 "count": 1
             }
         ],
-        "duration": "54m 12s",
-        "machine": "0"
+        "duration": "54m 12s"
     },
     {
         "id": "3dprint-rocket-nosecone",
         "title": "3D print a rocket nosecone",
+        "requireItems": [
+            {
+                "id": "0",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "12",
@@ -405,12 +454,17 @@
                 "count": 1
             }
         ],
-        "duration": "1h 47m 15s",
-        "machine": "0"
+        "duration": "1h 47m 15s"
     },
     {
         "id": "3dprint-rocket-fincan",
         "title": "3D print a rocket fincan",
+        "requireItems": [
+            {
+                "id": "0",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "12",
@@ -427,12 +481,13 @@
                 "count": 1
             }
         ],
-        "duration": "8h 3m 13s",
-        "machine": "0"
+        "duration": "8h 3m 13s"
     },
     {
         "id": "assemble-rocket",
         "title": "Assemble your rocket",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "30",
@@ -469,12 +524,17 @@
                 "count": 1
             }
         ],
-        "duration": "5m",
-        "machine": "35"
+        "duration": "5m"
     },
     {
         "id": "launch-rocket",
         "title": "Launch your rocket!",
+        "requireItems": [
+            {
+                "id": "38",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "39",
@@ -495,13 +555,17 @@
                 "count": 1
             }
         ],
-        "duration": "30s",
-        "image": "/assets/rocket_field.jpg",
-        "machine": "38"
+        "duration": "30s"
     },
     {
         "id": "launch-rocket-parachute",
         "title": "rocket with parachute",
+        "requireItems": [
+            {
+                "id": "38",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "67",
@@ -522,13 +586,13 @@
                 "count": 1
             }
         ],
-        "duration": "45s",
-        "image": "/assets/rocket_field.jpg",
-        "machine": "38"
+        "duration": "45s"
     },
     {
         "id": "rocket-attach-parachute",
         "title": "Attach parachute to rocket",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "39",
@@ -545,12 +609,13 @@
                 "count": 1
             }
         ],
-        "duration": "60s",
-        "image": "/assets/rocket_field.jpg"
+        "duration": "60s"
     },
     {
         "id": "solar-dWatt",
         "title": "Generate dWatt using solar",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "5",
@@ -579,12 +644,13 @@
                 "count": 200
             }
         ],
-        "duration": "1h",
-        "machine": "5"
+        "duration": "1h"
     },
     {
         "id": "solar-dWatt-1e3",
         "title": "Generate dWatt using solar",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "5",
@@ -613,12 +679,13 @@
                 "count": 1000
             }
         ],
-        "duration": "1h",
-        "machine": "5"
+        "duration": "1h"
     },
     {
         "id": "prepare-aquarium",
         "title": "Prepare your aquarium",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "51",
@@ -659,12 +726,13 @@
                 "count": 1
             }
         ],
-        "duration": "30m",
-        "machine": "51"
+        "duration": "30m"
     },
     {
         "id": "add-goldfish",
         "title": "Add a goldfish to your aquarium",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "60",
@@ -689,12 +757,13 @@
                 "count": 1
             }
         ],
-        "duration": "1m",
-        "machine": "60"
+        "duration": "1m"
     },
     {
         "id": "feed-goldfish",
         "title": "Feed your goldfish",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "52",
@@ -715,12 +784,13 @@
                 "count": 1
             }
         ],
-        "machine": "52",
         "duration": "8h"
     },
     {
         "id": "dCarbon-dOffset-1",
         "title": "dCarbon to dOffset",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "20",
@@ -742,6 +812,8 @@
     {
         "id": "dCarbon-dOffset-10",
         "title": "dCarbon to dOffset",
+        "requireItems": [
+        ],
         "consumeItems": [
             {
                 "id": "20",
@@ -763,6 +835,8 @@
     {
         "id": "basic-income",
         "title": "basic income",
+        "requireItems": [
+        ],
         "consumeItems": [
         ],
         "createItems": [
@@ -775,11 +849,17 @@
                 "count": 100
             }
         ],
-        "duration": "7d"
+        "duration": "1d"
     },
     {
         "id": "charge-hypercar",
         "title": "Charge your Hypercar",
+        "requireItems": [
+            {
+                "id": "73",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "74",
@@ -796,7 +876,6 @@
                 "count": 1
             }
         ],
-        "duration": "30m",
-        "machine": "73"
+        "duration": "30m"
     }
 ]

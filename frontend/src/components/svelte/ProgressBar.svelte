@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { tweened } from 'svelte/motion';
+
   const dispatch = createEventDispatcher();
 
   export let startValue;
@@ -9,8 +10,10 @@
   const value = tweened(startValue * 100);
   let percentage;
   let stopTween; // To store the stop function for the tween
+  let endTimeTimestamp;
 
   $: percentage = parseFloat($value.toFixed(2));
+  $: endTimeTimestamp = Date.now() + (1 - startValue) * totalDurationInSeconds * 1000;
 
   export function startProgressBar() {
     // Stop any previous tween if exists

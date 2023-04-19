@@ -266,3 +266,46 @@ export const cancelProcess = (processId, consumeItems) => {
   saveGameState(gameState);
 };
 
+export const ProcessItemTypes = {
+  REQUIRE_ITEM: "requireItem",
+  CONSUME_ITEM: "consumeItem",
+  CREATE_ITEM: "createItem",
+};
+
+export const getProcessesForItem = (itemId) => {
+  const processMap = {};
+
+  processes.forEach((process) => {
+    if (process.requireItems) {
+      process.requireItems.forEach((item) => {
+        if (item.id === itemId) {
+          processMap[ProcessItemTypes.REQUIRE_ITEM] =
+            processMap[ProcessItemTypes.REQUIRE_ITEM] || [];
+          processMap[ProcessItemTypes.REQUIRE_ITEM].push(process.id);
+        }
+      });
+    }
+
+    if (process.consumeItems) {
+      process.consumeItems.forEach((item) => {
+        if (item.id === itemId) {
+          processMap[ProcessItemTypes.CONSUME_ITEM] =
+            processMap[ProcessItemTypes.CONSUME_ITEM] || [];
+          processMap[ProcessItemTypes.CONSUME_ITEM].push(process.id);
+        }
+      });
+    }
+
+    if (process.createItems) {
+      process.createItems.forEach((item) => {
+        if (item.id === itemId) {
+          processMap[ProcessItemTypes.CREATE_ITEM] =
+            processMap[ProcessItemTypes.CREATE_ITEM] || [];
+          processMap[ProcessItemTypes.CREATE_ITEM].push(process.id);
+        }
+      });
+    }
+  });
+
+  return processMap;
+};

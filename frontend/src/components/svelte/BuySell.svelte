@@ -43,30 +43,34 @@
 </script>
 
 <Chip inverted={true} text="">
-    <div class="buy-sell-wrapper vertical">
-        <div class="horizontal">
-            <Chip 
-                text="Buy" 
-                inverted={!buyChipActive} 
-                onClick={() => handleTypeClick('buy')}
-            />
-            <Chip 
-                text="Sell" 
-                inverted={!sellChipActive} 
-                onClick={() => handleTypeClick('sell')}
-            />
-        </div>
+    {#if price === 0}
+        <p>Not tradeable</p>
+    {:else}
+        <div class="buy-sell-wrapper vertical">
+            <div class="horizontal">
+                <Chip 
+                    text="Buy" 
+                    inverted={!buyChipActive} 
+                    onClick={() => handleTypeClick('buy')}
+                />
+                <Chip 
+                    text="Sell" 
+                    inverted={!sellChipActive} 
+                    onClick={() => handleTypeClick('sell')}
+                />
+            </div>
 
-        <div class="horizontal">
-            <label>
-                <input type="number" min="1" value={quantity} onInput={handleQuantityInput} class="quantity-input"/>
-            </label>
-            <Chip 
-                text={buyChipActive ? `Buy for ${price} ${symbol} each` : `Sell for ${price} ${symbol} each`}
-                onClick={handleTransactionClick}
-            />
+            <div class="horizontal">
+                <label>
+                    <input type="number" min="1" value={quantity} onInput={handleQuantityInput} class="quantity-input"/>
+                </label>
+                <Chip 
+                    text={buyChipActive ? `Buy for ${price} ${symbol} each` : `Sell for ${price} ${symbol} each`}
+                    onClick={handleTransactionClick}
+                />
+            </div>
         </div>
-    </div>
+    {/if}
 </Chip>
 
 <style>
