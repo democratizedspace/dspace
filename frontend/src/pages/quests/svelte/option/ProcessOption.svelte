@@ -5,6 +5,6 @@
     export let option;
 </script>
 
-<Chip inverted={false} text="">
-    <Process processId={option.process} />
+<Chip text="">
+    <Process inverted={false} processId={option.process} />
 </Chip>

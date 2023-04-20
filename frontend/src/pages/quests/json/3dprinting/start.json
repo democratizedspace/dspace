@@ -1,64 +1,123 @@
 {
-    "id": "3dprinting/start",
-    "title": "Free 3D printer!",
-    "description": "Experience the future of manufacturing with our free 3D printer offer! This interactive dialogue-based experience gives you the chance to claim a 3D printer and some filament to start your own printing projects. Simply choose your options as the dialogue unfolds to receive your reward. Don't miss out on this opportunity to join the 3D printing revolution!",
+    "id": "3dprinter/start",
+    "title": "Set up your first 3D printer",
+    "description": "Accept Sydney's offer of a 3D printer, and learn how to set it up for use in your space exploration adventure.",
     "image": "/assets/quests/start.png",
-    "npc": "/assets/npc/794f0915-4d04-4cb9-91fa-9441e66cf0e5.jpg",
+    "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hello! We believe that democratized 3D printing is the future of manufacturing, and we want to help you be a part of that future. That's why we're offering you a free 3D printer and some filament. It's yours to keep, no strings attached.",
+            "text": "Hello, friend! I'm Sydney, a 3D printing expert with the metaguild. dChat referred me. I've got a proposition for you: how would you like to have your very own 3D printer?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "learnmore",
-                    "text": "What's 3D printing?"
+                    "goto": "enthusiastic",
+                    "text": "A 3D printer? That sounds amazing! Tell me more."
                 },
                 {
                     "type": "goto",
-                    "goto": "interested",
-                    "text": "Definitely!"
+                    "goto": "skeptical",
+                    "text": "A 3D printer? How would that help me?"
                 }
             ]
         },
         {
-            "id": "learnmore",
-            "text": "3D printing is a technology that creates physical objects from digital models by laying down successive layers of material. Its applications are diverse, from decor to machine parts to rockets. In rocketry, 3D printing is particularly useful for creating lightweight parts that were previously difficult to make, saving time and money.",
+            "id": "enthusiastic",
+            "text": "Fantastic! A 3D printer is an invaluable tool for space exploration. It can create tools, equipment, and even spare parts for your ship. The printer is fully assembled and calibrated, so all you need to do is complete a test print.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "interested",
-                    "text": "That sounds really interesting! I'm in!"
-                },
-                {
-                    "type": "dismiss",
-                    "text": "I'm still not quite sure it's right for me at this time. Thanks though."
+                    "goto": "grant",
+                    "text": "Great, let's get started!"
                 }
             ]
         },
         {
-            "id": "interested",
-            "text": "Great! Here's your 3D printer and some filament to get you started. Have fun printing!",
+            "id": "skeptical",
+            "text": "A 3D printer can be a game-changer in not only space exploration but a ton of other industries. It allows you to create tools, equipment, and spare parts on demand. I've got a fully assembled and calibrated printer for you. All you need to do is complete a test print to see its capabilities.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "grant",
+                    "text": "Alright, let's give it a try."
+                }
+            ]
+        },
+        {
+            "id": "grant",
+            "text": "First things first, I need you to accept the 3D printer. It's fully assembled and calibrated, so you're ready to go. Just take it and we'll proceed.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "0",
+                            "count": 1
+                        },
+                        {
+                            "id": "12",
+                            "count": 1000
+                        }
+                    ],
+                    "text": "Don't mind if I do!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "benchy",
+                    "requiresItems": [
+                        {
+                            "id": "0",
+                            "count": 1
+                        },
+                        {
+                            "id": "12",
+                            "count": 1000
+                        }
+                    ],
+                    "text": "I've got the 3D printer and some PLA filament! What's next?"
+                }
+            ]
+        },
+        {
+            "id": "benchy",
+            "text": "For your test print, I recommend printing a Benchy. It's a small boat model often used to validate 3D printer setups. Once you've successfully printed Benchy, we'll know your 3D printer is ready for action.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-benchy",
+                    "text": "Starting the Benchy print."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "1",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I've printed the Benchy! What's next?"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! You're all set to use your 3D printer for your space exploration adventures. If you need help or tips on 3D printing, feel free to reach out. Good luck!",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thank you!"
+                    "text": "Thanks, Sydney! I appreciate your help."
                 }
             ]
         }
     ],
     "rewards": [
         {
-            "id": "0",
-            "count": 1
-        },
-        {
-            "id": "12",
-            "count": 1000
+            "id": "24",
+            "count": 100
         }
     ],
     "requiresQuests": [
-        "welcome/howtodoquests"
     ]
 }

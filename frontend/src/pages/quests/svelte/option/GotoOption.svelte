@@ -9,7 +9,9 @@
     const itemRequirementsMet = writable(option.requiresItems === undefined ? true : false);
 
     function onClick() {
-        setCurrentDialogueStep(questId, option.goto);
+        if ($itemRequirementsMet) {
+            setCurrentDialogueStep(questId, option.goto);
+        }
     }
 
     $: {

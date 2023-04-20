@@ -1,0 +1,145 @@
+{
+    "id": "finances/basicincome",
+    "title": "Earn basic income",
+    "description": "Learn about the basic income system and how to earn dUSD.",
+    "image": "/assets/quests/basicincome.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Howdy once again, adventurer! It's nice to see you again. I'm glad you're here, because I have a very important question for you. Are you ready to earn some dUSD?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "earn",
+                    "text": "You bet! I love dUSD."
+                },
+                {
+                    "type": "goto",
+                    "goto": "what",
+                    "text": "Wait what? You're just giving away money?"
+                }
+            ]
+        },
+        {
+            "id": "earn",
+            "text": "Fantastic! Welcome to the wonderful world of UBI - Universal Basic Income! You can receive some dUSD daily, courtesy of the metaguild and its members.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "metaguild",
+                    "text": "What's the metaguild?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "strings",
+                    "text": "Are there any strings attached?"
+                }
+            ]
+        },
+        {
+            "id": "what",
+            "text": "That's right! Thanks to the metaguild and its generous members, we can provide you with a daily UBI in the form of dUSD. Isn't it great?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "metaguild",
+                    "text": "What's the metaguild?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "strings",
+                    "text": "Are there any strings attached?"
+                }
+            ]
+        },
+        {
+            "id": "metaguild",
+            "text": "The metaguild is a guild that all DSPACE players will eventually join later in their adventures. It's a guild that is building a global tech tree, from things like hydroponics and mycology all the way to rocketry and simulations.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "source",
+                    "text": "Where does the money come from?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "strings",
+                    "text": "Are there any strings attached?"
+                }
+            ]
+        },
+        {
+            "id": "strings",
+            "text": "Nope! You can withdraw once per day! You must meet certain requirements to unlock higher tiers. Enjoy the free money!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "source",
+                    "text": "Where does the money come from?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "process",
+                    "text": "I'm ready to earn my dUSD!"
+                }
+            ]
+        },
+        {
+            "id": "source",
+            "text": "The money comes from donations made by generous members of the metaguild. There's a leaderboard that gamifies donations. Additionally, any ecosystem tax (having too much dCarbon, for example, a token that accrues whenever you release carbon dioxide into the atmosphere) contributes to the UBI pool.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "moreinfo",
+                    "text": "Interesting! Tell me more about dCarbon."
+                },
+                {
+                    "type": "goto",
+                    "goto": "earn",
+                    "text": "Got it. Let's loop back to the start."
+                }
+            ]
+        },
+        {
+            "id": "moreinfo",
+            "text": "dCarbon is a token that represents your carbon footprint in the game. Whenever you release carbon dioxide into the atmosphere, you'll accrue dCarbon. Having too much dCarbon can result in an ecosystem tax, which then contributes to the UBI pool for other players.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "earn",
+                    "text": "Thanks for the explanation! Let's get back to earning dUSD."
+                }
+            ]
+        },
+        {
+            "id": "process",
+            "text": "Alright! To receive your dUSD, you'll need to complete the process with ID 'basic-income'. This will give you a dBI token (id: '72').",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "basic-income",
+                    "text": "I'm ready to receive my dUSD!"
+                },
+                {
+                    "type": "finish",
+                    "text": "I'll come back later."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "24",
+            "count": 100
+        },
+        {
+            "id": "72",
+            "count": 100
+        }
+    ],
+    "requiresQuests": [
+
+    ]
+}

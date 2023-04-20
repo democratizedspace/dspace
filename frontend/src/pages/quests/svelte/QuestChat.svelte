@@ -91,7 +91,7 @@
     {/if}
     <div class="vertical">
         <h5>Status:</h5>
-        {#if finished}
+        {#if $finished}
             <p class="green">Complete</p>
         {:else}
             <p class="orange">In Progress</p>
