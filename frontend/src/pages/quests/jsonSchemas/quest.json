@@ -14,6 +14,9 @@
     "image": {
       "type": "string"
     },
+    "npc": {
+      "type": "string"
+    },
     "start": {
       "type": "string"
     },
@@ -34,23 +37,53 @@
               "type": "object",
               "properties": {
                 "type": {
-                  "type": "string",
-                  "enum": ["goto", "dismiss"]
+                  "type": "string"
                 },
                 "goto": {
                   "type": "string"
+                },
+                "process": {
+                  "type": "string"
+                },
+                "requiresItems": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "count": {
+                        "type": "number"
+                      }
+                    },
+                    "required": ["id", "count"]
+                  }
+                },
+                "grantsItems": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "count": {
+                        "type": "number"
+                      }
+                    },
+                    "required": ["id", "count"]
+                  }
                 },
                 "text": {
                   "type": "string"
                 }
               },
-              "required": ["type", "text"],
-              "additionalProperties": false
+              "required": ["type", "text"]
             }
           }
         },
-        "required": ["id", "text", "options"],
-        "additionalProperties": false
+        "required": ["id", "text"]
       }
     },
     "rewards": {
@@ -62,14 +95,18 @@
             "type": "string"
           },
           "count": {
-            "type": "integer"
+            "type": "number"
           }
         },
-        "required": ["id", "count"],
-        "additionalProperties": false
+        "required": ["id", "count"]
+      }
+    },
+    "requiresQuests": {
+      "type": "array",
+      "items": {
+        "type": "string"
       }
     }
   },
-  "required": ["id", "title", "description", "image", "start", "dialogue", "rewards"],
-  "additionalProperties": false
+  "required": ["id", "title", "description", "image", "npc", "start", "dialogue"]
 }

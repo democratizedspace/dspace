@@ -1,0 +1,11 @@
+{
+    "id": "vehicles/hypercar",
+    "title": "Buy a Hypercar",
+    "description": "This car isn't just eye candy! It's also fully electric with a range of 500 miles and a suite of AI integrations, including a personal assistant and driving assistance",
+    "image": "/assets/quests/hypercar.jpg",
+    "npc": "/assets/npc/orion.png",
+    "start": "start",
+    "dialogue": [],
+    "rewards": [],
+    "requiresQuests": []
+}

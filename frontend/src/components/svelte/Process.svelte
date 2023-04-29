@@ -63,7 +63,9 @@
     isMounted = true;
 
     if ($processStateInfo.state === ProcessStates.IN_PROGRESS) {
-      progressBar.startProgressBar();
+      setTimeout(() => {
+        progressBar.startProgressBar();
+      }, 0); // This will delay the execution of startProgressBar until the next event loop
     }
   });
 </script>

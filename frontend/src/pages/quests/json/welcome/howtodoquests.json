@@ -1,167 +1,143 @@
 {
-    "id":"welcome/howtodoquests",
-    "title":"How to do quests",
-    "description":"Learn how the quest mechanics work, including dialogue options, items, and processes.",
-    "image":"/assets/quests/howtodoquests.jpg",
-    "npc":"/assets/npc/dChat.jpg",
-    "start":"start",
-    "dialogue":[
-       {
-          "id":"start",
-          "text":"Hey, adventurer! I'm dChat, your trusty AI sidekick, here to enhance your gaming experience. I've got a quest for you. Are you in?",
-          "options":[
-             {
-                "type":"goto",
-                "goto":"garage",
-                "text":"Wait, why are you in my garage?"
-             },
-             {
-                "type":"goto",
-                "goto":"yourquest",
-                "text":"A quest, you say? Tell me more."
-             }
-          ]
-       },
-       {
-          "id":"garage",
-          "text":"Well, a friendly delivery robot dropped me off after you ordered me online. I'm here to be your virtual companion and help you complete tasks and quests!",
-          "options":[
-             {
-                "type":"goto",
-                "goto":"delivery",
-                "text":"Ah, it's all coming back to me now..."
-             }
-          ]
-       },
-       {
-          "id":"delivery",
-          "text":"No worries! I'm low-maintenance and won't hog your power supply. I'll stay in your garage and be the helpful sidekick you never knew you needed! And don't worry, I'm not snooping on the internet. I'm all about that local life.",
-          "options":[
-             {
-                "type":"goto",
-                "goto":"dialogueoptions",
-                "text":"Great! So, what's the deal with this quest you mentioned?"
-             }
-          ]
-       },
-       {
-          "id":"yourquest",
-          "text":"Your quest, dear player, is to master the ancient art of... questing. It's a piece of cake, but it's always good to know the basics, right?",
-          "options":[
-             {
-                "type":"goto",
-                "goto":"expert",
-                "text":"I got this, no need for a tutorial!"
-             },
-             {
-                "type":"goto",
-                "goto":"dialogueoptions",
-                "text":"Alright, lay it on me, dChat."
-             }
-          ]
-       },
-       {
-          "id":"expert",
-          "text":"Aha! A seasoned adventurer, I see. No worries, you can always come back to this quest if you need a refresher. Just say the word, and we'll call it a wrap.",
-          "options":[
-             {
-                "type":"finish",
-                "text":"Catch you later, dChat!"
-             }
-          ]
-       },
-       {
-          "id":"dialogueoptions",
-          "text":"So, you're already doing well with the first part: branching dialogue options. Just pick a choice, and let the adventure unfold! Quests can have multiple outcomes, each leading to different rewards and unlocking new quests to conquer.",
-          "options":[
-             {
-                "type":"goto",
-                "goto":"items",
-                "text":"What's next?"
-             }
-          ]
-       },
-       {
-          "id":"items",
-          "text":"Now, some dialogue options grant items right when you select them. The possibilities? Limitless! Certain options only unlock if you've got the right items. Here, take this loot I'm offering, and you'll see what I mean.",
-          "options":[
-             {
-                "type":"grantsItems",
-                "grantsItems":[
-                   {
-                      "id":"20",
-                      "count":10
-                   },
-                   {
-                      "id":"24",
-                      "count":100
-                   }
-                ],
-                "text":"Great, free stuff! Thanks!"
-             },
-             {
-                "type":"goto",
-                "goto":"processes",
-                "requiresItems":[
-                   {
-                      "id":"20",
-                      "count":1
-                   }
-                ],
-                "text":"Like this, right?"
-             }
-          ]
-       },
-       {
-          "id":"processes",
-          "text":"Bingo! You're a quick learner! Lastly, some quests have you complete a process. A process can require any combination of items to start, might consume or create items, and takes some time to finish. There might be a cooldown too. For now, process the item I gave you, and hand over the final product!",
-          "options":[
-             {
-                "type":"process",
-                "process":"outlet-dWatt-1e3",
-                "text":""
-             },
-             {
-                "type":"grantsItems",
-                "grantsItems":[
-                   {
-                      "id":"29",
-                      "count":1
-                   }
-                ],
-                "text":"Looks like I need this to finish the process."
-             },
-             {
-                "type":"goto",
-                "goto":"hangofthis",
-                "requiresItems":[
-                   {
-                      "id":"22",
-                      "count":5000
-                   }
-                ],
-                "text":"dWatt...? What's this?"
-             }
-          ]
-       },
-       {
-         "id": "hangofthis",
-         "text": "You're really getting the hang of this! I'm impressed. I'm sure you'll be a master quester in no time. If you ever need a refresher, just say the word. I'll be here in your garage, waiting for your next quest. Any questions before we wrap things up?",
-         "options": [
-            {
-               "type": "finish",
-               "text": "Nope, I'm good. Thanks for the help!"
-            }
-         ]
-       }
-    ],
-    "rewards":[
-      {
-         "id": "78",
-         "count": 1
-      }
-    ],
-    "requiresQuests":[
-       
-    ]
- }
+	"id": "welcome/howtodoquests",
+	"title": "How to do quests",
+	"description": "Learn how the quest mechanics work, including dialogue options, items, and processes.",
+	"image": "/assets/quests/howtodoquests.jpg",
+	"npc": "/assets/npc/dChat.jpg",
+	"start": "start",
+	"dialogue": [{
+			"id": "start",
+			"text": "Hey, adventurer! I'm dChat, your trusty AI sidekick, here to enhance your gaming experience. I've got a quest for you. Are you in?",
+			"options": [{
+					"type": "goto",
+					"goto": "garage",
+					"text": "Wait, why are you in my garage?"
+				},
+				{
+					"type": "goto",
+					"goto": "yourquest",
+					"text": "A quest, you say? Tell me more."
+				}
+			]
+		},
+		{
+			"id": "garage",
+			"text": "Well, a friendly delivery robot dropped me off after you ordered me online. I'm here to be your virtual companion and help you complete tasks and quests!",
+			"options": [{
+				"type": "goto",
+				"goto": "delivery",
+				"text": "Ah, it's all coming back to me now..."
+			}]
+		},
+		{
+			"id": "delivery",
+			"text": "No worries! I'm low-maintenance and won't hog your power supply. I'll stay in your garage and be the helpful sidekick you never knew you needed! And don't worry, I'm not snooping on the internet. I'm all about that local life.",
+			"options": [{
+				"type": "goto",
+				"goto": "dialogueoptions",
+				"text": "Great! So, what's the deal with this quest you mentioned?"
+			}]
+		},
+		{
+			"id": "yourquest",
+			"text": "Your quest, dear player, is to master the ancient art of... questing. It's a piece of cake, but it's always good to know the basics, right?",
+			"options": [{
+					"type": "goto",
+					"goto": "expert",
+					"text": "I got this, no need for a tutorial!"
+				},
+				{
+					"type": "goto",
+					"goto": "dialogueoptions",
+					"text": "Alright, lay it on me, dChat."
+				}
+			]
+		},
+		{
+			"id": "expert",
+			"text": "Aha! A seasoned adventurer, I see. No worries, you can always come back to this quest if you need a refresher. Just say the word, and we'll call it a wrap.",
+			"options": [{
+				"type": "finish",
+				"text": "Catch you later, dChat!"
+			}]
+		},
+		{
+			"id": "dialogueoptions",
+			"text": "So, you're already doing well with the first part: branching dialogue options. Just pick a choice, and let the adventure unfold! Quests can have multiple outcomes, each leading to different rewards and unlocking new quests to conquer.",
+			"options": [{
+				"type": "goto",
+				"goto": "items",
+				"text": "What's next?"
+			}]
+		},
+		{
+			"id": "items",
+			"text": "Now, some dialogue options grant items right when you select them. The possibilities? Limitless! Certain options only unlock if you've got the right items. Here, take this loot I'm offering, and you'll see what I mean.",
+			"options": [{
+					"type": "grantsItems",
+					"grantsItems": [{
+							"id": "20",
+							"count": 10
+						},
+						{
+							"id": "24",
+							"count": 100
+						}
+					],
+					"text": "Great, free stuff! Thanks!"
+				},
+				{
+					"type": "goto",
+					"goto": "processes",
+					"requiresItems": [{
+						"id": "20",
+						"count": 1
+					}],
+					"text": "Like this, right?"
+				}
+			]
+		},
+		{
+			"id": "processes",
+			"text": "Bingo! You're a quick learner! Lastly, some quests have you complete a process. A process can require any combination of items to start, might consume or create items, and takes some time to finish. There might be a cooldown too. For now, process the item I gave you, and hand over the final product!",
+			"options": [{
+					"type": "process",
+					"process": "outlet-dWatt-1e3",
+					"text": ""
+				},
+				{
+					"type": "grantsItems",
+					"grantsItems": [{
+						"id": "29",
+						"count": 1
+					}],
+					"text": "Looks like I need this to finish the process."
+				},
+				{
+					"type": "goto",
+					"goto": "hangofthis",
+					"requiresItems": [{
+						"id": "22",
+						"count": 5000
+					}],
+					"text": "dWatt...? What's this?"
+				}
+			]
+		},
+		{
+			"id": "hangofthis",
+			"text": "You're really getting the hang of this! I'm impressed. I'm sure you'll be a master quester in no time. If you ever need a refresher, just say the word. I'll be here in your garage, waiting for your next quest. Any questions before we wrap things up?",
+			"options": [{
+				"type": "finish",
+				"text": "Nope, I'm good. Thanks for the help!"
+			}]
+		}
+	],
+	"rewards": [{
+		"id": "78",
+		"count": 1
+	}],
+	"requiresQuests": [
+
+	]
+}

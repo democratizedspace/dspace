@@ -1,0 +1,11 @@
+{
+    "id": "energy/solar",
+    "title": "Set up a solar panel",
+    "description": "Set up a solar panel to generate energy",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/orion.png",
+    "start": "start",
+    "dialogue": [],
+    "rewards": [],
+    "requiresQuests": []
+}
