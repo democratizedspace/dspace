@@ -21,7 +21,8 @@
   "dependencies": {
     "@3id/connect": "^0.4.1",
     "@algolia/client-search": "^4.13.1",
-    "@astrojs/netlify": "^1.0.1",
+    "@astrojs/netlify": "^2.2.2",
+    "@astrojs/node": "^5.1.1",
     "@astrojs/vercel": "^3.2.5",
     "@ceramicnetwork/ceramic-http-client": "^0.2.8",
     "@ceramicstudio/idx": "^0.10.0",
