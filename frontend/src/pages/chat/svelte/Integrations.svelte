@@ -8,7 +8,9 @@
 </script>
 
 <div class="container">
-    <OpenAIAPIKeySettings {apiKey} />
+    <div class="api-container">
+        <OpenAIAPIKeySettings {apiKey} />
+    </div>
     <OpenAIChat />
 </div>
 
@@ -22,5 +24,10 @@
         color: black;
         border-radius: 10px;
         padding: 20px;
+    }
+
+    .api-container {
+        min-height: 70px;
+        transition: opacity 0.5s;
     }
 </style>
