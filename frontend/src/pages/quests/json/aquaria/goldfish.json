@@ -2,7 +2,7 @@
     "id": "aquaria/goldfish",
     "title": "Set up an aquarium for a goldfish",
     "description": "Goldfish need a fairly large aquarium to be happy, but they're easy to raise.",
-    "image": "/assets/quests/golfish.jpg",
+    "image": "/assets/quests/goldfish.jpg",
     "npc": "/assets/npc/vega.png",
     "start": "start",
     "dialogue": [],

@@ -1,8 +1,8 @@
 {
     "id": "vehicles/charge",
-    "title": "An inconvenient truth",
-    "description": "Certain types of energy production (e.g. coal) release carbon dioxide (known in-game as dCarbon) into the atmosphere. Learn what you can do about it.",
-    "image": "/assets/quests/dCarbon.jpg",
+    "title": "Charge your Hypercar",
+    "description": "Charge your Hypercar at your home charging station.",
+    "image": "/assets/quests/charge.jpg",
     "npc": "/assets/npc/phoenix.png",
     "start": "start",
     "dialogue": [],
