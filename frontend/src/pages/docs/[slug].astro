@@ -23,9 +23,9 @@ if (doc) {
     <div>
         <Page title={doc.frontmatter.title} columns="1">
             <div>
-            <Chip text="Docs" href="/docs" />
-            <span>-></span>
-            <Chip text={title} href={`/docs/${slug}`} />
+                <Chip text="Docs" href="/docs" />
+                <span>-></span>
+                <Chip text={title} href={`/docs/${slug}`} />
             </div>
             <span set:html={html} />
         </Page>
@@ -49,5 +49,6 @@ if (doc) {
         color: black; 
         padding: 10px;
         border-radius: 20px;
+        overflow: auto;
     }
 </style>

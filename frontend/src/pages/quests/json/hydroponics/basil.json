@@ -5,7 +5,113 @@
     "image": "/assets/quests/hydroponic_basil.jpg",
     "npc": "/assets/npc/hydro.png",
     "start": "start",
-    "dialogue": [],
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Greetings, friend! Hydro here, your friendly hydroponics guru. I hear you're keen on space farming. How would you like to start by growing some basil in a hydroponics tub?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "enthusiastic",
+                    "text": "Sounds great, Hydro. Tell me more about it."
+                },
+                {
+                    "type": "goto",
+                    "goto": "skeptical",
+                    "text": "I'm not sure. Why basil, and why in a hydroponics tub?"
+                }
+            ]
+        },
+        {
+            "id": "enthusiastic",
+            "text": "Perfect! Growing basil in a hydroponics tub is a great start. It's a hardy plant that does well in various conditions, and it's excellent for cooking. The tub is self-contained and fully automated, so you just need to get it started.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "grant",
+                    "text": "Sounds good, let's get going!"
+                }
+            ]
+        },
+        {
+            "id": "skeptical",
+            "text": "Excellent question. Basil is a hardy plant that does well in various conditions, making it perfect for beginners. Hydroponics, on the other hand, allows you to grow plants faster and with less water than traditional farming. It's ideal for space conditions. I have a ready-to-use hydroponics tub for you. All you need to do is start it up.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "grant",
+                    "text": "Alright, let's give it a try."
+                }
+            ]
+        },
+        {
+            "id": "grant",
+            "text": "First things first, I need you to accept the hydroponics tub and the basil seeds. The tub is fully automated, so once you plant the seeds, they'll start growing.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "hydroponics-tub",
+                            "count": 1
+                        },
+                        {
+                            "id": "basil-seeds",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Sounds like a plan!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "planting",
+                    "requiresItems": [
+                        {
+                            "id": "hydroponics-tub",
+                            "count": 1
+                        },
+                        {
+                            "id": "basil-seeds",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I've got the hydroponics tub and the basil seeds. What's next?"
+                }
+            ]
+        },
+        {
+            "id": "planting",
+            "text": "Now it's time to plant the seeds. Follow the instructions on the tub. Once you've successfully planted them, we'll know your hydroponics system is up and running.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plant-basil",
+                    "text": "I'm planting the seeds now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "basil-plant",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I've planted the basil seeds. What's next?"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! You're all set to use your hydroponics system for your space farming adventures. Remember, hydroponics is a great way to grow food in space. If you have any questions or need help, don't hesitate to ask. Happy farming!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Hydro! I appreciate your help."
+                }
+            ]
+        }    
+    ],
     "rewards": [],
     "requiresQuests": []
 }

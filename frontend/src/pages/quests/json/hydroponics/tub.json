@@ -5,7 +5,115 @@
     "image": "/assets/quests/hydroponics_tub.jpg",
     "npc": "/assets/npc/hydro.png",
     "start": "start",
-    "dialogue": [],
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hello there, space explorer! I'm Phoenix, a chemist specializing in sustainable solutions. I hear you're interested in hydroponics, is that right? Hydroponics is the future of space agriculture, allowing us to grow plants without soil.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interested",
+                    "text": "Hydroponics? That sounds really interesting, tell me more."
+                },
+                {
+                    "type": "goto",
+                    "goto": "questioning",
+                    "text": "Why would I want to grow plants without soil?"
+                }
+            ]
+        },
+        {
+            "id": "interested",
+            "text": "Great! Hydroponics is a method of growing plants using mineral nutrient solutions in water, without soil. It's a great way to save resources and space while ensuring a constant supply of fresh produce during your space adventures. I've got a hydroponics tub for you to get started.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "accept",
+                    "text": "That sounds amazing! Let's get started."
+                }
+            ]
+        },
+        {
+            "id": "questioning",
+            "text": "Well, in space, soil is a precious resource that's hard to come by. Hydroponics allows you to grow plants with just water and nutrients. Plus, it's more space-efficient and less messy. How about we set you up with a hydroponics tub?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "accept",
+                    "text": "Alright, I'm convinced. Let's give it a try."
+                }
+            ]
+        },
+        {
+            "id": "accept",
+            "text": "Excellent! First things first, I need you to accept this hydroponics tub. It's all set up, you just need to add water and the plant seeds to get started.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "grant",
+                    "text": "Great, I'll take it!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "planting",
+                    "text": "I've got the hydroponics tub, what's next?"
+                }
+            ]
+        },
+        {
+            "id": "grant",
+            "text": "Now that you have the hydroponics tub, you'll need some plant seeds and water. I recommend starting with lettuce seeds as they grow quite well in hydroponic systems.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "planting",
+                    "text": "Alright, I'll add the water and seeds."
+                }
+            ]
+        },
+        {
+            "id": "planting",
+            "text": "Excellent! Now just watch your plants grow. You'll need to monitor the water level and add more nutrients from time to time, but with this setup, you should have fresh produce in no time!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "I've planted the seeds and added water. What's next?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "My plants are growing! What's next?"
+                }
+            ]
+        },
+        {
+            "id": "monitor",
+            "text": "Now, it's a waiting game. Just make sure to monitor the water level and add nutrients as needed. Once you see your plants growing, you'll know your hydroponics setup is working.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I see, I'll keep an eye on it."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "My plants are growing! What's next?"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Fantastic! You're all set with your hydroponics setup. Now you can enjoy fresh produce even in space! If you have any questions or need further guidance, don't hesitate to ask. Good luck with your space gardening!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Phoenix! I appreciate your help."
+                }
+            ]
+        }
+    ],
     "rewards": [],
     "requiresQuests": []
 }

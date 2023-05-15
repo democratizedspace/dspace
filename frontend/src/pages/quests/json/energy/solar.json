@@ -5,7 +5,96 @@
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/orion.png",
     "start": "start",
-    "dialogue": [],
-    "rewards": [],
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hello there, space explorer! I'm Orion, your go-to engineer for all things electrical. I've got a fun project lined up. Interested?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "solarpanel",
+                    "text": "Absolutely! What's the project?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "notyet",
+                    "text": "Maybe later, Orion."
+                }
+            ]
+        },
+        {
+            "id": "solarpanel",
+            "text": "Glad to hear that! We'll be setting up a solar panel to generate clean, renewable energy. Ready to get started?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stepone",
+                    "text": "I'm ready. Let's go!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "notyet",
+                    "text": "I need to prepare first. I'll be back."
+                }
+            ]
+        },
+        {
+            "id": "stepone",
+            "text": "Alright! The first step is to gather the necessary materials. We'll need solar cells, a panel frame, and some wiring. Can you collect these items?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "steponecheck",
+                    "requiresItems": [
+                        {
+                            "id": "solarcell",
+                            "count": 20
+                        },
+                        {
+                            "id": "panelframe",
+                            "count": 1
+                        },
+                        {
+                            "id": "wiring",
+                            "count": 5
+                        }
+                    ],
+                    "text": "I have everything we need!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "stepone",
+                    "text": "I'll need some time to gather these."
+                }
+            ]
+        },
+        {
+            "id": "steponecheck",
+            "text": "Fantastic! Now that we have all the materials, let's start assembling the panel.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-solar-panel",
+                    "text": "Let's assemble this solar panel!"
+                }
+            ]
+        },
+        {
+            "id": "notyet",
+            "text": "No worries! I'll be here when you're ready to tackle this project.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "See you later, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "0",
+            "count": 1
+        }
+    ],
     "requiresQuests": []
 }

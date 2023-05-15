@@ -5,7 +5,112 @@
     "image": "/assets/quests/dCarbon.jpg",
     "npc": "/assets/npc/phoenix.png",
     "start": "start",
-    "dialogue": [],
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Greetings, adventurer! I'm Phoenix, a chemist working on sustainable rocket fuel development. I couldn't help but notice that your energy production is releasing dCarbon into the atmosphere. This is a concern for our planet. Would you like some advice on how to reduce your dCarbon emissions?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interested",
+                    "text": "Yes, please tell me more!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "unconcerned",
+                    "text": "I'm not really concerned about dCarbon."
+                }
+            ]
+        },
+        {
+            "id": "interested",
+            "text": "I'm glad to hear that you're interested in reducing your dCarbon emissions. There are a few ways you can tackle this issue, such as switching to renewable energy sources or implementing carbon capture technologies. First, let's assess your current energy setup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assess",
+                    "text": "Sounds good, let's do it."
+                }
+            ]
+        },
+        {
+            "id": "unconcerned",
+            "text": "I understand that dCarbon emissions might not be your top priority, but it's important to consider the long-term effects on our planet. Switching to more eco-friendly energy sources or implementing carbon capture technologies can be beneficial for everyone. I encourage you to reconsider.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assess",
+                    "text": "Alright, you've convinced me. Let's assess my energy setup."
+                }
+            ]
+        },
+        {
+            "id": "assess",
+            "text": "Great! Let's start by looking at your primary energy source. Are you using coal, natural gas, nuclear, or renewable energy?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "coal",
+                    "text": "Coal"
+                },
+                {
+                    "type": "goto",
+                    "goto": "naturalGas",
+                    "text": "Natural gas"
+                },
+                {
+                    "type": "goto",
+                    "goto": "nuclear",
+                    "text": "Nuclear"
+                },
+                {
+                    "type": "goto",
+                    "goto": "renewable",
+                    "text": "Renewable energy"
+                }
+            ]
+        },
+        {
+            "id": "coal",
+            "text": "Coal is one of the largest contributors to dCarbon emissions. I recommend transitioning to cleaner energy sources like natural gas, nuclear, or renewables. Each option has its pros and cons, but they all help reduce dCarbon emissions.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll look into cleaner energy sources."
+                }
+            ]
+        },
+        {
+            "id": "naturalGas",
+            "text": "Natural gas is a cleaner alternative to coal, but it still produces dCarbon emissions. Consider switching to nuclear or renewable energy sources to further reduce your environmental impact.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll consider nuclear or renewable energy sources."
+                }
+            ]
+        },
+        {
+            "id": "nuclear",
+            "text": "Nuclear energy is a low-dCarbon alternative to fossil fuels. However, it comes with its own set of challenges, such as waste disposal and potential safety concerns. You might also explore renewable energy sources like solar, wind, or hydroelectric power.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll think about renewable energy options."
+                }
+            ]
+        },
+        {
+            "id": "renewable",
+            "text": "Excellent choice! Renewable energy sources like solar, wind, and hydroelectric power are the most eco-friendly options. Keep up the good work and continue exploring ways to improve your energy efficiency.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks for the advice!"
+                }
+            ]
+        }        
+    ],
     "rewards": [],
     "requiresQuests": []
 }
