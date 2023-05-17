@@ -8,23 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Greetings, adventurer! I'm Orion, an electrical engineer with a passion for robotics and microprocessors. I specialize in designing and building intelligent robotic systems, including the Hypercar you see here. Are you interested in learning more about this marvel of modern engineering?",
+            "text": "Hey friend, are you tired of having to walk everywhere? Ever wanna just hop in a car and go for a drive? Well, I've got the perfect solution for you! Introducing the Hypercar! It's a fully electric vehicle with a range of 500 miles on a single charge. It's not only luxurious but also comes with a suite of AI integrations, including a personal assistant and advanced driving assistance. This car is a perfect blend of style, performance, and cutting-edge technology.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "moreinfo",
-                    "text": "Definitely! Tell me more about the Hypercar."
+                    "goto": "expensive",
+                    "text": "Sounds expensive!"
                 },
                 {
                     "type": "goto",
-                    "goto": "notinterested",
-                    "text": "Not really, I'm just browsing."
+                    "goto": "bus",
+                    "text": "I'm kind of more of a bus fan"
                 }
             ]
         },
         {
-            "id": "moreinfo",
-            "text": "The Hypercar is a fully electric vehicle with a range of 500 miles on a single charge. It's not only luxurious but also comes with a suite of AI integrations, including a personal assistant and advanced driving assistance. This car is a perfect blend of style, performance, and cutting-edge technology.",
+            "id": "expensive",
+            "text": "Oh, you betcha! The cyberpunk vehicle of your dreams doesn't come cheap. If you've got the big bucks, though, it's well worth the price. Alternatively, you can buy vouchers for individual trips. The car drives itself right to your door! Isn't that cool???",
             "options": [
                 {
                     "type": "goto",
