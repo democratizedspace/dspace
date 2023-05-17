@@ -3,7 +3,7 @@
     "title": "Get started with hydroponics",
     "description": "Learn how to grow plants without soil!",
     "image": "/assets/quests/hydroponics_tub.jpg",
-    "npc": "/assets/npc/hydro.png",
+    "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {

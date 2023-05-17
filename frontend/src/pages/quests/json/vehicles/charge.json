@@ -3,9 +3,90 @@
     "title": "Charge your Hypercar",
     "description": "Charge your Hypercar at your home charging station.",
     "image": "/assets/quests/charge.jpg",
-    "npc": "/assets/npc/phoenix.png",
+    "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
-    "dialogue": [],
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hi there! I'm Phoenix, a chemist specializing in sustainable rocket fuel development. I see that you have a Hypercar! It's crucial to keep it charged for optimal performance. Do you have a home charging station for it?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "yes",
+                    "text": "Yes, I do!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "no",
+                    "text": "No, I don't. How can I get one?"
+                }
+            ]
+        },
+        {
+            "id": "yes",
+            "text": "Great! To charge your Hypercar, simply connect it to the charging station and wait for the charging process to complete. It's important to keep an eye on the battery levels during your space adventures.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Thanks for the advice!"
+                }
+            ]
+        },
+        {
+            "id": "no",
+            "text": "Don't worry! I can help you acquire a home charging station. Once you have it, you'll be able to charge your Hypercar with ease. Are you ready to proceed?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "acquire",
+                    "text": "Yes, let's do it!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Not right now, maybe later."
+                }
+            ]
+        },
+        {
+            "id": "acquire",
+            "text": "To get a home charging station, you'll need to gather some resources and components. I'll guide you through the process. First, you'll need to find the following items:\n\n10 units of titanium\n5 power cells\n1 high-capacity battery\nDo you have these items?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Yes, I have them."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "No, I need to find them first."
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Fantastic! With those components, you can now assemble your home charging station. Once it's set up, connect your Hypercar to it to charge. Remember to keep an eye on the battery levels during your space adventures.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Got it, thanks Phoenix!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "You're welcome! If you have any questions or need assistance in the future, don't hesitate to reach out. Good luck with your space adventures!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Phoenix! See you around."
+                }
+            ]
+        }
+    ],
     "rewards": [],
     "requiresQuests": []
 }

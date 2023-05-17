@@ -3,7 +3,7 @@
     "title": "Grow basil in your new hydroponics tub!",
     "description": "Basil is an easy starter plant to learn the basics, and there are many dishes you can make with it!",
     "image": "/assets/quests/hydroponic_basil.jpg",
-    "npc": "/assets/npc/hydro.png",
+    "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {

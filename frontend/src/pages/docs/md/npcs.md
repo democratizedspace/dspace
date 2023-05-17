@@ -58,4 +58,8 @@ Atlas is a humanoid robot assistant designed to help with physical tasks that re
         margin: 10px;
         border-radius: 20px;
     }
+
+    p {
+        font-size: 1.3rem;
+    }
 </style>

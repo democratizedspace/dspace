@@ -3,13 +3,21 @@ title: "Quest prompts"
 slug: "prompts-quests"
 ---
 
-These prompts are intended to work with GPT-4 on ChatGPT (or using the API). They should fit in the 8K token context window.
+## Instructions
+
+These prompts help with quest creation and are intended to work with GPT-4 on ChatGPT (or using the API). They should fit in the 8K token context window.
 
 These prompts are a work in progress. Eventually, quest creation will be done using an in-game WYSIWYG editor.
 
 Run the first quest (replacing the placeholder JSON for the new quest appropriately), copy the dialogue sample, and paste it in the second prompt and run that one too. This should generate the dialogue option, which you can paste back in the original placeholder JSON. You're welcome to submit [pull requests](https://github.com/democratizedspace/dspace/pulls) to improve these prompts!
 
 Ideally do each prompt in a fresh chat in order to minimize side-effects (as the previous prompt will still be in the context window and may cause GPT-4 to improvize).
+
+If your prompt doesn't work as expected, regenerate the response. It seems to be somewhat inconsistent sometimes.
+
+TODO: link to source code in the main branchafter v2 launch
+
+For now, copy directly from the [source file](https://github.com/democratizedspace/dspace/blob/v2/frontend/src/pages/docs/md/prompts-quests.md) so that backticks are included around code blocks.
 
 ## Create a new quest from starter JSON
 

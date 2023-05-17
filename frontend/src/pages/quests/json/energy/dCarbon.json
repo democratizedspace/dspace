@@ -3,7 +3,7 @@
     "title": "An inconvenient truth",
     "description": "Certain types of energy production (e.g. coal) release carbon dioxide (known in-game as dCarbon) into the atmosphere. Learn what you can do about it.",
     "image": "/assets/quests/dCarbon.jpg",
-    "npc": "/assets/npc/phoenix.png",
+    "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
