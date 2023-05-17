@@ -3,6 +3,7 @@
     import { writable } from 'svelte/store';
     import items from '../../inventory/json/items.json';
     import QuestChatOption from './QuestChatOption.svelte';
+    import QuestDialoguePreview from './QuestDialoguePreview.svelte';
     import { state, questFinished } from '../../../utils/gameState.js';
 
     export let quest, pointer, currentDialogue;
@@ -104,11 +105,13 @@
             </div>
         {/each}
     </div>
+
+    <!-- uncomment this line to see a dev preview for debugging purposes -->
+    <!-- <QuestDialoguePreview {quest} /> -->
 </div>
 
 <style>
     .chat {
-        /* background-color: a dark mode chat background color */
         background-color: #68d46d;
         color: black;
         border-radius: 20px;
@@ -128,7 +131,6 @@
         width: 50px;
         height: 50px;
         border-radius: 20px;
-        /* green border */
         border: 2px solid #68d46d;
     }
 
@@ -136,7 +138,6 @@
         width: 50px;
         height: 50px;
         border-radius: 20px;
-        /* green border */
         border: 2px solid #68d46d;
         margin: 5px;
     }
@@ -165,7 +166,6 @@
         margin-top: -10%;
     }
 
-    /* mobile */
     @media only screen and (max-width: 600px) {
         .banner {
             width: 120%;

@@ -126,7 +126,7 @@
 		},
 		{
 			"id": "hangofthis",
-			"text": "You're really getting the hang of this! I'm impressed. I'm sure you'll be a master quester in no time. If you ever need a refresher, just say the word. I'll be here in your garage, waiting for your next quest. Any questions before we wrap things up?",
+			"text": "You're really getting the hang of this! I'm impressed. I'm sure you'll be a master quester in no time. If you ever need a refresher, just say the word. I'll be here in your garage, waiting for your next quest. Oh, and have some nice cold hard cash, on me! Well, it's actually digital, but, you know... Any questions before we wrap things up?",
 			"options": [{
 				"type": "finish",
 				"text": "Nope, I'm good. Thanks for the help!"

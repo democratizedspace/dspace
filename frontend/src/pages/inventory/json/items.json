@@ -151,7 +151,7 @@
         "id": "20",
         "name": "dCarbon",
         "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
-        "image": "/assets/Dcarbon.jpg"
+        "image": "/assets/dCarbon.jpg"
     },
     {
         "id": "21",
