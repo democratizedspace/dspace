@@ -30,7 +30,7 @@
         <h2>{d.id}</h2>
         <h5>NPC:</h5>
         <p>
-            {JSON.stringify(d.text)}
+            {d.text}
         </p>
 
         <h5>Player:</h5>

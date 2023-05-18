@@ -42,39 +42,23 @@ Here's an example quest:
                     "type": "goto",
                     "goto": "enthusiastic",
                     "text": "A 3D printer? That sounds amazing! Tell me more."
-                },
-                {
-                    "type": "goto",
-                    "goto": "skeptical",
-                    "text": "A 3D printer? How would that help me?"
                 }
             ]
         },
         {
             "id": "enthusiastic",
-            "text": "Fantastic! A 3D printer is an invaluable tool for space exploration. It can create tools, equipment, and even spare parts for your ship. The printer is fully assembled and calibrated, so all you need to do is complete a test print.",
+            "text": "Fantastic! A 3D printer is an invaluable tool! It can be used to quickly prototype new designs, print decor, and even build robots!! Not only that, but I've taken the liberty of fully assembling and calibrating it for you. So, what do you say?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "grant",
-                    "text": "Great, let's get started!"
-                }
-            ]
-        },
-        {
-            "id": "skeptical",
-            "text": "A 3D printer can be a game-changer in not only space exploration but a ton of other industries. It allows you to create tools, equipment, and spare parts on demand. I've got a fully assembled and calibrated printer for you. All you need to do is complete a test print to see its capabilities.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "grant",
-                    "text": "Alright, let's give it a try."
+                    "text": "I say let's do this!!"
                 }
             ]
         },
         {
             "id": "grant",
-            "text": "First things first, I need you to accept the 3D printer. It's fully assembled and calibrated, so you're ready to go. Just take it and we'll proceed.",
+            "text": "First things first, I need you to accept the 3D printer. Just take it and we'll proceed. Oh, and I threw in some filament! That filament gets melted at a high temperature and laid down one layer at a time. It may take a while at first, but over time you'll be able tweak settings and make it run way faster! Plus, this is a cheap beginner model. There are way more powerful printers out there if you've got the cash!",
             "options": [
                 {
                     "type": "grantsItems",
