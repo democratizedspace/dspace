@@ -8,23 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hello there, space explorer! I'm Phoenix, a chemist specializing in sustainable solutions. I hear you're interested in hydroponics, is that right? Hydroponics is the future of space agriculture, allowing us to grow plants without soil.",
+            "text": "Hey there! I'm Hydro, your local hydroponics expert! Before you ask, it's just a nickname :P",
             "options": [
                 {
                     "type": "goto",
                     "goto": "interested",
                     "text": "Hydroponics? That sounds really interesting, tell me more."
-                },
-                {
-                    "type": "goto",
-                    "goto": "questioning",
-                    "text": "Why would I want to grow plants without soil?"
                 }
             ]
         },
         {
             "id": "interested",
-            "text": "Great! Hydroponics is a method of growing plants using mineral nutrient solutions in water, without soil. It's a great way to save resources and space while ensuring a constant supply of fresh produce during your space adventures. I've got a hydroponics tub for you to get started.",
+            "text": "Oh I could talk for hours but I'll give you the short version: hydroponics is a method of growing plants using mineral nutrient solutions in water, without soil. It's a great way to save resources and space while ensuring a constant supply of fresh produce during your space adventures. Unless you're growing outside, you'll definitely incur a bit of energy costs from indoor lighting, but on the flip side you can save up to 95% on your water usage compared to traditional farming. I've got a hydroponics tub for you to get started if you're interested.",
             "options": [
                 {
                     "type": "goto",
@@ -34,82 +29,129 @@
             ]
         },
         {
-            "id": "questioning",
-            "text": "Well, in space, soil is a precious resource that's hard to come by. Hydroponics allows you to grow plants with just water and nutrients. Plus, it's more space-efficient and less messy. How about we set you up with a hydroponics tub?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "accept",
-                    "text": "Alright, I'm convinced. Let's give it a try."
-                }
-            ]
-        },
-        {
             "id": "accept",
             "text": "Excellent! First things first, I need you to accept this hydroponics tub. It's all set up, you just need to add water and the plant seeds to get started.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "grant",
-                    "text": "Great, I'll take it!"
-                },
+					"type": "grantsItems",
+					"grantsItems": [{
+							"id": "9",
+							"count": 1
+						}
+					],
+					"text": "Ooh, fancy!"
+				},
                 {
                     "type": "goto",
-                    "goto": "planting",
+                    "goto": "water",
+					"requiresItems": [{
+                        "id": "9",
+                        "count": 1
+					}],
                     "text": "I've got the hydroponics tub, what's next?"
                 }
             ]
         },
         {
-            "id": "grant",
-            "text": "Now that you have the hydroponics tub, you'll need some plant seeds and water. I recommend starting with lettuce seeds as they grow quite well in hydroponic systems.",
+            "id": "water",
+            "text": "Now that you've got your hydroponics tub, you'll need some dechlorinated water. There are a few techniques to accomplish this, but the simplest and cheapest way is to just let tap water sit outdoors for 48 hours or so. Here, take this sink! And then let that sink in 😁",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "planting",
-                    "text": "Alright, I'll add the water and seeds."
-                }
-            ]
-        },
-        {
-            "id": "planting",
-            "text": "Excellent! Now just watch your plants grow. You'll need to monitor the water level and add more nutrients from time to time, but with this setup, you should have fresh produce in no time!",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "monitor",
-                    "text": "I've planted the seeds and added water. What's next?"
+                    "type": "grantsItems",
+					"grantsItems": [{
+						"id": "28",
+						"count": 1
+					}],
+                    "text": "Ha, very funny. I know just where to put this."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "My plants are growing! What's next?"
+                    "goto": "bucket",
+                    "requiresItems": [{
+                        "id": "28",
+                        "count": 1
+                    }],
+                    "text": "Kind of weird that I didn't have one of those already."
                 }
             ]
         },
         {
-            "id": "monitor",
-            "text": "Now, it's a waiting game. Just make sure to monitor the water level and add nutrients as needed. Once you see your plants growing, you'll know your hydroponics setup is working.",
+            "id": "bucket",
+            "text": "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems instead of building a proper one! But I digress. Now that you've got your sink installed, why don't you fill a bucket up with water? I'll show you how, if you need...",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "I see, I'll keep an eye on it."
+					"type": "process",
+					"process": "bucket-water-chlorinated",
+					"text": "No, I think I've got this one, thanks!"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "My plants are growing! What's next?"
+                    "goto": "dechlorinate",
+                    "requiresItems": [{
+                        "id": "17",
+                        "count": 1
+                    }],
+                    "text": "Alright, I've completed the challenging task of filling a bucket with water. What's next?"
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Fantastic! You're all set with your hydroponics setup. Now you can enjoy fresh produce even in space! If you have any questions or need further guidance, don't hesitate to ask. Good luck with your space gardening!",
+            "id": "dechlorinate",
+            "text": "Next you dechlorinate, of course! You may have to scoop some bugs out after, but this is a decent way to ensure there's no chlorine. Just make sure it gets direct sunlight!",
             "options": [
                 {
-                    "type": "finish",
-                    "text": "Thanks, Phoenix! I appreciate your help."
+					"type": "process",
+					"process": "bucket-water-dechlorinated",
+					"text": "It's like watching paint dry..."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fill",
+                    "requiresItems": [{
+                        "id": "25",
+                        "count": 1
+                    }],
+                    "text": "My water should be good to go now, right?"
+                }
+            ]
+        },
+        {
+            "id": "fill",
+            "text": "Yup! Next up, we've gotta make some seedlings! And what better way than with seeds? You gotta soak some rockwool in water for like 15 minutes or so. That way the water's fully permeated them! Rockwool is a great growing medium for hydroponics.",
+            "options": [
+                {
+					"type": "process",
+					"process": "rockwool-soak",
+					"text": "BRB gonna grab a coffee..."
+                },
+                {
+                    "type": "goto",
+                    "goto": "germinate",
+                    "requiresItems": [{
+                        "id": "26",
+                        "count": 11
+                    }],
+                    "text": "I can add the seeds now, right?"
+                }
+            ]
+        },
+        {
+            "id": "germinate",
+            "text": "You sure can! Just plop a few seeds in each pre-drilled hole. Afterwards you can just leave them in a window for a few weeks and come back when they've grown into little baby seedlings!",
+            "options": [
+                {
+					"type": "process",
+					"process": "rockwool-soak",
+					"text": "BRB gonna grab a coffee..."
+                },
+                {
+                    "type": "goto",
+                    "goto": "transplant",
+                    "requiresItems": [{
+                        "id": "26",
+                        "count": 11
+                    }],
+                    "text": "I can add the seeds now, right?"
                 }
             ]
         }

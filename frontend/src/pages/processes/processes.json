@@ -180,22 +180,18 @@
         "id": "rockwool-soak",
         "title": "soak your hydroponic starter plugs",
         "requireItems": [
-        ],
-        "consumeItems": [
             {
                 "id": "25",
                 "count": 1
-            },
+            }
+        ],
+        "consumeItems": [
             {
                 "id": "13",
                 "count": 11
             }
         ],
         "createItems": [
-            {
-                "id": "25",
-                "count": 1
-            },
             {
                 "id": "26",
                 "count": 11
