@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Howdy once again, adventurer! It's nice to see you again. I'm glad you're here, because I have a very important question for you. Are you ready to earn some dUSD?",
+            "text": "Howdy once again, adventurer! It's nice to see you. I'm glad you're here, because I have a very important question for you. Are you ready to earn some more dUSD?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "earn",
-                    "text": "You bet! I love dUSD."
+                    "text": "You bet! Sydney told me about this earlier."
                 },
                 {
                     "type": "goto",
@@ -88,7 +88,7 @@
         },
         {
             "id": "source",
-            "text": "The money comes from donations made by generous members of the metaguild. There's a leaderboard that gamifies donations. Additionally, any ecosystem tax (having too much dCarbon, for example, a token that accrues whenever you release carbon dioxide into the atmosphere) contributes to the UBI pool.",
+            "text": "The money comes from donations made by generous members of the metaguild. There's a leaderboard that gamifies donations (although it's still not quite ready to show you yet). Additionally, any ecosystem tax (for example, having too much dCarbon, a token that accrues whenever you release carbon dioxide into the atmosphere) contributes to the UBI pool.",
             "options": [
                 {
                     "type": "goto",
@@ -115,16 +115,16 @@
         },
         {
             "id": "process",
-            "text": "Alright! To receive your dUSD, you'll need to complete the process with ID 'basic-income'. This will give you a dBI token (id: '72').",
+            "text": "Alright! To receive your dUSD, just launch this here process and watch that progress bar grow! Well, actually, don't do that because it takes like, a whole day or something. Oh, and every dUSD you earn gives you a dBI as well! It's kind of just a neat way to track how much you've earned over time. Have fun!! Don't feel obligated to wait for the process to finish before you end this quest! You can always find it on the Wallet page.",
             "options": [
                 {
                     "type": "process",
                     "process": "basic-income",
-                    "text": "I'm ready to receive my dUSD!"
+                    "text": "This process right here?"
                 },
                 {
                     "type": "finish",
-                    "text": "I'll come back later."
+                    "text": "Cool, I've got the gist! See you around, dChat!"
                 }
             ]
         }
