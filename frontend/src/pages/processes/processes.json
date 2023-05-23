@@ -276,6 +276,10 @@
         "id": "grow-basil",
         "title": "grow basil until it's ready to harvest",
         "requireItems": [
+            {
+                "id": "43",
+                "count": 1
+            }
         ],
         "consumeItems": [
             {

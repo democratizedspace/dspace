@@ -70,11 +70,10 @@
     },
     {
         "id": "9",
-        "name": "Real Hydroponics Tub 1",
+        "name": "Beginner hydroponics tub",
         "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
         "image": "/assets/hydroponics_tub.jpg",
-        "price": "30 dUSD",
-        "type": "machine"
+        "price": "30 dUSD"
     },
     {
         "id": "10",

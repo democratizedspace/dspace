@@ -1,116 +1,256 @@
 {
     "id": "hydroponics/basil",
-    "title": "Grow basil in your new hydroponics tub!",
-    "description": "Basil is an easy starter plant to learn the basics, and there are many dishes you can make with it!",
-    "image": "/assets/quests/hydroponic_basil.jpg",
+    "title": "Grow basil hydroponically",
+    "description": "Learn how to grow plants without soil!",
+    "image": "/assets/quests/hydroponics_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Greetings, friend! Hydro here, your friendly hydroponics guru. I hear you're keen on space farming. How would you like to start by growing some basil in a hydroponics tub?",
+            "text": "Hey there! I'm Hydro, your local hydroponics expert! Before you ask, it's just a nickname :P",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "enthusiastic",
-                    "text": "Sounds great, Hydro. Tell me more about it."
-                },
-                {
-                    "type": "goto",
-                    "goto": "skeptical",
-                    "text": "I'm not sure. Why basil, and why in a hydroponics tub?"
+                    "goto": "interested",
+                    "text": "Hydroponics? That sounds really interesting, tell me more."
                 }
             ]
         },
         {
-            "id": "enthusiastic",
-            "text": "Perfect! Growing basil in a hydroponics tub is a great start. It's a hardy plant that does well in various conditions, and it's excellent for cooking. The tub is self-contained and fully automated, so you just need to get it started.",
+            "id": "interested",
+            "text": "Oh I could talk for hours but I'll give you the short version: hydroponics is a method of growing plants using mineral nutrient solutions in water without soil. It's a great way to save resources and space while ensuring a constant supply of fresh produce during your space adventures. Unless you're growing outside, you'll definitely incur a bit of energy costs from indoor lighting, but on the flip side you can save up to 95% on your water usage compared to traditional farming. I've got a hydroponics tub for you to get started if you're interested.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "grant",
-                    "text": "Sounds good, let's get going!"
+                    "goto": "accept",
+                    "text": "That sounds amazing! Let's get started."
                 }
             ]
         },
         {
-            "id": "skeptical",
-            "text": "Excellent question. Basil is a hardy plant that does well in various conditions, making it perfect for beginners. Hydroponics, on the other hand, allows you to grow plants faster and with less water than traditional farming. It's ideal for space conditions. I have a ready-to-use hydroponics tub for you. All you need to do is start it up.",
+            "id": "accept",
+            "text": "Excellent! First things first, I need you to accept this hydroponics tub. It's all set up, you just need to add water and the plant seeds to get started.",
             "options": [
                 {
+					"type": "grantsItems",
+					"grantsItems": [{
+							"id": "9",
+							"count": 1
+						}
+					],
+					"text": "Ooh, fancy!"
+				},
+                {
                     "type": "goto",
-                    "goto": "grant",
-                    "text": "Alright, let's give it a try."
+                    "goto": "water",
+					"requiresItems": [{
+                        "id": "9",
+                        "count": 1
+					}],
+                    "text": "I've got the hydroponics tub, what's next?"
                 }
             ]
         },
         {
-            "id": "grant",
-            "text": "First things first, I need you to accept the hydroponics tub and the basil seeds. The tub is fully automated, so once you plant the seeds, they'll start growing.",
+            "id": "water",
+            "text": "Now that you've got your hydroponics tub, you'll need some dechlorinated water. There are a few techniques to accomplish this, but the simplest and cheapest way is to just let tap water sit outdoors for 48 hours or so. Here, take this sink! And then let that sink in 😁",
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "hydroponics-tub",
-                            "count": 1
-                        },
-                        {
-                            "id": "basil-seeds",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Sounds like a plan!"
+					"grantsItems": [{
+						"id": "28",
+						"count": 1
+					}],
+                    "text": "Ha, very funny. I know just where to put this."
                 },
                 {
                     "type": "goto",
-                    "goto": "planting",
-                    "requiresItems": [
-                        {
-                            "id": "hydroponics-tub",
-                            "count": 1
-                        },
-                        {
-                            "id": "basil-seeds",
-                            "count": 1
-                        }
-                    ],
-                    "text": "I've got the hydroponics tub and the basil seeds. What's next?"
+                    "goto": "bucket",
+                    "requiresItems": [{
+                        "id": "28",
+                        "count": 1
+                    }],
+                    "text": "Kind of weird that I didn't have one of those already."
                 }
             ]
         },
         {
-            "id": "planting",
-            "text": "Now it's time to plant the seeds. Follow the instructions on the tub. Once you've successfully planted them, we'll know your hydroponics system is up and running.",
+            "id": "bucket",
+            "text": "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems instead of building a proper one! But I digress. Now that you've got your sink installed, why don't you fill a bucket up with water? I'll show you how, if you need...",
             "options": [
                 {
-                    "type": "process",
-                    "process": "plant-basil",
-                    "text": "I'm planting the seeds now."
+					"type": "process",
+					"process": "bucket-water-chlorinated",
+					"text": "No, I think I've got this one, thanks!"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "basil-plant",
-                            "count": 1
-                        }
-                    ],
-                    "text": "I've planted the basil seeds. What's next?"
+                    "goto": "dechlorinate",
+                    "requiresItems": [{
+                        "id": "17",
+                        "count": 1
+                    }],
+                    "text": "Alright, I've completed the challenging task of filling a bucket with water. What's next?"
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Great job! You're all set to use your hydroponics system for your space farming adventures. Remember, hydroponics is a great way to grow food in space. If you have any questions or need help, don't hesitate to ask. Happy farming!",
+            "id": "dechlorinate",
+            "text": "Next you dechlorinate, of course! You may have to scoop some bugs out after, but this is a decent way to ensure there's no chlorine. Just make sure it gets direct sunlight!",
             "options": [
+                {
+					"type": "process",
+					"process": "bucket-water-dechlorinated",
+					"text": "It's like watching paint dry..."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fill",
+                    "requiresItems": [{
+                        "id": "25",
+                        "count": 1
+                    }],
+                    "text": "My water should be good to go now, right?"
+                }
+            ]
+        },
+        {
+            "id": "fill",
+            "text": "Well, look who's back! You would be correct! Next up, we've gotta make some seedlings! And what better way than with seeds? Later you can propagate from existing plants, but for now let's start from scratch so that you get the full experience. You gotta soak some rockwool in water for like 15 minutes or so. That way the water's fully permeated them! Rockwool is a great growing medium for hydroponics.",
+            "options": [
+                {
+					"type": "process",
+					"process": "rockwool-soak",
+					"text": "BRB gonna grab a coffee..."
+                },
+                {
+                    "type": "goto",
+                    "goto": "germinate",
+                    "requiresItems": [{
+                        "id": "26",
+                        "count": 11
+                    }],
+                    "text": "I can add the seeds now, right?"
+                }
+            ]
+        },
+        {
+            "id": "germinate",
+            "text": "You sure can! Just plop a few seeds in each pre-drilled hole. Afterwards you can just leave them in a window for a few weeks and come back when they've grown into little baby seedlings! Don't worry, I'll be around!",
+            "options": [
+                {
+					"type": "process",
+					"process": "rockwool-soak",
+					"text": "I sure hope I did this right..."
+                },
+                {
+                    "type": "goto",
+                    "goto": "transfer",
+                    "requiresItems": [{
+                        "id": "26",
+                        "count": 11
+                    }],
+                    "text": "Alright, I'm definitely seeing a bunch of seedlings. It seems like all of them were successful!"
+                }
+            ]
+        },
+        {
+            "id": "transfer",
+            "text": "Fancy seeing you again! By my calculations, at least two weeks have passed! Your seedlings are looking fantastic! And all of them?? That's some great beginner's luck! It's time to transfer them to their new home! If you still have that hydroponics tub I gave you (and the dechlorinated water), you can complete the transfer now! Also, you'll need to add some nutrients to the water. I've got some here for you.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{
+                        "id": "14",
+                        "count": 1
+                    }],
+                    "text": "Nutrients, eh? I'll take 'em!"
+                },
+                {
+					"type": "process",
+					"process": "prepare-hydroponic-tub",
+					"text": "Alright, time to get my hands dirty!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "lighting",
+                    "requiresItems": [{
+                        "id": "44",
+                        "count": 11
+                    }],
+                    "text": "Ok, I've filled the tub with water and nutrients. What's next?"
+                }
+            ]
+        },
+        {
+            "id": "lighting",
+            "text": "Before we start the main event and grow you some basil, we've gotta ensure that we have sufficient lighting. They make dedicated grow lamps for hydroponics, and for now let's keep it super simple. Here, have a grow lamp! This one uses 36 Watt-hours (that is, 36 dWatt for every hour), which is not too shabby, but it'll definitely add up over the next 4 weeks you'll need to fully grow your basil. I'd head on over to the Energy page and make sure you have enough dWatt. Also, just so you're ready, I'd prep another bucket of dechlorinated water because after harvest we'll be replacing it. There are more water-efficient techniques, but I don't want to overwhelm you just yet. Don't worry, we'll hit that aspirational 95% water savings someday! I guarantee it!",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{
+                        "id": "43",
+                        "count": 1
+                    }],
+                    "text": "Cool grow lamp! This'll add a nice pink hue to my room."
+                },
+                {
+					"type": "process",
+					"process": "grow-basil",
+					"text": "4 weeks?? Geez!"
+                },
+                {
+					"type": "process",
+					"process": "bucket-water-dechlorinated",
+					"text": "Thanks for the heads up! I'd hate to have to wait an extra 48 hours."
+                },
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "requiresItems": [{
+                        "id": "27",
+                        "count": 11
+                    }],
+                    "text": "A month older and a month wiser. I've got a bunch of basil now! Is it time to harvest?"
+                }
+            ]
+        },
+        {
+            "id": "harvest",
+            "text": "You bet, buddy! I'm so proud of you! Look at those gorgeous plants! Think of all the tasty dishes you could make with this! I'm getting hungry just thinking about it. To promote healthy growth for your successive harvests, prune your basil plants by pinching off the tops of the stems! This encourages the plant to become bushier because it stimulates the growth of two new stems from each pinch point. Also, you should aim to remove no more than one-third of the total amount of foliage at any one time. Otherwise, you won't have enough leaves to promote photosynthesis! I'll leave you to it. I'm sure you'll do great!",
+            "options": [
+                {
+					"type": "process",
+					"process": "harvest-basil",
+					"text": "This basil is a cut above the rest, if I do say so myself! Snippity snip!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "regrow",
+                    "requiresItems": [{
+                        "id": "47",
+                        "count": 11
+                    }],
+                    "text": "I've got these fresh bundles of basil! How do they look?"
+                }
+            ]
+        },
+        {
+            "id": "regrow",
+            "text": "They look perfect! You could sell them, cook with them, or even munch on them like a rabbit if you're so inclined! Just make sure you wash them first! No telling what's been floating around your room over the last 4 weeks! I'm sure you're eager to get started on your next batch, and that's relatively simple. Just replace your nutrient-deficient water with a fresh batch of water nutrients, and you can start the process all over again! I know it feels a bit wasteful, but don't worry, I've got big plans to address that! Plus, you're not growing from scratch, so another 2 weeks should do it! Feel free to start the growth process and finish this quest whenever you're ready!",
+            "options": [
+                {
+					"type": "process",
+					"process": "regrow-basil",
+					"text": "Out with the old, in with the new! I'm ready to start growing again!"
+                },
                 {
                     "type": "finish",
-                    "text": "Thanks, Hydro! I appreciate your help."
+                    "text": "Thanks for all your help and advice, Hydro! You're the best! Don't tell the others I said that."
                 }
             ]
-        }    
+        }
     ],
     "rewards": [],
     "requiresQuests": []
