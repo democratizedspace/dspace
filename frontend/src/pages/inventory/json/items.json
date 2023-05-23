@@ -43,7 +43,7 @@
     {
         "id": "5",
         "name": "portable solar panel",
-        "description": "A portable solar panel that can be used to charge your devices. Supports USB-A and USB-C ports, and it has a 110V AC outlet, with support for 200W at peak sunpower.",
+        "description": "A portable solar panel, with support for 200W at peak sunpower. Standard DC Output.",
         "price": "200 dUSD",
         "image": "/assets/solar.jpg",
         "type": "machine"
@@ -537,5 +537,22 @@
         "name": "dChat",
         "description": "An offline-first conversational digital assistant. You ask it questions, it answers! Powered by LLMs!",
         "image": "/assets/npc/dChat.jpg"
+    },
+    {
+        "id": "79",
+        "name": "Solar charge controller",
+        "description": "A charge controller for a solar panel. Used to regular the voltage and current from a solar panel to protect the battery.",
+        "image": "/assets/solar_charge_controller.jpg"
+    },
+    {
+        "id": "80",
+        "name": "Small solar enclosure",
+        "description": "A solar controller with enough room for a single panel, a charge controller, and a 200 Wh battery.",
+        "image": "/assets/solar_enclosure_small.jpg"
+    },
+    {
+        "id": "81",
+        "name": "Solar setup (200 W)",
+        "description": "A solar panel, charge controller, and 200 Wh battery in a weatherproof enclosure. Ready to use!"
     }
 ]

@@ -75,6 +75,11 @@
         "comingSoon": true
     },
     {
+        "name": "The Flywheel",
+        "href": "/flywheel",
+        "comingSoon": true
+    },
+    {
         "name": "Changelog",
         "href": "/changelog"
     },

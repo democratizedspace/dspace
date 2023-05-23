@@ -24,76 +24,89 @@
         },
         {
             "id": "solarpanel",
-            "text": "Glad to hear that! We'll be setting up a solar panel to generate clean, renewable energy. Ready to get started?",
+            "text": "Glad to hear that! I'm gonna help you set up your first solar panel! Ready to get started?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "stepone",
+                    "goto": "materials",
                     "text": "I'm ready. Let's go!"
-                },
-                {
-                    "type": "goto",
-                    "goto": "notyet",
-                    "text": "I need to prepare first. I'll be back."
                 }
             ]
         },
         {
-            "id": "stepone",
-            "text": "Alright! The first step is to gather the necessary materials. We'll need solar cells, a panel frame, and some wiring. Can you collect these items?",
+            "id": "materials",
+            "text": "It's simpler than you think! In the simplest case all you need is a solar panel, a charge controller, and a battery. I've got plenty of spares, so I'll just give you the materials you need. Oh, you'll also need an enclosure unless you want to short out your equipment. I'll give you one of those too.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "steponecheck",
-                    "requiresItems": [
-                        {
-                            "id": "solarcell",
-                            "count": 20
-                        },
-                        {
-                            "id": "panelframe",
+                    "type": "grantsItems",
+                    "grantsItems": [{
+                            "id": "5",
                             "count": 1
                         },
                         {
-                            "id": "wiring",
-                            "count": 5
+                            "id": "6",
+                            "count": 1
+                        },
+                        {
+                            "id": "79",
+                            "count": 1
+                        },
+                        {
+                            "id": "80",
+                            "count": 1
                         }
                     ],
-                    "text": "I have everything we need!"
+                    "text": "Wow, no charge? You're too kind!"
                 },
                 {
                     "type": "goto",
-                    "goto": "stepone",
-                    "text": "I'll need some time to gather these."
+                    "goto": "setup",
+                    "text": "Alright, what's next?"
                 }
             ]
         },
         {
-            "id": "steponecheck",
-            "text": "Fantastic! Now that we have all the materials, let's start assembling the panel.",
+            "id": "setup",
+            "text": "All you gotta do now is find a safe, secure place to put your solar panel and other equipment! That patch of grass in your yard looks perfect! Just place the enclosure on the ground and make sure it's level. Then insert the charge controller and battery and hook everything up. Finally, secure the solar panel on the top of the enclosure with the provided screws. This thing is designed for ease of use and should be able to weather almost any storm!",
             "options": [
                 {
                     "type": "process",
-                    "process": "assemble-solar-panel",
-                    "text": "Let's assemble this solar panel!"
+                    "process": "setup-small-solar-enclosure",
+                    "text": "This is so freaking cool!"
+                },
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "81",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "setup",
+                    "text": "Everything's all set up! What now?"
                 }
             ]
         },
         {
-            "id": "notyet",
-            "text": "No worries! I'll be here when you're ready to tackle this project.",
+            "id": "charge",
+            "text": "Now all that's left is starting the charging process! Push the big button and energy will flow from the Sun into that battery! Isn't technology amazing? Once you've started the charge, feel free to finish the quest! You'll get a reward for your hard work!",
             "options": [
                 {
+                    "type": "process",
+                    "process": "solar-charge-200Wh",
+                    "text": "Let there be light!"
+                },
+                {
                     "type": "finish",
-                    "text": "See you later, Orion!"
+                    "text": "You've made my day, Orion! Thanks so much!!"
                 }
             ]
         }
     ],
     "rewards": [
         {
-            "id": "0",
-            "count": 1
+            "id": "5",
+            "count": 3
         }
     ],
     "requiresQuests": []

@@ -133,10 +133,16 @@
 			}]
 		}
 	],
-	"rewards": [{
-		"id": "78",
-		"count": 1
-	}],
+	"rewards": [
+		{
+			"id": "78",
+			"count": 1
+		},
+		{
+			"id": "24",
+			"count": 1000
+		}
+	],
 	"requiresQuests": [
 
 	]

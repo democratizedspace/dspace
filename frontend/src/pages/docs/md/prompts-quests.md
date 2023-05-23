@@ -47,7 +47,7 @@ Here's an example quest:
         },
         {
             "id": "enthusiastic",
-            "text": "Fantastic! A 3D printer is an invaluable tool! It can be used to quickly prototype new designs, print decor, and even build robots!! Not only that, but I've taken the liberty of fully assembling and calibrating it for you. So, what do you say?",
+            "text": "Fantastic! A 3D printer is an invaluable tool! It can be used to quickly prototype new designs, print decor, and even build robots!! I've taken the liberty of fully assembling and calibrating one for you. So, what do you say?",
             "options": [
                 {
                     "type": "goto",
