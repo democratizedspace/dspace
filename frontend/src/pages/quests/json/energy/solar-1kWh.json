@@ -2,7 +2,7 @@
     "id": "energy/solar-1kWh",
     "title": "Upgrade your solar enclosure with more capacity",
     "description": "Swap out that tiny 200 Wh battery for a new 1 kWh one! No upgrade in charge speed just yet, just more capacity!",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/solar_1kWh.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
