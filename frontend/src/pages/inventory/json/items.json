@@ -547,12 +547,19 @@
     {
         "id": "80",
         "name": "Small solar enclosure",
-        "description": "A solar controller with enough room for a single panel, a charge controller, and a 200 Wh battery.",
+        "description": "A solar enclosure with enough room for a single panel, a charge controller, and a 200 Wh battery.",
         "image": "/assets/solar_enclosure_small.jpg"
     },
     {
         "id": "81",
-        "name": "Solar setup (200 W)",
-        "description": "A solar panel, charge controller, and 200 Wh battery in a weatherproof enclosure. Ready to use!"
+        "name": "Solar setup (200 Wh)",
+        "description": "A 200 W solar panel, charge controller, and 200 Wh battery in a weatherproof enclosure. Ready to use!",
+        "image": "/assets/solar_setup_small.jpg"
+    },
+    {
+        "id": "82",
+        "name": "Solar setup (1 kWh)",
+        "description": "A 200 W solar panel, charge controller, and 1 kWh battery in a weatherproof enclosure. Ready to use!",
+        "image": "/assets/solar_setup_small.jpg"
     }
 ]

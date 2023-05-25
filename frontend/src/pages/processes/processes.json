@@ -612,10 +612,9 @@
         "duration": "60s"
     },
     {
-        "id": "solar-dWatt",
-        "title": "Generate dWatt using solar",
-        "requireItems": [
-        ],
+        "id": "setup-solar-enclosure-200Wh",
+        "title": "Add a 200 Wh battery, charge controller, and 200 W solar panel to an outdoor watertight enclosure",
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "5",
@@ -623,6 +622,32 @@
             },
             {
                 "id": "6",
+                "count": 1
+            },
+            {
+                "id": "79",
+                "count": 1
+            },
+            {
+                "id": "80",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "81",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "disassemble-enclosure-200Wh",
+        "title": "Disassemble a 200 Wh solar enclosure",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "81",
                 "count": 1
             }
         ],
@@ -636,40 +661,112 @@
                 "count": 1
             },
             {
+                "id": "79",
+                "count": 1
+            },
+            {
+                "id": "80",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "setup-solar-enclosure-1kWh",
+        "title": "Add a 1 kWh battery, charge controller, and 200 W solar panel to an outdoor watertight enclosure",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "5",
+                "count": 1
+            },
+            {
+                "id": "76",
+                "count": 1
+            },
+            {
+                "id": "79",
+                "count": 1
+            },
+            {
+                "id": "80",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "82",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "disassemble-enclosure-1kWh",
+        "title": "Disassemble a 1 kWh solar enclosure",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "82",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5",
+                "count": 1
+            },
+            {
+                "id": "6",
+                "count": 1
+            },
+            {
+                "id": "79",
+                "count": 1
+            },
+            {
+                "id": "80",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "solar-200Wh",
+        "title": "Generate 200 Wh of electricity using solar",
+        "requireItems": [
+            {
+                "id": "81",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+        ],
+        "createItems": [
+            {
                 "id": "22",
                 "count": 200
             },
             {
                 "id": "61",
                 "count": 200
+
             }
         ],
         "duration": "1h"
     },
     {
-        "id": "solar-dWatt-1e3",
-        "title": "Generate dWatt using solar",
+        "id": "solar-1000Wh",
+        "title": "Generate 1000 Wh of electricity using solar",
         "requireItems": [
-        ],
-        "consumeItems": [
             {
-                "id": "5",
-                "count": 5
-            },
-            {
-                "id": "76",
+                "id": "82",
                 "count": 1
             }
         ],
+        "consumeItems": [
+        ],
         "createItems": [
-            {
-                "id": "5",
-                "count": 5
-            },
-            {
-                "id": "76",
-                "count": 1
-            },
             {
                 "id": "22",
                 "count": 1000
@@ -677,9 +774,10 @@
             {
                 "id": "61",
                 "count": 1000
+
             }
         ],
-        "duration": "1h"
+        "duration": "5h"
     },
     {
         "id": "prepare-aquarium",
