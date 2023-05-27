@@ -1,11 +1,19 @@
 <script>
     import Chip from './Chip.svelte';
+    import CompactItemList from './CompactItemList.svelte';
     import items from '../../pages/inventory/json/items.json';
     import { getPriceStringComponents } from '../../utils';
     import { buyItems, sellItems } from '../../utils/gameState.js';
 
     export let itemId;
     export let gameState;
+
+    const dUSDId = "24";
+
+    let itemList = [
+        { id: itemId },
+        { id: dUSDId },
+    ];
     
     const item = items.find(item => item.id === itemId);
     const { price, symbol } = getPriceStringComponents(item.price);
@@ -18,6 +26,7 @@
     }
 
     function handleQuantityInput(event) {
+        console.log("event", event.target.value);
         const newQuantity = parseFloat(event.target.value);
         if (!isNaN(newQuantity) && newQuantity > 0) {
             quantity = newQuantity;
@@ -27,13 +36,14 @@
     }
 
     function handleTransactionClick() {
-        const transactionItem = { ...item, price: `${price} ${symbol}` };
+        const { price, symbol } = getPriceStringComponents(item.price);
+        const transactionItem = { ...item, price, symbol, quantity }; // separate price and symbol properties
         const transactionList = [transactionItem];
 
         if (activeType === 'buy') {
-            buyItems(transactionList, gameState);
+            buyItems(transactionList);
         } else {
-            sellItems(transactionList, gameState);
+            sellItems(transactionList);
         }
     }
 
@@ -47,6 +57,9 @@
         <p>Not tradeable</p>
     {:else}
         <div class="buy-sell-wrapper vertical">
+            <Chip text="">
+                <CompactItemList itemList={itemList} />
+            </Chip>
             <div class="horizontal">
                 <Chip 
                     text="Buy" 
@@ -62,7 +75,7 @@
 
             <div class="horizontal">
                 <label>
-                    <input type="number" min="1" value={quantity} onInput={handleQuantityInput} class="quantity-input"/>
+                    <input type="number" min="1" value={quantity} on:input={handleQuantityInput} class="quantity-input"/>
                 </label>
                 <Chip 
                     text={buyChipActive ? `Buy for ${price} ${symbol} each` : `Sell for ${price} ${symbol} each`}

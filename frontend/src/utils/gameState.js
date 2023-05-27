@@ -133,24 +133,30 @@ export const getItemCounts = (itemList) => {
     counts[item.id] = gameState.inventory[item.id] || 0;
   });
   return counts;
-}
+};
 
 export const getItemCount = (itemId) => {
   return getItemCounts([{ id: itemId }])[itemId];
-}
+};
+
+export const getCurrentdUSD = () => {
+  return getItemCount("24");
+};
 
 export const buyItems = (items) => {
-  console.log("buyItems: ", items);
   items.forEach(item => {
-    const { price, symbol } = getPriceStringComponents(item.price);
-    const currencyId = symbol.toLowerCase(); // Assuming the symbol matches the id of the currency in the inventory
+    const { price, quantity } = item;
+    console.log("price: ", price);
+    console.log("quantity: ", quantity);
+    const currencyId = "24"; // Assuming the currency ID is always "24"
 
-    if (gameState.inventory[currencyId] && gameState.inventory[currencyId] >= price) {
-      // Deduct the price from the player's currency
-      gameState.inventory[currencyId] -= price;
+    const totalPrice = parseFloat(price) * parseFloat(quantity); // Convert price and quantity to numbers
 
-      // Add the purchased item to the player's inventory
-      gameState.inventory[item.id] = (gameState.inventory[item.id] || 0) + 1;
+    console.log("totalPrice: ", totalPrice);
+
+    if (gameState.inventory[currencyId] && gameState.inventory[currencyId] >= totalPrice) {
+      gameState.inventory[currencyId] -= totalPrice;
+      gameState.inventory[item.id] = (gameState.inventory[item.id] || 0) + parseFloat(quantity);
     } else {
       console.log("Not enough currency to buy the item.");
     }
@@ -161,15 +167,12 @@ export const buyItems = (items) => {
 
 export const sellItems = (items) => {
   items.forEach(item => {
-    const { price, symbol } = getPriceStringComponents(item.price);
-    const currencyId = symbol.toLowerCase(); // Assuming the symbol matches the id of the currency in the inventory
+    const { price, quantity } = item; // get the quantity from the item
+    const currencyId = "24"; // Assuming the currency ID is always "24"
 
-    if (gameState.inventory[item.id] && gameState.inventory[item.id] > 0) {
-      // Remove the sold item from the player's inventory
-      gameState.inventory[item.id] -= 1;
-
-      // Add the price to the player's currency
-      gameState.inventory[currencyId] = (gameState.inventory[currencyId] || 0) + price;
+    if (gameState.inventory[item.id] && gameState.inventory[item.id] >= quantity) {
+      gameState.inventory[item.id] -= quantity;
+      gameState.inventory[currencyId] = (gameState.inventory[currencyId] || 0) + price * quantity;
     } else {
       console.log("No items available to sell.");
     }
@@ -177,6 +180,8 @@ export const sellItems = (items) => {
 
   saveGameState(gameState);
 };
+
+
 
 export const hasItems = (itemList) => {
   for (let i = 0; i < itemList.length; i++) {
