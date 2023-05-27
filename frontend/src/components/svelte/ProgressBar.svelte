@@ -1,73 +1,80 @@
-<script>
-  import { createEventDispatcher, onMount } from 'svelte';
-  import { tweened } from 'svelte/motion';
-  import { prettyPrintDuration } from '../../utils.js'; // Adjust path as needed
+<script>  
+  import { createEventDispatcher } from 'svelte';  
+  import { tweened } from 'svelte/motion';  
+  import { prettyPrintDuration } from '../../utils.js'; // Adjust path as needed  
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher();  
 
-  export let startValue;
-  export let totalDurationInSeconds;
+  export let startValue;  
+  export let totalDurationInSeconds;  
 
-  const value = tweened(startValue * 100);
-  let percentage = 0;
-  let remainingTime = prettyPrintDuration(totalDurationInSeconds); // Initialize remainingTime
-  let stopTween; // To store the stop function for the tween
-  let endTimeTimestamp;
-  let intervalId;
-  let mounted = false;
+  const value = tweened(startValue * 100, {duration: 0});  
+  let percentage = startValue * 100;  
+  let remainingTime = prettyPrintDuration(totalDurationInSeconds); // Initialize remainingTime  
+  let stopTween; // To store the stop function for the tween  
+  let startTimeTimestamp; // Changed from endTimeTimestamp  
+  let intervalId;  
+  let mounted = false;  
 
-  $: endTimeTimestamp = Date.now() + (1 - startValue) * totalDurationInSeconds * 1000;
+  export function startProgressBar() {  
+    // Stop any previous tween if exists  
+    if (stopTween) {  
+      stopTween();  
+    }  
+    // Start the tween, and store the stop function  
+    stopTween = value.subscribe(v => {  
+      percentage = v;  
+      if (v >= 100) {  
+        dispatch('processcomplete');  
+        clearInterval(intervalId);  
+      }  
+    });  
+    value.set(100, {  
+      duration: totalDurationInSeconds * 1000,  
+      easing: x => x // linear easing  
+    });  
 
-  export function startProgressBar() {
-    // Stop any previous tween if exists
-    if (stopTween) {
-      stopTween();
-    }
-    // Start the tween, and store the stop function
-    stopTween = value.subscribe(v => {
-      if (v >= 100) {
-        dispatch('processcomplete');
-        clearInterval(intervalId);
-      }
-    });
-    value.set(100, {
-      duration: totalDurationInSeconds * 1000,
-      easing: x => x // linear easing
-    });
+    // Record the starting time
+    startTimeTimestamp = Date.now();
 
-    intervalId = setInterval(() => {
-      const elapsed = (Date.now() - (endTimeTimestamp - totalDurationInSeconds * 1000)) / 1000; // Adjust elapsed calculation
-      remainingTime = prettyPrintDuration(totalDurationInSeconds - elapsed); // Update remainingTime instead of duration
-      percentage = Math.max(0, Math.min(100, elapsed / totalDurationInSeconds * 100));
-      
-      if (!mounted) {
-        mounted = true;
-      }
-    }, 1000);
+    // Start the interval immediately, instead of after 1 second
+    updateInterval();
+
+    intervalId = setInterval(updateInterval, 100);  
+  }  
+
+  export function resetProgressBar() {  
+    // Stop any previous tween if exists  
+    if (stopTween) {  
+      stopTween();  
+    }  
+    value.set(0, { duration: 0 });  
+    clearInterval(intervalId);  
+
+    // Reset remainingTime to the total duration when the progress bar is reset
+    remainingTime = prettyPrintDuration(totalDurationInSeconds);  
+  }  
+
+  // Separate function for interval updates
+  function updateInterval() {
+    const elapsed = (Date.now() - startTimeTimestamp) / 1000; // Adjust elapsed calculation  
+    remainingTime = prettyPrintDuration(totalDurationInSeconds - elapsed); // Update remainingTime instead of duration  
+
+    if (!mounted) {  
+      mounted = true;  
+    }  
   }
-  
-  export function resetProgressBar() {
-    // Stop any previous tween if exists
-    if (stopTween) {
-      stopTween();
-    }
-    value.set(0, { duration: 0 });
-    clearInterval(intervalId);
-  }
-
-  onMount(() => {
-    startProgressBar();
-  });
 </script>
 
-{#if mounted}
-  <div class="progress-bar-container">
-    <p>{percentage.toFixed(2)}% - {remainingTime}</p>
-    <div class="progress-bar">
-      <div class="progress-bar-inner" style="width: {percentage}%;"></div>
-    </div>
+<div class="progress-bar-container">  
+  <p>
+    {$value.toFixed(2)}%
+    {#if $value < 100} - {remainingTime}{/if}
+  </p>  
+  <div class="progress-bar">
+    <div class="progress-bar-inner" style="width: {$value}%;"></div>
   </div>
-{/if}
+</div>
 
 <style>
   .progress-bar-container {
