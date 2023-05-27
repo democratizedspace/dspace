@@ -107,7 +107,7 @@
     </div>
 
     <!-- uncomment this line to see a dev preview for debugging purposes -->
-    <QuestDialoguePreview {quest} />
+    <!-- <QuestDialoguePreview {quest} /> -->
 </div>
 
 <style>
