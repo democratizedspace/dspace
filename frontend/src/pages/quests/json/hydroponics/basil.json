@@ -54,7 +54,7 @@
         },
         {
             "id": "water",
-            "text": "Now that you've got your hydroponics tub, you'll need some dechlorinated water. There are a few techniques to accomplish this, but the simplest and cheapest way is to just let tap water sit outdoors for 48 hours or so. Here, take this sink! And then let that sink in 😁",
+            "text": "Now that you've got your hydroponics tub, you'll need some dechlorinated water. There are a few techniques to accomplish this, but the simplest and cheapest way is to just let tap water sit outdoors for 48 hours or so. Here, take this sink!",
             "options": [
                 {
                     "type": "grantsItems",
@@ -62,7 +62,7 @@
 						"id": "28",
 						"count": 1
 					}],
-                    "text": "Ha, very funny. I know just where to put this."
+                    "text": "Let that sink in!"
                 },
                 {
                     "type": "goto",

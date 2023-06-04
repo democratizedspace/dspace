@@ -3,7 +3,7 @@
     "title": "First rocket launch!",
     "description": "Print and launch your own model rocket. Follow the steps to print, assemble, and launch the rocket. Get ready for liftoff!",
     "image": "/assets/quests/firstlaunch.jpg",
-    "npc": "/assets/npc/8ea17128-23f9-4a7f-a13e-4f2039b42c33.jpg",
+    "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
