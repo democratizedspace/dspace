@@ -1,5 +1,5 @@
 {
-    "id": "3dprinting/firstlaunch",
+    "id": "rocketry/firstlaunch",
     "title": "First rocket launch!",
     "description": "Print and launch your own model rocket. Follow the steps to print, assemble, and launch the rocket. Get ready for liftoff!",
     "image": "/assets/quests/firstlaunch.jpg",
@@ -8,69 +8,174 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Welcome to the first rocket launch quest! Are you ready to print and launch your own model rocket?",
+            "text": "Hey friend! I'm Nova! I'm sure you've met some of my colleagues! I work pretty closely with Sydney and Phoenix. I'm here to help you launch your first model rocket! Are you ready?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "instructions",
-                    "text": "Yes, let's do it!"
-                },
-                {
-                    "type": "dismiss",
-                    "text": "Not interested at this time."
+                    "goto": "height",
+                    "text": "You betcha! How, uh, how high is this rocket thing launching?"
                 }
             ]
         },
         {
-            "id": "instructions",
-            "text": "To launch your model rocket, print and assemble the rocket, prepare the launch site, and launch the rocket.",
+            "id": "height",
+            "text": "Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect conditions, but this can vary a lot based on wind and other factors.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "paperwork",
+                    "text": "Oh, cool, that doesn't sound very high, but I'm sure I'm underestimating what that looks like! And I don't need some special paperwork from the government to launch this thing?"
+                }
+            ]
+        },
+        {
+            "id": "paperwork",
+            "text": "Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no more than 1500 grams, with a maximum weight of 125g of propellant. We're looking at roughly 90 grams for the rocket body and 18 grams for the solid rocket motor. Just need to find a nice open space to launch it!",
             "options": [
                 {
                     "type": "goto",
                     "goto": "print",
-                    "text": "I'm ready to print!"
-                },
-                {
-                    "type": "dismiss",
-                    "text": "Not up for the challenge."
+                    "text": "Gotcha, that quiets my fears a bit. So, what do I need to do to get this thing ready to launch?"
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Print and assemble the rocket, and prepare the launch site.",
+            "text": "Well first you've gotta print the rocket!",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "fun",
+                    "text": "Print the rocket?? Aren't there, like, pre-made rockets I can buy?"
+                }
+            ]
+        },
+        {
+            "id": "fun",
+            "text": "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you, don't you? All you need to do is print 4 pieces and the rest is glue and assembly! Obviously it gets way more complicated for that but we're going for the MVP -- the minimum viable product. You can always come back and make it better later!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "components",
+                    "text": "Works for me! What do I need to print?"
+                }
+            ]
+        },
+        {
+            "id": "components",
+            "text": "Even for this MVP, it's good to keep modularity in mind. Not only does this mitigate the risk of a large print failing and wasting a bunch of filament and time, but it also allows you to iterate on the design more easily. For this rocket, we're going to print a nosecone, a body tube, a fincan, and a nosecone coupler, which attaches the nosecone to the body tube. Print those 4 components and then we'll proceed! You can only print one component at a time using a single printer, so either print those 4 in series, or buy more printers to parallelize! The choice is up to you! I'm in no rush.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-rocket-nosecone",
+                    "text": "One nosecone, coming right up!"
+                },
+                {
+                    "type": "process",
+                    "process": "3dprint-rocket-body-tube",
+                    "text": "Totally tubular!"
+                },
+                {
+                    "type": "process",
+                    "process": "3dprint-rocket-fincan",
+                    "text": "Fin! Well, not yet, but soon!"
+                },
+                {
+                    "type": "process",
+                    "process": "3dprint-rocket-nosecone-coupler",
+                    "text": "A couple of these should do the trick! Get it? A couple? Nosecone coupler? Hah! Actually I only need the one ..."
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Alright, all 4 components are now printed! What's next?"
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "It's time for assembly!! There are a few more things you'll need: a solid rocket motor, some superglue, and some kevlar cord! You know how to buy those, right? I'm sure you do. I'll wait here while you go get them and assemble this thing. Here, use this handy schematic!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-rocket",
+                    "text": "Components, assemble!"
+                },
+                {
+                    "type": "goto",
                     "goto": "launch",
-                    "text": "I'm ready to launch!"
+                    "text": "The rocket's assembled! Are we ready for launch?"
                 }
             ]
         },
         {
             "id": "launch",
-            "text": "Launch the rocket following these tips and guidelines.",
+            "text": "We're nearly there! You'll also need a launch pad, a rocket igniter, and a launch controller. The launch pad ensures the rocket launches straight up, and the launch controller is what actually ignites the rocket motor. The igniter is the part you insert in the bottom of your rocket motor. You've already bought plenty of stuff at this point, so I'll just give you some spares I have laying around. Here you go!",
             "options": [
+				{
+					"type": "grantsItems",
+					"grantsItems": [
+                        {
+                            "id": "38",
+                            "count": 1
+                        },
+                        {
+                            "id": "37",
+                            "count": 1
+                        },
+                        {
+                            "id": "83",
+                            "count": 1
+                        }
+                    ],
+					"text": "Oh cool, I'll never turn down free stuff!"
+				},
+                {
+                    "type": "goto",
+                    "goto": "go",
+                    "text": "We are go for launch!!! Right?"
+                }
+            ]
+        },
+        {
+            "id": "go",
+            "text": "We sure are, buddy! Let's go launch this thing! Just place the rocket on the launchpad, insert the igniter, and connect the igniter to your launch controller. You should have plenty of wire to launch from a safe distance. Once you're ready, press the launch button on the controller and watch it go!",
+            "options": [
+				{
+					"type": "process",
+					"process": "launch-rocket",
+					"text": "3 ... 2 ... 1 ... LIFTOFF!!!"
+				},
                 {
                     "type": "goto",
                     "goto": "done",
-                    "text": "Congratulations!"
+                    "requiresItems": [
+                        {
+                            "id": "40",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Whoa! I can't believe I launched a rocket!! It didn't survive the landing, though, unfortunately."
                 }
             ]
         },
         {
             "id": "done",
-            "text": "Congratulations on launching your first model rocket!",
-            "options": []
+            "text": "That's ok, this is still a massive success! You're on your way to being a rocketeer! I'm so proud of you! Here, take this as a token of my appreciation. We'll improve on this design later and try to recover it for reuse. But for now, bask in the glory of your first rocket launch!",
+            "options": [
+				{
+					"type": "finish",
+					"text": "Houston, we do not have a problem!"
+				}
+            ]
         }
     ],
     "rewards": [
         {
-            "id": "6",
+            "id": "19",
             "count": 1
         }
     ],
     "requiresQuests": [
-        "3dprinting/start"
     ]
 }

@@ -240,7 +240,7 @@
     {
         "id": "34",
         "name": "hobbyist solid rocket motor",
-        "description": "24mm in diameter, 95mm long, weighing 58.1g. Max thrust: 31.3 Newtons.",
+        "description": "18mm in diameter, 70mm long, weighing 17.9g. Max thrust: 31.3 Newtons. Thrust duration: 0.80s.",
         "image": "/assets/rocket_motor.jpg",
         "price": "10 dUSD"
     },
@@ -561,5 +561,11 @@
         "name": "Solar setup (1 kWh)",
         "description": "A 200 W solar panel, charge controller, and 1 kWh battery in a weatherproof enclosure. Ready to use!",
         "image": "/assets/solar_setup_small.jpg"
+    },
+    {
+        "id": "83",
+        "name": "Model rocket launchpad",
+        "description": "A launchpad for model rockets.",
+        "image": "/assets/launchpad.jpg"
     }
 ]
