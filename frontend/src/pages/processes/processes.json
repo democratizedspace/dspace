@@ -854,6 +854,10 @@
         "id": "add-goldfish",
         "title": "Add a goldfish to your aquarium",
         "requireItems": [
+            {
+                "id": "63",
+                "count": 1
+            }
         ],
         "consumeItems": [
             {
@@ -863,19 +867,11 @@
             {
                 "id": "53",
                 "count": 1
-            },
-            {
-                "id": "63",
-                "count": 1
             }
         ],
         "createItems": [
             {
                 "id": "52",
-                "count": 1
-            },
-            {
-                "id": "63",
                 "count": 1
             }
         ],
@@ -885,22 +881,18 @@
         "id": "feed-goldfish",
         "title": "Feed your goldfish",
         "requireItems": [
-        ],
-        "consumeItems": [
             {
                 "id": "52",
                 "count": 1
-            },
+            }
+        ],
+        "consumeItems": [
             {
                 "id": "54",
                 "count": 0.1
             }
         ],
         "createItems": [
-            {
-                "id": "52",
-                "count": 1
-            },
             {
                 "id": "64",
                 "count": 1

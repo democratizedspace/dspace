@@ -8,112 +8,133 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there, I'm Vega. I hear you're interested in starting an aquarium. I have an idea: How about setting up a new home for a goldfish? It's a great start for budding aquarists.",
+            "text": "Hey there, I'm Vega. I'm love to teach you the basics of aquaria, if you're interested! I have a goldfish that needs a new home, and I'd love to help you get set up with the equipment you need!",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "enthusiastic",
+                    "goto": "yes",
                     "text": "A goldfish? That sounds fun! Tell me more."
-                },
-                {
-                    "type": "goto",
-                    "goto": "skeptical",
-                    "text": "A goldfish? I thought they were pretty basic."
                 }
             ]
         },
         {
-            "id": "enthusiastic",
-            "text": "I'm glad you're excited! Goldfish might seem simple, but they're actually quite interesting. They need a fairly large tank and good water quality to thrive. I have a kit to help you get started.",
+            "id": "yes",
+            "text": "Excellent! All you need is a nice surface to put this on. That stand in your garage looks perfect! I'll supply you with all the materials you need for a minimal setup! You can always upgrade later, add more fish and plants, and so on. But this will get you started!",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "grant",
-                    "text": "That sounds great, let's do this!"
+                    "goto": "maintenance",
+                    "text": "I've always loved aquariums! Do they need a lot of maintenance?"
                 }
             ]
         },
         {
-            "id": "skeptical",
-            "text": "You'd be surprised! Goldfish are easy to care for, yes, but they also require some attention to detail. They need a decent-sized tank and good water quality. How about we get you set up with a starter kit?",
+            "id": "maintenance",
+            "text": "A little bit of maintenance is certainly required, but if you work smart it's not too bad! Regularly cleaning the tank, monitoring the water parameters, and feeding the fish are some of the tasks you'll need to do. However, with the right tools and some planning, it's very manageable!",
             "options": [
-                {
-                    "type": "goto",
-                    "goto": "grant",
-                    "text": "Alright, let's give it a shot."
-                }
-            ]
-        },
-        {
-            "id": "grant",
-            "text": "Perfect! I've got this starter kit for you. It includes a 20-gallon tank, a filter, and some food for your new pet.",
-            "options": [
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "0",
-                            "count": 1
-                        }
-                    ],
-                    "text": "I'll gladly take that!"
-                },
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "requiresItems": [
-                        {
-                            "id": "0",
-                            "count": 1
-                        }
-                    ],
-                    "text": "I've got the aquarium kit! What's next?"
+                    "text": "Sounds good! Let's get started with the setup."
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Great! Now, the first thing you need to do is set up the aquarium. Install the filter and fill the tank with water. Remember to condition the water before introducing the fish.",
+            "text": "Great! I'm giving you the following materials to get you started: a 150 Liter tank, some gravel, a filter, a heater, a light, a thermometer, some fish food, and of course, the fish. That's the absolute bare minimum you'll need, and obviously we'll want to add plants and decorations for the enjoyment of both you and the fish.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "51",
+                            "count": 1
+                        },
+                        {
+                            "id": "25",
+                            "count": 1
+                        },
+                        {
+                            "id": "62",
+                            "count": 20
+                        },
+                        {
+                            "id": "55",
+                            "count": 1
+                        },
+                        {
+                            "id": "56",
+                            "count": 1
+                        },
+                        {
+                            "id": "57",
+                            "count": 1
+                        },
+                        {
+                            "id": "58",
+                            "count": 1
+                        },
+                        {
+                            "id": "63",
+                            "count": 1
+                        },
+                        {
+                            "id": "54",
+                            "count": 1
+                        },
+                        {
+                            "id": "53",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Whoa, that's a lot of stuff! I hope I have the space..."
+                },
+                {
                     "type": "process",
-                    "process": "setup-tank",
-                    "text": "Alright, setting up the tank."
+                    "process": "prepare-aquarium",
+                    "text": "Let's set this thing up! Can't wait to feed my fishie"
                 },
                 {
                     "type": "goto",
-                    "goto": "introduce",
-                    "text": "I've set up the tank and conditioned the water. What's next?"
+                    "goto": "fish",
+                    "requiresItems": [
+                        {
+                            "id": "60",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Aquarium is fully set up! Time to add the fish, right?"
                 }
             ]
         },
         {
-            "id": "introduce",
-            "text": "Now gently introduce the goldfish into the tank. Remember, it's essential to acclimate the fish to the new water temperature by floating the bag in the tank for about 15 minutes before fully releasing it.",
+            "id": "fish",
+            "text": "Yep, time to add the fish! Also you can feed your goldfish up to 3 times per day! Once your fish is in the tank, go ahead and feed it!",
             "options": [
                 {
                     "type": "process",
-                    "process": "introduce-fish",
-                    "text": "Ok, introducing the goldfish now."
+                    "process": "add-goldfish",
+                    "text": "Here you go, little buddy! Welcome to your new home!"
                 },
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "I've introduced the goldfish into the tank. What's next?"
-                }
-            ]
-        },
-        {
-            "id": "finish",
-            "text": "That's it! You've done a great job setting up your new goldfish tank. Remember, goldfish are pretty hardy, but they still need regular feeding and tank cleaning. Let me know if you need any more help with your aquarium!",
-            "options": [
+                    "type": "process",
+                    "process": "feed-goldfish",
+                    "text": "Wakey wakey, eggs and bakey! I hope you enjoy!"
+                },
                 {
                     "type": "finish",
-                    "text": "Thanks, Vega! I appreciate your help."
+                    "requiresItems": [
+                        {
+                            "id": "52",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I'm so excited to have a fish! Thanks for all your help!"
                 }
             ]
-        }    
+        }
     ],
-    "rewards": [],
+    "rewards": [
+    ],
     "requiresQuests": []
 }
