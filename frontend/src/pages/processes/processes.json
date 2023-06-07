@@ -107,12 +107,12 @@
         "id": "3dprint-benchy",
         "title": "Make a test print",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 33
@@ -124,6 +124,10 @@
         ],
         "createItems": [
             {
+                "id": "0",
+                "count": 1
+            },
+            {
                 "id": "1",
                 "count": 1
             }
@@ -134,12 +138,12 @@
         "id": "3dprint-rocket",
         "title": "3D print a model rocket",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 91
@@ -150,6 +154,10 @@
             }
         ],
         "createItems": [
+            {
+                "id": "0",
+                "count": 1
+            },
             {
                 "id": "11",
                 "count": 1
@@ -379,12 +387,12 @@
         "id": "3dprint-rocket-body-tube",
         "title": "3D Print a rocket body tube",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 18.48
@@ -396,6 +404,10 @@
         ],
         "createItems": [
             {
+                "id": "0",
+                "count": 1
+            },
+            {
                 "id": "31",
                 "count": 1
             }
@@ -406,12 +418,12 @@
         "id": "3dprint-rocket-nosecone-coupler",
         "title": "3D print a rocket nosecone coupler",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 6.32
@@ -423,6 +435,10 @@
         ],
         "createItems": [
             {
+                "id": "0",
+                "count": 1
+            },
+            {
                 "id": "33",
                 "count": 1
             }
@@ -433,12 +449,12 @@
         "id": "3dprint-rocket-nosecone",
         "title": "3D print a rocket nosecone",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 13.9
@@ -450,6 +466,10 @@
         ],
         "createItems": [
             {
+                "id": "0",
+                "count": 1
+            },
+            {
                 "id": "30",
                 "count": 1
             }
@@ -460,12 +480,12 @@
         "id": "3dprint-rocket-fincan",
         "title": "3D print a rocket fincan",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 52.3
@@ -476,6 +496,10 @@
             }
         ],
         "createItems": [
+            {
+                "id": "0",
+                "count": 1
+            },
             {
                 "id": "32",
                 "count": 1
