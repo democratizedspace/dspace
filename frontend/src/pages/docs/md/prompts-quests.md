@@ -354,6 +354,129 @@ Here are some examples of things I'd like to improve:
 ```
 Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs and constructs the spacecraft used by the metaguild to explore the solar system. After studying aerospace engineering in college, she rapidly gained expertise in the field. Known for her perfectionism and ability to overcome obstacles, Nova embraced the metaguild as a means to employ her skills in groundbreaking ways. She's a natural leader and a great mentor to new recruits.
 ```
-```
 
 List your suggestions in a numbered list. After reading your response, I'll reply with a list of numbers that I'd like you to incorporate into the JSON file. Please return the entire JSON file with your changes once I respond. Thank you so much in advance!
+
+## More aggressive polish (only glaring issues)
+
+does this quest dialogue look good to ship?
+
+```
+{
+    "id": "energy/solar",
+    "title": "Set up a solar panel",
+    "description": "Set up a solar panel to generate energy",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hello there, space explorer! I'm Orion, your go-to engineer for all things electrical. I've got a fun project lined up. Interested?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "solarpanel",
+                    "text": "Absolutely! What's the project?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "notyet",
+                    "text": "Maybe later, Orion."
+                }
+            ]
+        },
+        {
+            "id": "solarpanel",
+            "text": "Glad to hear that! I'm gonna help you set up your first solar panel! Ready to get started?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "I'm ready. Let's go!"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "It's simpler than you think! In the simplest case all you need is a solar panel, a charge controller, and a battery. I've got plenty of spares, so I'll just give you the materials you need. Oh, you'll also need an enclosure unless you want to short out your equipment. I'll give you one of those too.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{
+                            "id": "5",
+                            "count": 1
+                        },
+                        {
+                            "id": "6",
+                            "count": 1
+                        },
+                        {
+                            "id": "79",
+                            "count": 1
+                        },
+                        {
+                            "id": "80",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Wow, no charge? You're too kind!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Alright, what's next?"
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "All you gotta do now is find a safe, secure place to put your solar panel and other equipment! That patch of grass in your yard looks perfect! Just place the enclosure on the ground and make sure it's level. Then insert the charge controller and battery and hook everything up. Finally, secure the solar panel on the top of the enclosure with the provided screws. This thing is designed for ease of use and should be able to weather almost any storm!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "setup-solar-enclosure-200Wh",
+                    "text": "This is so freaking cool!"
+                },
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "81",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "setup",
+                    "text": "Everything's all set up! What now?"
+                }
+            ]
+        },
+        {
+            "id": "charge",
+            "text": "Now all that's left is starting the charging process! Push the big button and energy will flow from the Sun into that battery! Isn't technology amazing? Once you've started the charge, feel free to finish the quest! You'll get a reward for your hard work!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solar-200Wh",
+                    "text": "Let there be light!"
+                },
+                {
+                    "type": "finish",
+                    "text": "You've made my day, Orion! Thanks so much!!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 1
+        }
+    ],
+    "requiresQuests": []
+}
+```
+
+let me know if anything is horribly wrong or there's an obvious mistake (to the point where I could face serious consequences or embarrassment), but otherwise just reply with "looks good"
+
+Don't worry about the structure of the json or any of the properties whose purpose is unclear. Assume all of that is implemented correctly. Focus only on the NPC dialogue and the player responses.

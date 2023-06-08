@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there, I'm Vega. I'm love to teach you the basics of aquaria, if you're interested! I have a goldfish that needs a new home, and I'd love to help you get set up with the equipment you need!",
+            "text": "Hey there, I'm Vega. I'd love to teach you the basics of aquaria, if you're interested! I have a goldfish that needs a new home, and I'd love to help you get set up with the equipment you need!",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "yes",
-            "text": "Excellent! All you need is a nice surface to put this on. That stand in your garage looks perfect! I'll supply you with all the materials you need for a minimal setup! You can always upgrade later, add more fish and plants, and so on. But this will get you started!",
+            "text": "Excellent! All you need is a nice surface to put this on. That stand in your garage looks perfect! I'm offering to supply you with all the necessary materials for a basic aquarium setup. You can always upgrade later, add more fish and plants, and so on. But this will get you started!",
             "options": [
                 {
                     "type": "goto",
@@ -30,7 +30,7 @@
         },
         {
             "id": "maintenance",
-            "text": "A little bit of maintenance is certainly required, but if you work smart it's not too bad! Regularly cleaning the tank, monitoring the water parameters, and feeding the fish are some of the tasks you'll need to do. However, with the right tools and some planning, it's very manageable!",
+            "text": "A little bit of maintenance is certainly required, but if you schedule regular cleaning and monitoring tasks, it's not too bad! Tasks include cleaning the tank, monitoring the water parameters, and feeding the fish. With the right tools and a consistent schedule, these tasks become very manageable!",
             "options": [
                 {
                     "type": "goto",
@@ -41,7 +41,7 @@
         },
         {
             "id": "setup",
-            "text": "Great! I'm giving you the following materials to get you started: a 150 Liter tank, some gravel, a filter, a heater, a light, a thermometer, some fish food, and of course, the fish. That's the absolute bare minimum you'll need, and obviously we'll want to add plants and decorations for the enjoyment of both you and the fish.",
+            "text": "Great! I'm giving you the following materials to get you started: a 150 Liter tank (for the fish to swim and grow), some gravel (for the tank bottom), a filter (to clean and purify the water), a heater (to keep the water at the right temperature), a light (to simulate day and night), a thermometer (to monitor the temperature), some fish food, and of course, the fish. These are the absolute basics you'll need, and as you become more comfortable, we'll want to add plants and decorations for the enjoyment of both you and the fish.",
             "options": [
                 {
                     "type": "grantsItems",
