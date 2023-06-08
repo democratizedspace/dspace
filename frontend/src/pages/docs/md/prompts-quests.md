@@ -263,83 +263,7 @@ If you have clarifying questions, send them as a numbered list, and I'll send th
 I have the following quest:
 
 ```
-{
-    "id": "rocketry/parachute",
-    "title": "Add a parachute",
-    "description": "The launch was a success, but let's improve the design for future launches. We'll add a parachute to ensure a safer landing and potential reuse.",
-    "image": "/assets/quests/parachute.jpg",
-    "npc": "/assets/npc/nova.jpg",
-    "start": "start",
-    "dialogue": [
-        {
-            "id": "start",
-            "text": "Hey there! I hope you're still feeling the excitement from your first rocket launch! We've learned a lot, and now it's time to make some improvements. To ensure a safer landing and potential reuse for future rockets, let's add a parachute to the design.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "parachute",
-                    "text": "Sounds like a plan! How do we go about adding a parachute?"
-                }
-            ]
-        },
-        {
-            "id": "parachute",
-            "text": "Adding a parachute will help slow down the descent of the rocket, ensuring a gentler landing. This will increase the chances of a successful recovery and potential reuse of the rocket. We'll need a few additional components: a parachute, some shock cord, and a recovery wadding. The recovery wadding protects the parachute from the ejection charge of the rocket motor. Once we have those items, we can proceed with the modifications.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "assemble-rocket-parachute",
-                    "text": "Let's assemble the parachute system!"
-                },
-                {
-                    "type": "goto",
-                    "goto": "launch",
-                    "text": "Great! Once the parachute system is ready, are we good to go for another launch?"
-                }
-            ]
-        },
-        {
-            "id": "launch",
-            "text": "Absolutely! With the parachute system installed, we're ready for another launch. As before, place the rocket on the launchpad, insert the igniter, and connect the igniter to your launch controller. Once you're ready, press the launch button and watch the rocket take flight!",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "launch-rocket-parachute",
-                    "text": "This feels so exhilarating!!"
-                },
-                {
-                    "type": "goto",
-                    "goto": "success",
-                    "requiresItems": [
-                        {
-                            "id": "40",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Congratulations on another successful launch! How did the rocket fare with the parachute?"
-                }
-            ]
-        },
-        {
-            "id": "success",
-            "text": "The addition of the parachute worked like a charm, ensuring a safer landing for the rocket! It's a significant improvement from our previous attempt, and we're making great strides in rocketry!",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Thank you, Nova! I'm thrilled with the progress we've made!"
-                }
-            ]
-        }
-    ],
-    "rewards": [
-        {
-            "id": "4",
-            "count": 1
-        }
-    ],
-    "requiresQuests": [
-    ]
-}
+<paste quest JSON  (from any quest in frontend/src/pages/quests/json/) here>
 ```
 
 Can you help me improve the dialogue? Assume all the items have descriptions in other files, and don't worry about images or other content. Just focus on dialogue.
@@ -352,7 +276,7 @@ Here are some examples of things I'd like to improve:
 - make sure the dialogue matches the NPC's personality, as inferred by the information in their bio:
 
 ```
-Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs and constructs the spacecraft used by the metaguild to explore the solar system. After studying aerospace engineering in college, she rapidly gained expertise in the field. Known for her perfectionism and ability to overcome obstacles, Nova embraced the metaguild as a means to employ her skills in groundbreaking ways. She's a natural leader and a great mentor to new recruits.
+<paste NPC bio (from any section in frontend/src/pages/docs/md/npcs.md) here>
 ```
 
 List your suggestions in a numbered list. After reading your response, I'll reply with a list of numbers that I'd like you to incorporate into the JSON file. Please return the entire JSON file with your changes once I respond. Thank you so much in advance!
@@ -362,119 +286,7 @@ List your suggestions in a numbered list. After reading your response, I'll repl
 does this quest dialogue look good to ship?
 
 ```
-{
-    "id": "energy/solar",
-    "title": "Set up a solar panel",
-    "description": "Set up a solar panel to generate energy",
-    "image": "/assets/quests/solar_200Wh.jpg",
-    "npc": "/assets/npc/orion.jpg",
-    "start": "start",
-    "dialogue": [
-        {
-            "id": "start",
-            "text": "Hello there, space explorer! I'm Orion, your go-to engineer for all things electrical. I've got a fun project lined up. Interested?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "solarpanel",
-                    "text": "Absolutely! What's the project?"
-                },
-                {
-                    "type": "goto",
-                    "goto": "notyet",
-                    "text": "Maybe later, Orion."
-                }
-            ]
-        },
-        {
-            "id": "solarpanel",
-            "text": "Glad to hear that! I'm gonna help you set up your first solar panel! Ready to get started?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "materials",
-                    "text": "I'm ready. Let's go!"
-                }
-            ]
-        },
-        {
-            "id": "materials",
-            "text": "It's simpler than you think! In the simplest case all you need is a solar panel, a charge controller, and a battery. I've got plenty of spares, so I'll just give you the materials you need. Oh, you'll also need an enclosure unless you want to short out your equipment. I'll give you one of those too.",
-            "options": [
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [{
-                            "id": "5",
-                            "count": 1
-                        },
-                        {
-                            "id": "6",
-                            "count": 1
-                        },
-                        {
-                            "id": "79",
-                            "count": 1
-                        },
-                        {
-                            "id": "80",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Wow, no charge? You're too kind!"
-                },
-                {
-                    "type": "goto",
-                    "goto": "setup",
-                    "text": "Alright, what's next?"
-                }
-            ]
-        },
-        {
-            "id": "setup",
-            "text": "All you gotta do now is find a safe, secure place to put your solar panel and other equipment! That patch of grass in your yard looks perfect! Just place the enclosure on the ground and make sure it's level. Then insert the charge controller and battery and hook everything up. Finally, secure the solar panel on the top of the enclosure with the provided screws. This thing is designed for ease of use and should be able to weather almost any storm!",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "setup-solar-enclosure-200Wh",
-                    "text": "This is so freaking cool!"
-                },
-                {
-                    "type": "goto",
-                    "requiresItems": [
-                        {
-                            "id": "81",
-                            "count": 1
-                        }
-                    ],
-                    "goto": "setup",
-                    "text": "Everything's all set up! What now?"
-                }
-            ]
-        },
-        {
-            "id": "charge",
-            "text": "Now all that's left is starting the charging process! Push the big button and energy will flow from the Sun into that battery! Isn't technology amazing? Once you've started the charge, feel free to finish the quest! You'll get a reward for your hard work!",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "solar-200Wh",
-                    "text": "Let there be light!"
-                },
-                {
-                    "type": "finish",
-                    "text": "You've made my day, Orion! Thanks so much!!"
-                }
-            ]
-        }
-    ],
-    "rewards": [
-        {
-            "id": "5",
-            "count": 1
-        }
-    ],
-    "requiresQuests": []
-}
+<paste quest JSON  (from any quest in frontend/src/pages/quests/json/) here>
 ```
 
 let me know if anything is horribly wrong or there's an obvious mistake (to the point where I could face serious consequences or embarrassment), but otherwise just reply with "looks good"

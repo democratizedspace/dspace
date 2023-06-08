@@ -7,7 +7,7 @@
 	"start": "start",
 	"dialogue": [{
 			"id": "start",
-			"text": "Hey, adventurer! I'm dChat, your trusty AI sidekick, here to enhance your gaming experience. I've got a quest for you. Are you in?",
+			"text": "Greetings, adventurer! I'm dChat, an advanced AI sidekick crafted by the grand codemancers of this realm. My purpose? To enhance your journey and offer aid in your quests. Speaking of which, I've got a task for you. Are you ready?",
 			"options": [{
 					"type": "goto",
 					"goto": "garage",
