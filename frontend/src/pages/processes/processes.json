@@ -536,10 +536,6 @@
             {
                 "id": "35",
                 "count": 0.1
-            },
-            {
-                "id": "36",
-                "count": 1
             }
         ],
         "createItems": [
@@ -556,6 +552,10 @@
         "requireItems": [
             {
                 "id": "38",
+                "count": 1
+            },
+            {
+                "id": "83",
                 "count": 1
             }
         ],
@@ -588,6 +588,10 @@
             {
                 "id": "38",
                 "count": 1
+            },
+            {
+                "id": "83",
+                "count": 1
             }
         ],
         "consumeItems": [
@@ -613,8 +617,8 @@
         "duration": "45s"
     },
     {
-        "id": "rocket-attach-parachute",
-        "title": "Attach parachute to rocket",
+        "id": "assemble-rocket-parachute",
+        "title": "Assemble a rocket with a parachute. A ",
         "requireItems": [
         ],
         "consumeItems": [
@@ -630,6 +634,10 @@
         "createItems": [
             {
                 "id": "67",
+                "count": 1
+            },
+            {
+                "id": "69",
                 "count": 1
             }
         ],

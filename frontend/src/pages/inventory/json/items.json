@@ -254,8 +254,8 @@
     },
     {
         "id": "36",
-        "name": "kevlar cord",
-        "description": "Perfect for model rocketry.",
+        "name": "kevlar shock cord",
+        "description": " Lightweight, strong, heat-resistant cord for model rockets. Ensures safe recovery system deployment.",
         "image": "/assets/kevlar_cord.jpg",
         "price": "0.3 dUSD",
         "unit": " m"
@@ -567,5 +567,11 @@
         "name": "Model rocket launchpad",
         "description": "A launchpad for model rockets.",
         "image": "/assets/launchpad.jpg"
+    },
+    {
+        "id": "84",
+        "name": "flame-resistant recovery wadding",
+        "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
+        "image": "/assets/recovery_wadding.jpg"
     }
 ]
