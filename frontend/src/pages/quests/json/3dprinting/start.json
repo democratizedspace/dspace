@@ -100,8 +100,13 @@
         {
             "id": "24",
             "count": 100
+        },
+        {
+            "id": "8",
+            "count": 1
         }
     ],
     "requiresQuests": [
+        "welcome/howtodoquests"
     ]
 }

@@ -6,6 +6,15 @@
 
   const dispatch = createEventDispatcher();  
 
+  let initialized = false;
+
+  $: {
+    initialized = startValue !== undefined && totalDurationInSeconds !== undefined;
+    if (initialized) {
+      dispatch('Progress bar initialized');
+    }
+  }
+
   // `startValue` is a prop for the initial state of the progress bar. 
   // It should be between 0 and 1, representing the percentage of completion.
   // For example, if progress bar should start half complete, `startValue` = 0.5.
@@ -51,7 +60,8 @@
   // `updateInterval` calculates the elapsed time and updates the remaining time.
   function updateInterval() {
     const elapsed = (Date.now() - startTime) / 1000; 
-    remainingTime = calculateRemainingTime(elapsed); 
+    remainingTime = calculateRemainingTime(elapsed);
+    console.log(`Elapsed time: ${elapsed}, Remaining time: ${remainingTime}`); // Logging elapsed and remaining time
   }
 
   export function startProgressBar() {  
@@ -67,6 +77,7 @@
     });  
 
     percentageValue.set(100, { duration: totalDurationInSeconds * 1000, easing: x => x });  
+    console.log(`Start percentage: ${startValue * 100}, Duration: ${totalDurationInSeconds}`); // Logging start percentage and total duration
     startTime = Date.now();
     startUpdateInterval(); 
   }  
@@ -82,13 +93,14 @@
   // bar's current value (`percentageValue`) and remaining time are recalculated.
   $: {
     percentageValue.set(startValue * 100, {duration: 0}); // reactive statement for startValue changes
-    remainingTime = calculateRemainingTime(0); // reactive statement for totalDurationInSeconds changes
+    console.log(`Updated start value: ${startValue * 100}`); // Logging updated start value
+    remainingTime = calculateRemainingTime(0); 
   }
 </script>
 
 <div class="progress-bar-container">  
   <p>
-    {getDurationString($percentageValue, remainingTime)}
+    {getDurationString($percentageValue, initialized ? remainingTime : '')}
   </p>  
   <div class="progress-bar">
     <div class="progress-bar-inner" style="width: {$percentageValue}%;"></div>

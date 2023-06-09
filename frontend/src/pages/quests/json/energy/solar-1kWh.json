@@ -87,5 +87,7 @@
             "count": 3
         }
     ],
-    "requiresQuests": []
+    "requiresQuests": [
+        "energy/solar.json"
+    ]
 }

@@ -73,5 +73,6 @@
         }
     ],
     "requiresQuests": [
+        "rocketry/firstlaunch"
     ]
 }

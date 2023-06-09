@@ -136,5 +136,7 @@
     ],
     "rewards": [
     ],
-    "requiresQuests": []
+    "requiresQuests": [
+        "hydroponics/basil"
+    ]
 }

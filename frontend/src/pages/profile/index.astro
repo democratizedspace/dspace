@@ -29,35 +29,34 @@ const tokenPreview = `${token.slice(0, 3)}...${token.slice(-3)}`;
     <div class="horizontal">
         <Avatar client:load />
         <div class="vertical">
-            <p class="item">Display Name (@username)</p>
-            <p class="item">Title: Initiate</p>
         </div>
     </div>
 
-    <p>Choose a default PFP or connect your Ethereum wallet to use your own NFTs as your profile picture.</p>
+    <p>Choose a default avatar</p>
+
     <EthProfile client:visible />
 </Page>
 
-<style>
-    .horizontal {
-        display: flex;
-        flex-direction: row;
-        /* center items in this div vertically */
-        align-items: center;
-    }
+    <style>
+        .horizontal {
+            display: flex;
+            flex-direction: row;
+            /* center items in this div vertically */
+            align-items: center;
+        }
 
-    .item {
-        /* equal spacing between items, and centered */
-        justify-content: space-evenly;
-        margin-left: 2rem;
-    }
+        .item {
+            /* equal spacing between items, and centered */
+            justify-content: space-evenly;
+            margin-left: 2rem;
+        }
 
-    .vertical {
-        display: flex;
-        flex-direction: column;
-    }
+        .vertical {
+            display: flex;
+            flex-direction: column;
+        }
 
-    .hidden {
-        display: none;
-    }
-</style>
+        .hidden {
+            display: none;
+        }    </style>
+

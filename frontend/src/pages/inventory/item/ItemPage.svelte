@@ -16,6 +16,8 @@
 
     const processes = getProcessesForItem(itemId);
     console.log(processes);
+
+    const hasProcesses = Object.values(processes).some(arr => arr.length);
     
     onMount(() => {
         const itemCount = getItemCounts([{ id: itemId }])[itemId];
@@ -32,7 +34,9 @@
             <p>Count: {$count}</p>
             {item.description}
             <BuySell itemId={itemId} />
-            <p>Processes:</p>
+            {#if hasProcesses}
+                <p>Processes:</p>
+            {/if}
             {#if processes[ProcessItemTypes.REQUIRE_ITEM]}
                 {#each processes[ProcessItemTypes.REQUIRE_ITEM] as processId}
                     <Process inverted={false} {processId} />
