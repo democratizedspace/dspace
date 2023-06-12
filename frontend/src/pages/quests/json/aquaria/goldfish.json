@@ -114,6 +114,11 @@
             ]
         }    
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "65",
+            "count": 1
+        }
+    ],
     "requiresQuests": []
 }

@@ -1,6 +1,6 @@
 <script>
   import { state } from '../../utils/gameState.js';
-  import ItemList from '../../components/svelte/InventoryItemList.svelte';
+  import ItemList from '../../components/svelte/ItemList.svelte';
   import items from './json/items.json';
 
   let showAllItems = false;

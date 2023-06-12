@@ -39,19 +39,23 @@
 </script>
 
 {#if $isMounted}
-  <div class={$isEditing ? 'vertical editing' : 'vertical'}>
-      {#if $isEditing}
-          <p>Enter your <a href="https://platform.openai.com/account/api-keys">OpenAI API Key</a> to integrate GPT-3.5. Make sure you place <a href="https://platform.openai.com/account/billing/limits">usage limits</a>.  You can monitor your usage <a href="https://platform.openai.com/account/usage">here.</a></p>
-          <form on:submit|preventDefault={handleSubmit}>
-          <input type="text" bind:value={$apiKey} />
-          <div class="horizontal">
-              <button type="submit">Submit</button>
-              <button class="red" type="button" on:click={() => deleteAPIKey()}>Clear</button>
-          </div>
-          </form>
-      {:else}
-          <button type="button" on:click={() => editAPIKey()}>Edit API Key</button>
-      {/if}
+  <div>
+    <div class={$isEditing ? 'vertical editing' : 'vertical'}>
+        {#if $isEditing}
+            <p>Enter your <a href="https://platform.openai.com/account/api-keys">OpenAI API Key</a> to integrate GPT-3.5. Make sure you place <a href="https://platform.openai.com/account/billing/limits">usage limits</a>.  You can monitor your usage <a href="https://platform.openai.com/account/usage">here.</a></p>
+            <form on:submit|preventDefault={handleSubmit}>
+            <input type="text" bind:value={$apiKey} />
+            <div class="horizontal">
+                <button type="submit">Submit</button>
+                <button class="red" type="button" on:click={() => deleteAPIKey()}>Clear</button>
+            </div>
+            </form>
+        {:else}
+            <button type="button" on:click={() => editAPIKey()}>Edit API Key</button>
+        {/if}
+    </div>
+
+    <p>Currently, the game doesn't know anything about the lore, the items in the game, or your inventory. This will be introduced in a future version, as an opt-in feature.</p>
   </div>
 {/if}
 
