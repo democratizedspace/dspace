@@ -61,14 +61,14 @@
 
   onMount(() => {
     isMounted = true;
-
-    console.log(`process state is ${$processStateInfo.state}`);
-
+    
     if ($processStateInfo.state === ProcessStates.IN_PROGRESS) {
-      setTimeout(() => {
+      const startProgressBarWhenInitialized = () => {
         console.log("starting progress bar");
         progressBar.startProgressBar();
-      }, 0); // This will delay the execution of startProgressBar until the next event loop
+      };
+
+      progressBar.$on('initialized', startProgressBarWhenInitialized);
     }
   });
 </script>

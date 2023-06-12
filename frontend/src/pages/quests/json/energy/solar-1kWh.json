@@ -61,7 +61,7 @@
                 {
                     "type": "goto",
                     "process": "charge",
-                    "text": "alright, it's fully assembled! I assume since I didn't upgrade the panel, it's still gonna charge at the same rate? So instead of an hour, this should take roughly 5 hours?"
+                    "text": "Alright, it's fully assembled! I assume since I didn't upgrade the panel, it's still gonna charge at the same rate? So instead of an hour, this should take roughly 5 hours?"
                 }
             ]
         },
@@ -87,5 +87,7 @@
             "count": 3
         }
     ],
-    "requiresQuests": []
+    "requiresQuests": [
+        "energy/solar.json"
+    ]
 }

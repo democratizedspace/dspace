@@ -257,3 +257,38 @@ Can you help me transform the dialogue into the proper JSON?
 [id] is an id for the dialogue step. [] empty brackets mean it's a leaf node, something other than type:goto (e.g. finish). Think of this as a directed cyclic graph. Keep the nodes (along with their IDs) from the quest above when you output the transformed version. Can you give me that transformed version now, or do you have clarifying questions?
 
 If you have clarifying questions, send them as a numbered list, and I'll send the answers back as a numbered list. Repeat as many times as needed and then give me the output. Thank you so much in advance!
+
+## Final pass with polish
+
+I have the following quest:
+
+```
+<paste quest JSON  (from any quest in frontend/src/pages/quests/json/) here>
+```
+
+Can you help me improve the dialogue? Assume all the items have descriptions in other files, and don't worry about images or other content. Just focus on dialogue.
+
+Here are some examples of things I'd like to improve:
+
+- catch any improper use of a word or phrase. Explain why it's improper and suggest a better alternative.
+- catch any awkward phrasing. Explain why it's awkward and suggest a better alternative.
+- catch any overly complex sentences. Explain why it's overly complex and suggest a better alternative.
+- make sure the dialogue matches the NPC's personality, as inferred by the information in their bio:
+
+```
+<paste NPC bio (from any section in frontend/src/pages/docs/md/npcs.md) here>
+```
+
+List your suggestions in a numbered list. After reading your response, I'll reply with a list of numbers that I'd like you to incorporate into the JSON file. Please return the entire JSON file with your changes once I respond. Thank you so much in advance!
+
+## More aggressive polish (only glaring issues)
+
+does this quest dialogue look good to ship?
+
+```
+<paste quest JSON  (from any quest in frontend/src/pages/quests/json/) here>
+```
+
+let me know if anything is horribly wrong or there's an obvious mistake (to the point where I could face serious consequences or embarrassment), but otherwise just reply with "looks good"
+
+Don't worry about the structure of the json or any of the properties whose purpose is unclear. Assume all of that is implemented correctly. Focus only on the NPC dialogue and the player responses.

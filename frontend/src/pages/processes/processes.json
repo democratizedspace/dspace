@@ -107,12 +107,12 @@
         "id": "3dprint-benchy",
         "title": "Make a test print",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 33
@@ -124,6 +124,10 @@
         ],
         "createItems": [
             {
+                "id": "0",
+                "count": 1
+            },
+            {
                 "id": "1",
                 "count": 1
             }
@@ -134,12 +138,12 @@
         "id": "3dprint-rocket",
         "title": "3D print a model rocket",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 91
@@ -150,6 +154,10 @@
             }
         ],
         "createItems": [
+            {
+                "id": "0",
+                "count": 1
+            },
             {
                 "id": "11",
                 "count": 1
@@ -379,12 +387,12 @@
         "id": "3dprint-rocket-body-tube",
         "title": "3D Print a rocket body tube",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 18.48
@@ -396,6 +404,10 @@
         ],
         "createItems": [
             {
+                "id": "0",
+                "count": 1
+            },
+            {
                 "id": "31",
                 "count": 1
             }
@@ -406,12 +418,12 @@
         "id": "3dprint-rocket-nosecone-coupler",
         "title": "3D print a rocket nosecone coupler",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 6.32
@@ -423,6 +435,10 @@
         ],
         "createItems": [
             {
+                "id": "0",
+                "count": 1
+            },
+            {
                 "id": "33",
                 "count": 1
             }
@@ -433,12 +449,12 @@
         "id": "3dprint-rocket-nosecone",
         "title": "3D print a rocket nosecone",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 13.9
@@ -450,6 +466,10 @@
         ],
         "createItems": [
             {
+                "id": "0",
+                "count": 1
+            },
+            {
                 "id": "30",
                 "count": 1
             }
@@ -460,12 +480,12 @@
         "id": "3dprint-rocket-fincan",
         "title": "3D print a rocket fincan",
         "requireItems": [
+        ],
+        "consumeItems": [
             {
                 "id": "0",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "12",
                 "count": 52.3
@@ -476,6 +496,10 @@
             }
         ],
         "createItems": [
+            {
+                "id": "0",
+                "count": 1
+            },
             {
                 "id": "32",
                 "count": 1
@@ -512,10 +536,6 @@
             {
                 "id": "35",
                 "count": 0.1
-            },
-            {
-                "id": "36",
-                "count": 1
             }
         ],
         "createItems": [
@@ -532,6 +552,10 @@
         "requireItems": [
             {
                 "id": "38",
+                "count": 1
+            },
+            {
+                "id": "83",
                 "count": 1
             }
         ],
@@ -564,6 +588,10 @@
             {
                 "id": "38",
                 "count": 1
+            },
+            {
+                "id": "83",
+                "count": 1
             }
         ],
         "consumeItems": [
@@ -589,8 +617,8 @@
         "duration": "45s"
     },
     {
-        "id": "rocket-attach-parachute",
-        "title": "Attach parachute to rocket",
+        "id": "assemble-rocket-parachute",
+        "title": "Assemble a rocket with a parachute. A ",
         "requireItems": [
         ],
         "consumeItems": [
@@ -606,6 +634,10 @@
         "createItems": [
             {
                 "id": "67",
+                "count": 1
+            },
+            {
+                "id": "69",
                 "count": 1
             }
         ],
@@ -830,6 +862,10 @@
         "id": "add-goldfish",
         "title": "Add a goldfish to your aquarium",
         "requireItems": [
+            {
+                "id": "63",
+                "count": 1
+            }
         ],
         "consumeItems": [
             {
@@ -839,19 +875,11 @@
             {
                 "id": "53",
                 "count": 1
-            },
-            {
-                "id": "63",
-                "count": 1
             }
         ],
         "createItems": [
             {
                 "id": "52",
-                "count": 1
-            },
-            {
-                "id": "63",
                 "count": 1
             }
         ],
@@ -861,22 +889,18 @@
         "id": "feed-goldfish",
         "title": "Feed your goldfish",
         "requireItems": [
-        ],
-        "consumeItems": [
             {
                 "id": "52",
                 "count": 1
-            },
+            }
+        ],
+        "consumeItems": [
             {
                 "id": "54",
                 "count": 0.1
             }
         ],
         "createItems": [
-            {
-                "id": "52",
-                "count": 1
-            },
             {
                 "id": "64",
                 "count": 1

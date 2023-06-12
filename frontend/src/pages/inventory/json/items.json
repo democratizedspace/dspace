@@ -548,5 +548,11 @@
         "description": "A launchpad for model rockets.",
         "image": "/assets/launchpad.jpg",
         "price": "35 dUSD"
+    },
+    {
+        "id": "84",
+        "name": "flame-resistant recovery wadding",
+        "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
+        "image": "/assets/recovery_wadding.jpg"
     }
 ]

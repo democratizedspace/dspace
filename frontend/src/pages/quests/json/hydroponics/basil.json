@@ -258,5 +258,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": []
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ]
 }

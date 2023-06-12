@@ -113,5 +113,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": []
+    "requiresQuests": [
+        "3dprinting/start.json"
+    ]
 }

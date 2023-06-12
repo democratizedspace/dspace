@@ -52,7 +52,7 @@
         },
         {
             "id": "fun",
-            "text": "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you, don't you? All you need to do is print 4 pieces and the rest is glue and assembly! Obviously it gets way more complicated for that but we're going for the MVP -- the minimum viable product. You can always come back and make it better later!",
+            "text": "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you, don't you? All you need to do is print 4 pieces and the rest is glue and assembly! Obviously it gets way more complicated than that but we're going for the MVP -- the minimum viable product. You can always come back and make it better later!",
             "options": [
                 {
                     "type": "goto",
@@ -177,5 +177,6 @@
         }
     ],
     "requiresQuests": [
+        "3dprinting/start"
     ]
 }
