@@ -35,11 +35,6 @@
         "pinned": true
     },
     {
-        "name": "Settings",
-        "href": "/settings",
-        "pinned": true
-    },
-    {
         "name": "Chat",
         "href": "/chat",
         "pinned": true
@@ -75,8 +70,18 @@
         "comingSoon": true
     },
     {
-        "name": "The Flywheel",
+        "name": "Flywheel",
         "href": "/flywheel",
+        "comingSoon": true
+    },
+    {
+        "name": "Toolbox",
+        "href": "/toolbox",
+        "comingSoon": true
+    },
+    {
+        "name": "Settings",
+        "href": "/settings",
         "comingSoon": true
     },
     {
@@ -85,13 +90,11 @@
     },
     {
         "name": "Discord",
-        "href": "https://discord.gg/A3UAfYvnxM",
-        "pinned": true
+        "href": "https://discord.gg/A3UAfYvnxM"
     },
     {
         "name": "Twitter",
-        "href": "https://twitter.com/dspacegame",
-        "pinned": true
+        "href": "https://twitter.com/dspacegame"
     },
     {
         "name": "Github",
