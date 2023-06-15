@@ -235,7 +235,9 @@ export const getProcessState = (processId) => {
   }
 
   const elapsed = Date.now() - process.startedAt;
-  const progress = Math.min(1, elapsed / process.duration);
+  let progress = Math.min(1, elapsed / process.duration);
+  
+  progress = progress < 0.001 ? 0 : progress;
 
   if (process.startedAt + process.duration <= Date.now()) {
     return { state: ProcessStates.FINISHED, progress: progress * 100 };
