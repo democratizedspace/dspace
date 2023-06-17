@@ -14,8 +14,13 @@
 
     $: {
         if ($state) {
+            console.log("GrantItemsOption: state changed");
             if (getItemsGranted(questId, stepId, optionIndex)) {
+                console.log("items have been granted");
                 itemsClaimed.set(true);
+            } else {
+                console.log("items have not been granted");
+                itemsClaimed.set(false);
             }
         }
     }

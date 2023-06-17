@@ -33,10 +33,15 @@
 <div>
     <Chip disabled={!$itemRequirementsMet} text={option.text} onClick={onClick}>
         {#if option.requiresItems && option.requiresItems.length > 0}
-            <Chip inverted={true} text="">
+            <Chip inverted={true} disabled={!$itemRequirementsMet} text="">
                 <div class="vertical">
                     Requires:
-                    <CompactItemList itemList={option.requiresItems} increase={false} />
+                    <CompactItemList
+                        itemList={option.requiresItems}
+                        disabled={!$itemRequirementsMet}
+                        increase={false} 
+                        noRed={true}
+                    />
                 </div>
             </Chip>
         {/if}

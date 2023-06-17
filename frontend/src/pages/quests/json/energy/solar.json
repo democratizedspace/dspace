@@ -14,11 +14,6 @@
                     "type": "goto",
                     "goto": "solarpanel",
                     "text": "Absolutely! What's the project?"
-                },
-                {
-                    "type": "goto",
-                    "goto": "notyet",
-                    "text": "Maybe later, Orion."
                 }
             ]
         },
@@ -82,7 +77,7 @@
                             "count": 1
                         }
                     ],
-                    "goto": "setup",
+                    "goto": "charge",
                     "text": "Everything's all set up! What now?"
                 }
             ]
@@ -114,6 +109,6 @@
         }
     ],
     "requiresQuests": [
-        "3dprinting/start.json"
+        "welcome/howtodoquests"
     ]
 }

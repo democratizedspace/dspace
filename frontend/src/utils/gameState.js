@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import processes from '../pages/processes/processes.json';
-import { durationInSeconds, getPriceStringComponents } from '../utils.js';
+import { durationInSeconds } from '../utils.js';
 
 // ---------------------
 // INTERNAL: GAME STATE
@@ -246,6 +246,14 @@ export const getProcessState = (processId) => {
   return { state: ProcessStates.IN_PROGRESS, progress: progress * 100 };
 };
 
+export const getProcessStartedAt = (processId) => {
+  const process = gameState.processes[processId];
+  if (process && process.startedAt) {
+    return process.startedAt;
+  }
+  return undefined;
+};
+
 export const getProcessProgress = (processId) => {
   const process = gameState.processes[processId];
   if (!process || !process.startedAt) return 0;
@@ -256,21 +264,36 @@ export const getProcessProgress = (processId) => {
 
 export const finishProcess = (processId) => {
   if (getProcessState(processId).state === ProcessStates.FINISHED) {
+    console.log("finishing process");
     const process = processes.find((p) => p.id === processId);
     const createItems = process.createItems;
 
     gameState.processes[processId] = undefined;
     addItems(createItems);
     saveGameState(gameState);
+    console.log("Process finished.");
   }
 };
 
 
-export const cancelProcess = (processId, consumeItems) => {
-  gameState.processes[processId] = undefined;
-  // Return the consumed items to the player's inventory
-  addItems(consumeItems);
-  saveGameState(gameState);
+export const cancelProcess = (processId) => {
+  const process = processes.find((p) => p.id === processId);
+
+  if (!process) {
+    return;
+  }
+
+  try {
+    const consumeItems = process.consumeItems;
+    // Return the consumed items to the player's inventory
+    addItems(consumeItems);
+    gameState.processes[processId] = undefined;
+    saveGameState(gameState);
+    console.log("Process cancelled.");
+  } catch (e) {
+    console.log("Error cancelling process: ", e);
+
+  }
 };
 
 export const ProcessItemTypes = {

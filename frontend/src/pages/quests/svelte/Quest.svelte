@@ -1,16 +1,14 @@
 <script>
     export let quest;
-
-    const { title, description, image } = quest;
 </script>
 
-<div class="container">
+<div class="container" class:quest>
     {#if quest}
-        <div class="horizontal">
-            <img src={image} alt={image} />
-            <div class="vertical">
-                <h3>{title}</h3>
-                <p>{description}</p>
+        <div class="content">
+            <img class="quest-img" src={quest.image} alt={quest.image} />
+            <div class="content-text">
+                <h3>{quest.title}</h3>
+                <p>{quest.description}</p>
             </div>
         </div>
     {/if}
@@ -25,52 +23,43 @@
         opacity: 0.8;
     }
 
-    .container:hover {
+    .container:hover, .container.quest {
         opacity: 1;
     }
 
-    h3 {
+    h3, p {
         margin: 0;
         padding: 10px;
     }
 
-    img {
+    .quest-img {
         width: 200px;
         height: 400px;
         border-radius: 20px;
         margin: -10px;
-        /* preserve aspect ratio */
         object-fit: cover;
-        /* green border */
         border: 5px solid #68d46d;
     }
 
-    p {
-        margin: 0;
-        padding: 10px;
-        
-    }
-
-    .horizontal {
+    .content {
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 20px;
     }
 
-    /* iphone 14  */
     @media only screen and (max-width: 479px) {
-        .horizontal {
+        .content {
             flex-direction: column;
         }
         
-        img {
+        .quest-img {
             width: 105%;
             height: 105%;
         }
     }
 
-    .vertical {
+    .content-text {
         display: flex;
         flex-direction: column;
         align-items: center;

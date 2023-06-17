@@ -1,121 +1,111 @@
 <script>
-  import { writable, derived } from 'svelte/store';
-  import { onMount} from 'svelte';
-  import processes from '../../pages/processes/processes.json';
-  import CompactItemList from './CompactItemList.svelte';
   import ProgressBar from './ProgressBar.svelte';
-  import Chip from './Chip.svelte';
+  import { beforeUpdate, onMount } from 'svelte';
+  import { startProcess, cancelProcess, finishProcess, getProcessState, ProcessStates, getProcessStartedAt } from '../../utils/gameState.js';
+  import processes from '../../pages/processes/processes.json';
   import { durationInSeconds } from '../../utils.js';
-  import {
-    startProcess as startProcessInGameState,
-    finishProcess,
-    cancelProcess,
-    getProcessState,
-    ProcessStates,
-    hasRequiredAndConsumedItems,
-    state
-  } from '../../utils/gameState.js';
+  import Chip from './Chip.svelte';
+  import CompactItemList from './CompactItemList.svelte';
 
-  export let processId, inverted = true;
+  export let processId; // processId is now a prop
 
-  const process = processes.find((process) => process.id === processId);
-  const processStateInfo = writable(getProcessState(processId));
-  const canStartProcess = writable(false);
+  const process = processes.find(p => p.id === processId);
 
-  let progressBar;
-  let isMounted;
+  console.log(process);
 
-  function startProcess() {
-    startProcessInGameState(processId);
-    progressBar.startProgressBar();
-    processStateInfo.set(getProcessState(processId));
+  let state = getProcessState(processId).state;
+  let processStartedAt;
+  let intervalId;
+  let mounted = false;
+
+  const updateState = () => {
+    const processState = getProcessState(processId);
+    state = processState.state;
+    processStartedAt = getProcessStartedAt(processId);
   }
 
-  function handleProcessComplete() {
-    processStateInfo.set(getProcessState(processId));
+  const onProcessStart = () => {
+    clearInterval(intervalId);
+    startProcess(processId);
+    intervalId = setInterval(updateState, 100);
+    updateState();
   }
 
-  function claimItems() {
-    finishProcess(processId);
-    processStateInfo.set(getProcessState(processId));
-    progressBar.resetProgressBar();
+  const onProcessCancel = () => {
+    clearInterval(intervalId);
+    cancelProcess(processId);
+    updateState();
   }
-
-  function cancel() {
-    cancelProcess(processId, process.consumeItems);
-    processStateInfo.set(getProcessState(processId));
-    // Reset the progress bar and stop its motion
-    progressBar.resetProgressBar();
-  }
-
   
-  $: {
-    processStateInfo.set(getProcessState(processId));
-  }
-
-  $: {
-    if ($state) {
-      canStartProcess.set(hasRequiredAndConsumedItems(processId));
-    }
+  const onProcessComplete = () => {
+    clearInterval(intervalId);
+    finishProcess(processId);
+    updateState();
   }
 
   onMount(() => {
-    isMounted = true;
-    
-    if ($processStateInfo.state === ProcessStates.IN_PROGRESS) {
-      const startProgressBarWhenInitialized = () => {
-        console.log("starting progress bar");
-        progressBar.startProgressBar();
-      };
-
-      progressBar.$on('initialized', startProgressBarWhenInitialized);
-    }
+    mounted = true;
+    updateState();
+    intervalId = setInterval(updateState, 100);
   });
+
+  beforeUpdate(updateState);
 </script>
 
-{#if isMounted}
-  <Chip {inverted} text="">
-    <div class="vertical">
-      <p>{process.title}</p>
+<Chip text="">
+  <div class="container">
+    <h3>{process.title}</h3>
 
-      <div class="right-aligned">
-        <p>Requires:</p>
-        <CompactItemList itemList={process.requireItems} />
-
-        <p>Consumes:</p>
-        <CompactItemList itemList={process.consumeItems} />
-        
-        <p>Creates:</p>
-        <CompactItemList itemList={process.createItems} increase={true} />
-      </div>
-
-      {#if $processStateInfo.state === ProcessStates.NOT_STARTED}
-        <Chip inverted={!inverted} text="Start" onClick={() => startProcess()} disabled={!$canStartProcess} />
-      {:else if $processStateInfo.state === ProcessStates.IN_PROGRESS}
-        <Chip inverted={!inverted} text="Cancel" onClick={() => cancel()} />
-      {:else}
-        <Chip inverted={!inverted} text="Claim your items" onClick={() => claimItems()} />
+    {#if process.requireItems && process.requireItems.length > 0}
+      <h6>Requires:</h6>
+      <CompactItemList itemList={process.requireItems} noRed={true} />
+    {/if}
+    
+    {#if process.consumeItems && process.consumeItems.length > 0}
+      <h6>Consumes:</h6>
+      <CompactItemList itemList={process.consumeItems} noRed={true} />
+    {/if}
+    
+    {#if process.createItems && process.createItems.length > 0}
+      <h6>Creates:</h6>
+      <CompactItemList itemList={process.createItems} noRed={true} />
+    {/if}
+    <h4>Duration: {process.duration}</h4>
+    {#if state === ProcessStates.NOT_STARTED}
+      <Chip text="Start" onClick={onProcessStart} inverted={true} />
+    {:else if state === ProcessStates.IN_PROGRESS}
+      <Chip text="Cancel process" onClick={onProcessCancel} inverted={true} />
+      {#if mounted}
+        <ProgressBar
+          startDate={processStartedAt}
+          totalDurationSeconds={durationInSeconds(process.duration)} 
+        />
       {/if}
+    {:else}
+      <Chip text="Finish process" onClick={onProcessComplete} inverted={true} />
+    {/if}
+  </div>
 
-      <ProgressBar
-        bind:this={progressBar}
-        startValue={$processStateInfo.progress / 100}
-        totalDurationInSeconds={durationInSeconds(process.duration)}
-        on:processcomplete={handleProcessComplete}
-      />
-    </div>
-  </Chip>
-{/if}
+</Chip>
 
 <style>
-  .vertical {
+  .container {
     display: flex;
     flex-direction: column;
-    align-items: left;
-    gap: 10px;
   }
 
-  p {
-    margin: 0;
+  h3, h4, h6 {
+    color: white;
+    margin: 0px;
+  }
+
+  .button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
   }
 </style>

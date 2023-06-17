@@ -141,6 +141,6 @@
         }
     ],
     "requiresQuests": [
-        "hydroponics/basil"
+        "welcome/howtodoquests"
     ]
 }

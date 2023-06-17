@@ -32,19 +32,21 @@ switch (size) {
 }
 ---
 
-{ 
-    variant === ChipVariants.SELECTED
-        ?
-    <a class={`selected ${classString}`} href={href}>{textString}</a>
-        :
-            (
-                variant === ChipVariants.COMING_SOON
-                    ?
-                <a class={`blue ${classString}`} href={href}>{textString}</a>
-                    :
-                <a class={`${classString}`} href={href}>{textString}</a>
-            )
-}
+<span>
+    { 
+        variant === ChipVariants.SELECTED
+            ?
+        <a class={`selected ${classString}`} href={href}>{textString}</a>
+            :
+                (
+                    variant === ChipVariants.COMING_SOON
+                        ?
+                    <a class={`blue ${classString}`} href={href}>{textString}</a>
+                        :
+                    <a class={`${classString}`} href={href}>{textString}</a>
+                )
+    }
+</span>
 
 
 <style>

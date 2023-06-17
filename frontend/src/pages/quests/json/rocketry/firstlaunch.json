@@ -88,6 +88,24 @@
                 {
                     "type": "goto",
                     "goto": "assemble",
+                    "requiresItems": [
+                        {
+                            "id": "30",
+                            "count": 1
+                        },
+                        {
+                            "id": "31",
+                            "count": 1
+                        },
+                        {
+                            "id": "32",
+                            "count": 1
+                        },
+                        {
+                            "id": "33",
+                            "count": 1
+                        }
+                    ],
                     "text": "Alright, all 4 components are now printed! What's next?"
                 }
             ]
@@ -177,6 +195,6 @@
         }
     ],
     "requiresQuests": [
-        "3dprinting/start"
+        "welcome/howtodoquests"
     ]
 }

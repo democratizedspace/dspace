@@ -140,6 +140,6 @@
         }
     ],
     "requiresQuests": [
-        "ubi/basicincome"
+        "welcome/howtodoquests"
     ]
 }

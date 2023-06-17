@@ -19,7 +19,7 @@
 <Chip text={text}>
     <div class="vertical">
         <strong><p>The following items are required to proceed:</p></strong>
-        <CompactItemList itemList={items} />
+        <CompactItemList itemList={items} noRed={true} />
         <!-- Named slot with a slot name "requirements_met" -->
         {#if $$slots.requirements_met && $canProceed}
             <div class="requirements-met">

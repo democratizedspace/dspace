@@ -24,7 +24,7 @@
                 "count": 0.977023939064
             }
         ],
-        "duration": "5s"
+        "duration": "2s"
     },
     {
         "id": "outlet-dWatt-1e4",
@@ -51,7 +51,7 @@
                 "count": 9.77023939064
             }
         ],
-        "duration": "5s"
+        "duration": "2s"
     },
     {
         "id": "outlet-dWatt-1e5",
@@ -78,7 +78,7 @@
                 "count": 97.7023939064
             }
         ],
-        "duration": "5s"
+        "duration": "2s"
     },
     {
         "id": "bucket-water-chlorinated",
