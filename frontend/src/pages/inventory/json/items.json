@@ -557,8 +557,14 @@
     },
     {
         "id": "85",
-        "name": "Early Adopter Award",
+        "name": "Early Adopter Token",
         "description": "The early bird gets the worm.",
         "image": "/assets/early_adopter_award.jpg"
+    },
+    {
+        "id": "86",
+        "name": "Newcomer Token",
+        "description": "You're new here, aren't you?",
+        "image": "/assets/newcomer_token.jpg"
     }
 ]

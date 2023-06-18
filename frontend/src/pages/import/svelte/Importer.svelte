@@ -2,13 +2,19 @@
     import Chip from '../../../components/svelte/Chip.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
     import { onMount } from 'svelte';
-    import { getVersionNumber, importV1V2 } from '../../../utils/gameState.js';
+    import { derived } from 'svelte/store';
+    import { state, getVersionNumber, importV1V2, addItems, getItemCount } from '../../../utils/gameState.js';
 
     export let itemList = [];
 
+    const newcomerToken = {
+        id: "86",
+        count: 1
+    };
+
     let mounted = false, imported = false, currentVersion;
 
-    const totalItemCount = itemList.length;
+    let totalItemCount;
 
     const onImportItems = () => {
         if (imported) return;
@@ -16,6 +22,10 @@
         importV1V2(itemList);
 
         location.reload();
+    };
+
+    const acceptNewcomerToken = () => {
+        addItems([newcomerToken]);
     };
 
     onMount(() => {
@@ -27,6 +37,9 @@
             imported = true;
         }
     });
+
+    $: totalItemCount = itemList.length;
+    const newcomerTokenCount = derived(state, $state => getItemCount(newcomerToken.id));
 </script>
 
 {#if mounted}
@@ -41,19 +54,34 @@
                     </div>
                 {:else}
                     <p align="center">
-                        {totalItemCount} {totalItemCount === 1 ? "item" : "different items"} found
+                        {totalItemCount} {totalItemCount > 1 ? "different " : ""} {totalItemCount === 1 ? "item" : "items"} found
                     </p>
 
-                    <CompactItemList {itemList} noRed={true} increase={true} inverted={true} />
+                    {#if totalItemCount > 0}
+                        <CompactItemList {itemList} noRed={true} increase={true} inverted={true} />
 
-                    <div class="item">
-                        <Chip
-                            text="Import items"
-                            disabled={itemList.length === 0}
-                            inverted={false}
-                            onClick={onImportItems}
-                        />
-                    </div>
+                        <div class="item">
+                            <Chip
+                                text="Import items"
+                                disabled={itemList.length === 0}
+                                inverted={false}
+                                onClick={onImportItems}
+                            />
+                        </div>
+                    {:else}
+                        <p align="center">It looks like you didn't play v1 on this device, or your progress was wiped (by deleting cookies). In that case, take this token to hide this menu option!</p>
+                        <CompactItemList
+                            itemList={[newcomerToken]}
+                            noRed={true}
+                            increase={true}
+                            inverted={true} />
+                            <Chip text="Accept" onClick={acceptNewcomerToken} inverted={false} disabled={$newcomerTokenCount > 0} />
+
+                            {#if $newcomerTokenCount > 0}
+                                <Chip text="Go home" href="/" />
+                            {/if}
+                    {/if}
+
                 {/if}
             </div>
         </div>
