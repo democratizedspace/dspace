@@ -25,12 +25,8 @@
         messageHistory.update(history => [...history, aiMessage]);
   
       } catch (error) {
-        if (error.response) {
-          console.log(error.response.status);
-          console.log(error.response.data);
-        } else {
-          console.log(error.message);
-        }
+        console.error(error);
+        messageHistory.update(history => [...history, { role: "assistant", content: "Sorry, I'm having some trouble and can't generate a response." }]);
       }
   
       message.set(''); // clear text area

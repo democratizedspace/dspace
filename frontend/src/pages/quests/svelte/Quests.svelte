@@ -13,10 +13,8 @@
 
     quests.forEach(quest => {
         const finished = questFinished(quest.id);
-        console.log("finished: ", finished);
         if (!finished) {
             if (canStartQuest(quest)) {
-                console.log("can start quest: ", quest);
                 filteredQuests.push(quest);
             }
         }

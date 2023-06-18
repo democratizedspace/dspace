@@ -78,7 +78,6 @@ export const getCurrentDialogueStep = (questId) => {
 
 const setItemsGranted = (questId, stepId, optionIndex) => {
   const key = `${questId}-${stepId}-${optionIndex}`;
-  console.log(`granting items for key=${key}`);
   gameState.quests[questId] = { ...gameState.quests[questId], itemsClaimed: [...(gameState.quests[questId].itemsClaimed || []), key] };
   saveGameState(gameState);
 };
@@ -86,12 +85,10 @@ const setItemsGranted = (questId, stepId, optionIndex) => {
 export const getItemsGranted = (questId, stepId, optionIndex) => {
   try {
     const key = `${questId}-${stepId}-${optionIndex}`;
-    console.log(`key=${key}`);
     const itemsClaimed = gameState.quests[questId].itemsClaimed;
-    console.log(`itemsClaimed=${itemsClaimed}`);
     return itemsClaimed.includes(key);
   } catch (e) {
-    console.log("error getting items granted: ", e);
+    console.error(e);
     return false;
   }
 };
@@ -146,19 +143,13 @@ export const getCurrentdUSD = () => {
 export const buyItems = (items) => {
   items.forEach(item => {
     const { price, quantity } = item;
-    console.log("price: ", price);
-    console.log("quantity: ", quantity);
     const currencyId = "24"; // Assuming the currency ID is always "24"
 
     const totalPrice = parseFloat(price) * parseFloat(quantity); // Convert price and quantity to numbers
 
-    console.log("totalPrice: ", totalPrice);
-
     if (gameState.inventory[currencyId] && gameState.inventory[currencyId] >= totalPrice) {
       gameState.inventory[currencyId] -= totalPrice;
       gameState.inventory[item.id] = (gameState.inventory[item.id] || 0) + parseFloat(quantity);
-    } else {
-      console.log("Not enough currency to buy the item.");
     }
   });
 
@@ -173,8 +164,6 @@ export const sellItems = (items) => {
     if (gameState.inventory[item.id] && gameState.inventory[item.id] >= quantity) {
       gameState.inventory[item.id] -= quantity;
       gameState.inventory[currencyId] = (gameState.inventory[currencyId] || 0) + price * quantity;
-    } else {
-      console.log("No items available to sell.");
     }
   });
 
@@ -210,7 +199,6 @@ export const startProcess = (processId) => {
   const process = processes.find((p) => p.id === processId);
 
   if (!hasRequiredAndConsumedItems(processId)) {
-    console.log("Not enough items to start the process.");
     return;
   }
 
@@ -264,14 +252,12 @@ export const getProcessProgress = (processId) => {
 
 export const finishProcess = (processId) => {
   if (getProcessState(processId).state === ProcessStates.FINISHED) {
-    console.log("finishing process");
     const process = processes.find((p) => p.id === processId);
     const createItems = process.createItems;
 
     gameState.processes[processId] = undefined;
     addItems(createItems);
     saveGameState(gameState);
-    console.log("Process finished.");
   }
 };
 
@@ -289,10 +275,8 @@ export const cancelProcess = (processId) => {
     addItems(consumeItems);
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
-    console.log("Process cancelled.");
   } catch (e) {
-    console.log("Error cancelling process: ", e);
-
+    console.error(e);
   }
 };
 
