@@ -9,7 +9,7 @@ const cookie = Astro.request.headers.get('cookie');
 
 const itemList = getCookieItems(cookie);
 
-const title = `Upgrade from ${oldVersion.toString()} to ${newVersion.toString()} (WIP)`;
+const title = `Upgrade from ${oldVersion.toString()} to ${newVersion.toString()}`;
 ---
 
 <Page title={title} columns="1">
