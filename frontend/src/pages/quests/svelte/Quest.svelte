@@ -19,7 +19,7 @@
         background-color: #68d46d;
         color: black;
         border-radius: 20px;
-        margin: 20px;
+        margin: 5px;
         opacity: 0.8;
     }
 

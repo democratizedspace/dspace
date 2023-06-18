@@ -99,5 +99,10 @@
     {
         "name": "Github",
         "href": "https://github.com/democratizedspace/dspace"
+    },
+    {
+        "name": "Import from v1",
+        "href": "/import/v2/v1",
+        "pinned": true
     }
 ]

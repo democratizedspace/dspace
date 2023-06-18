@@ -100,11 +100,7 @@
 		{
 			"id": "processes",
 			"text": "Bingo! You're a quick learner! Lastly, some quests have you complete a process. A process can require any combination of items to start, might consume or create items, and takes some time to finish. There might be a cooldown too. For now, process the item I gave you, and hand over the final product!",
-			"options": [{
-					"type": "process",
-					"process": "outlet-dWatt-1e3",
-					"text": ""
-				},
+			"options": [
 				{
 					"type": "grantsItems",
 					"grantsItems": [{
@@ -112,6 +108,11 @@
 						"count": 1
 					}],
 					"text": "Looks like I need this to finish the process."
+				},
+				{
+					"type": "process",
+					"process": "outlet-dWatt-1e3",
+					"text": ""
 				},
 				{
 					"type": "goto",

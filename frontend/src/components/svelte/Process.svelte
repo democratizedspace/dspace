@@ -74,7 +74,7 @@
     {#if state === ProcessStates.NOT_STARTED}
       <Chip text="Start" onClick={onProcessStart} inverted={true} />
     {:else if state === ProcessStates.IN_PROGRESS}
-      <Chip text="Cancel process" onClick={onProcessCancel} inverted={true} />
+      <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
       {#if mounted}
         <ProgressBar
           startDate={processStartedAt}
@@ -82,7 +82,7 @@
         />
       {/if}
     {:else}
-      <Chip text="Finish process" onClick={onProcessComplete} inverted={true} />
+      <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
     {/if}
   </div>
 
