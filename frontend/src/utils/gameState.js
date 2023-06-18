@@ -339,3 +339,37 @@ export const getProcessesForItem = (itemId) => {
 
   return processMap;
 };
+
+
+// ---------------------
+// IMPORTER
+// ---------------------
+
+export const VERSIONS = {
+  V1: "1",
+  V2: "2",
+}
+
+export const setVersionNumber = (versionNumber) => {
+  gameState.versionNumberString = versionNumber;
+  saveGameState(gameState);
+}
+
+export const getVersionNumber = () => {
+  return gameState.versionNumberString;
+}
+
+// v1 -> v2
+export const importV1V2 = (itemList) => {
+  const award = {
+    "id": "85",
+    "count": 1
+  }
+
+  addItems([
+    award,
+    ...itemList
+  ]);
+  setVersionNumber(VERSIONS.V2);
+  saveGameState(gameState);
+}

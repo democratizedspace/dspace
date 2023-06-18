@@ -1,10 +1,13 @@
 <script>
     import menu from '../../config/menu.json';
+	import { getItemCount } from '../../utils/gameState.js';
+	import { onMount } from 'svelte';
 
 	export let pathname;
 
 	// get avatarUrl from localStorage key of same name
 	let avatarUrl = localStorage.getItem('avatarUrl');
+	let mounted = false;
 
 	const toggleShowUnpinned = () => {
 		showUnpinned = !showUnpinned;
@@ -21,6 +24,18 @@
 
 		// TODO: support unpinned menu items
 		return pathname.startsWith(item.href);
+	}
+
+	const showMenuItem = (currentItem) => {
+		if (currentItem && currentItem.hideIfOwned) {
+			// for each item in hideIfOwned, check if the player has it
+			for (const i of currentItem.hideIfOwned) {
+				if (getItemCount(i.id) > 0) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	const LABEL_MORE = 'More';
@@ -44,6 +59,10 @@
 		unpinned.splice(unpinned.indexOf(activeItem), 1);
 		pinned.push(activeItem);
 	}
+
+	onMount(() => {
+		mounted = true;
+	});
 </script>
 
 <div>
@@ -55,7 +74,11 @@
 				{#if isActive(item)}
 					<a class="active" href={item.href}>{item.name}</a>
 				{:else}
-					{#if item.comingSoon === true}
+					{#if item.hideIfOwned}
+						{#if showMenuItem(item) && mounted}
+							<a href={item.href}>{item.name}</a>
+						{/if}
+					{:else if item.comingSoon === true}
 						<a class="disabled" href={item.href}>{item.name}</a>
 					{:else}
 						<a href={item.href}>{item.name}</a>
@@ -65,7 +88,11 @@
 
 		{#if showUnpinned}
 			{#each unpinned as item}
-				{#if item.comingSoon === true}
+				{#if item.hideIfOwned}
+					{#if mounted}
+						<button class="active" href={""}>{item.name}f</button>
+					{/if}
+				{:else if item.comingSoon === true}
 					<button class="disabled" href={""}>{item.name}</button>
 				{:else}
 					<a href={item.href}>{item.name}</a>

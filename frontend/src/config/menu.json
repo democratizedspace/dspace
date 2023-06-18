@@ -103,6 +103,12 @@
     {
         "name": "Import from v1",
         "href": "/import/v2/v1",
-        "pinned": true
+        "pinned": true,
+        "hideIfOwned": [
+            {
+                "id": "85",
+                "count": 1
+            }
+        ]
     }
 ]

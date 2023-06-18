@@ -1,10 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import { createStarryNight } from '../scripts/starry.js';
 import Menu from '../components/svelte/Menu.svelte';
+import Updater from '../components/svelte/Updater.svelte';
+import { getCookieItems } from '../utils.js';
 
 const {title, message } = Astro.props;
+
+const cookie = Astro.request.headers.get('cookie');
+
+const itemList = getCookieItems(cookie);
 
 // get path of URL
 const pathname = Astro.url.pathname;
@@ -14,6 +19,8 @@ const pathname = Astro.url.pathname;
 	<main>
 		<div>
 			<Header title="" body="" href="" />
+
+			<Updater shouldUpdate={itemList.length === 0} />
 
 			<!-- for each item in menu, if  -->
 			<Menu pathname={pathname} client:idle />

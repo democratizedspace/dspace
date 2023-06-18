@@ -554,5 +554,11 @@
         "name": "flame-resistant recovery wadding",
         "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
         "image": "/assets/recovery_wadding.jpg"
+    },
+    {
+        "id": "85",
+        "name": "Early Adopter Award",
+        "description": "The early bird gets the worm.",
+        "image": "/assets/early_adopter_award.jpg"
     }
 ]

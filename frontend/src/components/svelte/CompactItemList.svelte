@@ -6,7 +6,7 @@
     import { prettyPrintNumber } from '../../utils.js';
     import Chip from './Chip.svelte';
 
-    export let itemList = [], increase = false, disabled = false, noRed = false;
+    export let itemList = [], increase = false, disabled = false, noRed = false, inverted = false;
 
     const itemCounts = writable(getItemCounts(itemList));
 
@@ -34,12 +34,12 @@
 </script>
 
 {#if isMounted}
-    <Chip inverted={true} disabled={disabled} text="">
+    <Chip inverted={!inverted} disabled={disabled} text="">
         <div class="vertical">
             {#each fullItemList as item (item.id)}
                 <div class="horizontal">
                     <a href={`/inventory/item/${item.id}`}><img src={item.image} class="icon" alt={item.name} /></a>
-                    <p class:disabled={disabled || ($itemCounts[item.id] < item.count)}>
+                    <p class:disabled={disabled || ($itemCounts[item.id] < item.count)} class:inverted="{inverted}">
                         {prettyPrintNumber($itemCounts[item.id])} 
                         {#if item.count !== null}
                             <span class="{increase ? 'blue' : (noRed ? '' : 'red')}">{increase ? '+' : '/'}{prettyPrintNumber(item.count)}</span>
@@ -75,7 +75,7 @@
     }
 
     .blue {
-        color: rgb(0, 99, 180);
+        color: rgb(78, 175, 255);
     }
 
     .red {
@@ -83,6 +83,10 @@
     }
 
     .disabled {
-        color: rgb(128, 128, 128);
+        color: rgb(0, 0, 0);
+    }
+
+    .inverted {
+        color: rgb(255, 255, 255);
     }
 </style>

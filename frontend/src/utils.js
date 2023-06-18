@@ -44,6 +44,10 @@ export const setCookieValue = (res, key, value) => {
     res.headers.append('Set-Cookie', `${key}=${value}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`);
 }
 
+export const deleteCookie = (res, key) => {
+    res.headers.append('Set-Cookie', `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`);
+}
+
 export const parseBool = (value) => {
     if (value === 'true') {
         return true;
@@ -55,6 +59,18 @@ export const hasAcceptedCookies = (req) => {
     const cookie = req.headers.get('cookie');
     const acceptedCookies = parseBool(getCookieValue(cookie, 'acceptedCookies'));
     return acceptedCookies || false;
+};
+
+export const getCookieItems = (cookie) => {
+    const parsedCookie = parseCookie(cookie);
+    return Object.keys(parsedCookie)
+        .filter(key => key.startsWith('item-'))
+        .map(key => {
+            return {
+            id: key.split('-')[1], // Extract the number after 'item-'
+            count: parseInt(parsedCookie[key], 10) // Convert the string value to a number
+        };
+    });
 };
 
 export const prettyPrintDuration = (durationSeconds) => {
