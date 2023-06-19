@@ -27,14 +27,8 @@ ChatGPT is a computer program that has been trained to understand and generate h
 
 DALL-E is an AI system that has been trained to generate original images from textual descriptions. It was developed by OpenAI and can create diverse and imaginative pictures from just a few words. For example, if you asked DALL-E to '[create an image of a toaster riding a bicycle](/assets/changelog/20230131/toaster.jpg)', it would generate an entirely new image of exactly that! DALL-E's ability to generate unique and creative images makes it useful for fields such as advertising, product design, and more.
 
-### [Scenario](https://app.scenario.gg)
+### [Scenario](https://scenario.com)
 
 ![Variation of the Scenario logo](/assets/team_scenario.jpg)
 
 Scenario is a generative model web app that allows users to train AI models to create specific objects and styles. With an easy-to-use interface, users can upload their own data and train models to generate outputs that match their desired styles and objects. For example, if you wanted to train a model to generate different variations of cats, you could upload pictures of cats and fine-tune the model until it generates new, original images of cats that match the styles and characteristics you want. The versatility of Scenario makes it a useful tool for artists, designers, and anyone looking to generate unique and custom outputs.
-
-### [Playground AI](https://playgroundai.com/)
-
-![Variation of the Playground AI logo](/assets/team_playground.jpg)
-
-Playground AI is a website that enables users to edit existing images with natural language commands. By simply saying things like "make the hat red" or "make it snowy", users can modify the appearance of an image and create new versions with different colors, textures, and elements.

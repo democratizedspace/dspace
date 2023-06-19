@@ -3,18 +3,37 @@ title: "Roadmap"
 slug: "roadmap"
 ---
 
-## March 2023
+This is just a tentative roadmap showing what I'm hoping to work on next. Things are subject to change, timelines are subject to delays, and some things may be reprioritized.
 
-- [ ] DSPACE v2
+## 2025
 
-## February 2023
+- [ ] multiplayer
 
-- [ ] reusable rocket v2
-    - [ ] 3D printed launchpad
-    - [ ] 3d printed launch controller
-- [ ] hydroponic lettuce, spinach, mint, andstrawberries
-- [ ] aquaponics
-- [ ] deliver hydroponics locally
+## 2024
+
+- [ ] guilds
+- [ ] top-down isometric base building
+
+## 2023
+
+- [ ] in-game suborbital launch
+- [ ] AI-enabled NPCs
+
+## September 2023
+
+- [ ] smarter dChat (knowledge of the game, the items, your inventory, etc.)
+
+## August 2023
+
+- [ ] custom quests
+
+## July 2023
+
+- [ ] content update
+
+## June 2023
+
+- [x] [DSPACE v2]()
 
 ## January 2023
 
@@ -26,17 +45,9 @@ slug: "roadmap"
 - [x] carbon offsets
 - [x] 1kwh battery
 
-## December 2022
-
-- [ ] 
-
-### November 2022
-
-- [ ] 
-
 ## October 2022
 - [x] Big [docs](/docs) update
-- [x] [Make a test print](/inventory/add/1)
+- [x] Make a test print
 
 ## September 2022
 

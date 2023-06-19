@@ -11,7 +11,7 @@ slug: hyperstructures
 - **Positive sum**: it creates a win-win environment for participants to utilize the same infrastrastructure.
 - **Credibly neutral**: the protocol is user-agnostic.
 
-These are the principles laid out [here](https://jacob.energy/hyperstructures). They are the criteria that a protocol must meet to be considered a hyperstructure.
+These are the principles laid out [here](https://jacob.energy/hyperstructures.html). They are the criteria that a protocol must meet to be considered a hyperstructure.
 
 ## In DSPACE
 
