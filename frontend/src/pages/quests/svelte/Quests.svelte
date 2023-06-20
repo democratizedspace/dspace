@@ -4,7 +4,7 @@
     import { questFinished, canStartQuest } from '../../../utils/gameState.js';
 
     export let quests = [];
-    let filteredQuests = [];
+    let filteredQuests = [], finishedQuests = [];
     let mounted = false;
 
     onMount(async () => {
@@ -13,12 +13,13 @@
 
     quests.forEach(quest => {
         const finished = questFinished(quest.id);
-        if (!finished) {
+        if (finished) {
+            finishedQuests.push(quest);
+        } else {
             if (canStartQuest(quest)) {
                 filteredQuests.push(quest);
             }
         }
-
     });
 </script>
 
@@ -29,6 +30,15 @@
                 <Quest quest={quest} />
             </a>
         {/each}
+
+        {#if finishedQuests.length > 0}
+            <h2>Completed Quests</h2>
+            {#each finishedQuests as quest}
+                <a href="/quests/{quest.id}">
+                    <Quest quest={quest} />
+                </a>
+            {/each}
+        {/if}
     {/if}
 </div>
 
