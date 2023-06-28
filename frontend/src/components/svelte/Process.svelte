@@ -7,10 +7,9 @@
   import Chip from './Chip.svelte';
   import CompactItemList from './CompactItemList.svelte';
 
-  export let processId; // processId is now a prop
+  export let processId;
 
-  const process = processes.find(p => p.id === processId);
-
+  let process;
   let state = getProcessState(processId).state;
   let processStartedAt;
   let intervalId;
@@ -48,6 +47,13 @@
   });
 
   beforeUpdate(updateState);
+
+  $: {
+    process = processes.find(p => p.id === processId);
+    updateState();
+    clearInterval(intervalId);
+    intervalId = setInterval(updateState, 100);
+  }
 </script>
 
 <Chip text="">

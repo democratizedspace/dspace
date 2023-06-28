@@ -119,7 +119,7 @@
 					"goto": "hangofthis",
 					"requiresItems": [{
 						"id": "22",
-						"count": 5000
+						"count": 3000
 					}],
 					"text": "dWatt...? What's this?"
 				}
