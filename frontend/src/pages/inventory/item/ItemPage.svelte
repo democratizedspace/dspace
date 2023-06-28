@@ -15,7 +15,6 @@
     const item = items.find(item => item.id === itemId);
 
     const processes = getProcessesForItem(itemId);
-    console.log(processes);
 
     const hasProcesses = Object.values(processes).some(arr => arr.length);
     

@@ -11,8 +11,6 @@
 
   const process = processes.find(p => p.id === processId);
 
-  console.log(process);
-
   let state = getProcessState(processId).state;
   let processStartedAt;
   let intervalId;

@@ -26,7 +26,6 @@
     }
 
     function handleQuantityInput(event) {
-        console.log("event", event.target.value);
         const newQuantity = parseFloat(event.target.value);
         if (!isNaN(newQuantity) && newQuantity > 0) {
             quantity = newQuantity;
