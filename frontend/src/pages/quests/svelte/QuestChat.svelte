@@ -11,7 +11,7 @@
     const finished = writable(false);
 
     const npc = quest.npc;
-    const avatar = localStorage.getItem('avatarUrl');
+    const avatar = localStorage.getItem('avatarUrl') || '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
 
     // create a map of reward ids (from quest.rewards) to images using the items list
     let rewardItems = quest.rewards.map(reward => {
