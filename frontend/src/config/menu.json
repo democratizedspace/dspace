@@ -5,16 +5,6 @@
         "pinned": true
     },
     {
-        "name": "Profile",
-        "href": "/profile",
-        "pinned": true
-    },
-    {
-        "name": "Docs",
-        "href": "/docs",
-        "pinned": true
-    },
-    {
         "name": "Quests",
         "href": "/quests",
         "pinned": true
@@ -35,9 +25,18 @@
         "pinned": true
     },
     {
-        "name": "Chat",
-        "href": "/chat",
+        "name": "Profile",
+        "href": "/profile",
         "pinned": true
+    },
+    {
+        "name": "Docs",
+        "href": "/docs",
+        "pinned": true
+    },
+    {
+        "name": "Chat",
+        "href": "/chat"
     },
     {
         "name": "Guilds",

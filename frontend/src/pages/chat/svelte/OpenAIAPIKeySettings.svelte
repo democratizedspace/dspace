@@ -31,6 +31,8 @@
 
   function handleSubmit() {
     saveAPIKey();
+    // reload the page
+    window.location.reload();
   }
 
   function editAPIKey() {
