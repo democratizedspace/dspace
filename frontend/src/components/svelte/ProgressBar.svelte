@@ -61,9 +61,14 @@
           />
       </div>
   {/if}
-  <p class="progress-text">
-    Progress: {(progressRatio * 100).toFixed(2)}% | Time Left: {prettyPrintDuration(totalDurationSeconds - elapsedSeconds)}
-  </p>
+  <div class="progress-text">
+    <p>
+      Progress: {(progressRatio * 100).toFixed(2)}%
+    </p>
+    <p>
+      Time Left: {prettyPrintDuration(totalDurationSeconds - elapsedSeconds)}
+    </p>
+  </div>
 </div>
 
 <style>

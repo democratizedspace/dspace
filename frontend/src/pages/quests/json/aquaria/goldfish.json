@@ -41,54 +41,8 @@
         },
         {
             "id": "setup",
-            "text": "Great! I'm giving you the following materials to get you started: a 150 Liter tank (for the fish to swim and grow), some gravel (for the tank bottom), a filter (to clean and purify the water), a heater (to keep the water at the right temperature), a light (to simulate day and night), a thermometer (to monitor the temperature), some fish food, and of course, the fish. These are the absolute basics you'll need, and as you become more comfortable, we'll want to add plants and decorations for the enjoyment of both you and the fish.",
+            "text": "Great! You'll have to buy the items you need yourself, but here's the basics: a 150 Liter tank (for the fish to swim and grow), some gravel (for the tank bottom), a filter (to clean and purify the water), a heater (to keep the water at the right temperature), a light (to simulate day and night), a thermometer (to monitor the temperature), some fish food, and of course, the fish. These are the absolute basics you'll need, and as you become more comfortable, we'll want to add plants and decorations for the enjoyment of both you and the fish.",
             "options": [
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "51",
-                            "count": 1
-                        },
-                        {
-                            "id": "25",
-                            "count": 1
-                        },
-                        {
-                            "id": "62",
-                            "count": 20
-                        },
-                        {
-                            "id": "55",
-                            "count": 1
-                        },
-                        {
-                            "id": "56",
-                            "count": 1
-                        },
-                        {
-                            "id": "57",
-                            "count": 1
-                        },
-                        {
-                            "id": "58",
-                            "count": 1
-                        },
-                        {
-                            "id": "63",
-                            "count": 1
-                        },
-                        {
-                            "id": "54",
-                            "count": 1
-                        },
-                        {
-                            "id": "53",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Whoa, that's a lot of stuff! I hope I have the space..."
-                },
                 {
                     "type": "process",
                     "process": "prepare-aquarium",

@@ -1,7 +1,7 @@
 {
     "id": "energy/solar",
     "title": "Set up a solar panel",
-    "description": "Set up a solar panel to generate energy",
+    "description": "The wall outlet is convenient, but your utility uses fossil fuels for electricity generation! Let's take things in our own hands and start going off the grid.",
     "image": "/assets/quests/solar_200Wh.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
