@@ -6,6 +6,7 @@
   import { durationInSeconds } from '../../utils.js';
   import Chip from './Chip.svelte';
   import CompactItemList from './CompactItemList.svelte';
+  import SkipProcessButton from './SkipProcessButton.svelte';
 
   export let processId;
 
@@ -88,6 +89,8 @@
     {:else}
       <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
     {/if}
+
+    <SkipProcessButton processId={processId} />
   </div>
 
 </Chip>

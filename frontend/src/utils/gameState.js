@@ -324,6 +324,18 @@ export const getProcessesForItem = (itemId) => {
   return processMap;
 };
 
+export const skipProcess = (processId) => {
+  const process = processes.find((p) => p.id === processId);
+  if (!process) {
+    return;
+  }
+
+  cancelProcess(processId);
+  burnItems(process.consumeItems);
+  addItems(process.createItems);
+  saveGameState(gameState);
+};
+
 
 // ---------------------
 // IMPORTER
