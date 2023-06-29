@@ -330,7 +330,7 @@
     {
         "id": "50",
         "name": "Completionist Award",
-        "description": "Awarded for completing all of the quests avaialble on January 1, 2023.",
+        "description": "Awarded for completing all of the quests available on January 1, 2023.",
         "image": "/assets/completionist_award.jpg"
     },
     {
@@ -566,5 +566,11 @@
         "name": "Newcomer Token",
         "description": "You're new here, aren't you?",
         "image": "/assets/newcomer_token.jpg"
+    },
+    {
+        "id": "87",
+        "name": "Completionist Award II",
+        "description": "Awarded for completing all of the quests available on June 30, 2023.",
+        "image": "/assets/completionist_award_ii.jpg"
     }
 ]

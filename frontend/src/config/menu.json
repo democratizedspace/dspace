@@ -36,7 +36,13 @@
     },
     {
         "name": "Chat",
-        "href": "/chat"
+        "href": "/chat",
+        "pinned": true
+    },
+    {
+        "name": "Changelog",
+        "href": "/changelog",
+        "pinned": true
     },
     {
         "name": "Guilds",
@@ -82,10 +88,6 @@
         "name": "Settings",
         "href": "/settings",
         "comingSoon": true
-    },
-    {
-        "name": "Changelog",
-        "href": "/changelog"
     },
     {
         "name": "Discord",

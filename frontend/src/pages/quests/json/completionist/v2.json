@@ -1,0 +1,53 @@
+{
+	"id": "completionist/v2",
+	"title": "Congrats for finishing all the quests!!",
+	"description": "Here's a trophy for your efforts!",
+	"image": "/assets/quests/completionist.jpg",
+	"npc": "/assets/npc/dChat.jpg",
+	"start": "start",
+	"dialogue": [
+        {
+			"id": "start",
+			"text": "Look who's back already!! My favorite human! You're a human, right? I'm pretty sure you are. Anyway, I'd love to present this prestigious award to you!",
+			"options": [{
+					"type": "goto",
+					"goto": "thanks",
+					"text": "Whoa, thanks, but why?"
+				}
+			]
+		},
+		{
+			"id": "thanks",
+			"text": "Well, adventurer, because you've completed the first wave of quests!! There are certainly many more on the horizon, but you've reached a significant milestone. And for that, this Completionist Award is all yours!!",
+			"options": [{
+				"type": "goto",
+				"goto": "mine",
+				"text": "All mine???"
+			}]
+		},
+		{
+			"id": "mine",
+			"text": "You betcha! You've earned it. I'll see you around, friend!",
+			"options": [{
+				"type": "finish",
+				"goto": "delivery",
+				"text": "See you, dChat!"
+			}]
+		}
+	],
+	"rewards": [
+        {
+            "id": "87",
+            "count": 1
+        }
+	],
+	"requiresQuests": [
+        "welcome/howtodoquests",
+        "ubi/basicincome",
+        "3dprinter/start",
+        "aquaria/goldfish",
+        "energy/solar-1kWh",
+        "rocketry/parachute",
+        "hydroponics/basil"
+	]
+}
