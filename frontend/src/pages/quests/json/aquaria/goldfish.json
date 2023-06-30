@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there, I'm Vega. I'd love to teach you the basics of aquaria, if you're interested! I have a goldfish that needs a new home, and I'd love to help you get set up with the equipment you need!",
+            "text": "Hey there, I'm Vega. I'd love to teach you the basics of aquaria, if you're interested! Aquariums are a very rewarding pastime, and I'd love to help you get set up with the equipment you need!",
             "options": [
                 {
                     "type": "goto",
