@@ -40,7 +40,7 @@
 		},
 		{
 			"id": "yourquest",
-			"text": "Your quest, dear player, is to master the ancient art of... questing. It's a piece of cake, but it's always good to know the basics, right?",
+			"text": "Your quest, dear player, is to master the ancient art of ... questing. It's a piece of cake, but it's always good to know the basics, right?",
 			"options": [{
 					"type": "goto",
 					"goto": "expert",
@@ -55,11 +55,36 @@
 		},
 		{
 			"id": "expert",
-			"text": "Aha! A seasoned adventurer, I see. No worries, you can always come back to this quest if you need a refresher. Just say the word, and we'll call it a wrap.",
-			"options": [{
-				"type": "finish",
-				"text": "Catch you later, dChat!"
-			}]
+			"text": "Aha! A seasoned adventurer, I see. Just say the word, and we'll call it a wrap. You'll still need this, though!",
+			"options": [
+				{
+					"type": "grantsItems",
+					"grantsItems": [{
+						"id": "29",
+						"count": 1
+					}],
+					"text": "What's this?"
+				},
+				{
+					"type": "goto",
+					"requiresItems": [{
+						"id": "29",
+						"count": 1
+					}],
+					"goto": "shortcircuit",
+					"text": "Alright, now can I skip?"
+				}
+			]
+		},
+		{
+			"id": "shortcircuit",
+			"text": "Yes. Alright, well, I'll see you, uh, around... I guess...?",
+			"options": [
+				{
+					"type": "finish",
+					"text": "Bye, dChat!"
+				}
+			]
 		},
 		{
 			"id": "dialogueoptions",

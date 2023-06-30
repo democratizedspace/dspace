@@ -35,12 +35,12 @@
         },
         {
             "id": "slow",
-            "text": "Oh, absolutely, but you have to put things in perspective! Your current solar setup is using just a little over 1 square meter of space! Imagine how much more room you have in your yard and on your roof! We're just getting started! Baby steps, though! This can get expensive fast! How about we upgrade to say... 1 kWh of storage?",
+            "text": "Oh, absolutely, but you have to put things in perspective! Your current solar setup is using just a little over 1 square meter of space! Imagine how much more room you have in your yard and on your roof! We're just getting started! Baby steps, though! This can get expensive fast! How about we upgrade to say ... 1 kWh of storage?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "upgrades",
-                    "text": "Sounds liek a plan! I'm in!"
+                    "text": "Sounds like a plan! I'm in!"
                 }
             ]
         },
@@ -60,7 +60,13 @@
                 },
                 {
                     "type": "goto",
-                    "process": "charge",
+                    "requiresItems": [
+                        {
+                            "id": "82",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "charge",
                     "text": "Alright, it's fully assembled! I assume since I didn't upgrade the panel, it's still gonna charge at the same rate? So instead of an hour, this should take roughly 5 hours?"
                 }
             ]
@@ -88,6 +94,6 @@
         }
     ],
     "requiresQuests": [
-        "energy/solar.json"
+        "energy/solar"
     ]
 }

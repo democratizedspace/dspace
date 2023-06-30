@@ -121,6 +121,12 @@
                 },
                 {
                     "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "39",
+                            "count": 1
+                        }
+                    ],
                     "goto": "launch",
                     "text": "The rocket's assembled! Are we ready for launch?"
                 }
@@ -150,6 +156,20 @@
 				},
                 {
                     "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "38",
+                            "count": 1
+                        },
+                        {
+                            "id": "37",
+                            "count": 1
+                        },
+                        {
+                            "id": "83",
+                            "count": 1
+                        }
+                    ],
                     "goto": "go",
                     "text": "We are go for launch!!! Right?"
                 }

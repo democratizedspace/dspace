@@ -141,14 +141,14 @@
             "options": [
                 {
 					"type": "process",
-					"process": "rockwool-soak",
+					"process": "germinate-basil",
 					"text": "I sure hope I did this right..."
                 },
                 {
                     "type": "goto",
                     "goto": "transfer",
                     "requiresItems": [{
-                        "id": "26",
+                        "id": "27",
                         "count": 11
                     }],
                     "text": "Alright, I'm definitely seeing a bunch of seedlings. It seems like all of them were successful!"
@@ -177,7 +177,7 @@
                     "goto": "lighting",
                     "requiresItems": [{
                         "id": "44",
-                        "count": 11
+                        "count": 1
                     }],
                     "text": "Ok, I've filled the tub with water and nutrients. What's next?"
                 }
@@ -209,7 +209,7 @@
                     "type": "goto",
                     "goto": "harvest",
                     "requiresItems": [{
-                        "id": "27",
+                        "id": "42",
                         "count": 11
                     }],
                     "text": "A month older and a month wiser. I've got a bunch of basil now! Is it time to harvest?"
@@ -240,6 +240,11 @@
             "id": "regrow",
             "text": "They look perfect! You could sell them, cook with them, or even munch on them like a rabbit if you're so inclined! Just make sure you wash them first! No telling what's been floating around your room over the last 4 weeks! I'm sure you're eager to get started on your next batch, and that's relatively simple. Just replace your nutrient-deficient water with a fresh batch of water nutrients, and you can start the process all over again! I know it feels a bit wasteful, but don't worry, I've got big plans to address that! Plus, you're not growing from scratch, so another 2 weeks should do it! Feel free to start the growth process and finish this quest whenever you're ready!",
             "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "What is old is new again!"
+                },
                 {
 					"type": "process",
 					"process": "regrow-basil",

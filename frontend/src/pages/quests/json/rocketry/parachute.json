@@ -28,6 +28,12 @@
                 },
                 {
                     "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "67",
+                            "count": 1
+                        }
+                    ],
                     "goto": "launch",
                     "text": "Great! Once the parachute system is ready, are we good to go for another launch?"
                 }
@@ -47,8 +53,8 @@
                     "goto": "success",
                     "requiresItems": [
                         {
-                            "id": "40",
-                            "count": 1
+                            "id": "69",
+                            "count": 2
                         }
                     ],
                     "text": "Congratulations on another successful launch! How did the rocket fare with the parachute?"

@@ -55,6 +55,24 @@
                 },
                 {
                     "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "5",
+                            "count": 1
+                        },
+                        {
+                            "id": "6",
+                            "count": 1
+                        },
+                        {
+                            "id": "79",
+                            "count": 1
+                        },
+                        {
+                            "id": "80",
+                            "count": 1
+                        }
+                    ],
                     "goto": "setup",
                     "text": "Alright, what's next?"
                 }
@@ -92,8 +110,25 @@
                     "text": "Let there be light!"
                 },
                 {
-                    "type": "finish",
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "61",
+                            "count": 200
+                        }
+                    ],
+                    "goto": "fin",
                     "text": "You've made my day, Orion! Thanks so much!!"
+                }
+            ]
+        },
+        {
+            "id": "fin",
+            "text": "It's my pleasure! I'm always happy to help!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looking forward to next time!"
                 }
             ]
         }

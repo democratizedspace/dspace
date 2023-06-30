@@ -140,6 +140,6 @@
         }
     ],
     "requiresQuests": [
-        "welcome/howtodoquests"
+        "3dprinter/start"
     ]
 }
