@@ -9,7 +9,7 @@ DSPACE is an incremental simulation game about resource management and space exp
 
 ## Start with the basics
 
-Learn skills related to space exploration and resource management, and [be](/quests/play/4) an early adopter of (virtual) futuristic tech.
+Learn skills related to space exploration and resource management, and be an early adopter of (virtual) futuristic tech.
 
 ## Gain momentum
 

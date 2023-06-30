@@ -16,7 +16,9 @@ const { title } = Astro.props as Props;
 		<title>{title}</title>
 	</head>
 	<body>
-		<slot />
+		<div id="starry">
+			<slot />
+		</div>
 	</body>
 </html>
 <style>

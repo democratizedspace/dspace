@@ -1,19 +1,112 @@
 {
-    "steps": [
+    "id": "3dprinter/start",
+    "title": "Set up your first 3D printer",
+    "description": "Accept Sydney's offer of a 3D printer, and learn how to set it up for use in your space exploration adventure.",
+    "image": "/assets/quests/start.png",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
         {
-            "id": "0",
-            "title": "To continue, you need the following items:",
-            "requirements": [
+            "id": "start",
+            "text": "Hello, friend! I'm Sydney, a 3D printing expert with the metaguild. dChat referred me. I've got a proposition for you: how would you like to have your very own 3D printer?",
+            "options": [
                 {
-                    "itemId": "5",
-                    "quantity": 1
+                    "type": "goto",
+                    "goto": "enthusiastic",
+                    "text": "A 3D printer? That sounds amazing! Tell me more."
                 }
-            ],
-            "unlocks": "1"
+            ]
         },
         {
-            "id": "1",
-            "title": ""
+            "id": "enthusiastic",
+            "text": "Fantastic! A 3D printer is an invaluable tool! It can be used to quickly prototype new designs, print decor, and even build robots!! I've taken the liberty of fully assembling and calibrating it for you. So, what do you say?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "grant",
+                    "text": "I say let's do this!!"
+                }
+            ]
+        },
+        {
+            "id": "grant",
+            "text": "First things first, I need you to accept the 3D printer. Just take it and we'll proceed. Oh, and I threw in some filament! That filament gets melted at a high temperature and laid down one layer at a time. It may take a while to print stuff at first, but over time you'll be able tweak settings and make it run way faster! Plus, this is a cheap beginner model. There are way more powerful printers out there if you've got the cash!",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "0",
+                            "count": 1
+                        },
+                        {
+                            "id": "12",
+                            "count": 1000
+                        }
+                    ],
+                    "text": "Don't mind if I do!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "benchy",
+                    "requiresItems": [
+                        {
+                            "id": "0",
+                            "count": 1
+                        },
+                        {
+                            "id": "12",
+                            "count": 1000
+                        }
+                    ],
+                    "text": "I've got the goods! What's next?"
+                }
+            ]
+        },
+        {
+            "id": "benchy",
+            "text": "For your test print, I recommend printing a Benchy. It's a small boat model often used to validate 3D printer setups. Once you've successfully printed Benchy, we'll know your 3D printer is ready for action. It's gonna take a bit of time so feel free to go talk to my associates or grab a coffee or something.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-benchy",
+                    "text": "Ok, here goes nothing!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "1",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I've printed the Benchy! What's next?"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! You're all set to use your 3D printer for your space exploration adventures (or whatever else tickles your fancy). If you need help or tips on 3D printing, feel free to reach out. Good luck! Oh and here's a little something. There's more where that came from! If you're interested in more free dUSD, dChat's got you covered!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Sydney! I appreciate your help. And I'll keep that in mind!"
+                }
+            ]
         }
+    ],
+    "rewards": [
+        {
+            "id": "24",
+            "count": 100
+        },
+        {
+            "id": "8",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "welcome/howtodoquests"
     ]
 }

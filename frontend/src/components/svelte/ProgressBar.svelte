@@ -1,23 +1,99 @@
 <script>
-    import { tweened } from 'svelte/motion';
-    import { cubicOut } from 'svelte/easing';
+  import { onMount, onDestroy, createEventDispatcher } from "svelte";
+  import { prettyPrintDuration } from "../../utils.js";
 
-    export let duration;
+  export let startDate = new Date();
+  export let totalDurationSeconds = 5;
+  export let stopped = false;
 
-    function startProcess() {
-        progress.set(1);
+  if (typeof startDate === 'string' || typeof startDate === 'number') {
+    startDate = new Date(startDate);
+  }
+
+  let interval;
+  let elapsedSeconds = 0;
+  let progressRatio = 0;
+
+  const dispatch = createEventDispatcher();
+
+  const updateState = () => {
+    const now = Date.now();
+    const elapsedMillis = now - startDate.getTime(); // Milliseconds since the start date
+    elapsedSeconds = Math.min(elapsedMillis / 1000, totalDurationSeconds);
+    progressRatio = elapsedSeconds / totalDurationSeconds;
+    if (elapsedSeconds >= totalDurationSeconds) {
+      progressRatio = 1;
+      clearInterval(interval);
+      dispatch("fillComplete");
     }
+  };
 
-    const progress = tweened(0, {
-		duration: duration
-	});
+  const startProgress = () => {
+    interval = setInterval(updateState, 100);
+  };
+
+  const stopProgress = () => {
+    if (interval) {
+      clearInterval(interval);
+    }
+    elapsedSeconds = 0;
+    progressRatio = 0;
+  };
+
+  onMount(startProgress);
+  onDestroy(stopProgress);
 </script>
 
-<span>
-    <button on:click={startProcess}>Start process</button>
-    <progress value={$progress}></progress>
-</span>
-
+<div class="progress-container">
+  {#if stopped}
+      stopped
+      <div class="progress-bar">
+          <div
+              class="progress-bar-fill"
+              style="width: {(progressRatio * 100).toFixed(2)}%; transition: none"
+          />
+      </div>
+  {:else}
+      <div class="progress-bar">
+          <div
+              class="progress-bar-fill"
+              style="width: {(progressRatio * 100).toFixed(2)}%; transition: width 0.1s linear"
+          />
+      </div>
+  {/if}
+  <div class="progress-text">
+    <p>
+      Progress: {(progressRatio * 100).toFixed(2)}%
+    </p>
+    <p>
+      Time Left: {prettyPrintDuration(totalDurationSeconds - elapsedSeconds)}
+    </p>
+  </div>
+</div>
 
 <style>
+  .progress-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Or other fixed width if you wish */
+  }
+
+  .progress-bar {
+    width: 100%;
+    background-color: #f3f3f3;
+    overflow: hidden;
+    border-radius: 20px;
+    margin: 5px;
+  }
+
+  .progress-bar-fill {
+    height: 50px;
+    background-color: #68d46d;
+    transition: width 0.1s linear;
+  }
+
+  .progress-text {
+    text-align: center;
+  }
 </style>

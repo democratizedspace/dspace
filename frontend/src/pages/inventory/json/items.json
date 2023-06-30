@@ -4,18 +4,13 @@
         "name": "Real Printer 1",
         "description": "A basic cheap printer that is easy to use and has a large community of users.",
         "image": "/assets/3dprinter.jpg",
-        "type": "machine",
-        "json": "items/printers/real-printer-1.json",
         "price": "200 dUSD"
     },
     {
         "id": "1",
         "name": "Benchy",
         "description": "A basic test print that is used to test the quality of a printer.",
-        "creationTitle": "Make a test print",
         "image": "/assets/benchy.jpg",
-        "type": "3dprint",
-        "json": "items/prints/benchy.json",
         "price": "5 dUSD"
     },
     {
@@ -43,10 +38,9 @@
     {
         "id": "5",
         "name": "portable solar panel",
-        "description": "A portable solar panel that can be used to charge your devices. Supports USB-A and USB-C ports, and it has a 110V AC outlet, with support for 200W at peak sunpower.",
+        "description": "A portable solar panel, with support for 200W at peak sunpower. Standard DC Output.",
         "price": "200 dUSD",
-        "image": "/assets/solar.jpg",
-        "type": "machine"
+        "image": "/assets/solar.jpg"
     },
     {
         "id": "6",
@@ -65,16 +59,15 @@
     {
         "id": "8",
         "name": "Benchy Award",
-        "description": "A trophy granted for printing your first Benchy.",
+        "description": "Cause it's a bench! Get it? Benchy?",
         "image": "/assets/benchy_award.jpg"
     },
     {
         "id": "9",
-        "name": "Real Hydroponics Tub 1",
+        "name": "Beginner hydroponics tub",
         "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
         "image": "/assets/hydroponics_tub.jpg",
-        "price": "30 dUSD",
-        "type": "machine"
+        "price": "30 dUSD"
     },
     {
         "id": "10",
@@ -88,7 +81,6 @@
         "name": "3D printed model rocket",
         "description": "A 3D-printed model rocket that can be used to launch small payloads into space.",
         "image": "/assets/modelrocket.jpg",
-        "json": "items/prints/rocket.json",
         "type": "3dprint",
         "price": "25 dUSD"
     },
@@ -132,8 +124,7 @@
         "id": "17",
         "name": "5 gallon bucket of tap water (chlorinated)",
         "description": "A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics.",
-        "image": "/assets/bucket_water.jpg",
-        "type": "machine"
+        "image": "/assets/bucket_water.jpg"
     },
     {
         "id": "18",
@@ -151,7 +142,7 @@
         "id": "20",
         "name": "dCarbon",
         "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
-        "image": "/assets/Dcarbon.jpg"
+        "image": "/assets/dCarbon.jpg"
     },
     {
         "id": "21",
@@ -176,23 +167,19 @@
         "id": "24",
         "name": "dUSD",
         "description": "An in-game tokenized version of the USD currency. Not backed by or in any way associated with actual USD.",
-        "image": "/assets/dUSD.jpg",
-        "type": "currency",
-        "symbol": "dUSD"
+        "image": "/assets/dUSD.jpg"
     },
     {
         "id": "25",
         "name": "5 gallon bucket of tap water (dechlorinated)",
         "description": "A 5 gallon bucket of water. This water is dechlorinated and can be used for hydroponics.",
-        "image": "/assets/bucket_water.jpg",
-        "type": "machine"
+        "image": "/assets/bucket_water.jpg"
     },
     {
         "id": "26",
         "name": "soaked hydroponic starter plug",
         "description": "A hydroponic starter plug soaked in water. Used to germinate seeds.",
-        "image": "/assets/rockwool_wet.jpg",
-        "type": "machine"
+        "image": "/assets/rockwool_wet.jpg"
     },
     {
         "id": "27",
@@ -204,15 +191,13 @@
         "id": "28",
         "name": "sink",
         "description": "Generates tap water.",
-        "image": "/assets/tap.jpg",
-        "type": "machine"
+        "image": "/assets/tap.jpg"
     },
     {
         "id": "29",
         "name": "smart plug",
         "description": "A smart plug that plugs into a wall outlet to measure energy usage.",
-        "image": "/assets/smart_plug.jpg",
-        "type": "machine"
+        "image": "/assets/smart_plug.jpg"
     },
     {
         "id": "30",
@@ -241,7 +226,7 @@
     {
         "id": "34",
         "name": "hobbyist solid rocket motor",
-        "description": "24mm in diameter, 95mm long, weighing 58.1g. Max thrust: 31.3 Newtons.",
+        "description": "18mm in diameter, 70mm long, weighing 17.9g. Max thrust: 31.3 Newtons. Thrust duration: 0.80s.",
         "image": "/assets/rocket_motor.jpg",
         "price": "10 dUSD"
     },
@@ -250,13 +235,12 @@
         "name": "superglue",
         "description": "Don't get it on your hands!",
         "image": "/assets/superglue.jpg",
-        "price": "10 dUSD",
-        "type": "machine"
+        "price": "10 dUSD"
     },
     {
         "id": "36",
-        "name": "kevlar cord",
-        "description": "Perfect for model rocketry.",
+        "name": "kevlar shock cord",
+        "description": "Perfect for model rocketry. Used to attach the rocket body to the parachute.",
         "image": "/assets/kevlar_cord.jpg",
         "price": "0.3 dUSD",
         "unit": " m"
@@ -273,8 +257,7 @@
         "name": "launch controller",
         "description": "A controller for launching model rockets.",
         "image": "/assets/launch_controller.jpg",
-        "price": "20 dUSD",
-        "type": "machine"
+        "price": "20 dUSD"
     },
     {
         "id": "39",
@@ -298,8 +281,7 @@
         "id": "42",
         "name": "harvestable basil plant",
         "description": "A basil plant that is ready to be harvested. Growing medium: rockwool.",
-        "image": "/assets/hydroponic_basil_adult.jpg",
-        "type": "machine"
+        "image": "/assets/hydroponic_basil_adult.jpg"
     },
     {
         "id": "43",
@@ -310,17 +292,15 @@
     },
     {
         "id": "44",
-        "name": "Real Hydroponics Tub 1 (ready)",
+        "name": "hydroponics tub (ready)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
-        "image": "/assets/hydroponics_tub.jpg",
-        "type": "machine"
+        "image": "/assets/hydroponics_tub.jpg"
     },
     {
         "id": "45",
-        "name": "Real Hydroponics Tub 1 (nutrient deficient)",
+        "name": "hydroponics tub (nutrient deficient)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
-        "image": "/assets/hydroponics_tub.jpg",
-        "type": "machine"
+        "image": "/assets/hydroponics_tub.jpg"
     },
     {
         "id": "46",
@@ -350,7 +330,7 @@
     {
         "id": "50",
         "name": "Completionist Award",
-        "description": "Awarded for completing all of the quests avaialble on January 1, 2023.",
+        "description": "Awarded for completing all of the quests available on January 1, 2023.",
         "image": "/assets/completionist_award.jpg"
     },
     {
@@ -358,15 +338,13 @@
         "name": "aquarium (150 L)",
         "description": "A glass tank for housing fish.",
         "image": "/assets/aquarium_empty.jpg",
-        "price": "60 dUSD",
-        "type": "machine"
+        "price": "60 dUSD"
     },
     {
         "id": "52",
         "name": "aquarium (goldfish) (150 L)",
         "description": "An aquarium containing a goldfish.",
-        "image": "/assets/aquarium_goldfish.jpg",
-        "type": "machine"
+        "image": "/assets/aquarium_goldfish.jpg"
     },
     {
         "id": "53",
@@ -421,8 +399,7 @@
         "id": "60",
         "name": "7 pH freshwater aquarium (150 L)",
         "description": "An freshwater aquarium with a pH of 7.",
-        "image": "/assets/aquarium_filled.jpg",
-        "type": "machine"
+        "image": "/assets/aquarium_filled.jpg"
     },
     {
         "id": "61",
@@ -532,5 +509,68 @@
         "name": "The grass is always greener (still)",
         "description": "A still image of a Hypercar on a grassy field.",
         "image": "/assets/hypercar_grassy.jpg"
+    },
+    {
+        "id": "78",
+        "name": "dChat",
+        "description": "An offline-first conversational digital assistant. You ask it questions, it answers! Powered by LLMs!",
+        "image": "/assets/npc/dChat.jpg"
+    },
+    {
+        "id": "79",
+        "name": "Solar charge controller",
+        "description": "A charge controller for a solar panel. Used to regular the voltage and current from a solar panel to protect the battery.",
+        "image": "/assets/solar_charge_controller.jpg",
+        "price": "30 dUSD"
+    },
+    {
+        "id": "80",
+        "name": "Small solar enclosure",
+        "description": "A solar enclosure with enough room for a single panel, a charge controller, and a 200 Wh battery.",
+        "image": "/assets/solar_enclosure_small.jpg",
+        "price": "100 dUSD"
+    },
+    {
+        "id": "81",
+        "name": "Solar setup (200 Wh)",
+        "description": "A 200 W solar panel, charge controller, and 200 Wh battery in a weatherproof enclosure. Ready to use!",
+        "image": "/assets/solar_setup_small.jpg"
+    },
+    {
+        "id": "82",
+        "name": "Solar setup (1 kWh)",
+        "description": "A 200 W solar panel, charge controller, and 1 kWh battery in a weatherproof enclosure. Ready to use!",
+        "image": "/assets/solar_setup_small.jpg"
+    },
+    {
+        "id": "83",
+        "name": "Model rocket launchpad",
+        "description": "A launchpad for model rockets.",
+        "image": "/assets/launchpad.jpg",
+        "price": "35 dUSD"
+    },
+    {
+        "id": "84",
+        "name": "flame-resistant recovery wadding",
+        "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
+        "image": "/assets/recovery_wadding.jpg"
+    },
+    {
+        "id": "85",
+        "name": "Early Adopter Token",
+        "description": "The early bird gets the worm.",
+        "image": "/assets/early_adopter_award.jpg"
+    },
+    {
+        "id": "86",
+        "name": "Newcomer Token",
+        "description": "You're new here, aren't you?",
+        "image": "/assets/newcomer_token.jpg"
+    },
+    {
+        "id": "87",
+        "name": "Completionist Award II",
+        "description": "Awarded for completing all of the quests available on June 30, 2023.",
+        "image": "/assets/completionist_award_ii.jpg"
     }
 ]

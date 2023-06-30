@@ -1,0 +1,99 @@
+{
+    "id": "energy/solar-1kWh",
+    "title": "Upgrade your solar enclosure with more capacity",
+    "description": "Swap out that tiny 200 Wh battery for a new 1 kWh one! No upgrade in charge speed just yet, just more capacity!",
+    "image": "/assets/quests/solar_1kWh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hi friend, back for more? How's that solarpunk life treating you?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "best",
+                    "text": "Harnessing the power of the Sun is the best!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "slow",
+                    "text": "It's great, but it's pretty slow!"
+                }
+            ]
+        },
+        {
+            "id": "best",
+            "text": "I'm happy to hear you're enjoying yourself! There's something quite special about being able to glean power off of that massive fusion generator in space. It's really poetic. If you're ready, it's time to kick it up a notch!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "upgrades",
+                    "text": "We talking upgrades?"
+                }
+            ]
+        },
+        {
+            "id": "slow",
+            "text": "Oh, absolutely, but you have to put things in perspective! Your current solar setup is using just a little over 1 square meter of space! Imagine how much more room you have in your yard and on your roof! We're just getting started! Baby steps, though! This can get expensive fast! How about we upgrade to say ... 1 kWh of storage?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "upgrades",
+                    "text": "Sounds like a plan! I'm in!"
+                }
+            ]
+        },
+        {
+            "id": "upgrades",
+            "text": "Alright, we can simply swap in a higher capacity battery. 1 kWh is still pretty small, so it should fit in this enclosure just fine. Just disassemble your existing enclosure and put everything back together with the bigger battery! Oh, and I'm kinda running low on funds so you'll have to source that bigger battery yourself. I'm sure you've got some spare dUSD lying around!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "disassemble-enclosure-200Wh",
+                    "text": "I hope I don't end up with spare parts."
+                },
+                {
+                    "type": "process",
+                    "process": "setup-solar-enclosure-1kWh",
+                    "text": "Oh, I definitely understand! I wouldn't want to put you out!"
+                },
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "82",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "charge",
+                    "text": "Alright, it's fully assembled! I assume since I didn't upgrade the panel, it's still gonna charge at the same rate? So instead of an hour, this should take roughly 5 hours?"
+                }
+            ]
+        },
+        {
+            "id": "charge",
+            "text": "That's the basic idea! We'll address that later! In general, though, photovoltaic cells for commercial panels have roughly the same efficiency, typically in the 15% to 22% range. So to get higher output, we'll need more surface area. We'll get there! For now, let's just get this thing charged up!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solar-1000Wh",
+                    "text": "UNLIMITED POWER!!! Well, not quite, but it's a start!"
+                },
+                {
+                    "type": "finish",
+                    "text": "Guess I'll turn in for the day. See you around, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 3
+        }
+    ],
+    "requiresQuests": [
+        "energy/solar"
+    ]
+}

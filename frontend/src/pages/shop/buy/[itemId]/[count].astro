@@ -1,19 +1,11 @@
 ---
 import Page from '../../../../components/Page.astro';
 import Chip from '../../../../components/Chip.astro';
-import ItemCount from '../../../../components/ItemCount.astro';
 import items from '../../../inventory/json/items.json';
 
 import { getWalletBalance, getSymbolFromId, prettyPrintNumber } from '../../../../utils.js';
-import { buyItem } from '../../../inventory/utils.js';
 
 const { itemId, count } = Astro.params;
-
-const purchaseConfirmation = buyItem(Astro.request, Astro.response, itemId, parseInt(count.toString()));
-
-if (!purchaseConfirmation) {
-  return Astro.redirect(`/shop/buy/${itemId}/${count}/insufficient_balance`);
-}
 
 const item = items.find((item) => item.id === itemId);
 const symbol = getSymbolFromId(item.id);
@@ -26,10 +18,6 @@ const currentWalletBalance = prettyPrintNumber(previousWalletBalance - totalCost
 <Page title={`Purchase successful!`} columns="1">
   <div class="vertical">
     <p>Added</p>
-    <ItemCount itemList={[{
-      id: item.id,
-      count: parseInt(count.toString()),
-    }]} />
   </div>
   Your wallet balance went from
   <div class="horizontal">

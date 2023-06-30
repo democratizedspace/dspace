@@ -1,5 +1,4 @@
 import items from './pages/inventory/json/items.json';
-import quests from './pages/quests/json/quests.json';
 
 export const prettyPrintNumber = (number) => {
     const n = parseFloat(number);
@@ -45,6 +44,10 @@ export const setCookieValue = (res, key, value) => {
     res.headers.append('Set-Cookie', `${key}=${value}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`);
 }
 
+export const deleteCookie = (res, key) => {
+    res.headers.append('Set-Cookie', `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`);
+}
+
 export const parseBool = (value) => {
     if (value === 'true') {
         return true;
@@ -58,11 +61,23 @@ export const hasAcceptedCookies = (req) => {
     return acceptedCookies || false;
 };
 
-export const prettyPrintDuration = (durationSeconds, integer) => {
+export const getCookieItems = (cookie) => {
+    const parsedCookie = parseCookie(cookie);
+    return Object.keys(parsedCookie)
+        .filter(key => key.startsWith('item-'))
+        .map(key => {
+            return {
+            id: key.split('-')[1], // Extract the number after 'item-'
+            count: parseInt(parsedCookie[key], 10) // Convert the string value to a number
+        };
+    });
+};
+
+export const prettyPrintDuration = (durationSeconds) => {
     const days = Math.floor(durationSeconds / 86400);
     const hours = Math.floor((durationSeconds % 86400) / 3600);
     const minutes = Math.floor((durationSeconds % 3600) / 60);
-    const seconds = !(integer) ? (durationSeconds % 60).toFixed(1) : Math.floor(durationSeconds % 60);
+    const seconds = durationSeconds % 60;
     const duration = [];
     if (days > 0) {
         duration.push(`${days}d`);
@@ -74,13 +89,15 @@ export const prettyPrintDuration = (durationSeconds, integer) => {
         duration.push(`${minutes}m`);
     }
     if (seconds > 0) {
-        duration.push(`${seconds}s`);
-    }
-    if (seconds == 0) {
-        duration.push('');
+        if (seconds < 1) {
+            duration.push(`${seconds.toFixed(1)}s`);
+        } else {
+            duration.push(`${Math.floor(seconds)}s`);
+        }
     }
     return duration.join(' ');
 }
+
 
 export const datetimeAfterDuration = (durationSeconds) => {
     const futureDatetime = new Date(Date.now() + durationSeconds);
@@ -149,27 +166,6 @@ export const addWalletBalance = (req, res, symbol, addBalance) => {
     setCookieValue(res, `currency-balance-${symbol}`, newBalance);
 };
 
-export const isQuestCompleted = (req, questId) => {
-    const cookie = req.headers.get('cookie');
-    return getCookieValue(cookie, `quest-${questId}-finished`) !== undefined;
-}
-
-export const questRequirementsMet = (req, questId) => {
-    const quest = quests.find((quest) => quest.id === questId);
-    if (quest) {
-        const requires = quest.requiresQuests;
-        if (requires) {
-            for (const requirement of requires) {
-                if (!isQuestCompleted(req, requirement)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    return false;
-}
-
 export const fixMarkdownText = (text) => {
     // replace ’ with '
     const fixedText = text.replace(/’/g, '\'');
@@ -177,6 +173,10 @@ export const fixMarkdownText = (text) => {
 };
 
 export const getPriceStringComponents = (currency) => {
+    if (!currency || typeof currency !== 'string') {
+        return { price: 0, symbol: '' };
+    }
+
     // parse a string like '10 dUSD' into a number and a symbol
     const priceString = currency.split(' ');
     const price = parseFloat(priceString[0]);
@@ -186,6 +186,7 @@ export const getPriceStringComponents = (currency) => {
         price, symbol
     };
 };
+
 
 export const getSymbolFromId = (itemId) => {
     const item = items.find((item) => item.id === itemId);

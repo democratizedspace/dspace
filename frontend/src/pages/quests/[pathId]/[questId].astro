@@ -1,0 +1,19 @@
+---
+import Page from '../../../components/Page.astro';
+import QuestChat from '../svelte/QuestChat.svelte';
+
+let quests;
+let quest;
+
+const { pathId, questId } = Astro.params;
+
+quests = await Astro.glob('../json/*/*.json');
+
+quest = quests.find((quest) => {
+    return quest.default.id === `${pathId}/${questId}`;
+});
+---
+
+<Page>
+    <QuestChat quest={quest} client:load />
+</Page>

@@ -1,5 +1,17 @@
 ---
+import Page from '../components/Page.astro';
 import WhatsNew from '../components/WhatsNew.astro';
 ---
 
-<WhatsNew />
+<Page columns="1">
+    <WhatsNew />
+</Page>
+
+<style>
+    div {
+        background-color: white;
+        padding: 20px;
+        border-radius: 20px;
+        color: black;
+    }
+</style>

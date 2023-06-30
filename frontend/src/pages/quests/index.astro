@@ -1,82 +1,11 @@
 ---
 import Page from '../../components/Page.astro';
-import Card from '../../components/Card.astro';
-import quests from './json/quests.json';
-import { getCookie, questRequirementsMet } from '../../utils';
+import Quests from './svelte/Quests.svelte';
 
-const requirementsMet = quests.filter((quest) => questRequirementsMet(Astro.request, quest.id));
-const incompleteQuests = requirementsMet.filter((quest) => getCookie(Astro.request, `quest-${quest.id}-finished`) === undefined);
-const completedQuests = requirementsMet.filter((quest) => getCookie(Astro.request, `quest-${quest.id}-finished`) !== undefined);
+
+const quests = await Astro.glob('./json/*/*.json');
 ---
 
-<Page title="Quests" columns="1">
-    <h2>In progress</h2>
-
-    <div class="vertical">
-        {incompleteQuests.map(quest => (
-            <a href={`/quests/play/${quest.id}`}>
-                <div class="horizontal container">
-                    <img src={quest.image} />
-                    <div class="vertical">
-                        <h3>{quest.title}</h3>
-                        <p>{quest.body}</p>
-                    </div>
-                </div>
-            </a>
-        ))}
-    </div>
-
-    {(completedQuests.length > 0) && <h2>Complete</h2>}
-
-    <div class="vertical">
-        {completedQuests.map(quest => (
-            <a href={`/quests/play/${quest.id}`}>
-                <div class="horizontal container">
-                    <img src={quest.image} />
-                    <div class="vertical">
-                        <h3>{quest.title}</h3>
-                        <p>{quest.body}</p>
-                    </div>
-                </div>
-            </a>
-        ))}
-    </div>
+<Page title="Quests">
+    <Quests client:load quests={quests} />
 </Page>
-
-<style>
-    img {
-        width: 150px;
-        height: 150px;
-        border-radius: 20px;
-        margin-right: 20px;
-    }
-
-    a {
-        text-decoration: none;
-        color: black;
-    }
-
-    .horizontal {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .vertical {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .container {
-        background-color: #84d484;
-        padding: 10px;
-        margin: 5px;
-        border-radius: 20px;
-        opacity: 0.8;
-        width: 95%;
-    }
-
-    .container:hover {
-        opacity: 1;
-    }
-</style>

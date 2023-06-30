@@ -3,7 +3,7 @@ title: "Rockets"
 slug: "rockets"
 ---
 
-DSPACE aims to make the creation and launches of rockets so easy that anyone can do it. Rockets are the most complex [machines](/docs/machines) in the game and will be the most expensive to build.
+DSPACE aims to make the creation and launches of rockets so easy that anyone can do it.
 
 You'll eventually be able to build a fully functioning virtual rocket and launch it into space. This will be a major milestone for the game, as everything leading up to that seems very loosely related. The first person to launch a rocket into orbit in DSPACE will be able to claim a unique title for their account.
 

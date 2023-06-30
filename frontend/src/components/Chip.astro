@@ -1,21 +1,61 @@
 ---
-const { text, href } = Astro.props;
+// export an enum for different variants of the chip
+export const ChipVariants = {
+    SELECTED: 'selected',
+    COMING_SOON: 'coming-soon',
+};
+
+export const ChipSize = {
+    SMALL: 'small',
+    MEDIUM: 'medium',
+    LARGE: 'large',
+}
+
+const { text, href, variant, size } = Astro.props;
 
 let textString = text;
+let classString;
+
+switch (size) {
+    case ChipSize.SMALL:
+        classString = 'small';
+        break;
+    case ChipSize.MEDIUM:
+        classString = 'medium';
+        break;
+    case ChipSize.LARGE:
+        classString = 'large';
+        break;
+    default:
+        classString = 'medium';
+        break;
+}
 ---
 
-<a href={href}>{textString}</a>
+<span>
+    { 
+        variant === ChipVariants.SELECTED
+            ?
+        <a class={`selected ${classString}`} href={href}>{textString}</a>
+            :
+                (
+                    variant === ChipVariants.COMING_SOON
+                        ?
+                    <a class={`blue ${classString}`} href={href}>{textString}</a>
+                        :
+                    <a class={`${classString}`} href={href}>{textString}</a>
+                )
+    }
+</span>
+
 
 <style>
 	a {
-        background-color: #2f5b2f;
+        background-color: #007006;
 		color: white;
 		border-radius: 5px;
 		text-decoration: none;
-        padding-left: 5px;
-        padding-right: 5px;
-        padding-top: 0px;
-        padding-bottom: 0px;
+        padding: 5px;
         margin: 0px;
         margin-left: 4px;
         margin-right: 4px;
@@ -29,14 +69,27 @@ let textString = text;
 
     a:hover {
         opacity: 1;
-        box-shadow: 0 0 25px 0px #245224;
     }
     
 	@media only screen and (max-width: 768px) {
 		a {
             opacity: 1;
             font-size: 1.1em;
-            box-shadow: 0 0 25px 0px #245224;
 		}
 	}
+
+    .selected {
+        background-color: #68d46d;
+        color: black;
+    }
+
+    .blue {
+        background-color: #9cbbe2;
+        color: black;
+    }
+
+    .small {
+        font-size: 0.8em;
+        padding: 3px;
+    }
 </style>

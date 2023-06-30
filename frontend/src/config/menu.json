@@ -1,0 +1,119 @@
+[
+    {
+        "name": "Home",
+        "href": "/",
+        "pinned": true
+    },
+    {
+        "name": "Quests",
+        "href": "/quests",
+        "pinned": true
+    },
+    {
+        "name": "Inventory",
+        "href": "/inventory",
+        "pinned": true
+    },
+    {
+        "name": "Energy",
+        "href": "/energy",
+        "pinned": true
+    },
+    {
+        "name": "Wallet",
+        "href": "/wallet",
+        "pinned": true
+    },
+    {
+        "name": "Profile",
+        "href": "/profile",
+        "pinned": true
+    },
+    {
+        "name": "Docs",
+        "href": "/docs",
+        "pinned": true
+    },
+    {
+        "name": "Chat",
+        "href": "/chat",
+        "pinned": true
+    },
+    {
+        "name": "Changelog",
+        "href": "/changelog",
+        "pinned": true
+    },
+    {
+        "name": "Guilds",
+        "href": "/guilds",
+        "comingSoon": true
+    },
+    {
+        "name": "Stats",
+        "href": "/stats",
+        "comingSoon": true
+    },
+    {
+        "name": "Achievements",
+        "href": "/achievements",
+        "comingSoon": true
+    },
+    {
+        "name": "Leaderboard",
+        "href": "/leaderboard",
+        "comingSoon": true
+    },
+    {
+        "name": "Locations",
+        "href": "/locations",
+        "comingSoon": true
+    },
+    {
+        "name": "Titles",
+        "href": "/titles",
+        "comingSoon": true
+    },
+    {
+        "name": "Flywheel",
+        "href": "/flywheel",
+        "comingSoon": true
+    },
+    {
+        "name": "Toolbox",
+        "href": "/toolbox",
+        "comingSoon": true
+    },
+    {
+        "name": "Settings",
+        "href": "/settings",
+        "comingSoon": true
+    },
+    {
+        "name": "Discord",
+        "href": "https://discord.gg/A3UAfYvnxM"
+    },
+    {
+        "name": "Twitter",
+        "href": "https://twitter.com/dspacegame"
+    },
+    {
+        "name": "Github",
+        "href": "https://github.com/democratizedspace/dspace"
+    },
+    {
+        "name": "Import from v1",
+        "href": "/import/v2/v1",
+        "pinned": true,
+        "hideIfOwned": [
+            {
+                "id": "85",
+                "count": 1
+            },
+            {
+                "id": "86",
+                "count": 1
+            }
+        ]
+    }
+]

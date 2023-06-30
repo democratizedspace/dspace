@@ -1,0 +1,43 @@
+---
+import Page from '../../components/Page.astro';
+import { randomBytes } from 'node:crypto';
+import { getCookieValue } from '../../utils';
+import EthProfile from '../../components/svelte/EthProfile.svelte';
+import Avatar from '../../components/svelte/Avatar.svelte';
+---
+
+<Page title="Profile">
+    <div class="horizontal">
+        <Avatar client:load />
+        <div class="vertical">
+        </div>
+    </div>
+
+    <p>Choose a default avatar</p>
+
+    <EthProfile client:visible />
+</Page>
+
+    <style>
+        .horizontal {
+            display: flex;
+            flex-direction: row;
+            /* center items in this div vertically */
+            align-items: center;
+        }
+
+        .item {
+            /* equal spacing between items, and centered */
+            justify-content: space-evenly;
+            margin-left: 2rem;
+        }
+
+        .vertical {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hidden {
+            display: none;
+        }    </style>
+

@@ -1,0 +1,149 @@
+{
+    "id": "energy/solar",
+    "title": "Set up a solar panel",
+    "description": "The wall outlet is convenient, but your utility uses fossil fuels for electricity generation! Let's take things in our own hands and start going off the grid.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hello there, space explorer! I'm Orion, your go-to engineer for all things electrical. I've got a fun project lined up. Interested?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "solarpanel",
+                    "text": "Absolutely! What's the project?"
+                }
+            ]
+        },
+        {
+            "id": "solarpanel",
+            "text": "Glad to hear that! I'm gonna help you set up your first solar panel! Ready to get started?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "I'm ready. Let's go!"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "It's simpler than you think! In the simplest case all you need is a solar panel, a charge controller, and a battery. I've got plenty of spares, so I'll just give you the materials you need. Oh, you'll also need an enclosure unless you want to short out your equipment. I'll give you one of those too.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{
+                            "id": "5",
+                            "count": 1
+                        },
+                        {
+                            "id": "6",
+                            "count": 1
+                        },
+                        {
+                            "id": "79",
+                            "count": 1
+                        },
+                        {
+                            "id": "80",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Wow, no charge? You're too kind!"
+                },
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "5",
+                            "count": 1
+                        },
+                        {
+                            "id": "6",
+                            "count": 1
+                        },
+                        {
+                            "id": "79",
+                            "count": 1
+                        },
+                        {
+                            "id": "80",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "setup",
+                    "text": "Alright, what's next?"
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "All you gotta do now is find a safe, secure place to put your solar panel and other equipment! That patch of grass in your yard looks perfect! Just place the enclosure on the ground and make sure it's level. Then insert the charge controller and battery and hook everything up. Finally, secure the solar panel on the top of the enclosure with the provided screws. This thing is designed for ease of use and should be able to weather almost any storm!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "setup-solar-enclosure-200Wh",
+                    "text": "This is so freaking cool!"
+                },
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "81",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "charge",
+                    "text": "Everything's all set up! What now?"
+                }
+            ]
+        },
+        {
+            "id": "charge",
+            "text": "Now all that's left is starting the charging process! Push the big button and energy will flow from the Sun into that battery! Isn't technology amazing? Once you've started the charge, feel free to finish the quest! You'll get a reward for your hard work!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solar-200Wh",
+                    "text": "Let there be light!"
+                },
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "61",
+                            "count": 200
+                        }
+                    ],
+                    "goto": "fin",
+                    "text": "You've made my day, Orion! Thanks so much!!"
+                }
+            ]
+        },
+        {
+            "id": "fin",
+            "text": "It's my pleasure! I'm always happy to help!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looking forward to next time!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 1
+        },
+        {
+            "id": "49",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ]
+}

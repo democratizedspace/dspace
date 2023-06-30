@@ -1,7 +1,8 @@
 ---
 import Page from '../../components/Page.astro';
-import ItemCount from '../../components/ItemCount.astro';
 import Chip from '../../components/Chip.astro';
+import CompactItemList from '../../components/svelte/CompactItemList.svelte';
+import Process from '../../components/svelte/Process.svelte';
 
 const currencies = [
     {
@@ -15,12 +16,14 @@ const currencies = [
 
 <Page columns="1">
     <h3>Balances</h3>
-    <div>
-        <ItemCount itemList={currencies} />
-    </div>
+    <CompactItemList itemList={currencies} client:load />
 
-    <h3>Basic Income</h3> 
-    <div>
-        <Chip text="Earn basic income" href="/processes/basic-income" />
-    </div>
+    <h3>Basic Income</h3>
+    <Process processId="basic-income" client:load />
 </Page>
+
+<style>
+    h3 {
+        text-align: center;
+    }
+</style>

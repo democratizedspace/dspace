@@ -5,8 +5,6 @@ const changelogs = await Astro.glob('./docs/md/changelog/*.md');
 
 const changelogsReversed = changelogs.reverse();
 
-console.log(JSON.stringify(changelogsReversed));
-
 function prepareHtml(html) {
     return html + `
         <style>
