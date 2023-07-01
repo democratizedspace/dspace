@@ -16,7 +16,9 @@ const currencies = [
 
 <Page columns="1">
     <h3>Balances</h3>
-    <CompactItemList itemList={currencies} client:load />
+    <div class="vertical">
+        <CompactItemList itemList={currencies} client:load />
+    </div>
 
     <h3>Basic Income</h3>
     <Process processId="basic-income" client:load />
@@ -25,5 +27,11 @@ const currencies = [
 <style>
     h3 {
         text-align: center;
+    }
+
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 </style>

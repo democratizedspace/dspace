@@ -6,8 +6,13 @@
     import { getItemCounts, getProcessesForItem, ProcessItemTypes } from '../../../utils/gameState.js';
     import items from '../json/items.json';
     import Process from '../../../components/svelte/Process.svelte';
+    import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
     
     export let itemId;
+
+    let itemList = [
+        { id: itemId },
+    ];
     
     const mounted = writable(false);
     const count = writable(0);
@@ -30,7 +35,7 @@
         <div class="vertical">
             <img src={item.image} alt={item.name} />
             <h2>{item.name}</h2>
-            <p>Count: {$count}</p>
+            <CompactItemList itemList={itemList} inverted={true} />
             {item.description}
             <BuySell itemId={itemId} />
             {#if hasProcesses}
