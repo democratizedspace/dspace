@@ -1,0 +1,19 @@
+---
+import Page from '../../components/Page.astro';
+import KVList from '../../components/svelte/KVList.svelte';
+import { getCookies } from '../../utils.js';
+import DebugLocalStorage from './svelte/DebugLocalStorage.svelte';
+
+const cookie = Astro.request.headers.get('cookie');
+
+const cookieItemList = getCookies(cookie);
+console.log("cookieItemList", cookieItemList);
+---
+
+<Page columns="1">
+    <h3>Cookies:</h3>
+    <KVList items={cookieItemList} />
+
+    <h3>localStorage:</h3>
+    <DebugLocalStorage client:idle />
+</Page>
