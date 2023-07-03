@@ -75,13 +75,13 @@ export const getCookies = (cookie) => {
 export const getCookieItems = (cookie) => {
     const parsedCookie = parseCookie(cookie);
     return Object.keys(parsedCookie)
-        .filter(key => key.startsWith('item-'))
+        .filter(key => /^item-\d+$/.test(key) && parseFloat(parsedCookie[key]) > 0)
         .map(key => {
             return {
-            id: key.split('-')[1], // Extract the number after 'item-'
-            count: parseInt(parsedCookie[key], 10) // Convert the string value to a number
-        };
-    });
+                id: key.split('-')[1], // Extract the number after 'item-'
+                count: parseFloat(parsedCookie[key]) // Convert the string value to a number
+            };
+        });
 };
 
 export const prettyPrintDuration = (durationSeconds) => {

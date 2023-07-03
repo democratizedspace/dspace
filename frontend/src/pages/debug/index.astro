@@ -7,7 +7,6 @@ import DebugLocalStorage from './svelte/DebugLocalStorage.svelte';
 const cookie = Astro.request.headers.get('cookie');
 
 const cookieItemList = getCookies(cookie);
-console.log("cookieItemList", cookieItemList);
 ---
 
 <Page columns="1">
