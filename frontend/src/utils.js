@@ -61,6 +61,17 @@ export const hasAcceptedCookies = (req) => {
     return acceptedCookies || false;
 };
 
+export const getCookies = (cookie) => {
+    const parsedCookie = parseCookie(cookie);
+    // return as an array of objects
+    return Object.keys(parsedCookie).map(key => {
+        return {
+            key,
+            value: parsedCookie[key]
+        };
+    });
+}
+
 export const getCookieItems = (cookie) => {
     const parsedCookie = parseCookie(cookie);
     return Object.keys(parsedCookie)
