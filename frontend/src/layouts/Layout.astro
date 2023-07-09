@@ -6,8 +6,6 @@ export interface Props {
 }
 
 const { title } = Astro.props as Props;
-
-const logoImage = "https://democratized.space/assets/logo.png";
 ---
 
 <!DOCTYPE html>
@@ -20,18 +18,27 @@ const logoImage = "https://democratized.space/assets/logo.png";
 			  basic: {
 				title: "DSPACE",
 				type: "website",
-				image: logoImage,
+				image: "/assets/logo.png",
 			  }
 			}}
 			twitter={{
 		      card: "summary_large_image",
 			  creator: "@EspToTheFuture",
-			  image: logoImage,
+			  image: "/assets/logo.png",
 			  imageAlt: "DSPACE",
 			}}
 			extend={{
 			  // extending the default link tags
 			  link: [{ rel: "icon", href: "/favicon.ico" }],
+			  // extending the default meta tags
+			  meta: [
+				{
+				  name: "twitter:image",
+				  content: "/assets/logo.png",
+				},
+				{ name: "twitter:title", content: "DSPACE" },
+				{ name: "twitter:description", content: "A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system." },
+			  ],
 			}}
 		  />
 		<meta charset="UTF-8" />
