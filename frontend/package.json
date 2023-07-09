@@ -29,6 +29,7 @@
     "@ceramicstudio/idx-constants": "^1.0.0",
     "@ceramicstudio/idx-tools": "^0.9.0",
     "@types/node": "^18.0.0",
+    "astro-seo": "^0.7.4",
     "autoprefixer": "^10.4.14",
     "cssnano": "^6.0.1",
     "date-fns": "^2.30.0",

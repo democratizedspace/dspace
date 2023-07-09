@@ -1,4 +1,6 @@
 ---
+import { SEO } from "astro-seo";
+
 export interface Props {
 	title: string;
 }
@@ -9,6 +11,33 @@ const { title } = Astro.props as Props;
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<SEO
+			title="DSPACE"
+			description="A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."
+			openGraph={{
+			  basic: {
+				title: "DSPACE",
+				type: "website",
+				image: "/assets/logo.png",
+			  }
+			}}
+			twitter={{
+			  creator: "@EspToTheFuture"
+			}}
+			extend={{
+			  // extending the default link tags
+			  link: [{ rel: "icon", href: "/favicon.ico" }],
+			  // extending the default meta tags
+			  meta: [
+				{
+				  name: "twitter:image",
+				  content: "/assets/logo.png",
+				},
+				{ name: "twitter:title", content: "DSPACE" },
+				{ name: "twitter:description", content: "A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system." },
+			  ],
+			}}
+		  />
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
