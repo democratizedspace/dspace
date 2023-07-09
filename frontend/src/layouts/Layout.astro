@@ -6,25 +6,27 @@ export interface Props {
 }
 
 const { title } = Astro.props as Props;
+
+const sitewideTitle = `DSPACE (democratized.space)`;
 ---
 
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<SEO
-			title={`DSPACE (democratized.space)`}
+			title={sitewideTitle}
 			description="A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."
 			canonical="https://democratized.space"
 			openGraph={{
 			  basic: {
-				title: title,
+				title: sitewideTitle,
 				type: "website",
 				image: "/assets/logo.png",
 			  }
 			}}
 			twitter={{
 			  creator: "@EspToTheFuture",
-			  title: title,
+			  title: sitewideTitle,
 			  image: "/assets/logo.png",
 			  description: "A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."
 			}}
