@@ -1,0 +1,46 @@
+{
+    "id": "energy/dSolar-1kW",
+    "title": "Accrue 1,000 dSolar",
+    "description": "Reach increasingly higher levels of energy production! To complete this quest, have at least 1,000 dSolar in your inventory.",
+    "image": "/assets/quests/dSolar-1kW.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "As you've probably noticed, you've been accruing dSolar as you generate energy with your panels! dSolar is basically just a token recording how much energy you've generated using solar historically. To make things a bit moe interesting, I'm going to give you increasingly bigger milestones to reach. Let's start small, with say, 1,000 dSolar. Before you know it you'll be a small blip on the Kardashev scale!",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "61",
+                            "count": 1000
+                        }
+                    ],
+                    "goto": "finish",
+                    "text": "That was easy!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "See, that wasn't so bad! I'll be back with more quests for you soon. In the meantime, keep generating energy!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 3
+        }
+    ],
+    "requiresQuests": [
+        "energy/solar-1kWh"
+    ]
+}

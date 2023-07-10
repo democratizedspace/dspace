@@ -1,0 +1,46 @@
+{
+    "id": "energy/dSolar-100kW",
+    "title": "Accrue 100,000 dSolar",
+    "description": "Set new standards in solar energy production! To complete this quest, have at least 100,000 dSolar in your inventory.",
+    "image": "/assets/quests/dSolar-100kW.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've come a long way, surpassing all the benchmarks I've set for you. Now, we're aiming for the stars! Your next challenge is to reach 100,000 dSolar. It's a monumental task, but you've shown you have what it takes to reach such heights!",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "61",
+                            "count": 100000
+                        }
+                    ],
+                    "goto": "finish",
+                    "text": "I'm ready for this!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Astounding! You've hit a new milestone in solar energy generation! I'm genuinely impressed. Remember, every dSolar represents a step toward a more sustainable future. I'll be back with an even bigger challenge. Keep lighting the way!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Bring it on!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 10
+        }
+    ],
+    "requiresQuests": [
+        "energy/dSolar-10kW"
+    ]
+}
