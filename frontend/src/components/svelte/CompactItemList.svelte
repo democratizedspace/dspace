@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import items from '../../pages/inventory/json/items.json';
-    import { getItemCounts } from '../../utils/gameState.js';
+    import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { prettyPrintNumber } from '../../utils.js';
     import Chip from './Chip.svelte';
     import DelayedRender from './DelayedRender.svelte';

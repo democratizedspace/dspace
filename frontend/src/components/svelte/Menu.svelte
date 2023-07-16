@@ -1,6 +1,6 @@
 <script>
     import menu from '../../config/menu.json';
-	import { getItemCount } from '../../utils/gameState.js';
+	import { getItemCount } from '../../utils/gameState/inventory.js';
 	import { onMount } from 'svelte';
 
 	export let pathname;

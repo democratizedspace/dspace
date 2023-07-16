@@ -1,0 +1,44 @@
+{
+    "id": "3dprinting/benchy_10",
+    "title": "3D Print 10 Benchies",
+    "description": "Put your 3D printer to the test! To complete this quest, print at least 10 Benchies.",
+    "image": "/assets/quests/benchy_10.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've made some impressive strides in 3D printing. Your next challenge is to print 10 Benchies. These small boat models will test the capabilities of your printer. Are you up for it?",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "benchy",
+                            "count": 10
+                        }
+                    ],
+                    "goto": "finish",
+                    "text": "Let's set sail!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Well done! These Benchies look fantastic. Keep honing your 3D printing skills. I'll be back with a new challenge soon!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'm ready for more!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 3
+        }
+    ],
+    "requiresQuests": []
+}
