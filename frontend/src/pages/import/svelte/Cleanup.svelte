@@ -1,6 +1,6 @@
 <script>
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { addItems } from '../../../utils/gameState.js';
+    import { addItems } from '../../../utils/gameState/inventory.js';
 
     addItems([
         {

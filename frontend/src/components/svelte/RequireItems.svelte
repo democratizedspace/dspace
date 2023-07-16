@@ -1,7 +1,7 @@
 <script>
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
-    import { state } from '../../utils/gameState.js';
+    import { state } from '../../utils/gameState/common.js';
     import { writable, derived } from 'svelte/store';
 
     export let text = '', items = [];

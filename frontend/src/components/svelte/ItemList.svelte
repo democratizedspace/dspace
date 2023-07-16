@@ -5,7 +5,7 @@
   import SearchBar from './SearchBar.svelte';
   import Sorter from './Sorter.svelte';
   import { getPriceStringComponents } from '../../utils.js';
-  import { getItemCount } from '../../utils/gameState.js';
+  import { getItemCount } from '../../utils/gameState/inventory.js';
 
   export let inventory;
 

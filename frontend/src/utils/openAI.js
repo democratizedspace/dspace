@@ -1,4 +1,4 @@
-import { loadGameState } from './gameState.js';
+import { loadGameState } from './gameState/common.js';
 import { Configuration, OpenAIApi } from 'openai';
 
 const apiKey = (loadGameState().openAI && loadGameState().openAI.apiKey) || '';

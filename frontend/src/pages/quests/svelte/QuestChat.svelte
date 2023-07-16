@@ -3,7 +3,8 @@
     import { writable } from 'svelte/store';
     import items from '../../inventory/json/items.json';
     import QuestChatOption from './QuestChatOption.svelte';
-    import { state, questFinished } from '../../../utils/gameState.js';
+    import { questFinished } from '../../../utils/gameState.js';
+    import { state } from '../../../utils/gameState/common.js';
 
     export let quest, pointer, currentDialogue;
 

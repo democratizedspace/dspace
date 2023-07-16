@@ -3,7 +3,9 @@
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
     import { onMount } from 'svelte';
     import { derived } from 'svelte/store';
-    import { state, getVersionNumber, importV1V2, addItems, getItemCount } from '../../../utils/gameState.js';
+    import { state } from '../../../utils/gameState/common.js';
+    import { addItems, getItemCount } from '../../../utils/gameState/inventory.js';
+    import { getVersionNumber, importV1V2 } from '../../../utils/gameState.js';
 
     export let itemList = [];
 

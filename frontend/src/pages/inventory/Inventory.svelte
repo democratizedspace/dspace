@@ -1,5 +1,5 @@
 <script>
-  import { state } from '../../utils/gameState.js';
+  import { state } from '../../utils/gameState/common.js';
   import ItemList from '../../components/svelte/ItemList.svelte';
   import items from './json/items.json';
 

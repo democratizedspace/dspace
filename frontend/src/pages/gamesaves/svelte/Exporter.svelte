@@ -1,6 +1,6 @@
 <script>
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { exportGameStateString } from '../../../utils/gameState.js';
+    import { exportGameStateString } from '../../../utils/gameState/common.js';
 
     const gameStateString = exportGameStateString();
 </script>

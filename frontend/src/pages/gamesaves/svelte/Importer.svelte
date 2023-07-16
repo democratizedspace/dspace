@@ -1,6 +1,6 @@
 <script>
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { importGameStateString } from '../../../utils/gameState.js';
+    import { importGameStateString } from '../../../utils/gameState/common.js';
 
     let importString = '';
 

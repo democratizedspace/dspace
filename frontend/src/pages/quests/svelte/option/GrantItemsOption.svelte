@@ -2,7 +2,8 @@
     import { writable } from 'svelte/store';
     import Chip from '../../../../components/svelte/Chip.svelte';
     import CompactItemList from '../../../../components/svelte/CompactItemList.svelte';
-    import { state, grantItems, getItemsGranted } from '../../../../utils/gameState.js';
+    import { grantItems, getItemsGranted } from '../../../../utils/gameState.js';
+    import { state } from '../../../../utils/gameState/common.js';
     
     export let option, questId, stepId, optionIndex;
 

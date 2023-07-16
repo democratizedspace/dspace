@@ -3,7 +3,7 @@
     import CompactItemList from './CompactItemList.svelte';
     import items from '../../pages/inventory/json/items.json';
     import { getPriceStringComponents } from '../../utils';
-    import { buyItems, sellItems } from '../../utils/gameState.js';
+    import { buyItems, sellItems } from '../../utils/gameState/inventory.js';
 
     export let itemId;
     export let gameState;
