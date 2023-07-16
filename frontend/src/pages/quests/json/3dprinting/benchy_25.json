@@ -14,7 +14,7 @@
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "benchy",
+                            "id": "1",
                             "count": 25
                         }
                     ],
@@ -36,8 +36,8 @@
     ],
     "rewards": [
         {
-            "id": "5",
-            "count": 5
+            "id": "12",
+            "count": 10000
         }
     ],
     "requiresQuests": [
