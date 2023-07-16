@@ -1,17 +1,23 @@
 import { loadGameState, saveGameState,  } from "./gameState/common.js";
 import { burnItems, addItems, getItemCounts, getItemCount, getCurrentdUSD, buyItems } from "./gameState/inventory.js";
 
+import processes from "../pages/processes/processes.json";
+
 // ---------------------
 // QUESTS
 // ---------------------
 
 export const finishQuest = (questId, rewardItems) => {
+  const gameState = loadGameState();
+
   gameState.quests[questId] = { finished: true };
   addItems(rewardItems);
   saveGameState(gameState);
 };
 
 export const questFinished = (questId) => {
+  const gameState = loadGameState();
+
   const finished = gameState.quests[questId] ? gameState.quests[questId].finished : false;
   return finished;
 };
@@ -35,21 +41,29 @@ export const canStartQuest = (quest) => {
 };
 
 export const setCurrentDialogueStep = (questId, stepId) => {
+  const gameState = loadGameState();
+
   gameState.quests[questId] = { stepId };
   saveGameState(gameState);
 };
 
 export const getCurrentDialogueStep = (questId) => {
+  const gameState = loadGameState();
+
   return gameState.quests[questId] ? gameState.quests[questId].stepId : 0;
 };
 
 const setItemsGranted = (questId, stepId, optionIndex) => {
+  const gameState = loadGameState();
+
   const key = `${questId}-${stepId}-${optionIndex}`;
   gameState.quests[questId] = { ...gameState.quests[questId], itemsClaimed: [...(gameState.quests[questId].itemsClaimed || []), key] };
   saveGameState(gameState);
 };
 
 export const getItemsGranted = (questId, stepId, optionIndex) => {
+  const gameState = loadGameState();
+
   try {
     const key = `${questId}-${stepId}-${optionIndex}`;
     const itemsClaimed = gameState.quests[questId].itemsClaimed;
@@ -81,6 +95,8 @@ export const hasRequiredAndConsumedItems = (processId) => {
 };
 
 export const startProcess = (processId) => {
+  const gameState = loadGameState();
+
   const process = processes.find((p) => p.id === processId);
 
   if (!hasRequiredAndConsumedItems(processId)) {
@@ -102,6 +118,8 @@ export const ProcessStates = {
 };
 
 export const getProcessState = (processId) => {
+  const gameState = loadGameState();
+
   const process = gameState.processes[processId];
   if (!process || !process.startedAt) {
     return { state: ProcessStates.NOT_STARTED, progress: 0 };
@@ -120,6 +138,8 @@ export const getProcessState = (processId) => {
 };
 
 export const getProcessStartedAt = (processId) => {
+  const gameState = loadGameState();
+
   const process = gameState.processes[processId];
   if (process && process.startedAt) {
     return process.startedAt;
@@ -128,6 +148,8 @@ export const getProcessStartedAt = (processId) => {
 };
 
 export const getProcessProgress = (processId) => {
+  const gameState = loadGameState();
+
   const process = gameState.processes[processId];
   if (!process || !process.startedAt) return 0;
   const elapsed = Date.now() - process.startedAt;
@@ -136,6 +158,8 @@ export const getProcessProgress = (processId) => {
 };
 
 export const finishProcess = (processId) => {
+  const gameState = loadGameState();
+
   if (getProcessState(processId).state === ProcessStates.FINISHED) {
     const process = processes.find((p) => p.id === processId);
     const createItems = process.createItems;
@@ -148,6 +172,7 @@ export const finishProcess = (processId) => {
 
 
 export const cancelProcess = (processId) => {
+  const gameState = loadGameState();
   const process = processes.find((p) => p.id === processId);
 
   if (!process) {
@@ -210,6 +235,8 @@ export const getProcessesForItem = (itemId) => {
 };
 
 export const skipProcess = (processId) => {
+  const gameState = loadGameState();
+
   const process = processes.find((p) => p.id === processId);
   if (!process) {
     return;
@@ -232,16 +259,22 @@ export const VERSIONS = {
 }
 
 export const setVersionNumber = (versionNumber) => {
+  const gameState = loadGameState();
+
   gameState.versionNumberString = versionNumber;
   saveGameState(gameState);
 }
 
 export const getVersionNumber = () => {
+  const gameState = loadGameState();
+
   return gameState.versionNumberString;
 }
 
 // v1 -> v2
 export const importV1V2 = (itemList) => {
+  const gameState = loadGameState();
+
   const award = {
     "id": "85",
     "count": 1
