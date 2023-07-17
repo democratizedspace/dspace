@@ -77,7 +77,7 @@
                     <input type="number" min="1" value={quantity} on:input={handleQuantityInput} class="quantity-input"/>
                 </label>
                 <Chip 
-                    text={buyChipActive ? `Buy for ${price} ${symbol} each` : `Sell for ${price} ${symbol} each`}
+                    text={buyChipActive ? `Buy for ${quantity*price} ${symbol}` : `Sell for ${quantity*price} ${symbol}`}
                     onClick={handleTransactionClick}
                 />
             </div>

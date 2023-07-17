@@ -1,16 +1,25 @@
 <script>
-    export let quest;
+    export let quest, compact = false;
 </script>
 
 <div class="container" class:quest>
     {#if quest}
-        <div class="content">
-            <img class="quest-img" src={quest.image} alt={quest.image} />
-            <div class="content-text">
-                <h3>{quest.title}</h3>
-                <p>{quest.description}</p>
+        {#if compact}
+            <div class="content">
+                <img class="quest-img quest-img-compact" src={quest.image} alt={quest.image} />
+                <div class="content-text">
+                    <h3>{quest.title}</h3>
+                </div>
             </div>
-        </div>
+        {:else}
+            <div class="content">
+                <img class="quest-img" src={quest.image} alt={quest.image} />
+                <div class="content-text">
+                    <h3>{quest.title}</h3>
+                    <p>{quest.description}</p>
+                </div>
+            </div>
+        {/if}
     {/if}
 </div>
 
@@ -39,6 +48,11 @@
         margin: -10px;
         object-fit: cover;
         border: 5px solid #68d46d;
+    }
+
+    .quest-img-compact {
+        width: 100px;
+        height: 100px;
     }
 
     .content {
