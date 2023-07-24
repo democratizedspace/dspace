@@ -1,35 +1,35 @@
 {
     "id": "3dprinting/benchy_10",
-    "title": "3D Print 10 Benchies",
-    "description": "Put your 3D printer to the test! To complete this quest, print at least 10 Benchies.",
+    "title": "Bucket, we'll do it live!",
+    "description": "Have 10 buckets of dechlorinated water in your inventory. For some reason.",
     "image": "/assets/quests/benchy_10.jpg",
-    "npc": "/assets/npc/phoenix.jpg",
+    "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You've made some impressive strides in 3D printing. Your next challenge is to print 10 Benchies. These small boat models will test the capabilities of your printer. Are you up for it?",
+            "text": "Hellooooo adventurer! You know what I find truly fascinating? Water! There's so much of it! I want all of it! Get me water! Lots of water!",
             "options": [
                 {
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "1",
+                            "id": "25",
                             "count": 10
                         }
                     ],
                     "goto": "finish",
-                    "text": "Let's set sail!"
+                    "text": "I have the 10 buckets ... that took awhile!"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Well done! These Benchies look fantastic. Keep honing your 3D printing skills. I'll be back with a new challenge soon!",
+            "text": "Ahhh, you're the best, adventurer! Have I ever told you that? You're the best! I give you this shiny liquid award!",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'm ready for more!"
+                    "text": "Aww, shucks!"
                 }
             ]
         }
@@ -41,6 +41,6 @@
         }
     ],
     "requiresQuests": [
-        "3dprinting/start"
+        "hydroponics/basil"
     ]
 }

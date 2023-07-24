@@ -159,14 +159,14 @@ export const getProcessProgress = (processId) => {
 };
 
 export const finishProcess = (processId) => {
-  const gameState = loadGameState();
-
   if (getProcessState(processId).state === ProcessStates.FINISHED) {
     const process = processes.find((p) => p.id === processId);
     const createItems = process.createItems;
 
-    gameState.processes[processId] = undefined;
     addItems(createItems);
+
+    const gameState = loadGameState();
+    gameState.processes[processId] = undefined;
     saveGameState(gameState);
   }
 };
