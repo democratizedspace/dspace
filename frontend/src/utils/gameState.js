@@ -1,5 +1,6 @@
 import { loadGameState, saveGameState,  } from "./gameState/common.js";
-import { burnItems, addItems, getItemCounts, getItemCount, getCurrentdUSD, buyItems } from "./gameState/inventory.js";
+import { burnItems, addItems, hasItems } from "./gameState/inventory.js";
+import { durationInSeconds } from "../utils.js";
 
 import processes from "../pages/processes/processes.json";
 
