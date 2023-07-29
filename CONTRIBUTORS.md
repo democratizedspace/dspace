@@ -2,7 +2,7 @@
 
 ## Welcome to the Contribution Guide!
 
-Firstly, thank you for your interest in our project! We truly appreciate your willingness to contribute. This document provides a set of guidelines to facilitate your contribution process. Whether you're submitting a bug report, suggesting a new feature, or directly writing some code, we welcome your participation.
+Thank you for your interest in our project! We truly appreciate your willingness to contribute. This document provides a set of guidelines to facilitate your contribution process. Whether you're submitting a bug report, suggesting a new feature, or directly writing some code, we welcome your participation.
 
 ### 1. Getting Started
 
