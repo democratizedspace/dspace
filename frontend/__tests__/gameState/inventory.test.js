@@ -17,7 +17,7 @@ describe("gameState - inventory", () => {
       inventory: {
         "1": 10, // Arbitrary initial inventory for item with id "1"
         "24": 50, // Arbitrary initial dUSD inventory
-        "20": 0   // Initializing dCarbon inventory
+        "20": 0,   // Initializing dCarbon inventory
       }
     };
 
@@ -116,5 +116,49 @@ describe("gameState - inventory", () => {
     };
 
     expect(mockGameState.inventory).toEqual(expectedInventory);
+  });
+
+  test("dCarbon tax should increase with the amount of dCarbon in the inventory", () => {
+    // Set up initial inventory with varying amounts of dCarbon
+    const dCarbonLevels = [0, 1000, 5000, 9000, 10000];
+    const initialInventory = {
+      "1": 50, // Arbitrary initial inventory for item with id "1"
+      "24": 0, // Starting with no dUSD
+    };
+
+    dCarbonLevels.forEach(dCarbonLevel => {
+      // Prepare the game state for each dCarbon level
+      mockGameState.inventory = {
+        ...initialInventory,
+        "20": dCarbonLevel, // Set dCarbon level
+      };
+
+      const itemsToSell = [
+        { id: "1", quantity: 5, price: 2 }
+      ];
+
+      // Sell the items
+      sellItems(itemsToSell);
+
+      // Calculate expected tax and resulting dUSD
+      const expectedTax = Math.min(Math.floor(dCarbonLevel / 1000) * 0.10, 0.90);
+      const expecteddUSD = (5 * 2) * (1 - expectedTax);
+
+      expect(loadGameState).toHaveBeenCalledTimes(1);
+      expect(saveGameState).toHaveBeenCalledTimes(1);
+
+      const expectedInventory = {
+        "1": 45, // Quantity of item "1" should have decreased by 5
+        "20": dCarbonLevel, // dCarbon level should remain the same
+        "24": expecteddUSD // dUSD should have increased by the sale price, minus the tax
+      };
+
+      // Check the inventory matches the expected inventory
+      expect(mockGameState.inventory).toEqual(expectedInventory);
+
+      // Clear the mock implementations' histories
+      loadGameState.mockClear();
+      saveGameState.mockClear();
+    });
   });
 });
