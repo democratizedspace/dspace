@@ -72,7 +72,7 @@
     
     {#if process.createItems && process.createItems.length > 0}
       <h6>Creates:</h6>
-      <CompactItemList itemList={process.createItems} noRed={true} />
+      <CompactItemList itemList={process.createItems} noRed={true} increase={true} />
     {/if}
     <h4>Duration: {process.duration}</h4>
     {#if state === ProcessStates.NOT_STARTED}
