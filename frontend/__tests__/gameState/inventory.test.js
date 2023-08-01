@@ -74,6 +74,24 @@ describe("gameState - inventory", () => {
     expect(mockGameState.inventory).toEqual(expectedInventory);
   });
 
+  test("burnItems should not burn items when not enough are available", () => {
+    const itemsToBurn = [{ id: "1", count: 15 }];
+  
+    burnItems(itemsToBurn);
+  
+    expect(loadGameState).toHaveBeenCalledTimes(1);
+    expect(saveGameState).toHaveBeenCalledTimes(1);
+  
+    const expectedInventory = {
+      "1": 10, // The count of item "1" should remain the same as burning more than available was attempted
+      "24": 50, // The counts of other items should not change
+      "20": 0,
+    };
+  
+    expect(mockGameState.inventory).toEqual(expectedInventory);
+  });
+  
+
   test("getItemCounts should correctly return counts of items", () => {
     const items = [{ id: "1" }, { id: "2" }];
 
@@ -131,4 +149,100 @@ describe("gameState - inventory", () => {
 
     expect(result).toBe(false); // The function should return false since the inventory doesn't have enough of item "2"
   });
+
+  test("hasItems should return true if the inventory has enough of each item", () => {
+    const items = [{ id: "1", count: 5 }, { id: "24", count: 10 }];
+  
+    const result = hasItems(items);
+  
+    expect(loadGameState).toHaveBeenCalledTimes(1);
+  
+    expect(result).toBe(true); // The function should return true since the inventory has enough of each item
+  });  
+});
+
+test("sellItems should silently fail if trying to sell more items than available", () => {
+  const itemsToSell = [{ id: "1", quantity: 15, price: "5" }];
+
+  sellItems(itemsToSell);
+
+  expect(loadGameState).toHaveBeenCalledTimes(1);
+  expect(saveGameState).toHaveBeenCalledTimes(0); // Since there are not enough items to sell, the game state should not be updated
+
+  const expectedInventory = {
+    "1": 10, // The count of item "1" should remain the same since we tried to sell more than we have
+    "24": 50, // The count of dUSD should not change since no items were sold
+    "20": 0,
+  };
+
+  expect(mockGameState.inventory).toEqual(expectedInventory);
+});
+
+test("sellItems should correctly sell items if the quantity to sell is less than or equal to the actual count", () => {
+  const itemsToSell = [{ id: "1", quantity: 5, price: "5" }];
+
+  sellItems(itemsToSell);
+
+  expect(loadGameState).toHaveBeenCalledTimes(1);
+  expect(saveGameState).toHaveBeenCalledTimes(1);
+
+  const expectedInventory = {
+    "1": 5, // The count of item "1" should have decreased by 5
+    "24": 75, // The count of dUSD should have increased by 25 (5 items * price 5) considering there's no tax
+    "20": 0,
+  };
+
+  expect(mockGameState.inventory).toEqual(expectedInventory);
+});
+
+test("sellItems should correctly increase dUSD after selling items", () => {
+  const itemsToSell = [{ id: "1", quantity: 5, price: "5" }];
+
+  sellItems(itemsToSell);
+
+  expect(loadGameState).toHaveBeenCalledTimes(1);
+  expect(saveGameState).toHaveBeenCalledTimes(1);
+
+  const expectedInventory = {
+    "1": 5, // The count of item "1" should have decreased by 5
+    "24": 75, // The count of dUSD should have increased by 25 (5 items * price 5) considering there's no tax
+    "20": 0,
+  };
+
+  expect(mockGameState.inventory).toEqual(expectedInventory);
+  expect(mockGameState.inventory["24"]).toBe(75); // dUSD should have increased correctly
+});
+
+test("sellItems should reject items with negative price", () => {
+  const itemsToSell = [{ id: "1", quantity: 5, price: "-5" }];
+
+  sellItems(itemsToSell);
+
+  expect(loadGameState).toHaveBeenCalledTimes(1);
+  expect(saveGameState).toHaveBeenCalledTimes(0); // Since price was negative, the game state should not be updated
+
+  const expectedInventory = {
+    "1": 10, // The count of item "1" should remain the same since the price was negative
+    "24": 50, // The count of dUSD should not change since no items were sold
+    "20": 0,
+  };
+
+  expect(mockGameState.inventory).toEqual(expectedInventory);
+});
+
+test("sellItems should reject items with negative count", () => {
+  const itemsToSell = [{ id: "1", quantity: -5, price: "5" }];
+
+  sellItems(itemsToSell);
+
+  expect(loadGameState).toHaveBeenCalledTimes(1);
+  expect(saveGameState).toHaveBeenCalledTimes(0); // Since count was negative, the game state should not be updated
+
+  const expectedInventory = {
+    "1": 10, // The count of item "1" should remain the same since the count was negative
+    "24": 50, // The count of dUSD should not change since no items were sold
+    "20": 0,
+  };
+
+  expect(mockGameState.inventory).toEqual(expectedInventory);
 });

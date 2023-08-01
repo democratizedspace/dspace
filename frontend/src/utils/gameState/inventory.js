@@ -11,17 +11,15 @@ export const addItems = (items) => {
   
   export const burnItems = (items) => {
     const gameState = loadGameState();
-
+  
     items.forEach(({ id, count }) => {
-      if (gameState.inventory[id]) {
+      if (gameState.inventory[id] && gameState.inventory[id] >= count) {
         gameState.inventory[id] -= count;
-        if (gameState.inventory[id] < 0) {
-          gameState.inventory[id] = 0;
-        }
       }
     });
     saveGameState(gameState);
   };
+  
   
   export const getItemCounts = (itemList) => {
     const gameState = loadGameState();
