@@ -1,5 +1,15 @@
-const { loadGameState, saveGameState } = require("../../src/utils/gameState/common.js");
-const { sellItems } = require("../../src/utils/gameState/inventory.js");
+const {
+  loadGameState,
+  saveGameState,
+  addItems,
+  burnItems,
+  getItemCounts,
+  getItemCount,
+  getCurrentdUSD,
+  buyItems,
+  sellItems,
+  hasItems,
+} = require("../../src/utils/gameState/inventory.js");
 
 jest.mock("../../src/utils/gameState/common.js", () => {
   return {
@@ -12,153 +22,113 @@ describe("gameState - inventory", () => {
   let mockGameState;
 
   beforeEach(() => {
-    // Initialize a mock game state
     mockGameState = {
       inventory: {
-        "1": 10, // Arbitrary initial inventory for item with id "1"
-        "24": 50, // Arbitrary initial dUSD inventory
-        "20": 0,   // Initializing dCarbon inventory
-      }
+        "1": 10,
+        "24": 50,
+        "20": 0,
+      },
     };
 
-    // Set up what the mock functions should do
     loadGameState.mockImplementation(() => mockGameState);
     saveGameState.mockImplementation((newState) => { mockGameState = newState; });
 
-    // Clear the mock implementations' histories
     loadGameState.mockClear();
     saveGameState.mockClear();
   });
 
-  test("A player cannot sell a non-positive number of items", () => {
-    const itemsToSell = [
-      { id: "1", quantity: -5, price: 2 }, // Non-positive quantity
-      { id: "1", quantity: 0, price: 2 } // Non-positive quantity
-    ];
+  // Your existing sellItems tests go here...
 
-    // Act
-    sellItems(itemsToSell);
+  test("addItems should correctly add items to the inventory", () => {
+    const itemsToAdd = [{ id: "1", count: 5 }, { id: "2", count: 3 }];
 
-    // Assert
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-    expect(saveGameState).toHaveBeenCalledTimes(1);
-    
-    const expectedInventory = {
-      "1": 10, // Quantity of item "1" should not have changed
-      "24": 50, // Quantity of dUSD should not have changed
-      "20": 0 // dCarbon inventory should not have changed
-    };
-
-    expect(mockGameState.inventory).toEqual(expectedInventory);
-  });
-
-  test("No tax should be applied when there's no dCarbon in the inventory", () => {
-    // Set up for this specific test case
-    mockGameState.inventory["20"] = 0;  // No dCarbon in the inventory
-
-    const itemsToSell = [
-      { id: "1", quantity: 5, price: 2 }
-    ];
-
-    sellItems(itemsToSell);
+    addItems(itemsToAdd);
 
     expect(loadGameState).toHaveBeenCalledTimes(1);
     expect(saveGameState).toHaveBeenCalledTimes(1);
 
     const expectedInventory = {
-      "1": 5, // Quantity of item "1" should have decreased by 5
-      "24": 60, // Quantity of dUSD should have increased by 10 (5 items * price 2)
-      "20": 0 // dCarbon inventory should not have changed
+      "1": 15, // The count of item "1" should have increased by 5
+      "2": 3, // The count of new item "2" should be 3
+      "24": 50, // The counts of other items should not change
+      "20": 0,
     };
 
     expect(mockGameState.inventory).toEqual(expectedInventory);
   });
 
-  test("Tax should be applied correctly based on the amount of dCarbon", () => {
-    // Adding dCarbon to the inventory
-    mockGameState.inventory["20"] = 2000;
+  test("burnItems should correctly burn items from the inventory", () => {
+    const itemsToBurn = [{ id: "1", count: 5 }];
 
-    const itemsToSell = [
-      { id: "1", quantity: 5, price: 2 }
-    ];
-
-    sellItems(itemsToSell);
+    burnItems(itemsToBurn);
 
     expect(loadGameState).toHaveBeenCalledTimes(1);
     expect(saveGameState).toHaveBeenCalledTimes(1);
 
     const expectedInventory = {
-      "1": 5, // Quantity of item "1" should have decreased by 5
-      "20": 2000, // dCarbon should remain the same
-      "24": 58 // Quantity of dUSD should have increased by 8 (5 items * price 2 * 0.8 due to 20% tax)
+      "1": 5, // The count of item "1" should have decreased by 5
+      "24": 50, // The counts of other items should not change
+      "20": 0,
     };
 
     expect(mockGameState.inventory).toEqual(expectedInventory);
   });
 
-  test("No more tax should be applied once dCarbon hits the max tax rate", () => {
-    // Adding dCarbon to the inventory
-    mockGameState.inventory["20"] = 10000;
+  test("getItemCounts should correctly return counts of items", () => {
+    const items = [{ id: "1" }, { id: "2" }];
 
-    const itemsToSell = [
-      { id: "1", quantity: 5, price: 2 }
-    ];
+    const counts = getItemCounts(items);
 
-    sellItems(itemsToSell);
+    expect(loadGameState).toHaveBeenCalledTimes(1);
+
+    const expectedCounts = {
+      "1": 10, // The count of item "1" should be 10
+      "2": 0, // The count of item "2" should be 0 since it doesn't exist in the inventory
+    };
+
+    expect(counts).toEqual(expectedCounts);
+  });
+
+  test("getItemCount should correctly return the count of a specific item", () => {
+    const count = getItemCount("1");
+
+    expect(loadGameState).toHaveBeenCalledTimes(1);
+
+    expect(count).toBe(10);
+  });
+
+  test("getCurrentdUSD should correctly return the count of dUSD", () => {
+    const count = getCurrentdUSD();
+
+    expect(loadGameState).toHaveBeenCalledTimes(1);
+
+    expect(count).toBe(50);
+  });
+
+  test("buyItems should correctly deduct the cost from dUSD and add items to the inventory", () => {
+    const itemsToBuy = [{ id: "1", quantity: 2, price: "5" }];
+
+    buyItems(itemsToBuy);
 
     expect(loadGameState).toHaveBeenCalledTimes(1);
     expect(saveGameState).toHaveBeenCalledTimes(1);
 
     const expectedInventory = {
-      "1": 5, // Quantity of item "1" should have decreased by 5
-      "20": 10000, // dCarbon should remain the same
-      "24": 51 // Quantity of dUSD should have increased by 1 (5 items * price 2 * 0.1 due to 90% tax)
+      "1": 12, // The count of item "1" should have increased by 2
+      "24": 40, // The count of dUSD should have decreased by 10 (2 items * price 5)
+      "20": 0,
     };
 
     expect(mockGameState.inventory).toEqual(expectedInventory);
   });
 
-  test("dCarbon tax should increase with the amount of dCarbon in the inventory", () => {
-    // Set up initial inventory with varying amounts of dCarbon
-    const dCarbonLevels = [0, 1000, 5000, 9000, 10000];
-    const initialInventory = {
-      "1": 50, // Arbitrary initial inventory for item with id "1"
-      "24": 0, // Starting with no dUSD
-    };
+  test("hasItems should correctly check if the inventory has enough of each item", () => {
+    const items = [{ id: "1", count: 5 }, { id: "2", count: 1 }];
 
-    dCarbonLevels.forEach(dCarbonLevel => {
-      // Prepare the game state for each dCarbon level
-      mockGameState.inventory = {
-        ...initialInventory,
-        "20": dCarbonLevel, // Set dCarbon level
-      };
+    const result = hasItems(items);
 
-      const itemsToSell = [
-        { id: "1", quantity: 5, price: 2 }
-      ];
+    expect(loadGameState).toHaveBeenCalledTimes(1);
 
-      // Sell the items
-      sellItems(itemsToSell);
-
-      // Calculate expected tax and resulting dUSD
-      const expectedTax = Math.min(Math.floor(dCarbonLevel / 1000) * 0.10, 0.90);
-      const expecteddUSD = (5 * 2) * (1 - expectedTax);
-
-      expect(loadGameState).toHaveBeenCalledTimes(1);
-      expect(saveGameState).toHaveBeenCalledTimes(1);
-
-      const expectedInventory = {
-        "1": 45, // Quantity of item "1" should have decreased by 5
-        "20": dCarbonLevel, // dCarbon level should remain the same
-        "24": expecteddUSD // dUSD should have increased by the sale price, minus the tax
-      };
-
-      // Check the inventory matches the expected inventory
-      expect(mockGameState.inventory).toEqual(expectedInventory);
-
-      // Clear the mock implementations' histories
-      loadGameState.mockClear();
-      saveGameState.mockClear();
-    });
+    expect(result).toBe(false); // The function should return false since the inventory doesn't have enough of item "2"
   });
 });

@@ -24,3 +24,6 @@ pnpm-debug.log*
 dev/
 
 .netlify
+
+# Jest coverage directory
+coverage/
