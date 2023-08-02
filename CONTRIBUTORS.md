@@ -28,6 +28,20 @@ More experienced contributors can look for the "Help Wanted" label. These are is
 
 Once you're ready to submit your code, create a pull request on GitHub. This will initiate a review process of your code. Please provide as much detail as possible in your pull request description.
 
+Make sure all the tests passed, and feel free to improve test coverage along with your pull requests if you're able to.
+
+In order to run the tests, simply run the following command:
+
+```sh
+npm test
+```
+
+to see test coverage, use
+
+```sh
+npm run coverage
+```
+
 ### 5. Coding Guidelines
 
 We don't have a strict coding style guide (yet?), but we do ask that you keep your code clean and well-commented. Additionally, if you're able to add unit tests for your code, that would be great, but it's not required unless otherwise stated.
