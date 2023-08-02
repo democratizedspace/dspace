@@ -80,10 +80,15 @@ export const addItems = (items) => {
   
     // Loop through all the items to be sold
     items.forEach(item => {
-      const { price, quantity } = item;
+      const { id, quantity, price } = item;
+
+      // Ignore items with an undefined price (this means they're soulbound)
+      if (price === undefined) {
+        return;
+      }
   
       // Ignore items with non-positive quantity
-      if (quantity <= 0) {
+      if (quantity <= 0 || price <= 0) {
         return;
       }
   
