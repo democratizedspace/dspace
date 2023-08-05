@@ -37,8 +37,6 @@ describe("gameState - inventory", () => {
     saveGameState.mockClear();
   });
 
-  // Your existing sellItems tests go here...
-
   test("addItems should correctly add items to the inventory", () => {
     const itemsToAdd = [{ id: "1", count: 5 }, { id: "2", count: 3 }];
 

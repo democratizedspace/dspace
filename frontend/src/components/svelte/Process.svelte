@@ -1,7 +1,7 @@
 <script>
   import ProgressBar from './ProgressBar.svelte';
   import { beforeUpdate, onMount } from 'svelte';
-  import { startProcess, cancelProcess, finishProcess, getProcessState, ProcessStates, getProcessStartedAt } from '../../utils/gameState.js';
+  import { startProcess, cancelProcess, finishProcess, getProcessState, ProcessStates, getProcessStartedAt } from '../../utils/gameState/processes.js';
   import processes from '../../pages/processes/processes.json';
   import { durationInSeconds } from '../../utils.js';
   import Chip from './Chip.svelte';

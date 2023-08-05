@@ -2,7 +2,7 @@
     import { writable } from 'svelte/store';
     import Chip from './Chip.svelte';
     import { onMount } from 'svelte';
-    import { skipProcess } from '../../utils/gameState.js';
+    import { skipProcess } from '../../utils/gameState/processes.js';
 
     export let processId;
 

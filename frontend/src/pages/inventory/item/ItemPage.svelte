@@ -3,7 +3,7 @@
     import { writable } from 'svelte/store';
     import Chip from '../../../components/svelte/Chip.svelte';
     import BuySell from '../../../components/svelte/BuySell.svelte';
-    import { getProcessesForItem, ProcessItemTypes } from '../../../utils/gameState.js';
+    import { getProcessesForItem, ProcessItemTypes } from '../../../utils/gameState/processes.js';
     import { getItemCounts } from '../../../utils/gameState/inventory.js';
     import items from '../json/items.json';
     import Process from '../../../components/svelte/Process.svelte';
