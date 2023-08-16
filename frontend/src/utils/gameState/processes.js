@@ -1,5 +1,5 @@
 import { loadGameState, saveGameState } from "./common.js";
-import { hasItems, burnItems } from "./inventory.js";
+import { hasItems, burnItems, addItems } from "./inventory.js";
 import { durationInSeconds } from "../../utils.js";
 
 import processes from "../../pages/processes/processes.json";
@@ -26,8 +26,8 @@ export const hasRequiredAndConsumedItems = (processId) => {
       startedAt: Date.now(),
       duration: durationInSeconds(process.duration) * 1000,
     };
-    burnItems(process.consumeItems);
     saveGameState(gameState);
+    burnItems(process.consumeItems);
   };
 
   export const ProcessStates = {
@@ -97,16 +97,17 @@ export const hasRequiredAndConsumedItems = (processId) => {
     if (!process) {
       return;
     }
-  
-    try {
-      const consumeItems = process.consumeItems;
-      // Return the consumed items to the player's inventory
-      addItems(consumeItems);
-      gameState.processes[processId] = undefined;
-      saveGameState(gameState);
-    } catch (e) {
-      console.error(e);
+
+    const processState = getProcessState(processId);
+    if (processState.state === ProcessStates.FINISHED || processState.state === ProcessStates.NOT_STARTED) {
+      return;
     }
+
+    const consumeItems = process.consumeItems;
+    // Return the consumed items to the player's inventory
+    gameState.processes[processId] = undefined;
+    saveGameState(gameState);
+    addItems(consumeItems);
   };
   
   export const ProcessItemTypes = {
@@ -160,9 +161,16 @@ export const hasRequiredAndConsumedItems = (processId) => {
     if (!process) {
       return;
     }
-  
-    cancelProcess(processId);
-    burnItems(process.consumeItems);
+
+    const processState = getProcessState(processId);
+
+    // If the process is not started, burn the required items. Otherwise, they
+    // have already been burned.
+    if (processState.state === ProcessStates.NOT_STARTED) {
+      burnItems(process.consumeItems);
+    }
+
+    gameState.processes[processId] = undefined;
     addItems(process.createItems);
     saveGameState(gameState);
   };

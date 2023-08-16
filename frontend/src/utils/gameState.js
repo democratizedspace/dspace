@@ -68,7 +68,7 @@ export const getItemsGranted = (questId, stepId, optionIndex) => {
   try {
     const key = `${questId}-${stepId}-${optionIndex}`;
     const itemsClaimed = gameState.quests[questId].itemsClaimed;
-    return itemsClaimed.includes(key);
+    return itemsClaimed && itemsClaimed.includes(key);
   } catch (e) {
     console.error(e);
     return false;

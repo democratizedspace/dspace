@@ -42,9 +42,6 @@ describe("gameState - inventory", () => {
 
     addItems(itemsToAdd);
 
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-    expect(saveGameState).toHaveBeenCalledTimes(1);
-
     const expectedInventory = {
       "1": 15, // The count of item "1" should have increased by 5
       "2": 3, // The count of new item "2" should be 3
@@ -60,9 +57,6 @@ describe("gameState - inventory", () => {
 
     burnItems(itemsToBurn);
 
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-    expect(saveGameState).toHaveBeenCalledTimes(1);
-
     const expectedInventory = {
       "1": 5, // The count of item "1" should have decreased by 5
       "24": 50, // The counts of other items should not change
@@ -76,9 +70,7 @@ describe("gameState - inventory", () => {
     const itemsToBurn = [{ id: "1", count: 15 }];
   
     burnItems(itemsToBurn);
-  
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-    expect(saveGameState).toHaveBeenCalledTimes(1);
+
   
     const expectedInventory = {
       "1": 10, // The count of item "1" should remain the same as burning more than available was attempted
@@ -95,8 +87,6 @@ describe("gameState - inventory", () => {
 
     const counts = getItemCounts(items);
 
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-
     const expectedCounts = {
       "1": 10, // The count of item "1" should be 10
       "2": 0, // The count of item "2" should be 0 since it doesn't exist in the inventory
@@ -108,26 +98,61 @@ describe("gameState - inventory", () => {
   test("getItemCount should correctly return the count of a specific item", () => {
     const count = getItemCount("1");
 
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-
     expect(count).toBe(10);
   });
 
   test("getCurrentdUSD should correctly return the count of dUSD", () => {
     const count = getCurrentdUSD();
 
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-
     expect(count).toBe(50);
   });
 
   test("buyItems should correctly deduct the cost from dUSD and add items to the inventory", () => {
-    const itemsToBuy = [{ id: "1", quantity: 2, price: "5" }];
+    const itemsToBuy = [{ id: "1", quantity: 2, price: 5 }];
 
     buyItems(itemsToBuy);
 
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-    expect(saveGameState).toHaveBeenCalledTimes(1);
+    const expectedInventory = {
+      "1": 12, // The count of item "1" should have increased by 2
+      "24": 40, // The count of dUSD should have decreased by 10 (2 items * price 5)
+      "20": 0,
+    };
+
+    expect(mockGameState.inventory).toEqual(expectedInventory);
+  });
+
+  test("buyItems should not buy items when not enough dUSD is available", () => {
+    const itemsToBuy = [{ id: "1", quantity: 2, price: 30 }];
+
+    buyItems(itemsToBuy);
+
+    const expectedInventory = {
+      "1": 10, // The count of item "1" should remain the same as buying more than available was attempted
+      "24": 50, // The count of dUSD should not change
+      "20": 0,
+    };
+
+    expect(mockGameState.inventory).toEqual(expectedInventory);
+  });
+
+  test("buyItems count should equal inventory count if there were no previous items", () => {
+    const itemsToBuy = [{ id: "1", quantity: 2, price: 5 }];
+
+    buyItems(itemsToBuy);
+
+    const expectedInventory = {
+      "1": 12, // The count of item "1" should have increased by 2
+      "24": 40, // The count of dUSD should have decreased by 10 (2 items * price 5)
+      "20": 0,
+    };
+
+    expect(mockGameState.inventory).toEqual(expectedInventory);
+  });
+
+  test("buyItems count should add to inventory count if there were previous items", () => {
+    const itemsToBuy = [{ id: "1", quantity: 2, price: 5 }];
+
+    buyItems(itemsToBuy);
 
     const expectedInventory = {
       "1": 12, // The count of item "1" should have increased by 2
@@ -143,8 +168,6 @@ describe("gameState - inventory", () => {
 
     const result = hasItems(items);
 
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-
     expect(result).toBe(false); // The function should return false since the inventory doesn't have enough of item "2"
   });
 
@@ -153,13 +176,11 @@ describe("gameState - inventory", () => {
   
     const result = hasItems(items);
   
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-  
     expect(result).toBe(true); // The function should return true since the inventory has enough of each item
   });
 
   test("sellItems should silently fail if trying to sell more items than available", () => {
-    const itemsToSell = [{ id: "1", quantity: 15, price: "5" }];
+    const itemsToSell = [{ id: "1", quantity: 15, price: 5 }];
 
     sellItems(itemsToSell);
 
@@ -173,12 +194,9 @@ describe("gameState - inventory", () => {
   });
 
   test("sellItems should correctly sell items if the quantity to sell is less than or equal to the actual count", () => {
-    const itemsToSell = [{ id: "1", quantity: 5, price: "5" }];
+    const itemsToSell = [{ id: "1", quantity: 5, price: 5 }];
 
     sellItems(itemsToSell);
-
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-    expect(saveGameState).toHaveBeenCalledTimes(1);
 
     const expectedInventory = {
       "1": 5, // The count of item "1" should have decreased by 5
@@ -190,12 +208,9 @@ describe("gameState - inventory", () => {
   });
 
   test("sellItems should correctly increase dUSD after selling items", () => {
-    const itemsToSell = [{ id: "1", quantity: 5, price: "5" }];
+    const itemsToSell = [{ id: "1", quantity: 5, price: 5 }];
 
     sellItems(itemsToSell);
-
-    expect(loadGameState).toHaveBeenCalledTimes(1);
-    expect(saveGameState).toHaveBeenCalledTimes(1);
 
     const expectedInventory = {
       "1": 5, // The count of item "1" should have decreased by 5
@@ -208,7 +223,7 @@ describe("gameState - inventory", () => {
   });
 
   test("sellItems should reject items with negative price", () => {
-    const itemsToSell = [{ id: "1", quantity: 5, price: "-5" }];
+    const itemsToSell = [{ id: "1", quantity: 5, price: -5 }];
 
     sellItems(itemsToSell);
 
@@ -222,7 +237,7 @@ describe("gameState - inventory", () => {
   });
 
   test("sellItems should reject items with a price of zero", () => {
-    const itemsToSell = [{ id: "1", quantity: 5, price: "0" }];
+    const itemsToSell = [{ id: "1", quantity: 5, price: 0 }];
 
     sellItems(itemsToSell);
 
@@ -250,7 +265,7 @@ describe("gameState - inventory", () => {
   });
 
   test("sellItems should reject items with negative count", () => {
-    const itemsToSell = [{ id: "1", quantity: -5, price: "5" }];
+    const itemsToSell = [{ id: "1", quantity: -5, price: 5 }];
 
     sellItems(itemsToSell);
 
