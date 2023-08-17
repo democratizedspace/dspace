@@ -7,13 +7,15 @@
     import Chip from './Chip.svelte';
     import DelayedRender from './DelayedRender.svelte';
 
-    export let itemList = [], increase = false, disabled = false, noRed = false, inverted = false;
+    // Props
+    export let itemList = [], increase = false, decrease = false, disabled = false, noRed = false, inverted = false;
 
-    const itemCounts = writable(getItemCounts(itemList));
-
+    // Local State
     let fullItemList = [];
     let isMounted = false;
+    const itemCounts = writable(getItemCounts(itemList));
 
+    // Generate the full item list with additional properties
     function generateFullItemList() {
         return itemList.map((item) => ({
             ...items.find((i) => i.id === item.id), 
@@ -22,16 +24,23 @@
         }));
     }
 
+    // Initial setup and cleanup on mount
     onMount(() => {
         isMounted = true;
         const intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
         return () => clearInterval(intervalId);
     });
 
+    // Reactive updates
     $: {
         itemCounts.set(getItemCounts(itemList));
         fullItemList = generateFullItemList();
     }
+    
+    // Determine the sign and color based on the flags increase and decrease
+    let sign = increase ? '+' : (decrease ? '-' : '/');
+    let colorClass = increase ? 'blue' : (decrease || !noRed ? 'red' : '');
+
 </script>
 
 {#if isMounted}
@@ -54,7 +63,7 @@
                         <p class:disabled={disabled || ($itemCounts[item.id] < item.count)} class:inverted="{inverted}">
                             {prettyPrintNumber($itemCounts[item.id])} 
                             {#if item.count !== null}
-                                <span class ="{increase ? 'blue' : (noRed ? '' : 'red')}">{increase ? '+' : '/'}{prettyPrintNumber(item.count)}</span>
+                                <span class="{colorClass}">{sign}{prettyPrintNumber(item.count)}</span>
                             {/if} 
                             x {item.name}
                         </p>

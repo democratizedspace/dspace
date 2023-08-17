@@ -56,41 +56,42 @@
   }
 </script>
 
-<Chip text="">
-  <div class="container">
-    <h3>{process.title}</h3>
+{#if mounted}
+  <Chip text="">
+    <div class="container">
+      <h3>{process.title}</h3>
 
-    {#if process.requireItems && process.requireItems.length > 0}
-      <h6>Requires:</h6>
-      <CompactItemList itemList={process.requireItems} noRed={true} />
-    {/if}
-    
-    {#if process.consumeItems && process.consumeItems.length > 0}
-      <h6>Consumes:</h6>
-      <CompactItemList itemList={process.consumeItems} noRed={true} />
-    {/if}
-    
-    {#if process.createItems && process.createItems.length > 0}
-      <h6>Creates:</h6>
-      <CompactItemList itemList={process.createItems} noRed={true} increase={true} />
-    {/if}
-    <h4>Duration: {process.duration}</h4>
-    {#if state === ProcessStates.NOT_STARTED}
-      <Chip text="Start" onClick={onProcessStart} inverted={true} />
-    {:else if state === ProcessStates.IN_PROGRESS}
-      <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
-      {#if mounted}
+      {#if process.requireItems && process.requireItems.length > 0}
+        <h6>Requires:</h6>
+        <CompactItemList itemList={process.requireItems} noRed={true} />
+      {/if}
+      
+      {#if process.consumeItems && process.consumeItems.length > 0}
+        <h6>Consumes:</h6>
+        <CompactItemList itemList={process.consumeItems} noRed={true} decrease={true} />
+      {/if}
+      
+      {#if process.createItems && process.createItems.length > 0}
+        <h6>Creates:</h6>
+        <CompactItemList itemList={process.createItems} noRed={true} increase={true} />
+      {/if}
+
+      <h4>Duration: {process.duration}</h4>
+      
+      {#if state === ProcessStates.NOT_STARTED}
+        <Chip text="Start" onClick={onProcessStart} inverted={true} />
+      {:else if state === ProcessStates.IN_PROGRESS}
+        <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
         <ProgressBar
           startDate={processStartedAt}
           totalDurationSeconds={durationInSeconds(process.duration)} 
         />
+      {:else}
+        <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
       {/if}
-    {:else}
-      <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
-    {/if}
-  </div>
-
-</Chip>
+    </div>
+  </Chip>
+{/if}
 
 <style>
   .container {
