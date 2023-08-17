@@ -1,6 +1,5 @@
 import { loadGameState, saveGameState,  } from "./gameState/common.js";
-import { burnItems, addItems, hasItems } from "./gameState/inventory.js";
-import { durationInSeconds } from "../utils.js";
+import { addItems } from "./gameState/inventory.js";
 
 
 
