@@ -7,6 +7,7 @@ const {
   buyItems,
   sellItems,
   hasItems,
+  getSalesTaxPercentage,
 } = require("../../src/utils/gameState/inventory.js");
 
 const { loadGameState, saveGameState } = require("../../src/utils/gameState/common.js");
@@ -276,5 +277,29 @@ describe("gameState - inventory", () => {
     };
 
     expect(mockGameState.inventory).toEqual(expectedInventory);
-  })
+  });
+
+  test("should return 0% if there is no dCarbon", () => {
+    expect(getSalesTaxPercentage()).toBe(0);
+  });
+
+  test("should return 10% for 1000 dCarbon", () => {
+    mockGameState.inventory["20"] = 1000;
+    expect(getSalesTaxPercentage()).toBe(10);
+  });
+
+  test("should return 20% for 2000 dCarbon", () => {
+    mockGameState.inventory["20"] = 2000;
+    expect(getSalesTaxPercentage()).toBe(20);
+  });
+
+  test("should return 90% for 9000 dCarbon", () => {
+    mockGameState.inventory["20"] = 9000;
+    expect(getSalesTaxPercentage()).toBe(90);
+  });
+
+  test("should cap at 90% for values greater than 9000 dCarbon", () => {
+    mockGameState.inventory["20"] = 9500;
+    expect(getSalesTaxPercentage()).toBe(90);
+  });
 });
