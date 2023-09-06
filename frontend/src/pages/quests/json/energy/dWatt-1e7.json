@@ -1,0 +1,46 @@
+{
+    "id": "energy/dWatt-1e7",
+    "title": "Amass an Unbelievable 10,000,000 dWatt",
+    "description": "Challenge the very fabric of what's considered possible! Conquer this monumental task by stockpiling 10,000,000 dWatt.",
+    "image": "/assets/quests/dWatt-1e7.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "I stand before you, awestruck. But the sky is the limit! How about stepping into the realm of legends? A magnificent 10,000,000 dWatt is your next challenge. The energy world watches in anticipation!",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "22",
+                            "count": 10000000
+                        }
+                    ],
+                    "goto": "epicAchievement",
+                    "text": "Watch closely, Orion. Here's 10,000,000 dWatt!"
+                }
+            ]
+        },
+        {
+            "id": "epicAchievement",
+            "text": "I've run out of words. You've redefined excellence. A beacon of inspiration for all, your journey will inspire countless others. Accept this grand reward as but a small token of your monumental achievement.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "With dedication, anything's possible. Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 25
+        }
+    ],
+    "requiresQuests": [
+        "energy/dWatt-1e6"
+    ]
+}

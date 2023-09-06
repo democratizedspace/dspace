@@ -1,0 +1,46 @@
+{
+    "id": "energy/dWatt-1e4",
+    "title": "Accumulate 10,000 dWatt",
+    "description": "Supercharge your energy reserves! To claim your prize, gather at least 10,000 dWatt in your inventory.",
+    "image": "/assets/quests/dWatt-1e4.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Back for more, I see! Alright, power enthusiast, let's up the ante a bit. Show me your energy expertise by collecting a whopping 10,000 dWatt. Think of it as a stepping stone to even greater energy accomplishments.",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "22",
+                            "count": 10000
+                        }
+                    ],
+                    "goto": "wellDone",
+                    "text": "Challenge accepted! Here's 10,000 dWatt."
+                }
+            ]
+        },
+        {
+            "id": "wellDone",
+            "text": "Now that's what I call powering through! Keep this momentum, and there's no telling how far you'll go. As always, a reward for your commendable effort.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Much appreciated, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 3
+        }
+    ],
+    "requiresQuests": [
+        "energy/dWatt-1e3"
+    ]
+}
