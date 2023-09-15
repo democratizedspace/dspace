@@ -2,7 +2,7 @@
     "id": "energy/dWatt-1e3",
     "title": "Accumulate 1,000 dWatt",
     "description": "Boost your energy potential! To unlock this quest's reward, accumulate at least 1,000 dWatt in your inventory.",
-    "image": "/assets/quests/dWatt-1e3.jpg",
+    "image": "/assets/quests/dWatt_1e3.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

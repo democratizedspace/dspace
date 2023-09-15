@@ -14,7 +14,7 @@
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "benchy",
+                            "id": "1",
                             "count": 100
                         }
                     ],

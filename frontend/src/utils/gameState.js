@@ -8,10 +8,10 @@ import { addItems } from "./gameState/inventory.js";
 // ---------------------
 
 export const finishQuest = (questId, rewardItems) => {
-  const gameState = loadGameState();
-
-  gameState.quests[questId] = { finished: true };
   addItems(rewardItems);
+  
+  const gameState = loadGameState();
+  gameState.quests[questId] = { finished: true };
   saveGameState(gameState);
 };
 

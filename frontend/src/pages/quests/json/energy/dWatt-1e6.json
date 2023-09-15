@@ -2,7 +2,7 @@
     "id": "energy/dWatt-1e6",
     "title": "Achieve an Astounding 1,000,000 dWatt",
     "description": "Reach the pinnacle of energy gathering! Secure your legacy by accumulating 1,000,000 dWatt.",
-    "image": "/assets/quests/dWatt-1e6.jpg",
+    "image": "/assets/quests/dWatt_1e6.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

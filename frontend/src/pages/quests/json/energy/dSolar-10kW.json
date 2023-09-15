@@ -2,7 +2,7 @@
     "id": "energy/dSolar-10kW",
     "title": "Accrue 10,000 dSolar",
     "description": "Push the boundaries of energy production! To complete this quest, have at least 10,000 dSolar in your inventory.",
-    "image": "/assets/quests/dSolar-10kW.jpg",
+    "image": "/assets/quests/dSolar_10kW.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "energy/dWatt-1e5",
     "title": "Collect a Stunning 100,000 dWatt",
     "description": "Ascent to greater heights in energy collection! To be rewarded, amass a significant 100,000 dWatt.",
-    "image": "/assets/quests/dWatt-1e5.jpg",
+    "image": "/assets/quests/dWatt_1e5.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

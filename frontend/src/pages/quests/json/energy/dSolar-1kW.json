@@ -2,7 +2,7 @@
     "id": "energy/dSolar-1kW",
     "title": "Accrue 1,000 dSolar",
     "description": "Reach increasingly higher levels of energy production! To complete this quest, have at least 1,000 dSolar in your inventory.",
-    "image": "/assets/quests/dSolar-1kW.jpg",
+    "image": "/assets/quests/dSolar_1kW.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

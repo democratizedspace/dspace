@@ -2,7 +2,7 @@
     "id": "energy/dSolar-100kW",
     "title": "Accrue 100,000 dSolar",
     "description": "Set new standards in solar energy production! To complete this quest, have at least 100,000 dSolar in your inventory.",
-    "image": "/assets/quests/dSolar-100kW.jpg",
+    "image": "/assets/quests/dSolar_100kW.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

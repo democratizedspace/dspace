@@ -154,9 +154,7 @@ export const hasRequiredAndConsumedItems = (processId) => {
     return processMap;
   };
   
-  export const skipProcess = (processId) => {
-    const gameState = loadGameState();
-  
+  export const skipProcess = (processId) => {  
     const process = processes.find((p) => p.id === processId);
     if (!process) {
       return;
@@ -170,7 +168,9 @@ export const hasRequiredAndConsumedItems = (processId) => {
       burnItems(process.consumeItems);
     }
 
-    gameState.processes[processId] = undefined;
     addItems(process.createItems);
+    
+    const gameState = loadGameState();
+    gameState.processes[processId] = undefined;
     saveGameState(gameState);
   };

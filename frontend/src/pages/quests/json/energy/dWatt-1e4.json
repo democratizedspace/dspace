@@ -2,7 +2,7 @@
     "id": "energy/dWatt-1e4",
     "title": "Accumulate 10,000 dWatt",
     "description": "Supercharge your energy reserves! To claim your prize, gather at least 10,000 dWatt in your inventory.",
-    "image": "/assets/quests/dWatt-1e4.jpg",
+    "image": "/assets/quests/dWatt_1e4.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
