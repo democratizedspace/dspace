@@ -5,8 +5,8 @@ slug: "dCarbon"
 
 dCarbon is a token that represents the amount of carbon dioxide produced by a player. 1 dCarbon = 1 kg of carbon dioxide.
 
-In a future update, there will be a penalty applied when selling items, depending on the amount of dCarbon the user has. The amount of dCarbon an account has can only be reduced by contributing [dUSD](/docs/dusd) to a carbon fund that helps* other players obtain items to generate renewable energy, like solar panels, wind turbines, or batteries.
+This token is generated when you generate energy, unless that energy source explicitly doesn't release carbon dioxide.
 
-\* In the local, singleplayer experience, this is just a dUSD sink. In the multiplayer experience, dCarbon will be a real token used to help other actual players in their quest to reduce their own carbon footprint.
+Currently, the only way to generate dCarbon is by drawing power from your outlet using your [smart plug](/inventory/item/29):
 
-Exact numbers are still being worked out, so stay tuned!
+<img src="/assets/docs/generate_dCarbon.jpg" alt="screenshot of processes producing dCarbon" width="100%" />

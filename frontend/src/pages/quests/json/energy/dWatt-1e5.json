@@ -1,0 +1,46 @@
+{
+    "id": "energy/dWatt-1e5",
+    "title": "Collect a Stunning 100,000 dWatt",
+    "description": "Ascent to greater heights in energy collection! To be rewarded, amass a significant 100,000 dWatt.",
+    "image": "/assets/quests/dWatt_1e5.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The next horizon awaits, energy aficionado! How about making it to the 100,000 dWatt milestone? I've seen your progress, and I have faith in your capability to achieve this!",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "22",
+                            "count": 100000
+                        }
+                    ],
+                    "goto": "amazingWork",
+                    "text": "Your faith is well-placed. Here's 100,000 dWatt!"
+                }
+            ]
+        },
+        {
+            "id": "amazingWork",
+            "text": "Every time, you astonish me with your dedication. Truly a master of energy. Here's a well-earned reward for your prowess.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thank you for the guidance, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 5
+        }
+    ],
+    "requiresQuests": [
+        "energy/dWatt-1e4"
+    ]
+}

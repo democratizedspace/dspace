@@ -1,0 +1,46 @@
+{
+    "id": "energy/dWatt-1e6",
+    "title": "Achieve an Astounding 1,000,000 dWatt",
+    "description": "Reach the pinnacle of energy gathering! Secure your legacy by accumulating 1,000,000 dWatt.",
+    "image": "/assets/quests/dWatt_1e6.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "There's a legend among us, one who rises to challenges and redefines the boundaries. Can it be you? I challenge you to gather a colossal 1,000,000 dWatt. It's a feat few can even dream of!",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "22",
+                            "count": 1000000
+                        }
+                    ],
+                    "goto": "legendary",
+                    "text": "Legends are made by actions. Here's 1,000,000 dWatt!"
+                }
+            ]
+        },
+        {
+            "id": "legendary",
+            "text": "Incredible! Your name will echo in the annals of energy history. Accept this reward as a testament to your unparalleled dedication and skill.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "This journey was worth it. Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 10
+        }
+    ],
+    "requiresQuests": [
+        "energy/dWatt-1e5"
+    ]
+}

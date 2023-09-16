@@ -1,12 +1,12 @@
 <script>
-    export let href, text, onClick, disabled = false, inverted = false;
+    export let href, text, onClick, disabled = false, inverted = false, red = false;
 </script>
 
 <nav>
 	{#if href}
 		<a href={href}>{text}</a>
 	{:else}
-		<button class:disabled={disabled === true} class:inverted={inverted === true} on:click={onClick}>
+		<button class:disabled={disabled === true} class:inverted={inverted === true} class:red={red === true} on:click={onClick}>
 			<div class="slot">
 				<slot></slot>
 			</div>
@@ -49,6 +49,10 @@
 
 	nav button:hover {
 		cursor: pointer;
+	}
+
+	.red {
+		color: rgb(255, 94, 0);
 	}
 
 	.inverted {

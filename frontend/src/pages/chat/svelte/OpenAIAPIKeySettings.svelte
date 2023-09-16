@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { writable } from "svelte/store";
-  import { loadGameState, saveGameState } from "../../../utils/gameState.js";
+  import { loadGameState, saveGameState } from "../../../utils/gameState/common.js";
 
   export let apiKey = writable(loadGameState().openAI?.apiKey || "");
   

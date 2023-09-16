@@ -1,0 +1,46 @@
+{
+    "id": "energy/dWatt-1e3",
+    "title": "Accumulate 1,000 dWatt",
+    "description": "Boost your energy potential! To unlock this quest's reward, accumulate at least 1,000 dWatt in your inventory.",
+    "image": "/assets/quests/dWatt_1e3.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey there, power producer! As your energy collection ventures into the dWatt realm, I've set a little challenge for you. Can you hit the 1,000 dWatt mark? It's a testament to your energy prowess. Do that, and I've got a nice reward waiting for you.",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "22",
+                            "count": 1000
+                        }
+                    ],
+                    "goto": "congrats",
+                    "text": "Oh, that's easy! Here's 1,000 dWatt."
+                }
+            ]
+        },
+        {
+            "id": "congrats",
+            "text": "Impressive speed, energy connoisseur! As promised, here's your reward for embracing the power of dWatt. Keep up the great work, and always be on the lookout for new horizons to explore!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "energy/solar"
+    ]
+}

@@ -10,8 +10,7 @@
         "id": "1",
         "name": "Benchy",
         "description": "A basic test print that is used to test the quality of a printer.",
-        "image": "/assets/benchy.jpg",
-        "price": "5 dUSD"
+        "image": "/assets/benchy.jpg"
     },
     {
         "id": "2",
@@ -572,5 +571,17 @@
         "name": "Completionist Award II",
         "description": "Awarded for completing all of the quests available on June 30, 2023.",
         "image": "/assets/completionist_award_ii.jpg"
+    },
+    {
+        "id": "88",
+        "name": "dPrint",
+        "description": "A token that represents 1 gram of 3D pinting filament used while printing.",
+        "image": "/assets/dPrint.jpg"
+    },
+    {
+        "id": "89",
+        "name": "Hydro Award",
+        "description": "An award for bringing dChat 10 buckets of dechlorinated water.",
+        "image": "/assets/hydro_award.jpg"
     }
 ]

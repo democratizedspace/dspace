@@ -1,6 +1,6 @@
 <script>
   import items from '../../pages/inventory/json/items.json';
-  import { getItemCount } from '../../utils/gameState.js';
+  import { getItemCount } from '../../utils/gameState/inventory.js';
   
   export let itemId;
   export let count;

@@ -1,0 +1,46 @@
+{
+    "id": "3dprinting/benchy_100",
+    "title": "3D Print 100 Benchies",
+    "description": "Show off your 3D printing prowess! To complete this quest, print at least 100 Benchies.",
+    "image": "/assets/quests/benchy_100.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've truly mastered the art of 3D printing Benchies. Now, let's take things to the next level. I want to see a fleet of 100 Benchies. Are you ready for this grand voyage?",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "1",
+                            "count": 100
+                        }
+                    ],
+                    "goto": "finish",
+                    "text": "Let's embark on this journey!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Incredible! You've constructed a formidable fleet of Benchies. Your 3D printing skills are truly remarkable. Remember, every Benchy is a testament to your growing capabilities. I'll be back with another challenge soon. Until then, keep printing!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Bring on the next challenge!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "12",
+            "count": 100000
+        }
+    ],
+    "requiresQuests": [
+        "3dprinting/benchy_25"
+    ]
+}

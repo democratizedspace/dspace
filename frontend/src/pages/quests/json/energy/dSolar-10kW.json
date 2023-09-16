@@ -1,0 +1,46 @@
+{
+    "id": "energy/dSolar-10kW",
+    "title": "Accrue 10,000 dSolar",
+    "description": "Push the boundaries of energy production! To complete this quest, have at least 10,000 dSolar in your inventory.",
+    "image": "/assets/quests/dSolar_10kW.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You're doing great so far, generating a substantial amount of solar energy! Your next milestone is a whopping 10,000 dSolar. This might seem like a steep jump, but I believe in your potential. Onwards, to a brighter future!",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "61",
+                            "count": 10000
+                        }
+                    ],
+                    "goto": "finish",
+                    "text": "Challenge accepted!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Impressive, you've truly outdone yourself! I knew you had it in you. But remember, the sky is the limit, or in our case, the sun. I'll return with a greater challenge soon. Keep up the energy production!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looking forward to it!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5",
+            "count": 6
+        }
+    ],
+    "requiresQuests": [
+        "energy/dSolar-1kW"
+    ]
+}

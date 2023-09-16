@@ -1,0 +1,46 @@
+{
+    "id": "3dprinting/benchy_25",
+    "title": "3D Print 25 Benchies",
+    "description": "Increase your 3D printing output! To complete this quest, print at least 25 Benchies.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've shown great progress with your 3D printing! Your next goal is to print 25 Benchies. Can you handle this nautical challenge?",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "1",
+                            "count": 25
+                        }
+                    ],
+                    "goto": "finish",
+                    "text": "Full steam ahead!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent job! Your fleet of Benchies is growing. Keep up the great work. I'll return with an even bigger challenge soon!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'm ready for anything!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "12",
+            "count": 10000
+        }
+    ],
+    "requiresQuests": [
+        "3dprinting/benchy_10"
+    ]
+}

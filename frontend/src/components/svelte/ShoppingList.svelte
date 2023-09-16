@@ -1,7 +1,7 @@
 <script>
     export let itemList = [];
 
-    import { getItemCounts } from "../../utils/gameState";
+    import { getItemCounts } from "../../utils/gameState/inventory.js";
 </script>
 
 <div>

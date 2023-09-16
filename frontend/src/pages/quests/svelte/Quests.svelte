@@ -35,7 +35,7 @@
             <h2>Completed Quests</h2>
             {#each finishedQuests as quest}
                 <a href="/quests/{quest.id}">
-                    <Quest quest={quest} />
+                    <Quest quest={quest} compact={true} />
                 </a>
             {/each}
         {/if}

@@ -45,6 +45,10 @@
         "pinned": true
     },
     {
+        "name": "Import/export gamesaves",
+        "href": "/gamesaves"
+    },
+    {
         "name": "Guilds",
         "href": "/guilds",
         "comingSoon": true

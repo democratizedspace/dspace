@@ -1,7 +1,7 @@
 <script>
     import OpenAIAPIKeySettings from './OpenAIAPIKeySettings.svelte';
     import { writable } from 'svelte/store';
-    import { loadGameState } from '../../../utils/gameState.js';
+    import { loadGameState } from '../../../utils/gameState/common.js';
     import OpenAIChat from './OpenAIChat.svelte';
 
     const apiKey = writable(loadGameState().openAI?.apiKey || '');
