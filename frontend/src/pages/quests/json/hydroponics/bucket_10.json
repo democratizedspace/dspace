@@ -36,8 +36,12 @@
     ],
     "rewards": [
         {
-            "id": "12",
-            "count": 1000
+            "id": "89",
+            "count": 1
+        },
+        {
+            "id": "16",
+            "count": 10
         }
     ],
     "requiresQuests": [

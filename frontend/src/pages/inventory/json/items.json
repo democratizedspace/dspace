@@ -577,5 +577,11 @@
         "name": "dPrint",
         "description": "A token that represents 1 gram of 3D pinting filament used while printing.",
         "image": "/assets/dPrint.jpg"
+    },
+    {
+        "id": "89",
+        "name": "Hydro Award",
+        "description": "An award for bringing dChat 10 buckets of dechlorinated water.",
+        "image": "/assets/hydro_award.jpg"
     }
 ]
