@@ -90,7 +90,8 @@
       {:else}
         <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
       {/if}
-      <SkipProcessButton {processId} />
+      <!-- uncomment the following line to add a Skip button to all processes -->
+      <!-- <SkipProcessButton {processId} /> -->
     </div>
   </Chip>
 {/if}
