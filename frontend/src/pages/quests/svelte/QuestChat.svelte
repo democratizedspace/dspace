@@ -6,44 +6,56 @@
     import { questFinished } from '../../../utils/gameState.js';
     import { state } from '../../../utils/gameState/common.js';
 
-    export let quest, pointer, currentDialogue;
+    export let quest;
+    export let pointer;
+    export let currentDialogue;
 
     const clientSideRendered = writable(false);
     const finished = writable(false);
 
-    const npc = quest.npc;
+    // Move these declarations inside onMount to ensure quest is defined
+    let npc;
+    let rewardItems = [];
+    let dialogueMap;
+
     const avatar = localStorage.getItem('avatarUrl') || '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
 
-    // create a map of reward ids (from quest.rewards) to images using the items list
-    let rewardItems = quest.rewards.map(reward => {
-        let item = items.find(item => item.id === reward.id);
-        return {
-            id: reward.id,
-            count: reward.count,
-            image: item.image,
-            name: item.name
-        }
-    });
-
-    pointer = quest.start;
-
-    // map of dialogue ids to dialogue objects
-    const dialogueMap = new Map();
-    quest.dialogue.forEach(d => {
-        dialogueMap.set(d.id, d);
-    });
-
-    currentDialogue = dialogueMap.get(pointer);
-
     onMount(() => {
+        // Initialize quest-related data after component is mounted
+        if (quest) {
+            npc = quest.npc;
+            
+            // Create reward items map
+            rewardItems = quest.rewards.map(reward => {
+                let item = items.find(item => item.id === reward.id);
+                return {
+                    id: reward.id,
+                    count: reward.count,
+                    image: item.image,
+                    name: item.name
+                }
+            });
+
+            // Initialize pointer if not set
+            pointer = pointer || quest.start;
+
+            // Create dialogue map
+            dialogueMap = new Map();
+            quest.dialogue.forEach(d => {
+                dialogueMap.set(d.id, d);
+            });
+
+            currentDialogue = dialogueMap.get(pointer);
+        }
+        
         clientSideRendered.set(true);
     });
 
     $: {
-        if ($state) {
+        if ($state && quest) {
             if ($state.quests[quest.id]) {
                 pointer = $state.quests[quest.id].stepId;
-                currentDialogue = dialogueMap.get(pointer);
+                currentDialogue = dialogueMap?.get(pointer);
             }
             if (questFinished(quest.id)) {
                 finished.set(true);
@@ -55,7 +67,7 @@
 <div class="vertical">
     <div class="horizontal">
         <div class="vertical">
-            <h3>{quest.title}</h3>
+            <h3>{quest?.title}</h3>
         </div>
     </div>
     {#if $finished}
@@ -68,19 +80,19 @@
     {:else}
         <div class="chat">
             <div>
-                {#if $clientSideRendered}
+                {#if $clientSideRendered && quest && dialogueMap}
                     <div>
-                        <img class="banner" src={quest.image} alt={quest.image} />
+                        <img class="banner" src={quest.image} alt={quest.title} />
                     </div>
                     <div class="left">
-                        <img src={npc} alt={npc} />
+                        <img src={npc} alt="NPC" />
                         <p class="npcDialogue left">
-                            {dialogueMap.get(pointer).text}
+                            {dialogueMap.get(pointer)?.text}
                         </p>
                     </div>
                     <div class="right options">
-                        <img src={avatar} alt={avatar} />
-                        {#each dialogueMap.get(pointer).options as option, index}
+                        <img src={avatar} alt="Avatar" />
+                        {#each dialogueMap.get(pointer)?.options || [] as option, index}
                             <QuestChatOption {quest} {option} questId={quest.id} stepId={pointer} optionIndex={index} />
                         {/each}
                     </div>
@@ -100,14 +112,11 @@
         <h5>Rewards:</h5>
         {#each rewardItems as item}
             <div class="horizontal">
-                <a href={`/inventory/item/${item.id}`}><img class="item" src={item.image} alt={item.image} /></a>
+                <a href={`/inventory/item/${item.id}`}><img class="item" src={item.image} alt={item.name} /></a>
                 <p>{item.count} x {item.name}</p>
             </div>
         {/each}
     </div>
-
-    <!-- uncomment this line to see a dev preview for debugging purposes -->
-    <!-- <QuestDialoguePreview {quest} /> -->
 </div>
 
 <style>
