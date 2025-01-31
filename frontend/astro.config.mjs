@@ -8,7 +8,7 @@ import vercel from "@astrojs/vercel/serverless";
 const adapters = {
   netlify: netlify(),
   vercel: vercel()
-}
+};
 
 export default defineConfig({
   output: 'server',
@@ -18,6 +18,10 @@ export default defineConfig({
     postcss: {}
   },
   vite: {
+    server: {
+      port: parseInt(process.env.PORT) || 3000, // Use PORT env var or default to 3000
+      host: "0.0.0.0",
+    },
     resolve: {
       alias: {
         "node-domexception": "/domexception-shim.js"

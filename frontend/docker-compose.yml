@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+    ports:
+      - "3002:3002" # Map host port 3002 to container port 3002
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3002
+      HOST: 0.0.0.0 # Explicitly set HOST to bind to all network interfaces
+    volumes:
+      - /app/node_modules
+    command: ["npm", "run", "dev"]
