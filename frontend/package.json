@@ -3,7 +3,7 @@
   "version": "2.1",
   "description": "A free and open source web-based space exploration idle game",
   "scripts": {
-    "dev": "astro dev --port=$PORT",
+    "dev": "astro dev --port=3002",
     "start": "astro dev  --port=$PORT",
     "build": "astro build",
     "preview": "astro preview",
