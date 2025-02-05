@@ -53,7 +53,7 @@
         <input type="file" id="image" accept="image/*" on:change={handleImageUpload} />
         {#if previewUrl}
             <div class="image-preview-container">
-                <img src={previewUrl} class="image-preview" alt="Uploaded Image" />
+                <img src={previewUrl} class="image-preview" alt="Preview" />
             </div>
         {/if}
     </div>

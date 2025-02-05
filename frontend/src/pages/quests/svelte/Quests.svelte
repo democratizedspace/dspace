@@ -22,12 +22,20 @@
             }
         }
     });
+
+    // Define buttons for easy expansion
+    const actionButtons = [
+        { text: "Create a new quest", href: "/quests/create" },
+        { text: "Managed quests", href: "/quests/managed" }
+    ];
 </script>
 
 <div class="container">
     {#if mounted}
-        <div class="new-quest">
-            <Chip text="Create a new quest" href="/quests/create" inverted={true} />
+        <div class="action-buttons">
+            {#each actionButtons as button}
+                <Chip text={button.text} href={button.href} inverted={true} />
+            {/each}
         </div>
     
         {#each filteredQuests as quest}
@@ -53,7 +61,10 @@
         margin: 50px;
     }
 
-    .new-quest {
-        text-align: center;
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
     }
 </style>
