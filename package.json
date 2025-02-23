@@ -1,4 +1,7 @@
 {
   "name": "dspace",
-  "main": "index.js"
+  "main": "index.js",
+  "devDependencies": {
+    "fake-indexeddb": "^6.0.0"
+  }
 }

@@ -1,10 +1,10 @@
 <script>
     import { createEventDispatcher } from "svelte";
 
-    let title = "";
-    let description = "";
-    let image = null;
-    let previewUrl = null;
+    export let title = "";
+    export let description = "";
+    export let image = null;
+    export let previewUrl = null;
 
     const dispatch = createEventDispatcher();
 
@@ -32,7 +32,6 @@
             formData.append("image", image);
         }
 
-        // Dispatch event to Astro or handle form submission
         dispatch("submit", formData);
     }
 </script>
@@ -111,7 +110,6 @@ textarea {
     resize: vertical;
 }
 
-/* Style file upload */
 input[type="file"] {
     width: 100%;
     background: #fff;
@@ -122,13 +120,11 @@ input[type="file"] {
     cursor: pointer;
 }
 
-/* Image preview container */
 .image-preview-container {
     text-align: center;
     margin-top: 10px;
 }
 
-/* Image preview */
 .image-preview {
     max-width: 100%;
     height: auto;
@@ -138,7 +134,6 @@ input[type="file"] {
     margin-top: 10px;
 }
 
-/* Submit Button */
 .submit-button {
     font-size: 16px;
     padding: 10px 20px;
