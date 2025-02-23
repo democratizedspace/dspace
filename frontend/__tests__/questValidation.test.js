@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 const fs = require("fs");
 const path = require("path");
 const Ajv = require("ajv");
@@ -36,8 +39,34 @@ function validateDirectory(dir) {
 }
 
 describe("quest validation", () => {
-  test("All files in quests/json/ directory conform to schema", () => {
+  // Store original document state
+  let originalDocument;
+
+  beforeAll(() => {
+    originalDocument = global.document;
+    // Ensure we have a document
+    if (!global.document) {
+      global.document = new JSDOM('<!doctype html><html><body></body></html>').window.document;
+    }
+  });
+
+  afterAll(() => {
+    // Restore original document state
+    global.document = originalDocument;
+  });
+
+  test("All files in quests/json/ directory conform to schema", async () => {
     const directoryPath = path.join(__dirname, questDirectoryRelativePath);
-    expect(validateDirectory(directoryPath)).toBe(true, "Some quest files are invalid");
+    
+    // Wrap the validation in a promise to catch any async errors
+    await new Promise((resolve, reject) => {
+      try {
+        const result = validateDirectory(directoryPath);
+        expect(result).toBe(true, "Some quest files are invalid");
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
   });
 });

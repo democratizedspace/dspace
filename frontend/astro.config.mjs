@@ -19,7 +19,7 @@ export default defineConfig({
   },
   vite: {
     server: {
-      port: parseInt(process.env.PORT) || 3000, // Use PORT env var or default to 3000
+      port: parseInt(process.env.PORT) || 3002, // Use PORT env var or default to 3000
       host: "0.0.0.0",
     },
     resolve: {

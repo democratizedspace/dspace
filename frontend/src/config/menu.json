@@ -104,20 +104,5 @@
     {
         "name": "Github",
         "href": "https://github.com/democratizedspace/dspace"
-    },
-    {
-        "name": "Import from v1",
-        "href": "/import/v2/v1",
-        "pinned": true,
-        "hideIfOwned": [
-            {
-                "id": "85",
-                "count": 1
-            },
-            {
-                "id": "86",
-                "count": 1
-            }
-        ]
     }
 ]
