@@ -1,6 +1,6 @@
 # DSPACE Frontend
 
-DSPACE is a free and open source web-based space exploration idle game where players can explore the cosmos, manage resources, and build their own space empire. The game combines elements of resource management, exploration, and community interaction in an engaging virtual environment.
+DSPACE is a free and open source web-based space exploration idle game where players can acquire resources, build cool things, and ultimately reach the cosmos. The game combines elements of resource management, exploration, and community interaction in an engaging virtual environment.
 
 ## Tech Stack
 
