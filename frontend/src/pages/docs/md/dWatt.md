@@ -1,9 +1,9 @@
 ---
 title: 'dWatt'
-slug: 'dWatt'
+slug: 'dwatt'
 ---
 
-dWatt is a token that represents 1 Watt of power.
+dWatt represents 1 Watt of power generated in the game. It's a virtual unit used to track your power generation capabilities and achievements. This measurement helps you understand your energy production efficiency and progress in the game.
 
 In order to perform any [process](/docs/processes), you must have enough dWatt to power the process. To generate dWatt, see the [Energy](/energy) page.
 
