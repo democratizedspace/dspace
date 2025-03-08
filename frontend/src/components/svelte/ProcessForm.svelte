@@ -1,5 +1,7 @@
 <script>
     import { createEventDispatcher } from "svelte";
+    import ItemSelector from './ItemSelector.svelte';
+    import items from '../../pages/inventory/json/items.json';
 
     export let title = "";
     export let duration = "";
@@ -33,8 +35,47 @@
         createItems = createItems.filter((_, i) => i !== index);
     }
 
+    function handleItemSelect(event, itemType, index) {
+        const { itemId } = event.detail;
+        if (itemType === 'require') {
+            requireItems[index].id = itemId;
+        } else if (itemType === 'consume') {
+            consumeItems[index].id = itemId;
+        } else if (itemType === 'create') {
+            createItems[index].id = itemId;
+        }
+    }
+
+    function validateDuration(duration) {
+        // Duration should be in format like "1h 30m", "2h", "45m", etc.
+        const pattern = /^(\d+h\s*)?(\d+m\s*)?$/;
+        return pattern.test(duration.trim());
+    }
+
+    function validateItems() {
+        // Check if any item has negative or zero count
+        const allItems = [...requireItems, ...consumeItems, ...createItems];
+        return allItems.every(item => item.count > 0);
+    }
+
     function handleSubmit(event) {
         event.preventDefault();
+
+        // Validate duration format
+        if (!validateDuration(duration)) {
+            return;
+        }
+
+        // Validate item counts
+        if (!validateItems()) {
+            return;
+        }
+
+        // Validate required fields
+        if (!title || !duration) {
+            return;
+        }
+
         const formData = new FormData();
         formData.append("title", title);
         formData.append("duration", duration);
@@ -61,7 +102,12 @@
         <label>Required Items</label>
         {#each requireItems as item, index}
             <div class="item-row">
-                <input type="text" bind:value={item.id} placeholder="Item ID" />
+                <ItemSelector 
+                    {items}
+                    selectedItemId={item.id}
+                    label="Select Required Item"
+                    on:select={(e) => handleItemSelect(e, 'require', index)}
+                />
                 <input type="number" bind:value={item.count} placeholder="Count" />
                 <button type="button" class="remove-button" on:click={() => removeItemRequirement(index)}>Remove</button>
             </div>
@@ -73,7 +119,12 @@
         <label>Consumed Items</label>
         {#each consumeItems as item, index}
             <div class="item-row">
-                <input type="text" bind:value={item.id} placeholder="Item ID" />
+                <ItemSelector 
+                    {items}
+                    selectedItemId={item.id}
+                    label="Select Consumed Item"
+                    on:select={(e) => handleItemSelect(e, 'consume', index)}
+                />
                 <input type="number" bind:value={item.count} placeholder="Count" />
                 <button type="button" class="remove-button" on:click={() => removeItemConsumption(index)}>Remove</button>
             </div>
@@ -85,7 +136,12 @@
         <label>Created Items</label>
         {#each createItems as item, index}
             <div class="item-row">
-                <input type="text" bind:value={item.id} placeholder="Item ID" />
+                <ItemSelector 
+                    {items}
+                    selectedItemId={item.id}
+                    label="Select Created Item"
+                    on:select={(e) => handleItemSelect(e, 'create', index)}
+                />
                 <input type="number" bind:value={item.count} placeholder="Count" />
                 <button type="button" class="remove-button" on:click={() => removeItemCreation(index)}>Remove</button>
             </div>
@@ -125,7 +181,6 @@ label {
 }
 
 input {
-    width: 85%;
     padding: 10px;
     border-radius: 8px;
     background: #68d46d;
@@ -134,6 +189,15 @@ input {
     border: 2px solid #007006;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"] {
+    width: 85%;
+}
+
+input[type="number"] {
+    width: 80px;
+    text-align: center;
 }
 
 input:focus {
@@ -148,8 +212,9 @@ input:focus {
     align-items: center;
 }
 
-.item-row input {
+.item-row :global(.item-selector) {
     flex: 1;
+    min-width: 0; /* Allows flex item to shrink below content size */
 }
 
 .remove-button {
@@ -160,6 +225,8 @@ input:focus {
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
+    white-space: nowrap;
+    min-width: 80px;
 }
 
 .remove-button:hover {
