@@ -18,22 +18,24 @@
     let rewardItems = [];
     let dialogueMap;
 
-    const avatar = localStorage.getItem('avatarUrl') || '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
+    const avatar =
+        localStorage.getItem('avatarUrl') ||
+        '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
 
     onMount(() => {
         // Initialize quest-related data after component is mounted
         if (quest) {
             npc = quest.npc;
-            
+
             // Create reward items map
-            rewardItems = quest.rewards.map(reward => {
-                let item = items.find(item => item.id === reward.id);
+            rewardItems = quest.rewards.map((reward) => {
+                let item = items.find((item) => item.id === reward.id);
                 return {
                     id: reward.id,
                     count: reward.count,
                     image: item.image,
-                    name: item.name
-                }
+                    name: item.name,
+                };
             });
 
             // Initialize pointer if not set
@@ -41,13 +43,13 @@
 
             // Create dialogue map
             dialogueMap = new Map();
-            quest.dialogue.forEach(d => {
+            quest.dialogue.forEach((d) => {
                 dialogueMap.set(d.id, d);
             });
 
             currentDialogue = dialogueMap.get(pointer);
         }
-        
+
         clientSideRendered.set(true);
     });
 
@@ -74,7 +76,10 @@
         <div class="chat">
             <div class="vertical">
                 <h4>Quest Complete!</h4>
-                <p>You have completed this quest. You can now return to the Quests page to start another quest.</p>
+                <p>
+                    You have completed this quest. You can now return to the
+                    Quests page to start another quest.
+                </p>
             </div>
         </div>
     {:else}
@@ -82,7 +87,11 @@
             <div>
                 {#if $clientSideRendered && quest && dialogueMap}
                     <div>
-                        <img class="banner" src={quest.image} alt={quest.title} />
+                        <img
+                            class="banner"
+                            src={quest.image}
+                            alt={quest.title}
+                        />
                     </div>
                     <div class="left">
                         <img src={npc} alt="NPC" />
@@ -93,7 +102,13 @@
                     <div class="right options">
                         <img src={avatar} alt="Avatar" />
                         {#each dialogueMap.get(pointer)?.options || [] as option, index}
-                            <QuestChatOption {quest} {option} questId={quest.id} stepId={pointer} optionIndex={index} />
+                            <QuestChatOption
+                                {quest}
+                                {option}
+                                questId={quest.id}
+                                stepId={pointer}
+                                optionIndex={index}
+                            />
                         {/each}
                     </div>
                 {:else}
@@ -112,7 +127,9 @@
         <h5>Rewards:</h5>
         {#each rewardItems as item}
             <div class="horizontal">
-                <a href={`/inventory/item/${item.id}`}><img class="item" src={item.image} alt={item.name} /></a>
+                <a href={`/inventory/item/${item.id}`}
+                    ><img class="item" src={item.image} alt={item.name} /></a
+                >
                 <p>{item.count} x {item.name}</p>
             </div>
         {/each}

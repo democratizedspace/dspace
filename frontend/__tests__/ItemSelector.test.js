@@ -17,7 +17,7 @@ describe('ItemSelector Component', () => {
     const mockItems = [
         { id: '1', name: 'Test Item 1', description: 'Description 1' },
         { id: '2', name: 'Test Item 2', description: 'Description 2' },
-        { id: '3', name: 'Another Item', description: 'Description 3' }
+        { id: '3', name: 'Another Item', description: 'Description 3' },
     ];
 
     test('should mount component', () => {
@@ -26,10 +26,10 @@ describe('ItemSelector Component', () => {
             props: {
                 items: mockItems,
                 selectedItemId: '',
-                label: 'Select Item'
-            }
+                label: 'Select Item',
+            },
         });
-        
+
         expect(component).toBeTruthy();
         expect(container.querySelector('.item-selector')).toBeTruthy();
     });
@@ -40,8 +40,8 @@ describe('ItemSelector Component', () => {
             props: {
                 items: mockItems,
                 selectedItemId: '',
-                label: 'Select Item'
-            }
+                label: 'Select Item',
+            },
         });
 
         const searchInput = container.querySelector('input[type="text"]');
@@ -49,7 +49,7 @@ describe('ItemSelector Component', () => {
         searchInput.dispatchEvent(new Event('input'));
 
         // Wait for Svelte to update
-        await new Promise(resolve => setTimeout(resolve, 0));
+        await new Promise((resolve) => setTimeout(resolve, 0));
 
         const visibleItems = container.querySelectorAll('.item-row');
         expect(visibleItems.length).toBe(1);
@@ -63,8 +63,8 @@ describe('ItemSelector Component', () => {
             props: {
                 items: mockItems,
                 selectedItemId: '',
-                label: 'Select Item'
-            }
+                label: 'Select Item',
+            },
         });
 
         component.$on('select', (event) => {
@@ -84,8 +84,8 @@ describe('ItemSelector Component', () => {
             props: {
                 items: mockItems,
                 selectedItemId: '2',
-                label: 'Select Item'
-            }
+                label: 'Select Item',
+            },
         });
 
         const selectedItem = container.querySelector('.selected-item');
@@ -99,8 +99,8 @@ describe('ItemSelector Component', () => {
             props: {
                 items: mockItems,
                 selectedItemId: '2',
-                label: 'Select Item'
-            }
+                label: 'Select Item',
+            },
         });
 
         // Initially collapsed (since we have a selectedItemId)
@@ -112,7 +112,7 @@ describe('ItemSelector Component', () => {
         expect(editButton).toBeTruthy();
         editButton.click();
 
-        await new Promise(resolve => setTimeout(resolve, 0));
+        await new Promise((resolve) => setTimeout(resolve, 0));
         itemsList = container.querySelector('.items-list');
         expect(itemsList).toBeTruthy();
     });
@@ -123,8 +123,8 @@ describe('ItemSelector Component', () => {
             props: {
                 items: [],
                 selectedItemId: '',
-                label: 'Select Item'
-            }
+                label: 'Select Item',
+            },
         });
 
         const itemsList = container.querySelector('.items-list');
@@ -138,11 +138,11 @@ describe('ItemSelector Component', () => {
             props: {
                 items: mockItems,
                 selectedItemId: 'invalid-id',
-                label: 'Select Item'
-            }
+                label: 'Select Item',
+            },
         });
 
         const selectedItem = container.querySelector('.selected-item');
         expect(selectedItem).toBeFalsy();
     });
-}); 
+});

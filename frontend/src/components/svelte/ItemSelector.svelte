@@ -3,8 +3,8 @@
     import { writable } from 'svelte/store';
     import SearchBar from './SearchBar.svelte';
 
-    export let selectedItemId = "";
-    export let label = "Select Item";
+    export let selectedItemId = '';
+    export let label = 'Select Item';
     export let items = []; // Make items a prop instead of importing
 
     const dispatch = createEventDispatcher();
@@ -30,19 +30,19 @@
         filteredItems.set(items);
     }
 
-    $: selectedItem = items.find(item => item.id === selectedItemId);
+    $: selectedItem = items.find((item) => item.id === selectedItemId);
 </script>
 
 <div class="item-selector">
     <label>{label}</label>
-    
+
     {#if isExpanded}
         <div class="selector-expanded">
             <SearchBar data={items} on:search={handleSearch} />
             <div class="items-list">
                 {#each $filteredItems as item (item.id)}
-                    <div 
-                        class="item-row" 
+                    <div
+                        class="item-row"
                         class:selected={selectedItemId === item.id}
                         on:click={() => handleItemSelect(item.id)}
                     >
@@ -53,7 +53,9 @@
                             <div class="item-info">
                                 <h3>{item.name}</h3>
                                 {#if item.description}
-                                    <p class="description">{item.description}</p>
+                                    <p class="description">
+                                        {item.description}
+                                    </p>
                                 {/if}
                             </div>
                         </div>
@@ -166,7 +168,8 @@
         border: 2px solid #007006;
     }
 
-    .edit-button, .select-button {
+    .edit-button,
+    .select-button {
         padding: 6px 12px;
         background: #44ff44;
         color: black;
@@ -177,7 +180,8 @@
         transition: background 0.2s ease;
     }
 
-    .edit-button:hover, .select-button:hover {
+    .edit-button:hover,
+    .select-button:hover {
         background: #00cc00;
     }
 
@@ -185,4 +189,4 @@
         width: 100%;
         padding: 10px;
     }
-</style> 
+</style>

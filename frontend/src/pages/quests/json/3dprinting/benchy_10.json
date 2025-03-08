@@ -40,7 +40,5 @@
             "count": 1000
         }
     ],
-    "requiresQuests": [
-        "3dprinting/start"
-    ]
+    "requiresQuests": ["3dprinting/start"]
 }

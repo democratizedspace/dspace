@@ -1,6 +1,6 @@
 ---
-title: "Hydroponics"
-slug: "hydroponics"
+title: 'Hydroponics'
+slug: 'hydroponics'
 ---
 
 [Hydroponics](https://en.wikipedia.org/wiki/Hydroponics) is the process of growing plants in a water-based nutrient solution.

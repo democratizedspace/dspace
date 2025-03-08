@@ -2,15 +2,18 @@
     import { writable } from 'svelte/store';
     import Chip from '../../../../components/svelte/Chip.svelte';
     import CompactItemList from '../../../../components/svelte/CompactItemList.svelte';
-    import { grantItems, getItemsGranted } from '../../../../utils/gameState.js';
+    import {
+        grantItems,
+        getItemsGranted,
+    } from '../../../../utils/gameState.js';
     import { state } from '../../../../utils/gameState/common.js';
-    
+
     export let option, questId, stepId, optionIndex;
 
     const itemsClaimed = writable(false);
 
     function onClick() {
-        grantItems(questId, stepId, optionIndex, option.grantsItems); 
+        grantItems(questId, stepId, optionIndex, option.grantsItems);
     }
 
     $: {
@@ -28,8 +31,17 @@
     {#if $state}
         <Chip disabled={$itemsClaimed} text={option.text}>
             <div class="vertical container">
-                <CompactItemList disabled={$itemsClaimed} itemList={option.grantsItems} increase={true} />
-                <Chip disabled={$itemsClaimed} inverted={true} text="Claim" onClick={() => onClick()} />
+                <CompactItemList
+                    disabled={$itemsClaimed}
+                    itemList={option.grantsItems}
+                    increase={true}
+                />
+                <Chip
+                    disabled={$itemsClaimed}
+                    inverted={true}
+                    text="Claim"
+                    onClick={() => onClick()}
+                />
             </div>
         </Chip>
     {/if}

@@ -1,6 +1,6 @@
 ---
-title: "Quest prompts"
-slug: "prompts-quests"
+title: 'Quest prompts'
+slug: 'prompts-quests'
 ---
 
 ## Instructions
@@ -249,7 +249,7 @@ I want to transform it into a dialogue array in JSON. Here's a sample from a que
                     "text": "Great, let's get started!"
                 }
             ]
-        },        
+        },
 ```
 
 Can you help me transform the dialogue into the proper JSON?
@@ -270,10 +270,10 @@ Can you help me improve the dialogue? Assume all the items have descriptions in 
 
 Here are some examples of things I'd like to improve:
 
-- catch any improper use of a word or phrase. Explain why it's improper and suggest a better alternative.
-- catch any awkward phrasing. Explain why it's awkward and suggest a better alternative.
-- catch any overly complex sentences. Explain why it's overly complex and suggest a better alternative.
-- make sure the dialogue matches the NPC's personality, as inferred by the information in their bio:
+-   catch any improper use of a word or phrase. Explain why it's improper and suggest a better alternative.
+-   catch any awkward phrasing. Explain why it's awkward and suggest a better alternative.
+-   catch any overly complex sentences. Explain why it's overly complex and suggest a better alternative.
+-   make sure the dialogue matches the NPC's personality, as inferred by the information in their bio:
 
 ```
 <paste NPC bio (from any section in frontend/src/pages/docs/md/npcs.md) here>

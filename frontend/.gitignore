@@ -27,3 +27,8 @@ dev/
 
 # Jest coverage directory
 coverage/
+
+# Local development file
+.eslintrc.local.json
+.prettierrc.local.json
+.editorconfig.local

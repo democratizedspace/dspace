@@ -1,7 +1,7 @@
 <script>
     import Chip from '../../../../components/svelte/Chip.svelte';
     import CompactItemList from '../../../../components/svelte/CompactItemList.svelte';
-    import { finishQuest} from '../../../../utils/gameState.js';
+    import { finishQuest } from '../../../../utils/gameState.js';
 
     export let quest, option;
 

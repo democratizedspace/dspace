@@ -11,10 +11,10 @@
     let passportStamps = [];
 
     onMount(() => {
-        const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+        const web3 = new Web3(Web3.givenProvider || 'ws://localhost:8545');
 
         if (web3.currentProvider.isMetaMask !== true) {
-            console.error("MetaMask is not available.");
+            console.error('MetaMask is not available.');
         }
 
         ethAddress = localStorage.getItem('ethAddress');
@@ -28,15 +28,18 @@
 
     function handleSignIn() {
         if (window.ethereum) {
-            window.ethereum.request({ method: 'eth_requestAccounts' }).then(function (accounts) {
-                ethAddress = accounts[0];
-                localStorage.setItem('ethAddress', ethAddress);
-                signedIn.set(true);
-            }).catch(function (error) {
-                console.error("Error signing in with MetaMask:", error);
-            });
+            window.ethereum
+                .request({ method: 'eth_requestAccounts' })
+                .then(function (accounts) {
+                    ethAddress = accounts[0];
+                    localStorage.setItem('ethAddress', ethAddress);
+                    signedIn.set(true);
+                })
+                .catch(function (error) {
+                    console.error('Error signing in with MetaMask:', error);
+                });
         } else {
-            console.error("MetaMask is not available.");
+            console.error('MetaMask is not available.');
         }
     }
 
@@ -48,21 +51,20 @@
 </script>
 
 <div id="container">
-    {#if $signedIn }
+    {#if $signedIn}
         <p>gm, {ethAddress.slice(0, 6)}...{ethAddress.slice(-4)}!</p>
 
         <!-- TODO: uncomment once this is ported to the backend -->
         <!-- <GitcoinPassport {ethAddress} /> -->
 
         <Chip text="Sign out" onClick={handleSignOut} />
-
     {/if}
 
-    {#if !$signedIn && $signedInConfirmed }
+    {#if !$signedIn && $signedInConfirmed}
         <Chip text="Sign in with Ethereum" onClick={handleSignIn} />
     {/if}
 </div>
-    
+
 <style>
     #container {
         background-color: #68d46d;

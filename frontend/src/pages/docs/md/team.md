@@ -1,6 +1,6 @@
 ---
-title: "Meet the team"
-slug: "team"
+title: 'Meet the team'
+slug: 'team'
 ---
 
 # Meet the team
@@ -19,7 +19,7 @@ Esp is the founding human developer of the game. Software engineer by day, and a
 
 ![Variation of the ChatGPT logo](/assets/team_chatgpt.jpg)
 
-ChatGPT is a computer program that has been trained to understand and generate human-like text. It was created by OpenAI and is capable of answering questions, completing tasks, and even generating creative content like stories and poems. ChatGPT can interact with people in a conversational manner and is often used for things like customer service, personal assistants, and more. 
+ChatGPT is a computer program that has been trained to understand and generate human-like text. It was created by OpenAI and is capable of answering questions, completing tasks, and even generating creative content like stories and poems. ChatGPT can interact with people in a conversational manner and is often used for things like customer service, personal assistants, and more.
 
 ### [DALL-E 2](https://labs.openai.com)
 

@@ -136,9 +136,9 @@
             "id": "launch",
             "text": "We're nearly there! You'll also need a launch pad, a rocket igniter, and a launch controller. The launch pad ensures the rocket launches straight up, and the launch controller is what actually ignites the rocket motor. The igniter is the part you insert in the bottom of your rocket motor. You've already bought plenty of stuff at this point, so I'll just give you some spares I have laying around. Here you go!",
             "options": [
-				{
-					"type": "grantsItems",
-					"grantsItems": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
                         {
                             "id": "38",
                             "count": 1
@@ -152,8 +152,8 @@
                             "count": 1
                         }
                     ],
-					"text": "Oh cool, I'll never turn down free stuff!"
-				},
+                    "text": "Oh cool, I'll never turn down free stuff!"
+                },
                 {
                     "type": "goto",
                     "requiresItems": [
@@ -179,11 +179,11 @@
             "id": "go",
             "text": "We sure are, buddy! Let's go launch this thing! Just place the rocket on the launchpad, insert the igniter, and connect the igniter to your launch controller. You should have plenty of wire to launch from a safe distance. Once you're ready, press the launch button on the controller and watch it go!",
             "options": [
-				{
-					"type": "process",
-					"process": "launch-rocket",
-					"text": "3 ... 2 ... 1 ... LIFTOFF!!!"
-				},
+                {
+                    "type": "process",
+                    "process": "launch-rocket",
+                    "text": "3 ... 2 ... 1 ... LIFTOFF!!!"
+                },
                 {
                     "type": "goto",
                     "goto": "done",
@@ -201,10 +201,10 @@
             "id": "done",
             "text": "That's ok, this is still a massive success! You're on your way to being a rocketeer! I'm so proud of you! Here, take this as a token of my appreciation. We'll improve on this design later and try to recover it for reuse. But for now, bask in the glory of your first rocket launch!",
             "options": [
-				{
-					"type": "finish",
-					"text": "Houston, we do not have a problem!"
-				}
+                {
+                    "type": "finish",
+                    "text": "Houston, we do not have a problem!"
+                }
             ]
         }
     ],
@@ -214,7 +214,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "3dprinter/start"
-    ]
+    "requiresQuests": ["3dprinter/start"]
 }

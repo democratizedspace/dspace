@@ -1,6 +1,6 @@
 ---
-title: "dCarbon"
-slug: "dCarbon"
+title: 'dCarbon'
+slug: 'dCarbon'
 ---
 
 dCarbon is a token that represents the amount of carbon dioxide produced by a player. 1 dCarbon = 1 kg of carbon dioxide.

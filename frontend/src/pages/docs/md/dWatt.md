@@ -1,6 +1,6 @@
 ---
-title: "dWatt"
-slug: "dWatt"
+title: 'dWatt'
+slug: 'dWatt'
 ---
 
 dWatt is a token that represents 1 Watt of power.

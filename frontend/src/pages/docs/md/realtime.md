@@ -1,6 +1,6 @@
 ---
-title: "Everthing is real-time"
-slug: "realtime"
+title: 'Everthing is real-time'
+slug: 'realtime'
 ---
 
 At v1, everything in the game will be real-time.

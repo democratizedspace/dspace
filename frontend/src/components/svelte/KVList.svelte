@@ -26,7 +26,8 @@
         word-break: break-word;
     }
 
-    th, td {
+    th,
+    td {
         text-align: center;
         padding: 8px;
         color: black;
@@ -34,15 +35,15 @@
     }
 
     thead {
-        background-color: #4CAF50;
+        background-color: #4caf50;
     }
 
     tbody tr:nth-child(even) {
-        background-color: #C8E6C9;
+        background-color: #c8e6c9;
     }
 
     tbody tr:nth-child(odd) {
-        background-color: #A5D6A7;
+        background-color: #a5d6a7;
     }
 
     .key {

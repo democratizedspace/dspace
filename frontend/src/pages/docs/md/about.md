@@ -1,9 +1,9 @@
 ---
-title: "About"
-slug: "about"
+title: 'About'
+slug: 'about'
 ---
 
-DSPACE is an incremental simulation game about resource management and space exploration. In the game, you will learn skills, work on [quests](/quests), and build your own presence in the solar system. 
+DSPACE is an incremental simulation game about resource management and space exploration. In the game, you will learn skills, work on [quests](/quests), and build your own presence in the solar system.
 
 **The game is still very much under development. The following is an imagined future iteration of the game and does not represent the current state.** If you would like to get involved in the creation of the game, please join the [Discord](https://discord.gg/A3UAfYvnxM) and say hello!
 

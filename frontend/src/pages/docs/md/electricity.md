@@ -1,6 +1,6 @@
 ---
-title: "Electricity"
-slug: "electricity"
+title: 'Electricity'
+slug: 'electricity'
 ---
 
 ## Non-renewable energy

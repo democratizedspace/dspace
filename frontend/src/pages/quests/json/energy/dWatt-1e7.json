@@ -40,7 +40,5 @@
             "count": 25
         }
     ],
-    "requiresQuests": [
-        "energy/dWatt-1e6"
-    ]
+    "requiresQuests": ["energy/dWatt-1e6"]
 }

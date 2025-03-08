@@ -5,14 +5,15 @@
     import { questFinished, canStartQuest } from '../../../utils/gameState.js';
 
     export let quests = [];
-    let filteredQuests = [], finishedQuests = [];
+    let filteredQuests = [],
+        finishedQuests = [];
     let mounted = false;
 
     onMount(async () => {
         mounted = true;
     });
 
-    quests.forEach(quest => {
+    quests.forEach((quest) => {
         const finished = questFinished(quest.id);
         if (finished) {
             finishedQuests.push(quest);
@@ -25,8 +26,8 @@
 
     // Define buttons for easy expansion
     const actionButtons = [
-        { text: "Create a new quest", href: "/quests/create" },
-        { text: "Managed quests", href: "/quests/managed" }
+        { text: 'Create a new quest', href: '/quests/create' },
+        { text: 'Managed quests', href: '/quests/managed' },
     ];
 </script>
 
@@ -37,10 +38,10 @@
                 <Chip text={button.text} href={button.href} inverted={true} />
             {/each}
         </div>
-    
+
         {#each filteredQuests as quest}
             <a href="/quests/{quest.id}">
-                <Quest quest={quest} />
+                <Quest {quest} />
             </a>
         {/each}
 
@@ -48,7 +49,7 @@
             <h2>Completed Quests</h2>
             {#each finishedQuests as quest}
                 <a href="/quests/{quest.id}">
-                    <Quest quest={quest} compact={true} />
+                    <Quest {quest} compact={true} />
                 </a>
             {/each}
         {/if}

@@ -1,8 +1,8 @@
 <script>
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher } from 'svelte';
 
-    export let title = "";
-    export let description = "";
+    export let title = '';
+    export let description = '';
     export let image = null;
     export let previewUrl = null;
 
@@ -26,30 +26,46 @@
     function handleSubmit(event) {
         event.preventDefault();
         const formData = new FormData();
-        formData.append("title", title);
-        formData.append("description", description);
+        formData.append('title', title);
+        formData.append('description', description);
         if (image) {
-            formData.append("image", image);
+            formData.append('image', image);
         }
 
-        dispatch("submit", formData);
+        dispatch('submit', formData);
     }
 </script>
 
 <form on:submit={handleSubmit} enctype="multipart/form-data" class="quest-form">
     <div class="form-group">
         <label for="title">Title*</label>
-        <input type="text" id="title" bind:value={title} placeholder="Gather resources" required />
+        <input
+            type="text"
+            id="title"
+            bind:value={title}
+            placeholder="Gather resources"
+            required
+        />
     </div>
 
     <div class="form-group">
         <label for="description">Description*</label>
-        <textarea id="description" bind:value={description} placeholder="Describe the quest in detail. What needs to be done?" required></textarea>
+        <textarea
+            id="description"
+            bind:value={description}
+            placeholder="Describe the quest in detail. What needs to be done?"
+            required
+        />
     </div>
 
     <div class="form-group">
         <label for="image">Attach an Image</label>
-        <input type="file" id="image" accept="image/*" on:change={handleImageUpload} />
+        <input
+            type="file"
+            id="image"
+            accept="image/*"
+            on:change={handleImageUpload}
+        />
         {#if previewUrl}
             <div class="image-preview-container">
                 <img src={previewUrl} class="image-preview" alt="Preview" />
@@ -63,89 +79,91 @@
 </form>
 
 <style>
-.quest-form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #2c5837;
-    border-radius: 12px;
-    border: 2px solid #007006;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    text-align: center;
-}
+    .quest-form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #2c5837;
+        border-radius: 12px;
+        border: 2px solid #007006;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
 
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
 
-label {
-    display: block;
-    font-weight: bold;
-    font-size: 16px;
-    margin-bottom: 6px;
-    color: white;
-}
+    label {
+        display: block;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 6px;
+        color: white;
+    }
 
-input, textarea {
-    width: 85%;
-    padding: 10px;
-    border-radius: 8px;
-    background: #68d46d;
-    color: black;
-    font-size: 16px;
-    border: 2px solid #007006;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
+    input,
+    textarea {
+        width: 85%;
+        padding: 10px;
+        border-radius: 8px;
+        background: #68d46d;
+        color: black;
+        font-size: 16px;
+        border: 2px solid #007006;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
 
-input:focus, textarea:focus {
-    border-color: #0f0;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
-}
+    input:focus,
+    textarea:focus {
+        border-color: #0f0;
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+    }
 
-textarea {
-    height: 120px;
-    resize: vertical;
-}
+    textarea {
+        height: 120px;
+        resize: vertical;
+    }
 
-input[type="file"] {
-    width: 100%;
-    background: #fff;
-    border: 2px solid #007006;
-    padding: 8px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-}
+    input[type='file'] {
+        width: 100%;
+        background: #fff;
+        border: 2px solid #007006;
+        padding: 8px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+    }
 
-.image-preview-container {
-    text-align: center;
-    margin-top: 10px;
-}
+    .image-preview-container {
+        text-align: center;
+        margin-top: 10px;
+    }
 
-.image-preview {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    border: 2px solid #007006;
-    box-shadow: 0px 0px 10px rgba(0, 255, 0, 0.5);
-    margin-top: 10px;
-}
+    .image-preview {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        border: 2px solid #007006;
+        box-shadow: 0px 0px 10px rgba(0, 255, 0, 0.5);
+        margin-top: 10px;
+    }
 
-.submit-button {
-    font-size: 16px;
-    padding: 10px 20px;
-    background-color: #007006;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
-}
+    .submit-button {
+        font-size: 16px;
+        padding: 10px 20px;
+        background-color: #007006;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+    }
 
-.submit-button:hover {
-    background-color: #005004;
-}
+    .submit-button:hover {
+        background-color: #005004;
+    }
 </style>

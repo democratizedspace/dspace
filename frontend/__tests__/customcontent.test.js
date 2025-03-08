@@ -10,7 +10,7 @@ import {
     createProcess,
     getProcess,
     updateProcess,
-    deleteProcess
+    deleteProcess,
 } from '../src/utils/customcontent.js';
 
 describe('Custom Content Functions', () => {
@@ -52,15 +52,22 @@ describe('Custom Content Functions', () => {
             const price = '100 dUSD';
             const unit = 'kg';
             const type = '3dprint';
-            const id = await createItem(name, description, null, price, unit, type);
+            const id = await createItem(
+                name,
+                description,
+                null,
+                price,
+                unit,
+                type
+            );
             const item = await getItem(id);
-            expect(item).toMatchObject({ 
-                id, 
-                name, 
-                description, 
-                price, 
-                unit, 
-                itemType: type 
+            expect(item).toMatchObject({
+                id,
+                name,
+                description,
+                price,
+                unit,
+                itemType: type,
             });
         });
 
@@ -79,9 +86,9 @@ describe('Custom Content Functions', () => {
             const name = 'Item to Update';
             const description = 'Initial description';
             const id = await createItem(name, description);
-            const updates = { 
+            const updates = {
                 name: 'Updated Item Name',
-                price: '200 dUSD'
+                price: '200 dUSD',
             };
             await updateItem(id, updates);
             const updatedItem = await getItem(id);
@@ -107,17 +114,23 @@ describe('Custom Content Functions', () => {
             const requireItems = [{ id: '1', count: 2 }];
             const consumeItems = [{ id: '2', count: 1 }];
             const createItems = [{ id: '3', count: 3 }];
-            
-            const id = await createProcess(title, duration, requireItems, consumeItems, createItems);
-            const process = await getProcess(id);
-            
-            expect(process).toMatchObject({ 
-                id, 
-                title, 
+
+            const id = await createProcess(
+                title,
                 duration,
                 requireItems,
                 consumeItems,
                 createItems
+            );
+            const process = await getProcess(id);
+
+            expect(process).toMatchObject({
+                id,
+                title,
+                duration,
+                requireItems,
+                consumeItems,
+                createItems,
             });
         });
 
@@ -136,16 +149,18 @@ describe('Custom Content Functions', () => {
             const title = 'Process to Update';
             const duration = '1h';
             const id = await createProcess(title, duration);
-            const updates = { 
+            const updates = {
                 title: 'Updated Process Title',
                 duration: '2h',
-                requireItems: [{ id: '4', count: 1 }]
+                requireItems: [{ id: '4', count: 1 }],
             };
             await updateProcess(id, updates);
             const updatedProcess = await getProcess(id);
             expect(updatedProcess.title).toBe('Updated Process Title');
             expect(updatedProcess.duration).toBe('2h');
-            expect(updatedProcess.requireItems).toEqual([{ id: '4', count: 1 }]);
+            expect(updatedProcess.requireItems).toEqual([
+                { id: '4', count: 1 },
+            ]);
         });
 
         test('should delete a process', async () => {

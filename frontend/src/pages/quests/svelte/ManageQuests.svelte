@@ -9,16 +9,17 @@
     let selectedStatus = 'all';
 
     // Reactive filtered quests
-    $: filteredQuests = quests.filter(quest => {
-        const matchesSearch = quest.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            quest.description.toLowerCase().includes(searchTerm.toLowerCase());
-        
+    $: filteredQuests = quests.filter((quest) => {
+        const matchesSearch =
+            quest.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            quest.description.toLowerCase().includes(searchTerm.toLowerCase());
+
         const isFinished = questFinished(quest.id);
-        
+
         if (selectedStatus === 'all') return matchesSearch;
         if (selectedStatus === 'active') return matchesSearch && !isFinished;
         if (selectedStatus === 'completed') return matchesSearch && isFinished;
-        
+
         return false;
     });
 
@@ -35,12 +36,12 @@
         if (confirm('Are you sure you want to delete this quest?')) {
             try {
                 const response = await fetch(`/api/quests/${questId}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
                 });
-                
+
                 if (response.ok) {
                     // Remove quest from local state
-                    quests = quests.filter(q => q.id !== questId);
+                    quests = quests.filter((q) => q.id !== questId);
                 } else {
                     alert('Failed to delete quest');
                 }
@@ -56,13 +57,13 @@
     {#if mounted}
         <div class="controls">
             <div class="search-box">
-                <input 
-                    type="text" 
-                    bind:value={searchTerm} 
+                <input
+                    type="text"
+                    bind:value={searchTerm}
                     placeholder="Search quests..."
                 />
             </div>
-            
+
             <div class="status-filter">
                 <select bind:value={selectedStatus}>
                     <option value="all">All Quests</option>
@@ -80,16 +81,16 @@
             {:else}
                 {#each filteredQuests as quest (quest.id)}
                     <div class="quest-item">
-                        <Quest quest={quest} compact={true} />
+                        <Quest {quest} compact={true} />
                         <div class="quest-actions">
-                            <button 
-                                class="edit-button" 
+                            <button
+                                class="edit-button"
                                 on:click={() => handleEdit(quest.id)}
                             >
                                 Edit
                             </button>
-                            <button 
-                                class="delete-button" 
+                            <button
+                                class="delete-button"
                                 on:click={() => handleDelete(quest.id)}
                             >
                                 Delete
@@ -116,7 +117,8 @@
         justify-content: space-between;
     }
 
-    .search-box input, .status-filter select {
+    .search-box input,
+    .status-filter select {
         padding: 10px;
         border-radius: 8px;
         background: #68d46d;
@@ -142,7 +144,8 @@
         gap: 10px;
     }
 
-    .edit-button, .delete-button {
+    .edit-button,
+    .delete-button {
         padding: 8px 16px;
         border-radius: 6px;
         border: none;

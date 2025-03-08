@@ -1,6 +1,6 @@
 ---
-title: "Processes"
-slug: "processes"
+title: 'Processes'
+slug: 'processes'
 ---
 
 Processes are the steps that machines take to convert ingredients, raw materials, or subcomponents into other machines or objects. Think of them as blueprints or recipes.

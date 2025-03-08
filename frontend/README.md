@@ -1,44 +1,65 @@
-# Welcome to [Astro](https://astro.build)
+# DSPACE Frontend
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
+The frontend for DSPACE, a free and open source web-based space exploration idle game.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Project Structure
 
 ```
-/
-├── public/
-│   └── favicon.ico
+frontend/
+├── __tests__/           # Jest test files
 ├── src/
-│   ├── components/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
+│   ├── components/      # Svelte components
+│   │   └── svelte/     # Main Svelte components
+│   ├── config/         # Configuration files
+│   ├── pages/          # Page components and routes
+│   │   ├── chat/       # Chat system
+│   │   ├── docs/       # Documentation
+│   │   ├── inventory/  # Inventory system
+│   │   ├── quests/     # Quest system
+│   │   └── shop/       # Shopping system
+│   ├── scripts/        # Utility scripts
+│   └── utils/          # Utility functions
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Development Commands
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components or layouts.
+| Command            | Action                               |
+| ------------------ | ------------------------------------ |
+| `npm install`      | Install dependencies                 |
+| `npm run dev`      | Start dev server at `localhost:3002` |
+| `npm run build`    | Build production site                |
+| `npm run preview`  | Preview production build             |
+| `npm test`         | Run tests                            |
+| `npm run coverage` | Run tests with coverage              |
 
-Any static assets, like images, can be placed in the `public/` directory.
+### Code Quality Commands
 
-## 🧞 Commands
+| Command                | Action                |
+| ---------------------- | --------------------- |
+| `npm run format:check` | Check code formatting |
+| `npm run format:fix`   | Fix code formatting   |
+| `npm run lint:local`   | Run ESLint            |
 
-All commands are run from the root of the project, from a terminal:
+## Code Style
 
-| Command                | Action                                             |
-| :--------------------- | :------------------------------------------------- |
-| `npm install`          | Installs dependencies                              |
-| `npm run dev`          | Starts local dev server at `localhost:3000`        |
-| `npm run build`        | Build your production site to `./dist/`            |
-| `npm run preview`      | Preview your build locally, before deploying       |
-| `npm run astro ...`    | Run CLI commands like `astro add`, `astro preview` |
-| `npm run astro --help` | Get help using the Astro CLI                       |
+The project uses:
 
-## 👀 Want to learn more?
+-   Prettier for code formatting
+-   ESLint for code quality
+-   EditorConfig for editor consistency
+-   Jest for testing
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Configuration files:
+
+-   `.prettierrc.json` - Prettier configuration
+-   `.eslintrc.local.json` - ESLint configuration
+-   `.editorconfig.local` - EditorConfig settings
+
+These settings ensure:
+
+-   Consistent line endings (LF)
+-   4-space indentation (2 for markdown)
+-   Single quotes for strings
+-   Semicolons required
+-   Trailing commas in objects and arrays

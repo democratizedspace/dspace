@@ -16,7 +16,11 @@
             </code>
         </div>
 
-        <Chip text="Copy" onClick={() => navigator.clipboard.writeText(gameStateString)} inverted={true} />
+        <Chip
+            text="Copy"
+            onClick={() => navigator.clipboard.writeText(gameStateString)}
+            inverted={true}
+        />
     </div>
 </Chip>
 

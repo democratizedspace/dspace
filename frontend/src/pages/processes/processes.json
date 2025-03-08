@@ -106,8 +106,7 @@
     {
         "id": "3dprint-benchy",
         "title": "Make a test print",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "0",
@@ -141,8 +140,7 @@
     {
         "id": "3dprint-rocket",
         "title": "3D print a model rocket",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "0",
@@ -176,8 +174,7 @@
     {
         "id": "bucket-water-dechlorinated",
         "title": "dechlorinate a bucket of water",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "17",
@@ -218,8 +215,7 @@
     {
         "id": "germinate-basil",
         "title": "grow basil seedlings",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "10",
@@ -241,8 +237,7 @@
     {
         "id": "prepare-hydroponic-tub",
         "title": "prepare your hydroponic tub",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "9",
@@ -268,8 +263,7 @@
     {
         "id": "refresh-hydroponic-tub",
         "title": "refresh the nutrient solution",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "45",
@@ -326,8 +320,7 @@
     {
         "id": "regrow-basil",
         "title": "regrow basil after harvest",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "47",
@@ -357,8 +350,7 @@
     {
         "id": "harvest-basil",
         "title": "Harvest your hydroponic basil plants",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "42",
@@ -380,8 +372,7 @@
     {
         "id": "sink",
         "title": "find your sink",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [],
         "createItems": [
             {
@@ -394,8 +385,7 @@
     {
         "id": "3dprint-rocket-body-tube",
         "title": "3D Print a rocket body tube",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "0",
@@ -429,8 +419,7 @@
     {
         "id": "3dprint-rocket-nosecone-coupler",
         "title": "3D print a rocket nosecone coupler",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "0",
@@ -464,8 +453,7 @@
     {
         "id": "3dprint-rocket-nosecone",
         "title": "3D print a rocket nosecone",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "0",
@@ -499,8 +487,7 @@
     {
         "id": "3dprint-rocket-fincan",
         "title": "3D print a rocket fincan",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "0",
@@ -534,8 +521,7 @@
     {
         "id": "assemble-rocket",
         "title": "Assemble your rocket",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "30",
@@ -643,8 +629,7 @@
     {
         "id": "assemble-rocket-parachute",
         "title": "Assemble a rocket with a parachute. A ",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "39",
@@ -792,8 +777,7 @@
                 "count": 1
             }
         ],
-        "consumeItems": [
-        ],
+        "consumeItems": [],
         "createItems": [
             {
                 "id": "22",
@@ -802,7 +786,6 @@
             {
                 "id": "61",
                 "count": 200
-
             }
         ],
         "duration": "1h"
@@ -816,8 +799,7 @@
                 "count": 1
             }
         ],
-        "consumeItems": [
-        ],
+        "consumeItems": [],
         "createItems": [
             {
                 "id": "22",
@@ -826,7 +808,6 @@
             {
                 "id": "61",
                 "count": 1000
-
             }
         ],
         "duration": "5h"
@@ -834,8 +815,7 @@
     {
         "id": "prepare-aquarium",
         "title": "Prepare your aquarium",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "51",
@@ -931,8 +911,7 @@
     {
         "id": "dCarbon-dOffset-1",
         "title": "dCarbon to dOffset",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "20",
@@ -954,8 +933,7 @@
     {
         "id": "dCarbon-dOffset-10",
         "title": "dCarbon to dOffset",
-        "requireItems": [
-        ],
+        "requireItems": [],
         "consumeItems": [
             {
                 "id": "20",
@@ -977,10 +955,8 @@
     {
         "id": "basic-income",
         "title": "basic income",
-        "requireItems": [
-        ],
-        "consumeItems": [
-        ],
+        "requireItems": [],
+        "consumeItems": [],
         "createItems": [
             {
                 "id": "24",

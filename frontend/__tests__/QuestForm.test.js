@@ -16,9 +16,9 @@ describe('QuestForm Component', () => {
 
     test('should mount component', () => {
         const component = new QuestForm({
-            target: container
+            target: container,
         });
-        
+
         expect(component).toBeTruthy();
         expect(container.querySelector('form')).toBeTruthy();
         expect(container.querySelector('input[type="text"]')).toBeTruthy();
@@ -27,7 +27,7 @@ describe('QuestForm Component', () => {
 
     test('should handle form submission', () => {
         const component = new QuestForm({
-            target: container
+            target: container,
         });
 
         const form = container.querySelector('form');
@@ -43,7 +43,7 @@ describe('QuestForm Component', () => {
         // Fill form
         titleInput.value = 'Test Quest';
         titleInput.dispatchEvent(new Event('input'));
-        
+
         descInput.value = 'Test Description';
         descInput.dispatchEvent(new Event('input'));
 
@@ -59,18 +59,18 @@ describe('QuestForm Component', () => {
 
     test('should handle image upload', () => {
         const component = new QuestForm({
-            target: container
+            target: container,
         });
 
         const fileInput = container.querySelector('input[type="file"]');
-        
+
         // Create a mock file
         const file = new File([''], 'test.jpg', { type: 'image/jpeg' });
-        
+
         // Create a mock file list
         Object.defineProperty(fileInput, 'files', {
             value: [file],
-            writable: true
+            writable: true,
         });
 
         // Trigger change event

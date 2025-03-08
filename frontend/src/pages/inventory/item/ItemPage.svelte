@@ -3,27 +3,28 @@
     import { writable } from 'svelte/store';
     import Chip from '../../../components/svelte/Chip.svelte';
     import BuySell from '../../../components/svelte/BuySell.svelte';
-    import { getProcessesForItem, ProcessItemTypes } from '../../../utils/gameState/processes.js';
+    import {
+        getProcessesForItem,
+        ProcessItemTypes,
+    } from '../../../utils/gameState/processes.js';
     import { getItemCounts } from '../../../utils/gameState/inventory.js';
     import items from '../json/items.json';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
-    
+
     export let itemId;
 
-    let itemList = [
-        { id: itemId },
-    ];
-    
+    let itemList = [{ id: itemId }];
+
     const mounted = writable(false);
     const count = writable(0);
 
-    const item = items.find(item => item.id === itemId);
+    const item = items.find((item) => item.id === itemId);
 
     const processes = getProcessesForItem(itemId);
 
-    const hasProcesses = Object.values(processes).some(arr => arr.length);
-    
+    const hasProcesses = Object.values(processes).some((arr) => arr.length);
+
     onMount(() => {
         const itemCount = getItemCounts([{ id: itemId }])[itemId];
         count.set(itemCount);
@@ -36,9 +37,9 @@
         <div class="vertical">
             <img src={item.image} alt={item.name} />
             <h2>{item.name}</h2>
-            <CompactItemList itemList={itemList} inverted={true} />
+            <CompactItemList {itemList} inverted={true} />
             {item.description}
-            <BuySell itemId={itemId} />
+            <BuySell {itemId} />
             {#if hasProcesses}
                 <p>Processes:</p>
             {/if}
@@ -59,7 +60,6 @@
             {/if}
         </div>
     </Chip>
-
 {/if}
 
 <style>

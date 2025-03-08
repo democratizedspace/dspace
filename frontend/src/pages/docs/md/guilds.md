@@ -1,6 +1,6 @@
 ---
-title: "Guilds"
-slug: "guilds"
+title: 'Guilds'
+slug: 'guilds'
 ---
 
 In the future, DSPACE will support an organizational structure called a guild. Guilds will be able to self-organize and accomplish things in the game more effectively through economies of scale and collaboration.

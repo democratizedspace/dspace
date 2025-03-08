@@ -5,11 +5,14 @@ global.TextDecoder = TextDecoder;
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
-const dom = new JSDOM('<!DOCTYPE html><html><head></head><body></body></html>', {
-  url: 'http://localhost',
-  pretendToBeVisual: true,
-  resources: 'usable'
-});
+const dom = new JSDOM(
+    '<!DOCTYPE html><html><head></head><body></body></html>',
+    {
+        url: 'http://localhost',
+        pretendToBeVisual: true,
+        resources: 'usable',
+    }
+);
 
 global.window = dom.window;
 global.document = dom.window.document;
@@ -22,5 +25,5 @@ global.CustomEvent = dom.window.CustomEvent;
 
 // Add structuredClone if needed
 if (!global.structuredClone) {
-    global.structuredClone = obj => JSON.parse(JSON.stringify(obj));
+    global.structuredClone = (obj) => JSON.parse(JSON.stringify(obj));
 }

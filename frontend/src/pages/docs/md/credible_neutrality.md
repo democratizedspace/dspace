@@ -1,26 +1,26 @@
 ---
-title: "Credible Neutrality"
-slug: "credible_neutrality"
+title: 'Credible Neutrality'
+slug: 'credible_neutrality'
 ---
 
 The architecture of DSPACE will be split into two categories:
 
-- Protocol-level systems
-- Platform-level systems
+-   Protocol-level systems
+-   Platform-level systems
 
 ## Protocol-level systems
 
 Protocol-level systems will be smart contracts that are deployed on the Ethereum blockchain (through an [L2](https://ethereum.org/en/layer-2/)). They are core to every multiplayer aspect of DSPACE:
 
-- Shops and markets
-- Jobs
-- Content moderation
+-   Shops and markets
+-   Jobs
+-   Content moderation
 
 These systems will be **credibly neutral**. That is, with an Ethereum wallet can interact with them, and any possible transaction you can execute in the smart contracts will be uncensorable. This ensures that someone with a financial incentive (the [creator](https://futuroptimist.com) of the game, for example) or a desire to censor (an authoritarian government) cannot prevent you from executing some process in the way you expect. This also carries inherent risks:
 
-- A bad actor can inspect the code of a smart contract and discover some vulnerability
-- A bad actor can pretend to represent DSPACE and convince users to sign a transaction that drains their wallet
-- A smart contract could have weaknesses that only emerge with scale
+-   A bad actor can inspect the code of a smart contract and discover some vulnerability
+-   A bad actor can pretend to represent DSPACE and convince users to sign a transaction that drains their wallet
+-   A smart contract could have weaknesses that only emerge with scale
 
 For this reason, these smart contracts will need to be as simple as possible to minimze the attack surface.
 

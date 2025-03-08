@@ -16,9 +16,9 @@ describe('ItemForm Component', () => {
 
     test('should mount component', () => {
         const component = new ItemForm({
-            target: container
+            target: container,
         });
-        
+
         expect(component).toBeTruthy();
         expect(container.querySelector('form')).toBeTruthy();
         expect(container.querySelector('input[type="text"]')).toBeTruthy();
@@ -28,15 +28,21 @@ describe('ItemForm Component', () => {
 
     test('should handle form submission with all fields', () => {
         const component = new ItemForm({
-            target: container
+            target: container,
         });
 
         const form = container.querySelector('form');
         const nameInput = container.querySelector('input[type="text"]');
         const descInput = container.querySelector('textarea');
-        const priceInput = container.querySelector('input[placeholder="e.g. 100 dUSD"]');
-        const unitInput = container.querySelector('input[placeholder="e.g. kg, m, L"]');
-        const typeInput = container.querySelector('input[placeholder="e.g. 3dprint"]');
+        const priceInput = container.querySelector(
+            'input[placeholder="e.g. 100 dUSD"]'
+        );
+        const unitInput = container.querySelector(
+            'input[placeholder="e.g. kg, m, L"]'
+        );
+        const typeInput = container.querySelector(
+            'input[placeholder="e.g. 3dprint"]'
+        );
 
         // Setup mock event listener
         let submittedData = null;
@@ -47,7 +53,7 @@ describe('ItemForm Component', () => {
         // Fill form
         nameInput.value = 'Test Item';
         nameInput.dispatchEvent(new Event('input'));
-        
+
         descInput.value = 'Test Description';
         descInput.dispatchEvent(new Event('input'));
 
@@ -75,7 +81,7 @@ describe('ItemForm Component', () => {
 
     test('should handle form submission with only required fields', () => {
         const component = new ItemForm({
-            target: container
+            target: container,
         });
 
         const form = container.querySelector('form');
@@ -91,7 +97,7 @@ describe('ItemForm Component', () => {
         // Fill only required fields
         nameInput.value = 'Test Item';
         nameInput.dispatchEvent(new Event('input'));
-        
+
         descInput.value = 'Test Description';
         descInput.dispatchEvent(new Event('input'));
 
@@ -110,18 +116,18 @@ describe('ItemForm Component', () => {
 
     test('should handle image upload', () => {
         const component = new ItemForm({
-            target: container
+            target: container,
         });
 
         const fileInput = container.querySelector('input[type="file"]');
-        
+
         // Create a mock file
         const file = new File([''], 'test.jpg', { type: 'image/jpeg' });
-        
+
         // Create a mock file list
         Object.defineProperty(fileInput, 'files', {
             value: [file],
-            writable: true
+            writable: true,
         });
 
         // Trigger change event
@@ -132,4 +138,4 @@ describe('ItemForm Component', () => {
         expect(fileInput.files[0].name).toBe('test.jpg');
         expect(fileInput.files[0].type).toBe('image/jpeg');
     });
-}); 
+});

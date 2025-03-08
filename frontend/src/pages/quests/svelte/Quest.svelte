@@ -1,12 +1,17 @@
 <script>
-    export let quest, compact = false;
+    export let quest,
+        compact = false;
 </script>
 
 <div class="container" class:quest>
     {#if quest}
         {#if compact}
             <div class="content">
-                <img class="quest-img quest-img-compact" src={quest.image} alt={quest.image} />
+                <img
+                    class="quest-img quest-img-compact"
+                    src={quest.image}
+                    alt={quest.image}
+                />
                 <div class="content-text">
                     <h3>{quest.title}</h3>
                 </div>
@@ -32,11 +37,13 @@
         opacity: 0.8;
     }
 
-    .container:hover, .container.quest {
+    .container:hover,
+    .container.quest {
         opacity: 1;
     }
 
-    h3, p {
+    h3,
+    p {
         margin: 0;
         padding: 10px;
     }
@@ -66,7 +73,7 @@
         .content {
             flex-direction: column;
         }
-        
+
         .quest-img {
             width: 105%;
             height: 105%;

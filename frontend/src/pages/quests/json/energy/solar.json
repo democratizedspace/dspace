@@ -34,7 +34,8 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [{
+                    "grantsItems": [
+                        {
                             "id": "5",
                             "count": 1
                         },
@@ -143,7 +144,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "welcome/howtodoquests"
-    ]
+    "requiresQuests": ["welcome/howtodoquests"]
 }

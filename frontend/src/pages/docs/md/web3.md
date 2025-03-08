@@ -1,6 +1,6 @@
 ---
-title: "Web3"
-slug: "web3"
+title: 'Web3'
+slug: 'web3'
 ---
 
 An important long term goal of DSPACE is to actually physically get to space and have a presence there. Even though the cost of getting to orbit is [dropping rapidly](https://ttu-ir.tdl.org/bitstream/handle/2346/74082/ICES_2018_81.pdf), it is still prohibitively expensive, and companies and governments need a lot of capital to even get started with the process. Web3 is still in its infancy, and there are still a lot of big challenges we have to solve (namely, coordination failures, centralization risk, and scalability, among others), but one of the cool properties of tokenizing some concept or process is that you can take an incremental approach instead of raising capital all at once to successfully build and launch a rocket.

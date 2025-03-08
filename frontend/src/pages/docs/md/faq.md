@@ -1,6 +1,6 @@
 ---
-title: "Freqently Asked Questions"
-slug: "faq"
+title: 'Freqently Asked Questions'
+slug: 'faq'
 ---
 
 ## What can I do?
@@ -18,4 +18,3 @@ There are a variety of quests to complete. Quests are the primary way to learn a
 ## Where can I learn more?
 
 On the [Discord](https://discord.gg/A3UAfYvnxM) or here in the [docs]
-

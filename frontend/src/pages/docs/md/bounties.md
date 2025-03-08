@@ -1,6 +1,6 @@
 ---
-title: "Bounties"
-slug: "bounties"
+title: 'Bounties'
+slug: 'bounties'
 ---
 
 GitHub contributions will eventually be incentivized through bounties.

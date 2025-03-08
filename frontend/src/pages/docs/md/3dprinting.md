@@ -1,6 +1,6 @@
 ---
-title: "3D Printing"
-slug: "3dprinting"
+title: '3D Printing'
+slug: '3dprinting'
 ---
 
 3D printing is the process of making a three-dimensional object from a digital file. The object is created by laying down many thin layers of material in succession.

@@ -1,11 +1,16 @@
 // frontend/src/utils/customcontent.js
 
-import { addEntity, getEntity, updateEntity, deleteEntity } from './indexeddb.js';
+import {
+    addEntity,
+    getEntity,
+    updateEntity,
+    deleteEntity,
+} from './indexeddb.js';
 
 const ENTITY_TYPES = {
     QUEST: 'quest',
     ITEM: 'item',
-    PROCESS: 'process'
+    PROCESS: 'process',
 };
 
 // Quest functions
@@ -31,7 +36,11 @@ function getQuest(id) {
 
 function updateQuest(id, updates) {
     return getQuest(id).then((quest) => {
-        const updatedQuest = { ...quest, ...updates, updatedAt: new Date().toISOString() };
+        const updatedQuest = {
+            ...quest,
+            ...updates,
+            updatedAt: new Date().toISOString(),
+        };
         return updateEntity(updatedQuest);
     });
 }
@@ -41,7 +50,14 @@ function deleteQuest(id) {
 }
 
 // Item functions
-function createItem(name, description, image = null, price = null, unit = null, type = null) {
+function createItem(
+    name,
+    description,
+    image = null,
+    price = null,
+    unit = null,
+    type = null
+) {
     const item = {
         type: ENTITY_TYPES.ITEM,
         name,
@@ -67,7 +83,11 @@ function getItem(id) {
 
 function updateItem(id, updates) {
     return getItem(id).then((item) => {
-        const updatedItem = { ...item, ...updates, updatedAt: new Date().toISOString() };
+        const updatedItem = {
+            ...item,
+            ...updates,
+            updatedAt: new Date().toISOString(),
+        };
         return updateEntity(updatedItem);
     });
 }
@@ -77,7 +97,13 @@ function deleteItem(id) {
 }
 
 // Process functions
-function createProcess(title, duration, requireItems = [], consumeItems = [], createItems = []) {
+function createProcess(
+    title,
+    duration,
+    requireItems = [],
+    consumeItems = [],
+    createItems = []
+) {
     const process = {
         type: ENTITY_TYPES.PROCESS,
         title,
@@ -102,7 +128,11 @@ function getProcess(id) {
 
 function updateProcess(id, updates) {
     return getProcess(id).then((process) => {
-        const updatedProcess = { ...process, ...updates, updatedAt: new Date().toISOString() };
+        const updatedProcess = {
+            ...process,
+            ...updates,
+            updatedAt: new Date().toISOString(),
+        };
         return updateEntity(updatedProcess);
     });
 }
@@ -124,5 +154,5 @@ export {
     getProcess,
     updateProcess,
     deleteProcess,
-    ENTITY_TYPES
+    ENTITY_TYPES,
 };

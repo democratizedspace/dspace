@@ -4,7 +4,7 @@ import ProcessForm from '../src/components/svelte/ProcessForm.svelte';
 jest.mock('../src/pages/inventory/json/items.json', () => [
     { id: '1', name: 'Test Item 1', description: 'Description 1' },
     { id: '2', name: 'Test Item 2', description: 'Description 2' },
-    { id: '3', name: 'Test Item 3', description: 'Description 3' }
+    { id: '3', name: 'Test Item 3', description: 'Description 3' },
 ]);
 
 describe('ProcessForm Component', () => {
@@ -23,9 +23,9 @@ describe('ProcessForm Component', () => {
 
     test('should mount component', () => {
         const component = new ProcessForm({
-            target: container
+            target: container,
         });
-        
+
         expect(component).toBeTruthy();
         expect(container.querySelector('form')).toBeTruthy();
         expect(container.querySelector('input[type="text"]')).toBeTruthy();
@@ -33,12 +33,14 @@ describe('ProcessForm Component', () => {
 
     test('should handle form submission with all fields', () => {
         const component = new ProcessForm({
-            target: container
+            target: container,
         });
 
         const form = container.querySelector('form');
         const titleInput = container.querySelector('input[type="text"]');
-        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+        const durationInput = container.querySelector(
+            'input[placeholder="e.g. 1h 30m"]'
+        );
 
         // Setup mock event listener
         let submittedData = null;
@@ -49,15 +51,15 @@ describe('ProcessForm Component', () => {
         // Fill form
         titleInput.value = 'Test Process';
         titleInput.dispatchEvent(new Event('input'));
-        
+
         durationInput.value = '1h 30m';
         durationInput.dispatchEvent(new Event('input'));
 
         // Add items
-        component.$$set({ 
+        component.$$set({
             requireItems: [{ id: '1', count: 2 }],
             consumeItems: [{ id: '2', count: 1 }],
-            createItems: [{ id: '3', count: 3 }]
+            createItems: [{ id: '3', count: 3 }],
         });
 
         // Submit form
@@ -68,19 +70,27 @@ describe('ProcessForm Component', () => {
         const formData = submittedData;
         expect(formData.get('title')).toBe('Test Process');
         expect(formData.get('duration')).toBe('1h 30m');
-        expect(JSON.parse(formData.get('requireItems'))).toEqual([{ id: '1', count: 2 }]);
-        expect(JSON.parse(formData.get('consumeItems'))).toEqual([{ id: '2', count: 1 }]);
-        expect(JSON.parse(formData.get('createItems'))).toEqual([{ id: '3', count: 3 }]);
+        expect(JSON.parse(formData.get('requireItems'))).toEqual([
+            { id: '1', count: 2 },
+        ]);
+        expect(JSON.parse(formData.get('consumeItems'))).toEqual([
+            { id: '2', count: 1 },
+        ]);
+        expect(JSON.parse(formData.get('createItems'))).toEqual([
+            { id: '3', count: 3 },
+        ]);
     });
 
     test('should handle form submission with minimal fields', () => {
         const component = new ProcessForm({
-            target: container
+            target: container,
         });
 
         const form = container.querySelector('form');
         const titleInput = container.querySelector('input[type="text"]');
-        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+        const durationInput = container.querySelector(
+            'input[placeholder="e.g. 1h 30m"]'
+        );
 
         // Setup mock event listener
         let submittedData = null;
@@ -91,7 +101,7 @@ describe('ProcessForm Component', () => {
         // Fill only required fields
         titleInput.value = 'Test Process';
         titleInput.dispatchEvent(new Event('input'));
-        
+
         durationInput.value = '1h';
         durationInput.dispatchEvent(new Event('input'));
 
@@ -110,14 +120,14 @@ describe('ProcessForm Component', () => {
 
     test('should handle adding and removing items', () => {
         const component = new ProcessForm({
-            target: container
+            target: container,
         });
 
         // Add a required item using the component's API
-        component.$$set({ requireItems: [{ id: "", count: 1 }] });
+        component.$$set({ requireItems: [{ id: '', count: 1 }] });
 
         // Wait for next tick to allow Svelte to update the DOM
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             requestAnimationFrame(() => {
                 // Verify item was added
                 expect(container.querySelectorAll('.item-row')).toHaveLength(1);
@@ -127,7 +137,9 @@ describe('ProcessForm Component', () => {
 
                 requestAnimationFrame(() => {
                     // Verify item was removed
-                    expect(container.querySelectorAll('.item-row')).toHaveLength(0);
+                    expect(
+                        container.querySelectorAll('.item-row')
+                    ).toHaveLength(0);
                     resolve();
                 });
             });
@@ -136,12 +148,14 @@ describe('ProcessForm Component', () => {
 
     test('should validate duration format', () => {
         const component = new ProcessForm({
-            target: container
+            target: container,
         });
 
         const form = container.querySelector('form');
         const titleInput = container.querySelector('input[type="text"]');
-        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+        const durationInput = container.querySelector(
+            'input[placeholder="e.g. 1h 30m"]'
+        );
 
         // Setup mock event listener
         let submittedData = null;
@@ -152,7 +166,7 @@ describe('ProcessForm Component', () => {
         // Test invalid duration format
         titleInput.value = 'Test Process';
         titleInput.dispatchEvent(new Event('input'));
-        
+
         durationInput.value = 'invalid';
         durationInput.dispatchEvent(new Event('input'));
 
@@ -169,22 +183,24 @@ describe('ProcessForm Component', () => {
 
     test('should validate item counts', () => {
         const component = new ProcessForm({
-            target: container
+            target: container,
         });
 
         // Try to set negative count
-        component.$$set({ 
-            requireItems: [{ id: '1', count: -1 }]
+        component.$$set({
+            requireItems: [{ id: '1', count: -1 }],
         });
 
         const form = container.querySelector('form');
         const titleInput = container.querySelector('input[type="text"]');
-        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+        const durationInput = container.querySelector(
+            'input[placeholder="e.g. 1h 30m"]'
+        );
 
         // Setup form data
         titleInput.value = 'Test Process';
         titleInput.dispatchEvent(new Event('input'));
-        
+
         durationInput.value = '1h';
         durationInput.dispatchEvent(new Event('input'));
 
@@ -198,8 +214,8 @@ describe('ProcessForm Component', () => {
         expect(submittedData).toBeFalsy();
 
         // Set valid count
-        component.$$set({ 
-            requireItems: [{ id: '1', count: 1 }]
+        component.$$set({
+            requireItems: [{ id: '1', count: 1 }],
         });
 
         form.dispatchEvent(new Event('submit', { cancelable: true }));
@@ -208,7 +224,7 @@ describe('ProcessForm Component', () => {
 
     test('should handle empty required fields', () => {
         const component = new ProcessForm({
-            target: container
+            target: container,
         });
 
         const form = container.querySelector('form');
@@ -223,4 +239,4 @@ describe('ProcessForm Component', () => {
         form.dispatchEvent(new Event('submit', { cancelable: true }));
         expect(submittedData).toBeFalsy();
     });
-}); 
+});

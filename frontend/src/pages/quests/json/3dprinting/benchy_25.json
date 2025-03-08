@@ -40,7 +40,5 @@
             "count": 10000
         }
     ],
-    "requiresQuests": [
-        "3dprinting/benchy_10"
-    ]
+    "requiresQuests": ["3dprinting/benchy_10"]
 }

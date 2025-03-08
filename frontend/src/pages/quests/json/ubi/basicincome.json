@@ -139,7 +139,5 @@
             "count": 100
         }
     ],
-    "requiresQuests": [
-        "3dprinter/start"
-    ]
+    "requiresQuests": ["3dprinter/start"]
 }

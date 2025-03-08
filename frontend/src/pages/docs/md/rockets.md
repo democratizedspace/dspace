@@ -1,6 +1,6 @@
 ---
-title: "Rockets"
-slug: "rockets"
+title: 'Rockets'
+slug: 'rockets'
 ---
 
 DSPACE aims to make the creation and launches of rockets so easy that anyone can do it.

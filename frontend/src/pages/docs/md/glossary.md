@@ -1,6 +1,6 @@
 ---
-title: "Glossary"
-slug: "glossary"
+title: 'Glossary'
+slug: 'glossary'
 ---
 
 ## DSPACE
@@ -21,7 +21,7 @@ Given certain required items (and items that are consumed by the [process](/docs
 
 ## Quest
 
-A task that can be completed by the player. It involves branching dialogue with an NPC, a variety of objects either given or received, 
+A task that can be completed by the player. It involves branching dialogue with an NPC, a variety of objects either given or received,
 
 ## Questline
 

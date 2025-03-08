@@ -4,9 +4,10 @@ export const prettyPrintNumber = (number) => {
     const n = parseFloat(number);
 
     if (n !== 0 && (n < 0.005 || n > 9999)) {
-        return n.toExponential(2)
-            .replace('e', 'E').
-            replace(/\+/, '')
+        return n
+            .toExponential(2)
+            .replace('e', 'E')
+            .replace(/\+/, '')
             .replace(/\.?0*$/, '')
             .replace(/0*E/, 'E');
     }
@@ -15,7 +16,7 @@ export const prettyPrintNumber = (number) => {
 
 export const parseCookie = (cookie) => {
     try {
-        return cookie.split(/[;] */).reduce(function(result, pairStr) {
+        return cookie.split(/[;] */).reduce(function (result, pairStr) {
             const arr = pairStr.split('=');
             if (arr.length === 2) {
                 result[arr[0]] = arr[1];
@@ -25,7 +26,7 @@ export const parseCookie = (cookie) => {
     } catch (e) {
         return {};
     }
-}
+};
 
 export const getCookieValue = (cookie, key) => {
     const c = parseCookie(cookie);
@@ -33,53 +34,63 @@ export const getCookieValue = (cookie, key) => {
         return c[key];
     }
     return null;
-}
+};
 
 export const getCookie = (req, key) => {
     const cookie = req.headers.get('cookie');
     return getCookieValue(cookie, key);
-}
+};
 
 export const setCookieValue = (res, key, value) => {
-    res.headers.append('Set-Cookie', `${key}=${value}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`);
-}
+    res.headers.append(
+        'Set-Cookie',
+        `${key}=${value}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`
+    );
+};
 
 export const deleteCookie = (res, key) => {
-    res.headers.append('Set-Cookie', `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`);
-}
+    res.headers.append(
+        'Set-Cookie',
+        `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+    );
+};
 
 export const parseBool = (value) => {
     if (value === 'true') {
         return true;
     }
     return false;
-}
+};
 
 export const hasAcceptedCookies = (req) => {
     const cookie = req.headers.get('cookie');
-    const acceptedCookies = parseBool(getCookieValue(cookie, 'acceptedCookies'));
+    const acceptedCookies = parseBool(
+        getCookieValue(cookie, 'acceptedCookies')
+    );
     return acceptedCookies || false;
 };
 
 export const getCookies = (cookie) => {
     const parsedCookie = parseCookie(cookie);
     // return as an array of objects
-    return Object.keys(parsedCookie).map(key => {
+    return Object.keys(parsedCookie).map((key) => {
         return {
             key,
-            value: parsedCookie[key]
+            value: parsedCookie[key],
         };
     });
-}
+};
 
 export const getCookieItems = (cookie) => {
     const parsedCookie = parseCookie(cookie);
     return Object.keys(parsedCookie)
-        .filter(key => /^item-\d+$/.test(key) && parseFloat(parsedCookie[key]) > 0)
-        .map(key => {
+        .filter(
+            (key) => /^item-\d+$/.test(key) && parseFloat(parsedCookie[key]) > 0
+        )
+        .map((key) => {
             return {
                 id: key.split('-')[1], // Extract the number after 'item-'
-                count: parseFloat(parsedCookie[key]) // Convert the string value to a number
+                count: parseFloat(parsedCookie[key]), // Convert the string value to a number
             };
         });
 };
@@ -107,13 +118,12 @@ export const prettyPrintDuration = (durationSeconds) => {
         }
     }
     return duration.join(' ');
-}
-
+};
 
 export const datetimeAfterDuration = (durationSeconds) => {
     const futureDatetime = new Date(Date.now() + durationSeconds);
     return new Date(Date.now() + durationSeconds * 1000);
-}
+};
 
 export const durationInSeconds = (durationString) => {
     try {
@@ -144,21 +154,23 @@ export const durationInSeconds = (durationString) => {
             }
             durationSeconds += seconds;
         }
-        
+
         return durationSeconds;
     } catch (e) {
         return 0;
     }
-}
+};
 
 export const getWalletBalance = (req, symbol) => {
     const cookie = req.headers.get('cookie');
-    const balance = parseFloat(getCookieValue(cookie, `currency-balance-${symbol}`));
+    const balance = parseFloat(
+        getCookieValue(cookie, `currency-balance-${symbol}`)
+    );
     if (balance !== undefined && !isNaN(balance)) {
         return balance;
     }
     return 0;
-}
+};
 
 export const burnCurrency = (req, res, symbol, burnAmount) => {
     const balance = getWalletBalance(req, symbol);
@@ -168,7 +180,7 @@ export const burnCurrency = (req, res, symbol, burnAmount) => {
     }
     setCookieValue(res, `currency-balance-${symbol}`, newBalance);
     return true;
-}
+};
 
 export const addWalletBalance = (req, res, symbol, addBalance) => {
     const balance = getWalletBalance(req, symbol);
@@ -179,7 +191,7 @@ export const addWalletBalance = (req, res, symbol, addBalance) => {
 
 export const fixMarkdownText = (text) => {
     // replace ’ with '
-    const fixedText = text.replace(/’/g, '\'');
+    const fixedText = text.replace(/’/g, "'");
     return fixedText;
 };
 
@@ -194,10 +206,10 @@ export const getPriceStringComponents = (currency) => {
     const symbol = priceString[1];
 
     return {
-        price, symbol
+        price,
+        symbol,
     };
 };
-
 
 export const getSymbolFromId = (itemId) => {
     const item = items.find((item) => item.id === itemId);
@@ -206,7 +218,7 @@ export const getSymbolFromId = (itemId) => {
         return symbol;
     }
     return undefined;
-}
+};
 
 export const constructLink = (astroRedirect, url, redirectLink) => {
     if (redirectLink) {

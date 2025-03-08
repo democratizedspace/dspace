@@ -1,6 +1,6 @@
 ---
-title: "NPCs"
-slug: "npcs"
+title: 'NPCs'
+slug: 'npcs'
 ---
 
 ## dChat
