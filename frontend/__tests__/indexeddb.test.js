@@ -1,9 +1,8 @@
-import {
-    addEntity,
-    getEntity,
-    updateEntity,
-    deleteEntity,
-} from '../src/utils/indexeddb.js';
+/**
+ * @jest-environment jsdom
+ */
+import 'fake-indexeddb/auto';
+import { addEntity, getEntity, updateEntity, deleteEntity } from '../src/utils/indexeddb.js';
 
 describe('IndexedDB Utility Functions', () => {
     test('should add and retrieve an entity', async () => {
