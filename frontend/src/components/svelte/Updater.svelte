@@ -1,10 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import {
-        getVersionNumber,
-        setVersionNumber,
-        VERSIONS,
-    } from '../../utils/gameState.js';
+    import { getVersionNumber, setVersionNumber, VERSIONS } from '../../utils/gameState.js';
 
     export let shouldUpdate = false;
 

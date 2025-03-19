@@ -4,10 +4,7 @@
     import { onMount } from 'svelte';
     import { derived } from 'svelte/store';
     import { state } from '../../../utils/gameState/common.js';
-    import {
-        addItems,
-        getItemCount,
-    } from '../../../utils/gameState/inventory.js';
+    import { addItems, getItemCount } from '../../../utils/gameState/inventory.js';
     import { getVersionNumber, importV1V2 } from '../../../utils/gameState.js';
 
     export let itemList = [];
@@ -46,9 +43,7 @@
     });
 
     $: totalItemCount = itemList.length;
-    const newcomerTokenCount = derived(state, ($state) =>
-        getItemCount(newcomerToken.id)
-    );
+    const newcomerTokenCount = derived(state, ($state) => getItemCount(newcomerToken.id));
 </script>
 
 {#if mounted}
@@ -59,15 +54,10 @@
                     <div class="item vertical">
                         <p>Done!</p>
                         <p>
-                            You can click the button below to remove cookies
-                            used for DSPACE v1. Completing this step removes
-                            "Import from v1" menu item.
+                            You can click the button below to remove cookies used for DSPACE v1.
+                            Completing this step removes "Import from v1" menu item.
                         </p>
-                        <Chip
-                            text="Remove v1"
-                            href="/import/v2/v1/done"
-                            inverted={false}
-                        />
+                        <Chip text="Remove v1" href="/import/v2/v1/done" inverted={false} />
                     </div>
                 {:else}
                     <p align="center">
@@ -77,12 +67,7 @@
                     </p>
 
                     {#if totalItemCount > 0}
-                        <CompactItemList
-                            {itemList}
-                            noRed={true}
-                            increase={true}
-                            inverted={true}
-                        />
+                        <CompactItemList {itemList} noRed={true} increase={true} inverted={true} />
 
                         <div class="item">
                             <Chip
@@ -94,9 +79,9 @@
                         </div>
                     {:else}
                         <p align="center">
-                            It looks like you didn't play v1 on this device, or
-                            your progress was wiped (by deleting cookies). In
-                            that case, take this token to hide this menu option!
+                            It looks like you didn't play v1 on this device, or your progress was
+                            wiped (by deleting cookies). In that case, take this token to hide this
+                            menu option!
                         </p>
                         <CompactItemList
                             itemList={[newcomerToken]}

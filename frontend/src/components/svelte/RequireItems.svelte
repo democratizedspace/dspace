@@ -11,9 +11,7 @@
 
     const canProceed = derived([state], ([$state]) => {
         return items.every((item) => {
-            const inventoryItem = $state.inventory.find(
-                (i) => i.id === item.id
-            );
+            const inventoryItem = $state.inventory.find((i) => i.id === item.id);
             return inventoryItem && inventoryItem.count >= item.count;
         });
     });

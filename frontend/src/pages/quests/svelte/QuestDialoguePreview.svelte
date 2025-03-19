@@ -8,9 +8,9 @@
     const getTypeString = (option) => {
         if (option.type === 'goto') {
             if (option.requiresItems) {
-                return `requiresItems(${getItemListString(
-                    option.requiresItems
-                )})->goto(${option.goto})`;
+                return `requiresItems(${getItemListString(option.requiresItems)})->goto(${
+                    option.goto
+                })`;
             }
             return `goto(${option.goto})`;
         }

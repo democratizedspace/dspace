@@ -108,13 +108,5 @@
             }
         }
     },
-    "required": [
-        "id",
-        "title",
-        "description",
-        "image",
-        "npc",
-        "start",
-        "dialogue"
-    ]
+    "required": ["id", "title", "description", "image", "npc", "start", "dialogue"]
 }

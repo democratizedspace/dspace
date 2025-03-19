@@ -8,9 +8,7 @@
     // Create an object with a count of 0 for items not in $state.inventory
     const allItems = items.reduce((acc, item) => {
         acc[item.id] = {
-            count: $state.inventory[item.id]
-                ? $state.inventory[item.id].count
-                : 0,
+            count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
         };
         return acc;
     }, {});
@@ -27,11 +25,7 @@
 <div>
     <div class="horizontal">
         <label>
-            <input
-                type="checkbox"
-                class="checkbox"
-                bind:checked={showAllItems}
-            /> Show all items
+            <input type="checkbox" class="checkbox" bind:checked={showAllItems} /> Show all items
         </label>
     </div>
     <ItemList inventory={currentInventory} />

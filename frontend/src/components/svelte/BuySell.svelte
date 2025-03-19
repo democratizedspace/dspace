@@ -3,11 +3,7 @@
     import CompactItemList from './CompactItemList.svelte';
     import items from '../../pages/inventory/json/items.json';
     import { getPriceStringComponents } from '../../utils';
-    import {
-        buyItems,
-        sellItems,
-        getSalesTaxPercentage,
-    } from '../../utils/gameState/inventory.js';
+    import { buyItems, sellItems, getSalesTaxPercentage } from '../../utils/gameState/inventory.js';
 
     export let itemId;
     export let gameState;
@@ -20,8 +16,7 @@
     const item = items.find((item) => item.id === itemId);
     const { price, symbol } = getPriceStringComponents(item.price);
     const taxAmount = getSalesTaxPercentage(item.price); // Assuming this function returns a percentage value.
-    const effectiveSellPrice =
-        taxAmount > 0 ? price * (1 - taxAmount / 100) : price;
+    const effectiveSellPrice = taxAmount > 0 ? price * (1 - taxAmount / 100) : price;
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
@@ -70,11 +65,7 @@
             </Chip>
 
             <div class="horizontal">
-                <Chip
-                    text="Buy"
-                    inverted={!buyChipActive}
-                    onClick={() => handleTypeClick('buy')}
-                />
+                <Chip text="Buy" inverted={!buyChipActive} onClick={() => handleTypeClick('buy')} />
                 <Chip
                     text="Sell"
                     inverted={!sellChipActive}
@@ -95,9 +86,7 @@
                 <Chip
                     text={buyChipActive
                         ? `Buy for ${quantity * price} ${symbol}`
-                        : `Sell for ${
-                              quantity * effectiveSellPrice
-                          } ${symbol} (-${taxAmount}%)`}
+                        : `Sell for ${quantity * effectiveSellPrice} ${symbol} (-${taxAmount}%)`}
                     onClick={handleTransactionClick}
                     priceInRed={displaySellPriceInRed}
                     red={sellChipActive}
@@ -106,14 +95,11 @@
 
             {#if sellChipActive && taxAmount > 0}
                 <p class="tax-notice">
-                    Note: There's a {taxAmount}% tax applied. Reduce the amount
-                    of <a href="/docs/dCarbon">dCarbon</a> in your inventory:
+                    Note: There's a {taxAmount}% tax applied. Reduce the amount of
+                    <a href="/docs/dCarbon">dCarbon</a> in your inventory:
                 </p>
 
-                <CompactItemList
-                    itemList={[{ id: dCarbonId }]}
-                    inverted={true}
-                />
+                <CompactItemList itemList={[{ id: dCarbonId }]} inverted={true} />
             {/if}
         </div>
     {/if}

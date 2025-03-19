@@ -4,7 +4,9 @@
 
 module.exports = async () => {
     try {
-        console.log('Tests completed - dedicated test directories will store artifacts automatically');
+        console.log(
+            'Tests completed - dedicated test directories will store artifacts automatically'
+        );
     } catch (error) {
         console.error('Error in teardown process:', error);
     }

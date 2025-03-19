@@ -16,9 +16,7 @@
 
     function sort(field, func) {
         const newOrder =
-            sortState.activeField === field && sortState.order === 'asc'
-                ? 'desc'
-                : 'asc';
+            sortState.activeField === field && sortState.order === 'asc' ? 'desc' : 'asc';
         sortState = { activeField: field, order: newOrder };
         dispatch('sort', { field, order: newOrder, func });
     }

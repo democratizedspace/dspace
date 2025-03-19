@@ -76,20 +76,12 @@
 
             {#if process.consumeItems && process.consumeItems.length > 0}
                 <h6>Consumes:</h6>
-                <CompactItemList
-                    itemList={process.consumeItems}
-                    noRed={true}
-                    decrease={true}
-                />
+                <CompactItemList itemList={process.consumeItems} noRed={true} decrease={true} />
             {/if}
 
             {#if process.createItems && process.createItems.length > 0}
                 <h6>Creates:</h6>
-                <CompactItemList
-                    itemList={process.createItems}
-                    noRed={true}
-                    increase={true}
-                />
+                <CompactItemList itemList={process.createItems} noRed={true} increase={true} />
             {/if}
 
             <h4>Duration: {process.duration}</h4>
@@ -103,11 +95,7 @@
                     totalDurationSeconds={durationInSeconds(process.duration)}
                 />
             {:else}
-                <Chip
-                    text="Collect"
-                    onClick={onProcessComplete}
-                    inverted={true}
-                />
+                <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
             {/if}
             <!-- uncomment the following line to add a Skip button to all processes -->
             <!-- <SkipProcessButton {processId} /> -->

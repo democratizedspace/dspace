@@ -11,10 +11,7 @@ const {
     skipProcess,
 } = require('../../src/utils/gameState/processes.js');
 
-const {
-    loadGameState,
-    saveGameState,
-} = require('../../src/utils/gameState/common.js');
+const { loadGameState, saveGameState } = require('../../src/utils/gameState/common.js');
 
 // Mock common.js imports
 jest.mock('../../src/utils/gameState/common.js', () => {
@@ -139,9 +136,7 @@ describe('gameState - processes', () => {
 
     test('getProcessStartedAt should return the correct value if the process has started', () => {
         startProcess('foo');
-        expect(getProcessStartedAt('foo')).toBe(
-            mockGameState.processes['foo'].startedAt
-        );
+        expect(getProcessStartedAt('foo')).toBe(mockGameState.processes['foo'].startedAt);
     });
 
     test('getProcessProgress should return 0 if the process has not started', () => {

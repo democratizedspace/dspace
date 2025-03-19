@@ -32,12 +32,7 @@
     }
 </script>
 
-<input
-    type="text"
-    bind:value={searchQuery}
-    placeholder="Search..."
-    on:input={handleInput}
-/>
+<input type="text" bind:value={searchQuery} placeholder="Search..." on:input={handleInput} />
 
 <style>
     input {

@@ -12,9 +12,7 @@
     let fullItemList = items.map((item) => ({ ...item }));
 
     // Create a derived list from fullItemList based on inventory prop
-    let inventoryItemList = fullItemList.filter(
-        (item) => inventory[item.id] !== undefined
-    );
+    let inventoryItemList = fullItemList.filter((item) => inventory[item.id] !== undefined);
 
     const filteredItems = writable(inventoryItemList); // Use writable store
 
@@ -28,10 +26,8 @@
         const func = sortField.func || null;
 
         const sortFunc = (a, b) => {
-            const aValue =
-                func && field === sortField.field ? func(a) : a[field];
-            const bValue =
-                func && field === sortField.field ? func(b) : b[field];
+            const aValue = func && field === sortField.field ? func(a) : a[field];
+            const bValue = func && field === sortField.field ? func(b) : b[field];
             return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
         };
 
@@ -60,9 +56,7 @@
 
     // Update the inventoryItemList when the inventory prop changes
     $: {
-        inventoryItemList = fullItemList.filter(
-            (item) => inventory[item.id] !== undefined
-        );
+        inventoryItemList = fullItemList.filter((item) => inventory[item.id] !== undefined);
         filteredItems.set(inventoryItemList);
     }
 </script>
@@ -76,9 +70,7 @@
             {
                 field: 'price',
                 func: (item) => {
-                    return item.price
-                        ? getPriceStringComponents(item.price).price
-                        : 0;
+                    return item.price ? getPriceStringComponents(item.price).price : 0;
                 },
             },
             {

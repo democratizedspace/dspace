@@ -90,24 +90,12 @@
 <form on:submit={handleSubmit} class="process-form">
     <div class="form-group">
         <label for="title">Title*</label>
-        <input
-            type="text"
-            id="title"
-            bind:value={title}
-            placeholder="Process title"
-            required
-        />
+        <input type="text" id="title" bind:value={title} placeholder="Process title" required />
     </div>
 
     <div class="form-group">
         <label for="duration">Duration*</label>
-        <input
-            type="text"
-            id="duration"
-            bind:value={duration}
-            placeholder="e.g. 1h 30m"
-            required
-        />
+        <input type="text" id="duration" bind:value={duration} placeholder="e.g. 1h 30m" required />
     </div>
 
     <div class="form-group">
@@ -120,11 +108,7 @@
                     label="Select Required Item"
                     on:select={(e) => handleItemSelect(e, 'require', index)}
                 />
-                <input
-                    type="number"
-                    bind:value={item.count}
-                    placeholder="Count"
-                />
+                <input type="number" bind:value={item.count} placeholder="Count" />
                 <button
                     type="button"
                     class="remove-button"
@@ -147,11 +131,7 @@
                     label="Select Consumed Item"
                     on:select={(e) => handleItemSelect(e, 'consume', index)}
                 />
-                <input
-                    type="number"
-                    bind:value={item.count}
-                    placeholder="Count"
-                />
+                <input type="number" bind:value={item.count} placeholder="Count" />
                 <button
                     type="button"
                     class="remove-button"
@@ -174,11 +154,7 @@
                     label="Select Created Item"
                     on:select={(e) => handleItemSelect(e, 'create', index)}
                 />
-                <input
-                    type="number"
-                    bind:value={item.count}
-                    placeholder="Count"
-                />
+                <input type="number" bind:value={item.count} placeholder="Count" />
                 <button
                     type="button"
                     class="remove-button"
@@ -186,8 +162,7 @@
                 >
             </div>
         {/each}
-        <button type="button" class="add-button" on:click={addItemCreation}
-            >Add Created Item</button
+        <button type="button" class="add-button" on:click={addItemCreation}>Add Created Item</button
         >
     </div>
 

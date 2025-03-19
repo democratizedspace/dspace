@@ -15,29 +15,33 @@ All quests must conform to this schema:
 
 ```json
 {
-    "id": "string",           // Unique identifier, often category/name format
-    "title": "string",        // Display title
-    "description": "string",  // Brief quest description
-    "image": "string",        // Path to quest image
-    "npc": "string",         // Path to NPC avatar image
-    "start": "string",       // ID of the starting dialogue node
-    "dialogue": [            // Array of dialogue nodes
+    "id": "string", // Unique identifier, often category/name format
+    "title": "string", // Display title
+    "description": "string", // Brief quest description
+    "image": "string", // Path to quest image
+    "npc": "string", // Path to NPC avatar image
+    "start": "string", // ID of the starting dialogue node
+    "dialogue": [
+        // Array of dialogue nodes
         {
-            "id": "string",  // Node identifier
+            "id": "string", // Node identifier
             "text": "string", // NPC's dialogue text
-            "options": [     // Player response options
+            "options": [
+                // Player response options
                 {
-                    "type": "string",     // goto, finish, process, or grantsItems
-                    "text": "string",     // Player's response text
-                    "goto": "string",     // For type:goto, target node ID
-                    "process": "string",  // For type:process, process ID
-                    "requiresItems": [    // Optional items needed to select this option
+                    "type": "string", // goto, finish, process, or grantsItems
+                    "text": "string", // Player's response text
+                    "goto": "string", // For type:goto, target node ID
+                    "process": "string", // For type:process, process ID
+                    "requiresItems": [
+                        // Optional items needed to select this option
                         {
                             "id": "string",
                             "count": "number"
                         }
                     ],
-                    "grantsItems": [      // Optional items given when selecting this option
+                    "grantsItems": [
+                        // Optional items given when selecting this option
                         {
                             "id": "string",
                             "count": "number"
@@ -47,13 +51,15 @@ All quests must conform to this schema:
             ]
         }
     ],
-    "rewards": [             // Items given upon quest completion
+    "rewards": [
+        // Items given upon quest completion
         {
             "id": "string",
             "count": "number"
         }
     ],
-    "requiresQuests": [      // Array of quest IDs that must be completed first
+    "requiresQuests": [
+        // Array of quest IDs that must be completed first
         "string"
     ]
 }
@@ -64,50 +70,53 @@ All quests must conform to this schema:
 Based on the codebase, quests are organized into these main categories:
 
 1. Energy
-   - dWatt collection (e.g., "energy/dWatt-1e5")
-   - Solar power (e.g., "energy/dSolar-100kW")
+    - dWatt collection (e.g., "energy/dWatt-1e5")
+    - Solar power (e.g., "energy/dSolar-100kW")
 2. Rocketry
-   - First launch
-   - Component printing
-   - Assembly
+    - First launch
+    - Component printing
+    - Assembly
 3. 3D Printing
-   - Printer setup
-   - Test prints
-   - Component creation
+    - Printer setup
+    - Test prints
+    - Component creation
 4. Hydroponics
-   - Water management
-   - Plant growth
-   - Harvesting
+    - Water management
+    - Plant growth
+    - Harvesting
 
 ### Quest Dependencies
 
 Quests can require other quests to be completed first. For example:
-- Solar quests follow a progression: 1kW → 10kW → 100kW
-- Energy collection quests scale up: 1e4 → 1e5
-- Complex builds require basic tool quests first
+
+-   Solar quests follow a progression: 1kW → 10kW → 100kW
+-   Energy collection quests scale up: 1e4 → 1e5
+-   Complex builds require basic tool quests first
 
 ## Custom Quest Creation
 
 When creating custom quests:
 
 1. Validation
-   - All required fields must be present
-   - IDs must be unique
-   - All referenced dialogue nodes must exist
-   - All item IDs must be valid
-   - All process IDs must be valid
+
+    - All required fields must be present
+    - IDs must be unique
+    - All referenced dialogue nodes must exist
+    - All item IDs must be valid
+    - All process IDs must be valid
 
 2. Testing
-   - Quest dependencies are checked
-   - Item requirements are validated
-   - Process integrations are verified
-   - Dialogue flow is tested for dead ends
+
+    - Quest dependencies are checked
+    - Item requirements are validated
+    - Process integrations are verified
+    - Dialogue flow is tested for dead ends
 
 3. Contribution
-   - Custom quests are stored locally by default
-   - Can be submitted for inclusion in the base game
-   - Must follow space exploration theme
-   - Pull requests are generated automatically
+    - Custom quests are stored locally by default
+    - Can be submitted for inclusion in the base game
+    - Must follow space exploration theme
+    - Pull requests are generated automatically
 
 Run the first quest (replacing the placeholder JSON for the new quest appropriately), copy the dialogue sample, and paste it in the second prompt and run that one too. This should generate the dialogue option, which you can paste back in the original placeholder JSON. You're welcome to submit [pull requests](https://github.com/democratizedspace/dspace/pulls) to improve these prompts!
 

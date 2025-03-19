@@ -7,9 +7,7 @@
 
     export let option, questId;
 
-    const itemRequirementsMet = writable(
-        option.requiresItems === undefined ? true : false
-    );
+    const itemRequirementsMet = writable(option.requiresItems === undefined ? true : false);
 
     function onClick() {
         if ($itemRequirementsMet) {
@@ -22,10 +20,7 @@
             if (option.requiresItems) {
                 let met = true;
                 for (let item of option.requiresItems) {
-                    if (
-                        !$state.inventory[item.id] ||
-                        $state.inventory[item.id] < item.count
-                    ) {
+                    if (!$state.inventory[item.id] || $state.inventory[item.id] < item.count) {
                         met = false;
                         break;
                     }

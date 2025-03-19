@@ -34,15 +34,9 @@ describe('ItemForm Component', () => {
         const form = container.querySelector('form');
         const nameInput = container.querySelector('input[type="text"]');
         const descInput = container.querySelector('textarea');
-        const priceInput = container.querySelector(
-            'input[placeholder="e.g. 100 dUSD"]'
-        );
-        const unitInput = container.querySelector(
-            'input[placeholder="e.g. kg, m, L"]'
-        );
-        const typeInput = container.querySelector(
-            'input[placeholder="e.g. 3dprint"]'
-        );
+        const priceInput = container.querySelector('input[placeholder="e.g. 100 dUSD"]');
+        const unitInput = container.querySelector('input[placeholder="e.g. kg, m, L"]');
+        const typeInput = container.querySelector('input[placeholder="e.g. 3dprint"]');
 
         // Setup mock event listener
         let submittedData = null;

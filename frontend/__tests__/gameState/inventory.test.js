@@ -10,10 +10,7 @@ const {
     getSalesTaxPercentage,
 } = require('../../src/utils/gameState/inventory.js');
 
-const {
-    loadGameState,
-    saveGameState,
-} = require('../../src/utils/gameState/common.js');
+const { loadGameState, saveGameState } = require('../../src/utils/gameState/common.js');
 
 jest.mock('../../src/utils/gameState/common.js', () => {
     return {

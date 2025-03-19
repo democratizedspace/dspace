@@ -19,8 +19,7 @@
     let dialogueMap;
 
     const avatar =
-        localStorage.getItem('avatarUrl') ||
-        '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
+        localStorage.getItem('avatarUrl') || '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
 
     onMount(() => {
         // Initialize quest-related data after component is mounted
@@ -77,8 +76,8 @@
             <div class="vertical">
                 <h4>Quest Complete!</h4>
                 <p>
-                    You have completed this quest. You can now return to the
-                    Quests page to start another quest.
+                    You have completed this quest. You can now return to the Quests page to start
+                    another quest.
                 </p>
             </div>
         </div>
@@ -87,11 +86,7 @@
             <div>
                 {#if $clientSideRendered && quest && dialogueMap}
                     <div>
-                        <img
-                            class="banner"
-                            src={quest.image}
-                            alt={quest.title}
-                        />
+                        <img class="banner" src={quest.image} alt={quest.title} />
                     </div>
                     <div class="left">
                         <img src={npc} alt="NPC" />

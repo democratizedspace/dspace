@@ -26,13 +26,9 @@
     md.renderer.rules.fence = (tokens, idx, options, env, self) => {
         const token = tokens[idx];
         let language = token.info ? token.info.trim() : '';
-        language = languageMapping[language]
-            ? languageMapping[language]
-            : language;
+        language = languageMapping[language] ? languageMapping[language] : language;
         const code = token.content.trim();
-        const languageLabel = language
-            ? `<span class="language-label">${language}</span>`
-            : '';
+        const languageLabel = language ? `<span class="language-label">${language}</span>` : '';
 
         return `<div>${languageLabel}<pre title="${language}"><code class="hljs ${language}">${
             hljs.highlightAuto(code).value

@@ -42,9 +42,10 @@ These are the items produced by the process, which are added to your inventory u
 Duration indicates the amount of time required for the process to complete. It's expressed in the form 1d 2h 3m 4s, meaning 1 day, 2 hours, 3 minutes, and 4 seconds. Process durations can range from mere seconds to several months or even years.
 
 #### Duration Examples
-- Quick processes: "2s", "30s", "1m"
-- Medium processes: "1h 30m", "2h 8m 11s"
-- Long processes: "12h 52m 51s", "48h", "7d", "28d"
+
+-   Quick processes: "2s", "30s", "1m"
+-   Medium processes: "1h 30m", "2h 8m 11s"
+-   Long processes: "12h 52m 51s", "48h", "7d", "28d"
 
 The system automatically converts these durations into milliseconds for precise timing.
 
@@ -54,32 +55,35 @@ Starting with v3, you can create your own custom processes. When creating a cust
 
 1. Duration Format: Must follow the pattern `(\d+h\s*)?(\d+m\s*)?(\d+s\s*)?` (e.g., "1h 30m", "45s", "2h")
 2. Item Requirements:
-   - Required items are checked but not consumed
-   - Consumed items are removed at process start
-   - Created items are added upon completion
+    - Required items are checked but not consumed
+    - Consumed items are removed at process start
+    - Created items are added upon completion
 3. Item Counts: Must be positive numbers
 4. Process State Management:
-   - Processes can be canceled and resumed
-   - Consumed items are returned on cancellation
-   - Progress is saved locally and persists between sessions
+    - Processes can be canceled and resumed
+    - Consumed items are returned on cancellation
+    - Progress is saved locally and persists between sessions
 
 ## Process Examples
 
 Here are some example processes from the base game:
 
 ### 3D Printing
-- Benchy test print: 1h 51m, consumes 33g filament and 231.25 dWatt
-- Rocket body tube: 2h 8m 11s, consumes 18.48g filament and 266.67 dWatt
-- Full rocket: 12h 52m 51s, consumes 91g filament and 1610.10 dWatt
+
+-   Benchy test print: 1h 51m, consumes 33g filament and 231.25 dWatt
+-   Rocket body tube: 2h 8m 11s, consumes 18.48g filament and 266.67 dWatt
+-   Full rocket: 12h 52m 51s, consumes 91g filament and 1610.10 dWatt
 
 ### Hydroponics
-- Soak rockwool: 15m
-- Germinate basil: 7d
-- Grow basil: 28d, requires grow light, consumes 16128 dWatt
+
+-   Soak rockwool: 15m
+-   Germinate basil: 7d
+-   Grow basil: 28d, requires grow light, consumes 16128 dWatt
 
 ### Energy Generation
-- Solar 200Wh: 1h, creates 200 dWatt and 200 dSolar
-- Solar 1000Wh: 5h, creates 1000 dWatt and 1000 dSolar
+
+-   Solar 200Wh: 1h, creates 200 dWatt and 200 dSolar
+-   Solar 1000Wh: 5h, creates 1000 dWatt and 1000 dSolar
 
 ## Lifecycle
 

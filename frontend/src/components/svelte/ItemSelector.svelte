@@ -73,14 +73,10 @@
                     <h3>{selectedItem.name}</h3>
                 </div>
             </div>
-            <button type="button" class="edit-button" on:click={toggleExpanded}>
-                Edit
-            </button>
+            <button type="button" class="edit-button" on:click={toggleExpanded}> Edit </button>
         </div>
     {:else}
-        <button type="button" class="select-button" on:click={toggleExpanded}>
-            Select Item
-        </button>
+        <button type="button" class="select-button" on:click={toggleExpanded}> Select Item </button>
     {/if}
 </div>
 

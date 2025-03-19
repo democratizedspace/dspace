@@ -39,13 +39,7 @@
 <form on:submit={handleSubmit} enctype="multipart/form-data" class="quest-form">
     <div class="form-group">
         <label for="title">Title*</label>
-        <input
-            type="text"
-            id="title"
-            bind:value={title}
-            placeholder="Gather resources"
-            required
-        />
+        <input type="text" id="title" bind:value={title} placeholder="Gather resources" required />
     </div>
 
     <div class="form-group">
@@ -60,12 +54,7 @@
 
     <div class="form-group">
         <label for="image">Attach an Image</label>
-        <input
-            type="file"
-            id="image"
-            accept="image/*"
-            on:change={handleImageUpload}
-        />
+        <input type="file" id="image" accept="image/*" on:change={handleImageUpload} />
         {#if previewUrl}
             <div class="image-preview-container">
                 <img src={previewUrl} class="image-preview" alt="Preview" />

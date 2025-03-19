@@ -19,18 +19,13 @@
     <div class="horizontal selector">
         <div class="item horizontal previewcontainer" id="preview">
             {#if selectedIndex >= 0}
-                <img
-                    class="preview"
-                    src={defaultPFPs[selectedIndex]}
-                    alt="Selected Avatar"
-                />
+                <img class="preview" src={defaultPFPs[selectedIndex]} alt="Selected Avatar" />
             {:else}
                 <img class="preview hidden" alt="" />
             {/if}
         </div>
-        <button
-            class="item selectbutton"
-            on:click={() => setSelectedAvatar(selectedIndex)}>Select</button
+        <button class="item selectbutton" on:click={() => setSelectedAvatar(selectedIndex)}
+            >Select</button
         >
         Refresh the page to see more random avatars!
     </div>

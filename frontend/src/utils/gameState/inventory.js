@@ -57,10 +57,7 @@ export const buyItems = (items) => {
 
         const totalPrice = parseFloat(price) * parseFloat(quantity);
 
-        if (
-            gameState.inventory[currencyId] &&
-            gameState.inventory[currencyId] >= totalPrice
-        ) {
+        if (gameState.inventory[currencyId] && gameState.inventory[currencyId] >= totalPrice) {
             gameState.inventory[currencyId] -= totalPrice; // Subtracting the currency for buying.
             gameState.inventory[item.id] =
                 (gameState.inventory[item.id] || 0) + parseFloat(quantity); // Adding the bought item to inventory.
@@ -80,10 +77,7 @@ export const sellItems = (items) => {
         if (price === undefined) return;
         if (quantity <= 0 || price <= 0) return;
 
-        if (
-            gameState.inventory[item.id] &&
-            gameState.inventory[item.id] >= quantity
-        ) {
+        if (gameState.inventory[item.id] && gameState.inventory[item.id] >= quantity) {
             const taxPercentage = getSalesTaxPercentage(id);
             const taxedPrice = price * (1 - taxPercentage / 100);
             const totalPriceAfterTax = taxedPrice * quantity;

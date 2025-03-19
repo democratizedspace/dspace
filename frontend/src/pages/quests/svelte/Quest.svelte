@@ -7,11 +7,7 @@
     {#if quest}
         {#if compact}
             <div class="content">
-                <img
-                    class="quest-img quest-img-compact"
-                    src={quest.image}
-                    alt={quest.image}
-                />
+                <img class="quest-img quest-img-compact" src={quest.image} alt={quest.image} />
                 <div class="content-text">
                     <h3>{quest.title}</h3>
                 </div>

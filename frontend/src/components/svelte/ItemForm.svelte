@@ -51,13 +51,7 @@
 <form on:submit={handleSubmit} enctype="multipart/form-data" class="item-form">
     <div class="form-group">
         <label for="name">Name*</label>
-        <input
-            type="text"
-            id="name"
-            bind:value={name}
-            placeholder="Item name"
-            required
-        />
+        <input type="text" id="name" bind:value={name} placeholder="Item name" required />
     </div>
 
     <div class="form-group">
@@ -72,12 +66,7 @@
 
     <div class="form-group">
         <label for="image">Attach an Image</label>
-        <input
-            type="file"
-            id="image"
-            accept="image/*"
-            on:change={handleImageUpload}
-        />
+        <input type="file" id="image" accept="image/*" on:change={handleImageUpload} />
         {#if previewUrl}
             <div class="image-preview-container">
                 <img src={previewUrl} class="image-preview" alt="Preview" />
@@ -87,32 +76,17 @@
 
     <div class="form-group">
         <label for="price">Price (optional)</label>
-        <input
-            type="text"
-            id="price"
-            bind:value={price}
-            placeholder="e.g. 100 dUSD"
-        />
+        <input type="text" id="price" bind:value={price} placeholder="e.g. 100 dUSD" />
     </div>
 
     <div class="form-group">
         <label for="unit">Unit (optional)</label>
-        <input
-            type="text"
-            id="unit"
-            bind:value={unit}
-            placeholder="e.g. kg, m, L"
-        />
+        <input type="text" id="unit" bind:value={unit} placeholder="e.g. kg, m, L" />
     </div>
 
     <div class="form-group">
         <label for="type">Type (optional)</label>
-        <input
-            type="text"
-            id="type"
-            bind:value={type}
-            placeholder="e.g. 3dprint"
-        />
+        <input type="text" id="type" bind:value={type} placeholder="e.g. 3dprint" />
     </div>
 
     <div class="form-submit">

@@ -18,10 +18,13 @@ export default defineConfig({
     workers: 1,
     reporter: [
         ['list'],
-        ['html', { 
-            outputFolder: './test-results/html-report/',
-            open: 'never' 
-        }]
+        [
+            'html',
+            {
+                outputFolder: './test-results/html-report/',
+                open: 'never',
+            },
+        ],
     ],
     retries: process.env.CI ? 2 : 0,
     timeout: 30000,

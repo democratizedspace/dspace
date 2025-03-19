@@ -16,9 +16,7 @@ export const finishQuest = (questId, rewardItems) => {
 export const questFinished = (questId) => {
     const gameState = loadGameState();
 
-    const finished = gameState.quests[questId]
-        ? gameState.quests[questId].finished
-        : false;
+    const finished = gameState.quests[questId] ? gameState.quests[questId].finished : false;
     return finished;
 };
 

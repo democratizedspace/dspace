@@ -38,9 +38,7 @@ describe('ProcessForm Component', () => {
 
         const form = container.querySelector('form');
         const titleInput = container.querySelector('input[type="text"]');
-        const durationInput = container.querySelector(
-            'input[placeholder="e.g. 1h 30m"]'
-        );
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
 
         // Setup mock event listener
         let submittedData = null;
@@ -70,15 +68,9 @@ describe('ProcessForm Component', () => {
         const formData = submittedData;
         expect(formData.get('title')).toBe('Test Process');
         expect(formData.get('duration')).toBe('1h 30m');
-        expect(JSON.parse(formData.get('requireItems'))).toEqual([
-            { id: '1', count: 2 },
-        ]);
-        expect(JSON.parse(formData.get('consumeItems'))).toEqual([
-            { id: '2', count: 1 },
-        ]);
-        expect(JSON.parse(formData.get('createItems'))).toEqual([
-            { id: '3', count: 3 },
-        ]);
+        expect(JSON.parse(formData.get('requireItems'))).toEqual([{ id: '1', count: 2 }]);
+        expect(JSON.parse(formData.get('consumeItems'))).toEqual([{ id: '2', count: 1 }]);
+        expect(JSON.parse(formData.get('createItems'))).toEqual([{ id: '3', count: 3 }]);
     });
 
     test('should handle form submission with minimal fields', () => {
@@ -88,9 +80,7 @@ describe('ProcessForm Component', () => {
 
         const form = container.querySelector('form');
         const titleInput = container.querySelector('input[type="text"]');
-        const durationInput = container.querySelector(
-            'input[placeholder="e.g. 1h 30m"]'
-        );
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
 
         // Setup mock event listener
         let submittedData = null;
@@ -137,9 +127,7 @@ describe('ProcessForm Component', () => {
 
                 requestAnimationFrame(() => {
                     // Verify item was removed
-                    expect(
-                        container.querySelectorAll('.item-row')
-                    ).toHaveLength(0);
+                    expect(container.querySelectorAll('.item-row')).toHaveLength(0);
                     resolve();
                 });
             });
@@ -153,9 +141,7 @@ describe('ProcessForm Component', () => {
 
         const form = container.querySelector('form');
         const titleInput = container.querySelector('input[type="text"]');
-        const durationInput = container.querySelector(
-            'input[placeholder="e.g. 1h 30m"]'
-        );
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
 
         // Setup mock event listener
         let submittedData = null;
@@ -193,9 +179,7 @@ describe('ProcessForm Component', () => {
 
         const form = container.querySelector('form');
         const titleInput = container.querySelector('input[type="text"]');
-        const durationInput = container.querySelector(
-            'input[placeholder="e.g. 1h 30m"]'
-        );
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
 
         // Setup form data
         titleInput.value = 'Test Process';

@@ -19,12 +19,8 @@ export const createStarryNight = (selector) => {
                     this.y + this.size * Math.sin((2 * Math.PI * i) / 5)
                 );
                 ctx.lineTo(
-                    this.x +
-                        (this.size / 2) *
-                            Math.cos((2 * Math.PI * (i + 0.5)) / 5),
-                    this.y +
-                        (this.size / 2) *
-                            Math.sin((2 * Math.PI * (i + 0.5)) / 5)
+                    this.x + (this.size / 2) * Math.cos((2 * Math.PI * (i + 0.5)) / 5),
+                    this.y + (this.size / 2) * Math.sin((2 * Math.PI * (i + 0.5)) / 5)
                 );
             }
             ctx.closePath();

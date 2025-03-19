@@ -5,12 +5,12 @@ module.exports = {
     "npm run lint -- --quiet",
     "npm run format -- --quiet",
     // Run test for changed source files
-    () => `cd frontend && npx jest --passWithNoTests`
+    () => `npm test`
   ],
   
   // Run tests for changed test files
   "frontend/**/__tests__/**/*.{js,ts}": [
-    () => `cd frontend && npx jest --passWithNoTests`
+    () => `npm test`
   ],
   
   // TypeScript type checking for TS files

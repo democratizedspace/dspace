@@ -4,10 +4,7 @@
 </script>
 
 <div class="spinner" style="width: {size}px; height: {size}px;">
-    <div
-        class="inner-spinner"
-        style="border-color: {color}; border-left-color: transparent;"
-    />
+    <div class="inner-spinner" style="border-color: {color}; border-left-color: transparent;" />
 </div>
 
 <style>

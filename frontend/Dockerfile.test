@@ -1,0 +1,33 @@
+FROM mcr.microsoft.com/playwright:v1.41.1-jammy
+
+WORKDIR /app
+
+# Install wget for healthcheck
+RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+# Install only Chromium browser
+RUN npx playwright install chromium
+
+# Create directories for test artifacts
+RUN mkdir -p test-results playwright-report
+
+# Enable Playwright debug logging
+ENV DEBUG=pw:api
+ENV PWDEBUG=console
+
+# Configure for headless mode
+ENV CI=true
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+ENV PROTOCOL=http
+
+# Command to run tests in headless mode
+CMD ["npx", "playwright", "test", "--project=chromium"] 

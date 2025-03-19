@@ -50,18 +50,14 @@
         <div class="progress-bar">
             <div
                 class="progress-bar-fill"
-                style="width: {(progressRatio * 100).toFixed(
-                    2
-                )}%; transition: none"
+                style="width: {(progressRatio * 100).toFixed(2)}%; transition: none"
             />
         </div>
     {:else}
         <div class="progress-bar">
             <div
                 class="progress-bar-fill"
-                style="width: {(progressRatio * 100).toFixed(
-                    2
-                )}%; transition: width 0.1s linear"
+                style="width: {(progressRatio * 100).toFixed(2)}%; transition: width 0.1s linear"
             />
         </div>
     {/if}
@@ -70,9 +66,7 @@
             Progress: {(progressRatio * 100).toFixed(2)}%
         </p>
         <p>
-            Time Left: {prettyPrintDuration(
-                totalDurationSeconds - elapsedSeconds
-            )}
+            Time Left: {prettyPrintDuration(totalDurationSeconds - elapsedSeconds)}
         </p>
     </div>
 </div>

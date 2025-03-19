@@ -57,11 +57,7 @@
     {#if mounted}
         <div class="controls">
             <div class="search-box">
-                <input
-                    type="text"
-                    bind:value={searchTerm}
-                    placeholder="Search quests..."
-                />
+                <input type="text" bind:value={searchTerm} placeholder="Search quests..." />
             </div>
 
             <div class="status-filter">
@@ -75,24 +71,16 @@
 
         <div class="quests-list">
             {#if filteredQuests.length === 0}
-                <div class="no-quests">
-                    No quests found matching your criteria
-                </div>
+                <div class="no-quests">No quests found matching your criteria</div>
             {:else}
                 {#each filteredQuests as quest (quest.id)}
                     <div class="quest-item">
                         <Quest {quest} compact={true} />
                         <div class="quest-actions">
-                            <button
-                                class="edit-button"
-                                on:click={() => handleEdit(quest.id)}
-                            >
+                            <button class="edit-button" on:click={() => handleEdit(quest.id)}>
                                 Edit
                             </button>
-                            <button
-                                class="delete-button"
-                                on:click={() => handleDelete(quest.id)}
-                            >
+                            <button class="delete-button" on:click={() => handleDelete(quest.id)}>
                                 Delete
                             </button>
                         </div>

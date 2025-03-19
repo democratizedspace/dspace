@@ -101,9 +101,7 @@
             {/each}
         {/if}
 
-        <button id="unpinned-toggle" on:click={toggleShowUnpinned}
-            >{LABEL_MORE}</button
-        >
+        <button id="unpinned-toggle" on:click={toggleShowUnpinned}>{LABEL_MORE}</button>
     </nav>
 </div>
 
