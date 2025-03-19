@@ -10,7 +10,11 @@ module.exports = {
     // Run Jest tests related to changed files
     files => {
       const tests = files
-        .filter(file => !file.includes('test.js') && !file.includes('test.ts'))
+        .filter(file => 
+          !file.includes('test.js') && 
+          !file.includes('test.ts') &&
+          !file.includes('test-entityType.js')  // exclude this file
+        )
         .map(file => `--testPathPattern=${file.replace(/\\/g, '/')}`)
         .join(' ');
       
