@@ -1,6 +1,6 @@
 module.exports = {
     transform: {
-        '^.+\\.svelte$': ['svelte-jester', { preprocess: true }],
+        '^.+\\.svelte$': ['svelte-jester', { preprocess: false }],
         '^.+\\.js$': 'babel-jest',
         '^.+\\.ts$': 'ts-jest',
     },
@@ -12,9 +12,13 @@ module.exports = {
         '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
             '<rootDir>/__mocks__/fileMock.js',
         '^\\$lib/(.*)': '<rootDir>/src/$1',
+        'jsdom': '<rootDir>/__mocks__/jsdom.js',
+        'fake-indexeddb/build/cjs/FDBObjectStore': '<rootDir>/__mocks__/fake-indexeddb.js'
     },
     testPathIgnorePatterns: ['/node_modules/', '/.svelte-kit/'],
     roots: ['./src', './__tests__'],
     collectCoverageFrom: ['src/**/*.{js,svelte}', '!**/node_modules/**'],
-    globalTeardown: '<rootDir>/jest.teardown.js',
+    transformIgnorePatterns: [
+        'node_modules/(?!(svelte|svelte-hmr)/)'
+    ]
 };
