@@ -17,7 +17,7 @@ else
   
   # Run e2e tests using the npm script
   echo "Running e2e tests..."
-  npm run test:e2e:debug || exit 1
+  npm run test:e2e || exit 1
   
   cd ..
 

@@ -25,7 +25,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # Run e2e tests using the npm script in the frontend directory
 Write-Host "Running e2e tests..." -ForegroundColor Yellow
-npm run test:e2e:debug
+npm run test:e2e
     
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ E2E tests failed. Please fix failing tests before pushing." -ForegroundColor Red
