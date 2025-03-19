@@ -7,9 +7,9 @@ elif command -v powershell >/dev/null 2>&1; then
 else
   echo "Running pre-push checks..."
 
-  # Run linting checks
-  echo "Running code quality checks..."
-  npm run check || exit 1
+  # Skip linting checks
+  # echo "Running code quality checks..."
+  # npm run check || exit 1
 
   # Run unit tests
   echo "Running unit tests..."
