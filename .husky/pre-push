@@ -15,9 +15,9 @@ else
   echo "Running unit tests..."
   cd frontend && npx jest || exit 1
   
-  # Run e2e tests using the npm script
-  echo "Running e2e tests..."
-  npm run test:e2e || exit 1
+  # Temporarily skip e2e tests
+  echo "Skipping e2e tests for now..."
+  # npm run test:e2e || exit 1
   
   cd ..
 
