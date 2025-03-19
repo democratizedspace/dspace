@@ -2,6 +2,7 @@ module.exports = {
   // Run lint and format checks on JavaScript, TypeScript, and Svelte files
   "frontend/**/*.{js,ts,svelte}": [
     "npm run lint:fix -- --quiet", 
+    "npm run lint -- --quiet",
     "npm run format -- --quiet",
   ],
   
