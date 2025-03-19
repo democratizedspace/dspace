@@ -1,3 +1,6 @@
+// Load the FormData mock
+require('./__mocks__/formData.js');
+
 // Mock browser environment for tests
 if (typeof window === 'undefined') {
     global.window = {
@@ -29,6 +32,7 @@ if (typeof window === 'undefined') {
     };
 }
 
+// Mock Document object with querySelector methods
 if (typeof document === 'undefined') {
     global.document = {
         createElement: (tag) => ({
@@ -40,6 +44,7 @@ if (typeof document === 'undefined') {
             parentNode: {
                 removeChild: jest.fn()
             },
+            tagName: tag.toUpperCase(),
             tag
         }),
         getElementById: (id) => ({
@@ -52,7 +57,15 @@ if (typeof document === 'undefined') {
         dispatchEvent: jest.fn(),
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
-        querySelector: jest.fn(),
+        querySelector: jest.fn(() => ({
+            tagName: 'DIV',
+            getAttribute: jest.fn((attr) => {
+                if (attr === 'src') return '/assets/logo.png';
+                return '';
+            }),
+            className: '',
+            style: {}
+        })),
         querySelectorAll: jest.fn(() => [])
     };
 }
@@ -89,9 +102,10 @@ global.Headers = class Headers {
     get(key) { return this.headers[key]; }
 };
 
-global.FormData = class FormData {
+global.FormData = global.FormData || class FormData {
     constructor() { this.data = {}; }
     append(key, value) { this.data[key] = value; }
+    get(key) { return this.data[key] || null; }
 };
 
 global.Blob = class Blob {
@@ -101,6 +115,15 @@ global.Blob = class Blob {
         this.size = 0;
         this.type = options.type || '';
     }
+};
+
+// Fix JSDOM dispatchEvent errors
+const originalDispatchEvent = global.document.dispatchEvent;
+global.document.dispatchEvent = function(event) {
+    if (originalDispatchEvent) {
+        return originalDispatchEvent.call(this, event);
+    }
+    return true;
 };
 
 // Mock process.env for devLog.js
