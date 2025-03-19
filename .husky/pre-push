@@ -1,16 +1,20 @@
 #!/bin/sh
 
-echo "Running pre-push checks..."
-
-# Check if we're on Windows and use PowerShell if available
 if command -v pwsh >/dev/null 2>&1; then
   pwsh -NoProfile -ExecutionPolicy Bypass -File .husky/pre-push.ps1
-  exit $?
 elif command -v powershell >/dev/null 2>&1; then
   powershell -NoProfile -ExecutionPolicy Bypass -File .husky/pre-push.ps1
-  exit $?
 else
-  # Run type checking and all tests
-  npm run check && npm test
-  exit $?
+  echo "Running pre-push checks..."
+
+  # Run type checking
+  echo "Running code quality checks..."
+  npm run check || exit 1
+
+  # Run all tests (unit tests only, not e2e tests which are slow)
+  echo "Running tests..."
+  cd frontend && npx jest || exit 1
+
+  echo "✅ All pre-push checks passed!"
+  exit 0
 fi 

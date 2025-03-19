@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+import 'fake-indexeddb/auto';
 import {
     createQuest,
     getQuest,
@@ -52,14 +56,7 @@ describe('Custom Content Functions', () => {
             const price = '100 dUSD';
             const unit = 'kg';
             const type = '3dprint';
-            const id = await createItem(
-                name,
-                description,
-                null,
-                price,
-                unit,
-                type
-            );
+            const id = await createItem(name, description, null, price, unit, type);
             const item = await getItem(id);
             expect(item).toMatchObject({
                 id,
@@ -158,9 +155,7 @@ describe('Custom Content Functions', () => {
             const updatedProcess = await getProcess(id);
             expect(updatedProcess.title).toBe('Updated Process Title');
             expect(updatedProcess.duration).toBe('2h');
-            expect(updatedProcess.requireItems).toEqual([
-                { id: '4', count: 1 },
-            ]);
+            expect(updatedProcess.requireItems).toEqual([{ id: '4', count: 1 }]);
         });
 
         test('should delete a process', async () => {

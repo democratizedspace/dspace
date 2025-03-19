@@ -11,6 +11,9 @@ module.exports = {
     () => "npm run check"
   ],
   
+  // Tests are run in pre-push hook instead of pre-commit to avoid Windows path issues
+  // and to make commits faster
+  
   // Format JSON, markdown, and CSS files
   "frontend/**/*.{json,md,css,scss}": [
     "npm run format -- --quiet"

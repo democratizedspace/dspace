@@ -13,9 +13,10 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-# Run all tests
+# Run all tests (unit tests only, not e2e tests which are slow)
 Write-Host "Running tests..." -ForegroundColor Yellow
-npm test
+cd frontend
+npx jest
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ Tests failed. Please fix failing tests before pushing." -ForegroundColor Red
