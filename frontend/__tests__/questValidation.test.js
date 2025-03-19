@@ -8,6 +8,8 @@ const schema = require('../src/pages/quests/jsonSchemas/quest.json');
 const questDirectoryRelativePath = '../src/pages/quests/json/';
 const ajv = new Ajv();
 const validate = ajv.compile(schema);
+// Import JSDOM for testing
+const { JSDOM } = require('jsdom');
 
 function validateFile(filepath) {
     const data = JSON.parse(fs.readFileSync(filepath));

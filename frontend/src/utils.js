@@ -49,10 +49,7 @@ export const setCookieValue = (res, key, value) => {
 };
 
 export const deleteCookie = (res, key) => {
-    res.headers.append(
-        'Set-Cookie',
-        `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
-    );
+    res.headers.append('Set-Cookie', `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`);
 };
 
 export const parseBool = (value) => {
@@ -64,9 +61,7 @@ export const parseBool = (value) => {
 
 export const hasAcceptedCookies = (req) => {
     const cookie = req.headers.get('cookie');
-    const acceptedCookies = parseBool(
-        getCookieValue(cookie, 'acceptedCookies')
-    );
+    const acceptedCookies = parseBool(getCookieValue(cookie, 'acceptedCookies'));
     return acceptedCookies || false;
 };
 
@@ -84,9 +79,7 @@ export const getCookies = (cookie) => {
 export const getCookieItems = (cookie) => {
     const parsedCookie = parseCookie(cookie);
     return Object.keys(parsedCookie)
-        .filter(
-            (key) => /^item-\d+$/.test(key) && parseFloat(parsedCookie[key]) > 0
-        )
+        .filter((key) => /^item-\d+$/.test(key) && parseFloat(parsedCookie[key]) > 0)
         .map((key) => {
             return {
                 id: key.split('-')[1], // Extract the number after 'item-'
@@ -163,9 +156,7 @@ export const durationInSeconds = (durationString) => {
 
 export const getWalletBalance = (req, symbol) => {
     const cookie = req.headers.get('cookie');
-    const balance = parseFloat(
-        getCookieValue(cookie, `currency-balance-${symbol}`)
-    );
+    const balance = parseFloat(getCookieValue(cookie, `currency-balance-${symbol}`));
     if (balance !== undefined && !isNaN(balance)) {
         return balance;
     }
@@ -190,8 +181,8 @@ export const addWalletBalance = (req, res, symbol, addBalance) => {
 };
 
 export const fixMarkdownText = (text) => {
-    // replace ’ with '
-    const fixedText = text.replace(/’/g, "'");
+    // replace ' with '
+    const fixedText = text.replace(/'/g, "'");
     return fixedText;
 };
 
@@ -241,7 +232,9 @@ export const base64ToObject = (base64) => {
         if (json) {
             return json;
         }
-    } catch (e) {}
+    } catch (e) {
+        // Silently fail and return empty object for invalid base64 or JSON
+    }
     return {};
 };
 

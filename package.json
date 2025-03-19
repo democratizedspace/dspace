@@ -1,6 +1,14 @@
 {
   "name": "dspace",
+  "version": "2.1.0",
   "main": "index.js",
+  "scripts": {
+    "test": "cd frontend && npm test",
+    "check": "cd frontend && npm run check",
+    "lint": "cd frontend && npm run lint",
+    "lint:fix": "cd frontend && npm run lint:fix",
+    "format": "cd frontend && npm run format"
+  },
   "devDependencies": {
     "fake-indexeddb": "^6.0.0"
   }

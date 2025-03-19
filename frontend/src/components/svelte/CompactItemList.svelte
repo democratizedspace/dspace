@@ -24,7 +24,7 @@
     function generateFullItemList() {
         return itemList.map((item) => ({
             ...items.find((i) => i.id === item.id),
-            count: item.hasOwnProperty('count')
+            count: Object.prototype.hasOwnProperty.call(item, 'count')
                 ? Number(item.count.toFixed(5))
                 : null,
             total: $itemCounts[item.id],
@@ -34,10 +34,7 @@
     // Initial setup and cleanup on mount
     onMount(() => {
         isMounted = true;
-        const intervalId = setInterval(
-            () => itemCounts.set(getItemCounts(itemList)),
-            1000
-        );
+        const intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
         return () => clearInterval(intervalId);
     });
 
@@ -61,31 +58,21 @@
                         <DelayedRender delaySeconds={0.1}>
                             <span slot="content">
                                 <a href={`/inventory/item/${item.id}`}>
-                                    <img
-                                        src={item.image}
-                                        class="icon"
-                                        alt={item.name}
-                                    />
+                                    <img src={item.image} class="icon" alt={item.name} />
                                 </a>
                             </span>
 
                             <span slot="fallback">
-                                <img
-                                    src={item.image}
-                                    class="icon"
-                                    alt={item.name}
-                                />
+                                <img src={item.image} class="icon" alt={item.name} />
                             </span>
                         </DelayedRender>
                         <p
-                            class:disabled={disabled ||
-                                $itemCounts[item.id] < item.count}
+                            class:disabled={disabled || $itemCounts[item.id] < item.count}
                             class:inverted
                         >
                             {prettyPrintNumber($itemCounts[item.id])}
                             {#if item.count !== null}
-                                <span class={colorClass}
-                                    >{sign}{prettyPrintNumber(item.count)}</span
+                                <span class={colorClass}>{sign}{prettyPrintNumber(item.count)}</span
                                 >
                             {/if}
                             x {item.name}

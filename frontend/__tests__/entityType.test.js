@@ -1,4 +1,5 @@
 /**
+ * @jest-environment jsdom
  * Tests for getStoreForEntityType function
  */
 

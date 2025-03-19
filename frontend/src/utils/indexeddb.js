@@ -109,3 +109,22 @@ export function deleteEntity(id) {
         });
     });
 }
+
+/**
+ * Get the store name for a given entity type
+ * @param {string} entityType - The type of entity (quest, item, process)
+ * @returns {string} The store name for the entity type
+ * @throws {Error} If the entity type is not supported
+ */
+export function getStoreForEntityType(entityType) {
+    switch (entityType) {
+        case 'quest':
+            return 'quests';
+        case 'item':
+            return 'items';
+        case 'process':
+            return 'processes';
+        default:
+            throw new Error(`Unknown entity type: ${entityType}`);
+    }
+}
