@@ -132,20 +132,20 @@ export const durationInSeconds = (durationString) => {
             const unit = component.replace(number, '');
             let seconds = 0;
             switch (unit) {
-                case 'd':
-                    seconds = number * 86400;
-                    break;
-                case 'h':
-                    seconds = number * 3600;
-                    break;
-                case 'm':
-                    seconds = number * 60;
-                    break;
-                case 's':
-                    seconds = number;
-                    break;
-                default:
-                    break;
+            case 'd':
+                seconds = number * 86400;
+                break;
+            case 'h':
+                seconds = number * 3600;
+                break;
+            case 'm':
+                seconds = number * 60;
+                break;
+            case 's':
+                seconds = number;
+                break;
+            default:
+                break;
             }
             durationSeconds += seconds;
         }
@@ -184,7 +184,7 @@ export const addWalletBalance = (req, res, symbol, addBalance) => {
 
 export const fixMarkdownText = (text) => {
     // replace ' with '
-    const fixedText = text.replace(/'/g, "'");
+    const fixedText = text.replace(/'/g, '\'');
     return fixedText;
 };
 
@@ -207,7 +207,7 @@ export const getPriceStringComponents = (currency) => {
 export const getSymbolFromId = (itemId) => {
     const item = items.find((item) => item.id === itemId);
     if (item) {
-        const { _, symbol } = getPriceStringComponents(item.price);
+        const { symbol } = getPriceStringComponents(item.price);
         return symbol;
     }
     return undefined;
@@ -309,39 +309,6 @@ export function formatNumberK(n) {
     if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + 'M';
     if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + 'B';
     if (n >= 1e12) return +(n / 1e12).toFixed(1) + 'T';
-}
-
-export function getPriceStringComponents(price) {
-    if (price === undefined)
-        return {
-            symbol: '$',
-            price: 0,
-        };
-
-    // Regular expression to match optionally a dollar sign, then the number
-    const regex = /^(\$)?([\d.]+)$/;
-    const match = String(price).match(regex);
-
-    // Set defaults
-    let symbol = '$';
-    let numericPrice = 0;
-
-    if (match) {
-        // If there was a dollar sign, it's in match[1]
-        if (match[1]) {
-            symbol = match[1];
-        }
-        // The number is in match[2]
-        numericPrice = parseFloat(match[2]);
-    } else {
-        // If the regex doesn't match, just try to get a number
-        numericPrice = parseFloat(price) || 0;
-    }
-
-    return {
-        symbol,
-        price: numericPrice,
-    };
 }
 
 // Get price string
@@ -525,16 +492,16 @@ export function filterQuests(quests, filter = 'all') {
     let result = [];
 
     switch (filter) {
-        case 'available':
-            result = quests.filter((quest) => !questFinished(quest.id) && canStartQuest(quest));
-            break;
-        case 'finished':
-            result = quests.filter((quest) => questFinished(quest.id));
-            break;
-        case 'all':
-        default:
-            result = [...quests];
-            break;
+    case 'available':
+        result = quests.filter((quest) => !questFinished(quest.id) && canStartQuest(quest));
+        break;
+    case 'finished':
+        result = quests.filter((quest) => questFinished(quest.id));
+        break;
+    case 'all':
+    default:
+        result = [...quests];
+        break;
     }
 
     return result;
