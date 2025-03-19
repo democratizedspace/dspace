@@ -1,32 +1,18 @@
 module.exports = {
+    testEnvironment: 'jsdom',
+    setupFiles: ['./jest.setup.js'],
+    moduleNameMapper: {
+        '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+        '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+            '<rootDir>/__mocks__/fileMock.js',
+    },
+    testPathIgnorePatterns: ['/node_modules/', '/.svelte-kit/'],
     transform: {
-        '^.+\\.svelte$': [
-            'svelte-jester',
-            {
-                preprocess: false,
-                compilerOptions: {
-                    dev: false,
-                },
-            },
-        ],
+        '^.+\\.svelte$': 'svelte-jester',
         '^.+\\.js$': 'babel-jest',
     },
     moduleFileExtensions: ['js', 'svelte'],
-    testEnvironment: 'jsdom',
-    testEnvironmentOptions: {
-        html: '<!DOCTYPE html><html><head></head><body></body></html>',
-        url: 'http://localhost',
-        includeNodeLocations: true,
-        storageQuota: 10000000,
-        pretendToBeVisual: true,
-        resources: 'usable',
-    },
-    testPathIgnorePatterns: ['node_modules'],
-    bail: false,
-    verbose: true,
-    transformIgnorePatterns: ['node_modules'],
-    setupFiles: ['<rootDir>/setupJest.js', 'fake-indexeddb/auto'],
-    setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
     roots: ['./src', './__tests__'],
     collectCoverageFrom: ['src/**/*.{js,svelte}', '!**/node_modules/**'],
+    globalTeardown: '<rootDir>/jest.teardown.js',
 };

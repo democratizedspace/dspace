@@ -28,6 +28,18 @@ dev/
 # Jest coverage directory
 coverage/
 
+# Playwright test results
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Test screenshots and artifacts
+/test-artifacts/
+/test-screenshots/
+/test-videos/
+/e2e-results/
+
 # Local development file
 .eslintrc.local.json
 .prettierrc.local.json
