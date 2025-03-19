@@ -5,6 +5,11 @@ module.exports = {
     "npm run format -- --quiet",
   ],
   
+  // TypeScript type checking for TS files
+  "frontend/**/*.ts": [
+    () => "cd frontend && npm run check"
+  ],
+  
   // Only run tests on JavaScript and TypeScript files (not Svelte components)
   "frontend/**/*.{js,ts}": [
     // Run Jest tests related to changed files
