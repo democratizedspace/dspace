@@ -1,40 +1,32 @@
-#!/bin/sh
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
-if command -v pwsh >/dev/null 2>&1; then
-  pwsh -NoProfile -ExecutionPolicy Bypass -File .husky/pre-push.ps1
-elif command -v powershell >/dev/null 2>&1; then
-  powershell -NoProfile -ExecutionPolicy Bypass -File .husky/pre-push.ps1
-else
-  echo "Running pre-push checks..."
+echo "Running pre-push checks..."
 
-  # Run linting checks
-  echo "Running code quality checks..."
-  npm run check || exit 1
+# Run linting checks
+echo "Running code quality checks..."
+npm run check
+if [ $? -ne 0 ]; then
+  echo "❌ Code quality checks failed. Please fix the issues before pushing."
+  exit 1
+fi
 
-  # Run unit tests
-  echo "Running unit tests..."
-  cd frontend && npx jest || exit 1
-  
-  # Run e2e tests
-  echo "Running e2e tests..."
-  cd frontend
-  # Comment out linting checks to allow push
-  # echo "Running code quality checks..."
-  # npm run lint
-  # if [ $? -ne 0 ]; then
-  #   echo "❌ Code quality checks failed. Please fix the issues before pushing."
-  #   exit 1
-  # fi
+# Run unit tests
+echo "Running unit tests..."
+cd frontend
+npx jest
+if [ $? -ne 0 ]; then
+  echo "❌ Unit tests failed. Please fix failing tests before pushing."
+  exit 1
+fi
 
-  echo "Running e2e tests..."
-  npm run test:e2e:headless
-  if [ $? -ne 0 ]; then
-    echo "❌ E2E tests failed. Please fix the failing tests before pushing."
-    exit 1
-  fi
-  
-  cd ..
+# Run e2e tests (Playwright)
+echo "Running e2e tests..."
+npx playwright test
+if [ $? -ne 0 ]; then
+  echo "❌ E2E tests failed. Please fix failing tests before pushing."
+  exit 1
+fi
 
-  echo "✅ All pre-push checks passed!"
-  exit 0
-fi 
+cd ..
+echo "✅ All pre-push checks passed!" 
