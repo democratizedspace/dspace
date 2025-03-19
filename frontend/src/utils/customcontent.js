@@ -1,11 +1,6 @@
 // frontend/src/utils/customcontent.js
 
-import {
-    addEntity,
-    getEntity,
-    updateEntity,
-    deleteEntity,
-} from './indexeddb.js';
+import { addEntity, getEntity, updateEntity, deleteEntity } from './indexeddb.js';
 
 const ENTITY_TYPES = {
     QUEST: 'quest',
@@ -14,11 +9,13 @@ const ENTITY_TYPES = {
 };
 
 // Quest functions
-function createQuest(title, description) {
+function createQuest(title, description, image = '/assets/quests/howtodoquests.jpg') {
     const quest = {
         type: ENTITY_TYPES.QUEST,
         title,
         description,
+        image,
+        custom: true,
         createdAt: new Date().toISOString(),
     };
     return addEntity(quest);
@@ -50,14 +47,7 @@ function deleteQuest(id) {
 }
 
 // Item functions
-function createItem(
-    name,
-    description,
-    image = null,
-    price = null,
-    unit = null,
-    type = null
-) {
+function createItem(name, description, image = null, price = null, unit = null, type = null) {
     const item = {
         type: ENTITY_TYPES.ITEM,
         name,
@@ -97,13 +87,7 @@ function deleteItem(id) {
 }
 
 // Process functions
-function createProcess(
-    title,
-    duration,
-    requireItems = [],
-    consumeItems = [],
-    createItems = []
-) {
+function createProcess(title, duration, requireItems = [], consumeItems = [], createItems = []) {
     const process = {
         type: ENTITY_TYPES.PROCESS,
         title,

@@ -39,11 +39,13 @@
             {/each}
         </div>
 
-        {#each filteredQuests as quest}
-            <a href="/quests/{quest.id}">
-                <Quest {quest} />
-            </a>
-        {/each}
+        <div class="quests-grid">
+            {#each filteredQuests as quest}
+                <a href="/quests/{quest.id}">
+                    <Quest {quest} />
+                </a>
+            {/each}
+        </div>
 
         {#if finishedQuests.length > 0}
             <h2>Completed Quests</h2>
@@ -67,5 +69,11 @@
         justify-content: center;
         gap: 10px;
         margin-bottom: 20px;
+    }
+
+    .quests-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
     }
 </style>
