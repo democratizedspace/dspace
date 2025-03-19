@@ -1,4 +1,6 @@
 import items from './pages/inventory/json/items.json';
+import { questFinished, canStartQuest } from './utils/gameState.js';
+import { log } from './utils/devLog.js';
 
 export const prettyPrintNumber = (number) => {
     const n = parseFloat(number);
@@ -258,3 +260,369 @@ export const MINUTE = 60 * SECOND;
 export const HOUR = 60 * MINUTE;
 
 export const DEFAULT_COOLDOWN = 5 * MINUTE;
+
+// Define the delay promise
+export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Get elapsed time based on timeStart, timeEnd, and pausedTime
+export function getElapsedTime(timeStart, timeEnd = new Date(), pausedTime = 0) {
+    return Math.max(0, timeEnd - timeStart - pausedTime);
+}
+
+// Get the time left based on timeStart, timeElapsed, and timeMs
+export function getTimeLeft(timeStart, timeElapsed, timeMs) {
+    const now = new Date();
+    const diff = getElapsedTime(timeStart, now, timeElapsed);
+    return Math.max(0, timeMs - diff);
+}
+
+// Convert MS to a nice readable string
+export function msToTime(s) {
+    const ms = s % 1000;
+    s = (s - ms) / 1000;
+    const secs = s % 60;
+    s = (s - secs) / 60;
+    const mins = s % 60;
+    const hrs = (s - mins) / 60;
+
+    const showMs = hrs === 0 && mins === 0 && secs < 10;
+
+    let str = '';
+
+    if (hrs > 0) str += hrs + 'h ';
+    if (mins > 0 || hrs > 0) str += mins + 'm ';
+    if (secs > 0 || mins > 0 || hrs > 0) str += secs + 's';
+    if (showMs && ms > 0) str += ' ' + ms + 'ms';
+
+    return str.trim();
+}
+
+// Format a number to be kinda nice
+export function formatNumber(n) {
+    return Number(n).toLocaleString();
+}
+
+// Format a number to be kinda nice
+export function formatNumberK(n) {
+    if (n < 1e3) return n;
+    if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + 'K';
+    if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + 'M';
+    if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + 'B';
+    if (n >= 1e12) return +(n / 1e12).toFixed(1) + 'T';
+}
+
+export function getPriceStringComponents(price) {
+    if (price === undefined)
+        return {
+            symbol: '$',
+            price: 0,
+        };
+
+    // Regular expression to match optionally a dollar sign, then the number
+    const regex = /^(\$)?([\d.]+)$/;
+    const match = String(price).match(regex);
+
+    // Set defaults
+    let symbol = '$';
+    let numericPrice = 0;
+
+    if (match) {
+        // If there was a dollar sign, it's in match[1]
+        if (match[1]) {
+            symbol = match[1];
+        }
+        // The number is in match[2]
+        numericPrice = parseFloat(match[2]);
+    } else {
+        // If the regex doesn't match, just try to get a number
+        numericPrice = parseFloat(price) || 0;
+    }
+
+    return {
+        symbol,
+        price: numericPrice,
+    };
+}
+
+// Get price string
+export function getPriceString(price) {
+    const components = getPriceStringComponents(price);
+    return `${components.symbol}${components.price}`;
+}
+
+/**
+ * Converts a date object into various time formats.
+ * @param {Date} date - The date to convert.
+ * @returns {Object} timeFormats - The formatted time strings.
+ * @returns {string} timeFormats.iso - ISO format.
+ * @returns {string} timeFormats.utc - UTC format.
+ * @returns {string} timeFormats.full - Full format.
+ * @returns {string} timeFormats.short - Short format.
+ * @returns {string} timeFormats.tinyTime - Tiny time format.
+ * @returns {string} timeFormats.timeOnly - Time only format.
+ * @returns {string} timeFormats.dateOnly - Date only format.
+ */
+export function formatTime(date) {
+    if (!date) {
+        date = new Date();
+    }
+    // Pad with a zero if needed
+    const pad = (n) => (n < 10 ? '0' + n : n);
+
+    const hours = date.getHours();
+    const hoursFormat = hours % 12 === 0 ? 12 : hours % 12;
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const month = date.getMonth() + 1; // JavaScript months are 0-11
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    const timeFormats = {
+        iso: date.toISOString(),
+        utc: date.toUTCString(),
+        full: `${month}/${day}/${year} ${hoursFormat}:${pad(minutes)}:${pad(seconds)} ${ampm}`,
+        short: `${month}/${day}/${year} ${hoursFormat}:${pad(minutes)} ${ampm}`,
+        tinyTime: `${hoursFormat}:${pad(minutes)}${ampm}`,
+        timeOnly: `${hoursFormat}:${pad(minutes)}:${pad(seconds)} ${ampm}`,
+        dateOnly: `${month}/${day}/${year}`,
+    };
+
+    return timeFormats;
+}
+
+const futureDatetime = (Date.now() + 1000 * 60 * 60 * 24 * 2).toFixed(0); // 2 days from now
+
+export function getRelativeTimeString(date, lang = navigator.language) {
+    // Allow dates or times to be passed
+    const timeMs = typeof date === 'number' ? date : date.getTime();
+
+    // Get the time difference in seconds
+    const deltaSeconds = Math.round((timeMs - Date.now()) / 1000);
+
+    // Array of time divisions
+    const divisions = [
+        { amount: 31536000, name: 'year' },
+        { amount: 2592000, name: 'month' },
+        { amount: 86400, name: 'day' },
+        { amount: 3600, name: 'hour' },
+        { amount: 60, name: 'minute' },
+        { amount: 1, name: 'second' },
+    ];
+
+    // Absolute delta in seconds
+    const deltaSec = Math.abs(deltaSeconds);
+
+    // Find the appropriate division
+    const division = divisions.find((division) => division.amount <= deltaSec);
+
+    if (!division) {
+        return 'just now';
+    }
+
+    const count = Math.round(deltaSec / division.amount);
+    const formatted = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' }).format(
+        deltaSeconds > 0 ? count : -count,
+        division.name
+    );
+
+    return formatted;
+}
+
+// Clamp a number
+export function clamp(min, max, n) {
+    return Math.min(Math.max(n, min), max);
+}
+
+// Interpolate between min and max (0, 1 => 0, 0.5, 1 => min, (min+max)/2, max)
+export function lerp(min, max, t) {
+    return min + (max - min) * clamp(0, 1, t);
+}
+
+// Get a random item from an array
+export function choice(arr) {
+    return arr.length === 0 ? undefined : arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Get a random int between min and max (inclusive)
+export function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function getRandomInts(min, max, n) {
+    const result = Array(n).fill(0);
+    for (let i = 0; i < n; i++) {
+        result[i] = getRandomInt(min, max);
+    }
+    return result;
+}
+
+// Shuffles an array
+export function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
+// Generate a random string
+export function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const _ = Array(length)
+        .fill(0)
+        .forEach(() => {
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
+        });
+    return result;
+}
+
+export function getQuestPossibleChoices(quest) {
+    if (!quest) return {};
+    const possibleChoices = {};
+
+    for (const section of quest.quest) {
+        if (section.goto) {
+            possibleChoices[section.name] = section.goto.options || [];
+        }
+    }
+
+    return possibleChoices;
+}
+
+export function getQuestByID(id, questList) {
+    if (!questList) return null;
+    for (const quest of questList) {
+        if (quest && quest.id === id) {
+            return quest;
+        }
+    }
+    return null;
+}
+
+export function getQuestCategory(quest) {
+    return quest.tags ? quest.tags[0] : 'Unknown';
+}
+
+export function getQuestCategories(quests) {
+    if (!quests || !quests.length) return [];
+    const categories = new Set();
+    for (const quest of quests) {
+        categories.add(getQuestCategory(quest));
+    }
+    // Convert it to an array
+    return Array.from(categories);
+}
+
+// Function to filter quests by available, finished, or all
+export function filterQuests(quests, filter = 'all') {
+    if (!quests) return [];
+    let result = [];
+
+    switch (filter) {
+        case 'available':
+            result = quests.filter((quest) => !questFinished(quest.id) && canStartQuest(quest));
+            break;
+        case 'finished':
+            result = quests.filter((quest) => questFinished(quest.id));
+            break;
+        case 'all':
+        default:
+            result = [...quests];
+            break;
+    }
+
+    return result;
+}
+
+export function getQuestsByCategory(quests, category) {
+    if (!quests || !quests.length) return [];
+    return quests.filter((quest) => getQuestCategory(quest) === category);
+}
+
+// Get URL slug
+export function getUrlSlug(str) {
+    return str
+        .toLowerCase()
+        .replace(/[^\w ]+/g, '')
+        .replace(/ +/g, '-');
+}
+
+// Get random ID
+export function getRandomId() {
+    return Math.random().toString(36).substr(2, 9);
+}
+
+// Get file extension
+export function getFileExtension(filename) {
+    return filename.slice(((filename.lastIndexOf('.') - 1) >>> 0) + 2);
+}
+
+// Returns a truncated string
+export function truncateString(str, n, useWordBoundary = true) {
+    if (!str) return '';
+    if (str.length <= n) {
+        return str;
+    }
+    const subString = str.slice(0, n - 1);
+    return (
+        (useWordBoundary ? subString.slice(0, subString.lastIndexOf(' ')) : subString) + '&hellip;'
+    );
+}
+
+export function arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+}
+
+export async function getFileAsBase64(filename) {
+    if (!filename) {
+        return '';
+    }
+    try {
+        const response = await fetch(filename);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            try {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    } catch (err) {
+        console.error('Error fetching file:', err);
+        return '';
+    }
+}
+
+export function formatCurrency(value, symbol = '$') {
+    if (value === undefined || value === null) return `${symbol}0`;
+    const numberFormat = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+    });
+    return `${symbol}${numberFormat.format(value)}`;
+}
+
+export function isArrayEqual(a, b) {
+    if (a === b) return true;
+    if (a === null || b === null) return false;
+    if (a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+    }
+    return true;
+}

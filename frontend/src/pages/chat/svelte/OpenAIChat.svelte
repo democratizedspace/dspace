@@ -9,7 +9,7 @@
     const messageHistory = writable([]);
     let showSpinner = false;
     let welcomeMessage =
-        "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say. I'm still learning! I should have some shiny new upgrades soon!";
+        'Hello, adventurer! I\'m dChat! I\'m here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say. I\'m still learning! I should have some shiny new upgrades soon!';
 
     async function submitMessage() {
         const userMessage = { role: 'user', content: $message };
@@ -30,7 +30,7 @@
                 ...history,
                 {
                     role: 'assistant',
-                    content: "Sorry, I'm having some trouble and can't generate a response.",
+                    content: 'Sorry, I\'m having some trouble and can\'t generate a response.',
                 },
             ]);
         }
