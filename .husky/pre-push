@@ -7,13 +7,24 @@ elif command -v powershell >/dev/null 2>&1; then
 else
   echo "Running pre-push checks..."
 
-  # Run type checking
+  # Run linting checks
   echo "Running code quality checks..."
   npm run check || exit 1
 
-  # Run all tests (unit tests only, not e2e tests which are slow)
-  echo "Running tests..."
+  # Run unit tests
+  echo "Running unit tests..."
   cd frontend && npx jest || exit 1
+  cd ..
+  
+  # Run e2e tests if they exist
+  echo "Running e2e tests..."
+  if [ -d "./e2e" ]; then
+    cd e2e
+    npm test || exit 1
+    cd ..
+  else
+    echo "No e2e tests found, skipping..."
+  fi
 
   echo "✅ All pre-push checks passed!"
   exit 0

@@ -4,15 +4,19 @@ module.exports = {
     "npm run lint:fix -- --quiet", 
     "npm run lint -- --quiet",
     "npm run format -- --quiet",
+    // Run test for changed source files
+    () => `cd frontend && npx jest --passWithNoTests`
+  ],
+  
+  // Run tests for changed test files
+  "frontend/**/__tests__/**/*.{js,ts}": [
+    () => `cd frontend && npx jest --passWithNoTests`
   ],
   
   // TypeScript type checking for TS files
   "frontend/**/*.ts": [
     () => "npm run check"
   ],
-  
-  // Tests are run in pre-push hook instead of pre-commit to avoid Windows path issues
-  // and to make commits faster
   
   // Format JSON, markdown, and CSS files
   "frontend/**/*.{json,md,css,scss}": [
