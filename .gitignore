@@ -8,3 +8,9 @@ node_modules
 .DS_Store
 
 f2clipboard.py
+
+# Test results
+test-results/
+
+# Additional artifacts
+# Added comment for testing git hooks
