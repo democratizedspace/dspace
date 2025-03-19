@@ -7,17 +7,17 @@ elif command -v powershell >/dev/null 2>&1; then
 else
   echo "Running pre-push checks..."
 
-  # Skip linting checks
-  # echo "Running code quality checks..."
-  # npm run check || exit 1
+  # Run linting checks
+  echo "Running code quality checks..."
+  npm run check || exit 1
 
   # Run unit tests
   echo "Running unit tests..."
   cd frontend && npx jest || exit 1
   
-  # Temporarily skip e2e tests
-  echo "Skipping e2e tests for now..."
-  # npm run test:e2e || exit 1
+  # Run e2e tests
+  echo "Running e2e tests..."
+  npm run test:e2e || exit 1
   
   cd ..
 
