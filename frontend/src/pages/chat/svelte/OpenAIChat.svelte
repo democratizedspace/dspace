@@ -19,10 +19,7 @@
         showSpinner = true;
 
         try {
-            const aiResponse = await GPT35Turbo([
-                ...$messageHistory,
-                userMessage,
-            ]);
+            const aiResponse = await GPT35Turbo([...$messageHistory, userMessage]);
             const aiMessage = { role: 'assistant', content: aiResponse };
 
             // Update the chat history with the assistant's message
@@ -33,8 +30,7 @@
                 ...history,
                 {
                     role: 'assistant',
-                    content:
-                        "Sorry, I'm having some trouble and can't generate a response.",
+                    content: "Sorry, I'm having some trouble and can't generate a response.",
                 },
             ]);
         }
@@ -44,11 +40,7 @@
     }
 
     function handleKeyDown(event) {
-        if (
-            event.key === 'Enter' &&
-            event.target.tagName === 'TEXTAREA' &&
-            !event.shiftKey
-        ) {
+        if (event.key === 'Enter' && event.target.tagName === 'TEXTAREA' && !event.shiftKey) {
             event.preventDefault();
             submitMessage();
         }
@@ -76,16 +68,11 @@
     </div>
 
     <div class="chat-container">
-        <div
-            class="spinner-container"
-            style="display: {showSpinner ? 'flex' : 'none'}"
-        >
+        <div class="spinner-container" style="display: {showSpinner ? 'flex' : 'none'}">
             <Spinner />
         </div>
         {#if $messageHistory.length}
-            {#each $messageHistory
-                .slice()
-                .reverse() as message (message.content)}
+            {#each $messageHistory.slice().reverse() as message (message.content)}
                 <Message
                     messageMarkdown={message.content}
                     className={message.role}
