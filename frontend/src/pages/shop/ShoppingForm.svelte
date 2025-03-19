@@ -28,18 +28,18 @@
         const buyLink = document.createElement('a');
 
         switch (shopAction) {
-        case 'buy':
-            buyLink.innerHTML = `Buy ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
-            href = `/shop/buy/${item.id}/${count}`;
-            break;
-        case 'sell':
-            buyLink.innerHTML = `Sell ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
-            href = `/shop/sell/${item.id}/${count}`;
-            break;
-        default:
-            buyLink.innerHTML = `Buy ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
-            href = `/shop/buy/${item.id}/${count}`;
-            break;
+            case 'buy':
+                buyLink.innerHTML = `Buy ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
+                href = `/shop/buy/${item.id}/${count}`;
+                break;
+            case 'sell':
+                buyLink.innerHTML = `Sell ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
+                href = `/shop/sell/${item.id}/${count}`;
+                break;
+            default:
+                buyLink.innerHTML = `Buy ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
+                href = `/shop/buy/${item.id}/${count}`;
+                break;
         }
 
         buyLink.setAttribute('href', href);
@@ -60,7 +60,7 @@
 
     <p class="x">x</p>
 
-    <img class="img" src={item.image} />
+    <img class="img" src={item.image} alt={`${item.name} image`} />
 
     <p class="price">You currently have: {0} {symbol}</p>
     <p class="price">Price per unit: {item.price}</p>
