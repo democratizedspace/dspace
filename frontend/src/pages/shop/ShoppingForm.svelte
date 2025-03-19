@@ -1,5 +1,5 @@
 <script>
-    import { getPriceStringComponents, getWalletBalance } from '../../utils.js';
+    import { getPriceStringComponents } from '../../utils.js';
     export let item,
         request,
         count = 1,
@@ -28,18 +28,18 @@
         const buyLink = document.createElement('a');
 
         switch (shopAction) {
-            case 'buy':
-                buyLink.innerHTML = `Buy ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
-                href = `/shop/buy/${item.id}/${count}`;
-                break;
-            case 'sell':
-                buyLink.innerHTML = `Sell ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
-                href = `/shop/sell/${item.id}/${count}`;
-                break;
-            default:
-                buyLink.innerHTML = `Buy ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
-                href = `/shop/buy/${item.id}/${count}`;
-                break;
+        case 'buy':
+            buyLink.innerHTML = `Buy ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
+            href = `/shop/buy/${item.id}/${count}`;
+            break;
+        case 'sell':
+            buyLink.innerHTML = `Sell ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
+            href = `/shop/sell/${item.id}/${count}`;
+            break;
+        default:
+            buyLink.innerHTML = `Buy ${count} ${name} for ${totalPrice} ${priceComponents.symbol}`;
+            href = `/shop/buy/${item.id}/${count}`;
+            break;
         }
 
         buyLink.setAttribute('href', href);
@@ -65,9 +65,7 @@
     <p class="price">You currently have: {0} {symbol}</p>
     <p class="price">Price per unit: {item.price}</p>
     <p class="price">
-        Total price: {parseFloat(
-            (count * priceComponents.price).toPrecision(4)
-        )}
+        Total price: {parseFloat((count * priceComponents.price).toPrecision(4))}
         {symbol}
     </p>
 
@@ -84,12 +82,7 @@
 <style>
     :root {
         --astro-gradient: linear-gradient(0deg, #2c5837, #00ff22);
-        --link-gradient: linear-gradient(
-            45deg,
-            #003a03,
-            #003a03 30%,
-            var(--color-border) 60%
-        );
+        --link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
         --form-width: 250px;
         --form-width-padding: 230px;
     }
