@@ -1,135 +1,204 @@
-import ItemForm from '../src/components/svelte/ItemForm.svelte';
+/**
+ * @jest-environment jsdom
+ */
+import { beforeEach, afterEach, describe, it, expect, vi } from '@jest/globals';
+import '@testing-library/jest-dom';
+import { render, act, fireEvent, waitFor } from '@testing-library/svelte';
+import ItemForm from '../src/components/ItemForm.svelte';
+import { db } from '../src/lib/db';
+
+// Mock the database operations
+vi.mock('../src/lib/db', () => ({
+  db: {
+    items: {
+      add: vi.fn().mockResolvedValue('mocked-item-id')
+    }
+  }
+}));
+
+// Mock the browser's fetch API
+global.fetch = vi.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve({ url: 'mocked-image-url' })
+  })
+);
+
+// Mock File and FileReader for image uploads
+global.File = class File {
+  constructor(bits, name, options) {
+    this.name = name;
+    this.size = bits.length;
+    this.type = options?.type || '';
+  }
+};
+
+// Create a FileReader mock
+global.FileReader = class FileReader {
+  constructor() {
+    this.readAsDataURL = vi.fn((file) => {
+      // Simulate the file reading process
+      setTimeout(() => {
+        this.result = 'data:image/png;base64,mockedBase64Data';
+        if (typeof this.onload === 'function') {
+          this.onload({ target: this });
+        }
+      }, 0);
+    });
+  }
+};
+
+// Ensure __SSR__ is properly set for client-side hydration
+global.__SSR__ = false;
+global.__BROWSER__ = true;
+
+// Setup DOM environment mimicking Astro SSR output
+function setupDom() {
+  document.body.innerHTML = `
+    <div id="app">
+      <div id="item-form-container"></div>
+    </div>
+  `;
+  return document.getElementById('item-form-container');
+}
 
 describe('ItemForm Component', () => {
-    let container;
+  let container;
 
-    beforeEach(() => {
-        container = document.createElement('div');
-        document.body.appendChild(container);
+  beforeEach(() => {
+    // Setup DOM
+    container = setupDom();
+    
+    // Reset mocks
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    // Cleanup
+    container.innerHTML = '';
+  });
+
+  it('renders form elements correctly', async () => {
+    const { getByLabelText } = render(ItemForm, {
+      target: container,
+      props: {
+        isEdit: false
+      }
     });
 
-    afterEach(() => {
-        if (container) {
-            container.remove();
-        }
+    // Verify form fields are present
+    await waitFor(() => {
+      expect(getByLabelText(/name/i)).toBeInTheDocument();
+      expect(getByLabelText(/description/i)).toBeInTheDocument();
+      expect(getByLabelText(/upload an image/i)).toBeInTheDocument();
+    });
+  });
+
+  it('submits form with all fields filled', async () => {
+    const { getByLabelText, getByText } = render(ItemForm, {
+      target: container,
+      props: {
+        isEdit: false
+      }
     });
 
-    test('should mount component', () => {
-        const component = new ItemForm({
-            target: container,
-        });
+    // Fill form fields
+    await act(async () => {
+      fireEvent.input(getByLabelText(/name/i), {
+        target: { value: 'Test Item' }
+      });
+      
+      fireEvent.input(getByLabelText(/description/i), {
+        target: { value: 'This is a test item description' }
+      });
 
-        expect(component).toBeTruthy();
-        expect(container.querySelector('form')).toBeTruthy();
-        expect(container.querySelector('input[type="text"]')).toBeTruthy();
-        expect(container.querySelector('textarea')).toBeTruthy();
-        expect(container.querySelector('input[type="file"]')).toBeTruthy();
+      // Simulate image upload
+      const file = new File(['mock content'], 'test-image.jpg', { type: 'image/jpeg' });
+      fireEvent.change(getByLabelText(/upload an image/i), {
+        target: { files: [file] }
+      });
     });
 
-    test('should handle form submission with all fields', () => {
-        const component = new ItemForm({
-            target: container,
-        });
-
-        const form = container.querySelector('form');
-        const nameInput = container.querySelector('input[type="text"]');
-        const descInput = container.querySelector('textarea');
-        const priceInput = container.querySelector('input[placeholder="e.g. 100 dUSD"]');
-        const unitInput = container.querySelector('input[placeholder="e.g. kg, m, L"]');
-        const typeInput = container.querySelector('input[placeholder="e.g. 3dprint"]');
-
-        // Setup mock event listener
-        let submittedData = null;
-        component.$on('submit', (event) => {
-            submittedData = event.detail;
-        });
-
-        // Fill form
-        nameInput.value = 'Test Item';
-        nameInput.dispatchEvent(new Event('input'));
-
-        descInput.value = 'Test Description';
-        descInput.dispatchEvent(new Event('input'));
-
-        priceInput.value = '100 dUSD';
-        priceInput.dispatchEvent(new Event('input'));
-
-        unitInput.value = 'kg';
-        unitInput.dispatchEvent(new Event('input'));
-
-        typeInput.value = '3dprint';
-        typeInput.dispatchEvent(new Event('input'));
-
-        // Submit form
-        form.dispatchEvent(new Event('submit', { cancelable: true }));
-
-        // Verify submission
-        expect(submittedData).toBeTruthy();
-        const formData = submittedData;
-        expect(formData.get('name')).toBe('Test Item');
-        expect(formData.get('description')).toBe('Test Description');
-        expect(formData.get('price')).toBe('100 dUSD');
-        expect(formData.get('unit')).toBe('kg');
-        expect(formData.get('type')).toBe('3dprint');
+    // Submit the form
+    await act(async () => {
+      fireEvent.click(getByText(/create item/i));
     });
 
-    test('should handle form submission with only required fields', () => {
-        const component = new ItemForm({
-            target: container,
-        });
+    // Check if database add was called with correct data
+    await waitFor(() => {
+      expect(db.items.add).toHaveBeenCalledWith(expect.objectContaining({
+        name: 'Test Item',
+        description: 'This is a test item description',
+        image: 'mocked-image-url'
+      }));
+    });
+  });
 
-        const form = container.querySelector('form');
-        const nameInput = container.querySelector('input[type="text"]');
-        const descInput = container.querySelector('textarea');
-
-        // Setup mock event listener
-        let submittedData = null;
-        component.$on('submit', (event) => {
-            submittedData = event.detail;
-        });
-
-        // Fill only required fields
-        nameInput.value = 'Test Item';
-        nameInput.dispatchEvent(new Event('input'));
-
-        descInput.value = 'Test Description';
-        descInput.dispatchEvent(new Event('input'));
-
-        // Submit form
-        form.dispatchEvent(new Event('submit', { cancelable: true }));
-
-        // Verify submission
-        expect(submittedData).toBeTruthy();
-        const formData = submittedData;
-        expect(formData.get('name')).toBe('Test Item');
-        expect(formData.get('description')).toBe('Test Description');
-        expect(formData.get('price')).toBeNull();
-        expect(formData.get('unit')).toBeNull();
-        expect(formData.get('type')).toBeNull();
+  it('validates required fields', async () => {
+    const { getByText } = render(ItemForm, {
+      target: container,
+      props: {
+        isEdit: false
+      }
     });
 
-    test('should handle image upload', () => {
-        const component = new ItemForm({
-            target: container,
-        });
-
-        const fileInput = container.querySelector('input[type="file"]');
-
-        // Create a mock file
-        const file = new File([''], 'test.jpg', { type: 'image/jpeg' });
-
-        // Create a mock file list
-        Object.defineProperty(fileInput, 'files', {
-            value: [file],
-            writable: true,
-        });
-
-        // Trigger change event
-        const changeEvent = new Event('change', { bubbles: true });
-        fileInput.dispatchEvent(changeEvent);
-
-        // Verify that the file input has the file
-        expect(fileInput.files[0].name).toBe('test.jpg');
-        expect(fileInput.files[0].type).toBe('image/jpeg');
+    // Submit form without filling any fields
+    await act(async () => {
+      fireEvent.click(getByText(/create item/i));
     });
+
+    // Check if validation messages appear
+    await waitFor(() => {
+      expect(getByText(/name is required/i)).toBeInTheDocument();
+      expect(getByText(/description is required/i)).toBeInTheDocument();
+      expect(getByText(/image is required/i)).toBeInTheDocument();
+    });
+
+    // Verify the database was not called
+    expect(db.items.add).not.toHaveBeenCalled();
+  });
+
+  it('handles edit mode correctly', async () => {
+    // Setup edit mode with existing item data
+    const existingItem = {
+      id: 'item-123',
+      name: 'Existing Item',
+      description: 'Existing item description',
+      image: 'existing-image-url'
+    };
+
+    // Mock the database update function for edit mode
+    db.items.update = vi.fn().mockResolvedValue(existingItem.id);
+
+    const { getByLabelText, getByText } = render(ItemForm, {
+      target: container,
+      props: {
+        isEdit: true,
+        itemData: existingItem
+      }
+    });
+
+    // Check if form is pre-filled with existing data
+    await waitFor(() => {
+      expect(getByLabelText(/name/i).value).toBe(existingItem.name);
+      expect(getByLabelText(/description/i).value).toBe(existingItem.description);
+    });
+
+    // Submit form without changes
+    await act(async () => {
+      fireEvent.click(getByText(/update item/i));
+    });
+
+    // Verify update was called with correct data
+    await waitFor(() => {
+      expect(db.items.update).toHaveBeenCalledWith(
+        existingItem.id,
+        expect.objectContaining({
+          name: existingItem.name,
+          description: existingItem.description,
+          image: existingItem.image
+        })
+      );
+    });
+  });
 });

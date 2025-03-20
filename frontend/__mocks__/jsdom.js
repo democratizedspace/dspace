@@ -1,9 +1,3 @@
-// Mock for JSDOM
-class JSDOM {
-  constructor(html) {
-    this.window = global.window;
-    this.document = global.document;
-  }
-}
-
-module.exports = { JSDOM }; 
+// This file is a pass-through to the real jsdom module to avoid issues with mocking
+const originalJsdom = jest.requireActual('jsdom');
+module.exports = originalJsdom; 
