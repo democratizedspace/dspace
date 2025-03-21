@@ -30,7 +30,7 @@ test.describe('Process Creation', () => {
         await page.waitForLoadState('networkidle');
 
         // Take a screenshot of the initial form
-        await page.screenshot({ path: './debug-process-form-initial.png' });
+        await page.screenshot({ path: './test-artifacts/screenshots/debug-process-form-initial.png' });
 
         // Fill in basic process details using our helper
         const processTitle = `Debug Process ${Date.now()}`;
@@ -47,7 +47,7 @@ test.describe('Process Creation', () => {
             console.log('Successfully filled out process form');
 
             // Take a screenshot before submission
-            await page.screenshot({ path: './debug-process-form-filled.png' });
+            await page.screenshot({ path: './test-artifacts/screenshots/debug-process-form-filled.png' });
 
             // Submit the form
             const submitButton = page.locator('button.submit-button');
@@ -57,7 +57,7 @@ test.describe('Process Creation', () => {
 
                 // Wait for redirect or success message
                 await page.waitForTimeout(5000);
-                await page.screenshot({ path: './debug-after-submit.png' });
+                await page.screenshot({ path: './test-artifacts/screenshots/debug-after-submit.png' });
 
                 // Log the current URL
                 console.log('Current URL after submission:', page.url());
@@ -85,7 +85,7 @@ test.describe('Process Creation', () => {
             }
         } else {
             console.log('Failed to fill out process form');
-            await page.screenshot({ path: './debug-form-fill-failed.png' });
+            await page.screenshot({ path: './test-artifacts/screenshots/debug-form-fill-failed.png' });
         }
     });
 
@@ -106,7 +106,7 @@ test.describe('Process Creation', () => {
             console.log('Added a created item row');
 
             // Take a screenshot
-            await page.screenshot({ path: './item-selector-initial.png' });
+            await page.screenshot({ path: './test-artifacts/screenshots/item-selector-initial.png' });
 
             // Get the item row
             const itemRow = page.locator('.form-group:has-text("Created Items") .item-row').first();
@@ -122,7 +122,7 @@ test.describe('Process Creation', () => {
 
                 if (opened) {
                     // Take a screenshot
-                    await page.screenshot({ path: './item-selector-opened.png' });
+                    await page.screenshot({ path: './test-artifacts/screenshots/item-selector-opened.png' });
 
                     // Look for the selector-expanded element and log its HTML
                     const expandedSelector = itemRow.locator('.selector-expanded');
@@ -143,7 +143,7 @@ test.describe('Process Creation', () => {
                             if (selected) {
                                 // Take a screenshot
                                 await page.screenshot({
-                                    path: './item-selector-item-selected.png',
+                                    path: './test-artifacts/screenshots/item-selector-item-selected.png',
                                 });
 
                                 // Try to set the quantity
@@ -153,7 +153,7 @@ test.describe('Process Creation', () => {
                                 if (quantitySet) {
                                     // Take a screenshot
                                     await page.screenshot({
-                                        path: './item-selector-quantity-set.png',
+                                        path: './test-artifacts/screenshots/item-selector-quantity-set.png',
                                     });
                                 }
                             }

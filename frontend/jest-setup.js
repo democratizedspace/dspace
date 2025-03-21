@@ -136,4 +136,84 @@ if (typeof process === 'undefined') {
 }
 
 // Setup Jest globals
-global.jest = jest; 
+global.jest = jest;
+
+// Set SSR and browser flags
+global.__SSR__ = false;
+global.__BROWSER__ = true;
+
+// Setup JSDOM environment
+global.window = {
+    location: {
+        href: 'http://localhost:3000/'
+    },
+    crypto: {
+        getRandomValues: arr => require('crypto').randomFillSync(arr)
+    },
+    navigator: {
+        userAgent: 'node.js'
+    },
+    dispatchEvent: jest.fn()
+};
+
+// Define CustomEvent
+class MockCustomEvent {
+    constructor(type, options = {}) {
+        this.type = type;
+        this.detail = options.detail || null;
+    }
+}
+global.CustomEvent = MockCustomEvent;
+global.Event = function(type) { this.type = type; };
+
+// Define a function to create realistic DOM elements
+const createDomElement = (tag) => {
+    const element = {
+        tagName: tag.toUpperCase(),
+        nodeType: 1,
+        ownerDocument: global.document,
+        toString: () => tag,
+        getAttribute: jest.fn(),
+        setAttribute: jest.fn(),
+        removeAttribute: jest.fn(),
+        classList: {
+            add: jest.fn(),
+            remove: jest.fn(),
+            contains: jest.fn(),
+            toggle: jest.fn()
+        },
+        style: {},
+        children: [],
+        childNodes: [],
+        appendChild: function(child) {
+            this.children.push(child);
+            this.childNodes.push(child);
+            child.parentNode = this;
+            return child;
+        },
+        removeChild: function(child) {
+            const index = this.children.indexOf(child);
+            if (index !== -1) {
+                this.children.splice(index, 1);
+                this.childNodes.splice(index, 1);
+            }
+            return child;
+        },
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+        innerHTML: '',
+        textContent: '',
+        id: '',
+        querySelector: function(selector) {
+            // ... existing code ...
+        },
+        querySelectorAll: function(selector) {
+            // ... existing code ...
+        }
+    };
+  
+    // ... existing code ...
+  
+    return element;
+}; 

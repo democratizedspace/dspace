@@ -12,5 +12,11 @@ f2clipboard.py
 # Test results
 test-results/
 
+# Test artifacts and screenshots
+test-artifacts/
+test-screenshots/
+*.png
+!public/assets/**/*.png
+
 # Additional artifacts
 # Added comment for testing git hooks

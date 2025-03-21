@@ -10,15 +10,15 @@ global.__BROWSER__ = true;
 
 // Setup DOM with Astro-rendered structure for testing
 function setupSSRDom() {
-  // Clear existing content
-  document.body.innerHTML = '';
+    // Clear existing content
+    document.body.innerHTML = '';
   
-  // Create the app container
-  const appDiv = document.createElement('div');
-  appDiv.id = 'app';
+    // Create the app container
+    const appDiv = document.createElement('div');
+    appDiv.id = 'app';
   
-  // Set the HTML content
-  appDiv.innerHTML = `
+    // Set the HTML content
+    appDiv.innerHTML = `
     <header>
       <div class="logo-container">
         <img src="/assets/logo.svg" alt="dSpace Logo" class="logo" />
@@ -39,24 +39,24 @@ function setupSSRDom() {
     </main>
   `;
   
-  // Append to body
-  document.body.appendChild(appDiv);
+    // Append to body
+    document.body.appendChild(appDiv);
   
-  // Return the app container element
-  return appDiv;
+    // Return the app container element
+    return appDiv;
 }
 
 // Setup DOM with Quests page structure
 function setupQuestsPageDom() {
-  // Clear existing content
-  document.body.innerHTML = '';
+    // Clear existing content
+    document.body.innerHTML = '';
   
-  // Create the app container
-  const appDiv = document.createElement('div');
-  appDiv.id = 'app';
+    // Create the app container
+    const appDiv = document.createElement('div');
+    appDiv.id = 'app';
   
-  // Set the HTML content
-  appDiv.innerHTML = `
+    // Set the HTML content
+    appDiv.innerHTML = `
     <header>
       <div class="logo-container">
         <img src="/assets/logo.svg" alt="dSpace Logo" class="logo" />
@@ -91,104 +91,104 @@ function setupQuestsPageDom() {
     </main>
   `;
   
-  // Append to body
-  document.body.appendChild(appDiv);
+    // Append to body
+    document.body.appendChild(appDiv);
   
-  // Return the app container element
-  return appDiv;
+    // Return the app container element
+    return appDiv;
 }
 
 describe('Page Structure Test', () => {
-  let container;
+    let container;
 
-  beforeEach(() => {
+    beforeEach(() => {
     // Setup the DOM and store container
-    container = setupSSRDom();
+        container = setupSSRDom();
     
-    // Verify container exists before tests
-    expect(container).not.toBeNull();
-    expect(container.id).toBe('app');
-  });
+        // Verify container exists before tests
+        expect(container).not.toBeNull();
+        expect(container.id).toBe('app');
+    });
 
-  afterEach(() => {
-    document.body.innerHTML = '';
-    container = null;
-  });
+    afterEach(() => {
+        document.body.innerHTML = '';
+        container = null;
+    });
 
-  it('renders the header with logo and title', () => {
-    const header = container.querySelector('header');
-    expect(header).not.toBeNull();
+    it('renders the header with logo and title', () => {
+        const header = container.querySelector('header');
+        expect(header).not.toBeNull();
     
-    const logo = container.querySelector('img.logo');
-    expect(logo).not.toBeNull();
-    expect(logo.getAttribute('src')).toBe('/assets/logo.svg');
+        const logo = container.querySelector('img.logo');
+        expect(logo).not.toBeNull();
+        expect(logo.getAttribute('src')).toBe('/assets/logo.svg');
     
-    const title = container.querySelector('h1');
-    expect(title).not.toBeNull();
-    expect(title.textContent).toBe('dSpace');
-  });
+        const title = container.querySelector('h1');
+        expect(title).not.toBeNull();
+        expect(title.textContent).toBe('dSpace');
+    });
 
-  it('renders navigation links', () => {
-    const navLinks = container.querySelectorAll('.nav-links li');
-    expect(navLinks.length).toBe(3);
+    it('renders navigation links', () => {
+        const navLinks = container.querySelectorAll('.nav-links li');
+        expect(navLinks.length).toBe(3);
     
-    const links = Array.from(navLinks).map(li => li.querySelector('a').textContent);
-    expect(links).toContain('Home');
-    expect(links).toContain('Quests');
-    expect(links).toContain('Inventory');
-  });
+        const links = Array.from(navLinks).map(li => li.querySelector('a').textContent);
+        expect(links).toContain('Home');
+        expect(links).toContain('Quests');
+        expect(links).toContain('Inventory');
+    });
 
-  it('has a main content area', () => {
-    const main = container.querySelector('main');
-    expect(main).not.toBeNull();
+    it('has a main content area', () => {
+        const main = container.querySelector('main');
+        expect(main).not.toBeNull();
     
-    const contentArea = main.querySelector('.content-area');
-    expect(contentArea).not.toBeNull();
-  });
+        const contentArea = main.querySelector('.content-area');
+        expect(contentArea).not.toBeNull();
+    });
 });
 
 describe('Quests Page Structure Test', () => {
-  let container;
+    let container;
 
-  beforeEach(() => {
+    beforeEach(() => {
     // Setup the DOM and store container
-    container = setupQuestsPageDom();
+        container = setupQuestsPageDom();
     
-    // Verify container exists before tests
-    expect(container).not.toBeNull();
-    expect(container.id).toBe('app');
-  });
+        // Verify container exists before tests
+        expect(container).not.toBeNull();
+        expect(container.id).toBe('app');
+    });
 
-  afterEach(() => {
-    document.body.innerHTML = '';
-    container = null;
-  });
+    afterEach(() => {
+        document.body.innerHTML = '';
+        container = null;
+    });
 
-  it('shows action buttons for quests management', () => {
-    const actionButtonsNav = container.querySelector('.action-buttons');
-    expect(actionButtonsNav).not.toBeNull();
+    it('shows action buttons for quests management', () => {
+        const actionButtonsNav = container.querySelector('.action-buttons');
+        expect(actionButtonsNav).not.toBeNull();
     
-    const buttons = actionButtonsNav.querySelectorAll('button');
-    expect(buttons.length).toBe(3);
+        const buttons = actionButtonsNav.querySelectorAll('button');
+        expect(buttons.length).toBe(3);
     
-    // Check that we have the expected buttons
-    const buttonTexts = Array.from(buttons).map(button => button.textContent);
-    expect(buttonTexts).toContain('Add New Quest');
-    expect(buttonTexts).toContain('Import Quest');
-    expect(buttonTexts).toContain('Export Quests');
-  });
+        // Check that we have the expected buttons
+        const buttonTexts = Array.from(buttons).map(button => button.textContent);
+        expect(buttonTexts).toContain('Add New Quest');
+        expect(buttonTexts).toContain('Import Quest');
+        expect(buttonTexts).toContain('Export Quests');
+    });
 
-  it('displays quest cards in a grid', () => {
-    const questsGrid = container.querySelector('.quests-grid');
-    expect(questsGrid).not.toBeNull();
+    it('displays quest cards in a grid', () => {
+        const questsGrid = container.querySelector('.quests-grid');
+        expect(questsGrid).not.toBeNull();
     
-    const questCards = questsGrid.querySelectorAll('.quest-card');
-    expect(questCards.length).toBe(2);
+        const questCards = questsGrid.querySelectorAll('.quest-card');
+        expect(questCards.length).toBe(2);
     
-    // Check quest card structure
-    const firstCard = questCards[0];
-    expect(firstCard.querySelector('img')).not.toBeNull();
-    expect(firstCard.querySelector('h3')).not.toBeNull();
-    expect(firstCard.querySelector('p')).not.toBeNull();
-  });
+        // Check quest card structure
+        const firstCard = questCards[0];
+        expect(firstCard.querySelector('img')).not.toBeNull();
+        expect(firstCard.querySelector('h3')).not.toBeNull();
+        expect(firstCard.querySelector('p')).not.toBeNull();
+    });
 });

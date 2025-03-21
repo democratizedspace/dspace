@@ -13,7 +13,6 @@
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
-    import SkipProcessButton from './SkipProcessButton.svelte';
 
     export let processId;
 
@@ -97,8 +96,6 @@
             {:else}
                 <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
             {/if}
-            <!-- uncomment the following line to add a Skip button to all processes -->
-            <!-- <SkipProcessButton {processId} /> -->
         </div>
     </Chip>
 {/if}
@@ -114,15 +111,5 @@
     h6 {
         color: white;
         margin: 0px;
-    }
-
-    .button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #007bff;
-        color: white;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-bottom: 20px;
     }
 </style>

@@ -1,9 +1,9 @@
 <script>
     import { getPriceStringComponents } from '../../utils.js';
     export let item,
-        request,
         count = 1,
         shopAction = 'buy';
+    export const request = undefined; // Changed to export const since it's only for external reference
 
     if (item === undefined) {
         console.error(`Item with id ${item.id} not found`);

@@ -16,7 +16,10 @@
     "overrides": [
         {
             "files": ["*.svelte"],
-            "processor": "svelte3/svelte3"
+            "processor": "svelte3/svelte3",
+            "rules": {
+                "@typescript-eslint/no-unused-vars": "warn"
+            }
         },
         {
             "files": ["*.ts"],
@@ -42,6 +45,21 @@
             "files": ["**/e2e/**/*.ts"],
             "rules": {
                 "@typescript-eslint/no-unused-vars": "off"
+            }
+        },
+        {
+            "files": ["**/__mocks__/**/*", "**/jest.*.js"],
+            "rules": {
+                "@typescript-eslint/no-empty-function": "off",
+                "@typescript-eslint/no-unused-vars": "off",
+                "@typescript-eslint/no-var-requires": "off"
+            }
+        },
+        {
+            "files": ["**/*.config.js", "**/svelte.config.js", "**/babel.config.js", "**/jest-setup.js"],
+            "rules": {
+                "@typescript-eslint/no-var-requires": "off",
+                "@typescript-eslint/no-unused-vars": "warn"
             }
         }
     ],

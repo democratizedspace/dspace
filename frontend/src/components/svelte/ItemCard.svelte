@@ -3,7 +3,7 @@
     import { getItemCount } from '../../utils/gameState/inventory.js';
 
     export let itemId;
-    export let count;
+    export const count = undefined;
 
     const item = items.find((item) => item.id === itemId);
 

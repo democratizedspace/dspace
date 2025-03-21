@@ -12,7 +12,7 @@ test.describe('Quest Chat Navigation', () => {
         await page.waitForLoadState('networkidle');
 
         // Take a screenshot of the initial state
-        await page.screenshot({ path: './test-screenshots/quests-page.png' });
+        await page.screenshot({ path: './test-artifacts/screenshots/quests-page.png' });
 
         // Go directly to the tutorial quest page instead of navigating from the quests page
         // This ensures we find the quest even if it's not showing in the quests list
@@ -20,7 +20,8 @@ test.describe('Quest Chat Navigation', () => {
         console.log('Navigated directly to tutorial quest');
 
         // Take a screenshot after navigating to the quest
-        await page.screenshot({ path: './test-screenshots/quest-detail-direct.png' });
+        await page.waitForLoadState('networkidle');
+        await page.screenshot({ path: './test-artifacts/screenshots/quest-detail-direct.png' });
 
         // Wait for the quest page to load and chat to appear
         await expect(page.locator('.chat')).toBeVisible();
@@ -58,7 +59,7 @@ test.describe('Quest Chat Navigation', () => {
         console.log('Clickable elements count:', await anyClickableElement.count());
 
         // Take a screenshot of the options area
-        await page.screenshot({ path: './test-screenshots/options-area.png' });
+        await page.screenshot({ path: './test-artifacts/screenshots/options-area.png' });
 
         // Try to click any visible div inside options that might be clickable
         let clicked = false;
@@ -82,7 +83,7 @@ test.describe('Quest Chat Navigation', () => {
                 clicked = true;
 
                 // Take another screenshot after clicking
-                await page.screenshot({ path: './test-screenshots/after-option-click.png' });
+                await page.screenshot({ path: './test-artifacts/screenshots/after-option-click.png' });
 
                 // Check that URL hasn't changed (meaning no page refresh)
                 const afterClickUrl = page.url();
@@ -104,7 +105,7 @@ test.describe('Quest Chat Navigation', () => {
                 await firstDiv.click();
 
                 // Take another screenshot after clicking
-                await page.screenshot({ path: './test-screenshots/after-div-click.png' });
+                await page.screenshot({ path: './test-artifacts/screenshots/after-div-click.png' });
 
                 // Check that URL hasn't changed (meaning no page refresh)
                 const afterClickUrl = page.url();
@@ -119,6 +120,6 @@ test.describe('Quest Chat Navigation', () => {
 
         // Wait a moment and take a final screenshot
         await page.waitForTimeout(1000);
-        await page.screenshot({ path: './test-screenshots/final-state.png' });
+        await page.screenshot({ path: './test-artifacts/screenshots/final-state.png' });
     });
 });

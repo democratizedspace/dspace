@@ -7,6 +7,14 @@ import * as indexedDb from '../src/utils/indexeddb.js';
 
 // Mock the indexeddb module
 jest.mock('../src/utils/indexeddb.js', () => ({
+    getStoreForEntityType: jest.fn((entityType) => {
+        switch (entityType) {
+        case 'quest': return 'quests';
+        case 'item': return 'items';
+        case 'process': return 'processes';
+        default: throw new Error(`Unknown entity type: ${entityType}`);
+        }
+    }),
     addEntity: jest.fn((entity) => {
         // Return the input entity's id or generate a new one
         const entityWithDefaults = {

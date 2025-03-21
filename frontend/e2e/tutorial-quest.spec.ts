@@ -9,8 +9,8 @@ test.describe('Tutorial Quest', () => {
         await page.goto('/quests/welcome/howtodoquests');
         await page.waitForLoadState('networkidle');
 
-        // Take a screenshot for debugging
-        await page.screenshot({ path: './tutorial-quest-initial.png' });
+        // Take a screenshot of the initial state
+        await page.screenshot({ path: './test-artifacts/screenshots/tutorial-quest-initial.png' });
 
         // Verify the chat container is visible
         await expect(page.locator('.chat, .dialogue-container')).toBeVisible({ timeout: 15000 });
@@ -26,8 +26,8 @@ test.describe('Tutorial Quest', () => {
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
 
-        // Take a final screenshot
-        await page.screenshot({ path: './tutorial-quest-final.png' });
+        // Take a screenshot at the end
+        await page.screenshot({ path: './test-artifacts/screenshots/tutorial-quest-final.png' });
     });
 });
 
@@ -38,8 +38,8 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
         const maxClicks = 10;
         let clickCount = 0;
 
-        // Capture current state
-        await page.screenshot({ path: './tutorial-quest-start.png' });
+        // Take a screenshot of the initial state
+        await page.screenshot({ path: './test-artifacts/screenshots/tutorial-quest-start.png' });
 
         // Look for clickable elements and interact with them
         while (clickCount < maxClicks) {
@@ -49,7 +49,7 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
                 console.log('Clicking claim button');
                 await claimButton.click();
                 await page.waitForTimeout(500);
-                await page.screenshot({ path: `./tutorial-quest-claim${clickCount}.png` });
+                await page.screenshot({ path: `./test-artifacts/screenshots/tutorial-quest-claim${clickCount}.png` });
                 clickCount++;
                 continue;
             }
@@ -60,7 +60,7 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
                 console.log('Clicking process button');
                 await processButton.click();
                 await page.waitForTimeout(500);
-                await page.screenshot({ path: `./tutorial-quest-process${clickCount}.png` });
+                await page.screenshot({ path: `./test-artifacts/screenshots/tutorial-quest-process${clickCount}.png` });
                 clickCount++;
                 continue;
             }
@@ -69,7 +69,7 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
             const optionsContainer = page.locator('.options');
             if ((await optionsContainer.count()) === 0) {
                 console.log('No options container found');
-                await page.screenshot({ path: `./tutorial-quest-nooptions${clickCount}.png` });
+                await page.screenshot({ path: `./test-artifacts/screenshots/tutorial-quest-nooptions${clickCount}.png` });
                 break;
             }
 
@@ -82,7 +82,7 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
                 console.log(`Clicking option ${clickCount + 1} of ${optionsCount} available`);
                 await options.first().click();
                 await page.waitForTimeout(500);
-                await page.screenshot({ path: `./tutorial-quest-step${clickCount + 1}.png` });
+                await page.screenshot({ path: `./test-artifacts/screenshots/tutorial-quest-step${clickCount + 1}.png` });
                 clickCount++;
                 continue;
             }
@@ -93,7 +93,7 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
                 console.log('Clicking first div in options container');
                 await anyElement.click();
                 await page.waitForTimeout(500);
-                await page.screenshot({ path: `./tutorial-quest-fallback${clickCount}.png` });
+                await page.screenshot({ path: `./test-artifacts/screenshots/tutorial-quest-fallback${clickCount}.png` });
                 clickCount++;
                 continue;
             }
@@ -105,6 +105,6 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
         console.log(`Successfully interacted with ${clickCount} elements in the tutorial quest`);
     } catch (error) {
         console.error('Error in tutorial quest interaction:', error);
-        await page.screenshot({ path: './tutorial-quest-error.png' });
+        await page.screenshot({ path: './test-artifacts/screenshots/tutorial-quest-error.png' });
     }
 }
