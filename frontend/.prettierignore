@@ -1,0 +1,22 @@
+# Build output
+dist/
+.output/
+build/
+
+# Dependencies
+node_modules/
+
+# Test coverage and reports
+coverage/
+test-results/
+playwright-report/
+blob-report/
+test-videos/
+
+# Log files
+*.log
+
+# Local development files
+.eslintrc.local.json
+.prettierrc.local.json
+.editorconfig.local 

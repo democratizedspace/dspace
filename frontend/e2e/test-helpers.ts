@@ -43,22 +43,24 @@ export async function createTestItems(page: Page, count = 2): Promise<string[]> 
 
         // Wait for navigation to complete
         await page.waitForLoadState('networkidle');
-        
+
         // Take a screenshot after submission
-        await page.screenshot({ path: `./test-artifacts/screenshots/create-item-${i+1}.png` });
-        
+        await page.screenshot({ path: `./test-artifacts/screenshots/create-item-${i + 1}.png` });
+
         // Check for success by either finding success message or checking for redirect
         let viewUrl: string | null = null;
-        
+
         try {
             // First try to find success message if present
             const successMessage = page.locator('.success-message, text=success, text=created');
             if (await successMessage.isVisible({ timeout: 5000 })) {
                 // Try to find view button
-                const viewButton = page.locator('.view-button, a:has-text("View"), button:has-text("View")');
-                if (await viewButton.count() > 0) {
+                const viewButton = page.locator(
+                    '.view-button, a:has-text("View"), button:has-text("View")'
+                );
+                if ((await viewButton.count()) > 0) {
                     viewUrl = await viewButton.getAttribute('href');
-                    
+
                     // Extract the item ID from the URL if possible
                     if (viewUrl) {
                         const id = viewUrl.split('/').pop();
@@ -72,10 +74,10 @@ export async function createTestItems(page: Page, count = 2): Promise<string[]> 
             // If no success message, we might have been redirected to inventory already
             console.log('No success message found, checking for redirect');
         }
-        
+
         // If we couldn't extract an ID but the item was created, at least return something
         if (itemIds.length <= i) {
-            itemIds.push(`unknown-item-${i+1}-${Date.now()}`);
+            itemIds.push(`unknown-item-${i + 1}-${Date.now()}`);
         }
     }
 
@@ -148,7 +150,9 @@ export class ItemSelectorHelper {
 
         if ((await selectButton.count()) > 0) {
             // Take screenshot before clicking
-            await this.page.screenshot({ path: './test-artifacts/screenshots/item-selector-before-click.png' });
+            await this.page.screenshot({
+                path: './test-artifacts/screenshots/item-selector-before-click.png',
+            });
 
             await selectButton.first().click();
             console.log('Clicked Select Item button');
@@ -245,7 +249,7 @@ export async function fillProcessForm(
     try {
         // Basic details with more flexible selectors
         const nameInput = page.locator('#name, #title').first();
-        if (await nameInput.count() > 0) {
+        if ((await nameInput.count()) > 0) {
             await nameInput.fill(title);
             console.log('Filled process title');
         } else {
@@ -253,7 +257,7 @@ export async function fillProcessForm(
         }
 
         const durationInput = page.locator('#duration');
-        if (await durationInput.count() > 0) {
+        if ((await durationInput.count()) > 0) {
             await durationInput.fill(duration);
             console.log('Filled duration');
         } else {
@@ -261,7 +265,9 @@ export async function fillProcessForm(
         }
 
         // Screenshot after filling basic details
-        await page.screenshot({ path: './test-artifacts/screenshots/process-form-basic-details.png' });
+        await page.screenshot({
+            path: './test-artifacts/screenshots/process-form-basic-details.png',
+        });
 
         // Helper to add items of a specific type
         const addItems = async (type: 'required' | 'consumed' | 'created', count: number) => {
@@ -269,22 +275,22 @@ export async function fillProcessForm(
             const buttonTexts = {
                 required: ['Add Required Item', 'Add Requirement', 'Require Item'],
                 consumed: ['Add Consumed Item', 'Add Consumption', 'Consume Item'],
-                created: ['Add Created Item', 'Add Creation', 'Create Item']
+                created: ['Add Created Item', 'Add Creation', 'Create Item'],
             };
-            
+
             // Try different button selectors
-            const possibleButtons = buttonTexts[type].map(text => 
+            const possibleButtons = buttonTexts[type].map((text) =>
                 page.locator(`button:has-text("${text}")`)
             );
-            
+
             let foundButton = false;
             for (const buttonSelector of possibleButtons) {
-                if (await buttonSelector.count() > 0) {
+                if ((await buttonSelector.count()) > 0) {
                     for (let i = 0; i < count; i++) {
                         await buttonSelector.click();
                         await page.waitForTimeout(300);
-                        console.log(`Added ${type} item ${i+1}`);
-                        
+                        console.log(`Added ${type} item ${i + 1}`);
+
                         // Try to select an item from the dropdown or selector if one appears
                         await trySelectItem(page);
                     }
@@ -292,20 +298,22 @@ export async function fillProcessForm(
                     break;
                 }
             }
-            
+
             if (!foundButton && count > 0) {
                 console.log(`Could not find button to add ${type} items`);
             }
         };
-        
+
         // Add required, consumed, and created items as specified
         await addItems('required', requiredItems);
         await addItems('consumed', consumedItems);
         await addItems('created', createdItems);
-        
+
         // Screenshot after adding all items
-        await page.screenshot({ path: './test-artifacts/screenshots/process-form-after-adding-items.png' });
-        
+        await page.screenshot({
+            path: './test-artifacts/screenshots/process-form-after-adding-items.png',
+        });
+
         return true;
     } catch (e) {
         console.error('Error filling process form:', e);
@@ -322,32 +330,32 @@ async function trySelectItem(page: Page): Promise<boolean> {
         const selectors = [
             page.locator('select').first(),
             page.locator('button:has-text("Select")').first(),
-            page.locator('.item-selector').first()
+            page.locator('.item-selector').first(),
         ];
-        
+
         for (const selector of selectors) {
-            if (await selector.count() > 0 && await selector.isVisible()) {
+            if ((await selector.count()) > 0 && (await selector.isVisible())) {
                 // For select elements
-                if (await page.locator('select').count() > 0) {
+                if ((await page.locator('select').count()) > 0) {
                     // Choose the second option (index 1) to avoid selecting placeholder
                     await page.locator('select').first().selectOption({ index: 1 });
                     return true;
                 }
-                
+
                 // For buttons that open a dropdown
                 await selector.click();
                 await page.waitForTimeout(300);
-                
+
                 // Try to click the first item in any dropdown that appears
                 const dropdownItems = [
                     page.locator('.dropdown-menu .item').first(),
                     page.locator('.item-list .item').first(),
                     page.locator('.selector-expanded .item').first(),
-                    page.locator('[role="listbox"] [role="option"]').first()
+                    page.locator('[role="listbox"] [role="option"]').first(),
                 ];
-                
+
                 for (const item of dropdownItems) {
-                    if (await item.count() > 0 && await item.isVisible()) {
+                    if ((await item.count()) > 0 && (await item.isVisible())) {
                         await item.click();
                         return true;
                     }
@@ -357,6 +365,6 @@ async function trySelectItem(page: Page): Promise<boolean> {
     } catch (e) {
         console.log('Error trying to select item:', e);
     }
-    
+
     return false;
 }

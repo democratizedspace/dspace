@@ -1,17 +1,17 @@
-const path = require('path');
+import path from 'path';
 
-module.exports = {
+export default {
     preprocess: [],
     compilerOptions: {
-        dev: true
+        dev: true,
     },
     kit: {
         vite: {
             resolve: {
                 alias: {
-                    $lib: path.resolve('./src')
-                }
-            }
-        }
-    }
-}; 
+                    $lib: path.resolve('./src'),
+                },
+            },
+        },
+    },
+};

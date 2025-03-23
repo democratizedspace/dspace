@@ -11,16 +11,16 @@ import { db } from '../src/lib/db';
 vi.mock('../src/lib/db', () => ({
     db: {
         items: {
-            add: vi.fn().mockResolvedValue('mocked-item-id')
-        }
-    }
+            add: vi.fn().mockResolvedValue('mocked-item-id'),
+        },
+    },
 }));
 
 // Mock the browser's fetch API
 global.fetch = vi.fn(() =>
     Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({ url: 'mocked-image-url' })
+        json: () => Promise.resolve({ url: 'mocked-image-url' }),
     })
 );
 
@@ -66,15 +66,15 @@ describe('ItemForm Component', () => {
     let container;
 
     beforeEach(() => {
-    // Setup DOM
+        // Setup DOM
         container = setupDom();
-    
+
         // Reset mocks
         vi.clearAllMocks();
     });
 
     afterEach(() => {
-    // Cleanup
+        // Cleanup
         container.innerHTML = '';
     });
 
@@ -82,8 +82,8 @@ describe('ItemForm Component', () => {
         const { getByLabelText } = render(ItemForm, {
             target: container,
             props: {
-                isEdit: false
-            }
+                isEdit: false,
+            },
         });
 
         // Verify form fields are present
@@ -98,24 +98,24 @@ describe('ItemForm Component', () => {
         const { getByLabelText, getByText } = render(ItemForm, {
             target: container,
             props: {
-                isEdit: false
-            }
+                isEdit: false,
+            },
         });
 
         // Fill form fields
         await act(async () => {
             fireEvent.input(getByLabelText(/name/i), {
-                target: { value: 'Test Item' }
+                target: { value: 'Test Item' },
             });
-      
+
             fireEvent.input(getByLabelText(/description/i), {
-                target: { value: 'This is a test item description' }
+                target: { value: 'This is a test item description' },
             });
 
             // Simulate image upload
             const file = new File(['mock content'], 'test-image.jpg', { type: 'image/jpeg' });
             fireEvent.change(getByLabelText(/upload an image/i), {
-                target: { files: [file] }
+                target: { files: [file] },
             });
         });
 
@@ -126,11 +126,13 @@ describe('ItemForm Component', () => {
 
         // Check if database add was called with correct data
         await waitFor(() => {
-            expect(db.items.add).toHaveBeenCalledWith(expect.objectContaining({
-                name: 'Test Item',
-                description: 'This is a test item description',
-                image: 'mocked-image-url'
-            }));
+            expect(db.items.add).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    name: 'Test Item',
+                    description: 'This is a test item description',
+                    image: 'mocked-image-url',
+                })
+            );
         });
     });
 
@@ -138,8 +140,8 @@ describe('ItemForm Component', () => {
         const { getByText } = render(ItemForm, {
             target: container,
             props: {
-                isEdit: false
-            }
+                isEdit: false,
+            },
         });
 
         // Submit form without filling any fields
@@ -159,12 +161,12 @@ describe('ItemForm Component', () => {
     });
 
     it('handles edit mode correctly', async () => {
-    // Setup edit mode with existing item data
+        // Setup edit mode with existing item data
         const existingItem = {
             id: 'item-123',
             name: 'Existing Item',
             description: 'Existing item description',
-            image: 'existing-image-url'
+            image: 'existing-image-url',
         };
 
         // Mock the database update function for edit mode
@@ -174,8 +176,8 @@ describe('ItemForm Component', () => {
             target: container,
             props: {
                 isEdit: true,
-                itemData: existingItem
-            }
+                itemData: existingItem,
+            },
         });
 
         // Check if form is pre-filled with existing data
@@ -196,7 +198,7 @@ describe('ItemForm Component', () => {
                 expect.objectContaining({
                     name: existingItem.name,
                     description: existingItem.description,
-                    image: existingItem.image
+                    image: existingItem.image,
                 })
             );
         });

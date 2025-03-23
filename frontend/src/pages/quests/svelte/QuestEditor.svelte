@@ -26,31 +26,39 @@
 <form class="form-style vertical">
     {#each fields as field (field.name)}
         <div class="field-container">
-            <label>{field.label}:</label>
+            <label for={field.name}>{field.label}:</label>
             <div class="input-container">
                 {#if field.type === 'text'}
-                    <input class="input-style" type="text" bind:value={field.value} />
+                    <input
+                        class="input-style"
+                        type="text"
+                        id={field.name}
+                        bind:value={field.value}
+                    />
                 {:else if field.type === 'textarea'}
-                    <textarea class="input-style" bind:value={field.value} />
+                    <textarea class="input-style" id={field.name} bind:value={field.value} />
                 {:else if field.type === 'steps'}
-                    <ul class="vertical steps-list">
-                        {#each steps as step, index (index)}
-                            <li class="horizontal">
-                                <span>{step}</span>
-                                <button class="delete-button" on:click={() => removeStep(index)}
-                                    >Delete</button
-                                >
-                            </li>
-                        {/each}
-                    </ul>
-                    <div class="horizontal">
-                        <input
-                            class="input-style step-input"
-                            type="text"
-                            bind:value={stepInput}
-                            on:keydown={handleKeyPress}
-                        />
-                        <button class="add-button" type="button" on:click={addStep}>Add</button>
+                    <div id={field.name}>
+                        <ul class="vertical steps-list">
+                            {#each steps as step, index (index)}
+                                <li class="horizontal">
+                                    <span>{step}</span>
+                                    <button class="delete-button" on:click={() => removeStep(index)}
+                                        >Delete</button
+                                    >
+                                </li>
+                            {/each}
+                        </ul>
+                        <div class="horizontal">
+                            <input
+                                class="input-style step-input"
+                                type="text"
+                                id="step-input"
+                                bind:value={stepInput}
+                                on:keydown={handleKeyPress}
+                            />
+                            <button class="add-button" type="button" on:click={addStep}>Add</button>
+                        </div>
                     </div>
                 {/if}
             </div>

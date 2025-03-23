@@ -1,9 +1,9 @@
 // frontend/src/utils/customcontent.js
 
-import { 
-    addEntity, 
-    getEntity, 
-    updateEntity, 
+import {
+    addEntity,
+    getEntity,
+    updateEntity,
     deleteEntity,
     getItems,
     getProcesses,
@@ -11,7 +11,7 @@ import {
     getStoreForEntityType,
     saveItem,
     saveProcess,
-    saveQuest
+    saveQuest,
 } from './indexeddb.js';
 
 /**
@@ -34,65 +34,65 @@ export const db = {
         const preparedEntity = {
             ...entity,
             type: entityType,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
         };
         return addEntity(preparedEntity);
     },
-  
+
     get: (entityType, id) => {
-        return getEntity(id).then(entity => {
+        return getEntity(id).then((entity) => {
             if (entity && entity.type === entityType) {
                 return entity;
             }
             throw new Error(`${entityType} not found with id: ${id}`);
         });
     },
-  
+
     update: (entityType, id, updates) => {
-        return getEntity(id).then(entity => {
+        return getEntity(id).then((entity) => {
             if (!entity || entity.type !== entityType) {
                 throw new Error(`${entityType} not found with id: ${id}`);
             }
-      
+
             const updatedEntity = {
                 ...entity,
                 ...updates,
-                updatedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString(),
             };
-      
+
             return updateEntity(updatedEntity);
         });
     },
-  
+
     delete: (entityType, id) => {
-        return getEntity(id).then(entity => {
+        return getEntity(id).then((entity) => {
             if (!entity || entity.type !== entityType) {
                 throw new Error(`${entityType} not found with id: ${id}`);
             }
             return deleteEntity(id);
         });
     },
-  
+
     // List operations
     list: async (entityType) => {
         switch (entityType) {
-        case ENTITY_TYPES.QUEST:
-            return getQuests();
-        case ENTITY_TYPES.ITEM:
-            return getItems();
-        case ENTITY_TYPES.PROCESS:
-            return getProcesses();
-        default:
-            throw new Error(`Unknown entity type: ${entityType}`);
+            case ENTITY_TYPES.QUEST:
+                return getQuests();
+            case ENTITY_TYPES.ITEM:
+                return getItems();
+            case ENTITY_TYPES.PROCESS:
+                return getProcesses();
+            default:
+                throw new Error(`Unknown entity type: ${entityType}`);
         }
     },
-  
+
     // Query operations
     query: async (entityType, filterFn) => {
         const items = await db.list(entityType);
         return items.filter(filterFn);
     },
-  
+
     // Entity-specific operations
     quests: {
         add: (quest) => {
@@ -102,19 +102,19 @@ export const db = {
                 description: quest.description || '',
                 image: quest.image || '/assets/quests/howtodoquests.jpg',
                 custom: true,
-                ...quest
+                ...quest,
             };
-            
+
             return db.add(ENTITY_TYPES.QUEST, preparedQuest);
         },
-        
+
         get: (id) => db.get(ENTITY_TYPES.QUEST, id),
-        
+
         update: (id, updates) => db.update(ENTITY_TYPES.QUEST, id, updates),
-        
-        delete: (id) => db.delete(ENTITY_TYPES.QUEST, id)
+
+        delete: (id) => db.delete(ENTITY_TYPES.QUEST, id),
     },
-  
+
     items: {
         add: (item) => {
             // Ensure minimal item structure
@@ -126,19 +126,19 @@ export const db = {
                 unit: item.unit || null,
                 type: item.type || null,
                 custom: true,
-                ...item
+                ...item,
             };
-            
+
             return db.add(ENTITY_TYPES.ITEM, preparedItem);
         },
-        
+
         get: (id) => db.get(ENTITY_TYPES.ITEM, id),
-        
+
         update: (id, updates) => db.update(ENTITY_TYPES.ITEM, id, updates),
-        
-        delete: (id) => db.delete(ENTITY_TYPES.ITEM, id)
+
+        delete: (id) => db.delete(ENTITY_TYPES.ITEM, id),
     },
-  
+
     processes: {
         add: (process) => {
             // Ensure minimal process structure
@@ -149,18 +149,18 @@ export const db = {
                 consumeItems: process.consumeItems || [],
                 createItems: process.createItems || [],
                 custom: true,
-                ...process
+                ...process,
             };
-            
+
             return db.add(ENTITY_TYPES.PROCESS, preparedProcess);
         },
-        
+
         get: (id) => db.get(ENTITY_TYPES.PROCESS, id),
-        
+
         update: (id, updates) => db.update(ENTITY_TYPES.PROCESS, id, updates),
-        
-        delete: (id) => db.delete(ENTITY_TYPES.PROCESS, id)
-    }
+
+        delete: (id) => db.delete(ENTITY_TYPES.PROCESS, id),
+    },
 };
 
 // Convenience functions for common operations
@@ -181,7 +181,14 @@ export function deleteQuest(id) {
     return db.quests.delete(id);
 }
 
-export function createItem(name, description, image = null, price = null, unit = null, type = null) {
+export function createItem(
+    name,
+    description,
+    image = null,
+    price = null,
+    unit = null,
+    type = null
+) {
     return db.items.add({ name, description, image, price, unit, type });
 }
 
@@ -197,7 +204,13 @@ export function deleteItem(id) {
     return db.items.delete(id);
 }
 
-export function createProcess(title, duration, requireItems = [], consumeItems = [], createItems = []) {
+export function createProcess(
+    title,
+    duration,
+    requireItems = [],
+    consumeItems = [],
+    createItems = []
+) {
     return db.processes.add({ title, duration, requireItems, consumeItems, createItems });
 }
 

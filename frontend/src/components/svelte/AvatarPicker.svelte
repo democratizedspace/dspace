@@ -31,14 +31,22 @@
     </div>
     <div class="horizontal">
         {#each defaultPFPs as pfp, i}
-            <img
-                class="item"
+            <div
+                class="item-wrapper"
                 class:highlighted={selectedIndex === i}
                 id={`img-${i}`}
-                src={pfp}
-                alt="Avatar"
                 on:click={() => setHighlighted(i)}
-            />
+                on:keydown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        setHighlighted(i);
+                    }
+                }}
+                tabindex="0"
+                role="button"
+                aria-label={`Select avatar ${i + 1}`}
+            >
+                <img class="item" src={pfp} alt={`Avatar option ${i + 1}`} />
+            </div>
         {/each}
     </div>
 </div>
@@ -59,12 +67,18 @@
         justify-content: center;
     }
 
-    .item {
+    .item-wrapper {
         width: 40%;
         margin: 5px;
         border-radius: 20px;
         opacity: 0.8;
         border: 2px solid transparent;
+        cursor: pointer;
+    }
+
+    .item {
+        width: 100%;
+        border-radius: 20px;
     }
 
     .previewcontainer {
@@ -79,8 +93,7 @@
         cursor: default;
     }
 
-    .item:hover {
-        cursor: pointer;
+    .item-wrapper:hover {
         opacity: 1;
     }
 

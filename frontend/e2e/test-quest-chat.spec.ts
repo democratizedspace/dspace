@@ -83,7 +83,9 @@ test.describe('Quest Chat Navigation', () => {
                 clicked = true;
 
                 // Take another screenshot after clicking
-                await page.screenshot({ path: './test-artifacts/screenshots/after-option-click.png' });
+                await page.screenshot({
+                    path: './test-artifacts/screenshots/after-option-click.png',
+                });
 
                 // Check that URL hasn't changed (meaning no page refresh)
                 const afterClickUrl = page.url();

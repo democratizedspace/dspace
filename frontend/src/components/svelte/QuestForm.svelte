@@ -4,7 +4,7 @@
 
     export let isEdit = false;
     export let questId = null;
-    
+
     let title = '';
     let description = '';
     let image = null;
@@ -47,39 +47,39 @@
 
     async function validateForm() {
         const errors = {};
-        
+
         if (!title.trim()) {
             errors.title = 'Title is required';
         }
-        
+
         if (!description.trim()) {
             errors.description = 'Description is required';
         }
-        
+
         if (!isEdit && !image && !previewUrl) {
             errors.image = 'Image is required';
         }
-        
+
         validationErrors = errors;
         return Object.keys(errors).length === 0;
     }
 
     async function uploadImage(file) {
         if (!file) return previewUrl; // Return existing image URL if no new file
-        
+
         // For demo purposes, simulate an image upload
         // In production, you would use a real upload service
         // This is a placeholder for actual image upload logic
         const formData = new FormData();
         formData.append('image', file);
-        
+
         try {
             // Simulate API call
             const response = await fetch('/api/upload', {
                 method: 'POST',
-                body: formData
+                body: formData,
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 return data.url;
@@ -95,37 +95,37 @@
 
     async function handleSubmit(event) {
         event.preventDefault();
-        
+
         // Validate form
         const isValid = await validateForm();
         if (!isValid) return;
-        
+
         isSubmitting = true;
-        
+
         try {
             // Upload image if there's a new one
             const imageUrl = await uploadImage(image);
-            
+
             if (isEdit) {
                 // Update existing quest
                 await db.quests.update(questId, {
                     title,
                     description,
                     image: imageUrl,
-                    updatedAt: new Date().toISOString()
+                    updatedAt: new Date().toISOString(),
                 });
-                
+
                 dispatch('success', { message: 'Quest updated successfully', id: questId });
             } else {
                 // Create new quest
                 const newQuestId = await db.quests.add({
                     title,
                     description,
-                    image: imageUrl
+                    image: imageUrl,
                 });
-                
+
                 dispatch('success', { message: 'Quest created successfully', id: newQuestId });
-                
+
                 // Reset form after successful submission
                 title = '';
                 description = '';
@@ -144,11 +144,11 @@
 <form on:submit={handleSubmit} class="quest-form">
     <div class="form-group">
         <label for="title">Title*</label>
-        <input 
-            type="text" 
-            id="title" 
-            bind:value={title} 
-            placeholder="Gather resources" 
+        <input
+            type="text"
+            id="title"
+            bind:value={title}
+            placeholder="Gather resources"
             class:error={validationErrors.title}
         />
         {#if validationErrors.title}
@@ -163,7 +163,7 @@
             bind:value={description}
             placeholder="Describe the quest in detail. What needs to be done?"
             class:error={validationErrors.description}
-        ></textarea>
+        />
         {#if validationErrors.description}
             <span class="error-message">{validationErrors.description}</span>
         {/if}
@@ -171,10 +171,10 @@
 
     <div class="form-group">
         <label for="image">Upload an Image*</label>
-        <input 
-            type="file" 
-            id="image" 
-            accept="image/*" 
+        <input
+            type="file"
+            id="image"
+            accept="image/*"
             on:change={handleImageUpload}
             class:error={validationErrors.image}
         />

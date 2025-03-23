@@ -4,40 +4,40 @@ class FDBObjectStore {
         return {
             onsuccess: null,
             onerror: null,
-            result: 1
+            result: 1,
         };
     }
-  
+
     put(entity) {
         return {
             onsuccess: null,
             onerror: null,
-            result: 1
+            result: 1,
         };
     }
-  
+
     delete(id) {
         return {
             onsuccess: null,
-            onerror: null
+            onerror: null,
         };
     }
-  
+
     get(id) {
         return {
             onsuccess: null,
             onerror: null,
-            result: { id }
+            result: { id },
         };
     }
-  
+
     getAll() {
         return {
             onsuccess: null,
             onerror: null,
-            result: []
+            result: [],
         };
     }
 }
 
-module.exports = { FDBObjectStore }; 
+module.exports = { FDBObjectStore };

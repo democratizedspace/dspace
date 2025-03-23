@@ -9,10 +9,14 @@ import * as indexedDb from '../src/utils/indexeddb.js';
 jest.mock('../src/utils/indexeddb.js', () => ({
     getStoreForEntityType: jest.fn((entityType) => {
         switch (entityType) {
-        case 'quest': return 'quests';
-        case 'item': return 'items';
-        case 'process': return 'processes';
-        default: throw new Error(`Unknown entity type: ${entityType}`);
+            case 'quest':
+                return 'quests';
+            case 'item':
+                return 'items';
+            case 'process':
+                return 'processes';
+            default:
+                throw new Error(`Unknown entity type: ${entityType}`);
         }
     }),
     addEntity: jest.fn((entity) => {

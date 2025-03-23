@@ -3,12 +3,14 @@ import { clearUserData } from './test-helpers';
 
 test.describe('Page Layout Structure', () => {
     test.beforeEach(async ({ page }) => {
-    // Clear user data before each test
+        // Clear user data before each test
         await clearUserData(page);
     });
 
-    test('home page should have correct structure with header, logo and navigation', async ({ page }) => {
-    // Go to the home page
+    test('home page should have correct structure with header, logo and navigation', async ({
+        page,
+    }) => {
+        // Go to the home page
         await page.goto('/');
         await page.waitForLoadState('networkidle');
 
@@ -29,18 +31,18 @@ test.describe('Page Layout Structure', () => {
         const navLinks = page.locator('nav a');
         // Remove the count check or update it to match the current number
         // await expect(navLinks).toHaveCount(3);
-        
+
         // Verify Home, Quests, and Inventory links exist
         await expect(page.getByRole('link', { name: 'Home', exact: true })).toBeVisible();
         await expect(page.getByRole('link', { name: 'Quests', exact: true })).toBeVisible();
         await expect(page.getByRole('link', { name: 'Inventory', exact: true })).toBeVisible();
-    
+
         // Verify the home link is active
         await expect(page.getByRole('link', { name: 'Home', exact: true })).toHaveClass(/active/);
     });
 
     test('quests page should have correct structure with action buttons', async ({ page }) => {
-    // Go to the quests page
+        // Go to the quests page
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
 
@@ -52,18 +54,18 @@ test.describe('Page Layout Structure', () => {
         // Verify action buttons are present - adjust selectors as needed
         const createQuestButton = page.getByRole('link', { name: 'Create a new quest' });
         const managedQuestsButton = page.getByRole('link', { name: 'Managed quests' });
-        
+
         await expect(createQuestButton).toBeVisible();
         await expect(managedQuestsButton).toBeVisible();
-    
+
         // Verify quest grid exists - adjust selector if needed
         const questsGrid = page.locator('.quests-grid, .quest-cards');
         await expect(questsGrid).toBeVisible();
-    
+
         // Verify at least one quest card exists - adjust selector if needed
         const questCards = page.locator('.quests-grid a, .quest-card');
         await expect(questCards.first()).toBeVisible();
-    
+
         // Verify quest card has an image and text content
         const firstQuestCard = questCards.first();
         await expect(firstQuestCard.locator('img')).toBeVisible();
@@ -71,7 +73,7 @@ test.describe('Page Layout Structure', () => {
     });
 
     test('inventory page should have correct structure with item list', async ({ page }) => {
-    // Go to the inventory page
+        // Go to the inventory page
         await page.goto('/inventory');
         await page.waitForLoadState('networkidle');
 
@@ -85,35 +87,35 @@ test.describe('Page Layout Structure', () => {
         // Verify page has content
         const pageContent = page.locator('main');
         await expect(pageContent).toBeVisible();
-        
+
         // Verify page title or heading exists (more flexible)
         const titleOrHeading = page.locator('h1, h2, h3, .title, header').first();
         await expect(titleOrHeading).toBeVisible();
     });
 
     test('page should be responsive across different screen sizes', async ({ page }) => {
-    // Test mobile view
+        // Test mobile view
         await page.setViewportSize({ width: 375, height: 667 });
         await page.goto('/');
         await page.waitForLoadState('networkidle');
-    
+
         // Take a screenshot for visual verification
         await page.screenshot({ path: './test-artifacts/mobile-view.png' });
-    
+
         // Test tablet view
         await page.setViewportSize({ width: 768, height: 1024 });
         await page.goto('/');
         await page.waitForLoadState('networkidle');
-    
+
         // Take a screenshot for visual verification
         await page.screenshot({ path: './test-artifacts/tablet-view.png' });
-    
+
         // Test desktop view
         await page.setViewportSize({ width: 1366, height: 768 });
         await page.goto('/');
         await page.waitForLoadState('networkidle');
-    
+
         // Take a screenshot for visual verification
         await page.screenshot({ path: './test-artifacts/desktop-view.png' });
     });
-}); 
+});

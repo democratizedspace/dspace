@@ -12,11 +12,11 @@ global.__BROWSER__ = true;
 function setupSSRDom() {
     // Clear existing content
     document.body.innerHTML = '';
-  
+
     // Create the app container
     const appDiv = document.createElement('div');
     appDiv.id = 'app';
-  
+
     // Set the HTML content
     appDiv.innerHTML = `
     <header>
@@ -38,10 +38,10 @@ function setupSSRDom() {
       </div>
     </main>
   `;
-  
+
     // Append to body
     document.body.appendChild(appDiv);
-  
+
     // Return the app container element
     return appDiv;
 }
@@ -50,11 +50,11 @@ function setupSSRDom() {
 function setupQuestsPageDom() {
     // Clear existing content
     document.body.innerHTML = '';
-  
+
     // Create the app container
     const appDiv = document.createElement('div');
     appDiv.id = 'app';
-  
+
     // Set the HTML content
     appDiv.innerHTML = `
     <header>
@@ -90,10 +90,10 @@ function setupQuestsPageDom() {
       </div>
     </main>
   `;
-  
+
     // Append to body
     document.body.appendChild(appDiv);
-  
+
     // Return the app container element
     return appDiv;
 }
@@ -102,9 +102,9 @@ describe('Page Structure Test', () => {
     let container;
 
     beforeEach(() => {
-    // Setup the DOM and store container
+        // Setup the DOM and store container
         container = setupSSRDom();
-    
+
         // Verify container exists before tests
         expect(container).not.toBeNull();
         expect(container.id).toBe('app');
@@ -118,11 +118,11 @@ describe('Page Structure Test', () => {
     it('renders the header with logo and title', () => {
         const header = container.querySelector('header');
         expect(header).not.toBeNull();
-    
+
         const logo = container.querySelector('img.logo');
         expect(logo).not.toBeNull();
         expect(logo.getAttribute('src')).toBe('/assets/logo.svg');
-    
+
         const title = container.querySelector('h1');
         expect(title).not.toBeNull();
         expect(title.textContent).toBe('dSpace');
@@ -131,8 +131,8 @@ describe('Page Structure Test', () => {
     it('renders navigation links', () => {
         const navLinks = container.querySelectorAll('.nav-links li');
         expect(navLinks.length).toBe(3);
-    
-        const links = Array.from(navLinks).map(li => li.querySelector('a').textContent);
+
+        const links = Array.from(navLinks).map((li) => li.querySelector('a').textContent);
         expect(links).toContain('Home');
         expect(links).toContain('Quests');
         expect(links).toContain('Inventory');
@@ -141,7 +141,7 @@ describe('Page Structure Test', () => {
     it('has a main content area', () => {
         const main = container.querySelector('main');
         expect(main).not.toBeNull();
-    
+
         const contentArea = main.querySelector('.content-area');
         expect(contentArea).not.toBeNull();
     });
@@ -151,9 +151,9 @@ describe('Quests Page Structure Test', () => {
     let container;
 
     beforeEach(() => {
-    // Setup the DOM and store container
+        // Setup the DOM and store container
         container = setupQuestsPageDom();
-    
+
         // Verify container exists before tests
         expect(container).not.toBeNull();
         expect(container.id).toBe('app');
@@ -167,12 +167,12 @@ describe('Quests Page Structure Test', () => {
     it('shows action buttons for quests management', () => {
         const actionButtonsNav = container.querySelector('.action-buttons');
         expect(actionButtonsNav).not.toBeNull();
-    
+
         const buttons = actionButtonsNav.querySelectorAll('button');
         expect(buttons.length).toBe(3);
-    
+
         // Check that we have the expected buttons
-        const buttonTexts = Array.from(buttons).map(button => button.textContent);
+        const buttonTexts = Array.from(buttons).map((button) => button.textContent);
         expect(buttonTexts).toContain('Add New Quest');
         expect(buttonTexts).toContain('Import Quest');
         expect(buttonTexts).toContain('Export Quests');
@@ -181,10 +181,10 @@ describe('Quests Page Structure Test', () => {
     it('displays quest cards in a grid', () => {
         const questsGrid = container.querySelector('.quests-grid');
         expect(questsGrid).not.toBeNull();
-    
+
         const questCards = questsGrid.querySelectorAll('.quest-card');
         expect(questCards.length).toBe(2);
-    
+
         // Check quest card structure
         const firstCard = questCards[0];
         expect(firstCard.querySelector('img')).not.toBeNull();

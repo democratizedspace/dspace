@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
 
     const dispatch = createEventDispatcher();
 
@@ -7,6 +7,11 @@
 
     let searchQuery = '';
     let originalData = []; // Store a copy of the original data
+    let isClientSide = false;
+
+    onMount(() => {
+        isClientSide = true;
+    });
 
     // Update originalData whenever data changes
     $: originalData = [...data];
@@ -32,7 +37,18 @@
     }
 </script>
 
-<input type="text" bind:value={searchQuery} placeholder="Search..." on:input={handleInput} />
+<div data-hydrated={isClientSide ? 'true' : 'false'}>
+    {#if isClientSide}
+        <input
+            type="text"
+            bind:value={searchQuery}
+            placeholder="Search..."
+            on:input={handleInput}
+        />
+    {:else}
+        <div class="search-placeholder">Loading search...</div>
+    {/if}
+</div>
 
 <style>
     input {
@@ -44,6 +60,20 @@
         display: block;
         margin-left: auto;
         margin-right: auto;
+        border-radius: 20px;
+    }
+
+    .search-placeholder {
+        width: 80%;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        font-style: italic;
+        color: #d0ffd0;
+        background: rgba(255, 255, 255, 0.1);
         border-radius: 20px;
     }
 </style>

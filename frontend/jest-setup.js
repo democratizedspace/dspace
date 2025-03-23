@@ -5,30 +5,32 @@ require('./__mocks__/formData.js');
 if (typeof window === 'undefined') {
     global.window = {
         location: {
-            href: 'http://localhost/'
+            href: 'http://localhost/',
         },
         localStorage: {
             getItem: jest.fn(),
             setItem: jest.fn(),
             removeItem: jest.fn(),
-            clear: jest.fn()
+            clear: jest.fn(),
         },
         sessionStorage: {
             getItem: jest.fn(),
             setItem: jest.fn(),
             removeItem: jest.fn(),
-            clear: jest.fn()
+            clear: jest.fn(),
         },
-        fetch: jest.fn(() => Promise.resolve({
-            json: () => Promise.resolve({}),
-            text: () => Promise.resolve(''),
-            blob: () => Promise.resolve(new Blob()),
-            arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
-            formData: () => Promise.resolve(new FormData()),
-            headers: new Headers()
-        })),
+        fetch: jest.fn(() =>
+            Promise.resolve({
+                json: () => Promise.resolve({}),
+                text: () => Promise.resolve(''),
+                blob: () => Promise.resolve(new Blob()),
+                arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
+                formData: () => Promise.resolve(new FormData()),
+                headers: new Headers(),
+            })
+        ),
         atob: (str) => Buffer.from(str, 'base64').toString('binary'),
-        btoa: (str) => Buffer.from(str, 'binary').toString('base64')
+        btoa: (str) => Buffer.from(str, 'binary').toString('base64'),
     };
 }
 
@@ -42,17 +44,17 @@ if (typeof document === 'undefined') {
             id: '',
             append: jest.fn(),
             parentNode: {
-                removeChild: jest.fn()
+                removeChild: jest.fn(),
             },
             tagName: tag.toUpperCase(),
-            tag
+            tag,
         }),
         getElementById: (id) => ({
             parentNode: {
-                removeChild: jest.fn()
+                removeChild: jest.fn(),
             },
             append: jest.fn(),
-            id
+            id,
         }),
         dispatchEvent: jest.fn(),
         addEventListener: jest.fn(),
@@ -64,9 +66,9 @@ if (typeof document === 'undefined') {
                 return '';
             }),
             className: '',
-            style: {}
+            style: {},
         })),
-        querySelectorAll: jest.fn(() => [])
+        querySelectorAll: jest.fn(() => []),
     };
 }
 
@@ -90,26 +92,40 @@ if (typeof structuredClone === 'undefined') {
 if (typeof Buffer === 'undefined') {
     global.Buffer = {
         from: jest.fn((data, encoding) => ({
-            toString: jest.fn(() => data)
-        }))
+            toString: jest.fn(() => data),
+        })),
     };
 }
 
 // Mock Fetch API
 global.Headers = class Headers {
-    constructor() { this.headers = {}; }
-    append(key, value) { this.headers[key] = value; }
-    get(key) { return this.headers[key]; }
+    constructor() {
+        this.headers = {};
+    }
+    append(key, value) {
+        this.headers[key] = value;
+    }
+    get(key) {
+        return this.headers[key];
+    }
 };
 
-global.FormData = global.FormData || class FormData {
-    constructor() { this.data = {}; }
-    append(key, value) { this.data[key] = value; }
-    get(key) { return this.data[key] || null; }
-};
+global.FormData =
+    global.FormData ||
+    class FormData {
+        constructor() {
+            this.data = {};
+        }
+        append(key, value) {
+            this.data[key] = value;
+        }
+        get(key) {
+            return this.data[key] || null;
+        }
+    };
 
 global.Blob = class Blob {
-    constructor(parts, options = {}) { 
+    constructor(parts, options = {}) {
         this.parts = parts || [];
         this.options = options;
         this.size = 0;
@@ -119,7 +135,7 @@ global.Blob = class Blob {
 
 // Fix JSDOM dispatchEvent errors
 const originalDispatchEvent = global.document.dispatchEvent;
-global.document.dispatchEvent = function(event) {
+global.document.dispatchEvent = function (event) {
     if (originalDispatchEvent) {
         return originalDispatchEvent.call(this, event);
     }
@@ -130,8 +146,8 @@ global.document.dispatchEvent = function(event) {
 if (typeof process === 'undefined') {
     global.process = {
         env: {
-            NODE_ENV: 'test'
-        }
+            NODE_ENV: 'test',
+        },
     };
 }
 
@@ -145,15 +161,15 @@ global.__BROWSER__ = true;
 // Setup JSDOM environment
 global.window = {
     location: {
-        href: 'http://localhost:3000/'
+        href: 'http://localhost:3000/',
     },
     crypto: {
-        getRandomValues: arr => require('crypto').randomFillSync(arr)
+        getRandomValues: (arr) => require('crypto').randomFillSync(arr),
     },
     navigator: {
-        userAgent: 'node.js'
+        userAgent: 'node.js',
     },
-    dispatchEvent: jest.fn()
+    dispatchEvent: jest.fn(),
 };
 
 // Define CustomEvent
@@ -164,7 +180,9 @@ class MockCustomEvent {
     }
 }
 global.CustomEvent = MockCustomEvent;
-global.Event = function(type) { this.type = type; };
+global.Event = function (type) {
+    this.type = type;
+};
 
 // Define a function to create realistic DOM elements
 const createDomElement = (tag) => {
@@ -180,18 +198,18 @@ const createDomElement = (tag) => {
             add: jest.fn(),
             remove: jest.fn(),
             contains: jest.fn(),
-            toggle: jest.fn()
+            toggle: jest.fn(),
         },
         style: {},
         children: [],
         childNodes: [],
-        appendChild: function(child) {
+        appendChild: function (child) {
             this.children.push(child);
             this.childNodes.push(child);
             child.parentNode = this;
             return child;
         },
-        removeChild: function(child) {
+        removeChild: function (child) {
             const index = this.children.indexOf(child);
             if (index !== -1) {
                 this.children.splice(index, 1);
@@ -205,15 +223,15 @@ const createDomElement = (tag) => {
         innerHTML: '',
         textContent: '',
         id: '',
-        querySelector: function(selector) {
+        querySelector: function (selector) {
             // ... existing code ...
         },
-        querySelectorAll: function(selector) {
+        querySelectorAll: function (selector) {
             // ... existing code ...
-        }
+        },
     };
-  
+
     // ... existing code ...
-  
+
     return element;
-}; 
+};

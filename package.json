@@ -3,11 +3,20 @@
   "version": "2.1.0",
   "main": "index.js",
   "scripts": {
+    "dev": "cd frontend && npm run dev",
     "test": "cd frontend && npm test",
+    "test:watch": "cd frontend && npm run test:watch",
+    "test:e2e": "cd frontend && npm run test:e2e",
+    "test:e2e:groups": "cd frontend && npm run test:e2e:groups",
+    "test:e2e:custom": "cd frontend && npm run test:e2e:custom",
+    "test:all": "cd frontend && npm run test:all",
+    "test:quick": "cd frontend && npm run test:quick",
+    "test:pr": "node run-tests.js",
     "check": "cd frontend && npm run check",
     "lint": "cd frontend && npm run lint",
     "lint:fix": "cd frontend && npm run lint:fix",
-    "format": "cd frontend && npm run format"
+    "format": "cd frontend && npm run format",
+    "build": "cd frontend && npm run build"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.0.0"

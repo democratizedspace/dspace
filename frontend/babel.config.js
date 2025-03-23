@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
     presets: [
         [
             '@babel/preset-env',
@@ -15,5 +15,7 @@ module.exports = {
         '@babel/plugin-transform-runtime',
         '@babel/plugin-syntax-import-meta',
     ],
-    sourceType: 'unambiguous'
-}; 
+    sourceType: 'unambiguous',
+};
+
+export default config;

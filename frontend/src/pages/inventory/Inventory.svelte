@@ -2,33 +2,52 @@
     import { state } from '../../utils/gameState/common.js';
     import ItemList from '../../components/svelte/ItemList.svelte';
     import items from './json/items.json';
+    import { onMount } from 'svelte';
 
     let showAllItems = false;
+    let currentInventory = {};
+    let isClientSide = false;
+    let allItems = {};
 
-    // Create an object with a count of 0 for items not in $state.inventory
-    const allItems = items.reduce((acc, item) => {
-        acc[item.id] = {
-            count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
-        };
-        return acc;
-    }, {});
+    // Use onMount to ensure this code only runs in the browser after hydration
+    onMount(() => {
+        isClientSide = true;
 
-    // Reactive variable for the current inventory source
-    let currentInventory = $state.inventory;
+        // Initialize allItems with all available items from the items list
+        allItems = items.reduce((acc, item) => {
+            acc[item.id] = {
+                count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
+            };
+            return acc;
+        }, {});
 
-    // Update the current inventory source when the checkbox is toggled
-    $: {
+        // Set initial inventory state
+        updateInventorySource();
+    });
+
+    // Function to update the inventory source based on the showAllItems toggle
+    function updateInventorySource() {
+        if (!isClientSide) return;
         currentInventory = showAllItems ? allItems : $state.inventory;
+    }
+
+    // Reactive statement to update inventory when state changes or toggle is flipped
+    $: if (isClientSide) {
+        updateInventorySource();
     }
 </script>
 
-<div>
+<div data-hydrated={isClientSide ? 'true' : 'false'}>
     <div class="horizontal">
         <label>
             <input type="checkbox" class="checkbox" bind:checked={showAllItems} /> Show all items
         </label>
     </div>
-    <ItemList inventory={currentInventory} />
+    {#if isClientSide}
+        <ItemList inventory={currentInventory} />
+    {:else}
+        <div class="loading">Loading inventory...</div>
+    {/if}
 </div>
 
 <style>
@@ -48,5 +67,12 @@
         transform: scale(2.5);
         cursor: pointer;
         margin: 10px;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 2rem;
+        font-style: italic;
+        color: #666;
     }
 </style>

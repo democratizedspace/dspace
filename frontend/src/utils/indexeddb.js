@@ -120,14 +120,14 @@ export function deleteEntity(id) {
  */
 export function getStoreForEntityType(entityType) {
     switch (entityType) {
-    case 'quest':
-        return 'quests';
-    case 'item':
-        return 'items';
-    case 'process':
-        return 'processes';
-    default:
-        throw new Error(`Unknown entity type: ${entityType}`);
+        case 'quest':
+            return 'quests';
+        case 'item':
+            return 'items';
+        case 'process':
+            return 'processes';
+        default:
+            throw new Error(`Unknown entity type: ${entityType}`);
     }
 }
 

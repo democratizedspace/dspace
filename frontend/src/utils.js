@@ -132,20 +132,20 @@ export const durationInSeconds = (durationString) => {
             const unit = component.replace(number, '');
             let seconds = 0;
             switch (unit) {
-            case 'd':
-                seconds = number * 86400;
-                break;
-            case 'h':
-                seconds = number * 3600;
-                break;
-            case 'm':
-                seconds = number * 60;
-                break;
-            case 's':
-                seconds = number;
-                break;
-            default:
-                break;
+                case 'd':
+                    seconds = number * 86400;
+                    break;
+                case 'h':
+                    seconds = number * 3600;
+                    break;
+                case 'm':
+                    seconds = number * 60;
+                    break;
+                case 's':
+                    seconds = number;
+                    break;
+                default:
+                    break;
             }
             durationSeconds += seconds;
         }
@@ -184,7 +184,7 @@ export const addWalletBalance = (req, res, symbol, addBalance) => {
 
 export const fixMarkdownText = (text) => {
     // replace ' with '
-    const fixedText = text.replace(/'/g, '\'');
+    const fixedText = text.replace(/'/g, "'");
     return fixedText;
 };
 
@@ -492,16 +492,16 @@ export function filterQuests(quests, filter = 'all') {
     let result = [];
 
     switch (filter) {
-    case 'available':
-        result = quests.filter((quest) => !questFinished(quest.id) && canStartQuest(quest));
-        break;
-    case 'finished':
-        result = quests.filter((quest) => questFinished(quest.id));
-        break;
-    case 'all':
-    default:
-        result = [...quests];
-        break;
+        case 'available':
+            result = quests.filter((quest) => !questFinished(quest.id) && canStartQuest(quest));
+            break;
+        case 'finished':
+            result = quests.filter((quest) => questFinished(quest.id));
+            break;
+        case 'all':
+        default:
+            result = [...quests];
+            break;
     }
 
     return result;

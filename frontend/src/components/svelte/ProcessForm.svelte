@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     import ItemSelector from './ItemSelector.svelte';
     import items from '../../pages/inventory/json/items.json';
 
@@ -9,7 +9,13 @@
     export let consumeItems = [];
     export let createItems = [];
 
+    let isClientSide = false;
+
     const dispatch = createEventDispatcher();
+
+    onMount(() => {
+        isClientSide = true;
+    });
 
     function addItemRequirement() {
         requireItems = [...requireItems, { id: '', count: 1 }];
@@ -87,89 +93,116 @@
     }
 </script>
 
-<form on:submit={handleSubmit} class="process-form">
-    <div class="form-group">
-        <label for="title">Title*</label>
-        <input type="text" id="title" bind:value={title} placeholder="Process title" required />
-    </div>
-
-    <div class="form-group">
-        <label for="duration">Duration*</label>
-        <input type="text" id="duration" bind:value={duration} placeholder="e.g. 1h 30m" required />
-    </div>
-
-    <div class="form-group">
-        <label>Required Items</label>
-        {#each requireItems as item, index}
-            <div class="item-row">
-                <ItemSelector
-                    {items}
-                    selectedItemId={item.id}
-                    label="Select Required Item"
-                    on:select={(e) => handleItemSelect(e, 'require', index)}
+<div data-hydrated={isClientSide ? 'true' : 'false'}>
+    {#if isClientSide}
+        <form on:submit={handleSubmit} class="process-form">
+            <div class="form-group">
+                <label for="title">Title*</label>
+                <input
+                    type="text"
+                    id="title"
+                    bind:value={title}
+                    placeholder="Process title"
+                    required
                 />
-                <input type="number" bind:value={item.count} placeholder="Count" />
-                <button
-                    type="button"
-                    class="remove-button"
-                    on:click={() => removeItemRequirement(index)}>Remove</button
-                >
             </div>
-        {/each}
-        <button type="button" class="add-button" on:click={addItemRequirement}
-            >Add Required Item</button
-        >
-    </div>
 
-    <div class="form-group">
-        <label>Consumed Items</label>
-        {#each consumeItems as item, index}
-            <div class="item-row">
-                <ItemSelector
-                    {items}
-                    selectedItemId={item.id}
-                    label="Select Consumed Item"
-                    on:select={(e) => handleItemSelect(e, 'consume', index)}
+            <div class="form-group">
+                <label for="duration">Duration*</label>
+                <input
+                    type="text"
+                    id="duration"
+                    bind:value={duration}
+                    placeholder="e.g. 1h 30m"
+                    required
                 />
-                <input type="number" bind:value={item.count} placeholder="Count" />
-                <button
-                    type="button"
-                    class="remove-button"
-                    on:click={() => removeItemConsumption(index)}>Remove</button
-                >
             </div>
-        {/each}
-        <button type="button" class="add-button" on:click={addItemConsumption}
-            >Add Consumed Item</button
-        >
-    </div>
 
-    <div class="form-group">
-        <label>Created Items</label>
-        {#each createItems as item, index}
-            <div class="item-row">
-                <ItemSelector
-                    {items}
-                    selectedItemId={item.id}
-                    label="Select Created Item"
-                    on:select={(e) => handleItemSelect(e, 'create', index)}
-                />
-                <input type="number" bind:value={item.count} placeholder="Count" />
-                <button
-                    type="button"
-                    class="remove-button"
-                    on:click={() => removeItemCreation(index)}>Remove</button
-                >
+            <div class="form-group">
+                <label for="required-items-section">Required Items</label>
+                <div id="required-items-section">
+                    {#each requireItems as item, index}
+                        <div class="item-row">
+                            <ItemSelector
+                                {items}
+                                selectedItemId={item.id}
+                                label="Select Required Item"
+                                on:select={(e) => handleItemSelect(e, 'require', index)}
+                            />
+                            <input type="number" bind:value={item.count} placeholder="Count" />
+                            <button
+                                type="button"
+                                class="remove-button"
+                                on:click={() => removeItemRequirement(index)}>Remove</button
+                            >
+                        </div>
+                    {/each}
+                    <button type="button" class="add-button" on:click={addItemRequirement}
+                        >Add Required Item</button
+                    >
+                </div>
             </div>
-        {/each}
-        <button type="button" class="add-button" on:click={addItemCreation}>Add Created Item</button
-        >
-    </div>
 
-    <div class="form-submit">
-        <button type="submit" class="submit-button">Create Process</button>
-    </div>
-</form>
+            <div class="form-group">
+                <label for="consumed-items-section">Consumed Items</label>
+                <div id="consumed-items-section">
+                    {#each consumeItems as item, index}
+                        <div class="item-row">
+                            <ItemSelector
+                                {items}
+                                selectedItemId={item.id}
+                                label="Select Consumed Item"
+                                on:select={(e) => handleItemSelect(e, 'consume', index)}
+                            />
+                            <input type="number" bind:value={item.count} placeholder="Count" />
+                            <button
+                                type="button"
+                                class="remove-button"
+                                on:click={() => removeItemConsumption(index)}>Remove</button
+                            >
+                        </div>
+                    {/each}
+                    <button type="button" class="add-button" on:click={addItemConsumption}
+                        >Add Consumed Item</button
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="created-items-section">Created Items</label>
+                <div id="created-items-section">
+                    {#each createItems as item, index}
+                        <div class="item-row">
+                            <ItemSelector
+                                {items}
+                                selectedItemId={item.id}
+                                label="Select Created Item"
+                                on:select={(e) => handleItemSelect(e, 'create', index)}
+                            />
+                            <input type="number" bind:value={item.count} placeholder="Count" />
+                            <button
+                                type="button"
+                                class="remove-button"
+                                on:click={() => removeItemCreation(index)}>Remove</button
+                            >
+                        </div>
+                    {/each}
+                    <button type="button" class="add-button" on:click={addItemCreation}
+                        >Add Created Item</button
+                    >
+                </div>
+            </div>
+
+            <div class="form-submit">
+                <button type="submit" class="submit-button">Create Process</button>
+            </div>
+        </form>
+    {:else}
+        <div class="loading-container">
+            <p class="loading-text">Loading process form...</p>
+        </div>
+    {/if}
+</div>
 
 <style>
     .process-form {
@@ -182,6 +215,24 @@
         color: #fff;
         font-family: Arial, sans-serif;
         text-align: center;
+    }
+
+    .loading-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: #2c5837;
+        border-radius: 12px;
+        border: 2px solid #007006;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .loading-text {
+        font-size: 16px;
+        font-style: italic;
+        color: #d0ffd0;
     }
 
     .form-group {
@@ -251,25 +302,27 @@
     }
 
     .add-button {
+        margin-top: 10px;
         padding: 8px 16px;
-        background-color: #44ff44;
-        color: black;
+        background-color: #4488ff;
+        color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
         transition: background 0.2s ease-in-out;
-        margin-top: 10px;
     }
 
     .add-button:hover {
-        background-color: #00cc00;
+        background-color: #0055cc;
     }
 
     .submit-button {
-        font-size: 16px;
-        padding: 10px 20px;
-        background-color: #007006;
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #00cc00;
         color: white;
+        font-size: 18px;
+        font-weight: bold;
         border: none;
         border-radius: 8px;
         cursor: pointer;
@@ -277,6 +330,11 @@
     }
 
     .submit-button:hover {
-        background-color: #005004;
+        background-color: #009900;
+    }
+
+    .form-submit {
+        text-align: center;
+        margin-top: 20px;
     }
 </style>

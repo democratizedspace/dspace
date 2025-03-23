@@ -5,7 +5,7 @@
         "node": true,
         "jest": true
     },
-    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -13,6 +13,7 @@
         "extraFileExtensions": [".svelte"]
     },
     "plugins": ["@typescript-eslint", "svelte3"],
+    "ignorePatterns": ["dist/**/*", "node_modules/**/*"],
     "overrides": [
         {
             "files": ["*.svelte"],
@@ -56,7 +57,12 @@
             }
         },
         {
-            "files": ["**/*.config.js", "**/svelte.config.js", "**/babel.config.js", "**/jest-setup.js"],
+            "files": [
+                "**/*.config.js",
+                "**/svelte.config.js",
+                "**/babel.config.js",
+                "**/jest-setup.js"
+            ],
             "rules": {
                 "@typescript-eslint/no-var-requires": "off",
                 "@typescript-eslint/no-unused-vars": "warn"
@@ -64,10 +70,7 @@
         }
     ],
     "rules": {
-        "indent": ["error", 4],
         "linebreak-style": ["error", "unix"],
-        "quotes": ["error", "single"],
-        "semi": ["error", "always"],
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off"

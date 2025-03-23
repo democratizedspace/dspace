@@ -1,2 +1,2 @@
 // Mock for devLog.js
-export const log = jest.fn(); 
+export const log = jest.fn();

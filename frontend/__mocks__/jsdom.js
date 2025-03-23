@@ -6,4 +6,4 @@ global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
 const originalJsdom = jest.requireActual('jsdom');
-module.exports = originalJsdom; 
+module.exports = originalJsdom;

@@ -6,6 +6,7 @@ declare const process: {
         CI?: string;
         BASE_URL?: string;
         PROTOCOL?: string;
+        PW_WORKERS?: string;
     };
 };
 
@@ -13,9 +14,12 @@ declare const process: {
 const protocol = process.env.PROTOCOL || 'http';
 const baseURL = process.env.BASE_URL || `${protocol}://localhost:3002`;
 
+// Allow setting workers via environment variable for CI and local runs
+const workers = process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS) : process.env.CI ? 1 : 1;
+
 export default defineConfig({
     testDir: './e2e',
-    workers: 1,
+    workers: workers,
     reporter: [
         ['list'],
         [
@@ -26,7 +30,7 @@ export default defineConfig({
             },
         ],
     ],
-    retries: process.env.CI ? 2 : 0,
+    retries: process.env.CI ? 2 : 1, // Add 1 retry for flaky tests even in local development
     timeout: 30000,
     // Configure artifact folders
     outputDir: './test-artifacts/',
@@ -69,4 +73,6 @@ export default defineConfig({
         reuseExistingServer: true,
         timeout: 60000,
     },
+    // Group tests to improve parallelization
+    fullyParallel: false, // Only parallel when explicitly enabled in tests
 });

@@ -14,16 +14,16 @@ const mockDb = {
         update: jest.fn(),
         delete: jest.fn(),
         list: jest.fn().mockResolvedValue([]),
-        query: jest.fn().mockResolvedValue([])
+        query: jest.fn().mockResolvedValue([]),
     },
     items: {
-        list: jest.fn().mockResolvedValue([])
-    }
+        list: jest.fn().mockResolvedValue([]),
+    },
 };
 
 // Mock the imports
 jest.mock('../src/utils/customcontent.js', () => ({
-    db: mockDb
+    db: mockDb,
 }));
 
 // Create a mock for QuestForm component
@@ -32,90 +32,91 @@ const mockQuestForm = {
         // Simple mock implementation that simulates a rendered form
         const form = document.createElement('form');
         form.className = 'quest-form';
-    
+
         // Add title input
         const titleGroup = document.createElement('div');
         titleGroup.className = 'form-group';
-    
+
         const titleLabel = document.createElement('label');
         titleLabel.setAttribute('for', 'title');
         titleLabel.textContent = 'Title*';
-    
+
         const titleInput = document.createElement('input');
         titleInput.id = 'title';
         titleInput.type = 'text';
         titleInput.placeholder = 'Gather resources';
         titleInput.value = props.title || '';
-    
+
         titleGroup.appendChild(titleLabel);
         titleGroup.appendChild(titleInput);
-    
+
         // Add description textarea
         const descGroup = document.createElement('div');
         descGroup.className = 'form-group';
-    
+
         const descLabel = document.createElement('label');
         descLabel.setAttribute('for', 'description');
         descLabel.textContent = 'Description*';
-    
+
         const descTextarea = document.createElement('textarea');
         descTextarea.id = 'description';
         descTextarea.placeholder = 'Describe the quest in detail. What needs to be done?';
         descTextarea.value = props.description || '';
-    
+
         descGroup.appendChild(descLabel);
         descGroup.appendChild(descTextarea);
-    
+
         // Add image input
         const imageGroup = document.createElement('div');
         imageGroup.className = 'form-group';
-    
+
         const imageLabel = document.createElement('label');
         imageLabel.setAttribute('for', 'image');
         imageLabel.textContent = 'Upload an Image*';
-    
+
         const imageInput = document.createElement('input');
         imageInput.id = 'image';
         imageInput.type = 'file';
         imageInput.accept = 'image/*';
-    
+
         imageGroup.appendChild(imageLabel);
         imageGroup.appendChild(imageInput);
-    
+
         // Add submit button
         const submitDiv = document.createElement('div');
         submitDiv.className = 'form-submit';
-    
+
         const submitButton = document.createElement('button');
         submitButton.type = 'submit';
         submitButton.className = 'submit-button';
         submitButton.textContent = props.isEdit ? 'Update Quest' : 'Create Quest';
-    
+
         submitDiv.appendChild(submitButton);
-    
+
         // Define the submission handler
         const handleSubmit = async (e) => {
             if (e) e.preventDefault();
-      
+
             const formData = {
                 title: titleInput.value,
                 description: descTextarea.value,
-                image: imageInput.files?.[0] || (props.image ? 'existing-image' : null)
+                image: imageInput.files?.[0] || (props.image ? 'existing-image' : null),
             };
-      
+
             // Validate form
             const errors = {};
             if (!formData.title.trim()) errors.title = 'Title is required';
             if (!formData.description.trim()) errors.description = 'Description is required';
-            if (!props.isEdit && !formData.image && !props.image) errors.image = 'Image is required';
-      
+            if (!props.isEdit && !formData.image && !props.image)
+                errors.image = 'Image is required';
+
             // If there are errors, show them
             if (Object.keys(errors).length > 0) {
                 for (const [field, message] of Object.entries(errors)) {
                     const errorSpan = document.createElement('span');
                     errorSpan.className = 'error-message';
                     errorSpan.textContent = message;
-          
+
                     const fieldGroup = form.querySelector(`#${field}`).parentNode;
                     if (!fieldGroup.querySelector('.error-message')) {
                         fieldGroup.appendChild(errorSpan);
@@ -123,7 +124,7 @@ const mockQuestForm = {
                 }
                 return false;
             }
-      
+
             // If in edit mode, call update, otherwise call add
             if (props.isEdit) {
                 await mockDb.quests.update(props.questId, {
@@ -138,22 +139,22 @@ const mockQuestForm = {
                     image: 'mocked-image-url',
                 });
             }
-            
+
             return true;
         };
-    
+
         // Add event listener (but mostly for documentation, we'll call handleSubmit directly in tests)
         form.addEventListener('submit', handleSubmit);
-    
+
         // Build the form
         form.appendChild(titleGroup);
         form.appendChild(descGroup);
         form.appendChild(imageGroup);
         form.appendChild(submitDiv);
-    
+
         // Add to the target
         target.appendChild(form);
-    
+
         return {
             destroy: () => {
                 form.remove();
@@ -164,25 +165,25 @@ const mockQuestForm = {
                 titleInput,
                 descTextarea,
                 imageInput,
-                submitButton
+                submitButton,
             },
-            handleSubmit
+            handleSubmit,
         };
-    }
+    },
 };
 
 // Mock the component
 jest.mock('../src/components/svelte/QuestForm.svelte', () => ({
     default: {
-        render: mockQuestForm.render
-    }
+        render: mockQuestForm.render,
+    },
 }));
 
 // Mock the browser's fetch API
 global.fetch = jest.fn(() =>
     Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({ url: 'mocked-image-url' })
+        json: () => Promise.resolve({ url: 'mocked-image-url' }),
     })
 );
 
@@ -214,7 +215,7 @@ global.FileReader = class FileReader {
 const waitFor = async (callback, options = {}) => {
     const { timeout = 1000, interval = 50 } = options;
     const startTime = Date.now();
-  
+
     while (Date.now() - startTime < timeout) {
         try {
             const result = callback();
@@ -224,11 +225,11 @@ const waitFor = async (callback, options = {}) => {
         } catch (error) {
             // Ignore errors during waiting
         }
-    
+
         // Wait for the next interval
-        await new Promise(resolve => setTimeout(resolve, interval));
+        await new Promise((resolve) => setTimeout(resolve, interval));
     }
-  
+
     // Last attempt before throwing timeout error
     return callback();
 };
@@ -237,7 +238,7 @@ const waitFor = async (callback, options = {}) => {
 const act = async (callback) => {
     await callback();
     // Wait for any promises to resolve
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
 };
 
 // Setup DOM environment
@@ -256,15 +257,15 @@ describe('QuestForm Component', () => {
     let component;
 
     beforeEach(() => {
-    // Setup DOM
+        // Setup DOM
         container = setupDom();
-    
+
         // Reset mocks
         jest.clearAllMocks();
     });
 
     afterEach(() => {
-    // Cleanup
+        // Cleanup
         if (component && component.destroy) {
             component.destroy();
         }
@@ -272,9 +273,9 @@ describe('QuestForm Component', () => {
     });
 
     it('renders form elements correctly', async () => {
-    // Render the component
+        // Render the component
         component = mockQuestForm.render(container, { isEdit: false });
-    
+
         // Verify form fields are present
         expect(container.querySelector('label[for="title"]')).not.toBeNull();
         expect(container.querySelector('label[for="description"]')).not.toBeNull();
@@ -282,31 +283,33 @@ describe('QuestForm Component', () => {
     });
 
     it('submits form with all fields filled', async () => {
-    // Render the component
+        // Render the component
         component = mockQuestForm.render(container, { isEdit: false });
-    
+
         // Fill form fields
         await act(async () => {
             const titleInput = container.querySelector('#title');
             titleInput.value = 'Test Quest';
-      
+
             const descInput = container.querySelector('#description');
             descInput.value = 'This is a test quest description';
-      
+
             // Create a mock file
-            const mockFile = new File(['test image content'], 'test-image.png', { type: 'image/png' });
-      
+            const mockFile = new File(['test image content'], 'test-image.png', {
+                type: 'image/png',
+            });
+
             // Add a file to the image input
             await act(async () => {
                 // Get the image input from the component elements
                 const { imageInput } = component.elements;
-                
+
                 // Set the files property directly
                 Object.defineProperty(imageInput, 'files', {
                     value: [mockFile],
-                    writable: true
+                    writable: true,
                 });
-                
+
                 // No need to dispatch event, we'll directly call handleSubmit which reads from files
             });
         });
@@ -321,15 +324,15 @@ describe('QuestForm Component', () => {
             expect.objectContaining({
                 title: 'Test Quest',
                 description: 'This is a test quest description',
-                image: 'mocked-image-url'
+                image: 'mocked-image-url',
             })
         );
     });
 
     it('validates required fields', async () => {
-    // Render the component
+        // Render the component
         component = mockQuestForm.render(container, { isEdit: false });
-    
+
         // Submit form without filling any fields
         await act(async () => {
             await component.handleSubmit();
@@ -348,12 +351,12 @@ describe('QuestForm Component', () => {
     });
 
     it('handles edit mode correctly', async () => {
-    // Setup edit mode with existing quest data
+        // Setup edit mode with existing quest data
         const existingQuest = {
             id: 'quest-123',
             title: 'Existing Quest',
             description: 'Existing quest description',
-            image: 'existing-image-url'
+            image: 'existing-image-url',
         };
 
         // Mock for edit mode
@@ -366,9 +369,9 @@ describe('QuestForm Component', () => {
             questId: existingQuest.id,
             title: existingQuest.title,
             description: existingQuest.description,
-            image: existingQuest.image
+            image: existingQuest.image,
         });
-    
+
         // Check if form is pre-filled with existing data
         expect(container.querySelector('#title').value).toBe(existingQuest.title);
         expect(container.querySelector('#description').value).toBe(existingQuest.description);
@@ -384,7 +387,7 @@ describe('QuestForm Component', () => {
             expect.objectContaining({
                 title: existingQuest.title,
                 description: existingQuest.description,
-                image: 'mocked-image-url'
+                image: 'mocked-image-url',
             })
         );
     });

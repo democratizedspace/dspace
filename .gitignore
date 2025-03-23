@@ -1,22 +1,52 @@
+# Development directories
 dev/
 .netlify/state.json
-
 .netlify/
 .vscode/
-node_modules
 
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+.output/
+build/
+
+# OS files
 .DS_Store
 
+# Custom scripts
 f2clipboard.py
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # Test results
 test-results/
+coverage/
+playwright-report/
+blob-report/
+playwright/.cache/
 
 # Test artifacts and screenshots
 test-artifacts/
 test-screenshots/
+test-videos/
+e2e-results/
 *.png
 !public/assets/**/*.png
+
+# Environment variables
+.env
+.env.production
+
+# Local development files
+.eslintrc.local.json
+.prettierrc.local.json
+.editorconfig.local
 
 # Additional artifacts
 # Added comment for testing git hooks

@@ -44,4 +44,4 @@ class MockFormData {
 // Override FormData in global scope
 global.FormData = MockFormData;
 
-module.exports = MockFormData; 
+module.exports = MockFormData;

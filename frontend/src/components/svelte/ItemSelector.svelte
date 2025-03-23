@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import SearchBar from './SearchBar.svelte';
 
@@ -10,6 +10,11 @@
     const dispatch = createEventDispatcher();
     const filteredItems = writable(items);
     let isExpanded = !selectedItemId;
+    let isClientSide = false;
+
+    onMount(() => {
+        isClientSide = true;
+    });
 
     function handleSearch(event) {
         filteredItems.set(event.detail);
@@ -33,50 +38,68 @@
     $: selectedItem = items.find((item) => item.id === selectedItemId);
 </script>
 
-<div class="item-selector">
-    <label>{label}</label>
+<div class="item-selector" data-hydrated={isClientSide ? 'true' : 'false'}>
+    <label for="item-select-control">{label}</label>
 
-    {#if isExpanded}
-        <div class="selector-expanded">
-            <SearchBar data={items} on:search={handleSearch} />
-            <div class="items-list">
-                {#each $filteredItems as item (item.id)}
-                    <div
-                        class="item-row"
-                        class:selected={selectedItemId === item.id}
-                        on:click={() => handleItemSelect(item.id)}
-                    >
-                        <div class="item-content">
-                            {#if item.image}
-                                <img src={item.image} alt={item.name} />
-                            {/if}
-                            <div class="item-info">
-                                <h3>{item.name}</h3>
-                                {#if item.description}
-                                    <p class="description">
-                                        {item.description}
-                                    </p>
+    {#if isClientSide}
+        {#if isExpanded}
+            <div class="selector-expanded" id="item-select-control">
+                <SearchBar data={items} on:search={handleSearch} />
+                <div class="items-list">
+                    {#each $filteredItems as item (item.id)}
+                        <div
+                            class="item-row"
+                            class:selected={selectedItemId === item.id}
+                            on:click={() => handleItemSelect(item.id)}
+                            on:keydown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    handleItemSelect(item.id);
+                                }
+                            }}
+                            tabindex="0"
+                            role="button"
+                        >
+                            <div class="item-content">
+                                {#if item.image}
+                                    <img src={item.image} alt={item.name} />
                                 {/if}
+                                <div class="item-info">
+                                    <h3>{item.name}</h3>
+                                    {#if item.description}
+                                        <p class="description">
+                                            {item.description}
+                                        </p>
+                                    {/if}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {/each}
-            </div>
-        </div>
-    {:else if selectedItem}
-        <div class="selected-item">
-            <div class="item-content">
-                {#if selectedItem.image}
-                    <img src={selectedItem.image} alt={selectedItem.name} />
-                {/if}
-                <div class="item-info">
-                    <h3>{selectedItem.name}</h3>
+                    {/each}
                 </div>
             </div>
-            <button type="button" class="edit-button" on:click={toggleExpanded}> Edit </button>
-        </div>
+        {:else if selectedItem}
+            <div class="selected-item" id="item-select-control">
+                <div class="item-content">
+                    {#if selectedItem.image}
+                        <img src={selectedItem.image} alt={selectedItem.name} />
+                    {/if}
+                    <div class="item-info">
+                        <h3>{selectedItem.name}</h3>
+                    </div>
+                </div>
+                <button type="button" class="edit-button" on:click={toggleExpanded}> Edit </button>
+            </div>
+        {:else}
+            <button
+                type="button"
+                class="select-button"
+                id="item-select-control"
+                on:click={toggleExpanded}
+            >
+                Select Item
+            </button>
+        {/if}
     {:else}
-        <button type="button" class="select-button" on:click={toggleExpanded}> Select Item </button>
+        <div class="loading-selector" id="item-select-control">Loading item selector...</div>
     {/if}
 </div>
 
@@ -92,6 +115,16 @@
         font-size: 16px;
         margin-bottom: 6px;
         color: white;
+    }
+
+    .loading-selector {
+        padding: 10px;
+        background: #1a3d1a;
+        border-radius: 8px;
+        color: #d0ffd0;
+        font-style: italic;
+        text-align: center;
+        border: 2px solid #007006;
     }
 
     .selector-expanded {

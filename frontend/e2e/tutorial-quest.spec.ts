@@ -49,7 +49,9 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
                 console.log('Clicking claim button');
                 await claimButton.click();
                 await page.waitForTimeout(500);
-                await page.screenshot({ path: `./test-artifacts/screenshots/tutorial-quest-claim${clickCount}.png` });
+                await page.screenshot({
+                    path: `./test-artifacts/screenshots/tutorial-quest-claim${clickCount}.png`,
+                });
                 clickCount++;
                 continue;
             }
@@ -60,7 +62,9 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
                 console.log('Clicking process button');
                 await processButton.click();
                 await page.waitForTimeout(500);
-                await page.screenshot({ path: `./test-artifacts/screenshots/tutorial-quest-process${clickCount}.png` });
+                await page.screenshot({
+                    path: `./test-artifacts/screenshots/tutorial-quest-process${clickCount}.png`,
+                });
                 clickCount++;
                 continue;
             }
@@ -69,7 +73,9 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
             const optionsContainer = page.locator('.options');
             if ((await optionsContainer.count()) === 0) {
                 console.log('No options container found');
-                await page.screenshot({ path: `./test-artifacts/screenshots/tutorial-quest-nooptions${clickCount}.png` });
+                await page.screenshot({
+                    path: `./test-artifacts/screenshots/tutorial-quest-nooptions${clickCount}.png`,
+                });
                 break;
             }
 
@@ -82,7 +88,9 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
                 console.log(`Clicking option ${clickCount + 1} of ${optionsCount} available`);
                 await options.first().click();
                 await page.waitForTimeout(500);
-                await page.screenshot({ path: `./test-artifacts/screenshots/tutorial-quest-step${clickCount + 1}.png` });
+                await page.screenshot({
+                    path: `./test-artifacts/screenshots/tutorial-quest-step${clickCount + 1}.png`,
+                });
                 clickCount++;
                 continue;
             }
@@ -93,7 +101,9 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
                 console.log('Clicking first div in options container');
                 await anyElement.click();
                 await page.waitForTimeout(500);
-                await page.screenshot({ path: `./test-artifacts/screenshots/tutorial-quest-fallback${clickCount}.png` });
+                await page.screenshot({
+                    path: `./test-artifacts/screenshots/tutorial-quest-fallback${clickCount}.png`,
+                });
                 clickCount++;
                 continue;
             }

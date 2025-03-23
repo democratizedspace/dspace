@@ -1,6 +1,6 @@
 /**
  * Mock for Svelte's internal module
- * 
+ *
  * This mock addresses issues with testing Svelte components that are used within
  * Astro's SSR + hydration framework. It handles both the server-rendered portions
  * and client-side hydration.
@@ -18,13 +18,13 @@ if (typeof global.document === 'undefined') {
             classList: {
                 add: () => {},
                 remove: () => {},
-                contains: () => false
-            }
+                contains: () => false,
+            },
         }),
         createTextNode: () => ({}),
         querySelector: () => null,
         querySelectorAll: () => [],
-        getElementById: () => null
+        getElementById: () => null,
     };
 }
 
@@ -44,10 +44,10 @@ function custom_event(type, detail) {
  */
 function dispatch_dev(type, detail) {
     try {
-    // Make sure document is defined
+        // Make sure document is defined
         if (global.document && typeof global.document.dispatchEvent === 'function') {
-            const customEvent = new CustomEvent(type, { 
-                detail: { ...detail, __svelte__: true } 
+            const customEvent = new CustomEvent(type, {
+                detail: { ...detail, __svelte__: true },
             });
             global.document.dispatchEvent(customEvent);
         }
@@ -133,29 +133,29 @@ function create_component(component) {
 function mount_component(component, target, anchor, options) {
     // Handle hydration for components with client: directives
     if (options && options.hydrate) {
-    // For Astro SSR + hydration, we need to handle both pre-rendered content 
-    // and client-side hydration differently
+        // For Astro SSR + hydration, we need to handle both pre-rendered content
+        // and client-side hydration differently
         return {
             $$: {
                 fragment: {
                     c: noop,
-                    m: noop
-                }
+                    m: noop,
+                },
             },
             $set: noop,
-            $destroy: noop
+            $destroy: noop,
         };
     }
-  
+
     return {
         $$: {
             fragment: {
                 c: () => {},
-                m: (target, anchor) => {}
-            }
+                m: (target, anchor) => {},
+            },
         },
         $set: () => {},
-        $destroy: () => {}
+        $destroy: () => {},
     };
 }
 
@@ -181,13 +181,13 @@ module.exports = {
     children,
     create_component,
     mount_component,
-  
+
     // Critical flag to disable SSR mode for testing
     ssr: false,
-  
+
     // Helper functions for hydration
     tick: (fn) => Promise.resolve().then(fn || (() => {})),
-  
+
     // Special component constructors for testing
     SvelteComponent: class SvelteComponent {
         constructor() {}
@@ -196,5 +196,5 @@ module.exports = {
     SvelteComponentDev: class SvelteComponentDev {
         constructor() {}
         $destroy() {}
-    }
-}; 
+    },
+};
