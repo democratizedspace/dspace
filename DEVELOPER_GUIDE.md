@@ -482,33 +482,77 @@ For component state:
 
 ## Game Systems
 
-### Inventory System
+DSPACE features several core game systems that work together to create the gameplay experience:
 
-The inventory system tracks items owned by the player:
-- Located in `src/utils/gameState/inventory.js`
-- Uses reactive stores for real-time updates
-- Persists to localStorage
+### Core Game Mechanics
 
-### Process System
+#### Items
+Items are the fundamental resources and objects in the game that players can acquire, use, and transform. 
 
-Processes transform items over time:
-- Located in `src/utils/gameState/processes.js`
-- Handles scheduling and completion
-- Integrates with the inventory system
+- **Built-in Items**: Pre-defined items that come with the game (metals, components, tools, etc.)
+- **Custom Items**: User-created items that extend the game's item catalog
+- **Item Properties**: 
+  - Name and description
+  - Image/icon
+  - Category
+  - Value
+  - Tags for filtering and sorting
 
-### Quest System
+All items are displayed in the inventory system (under the `/inventory` route) and can be integrated into processes and quests.
 
-Quests provide objectives and rewards:
-- Located in `src/pages/quests/`
-- Supports both built-in and custom quests
-- Includes conversation-based interaction
+#### Processes
+Processes represent manufacturing, transformation, or creation activities that convert input items into output items over time.
 
-### Custom Content System
+- **Built-in Processes**: Pre-defined manufacturing processes included with the game
+- **Custom Processes**: User-created processes that extend the game's capabilities
+- **Process Properties**:
+  - Title and description
+  - Duration (time to complete)
+  - Required items (for the process to run)
+  - Consumed items (items used up during the process)
+  - Created items (items produced by the process)
 
-Players can create their own game content:
-- Located in `src/utils/customcontent.js`
-- Supports items, processes, and quests
-- Validates user input for game balance
+Processes appear in the processes list and can be initiated from anywhere in the game that displays the process component.
+
+#### Quests
+Quests are missions or objectives that guide the player's progression through the game.
+
+- **Built-in Quests**: Pre-defined storylines and objectives included with the game
+- **Custom Quests**: User-created quests that extend the game's narrative
+- **Quest Properties**:
+  - Title and description
+  - Objectives and steps
+  - Dialogue and narrative elements
+  - Rewards (items granted upon completion)
+  - Requirements (items needed to start)
+  - Optional process integration
+
+Quests are displayed in the quests page (under the `/quests` route) and can link to processes and items.
+
+### Custom Content Integration
+
+A key feature of DSPACE is the ability for users to create custom content that integrates seamlessly with built-in content:
+
+1. **Unified Display**: Custom and built-in content appear together in the same UI lists and are indistinguishable to players
+2. **Cross-referencing**: Custom quests can require or reward custom items, custom processes can create custom items, etc.
+3. **Filtering and Sorting**: All UI pages that display game elements support filtering and sorting of both built-in and custom content
+
+The design of the application ensures that custom content has the same capabilities as built-in content, allowing players to extend the game in meaningful ways.
+
+### Content Storage
+
+- **Built-in Content**: Stored as JSON files in the repository under `src/pages/[content-type]/json/`
+- **Custom Content**: Stored in the browser's IndexedDB database and managed through the customcontent.js utility
+
+### UI Integration
+
+All game elements are rendered through Svelte components that can handle both built-in and custom content:
+
+- `/inventory` - Displays all items (built-in and custom)
+- `/quests` - Displays all quests (built-in and custom)
+- Process list - Displays all processes (built-in and custom)
+
+These lists are sortable and filterable according to the specific capabilities of each page.
 
 ## Performance Considerations
 
