@@ -469,3 +469,63 @@ console.log('Actual localStorage keys:', actualKeys);
 ```
 
 Remember that maintaining tests is as important as writing them. As the application evolves, tests need to be updated to reflect changes in the UI and application behavior.
+
+## Test Artifact Management
+
+When running Playwright tests, particularly with tracing enabled, you may encounter file system errors like:
+
+```
+Error: ENOENT: no such file or directory, stat '.playwright-artifacts-*/traces/*.network'
+```
+
+These errors typically occur when:
+
+1. Tests are terminated abruptly while writing trace/network files
+2. Multiple test runs overlap and compete for the same file resources
+3. Large trace files exceed system resource limits
+
+### Preventing Test Artifact Issues
+
+To prevent these issues:
+
+1. **Clean up artifacts regularly**:
+   ```bash
+   # Before test runs, clean up old artifacts
+   rm -rf test-videos/ .playwright-artifacts-*/ test-results/
+   ```
+
+2. **Configure trace retention selectively**:
+   ```typescript
+   // In playwright.config.ts, only retain traces for failing tests
+   use: {
+     trace: 'retain-on-failure',
+     video: 'on-first-retry'
+   }
+   ```
+
+3. **Run tests with lower concurrency** if you see file system errors:
+   ```bash
+   # Reduce worker count to minimize file system contention
+   npx playwright test --workers=1
+   ```
+
+4. **Use separate output directories** for parallel test runs:
+   ```typescript
+   // In run-test-groups.mjs
+   const outputDir = `test-results-group-${groupIndex}`;
+   commands.push(`--output=${outputDir}`);
+   ```
+
+### Recovering From Artifact Errors
+
+If you encounter ENOENT or file system errors during test runs:
+
+1. Stop any running test processes
+2. Clear all test artifacts and temporary files:
+   ```bash
+   rm -rf test-videos/ .playwright-artifacts-*/ test-results/
+   ```
+3. Restart the dev server and run tests with reduced concurrency
+4. If problems persist, try running individual test files or smaller groups
+
+Remember that test artifacts are valuable for debugging but can consume significant disk space. Consider regularly cleaning them up in CI environments.
