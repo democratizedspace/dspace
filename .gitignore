@@ -37,13 +37,19 @@ test-screenshots/
 test-videos/
 .playwright-artifacts-*/
 e2e-results/
-*.png
-*.jpeg
-*.webm
-*.zip
-*.trace
-*.network
+test-videos/**/*.png
+test-videos/**/*.jpeg
+test-videos/**/*.webm
+test-videos/**/*.zip
+test-videos/**/*.trace
+test-videos/**/*.network
+test-artifacts/**/*.png
+test-artifacts/**/*.jpeg
+
+# Keep all game assets
 !public/assets/**/*.png
+!public/assets/**/*.jpeg
+!public/assets/**/*.jpg
 
 # Environment variables
 .env
