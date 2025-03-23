@@ -1,51 +1,95 @@
 ---
-title: 'Quest prompts'
+title: 'Quest Prompts'
 slug: 'prompts-quests'
 ---
 
-## Instructions
+# AI-Assisted Content Development for DSPACE
 
-These prompts help with quest creation and are intended to work with GPT-4 on ChatGPT (or using the API). They should fit in the 8K token context window.
+This guide provides structured prompts for using AI assistants like Claude, GPT-4, and others to help create content for DSPACE. These prompts serve as starting templates that you can customize for your specific content needs.
 
-Starting with v3, quest creation will be done using an in-game WYSIWYG editor, but these prompts are still useful for understanding the quest structure and generating ideas.
+> **Note:** For comprehensive content development guidelines, please refer to our [Content Development Guide](/docs/content-development), which includes specific documentation for [Quests](/docs/quest-guidelines), [Items](/docs/item-guidelines), and [Processes](/docs/process-guidelines).
 
-## Quest Schema
+## Getting Started with AI Assistance
 
-All quests must conform to this schema:
+Modern AI assistants can be powerful collaborators in content creation. Here are some tips for effective use:
+
+-   **Provide clear context** about DSPACE's educational mission and sustainability focus
+-   **Use system prompts** to guide the AI toward appropriate tone and technical accuracy
+-   **Iterate on outputs** rather than expecting perfect results on the first try
+-   **Fact-check technical information** since AI systems can sometimes generate plausible-sounding but incorrect details
+
+## Quest Development Prompts
+
+### Basic Quest Structure
+
+```
+I'm developing content for DSPACE, an educational game that teaches real-world skills related to space exploration and sustainability. I need help creating a quest about [TOPIC].
+
+The quest should:
+1. Be scientifically accurate and educational
+2. Focus on something people can actually build or do at home
+3. Follow a logical progression of steps
+4. Include relevant safety considerations
+5. Match the appropriate difficulty level ([BEGINNER/INTERMEDIATE/ADVANCED])
+
+Please help me brainstorm:
+1. A compelling title and description
+2. An appropriate NPC character to guide the player
+3. The key learning objectives
+4. The main steps/activities in the quest
+5. Required materials or prerequisites
+6. Potential branching paths in the dialogue
+```
+
+### Dialogue Development
+
+```
+I'm creating dialogue for a quest in DSPACE about [TOPIC]. The NPC guiding the player is [NPC NAME], who is [BRIEF CHARACTER DESCRIPTION].
+
+Please help me write natural-sounding dialogue that:
+1. Explains [CONCEPT] in an accessible way
+2. Maintains a consistent voice for the character
+3. Includes both educational content and engaging interaction
+4. Provides clear instructions for the player
+5. Offers meaningful choices where appropriate
+
+The dialogue should follow this general structure:
+1. Introduction and explanation of the quest
+2. Instructions for gathering materials/prerequisites
+3. Step-by-step guidance through the process
+4. Troubleshooting common issues
+5. Conclusion and next steps
+```
+
+### Quest Schema Reference
+
+All quests conform to this structure:
 
 ```json
 {
-    "id": "string", // Unique identifier, often category/name format
+    "id": "string", // Unique identifier (category/name format)
     "title": "string", // Display title
     "description": "string", // Brief quest description
     "image": "string", // Path to quest image
     "npc": "string", // Path to NPC avatar image
     "start": "string", // ID of the starting dialogue node
     "dialogue": [
-        // Array of dialogue nodes
         {
             "id": "string", // Node identifier
             "text": "string", // NPC's dialogue text
             "options": [
-                // Player response options
                 {
                     "type": "string", // goto, finish, process, or grantsItems
                     "text": "string", // Player's response text
                     "goto": "string", // For type:goto, target node ID
                     "process": "string", // For type:process, process ID
                     "requiresItems": [
-                        // Optional items needed to select this option
-                        {
-                            "id": "string",
-                            "count": "number"
-                        }
+                        // Optional items needed to select option
+                        { "id": "string", "count": "number" }
                     ],
                     "grantsItems": [
-                        // Optional items given when selecting this option
-                        {
-                            "id": "string",
-                            "count": "number"
-                        }
+                        // Optional items given when selecting option
+                        { "id": "string", "count": "number" }
                     ]
                 }
             ]
@@ -53,351 +97,131 @@ All quests must conform to this schema:
     ],
     "rewards": [
         // Items given upon quest completion
-        {
-            "id": "string",
-            "count": "number"
-        }
+        { "id": "string", "count": "number" }
     ],
     "requiresQuests": [
-        // Array of quest IDs that must be completed first
+        // Quest IDs that must be completed first
         "string"
     ]
 }
 ```
 
-### Quest Categories
+## Item Development Prompts
 
-Based on the codebase, quests are organized into these main categories:
-
-1. Energy
-    - dWatt collection (e.g., "energy/dWatt-1e5")
-    - Solar power (e.g., "energy/dSolar-100kW")
-2. Rocketry
-    - First launch
-    - Component printing
-    - Assembly
-3. 3D Printing
-    - Printer setup
-    - Test prints
-    - Component creation
-4. Hydroponics
-    - Water management
-    - Plant growth
-    - Harvesting
-
-### Quest Dependencies
-
-Quests can require other quests to be completed first. For example:
-
--   Solar quests follow a progression: 1kW → 10kW → 100kW
--   Energy collection quests scale up: 1e4 → 1e5
--   Complex builds require basic tool quests first
-
-## Custom Quest Creation
-
-When creating custom quests:
-
-1. Validation
-
-    - All required fields must be present
-    - IDs must be unique
-    - All referenced dialogue nodes must exist
-    - All item IDs must be valid
-    - All process IDs must be valid
-
-2. Testing
-
-    - Quest dependencies are checked
-    - Item requirements are validated
-    - Process integrations are verified
-    - Dialogue flow is tested for dead ends
-
-3. Contribution
-    - Custom quests are stored locally by default
-    - Can be submitted for inclusion in the base game
-    - Must follow space exploration theme
-    - Pull requests are generated automatically
-
-Run the first quest (replacing the placeholder JSON for the new quest appropriately), copy the dialogue sample, and paste it in the second prompt and run that one too. This should generate the dialogue option, which you can paste back in the original placeholder JSON. You're welcome to submit [pull requests](https://github.com/democratizedspace/dspace/pulls) to improve these prompts!
-
-Ideally do each prompt in a fresh chat in order to minimize side-effects (as the previous prompt will still be in the context window and may cause GPT-4 to improvize).
-
-If your prompt doesn't work as expected, regenerate the response. It seems to be somewhat inconsistent sometimes.
-
-TODO: link to source code in the main branchafter v2 launch
-
-For now, copy directly from the [source file](https://github.com/democratizedspace/dspace/blob/v2/frontend/src/pages/docs/md/prompts-quests.md) so that backticks are included around code blocks.
-
-## Create a new quest from starter JSON
-
-I'm trying to create branching dialogue for a game.
-
-Here's an example quest:
+### Basic Item Creation
 
 ```
-{
-    "id": "3dprinter/start",
-    "title": "Set up your first 3D printer",
-    "description": "Accept Sydney's offer of a 3D printer, and learn how to set it up for use in your space exploration adventure.",
-    "image": "/assets/quests/start.png",
-    "npc": "/assets/npc/sydney.jpg",
-    "start": "start",
-    "dialogue": [
-        {
-            "id": "start",
-            "text": "Hello, friend! I'm Sydney, a 3D printing expert with the metaguild. dChat referred me. I've got a proposition for you: how would you like to have your very own 3D printer?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "enthusiastic",
-                    "text": "A 3D printer? That sounds amazing! Tell me more."
-                }
-            ]
-        },
-        {
-            "id": "enthusiastic",
-            "text": "Fantastic! A 3D printer is an invaluable tool! It can be used to quickly prototype new designs, print decor, and even build robots!! I've taken the liberty of fully assembling and calibrating one for you. So, what do you say?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "grant",
-                    "text": "I say let's do this!!"
-                }
-            ]
-        },
-        {
-            "id": "grant",
-            "text": "First things first, I need you to accept the 3D printer. Just take it and we'll proceed. Oh, and I threw in some filament! That filament gets melted at a high temperature and laid down one layer at a time. It may take a while at first, but over time you'll be able tweak settings and make it run way faster! Plus, this is a cheap beginner model. There are way more powerful printers out there if you've got the cash!",
-            "options": [
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "0",
-                            "count": 1
-                        },
-                        {
-                            "id": "12",
-                            "count": 1000
-                        }
-                    ],
-                    "text": "Don't mind if I do!"
-                },
-                {
-                    "type": "goto",
-                    "goto": "benchy",
-                    "requiresItems": [
-                        {
-                            "id": "0",
-                            "count": 1
-                        },
-                        {
-                            "id": "12",
-                            "count": 1000
-                        }
-                    ],
-                    "text": "I've got the 3D printer and some PLA filament! What's next?"
-                }
-            ]
-        },
-        {
-            "id": "benchy",
-            "text": "For your test print, I recommend printing a Benchy. It's a small boat model often used to validate 3D printer setups. Once you've successfully printed Benchy, we'll know your 3D printer is ready for action.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "3dprint-benchy",
-                    "text": "Starting the Benchy print."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "1",
-                            "count": 1
-                        }
-                    ],
-                    "text": "I've printed the Benchy! What's next?"
-                }
-            ]
-        },
-        {
-            "id": "finish",
-            "text": "Great job! You're all set to use your 3D printer for your space exploration adventures. If you need help or tips on 3D printing, feel free to reach out. Good luck!",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Thanks, Sydney! I appreciate your help."
-                }
-            ]
-        }
-    ],
-    "rewards": [
-        {
-            "id": "24",
-            "count": 100
-        }
-    ],
-    "requiresQuests": [
-    ]
-}
+I'm creating items for DSPACE, an educational game about space exploration and sustainability. I need help designing [NUMBER] items related to [CATEGORY].
+
+For each item, please provide:
+1. A clear, descriptive name
+2. A concise but informative description (1-2 sentences)
+3. Appropriate classification (Resource, Tool, Component, or Consumable)
+4. Realistic properties or specifications
+5. Potential uses in space-related activities
+
+The items should be:
+- Scientifically accurate
+- Realistically obtainable or creatable
+- Educational about their real-world counterparts
+- Relevant to space exploration challenges
 ```
 
-I'd like you to create a new quest that uses similar dialogue. Here's a starting JSON file:
+### Item Categories Reference
+
+DSPACE items fall into these main categories:
+
+1. **Resources**: Raw materials and basic resources (e.g., water, energy units, metals)
+2. **Tools & Equipment**: Items used to perform tasks (e.g., 3D printers, solar panels)
+3. **Components**: Parts used in larger systems (e.g., circuit boards, structural elements)
+4. **Consumables**: Items that get used up (e.g., fuel, food, plant nutrients)
+5. **Educational**: Items that represent knowledge or skills (e.g., blueprints, certifications)
+
+## Process Development Prompts
+
+### Basic Process Creation
 
 ```
-{
-    "id": "vehicles/charge",
-    "title": "Charge your Hypercar",
-    "description": "Charge your Hypercar at your home charging station.",
-    "image": "/assets/quests/charge.jpg",
-    "npc": "/assets/npc/phoenix.png",
-    "start": "start",
-    "dialogue": [],
-    "rewards": [],
-    "requiresQuests": []
-}
+I'm creating processes for DSPACE, an educational game about space exploration and sustainability. I need help designing a process for [ACTIVITY].
+
+Please provide:
+1. A clear, descriptive title
+2. An appropriate duration (format: "2h 30m" or "3d")
+3. Required items (tools/equipment needed but not consumed)
+4. Consumed items (resources used up during the process)
+5. Created items (output of the process)
+
+The process should:
+- Reflect realistic time requirements
+- Maintain logical resource conservation (input ≈ output)
+- Represent an actual scientific or engineering procedure
+- Have educational value relevant to space exploration
+- Balance effort and reward appropriately
 ```
 
-but the NPC may be different. Here's the NPC bio:
+### Process Categories Reference
+
+DSPACE processes generally fall into these categories:
+
+1. **Manufacturing**: Creating physical components (e.g., 3D printing, assembly)
+2. **Biological**: Growing organisms or managing ecosystems (e.g., hydroponics, composting)
+3. **Energy**: Generating or transforming energy (e.g., solar power generation, battery charging)
+4. **Educational**: Learning and experimentation (e.g., simulations, data analysis)
+
+## Content Review and Improvement
+
+### Scientific Accuracy Check
 
 ```
-Phoenix is a professional chemist specializing in sustainable rocket fuel development. With a strong background in chemistry and a focus on environmental conservation, they are committed to finding innovative solutions for the space industry that have a minimal impact on our planet. Phoenix's work has the potential to revolutionize space travel by making it more eco-friendly and accessible to a wider range of people.
+I've created the following content for DSPACE, an educational game about space exploration:
+
+[PASTE CONTENT HERE]
+
+Please review this for scientific accuracy and provide feedback on:
+1. Any factual errors or misconceptions
+2. Realistic timeframes and resource requirements
+3. Safety considerations that should be addressed
+4. Technical terminology usage
+5. Educational value and clarity
+
+If you identify issues, please suggest specific corrections.
 ```
 
-Feel free to ask clarifying questions first. I'd like you to just focus on the dialogue. As a shorthand, use the following format (do not include inline comments in your response code block):
+### Dialogue Polish
 
 ```
-[start]
-NPC: hello
-PLAYER: world >[foo] // this signifies that clicking this option shows the dialogue option with id foo (e.g. `[foo]`)
-PLAYER: lorem >[bar]
+I've written the following dialogue for a quest in DSPACE:
 
-[foo]
-NPC: ipsum
-PLAYER: one >[] // this signifies an empty list, no action
+[PASTE DIALOGUE HERE]
 
-[bar]
-NPC: two
-[] PLAYER: three
+The NPC is [CHARACTER NAME], who is [BRIEF CHARACTER DESCRIPTION].
+
+Please help me improve this dialogue by:
+1. Making it sound more natural and conversational
+2. Ensuring consistent character voice
+3. Simplifying overly complex explanations
+4. Adding engagement through appropriate questions
+5. Maintaining educational value while being entertaining
+6. Identifying any confusing instructions or unclear directions
+
+Suggest specific improvements rather than rewriting the entire dialogue.
 ```
 
-[id] is an id for the dialogue step. [] empty brackets mean it's a leaf node, something other than type:goto (e.g. finish). Think of this as a directed cyclic graph. Keep the nodes (along with their IDs) from the quest above when you output the transformed version. Can you give me that transformed version now, or do you have clarifying questions?
+## Example: Complete Quest Creation
 
-If you have clarifying questions, send them as a numbered list, and I'll send the answers back as a numbered list. Repeat as many times as needed and then give me the output. Thank you so much in advance!
+Here's an example of how to use these prompts to create a complete quest:
 
-## Dialogue to JSON
+1. Start with the Basic Quest Structure prompt to outline your quest
+2. Use the Dialogue Development prompt to create the core narrative
+3. Refine the dialogue using the Dialogue Polish prompt
+4. Check for scientific accuracy with the Scientific Accuracy Check prompt
+5. Format the content into the proper JSON structure using the Quest Schema Reference
 
-I have the following dialogue:
+Remember that AI assistants are collaborative tools. You'll get the best results by:
 
-```
-[start]
-NPC: Hey there, I'm Vega. I hear you're interested in starting an aquarium. I have an idea: How about setting up a new home for a goldfish? It's a great start for budding aquarists.
-PLAYER: A goldfish? That sounds fun! Tell me more. >[enthusiastic]
-PLAYER: A goldfish? I thought they were pretty basic. >[skeptical]
+-   Providing detailed context about DSPACE
+-   Iterating on content rather than accepting first drafts
+-   Focusing the AI on specific aspects at a time
+-   Combining AI suggestions with your own knowledge and creativity
 
-[enthusiastic]
-NPC: I'm glad you're excited! Goldfish might seem simple, but they're actually quite interesting. They need a fairly large tank and good water quality to thrive. I have a kit to help you get started.
-PLAYER: That sounds great, let's do this! >[grant]
-
-[skeptical]
-NPC: You'd be surprised! Goldfish are easy to care for, yes, but they also require some attention to detail. They need a decent-sized tank and good water quality. How about we get you set up with a starter kit?
-PLAYER: Alright, let's give it a shot. >[grant]
-
-[grant]
-NPC: Perfect! I've got this starter kit for you. It includes a 20-gallon tank, a filter, and some food for your new pet.
-PLAYER: I'll gladly take that! >[]
-PLAYER: I've got the aquarium kit! What's next? >[setup]
-
-[setup]
-NPC: Great! Now, the first thing you need to do is set up the aquarium. Install the filter and fill the tank with water. Remember to condition the water before introducing the fish.
-PLAYER: Alright, setting up the tank. >[process]
-PLAYER: I've set up the tank and conditioned the water. What's next? >[introduce]
-
-[process]
-NPC: Fantastic! Once you're done setting up, let's introduce your new goldfish into its home.
-PLAYER: Let's introduce the goldfish. >[introduce]
-
-[introduce]
-NPC: Now gently introduce the goldfish into the tank. Remember, it's essential to acclimate the fish to the new water temperature by floating the bag in the tank for about 15 minutes before fully releasing it.
-PLAYER: Ok, introducing the goldfish now. >[]
-PLAYER: I've introduced the goldfish into the tank. What's next? >[finish]
-
-[finish]
-NPC: That's it! You've done a great job setting up your new goldfish tank. Remember, goldfish are pretty hardy, but they still need regular feeding and tank cleaning. Let me know if you need any more help with your aquarium!
-PLAYER: Thanks, Vega! I appreciate your help. >[]
-```
-
-I want to transform it into a dialogue array in JSON. Here's a sample from a quest:
-
-```
-        {
-            "id": "start",
-            "text": "Hello, friend! I'm Sydney, a 3D printing expert with the metaguild. dChat referred me. I've got a proposition for you: how would you like to have your very own 3D printer?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "enthusiastic",
-                    "text": "A 3D printer? That sounds amazing! Tell me more."
-                },
-                {
-                    "type": "goto",
-                    "goto": "skeptical",
-                    "text": "A 3D printer? How would that help me?"
-                }
-            ]
-        },
-        {
-            "id": "enthusiastic",
-            "text": "Fantastic! A 3D printer is an invaluable tool for space exploration. It can create tools, equipment, and even spare parts for your ship. The printer is fully assembled and calibrated, so all you need to do is complete a test print.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "grant",
-                    "text": "Great, let's get started!"
-                }
-            ]
-        },
-```
-
-Can you help me transform the dialogue into the proper JSON?
-
-[id] is an id for the dialogue step. [] empty brackets mean it's a leaf node, something other than type:goto (e.g. finish). Think of this as a directed cyclic graph. Keep the nodes (along with their IDs) from the quest above when you output the transformed version. Can you give me that transformed version now, or do you have clarifying questions?
-
-If you have clarifying questions, send them as a numbered list, and I'll send the answers back as a numbered list. Repeat as many times as needed and then give me the output. Thank you so much in advance!
-
-## Final pass with polish
-
-I have the following quest:
-
-```
-<paste quest JSON  (from any quest in frontend/src/pages/quests/json/) here>
-```
-
-Can you help me improve the dialogue? Assume all the items have descriptions in other files, and don't worry about images or other content. Just focus on dialogue.
-
-Here are some examples of things I'd like to improve:
-
--   catch any improper use of a word or phrase. Explain why it's improper and suggest a better alternative.
--   catch any awkward phrasing. Explain why it's awkward and suggest a better alternative.
--   catch any overly complex sentences. Explain why it's overly complex and suggest a better alternative.
--   make sure the dialogue matches the NPC's personality, as inferred by the information in their bio:
-
-```
-<paste NPC bio (from any section in frontend/src/pages/docs/md/npcs.md) here>
-```
-
-List your suggestions in a numbered list. After reading your response, I'll reply with a list of numbers that I'd like you to incorporate into the JSON file. Please return the entire JSON file with your changes once I respond. Thank you so much in advance!
-
-## More aggressive polish (only glaring issues)
-
-does this quest dialogue look good to ship?
-
-```
-<paste quest JSON  (from any quest in frontend/src/pages/quests/json/) here>
-```
-
-let me know if anything is horribly wrong or there's an obvious mistake (to the point where I could face serious consequences or embarrassment), but otherwise just reply with "looks good"
-
-Don't worry about the structure of the json or any of the properties whose purpose is unclear. Assume all of that is implemented correctly. Focus only on the NPC dialogue and the player responses.
+By following these guidelines, you can leverage AI to create high-quality, educational content that advances DSPACE's mission of democratizing space exploration through practical, hands-on learning.
