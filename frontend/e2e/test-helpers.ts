@@ -368,3 +368,75 @@ async function trySelectItem(page: Page): Promise<boolean> {
 
     return false;
 }
+
+/**
+ * Waits for Svelte component hydration to complete
+ * @param page The Playwright page object
+ * @param componentName Optional component name to look for in data-hydrated attributes
+ */
+export async function waitForHydration(page: Page, componentName?: string): Promise<void> {
+    // Try waiting for an element that indicates hydration is complete
+    try {
+        if (componentName) {
+            // Look for a specific component that's hydrated
+            await page.waitForSelector(`[data-hydrated="${componentName}"]`, { timeout: 5000 });
+        } else {
+            // Look for any hydrated component
+            await page.waitForSelector('[data-hydrated="true"]', { timeout: 5000 });
+        }
+    } catch (e) {
+        // If we can't find a specific element, wait a bit to ensure hydration completes
+        console.log('Could not find hydration marker, waiting for timeout');
+        await page.waitForTimeout(2000);
+    }
+}
+
+/**
+ * Adds test items to the inventory for testing purposes
+ * Uses localStorage to directly inject items without using the UI
+ */
+export async function addTestItems(page: Page): Promise<void> {
+    await page.goto('/');
+
+    await page.evaluate(() => {
+        // Get current inventory or initialize new one
+        const inventory = JSON.parse(localStorage.getItem('inventory') || '{}');
+
+        // Add some basic test items with various properties
+        if (!inventory.items) {
+            inventory.items = {};
+        }
+
+        // Add a basic item
+        inventory.items['test-item-1'] = {
+            id: 'test-item-1',
+            name: 'Test Item 1',
+            description: 'A test item for testing',
+            category: 'test',
+            quantity: 10,
+            value: 100,
+            custom: true,
+        };
+
+        // Add another item with different properties
+        inventory.items['test-item-2'] = {
+            id: 'test-item-2',
+            name: 'Test Item 2',
+            description: 'Another test item',
+            category: 'resources',
+            quantity: 5,
+            value: 200,
+            custom: true,
+        };
+
+        // Add some currency for purchase tests
+        if (!inventory.currency) {
+            inventory.currency = 0;
+        }
+        inventory.currency += 500;
+
+        // Save back to localStorage
+        localStorage.setItem('inventory', JSON.stringify(inventory));
+        console.log('Added test items to inventory');
+    });
+}

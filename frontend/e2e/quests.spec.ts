@@ -333,10 +333,21 @@ test.describe('Quest Management', () => {
 
         // Verify that the quests page loads properly
         try {
-            // Wait for the quests container to appear
-            await expect(page.locator('.quests-grid, .quests-list, main')).toBeVisible({
-                timeout: 10000,
-            });
+            // Look for quests section in the appropriate selector
+            const questsContainer = page.locator('.quests-grid').first();
+            if ((await questsContainer.count()) > 0) {
+                await expect(questsContainer).toBeVisible();
+            } else {
+                // Try alternative container
+                const questsList = page.locator('.quests-list').first();
+                if ((await questsList.count()) > 0) {
+                    await expect(questsList).toBeVisible();
+                } else {
+                    // Fall back to main content
+                    const mainContent = page.locator('main').first();
+                    await expect(mainContent).toBeVisible();
+                }
+            }
 
             // Look for any quest filtering or toggling UI elements
             const filterElements = page.locator(

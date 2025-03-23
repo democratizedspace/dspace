@@ -1,273 +1,471 @@
-# Testing Guide for DSPACE
+# DSpace Testing Guide
 
-This document provides comprehensive information about the testing approaches used in the DSPACE project.
+This document provides comprehensive information about testing in the DSpace project.
 
-## Testing Approaches
+## Testing Overview
 
-DSPACE employs multiple testing layers to ensure code quality and functionality:
+The DSpace project uses a multi-layered testing approach:
 
-### 1. Unit Tests
+1. **Unit Tests** with Jest
+2. **End-to-End Tests** with Playwright
+3. **Linting** with ESLint
+4. **Formatting** with Prettier
 
-Unit tests validate individual functions and components in isolation.
+## Setting Up for Testing
 
--   **Framework**: Jest
--   **Location**: `__tests__/` directory
--   **Run command**: `npm test`
--   **Coverage report**: `npm run coverage`
+Ensure you have all dependencies installed:
 
-#### Component Testing
+```bash
+npm install
+```
 
--   **Framework**: Testing Library for Svelte
--   **Purpose**: Test Svelte components in isolation
--   **Focus**: Component behavior and user interactions
--   **Run as**: Part of the unit test suite
+## Running Tests
 
-### 2. End-to-End Tests
+### Unit Tests
 
-E2E tests validate complete user flows and application functionality.
+Unit tests use Jest and test components, utilities, and other isolated functionality:
 
--   **Framework**: Playwright
--   **Location**: `e2e/` directory
--   **Run command**: `npm run test:e2e`
--   **UI mode**: `npm run test:e2e:ui`
--   **Browsers**: Tests run in Chrome, Firefox, and Safari
--   **Reports**: Generates HTML reports, videos, and traces on failures
+```bash
+# Run all unit tests
+npm test
 
-### 3. Linting and Formatting
+# Watch mode for unit tests
+npm run test:watch
 
-Code quality checks ensure consistency and prevent common errors.
+# Generate coverage report
+npm run coverage
+```
 
--   **ESLint**: Code quality checks (`npm run lint`)
--   **Prettier**: Code formatting (`npm run format:check`)
--   **Combined**: Run all checks with `npm run check`
--   **Auto-fix**: Fix ESLint issues with `npm run lint:fix`
+### End-to-End Tests
 
-#### ESLint Configuration for Svelte
+E2E tests use Playwright to test the application from a user's perspective:
 
-The project uses `eslint-plugin-svelte3` instead of `svelte-eslint-parser` to avoid ESM/CommonJS compatibility issues. The configuration in `.eslintrc.json` uses the following structure:
+```bash
+# Start the development server (REQUIRED for E2E tests)
+npm run dev
 
-```json
-{
-    "plugins": ["@typescript-eslint", "svelte3"],
-    "overrides": [
-        {
-            "files": ["*.svelte"],
-            "processor": "svelte3/svelte3"
-        },
-        {
-            "files": ["*.ts"],
-            "parserOptions": {
-                "project": "./tsconfig.json"
-            }
-        }
-    ],
-    "settings": {
-        "svelte3": {
-            "ignore-warnings": false
-        }
-    }
+# In a separate terminal, run all E2E tests
+npm run test:e2e
+
+# Run E2E tests with UI visualization
+npm run test:e2e:ui
+
+# Run E2E tests with debug mode
+npm run test:e2e:debug
+
+# Run E2E tests in logical groups (recommended for CI)
+npm run test:e2e:groups
+
+# Run specific test groups
+npm run test:e2e:structure
+npm run test:e2e:quests
+npm run test:e2e:process
+npm run test:e2e:custom
+npm run test:e2e:integration
+```
+
+> **Important:** E2E tests require a running development server on port 3002. If you see connection errors like `ERR_CONNECTION_REFUSED`, make sure you've started the dev server with `npm run dev` in a separate terminal.
+
+### Running All Checks (Pre-PR)
+
+Before submitting a PR, run the comprehensive validation:
+
+```bash
+# First, start the development server
+npm run dev
+
+# In a separate terminal, from project root, run
+npm run test:pr
+```
+
+## Test Structure
+
+### Unit Tests
+
+-   Unit test files are located in `__tests__/` directory
+-   Name your tests with `.test.js` extension
+-   Use Jest's `describe` and `it` syntax for clear organization
+
+Example:
+
+```javascript
+describe('ItemForm Component', () => {
+    it('should render the form correctly', () => {
+        // Test code here
+    });
+});
+```
+
+### End-to-End Tests
+
+-   E2E test files are in the `e2e/` directory
+-   Name your tests with `.spec.ts` extension
+-   Use Playwright's `test.describe` and `test` syntax
+
+Example:
+
+```typescript
+test.describe('Profile Page Functionality', () => {
+    test('profile page should load with user information', async ({ page }) => {
+        // Test code here
+    });
+});
+```
+
+## Best Practices for Playwright Tests
+
+### 1. Use Proper Waiting Mechanisms
+
+Always wait for the page to load properly:
+
+```typescript
+// Recommended way
+await page.goto('/profile');
+await page.waitForLoadState('networkidle');
+
+// Avoid using waitForHydration as it may be less reliable
+```
+
+### 2. Handle Element Selectors Safely
+
+Playwright runs in strict mode, so follow these practices:
+
+```typescript
+// Use first() for selectors that might match multiple elements
+const button = page.locator('button').filter({ hasText: 'Save' }).first();
+
+// Check element count before interacting
+if ((await button.count()) > 0) {
+    await button.click();
+}
+
+// Use filter() with regular expressions for text matching
+page.locator('button').filter({ hasText: /save/i });
+
+// Avoid using text= prefix in selectors (deprecated)
+```
+
+### 3. Conditional Test Execution
+
+Handle scenarios where elements may not be present:
+
+```typescript
+// Check if feature exists before testing it
+const featureElement = page.locator('.feature-container').first();
+if ((await featureElement.count()) > 0) {
+    // Run test for this feature
+} else {
+    // Skip test properly
+    test.skip();
+    console.log('Feature not available, skipping test');
 }
 ```
 
-This configuration:
+### 4. Robust Selector Strategies
 
--   Limits TypeScript project checking to `.ts` files only
--   Uses the Svelte3 processor for `.svelte` files
--   Avoids ESM module compatibility issues
+Use multiple strategies to find elements:
 
-### 4. Combined Testing
+```typescript
+// Chain selectors from parent to child
+const menu = page.locator('nav').locator('.menu-item');
 
-Run all tests at once to verify the entire application:
+// Use multiple attributes/selectors for more reliability
+const submitButton = page
+    .locator('[type="submit"], button.submit, button:has-text("Submit")')
+    .first();
 
--   **All tests**: `npm run test:all`
--   **Verbose output**: `npm run test:all:verbose`
+// Use data-testid for stable selectors
+const profile = page.locator('[data-testid="profile-section"]');
+```
 
-## Git Hooks
+### 5. Clean Test Data
 
-The project uses Husky to enforce code quality via Git hooks:
+Always start with a clean environment:
 
-### Pre-commit Hook
+```typescript
+// Use beforeEach to reset state
+test.beforeEach(async ({ page }) => {
+    await clearUserData(page);
+});
+```
 
-The pre-commit hook automatically runs:
+## Common Testing Errors and Solutions
 
--   Linting checks (ESLint and Prettier)
--   Unit tests for changed files
+### Strict Mode Violations
 
-This ensures that code must pass quality checks before being committed.
+**Error:** "strict mode violation: locator('button') resolved to X elements"
 
-### Commit Message Hook
+**Solution:** Use `.first()` or more specific selectors:
 
-Commit messages must follow the [Conventional Commits](https://www.conventionalcommits.org/) format:
+```typescript
+// Instead of
+page.locator('button');
 
--   Start with a type: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, or `chore`
--   Optionally followed by a scope in parentheses
--   Then a colon, space, and description
--   Example: `feat: add new test runner` or `fix(auth): resolve login issue`
+// Use
+page.locator('button').first();
+// or
+page.locator('button#submit-form');
+```
 
-## Testing in Docker
+### Text Content Assertions
 
-For consistent testing across environments, you can use Docker:
+**Error:** "Error: expect(...).toContainText(/Text/)"
 
--   **Run tests in Docker**: `npm run docker:test`
--   **Run all tests in Docker**: `npm run docker:test:all`
--   **Start app and run tests**: `npm run docker:start-test`
+**Solution:** Ensure text is actually present and wait for elements to be loaded:
 
-## Astro and Svelte: SSR Considerations
+```typescript
+await expect(page.locator('h1')).toContainText(/Welcome/);
+```
 
-### ⚠️ Important: Server-Side Rendering Implications
+### Timeouts
 
-DSPACE uses Astro with Svelte components, with Astro configured for server-side rendering (`output: 'server'` in `astro.config.mjs`). This architecture has significant implications for component development and testing:
+**Error:** "Timeout X ms exceeded"
 
-1. **Components render twice**: Once on the server (Node.js environment) and once on the client (browser)
-2. **No DOM in SSR**: Browser APIs like `document` and `window` are unavailable during server rendering
-3. **Common error**: `TypeError: Cannot read properties of undefined (reading 'createElement')`
-4. **Hydration mismatch**: Differences between server and client rendering can cause hydration errors
+**Solution:** Increase wait time or fix application slowness:
 
-### Best Practices for SSR-compatible Components
+```typescript
+// Increase timeout for slow operations
+test.setTimeout(60000);
 
-When developing new Svelte components:
+// Or use explicit waiting
+await page.waitForTimeout(2000);
+```
 
-1. **Always use the `onMount` pattern**:
+### Locator Not Found
 
-    ```svelte
-    <script>
-        import { onMount } from 'svelte';
-        let mounted = false;
-        onMount(() => {
-            mounted = true;
-        });
-    </script>
+**Error:** "locator.click: Target closed"
 
-    {#if mounted}
-        <!-- DOM-dependent content -->
-    {/if}
-    ```
+**Solution:** Ensure the page is fully loaded:
 
-2. **Export handler methods** for better testability:
+```typescript
+await page.waitForLoadState('networkidle');
+await page.waitForTimeout(1000); // Sometimes needed for dynamic content
+```
 
-    ```svelte
-    export function handleSubmit(event) {
-      // Implementation
-    }
-    ```
+## Adding New Tests to Test Groups
 
-3. **Avoid initialization that requires DOM**:
+When adding new E2E tests, update the test groups configuration in `scripts/run-test-groups.mjs`:
 
-    ```svelte
-    // ❌ Bad - will fail in SSR
-    let element = document.createElement('div');
+```javascript
+// Example: Adding a new test to Structure Tests group
+const TEST_GROUPS = [
+    {
+        name: 'Structure Tests',
+        files: ['page-structure.spec.ts', 'error-pages.spec.ts', 'your-new-test.spec.ts'],
+        workers: MAX_WORKERS,
+        retries: 1,
+    },
+    // Other test groups...
+];
+```
 
-    // ✅ Good - wait for client-side execution
-    let element;
-    onMount(() => { element = document.createElement('div'); });
-    ```
+## Testing Hydrated Svelte Components
 
-4. **Use defensive coding** with browser APIs:
+Since DSpace uses Astro SSR with hydrated Svelte components:
 
-    ```svelte
-    const isClient = typeof window !== 'undefined';
-    if (isClient) {
-      // Browser-only code
-    }
-    ```
+1. Always wait for component hydration
+2. Understand that interactivity only works after hydration
+3. Use `page.waitForLoadState('networkidle')` to ensure components are ready
 
-5. **Add client directives** in Astro files:
+## Test Artifacts
 
-    ```astro
-    ---
-    import MyComponent from '../components/MyComponent.svelte';
-    ---
+Tests generate artifacts for debugging:
 
-    <!-- Use client:load for components that need immediate hydration -->
-    <MyComponent client:load />
+-   **Screenshots**: In `test-artifacts/` directory
+-   **Videos**: In `test-videos/` directory
+-   **Traces**: In `.playwright-artifacts/traces/` directory
 
-    <!-- Use client:idle for non-critical components -->
-    <AnotherComponent client:idle />
-    ```
+These should be ignored in version control but preserved locally for debugging.
 
-### SSR-Compatible Testing
+## Further Resources
 
-When testing components:
+-   [Playwright Documentation](https://playwright.dev/docs/intro)
+-   [Jest Documentation](https://jestjs.io/docs/getting-started)
+-   [Svelte Testing Library](https://testing-library.com/docs/svelte-testing-library/intro/)
 
-1. **Mock minimal components** rather than depending on real DOM:
+## Developer Insights
 
-    ```javascript
-    const component = {
-        prop1: 'value',
-        handler: jest.fn(),
-        $set: function (props) {
-            Object.assign(this, props);
-        },
-    };
-    ```
+These insights were gathered from real debugging scenarios and represent common "aha moments" when working with the DSpace testing suite.
 
-2. **Use conditional testing** to skip DOM-dependent tests in Node.js:
+### Environment Limitations and Browser Capabilities
 
-    ```javascript
-    const testOrSkip = typeof document !== 'undefined' ? test : test.skip;
-    testOrSkip('DOM-dependent test', () => {
-        /* ... */
-    });
-    ```
+Tests might fail due to browser environment limitations, particularly:
 
-3. **Test component behavior** instead of DOM interactions:
+- **localStorage restrictions**: Affects game save tests
+- **Cookie restrictions**: Affects session management tests
+- **Fetch API limitations**: Affects API call tests
 
-    ```javascript
-    // Test state changes directly
-    component.$set({ value: 'new value' });
-    expect(component.value).toBe('new value');
+Our test-coverage.spec.ts handles these issues by:
+1. Checking which capabilities are available
+2. Warning about missing capabilities
+3. Continuing tests with appropriate expectations
 
-    // Direct method calls instead of event simulation
-    component.handleClick({ preventDefault: jest.fn() });
-    ```
+```typescript
+// Example of capability checking pattern
+try {
+    await page.evaluate(() => window.localStorage.setItem('test', 'test'));
+    // localStorage is available
+} catch (e) {
+    console.warn('localStorage is not available. Game save tests may fail.');
+}
+```
 
-### Diagnosing SSR Issues
+### Handling Strict Mode Violations
 
-When you encounter issues:
+Playwright's strict mode will fail tests if selectors match multiple elements. Common patterns to avoid this:
 
-1. **Check error messages** for DOM-related errors in Node.js context
-2. **Verify onMount usage** in components with DOM operations
-3. **Use browser console** to identify hydration mismatches
-4. **Inspect Astro client directives** to ensure proper component hydration
+```typescript
+// BAD: Might match multiple buttons
+await page.locator('button').click();
 
-### Real-world Example: Form Components
+// GOOD: Use first() to explicitly handle multiple matches
+await page.locator('button').first().click();
 
-The `ItemForm` and `QuestForm` components in this project demonstrate the SSR-compatible pattern:
+// BETTER: Use filtering to get exactly what you want
+await page.locator('button').filter({ hasText: 'Submit' }).first().click();
 
-1. They use `onMount` to track when they're executing in the browser
-2. They wrap DOM-dependent content in `{#if mounted}` blocks
-3. Their tests focus on behavior rather than DOM rendering
-4. They export handler methods for direct testing
+// BEST: Check visibility first to avoid clicking hidden elements
+const button = page.locator('button').filter({ hasText: 'Submit' }).first();
+await expect(button).toBeVisible();
+await button.click();
+```
 
-By following these patterns, you'll avoid common SSR-related errors and ensure components work consistently across both server and client environments.
+### ES Modules and CommonJS Warnings
 
-## Best Practices
+Tests might show warnings about ES Modules being loaded by CommonJS. These are generally safe to ignore:
 
--   Run all tests before submitting pull requests
--   Write tests for new features and bug fixes
--   Test both success and error scenarios
--   Keep tests focused and maintainable
--   Use meaningful test descriptions
--   Maintain good test coverage (aim for >80%)
--   Isolate external dependencies with mocks
+```
+ExperimentalWarning: CommonJS module is loading ES Module using require()
+```
+
+However, if you see actual errors related to modules, you may need to update your import statements.
+
+### Orphaned Tests Detection
+
+The `test-coverage.spec.ts` test verifies that no tests are orphaned from the test groups. If you add a new test file:
+
+1. Make sure it's included in one of the test groups in `scripts/run-test-groups.mjs`
+2. Run the orphaned test check to verify: `npx playwright test e2e/test-coverage.spec.ts`
+
+### Making Tests Environment-Resilient
+
+To write tests that work across different environments (local, CI, etc.):
+
+1. **Use try/catch for optional capabilities**:
+```typescript
+let hasLocalStorage = false;
+try {
+    await page.evaluate(() => window.localStorage.setItem('test', 'test'));
+    hasLocalStorage = true;
+} catch (e) {
+    console.log('localStorage test failed:', e.message);
+}
+
+// Only run localStorage-dependent tests if available
+if (hasLocalStorage) {
+    // Test localStorage functionality
+}
+```
+
+2. **Check for features before testing them**:
+```typescript
+const chatButton = page.locator('[data-testid="chat-button"]').first();
+if (await chatButton.count() > 0) {
+    await chatButton.click();
+    // Test chat functionality
+} else {
+    console.log('Chat button not found, skipping chat tests');
+    test.skip();
+}
+```
+
+### Development Server Requirements
+
+Remember that E2E tests require a running development server:
+
+- Server must be running on port 3002 (`npm run dev`)
+- Run your server in a separate terminal before starting tests
+- If tests show connection errors, check that your server is running
 
 ## Troubleshooting
 
-### Common Issues
+If you encounter persistent issues, try:
 
-1. **DOM-related errors in Jest tests**:
+1. Clearing the test cache: `npx playwright clear-cache`
+2. Reinstalling browsers: `npx playwright install`
+3. Restarting the dev server
+4. Checking the logs in the test artifacts directories
 
-    - These are expected when testing Svelte components in Node.js
-    - Focus on functional assertions rather than DOM rendering in unit tests
+## Known Test Failures
 
-2. **ESLint configuration errors**:
+### Game Systems Tests
 
-    - If you encounter ESM-related errors with svelte parsers, use `eslint-plugin-svelte3` instead of `svelte-eslint-parser`
-    - The project is configured to use the CommonJS-compatible `eslint-plugin-svelte3`
-    - TypeScript project settings are only applied to `.ts` files, not all JavaScript files
+The "Game Systems" test group currently has some known failures:
 
-3. **Pre-commit hooks not running**:
-    - Run `npx husky install` to reinstall hooks
-    - Check permissions on hook files
+1. **Chat System Tests**: Tests fail when the chat interface cannot be found. This may occur if:
 
-For more help, reach out on the [Discord](https://discord.gg/A3UAfYvnxM).
+    - The chat feature is under active development
+    - The selectors have changed since the tests were written
+    - The chat components aren't properly hydrating
+
+2. **Game Save System Tests**: Failures occur when:
+    - The game save interface doesn't load properly
+    - Local storage isn't being properly populated
+
+### Handling Test Failures in Pull Requests
+
+When encountering test failures in the Game Systems group, follow these steps:
+
+1. **First, verify your changes**: Make sure your changes haven't broken the tests
+2. **Check the test artifacts**: Examine screenshots and videos in the `test-videos/` directory
+3. **Open a discussion**: If the failures appear to be in unchanged code, mention this in your PR
+4. **Consider skipping problematic tests**: In extreme cases, you may need to add `.skip()` to failing tests with a comment explaining why
+
+```javascript
+// Example of temporarily skipping a problematic test
+test.skip('should open the chat interface', async ({ page }) => {
+    // Test code
+    // FIXME: Skipped due to chat interface redesign in progress - Issue #123
+});
+```
+
+## Advanced Troubleshooting for Game Systems Tests
+
+### Chat System Failures
+
+If chat tests are failing with "element not found" errors:
+
+1. Check if the chat interface has been redesigned
+2. Update the locators to match the new structure:
+
+```typescript
+// Old selector
+const chatInterface = page.locator('.chat-interface');
+
+// More robust selector that may work with different designs
+const chatInterface = page
+    .locator('[data-testid="chat"], .chat-interface, .chat-window, .message-container')
+    .first();
+```
+
+### Game Save System Failures
+
+For game save test failures:
+
+1. Ensure localStorage is working in the test environment
+2. Try adding a pause before checking localStorage:
+
+```typescript
+// Add a pause to allow localStorage updates
+await page.waitForTimeout(1000);
+```
+
+3. Verify the localStorage keys being used in tests match the actual application:
+
+```typescript
+// Check what keys are actually being used
+const actualKeys = await page.evaluate(() => Object.keys(localStorage));
+console.log('Actual localStorage keys:', actualKeys);
+```
+
+Remember that maintaining tests is as important as writing them. As the application evolves, tests need to be updated to reflect changes in the UI and application behavior.

@@ -19,8 +19,14 @@ const MAX_WORKERS = Math.max(2, Math.floor(CPU_CORES / 2)); // Use half the avai
 // Configuration: Test groups
 const TEST_GROUPS = [
     {
+        name: 'Test Coverage',
+        files: ['test-coverage.spec.ts'],
+        parallel: false,
+        workers: 1,
+    },
+    {
         name: 'Structure Tests',
-        files: ['page-structure.spec.ts'],
+        files: ['page-structure.spec.ts', 'error-pages.spec.ts', 'svelte-component-hydration.spec.ts'],
         parallel: true,
         workers: MAX_WORKERS,
     },
@@ -40,8 +46,8 @@ const TEST_GROUPS = [
     },
     {
         name: 'Quest Tests',
-        files: ['test-quest-chat.spec.ts', 'tutorial-quest.spec.ts', 'custom-content.spec.ts'],
-        grep: 'create and view a custom quest',
+        files: ['test-quest-chat.spec.ts', 'tutorial-quest.spec.ts', 'quests.spec.ts', 'custom-content.spec.ts'],
+        grep: 'create and view a custom quest|Quest Management',
         parallel: true,
         workers: 2,
     },
@@ -50,6 +56,24 @@ const TEST_GROUPS = [
         files: ['custom-content.spec.ts'],
         grep: 'integrate custom items, processes, and quests',
         parallel: false, // Keep this sequential as it depends on previous state
+    },
+    {
+        name: 'Shop Functionality',
+        files: ['shop-functionality.spec.ts'],
+        parallel: true,
+        workers: 2,
+    },
+    {
+        name: 'User Profile',
+        files: ['profile-page.spec.ts'],
+        parallel: true,
+        workers: 2,
+    },
+    {
+        name: 'Game Systems',
+        files: ['energy-system.spec.ts', 'chat-system.spec.ts', 'gamesave-system.spec.ts'],
+        parallel: true,
+        workers: 3,
     },
 ];
 

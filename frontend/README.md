@@ -212,18 +212,168 @@ npm run test:e2e:integration # Integration tests
 
 # Debug tests visually
 npm run test:e2e:ui
+
+# Run tests for PR validation (run from project root)
+npm run test:pr
 ```
+
+### PR Testing and Test Coverage
+
+When preparing a pull request, run the following command from the project root to verify that your changes meet all requirements:
+
+```bash
+npm run test:pr
+```
+
+This will:
+
+1. Check code formatting with Prettier
+2. Run the linter to identify code quality issues
+3. Run unit tests
+4. Run end-to-end tests in optimized groups
+
+If you've added new test files, make sure they're included in the test groups configuration in `frontend/scripts/run-test-groups.mjs` to ensure they run as part of the PR validation process.
+
+## Common Testing Issues and Pitfalls
+
+### Playwright Test Requirements
+
+1. **Hydration and Network States**: Always use appropriate waiting mechanisms in tests:
+
+    ```typescript
+    // Use waitForLoadState instead of waitForHydration for more reliable tests
+    await page.waitForLoadState('networkidle');
+    ```
+
+2. **Strict Mode Violations**: Playwright runs in strict mode, which means:
+
+    - Selectors that match multiple elements will cause tests to fail
+    - Always check element count before attempting operations
+    - Use `.first()` when dealing with potentially multiple matches
+
+    ```typescript
+    // Good practice - check count before proceeding
+    const button = page.locator('button').filter({ hasText: 'Save' }).first();
+    if ((await button.count()) > 0) {
+        await button.click();
+    }
+    ```
+
+3. **Skipping Tests**: When a test should be skipped conditionally:
+
+    ```typescript
+    // Correct way to skip a test
+    test.skip();
+    console.log('Skipping test because...');
+    ```
+
+4. **Text Selectors**: Avoid using text= prefix in selectors. Instead:
+
+    ```typescript
+    // Preferred approach
+    page.locator('button').filter({ hasText: /save/i });
+    ```
+
+5. **Test Artifacts**: Tests may generate artifacts in the `test-artifacts` and `test-videos` directories. These should be ignored in version control but preserved for debugging failed tests.
+
+6. **Formatting Issues**: Always run `npm run format` before submitting PRs to prevent formatting-related test failures.
 
 ### Performance Optimization
 
-Our test suite is optimized for performance:
+Our test suite is optimized for performance through:
 
--   **Parallelization** - Tests run in parallel where possible using multiple CPU cores
--   **Logical Grouping** - Tests are grouped by functionality for efficient execution
--   **Dynamic Worker Allocation** - Worker count is automatically adjusted based on system capabilities
--   **Dependency Management** - Groups are ordered to respect dependencies between tests
+1. **Parallelization**: Tests are run in parallel based on available CPU cores
+2. **Logical Grouping**: Related tests are grouped together to minimize setup/teardown overhead
+3. **Dynamic Worker Allocation**: Different test groups use different numbers of workers based on their requirements
+4. **Dependency Management**: Tests with interdependencies are grouped to ensure proper execution order
 
-For detailed information on test performance optimization, see the [Developer Guide](../DEVELOPER_GUIDE.md#playwright-test-performance-optimization).
+## Testing Insights and Tips
+
+Based on real-world experience with the test suite, here are some valuable insights that will help you be more productive:
+
+### 1. Browser Environment Awareness
+
+When writing tests, be aware of potential browser environment limitations:
+
+- **localStorage and sessionStorage** may not be available in headless environments
+- **Cookies** might be restricted in test runners 
+- **Network abilities** may vary between local and CI environments
+
+Our test suite now includes capability detection to handle these variations (see `test-coverage.spec.ts`). You should make your tests resilient to these limitations:
+
+```typescript
+// Test if localStorage is available before relying on it
+let hasLocalStorage = false;
+try {
+  await page.evaluate(() => window.localStorage.setItem('test', 'test'));
+  hasLocalStorage = true;
+} catch (e) {
+  console.log('localStorage not available in this environment');
+}
+
+// Only test localStorage-dependent features if it's available
+if (hasLocalStorage) {
+  // Run tests that require localStorage
+}
+```
+
+### 2. Server Dependency for E2E Tests
+
+**IMPORTANT**: E2E tests require a running development server:
+
+```bash
+# Start the dev server BEFORE running any E2E tests
+npm run dev 
+
+# Now you can run your tests
+npm run test:e2e
+```
+
+If you see connection errors like `ERR_CONNECTION_REFUSED`, you forgot to start the dev server.
+
+### 3. Test Group Management
+
+Always check that your new test files are added to the test groups:
+
+1. Edit `scripts/run-test-groups.mjs` to include your test file in an appropriate group
+2. Run `npx playwright test e2e/test-coverage.spec.ts` to verify no orphaned tests
+3. Test files not included in any group won't run during CI checks
+
+### 4. Common Playwright Patterns
+
+Use these patterns consistently to make tests more reliable:
+
+```typescript
+// 1. Always wait for page load
+await page.goto('/route');
+await page.waitForLoadState('networkidle');
+
+// 2. Always use first() with locators
+const button = page.locator('button').first();
+
+// 3. Check visibility before interactions
+await expect(element).toBeVisible();
+await element.click();
+
+// 4. Use conditional tests based on feature presence
+if (await featureElement.count() > 0) {
+  // Test the feature
+} else {
+  test.skip();
+  console.log('Feature not present, skipping test');
+}
+```
+
+### 5. Understanding Test Failures
+
+When tests fail, check:
+
+1. **Test logs**: Look for warnings about missing capabilities
+2. **Test videos**: Review the generated videos in the `test-videos/` directory
+3. **Trace files**: Use `npx playwright show-trace [path]` to see detailed test execution
+4. **Screenshots**: Check the screenshots in test-videos directory
+
+For more detailed guidelines, see [TESTING.md](./TESTING.md) for our comprehensive testing documentation.
 
 ## Development Guidelines
 

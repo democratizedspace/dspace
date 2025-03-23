@@ -13,7 +13,8 @@ This guide provides comprehensive information for developers working on the DSPA
 7. [Component Development](#component-development)
 8. [Game Systems](#game-systems)
 9. [Performance Considerations](#performance-considerations)
-10. [Troubleshooting](#troubleshooting)
+10. [Debugging and Test Insights](#debugging-and-test-insights)
+11. [Troubleshooting](#troubleshooting)
 
 ## Introduction
 
@@ -569,6 +570,140 @@ These lists are sortable and filterable according to the specific capabilities o
 - Use Lighthouse for overall performance metrics
 - Use the browser's Performance tab for detailed analysis
 - Monitor bundle size with the build output
+
+## Debugging and Test Insights
+
+Through real-world testing and debugging sessions, we've gathered valuable insights that can help new developers avoid common pitfalls.
+
+### Testing Environment Limitations
+
+#### Browser Capabilities in Test Environments
+
+Different test environments (local, CI, headless browsers) have different capabilities:
+
+1. **Missing localStorage**: 
+   - Game save tests will fail if localStorage isn't available
+   - Chat history tests may fail without persistence
+   - Use detection patterns to gracefully handle missing capabilities
+
+2. **Cookie Restrictions**:
+   - Session management tests can fail in environments with cookie restrictions
+   - Profile tests may be affected
+
+3. **Network Limitations**:
+   - API fetch tests may fail with certain network restrictions
+   - Useful to mock network calls in sensitive tests
+
+#### Resilient Test Patterns
+
+Make your tests resilient against environment differences:
+
+```typescript
+// Example: Check if localStorage is available
+let hasLocalStorage = false;
+try {
+  await page.evaluate(() => window.localStorage.setItem('test', 'test'));
+  hasLocalStorage = true;
+} catch (e) {
+  console.log('localStorage not available in this environment');
+}
+
+// Only run localStorage-dependent tests if it's available
+if (hasLocalStorage) {
+  // Test localStorage functionality
+} else {
+  console.log('Skipping localStorage tests due to environment limitations');
+}
+```
+
+### Server Dependencies
+
+The E2E test suite requires a running development server:
+
+- Tests expect the server to be running on port 3002
+- Always start the server with `npm run dev` before running E2E tests
+- Connection errors (`ERR_CONNECTION_REFUSED`) indicate a missing server
+
+```bash
+# Best practice: Run server in one terminal
+npm run dev
+
+# Then run tests in another terminal
+npm run test:e2e
+```
+
+### Orphaned Test Detection
+
+Our `test-coverage.spec.ts` file ensures no tests are left out of the test workflow:
+
+1. It scans all test files in the `e2e/` directory
+2. It compares them to files referenced in the test groups configuration
+3. It reports any orphaned tests that aren't included in test groups
+
+When adding new test files:
+1. Add the file to an appropriate test group in `scripts/run-test-groups.mjs`
+2. Run `npx playwright test e2e/test-coverage.spec.ts` to verify no orphaned tests
+3. Tests left out of groups won't run during CI and may cause undetected regressions
+
+### Playwright Strict Mode
+
+Playwright runs in strict mode, which has specific requirements:
+
+1. **Multiple Element Matches**:
+   - Using `page.locator('button').click()` will fail if multiple buttons exist
+   - Always use `.first()` or more specific selectors
+
+2. **Visibility Checks**:
+   - Always check visibility before interaction
+   - Use `await expect(element).toBeVisible()` before clicking
+
+3. **Best Practice Pattern**:
+```typescript
+// Complete pattern for reliable element interaction
+const button = page.locator('button').filter({ hasText: 'Submit' }).first();
+await expect(button).toBeVisible();
+await button.click();
+```
+
+### Test Artifacts for Debugging
+
+When tests fail, valuable artifacts are created to help diagnose issues:
+
+1. **Screenshots**: Captured at the point of failure in `test-videos/` directory
+2. **Videos**: Full test run recordings in `test-videos/` directory
+3. **Trace Files**: Detailed interaction logs viewable with `npx playwright show-trace [path]`
+
+These artifacts are especially useful for diagnosing:
+- Element visibility issues
+- Timing problems
+- Hydration failures
+- Selector mismatches
+
+### Common E2E Test Failures
+
+Some tests may fail due to known limitations:
+
+1. **Chat System Tests**: May fail if:
+   - Chat interface elements can't be found
+   - localStorage isn't available for message persistence
+   - Network calls for chat API are restricted
+
+2. **Game Save Tests**: May fail if:
+   - localStorage isn't available in the test environment
+   - IndexedDB access is restricted
+   - Game save interface doesn't load properly
+
+These failures are expected in certain environments and don't necessarily indicate code issues.
+
+### ES Module Warnings
+
+During testing, you may see warnings about ES Modules:
+
+```
+ExperimentalWarning: CommonJS module is loading ES Module using require()
+```
+
+These warnings are generally safe to ignore as long as the tests themselves pass. They're caused by the hybrid module system used in Node.js when loading ES modules from CommonJS contexts.
 
 ## Troubleshooting
 
