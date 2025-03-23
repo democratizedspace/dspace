@@ -35,8 +35,14 @@ playwright/.cache/
 test-artifacts/
 test-screenshots/
 test-videos/
+.playwright-artifacts-*/
 e2e-results/
 *.png
+*.jpeg
+*.webm
+*.zip
+*.trace
+*.network
 !public/assets/**/*.png
 
 # Environment variables
