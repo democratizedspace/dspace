@@ -1,82 +1,181 @@
-# DSpace Testing Guide
+# DSPACE Testing Guide
 
-This document provides comprehensive information about testing in the DSpace project.
+This document provides comprehensive information about DSPACE's testing infrastructure, how to run tests, and best practices for writing new tests.
 
-## Testing Overview
+## Testing Architecture
 
-The DSpace project uses a multi-layered testing approach:
+DSPACE uses a multi-layered testing approach:
 
-1. **Unit Tests** with Jest
-2. **End-to-End Tests** with Playwright
-3. **Linting** with ESLint
-4. **Formatting** with Prettier
-
-## Setting Up for Testing
-
-Ensure you have all dependencies installed:
-
-```bash
-npm install
-```
+1. **Unit Tests** (Jest) - For testing individual components and utilities
+2. **End-to-End Tests** (Playwright) - For testing full user workflows and functionality
+3. **Test Coverage Validation** - To ensure all tests are properly included in the CI workflow
 
 ## Running Tests
 
-### Unit Tests
+### Full Test Suite
 
-Unit tests use Jest and test components, utilities, and other isolated functionality:
+To run the complete test suite:
 
 ```bash
-# Run all unit tests
-npm test
+# From the project root
+npm run test:pr
 
-# Watch mode for unit tests
-npm run test:watch
-
-# Generate coverage report
-npm run coverage
+# Or from the frontend directory
+npm run test:all
 ```
 
-### End-to-End Tests
+### Preventing Playwright Artifact Errors
 
-E2E tests use Playwright to test the application from a user's perspective:
+When running Playwright tests or developing with a recent test history, you might encounter ENOENT errors related to missing trace or network files. We've added tools to prevent these errors:
+
+#### During Development
+
+Use the enhanced dev script that automatically handles missing Playwright artifacts:
 
 ```bash
-# Start the development server (REQUIRED for E2E tests)
-npm run dev
+# Start the dev server with artifact error prevention
+npm run dev:safe
+```
 
-# In a separate terminal, run all E2E tests
-npm run test:e2e
+This runs both the development server and a file watcher that creates any missing trace/network files that would otherwise cause errors.
 
-# Run E2E tests with UI visualization
-npm run test:e2e:ui
+#### Before Running Tests
 
-# Run E2E tests with debug mode
-npm run test:e2e:debug
+All test commands automatically run the `setup-test-env` script, which ensures that all required directories and placeholder files exist. You don't need to run this manually.
 
-# Run E2E tests in logical groups (recommended for CI)
+If you still encounter artifact errors, you can run the fix directly:
+
+```bash
+npm run fix-artifacts
+```
+
+### Unit Tests Only
+
+```bash
+npm test
+```
+
+### End-to-End Tests Only
+
+```bash
+# Run all E2E tests in optimized groups
 npm run test:e2e:groups
 
-# Run specific test groups
-npm run test:e2e:structure
-npm run test:e2e:quests
-npm run test:e2e:process
-npm run test:e2e:custom
-npm run test:e2e:integration
+# Run a specific test file
+npx playwright test e2e/custom-content.spec.ts
+
+# Run tests with a specific tag or pattern
+npx playwright test -g "create a custom item"
 ```
 
-> **Important:** E2E tests require a running development server on port 3002. If you see connection errors like `ERR_CONNECTION_REFUSED`, make sure you've started the dev server with `npm run dev` in a separate terminal.
+## Automated Server Management
 
-### Running All Checks (Pre-PR)
+**Important:** Playwright automatically starts and stops the development server for E2E tests. You should **not** manually start a server when running tests.
 
-Before submitting a PR, run the comprehensive validation:
+### How the Automated Server Works
 
-```bash
-# First, start the development server
-npm run dev
+The automated server is configured in `playwright.config.ts`:
 
-# In a separate terminal, from project root, run
-npm run test:pr
+```typescript
+webServer: {
+  command: 'npm run dev',
+  url: 'http://localhost:3002',
+  reuseExistingServer: !process.env.CI,
+  stdout: 'ignore',
+  stderr: 'pipe',
+}
 ```
+
+This configuration:
+1. Starts a server using `npm run dev` before tests begin
+2. Waits for the server to be available at `http://localhost:3002`
+3. Runs tests against this server
+4. Shuts down the server when tests finish
+
+### Common Server-Related Issues
+
+1. **Port Conflicts**: If you manually start a server on port 3002 and then run tests, you may see errors as Playwright tries to start another server on the same port
+2. **Server Not Started**: If the server fails to start or doesn't respond at the expected URL, tests will fail with connection errors
+3. **Trace Collection Errors**: You may see errors about missing trace files in the console output - these are typically harmless and related to how Playwright collects debugging information
+
+## Test Coverage Validation
+
+We have automated checks to ensure no test files are orphaned from the test workflow:
+
+1. The `test-coverage.spec.ts` file verifies:
+   - All E2E tests are included in our test groups
+   - Important Jest test files are properly configured
+   - Your browser environment supports the capabilities needed for testing
+
+This test runs as part of the `test:pr` and `test:e2e:groups` commands.
+
+## Writing New Tests
+
+### Adding New Test Files
+
+When creating new test files:
+
+1. For E2E tests:
+   - Place `.spec.ts` files in the `frontend/e2e/` directory
+   - Add them to a test group in `frontend/scripts/run-test-groups.mjs`
+
+2. For Jest tests:
+   - Place `.test.js` files in the `frontend/__tests__/` directory
+   - Ensure they match the patterns in Jest's `testMatch` configuration
+
+### Best Practices for Tests
+
+1. **Make Tests Skip Gracefully**: Use conditional skipping when features may not be available
+   ```typescript
+   if (!(await page.locator('#feature-element').count())) {
+     test.skip(true, 'Feature not available in this environment');
+   }
+   ```
+
+2. **Use Proper Waiting**: Always wait for network idle or specific elements to be visible
+   ```typescript
+   await page.waitForLoadState('networkidle');
+   await page.locator('.element').waitFor({ state: 'visible' });
+   ```
+
+3. **Handle Both Client and Server Rendering**: Account for hydration in tests
+   ```typescript
+   // Wait for hydration to complete
+   await page.locator('[data-hydrated="true"]').first().waitFor();
+   ```
+
+## Debugging Test Failures
+
+When tests fail, several options are available for debugging:
+
+1. **View Test Report**:
+   ```bash
+   npx playwright show-report test-results/html-report
+   ```
+
+2. **View Browser Traces**:
+   ```bash
+   npx playwright show-report test-results/html-report --tracing
+   ```
+
+3. **Run Tests in UI Mode**:
+   ```bash
+   npm run test:e2e:ui
+   ```
+
+4. **Run Tests in Debug Mode**:
+   ```bash
+   PWDEBUG=1 npx playwright test e2e/my-failing-test.spec.ts
+   ```
+
+## Continuous Integration
+
+In CI environments, tests run with special settings:
+- No server reuse (`reuseExistingServer: false`)
+- Headless browsers
+- Parallel execution based on available CPU cores
+
+The `test:pr` command simulates this environment locally before you submit a PR.
 
 ## Test Structure
 
@@ -94,6 +193,31 @@ describe('ItemForm Component', () => {
         // Test code here
     });
 });
+```
+
+### Content Quality Tests
+
+We have specialized tests to ensure content quality:
+
+1. **Quest Quality Tests** (`questQuality.test.js`):
+   - Validates NPC dialogue style consistency
+   - Checks for ethical considerations in aquarium quests
+   - Verifies proper quest progression and dependencies
+   - Identifies dialogue that doesn't match NPC personalities
+
+2. **Image Reference Tests** (`imageReferences.test.js`):
+   - Scans all quest JSON files for image references 
+   - Verifies that referenced images exist in the public directory
+   - Checks for proper image naming conventions
+   - Suggests similar images when references are broken
+   
+These tests are designed to produce warnings rather than failures, allowing for ongoing development while still identifying quality issues to address.
+
+To run these tests specifically:
+
+```bash
+npm test -- questQuality
+npm test -- imageReferences
 ```
 
 ### End-to-End Tests
@@ -291,11 +415,12 @@ These insights were gathered from real debugging scenarios and represent common 
 
 Tests might fail due to browser environment limitations, particularly:
 
-- **localStorage restrictions**: Affects game save tests
-- **Cookie restrictions**: Affects session management tests
-- **Fetch API limitations**: Affects API call tests
+-   **localStorage restrictions**: Affects game save tests
+-   **Cookie restrictions**: Affects session management tests
+-   **Fetch API limitations**: Affects API call tests
 
 Our test-coverage.spec.ts handles these issues by:
+
 1. Checking which capabilities are available
 2. Warning about missing capabilities
 3. Continuing tests with appropriate expectations
@@ -352,6 +477,7 @@ The `test-coverage.spec.ts` test verifies that no tests are orphaned from the te
 To write tests that work across different environments (local, CI, etc.):
 
 1. **Use try/catch for optional capabilities**:
+
 ```typescript
 let hasLocalStorage = false;
 try {
@@ -368,9 +494,10 @@ if (hasLocalStorage) {
 ```
 
 2. **Check for features before testing them**:
+
 ```typescript
 const chatButton = page.locator('[data-testid="chat-button"]').first();
-if (await chatButton.count() > 0) {
+if ((await chatButton.count()) > 0) {
     await chatButton.click();
     // Test chat functionality
 } else {
@@ -383,9 +510,9 @@ if (await chatButton.count() > 0) {
 
 Remember that E2E tests require a running development server:
 
-- Server must be running on port 3002 (`npm run dev`)
-- Run your server in a separate terminal before starting tests
-- If tests show connection errors, check that your server is running
+-   Server must be running on port 3002 (`npm run dev`)
+-   Run your server in a separate terminal before starting tests
+-   If tests show connection errors, check that your server is running
 
 ## Troubleshooting
 
@@ -489,32 +616,35 @@ These errors typically occur when:
 To prevent these issues:
 
 1. **Clean up artifacts regularly**:
-   ```bash
-   # Before test runs, clean up old artifacts
-   rm -rf test-videos/ .playwright-artifacts-*/ test-results/
-   ```
+
+    ```bash
+    # Before test runs, clean up old artifacts
+    rm -rf test-videos/ .playwright-artifacts-*/ test-results/
+    ```
 
 2. **Configure trace retention selectively**:
-   ```typescript
-   // In playwright.config.ts, only retain traces for failing tests
-   use: {
-     trace: 'retain-on-failure',
-     video: 'on-first-retry'
-   }
-   ```
+
+    ```typescript
+    // In playwright.config.ts, only retain traces for failing tests
+    use: {
+      trace: 'retain-on-failure',
+      video: 'on-first-retry'
+    }
+    ```
 
 3. **Run tests with lower concurrency** if you see file system errors:
-   ```bash
-   # Reduce worker count to minimize file system contention
-   npx playwright test --workers=1
-   ```
+
+    ```bash
+    # Reduce worker count to minimize file system contention
+    npx playwright test --workers=1
+    ```
 
 4. **Use separate output directories** for parallel test runs:
-   ```typescript
-   // In run-test-groups.mjs
-   const outputDir = `test-results-group-${groupIndex}`;
-   commands.push(`--output=${outputDir}`);
-   ```
+    ```typescript
+    // In run-test-groups.mjs
+    const outputDir = `test-results-group-${groupIndex}`;
+    commands.push(`--output=${outputDir}`);
+    ```
 
 ### Recovering From Artifact Errors
 
@@ -522,10 +652,42 @@ If you encounter ENOENT or file system errors during test runs:
 
 1. Stop any running test processes
 2. Clear all test artifacts and temporary files:
-   ```bash
-   rm -rf test-videos/ .playwright-artifacts-*/ test-results/
-   ```
+    ```bash
+    rm -rf test-videos/ .playwright-artifacts-*/ test-results/
+    ```
 3. Restart the dev server and run tests with reduced concurrency
 4. If problems persist, try running individual test files or smaller groups
 
 Remember that test artifacts are valuable for debugging but can consume significant disk space. Consider regularly cleaning them up in CI environments.
+
+## Test Types
+
+DSPACE uses several types of tests to ensure quality:
+
+### Unit Tests
+
+Unit tests focus on testing individual components, functions, or modules in isolation. These tests are written using Jest and are located in the `__tests__` directory.
+
+### Image Reference Tests
+
+The `imageReferences.test.js` file performs comprehensive validation of all images referenced in quest files:
+
+1. **Existence Verification**: Checks that all referenced images exist in the public directory
+2. **Size Validation**: Warns if images exceed recommended file size limits (150KB)
+3. **Dimension Checking**: Verifies that images conform to standardized dimensions (512x512px)
+4. **Naming Convention Validation**: Ensures quest and NPC images follow proper naming patterns
+
+To run just the image reference tests:
+
+```bash
+npm test -- imageReferences
+```
+
+If you encounter warnings about missing or incorrect images:
+- Check the image paths in your quest JSON files
+- Ensure all images are placed in the correct directory structure
+- Verify that images meet the size and dimension requirements
+
+### End-to-End Tests
+
+// ... rest of existing content ...

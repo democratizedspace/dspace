@@ -17,8 +17,14 @@ npm install
 Start the development server:
 
 ```bash
+# Standard development server
 npm run dev
+
+# Development server with Playwright artifact error prevention
+cd frontend && npm run dev:safe
 ```
+
+The `dev:safe` command prevents common Playwright artifact errors that can occur after running tests.
 
 ## Testing
 
@@ -38,34 +44,16 @@ This cross-platform script will:
 - Run all end-to-end tests in optimized groups
 - Provide helpful error messages if any tests fail
 
-### Running All Tests
+The `test:pr` command handles everything automatically, including starting and stopping the development server for end-to-end tests.
 
-To run the full test suite manually:
+### Testing Information
 
-```bash
-# Start the development server first (required for end-to-end tests)
-npm run dev
+For detailed information about our testing approach, please refer to:
 
-# In a new terminal, run all tests
-npm run test:all
-```
+- [Testing Guide](./frontend/TESTING.md) - Comprehensive documentation on testing practices, common issues, and debugging techniques
+- [Developer Guide](./DEVELOPER_GUIDE.md#testing-strategy) - Higher-level overview of our testing strategy and approach
 
-This command runs:
-- Linting and formatting checks
-- Unit tests
-- End-to-end tests (in optimized groups)
-
-### Quick Testing During Development
-
-For faster development cycles:
-
-```bash
-# Start the development server first
-npm run dev
-
-# In a new terminal, run quick tests
-npm run test:quick
-```
+For common test commands, see the section below.
 
 ### Individual Test Commands
 
@@ -80,13 +68,11 @@ npm run format:check
 npm test
 
 # Only end-to-end tests (with optimized grouping)
-# Note: Development server must be running!
+# Note: Server starts automatically!
 npm run test:e2e:groups
 ```
 
-> **Important:** End-to-end (E2E) tests require the development server to be running at http://localhost:3002. Always start the server with `npm run dev` before running any E2E tests.
-
-For more details on our testing strategy, see the [Developer Guide](./DEVELOPER_GUIDE.md).
+> **Important:** End-to-end (E2E) tests use Playwright, which automatically starts and stops the development server when needed. You should not manually start a server when running these tests, as this could lead to port conflicts or unexpected behavior.
 
 ## Code Quality
 

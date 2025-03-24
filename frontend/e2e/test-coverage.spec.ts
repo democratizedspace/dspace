@@ -7,8 +7,9 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const e2eDir = __dirname;
+const testsDir = path.resolve(__dirname, '../__tests__');
 
-test('verify no test files are orphaned from test:pr workflow', async () => {
+test('verify no e2e test files are orphaned from test:pr workflow', async () => {
     // Read the run-test-groups.mjs file content
     const groupsFilePath = path.resolve(__dirname, '../scripts/run-test-groups.mjs');
 
@@ -57,6 +58,95 @@ test('verify no test files are orphaned from test:pr workflow', async () => {
     }
 
     expect(orphanedFiles.length).toBe(0);
+});
+
+test('verify Jest test files are included in package.json test configuration', async () => {
+    // Path to package.json
+    const packageJsonPath = path.resolve(__dirname, '../package.json');
+    
+    // Check if file exists before reading
+    if (!fs.existsSync(packageJsonPath)) {
+        console.error(`File not found: ${packageJsonPath}`);
+        test.skip(true, `Could not find file: ${packageJsonPath}`);
+        return;
+    }
+    
+    const packageJsonContent = fs.readFileSync(packageJsonPath, 'utf8');
+    const packageJson = JSON.parse(packageJsonContent);
+    
+    // Get all Jest test files in the __tests__ directory
+    const allJestTestFiles = [];
+    
+    // Recursively scan the __tests__ directory
+    function scanDirectory(dir) {
+        if (!fs.existsSync(dir)) {
+            console.warn(`Directory does not exist: ${dir}`);
+            return;
+        }
+        
+        const items = fs.readdirSync(dir);
+        for (const item of items) {
+            const itemPath = path.join(dir, item);
+            const stats = fs.statSync(itemPath);
+            
+            if (stats.isDirectory()) {
+                scanDirectory(itemPath);
+            } else if (stats.isFile() && item.endsWith('.test.js')) {
+                // Store relative path from __tests__ directory
+                const relativePath = path.relative(testsDir, itemPath);
+                allJestTestFiles.push(relativePath);
+            }
+        }
+    }
+    
+    scanDirectory(testsDir);
+    
+    // Check that our specific files exist
+    const importantTestFiles = ['questQuality.test.js', 'imageReferences.test.js'];
+    
+    for (const file of importantTestFiles) {
+        const exists = allJestTestFiles.some(testFile => testFile === file || testFile.endsWith(`/${file}`));
+        
+        if (!exists) {
+            console.error(`Important test file ${file} not found in __tests__ directory`);
+            test.fail(true, `Important test file ${file} not found in __tests__ directory`);
+        }
+        
+        expect(exists).toBeTruthy();
+    }
+    
+    // Check that Jest config in package.json includes our test pattern
+    let jestConfigCapturesAllFiles = false;
+    
+    // Check if Jest is configured in package.json
+    if (packageJson.jest) {
+        if (packageJson.jest.testMatch) {
+            // Check if the test patterns would match our files
+            jestConfigCapturesAllFiles = packageJson.jest.testMatch.some(pattern => {
+                return pattern.includes('**/*.test.js') || pattern.includes('**/__tests__/**');
+            });
+        }
+    }
+    
+    // Also check if Jest config might be in jest.config.js
+    const jestConfigPath = path.resolve(__dirname, '../jest.config.js');
+    if (fs.existsSync(jestConfigPath)) {
+        const jestConfigContent = fs.readFileSync(jestConfigPath, 'utf8');
+        if (jestConfigContent.includes('**/*.test.js') || jestConfigContent.includes('**/__tests__/**')) {
+            jestConfigCapturesAllFiles = true;
+        }
+    }
+    
+    console.log('All Jest test files:', allJestTestFiles);
+    
+    if (!jestConfigCapturesAllFiles) {
+        const errorMessage = 'Jest configuration might not capture all test files. ' +
+            'Make sure testMatch includes "**/*.test.js" or similar pattern in package.json or jest.config.js.';
+        console.error(errorMessage);
+        test.fail(true, errorMessage);
+    }
+    
+    expect(jestConfigCapturesAllFiles).toBeTruthy();
 });
 
 test('verify playwright web server is properly configured', async ({ page }) => {

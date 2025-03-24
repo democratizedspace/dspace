@@ -133,7 +133,9 @@ The site will be available at `http://localhost:3002`
 
 ## Testing
 
-DSPACE has a robust testing strategy to ensure code quality. For a full explanation of our testing approach, see the [Developer Guide](../DEVELOPER_GUIDE.md#testing-strategy).
+DSPACE has a robust testing strategy to ensure code quality. For comprehensive documentation on testing, see our dedicated [Testing Guide](./TESTING.md).
+
+The [Developer Guide](../DEVELOPER_GUIDE.md#testing-strategy) also contains high-level information about our testing approach.
 
 ### Test Infrastructure
 
@@ -143,96 +145,20 @@ Our testing infrastructure consists of:
 -   **End-to-End Tests** - Using Playwright for full application workflow testing
 -   **Test Groups** - Optimized test execution through logical grouping and parallelization
 
-The test files are organized as follows:
-
-```
-frontend/
-├── __tests__/          # Unit tests with Jest
-│   ├── components/     # Component tests
-│   ├── gameState/      # Game state logic tests
-│   └── utils/          # Utility function tests
-├── e2e/               # End-to-end tests with Playwright
-│   ├── custom-content.spec.ts    # Custom content creation tests
-│   ├── page-structure.spec.ts    # Page structure validation
-│   ├── process-creation.spec.ts  # Process creation workflows
-│   ├── test-quest-chat.spec.ts   # Quest and chat functionality
-│   └── tutorial-quest.spec.ts    # Tutorial quest completion
-└── scripts/
-    └── run-test-groups.mjs       # Test grouping and optimization script
-```
-
-### Running All Tests
-
-To run the complete test suite (recommended before submitting a PR):
+Common commands for testing:
 
 ```bash
-# Start the development server first (required for end-to-end tests)
-npm run dev
-
-# In a new terminal, run all tests
+# Run all tests (Playwright will start/stop the server automatically)
 npm run test:all
-```
 
-> **Important:** End-to-end (E2E) tests require the development server to be running at http://localhost:3002. Always start the server with `npm run dev` before running any E2E tests.
-
-### Quick Testing During Development
-
-For faster development cycles:
-
-```bash
-# Start the development server first
-npm run dev
-
-# In a new terminal, run quick tests
-npm run test:quick
-```
-
-### Individual Test Commands
-
-```bash
-# Only linting
-npm run lint
-
-# Only formatting check
-npm run format:check
-
-# Only unit tests
+# Unit tests only
 npm test
 
-# End-to-end tests (requires dev server running)
-# Run optimized test groups (recommended)
+# End-to-end tests (Playwright handles the server)
 npm run test:e2e:groups
-
-# Run specific test categories
-npm run test:e2e:custom     # Custom content
-npm run test:e2e:quests     # Quests
-npm run test:e2e:process    # Processes
-npm run test:e2e:structure  # Page structure
-npm run test:e2e:integration # Integration tests
-
-# Debug tests visually
-npm run test:e2e:ui
-
-# Run tests for PR validation (run from project root)
-npm run test:pr
 ```
 
-### PR Testing and Test Coverage
-
-When preparing a pull request, run the following command from the project root to verify that your changes meet all requirements:
-
-```bash
-npm run test:pr
-```
-
-This will:
-
-1. Check code formatting with Prettier
-2. Run the linter to identify code quality issues
-3. Run unit tests
-4. Run end-to-end tests in optimized groups
-
-If you've added new test files, make sure they're included in the test groups configuration in `frontend/scripts/run-test-groups.mjs` to ensure they run as part of the PR validation process.
+> **Note:** For detailed information about writing tests, running individual test files, debugging test failures, and best practices, refer to our [Testing Guide](./TESTING.md).
 
 ## Common Testing Issues and Pitfalls
 
@@ -295,9 +221,9 @@ Based on real-world experience with the test suite, here are some valuable insig
 
 When writing tests, be aware of potential browser environment limitations:
 
-- **localStorage and sessionStorage** may not be available in headless environments
-- **Cookies** might be restricted in test runners 
-- **Network abilities** may vary between local and CI environments
+-   **localStorage and sessionStorage** may not be available in headless environments
+-   **Cookies** might be restricted in test runners
+-   **Network abilities** may vary between local and CI environments
 
 Our test suite now includes capability detection to handle these variations (see `test-coverage.spec.ts`). You should make your tests resilient to these limitations:
 
@@ -305,15 +231,15 @@ Our test suite now includes capability detection to handle these variations (see
 // Test if localStorage is available before relying on it
 let hasLocalStorage = false;
 try {
-  await page.evaluate(() => window.localStorage.setItem('test', 'test'));
-  hasLocalStorage = true;
+    await page.evaluate(() => window.localStorage.setItem('test', 'test'));
+    hasLocalStorage = true;
 } catch (e) {
-  console.log('localStorage not available in this environment');
+    console.log('localStorage not available in this environment');
 }
 
 // Only test localStorage-dependent features if it's available
 if (hasLocalStorage) {
-  // Run tests that require localStorage
+    // Run tests that require localStorage
 }
 ```
 
@@ -323,7 +249,7 @@ if (hasLocalStorage) {
 
 ```bash
 # Start the dev server BEFORE running any E2E tests
-npm run dev 
+npm run dev
 
 # Now you can run your tests
 npm run test:e2e
@@ -356,11 +282,11 @@ await expect(element).toBeVisible();
 await element.click();
 
 // 4. Use conditional tests based on feature presence
-if (await featureElement.count() > 0) {
-  // Test the feature
+if ((await featureElement.count()) > 0) {
+    // Test the feature
 } else {
-  test.skip();
-  console.log('Feature not present, skipping test');
+    test.skip();
+    console.log('Feature not present, skipping test');
 }
 ```
 
