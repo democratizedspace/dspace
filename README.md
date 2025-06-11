@@ -111,6 +111,13 @@ For comprehensive information about developing DSPACE, see our [Developer Guide]
 - Performance considerations
 - Troubleshooting tips
 
+## Built-in Quests
+
+Starter quest JSON files live in `src/pages/quests/json`. They follow the schema
+defined at `src/pages/quests/jsonSchemas/quest.json` and can reference NPC
+profiles in `src/pages/docs/md/npcs.md`.
+Keep that NPC file updated when adding new characters.
+
 ## Want to contribute?
 
 Check out the [Contribution Guide](https://github.com/democratizedspace/dspace/blob/v2.1/CONTRIBUTORS.md) to get started.
