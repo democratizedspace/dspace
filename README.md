@@ -12,6 +12,9 @@ Clone and set up the project:
 git clone https://github.com/democratizedspace/dspace.git
 cd dspace
 npm install
+# Install frontend dependencies
+cd frontend && npm install
+cd ..
 ```
 
 Start the development server:
