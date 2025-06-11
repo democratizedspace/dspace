@@ -81,6 +81,14 @@ Check code quality before committing:
 ```bash
 npm run check
 ```
+## Docker Deployment
+
+Run the game in Docker (works on Raspberry Pi) using:
+```bash
+docker compose up --build -d
+```
+The app will be available on port 3002. Point your Cloudflare Tunnel at `http://localhost:3002` to serve traffic.
+
 
 ## Project Architecture
 

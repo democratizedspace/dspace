@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+    app:
+        build:
+            context: ./frontend
+        container_name: dspace-app
+        platform: linux/arm64
+        ports:
+            - '3002:3002'
+        environment:
+            - NODE_ENV=production
+            - PORT=3002
+            - HOST=0.0.0.0
+        restart: unless-stopped
