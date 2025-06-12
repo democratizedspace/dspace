@@ -1,30 +1,30 @@
 {
-  "id": "aquaria/goldfish",
-  "title": "Keeping Goldfish",
-  "description": "Upgrade to a larger tank and care for a single fancy goldfish.",
-  "image": "/assets/quests/goldfish.jpg",
-  "npc": "/assets/npc/vega.jpg",
-  "requiresQuests": ["aquaria/breeding"],
-  "dialogue": [
-    {
-      "id": "start",
-      "text": "Goldfish produce a lot of waste, so they need a spacious tank and powerful filtration to stay healthy.",
-      "options": [{ "text": "I'll upgrade", "next": "tank" }]
-    },
-    {
-      "id": "tank",
-      "text": "Aim for at least a seventy-five liter aquarium for a single fancy goldfish. Larger volumes over one hundred fifty liters are even better.",
-      "options": [{ "text": "Tank ready", "next": "care" }]
-    },
-    {
-      "id": "care",
-      "text": "Keep the water cool, around eighteen to twenty-two degrees Celsius, and perform regular water changes to maintain quality.",
-      "options": [{ "text": "Got it", "next": "diet" }]
-    },
-    {
-      "id": "diet",
-      "text": "Offer a varied diet of pellets and fresh vegetables. With proper care your goldfish will thrive for many years.",
-      "options": [{ "text": "Thanks, Vega!" }]
-    }
-  ]
+    "id": "aquaria/goldfish",
+    "title": "Keeping Goldfish",
+    "description": "Upgrade to a larger tank and care for a single fancy goldfish.",
+    "image": "/assets/quests/goldfish.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "requiresQuests": ["aquaria/breeding"],
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Goldfish produce a lot of waste, so they need a spacious tank and powerful filtration to stay healthy.",
+            "options": [{ "text": "I'll upgrade", "next": "tank" }]
+        },
+        {
+            "id": "tank",
+            "text": "Aim for at least a seventy-five liter aquarium for a single fancy goldfish. Larger volumes over one hundred fifty liters are even better.",
+            "options": [{ "text": "Tank ready", "next": "care" }]
+        },
+        {
+            "id": "care",
+            "text": "Keep the water cool, around eighteen to twenty-two degrees Celsius, and perform regular water changes to maintain quality.",
+            "options": [{ "text": "Got it", "next": "diet" }]
+        },
+        {
+            "id": "diet",
+            "text": "Offer a varied diet of pellets and fresh vegetables. With proper care your goldfish will thrive for many years.",
+            "options": [{ "text": "Thanks, Vega!" }]
+        }
+    ]
 }

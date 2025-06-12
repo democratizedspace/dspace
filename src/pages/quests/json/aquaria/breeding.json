@@ -1,30 +1,30 @@
 {
-  "id": "aquaria/breeding",
-  "title": "Guppy Breeding Basics",
-  "description": "Learn how to breed guppies and raise the fry.",
-  "image": "/assets/quests/guppy-breeding.jpg",
-  "npc": "/assets/npc/vega.jpg",
-  "requiresQuests": ["aquaria/guppy"],
-  "dialogue": [
-    {
-      "id": "start",
-      "text": "To breed guppies, select a healthy male and female and place them in a separate breeding tank with plenty of cover.",
-      "options": [{ "text": "Pair selected", "next": "cover" }]
-    },
-    {
-      "id": "cover",
-      "text": "Floating plants give the fry a place to hide. Maintain warm, clean water between 24 and 28 degrees Celsius.",
-      "options": [{ "text": "Plants added", "next": "fry" }]
-    },
-    {
-      "id": "fry",
-      "text": "After a few days you'll notice tiny fry swimming near the surface. Feed them powdered food or baby brine shrimp.",
-      "options": [{ "text": "They're growing", "next": "finish" }]
-    },
-    {
-      "id": "finish",
-      "text": "Keep the water pristine and separate adults if they harass the fry. Soon you'll have a healthy new generation.",
-      "options": [{ "text": "Can't wait!" }]
-    }
-  ]
+    "id": "aquaria/breeding",
+    "title": "Guppy Breeding Basics",
+    "description": "Learn how to breed guppies and raise the fry.",
+    "image": "/assets/quests/guppy-breeding.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "requiresQuests": ["aquaria/guppy"],
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "To breed guppies, select a healthy male and female and place them in a separate breeding tank with plenty of cover.",
+            "options": [{ "text": "Pair selected", "next": "cover" }]
+        },
+        {
+            "id": "cover",
+            "text": "Floating plants give the fry a place to hide. Maintain warm, clean water between 24 and 28 degrees Celsius.",
+            "options": [{ "text": "Plants added", "next": "fry" }]
+        },
+        {
+            "id": "fry",
+            "text": "After a few days you'll notice tiny fry swimming near the surface. Feed them powdered food or baby brine shrimp.",
+            "options": [{ "text": "They're growing", "next": "finish" }]
+        },
+        {
+            "id": "finish",
+            "text": "Keep the water pristine and separate adults if they harass the fry. Soon you'll have a healthy new generation.",
+            "options": [{ "text": "Can't wait!" }]
+        }
+    ]
 }
