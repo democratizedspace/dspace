@@ -1,0 +1,36 @@
+{
+    "id": "aquaria/shrimp",
+    "title": "Add Dwarf Shrimp",
+    "description": "Introduce cherry shrimp to your planted tank as a cleanup crew.",
+    "image": "/assets/quests/shrimp.svg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "requiresQuests": ["aquaria/walstad"],
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Shrimp are great for beginners and help keep algae under control. Let's get some settled in your tank.",
+            "options": [{ "text": "Sounds fun!", "next": "acclimate" }]
+        },
+        {
+            "id": "acclimate",
+            "text": "Drip acclimate the shrimp for about thirty minutes so they adjust slowly to your water parameters.",
+            "options": [{ "text": "They're acclimated", "next": "release" }]
+        },
+        {
+            "id": "release",
+            "text": "Gently release them into the tank and dim the lights to reduce stress.",
+            "options": [{ "text": "Shrimp added", "next": "care" }]
+        },
+        {
+            "id": "care",
+            "text": "Feed lightly and provide plenty of moss or hiding spots. Stable parameters will help them thrive and multiply.",
+            "options": [{ "text": "Thanks!", "next": "finish" }]
+        },
+        {
+            "id": "finish",
+            "text": "With proper care your shrimp colony will grow and keep the tank tidy.",
+            "options": [{ "type": "finish", "text": "Can't wait!" }]
+        }
+    ]
+}
