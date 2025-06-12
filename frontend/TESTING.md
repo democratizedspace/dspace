@@ -87,6 +87,7 @@ webServer: {
 ```
 
 This configuration:
+
 1. Starts a server using `npm run dev` before tests begin
 2. Waits for the server to be available at `http://localhost:3002`
 3. Runs tests against this server
@@ -103,9 +104,9 @@ This configuration:
 We have automated checks to ensure no test files are orphaned from the test workflow:
 
 1. The `test-coverage.spec.ts` file verifies:
-   - All E2E tests are included in our test groups
-   - Important Jest test files are properly configured
-   - Your browser environment supports the capabilities needed for testing
+    - All E2E tests are included in our test groups
+    - Important Jest test files are properly configured
+    - Your browser environment supports the capabilities needed for testing
 
 This test runs as part of the `test:pr` and `test:e2e:groups` commands.
 
@@ -116,64 +117,71 @@ This test runs as part of the `test:pr` and `test:e2e:groups` commands.
 When creating new test files:
 
 1. For E2E tests:
-   - Place `.spec.ts` files in the `frontend/e2e/` directory
-   - Add them to a test group in `frontend/scripts/run-test-groups.mjs`
+
+    - Place `.spec.ts` files in the `frontend/e2e/` directory
+    - Add them to a test group in `frontend/scripts/run-test-groups.mjs`
 
 2. For Jest tests:
-   - Place `.test.js` files in the `frontend/__tests__/` directory
-   - Ensure they match the patterns in Jest's `testMatch` configuration
+    - Place `.test.js` files in the `frontend/__tests__/` directory
+    - Ensure they match the patterns in Jest's `testMatch` configuration
 
 ### Best Practices for Tests
 
 1. **Make Tests Skip Gracefully**: Use conditional skipping when features may not be available
-   ```typescript
-   if (!(await page.locator('#feature-element').count())) {
-     test.skip(true, 'Feature not available in this environment');
-   }
-   ```
+
+    ```typescript
+    if (!(await page.locator('#feature-element').count())) {
+        test.skip(true, 'Feature not available in this environment');
+    }
+    ```
 
 2. **Use Proper Waiting**: Always wait for network idle or specific elements to be visible
-   ```typescript
-   await page.waitForLoadState('networkidle');
-   await page.locator('.element').waitFor({ state: 'visible' });
-   ```
+
+    ```typescript
+    await page.waitForLoadState('networkidle');
+    await page.locator('.element').waitFor({ state: 'visible' });
+    ```
 
 3. **Handle Both Client and Server Rendering**: Account for hydration in tests
-   ```typescript
-   // Wait for hydration to complete
-   await page.locator('[data-hydrated="true"]').first().waitFor();
-   ```
+    ```typescript
+    // Wait for hydration to complete
+    await page.locator('[data-hydrated="true"]').first().waitFor();
+    ```
 
 ## Debugging Test Failures
 
 When tests fail, several options are available for debugging:
 
 1. **View Test Report**:
-   ```bash
-   npx playwright show-report test-results/html-report
-   ```
+
+    ```bash
+    npx playwright show-report test-results/html-report
+    ```
 
 2. **View Browser Traces**:
-   ```bash
-   npx playwright show-report test-results/html-report --tracing
-   ```
+
+    ```bash
+    npx playwright show-report test-results/html-report --tracing
+    ```
 
 3. **Run Tests in UI Mode**:
-   ```bash
-   npm run test:e2e:ui
-   ```
+
+    ```bash
+    npm run test:e2e:ui
+    ```
 
 4. **Run Tests in Debug Mode**:
-   ```bash
-   PWDEBUG=1 npx playwright test e2e/my-failing-test.spec.ts
-   ```
+    ```bash
+    PWDEBUG=1 npx playwright test e2e/my-failing-test.spec.ts
+    ```
 
 ## Continuous Integration
 
 In CI environments, tests run with special settings:
-- No server reuse (`reuseExistingServer: false`)
-- Headless browsers
-- Parallel execution based on available CPU cores
+
+-   No server reuse (`reuseExistingServer: false`)
+-   Headless browsers
+-   Parallel execution based on available CPU cores
 
 The `test:pr` command simulates this environment locally before you submit a PR.
 
@@ -200,17 +208,23 @@ describe('ItemForm Component', () => {
 We have specialized tests to ensure content quality:
 
 1. **Quest Quality Tests** (`questQuality.test.js`):
-   - Validates NPC dialogue style consistency
-   - Checks for ethical considerations in aquarium quests
-   - Verifies proper quest progression and dependencies
-   - Identifies dialogue that doesn't match NPC personalities
+
+    - Validates NPC dialogue style consistency
+    - Checks for ethical considerations in aquarium quests
+    - Verifies proper quest progression and dependencies
+    - Identifies dialogue that doesn't match NPC personalities
+    - Uses simple heuristics for now; integration with the OpenAI API is planned
 
 2. **Image Reference Tests** (`imageReferences.test.js`):
-   - Scans all quest JSON files for image references 
-   - Verifies that referenced images exist in the public directory
-   - Checks for proper image naming conventions
-   - Suggests similar images when references are broken
-   
+    - Scans all quest JSON files for image references
+    - Verifies that referenced images exist in the public directory
+    - Checks for proper image naming conventions
+    - Suggests similar images when references are broken
+3. **Quest Canonical Tests** (`questCanonical.test.js`):
+    - Ensures each quest includes a start node
+    - Requires at least one intermediate step and a finish option
+    - Helps keep quest dialogue consistent across repos
+
 These tests are designed to produce warnings rather than failures, allowing for ongoing development while still identifying quality issues to address.
 
 To run these tests specifically:
@@ -218,6 +232,7 @@ To run these tests specifically:
 ```bash
 npm test -- questQuality
 npm test -- imageReferences
+npm test -- questCanonical
 ```
 
 ### End-to-End Tests
@@ -684,9 +699,10 @@ npm test -- imageReferences
 ```
 
 If you encounter warnings about missing or incorrect images:
-- Check the image paths in your quest JSON files
-- Ensure all images are placed in the correct directory structure
-- Verify that images meet the size and dimension requirements
+
+-   Check the image paths in your quest JSON files
+-   Ensure all images are placed in the correct directory structure
+-   Verify that images meet the size and dimension requirements
 
 ### End-to-End Tests
 
