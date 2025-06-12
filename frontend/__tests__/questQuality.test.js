@@ -238,8 +238,8 @@ function checkQuestProgression() {
   // Check for category progression (e.g., aquaria quests follow proper sequence)
   for (const [category, questIds] of questsByCategory.entries()) {
     if (category === 'aquaria') {
-      // Verify aquaria progression: walstad -> community fish -> breeding -> goldfish
-      const expectedOrder = ['walstad', 'guppy', 'breeding', 'goldfish'];
+      // Verify aquaria progression: walstad -> guppy -> shrimp -> breeding -> goldfish
+      const expectedOrder = ['walstad', 'guppy', 'shrimp', 'breeding', 'goldfish'];
       
       // Get all relevant quests and sort by their position in the expected order
       const aquariaQuests = questIds

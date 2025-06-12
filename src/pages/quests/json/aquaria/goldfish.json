@@ -4,7 +4,7 @@
     "description": "Upgrade to a larger tank and care for a single fancy goldfish.",
     "image": "/assets/quests/goldfish.jpg",
     "npc": "/assets/npc/vega.jpg",
-    "requiresQuests": ["aquaria/breeding"],
+    "requiresQuests": ["aquaria/breeding", "aquaria/shrimp"],
     "dialogue": [
         {
             "id": "start",

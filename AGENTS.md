@@ -16,6 +16,8 @@ These guidelines apply to all files in this repository.
 -   Include a `finish` option in the final node so quests end cleanly. Quests
     without a finish option will fail canonical tests.
 -   Document any new or updated NPCs in `src/pages/docs/md/npcs.md`.
+-   Update quest progression tests in `frontend/__tests__/questQuality.test.js`
+    when introducing new aquaria quests or changing their order.
 
 ## Pull Request Message
 
