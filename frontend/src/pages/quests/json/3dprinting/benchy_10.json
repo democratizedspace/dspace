@@ -12,14 +12,25 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "progress",
+                    "text": "Let's set sail!"
+                }
+            ]
+        },
+        {
+            "id": "progress",
+            "text": "Keep going until you reach the goal!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "congrats",
+                    "text": "I have enough!",
                     "requiresItems": [
                         {
                             "id": "1",
                             "count": 10
                         }
-                    ],
-                    "goto": "finish",
-                    "text": "Let's set sail!"
+                    ]
                 }
             ]
         },
