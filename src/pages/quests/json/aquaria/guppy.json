@@ -4,12 +4,18 @@
     "description": "Introduce guppies to your established tank.",
     "image": "/assets/quests/guppy.jpg",
     "npc": "/assets/npc/vega.jpg",
+    "start": "start",
     "requiresQuests": ["aquaria/walstad"],
     "dialogue": [
         {
             "id": "start",
             "text": "Your Walstad tank is thriving. It's time to add some colorful guppies to create a lively community.",
-            "options": [{ "text": "I'm ready", "next": "acclimate" }]
+            "options": [{ "text": "I'm ready", "next": "quarantine" }]
+        },
+        {
+            "id": "quarantine",
+            "text": "Quarantine new fish for at least a week in a bare tank to watch for illness before they join the community.",
+            "options": [{ "text": "They're healthy", "next": "acclimate" }]
         },
         {
             "id": "acclimate",
@@ -24,7 +30,17 @@
         {
             "id": "observe",
             "text": "Feed a small pinch of food and observe their behavior. Healthy guppies will explore every corner of the tank.",
-            "options": [{ "text": "Thanks for the tips!" }]
+            "options": [{ "text": "Looking good", "next": "enjoy" }]
+        },
+        {
+            "id": "enjoy",
+            "text": "Monitor water quality for the next few days and add plants for extra cover. Soon the guppies will brighten up the tank.",
+            "options": [{ "text": "Thanks for the tips!", "next": "finish" }]
+        },
+        {
+            "id": "finish",
+            "text": "You've successfully introduced community fish. Keep up with weekly water changes and enjoy the activity.",
+            "options": [{ "type": "finish", "text": "Will do!" }]
         }
     ]
 }

@@ -13,6 +13,8 @@ These guidelines apply to all files in this repository.
     `src/pages/quests/jsonSchemas` when adding quests.
 -   Ensure quest dialogue contains at least a start, middle, and completion node
     with at least one option per node.
+-   Include a `finish` option in the final node so quests end cleanly. Quests
+    without a finish option will fail canonical tests.
 -   Document any new or updated NPCs in `src/pages/docs/md/npcs.md`.
 
 ## Pull Request Message

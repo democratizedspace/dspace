@@ -125,6 +125,21 @@ profiles in `src/pages/docs/md/npcs.md`. The schema now supports advanced
 fields such as `start`, `rewards` and item requirements, so older quests from
 the v2 era remain valid. Keep the NPC file updated when adding new characters.
 
+To validate that quests use a canonical structure with clear start and finish
+steps, run the dedicated test:
+
+```bash
+npm test -- questCanonical
+```
+
+Additional quality checks are available:
+
+```bash
+npm test -- questQuality        # heuristics for dialogue quality (TODO: integrate OpenAI)
+npm test -- imageReferences     # verifies quest and NPC image files
+```
+
+
 > **Tip:** The quest format is compatible with projects like
 > [`token.place`](https://github.com/futuroptimist/token.place), so content can be
 > shared across repos.
