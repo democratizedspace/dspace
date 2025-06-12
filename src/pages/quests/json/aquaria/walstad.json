@@ -1,30 +1,30 @@
 {
-  "id": "aquaria/walstad",
-  "title": "Start a Walstad Tank",
-  "description": "Set up a low-tech Walstad style aquarium with soil and plants.",
-  "image": "/assets/quests/walstad.jpg",
-  "npc": "/assets/npc/vega.jpg",
-  "requiresQuests": [],
-  "dialogue": [
-    {
-      "id": "start",
-      "text": "Let's build a natural Walstad aquarium from scratch. We'll start small so you can maintain it easily.",
-      "options": [{ "text": "Sounds good!", "next": "soil" }]
-    },
-    {
-      "id": "soil",
-      "text": "Begin by spreading a thin layer of organic potting soil on the bottom. Cover it with gravel to prevent cloudiness later.",
-      "options": [{ "text": "Done with the soil.", "next": "plant" }]
-    },
-    {
-      "id": "plant",
-      "text": "Add hardy stem plants like hornwort or water wisteria. They help balance nutrients while the tank settles.",
-      "options": [{ "text": "Plants added", "next": "cycle" }]
-    },
-    {
-      "id": "cycle",
-      "text": "Great work! Fill the tank slowly and let it cycle for several weeks before you introduce any fish.",
-      "options": [{ "text": "I'll wait patiently." }]
-    }
-  ]
+    "id": "aquaria/walstad",
+    "title": "Start a Walstad Tank",
+    "description": "Set up a low-tech Walstad style aquarium with soil and plants.",
+    "image": "/assets/quests/walstad.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "requiresQuests": [],
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's build a natural Walstad aquarium from scratch. We'll start small so you can maintain it easily.",
+            "options": [{ "text": "Sounds good!", "next": "soil" }]
+        },
+        {
+            "id": "soil",
+            "text": "Begin by spreading a thin layer of organic potting soil on the bottom. Cover it with gravel to prevent cloudiness later.",
+            "options": [{ "text": "Done with the soil.", "next": "plant" }]
+        },
+        {
+            "id": "plant",
+            "text": "Add hardy stem plants like hornwort or water wisteria. They help balance nutrients while the tank settles.",
+            "options": [{ "text": "Plants added", "next": "cycle" }]
+        },
+        {
+            "id": "cycle",
+            "text": "Great work! Fill the tank slowly and let it cycle for several weeks before you introduce any fish.",
+            "options": [{ "text": "I'll wait patiently." }]
+        }
+    ]
 }
