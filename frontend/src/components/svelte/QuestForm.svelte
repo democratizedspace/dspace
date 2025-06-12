@@ -1,0 +1,310 @@
+<script>
+    import { createEventDispatcher, onMount } from 'svelte';
+    import { db } from '../../utils/customcontent.js';
+
+    export let isEdit = false;
+    export let questId = null;
+
+    let title = '';
+    let description = '';
+    let image = null;
+    let previewUrl = null;
+    let validationErrors = {};
+    let isSubmitting = false;
+
+    const dispatch = createEventDispatcher();
+
+    // If in edit mode, load the quest data
+    onMount(async () => {
+        if (isEdit && questId) {
+            try {
+                const questData = await db.quests.get(questId);
+                title = questData.title;
+                description = questData.description;
+                if (questData.image) {
+                    previewUrl = questData.image;
+                }
+            } catch (error) {
+                console.error('Error loading quest:', error);
+            }
+        }
+    });
+
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewUrl = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            image = file;
+        } else {
+            previewUrl = null;
+            image = null;
+        }
+    }
+
+    async function validateForm() {
+        const errors = {};
+
+        if (!title.trim()) {
+            errors.title = 'Title is required';
+        }
+
+        if (!description.trim()) {
+            errors.description = 'Description is required';
+        }
+
+        if (!isEdit && !image && !previewUrl) {
+            errors.image = 'Image is required';
+        }
+
+        validationErrors = errors;
+        return Object.keys(errors).length === 0;
+    }
+
+    async function uploadImage(file) {
+        if (!file) return previewUrl; // Return existing image URL if no new file
+
+        // For demo purposes, simulate an image upload
+        // In production, you would use a real upload service
+        // This is a placeholder for actual image upload logic
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            // Simulate API call
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                return data.url;
+            } else {
+                throw new Error('Image upload failed');
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            // Fall back to the data URL for demo/testing
+            return previewUrl;
+        }
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+
+        // Validate form
+        const isValid = await validateForm();
+        if (!isValid) return;
+
+        isSubmitting = true;
+
+        try {
+            // Upload image if there's a new one
+            const imageUrl = await uploadImage(image);
+
+            if (isEdit) {
+                // Update existing quest
+                await db.quests.update(questId, {
+                    title,
+                    description,
+                    image: imageUrl,
+                    updatedAt: new Date().toISOString(),
+                });
+
+                dispatch('success', { message: 'Quest updated successfully', id: questId });
+            } else {
+                // Create new quest
+                const newQuestId = await db.quests.add({
+                    title,
+                    description,
+                    image: imageUrl,
+                });
+
+                dispatch('success', { message: 'Quest created successfully', id: newQuestId });
+
+                // Reset form after successful submission
+                title = '';
+                description = '';
+                image = null;
+                previewUrl = null;
+            }
+        } catch (error) {
+            console.error('Error saving quest:', error);
+            dispatch('error', { message: 'Failed to save quest' });
+        } finally {
+            isSubmitting = false;
+        }
+    }
+</script>
+
+<form on:submit={handleSubmit} class="quest-form">
+    <div class="form-group">
+        <label for="title">Title*</label>
+        <input
+            type="text"
+            id="title"
+            bind:value={title}
+            placeholder="Gather resources"
+            class:error={validationErrors.title}
+        />
+        {#if validationErrors.title}
+            <span class="error-message">{validationErrors.title}</span>
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description*</label>
+        <textarea
+            id="description"
+            bind:value={description}
+            placeholder="Describe the quest in detail. What needs to be done?"
+            class:error={validationErrors.description}
+        />
+        {#if validationErrors.description}
+            <span class="error-message">{validationErrors.description}</span>
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <label for="image">Upload an Image*</label>
+        <input
+            type="file"
+            id="image"
+            accept="image/*"
+            on:change={handleImageUpload}
+            class:error={validationErrors.image}
+        />
+        {#if validationErrors.image}
+            <span class="error-message">{validationErrors.image}</span>
+        {/if}
+        {#if previewUrl}
+            <div class="image-preview-container">
+                <img src={previewUrl} class="image-preview" alt="Quest preview" />
+            </div>
+        {/if}
+    </div>
+
+    <div class="form-submit">
+        <button type="submit" class="submit-button" disabled={isSubmitting}>
+            {#if isSubmitting}
+                Saving...
+            {:else if isEdit}
+                Update Quest
+            {:else}
+                Create Quest
+            {/if}
+        </button>
+    </div>
+</form>
+
+<style>
+    .quest-form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #2c5837;
+        border-radius: 12px;
+        border: 2px solid #007006;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 6px;
+        color: white;
+    }
+
+    input,
+    textarea {
+        width: 95%;
+        padding: 10px;
+        border-radius: 8px;
+        background: #68d46d;
+        color: black;
+        font-size: 16px;
+        border: 2px solid #007006;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input.error,
+    textarea.error {
+        border-color: #ff3e3e;
+        background-color: #ffecec;
+    }
+
+    .error-message {
+        color: #ff3e3e;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    input:focus,
+    textarea:focus {
+        border-color: #0f0;
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+    }
+
+    textarea {
+        height: 120px;
+        resize: vertical;
+    }
+
+    input[type='file'] {
+        width: 100%;
+        background: #fff;
+        border: 2px solid #007006;
+        padding: 8px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .image-preview-container {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .image-preview {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        border: 2px solid #007006;
+        box-shadow: 0px 0px 10px rgba(0, 255, 0, 0.5);
+        margin-top: 10px;
+    }
+
+    .submit-button {
+        font-size: 16px;
+        padding: 10px 20px;
+        background-color: #007006;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+        margin-top: 10px;
+    }
+
+    .submit-button:hover:not(:disabled) {
+        background-color: #005004;
+    }
+
+    .submit-button:disabled {
+        background-color: #88a889;
+        cursor: not-allowed;
+    }
+</style>

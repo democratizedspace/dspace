@@ -1,0 +1,128 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Menu from '../components/svelte/Menu.svelte';
+import Updater from '../components/svelte/Updater.svelte';
+import { getCookieItems } from '../utils.js';
+
+const {title, message } = Astro.props;
+
+const cookie = Astro.request.headers.get('cookie');
+
+const itemList = getCookieItems(cookie);
+
+// get path of URL
+const pathname = Astro.url.pathname;
+---
+
+<Layout title="DSPACE">
+	<main>
+		<div>
+			<Header title="" body="" href="" />
+
+			<Updater shouldUpdate={itemList.length === 0} />
+
+			<!-- for each item in menu, if  -->
+			<Menu pathname={pathname} client:idle />
+
+			<h2>{title}</h2>
+
+			<ul role="list" class="link-card-grid">
+			</ul>
+			<span />
+			<h2>
+				{message}
+			</h2>
+
+			<ul role="list" class="link-card-grid-1">
+				<slot />
+			</ul>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	:root {
+		--astro-gradient: linear-gradient(0deg, #2c5837, #00ff22);
+		--link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
+	}
+
+	
+
+	main {
+		margin: auto;
+		padding: 1em;
+		max-width: 60ch;
+	}
+
+	.text-gradient {
+		font-weight: 900;
+		background-image: var(--astro-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 100% 200%;
+		background-position-y: 100%;
+		border-radius: 0.4rem;
+		animation: pulse 1s ease-in-out infinite;
+	}
+
+	@keyframes pulse {
+		0%,
+		100% {
+			background-position-y: 0%;
+		}
+		50% {
+			background-position-y: 25%;
+		}
+	}
+
+	.link-card-grid-1 {
+		display: grid;
+		gap: 1rem;
+		padding: 0;
+		grid-template-columns: 1fr;
+	}
+	
+	.main-grid {
+		list-style-type: none;
+	}
+
+	/* Navbar */
+	h2 {
+		color: white;
+		text-align: center;
+	}
+
+	nav {
+		text-align: center;
+		display: inline-flex;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	nav a {
+		opacity: 0.8;
+		background-color: #007006;
+		border-radius: 0.4rem;
+		color: white;
+		text-decoration: none;
+		flex-direction: row;
+		margin: 1px;
+		padding: 5px;
+		text-align: center;
+	}
+
+	nav a:hover {
+		opacity: 1;
+	}
+
+	canvas {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+	}
+
+</style>

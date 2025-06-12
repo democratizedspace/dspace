@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import QuestDetail from './svelte/QuestDetail.svelte';
+import { getQuest } from '../../utils/customcontent.js';
+
+// For SSR, we'd do this on the server
+// For now, we'll just have a placeholder until client-side hydration
+const { id } = Astro.params;
+---
+
+<Layout title="Quest Details">
+    <main>
+        <QuestDetail questId={id} client:load />
+    </main>
+</Layout>
+
+<style>
+    main {
+        margin: auto;
+        padding: 2rem;
+        max-width: 800px;
+        color: var(--color-text);
+    }
+</style> 

@@ -1,0 +1,10 @@
+---
+import Page from '../../../components/Page.astro';
+import ItemPage from './ItemPage.svelte';
+
+const { itemId } = Astro.params;
+---
+
+<Page columns="1">
+    <ItemPage itemId={itemId} client:load />
+</Page>

@@ -1,0 +1,44 @@
+---
+title: 'Contribute'
+slug: 'contribute'
+---
+
+# Contribute to DSPACE
+
+There are several ways to contribute to the DSPACE project:
+
+## Community Participation
+
+-   [Join the Discord](https://discord.gg/A3UAfYvnxM)
+    -   Share your ideas in #ideas
+    -   Submit bug reports in #bugs
+    -   Discuss game mechanics in #game-mechanics
+    -   Connect with other contributors in #contributors
+
+## Content Creation
+
+DSPACE is designed as an extensible platform where community members can create and contribute various types of content:
+
+-   **[Create Custom Quests](/docs/quest-guidelines)** - Design educational missions that teach space-related skills
+-   **[Develop Custom Items](/docs/item-guidelines)** - Create virtual resources, tools, and components
+-   **[Design Custom Processes](/docs/process-guidelines)** - Build activities that transform or utilize items
+
+Our [Content Development Guide](/docs/content-development) provides a comprehensive overview of all content creation options, workflows, and best practices. We also offer [Quest Prompts](/docs/prompts-quests) for those looking to leverage AI tools in their content creation process.
+
+## Code Contributions
+
+-   [Submit a pull request](https://github.com/democratizedspace/dspace/pulls)
+-   Fix bugs or implement new features
+-   Improve documentation
+-   Enhance the user interface
+
+For technical contributions, please review our [Developer Guide](https://github.com/democratizedspace/dspace/blob/main/DEVELOPER_GUIDE.md) first.
+
+## Testing and Feedback
+
+-   Test new features and provide feedback
+-   Report bugs with detailed reproduction steps
+-   Suggest improvements to existing features
+-   Participate in user testing sessions
+
+By contributing to DSPACE, you're helping to democratize space exploration through practical, hands-on education. We welcome contributors of all skill levels and backgrounds!

@@ -1,0 +1,19 @@
+---
+import Logo from '../components/Logo.astro';
+
+export interface Props {
+	listItems: string[];
+}
+
+const { listItems } = Astro.props as Props;
+---
+
+<ul>
+	{ listItems.map(item => <li>{item}</li>) }
+</ul>
+
+<style>
+	ul {
+		list-style: none;
+	}
+</style>

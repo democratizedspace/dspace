@@ -1,0 +1,21 @@
+---
+import Page from '../../../../components/Page.astro';
+import Cleanup from '../../svelte/Cleanup.svelte';
+
+import { parseCookie, deleteCookie } from '../../../../utils.js';
+
+const cookie = Astro.request.headers.get('cookie');
+const parsedCookie = parseCookie(cookie);
+
+const cookieKeys = Object.keys(parsedCookie);
+
+for (let i = 0; i < cookieKeys.length; i++) {
+    const key = cookieKeys[i];
+
+    deleteCookie(Astro.response, key);
+}
+---
+
+<Page columns="1">
+    <Cleanup client:load />
+</Page>

@@ -1,0 +1,22 @@
+---
+import Card from './Card.astro';
+
+export interface Props {
+	title: string;
+	body: string;
+	href: string;
+	disabled: boolean;
+}
+
+const { href, title, body, disabled } = Astro.props as Props;
+---
+
+<Card
+    href={href}
+    title={title}
+    body={body}
+    textbox={false}
+    disabled={disabled}
+    hazard={true}
+/>
+

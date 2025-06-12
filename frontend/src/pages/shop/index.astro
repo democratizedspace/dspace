@@ -1,0 +1,12 @@
+---
+import Page from '../../components/Page.astro';
+import CompactCard from '../../components/CompactCard.astro';
+import { getWalletBalance } from '../../utils';
+import items from '../inventory/json/items.json';
+
+const item = items.find((item) => item.id === "1");
+---
+
+<Page title="Shop" columns="1">
+    <CompactCard title={item.name} image={item.image} text={item.description} />
+</Page>
