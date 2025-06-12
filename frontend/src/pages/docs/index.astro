@@ -1,0 +1,105 @@
+---
+import Page from '../../components/Page.astro';
+
+// TODO: create page dynamically with JSON
+---
+
+<Page title="Docs">
+    <span>
+        <h2>The basics</h2>
+        <nav>
+            <a href="/docs/about">About</a>
+            <a href="/docs/mission">Mission</a>
+            <a href="/docs/roadmap">Roadmap</a>
+            <a href="/docs/faq">FAQ</a>
+            <a href="/docs/glossary">Glossary</a>
+            <a href="/docs/contribute">Contribute</a>
+            <a href="/docs/team">Meet the team</a>
+        </nav>
+    </span>
+   
+    <span>
+        <h2>Skills</h2>
+        <nav>
+            <a href="/docs/3dprinting">3D printing</a>
+            <a href="/docs/solar">Solar power</a>
+            <a href="/docs/hydroponics">Hydroponics</a>
+            <a href="/docs/rockets">Rockets</a>
+        </nav>
+    </span>
+    <span>
+        <h2>Game systems</h2>
+        <nav>
+            <a href="/docs/npcs">NPCs</a>
+            <a href="/docs/realtime">Everything is real-time</a>
+            <a href="/docs/inventory">Inventory</a>
+            <a href="/docs/achievements">Achievements</a>
+            <a href="/docs/titles">Titles</a>
+            <a href="/docs/processes">Processes</a>
+            <a href="/docs/guilds">Guilds</a>
+            <a href="/docs/dWatt">dWatt</a>
+            <a href="/docs/dCarbon">dCarbon</a>
+        </nav>
+    </span>
+     <span>
+        <h2>Dev</h2>
+        <nav>
+            <a href="/docs/prs">Pull Requests</a>
+            <a href="/docs/bounties">Bounties</a>
+            <a href="/docs/prompts-quests">Quest prompts</a>
+        </nav>
+     </span>
+</Page>
+
+<style>
+    h2 {
+        color: white;
+    }
+
+    a:hover {
+        opacity: 1;
+    }
+
+    span {
+        background-color: #2f5b2f;
+		border-radius: 2rem;
+        text-align: justify;
+        text-justify: inter-word;
+        text-align: center;
+        padding: 1rem;
+    }
+    /* Navbar */
+
+	nav {
+		text-align: center;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+        padding: 0px;
+	}
+
+	nav a {
+        opacity: 0.8;
+		background-color: #84d484;
+		border-radius: 100px;
+		color: black;
+		text-decoration: none;
+		flex-direction: row;
+		padding-left: 5px;
+		padding-right: 5px;
+        text-align: center;
+        white-space: nowrap;
+        margin: 5px;
+        padding: 10px;
+    }
+
+	nav a:hover {
+		opacity: 1;
+	}
+
+    p {
+        background-color: #2f5b2f;
+        padding: 15px;
+		border-radius: 2rem;
+    }
+</style>

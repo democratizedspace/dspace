@@ -151,3 +151,8 @@ npm test -- imageReferences     # verifies quest and NPC image files
 Check out the [Contribution Guide](https://github.com/democratizedspace/dspace/blob/v2.1/CONTRIBUTORS.md) to get started.
 
 If you have any questions, feel free to join the [Discord](https://discord.gg/A3UAfYvnxM) and say hello!
+
+### Asset Guidelines
+
+Avoid committing large binary files such as Photoshop documents. Convert images
+to efficient formats (SVG, PNG, JPG) before adding them to the repository.

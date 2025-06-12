@@ -1,0 +1,11 @@
+---
+import Page from '../../components/Page.astro';
+import Quests from './svelte/Quests.svelte';
+
+
+const quests = await Astro.glob('./json/*/*.json');
+---
+
+<Page title="Quests">
+    <Quests client:load quests={quests} />
+</Page>

@@ -1,0 +1,63 @@
+---
+import Page from '../../../components/Page.astro';
+import items from '../../inventory/json/items.json';
+import ShoppingForm from '../ShoppingForm.svelte';
+
+const { itemId } = Astro.params;
+
+const item = items.find((item) => item.id === itemId);
+const image = item.image;
+
+
+---
+
+<Page title="Sell" columns="1">
+    <ShoppingForm client:idle item={item} shopAction="sell" />
+
+
+</Page>
+
+<style>
+	:root {
+		--astro-gradient: linear-gradient(0deg, #2c5837, #00ff22);
+		--link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
+        --form-width: 250px;
+        --form-width-padding: 230px;
+	}
+
+    .x {
+        font-size: 2rem;
+        margin: 0 1rem;
+        margin-left: 95px;
+		background-image: var(--link-gradient);
+		font-weight: 900;
+		background-image: var(--astro-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 100% 200%;
+		background-position-y: 100%;
+		border-radius: 0.4rem;
+		animation: pulse 4s ease-in-out infinite;
+    }
+
+    .num {
+        padding: 10px;
+        font-size: xx-large;
+        width: var(--form-width-padding);
+    }
+
+    input[type=number]::-webkit-inner-spin-button {
+        opacity: 1;
+    }
+
+    .buy {
+        font-size: xx-large;
+        padding: 10px;
+        width: var(--form-width); 
+    }
+
+    .img {
+        width: 200px;
+        width: var(--form-width);
+    }
+</style>

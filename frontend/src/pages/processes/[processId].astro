@@ -1,0 +1,10 @@
+---
+import Page from '../../components/Page.astro';
+import Process from '../../components/svelte/Process.svelte';
+
+const { processId } = Astro.params;
+---
+
+<Page columns="1">
+    <Process processId={processId.toString()} client:load />
+</Page>

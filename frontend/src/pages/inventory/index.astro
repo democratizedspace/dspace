@@ -1,0 +1,107 @@
+---
+import Page from '../../components/Page.astro';
+import Inventory from './Inventory.svelte';
+---
+
+<Page title="Inventory" columns="1">
+    <Inventory client:load />
+</Page>
+
+<style>
+
+    .parent {
+        display: flex;
+        align-items: center;
+    }
+
+    .vertical {
+        flex-direction: column;
+    }
+
+    .item {
+        background-color: #2f5b2f;
+        padding: 20px;
+        border-radius: 20px;
+        opacity: 0.8;
+    }
+
+    .item:hover {
+        opacity: 1;
+    }
+
+    .item h3 {
+        margin: 0px;
+        text-align: center;
+    }
+
+    img {
+        width: 100px;
+        height: 100px;
+        border-radius: 20px;
+        margin-right: 5px;
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+        width: 100%;
+    }
+
+    p {
+        background-color: #84d484;
+        opacity: 0.8;
+        color: black;
+        padding: 5px;
+        margin: 5px;
+        border-radius: 20px;
+    }
+
+    .compact {
+        font-size: 0.8em;
+        margin: 2px;
+        padding: 5px;
+    }
+
+    .nowrap {
+        margin-right: 5px;
+        white-space: nowrap;
+    }
+
+    .nobackground {
+        background: none;
+        color: white;
+    }
+
+	nav {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        justify-items: center;
+        grid-row-gap: 10px;
+	}
+
+    nav :global() {
+        margin: 10px;
+    }
+
+    .description {
+        width: 295px;
+    }
+
+    @media only screen and (max-width: 768px) {
+		img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .description {
+            min-width: 100px;
+            width: auto;
+        }
+	}
+
+    h4 {
+        /* center */
+        text-align: center;
+        color: white;
+    }
+</style>

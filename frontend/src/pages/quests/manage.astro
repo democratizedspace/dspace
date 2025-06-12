@@ -1,0 +1,11 @@
+---
+import Page from '../../components/Page.astro';
+import ManageQuests from './svelte/ManageQuests.svelte';
+
+// Get all quests - similar to index.astro
+const quests = await Astro.glob('./json/*/*.json');
+---
+
+<Page title="Manage Quests">
+    <ManageQuests client:load quests={quests} />
+</Page>

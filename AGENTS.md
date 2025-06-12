@@ -18,6 +18,8 @@ These guidelines apply to all files in this repository.
 -   Document any new or updated NPCs in `src/pages/docs/md/npcs.md`.
 -   Update quest progression tests in `frontend/__tests__/questQuality.test.js`
     when introducing new aquaria quests or changing their order.
+-   Avoid committing large binary assets (e.g., PSD files). Convert graphics to
+    optimized formats before adding them to the repo.
 
 ## Pull Request Message
 

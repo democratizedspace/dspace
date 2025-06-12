@@ -1,0 +1,23 @@
+---
+import Page from '../components/Page.astro';
+import { getCookieValue } from '../utils';
+
+let timeMs;
+let message;
+const cookie = Astro.request.headers.get('cookie');
+let timestamp = getCookieValue(cookie, 'longTaskDone');
+
+if (!timestamp) {
+    timeMs = new Date(Date.now() + 86400000);
+    Astro.response.headers.append('Set-Cookie', `longTaskDone=${timeMs.toString()}; expires=Fri, 31 Dec 9999 23:59:59 GMT`);
+    message = "Started the task.";
+} else {
+    timeMs = new Date(timestamp);
+}
+
+let diff = timeMs - Date.now();
+---
+
+<Page message={message}>
+    {(diff >= 0) ? `Come back after ${Math.floor((diff)/1000)} seconds.` : `Done.`}
+</Page>

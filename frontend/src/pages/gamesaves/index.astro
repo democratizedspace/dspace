@@ -1,0 +1,21 @@
+---
+import Page from '../../components/Page.astro';
+import Exporter from './svelte/Exporter.svelte';
+import Importer from './svelte/Importer.svelte';
+---
+
+<Page columns="1">
+    <div class="vertical">
+        <Exporter client:idle />
+        <Importer client:idle />
+    </div>
+</Page>
+
+<style>
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+</style>
