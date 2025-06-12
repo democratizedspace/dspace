@@ -119,9 +119,9 @@ For comprehensive information about developing DSPACE, see our [Developer Guide]
 
 ## Built-in Quests
 
-Starter quest JSON files live in `src/pages/quests/json`. They follow the schema
-defined at `src/pages/quests/jsonSchemas/quest.json` and can reference NPC
-profiles in `src/pages/docs/md/npcs.md`. The schema now supports advanced
+Starter quest JSON files live in `frontend/src/pages/quests/json`. They follow the schema
+defined at `frontend/src/pages/quests/jsonSchemas/quest.json` and can reference NPC
+profiles in `frontend/src/pages/docs/md/npcs.md`. The schema now supports advanced
 fields such as `start`, `rewards` and item requirements, so older quests from
 the v2 era remain valid. Keep the NPC file updated when adding new characters.
 
@@ -156,3 +156,10 @@ If you have any questions, feel free to join the [Discord](https://discord.gg/A3
 
 Avoid committing large binary files such as Photoshop documents. Convert images
 to efficient formats (SVG, PNG, JPG) before adding them to the repository.
+
+### Archiving Built-in Content
+
+If a quest, item, or process needs to be retired, move its JSON file to the
+`frontend/src/pages/quests/archive` directory instead of deleting it. The
+`contentIntegrity` test tracks the total count of built-in assets, so archived
+files help prevent accidental removals.
