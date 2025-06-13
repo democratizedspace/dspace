@@ -28,6 +28,8 @@ These guidelines apply to all files in this repository.
 -   Continuous integration runs `npm run check` and `npm test -- --coverage` via
     GitHub Actions.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
+-   After creating or editing quest JSON files, run `npm test -- questCanonical`
+    to verify the dialogue structure is valid.
 -   Quest JSON files are compatible with the [token.place](https://github.com/futuroptimist/token.place) project, so feel free to share content across repos.
 -   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
     server. Avoid starting it manually unless running Playwright directly.
