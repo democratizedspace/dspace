@@ -14,9 +14,9 @@ Clone and set up the project:
 ```bash
 git clone https://github.com/democratizedspace/dspace.git
 cd dspace
-npm install
+npm ci
 # Install frontend dependencies
-cd frontend && npm install
+cd frontend && npm ci
 cd ..
 ```
 
@@ -48,6 +48,13 @@ If Playwright browsers are available, omit `SKIP_E2E=1` to run the full suite:
 
 ```bash
 npm run test:pr
+```
+
+If you encounter an error like `browserType.launch: Executable doesn't exist`,
+download the browsers with:
+
+```bash
+npx playwright install
 ```
 
 This cross-platform script will:
@@ -165,10 +172,33 @@ npm test -- imageReferences     # verifies quest and NPC image files
 Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign new sequential `id` numbers and include an image path when adding items. See `frontend/src/pages/docs/md/item-guidelines.md` for detailed guidance.
 
 
-> **Tip:** The quest format is compatible with projects like
-> [`token.place`](https://github.com/futuroptimist/token.place), so content can be
-> shared across repos.
+> **Tip:** We use the open-source LLM inference from
+> [`token.place`](https://github.com/futuroptimist/token.place) when generating quest
+> dialogue. Token.place itself doesn't host quests, but you can reuse the same
+> prompts to create content across your projects.
+> You can also leverage [`f2clipboard`](https://github.com/futuroptimist/f2clipboard)
+> to copy quest templates or code snippets between repositories.
 
+### AI-Assisted Quest Creation
+
+For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)
+guide. It includes ready-made prompt templates for tools like GPT-4 or Claude to
+help you generate dialogue and structure quickly. Combine these with the
+[Quest Development Guidelines](/docs/quest-guidelines) to streamline content
+creation.
+
+
+
+### Staying Updated
+
+We frequently merge improvements from the `v3` branch. Keep your fork current:
+
+```bash
+git fetch origin
+git merge origin/v3
+npm ci
+(cd frontend && npm ci)
+```
 ### AI-Assisted Quest Creation
 
 For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)

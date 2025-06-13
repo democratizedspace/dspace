@@ -91,7 +91,7 @@ if (typeof structuredClone === 'undefined') {
 // Mock Node.js Buffer for browser
 if (typeof Buffer === 'undefined') {
     global.Buffer = {
-        from: jest.fn((data, encoding) => ({
+        from: jest.fn((data) => ({
             toString: jest.fn(() => data),
         })),
     };
@@ -185,53 +185,3 @@ global.Event = function (type) {
 };
 
 // Define a function to create realistic DOM elements
-const createDomElement = (tag) => {
-    const element = {
-        tagName: tag.toUpperCase(),
-        nodeType: 1,
-        ownerDocument: global.document,
-        toString: () => tag,
-        getAttribute: jest.fn(),
-        setAttribute: jest.fn(),
-        removeAttribute: jest.fn(),
-        classList: {
-            add: jest.fn(),
-            remove: jest.fn(),
-            contains: jest.fn(),
-            toggle: jest.fn(),
-        },
-        style: {},
-        children: [],
-        childNodes: [],
-        appendChild: function (child) {
-            this.children.push(child);
-            this.childNodes.push(child);
-            child.parentNode = this;
-            return child;
-        },
-        removeChild: function (child) {
-            const index = this.children.indexOf(child);
-            if (index !== -1) {
-                this.children.splice(index, 1);
-                this.childNodes.splice(index, 1);
-            }
-            return child;
-        },
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-        innerHTML: '',
-        textContent: '',
-        id: '',
-        querySelector: function (selector) {
-            // ... existing code ...
-        },
-        querySelectorAll: function (selector) {
-            // ... existing code ...
-        },
-    };
-
-    // ... existing code ...
-
-    return element;
-};
