@@ -155,7 +155,7 @@ npm run coverage
 E2E tests verify the application behaves correctly from a user's perspective:
 
 ```bash
-# Start the development server first (required for E2E tests)
+# Start the development server manually only when invoking Playwright directly
 npm run dev
 
 # In a new terminal, run all E2E tests (takes longer)
@@ -165,14 +165,16 @@ npm run test:e2e
 npm run test:e2e:groups
 ```
 
-> **Important:** End-to-end (E2E) tests require the development server to be running at http://localhost:3002. Always start the server with `npm run dev` before running any E2E tests.
+> **Important:** When using `npm run test:pr` or `npm run test:e2e:groups`, the
+> development server is started automatically. Start the server yourself only if
+> you run Playwright commands directly.
 
 ### Test Categories
 
 Specialized test commands for different areas:
 
 ```bash
-# Start the development server first
+# If running Playwright directly, start the dev server first
 npm run dev
 
 # In a new terminal, run specific test categories:
@@ -197,7 +199,7 @@ npm run test:e2e:integration
 For faster development cycles:
 
 ```bash
-# Start the development server first
+# Optional: start the dev server if you plan to run Playwright directly
 npm run dev
 
 # In a new terminal, run quick tests
@@ -619,14 +621,13 @@ if (hasLocalStorage) {
 
 ### Server Dependencies
 
-The E2E test suite requires a running development server:
-
-- Tests expect the server to be running on port 3002
-- Always start the server with `npm run dev` before running E2E tests
-- Connection errors (`ERR_CONNECTION_REFUSED`) indicate a missing server
+The E2E test suite requires a development server running on port 3002.
+When using the provided test scripts this is handled automatically.
+Start the server manually only if you execute Playwright directly.
+Connection errors (`ERR_CONNECTION_REFUSED`) indicate a missing server.
 
 ```bash
-# Best practice: Run server in one terminal
+# Optional: run server in one terminal when invoking Playwright directly
 npm run dev
 
 # Then run tests in another terminal
