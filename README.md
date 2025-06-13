@@ -163,6 +163,14 @@ npm test -- imageReferences     # verifies quest and NPC image files
 > [`token.place`](https://github.com/futuroptimist/token.place), so content can be
 > shared across repos.
 
+### AI-Assisted Quest Creation
+
+For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)
+guide. It includes ready-made prompt templates for tools like GPT-4 or Claude to
+help you generate dialogue and structure quickly. Combine these with the
+[Quest Development Guidelines](/docs/quest-guidelines) to streamline content
+creation.
+
 ## Want to contribute?
 
 Check out the [Contribution Guide](https://github.com/democratizedspace/dspace/blob/v2.1/CONTRIBUTORS.md) to get started.
