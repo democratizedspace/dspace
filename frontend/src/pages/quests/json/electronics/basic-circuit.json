@@ -1,0 +1,54 @@
+{
+    "id": "electronics/basic-circuit",
+    "title": "Build a basic LED circuit",
+    "description": "Learn electronics fundamentals by lighting up a simple LED.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey there! I'm Orion. Want to see how easy electronics can be? Let's build a simple LED circuit together.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Sure, what do I need?"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "You'll need an LED, a 330 ohm resistor, a breadboard, and a battery pack or USB power source. Ready to put it together?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Yep, let's assemble it."
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Place the LED on the breadboard and connect the resistor in series with the long leg. Hook everything up to power and the LED should glow.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It works!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! You've built your first circuit and lit up an LED.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": []
+}
