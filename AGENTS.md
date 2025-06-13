@@ -44,6 +44,8 @@ These guidelines apply to all files in this repository.
 -   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
     server. Avoid starting it manually unless running Playwright directly.
 -   When adding inventory items in `frontend/src/pages/inventory/json/items.json`, assign the next numeric `id` and provide an image if possible.
+-   When adding or removing Playwright spec files, update the groups in
+    `frontend/scripts/run-test-groups.mjs` so CI runs the correct tests.
 
 ## Pull Request Message
 

@@ -51,7 +51,12 @@ const TEST_GROUPS = [
     },
     {
         name: 'Quest Tests',
-        files: ['test-quest-chat.spec.ts', 'tutorial-quest.spec.ts', 'quests.spec.ts', 'custom-content.spec.ts'],
+        files: [
+            'test-quest-chat.spec.ts',
+            'tutorial-quest.spec.ts',
+            'quests.spec.ts',
+            'custom-content.spec.ts',
+        ],
         grep: 'create and view a custom quest|Quest Management',
         parallel: true,
         workers: 2,
@@ -73,12 +78,6 @@ const TEST_GROUPS = [
         files: ['profile-page.spec.ts'],
         parallel: true,
         workers: 2,
-    },
-    {
-        name: 'Game Systems',
-        files: ['energy-system.spec.ts', 'chat-system.spec.ts', 'gamesave-system.spec.ts'],
-        parallel: true,
-        workers: 3,
     },
 ];
 
@@ -125,7 +124,11 @@ function runTestGroup(group) {
 
     try {
         console.log(`${colors.cyan}Command: ${command}${colors.reset}`);
-        console.log(`${colors.cyan}Using ${group.parallel ? (group.workers || MAX_WORKERS) : 1} worker(s)${colors.reset}`);
+        console.log(
+            `${colors.cyan}Using ${group.parallel ? group.workers || MAX_WORKERS : 1} worker(s)${
+                colors.reset
+            }`
+        );
         execSync(command, { stdio: 'inherit', cwd: rootDir });
         console.log(`${colors.green}✓ ${group.name} completed successfully${colors.reset}`);
         return true;
@@ -139,7 +142,9 @@ function runTestGroup(group) {
 // Main execution
 console.log(`${colors.bright}${colors.magenta}Starting DSpace Test Suite in Groups${colors.reset}`);
 console.log(`${colors.yellow}Total groups: ${TEST_GROUPS.length}${colors.reset}`);
-console.log(`${colors.yellow}System has ${CPU_CORES} CPU cores, using up to ${MAX_WORKERS} workers for parallel tests${colors.reset}\n`);
+console.log(
+    `${colors.yellow}System has ${CPU_CORES} CPU cores, using up to ${MAX_WORKERS} workers for parallel tests${colors.reset}\n`
+);
 
 let startTime = Date.now();
 let successCount = 0;

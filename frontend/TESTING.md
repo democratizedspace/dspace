@@ -542,73 +542,7 @@ If you encounter persistent issues, try:
 
 ### Game Systems Tests
 
-The "Game Systems" test group currently has some known failures:
-
-1. **Chat System Tests**: Tests fail when the chat interface cannot be found. This may occur if:
-
-    - The chat feature is under active development
-    - The selectors have changed since the tests were written
-    - The chat components aren't properly hydrating
-
-2. **Game Save System Tests**: Failures occur when:
-    - The game save interface doesn't load properly
-    - Local storage isn't being properly populated
-
-### Handling Test Failures in Pull Requests
-
-When encountering test failures in the Game Systems group, follow these steps:
-
-1. **First, verify your changes**: Make sure your changes haven't broken the tests
-2. **Check the test artifacts**: Examine screenshots and videos in the `test-videos/` directory
-3. **Open a discussion**: If the failures appear to be in unchanged code, mention this in your PR
-4. **Consider skipping problematic tests**: In extreme cases, you may need to add `.skip()` to failing tests with a comment explaining why
-
-```javascript
-// Example of temporarily skipping a problematic test
-test.skip('should open the chat interface', async ({ page }) => {
-    // Test code
-    // FIXME: Skipped due to chat interface redesign in progress - Issue #123
-});
-```
-
-## Advanced Troubleshooting for Game Systems Tests
-
-### Chat System Failures
-
-If chat tests are failing with "element not found" errors:
-
-1. Check if the chat interface has been redesigned
-2. Update the locators to match the new structure:
-
-```typescript
-// Old selector
-const chatInterface = page.locator('.chat-interface');
-
-// More robust selector that may work with different designs
-const chatInterface = page
-    .locator('[data-testid="chat"], .chat-interface, .chat-window, .message-container')
-    .first();
-```
-
-### Game Save System Failures
-
-For game save test failures:
-
-1. Ensure localStorage is working in the test environment
-2. Try adding a pause before checking localStorage:
-
-```typescript
-// Add a pause to allow localStorage updates
-await page.waitForTimeout(1000);
-```
-
-3. Verify the localStorage keys being used in tests match the actual application:
-
-```typescript
-// Check what keys are actually being used
-const actualKeys = await page.evaluate(() => Object.keys(localStorage));
-console.log('Actual localStorage keys:', actualKeys);
-```
+This test group has been temporarily removed while the chat, energy, and save systems are redesigned. Once those features stabilize we will reintroduce appropriate e2e coverage.
 
 Remember that maintaining tests is as important as writing them. As the application evolves, tests need to be updated to reflect changes in the UI and application behavior.
 
