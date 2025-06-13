@@ -25,6 +25,7 @@ These guidelines apply to all files in this repository.
 -   Continuous integration runs `npm run check` and `npm test -- --coverage` via
     GitHub Actions.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
+-   Mention new quest categories in the README's Built-in Quests section when you add them.
 
 ## Pull Request Message
 

@@ -129,6 +129,7 @@ fields such as `start`, `rewards` and item requirements, so older quests from
 the v2 era remain valid. Keep the NPC file updated when adding new characters.
 
 Aquarium quests progress through a gentle learning curve: first set up a Walstad tank, then add dwarf shrimp and guppies, practice breeding, and finally keep a goldfish in a large tank.
+Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation.
 
 To validate that quests use a canonical structure with clear start and finish
 steps, run the dedicated test:
