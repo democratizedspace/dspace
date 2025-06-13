@@ -14,9 +14,9 @@ Clone and set up the project:
 ```bash
 git clone https://github.com/democratizedspace/dspace.git
 cd dspace
-npm install
+npm ci
 # Install frontend dependencies
-cd frontend && npm install
+cd frontend && npm ci
 cd ..
 ```
 
@@ -165,9 +165,10 @@ npm test -- imageReferences     # verifies quest and NPC image files
 Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign new sequential `id` numbers and include an image path when adding items. See `frontend/src/pages/docs/md/item-guidelines.md` for detailed guidance.
 
 
-> **Tip:** The quest format is compatible with projects like
-> [`token.place`](https://github.com/futuroptimist/token.place), which also powers our
-> open-source LLM inference. Feel free to share quest JSON across repos.
+> **Tip:** We use the open-source LLM inference from
+> [`token.place`](https://github.com/futuroptimist/token.place) when generating quest
+> dialogue. Token.place itself doesn't host quests, but you can reuse the same
+> prompts to create content across your projects.
 
 ### AI-Assisted Quest Creation
 
@@ -178,6 +179,17 @@ help you generate dialogue and structure quickly. Combine these with the
 creation.
 
 
+
+### Staying Updated
+
+We frequently merge improvements from the `v3` branch. Keep your fork current:
+
+```bash
+git fetch origin
+git merge origin/v3
+npm ci
+(cd frontend && npm ci)
+```
 ### AI-Assisted Quest Creation
 
 For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)

@@ -177,8 +177,8 @@ export const burnCurrency = (req, res, symbol, burnAmount) => {
 export const addWalletBalance = (req, res, symbol, addBalance) => {
     const balance = getWalletBalance(req, symbol);
     const newBalance = Math.max(0, balance + addBalance);
-    // TODO: start here
     setCookieValue(res, `currency-balance-${symbol}`, newBalance);
+    return newBalance;
 };
 
 export const fixMarkdownText = (text) => {
