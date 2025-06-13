@@ -41,6 +41,12 @@ DSPACE uses a comprehensive testing suite to ensure code quality and prevent reg
 Before submitting a pull request, run the comprehensive test suite with:
 
 ```bash
+# Skip Playwright tests if browsers aren't installed
+SKIP_E2E=1 npm run test:pr
+```
+If Playwright browsers are available, omit `SKIP_E2E=1` to run the full suite:
+
+```bash
 npm run test:pr
 ```
 
@@ -98,6 +104,13 @@ docker compose up --build -d
 ```
 
 The app will be available on port 3002. Point your Cloudflare Tunnel at `http://localhost:3002` to serve traffic.
+
+### Automated Raspberry Pi Deployment
+
+The workflow `.github/workflows/rpi-deploy.yml` builds an ARM64 Docker image and optionally deploys it to a Raspberry Pi over SSH.
+Add registry credentials in `GHCR_TOKEN` (or another registry) and set `RPI_HOST`, `RPI_USER`, and `RPI_SSH_KEY` secrets.
+Trigger the workflow manually or on pushes to `main` to update the Pi and restart the `app` service.
+
 
 ## Project Architecture
 
