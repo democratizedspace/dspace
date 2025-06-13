@@ -122,13 +122,14 @@ export const datetimeAfterDuration = (durationSeconds) => {
 
 export const durationInSeconds = (durationString) => {
     try {
-        const durationComponents = durationString.split(' ');
+        const durationComponents = durationString.split(' ').filter(Boolean);
 
         // for each item in durationComponents, get the number and the unit
         // then convert the number to seconds
         let durationSeconds = 0;
         for (const component of durationComponents) {
-            const number = parseInt(component);
+            const number = parseFloat(component);
+            if (isNaN(number)) continue;
             const unit = component.replace(number, '');
             let seconds = 0;
             switch (unit) {
