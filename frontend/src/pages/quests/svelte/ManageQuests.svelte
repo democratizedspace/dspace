@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import Quest from './Quest.svelte';
     import { questFinished } from '../../../utils/gameState.js';
+    import { db } from '../../../utils/customcontent.js';
 
     export let quests = [];
     let mounted = false;
@@ -35,16 +36,8 @@
     async function handleDelete(questId) {
         if (confirm('Are you sure you want to delete this quest?')) {
             try {
-                const response = await fetch(`/api/quests/${questId}`, {
-                    method: 'DELETE',
-                });
-
-                if (response.ok) {
-                    // Remove quest from local state
-                    quests = quests.filter((q) => q.id !== questId);
-                } else {
-                    alert('Failed to delete quest');
-                }
+                await db.quests.delete(questId);
+                quests = quests.filter((q) => q.id !== questId);
             } catch (error) {
                 console.error('Error deleting quest:', error);
                 alert('Failed to delete quest');
