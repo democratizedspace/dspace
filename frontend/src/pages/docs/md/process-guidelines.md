@@ -40,6 +40,8 @@ Duration must follow the pattern `(\d+h\s*)?(\d+m\s*)?(\d+s\s*)?`, for example:
 -   "1h 30m" (1 hour, 30 minutes)
 -   "5m 30s" (5 minutes, 30 seconds)
 
+Fractional values are allowed, so `0.5h` will be interpreted as thirty minutes.
+
 ### Implementation State
 
 The current `ProcessForm.svelte` component supports creating processes with all the properties listed above. It includes item selection interfaces for each of the three item relationship types.

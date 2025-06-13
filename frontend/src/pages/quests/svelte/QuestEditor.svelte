@@ -81,8 +81,7 @@
         margin-bottom: 20px;
     }
 
-    .input-style,
-    .textarea-style {
+    .input-style {
         padding: 10px;
         width: 100%;
         border: 1px solid #ccc;
@@ -90,8 +89,7 @@
         transition: border-color 0.3s ease;
     }
 
-    .input-style:focus,
-    .textarea-style:focus {
+    .input-style:focus {
         border-color: #007bff;
         outline: none;
     }

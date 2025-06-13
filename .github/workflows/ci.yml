@@ -12,10 +12,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install
-      - run: cd frontend && npm install
-      - run: npm run check
-      - run: npm test -- --coverage
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - run: npm ci
+      - run: cd frontend && npm ci
+      - run: npm run test:pr
       - uses: actions/upload-artifact@v4
         with:
           name: coverage

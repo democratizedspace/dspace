@@ -9,9 +9,6 @@ import {
     getProcesses,
     getQuests,
     getStoreForEntityType,
-    saveItem,
-    saveProcess,
-    saveQuest,
 } from './indexeddb.js';
 
 /**
@@ -30,7 +27,7 @@ export const ENTITY_TYPES = {
 export const db = {
     // Generic CRUD operations
     add: (entityType, entity) => {
-        const store = getStoreForEntityType(entityType);
+        getStoreForEntityType(entityType);
         const preparedEntity = {
             ...entity,
             type: entityType,

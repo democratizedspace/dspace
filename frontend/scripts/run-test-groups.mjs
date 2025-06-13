@@ -26,7 +26,12 @@ const TEST_GROUPS = [
     },
     {
         name: 'Structure Tests',
-        files: ['page-structure.spec.ts', 'error-pages.spec.ts', 'svelte-component-hydration.spec.ts'],
+        files: [
+            'page-structure.spec.ts',
+            'error-pages.spec.ts',
+            'svelte-component-hydration.spec.ts',
+            'builtin-quests.spec.ts',
+        ],
         parallel: true,
         workers: MAX_WORKERS,
     },

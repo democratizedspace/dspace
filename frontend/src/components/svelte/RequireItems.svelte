@@ -2,12 +2,10 @@
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
     import { state } from '../../utils/gameState/common.js';
-    import { writable, derived } from 'svelte/store';
+    import { derived } from 'svelte/store';
 
     export let text = '',
         items = [];
-
-    const itemCounts = $state.inventory;
 
     const canProceed = derived([state], ([$state]) => {
         return items.every((item) => {

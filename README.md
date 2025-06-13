@@ -159,9 +159,18 @@ npm test -- imageReferences     # verifies quest and NPC image files
 ```
 
 
-> **Tip:** The quest format is compatible with projects like
-> [`token.place`](https://github.com/futuroptimist/token.place), so content can be
-> shared across repos.
+> **Tip:** DSPACE relies on
+> [`token.place`](https://github.com/futuroptimist/token.place)
+> for open-source LLM inference. It doesn't store quests but powers our
+> AI-driven features.
+
+### AI-Assisted Quest Creation
+
+For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)
+guide. It includes ready-made prompt templates for tools like GPT-4 or Claude to
+help you generate dialogue and structure quickly. Combine these with the
+[Quest Development Guidelines](/docs/quest-guidelines) to streamline content
+creation.
 
 ## Want to contribute?
 

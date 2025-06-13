@@ -1,6 +1,5 @@
 import items from './pages/inventory/json/items.json';
 import { questFinished, canStartQuest } from './utils/gameState.js';
-import { log } from './utils/devLog.js';
 
 export const prettyPrintNumber = (number) => {
     const n = parseFloat(number);
@@ -116,19 +115,19 @@ export const prettyPrintDuration = (durationSeconds) => {
 };
 
 export const datetimeAfterDuration = (durationSeconds) => {
-    const futureDatetime = new Date(Date.now() + durationSeconds);
     return new Date(Date.now() + durationSeconds * 1000);
 };
 
 export const durationInSeconds = (durationString) => {
     try {
-        const durationComponents = durationString.split(' ');
+        const durationComponents = durationString.split(' ').filter(Boolean);
 
         // for each item in durationComponents, get the number and the unit
         // then convert the number to seconds
         let durationSeconds = 0;
         for (const component of durationComponents) {
-            const number = parseInt(component);
+            const number = parseFloat(component);
+            if (isNaN(number)) continue;
             const unit = component.replace(number, '');
             let seconds = 0;
             switch (unit) {
@@ -358,8 +357,6 @@ export function formatTime(date) {
     return timeFormats;
 }
 
-const futureDatetime = (Date.now() + 1000 * 60 * 60 * 24 * 2).toFixed(0); // 2 days from now
-
 export function getRelativeTimeString(date, lang = navigator.language) {
     // Allow dates or times to be passed
     const timeMs = typeof date === 'number' ? date : date.getTime();
@@ -441,7 +438,7 @@ export function shuffleArray(array) {
 export function generateRandomString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
-    const _ = Array(length)
+    Array(length)
         .fill(0)
         .forEach(() => {
             result += characters.charAt(Math.floor(Math.random() * characters.length));

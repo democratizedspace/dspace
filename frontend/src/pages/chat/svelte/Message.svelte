@@ -23,7 +23,7 @@
         js: 'javascript',
     };
 
-    md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+    md.renderer.rules.fence = (tokens, idx) => {
         const token = tokens[idx];
         let language = token.info ? token.info.trim() : '';
         language = languageMapping[language] ? languageMapping[language] : language;
@@ -124,16 +124,6 @@
     .timestamp {
         font-size: 12px;
         margin-bottom: 5px;
-    }
-
-    pre code {
-        display: block;
-        overflow-x: auto;
-        padding: 0.5em;
-        background-color: #2b2b2b;
-        color: #f8f8f8;
-        border-radius: 5px;
-        width: calc(100% - 50px);
     }
 
     .copy-button {
