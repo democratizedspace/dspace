@@ -50,6 +50,13 @@ If Playwright browsers are available, omit `SKIP_E2E=1` to run the full suite:
 npm run test:pr
 ```
 
+If you encounter an error like `browserType.launch: Executable doesn't exist`,
+download the browsers with:
+
+```bash
+npx playwright install
+```
+
 This cross-platform script will:
 
 -   Check code formatting and linting
