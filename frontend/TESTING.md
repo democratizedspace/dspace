@@ -18,7 +18,7 @@ To run the complete test suite:
 
 ```bash
 # From the project root
-npm run test:pr
+SKIP_E2E=1 npm run test:pr  # omit SKIP_E2E=1 for full suite
 
 # Or from the frontend directory
 npm run test:all
