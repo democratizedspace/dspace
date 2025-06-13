@@ -1,0 +1,54 @@
+{
+    "id": "robotics/servo-control",
+    "title": "Control a Servo Motor",
+    "description": "Learn to move a servo with an Arduino.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Orion again! Ready to add some movement to your projects? Let's control a servo motor with your Arduino.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "hookup",
+                    "text": "Yes! How do I hook it up?"
+                }
+            ]
+        },
+        {
+            "id": "hookup",
+            "text": "Connect the servo's control wire to pin 9, and power it from the 5V and ground pins. You'll need the Servo library in the Arduino IDE.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Wired up. What code do I use?"
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Use the Sweep example from the Servo library. Upload it and watch the arm swing back and forth.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It's moving!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! With servos you can build all sorts of small robots. Keep experimenting!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["electronics/arduino-blink"]
+}

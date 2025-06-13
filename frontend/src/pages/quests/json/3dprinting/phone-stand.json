@@ -1,0 +1,44 @@
+{
+    "id": "3dprinting/phone-stand",
+    "title": "Print a Phone Stand",
+    "description": "Practice 3D printing by making a handy phone stand.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey there, it's Sydney again! Ready for a quick project? Let's make a simple phone stand.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Sounds good, what do I need?"
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Load the STL into your slicer and start printing. It only takes a little filament.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "97", "count": 1 }],
+                    "text": "Print started!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [{ "id": "97", "count": 1 }],
+                    "text": "The stand is finished!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! This stand will keep your phone propped up while you work on more projects.",
+            "options": [{ "type": "finish", "text": "Thanks, Sydney!" }]
+        }
+    ],
+    "requiresQuests": ["3dprinter/start"]
+}
