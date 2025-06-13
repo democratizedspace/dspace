@@ -41,6 +41,8 @@ These guidelines apply to all files in this repository.
     `npm ci` and `(cd frontend && npm ci)` after merging to ensure a clean state.
     to verify the dialogue structure is valid.
 -   Quest JSON files are compatible with the [token.place](https://github.com/futuroptimist/token.place) project, so feel free to share content across repos.
+-   Look for low-hanging fruit quests that expand the game's tech tree. The README's
+    **AI-Assisted Quest Creation** section explains how to generate them quickly.
 -   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
     server. Avoid starting it manually unless running Playwright directly.
 -   When adding inventory items in `frontend/src/pages/inventory/json/items.json`, assign the next numeric `id` and provide an image if possible.

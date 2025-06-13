@@ -73,12 +73,6 @@ const TEST_GROUPS = [
         parallel: true,
         workers: 2,
     },
-    {
-        name: 'User Profile',
-        files: ['profile-page.spec.ts'],
-        parallel: true,
-        workers: 2,
-    },
 ];
 
 // Colors for console output

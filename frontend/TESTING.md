@@ -244,8 +244,8 @@ npm test -- questCanonical
 Example:
 
 ```typescript
-test.describe('Profile Page Functionality', () => {
-    test('profile page should load with user information', async ({ page }) => {
+test.describe('Tutorial Quest', () => {
+    test('should load the tutorial quest page', async ({ page }) => {
         // Test code here
     });
 });
@@ -259,7 +259,7 @@ Always wait for the page to load properly:
 
 ```typescript
 // Recommended way
-await page.goto('/profile');
+await page.goto('/tutorial');
 await page.waitForLoadState('networkidle');
 
 // Avoid using waitForHydration as it may be less reliable
@@ -314,7 +314,7 @@ const submitButton = page
     .first();
 
 // Use data-testid for stable selectors
-const profile = page.locator('[data-testid="profile-section"]');
+const section = page.locator('[data-testid="example-section"]');
 ```
 
 ### 5. Clean Test Data
