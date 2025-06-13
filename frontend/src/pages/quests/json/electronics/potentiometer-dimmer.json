@@ -1,0 +1,51 @@
+{
+    "id": "electronics/potentiometer-dimmer",
+    "title": "Dim an LED with a Potentiometer",
+    "description": "Adjust LED brightness using a potentiometer and an Arduino.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Orion here again! Ready to add some interactivity? Let's use a potentiometer to control the brightness of your LED.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Sounds good! What do I need?"
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Grab a potentiometer, connect the ends to 5V and ground, and the middle pin to analog pin A0. The LED stays on pin 9 with a 220 ohm resistor.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "program",
+                    "text": "Wired up! What's the code?"
+                }
+            ]
+        },
+        {
+            "id": "program",
+            "text": "Use analogRead() to read the potentiometer and analogWrite() on pin 9 to adjust brightness. The Arduino IDE's 'AnalogInput' example shows the basics.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Uploaded! The LED changes brightness as I turn the knob."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! Potentiometers open up lots of control options. Try using them with motors or sensors next!",
+            "options": [
+                { "type": "finish", "text": "Thanks, Orion!" }
+            ]
+        }
+    ],
+    "requiresQuests": ["electronics/arduino-blink"]
+}

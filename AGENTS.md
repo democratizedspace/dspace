@@ -9,6 +9,8 @@ These guidelines apply to all files in this repository.
 -   Before submitting a pull request, run `npm run test:pr` to execute lint, unit and e2e tests.
 -   If Playwright browsers aren't available, prefix the command with `SKIP_E2E=1`.
 -   Use `npm run check` to verify formatting and linting prior to commit.
+-   If these checks fail due to missing dev dependencies, mention the error in
+    your pull request summary.
 -   The lint script sets `ESLINT_USE_FLAT_CONFIG=false`. If you run ESLint
     manually, be sure to export this variable so the old `.eslintrc.json` works.
 -   Keep documentation up to date when adding or changing features.

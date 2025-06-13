@@ -631,5 +631,17 @@
         "name": "3D Printed Phone Stand",
         "description": "A simple stand to hold your smartphone upright on a desk.",
         "image": "/assets/3dprinter.jpg"
+    },
+    {
+        "id": "98",
+        "name": "Potentiometer",
+        "description": "Variable resistor for adjusting signal levels in circuits.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "99",
+        "name": "Lettuce Seeds",
+        "description": "Seeds for growing crisp hydroponic lettuce.",
+        "image": "/assets/hydroponic_lettuce.jpg"
     }
 ]
