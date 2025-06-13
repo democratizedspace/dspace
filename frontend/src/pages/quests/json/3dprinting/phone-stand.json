@@ -23,17 +23,13 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [
-                        { "id": "97", "count": 1 }
-                    ],
+                    "grantsItems": [{ "id": "97", "count": 1 }],
                     "text": "Print started!"
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [
-                        { "id": "97", "count": 1 }
-                    ],
+                    "requiresItems": [{ "id": "97", "count": 1 }],
                     "text": "The stand is finished!"
                 }
             ]
@@ -41,9 +37,7 @@
         {
             "id": "finish",
             "text": "Great job! This stand will keep your phone propped up while you work on more projects.",
-            "options": [
-                { "type": "finish", "text": "Thanks, Sydney!" }
-            ]
+            "options": [{ "type": "finish", "text": "Thanks, Sydney!" }]
         }
     ],
     "requiresQuests": ["3dprinter/start"]

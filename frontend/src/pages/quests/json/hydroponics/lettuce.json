@@ -16,16 +16,12 @@
         {
             "id": "plant",
             "text": "Place lettuce seeds in damp starter plugs. Keep them under light for about a week until they sprout.",
-            "options": [
-                { "type": "goto", "goto": "harvest", "text": "Seedlings look great!" }
-            ]
+            "options": [{ "type": "goto", "goto": "harvest", "text": "Seedlings look great!" }]
         },
         {
             "id": "harvest",
             "text": "Transfer the plugs to your tub and let them grow for a few weeks. Harvest outer leaves as needed for fresh salads!",
-            "options": [
-                { "type": "finish", "text": "Can't wait to taste it!" }
-            ]
+            "options": [{ "type": "finish", "text": "Can't wait to taste it!" }]
         }
     ],
     "requiresQuests": ["hydroponics/basil"]

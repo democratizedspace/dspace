@@ -42,9 +42,7 @@
         {
             "id": "finish",
             "text": "Great job! Potentiometers open up lots of control options. Try using them with motors or sensors next!",
-            "options": [
-                { "type": "finish", "text": "Thanks, Orion!" }
-            ]
+            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "requiresQuests": ["electronics/arduino-blink"]
