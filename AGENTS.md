@@ -25,8 +25,6 @@ These guidelines apply to all files in this repository.
 -   Continuous integration runs `npm run check` and `npm test -- --coverage` via
     GitHub Actions.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
--   The quest format is compatible with other repos like `token.place`. Look for
-    opportunities to share content across projects.
 -   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
     server. Avoid starting it manually unless running Playwright directly.
 
