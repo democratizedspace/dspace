@@ -583,5 +583,53 @@
         "name": "Hydro Award",
         "description": "An award for bringing dChat 10 buckets of dechlorinated water.",
         "image": "/assets/hydro_award.jpg"
+    },
+    {
+        "id": "90",
+        "name": "Arduino Uno",
+        "description": "A beginner-friendly microcontroller board ideal for electronics projects.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "91",
+        "name": "Breadboard",
+        "description": "A reusable board for prototyping circuits without soldering.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "92",
+        "name": "Jumper Wires",
+        "description": "Flexible wires with pin connectors for building temporary circuits.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "93",
+        "name": "LED",
+        "description": "A light emitting diode useful for basic electronics experiments.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "94",
+        "name": "220 Ohm Resistor",
+        "description": "A resistor commonly used to limit current to an LED.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "95",
+        "name": "USB Cable",
+        "description": "Connects the Arduino to your computer for programming.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "96",
+        "name": "Servo Motor",
+        "description": "A small motor with control circuitry for precise movement.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "97",
+        "name": "3D Printed Phone Stand",
+        "description": "A simple stand to hold your smartphone upright on a desk.",
+        "image": "/assets/3dprinter.jpg"
     }
 ]

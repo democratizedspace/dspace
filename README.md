@@ -158,6 +158,10 @@ npm test -- questQuality        # heuristics for dialogue quality (TODO: integra
 npm test -- imageReferences     # verifies quest and NPC image files
 ```
 
+## Built-in Items
+
+Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign new sequential `id` numbers and include an image path when adding items. See `frontend/src/pages/docs/md/item-guidelines.md` for detailed guidance.
+
 
 > **Tip:** The quest format is compatible with projects like
 > [`token.place`](https://github.com/futuroptimist/token.place), so content can be

@@ -7,6 +7,7 @@ These guidelines apply to all files in this repository.
 ## Development
 
 -   Before submitting a pull request, run `npm run test:pr` to execute lint, unit and e2e tests.
+-   If Playwright browsers aren't available, prefix the command with `SKIP_E2E=1`.
 -   Use `npm run check` to verify formatting and linting prior to commit.
 -   The lint script sets `ESLINT_USE_FLAT_CONFIG=false`. If you run ESLint
     manually, be sure to export this variable so the old `.eslintrc.json` works.
@@ -27,6 +28,7 @@ These guidelines apply to all files in this repository.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
 -   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
     server. Avoid starting it manually unless running Playwright directly.
+-   When adding inventory items in `frontend/src/pages/inventory/json/items.json`, assign the next numeric `id` and provide an image if possible.
 
 ## Pull Request Message
 
