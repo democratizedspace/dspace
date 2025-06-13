@@ -8,7 +8,7 @@ These guidelines apply to all files in this repository.
 
 -   Before submitting a pull request, run `npm run test:pr` to execute lint, unit and e2e tests.
 -   If E2E tests complain that the browser executable is missing, run `npx playwright install` to download the required browsers.
--   If Playwright browsers aren't available, prefix the command with `SKIP_E2E=1`.
+-   If that command fails (e.g., due to network restrictions) or browsers still aren't available, prefix `npm run test:pr` with `SKIP_E2E=1` and note the issue in your PR summary.
 -   Use `npm run check` to verify formatting and linting prior to commit.
 -   If these checks fail due to missing dev dependencies, mention the error in
     your pull request summary.

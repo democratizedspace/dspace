@@ -57,6 +57,8 @@ download the browsers with:
 ```bash
 npx playwright install
 ```
+If that command fails (for example, due to network restrictions), run the tests
+with `SKIP_E2E=1` and mention the skipped browser install in your PR summary.
 
 This cross-platform script will:
 
