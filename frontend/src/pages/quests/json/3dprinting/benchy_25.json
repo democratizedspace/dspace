@@ -12,14 +12,25 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "progress",
+                    "text": "Full steam ahead!"
+                }
+            ]
+        },
+        {
+            "id": "progress",
+            "text": "Keep going until you reach the goal!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "congrats",
+                    "text": "I have enough!",
                     "requiresItems": [
                         {
                             "id": "1",
                             "count": 25
                         }
-                    ],
-                    "goto": "finish",
-                    "text": "Full steam ahead!"
+                    ]
                 }
             ]
         },

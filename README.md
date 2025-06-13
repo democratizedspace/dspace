@@ -1,5 +1,8 @@
 # DSPACE - Democratized Space
 
+![CI](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/coverage-unknown-lightgrey)
+
 You can find the game at [democratized.space](https://democratized.space).
 
 Check out the [docs](https://democratized.space/docs)!

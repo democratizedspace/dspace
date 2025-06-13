@@ -12,14 +12,25 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "progress",
+                    "text": "Legends are made by actions. Here's 1,000,000 dWatt!"
+                }
+            ]
+        },
+        {
+            "id": "progress",
+            "text": "Keep going until you reach the goal!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "congrats",
+                    "text": "I have enough!",
                     "requiresItems": [
                         {
                             "id": "22",
                             "count": 1000000
                         }
-                    ],
-                    "goto": "legendary",
-                    "text": "Legends are made by actions. Here's 1,000,000 dWatt!"
+                    ]
                 }
             ]
         },

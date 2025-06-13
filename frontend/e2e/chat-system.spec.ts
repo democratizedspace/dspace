@@ -14,9 +14,12 @@ test.describe('Chat System Functionality', () => {
         // Check if the chat feature is available in this environment
         const chatFeatureAvailable = await page.evaluate(() => {
             // Check if there's any chat-related elements or related localStorage
-            const hasChatElements = document.querySelector('.chat-interface, .chat-window, .message-container') !== null;
-            const hasChatButtons = Array.from(document.querySelectorAll('button, a')).some(el => 
-                el.textContent && /chat|message/i.test(el.textContent));
+            const hasChatElements =
+                document.querySelector('.chat-interface, .chat-window, .message-container') !==
+                null;
+            const hasChatButtons = Array.from(document.querySelectorAll('button, a')).some(
+                (el) => el.textContent && /chat|message/i.test(el.textContent)
+            );
             return hasChatElements || hasChatButtons;
         });
 
@@ -39,7 +42,7 @@ test.describe('Chat System Functionality', () => {
             const chatInterface = page
                 .locator('.chat-interface, .chat-window, .message-container')
                 .first();
-            
+
             if ((await chatInterface.count()) > 0) {
                 await expect(chatInterface).toBeVisible();
             } else {
@@ -67,9 +70,12 @@ test.describe('Chat System Functionality', () => {
         // Check if the chat feature is available in this environment
         const chatFeatureAvailable = await page.evaluate(() => {
             // Check if there's any chat-related elements or related localStorage
-            const hasChatElements = document.querySelector('.chat-interface, .chat-window, .message-container') !== null;
-            const hasChatButtons = Array.from(document.querySelectorAll('button, a')).some(el => 
-                el.textContent && /chat|message/i.test(el.textContent));
+            const hasChatElements =
+                document.querySelector('.chat-interface, .chat-window, .message-container') !==
+                null;
+            const hasChatButtons = Array.from(document.querySelectorAll('button, a')).some(
+                (el) => el.textContent && /chat|message/i.test(el.textContent)
+            );
             return hasChatElements || hasChatButtons;
         });
 
@@ -114,7 +120,7 @@ test.describe('Chat System Functionality', () => {
             await page.waitForTimeout(1000); // Wait for message to be processed
 
             const messageElements = page.locator('.message, .chat-message, .message-bubble');
-            
+
             if ((await messageElements.count()) > 0) {
                 const messagesText = await messageElements.allTextContents();
 
@@ -137,9 +143,12 @@ test.describe('Chat System Functionality', () => {
         // Check if the chat feature is available in this environment
         const chatFeatureAvailable = await page.evaluate(() => {
             // Check if there's any chat-related elements or related localStorage
-            const hasChatElements = document.querySelector('.chat-interface, .chat-window, .message-container') !== null;
-            const hasChatButtons = Array.from(document.querySelectorAll('button, a')).some(el => 
-                el.textContent && /chat|message/i.test(el.textContent));
+            const hasChatElements =
+                document.querySelector('.chat-interface, .chat-window, .message-container') !==
+                null;
+            const hasChatButtons = Array.from(document.querySelectorAll('button, a')).some(
+                (el) => el.textContent && /chat|message/i.test(el.textContent)
+            );
             return hasChatElements || hasChatButtons;
         });
 
@@ -201,13 +210,13 @@ test.describe('Chat System Functionality', () => {
             if ((await messageElements.count()) > 0) {
                 const messagesText = await messageElements.allTextContents();
                 const messageFound = messagesText.some((text) => text.includes(testMessage));
-                
+
                 if (!messageFound) {
                     // If message not found, just verify chat interface loaded
                     const chatInterface = page
                         .locator('.chat-interface, .chat-window, .message-container')
                         .first();
-                    
+
                     if ((await chatInterface.count()) > 0) {
                         await expect(chatInterface).toBeVisible();
                     } else {

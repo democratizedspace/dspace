@@ -12,14 +12,25 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "progress",
+                    "text": "Your faith is well-placed. Here's 100,000 dWatt!"
+                }
+            ]
+        },
+        {
+            "id": "progress",
+            "text": "Keep going until you reach the goal!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "congrats",
+                    "text": "I have enough!",
                     "requiresItems": [
                         {
                             "id": "22",
                             "count": 100000
                         }
-                    ],
-                    "goto": "amazingWork",
-                    "text": "Your faith is well-placed. Here's 100,000 dWatt!"
+                    ]
                 }
             ]
         },

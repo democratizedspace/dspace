@@ -12,14 +12,25 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "progress",
+                    "text": "I have the 10 buckets ... that took awhile!"
+                }
+            ]
+        },
+        {
+            "id": "progress",
+            "text": "Keep going until you reach the goal!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "congrats",
+                    "text": "I have enough!",
                     "requiresItems": [
                         {
                             "id": "25",
                             "count": 10
                         }
-                    ],
-                    "goto": "finish",
-                    "text": "I have the 10 buckets ... that took awhile!"
+                    ]
                 }
             ]
         },
