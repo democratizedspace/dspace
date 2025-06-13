@@ -18,6 +18,8 @@ These guidelines apply to all files in this repository.
     with at least one option per node.
 -   Include a `finish` option in the final node so quests end cleanly. Quests
     without a finish option will fail canonical tests.
+-   For rapid quest creation, reference `frontend/src/pages/docs/md/prompts-quests.md`
+    which contains AI prompt templates.
 -   Document any new or updated NPCs in `frontend/src/pages/docs/md/npcs.md`.
 -   Update quest progression tests in `frontend/__tests__/questQuality.test.js`
     when introducing new aquaria quests or changing their order.
