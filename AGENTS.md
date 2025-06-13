@@ -34,6 +34,8 @@ These guidelines apply to all files in this repository.
 -   Continuous integration runs `npm run check` and `npm test -- --coverage` via
     GitHub Actions.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
+-   The [f2clipboard](https://github.com/futuroptimist/f2clipboard) tool can speed
+    up copying quest prompts and snippets between projects.
     `npm ci` and `(cd frontend && npm ci)` after merging to ensure a clean state.
     to verify the dialogue structure is valid.
 -   Quest JSON files are compatible with the [token.place](https://github.com/futuroptimist/token.place) project, so feel free to share content across repos.

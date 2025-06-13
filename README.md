@@ -169,6 +169,8 @@ Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign 
 > [`token.place`](https://github.com/futuroptimist/token.place) when generating quest
 > dialogue. Token.place itself doesn't host quests, but you can reuse the same
 > prompts to create content across your projects.
+> You can also leverage [`f2clipboard`](https://github.com/futuroptimist/f2clipboard)
+> to copy quest templates or code snippets between repositories.
 
 ### AI-Assisted Quest Creation
 
