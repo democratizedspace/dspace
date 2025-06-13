@@ -8,6 +8,8 @@ These guidelines apply to all files in this repository.
 
 -   Before submitting a pull request, run `npm run test:pr` to execute lint, unit and e2e tests.
 -   Use `npm run check` to verify formatting and linting prior to commit.
+-   The lint script sets `ESLINT_USE_FLAT_CONFIG=false`. If you run ESLint
+    manually, be sure to export this variable so the old `.eslintrc.json` works.
 -   Keep documentation up to date when adding or changing features.
 -   Built-in quest files live in `frontend/src/pages/quests/json`. Maintain the schema in
     `frontend/src/pages/quests/jsonSchemas` when adding quests.

@@ -26,7 +26,8 @@ describe('Quest canonical structure', () => {
 
             // The final node must present a finish option
             const lastNode = quest.dialogue[quest.dialogue.length - 1];
-            const hasFinish = Array.isArray(lastNode.options) &&
+            const hasFinish =
+                Array.isArray(lastNode.options) &&
                 lastNode.options.some((o) => o.type === 'finish');
             expect(hasFinish).toBe(true);
         });
