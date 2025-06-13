@@ -7,8 +7,14 @@ These guidelines apply to all files in this repository.
 ## Development
 
 -   Before submitting a pull request, run `npm run test:pr` to execute lint, unit and e2e tests.
--   If Playwright browsers are unavailable, run `SKIP_E2E=1 npm run test:pr` instead.
+-   If Playwright browsers aren't available, prefix the command with `SKIP_E2E=1`.
 -   Use `npm run check` to verify formatting and linting prior to commit.
+-   If these checks fail due to missing dev dependencies, mention the error in
+    your pull request summary.
+-   If ESLint reports missing plugins, run `npm install` in both the repo root
+    and the `frontend` directory to restore dev dependencies.
+-   If formatting fails, run `npx prettier` on the affected files before
+    committing.
 -   The lint script sets `ESLINT_USE_FLAT_CONFIG=false`. If you run ESLint
     manually, be sure to export this variable so the old `.eslintrc.json` works.
 -   Keep documentation up to date when adding or changing features.
@@ -28,9 +34,12 @@ These guidelines apply to all files in this repository.
 -   Continuous integration runs `npm run check` and `npm test -- --coverage` via
     GitHub Actions.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
+-   After creating or editing quest JSON files, run `npm test -- questCanonical`
+    to verify the dialogue structure is valid.
 -   Quest JSON files are compatible with the [token.place](https://github.com/futuroptimist/token.place) project, so feel free to share content across repos.
 -   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
     server. Avoid starting it manually unless running Playwright directly.
+-   When adding inventory items in `frontend/src/pages/inventory/json/items.json`, assign the next numeric `id` and provide an image if possible.
 
 ## Pull Request Message
 

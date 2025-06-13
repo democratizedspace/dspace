@@ -1,0 +1,28 @@
+{
+    "id": "hydroponics/lettuce",
+    "title": "Grow Lettuce Hydroponically",
+    "description": "Plant lettuce seeds and harvest fresh leaves using your hydroponic setup.",
+    "image": "/assets/hydroponic_lettuce.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nice work with the basil! Ready for another crop? Lettuce is easy to grow and perfect for salads.",
+            "options": [
+                { "type": "goto", "goto": "plant", "text": "Sounds tasty! How do I start?" }
+            ]
+        },
+        {
+            "id": "plant",
+            "text": "Place lettuce seeds in damp starter plugs. Keep them under light for about a week until they sprout.",
+            "options": [{ "type": "goto", "goto": "harvest", "text": "Seedlings look great!" }]
+        },
+        {
+            "id": "harvest",
+            "text": "Transfer the plugs to your tub and let them grow for a few weeks. Harvest outer leaves as needed for fresh salads!",
+            "options": [{ "type": "finish", "text": "Can't wait to taste it!" }]
+        }
+    ],
+    "requiresQuests": ["hydroponics/basil"]
+}

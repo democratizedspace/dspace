@@ -1,0 +1,54 @@
+{
+    "id": "electronics/arduino-blink",
+    "title": "Blink an LED with Arduino",
+    "description": "Learn to program a microcontroller by blinking an LED.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey there! Orion here. Ready to do something a bit more exciting? Let's make that LED blink with a microcontroller.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Absolutely! What do I need?"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "All you need is an Arduino board, USB cable, a 220 ohm resistor, the LED from before, and a computer with the Arduino IDE installed. Hook the LED to pin 13 through the resistor.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "upload",
+                    "text": "Got it all wired up. What's next?"
+                }
+            ]
+        },
+        {
+            "id": "upload",
+            "text": "Open the Arduino IDE, load the Blink example, select the correct port, and hit upload. The microcontroller will reset and start blinking the LED once every second.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Upload complete and the LED is blinking!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Look at that! You just programmed a microcontroller. Keep experimenting with different patterns and sensors. This skill will come in handy for bigger projects.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks Orion, that was awesome!"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["electronics/basic-circuit"]
+}

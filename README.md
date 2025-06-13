@@ -140,6 +140,8 @@ defined at `frontend/src/pages/quests/jsonSchemas/quest.json` and can reference 
 profiles in `frontend/src/pages/docs/md/npcs.md`. The schema now supports advanced
 fields such as `start`, `rewards` and item requirements, so older quests from
 the v2 era remain valid. Keep the NPC file updated when adding new characters.
+Quest files are organized by category in subfolders, so feel free to expand any
+area—electronics, hydroponics, rocketry and more—with additional quests.
 
 Aquarium quests progress through a gentle learning curve: first set up a Walstad tank, then add dwarf shrimp and guppies, practice breeding, and finally keep a goldfish in a large tank.
 Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation.
@@ -157,6 +159,10 @@ Additional quality checks are available:
 npm test -- questQuality        # heuristics for dialogue quality (TODO: integrate OpenAI)
 npm test -- imageReferences     # verifies quest and NPC image files
 ```
+
+## Built-in Items
+
+Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign new sequential `id` numbers and include an image path when adding items. See `frontend/src/pages/docs/md/item-guidelines.md` for detailed guidance.
 
 
 > **Tip:** The quest format is compatible with projects like
