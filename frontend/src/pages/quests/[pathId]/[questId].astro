@@ -12,8 +12,13 @@ quests = await Astro.glob('../json/*/*.json');
 quest = quests.find((quest) => {
     return quest.default.id === `${pathId}/${questId}`;
 });
+
+// If quest not found, return 404
+if (!quest) {
+    return Astro.redirect('/404');
+}
 ---
 
 <Page>
-    <QuestChat quest={quest} client:load />
+    <QuestChat quest={quest.default} client:load />
 </Page>

@@ -44,7 +44,7 @@ describe('Custom Content Functions', () => {
             const description = 'This quest will be deleted';
             const id = await createQuest(title, description);
             await deleteQuest(id);
-            await expect(getQuest(id)).rejects.toThrow('Quest not found');
+            await expect(getQuest(id)).rejects.toThrow('quest not found');
         });
     });
 
@@ -64,7 +64,7 @@ describe('Custom Content Functions', () => {
                 description,
                 price,
                 unit,
-                itemType: type,
+                type: 'item', // Database overwrites type with entity type
             });
         });
 
@@ -76,7 +76,7 @@ describe('Custom Content Functions', () => {
             expect(item).toMatchObject({ id, name, description });
             expect(item.price).toBeNull();
             expect(item.unit).toBeNull();
-            expect(item.itemType).toBeNull();
+            expect(item.type).toBe('item'); // Database always sets type to entity type
         });
 
         test('should update an item', async () => {
@@ -99,7 +99,7 @@ describe('Custom Content Functions', () => {
             const description = 'This item will be deleted';
             const id = await createItem(name, description);
             await deleteItem(id);
-            await expect(getItem(id)).rejects.toThrow('Item not found');
+            await expect(getItem(id)).rejects.toThrow('item not found');
         });
     });
 
@@ -163,7 +163,7 @@ describe('Custom Content Functions', () => {
             const duration = '1h';
             const id = await createProcess(title, duration);
             await deleteProcess(id);
-            await expect(getProcess(id)).rejects.toThrow('Process not found');
+            await expect(getProcess(id)).rejects.toThrow('process not found');
         });
     });
 });

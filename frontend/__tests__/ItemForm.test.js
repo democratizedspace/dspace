@@ -1,23 +1,21 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, afterEach, describe, it, expect, vi } from '@jest/globals';
+import { beforeEach, afterEach, describe, it, expect } from '@jest/globals';
 import '@testing-library/jest-dom';
 import { render, act, fireEvent, waitFor } from '@testing-library/svelte';
-import ItemForm from '../src/components/ItemForm.svelte';
-import { db } from '../src/lib/db';
+import ItemForm from '../src/components/svelte/ItemForm.svelte';
 
-// Mock the database operations
-vi.mock('../src/lib/db', () => ({
-    db: {
-        items: {
-            add: vi.fn().mockResolvedValue('mocked-item-id'),
-        },
-    },
+// Mock the database operations using Jest instead of Vitest
+jest.mock('../src/utils/indexeddb.js', () => ({
+    addEntity: jest.fn().mockResolvedValue('mocked-item-id'),
+    updateEntity: jest.fn().mockResolvedValue('mocked-item-id'),
 }));
 
+import { addEntity, updateEntity } from '../src/utils/indexeddb.js';
+
 // Mock the browser's fetch API
-global.fetch = vi.fn(() =>
+global.fetch = jest.fn(() =>
     Promise.resolve({
         ok: true,
         json: () => Promise.resolve({ url: 'mocked-image-url' }),
@@ -36,7 +34,7 @@ global.File = class File {
 // Create a FileReader mock
 global.FileReader = class FileReader {
     constructor() {
-        this.readAsDataURL = vi.fn((file) => {
+        this.readAsDataURL = jest.fn((file) => {
             // Simulate the file reading process
             setTimeout(() => {
                 this.result = 'data:image/png;base64,mockedBase64Data';
@@ -70,7 +68,7 @@ describe('ItemForm Component', () => {
         container = setupDom();
 
         // Reset mocks
-        vi.clearAllMocks();
+        jest.clearAllMocks();
     });
 
     afterEach(() => {
@@ -126,7 +124,7 @@ describe('ItemForm Component', () => {
 
         // Check if database add was called with correct data
         await waitFor(() => {
-            expect(db.items.add).toHaveBeenCalledWith(
+            expect(addEntity).toHaveBeenCalledWith(
                 expect.objectContaining({
                     name: 'Test Item',
                     description: 'This is a test item description',
@@ -157,7 +155,7 @@ describe('ItemForm Component', () => {
         });
 
         // Verify the database was not called
-        expect(db.items.add).not.toHaveBeenCalled();
+        expect(addEntity).not.toHaveBeenCalled();
     });
 
     it('handles edit mode correctly', async () => {
@@ -169,8 +167,7 @@ describe('ItemForm Component', () => {
             image: 'existing-image-url',
         };
 
-        // Mock the database update function for edit mode
-        db.items.update = vi.fn().mockResolvedValue(existingItem.id);
+        // No additional mocking needed - updateEntity is already mocked
 
         const { getByLabelText, getByText } = render(ItemForm, {
             target: container,
@@ -193,9 +190,9 @@ describe('ItemForm Component', () => {
 
         // Verify update was called with correct data
         await waitFor(() => {
-            expect(db.items.update).toHaveBeenCalledWith(
-                existingItem.id,
+            expect(updateEntity).toHaveBeenCalledWith(
                 expect.objectContaining({
+                    id: existingItem.id,
                     name: existingItem.name,
                     description: existingItem.description,
                     image: existingItem.image,

@@ -7,7 +7,7 @@
  */
 
 // Import the actual function from the indexeddb.js file for proper testing
-import { getStoreForEntityType } from '../src/utils/indexeddb';
+import { getStoreForEntityType } from '../src/utils/indexeddb.js';
 
 describe('getStoreForEntityType', () => {
     test('returns correct store name for quest entity type', () => {

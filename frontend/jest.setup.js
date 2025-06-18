@@ -10,6 +10,31 @@ if (typeof TextDecoder === 'undefined') {
     global.TextDecoder = TextDecoder;
 }
 
+// Add setImmediate polyfill for fake-indexeddb
+if (typeof setImmediate === 'undefined') {
+    global.setImmediate = (callback, ...args) => {
+        return setTimeout(callback, 0, ...args);
+    };
+}
+
+if (typeof clearImmediate === 'undefined') {
+    global.clearImmediate = (id) => {
+        return clearTimeout(id);
+    };
+}
+
+// Add structuredClone polyfill for fake-indexeddb
+if (typeof structuredClone === 'undefined') {
+    global.structuredClone = (obj) => {
+        try {
+            return JSON.parse(JSON.stringify(obj));
+        } catch (e) {
+            // Fallback for non-serializable objects
+            return obj;
+        }
+    };
+}
+
 // Set SSR and browser flags
 global.__SSR__ = false;
 global.__BROWSER__ = true;

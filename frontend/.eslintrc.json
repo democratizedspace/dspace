@@ -13,7 +13,13 @@
         "extraFileExtensions": [".svelte"]
     },
     "plugins": ["@typescript-eslint", "svelte3"],
-    "ignorePatterns": ["dist/**/*", "node_modules/**/*"],
+    "ignorePatterns": [
+        "dist/**/*",
+        "node_modules/**/*",
+        "test-results/**/*",
+        "coverage/**/*",
+        "*.config.cjs"
+    ],
     "overrides": [
         {
             "files": ["*.svelte"],

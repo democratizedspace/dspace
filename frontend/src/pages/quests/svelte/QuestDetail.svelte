@@ -46,6 +46,14 @@
                         'Learn how the quest mechanics work, including dialogue options, items, and processes.',
                     image: '/assets/quests/howtodoquests.jpg',
                 };
+            } else if (questId === 'energy/solar') {
+                quest = {
+                    id: 'energy/solar',
+                    title: 'Set up a solar panel',
+                    description:
+                        "The wall outlet is convenient, but your utility uses fossil fuels for electricity generation! Let's take things in our own hands and start going off the grid.",
+                    image: '/assets/quests/solar_200Wh.jpg',
+                };
             } else {
                 throw new Error('Quest not found');
             }
