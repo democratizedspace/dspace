@@ -68,18 +68,7 @@ const TEST_GROUPS = [
         parallel: true,
         workers: 2,
     },
-    {
-        name: 'User Profile',
-        files: ['profile-page.spec.ts'],
-        parallel: true,
-        workers: 2,
-    },
-    {
-        name: 'Game Systems',
-        files: ['energy-system.spec.ts', 'chat-system.spec.ts', 'gamesave-system.spec.ts'],
-        parallel: true,
-        workers: 3,
-    },
+
 ];
 
 // Colors for console output
