@@ -1,7 +1,7 @@
 # DSPACE - Democratized Space
 
-![CI](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-unknown-lightgrey)
+[![CI](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml/badge.svg)](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/democratizedspace/dspace/branch/main/graph/badge.svg)](https://codecov.io/gh/democratizedspace/dspace)
 
 You can find the game at [democratized.space](https://democratized.space).
 
@@ -93,6 +93,12 @@ npm run test:e2e:groups
 ```
 
 > **Important:** End-to-end (E2E) tests use Playwright, which automatically starts and stops the development server when needed. You should not manually start a server when running these tests, as this could lead to port conflicts or unexpected behavior.
+
+### Continuous Integration
+
+GitHub Actions automatically run `npm run test:pr` on every pull request and push to `main`.
+If the `CODECOV_TOKEN` secret is configured, coverage reports upload to Codecov and update the badge at the top of this README.
+You'll find the CI results under the **Checks** tab of your pull request.
 
 ## Code Quality
 
