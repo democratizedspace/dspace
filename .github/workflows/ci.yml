@@ -7,6 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -19,7 +21,14 @@ jobs:
       - run: npm ci
       - run: cd frontend && npm ci
       - run: npm run test:pr
+      - run: cd frontend && npm run coverage
+        if: env.CODECOV_TOKEN != ''
       - uses: actions/upload-artifact@v4
+        if: env.CODECOV_TOKEN != ''
         with:
           name: coverage
           path: frontend/coverage
+      - uses: codecov/codecov-action@v5
+        if: env.CODECOV_TOKEN != ''
+        with:
+          token: ${{ env.CODECOV_TOKEN }}

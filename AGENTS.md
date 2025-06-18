@@ -32,8 +32,9 @@ These guidelines apply to all files in this repository.
     when introducing new aquaria quests or changing their order.
 -   Avoid committing large binary assets (e.g., PSD files). Convert graphics to
     optimized formats before adding them to the repo.
--   Continuous integration runs `npm run check` and `npm test -- --coverage` via
-    GitHub Actions.
+-   Continuous integration runs `npm run test:pr` on pushes and pull requests.
+    Coverage uploads to Codecov when the `CODECOV_TOKEN` secret is set. You'll
+    see the results in the **Checks** tab of your PR.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
 -   token.place only provides open-source LLM inference. It does not host quests, but you can reuse the same prompts to generate dialogue here or in other projects.
 -   The [f2clipboard](https://github.com/futuroptimist/f2clipboard) tool can speed
