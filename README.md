@@ -44,6 +44,7 @@ Before submitting a pull request, run the comprehensive test suite with:
 # Skip Playwright tests if browsers aren't installed
 SKIP_E2E=1 npm run test:pr
 ```
+
 If Playwright browsers are available, omit `SKIP_E2E=1` to run the full suite:
 
 ```bash
@@ -90,6 +91,9 @@ npm test
 # Only end-to-end tests (with optimized grouping)
 # Note: Server starts automatically!
 npm run test:e2e:groups
+
+# Collect Playwright coverage
+npm run test:e2e:coverage
 ```
 
 > **Important:** End-to-end (E2E) tests use Playwright, which automatically starts and stops the development server when needed. You should not manually start a server when running these tests, as this could lead to port conflicts or unexpected behavior.
@@ -123,7 +127,6 @@ The app will be available on port 3002. Point your Cloudflare Tunnel at `http://
 The workflow `.github/workflows/rpi-deploy.yml` builds an ARM64 Docker image and optionally deploys it to a Raspberry Pi over SSH.
 Add registry credentials in `GHCR_TOKEN` (or another registry) and set `RPI_HOST`, `RPI_USER`, and `RPI_SSH_KEY` secrets.
 Trigger the workflow manually or on pushes to `main` to update the Pi and restart the `app` service.
-
 
 ## Project Architecture
 
@@ -177,7 +180,6 @@ npm test -- imageReferences     # verifies quest and NPC image files
 
 Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign new sequential `id` numbers and include an image path when adding items. See `frontend/src/pages/docs/md/item-guidelines.md` for detailed guidance.
 
-
 > **Tip:** We use the open-source LLM inference from
 > [`token.place`](https://github.com/futuroptimist/token.place) when generating quest
 > dialogue. Token.place itself doesn't host quests, but you can reuse the same
@@ -193,8 +195,6 @@ help you generate dialogue and structure quickly. Combine these with the
 [Quest Development Guidelines](/docs/quest-guidelines) to streamline content
 creation.
 
-
-
 ### Staying Updated
 
 We frequently merge improvements from the `v3` branch. Keep your fork current:
@@ -205,6 +205,7 @@ git merge origin/v3
 npm ci
 (cd frontend && npm ci)
 ```
+
 ### AI-Assisted Quest Creation
 
 For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)
