@@ -3,7 +3,7 @@ name: Build and Deploy to RPi
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [v3]
 
 jobs:
   deploy:
