@@ -39,6 +39,7 @@ These guidelines apply to all files in this repository.
 -   Continuous integration runs `npm run test:pr` on pushes and pull requests.
     Coverage uploads to Codecov when the `CODECOV_TOKEN` secret is set. You'll
     see the results in the **Checks** tab of your PR. Ensure the README's Codecov badge tracks the `v3` branch so it reflects CI results.
+    Run `npm run coverage` locally to generate a detailed report before submitting changes.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
 -   token.place only provides open-source LLM inference. It does not host quests, but you can reuse the same prompts to generate dialogue here or in other projects.
 -   The [f2clipboard](https://github.com/futuroptimist/f2clipboard) tool can speed
