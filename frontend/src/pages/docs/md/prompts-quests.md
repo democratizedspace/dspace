@@ -7,6 +7,8 @@ slug: 'prompts-quests'
 
 This guide provides structured prompts for using AI assistants like Claude, GPT-4, and others to help create content for DSPACE. These prompts serve as starting templates that you can customize for your specific content needs.
 
+For the steps required to share your quests with the community, see the [Quest Submission Guide](/docs/quest-submission).
+
 > **Note:** For comprehensive content development guidelines, please refer to our [Content Development Guide](/docs/content-development), which includes specific documentation for [Quests](/docs/quest-guidelines), [Items](/docs/item-guidelines), and [Processes](/docs/process-guidelines).
 
 ## Getting Started with AI Assistance

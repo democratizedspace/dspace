@@ -27,9 +27,13 @@ These guidelines apply to all files in this repository.
     without a finish option will fail canonical tests.
 -   For rapid quest creation, reference `frontend/src/pages/docs/md/prompts-quests.md`
     which contains AI prompt templates.
+-   Review `frontend/src/pages/docs/md/quest-submission.md` for the submission workflow when contributing new quests.
+-   See `frontend/src/pages/docs/md/quest-template.md` for a minimal quest JSON template that works with [token.place](https://github.com/futuroptimist/token.place).
 -   Document any new or updated NPCs in `frontend/src/pages/docs/md/npcs.md`.
 -   Update quest progression tests in `frontend/__tests__/questQuality.test.js`
     when introducing new aquaria quests or changing their order.
+-   Provide simple Jest tests for any new Svelte components under
+    `frontend/__tests__` to help maintain Codecov coverage.
 -   Avoid committing large binary assets (e.g., PSD files). Convert graphics to
     optimized formats before adding them to the repo.
 -   Continuous integration runs `npm run test:pr` on pushes and pull requests.
@@ -38,9 +42,9 @@ These guidelines apply to all files in this repository.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
 -   token.place only provides open-source LLM inference. It does not host quests, but you can reuse the same prompts to generate dialogue here or in other projects.
 -   The [f2clipboard](https://github.com/futuroptimist/f2clipboard) tool can speed
-    up copying quest prompts and snippets between projects.
-    `npm ci` and `(cd frontend && npm ci)` after merging to ensure a clean state.
-    to verify the dialogue structure is valid.
+    up copying quest prompts and snippets between projects. After merging, run
+    `npm ci` in the repo root and `(cd frontend && npm ci)` to restore a clean
+    state before validating quests.
 -   Quest JSON files are compatible with the [token.place](https://github.com/futuroptimist/token.place) project, so feel free to share content across repos.
 -   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
     server. Avoid starting it manually unless running Playwright directly.
