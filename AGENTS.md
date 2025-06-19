@@ -42,9 +42,9 @@ These guidelines apply to all files in this repository.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
 -   token.place only provides open-source LLM inference. It does not host quests, but you can reuse the same prompts to generate dialogue here or in other projects.
 -   The [f2clipboard](https://github.com/futuroptimist/f2clipboard) tool can speed
-    up copying quest prompts and snippets between projects.
-    `npm ci` and `(cd frontend && npm ci)` after merging to ensure a clean state.
-    to verify the dialogue structure is valid.
+    up copying quest prompts and snippets between projects. After merging, run
+    `npm ci` in the repo root and `(cd frontend && npm ci)` to restore a clean
+    state before validating quests.
 -   Quest JSON files are compatible with the [token.place](https://github.com/futuroptimist/token.place) project, so feel free to share content across repos.
 -   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
     server. Avoid starting it manually unless running Playwright directly.
