@@ -5,7 +5,7 @@ slug: 'faq'
 
 ## What can I do?
 
-There are a variety of quests to complete. Quests are the primary way to learn about the lore and mechanics of the game. If you're all caught up, hang tight -- more content is here but otherwise LGTM!
+There are a variety of quests to complete. Quests are the primary way to learn about the lore and mechanics of the game. If you're all caught up, hang tight -- more content is coming soon!
 
 ## How do I make progress?
 
