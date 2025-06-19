@@ -475,6 +475,8 @@ For component state:
 - Use local state with Svelte's reactive variables where possible
 - Use stores for shared state across components
 - Leverage the game state system for persistent game data
+- During development you can quickly wipe progress by calling
+  `resetGameState()` from `frontend/src/utils/gameState/common.js`.
 
 ### Creating New Components
 
