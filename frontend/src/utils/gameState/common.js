@@ -18,7 +18,8 @@ export const loadGameState = () => {
     return initializeGameState();
 };
 
-export const saveGameState = (gameState) => {
+export const saveGameState = (newState) => {
+    gameState = newState;
     localStorage.setItem(gameStateKey, JSON.stringify(gameState));
     state.set(gameState); // Update the state store directly
 };
@@ -41,4 +42,9 @@ export const importGameStateString = (gameStateString) => {
 
     // Save the updated game state to local storage and update the state store
     saveGameState(gameState);
+};
+
+export const resetGameState = () => {
+    const freshState = initializeGameState();
+    saveGameState(freshState);
 };
