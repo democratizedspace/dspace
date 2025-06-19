@@ -27,6 +27,8 @@ These guidelines apply to all files in this repository.
     without a finish option will fail canonical tests.
 -   For rapid quest creation, reference `frontend/src/pages/docs/md/prompts-quests.md`
     which contains AI prompt templates.
+-   Review `frontend/src/pages/docs/md/quest-submission.md` for the submission workflow when contributing new quests.
+-   See `frontend/src/pages/docs/md/quest-template.md` for a minimal quest JSON template that works with [token.place](https://github.com/futuroptimist/token.place).
 -   Document any new or updated NPCs in `frontend/src/pages/docs/md/npcs.md`.
 -   Update quest progression tests in `frontend/__tests__/questQuality.test.js`
     when introducing new aquaria quests or changing their order.

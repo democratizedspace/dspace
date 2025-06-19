@@ -44,6 +44,7 @@ Before submitting a pull request, run the comprehensive test suite with:
 # Skip Playwright tests if browsers aren't installed
 SKIP_E2E=1 npm run test:pr
 ```
+
 If Playwright browsers are available, omit `SKIP_E2E=1` to run the full suite:
 
 ```bash
@@ -124,7 +125,6 @@ The workflow `.github/workflows/rpi-deploy.yml` builds an ARM64 Docker image and
 Add registry credentials in `GHCR_TOKEN` (or another registry) and set `RPI_HOST`, `RPI_USER`, and `RPI_SSH_KEY` secrets.
 Trigger the workflow manually or on pushes to `main` to update the Pi and restart the `app` service.
 
-
 ## Project Architecture
 
 DSPACE uses a modern JavaScript architecture:
@@ -177,7 +177,6 @@ npm test -- imageReferences     # verifies quest and NPC image files
 
 Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign new sequential `id` numbers and include an image path when adding items. See `frontend/src/pages/docs/md/item-guidelines.md` for detailed guidance.
 
-
 > **Tip:** We use the open-source LLM inference from
 > [`token.place`](https://github.com/futuroptimist/token.place) when generating quest
 > dialogue. Token.place itself doesn't host quests, but you can reuse the same
@@ -190,10 +189,7 @@ Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign 
 For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)
 guide. It includes ready-made prompt templates for tools like GPT-4 or Claude to
 help you generate dialogue and structure quickly. Combine these with the
-[Quest Development Guidelines](/docs/quest-guidelines) to streamline content
-creation.
-
-
+[Quest Development Guidelines](/docs/quest-guidelines) and the [Quest Submission Guide](/docs/quest-submission) to streamline content creation and sharing.
 
 ### Staying Updated
 
@@ -205,13 +201,6 @@ git merge origin/v3
 npm ci
 (cd frontend && npm ci)
 ```
-### AI-Assisted Quest Creation
-
-For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)
-guide. It includes ready-made prompt templates for tools like GPT-4 or Claude to
-help you generate dialogue and structure quickly. Combine these with the
-[Quest Development Guidelines](/docs/quest-guidelines) to streamline content
-creation.
 
 ## Want to contribute?
 
