@@ -94,6 +94,11 @@ npm run test:e2e:groups
 
 # Collect Playwright coverage
 npm run test:e2e:coverage
+
+# Generate unit test coverage
+npm run coverage
+# View the HTML report at
+frontend/coverage/lcov-report/index.html
 ```
 
 > **Important:** End-to-end (E2E) tests use Playwright, which automatically starts and stops the development server when needed. You should not manually start a server when running these tests, as this could lead to port conflicts or unexpected behavior.
