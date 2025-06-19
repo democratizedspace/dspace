@@ -6,8 +6,7 @@
 
 <div class="quest-preview">
     {#if imageUrl}
-        <!-- svelte-ignore a11y-img-redundant-alt -->
-        <img src={imageUrl} alt="Quest Image" class="quest-image" />
+        <img src={imageUrl} alt="Quest preview" class="quest-image" />
     {/if}
     <h3>{title}</h3>
     <p>{description}</p>

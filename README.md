@@ -166,7 +166,7 @@ To validate that quests use a canonical structure with clear start and finish
 steps, run the dedicated test:
 
 ```bash
-npm test -- questCanonical
+[Quest Development Guidelines](/docs/quest-guidelines), the [Quest Template Example](/docs/quest-template), and the [Quest Submission Guide](/docs/quest-submission) to streamline content creation and sharing.
 ```
 
 Additional quality checks are available:
