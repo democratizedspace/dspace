@@ -1,7 +1,7 @@
 # DSPACE - Democratized Space
 
 [![CI](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml/badge.svg)](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/democratizedspace/dspace/branch/main/graph/badge.svg)](https://codecov.io/gh/democratizedspace/dspace)
+[![codecov](https://codecov.io/gh/democratizedspace/dspace/branch/v3/graph/badge.svg)](https://codecov.io/gh/democratizedspace/dspace)
 
 You can find the game at [democratized.space](https://democratized.space).
 
@@ -100,7 +100,7 @@ npm run test:e2e:coverage
 
 ### Continuous Integration
 
-GitHub Actions automatically run `npm run test:pr` on every pull request and push to `main`.
+GitHub Actions automatically run `npm run test:pr` on every pull request and push to `v3`.
 If the `CODECOV_TOKEN` secret is configured, coverage reports upload to Codecov and update the badge at the top of this README.
 You'll find the CI results under the **Checks** tab of your pull request.
 
@@ -126,7 +126,7 @@ The app will be available on port 3002. Point your Cloudflare Tunnel at `http://
 
 The workflow `.github/workflows/rpi-deploy.yml` builds an ARM64 Docker image and optionally deploys it to a Raspberry Pi over SSH.
 Add registry credentials in `GHCR_TOKEN` (or another registry) and set `RPI_HOST`, `RPI_USER`, and `RPI_SSH_KEY` secrets.
-Trigger the workflow manually or on pushes to `main` to update the Pi and restart the `app` service.
+Trigger the workflow manually or on pushes to `v3` to update the Pi and restart the `app` service.
 
 ## Project Architecture
 
