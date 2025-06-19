@@ -192,8 +192,7 @@ Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign 
 For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)
 guide. It includes ready-made prompt templates for tools like GPT-4 or Claude to
 help you generate dialogue and structure quickly. Combine these with the
-[Quest Development Guidelines](/docs/quest-guidelines) to streamline content
-creation.
+[Quest Development Guidelines](/docs/quest-guidelines), the [Quest Template Example](/docs/quest-template), and the [Quest Submission Guide](/docs/quest-submission) to streamline content creation and sharing.
 
 ### Staying Updated
 
@@ -206,17 +205,9 @@ npm ci
 (cd frontend && npm ci)
 ```
 
-### AI-Assisted Quest Creation
-
-For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)
-guide. It includes ready-made prompt templates for tools like GPT-4 or Claude to
-help you generate dialogue and structure quickly. Combine these with the
-[Quest Development Guidelines](/docs/quest-guidelines) to streamline content
-creation.
-
 ## Want to contribute?
 
-Check out the [Contribution Guide](https://github.com/democratizedspace/dspace/blob/v2.1/CONTRIBUTORS.md) to get started.
+Check out the [Contribution Guide](./CONTRIBUTORS.md) to get started.
 
 If you have any questions, feel free to join the [Discord](https://discord.gg/A3UAfYvnxM) and say hello!
 
