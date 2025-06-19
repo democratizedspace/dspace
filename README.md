@@ -91,6 +91,9 @@ npm test
 # Only end-to-end tests (with optimized grouping)
 # Note: Server starts automatically!
 npm run test:e2e:groups
+
+# Collect Playwright coverage
+npm run test:e2e:coverage
 ```
 
 > **Important:** End-to-end (E2E) tests use Playwright, which automatically starts and stops the development server when needed. You should not manually start a server when running these tests, as this could lead to port conflicts or unexpected behavior.
