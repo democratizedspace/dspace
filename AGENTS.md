@@ -32,6 +32,8 @@ These guidelines apply to all files in this repository.
 -   Document any new or updated NPCs in `frontend/src/pages/docs/md/npcs.md`.
 -   Update quest progression tests in `frontend/__tests__/questQuality.test.js`
     when introducing new aquaria quests or changing their order.
+-   Provide simple Jest tests for any new Svelte components under
+    `frontend/__tests__` to help maintain Codecov coverage.
 -   Avoid committing large binary assets (e.g., PSD files). Convert graphics to
     optimized formats before adding them to the repo.
 -   Continuous integration runs `npm run test:pr` on pushes and pull requests.
