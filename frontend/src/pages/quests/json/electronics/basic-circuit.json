@@ -24,7 +24,11 @@
                 {
                     "type": "goto",
                     "goto": "assemble",
-                    "text": "Yep, let's assemble it."
+                    "text": "Yep, let's assemble it.",
+                    "requiresItems": [
+                        { "id": "93", "count": 1 },
+                        { "id": "94", "count": 1 }
+                    ]
                 }
             ]
         },
@@ -50,5 +54,8 @@
             ]
         }
     ],
-    "requiresQuests": []
+    "requiresQuests": [],
+    "rewards": [
+        { "id": "95", "count": 1 }
+    ]
 }

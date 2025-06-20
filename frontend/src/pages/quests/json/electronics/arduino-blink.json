@@ -24,7 +24,12 @@
                 {
                     "type": "goto",
                     "goto": "upload",
-                    "text": "Got it all wired up. What's next?"
+                    "text": "Got it all wired up. What's next?",
+                    "requiresItems": [
+                        { "id": "90", "count": 1 },
+                        { "id": "93", "count": 1 },
+                        { "id": "94", "count": 1 }
+                    ]
                 }
             ]
         },
@@ -50,5 +55,8 @@
             ]
         }
     ],
-    "requiresQuests": ["electronics/basic-circuit"]
+    "requiresQuests": ["electronics/basic-circuit"],
+    "rewards": [
+        { "id": "96", "count": 1 }
+    ]
 }
