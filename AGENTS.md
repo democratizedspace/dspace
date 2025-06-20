@@ -26,7 +26,12 @@ These guidelines apply to all files in this repository.
 -   Include a `finish` option in the final node so quests end cleanly. Quests
     without a finish option will fail canonical tests.
 -   For rapid quest creation, reference `frontend/src/pages/docs/md/prompts-quests.md`
-    which contains AI prompt templates.
+    which contains AI prompt templates, including a **Quest Sequence Expansion**
+    section for brainstorming follow-up quests.
+-   When generating dialogue with an LLM, consult the biography and sample
+    quotes in `frontend/src/pages/docs/md/npcs.md` so the character voice stays
+    consistent. Each NPC entry lists at least five example lines harvested from
+    existing quests. Keep these examples updated when quests change.
 -   Review `frontend/src/pages/docs/md/quest-submission.md` for the submission workflow when contributing new quests.
 -   See `frontend/src/pages/docs/md/quest-template.md` for a minimal quest JSON template that works with [token.place](https://github.com/futuroptimist/token.place).
 -   Document any new or updated NPCs in `frontend/src/pages/docs/md/npcs.md`.
@@ -42,14 +47,15 @@ These guidelines apply to all files in this repository.
     Run `npm run coverage` locally to generate a detailed report before submitting changes.
 -   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
 -   token.place only provides open-source LLM inference. It does not host quests, but you can reuse the same prompts to generate dialogue here or in other projects.
--   The [f2clipboard](https://github.com/futuroptimist/f2clipboard) tool can speed
-    up copying quest prompts and snippets between projects. After merging, run
-    `npm ci` in the repo root and `(cd frontend && npm ci)` to restore a clean
-    state before validating quests.
+-   After merging, run `npm ci` in the repo root and `(cd frontend && npm ci)` to
+    restore a clean state before validating quests.
+-   To grow the quest tree across repositories, use token.place prompts to reuse
+    dialogue or items from sibling projects.
 -   Quest JSON files are compatible with the [token.place](https://github.com/futuroptimist/token.place) project, so feel free to share content across repos.
 -   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
     server. Avoid starting it manually unless running Playwright directly.
 -   When adding inventory items in `frontend/src/pages/inventory/json/items.json`, assign the next numeric `id` and provide an image if possible.
+-   If you add a quest that changes the tech tree order, document the new sequence in `README.md` and update `frontend/__tests__/questQuality.test.js` accordingly.
 
 ## Pull Request Message
 

@@ -209,6 +209,20 @@ Please help me improve this dialogue by:
 Suggest specific improvements rather than rewriting the entire dialogue.
 ```
 
+### Quest Sequence Expansion
+
+Use this when you want an AI assistant to propose follow-up quests that build on
+existing content.
+
+```
+I maintain a quest tree for DSPACE. The latest quest I added was [LAST QUEST ID].
+Suggest several logical next quests that would follow it. For each quest propose:
+1. A short title
+2. A one-sentence summary
+3. The most fitting NPC guide
+4. Key items or processes that should be introduced, focusing on hands-on steps rather than purely conversational beats
+```
+
 ## Example: Complete Quest Creation
 
 Here's an example of how to use these prompts to create a complete quest:

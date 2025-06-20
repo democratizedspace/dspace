@@ -1,0 +1,27 @@
+{
+    "id": "aquaria/position-tank",
+    "title": "Move the Walstad tank",
+    "description": "Use Atlas to safely place the heavy aquarium on its stand.",
+    "image": "/assets/walstad.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hello! I'm Atlas. Vega said you needed help moving that 80 liter tank onto the stand.",
+            "options": [{ "type": "goto", "goto": "lift", "text": "Yes please, it's heavy." }]
+        },
+        {
+            "id": "lift",
+            "text": "I'll take most of the weight. On three... one, two, three!",
+            "options": [{ "type": "goto", "goto": "place", "text": "Heave-ho!" }]
+        },
+        {
+            "id": "place",
+            "text": "Great job keeping it level. The tank is secure on the stand now.",
+            "options": [{ "type": "finish", "text": "Thanks for the assist!" }]
+        }
+    ],
+    "requiresQuests": ["aquaria/walstad"],
+    "rewards": []
+}
