@@ -643,5 +643,61 @@
         "name": "Lettuce Seeds",
         "description": "Seeds for growing crisp hydroponic lettuce.",
         "image": "/assets/hydroponic_lettuce.jpg"
+    },
+    {
+        "id": "100",
+        "name": "Walstad aquarium (80 L)",
+        "description": "A planted tank using the low-tech Walstad method.",
+        "image": "/assets/walstad.jpg",
+        "price": "80 dUSD"
+    },
+    {
+        "id": "101",
+        "name": "Dwarf shrimp",
+        "description": "Hardy shrimp perfect for planted aquariums.",
+        "image": "/assets/quests/shrimp.svg",
+        "price": "3 dUSD"
+    },
+    {
+        "id": "102",
+        "name": "Guppy group",
+        "description": "Three females and one male guppy ready to breed.",
+        "image": "/assets/guppy.jpg",
+        "price": "6 dUSD"
+    },
+    {
+        "id": "103",
+        "name": "Hornwort cuttings",
+        "description": "Fast-growing stems that provide cover for fry.",
+        "image": "/assets/hornwort.jpg",
+        "price": "1 dUSD"
+    },
+    {
+        "id": "104",
+        "name": "Guppy grass starter",
+        "description": "Easy floating plant ideal for breeding tanks.",
+        "image": "/assets/guppy_grass.jpg",
+        "price": "1 dUSD"
+    },
+    {
+        "id": "105",
+        "name": "Duckweed portion",
+        "description": "Floating plant that helps absorb excess nutrients.",
+        "image": "/assets/duckweed.jpg",
+        "price": "1 dUSD"
+    },
+    {
+        "id": "106",
+        "name": "Heated Walstad aquarium (80 L, 26\u00B0C)",
+        "description": "An 80 L Walstad tank equipped with a heater set to 26\u00B0C.",
+        "image": "/assets/walstad.jpg",
+        "price": "85 dUSD"
+    },
+    {
+        "id": "107",
+        "name": "Walstad tank with guppies",
+        "description": "An 80 L heated Walstad aquarium containing three female and one male guppy.",
+        "image": "/assets/guppy.jpg",
+        "price": "90 dUSD"
     }
 ]

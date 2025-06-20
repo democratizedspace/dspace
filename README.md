@@ -164,8 +164,8 @@ the v2 era remain valid. Keep the NPC file updated when adding new characters.
 Quest files are organized by category in subfolders, so feel free to expand any
 area—electronics, hydroponics, rocketry and more—with additional quests.
 
-Aquarium quests progress through a gentle learning curve: first set up a Walstad tank, then add dwarf shrimp and guppies, practice breeding, and finally keep a goldfish in a large tank.
-Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation.
+Aquarium quests progress through a gentle learning curve: set up a Walstad tank, ask Atlas to help position it, add dwarf shrimp, introduce guppies, practice breeding, and finally keep a goldfish in a large tank.
+Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation. The robotics path then introduces servo control and culminates in building a basic line-following robot.
 
 To validate that quests use a canonical structure with clear start and finish
 steps, run the dedicated test:
@@ -189,8 +189,6 @@ Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign 
 > [`token.place`](https://github.com/futuroptimist/token.place) when generating quest
 > dialogue. Token.place itself doesn't host quests, but you can reuse the same
 > prompts to create content across your projects.
-> You can also leverage [`f2clipboard`](https://github.com/futuroptimist/f2clipboard)
-> to copy quest templates or code snippets between repositories.
 
 ### AI-Assisted Quest Creation
 
@@ -213,6 +211,7 @@ npm ci
 ## Want to contribute?
 
 Check out the [Contribution Guide](./CONTRIBUTORS.md) to get started.
+Automated contributors like the Codex agent follow the rules in [AGENTS.md](./AGENTS.md). Feel free to consult it when preparing your own pull requests.
 
 If you have any questions, feel free to join the [Discord](https://discord.gg/A3UAfYvnxM) and say hello!
 

@@ -909,6 +909,28 @@
         "duration": "8h"
     },
     {
+        "id": "heat-walstad",
+        "title": "Install a heater in your Walstad tank",
+        "requireItems": [],
+        "consumeItems": [
+            { "id": "100", "count": 1 },
+            { "id": "56", "count": 1 }
+        ],
+        "createItems": [{ "id": "106", "count": 1 }],
+        "duration": "5m"
+    },
+    {
+        "id": "stock-guppies",
+        "title": "Add guppies to your heated Walstad tank",
+        "requireItems": [],
+        "consumeItems": [
+            { "id": "106", "count": 1 },
+            { "id": "102", "count": 1 }
+        ],
+        "createItems": [{ "id": "107", "count": 1 }],
+        "duration": "1m"
+    },
+    {
         "id": "dCarbon-dOffset-1",
         "title": "dCarbon to dOffset",
         "requireItems": [],

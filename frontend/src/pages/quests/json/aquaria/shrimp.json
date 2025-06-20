@@ -1,0 +1,27 @@
+{
+    "id": "aquaria/shrimp",
+    "title": "Add dwarf shrimp",
+    "description": "Introduce hardy shrimp to help keep the tank clean.",
+    "image": "/assets/quests/shrimp.svg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your Walstad tank should be cycled now. A small colony of dwarf shrimp will keep algae in check.",
+            "options": [{ "type": "goto", "goto": "acquire", "text": "Sounds good!" }]
+        },
+        {
+            "id": "acquire",
+            "text": "Pick up a few shrimp from the store and float the bag in your tank to equalize temperature.",
+            "options": [{ "type": "goto", "goto": "acclimate", "text": "Bag is floating." }]
+        },
+        {
+            "id": "acclimate",
+            "text": "Slowly drip tank water into the bag for about an hour. Then release the shrimp gently.",
+            "options": [{ "type": "finish", "text": "Shrimp are in and exploring!" }]
+        }
+    ],
+    "rewards": [{ "id": "101", "count": 3 }],
+    "requiresQuests": ["aquaria/walstad"]
+}

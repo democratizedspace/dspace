@@ -1,0 +1,27 @@
+{
+    "id": "aquaria/breeding",
+    "title": "Breed your guppies",
+    "description": "Raise the next generation of fish among dense plants.",
+    "image": "/assets/guppy.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Guppies multiply quickly. Dense plants like hornwort and guppy grass keep the fry safe right in the main tank.",
+            "options": [{ "type": "goto", "goto": "wait", "text": "I'll add lots of plants." }]
+        },
+        {
+            "id": "wait",
+            "text": "Once the fry are born, feed them crushed flakes several times a day so they grow quickly.",
+            "options": [{ "type": "goto", "goto": "release", "text": "They're growing fast." }]
+        },
+        {
+            "id": "release",
+            "text": "When they're large enough not to be eaten, just enjoy watching them join the community tank.",
+            "options": [{ "type": "finish", "text": "Tiny fish everywhere!" }]
+        }
+    ],
+    "rewards": [{ "id": "102", "count": 1 }],
+    "requiresQuests": ["aquaria/guppy"]
+}
