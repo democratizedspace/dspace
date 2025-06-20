@@ -16,7 +16,14 @@
         {
             "id": "parts",
             "text": "You'll need two infrared sensors, a pair of continuous-rotation servos, and an Arduino. Mount everything on a small chassis.",
-            "options": [{ "type": "goto", "goto": "code", "text": "Hardware assembled." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Hardware assembled.",
+                    "requiresItems": [{ "id": "96", "count": 2 }]
+                }
+            ]
         },
         {
             "id": "code",
@@ -24,5 +31,6 @@
             "options": [{ "type": "finish", "text": "It works!" }]
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"]
+    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [{ "id": "97", "count": 1 }]
 }

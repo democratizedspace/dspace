@@ -19,9 +19,22 @@
         {
             "id": "place",
             "text": "Great job keeping it level. The tank is secure on the stand now.",
-            "options": [{ "type": "finish", "text": "Thanks for the assist!" }]
+            "options": [{ "type": "goto", "goto": "heat", "text": "What's next?" }]
+        },
+        {
+            "id": "heat",
+            "text": "Let's warm up the tank with the heater before adding livestock.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "heat-walstad",
+                    "text": "Install the heater",
+                    "requiresItems": [{ "id": "56", "count": 1 }]
+                },
+                { "type": "finish", "text": "Heater installed, thanks!" }
+            ]
         }
     ],
     "requiresQuests": ["aquaria/walstad"],
-    "rewards": []
+    "rewards": [{ "id": "106", "count": 1 }]
 }

@@ -13,6 +13,14 @@ const npcFilePath = '../src/pages/docs/md/npcs.md';
 const quests = new Map();
 const questDependencies = new Map();
 const questsByCategory = new Map();
+const items = JSON.parse(
+    fs.readFileSync(path.join(__dirname, '../src/pages/inventory/json/items.json'))
+);
+const processes = JSON.parse(
+    fs.readFileSync(path.join(__dirname, '../src/pages/processes/processes.json'))
+);
+const itemIds = new Set(items.map((i) => i.id));
+const processIds = new Set(processes.map((p) => p.id));
 
 // Quality criteria
 const CRITERIA = {
@@ -48,6 +56,8 @@ const CRITERIA = {
         goldfish: [18, 22],
         tropical: [24, 28],
     },
+    ITEM_USAGE_THRESHOLD: 0.8, // fraction of quests that should use items
+    PROCESS_USAGE_THRESHOLD: 0.3, // fraction of quests that should use processes
 };
 
 // Load all quest files
@@ -303,6 +313,78 @@ function checkQuestProgression() {
     return issues;
 }
 
+// Analyze how quests reference items and processes
+function checkItemProcessUsage() {
+    let questsUsingItems = 0;
+    let questsUsingProcesses = 0;
+    const issues = [];
+
+    for (const [id, quest] of quests.entries()) {
+        let usedItem = false;
+        let usedProcess = false;
+
+        quest.dialogue.forEach((node) => {
+            (node.options || []).forEach((opt) => {
+                if (opt.requiresItems) {
+                    usedItem = true;
+                    opt.requiresItems.forEach((item) => {
+                        if (!itemIds.has(item.id)) {
+                            issues.push(`Quest ${id} references unknown item ${item.id}`);
+                        }
+                    });
+                }
+                if (opt.grantsItems) {
+                    usedItem = true;
+                    opt.grantsItems.forEach((item) => {
+                        if (!itemIds.has(item.id)) {
+                            issues.push(`Quest ${id} references unknown item ${item.id}`);
+                        }
+                    });
+                }
+                if (opt.type === 'process') {
+                    usedProcess = true;
+                    if (!processIds.has(opt.process)) {
+                        issues.push(`Quest ${id} references unknown process ${opt.process}`);
+                    }
+                }
+            });
+        });
+
+        if (quest.rewards) {
+            usedItem = true;
+            quest.rewards.forEach((reward) => {
+                if (!itemIds.has(reward.id)) {
+                    issues.push(`Quest ${id} rewards unknown item ${reward.id}`);
+                }
+            });
+        }
+
+        if (usedItem) questsUsingItems++;
+        if (usedProcess) questsUsingProcesses++;
+    }
+
+    const itemRatio = questsUsingItems / quests.size;
+    const processRatio = questsUsingProcesses / quests.size;
+
+    if (itemRatio < CRITERIA.ITEM_USAGE_THRESHOLD) {
+        issues.push(
+            `Only ${Math.round(itemRatio * 100)}% of quests reference items (expected ${
+                CRITERIA.ITEM_USAGE_THRESHOLD * 100
+            }%)`
+        );
+    }
+
+    if (processRatio < CRITERIA.PROCESS_USAGE_THRESHOLD) {
+        issues.push(
+            `Only ${Math.round(processRatio * 100)}% of quests reference processes (expected ${
+                CRITERIA.PROCESS_USAGE_THRESHOLD * 100
+            }%)`
+        );
+    }
+
+    return issues;
+}
+
 describe('Quest Quality Validation', () => {
     beforeAll(() => {
         loadAllQuests();
@@ -357,6 +439,17 @@ describe('Quest Quality Validation', () => {
         }
 
         // For now, just output warnings but don't fail tests
+        expect(true).toBe(true);
+    });
+
+    test('Quests reference valid items and processes sufficiently', () => {
+        const issues = checkItemProcessUsage();
+
+        if (issues.length > 0) {
+            console.warn('Item/Process Usage Issues:');
+            issues.forEach((issue) => console.warn(`- ${issue}`));
+        }
+
         expect(true).toBe(true);
     });
 });

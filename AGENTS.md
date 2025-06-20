@@ -12,8 +12,8 @@ These guidelines apply to all files in this repository.
 -   Use `npm run check` to verify formatting and linting prior to commit.
 -   If these checks fail due to missing dev dependencies, mention the error in
     your pull request summary.
--   If ESLint reports missing plugins, run `npm install` in both the repo root
-    and the `frontend` directory to restore dev dependencies.
+-   If ESLint reports missing plugins, run `npm install` in both the repo root and the `frontend` directory to restore dev dependencies.
+-   If dependencies seem missing or tests fail immediately, run `npm ci` in the repo root and `(cd frontend && npm ci)` to reinstall packages.
 -   If formatting fails, run `npx prettier` on the affected files before
     committing.
 -   The lint script sets `ESLINT_USE_FLAT_CONFIG=false`. If you run ESLint
