@@ -16,7 +16,6 @@ build/
 .DS_Store
 
 # Custom scripts
-f2clipboard.py
 
 # Logs
 npm-debug.log*

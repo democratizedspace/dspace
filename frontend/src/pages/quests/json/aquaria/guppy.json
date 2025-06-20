@@ -1,0 +1,36 @@
+{
+    "id": "aquaria/guppy",
+    "title": "Add guppies",
+    "description": "Introduce colorful guppies to your community tank.",
+    "image": "/assets/guppy.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Those shrimp are thriving! Ready for some guppies? They prefer 24-28°C water, so let's warm the tank first.",
+            "options": [
+                { "type": "process", "process": "heat-walstad", "text": "Install the heater." }
+            ]
+        },
+        {
+            "id": "acquire",
+            "text": "Pick three females and one male and float the bag in the tank to match temperature.",
+            "options": [{ "type": "goto", "goto": "release", "text": "Temperature matched." }]
+        },
+        {
+            "id": "release",
+            "text": "Gently net the guppies into the tank and discard the store water.",
+            "options": [
+                { "type": "process", "process": "stock-guppies", "text": "Introduce them." }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Fish are in and seem happy!",
+            "options": [{ "type": "finish", "text": "All done." }]
+        }
+    ],
+    "rewards": [{ "id": "107", "count": 1 }],
+    "requiresQuests": ["aquaria/shrimp"]
+}
