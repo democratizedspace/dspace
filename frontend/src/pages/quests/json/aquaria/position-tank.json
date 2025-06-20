@@ -36,7 +36,5 @@
         }
     ],
     "requiresQuests": ["aquaria/walstad"],
-    "rewards": [
-        { "id": "106", "count": 1 }
-    ]
+    "rewards": [{ "id": "106", "count": 1 }]
 }

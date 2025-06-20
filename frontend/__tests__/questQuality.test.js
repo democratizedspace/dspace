@@ -14,14 +14,10 @@ const quests = new Map();
 const questDependencies = new Map();
 const questsByCategory = new Map();
 const items = JSON.parse(
-    fs.readFileSync(
-        path.join(__dirname, '../src/pages/inventory/json/items.json')
-    )
+    fs.readFileSync(path.join(__dirname, '../src/pages/inventory/json/items.json'))
 );
 const processes = JSON.parse(
-    fs.readFileSync(
-        path.join(__dirname, '../src/pages/processes/processes.json')
-    )
+    fs.readFileSync(path.join(__dirname, '../src/pages/processes/processes.json'))
 );
 const itemIds = new Set(items.map((i) => i.id));
 const processIds = new Set(processes.map((p) => p.id));

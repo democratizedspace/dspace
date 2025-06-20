@@ -55,7 +55,5 @@
         }
     ],
     "requiresQuests": [],
-    "rewards": [
-        { "id": "95", "count": 1 }
-    ]
+    "rewards": [{ "id": "95", "count": 1 }]
 }

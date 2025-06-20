@@ -56,7 +56,5 @@
         }
     ],
     "requiresQuests": ["electronics/basic-circuit"],
-    "rewards": [
-        { "id": "96", "count": 1 }
-    ]
+    "rewards": [{ "id": "96", "count": 1 }]
 }

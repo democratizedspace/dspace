@@ -32,7 +32,5 @@
         }
     ],
     "requiresQuests": ["hydroponics/basil"],
-    "rewards": [
-        { "id": "99", "count": 1 }
-    ]
+    "rewards": [{ "id": "99", "count": 1 }]
 }

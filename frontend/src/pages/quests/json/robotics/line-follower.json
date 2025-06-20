@@ -32,7 +32,5 @@
         }
     ],
     "requiresQuests": ["welcome/howtodoquests"],
-    "rewards": [
-        { "id": "97", "count": 1 }
-    ]
+    "rewards": [{ "id": "97", "count": 1 }]
 }
