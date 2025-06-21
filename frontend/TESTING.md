@@ -224,6 +224,12 @@ We have specialized tests to ensure content quality:
     - Ensures each quest includes a start node
     - Requires at least one intermediate step and a finish option
     - Helps keep quest dialogue consistent across repos
+4. **Item Quality Tests** (`itemQuality.test.js`):
+    - Verifies item names, descriptions, and images
+    - Checks price formatting and flags unrealistic values
+5. **Process Quality Tests** (`processQuality.test.js`):
+    - Validates duration strings and item references
+    - Warns when processes lack items or have extreme durations
 
 These tests are designed to produce warnings rather than failures, allowing for ongoing development while still identifying quality issues to address.
 
@@ -231,6 +237,8 @@ To run these tests specifically:
 
 ```bash
 npm test -- questQuality
+npm test -- itemQuality
+npm test -- processQuality
 npm test -- imageReferences
 npm test -- questCanonical
 ```

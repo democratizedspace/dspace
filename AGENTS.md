@@ -55,6 +55,8 @@ These guidelines apply to all files in this repository.
 -   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
     server. Avoid starting it manually unless running Playwright directly.
 -   When adding inventory items in `frontend/src/pages/inventory/json/items.json`, assign the next numeric `id` and provide an image if possible.
+-   Update `frontend/__tests__/itemQuality.test.js` when adding items so the quality ratio stays accurate.
+-   Update `frontend/__tests__/processQuality.test.js` when introducing new processes or unusual durations.
 -   If you add a quest that changes the tech tree order, document the new sequence in `README.md` and update `frontend/__tests__/questQuality.test.js` accordingly.
 
 ## Pull Request Message

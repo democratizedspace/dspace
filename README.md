@@ -180,12 +180,21 @@ Additional quality checks are available:
 
 ```bash
 npm test -- questQuality        # heuristics for dialogue quality (TODO: integrate OpenAI)
+npm test -- itemQuality         # validates items.json for realism and completeness
+npm test -- processQuality      # validates processes.json for realistic durations
 npm test -- imageReferences     # verifies quest and NPC image files
 ```
 
 ## Built-in Items
 
 Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign new sequential `id` numbers and include an image path when adding items. See `frontend/src/pages/docs/md/item-guidelines.md` for detailed guidance.
+
+## Built-in Processes
+
+Process definitions are stored in `frontend/src/pages/processes/processes.json`.
+Durations should mirror real-world expectations when possible. See
+`frontend/src/pages/docs/md/process-guidelines.md` for more tips on designing
+and balancing new processes.
 
 > **Tip:** We use the open-source LLM inference from
 > [`token.place`](https://github.com/futuroptimist/token.place) when generating quest
