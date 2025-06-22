@@ -8,7 +8,8 @@ const glob = require('glob');
 if (typeof TextDecoder === 'undefined') {
     global.TextDecoder = require('util').TextDecoder;
 }
-const sizeOf = require('image-size');
+// image-size 2.x exposes an object with an imageSize function
+const { imageSize } = require('image-size');
 
 // Path configurations
 const questDirectoryRelativePath = '../src/pages/quests/json/';
@@ -30,7 +31,8 @@ const IMAGE_STANDARDS = {
 function getImageDimensions(imagePath) {
     try {
         const fullPath = getImageFullPath(imagePath);
-        return sizeOf(fullPath);
+        const buffer = fs.readFileSync(fullPath);
+        return imageSize(buffer);
     } catch (error) {
         console.error(`Error getting dimensions for ${imagePath}: ${error.message}`);
         return { width: 0, height: 0 }; // Error code
