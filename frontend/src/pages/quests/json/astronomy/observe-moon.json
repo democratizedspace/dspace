@@ -1,0 +1,27 @@
+{
+    "id": "astronomy/observe-moon",
+    "title": "Observe the Moon",
+    "description": "Nova encourages you to sketch lunar features as an introduction to observational astronomy.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here! Before we engineer spacecraft, it's helpful to study the skies. Tonight let's observe the Moon together.",
+            "options": [{ "type": "goto", "goto": "record", "text": "I'm ready" }]
+        },
+        {
+            "id": "record",
+            "text": "Use a small telescope or binoculars and sketch the major craters you see. This design practice sharpens your eye for future missions.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Sketch completed" }]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! With regular observation you'll overcome many challenges when plotting real rocket trajectories.",
+            "options": [{ "type": "finish", "text": "Onward!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}
