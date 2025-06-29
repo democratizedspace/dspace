@@ -1,0 +1,27 @@
+{
+    "id": "chemistry/safe-reaction",
+    "title": "Demonstrate a Safe Chemical Reaction",
+    "description": "Phoenix walks you through a harmless experiment that introduces basic eco-friendly propellant concepts.",
+    "image": "/assets/quests/testprint.png",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Phoenix here, your resident chemist. I'd like to show you how a simple reaction demonstrates eco-friendly fuel chemistry. Interested?",
+            "options": [{ "type": "goto", "goto": "mix", "text": "Absolutely!" }]
+        },
+        {
+            "id": "mix",
+            "text": "Carefully mix baking soda with vinegar in this open bottle. The fizzing gas is harmless but shows how fuel chemistry releases energy.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "The reaction is bubbling!" }]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! We'll build on this sustainable experiment later to design clean rocket fuel.",
+            "options": [{ "type": "finish", "text": "Can't wait!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}

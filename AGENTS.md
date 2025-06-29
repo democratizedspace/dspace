@@ -58,6 +58,7 @@ These guidelines apply to all files in this repository.
 -   Update `frontend/__tests__/itemQuality.test.js` when adding items so the quality ratio stays accurate.
 -   Update `frontend/__tests__/processQuality.test.js` when introducing new processes or unusual durations.
 -   If you add a quest that changes the tech tree order, document the new sequence in `README.md` and update `frontend/__tests__/questQuality.test.js` accordingly.
+-   Summarize new categories in `frontend/src/pages/docs/md/quest-trees.md` when they are introduced.
 
 ## Pull Request Message
 

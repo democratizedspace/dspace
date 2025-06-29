@@ -165,6 +165,7 @@ so older quests from the v2 era remain valid. Keep the NPC file updated when
 adding new characters.
 Quest files are organized by category in subfolders, so feel free to expand any
 area—electronics, hydroponics, rocketry and more—with additional quests.
+See [Quest Trees](/docs/quest-trees) for an overview of the different categories and their progression.
 
 Aquarium quests progress through a gentle learning curve: set up a Walstad tank, ask Atlas to help position it, add dwarf shrimp, introduce guppies, practice breeding, and finally keep a goldfish in a large tank.
 Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation.
