@@ -127,6 +127,8 @@ docker compose up --build -d
 
 The app will be available on port 3002. Point your Cloudflare Tunnel at `http://localhost:3002` to serve traffic.
 
+For a full Raspberry Pi setup, including k3s instructions, see [docs/RPI_DEPLOYMENT_GUIDE.md](./docs/RPI_DEPLOYMENT_GUIDE.md).
+
 ### Automated Raspberry Pi Deployment
 
 The workflow `.github/workflows/rpi-deploy.yml` builds an ARM64 Docker image and optionally deploys it to a Raspberry Pi over SSH.
