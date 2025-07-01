@@ -19,6 +19,7 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 -   **Energy** – harvest solar power and accumulate dWatts toward higher milestones
 -   **UBI** – an optional quest explaining the metaguild's basic income concept
 -   **Completionist** – track progress toward finishing all available quests
+-   **Woodworking** – build a sturdy workbench, then craft birdhouses, stools and shelves
 
 ## Planned Quest Trees
 

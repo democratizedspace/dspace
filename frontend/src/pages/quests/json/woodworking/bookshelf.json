@@ -1,0 +1,59 @@
+{
+    "id": "woodworking/bookshelf",
+    "title": "Build a small bookshelf",
+    "description": "Apply your skills to assemble a functional bookshelf.",
+    "image": "/assets/bookshelf.jpg",
+    "npc": "/assets/npc/cedar.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "For a final challenge we'll make a bookshelf. It's larger than the stool but uses the same techniques you've learned.",
+            "options": [{ "type": "goto", "goto": "gather", "text": "Let's do it" }]
+        },
+        {
+            "id": "gather",
+            "text": "You'll need several pine boards plus glue and your trusty handsaw. Measure everything carefully so the shelves fit snugly.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        { "id": "112", "count": 4 },
+                        { "id": "110", "count": 1 },
+                        { "id": "109", "count": 1 }
+                    ],
+                    "text": "Buy lumber"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "requiresItems": [
+                        { "id": "112", "count": 4 },
+                        { "id": "110", "count": 1 },
+                        { "id": "109", "count": 1 }
+                    ],
+                    "text": "All materials ready"
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Cut the side panels and shelves, glue and clamp everything square, then let it dry. Finish by sanding the surfaces smooth.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Bookshelf built" }]
+        },
+        {
+            "id": "finish",
+            "text": "Fantastic job! You've progressed from basic carpentry to a piece of furniture you can proudly use at home.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "115", "count": 1 }],
+                    "text": "Take the bookshelf"
+                },
+                { "type": "finish", "text": "Thank you, Cedar" }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/step-stool"]
+}
