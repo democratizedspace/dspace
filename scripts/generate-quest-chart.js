@@ -4,6 +4,7 @@ const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 
 const questsDir = path.join(__dirname, '..', 'frontend', 'src', 'pages', 'quests', 'json');
 const outputDir = path.join(__dirname, '..', 'frontend', 'src', 'pages', 'docs', 'images');
+// PNG output is ignored by Git. Only the text summary is committed.
 const outputFile = path.join(outputDir, 'quest-tree-stats.png');
 
 function countLines(filePath) {
@@ -22,16 +23,21 @@ function gatherStats() {
         const lines = files.reduce((sum, file) => sum + countLines(path.join(catDir, file)), 0);
         return { category: cat, quests: files.length, lines };
     });
-    return stats;
+    // Sort by quest count so the chart groups larger categories together
+    return stats.sort((a, b) => b.quests - a.quests);
 }
 
 async function createChart(stats) {
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
     }
-    const width = 800;
-    const height = 600;
-    const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+    const width = 1000;
+    const height = 800;
+    const chartCallback = (ChartJS) => {
+        ChartJS.defaults.font.size = 16;
+        ChartJS.defaults.color = '#333';
+    };
+    const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, chartCallback });
     const labels = stats.map((s) => s.category);
     const questCounts = stats.map((s) => s.quests);
     const lineCounts = stats.map((s) => s.lines);
@@ -60,11 +66,22 @@ async function createChart(stats) {
                 title: {
                     display: true,
                     text: 'Quest Tree Stats',
+                    font: { size: 20 },
+                },
+                legend: {
+                    position: 'bottom',
                 },
             },
             scales: {
                 r: {
                     beginAtZero: true,
+                    pointLabels: {
+                        font: { size: 14 },
+                    },
+                    ticks: {
+                        backdropColor: 'rgba(255,255,255,0.8)',
+                        color: '#333',
+                    },
                 },
             },
         },
