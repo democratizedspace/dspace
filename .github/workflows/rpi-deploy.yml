@@ -28,7 +28,8 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
       - name: Deploy on Raspberry Pi
-        if: ${{ secrets.RPI_HOST }}
+        # Only run this step if the Raspberry Pi host secret is set
+        if: ${{ secrets.RPI_HOST != '' }}
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.RPI_HOST }}
