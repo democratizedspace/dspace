@@ -41,7 +41,7 @@
         },
         {
             "id": "print",
-            "text": "Well first you've gotta print the rocket!",
+            "text": "First things first, you'll need to 3D print the rocket itself. It's a quick job with lightweight PLA filament and should only take about an hour.",
             "options": [
                 {
                     "type": "goto",

@@ -19,7 +19,7 @@
         },
         {
             "id": "progress",
-            "text": "Keep going until you reach the goal!",
+            "text": "Hauling water isn't glamorous, but it's great practice for future hydroponic adventures. Keep those buckets coming until you've collected ten of them.",
             "options": [
                 {
                     "type": "goto",
@@ -33,6 +33,11 @@
                     ]
                 }
             ]
+        },
+        {
+            "id": "congrats",
+            "text": "You managed to wrangle all ten buckets of dechlorinated water. That's a lot of arm work!",
+            "options": [{ "type": "goto", "goto": "finish", "text": "My arms are tired!" }]
         },
         {
             "id": "finish",

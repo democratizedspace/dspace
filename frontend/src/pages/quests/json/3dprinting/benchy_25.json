@@ -19,7 +19,7 @@
         },
         {
             "id": "progress",
-            "text": "Keep going until you reach the goal!",
+            "text": "Your printer will be humming for a while. Keep the builds running until you've amassed twenty-five sturdy little Benchies.",
             "options": [
                 {
                     "type": "goto",
@@ -35,14 +35,14 @@
             ]
         },
         {
+            "id": "congrats",
+            "text": "Twenty-five prints later and you've got a respectable armada. Each one is a testament to your patience and persistence.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "All done!" }]
+        },
+        {
             "id": "finish",
             "text": "Excellent job! Your fleet of Benchies is growing. Keep up the great work. I'll return with an even bigger challenge soon!",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "I'm ready for anything!"
-                }
-            ]
+            "options": [{ "type": "finish", "text": "I'm ready for anything!" }]
         }
     ],
     "rewards": [
