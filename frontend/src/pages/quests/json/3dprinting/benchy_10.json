@@ -19,7 +19,7 @@
         },
         {
             "id": "progress",
-            "text": "Keep going until you reach the goal!",
+            "text": "Keep printing Benchies one by one until your workspace looks like a miniature marina. You'll know you've hit the mark when you can't fit another boat on the shelf!",
             "options": [
                 {
                     "type": "goto",
@@ -35,14 +35,14 @@
             ]
         },
         {
+            "id": "congrats",
+            "text": "That's a full fleet of ten Benchies! Your printer handled the run like a champ and each hull looks smooth and shiny.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "What's next?" }]
+        },
+        {
             "id": "finish",
             "text": "Well done! These Benchies look fantastic. Keep honing your 3D printing skills. I'll be back with a new challenge soon!",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "I'm ready for more!"
-                }
-            ]
+            "options": [{ "type": "finish", "text": "I'm ready for more!" }]
         }
     ],
     "rewards": [
@@ -51,5 +51,5 @@
             "count": 1000
         }
     ],
-    "requiresQuests": ["3dprinting/start"]
+    "requiresQuests": ["3dprinter/start"]
 }

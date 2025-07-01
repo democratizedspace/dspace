@@ -19,7 +19,7 @@
         },
         {
             "id": "progress",
-            "text": "Keep going until you reach the goal!",
+            "text": "This is a marathon print session. Keep your machines running until a hundred Benchies line your shelves like a tiny armada.",
             "options": [
                 {
                     "type": "goto",
@@ -35,14 +35,14 @@
             ]
         },
         {
+            "id": "congrats",
+            "text": "One hundred Benchies! The print farm is in full swing and you've proven your dedication.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "That was intense!" }]
+        },
+        {
             "id": "finish",
             "text": "Incredible! You've constructed a formidable fleet of Benchies. Your 3D printing skills are truly remarkable. Remember, every Benchy is a testament to your growing capabilities. I'll be back with another challenge soon. Until then, keep printing!",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Bring on the next challenge!"
-                }
-            ]
+            "options": [{ "type": "finish", "text": "Bring on the next challenge!" }]
         }
     ],
     "rewards": [
