@@ -223,6 +223,16 @@ Suggest several logical next quests that would follow it. For each quest propose
 4. Key items or processes that should be introduced, focusing on hands-on steps rather than purely conversational beats
 ```
 
+### Custom Quest Scaffolding
+
+Use this when you want help creating a bare-bones quest JSON for the custom quest system.
+
+```
+Create a minimal DSPACE quest with the id `[CATEGORY]/[SHORT_ID]`. Populate the required fields according to the quest schema but keep dialogue text short and clearly marked as placeholders. Return only the JSON object.
+```
+
+After generating the JSON, run `npm run generate-quest` and follow the prompts to save it under the correct category and assign an NPC.
+
 ## Example: Complete Quest Creation
 
 Here's an example of how to use these prompts to create a complete quest:

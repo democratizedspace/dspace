@@ -34,6 +34,8 @@ These guidelines apply to all files in this repository.
     existing quests. Keep these examples updated when quests change.
 -   Review `frontend/src/pages/docs/md/quest-submission.md` for the submission workflow when contributing new quests.
 -   See `frontend/src/pages/docs/md/quest-template.md` for a minimal quest JSON template that works with [token.place](https://github.com/futuroptimist/token.place).
+-   Use `npm run generate-quest` to scaffold a new quest with placeholder dialogue.
+-   The script is interactive; it lists categories and NPC usage statistics so you can assign the quest to an appropriate guide.
 -   Document any new or updated NPCs in `frontend/src/pages/docs/md/npcs.md`.
 -   Update quest progression tests in `frontend/__tests__/questQuality.test.js`
     when introducing new aquaria quests or changing their order.

@@ -755,5 +755,12 @@
         "description": "A simple wooden shelf ready to hold your growing library.",
         "image": "/assets/bookshelf.jpg",
         "price": "45 dUSD"
+    },
+    {
+        "id": "116",
+        "name": "Sponge filter",
+        "description": "A gentle air-driven filter ideal for small aquariums.",
+        "image": "/assets/aquarium_filter.jpg",
+        "price": "6 dUSD"
     }
 ]

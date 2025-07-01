@@ -11,7 +11,7 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 
 -   **Welcome** – introductory tutorial showing how to accept and complete quests
 -   **3D Printing** – receive a printer, then tackle small projects and larger print runs
--   **Aquaria** – set up a Walstad tank, add shrimp, keep guppies, breed them, and graduate to goldfish
+-   **Aquaria** – set up a Walstad tank, test the water, install a sponge filter, position the tank, add shrimp, keep guppies, perform water changes, breed them, and graduate to goldfish
 -   **Hydroponics** – grow basil, expand to bucket systems, and experiment with lettuce
 -   **Electronics** – wire a basic circuit, program an Arduino, and build a dimmer
 -   **Robotics** – assemble a line follower and learn servo control after completing electronics basics
