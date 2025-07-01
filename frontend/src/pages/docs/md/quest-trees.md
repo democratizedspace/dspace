@@ -30,3 +30,7 @@ The following quest lines are being drafted to help achieve the "10x More Quests
 -   **Programming** – simple scripts for automating sensors and data collection
 
 Check back as these new quests are fleshed out and integrated into the main progression.
+
+![Quest Tree Stats](../images/quest-tree-stats.png)
+
+The above radar chart is updated automatically after pushes to summarize quest volume per tree.
