@@ -31,6 +31,4 @@ The following quest lines are being drafted to help achieve the "10x More Quests
 
 Check back as these new quests are fleshed out and integrated into the main progression.
 
-![Quest Tree Stats](../images/quest-tree-stats.png)
-
-The above radar chart is updated automatically after pushes to summarize quest volume per tree.
+Run `node scripts/generate-quest-chart.js` from the repository root to produce a radar chart summarizing the quest tree sizes. The PNG output is ignored by Git, but CI artifacts attach the latest image.

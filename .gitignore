@@ -61,3 +61,7 @@ test-artifacts/**/*.jpeg
 
 # Additional artifacts
 # Added comment for testing git hooks
+
+# Ignore generated quest tree image
+frontend/src/pages/docs/images/quest-tree-stats.png
+
