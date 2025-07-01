@@ -542,7 +542,7 @@ Remember that E2E tests require a running development server:
 If you encounter persistent issues, try:
 
 1. Clearing the test cache: `npx playwright clear-cache`
-2. Reinstalling browsers: `npx playwright install`
+2. Reinstalling browsers: `npx playwright install chromium`
 3. Restarting the dev server
 4. Checking the logs in the test artifacts directories
 
