@@ -169,7 +169,7 @@ Quest files are organized by category in subfolders, so feel free to expand any
 area—electronics, hydroponics, rocketry and more—with additional quests.
 See [Quest Trees](/docs/quest-trees) for an overview of the different categories and their progression.
 
-Aquarium quests progress through a gentle learning curve: set up a Walstad tank, ask Atlas to help position it, add dwarf shrimp, introduce guppies, practice breeding, and finally keep a goldfish in a large tank.
+Aquarium quests progress through a gentle learning curve: set up a Walstad tank, test the water, install a sponge filter, ask Atlas to position the tank, add dwarf shrimp, introduce guppies, perform regular water changes, practice breeding, and finally keep a goldfish in a large tank.
 Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation.
 
 To validate that quests use a canonical structure with clear start and finish

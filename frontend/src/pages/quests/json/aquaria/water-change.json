@@ -1,0 +1,27 @@
+{
+    "id": "aquaria/water-change",
+    "title": "Perform a partial water change",
+    "description": "Learn how to remove dirty water and refill your tank with conditioned water.",
+    "image": "/assets/quests/goldfish.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Regular water changes keep your fish healthy. Let's remove about 25% of the water.",
+            "options": [{ "type": "goto", "goto": "remove", "text": "Got it. How do I start?" }]
+        },
+        {
+            "id": "remove",
+            "text": "Use a siphon to vacuum debris while draining into a bucket. Stop when you've removed about a quarter of the volume.",
+            "options": [{ "type": "goto", "goto": "refill", "text": "Water removed." }]
+        },
+        {
+            "id": "refill",
+            "text": "Refill slowly with dechlorinated water that's close to the tank's temperature.",
+            "options": [{ "type": "finish", "text": "Tank refilled and fish are happy!" }]
+        }
+    ],
+    "rewards": [{ "id": "106", "count": 1 }],
+    "requiresQuests": ["aquaria/guppy"]
+}

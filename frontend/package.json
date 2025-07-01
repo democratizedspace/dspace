@@ -32,6 +32,7 @@
         "lint:fix": "ESLINT_USE_FLAT_CONFIG=false npx eslint . --fix",
         "format": "prettier --write \"**/*.{js,ts,svelte,json,md}\"",
         "format:check": "prettier --check \"**/*.{js,ts,svelte,json,md}\"",
+        "generate-quest": "node scripts/generate-quest.mjs",
         "check": "npm run lint && npm run format:check",
         "sync": "node scripts/sync-package.js",
         "postinstall": "npm run sync",
