@@ -61,4 +61,3 @@ test-artifacts/**/*.jpeg
 
 # Additional artifacts
 # Added comment for testing git hooks
-frontend/src/pages/docs/images/quest-tree-stats.png
