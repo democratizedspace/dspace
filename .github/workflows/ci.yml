@@ -20,7 +20,14 @@ jobs:
             frontend/package-lock.json
       - run: npm ci
       - run: cd frontend && npm ci
-      - run: cd frontend && npx playwright install --with-deps
+      - name: Cache Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+      - run: cd frontend && npx playwright install chromium
       - run: npm run test:pr
       - run: cd frontend && npm run coverage
         if: env.CODECOV_TOKEN != ''

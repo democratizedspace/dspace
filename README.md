@@ -55,7 +55,7 @@ If you encounter an error like `browserType.launch: Executable doesn't exist`,
 download the browsers with:
 
 ```bash
-npx playwright install
+npx playwright install chromium
 ```
 
 This cross-platform script will:
