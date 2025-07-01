@@ -1,5 +1,5 @@
 3dprinting: 5 quests, 324 lines
-aquaria: 6 quests, 287 lines
+aquaria: 9 quests, 373 lines
 astronomy: 1 quests, 28 lines
 chemistry: 1 quests, 28 lines
 completionist: 1 quests, 59 lines
