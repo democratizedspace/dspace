@@ -1,0 +1,59 @@
+{
+    "id": "woodworking/step-stool",
+    "title": "Build a step stool",
+    "description": "Create a sturdy stool to reach higher places safely.",
+    "image": "/assets/step_stool.jpg",
+    "npc": "/assets/npc/cedar.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've mastered small projects. Let's tackle something bigger: a step stool sturdy enough to stand on.",
+            "options": [{ "type": "goto", "goto": "gather", "text": "I'm ready" }]
+        },
+        {
+            "id": "gather",
+            "text": "We'll use several pine boards along with wood glue and your handsaw. Take these materials and lay them out on your bench.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        { "id": "112", "count": 2 },
+                        { "id": "110", "count": 1 },
+                        { "id": "109", "count": 1 }
+                    ],
+                    "text": "Gather parts"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "requiresItems": [
+                        { "id": "112", "count": 2 },
+                        { "id": "110", "count": 1 },
+                        { "id": "109", "count": 1 }
+                    ],
+                    "text": "Parts ready"
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Cut the boards to length, glue the frame, and add cross supports. Once dry, test the stool carefully before trusting your weight on it.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Stool assembled" }]
+        },
+        {
+            "id": "finish",
+            "text": "Nicely done! This step stool will serve you well and shows you've learned solid joinery basics.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "114", "count": 1 }],
+                    "text": "Take the stool"
+                },
+                { "type": "finish", "text": "Onward!" }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/birdhouse"]
+}

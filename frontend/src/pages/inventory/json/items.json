@@ -699,5 +699,61 @@
         "description": "An 80 L heated Walstad aquarium containing three female and one male guppy.",
         "image": "/assets/guppy.jpg",
         "price": "90 dUSD"
+    },
+    {
+        "id": "108",
+        "name": "Workbench",
+        "description": "A sturdy table that provides a safe space for sawing and assembly.",
+        "image": "/assets/workbench.jpg",
+        "price": "120 dUSD"
+    },
+    {
+        "id": "109",
+        "name": "Handsaw",
+        "description": "Basic saw for cutting lumber to size.",
+        "image": "/assets/handsaw.jpg",
+        "price": "15 dUSD"
+    },
+    {
+        "id": "110",
+        "name": "Wood glue",
+        "description": "Adhesive designed for bonding wooden pieces.",
+        "image": "/assets/wood_glue.jpg",
+        "price": "5 dUSD"
+    },
+    {
+        "id": "111",
+        "name": "Sandpaper pack",
+        "description": "Assorted grits for smoothing rough lumber and finished projects.",
+        "image": "/assets/sandpaper.jpg",
+        "price": "3 dUSD"
+    },
+    {
+        "id": "112",
+        "name": "Pine board",
+        "description": "A lightweight plank ideal for beginner projects.",
+        "image": "/assets/pine_board.jpg",
+        "price": "8 dUSD"
+    },
+    {
+        "id": "113",
+        "name": "Birdhouse",
+        "description": "A small wooden shelter perfect for backyard birds.",
+        "image": "/assets/birdhouse.jpg",
+        "price": "18 dUSD"
+    },
+    {
+        "id": "114",
+        "name": "Step stool",
+        "description": "A compact stool that helps reach higher shelves safely.",
+        "image": "/assets/step_stool.jpg",
+        "price": "25 dUSD"
+    },
+    {
+        "id": "115",
+        "name": "Bookshelf",
+        "description": "A simple wooden shelf ready to hold your growing library.",
+        "image": "/assets/bookshelf.jpg",
+        "price": "45 dUSD"
     }
 ]

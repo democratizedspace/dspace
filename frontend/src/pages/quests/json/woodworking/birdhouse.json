@@ -1,0 +1,59 @@
+{
+    "id": "woodworking/birdhouse",
+    "title": "Build a birdhouse",
+    "description": "Use simple tools to craft a home for local birds.",
+    "image": "/assets/birdhouse.jpg",
+    "npc": "/assets/npc/cedar.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Now that your bench is ready, let's try a small project. A birdhouse is perfect for practicing basic cuts and assembly.",
+            "options": [{ "type": "goto", "goto": "gather", "text": "Sounds fun!" }]
+        },
+        {
+            "id": "gather",
+            "text": "You'll need a pine board, wood glue, and your handsaw. I'll hand over what you don't already have so we can get started right away.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        { "id": "112", "count": 1 },
+                        { "id": "110", "count": 1 },
+                        { "id": "109", "count": 1 }
+                    ],
+                    "text": "Gather materials"
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "requiresItems": [
+                        { "id": "112", "count": 1 },
+                        { "id": "110", "count": 1 },
+                        { "id": "109", "count": 1 }
+                    ],
+                    "text": "Materials ready"
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Cut the board into panels, glue the walls together, then attach the roof. After the glue dries, smooth all edges with sandpaper so birds won't get hurt.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "The birdhouse is complete" }]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent craftsmanship! Mount your birdhouse outdoors and watch for new feathered tenants.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "113", "count": 1 }],
+                    "text": "Take the birdhouse"
+                },
+                { "type": "finish", "text": "Thanks for the lesson!" }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/workbench"]
+}

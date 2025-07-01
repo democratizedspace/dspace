@@ -115,6 +115,20 @@ Atlas is a humanoid robot assistant designed to help with physical tasks that re
 -   "Great work! The tank is secure on the stand."
 -   "Anytime you need more muscle, just give me a shout."
 
+## Cedar
+
+<img src="/assets/npc/cedar.jpg" />
+
+Cedar is a seasoned woodworker who loves guiding newcomers. Years of building furniture have made them patient and detail-oriented. Cedar will help you master safe tool use and gradually tackle bigger projects.
+
+### Sample Dialogue
+
+-   "Hey there! I'm Cedar. Let's make sure you've got a solid bench before we start cutting."
+-   "Measure twice, cut once! That's a rule you'll hear often in my shop."
+-   "Keep your fingers clear of the blade and let the saw do the work."
+-   "Nice job on that birdhouse! Sand the edges so our feathered friends stay safe."
+-   "Ready for a bigger project? A sturdy step stool will test your skills."
+
 <style>
     img {
         float: left;
