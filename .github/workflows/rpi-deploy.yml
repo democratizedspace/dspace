@@ -8,6 +8,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      RPI_HOST: ${{ secrets.RPI_HOST }}
+      RPI_USER: ${{ secrets.RPI_USER }}
+      RPI_SSH_KEY: ${{ secrets.RPI_SSH_KEY }}
+      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
@@ -19,7 +24,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
+          password: ${{ env.GHCR_TOKEN }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -29,12 +34,12 @@ jobs:
           tags: ghcr.io/${{ github.repository }}:latest
       - name: Deploy on Raspberry Pi
         # Only run this step if the Raspberry Pi host secret is set
-        if: ${{ secrets.RPI_HOST != '' }}
+        if: env.RPI_HOST != ''
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.RPI_HOST }}
-          username: ${{ secrets.RPI_USER }}
-          key: ${{ secrets.RPI_SSH_KEY }}
+          host: ${{ env.RPI_HOST }}
+          username: ${{ env.RPI_USER }}
+          key: ${{ env.RPI_SSH_KEY }}
           script: |
             docker pull ghcr.io/${{ github.repository }}:latest
-            docker compose -f /home/${{ secrets.RPI_USER }}/dspace/docker-compose.yml up -d app
+            docker compose -f /home/${{ env.RPI_USER }}/dspace/docker-compose.yml up -d app
