@@ -8,6 +8,8 @@ WORKDIR /app
 
 # Copy package.json and package-lock.json to install dependencies
 COPY package*.json ./
+# The postinstall script depends on scripts/sync-package.js, so copy it early
+COPY scripts ./scripts
 
 # Install dependencies
 RUN npm install --production
