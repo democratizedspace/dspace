@@ -125,6 +125,9 @@ Run the game in Docker (works on Raspberry Pi) using:
 docker compose up --build -d
 ```
 
+Husky is disabled during installation in the Dockerfile via `HUSKY=0` to avoid
+missing git hook errors.
+
 The app will be available on port 3002. Point your Cloudflare Tunnel at `http://localhost:3002` to serve traffic.
 
 For a full Raspberry Pi setup, including k3s instructions, see [docs/RPI_DEPLOYMENT_GUIDE.md](./docs/RPI_DEPLOYMENT_GUIDE.md).

@@ -82,6 +82,9 @@ Build the container images and load them into k3s:
 docker build -t dspace-app:latest -f frontend/Dockerfile ./frontend
 k3s ctr images import dspace-app:latest
 
+The Dockerfile sets `HUSKY=0` during `npm install` so build steps succeed even
+without dev dependencies.
+
 ```
 
 Apply the manifests:
