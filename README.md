@@ -156,6 +156,7 @@ For comprehensive information about developing DSPACE, see our [Developer Guide]
 
 -   Detailed architecture overview
 -   Component development guidelines
+-   [UI Lifecycle Overview](./frontend/src/pages/docs/md/ui-lifecycle.md) for understanding Astro SSR and Svelte hydration
 -   Testing strategies
 -   Performance considerations
 -   Troubleshooting tips
