@@ -71,6 +71,8 @@ DSPACE uses Astro's Server-Side Rendering (SSR) with partial hydration of Svelte
 
 Due to the SSR + client hydration architecture, components must follow a specific pattern:
 
+For a concise overview and debugging tips, see [UI Lifecycle Overview](./frontend/src/pages/docs/md/ui-lifecycle.md).
+
 ```svelte
 <script>
   import { onMount } from 'svelte';
@@ -457,6 +459,9 @@ By properly separating formatting (Prettier) from code quality (ESLint), you'll 
 - Keep components small and focused
 
 ## Component Development
+
+For an overview of the server-to-client lifecycle and hydration guidelines,
+see [UI Lifecycle Overview](./frontend/src/pages/docs/md/ui-lifecycle.md).
 
 ### Component Structure
 

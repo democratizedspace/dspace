@@ -1,0 +1,1 @@
+When adding or modifying UI components, remember that Astro renders pages on the server and then hydrates Svelte components on the client. Interactive code must run inside the `onMount` hook, and components should expose `data-hydrated="true"` when ready so tests can wait for hydration. See `frontend/src/pages/docs/md/ui-lifecycle.md` for details.
