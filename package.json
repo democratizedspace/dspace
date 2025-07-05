@@ -12,6 +12,7 @@
         "test:e2e:custom": "cd frontend && npm run test:e2e:custom",
         "test:all": "cd frontend && npm run test:all",
         "test:quick": "cd frontend && npm run test:quick",
+        "coverage": "cd frontend && npm run coverage",
         "test:pr": "node run-tests.js",
         "check": "cd frontend && npm run check",
         "lint": "cd frontend && npm run lint",
