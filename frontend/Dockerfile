@@ -10,8 +10,8 @@ WORKDIR /app
 COPY package*.json ./
 COPY scripts ./scripts
 
-# Install dependencies without running Husky
-RUN HUSKY=0 npm install --production
+# Install dependencies without executing any npm scripts
+RUN npm ci --omit=dev --ignore-scripts
 
 # Copy the rest of the application
 COPY . .
