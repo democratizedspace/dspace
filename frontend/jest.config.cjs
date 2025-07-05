@@ -27,6 +27,8 @@ const config = {
         '!**/vendor/**',
         '!e2e/**',
         '!scripts/**',
+        '!**/__tests__/**',
+        '!src/pages/**/*.svelte',
     ],
 
     // The directory where Jest should output its coverage files
