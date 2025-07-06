@@ -29,6 +29,15 @@ const config = {
         '!scripts/**',
         '!**/__tests__/**',
         '!src/pages/**/*.svelte',
+        '!babel.config.js',
+        '!babel.config.cjs',
+        '!jest.config.cjs',
+        '!jest.setup.js',
+        '!jest.teardown.js',
+        '!playwright.config.ts',
+        '!svelte.config.js',
+        '!coverage/**',
+        '!src/components/**/*.svelte',
     ],
 
     // The directory where Jest should output its coverage files
