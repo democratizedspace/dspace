@@ -233,7 +233,7 @@ npm ci
 
 ## Want to contribute?
 
-Check out the [Contribution Guide](./CONTRIBUTORS.md) to get started.
+Check out the [Contribution Guide](./CONTRIBUTORS.md) and [Contributing Guidelines](./CONTRIBUTING.md) to get started. We follow a [Code of Conduct](./.github/CODE_OF_CONDUCT.md) to keep the community welcoming.
 Automated contributors like the Codex agent follow the rules in [AGENTS.md](./AGENTS.md). Feel free to consult it when preparing your own pull requests.
 
 If you have any questions, feel free to join the [Discord](https://discord.gg/A3UAfYvnxM) and say hello!
