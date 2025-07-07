@@ -8,6 +8,15 @@ elif command -v powershell >/dev/null 2>&1; then
 else
   echo "PowerShell not found, falling back to bash script"
   cd frontend
-  echo "Running linting and tests on modified files..."
+  echo "Running linting on staged files..."
   npx lint-staged
+  cd ..
+  echo "Running full code checks..."
+  npm run check
+  echo "Running full test suite (without e2e)..."
+  SKIP_E2E=1 npm run test:pr
+  if [ $? -ne 0 ]; then
+    echo "❌ Tests failed. Commit aborted."
+    exit 1
+  fi
 fi
