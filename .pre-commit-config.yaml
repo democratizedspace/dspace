@@ -1,0 +1,35 @@
+repos:
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: black
+        language: system
+        types: [python]
+      - id: isort
+        name: isort
+        entry: isort
+        language: system
+        types: [python]
+      - id: flake8
+        name: flake8
+        entry: flake8
+        language: system
+        types: [python]
+      - id: bandit
+        name: bandit
+        entry: bandit -ll --skip B101
+        language: system
+        types: [python]
+      - id: detect-secrets
+        name: detect-secrets
+        entry: detect-secrets-hook
+        language: system
+      - id: trailing-whitespace
+        name: trailing-whitespace
+        entry: python -m pre_commit_hooks.trailing_whitespace_fixer
+        language: system
+      - id: end-of-file-fixer
+        name: end-of-file-fixer
+        entry: python -m pre_commit_hooks.end_of_file_fixer
+        language: system
