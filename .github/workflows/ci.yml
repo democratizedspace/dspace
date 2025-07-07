@@ -11,6 +11,8 @@ jobs:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     steps:
       - uses: actions/checkout@v4
+      - name: Remove checkout token for external fetches
+        run: git config --global --unset-all http.https://github.com/.extraheader || true
       - uses: actions/setup-node@v4
         with:
           node-version: 20
