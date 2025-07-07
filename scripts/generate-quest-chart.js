@@ -12,6 +12,8 @@ function countLines(filePath) {
     return data.split(/\r?\n/).length;
 }
 
+module.exports = { countLines };
+
 function gatherStats() {
     const categories = fs.readdirSync(questsDir).filter((name) => {
         const p = path.join(questsDir, name);
