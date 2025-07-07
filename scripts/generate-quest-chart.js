@@ -1,6 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+let ChartJSNodeCanvas;
+try {
+    ({ ChartJSNodeCanvas } = require('chartjs-node-canvas'));
+} catch {
+    // Optional dependency for unit tests
+}
 
 const questsDir = path.join(__dirname, '..', 'frontend', 'src', 'pages', 'quests', 'json');
 const outputDir = path.join(__dirname, '..', 'frontend', 'src', 'pages', 'docs', 'images');
@@ -11,6 +16,8 @@ function countLines(filePath) {
     const data = fs.readFileSync(filePath, 'utf8');
     return data.split(/\r?\n/).length;
 }
+
+module.exports = { countLines };
 
 function gatherStats() {
     const categories = fs.readdirSync(questsDir).filter((name) => {
@@ -100,7 +107,9 @@ async function main() {
     fs.writeFileSync(path.join(outputDir, 'quest-tree-stats.txt'), summary + '\n');
 }
 
-main().catch((err) => {
-    console.error(err);
-    process.exit(1);
-});
+if (require.main === module) {
+    main().catch((err) => {
+        console.error(err);
+        process.exit(1);
+    });
+}

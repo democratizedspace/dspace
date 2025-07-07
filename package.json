@@ -18,7 +18,8 @@
         "lint": "cd frontend && npm run lint",
         "lint:fix": "cd frontend && npm run lint:fix",
         "format": "cd frontend && npm run format",
-        "build": "cd frontend && npm run build"
+        "build": "cd frontend && npm run build",
+        "test:unit": "node --test tests/unit"
     },
     "devDependencies": {
         "fake-indexeddb": "^6.0.0",
