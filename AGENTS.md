@@ -10,6 +10,8 @@ These guidelines apply to all files in this repository.
 -   If E2E tests complain that the browser executable is missing, run `npx playwright install chromium` to download the required browser.
 -   If Playwright browsers aren't available, prefix the command with `SKIP_E2E=1`.
 -   Use `npm run check` to verify formatting and linting prior to commit.
+-   Run `pre-commit run --files <file>...` to auto-format staged changes. Install
+    it with `pip install pre-commit` if the command is missing.
 -   If these checks fail due to missing dev dependencies, mention the error in
     your pull request summary.
 -   If ESLint reports missing plugins, run `npm install` in both the repo root and the `frontend` directory to restore dev dependencies.

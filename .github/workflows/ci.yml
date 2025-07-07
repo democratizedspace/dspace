@@ -28,6 +28,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-playwright-
       - run: cd frontend && npx playwright install chromium
+      - name: Install pre-commit
+        run: pip install pre-commit
       - name: Run Pre-commit
         run: pre-commit run --all-files --show-diff-on-failure
       - run: npm run test:pr
