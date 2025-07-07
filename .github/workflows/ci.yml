@@ -28,7 +28,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-playwright-
       - run: cd frontend && npx playwright install chromium
+      - name: Run Pre-commit
+        run: pre-commit run --all-files --show-diff-on-failure
       - run: npm run test:pr
+      - name: Unit tests
+        run: npm run test:unit
       - run: cd frontend && npm run coverage
         if: env.CODECOV_TOKEN != ''
       - uses: actions/upload-artifact@v4
