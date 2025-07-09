@@ -1,7 +1,5 @@
 # Development directories
 dev/
-.netlify/state.json
-.netlify/
 .vscode/
 
 # Dependencies
