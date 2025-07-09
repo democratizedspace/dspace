@@ -23,7 +23,6 @@ pnpm-debug.log*
 
 dev/
 
-.netlify
 
 # Jest coverage directory
 coverage/
@@ -42,5 +41,4 @@ playwright/.cache/
 
 # Local development file
 .eslintrc.local.json
-.prettierrc.local.json
-.editorconfig.local
+.prettierrc.local.json.editorconfig.local
