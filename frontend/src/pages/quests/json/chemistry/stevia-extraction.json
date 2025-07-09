@@ -1,0 +1,35 @@
+{
+    "id": "chemistry/stevia-extraction",
+    "title": "Extract Stevia Sweetener",
+    "description": "Use simple chemistry to make a sweet extract from stevia leaves.",
+    "image": "/assets/quests/testprint.png",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Phoenix here. Those stevia leaves you grew can be turned into a potent sweetener. Interested in an extraction demo?",
+            "options": [{ "type": "goto", "goto": "extract", "text": "Show me how!" }]
+        },
+        {
+            "id": "extract",
+            "text": "Dry the leaves and steep them in hot water to pull out the steviol glycosides.",
+            "options": [
+                { "type": "process", "process": "extract-stevia", "text": "Begin extraction" },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "The extract looks ready!",
+                    "requiresItems": [{ "id": "122", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! This homemade stevia extract will sweeten drinks without any sugar.",
+            "options": [{ "type": "finish", "text": "Thanks, Phoenix!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/stevia", "chemistry/safe-reaction"]
+}
