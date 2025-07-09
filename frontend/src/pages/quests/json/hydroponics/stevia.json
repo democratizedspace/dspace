@@ -1,0 +1,72 @@
+{
+    "id": "hydroponics/stevia",
+    "title": "Grow Stevia Hydroponically",
+    "description": "Cultivate stevia plants for a natural sweetener.",
+    "image": "/assets/quests/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hydro here! Ready to grow something sweet? Stevia leaves pack a sugary punch without the calories.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plant",
+                    "text": "Absolutely, let's plant some stevia!"
+                }
+            ]
+        },
+        {
+            "id": "plant",
+            "text": "Soak your rockwool plugs, add the stevia seeds, and wait for them to germinate.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "germinate-stevia",
+                    "text": "Starting the germination process."
+                },
+                {
+                    "type": "goto",
+                    "goto": "grow",
+                    "text": "Seedlings look healthy!",
+                    "requiresItems": [{ "id": "118", "count": 11 }]
+                }
+            ]
+        },
+        {
+            "id": "grow",
+            "text": "Transfer the seedlings to your hydroponics tub and give them plenty of light for about a month.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "grow-stevia",
+                    "text": "Start growth cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "They're full grown and smell sweet!",
+                    "requiresItems": [{ "id": "119", "count": 11 }]
+                }
+            ]
+        },
+        {
+            "id": "harvest",
+            "text": "Clip the leaves to make our sweetener. The plants will regrow if you keep them under the light.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "harvest-stevia",
+                    "text": "Harvesting the leaves."
+                },
+                {
+                    "type": "finish",
+                    "text": "Thanks for the tips, Hydro!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/lettuce"]
+}

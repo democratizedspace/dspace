@@ -370,6 +370,66 @@
         "duration": "1m"
     },
     {
+        "id": "germinate-stevia",
+        "title": "germinate stevia seeds",
+        "requireItems": [],
+        "consumeItems": [
+            { "id": "117", "count": 1 },
+            { "id": "26", "count": 11 }
+        ],
+        "createItems": [{ "id": "118", "count": 11 }],
+        "duration": "7d"
+    },
+    {
+        "id": "grow-stevia",
+        "title": "grow stevia until it's ready to harvest",
+        "requireItems": [{ "id": "43", "count": 1 }],
+        "consumeItems": [
+            { "id": "118", "count": 11 },
+            { "id": "44", "count": 1 },
+            { "id": "22", "count": 16128 }
+        ],
+        "createItems": [
+            { "id": "119", "count": 11 },
+            { "id": "45", "count": 1 }
+        ],
+        "duration": "28d"
+    },
+    {
+        "id": "regrow-stevia",
+        "title": "regrow stevia after harvest",
+        "requireItems": [],
+        "consumeItems": [
+            { "id": "121", "count": 11 },
+            { "id": "44", "count": 1 },
+            { "id": "22", "count": 8064 }
+        ],
+        "createItems": [
+            { "id": "119", "count": 11 },
+            { "id": "45", "count": 1 }
+        ],
+        "duration": "14d"
+    },
+    {
+        "id": "harvest-stevia",
+        "title": "Harvest your hydroponic stevia plants",
+        "requireItems": [],
+        "consumeItems": [{ "id": "119", "count": 11 }],
+        "createItems": [
+            { "id": "120", "count": 11 },
+            { "id": "121", "count": 11 }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "extract-stevia",
+        "title": "extract sweetener from stevia leaves",
+        "requireItems": [],
+        "consumeItems": [{ "id": "120", "count": 11 }],
+        "createItems": [{ "id": "122", "count": 1 }],
+        "duration": "1h"
+    },
+    {
         "id": "sink",
         "title": "find your sink",
         "requireItems": [],
