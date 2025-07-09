@@ -58,6 +58,7 @@ Hydro, a relaxed and affable team member, has a gift for hydroponics and sustain
 -   "Excellent! First things first, I need you to accept this hydroponics tub."
 -   "Now that you've got your hydroponics tub, you'll need some dechlorinated water."
 -   "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems."
+-   "Let's try stevia next. Its leaves are unbelievably sweet!"
 
 ## Orion
 
@@ -100,6 +101,7 @@ Phoenix is a professional chemist specializing in sustainable rocket fuel develo
 -   "You've shown great progress with your 3D printing! Your next goal is to print 25 Benchies."
 -   "Excellent job! Your fleet of Benchies is growing. Keep up the great work."
 -   "You've truly mastered the art of 3D printing Benchies. Now, let's take things to the next level. I want to see a fleet of 100 Benchies."
+-   "Dry those stevia leaves gently and we'll extract their sweetness."
 
 ## Atlas
 

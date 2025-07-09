@@ -762,5 +762,44 @@
         "description": "A gentle air-driven filter ideal for small aquariums.",
         "image": "/assets/aquarium_filter.jpg",
         "price": "6 dUSD"
+    },
+    {
+        "id": "117",
+        "name": "stevia seeds",
+        "description": "Seeds of the Stevia rebaudiana plant.",
+        "image": "/assets/basil_seeds.jpg",
+        "price": "5 dUSD"
+    },
+    {
+        "id": "118",
+        "name": "stevia seedling",
+        "description": "A young stevia plant sprouted in rockwool.",
+        "image": "/assets/basil_seedlings.jpg"
+    },
+    {
+        "id": "119",
+        "name": "harvestable stevia plant",
+        "description": "A mature stevia plant ready for leaf harvest.",
+        "image": "/assets/hydroponic_basil_adult.jpg"
+    },
+    {
+        "id": "120",
+        "name": "bundle of stevia leaves",
+        "description": "Fresh stevia leaves with natural sweetness.",
+        "image": "/assets/basil_harvested.jpg",
+        "price": "3 dUSD"
+    },
+    {
+        "id": "121",
+        "name": "harvested stevia plant",
+        "description": "A stevia plant trimmed of leaves but still alive.",
+        "image": "/assets/hydroponic_basil_harvested.jpg"
+    },
+    {
+        "id": "122",
+        "name": "stevia extract",
+        "description": "Concentrated sweetener derived from stevia leaves.",
+        "image": "/assets/dCarbon.jpg",
+        "price": "8 dUSD"
     }
 ]
