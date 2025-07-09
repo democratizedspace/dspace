@@ -1,18 +1,11 @@
 import { defineConfig } from 'astro/config';
-import netlify from '@astrojs/netlify/functions';
+import node from '@astrojs/node';
 import svelte from "@astrojs/svelte";
 
 // https://astro.build/config
-import vercel from "@astrojs/vercel/serverless";
-
-const adapters = {
-  netlify: netlify(),
-  vercel: vercel()
-};
-
 export default defineConfig({
   output: 'server',
-  adapter: adapters[process.env.PLATFORM] || netlify(), // Use Netlify as fallback
+  adapter: node({ mode: 'standalone' }),
   integrations: [svelte()],
   style: {
     postcss: {}
