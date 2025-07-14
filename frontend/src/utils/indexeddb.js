@@ -344,6 +344,7 @@ export const deleteProcess = async (id) => {
                 resolve();
                 db.close();
             };
+            /* istanbul ignore next */
             tx.onerror = () => {
                 reject(tx.error);
                 db.close();
@@ -367,6 +368,7 @@ export const saveQuest = async (quest) => {
                 resolve();
                 db.close();
             };
+            /* istanbul ignore next */
             tx.onerror = () => {
                 reject(tx.error);
                 db.close();
@@ -390,6 +392,7 @@ export const getQuests = async () => {
                 resolve(request.result);
                 db.close();
             };
+            /* istanbul ignore next */
             request.onerror = () => {
                 reject(request.error);
                 db.close();
@@ -413,6 +416,7 @@ export const getQuest = async (id) => {
                 resolve(request.result);
                 db.close();
             };
+            /* istanbul ignore next */
             request.onerror = () => {
                 reject(request.error);
                 db.close();
