@@ -32,7 +32,6 @@ const config = {
         '!babel.config.js',
         '!babel.config.cjs',
         '!jest.config.cjs',
-        '!jest.setup.js',
         '!jest.teardown.js',
         '!playwright.config.ts',
         '!svelte.config.js',
@@ -184,12 +183,12 @@ const config = {
         // '__tests__/entityType.test.js', - FIXED (import path)
         // '__tests__/customcontent.test.js', - FIXED (structuredClone polyfill + assertions)
         // '__tests__/gameState/inventory.test.js', - FIXED (import path)
-        
+
         // Svelte component testing issues - "init is not a function" errors
         // These components are actively used in the app but need different testing approach
         '__tests__/ItemForm.test.js', // Used in items/create.astro, inventory/create.astro + e2e tested
         '__tests__/ItemSelector.test.js', // Used by ProcessForm component + e2e tested
-        '__tests__/ProcessForm.test.js', // Used in processes/create.astro + e2e tested  
+        '__tests__/ProcessForm.test.js', // Used in processes/create.astro + e2e tested
         '__tests__/Quests.test.js', // Used in quests/index.astro + e2e tested
     ],
 

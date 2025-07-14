@@ -63,12 +63,7 @@
             }
         },
         {
-            "files": [
-                "**/*.config.js",
-                "**/svelte.config.js",
-                "**/babel.config.js",
-                "**/jest-setup.js"
-            ],
+            "files": ["**/*.config.js", "**/svelte.config.js", "**/babel.config.js"],
             "rules": {
                 "@typescript-eslint/no-var-requires": "off",
                 "@typescript-eslint/no-unused-vars": "warn"
