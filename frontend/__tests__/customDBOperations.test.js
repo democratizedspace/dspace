@@ -43,6 +43,15 @@ describe('Custom DB operations', () => {
         expect(afterDelete).toBeUndefined();
     });
 
+    test('getProcesses returns all stored processes', async () => {
+        const p1 = { id: 'p1', title: 'One' };
+        const p2 = { id: 'p2', title: 'Two' };
+        await saveProcess(p1);
+        await saveProcess(p2);
+        const processes = await getProcesses();
+        expect(processes).toEqual(expect.arrayContaining([p1, p2]));
+    });
+
     test('quest functions save and list correctly', async () => {
         const quest = { id: 'quest1', title: 'Start' };
         await saveQuest(quest);
