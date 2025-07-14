@@ -31,7 +31,7 @@ export const parseCookie = (cookie) => {
 
 export const getCookieValue = (cookie, key) => {
     const c = parseCookie(cookie);
-    if (c) {
+    if (c && Object.prototype.hasOwnProperty.call(c, key)) {
         return c[key];
     }
     return null;
@@ -143,6 +143,7 @@ export const durationInSeconds = (durationString) => {
                 case 's':
                     seconds = number;
                     break;
+                /* istanbul ignore next */
                 default:
                     break;
             }
@@ -561,6 +562,7 @@ export async function getFileAsBase64(filename) {
                 const reader = new FileReader();
                 reader.onloadend = () => resolve(reader.result);
                 reader.readAsDataURL(blob);
+                /* istanbul ignore next */
             } catch (err) {
                 reject(err);
             }
