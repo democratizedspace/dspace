@@ -5,6 +5,7 @@ const {
     setCurrentDialogueStep,
     getCurrentDialogueStep,
     grantItems,
+    getItemsGranted,
     setVersionNumber,
     getVersionNumber,
     importV1V2,
@@ -69,9 +70,18 @@ describe('gameState top-level helpers', () => {
         expect(canStartQuest(quest)).toBe(true);
     });
 
+    test('canStartQuest returns true without requirements', () => {
+        const quest = { id: 'newQuest', default: {} };
+        expect(canStartQuest(quest)).toBe(true);
+    });
+
     test('setCurrentDialogueStep and getCurrentDialogueStep work together', () => {
         setCurrentDialogueStep('quest1', 3);
         expect(getCurrentDialogueStep('quest1')).toBe(3);
+    });
+
+    test('getCurrentDialogueStep defaults to zero for missing quest', () => {
+        expect(getCurrentDialogueStep('missingQuest')).toBe(0);
     });
 
     test('grantItems only grants once per option', () => {
@@ -81,6 +91,14 @@ describe('gameState top-level helpers', () => {
         expect(addItems).toHaveBeenCalledTimes(1);
         grantItems('q', 'step', 0, items);
         expect(addItems).toHaveBeenCalledTimes(1); // no duplicate
+    });
+
+    test('getItemsGranted handles missing quest gracefully', () => {
+        const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+        const result = getItemsGranted('missing', 'step', 0);
+        expect(result).toBe(false);
+        expect(errorSpy).toHaveBeenCalled();
+        errorSpy.mockRestore();
     });
 
     test('version helpers update version string', () => {
