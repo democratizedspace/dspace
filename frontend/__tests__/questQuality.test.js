@@ -371,6 +371,9 @@ function checkItemProcessUsage() {
 
         if (usedItem) questsUsingItems++;
         if (usedProcess) questsUsingProcesses++;
+        if (!usedItem && !usedProcess) {
+            issues.push(`Quest ${id} has no item or process references`);
+        }
     }
 
     const itemRatio = questsUsingItems / quests.size;
@@ -459,7 +462,6 @@ describe('Quest Quality Validation', () => {
             console.warn('Item/Process Usage Issues:');
             issues.forEach((issue) => console.warn(`- ${issue}`));
         }
-
-        expect(true).toBe(true);
+        expect(issues.length).toBe(0);
     });
 });

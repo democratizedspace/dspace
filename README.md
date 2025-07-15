@@ -180,6 +180,7 @@ Run `node scripts/generate-quest-chart.js` to recreate `quest-tree-stats.txt` an
 
 Aquarium quests progress through a gentle learning curve: set up a Walstad tank, test the water, install a sponge filter, ask Atlas to position the tank, add dwarf shrimp, introduce guppies, perform regular water changes, practice breeding, and finally keep a goldfish in a large tank.
 Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation.
+The new DevOps chain explains how to deploy DSPACE on a small Raspberry Pi cluster using Docker and k3s.
 
 To validate that quests use a canonical structure with clear start and finish
 steps, run the dedicated test:

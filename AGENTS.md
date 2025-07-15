@@ -25,6 +25,8 @@ These guidelines apply to all files in this repository.
     with at least one option per node.
 -   Include a `finish` option in the final node so quests end cleanly. Quests
     without a finish option will fail canonical tests.
+-   Reference at least one inventory item or process in every quest. The
+    `questQuality` test now fails if a quest lacks both.
 -   For rapid quest creation, reference `frontend/src/pages/docs/md/prompts-quests.md`
     which contains AI prompt templates, including a **Quest Sequence Expansion**
     section for brainstorming follow-up quests.
@@ -63,6 +65,7 @@ These guidelines apply to all files in this repository.
 -   When adding inventory items in `frontend/src/pages/inventory/json/items.json`, assign the next numeric `id` and provide an image if possible.
 -   Update `frontend/__tests__/itemQuality.test.js` when adding items so the quality ratio stays accurate.
 -   Update `frontend/__tests__/processQuality.test.js` when introducing new processes or unusual durations.
+-   The `questQuality` test enforces item or process usage in quests; fix any failures before committing.
 -   If you add a quest that changes the tech tree order, document the new sequence in `README.md` and update `frontend/__tests__/questQuality.test.js` accordingly.
 -   Summarize new categories in `frontend/src/pages/docs/md/quest-trees.md` when they are introduced.
 

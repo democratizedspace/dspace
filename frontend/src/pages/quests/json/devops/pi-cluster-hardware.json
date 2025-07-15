@@ -1,0 +1,42 @@
+{
+    "id": "devops/pi-cluster-hardware",
+    "title": "Plan Your Pi Cluster",
+    "description": "Orion lists the parts needed to build a Raspberry Pi cluster.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey there! Orion here. Ready to build a little cluster to run DSPACE on your own hardware?",
+            "options": [{ "type": "goto", "goto": "list", "text": "Absolutely!" }]
+        },
+        {
+            "id": "list",
+            "text": "You'll need Raspberry Pi 5 boards, PoE+ HATs with M.2 slots, 1TB NVMe SSDs, a PoE+ switch with cables and a microSD card for flashing the OS. Don't forget a fan case or heatsink so everything stays cool.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I've gathered the parts.",
+                    "requiresItems": [
+                        { "id": "123", "count": 1 },
+                        { "id": "124", "count": 1 },
+                        { "id": "125", "count": 1 },
+                        { "id": "126", "count": 1 },
+                        { "id": "127", "count": 1 },
+                        { "id": "128", "count": 1 },
+                        { "id": "129", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! With the hardware ready we can prepare the first node.",
+            "options": [{ "type": "finish", "text": "Let's do it." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}

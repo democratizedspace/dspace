@@ -1,0 +1,45 @@
+{
+    "id": "devops/docker-compose",
+    "title": "Launch DSPACE in Docker",
+    "description": "Start the container and open a Cloudflare Tunnel.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "From the project directory run `docker compose up --build -d` to launch the game on port 3002.",
+            "options": [
+                { "type": "process", "process": "run-docker-compose", "text": "Starting it up." },
+                {
+                    "type": "goto",
+                    "goto": "tunnel",
+                    "text": "Container running.",
+                    "requiresItems": [{ "id": "132", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "tunnel",
+            "text": "Create a Cloudflare Tunnel pointing at `http://localhost:3002` so friends can reach your Pi from anywhere.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Tunnel online.",
+                    "requiresItems": [
+                        { "id": "127", "count": 1 },
+                        { "id": "128", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Everything is up and running! For a multi-node setup you can follow Orion's k3s guide later.",
+            "options": [{ "type": "finish", "text": "Will do." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/ssd-boot"]
+}
