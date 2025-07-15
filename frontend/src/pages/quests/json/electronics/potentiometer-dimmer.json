@@ -24,7 +24,15 @@
                 {
                     "type": "goto",
                     "goto": "program",
-                    "text": "Wired up! What's the code?"
+                    "text": "Wired up! What's the code?",
+                    "requiresItems": [
+                        { "id": "90", "count": 1 },
+                        { "id": "91", "count": 1 },
+                        { "id": "92", "count": 3 },
+                        { "id": "93", "count": 1 },
+                        { "id": "94", "count": 1 },
+                        { "id": "98", "count": 1 }
+                    ]
                 }
             ]
         },

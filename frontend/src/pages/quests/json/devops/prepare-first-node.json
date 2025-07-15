@@ -1,0 +1,47 @@
+{
+    "id": "devops/prepare-first-node",
+    "title": "Prepare the First Node",
+    "description": "Flash the OS and install Docker under Orion's guidance.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's get that first Pi running. Flash Raspberry Pi OS to a microSD card so we can update everything.",
+            "options": [
+                { "type": "process", "process": "flash-sd-card", "text": "Flashing now." },
+                {
+                    "type": "goto",
+                    "goto": "update",
+                    "text": "Card flashed and booted.",
+                    "requiresItems": [{ "id": "130", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "update",
+            "text": "Run `sudo apt update && sudo apt full-upgrade` then install the latest firmware with `sudo rpi-eeprom-update -a`.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "docker",
+                    "text": "System updated.",
+                    "requiresItems": [{ "id": "123", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "docker",
+            "text": "Clone the DSPACE repo and install Docker. Use `sudo apt install -y docker.io docker-compose`, add yourself to the docker group, and run `newgrp docker` to refresh.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Docker ready." }]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! The first node is set up and waiting for an SSD.",
+            "options": [{ "type": "finish", "text": "Onward!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/pi-cluster-hardware"]
+}

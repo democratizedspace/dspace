@@ -1,0 +1,47 @@
+{
+    "id": "devops/k3s-deploy",
+    "title": "Deploy with k3s",
+    "description": "Orion teaches you how to run DSPACE across multiple Pis with k3s.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "If you want high availability, let's turn the cluster into a k3s setup.",
+            "options": [{ "type": "goto", "goto": "install", "text": "Sounds good." }]
+        },
+        {
+            "id": "install",
+            "text": "Install k3s on the control plane with `curl -sfL https://get.k3s.io | sh -` and grab the join token from `/var/lib/rancher/k3s/server/node-token`.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "join",
+                    "text": "Token ready.",
+                    "requiresItems": [{ "id": "132", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "join",
+            "text": "Run the installer on each extra node with `curl -sfL https://get.k3s.io | K3S_URL=https://<CONTROL_PLANE_IP>:6443 K3S_TOKEN=<NODE_TOKEN> sh -`. Verify all nodes with `sudo kubectl get nodes -o wide`.",
+            "options": [
+                { "type": "process", "process": "join-k3s-cluster", "text": "Joining now." },
+                { "type": "goto", "goto": "load", "text": "Nodes joined." }
+            ]
+        },
+        {
+            "id": "load",
+            "text": "Build the DSPACE image and import it: `docker build -t dspace-app:latest -f frontend/Dockerfile ./frontend && k3s ctr images import dspace-app:latest`. Apply the manifests from `k8s/` to deploy.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Deployed." }]
+        },
+        {
+            "id": "finish",
+            "text": "That's it! Your cluster now runs DSPACE via k3s. Expose the service with a Cloudflare Tunnel and enjoy.",
+            "options": [{ "type": "finish", "text": "Mission accomplished." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/docker-compose"]
+}

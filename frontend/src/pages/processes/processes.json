@@ -1077,5 +1077,53 @@
             }
         ],
         "duration": "30m"
+    },
+    {
+        "id": "flash-sd-card",
+        "title": "Flash Raspberry Pi OS to microSD",
+        "requireItems": [],
+        "consumeItems": [{ "id": "126", "count": 1 }],
+        "createItems": [{ "id": "130", "count": 1 }],
+        "duration": "5m"
+    },
+    {
+        "id": "clone-os-to-ssd",
+        "title": "Clone OS to M.2 SSD",
+        "requireItems": [],
+        "consumeItems": [
+            { "id": "130", "count": 1 },
+            { "id": "125", "count": 1 }
+        ],
+        "createItems": [{ "id": "131", "count": 1 }],
+        "duration": "10m"
+    },
+    {
+        "id": "assemble-pi-node",
+        "title": "Assemble a Pi cluster node",
+        "requireItems": [],
+        "consumeItems": [
+            { "id": "123", "count": 1 },
+            { "id": "124", "count": 1 },
+            { "id": "131", "count": 1 },
+            { "id": "129", "count": 1 }
+        ],
+        "createItems": [{ "id": "132", "count": 1 }],
+        "duration": "5m"
+    },
+    {
+        "id": "run-docker-compose",
+        "title": "Launch DSPACE with Docker Compose",
+        "requireItems": [{ "id": "132", "count": 1 }],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "join-k3s-cluster",
+        "title": "Join nodes to a k3s cluster",
+        "requireItems": [{ "id": "132", "count": 1 }],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
     }
 ]

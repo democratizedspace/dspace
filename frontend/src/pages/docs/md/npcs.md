@@ -64,7 +64,7 @@ Hydro, a relaxed and affable team member, has a gift for hydroponics and sustain
 
 <img src="/assets/npc/orion.jpg" />
 
-Orion is an electrical engineer whose enthusiasm for robotics and microprocessors knows no bounds. He specializes in designing and building intelligent robotic systems to assist the metaguild in various tasks. Orion's technical prowess and innovative thinking make him a valuable team member in the quest to push the boundaries of space exploration.
+Orion is an electrical engineer whose enthusiasm for robotics and microprocessors knows no bounds. He specializes in designing and building intelligent robotic systems to assist the metaguild in various tasks. Orion also maintains the guild's servers and enjoys automating deployment pipelines. His technical prowess and innovative thinking make him a valuable team member in the quest to push the boundaries of space exploration.
 
 ### Sample Dialogue
 
@@ -73,6 +73,7 @@ Orion is an electrical engineer whose enthusiasm for robotics and microprocessor
 -   "Place the LED on the breadboard and connect the resistor in series with the long leg."
 -   "Hey there! Orion here. Ready to do something a bit more exciting? Let's make that LED blink with a microcontroller."
 -   "Open the Arduino IDE, load the Blink example, select the correct port, and hit upload."
+-   "Need a server check? I'm happy to spin up a fresh Pi and deploy the stack."
 
 ## Vega
 

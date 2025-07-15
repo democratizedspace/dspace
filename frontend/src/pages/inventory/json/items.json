@@ -801,5 +801,65 @@
         "description": "Concentrated sweetener derived from stevia leaves.",
         "image": "/assets/dCarbon.jpg",
         "price": "8 dUSD"
+    },
+    {
+        "id": "123",
+        "name": "Raspberry Pi 5 board",
+        "description": "A compact single-board computer with plenty of power for small clusters.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "124",
+        "name": "M.2 PoE+ HAT",
+        "description": "Provides power over Ethernet and an M.2 slot for NVMe drives.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "125",
+        "name": "1TB 2230 M.2 SSD",
+        "description": "A tiny NVMe drive perfect for booting a Pi.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "126",
+        "name": "64GB microSD card",
+        "description": "Used to flash the operating system before cloning to the SSD.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "127",
+        "name": "PoE+ switch",
+        "description": "Powers multiple devices and provides network connectivity.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "128",
+        "name": "Ethernet cable",
+        "description": "A simple cable for wired network connections.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "129",
+        "name": "fan case",
+        "description": "Keeps a Raspberry Pi cool during heavy workloads.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "130",
+        "name": "flashed microSD card",
+        "description": "Contains Raspberry Pi OS ready for cloning to SSD.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "131",
+        "name": "bootable 1TB SSD",
+        "description": "An M.2 drive with the OS cloned and ready to boot.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "132",
+        "name": "Pi cluster node",
+        "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
+        "image": "/assets/quests/basic_circuit.svg"
     }
 ]

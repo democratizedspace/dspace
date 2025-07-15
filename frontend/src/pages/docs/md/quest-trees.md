@@ -28,6 +28,7 @@ The following quest lines are being drafted to help achieve the "10x More Quests
 -   **Chemistry** – safe experiments that introduce sustainable rocket fuel principles and extract stevia into an artificial sweetener
 -   **Astronomy** – observational tasks that prepare players for future rocketry missions
 -   **Programming** – simple scripts for automating sensors and data collection
+-   **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s
 
 Check back as these new quests are fleshed out and integrated into the main progression.
 
