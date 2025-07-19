@@ -6,7 +6,7 @@ Thank you for your interest in our project! We truly appreciate your willingness
 
 ### 1. Getting Started
 
-The project is licensed under the 0BSD license, which allows very permissive free use. This means you are allowed to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software.
+The project is licensed under the MIT License, which is permissive and business-friendly. You may freely use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software.
 
 ### 2. Where to Contribute
 
