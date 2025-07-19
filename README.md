@@ -1,7 +1,10 @@
 # DSPACE - Democratized Space
 
-[![CI](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml/badge.svg)](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/democratizedspace/dspace/branch/v3/graph/badge.svg)](https://codecov.io/gh/democratizedspace/dspace)
+[![Lint & Format](https://img.shields.io/github/actions/workflow/status/democratizedspace/dspace/ci.yml?label=lint%20%26%20format)](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/github/actions/workflow/status/democratizedspace/dspace/ci.yml?label=tests)](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/democratizedspace/dspace/branch/v3/graph/badge.svg)](https://codecov.io/gh/democratizedspace/dspace)
+[![Docs](https://img.shields.io/github/actions/workflow/status/democratizedspace/dspace/quest-chart.yml?label=docs)](https://github.com/democratizedspace/dspace/actions/workflows/quest-chart.yml)
+[![License](https://img.shields.io/github/license/democratizedspace/dspace)](LICENSE)
 
 You can find the game at [democratized.space](https://democratized.space).
 
