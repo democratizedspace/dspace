@@ -4,7 +4,7 @@
 [![Tests](https://img.shields.io/github/actions/workflow/status/democratizedspace/dspace/ci.yml?label=tests)](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/democratizedspace/dspace/branch/v3/graph/badge.svg)](https://codecov.io/gh/democratizedspace/dspace)
 [![Docs](https://img.shields.io/github/actions/workflow/status/democratizedspace/dspace/quest-chart.yml?label=docs)](https://github.com/democratizedspace/dspace/actions/workflows/quest-chart.yml)
-[![License](https://img.shields.io/github/license/democratizedspace/dspace)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 You can find the game at [democratized.space](https://democratized.space).
 
@@ -253,3 +253,7 @@ If a quest, item, or process needs to be retired, move its JSON file to the
 `frontend/src/pages/quests/archive` directory instead of deleting it. The
 `contentIntegrity` test tracks the total count of built-in assets, so archived
 files help prevent accidental removals.
+
+## License
+
+DSPACE is licensed under the MIT License. See [LICENSE](LICENSE) for details.
