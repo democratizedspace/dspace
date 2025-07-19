@@ -93,5 +93,6 @@
         "postcss": "^8.4.23",
         "pretty-date": "^0.2.0",
         "remarkable": "^2.0.1"
-    }
+    },
+    "license": "MIT"
 }
