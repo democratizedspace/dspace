@@ -183,6 +183,9 @@ npm run dev
 # Test custom content functionality
 npm run test:e2e:custom
 
+The custom content suite also verifies that created items, processes and quests
+are persisted to IndexedDB and can be removed via the Manage Quests interface.
+
 # Test quest functionality
 npm run test:e2e:quests
 

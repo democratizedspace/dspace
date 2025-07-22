@@ -4,6 +4,8 @@ import {
     createTestItems,
     fillProcessForm,
     ItemSelectorHelper,
+    clearCustomContentDB,
+    getCustomContentEntities,
 } from './test-helpers';
 
 test.describe('Custom Content Management', () => {
@@ -483,5 +485,66 @@ test.describe('Custom Content Management', () => {
 
         // As long as we got through all the steps without major errors, consider the integration test a success
         expect(true).toBe(true);
+    });
+
+    test('should create a custom item persisted in IndexedDB', async ({ page }) => {
+        await clearCustomContentDB(page);
+        await page.goto('/inventory/create');
+        await page.waitForLoadState('networkidle');
+
+        const itemName = `DB Item ${Date.now()}`;
+        await page.fill('#name', itemName);
+        await page.fill('#description', 'Stored via e2e test');
+        await page.click('button.submit-button');
+        await page.waitForLoadState('networkidle');
+
+        const items = await getCustomContentEntities(page, 'items');
+        expect(items.some((i) => (i as { name?: string }).name === itemName)).toBe(true);
+    });
+
+    test('should create a custom process persisted in IndexedDB', async ({ page }) => {
+        await clearCustomContentDB(page);
+        await createTestItems(page, 1);
+        await page.goto('/processes/create');
+        await page.waitForLoadState('networkidle');
+
+        const title = `DB Process ${Date.now()}`;
+        await fillProcessForm(page, title, '10m', 1, 0, 0);
+        await page.locator('button.submit-button').first().click();
+        await page.waitForLoadState('networkidle');
+
+        const processes = await getCustomContentEntities(page, 'processes');
+        expect(processes.some((p) => (p as { title?: string }).title === title)).toBe(true);
+    });
+
+    test('Quest Management - delete custom quest via Manage Quests', async ({ page }) => {
+        await clearCustomContentDB(page);
+        const questTitle = `Managed Quest ${Date.now()}`;
+
+        await page.goto('/quests/create');
+        await page.waitForLoadState('networkidle');
+        await page.fill('#title', questTitle);
+        await page.fill('#description', 'Quest for deletion test');
+        await page.locator('button.submit-button').click();
+        await page.waitForLoadState('networkidle');
+
+        const quests = await getCustomContentEntities(page, 'quests');
+        expect(quests.some((q) => (q as { title?: string }).title === questTitle)).toBe(true);
+
+        await page.goto('/quests/manage');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const questItem = page.locator('.quest-item', { hasText: questTitle }).first();
+        await expect(questItem).toBeVisible();
+
+        page.on('dialog', (dialog) => dialog.accept());
+        const deleteButton = questItem.locator('button.delete-button').first();
+        await deleteButton.click();
+
+        await expect(questItem).toHaveCount(0);
+
+        const remaining = await getCustomContentEntities(page, 'quests');
+        expect(remaining.some((q) => (q as { title?: string }).title === questTitle)).toBe(false);
     });
 });

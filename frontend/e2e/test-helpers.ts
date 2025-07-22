@@ -440,3 +440,49 @@ export async function addTestItems(page: Page): Promise<void> {
         console.log('Added test items to inventory');
     });
 }
+
+/**
+ * Deletes the CustomContent IndexedDB database to ensure a clean state
+ */
+export async function clearCustomContentDB(page: Page): Promise<void> {
+    await page.goto('/');
+    await page.evaluate(() => {
+        indexedDB.deleteDatabase('CustomContent');
+    });
+}
+
+/**
+ * Retrieves all entities from a specific store in the CustomContent DB
+ */
+export async function getCustomContentEntities(
+    page: Page,
+    store: 'items' | 'processes' | 'quests'
+): Promise<Record<string, unknown>[]> {
+    await page.goto('/');
+    return page.evaluate(async (store) => {
+        function openDb() {
+            return new Promise<IDBDatabase>((resolve, reject) => {
+                const req = indexedDB.open('CustomContent', 1);
+                req.onupgradeneeded = () => {
+                    const db = req.result;
+                    ['items', 'processes', 'quests'].forEach((name) => {
+                        if (!db.objectStoreNames.contains(name)) {
+                            db.createObjectStore(name, { keyPath: 'id' });
+                        }
+                    });
+                };
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        const db = await openDb();
+        return new Promise<Record<string, unknown>[]>((resolve, reject) => {
+            const tx = db.transaction(store, 'readonly');
+            const os = tx.objectStore(store);
+            const q = os.getAll();
+            q.onsuccess = () => resolve(q.result as Record<string, unknown>[]);
+            q.onerror = () => reject(q.error);
+        });
+    }, store);
+}
