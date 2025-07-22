@@ -1,0 +1,34 @@
+{
+    "id": "woodworking/finish-sanding",
+    "title": "Finish Sand Your Project",
+    "description": "Smooth the surface of your latest build with fine-grit paper before applying finish.",
+    "image": "/assets/sandpaper.jpg",
+    "npc": "/assets/npc/cedar.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Sanding is the secret to a professional look. Use a light touch and work up to 220 grit for a silky feel.",
+            "options": [{ "type": "goto", "goto": "sand", "text": "Got it." }]
+        },
+        {
+            "id": "sand",
+            "text": "Move with the grain and wipe away dust between grits. It takes patience but the results are worth it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Looks smooth",
+                    "requiresItems": [{ "id": "111", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Beautiful work! A coat of finish will really make the wood shine.",
+            "options": [{ "type": "finish", "text": "Thanks, Cedar." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/step-stool"]
+}

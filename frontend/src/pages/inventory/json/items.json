@@ -861,5 +861,17 @@
         "name": "Pi cluster node",
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
         "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "133",
+        "name": "external backup SSD",
+        "description": "Stores nightly database dumps from your cluster.",
+        "image": "/assets/quests/basic_circuit.svg"
+    },
+    {
+        "id": "134",
+        "name": "basic telescope",
+        "description": "A simple refracting telescope for backyard astronomy.",
+        "image": "/assets/quests/solar.jpg"
     }
 ]

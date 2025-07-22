@@ -1,0 +1,34 @@
+{
+    "id": "rocketry/static-test",
+    "title": "Perform a Static Engine Test",
+    "description": "Fire your rocket engine while it's secured to verify thrust and stability.",
+    "image": "/assets/rocketry.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before launch day let's conduct a static burn. Secure the rocket to a stand and record the thrust curve.",
+            "options": [{ "type": "goto", "goto": "burn", "text": "Ready." }]
+        },
+        {
+            "id": "burn",
+            "text": "Ignite the engine remotely and keep clear. Use a scale under the mount to capture thrust data for analysis.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Data captured",
+                    "requiresItems": [{ "id": "66", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! Reviewing the numbers will help ensure a safe first flight.",
+            "options": [{ "type": "finish", "text": "Will do." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["rocketry/parachute"]
+}

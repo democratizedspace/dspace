@@ -1,0 +1,39 @@
+{
+    "id": "astronomy/basic-telescope",
+    "title": "Assemble a Simple Telescope",
+    "description": "Build a small refractor to observe Jupiter's moons.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Sketching the Moon was a great start. Now let's build a basic telescope so you can see much farther into the sky.",
+            "options": [{ "type": "goto", "goto": "build", "text": "I'm ready." }]
+        },
+        {
+            "id": "build",
+            "text": "Combine two lenses in a cardboard tube and align the optics carefully. A stable tripod will help keep the view steady.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-basic-telescope",
+                    "text": "Putting it together."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I can see Jupiter!",
+                    "requiresItems": [{ "id": "134", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent craftsmanship! Regular stargazing will sharpen your navigation skills for future missions.",
+            "options": [{ "type": "finish", "text": "Thanks, Nova." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/observe-moon"]
+}

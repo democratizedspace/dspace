@@ -1,0 +1,35 @@
+{
+    "id": "ubi/first-payment",
+    "title": "Claim Your First UBI",
+    "description": "Withdraw your daily dUSD for the first time.",
+    "image": "/assets/quests/basicincome.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to try out the basic income system? Let's trigger your first payout so you see how it works.",
+            "options": [{ "type": "goto", "goto": "claim", "text": "Absolutely." }]
+        },
+        {
+            "id": "claim",
+            "text": "Open the wallet page and click the claim button. Your balance will increase instantly once the transaction finishes.",
+            "options": [
+                { "type": "process", "process": "basic-income", "text": "Claiming now." },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Funds received",
+                    "requiresItems": [{ "id": "72", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Come back tomorrow for another payment and watch your savings grow.",
+            "options": [{ "type": "finish", "text": "See you then." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["ubi/basicincome"]
+}

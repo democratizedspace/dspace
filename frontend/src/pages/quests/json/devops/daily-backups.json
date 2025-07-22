@@ -1,0 +1,39 @@
+{
+    "id": "devops/daily-backups",
+    "title": "Configure Daily Backups",
+    "description": "Use a cron job to archive your game data each night.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's protect your work by backing up the cluster.",
+            "options": [{ "type": "goto", "goto": "script", "text": "Good plan." }]
+        },
+        {
+            "id": "script",
+            "text": "Plug an external SSD into the control plane and create a cron job that runs `docker exec dspace-postgres pg_dumpall > /mnt/backup/dspace.sql` each night.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "configure-daily-backups",
+                    "text": "Cron job added."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Backup script running.",
+                    "requiresItems": [{ "id": "133", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Backups are running daily. Store them off-site for extra safety.",
+            "options": [{ "type": "finish", "text": "Will do." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/monitoring"]
+}

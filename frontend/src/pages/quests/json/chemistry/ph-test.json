@@ -1,0 +1,35 @@
+{
+    "id": "chemistry/ph-test",
+    "title": "Measure Solution pH",
+    "description": "Use test strips to check the acidity of your latest experiment.",
+    "image": "/assets/pH_strip.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before we mix anything more reactive, let's practice measuring pH so you can record accurate data in future trials.",
+            "options": [{ "type": "goto", "goto": "measure", "text": "Got it." }]
+        },
+        {
+            "id": "measure",
+            "text": "Dip a strip into your solution and compare the color to the chart. Precision here helps keep reactions predictable.",
+            "options": [
+                { "type": "process", "process": "measure-ph", "text": "Reading the strip." },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logged my result",
+                    "requiresItems": [{ "id": "59", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! We'll use those readings when formulating safer propellants.",
+            "options": [{ "type": "finish", "text": "Looking forward to it." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["chemistry/safe-reaction"]
+}
