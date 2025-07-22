@@ -127,6 +127,7 @@ Every quest JSON file must include:
 > **Note:** The full quest editing interface is still under development. The current implementation in `QuestForm.svelte` supports basic quest properties (title, description, image) with more complete dialogue editing planned for future updates.
 
 While the user interface for editing complex dialogue trees is being developed, quests are currently created using JSON files or through the custom content API. The future implementation will include:
+You can run `npm run generate-quest` to scaffold a template JSON file with placeholder dialogue.
 
 -   Dialogue node creation and editing
 -   Process and item requirement selection
@@ -145,7 +146,7 @@ Before submitting a quest, verify:
 
 ## Contribution Workflow
 
-1. Develop your quest locally following these guidelines
+1. Develop your quest locally following these guidelines (start with `npm run generate-quest` for a ready-made template)
 2. Test thoroughly in your local environment
 3. Submit a [pull request](https://github.com/democratizedspace/dspace/pulls) with your quest JSON file
 4. Respond to feedback during code review

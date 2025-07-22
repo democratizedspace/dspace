@@ -1,0 +1,34 @@
+{
+    "id": "programming/temp-logger",
+    "title": "Log Temperature Data",
+    "description": "Write a simple script that records hourly temperature readings.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Now that you've read a sensor, let's automate data collection with a short program that logs temperature over time.",
+            "options": [{ "type": "goto", "goto": "code", "text": "Let's code." }]
+        },
+        {
+            "id": "code",
+            "text": "Use your favorite language to read the thermistor every hour and append the value to a file. We'll graph it later.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Script running",
+                    "requiresItems": [{ "id": "58", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! With regular logs you'll spot interesting patterns in your environment.",
+            "options": [{ "type": "finish", "text": "Cool!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/thermistor-reading"]
+}

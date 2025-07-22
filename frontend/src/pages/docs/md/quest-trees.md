@@ -10,16 +10,16 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 ## Existing Quest Trees
 
 -   **Welcome** – introductory tutorial showing how to accept and complete quests
--   **3D Printing** – receive a printer, then tackle small projects and larger print runs
--   **Aquaria** – set up a Walstad tank, test the water, install a sponge filter, position the tank, add shrimp, keep guppies, perform water changes, breed them, and graduate to goldfish
--   **Hydroponics** – grow basil, expand to bucket systems, experiment with lettuce, and cultivate stevia for homemade sweetener
--   **Electronics** – wire a basic circuit, program an Arduino, and build a dimmer
--   **Robotics** – assemble a line follower and learn servo control after completing electronics basics
--   **Rocketry** – print and launch a model rocket with parachute recovery
--   **Energy** – harvest solar power and accumulate dWatts toward higher milestones
--   **UBI** – an optional quest explaining the metaguild's basic income concept
+-   **3D Printing** – receive a printer, tackle small projects, fine-tune settings, and work up to larger print runs
+-   **Aquaria** – set up a Walstad tank, test the water, install a sponge filter, position the tank, add shrimp, introduce floating plants, keep guppies, perform water changes, breed them, and graduate to goldfish
+-   **Hydroponics** – grow basil, expand to bucket systems, refresh nutrients, experiment with lettuce, and cultivate stevia for homemade sweetener
+-   **Electronics** – wire a basic circuit, program an Arduino, read sensors, and build a dimmer
+-   **Robotics** – assemble a line follower, build a servo gripper, and learn advanced control after completing electronics basics
+-   **Rocketry** – print and launch a model rocket with parachute recovery and perform a static engine test
+-   **Energy** – harvest solar power, expand battery capacity, and accumulate dWatts toward higher milestones
+-   **UBI** – an optional quest explaining the metaguild's basic income concept with daily payouts
 -   **Completionist** – track progress toward finishing all available quests
--   **Woodworking** – build a sturdy workbench, then craft birdhouses, stools and shelves
+-   **Woodworking** – build a sturdy workbench, sand projects smooth, then craft birdhouses, stools and shelves
 
 ## Planned Quest Trees
 
@@ -28,7 +28,7 @@ The following quest lines are being drafted to help achieve the "10x More Quests
 -   **Chemistry** – safe experiments that introduce sustainable rocket fuel principles and extract stevia into an artificial sweetener
 -   **Astronomy** – observational tasks that prepare players for future rocketry missions
 -   **Programming** – simple scripts for automating sensors and data collection
--   **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s
+-   **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s, then add monitoring and nightly backups
 
 Check back as these new quests are fleshed out and integrated into the main progression.
 

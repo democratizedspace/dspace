@@ -1,0 +1,39 @@
+{
+    "id": "energy/battery-upgrade",
+    "title": "Install a Larger Battery",
+    "description": "Expand your solar setup with a 1 kWh storage pack and enclosure.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your first panel works well. To store more energy, let's install a 1 kWh battery and matching enclosure.",
+            "options": [{ "type": "goto", "goto": "install", "text": "Let's do it." }]
+        },
+        {
+            "id": "install",
+            "text": "Mount the new battery and controller in the enclosure, then connect your existing panel to start charging the bigger pack.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "setup-solar-enclosure-1kWh",
+                    "text": "Installing."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All set",
+                    "requiresItems": [{ "id": "6", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! With more storage you can run equipment longer into the night.",
+            "options": [{ "type": "finish", "text": "Awesome!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/solar"]
+}

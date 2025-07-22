@@ -1,0 +1,39 @@
+{
+    "id": "devops/monitoring",
+    "title": "Set Up Monitoring",
+    "description": "Install Prometheus and Grafana to monitor your Pi cluster.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "With the cluster online it's time to keep an eye on resource usage.",
+            "options": [{ "type": "goto", "goto": "install", "text": "Show me how." }]
+        },
+        {
+            "id": "install",
+            "text": "Use docker compose to run Prometheus and Grafana. Expose Grafana on port 3000.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "install-monitoring-stack",
+                    "text": "Installing now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Dashboard up.",
+                    "requiresItems": [{ "id": "133", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! You can now track CPU load and memory usage from the browser.",
+            "options": [{ "type": "finish", "text": "Looks good." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/k3s-deploy"]
+}

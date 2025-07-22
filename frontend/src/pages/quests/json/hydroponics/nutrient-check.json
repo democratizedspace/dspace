@@ -1,0 +1,34 @@
+{
+    "id": "hydroponics/nutrient-check",
+    "title": "Refresh Nutrient Solution",
+    "description": "Top off your tub with fresh hydroponic nutrients for healthy growth.",
+    "image": "/assets/hydroponics_nutrients.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Plants can quickly deplete minerals. Let's replenish the solution so your basil stays strong.",
+            "options": [{ "type": "goto", "goto": "add", "text": "Okay." }]
+        },
+        {
+            "id": "add",
+            "text": "Mix this bottle according to the label and pour it into the reservoir. Keep the pump running so everything circulates well.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Done",
+                    "requiresItems": [{ "id": "103", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Monitor the water level every few days and add more as needed.",
+            "options": [{ "type": "finish", "text": "Thanks!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/basil"]
+}

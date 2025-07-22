@@ -182,14 +182,15 @@ Run `node scripts/generate-quest-chart.js` to recreate `quest-tree-stats.txt` an
 ![Quest tree stats chart](https://nightly.link/democratizedspace/dspace/workflows/quest-chart.yml/branch/v3/quest-tree-chart.zip?path=frontend%2Fsrc%2Fpages%2Fdocs%2Fimages%2Fquest-tree-stats.png)
 
 Aquarium quests progress through a gentle learning curve: set up a Walstad tank, test the water, install a sponge filter, ask Atlas to position the tank, add dwarf shrimp, introduce guppies, perform regular water changes, practice breeding, and finally keep a goldfish in a large tank.
-Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation.
-The new DevOps chain explains how to deploy DSPACE on a small Raspberry Pi cluster using Docker and k3s.
+Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation. Each tree has been extended with follow-up tasks, such as tuning 3D printer retraction and refreshing hydroponic nutrients.
+The DevOps chain now covers deploying DSPACE on a Raspberry Pi cluster with Docker and k3s, setting up monitoring with Prometheus and Grafana, and scheduling nightly backups.
 
 To validate that quests use a canonical structure with clear start and finish
 steps, run the dedicated test:
 
 ```bash
 [Quest Development Guidelines](/docs/quest-guidelines), the [Quest Template Example](/docs/quest-template), and the [Quest Submission Guide](/docs/quest-submission) to streamline content creation and sharing.
+Use `npm run generate-quest` to scaffold a new quest with placeholder dialogue.
 ```
 
 Additional quality checks are available:

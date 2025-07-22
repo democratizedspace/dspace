@@ -1,0 +1,34 @@
+{
+    "id": "completionist/reminder",
+    "title": "Check for New Quests",
+    "description": "Return regularly to see what fresh challenges await you.",
+    "image": "/assets/quests/completionist.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "More quests are added all the time. Keep an eye on the board so you can maintain that shiny Completionist trophy!",
+            "options": [{ "type": "goto", "goto": "remind", "text": "I'll check back" }]
+        },
+        {
+            "id": "remind",
+            "text": "Set a weekly reminder so you never miss new content and can claim it before anyone else.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reminder set",
+                    "requiresItems": [{ "id": "87", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your dedication keeps the metaguild growing.",
+            "options": [{ "type": "finish", "text": "Happy to help." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["completionist/v2"]
+}
