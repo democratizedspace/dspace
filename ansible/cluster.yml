@@ -14,7 +14,7 @@
         state: present
         key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
 
-- hosts: master
+- hosts: controlplane0
   become: true
   roles:
     - role: xanmanning.k3s
@@ -28,5 +28,5 @@
     - role: xanmanning.k3s
       vars:
         k3s_become: true
-        k3s_server: "https://{{ hostvars['controlplane0'].ansible_host | default('controlplane0') }}:6443"
-        k3s_token: "{{ hostvars['controlplane0'].k3s_token | default('') }}"
+        k3s_server: "https://{{ hostvars['rpi-controlplane0.local'].ansible_host | default('rpi-controlplane0.local') }}:6443"
+        k3s_token: "{{ hostvars['rpi-controlplane0.local'].k3s_token | default('') }}"

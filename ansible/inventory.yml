@@ -1,5 +1,13 @@
 all:
   hosts:
-    controlplane0:
+    rpi-controlplane0.local:
     rpi-node1.local:
     rpi-node2.local:
+  children:
+    controlplane0:
+      hosts:
+        rpi-controlplane0.local:
+    workers:
+      hosts:
+        rpi-node1.local:
+        rpi-node2.local:

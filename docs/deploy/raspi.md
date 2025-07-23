@@ -46,7 +46,7 @@ Add the following secrets under **Settings → Secrets and variables → Actions
 | Secret | When needed | Example (safe) value |
 |--------|-------------|-----------------------|
 | `GHCR_TOKEN` | Always | `ghp_xxxxx` |
-| `RPI_HOST` | LAN only | `controlplane0` |
+| `RPI_HOST` | LAN only | `rpi-controlplane0.local` |
 | `RPI_USER` | LAN only | `ubuntu` |
 | `RPI_SSH_KEY` | LAN only | *private-key-block* |
 | `CLOUDFLARE_API_TOKEN` | When tunnels enabled | `cf_...` |
