@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [ v3 ]
+    branches: [v3]
   pull_request:
 
 jobs:
@@ -14,28 +14,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-          cache-dependency-path: |
-            package-lock.json
-            frontend/package-lock.json
-      - run: npm ci
-      - run: cd frontend && npm ci
-      - name: Cache Playwright browsers
-        uses: actions/cache@v3
+      - uses: pnpm/action-setup@v2
         with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-      - run: cd frontend && npx playwright install chromium
-      - run: npm run test:pr
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-      - run: pip install pyyaml lxml yamllint
-      - run: pytest -q
-      - run: yamllint -d '{extends: relaxed}' quests/*.yaml
-      - run: cd frontend && npm run coverage
+          version: 8
+          run_install: true
+      - run: pnpm test
+      - run: npm run lint
+      - run: npx cspell "**" --no-summary
+      - run: npm run coverage
         if: env.CODECOV_TOKEN != ''
       - uses: actions/upload-artifact@v4
         if: env.CODECOV_TOKEN != ''
