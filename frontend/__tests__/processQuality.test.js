@@ -22,8 +22,12 @@ function checkProcess(proc) {
     if (!seconds || seconds <= 0) {
         issues.push(`invalid duration ${proc.duration}`);
     }
-    if (seconds > 31536000) {
-        issues.push('duration longer than one year');
+    if (seconds < 30) {
+        issues.push('duration under 30s');
+    }
+    const max = 72 * 3600;
+    if (seconds > max && !proc.long) {
+        issues.push('duration longer than 72h');
     }
 
     const hasItems =
@@ -68,5 +72,23 @@ describe('Process Quality Validation', () => {
         }
 
         expect(true).toBe(true);
+    });
+
+    test('duration sanity checks', () => {
+        const shortProc = {
+            id: 'short',
+            title: 't',
+            duration: '10s',
+            requireItems: [{ id: items[0].id, count: 1 }],
+        };
+        const longProc = {
+            id: 'long',
+            title: 't',
+            duration: '100h',
+            long: true,
+            requireItems: [{ id: items[0].id, count: 1 }],
+        };
+        expect(checkProcess(shortProc)).toContain('duration under 30s');
+        expect(checkProcess(longProc)).not.toContain('duration longer than 72h');
     });
 });

@@ -1,7 +1,7 @@
 # DSPACE - Democratized Space
 
 [![Lint & Format](https://img.shields.io/github/actions/workflow/status/democratizedspace/dspace/ci.yml?label=lint%20%26%20format)](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/github/actions/workflow/status/democratizedspace/dspace/ci.yml?label=tests)](https://github.com/democratizedspace/dspace/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/github/actions/workflow/status/democratizedspace/dspace/test-pr.yml?label=tests)](https://github.com/democratizedspace/dspace/actions/workflows/test-pr.yml)
 [![Coverage](https://codecov.io/gh/democratizedspace/dspace/branch/v3/graph/badge.svg)](https://codecov.io/gh/democratizedspace/dspace)
 [![Docs](https://img.shields.io/github/actions/workflow/status/democratizedspace/dspace/quest-chart.yml?label=docs)](https://github.com/democratizedspace/dspace/actions/workflows/quest-chart.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)

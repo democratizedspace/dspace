@@ -1,6 +1,6 @@
 {
     "name": "dspace",
-    "version": "2.1",
+    "version": "3.0.0",
     "type": "module",
     "description": "A free and open source web-based space exploration idle game",
     "scripts": {

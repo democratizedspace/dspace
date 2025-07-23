@@ -22,3 +22,7 @@
 -   Added detailed instructions for preventing Playwright artifact errors
 -   Added documentation for image reference tests
 -   Updated root README with `dev:safe` command information
+
+## [3.0.0] - 2024-04-01
+
+Initial 3.0.0 stable release.
