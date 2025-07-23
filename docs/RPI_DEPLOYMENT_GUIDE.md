@@ -95,6 +95,17 @@ kubectl apply -f k8s/
 
 `k8s/dspace-deployment.yaml` and `k8s/dspace-service.yaml` describe the DSPACE Deployment and Service.
 
+## GitHub Deployment Workflow
+
+This repository provides a GitHub Actions workflow (`.github/workflows/rpi-deploy.yml`) to build and push an ARM64 Docker image and optionally deploy it over SSH. Define the following secrets in your repository to enable the workflow:
+
+- `GHCR_TOKEN` – a personal access token with the `write:packages` scope
+- `RPI_HOST` – the hostname or IP address of your Raspberry Pi
+- `RPI_USER` – the SSH username
+- `RPI_SSH_KEY` – the private key used for authentication
+
+Add these secrets under **Settings → Secrets and variables → Actions**. If any are missing, the workflow will fail with a "Missing required secrets" message.
+
 ## Troubleshooting
 
 - **SSD not detected**: reseat cables, check `lsblk`, run `sudo fsck -fy /dev/sda2`.
