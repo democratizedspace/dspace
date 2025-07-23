@@ -873,5 +873,11 @@
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
         "image": "/assets/quests/solar.jpg"
+    },
+    {
+        "id": "135",
+        "name": "first aid kit",
+        "description": "Adhesive bandages, gauze and antiseptic packed for emergencies.",
+        "image": "/assets/quests/basic_circuit.svg"
     }
 ]
