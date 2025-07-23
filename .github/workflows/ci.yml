@@ -29,6 +29,12 @@ jobs:
             ${{ runner.os }}-playwright-
       - run: cd frontend && npx playwright install chromium
       - run: npm run test:pr
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: pip install pyyaml lxml yamllint
+      - run: pytest -q
+      - run: yamllint -d '{extends: relaxed}' quests/*.yaml
       - run: cd frontend && npm run coverage
         if: env.CODECOV_TOKEN != ''
       - uses: actions/upload-artifact@v4
