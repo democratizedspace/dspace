@@ -1160,5 +1160,29 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "1m"
+    },
+    {
+        "id": "pack-first-aid-kit",
+        "title": "Pack a basic first aid kit",
+        "requireItems": [],
+        "consumeItems": [],
+        "createItems": [{ "id": "135", "count": 1 }],
+        "duration": "2m"
+    },
+    {
+        "id": "practice-cpr",
+        "title": "Practice CPR on a dummy",
+        "requireItems": [{ "id": "135", "count": 1 }],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "observe-jupiter-moons",
+        "title": "Observe Jupiter's moons",
+        "requireItems": [{ "id": "134", "count": 1 }],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
     }
 ]

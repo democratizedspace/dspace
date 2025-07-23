@@ -1,0 +1,35 @@
+{
+    "id": "firstaid/learn-cpr",
+    "title": "Practice Basic CPR",
+    "description": "Use a dummy to rehearse chest compressions in case of emergencies.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Now that you have a kit, let's cover CPR so you're ready for serious situations.",
+            "options": [{ "type": "goto", "goto": "steps", "text": "I'm ready." }]
+        },
+        {
+            "id": "steps",
+            "text": "Place the heel of your hand in the center of the chest and press hard and fast about 100 times per minute until help arrives.",
+            "options": [
+                { "type": "process", "process": "practice-cpr", "text": "Practicing now." },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [{ "id": "135", "count": 1 }],
+                    "text": "I know the basics."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent work! Regular practice could save a life one day.",
+            "options": [{ "type": "finish", "text": "I'll keep practicing." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/assemble-kit"]
+}

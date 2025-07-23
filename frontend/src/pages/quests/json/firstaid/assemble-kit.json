@@ -1,0 +1,35 @@
+{
+    "id": "firstaid/assemble-kit",
+    "title": "Assemble a First Aid Kit",
+    "description": "Gather basic medical supplies so you're ready for small emergencies.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "dChat here! Even experienced builders should keep a first aid kit nearby.",
+            "options": [{ "type": "goto", "goto": "gather", "text": "What do I need?" }]
+        },
+        {
+            "id": "gather",
+            "text": "Include adhesive bandages, gauze, antiseptic wipes and gloves. Pack them so they stay clean and dry.",
+            "options": [
+                { "type": "process", "process": "pack-first-aid-kit", "text": "Packing now." },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [{ "id": "135", "count": 1 }],
+                    "text": "Supplies packed."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Keep this kit handy so minor mishaps don't halt your progress.",
+            "options": [{ "type": "finish", "text": "Will do!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}

@@ -1,0 +1,39 @@
+{
+    "id": "astronomy/jupiter-moons",
+    "title": "Track Jupiter's Moons",
+    "description": "Observe the four largest moons nightly to understand orbital motion.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "With your telescope assembled, let's watch Jupiter. Its bright moons move quickly!",
+            "options": [{ "type": "goto", "goto": "observe", "text": "Pointing the scope." }]
+        },
+        {
+            "id": "observe",
+            "text": "Sketch Io, Europa, Ganymede and Callisto each night for a week and note how their positions change.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "observe-jupiter-moons",
+                    "text": "Logging observations."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [{ "id": "134", "count": 1 }],
+                    "text": "Week complete."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent diligence! Tracking these moons builds the skills needed for future navigation challenges.",
+            "options": [{ "type": "finish", "text": "Space feels closer already." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/basic-telescope"]
+}

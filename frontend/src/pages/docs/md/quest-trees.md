@@ -20,13 +20,14 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 -   **UBI** – an optional quest explaining the metaguild's basic income concept with daily payouts
 -   **Completionist** – track progress toward finishing all available quests
 -   **Woodworking** – build a sturdy workbench, sand projects smooth, then craft birdhouses, stools and shelves
+-   **First Aid** – assemble a kit and practice CPR so accidents don't derail progress
+-   **Astronomy** – observe the Moon, build a telescope and track Jupiter's moons
 
 ## Planned Quest Trees
 
 The following quest lines are being drafted to help achieve the "10x More Quests" goal announced for v3:
 
 -   **Chemistry** – safe experiments that introduce sustainable rocket fuel principles and extract stevia into an artificial sweetener
--   **Astronomy** – observational tasks that prepare players for future rocketry missions
 -   **Programming** – simple scripts for automating sensors and data collection
 -   **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s, then add monitoring and nightly backups
 
