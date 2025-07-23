@@ -23,5 +23,7 @@ ENV HOST=0.0.0.0
 # Expose port 3002
 EXPOSE 3002
 
+HEALTHCHECK CMD curl -f http://localhost:3002/health || exit 1
+
 # Run the application
 CMD ["npm", "run", "dev"]

@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 import { writeFileSync, mkdirSync, readdirSync, readFileSync, statSync } from 'fs';
+import glob from 'glob';
+import { fileURLToPath } from 'url';
 import path from 'path';
 import readline from 'readline';
 
@@ -31,13 +33,21 @@ function gatherStats() {
 async function main() {
     const { categories, npcCounts } = gatherStats();
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    const questRoot = path.join('frontend', 'src', 'pages', 'quests', 'json');
+    const existing = glob.sync(path.join(questRoot, '**/*.json')).map((f) => path.relative(questRoot, f).replace(/\.json$/, ''));
 
-    let questId = process.argv[2];
+    const noLlm = process.argv.includes('--no-llm');
+    let questId = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : null;
     if (!questId) {
         console.log('Available categories:', categories.join(', '));
         const category = (await ask('Choose a category or type a new one: ', rl)).trim();
         const slug = (await ask('Quest id (slug-with-dashes): ', rl)).trim();
         questId = `${category}/${slug}`;
+    }
+
+    if (existing.includes(`${questId}`)) {
+        console.error(`Quest ${questId} already exists.`);
+        process.exit(1);
     }
 
     const title = questId
@@ -69,13 +79,25 @@ async function main() {
         dialogue: [
             {
                 id: 'start',
-                text: 'Replace this text with your opening dialogue.',
+                text: 'Generating...',
                 options: [{ type: 'finish', text: 'Finish' }],
             },
         ],
         rewards: [],
         requiresQuests: [],
     };
+
+    if (!noLlm) {
+        const { scoreQuest } = await import('../../scripts/utils/llm.js');
+        try {
+            const text = await scoreQuest(`Write a short greeting from ${npcName} for the quest ${title}.`);
+            quest.dialogue[0].text = text;
+        } catch (e) {
+            console.warn('LLM generation failed:', e.message);
+        }
+    } else {
+        quest.dialogue[0].text = 'Replace this text with your opening dialogue.';
+    }
 
     const outputPath = path.join('frontend', 'src', 'pages', 'quests', 'json', `${questId}.json`);
     mkdirSync(path.dirname(outputPath), { recursive: true });

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: dspace
-        image: dspace-app:latest
+        image: ghcr.io/democratizedspace/dspace:v3
         ports:
         - containerPort: 3002
         env:
@@ -26,3 +26,9 @@ spec:
           value: "3002"
         - name: HOST
           value: "0.0.0.0"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 5
+          periodSeconds: 10
