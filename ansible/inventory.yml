@@ -1,0 +1,5 @@
+all:
+  hosts:
+    controlplane0:
+    rpi-node1.local:
+    rpi-node2.local:
