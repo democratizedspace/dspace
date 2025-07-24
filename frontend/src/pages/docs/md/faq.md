@@ -1,5 +1,5 @@
 ---
-title: 'Freqently Asked Questions'
+title: 'Frequently Asked Questions'
 slug: 'faq'
 ---
 
