@@ -37,7 +37,7 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## January 2023
 
--   [x] golfish aquarium
+-   [x] goldfish aquarium
 -   [x] rocket with a parachute
 -   [x] dSolar
 -   [x] basic income

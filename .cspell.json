@@ -1,6 +1,26 @@
 {
   "version": "0.2",
   "language": "en",
-  "ignorePaths": ["node_modules", "frontend/node_modules", "dist", "coverage"],
+  "dictionaryDefinitions": [
+    {
+      "name": "dspace-terms",
+      "path": "./cspell/dspace-terms.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": ["dspace-terms"],
+  "ignorePaths": [
+    "node_modules",
+    "frontend/node_modules",
+    "dist",
+    "coverage",
+    "frontend/pnpm-lock.yaml",
+    "pnpm-lock.yaml",
+    "**/*.svg",
+    "**/*.dxf",
+    "frontend/src/pages/**/json/**",
+    "frontend/src/pages/processes/processes.json"
+  ],
+  "words": ["NPCs", "MPPT"],
   "useGitignore": true
 }
