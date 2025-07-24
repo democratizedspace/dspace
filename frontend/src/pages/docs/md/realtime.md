@@ -1,5 +1,5 @@
 ---
-title: 'Everthing is real-time'
+title: 'Everything is real-time'
 slug: 'realtime'
 ---
 
