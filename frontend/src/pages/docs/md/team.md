@@ -9,7 +9,7 @@ slug: 'team'
 
 ### [Esp](https://twitter.com/EspToTheFuture)
 
-![The Twiter avatar of Esp](/assets/team_esp.jpg)
+![The Twitter avatar of Esp](/assets/team_esp.jpg)
 
 Esp is the founding human developer of the game. Software engineer by day, and also by night. You can find him saying weird stuff about Dyson swarms on [Twitter](https://twitter.com/EspToTheFuture).
 

@@ -13,7 +13,7 @@ test.describe('Docs Navigation', () => {
         const pages = [
             { href: '/docs/about', title: /About/i },
             { href: '/docs/mission', title: /Mission/i },
-            { href: '/docs/faq', title: /FAQ|Freqently/i },
+            { href: '/docs/faq', title: /FAQ|Frequently/i },
             { href: '/docs/3dprinting', title: /3D Printing/i },
         ];
 
