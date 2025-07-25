@@ -211,8 +211,8 @@ export const saveItem = async (item) => {
             /* istanbul ignore next */
             /* istanbul ignore next */
             /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -299,8 +299,8 @@ export const saveProcess = async (process) => {
             /* istanbul ignore next */
             /* istanbul ignore next */
             /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -371,8 +371,8 @@ export const deleteProcess = async (id) => {
                 db.close();
             };
             /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -395,8 +395,8 @@ export const saveQuest = async (quest) => {
                 db.close();
             };
             /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
