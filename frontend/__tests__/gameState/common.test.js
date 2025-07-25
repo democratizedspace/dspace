@@ -4,6 +4,8 @@ const {
     exportGameStateString,
     importGameStateString,
     resetGameState,
+    rollbackGameState,
+    validateGameState,
 } = require('../../src/utils/gameState/common.js');
 
 describe('gameState - common utilities', () => {
@@ -38,5 +40,25 @@ describe('gameState - common utilities', () => {
         importGameStateString(encoded);
         const loaded = loadGameState();
         expect(loaded).toEqual(newState);
+    });
+
+    test('validateGameState should fill missing sections', () => {
+        const corrupted = { quests: null };
+        const validated = validateGameState(corrupted);
+        expect(validated).toEqual({ quests: {}, inventory: {}, processes: {} });
+    });
+
+    test('rollbackGameState should restore previous state', () => {
+        const state = loadGameState();
+        state.inventory['1'] = 1;
+        saveGameState(state);
+
+        const updated = loadGameState();
+        updated.inventory['1'] = 2;
+        saveGameState(updated);
+
+        rollbackGameState();
+        const rolled = loadGameState();
+        expect(rolled.inventory['1']).toBe(1);
     });
 });

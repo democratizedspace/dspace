@@ -482,6 +482,23 @@ For component state:
 - Leverage the game state system for persistent game data
 - During development you can quickly wipe progress by calling
   `resetGameState()` from `frontend/src/utils/gameState/common.js`.
+- If something goes wrong, use `rollbackGameState()` to restore the last
+  saved state. The helper `validateGameState()` runs on load to keep the
+  structure intact.
+
+#### Rollback Use Cases
+
+Game state rollbacks provide a safety net during development and early
+access testing. Automatic backups are written before each save so you
+can undo the most recent change when things go sideways. Typical
+scenarios include:
+
+- **Buggy updates** that corrupt local saves
+- **Failed imports** of custom content or manually edited game state
+- **Early custom content** that doesn't pass validation yet
+
+Invoking `rollbackGameState()` restores the previous snapshot,
+preventing data loss while you debug the issue.
 
 ### Creating New Components
 
