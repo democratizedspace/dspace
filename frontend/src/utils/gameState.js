@@ -90,6 +90,7 @@ export const grantItems = (questId, stepId, optionIndex, itemList) => {
 export const VERSIONS = {
     V1: '1',
     V2: '2',
+    V3: '3',
 };
 
 export const setVersionNumber = (versionNumber) => {
@@ -116,5 +117,18 @@ export const importV1V2 = (itemList) => {
 
     addItems([award, ...itemList]);
     setVersionNumber(VERSIONS.V2);
+    saveGameState(gameState);
+};
+
+// v2 -> v3
+export const importV2V3 = () => {
+    const gameState = loadGameState();
+
+    // Ensure new properties exist for v3
+    if (!gameState.processes) {
+        gameState.processes = {};
+    }
+
+    setVersionNumber(VERSIONS.V3);
     saveGameState(gameState);
 };

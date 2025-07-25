@@ -1,0 +1,20 @@
+{
+    "id": "test/simple",
+    "title": "Test Quest",
+    "description": "A simple test quest",
+    "image": "/assets/test.png",
+    "npc": "/assets/npc/dchat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Start",
+            "options": [{ "type": "goto", "goto": "end", "text": "Next" }]
+        },
+        {
+            "id": "end",
+            "text": "End",
+            "options": [{ "type": "finish", "text": "Finish" }]
+        }
+    ]
+}

@@ -91,12 +91,14 @@ export async function updateEntity(updatedEntity) {
 
                 /* istanbul ignore next */
                 updateRequest.onerror = (event) => {
+                    console.error('Update entity failed:', event.target.error);
                     reject(event.target.error);
                 };
             };
 
             /* istanbul ignore next */
             getRequest.onerror = (event) => {
+                console.error('Get entity for update failed:', event.target.error);
                 reject(event.target.error);
             };
         });
@@ -169,6 +171,7 @@ export const openCustomContentDB = () => {
         };
 
         request.onerror = () => {
+            console.error('Error opening custom content DB:', request.error);
             reject(request.error);
         };
     });
@@ -185,6 +188,7 @@ export const getSchemaVersion = async () => {
             db.close();
         };
         request.onerror = () => {
+            console.error('Error getting schema version:', request.error);
             reject(request.error);
             db.close();
         };
@@ -204,15 +208,9 @@ export const saveItem = async (item) => {
                 db.close();
             };
             /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                console.error('Error saving item:', event.target.error);
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -235,18 +233,9 @@ export const getItems = async () => {
                 db.close();
             };
             /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                console.error('Error getting items:', event.target.error);
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -269,10 +258,9 @@ export const getItem = async (id) => {
                 db.close();
             };
             /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                console.error('Error getting item:', event.target.error);
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -295,12 +283,9 @@ export const saveProcess = async (process) => {
                 db.close();
             };
             /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                console.error('Error saving process:', event.target.error);
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -323,8 +308,9 @@ export const getProcesses = async () => {
                 db.close();
             };
             /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                console.error('Error getting processes:', event.target.error);
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -347,8 +333,9 @@ export const getProcess = async (id) => {
                 db.close();
             };
             /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                console.error('Error getting process:', event.target.error);
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -371,8 +358,9 @@ export const deleteProcess = async (id) => {
                 db.close();
             };
             /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                console.error('Error deleting process:', event.target.error);
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -395,8 +383,9 @@ export const saveQuest = async (quest) => {
                 db.close();
             };
             /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                console.error('Error saving quest:', event.target.error);
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -419,8 +408,9 @@ export const getQuests = async () => {
                 db.close();
             };
             /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                console.error('Error getting quests:', event.target.error);
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -443,8 +433,9 @@ export const getQuest = async (id) => {
                 db.close();
             };
             /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                console.error('Error getting quest:', event.target.error);
+                reject(event.target.error);
                 db.close();
             };
         });
