@@ -151,3 +151,5 @@ walstad
 wrappy
 xanmanning
 yourquest
+dChat
+SOULBOUND

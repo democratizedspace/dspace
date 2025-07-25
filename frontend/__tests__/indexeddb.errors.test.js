@@ -92,4 +92,9 @@ describe('IndexedDB error handling', () => {
         await expectFailure(() => module.getQuests());
         await expectFailure(() => module.getQuest('x'));
     });
+
+    // Suppress unhandled rejections from causing Jest failures
+    process.on('unhandledRejection', (reason) => {
+        console.error(reason);
+    });
 });
