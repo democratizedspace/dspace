@@ -311,6 +311,21 @@ describe('QuestForm Component', () => {
         expect(container.querySelector('label[for="image"]')).not.toBeNull();
     });
 
+    it('lists existing quests as requirement options', async () => {
+        component = mockQuestForm.render(container, {
+            isEdit: false,
+            existingQuests: [
+                { id: 'q1', title: 'Base Quest' },
+                { id: 'q2', title: 'Second Quest' },
+            ],
+        });
+
+        const { reqSelect } = component.elements;
+        expect(reqSelect.options).toHaveLength(2);
+        expect(reqSelect.options[0].value).toBe('q1');
+        expect(reqSelect.options[1].textContent).toBe('Second Quest');
+    });
+
     it('submits form with all fields filled', async () => {
         // Render the component
         component = mockQuestForm.render(container, {
