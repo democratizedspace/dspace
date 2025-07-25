@@ -1,0 +1,10 @@
+---
+import Page from '../../components/Page.astro';
+import QuestReview from '../../components/svelte/QuestReview.svelte';
+
+const quests = await Astro.glob('./json/*/*.json');
+---
+
+<Page title="Review Quests">
+    <QuestReview client:load quests={quests.map((q) => q.default)} />
+</Page>
