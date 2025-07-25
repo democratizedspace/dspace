@@ -8,7 +8,12 @@
         "image": { "type": "string" },
         "price": { "type": "string" },
         "unit": { "type": "string" },
-        "type": { "type": "string" }
+        "type": { "type": "string" },
+        "dependencies": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": []
+        }
     },
     "required": ["id", "name", "description", "image"],
     "additionalProperties": false

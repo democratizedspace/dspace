@@ -13,12 +13,19 @@ const validate = ajv.compile(schema);
 describe('item validation', () => {
     test('items.json conforms to schema', () => {
         const items = JSON.parse(fs.readFileSync(itemsFile));
+        const ids = new Set(items.map((it) => it.id));
         for (const item of items) {
             const valid = validate(item);
             if (!valid) {
                 console.error(validate.errors);
             }
             expect(valid).toBe(true);
+
+            if (item.dependencies) {
+                for (const dep of item.dependencies) {
+                    expect(ids.has(dep)).toBe(true);
+                }
+            }
         }
     });
 });

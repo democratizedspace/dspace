@@ -860,7 +860,8 @@
         "id": "132",
         "name": "Pi cluster node",
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "dependencies": ["129", "131"]
     },
     {
         "id": "133",
@@ -872,7 +873,8 @@
         "id": "134",
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
-        "image": "/assets/quests/solar.jpg"
+        "image": "/assets/quests/solar.jpg",
+        "dependencies": ["0", "3"]
     },
     {
         "id": "135",
