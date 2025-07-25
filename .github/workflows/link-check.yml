@@ -11,7 +11,8 @@ jobs:
       - uses: lycheeverse/lychee-action@v1.9.0
         with:
           args: >-
-            --accept 403 --accept 429
+            --accept 403,429
             --no-progress --verbose
             "**/*.md"
           fail: true
+
