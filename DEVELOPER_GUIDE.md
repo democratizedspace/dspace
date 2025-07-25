@@ -482,6 +482,9 @@ For component state:
 - Leverage the game state system for persistent game data
 - During development you can quickly wipe progress by calling
   `resetGameState()` from `frontend/src/utils/gameState/common.js`.
+- If something goes wrong, use `rollbackGameState()` to restore the last
+  saved state. The helper `validateGameState()` runs on load to keep the
+  structure intact.
 
 ### Creating New Components
 
