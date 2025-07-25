@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
+    import ItemPreview from './ItemPreview.svelte';
 
     export let name = '';
     export let description = '';
@@ -93,6 +94,10 @@
         <button type="submit" class="submit-button">Create Item</button>
     </div>
 </form>
+
+{#if name || description || previewUrl}
+    <ItemPreview {name} {description} imageUrl={previewUrl} {price} {unit} {type} />
+{/if}
 
 <style>
     .item-form {
