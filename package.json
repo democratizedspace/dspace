@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cd frontend && npm run dev",
-    "test": "cd frontend && npm test",
+    "test": "vitest run --coverage tests/itemQuality.test.ts",
     "test:watch": "cd frontend && npm run test:watch",
     "test:e2e": "cd frontend && npm run test:e2e",
     "test:e2e:coverage": "cd frontend && npm run test:e2e:coverage",
@@ -22,9 +22,13 @@
     "build": "cd frontend && npm run build"
   },
   "devDependencies": {
-    "fake-indexeddb": "^6.0.0",
+    "@types/node": "^24.1.0",
+    "@vitest/coverage-v8": "^3.2.4",
     "chart.js": "^4.5.0",
-    "chartjs-node-canvas": "^5.0.0"
+    "chartjs-node-canvas": "^5.0.0",
+    "fake-indexeddb": "^6.0.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   },
   "license": "MIT"
 }
