@@ -175,7 +175,7 @@ so older quests from the v2 era remain valid. Keep the NPC file updated when
 adding new characters.
 Quest files are organized by category in subfolders, so feel free to expand any
 area—electronics, hydroponics, rocketry and more—with additional quests.
-See [Quest Trees](/docs/quest-trees) for an overview of the different categories and their progression.
+See [Quest Trees](docs/quest-trees) for an overview of the different categories and their progression.
 The repository includes a script that summarizes how many quests and lines of dialogue exist in each tree. Categories are sorted by quest count for readability.
 Run `node scripts/generate-quest-chart.js` to recreate `quest-tree-stats.txt` and a PNG image saved locally. The PNG is ignored in Git, but CI artifacts attach the latest chart for reference.
 
@@ -189,7 +189,7 @@ To validate that quests use a canonical structure with clear start and finish
 steps, run the dedicated test:
 
 ```bash
-[Quest Development Guidelines](/docs/quest-guidelines), the [Quest Template Example](/docs/quest-template), and the [Quest Submission Guide](/docs/quest-submission) to streamline content creation and sharing.
+[Quest Development Guidelines](docs/quest-guidelines), the [Quest Template Example](docs/quest-template), and the [Quest Submission Guide](docs/quest-submission) to streamline content creation and sharing.
 Use `npm run generate-quest` to scaffold a new quest with placeholder dialogue.
 ```
 
@@ -221,10 +221,10 @@ and balancing new processes.
 
 ### AI-Assisted Quest Creation
 
-For faster quest development, consult our [Quest Prompts](/docs/prompts-quests)
+For faster quest development, consult our [Quest Prompts](docs/prompts-quests)
 guide. It includes ready-made prompt templates for tools like GPT-4 or Claude to
 help you generate dialogue and structure quickly. Combine these with the
-[Quest Development Guidelines](/docs/quest-guidelines), the [Quest Template Example](/docs/quest-template), and the [Quest Submission Guide](/docs/quest-submission) to streamline content creation and sharing.
+[Quest Development Guidelines](docs/quest-guidelines), the [Quest Template Example](docs/quest-template), and the [Quest Submission Guide](docs/quest-submission) to streamline content creation and sharing.
 
 ### Staying Updated
 
