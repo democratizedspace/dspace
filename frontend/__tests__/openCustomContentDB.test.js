@@ -14,6 +14,7 @@ describe('openCustomContentDB', () => {
             onsuccess: null,
             onerror: null,
             result: db,
+            transaction: { objectStore: jest.fn(() => ({ put: jest.fn() })) },
         };
         global.indexedDB.open = jest.fn(() => request);
 
@@ -35,6 +36,7 @@ describe('openCustomContentDB', () => {
             onsuccess: null,
             onerror: null,
             error: new Error('fail'),
+            transaction: { objectStore: jest.fn(() => ({ put: jest.fn() })) },
         };
         global.indexedDB.open = jest.fn(() => request);
 
