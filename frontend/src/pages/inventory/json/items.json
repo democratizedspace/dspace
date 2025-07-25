@@ -10,7 +10,8 @@
         "id": "1",
         "name": "Benchy",
         "description": "A basic test print that is used to test the quality of a printer.",
-        "image": "/assets/benchy.jpg"
+        "image": "/assets/benchy.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "2",
@@ -59,7 +60,8 @@
         "id": "8",
         "name": "Benchy Award",
         "description": "Cause it's a bench! Get it? Benchy?",
-        "image": "/assets/benchy_award.jpg"
+        "image": "/assets/benchy_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "9",
@@ -110,7 +112,8 @@
         "id": "15",
         "name": "3D printing kit",
         "description": "A kit that contains all the parts you need to get started with 3D printing. Everything is fully assembled.",
-        "image": "/assets/amazing1.jpg"
+        "image": "/assets/amazing1.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "16",
@@ -123,37 +126,43 @@
         "id": "17",
         "name": "5 gallon bucket of tap water (chlorinated)",
         "description": "A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics.",
-        "image": "/assets/bucket_water.jpg"
+        "image": "/assets/bucket_water.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "18",
         "name": "Motor Award",
         "description": "A trophy granted for being one of the first people to buy an Edison Model M",
-        "image": "/assets/motor_award.jpg"
+        "image": "/assets/motor_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "19",
         "name": "Rocket Award",
         "description": "A trophy granted for printing your first model rocket.",
-        "image": "/assets/rocket_award.jpg"
+        "image": "/assets/rocket_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "20",
         "name": "dCarbon",
         "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
-        "image": "/assets/dCarbon.jpg"
+        "image": "/assets/dCarbon.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "21",
         "name": "Hypercar (80% charge)",
         "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 80% charged.",
-        "image": "/assets/hypercar.jpg"
+        "image": "/assets/hypercar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "22",
         "name": "dWatt",
         "description": "A token that represents 1 watt of electricity that can be consumed by machines. To acquire 1 dWatt, you need to either prepay the dCarbon cost, or generate and store it in a battery without accruing dCarbon.",
-        "image": "/assets/dWatts.jpg"
+        "image": "/assets/dWatts.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "23",
@@ -166,61 +175,71 @@
         "id": "24",
         "name": "dUSD",
         "description": "An in-game tokenized version of the USD currency. Not backed by or in any way associated with actual USD.",
-        "image": "/assets/dUSD.jpg"
+        "image": "/assets/dUSD.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "25",
         "name": "5 gallon bucket of tap water (dechlorinated)",
         "description": "A 5 gallon bucket of water. This water is dechlorinated and can be used for hydroponics.",
-        "image": "/assets/bucket_water.jpg"
+        "image": "/assets/bucket_water.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "26",
         "name": "soaked hydroponic starter plug",
         "description": "A hydroponic starter plug soaked in water. Used to germinate seeds.",
-        "image": "/assets/rockwool_wet.jpg"
+        "image": "/assets/rockwool_wet.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "27",
         "name": "basil seedling",
         "description": "A basil seedling that has been germinated in a rockwool cube.",
-        "image": "/assets/basil_seedlings.jpg"
+        "image": "/assets/basil_seedlings.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "28",
         "name": "sink",
         "description": "Generates tap water.",
-        "image": "/assets/tap.jpg"
+        "image": "/assets/tap.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "29",
         "name": "smart plug",
         "description": "A smart plug that plugs into a wall outlet to measure energy usage.",
-        "image": "/assets/smart_plug.jpg"
+        "image": "/assets/smart_plug.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "30",
         "name": "3D printed nosecone",
         "description": "A nosecone for a modular model rocket.",
-        "image": "/assets/3dprinted_rocket_nosecone.jpg"
+        "image": "/assets/3dprinted_rocket_nosecone.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "31",
         "name": "3D printed body tube",
         "description": "A body tube for a modular model rocket.",
-        "image": "/assets/3dprinted_rocket_body_tube.jpg"
+        "image": "/assets/3dprinted_rocket_body_tube.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "32",
         "name": "3D printed fincan",
         "description": "A fincan for a modular model rocket.",
-        "image": "/assets/3dprinted_rocket_fincan.jpg"
+        "image": "/assets/3dprinted_rocket_fincan.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "33",
         "name": "3D printed nosecone coupler",
         "description": "A nosecone coupler for a modular model rocket.",
-        "image": "/assets/3dprinted_rocket_nosecone_coupler.jpg"
+        "image": "/assets/3dprinted_rocket_nosecone_coupler.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "34",
@@ -262,25 +281,29 @@
         "id": "39",
         "name": "launch-capable model rocket",
         "description": "A model rocket ready for launch. Ignite remotely using the launch controller.",
-        "image": "/assets/rocket_field.jpg"
+        "image": "/assets/rocket_field.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "40",
         "name": "damaged model rocket",
         "description": "Badly damaged and broken in several places.",
-        "image": "/assets/rocket_damaged.jpg"
+        "image": "/assets/rocket_damaged.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "41",
         "name": "Rocketeer Award",
         "description": "Awarded for launching your first rocket!",
-        "image": "/assets/rocketeer_award.jpg"
+        "image": "/assets/rocketeer_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "42",
         "name": "harvestable basil plant",
         "description": "A basil plant that is ready to be harvested. Growing medium: rockwool.",
-        "image": "/assets/hydroponic_basil_adult.jpg"
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "43",
@@ -293,13 +316,15 @@
         "id": "44",
         "name": "hydroponics tub (ready)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
-        "image": "/assets/hydroponics_tub.jpg"
+        "image": "/assets/hydroponics_tub.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "45",
         "name": "hydroponics tub (nutrient deficient)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
-        "image": "/assets/hydroponics_tub.jpg"
+        "image": "/assets/hydroponics_tub.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "46",
@@ -312,25 +337,29 @@
         "id": "47",
         "name": "harvested basil plant",
         "description": "A basil plant that has been freshly harvested. Don't worry, it'll grow back eventually!",
-        "image": "/assets/hydroponic_basil_harvested.jpg"
+        "image": "/assets/hydroponic_basil_harvested.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "48",
         "name": "Green Thumb Award",
         "description": "Awarded for growing and harvesting your first batch of hydroponic basil!",
-        "image": "/assets/green_thumb_award.jpg"
+        "image": "/assets/green_thumb_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "49",
         "name": "Solarpunk Award",
         "description": "Awarded for generating dWatt using solar panels!",
-        "image": "/assets/solarpunk_award.jpg"
+        "image": "/assets/solarpunk_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "50",
         "name": "Completionist Award",
         "description": "Awarded for completing all of the quests available on January 1, 2023.",
-        "image": "/assets/completionist_award.jpg"
+        "image": "/assets/completionist_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "51",
@@ -343,7 +372,8 @@
         "id": "52",
         "name": "aquarium (goldfish) (150 L)",
         "description": "An aquarium containing a goldfish.",
-        "image": "/assets/aquarium_goldfish.jpg"
+        "image": "/assets/aquarium_goldfish.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "53",
@@ -398,13 +428,15 @@
         "id": "60",
         "name": "7 pH freshwater aquarium (150 L)",
         "description": "An freshwater aquarium with a pH of 7.",
-        "image": "/assets/aquarium_filled.jpg"
+        "image": "/assets/aquarium_filled.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "61",
         "name": "dSolar",
         "description": "a token that represents 1 Watt of energy generated using a solar panel.",
-        "image": "/assets/dSolar.jpg"
+        "image": "/assets/dSolar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "62",
@@ -425,13 +457,15 @@
         "id": "64",
         "name": "dGoldfish",
         "description": "A token granted for feeding a goldfish",
-        "image": "/assets/dGoldfish.jpg"
+        "image": "/assets/dGoldfish.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "65",
         "name": "Fish Friend Award",
         "description": "An award given for setting up your first goldfish aquarium.",
-        "image": "/assets/fish_friend_award.jpg"
+        "image": "/assets/fish_friend_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "66",
@@ -444,37 +478,43 @@
         "id": "67",
         "name": "launch-capable model rocket (parachute)",
         "description": "A reusable rocket with a parachute",
-        "image": "/assets/rocket_field.jpg"
+        "image": "/assets/rocket_field.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "68",
         "name": "Rocket Descent (animated)",
         "description": "A rocket descending to the ground with a parachute.",
-        "image": "/assets/rocket_min.gif"
+        "image": "/assets/rocket_min.gif",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "69",
         "name": "dLaunch",
         "description": "1 dLaunch = 1 launch of a rocket. Any launch counts, even a model rocket launch.",
-        "image": "/assets/dLaunch.jpg"
+        "image": "/assets/dLaunch.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "70",
         "name": "dOffset",
         "description": "1 dOffset is granted for reducing dCarbon with dUSD. ",
-        "image": "/assets/dOffset.jpg"
+        "image": "/assets/dOffset.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "71",
         "name": "Tree Hugger Award",
         "description": "Awarded for converting dCarbon to dOffset.",
-        "image": "/assets/tree_hugger_award.jpg"
+        "image": "/assets/tree_hugger_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "72",
         "name": "dBI",
         "description": "Awarded for every dUSD earned through Basic Income. See the Wallet page for more details.",
-        "image": "/assets/dBI.jpg"
+        "image": "/assets/dBI.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "73",
@@ -494,7 +534,8 @@
         "id": "75",
         "name": "Hypercar (animated)",
         "description": "A hypercar driving down the road.",
-        "image": "/assets/hypercar.gif"
+        "image": "/assets/hypercar.gif",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "76",
@@ -507,13 +548,15 @@
         "id": "77",
         "name": "The grass is always greener (still)",
         "description": "A still image of a Hypercar on a grassy field.",
-        "image": "/assets/hypercar_grassy.jpg"
+        "image": "/assets/hypercar_grassy.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "78",
         "name": "dChat",
         "description": "An offline-first conversational digital assistant. You ask it questions, it answers! Powered by LLMs!",
-        "image": "/assets/npc/dChat.jpg"
+        "image": "/assets/npc/dChat.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "79",
@@ -533,13 +576,15 @@
         "id": "81",
         "name": "Solar setup (200 Wh)",
         "description": "A 200 W solar panel, charge controller, and 200 Wh battery in a weatherproof enclosure. Ready to use!",
-        "image": "/assets/solar_setup_small.jpg"
+        "image": "/assets/solar_setup_small.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "82",
         "name": "Solar setup (1 kWh)",
         "description": "A 200 W solar panel, charge controller, and 1 kWh battery in a weatherproof enclosure. Ready to use!",
-        "image": "/assets/solar_setup_small.jpg"
+        "image": "/assets/solar_setup_small.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "83",
@@ -552,97 +597,113 @@
         "id": "84",
         "name": "flame-resistant recovery wadding",
         "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
-        "image": "/assets/recovery_wadding.jpg"
+        "image": "/assets/recovery_wadding.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "85",
         "name": "Early Adopter Token",
         "description": "The early bird gets the worm.",
-        "image": "/assets/early_adopter_award.jpg"
+        "image": "/assets/early_adopter_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "86",
         "name": "Newcomer Token",
         "description": "You're new here, aren't you?",
-        "image": "/assets/newcomer_token.jpg"
+        "image": "/assets/newcomer_token.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "87",
         "name": "Completionist Award II",
         "description": "Awarded for completing all of the quests available on June 30, 2023.",
-        "image": "/assets/completionist_award_ii.jpg"
+        "image": "/assets/completionist_award_ii.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "88",
         "name": "dPrint",
         "description": "A token that represents 1 gram of 3D pinting filament used while printing.",
-        "image": "/assets/dPrint.jpg"
+        "image": "/assets/dPrint.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "89",
         "name": "Hydro Award",
         "description": "An award for bringing dChat 10 buckets of dechlorinated water.",
-        "image": "/assets/hydro_award.jpg"
+        "image": "/assets/hydro_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "90",
         "name": "Arduino Uno",
         "description": "A beginner-friendly microcontroller board ideal for electronics projects.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "91",
         "name": "Breadboard",
         "description": "A reusable board for prototyping circuits without soldering.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "92",
         "name": "Jumper Wires",
         "description": "Flexible wires with pin connectors for building temporary circuits.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "93",
         "name": "LED",
         "description": "A light emitting diode useful for basic electronics experiments.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "94",
         "name": "220 Ohm Resistor",
         "description": "A resistor commonly used to limit current to an LED.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "95",
         "name": "USB Cable",
         "description": "Connects the Arduino to your computer for programming.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "96",
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "97",
         "name": "3D Printed Phone Stand",
         "description": "A simple stand to hold your smartphone upright on a desk.",
-        "image": "/assets/3dprinter.jpg"
+        "image": "/assets/3dprinter.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "98",
         "name": "Potentiometer",
         "description": "Variable resistor for adjusting signal levels in circuits.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "99",
         "name": "Lettuce Seeds",
         "description": "Seeds for growing crisp hydroponic lettuce.",
-        "image": "/assets/hydroponic_lettuce.jpg"
+        "image": "/assets/hydroponic_lettuce.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "100",
@@ -688,8 +749,8 @@
     },
     {
         "id": "106",
-        "name": "Heated Walstad aquarium (80 L, 26\u00B0C)",
-        "description": "An 80 L Walstad tank equipped with a heater set to 26\u00B0C.",
+        "name": "Heated Walstad aquarium (80 L, 26°C)",
+        "description": "An 80 L Walstad tank equipped with a heater set to 26°C.",
         "image": "/assets/walstad.jpg",
         "price": "85 dUSD"
     },
@@ -774,13 +835,15 @@
         "id": "118",
         "name": "stevia seedling",
         "description": "A young stevia plant sprouted in rockwool.",
-        "image": "/assets/basil_seedlings.jpg"
+        "image": "/assets/basil_seedlings.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "119",
         "name": "harvestable stevia plant",
         "description": "A mature stevia plant ready for leaf harvest.",
-        "image": "/assets/hydroponic_basil_adult.jpg"
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "120",
@@ -793,7 +856,8 @@
         "id": "121",
         "name": "harvested stevia plant",
         "description": "A stevia plant trimmed of leaves but still alive.",
-        "image": "/assets/hydroponic_basil_harvested.jpg"
+        "image": "/assets/hydroponic_basil_harvested.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "122",
@@ -806,80 +870,93 @@
         "id": "123",
         "name": "Raspberry Pi 5 board",
         "description": "A compact single-board computer with plenty of power for small clusters.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "124",
         "name": "M.2 PoE+ HAT",
         "description": "Provides power over Ethernet and an M.2 slot for NVMe drives.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "125",
         "name": "1TB 2230 M.2 SSD",
         "description": "A tiny NVMe drive perfect for booting a Pi.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "126",
         "name": "64GB microSD card",
         "description": "Used to flash the operating system before cloning to the SSD.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "127",
         "name": "PoE+ switch",
         "description": "Powers multiple devices and provides network connectivity.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "128",
         "name": "Ethernet cable",
         "description": "A simple cable for wired network connections.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "129",
         "name": "fan case",
         "description": "Keeps a Raspberry Pi cool during heavy workloads.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "130",
         "name": "flashed microSD card",
         "description": "Contains Raspberry Pi OS ready for cloning to SSD.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "131",
         "name": "bootable 1TB SSD",
         "description": "An M.2 drive with the OS cloned and ready to boot.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "132",
         "name": "Pi cluster node",
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
         "image": "/assets/quests/basic_circuit.svg",
-        "dependencies": ["129", "131"]
+        "dependencies": ["129", "131"],
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "133",
         "name": "external backup SSD",
         "description": "Stores nightly database dumps from your cluster.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "134",
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
         "image": "/assets/quests/solar.jpg",
-        "dependencies": ["0", "3"]
+        "dependencies": ["0", "3"],
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "135",
         "name": "first aid kit",
         "description": "Adhesive bandages, gauze and antiseptic packed for emergencies.",
-        "image": "/assets/quests/basic_circuit.svg"
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     }
 ]
