@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
     import ItemSelector from './ItemSelector.svelte';
+    import ProcessPreview from './ProcessPreview.svelte';
     import items from '../../pages/inventory/json/items.json';
 
     export let title = '';
@@ -10,6 +11,8 @@
     export let createItems = [];
 
     let isClientSide = false;
+    let showPreview = false;
+    let validationErrors = {};
 
     const dispatch = createEventDispatcher();
 
@@ -64,21 +67,29 @@
         return allItems.every((item) => item.count > 0);
     }
 
+    function validateForm() {
+        const errors = {};
+
+        if (!title.trim()) {
+            errors.title = 'Title is required';
+        }
+
+        if (!duration.trim() || !validateDuration(duration)) {
+            errors.duration = 'Invalid duration';
+        }
+
+        if (!validateItems()) {
+            errors.items = 'Item counts must be positive';
+        }
+
+        validationErrors = errors;
+        return Object.keys(errors).length === 0;
+    }
+
     function handleSubmit(event) {
         event.preventDefault();
 
-        // Validate duration format
-        if (!validateDuration(duration)) {
-            return;
-        }
-
-        // Validate item counts
-        if (!validateItems()) {
-            return;
-        }
-
-        // Validate required fields
-        if (!title || !duration) {
+        if (!validateForm()) {
             return;
         }
 
@@ -103,8 +114,12 @@
                     id="title"
                     bind:value={title}
                     placeholder="Process title"
+                    class:error={validationErrors.title}
                     required
                 />
+                {#if validationErrors.title}
+                    <span class="error-message">{validationErrors.title}</span>
+                {/if}
             </div>
 
             <div class="form-group">
@@ -114,8 +129,12 @@
                     id="duration"
                     bind:value={duration}
                     placeholder="e.g. 1h 30m"
+                    class:error={validationErrors.duration}
                     required
                 />
+                {#if validationErrors.duration}
+                    <span class="error-message">{validationErrors.duration}</span>
+                {/if}
             </div>
 
             <div class="form-group">
@@ -193,14 +212,33 @@
                 </div>
             </div>
 
+            {#if validationErrors.items}
+                <div class="error-message">{validationErrors.items}</div>
+            {/if}
+
             <div class="form-submit">
                 <button type="submit" class="submit-button">Create Process</button>
+                <button
+                    type="button"
+                    class="preview-button"
+                    on:click={async () => {
+                        if (validateForm()) {
+                            showPreview = true;
+                        }
+                    }}
+                >
+                    Preview
+                </button>
             </div>
         </form>
     {:else}
         <div class="loading-container">
             <p class="loading-text">Loading process form...</p>
         </div>
+    {/if}
+
+    {#if showPreview}
+        <ProcessPreview {title} {duration} {requireItems} {consumeItems} {createItems} />
     {/if}
 </div>
 
@@ -261,6 +299,11 @@
 
     input[type='text'] {
         width: 85%;
+    }
+
+    input.error {
+        border-color: #ff3e3e;
+        background-color: #ffecec;
     }
 
     input[type='number'] {
@@ -331,6 +374,29 @@
 
     .submit-button:hover {
         background-color: #009900;
+    }
+
+    .preview-button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #0055cc;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .preview-button:hover {
+        background-color: #003d99;
+    }
+
+    .error-message {
+        color: #ff3e3e;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
     }
 
     .form-submit {

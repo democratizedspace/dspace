@@ -189,6 +189,7 @@ const config = {
         '__tests__/ItemForm.test.js', // Used in items/create.astro, inventory/create.astro + e2e tested
         '__tests__/ItemSelector.test.js', // Used by ProcessForm component + e2e tested
         '__tests__/ProcessForm.test.js', // Used in processes/create.astro + e2e tested
+        '__tests__/ProcessPreview.test.js',
         '__tests__/Quests.test.js', // Used in quests/index.astro + e2e tested
     ],
 
