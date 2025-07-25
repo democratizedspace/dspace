@@ -8,6 +8,9 @@
     export let price = '';
     export let unit = '';
     export let type = '';
+    export let requires = [];
+
+    import items from '../../pages/inventory/json/items.json';
 
     const dispatch = createEventDispatcher();
 
@@ -24,6 +27,18 @@
             previewUrl = null;
             image = null;
         }
+    }
+
+    function addDependency() {
+        requires = [...requires, ''];
+    }
+
+    function removeDependency(index) {
+        requires = requires.filter((_, i) => i !== index);
+    }
+
+    function handleDependencyChange(event, index) {
+        requires[index] = event.target.value;
     }
 
     function handleSubmit(event) {
@@ -43,6 +58,7 @@
         if (type) {
             formData.append('type', type);
         }
+        formData.append('requires', JSON.stringify(requires));
 
         dispatch('submit', formData);
     }
@@ -87,6 +103,22 @@
     <div class="form-group">
         <label for="type">Type (optional)</label>
         <input type="text" id="type" bind:value={type} placeholder="e.g. 3dprint" />
+    </div>
+
+    <div class="form-group">
+        <label>Dependencies (optional)</label>
+        {#each requires as req, index}
+            <div class="dependency-row">
+                <select on:change={(e) => handleDependencyChange(e, index)} bind:value={requires[index]}>
+                    <option value="">Select item</option>
+                    {#each items as item}
+                        <option value={item.id}>{item.name}</option>
+                    {/each}
+                </select>
+                <button type="button" class="remove-button" on:click={() => removeDependency(index)}>Remove</button>
+            </div>
+        {/each}
+        <button type="button" class="add-button" on:click={addDependency}>Add Dependency</button>
     </div>
 
     <div class="form-submit">
@@ -181,5 +213,39 @@
 
     .submit-button:hover {
         background-color: #005004;
+    }
+
+    .dependency-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .remove-button {
+        margin-left: 8px;
+        padding: 5px 10px;
+        background-color: #ff4444;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .remove-button:hover {
+        background-color: #cc0000;
+    }
+
+    .add-button {
+        margin-top: 10px;
+        padding: 8px 16px;
+        background-color: #4488ff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .add-button:hover {
+        background-color: #0055cc;
     }
 </style>

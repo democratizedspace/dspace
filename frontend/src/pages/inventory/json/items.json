@@ -202,7 +202,8 @@
         "id": "30",
         "name": "3D printed nosecone",
         "description": "A nosecone for a modular model rocket.",
-        "image": "/assets/3dprinted_rocket_nosecone.jpg"
+        "image": "/assets/3dprinted_rocket_nosecone.jpg",
+        "requires": ["0", "3"]
     },
     {
         "id": "31",

@@ -41,10 +41,13 @@ Every item requires the following basic properties:
 -   **price**: Value in game currency (optional)
 -   **unit**: Measurement unit for the item (e.g., kg, L, watts) (optional)
 -   **type**: Classification or category (optional)
+-   **requires**: Array of item IDs this item depends on (optional)
 
 ### Implementation State
 
 Currently, the `ItemForm.svelte` component supports creating items with the properties listed above. The current implementation focuses on the fundamental aspects of items, with more advanced features planned for future updates.
+
+The form now includes optional dependency selection so you can specify other items required to craft the new item.
 
 All items must now conform to the JSON schema located at `frontend/src/pages/inventory/jsonSchemas/item.json`. Run the `itemValidation` test to ensure any additions meet the schema requirements.
 

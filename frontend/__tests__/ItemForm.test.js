@@ -6,6 +6,12 @@ import '@testing-library/jest-dom';
 import { render, act, fireEvent, waitFor } from '@testing-library/svelte';
 import ItemForm from '../src/components/svelte/ItemForm.svelte';
 
+// Mock items import for dependency selection
+jest.mock('../src/pages/inventory/json/items.json', () => [
+    { id: '0', name: 'Printer' },
+    { id: '1', name: 'Filament' },
+]);
+
 // Mock the database operations using Jest instead of Vitest
 jest.mock('../src/utils/indexeddb.js', () => ({
     addEntity: jest.fn().mockResolvedValue('mocked-item-id'),
@@ -77,7 +83,7 @@ describe('ItemForm Component', () => {
     });
 
     it('renders form elements correctly', async () => {
-        const { getByLabelText } = render(ItemForm, {
+        const { getByLabelText, getByText } = render(ItemForm, {
             target: container,
             props: {
                 isEdit: false,
@@ -89,6 +95,7 @@ describe('ItemForm Component', () => {
             expect(getByLabelText(/name/i)).toBeInTheDocument();
             expect(getByLabelText(/description/i)).toBeInTheDocument();
             expect(getByLabelText(/upload an image/i)).toBeInTheDocument();
+            expect(getByText(/add dependency/i)).toBeInTheDocument();
         });
     });
 
@@ -115,6 +122,10 @@ describe('ItemForm Component', () => {
             fireEvent.change(getByLabelText(/upload an image/i), {
                 target: { files: [file] },
             });
+
+            fireEvent.click(getByText(/add dependency/i));
+            const select = container.querySelector('select');
+            fireEvent.change(select, { target: { value: '1' } });
         });
 
         // Submit the form
@@ -129,6 +140,7 @@ describe('ItemForm Component', () => {
                     name: 'Test Item',
                     description: 'This is a test item description',
                     image: 'mocked-image-url',
+                    requires: ['1']
                 })
             );
         });
@@ -165,6 +177,7 @@ describe('ItemForm Component', () => {
             name: 'Existing Item',
             description: 'Existing item description',
             image: 'existing-image-url',
+            requires: ['0'],
         };
 
         // No additional mocking needed - updateEntity is already mocked
@@ -196,6 +209,7 @@ describe('ItemForm Component', () => {
                     name: existingItem.name,
                     description: existingItem.description,
                     image: existingItem.image,
+                    requires: ['0'],
                 })
             );
         });

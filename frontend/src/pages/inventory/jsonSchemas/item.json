@@ -9,6 +9,10 @@
         "price": { "type": "string" },
         "unit": { "type": "string" },
         "type": { "type": "string" }
+        ,"requires": {
+            "type": "array",
+            "items": { "type": "string" }
+        }
     },
     "required": ["id", "name", "description", "image"],
     "additionalProperties": false
