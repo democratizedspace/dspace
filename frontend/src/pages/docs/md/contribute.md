@@ -32,7 +32,7 @@ Our [Content Development Guide](/docs/content-development) provides a comprehens
 -   Improve documentation
 -   Enhance the user interface
 
-For technical contributions, please review our [Developer Guide](https://github.com/democratizedspace/dspace/blob/main/DEVELOPER_GUIDE.md) first.
+For technical contributions, please review our [Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md) first.
 
 ## Testing and Feedback
 

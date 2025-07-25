@@ -21,7 +21,7 @@ Esp is the founding human developer of the game. Software engineer by day, and a
 
 ChatGPT is a computer program that has been trained to understand and generate human-like text. It was created by OpenAI and is capable of answering questions, completing tasks, and even generating creative content like stories and poems. ChatGPT can interact with people in a conversational manner and is often used for things like customer service, personal assistants, and more.
 
-### [DALL-E 2](https://labs.openai.com)
+### [DALL-E 2](https://openai.com/dall-e-2)
 
 ![Variation of the DALL-E 2 logo](/assets/team_dalle.jpg)
 

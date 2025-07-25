@@ -45,4 +45,4 @@ To avoid hydration mismatches and make tests predictable, follow this pattern in
 -   When writing Playwright tests, wait for `[data-hydrated="true"]` before performing actions.
 -   If a component behaves differently in tests versus the browser, ensure initialization logic is wrapped in `onMount`.
 
-For additional details on testing strategies, see [Testing Guide](../../../../TESTING.md) and the broader [Developer Guide](../../../../DEVELOPER_GUIDE.md).
+For additional details on testing strategies, see [Testing Guide](../../../../TESTING.md) and the broader [Developer Guide](../../../../../DEVELOPER_GUIDE.md).
