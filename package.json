@@ -15,6 +15,7 @@
     "coverage": "cd frontend && npm run coverage",
     "test:pr": "node run-tests.js",
     "check": "cd frontend && npm run check",
+    "itemValidation": "cd frontend && npm run itemValidation",
     "lint": "cd frontend && npm run lint",
     "lint:fix": "cd frontend && npm run lint:fix",
     "format": "cd frontend && npm run format",
