@@ -104,7 +104,8 @@ This repository provides a GitHub Actions workflow (`.github/workflows/rpi-deplo
 - `RPI_USER` – the SSH username
 - `RPI_SSH_KEY` – the private key used for authentication
 
-Add these secrets under **Settings → Secrets and variables → Actions**. If any are missing, the workflow will fail with a "Missing required secrets" message.
+Add these secrets under **Settings → Secrets and variables → Actions**.
+If any are missing, the workflow simply skips the deploy job.
 
 ## Troubleshooting
 

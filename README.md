@@ -139,7 +139,8 @@ For a full Raspberry Pi setup, including k3s instructions, see [docs/RPI_DEPLOYM
 
 The workflow `.github/workflows/rpi-deploy.yml` builds an ARM64 Docker image and optionally deploys it to a Raspberry Pi over SSH.
 Create a classic PAT with the [`write:packages` scope](https://github.com/settings/tokens/new?scopes=write:packages) (fine-grained tokens don’t work with Packages yet) and add it as the `GHCR_TOKEN` secret.
-Set `RPI_HOST`, `RPI_USER`, and `RPI_SSH_KEY` to enable SSH deployment. If the workflow fails with a "Missing required secrets" message, add these values under **Settings → Secrets and variables → Actions** in your repository.
+Set `RPI_HOST`, `RPI_USER`, and `RPI_SSH_KEY` to enable SSH deployment.
+If these secrets are not defined, the workflow simply skips the deploy job.
 Trigger the workflow manually or on pushes to `v3` to update the Pi and restart the `app` service.
 
 ## Project Architecture
