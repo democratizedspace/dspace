@@ -82,6 +82,27 @@ const mockQuestForm = {
         imageGroup.appendChild(imageLabel);
         imageGroup.appendChild(imageInput);
 
+        // Add requirements select
+        const reqGroup = document.createElement('div');
+        reqGroup.className = 'form-group';
+
+        const reqLabel = document.createElement('label');
+        reqLabel.setAttribute('for', 'requires');
+        reqLabel.textContent = 'Quest Requirements';
+
+        const reqSelect = document.createElement('select');
+        reqSelect.id = 'requires';
+        reqSelect.multiple = true;
+        (props.existingQuests || []).forEach((q) => {
+            const opt = document.createElement('option');
+            opt.value = q.id;
+            opt.textContent = q.title;
+            reqSelect.appendChild(opt);
+        });
+
+        reqGroup.appendChild(reqLabel);
+        reqGroup.appendChild(reqSelect);
+
         // Add submit button
         const submitDiv = document.createElement('div');
         submitDiv.className = 'form-submit';
@@ -101,6 +122,7 @@ const mockQuestForm = {
                 title: titleInput.value,
                 description: descTextarea.value,
                 image: imageInput.files?.[0] || (props.image ? 'existing-image' : null),
+                requiresQuests: Array.from(reqSelect.selectedOptions).map((o) => o.value),
             };
 
             // Validate form
@@ -131,12 +153,14 @@ const mockQuestForm = {
                     title: formData.title,
                     description: formData.description,
                     image: 'mocked-image-url',
+                    requiresQuests: formData.requiresQuests,
                 });
             } else {
                 await mockDb.quests.add({
                     title: formData.title,
                     description: formData.description,
                     image: 'mocked-image-url',
+                    requiresQuests: formData.requiresQuests,
                 });
             }
 
@@ -150,6 +174,7 @@ const mockQuestForm = {
         form.appendChild(titleGroup);
         form.appendChild(descGroup);
         form.appendChild(imageGroup);
+        form.appendChild(reqGroup);
         form.appendChild(submitDiv);
 
         // Add to the target
@@ -165,6 +190,7 @@ const mockQuestForm = {
                 titleInput,
                 descTextarea,
                 imageInput,
+                reqSelect,
                 submitButton,
             },
             handleSubmit,
@@ -274,7 +300,10 @@ describe('QuestForm Component', () => {
 
     it('renders form elements correctly', async () => {
         // Render the component
-        component = mockQuestForm.render(container, { isEdit: false });
+        component = mockQuestForm.render(container, {
+            isEdit: false,
+            existingQuests: [{ id: 'q1', title: 'Base Quest' }],
+        });
 
         // Verify form fields are present
         expect(container.querySelector('label[for="title"]')).not.toBeNull();
@@ -284,7 +313,10 @@ describe('QuestForm Component', () => {
 
     it('submits form with all fields filled', async () => {
         // Render the component
-        component = mockQuestForm.render(container, { isEdit: false });
+        component = mockQuestForm.render(container, {
+            isEdit: false,
+            existingQuests: [{ id: 'q1', title: 'Base Quest' }],
+        });
 
         // Fill form fields
         await act(async () => {
@@ -302,13 +334,14 @@ describe('QuestForm Component', () => {
             // Add a file to the image input
             await act(async () => {
                 // Get the image input from the component elements
-                const { imageInput } = component.elements;
+                const { imageInput, reqSelect } = component.elements;
 
                 // Set the files property directly
                 Object.defineProperty(imageInput, 'files', {
                     value: [mockFile],
                     writable: true,
                 });
+                reqSelect.options[0].selected = true;
 
                 // No need to dispatch event, we'll directly call handleSubmit which reads from files
             });
@@ -325,6 +358,7 @@ describe('QuestForm Component', () => {
                 title: 'Test Quest',
                 description: 'This is a test quest description',
                 image: 'mocked-image-url',
+                requiresQuests: ['q1'],
             })
         );
     });
@@ -370,6 +404,7 @@ describe('QuestForm Component', () => {
             title: existingQuest.title,
             description: existingQuest.description,
             image: existingQuest.image,
+            existingQuests: [{ id: 'q1', title: 'Base Quest' }],
         });
 
         // Check if form is pre-filled with existing data
@@ -388,6 +423,7 @@ describe('QuestForm Component', () => {
                 title: existingQuest.title,
                 description: existingQuest.description,
                 image: 'mocked-image-url',
+                requiresQuests: [],
             })
         );
     });

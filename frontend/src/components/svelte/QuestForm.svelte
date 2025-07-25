@@ -1,14 +1,18 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
-    import { db } from '../../utils/customcontent.js';
+    import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
+    import { validateQuestData } from '../../utils/customQuestValidation.js';
 
     export let isEdit = false;
     export let questId = null;
+    export let existingQuests = [];
 
     let title = '';
     let description = '';
     let image = null;
     let previewUrl = null;
+    let requiresQuests = [];
+    let allQuests = [];
     let validationErrors = {};
     let isSubmitting = false;
 
@@ -21,12 +25,23 @@
                 const questData = await db.quests.get(questId);
                 title = questData.title;
                 description = questData.description;
+                requiresQuests = questData.requiresQuests || [];
                 if (questData.image) {
                     previewUrl = questData.image;
                 }
             } catch (error) {
                 console.error('Error loading quest:', error);
             }
+        }
+
+        if (existingQuests.length === 0) {
+            try {
+                allQuests = await db.list(ENTITY_TYPES.QUEST);
+            } catch (error) {
+                console.error('Error loading quests:', error);
+            }
+        } else {
+            allQuests = existingQuests;
         }
     });
 
@@ -45,6 +60,10 @@
         }
     }
 
+    function handleRequirementsChange(event) {
+        requiresQuests = Array.from(event.target.selectedOptions).map((opt) => opt.value);
+    }
+
     async function validateForm() {
         const errors = {};
 
@@ -58,6 +77,16 @@
 
         if (!isEdit && !image && !previewUrl) {
             errors.image = 'Image is required';
+        }
+
+        const { valid } = validateQuestData({
+            title: title.trim(),
+            description: description.trim(),
+            image: previewUrl || '',
+            requiresQuests,
+        });
+        if (!valid) {
+            errors.schema = 'Invalid quest data';
         }
 
         validationErrors = errors;
@@ -112,6 +141,7 @@
                     title,
                     description,
                     image: imageUrl,
+                    requiresQuests,
                     updatedAt: new Date().toISOString(),
                 });
 
@@ -122,6 +152,7 @@
                     title,
                     description,
                     image: imageUrl,
+                    requiresQuests,
                 });
 
                 dispatch('success', { message: 'Quest created successfully', id: newQuestId });
@@ -131,6 +162,7 @@
                 description = '';
                 image = null;
                 previewUrl = null;
+                requiresQuests = [];
             }
         } catch (error) {
             console.error('Error saving quest:', error);
@@ -188,6 +220,17 @@
         {/if}
     </div>
 
+    <div class="form-group">
+        <label for="requires">Quest Requirements</label>
+        <select id="requires" multiple on:change={handleRequirementsChange}>
+            {#each allQuests as q}
+                <option value={q.id} selected={requiresQuests.includes(q.id)}>
+                    {q.title}
+                </option>
+            {/each}
+        </select>
+    </div>
+
     <div class="form-submit">
         <button type="submit" class="submit-button" disabled={isSubmitting}>
             {#if isSubmitting}
@@ -237,6 +280,17 @@
         border: 2px solid #007006;
         outline: none;
         transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    select {
+        width: 95%;
+        padding: 10px;
+        border-radius: 8px;
+        background: #68d46d;
+        color: black;
+        font-size: 16px;
+        border: 2px solid #007006;
+        outline: none;
     }
 
     input.error,
