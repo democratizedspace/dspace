@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
     import { db } from '../../utils/customcontent.js';
+    import validateQuestSchema from '../../utils/validateQuestSchema.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -58,6 +59,28 @@
 
         if (!isEdit && !image && !previewUrl) {
             errors.image = 'Image is required';
+        }
+
+        const questObject = {
+            id: questId || 'temp-id',
+            title,
+            description,
+            image: previewUrl || '',
+            npc: 'atlas',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Placeholder',
+                    options: [{ type: 'finish', text: 'Finish' }],
+                },
+            ],
+        };
+
+        const { valid, errors: schemaErrors } = validateQuestSchema(questObject);
+        if (!valid) {
+            errors.schema = 'Quest does not match schema';
+            console.error(schemaErrors);
         }
 
         validationErrors = errors;
