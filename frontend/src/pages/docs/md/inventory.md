@@ -74,7 +74,7 @@ The inventory interface allows you to:
 
 -   View item details and counts
 -   See related processes
--   Track item dependencies
+-   Track item dependencies using the new `dependencies` field
 -   Manage custom items
 
 All inventory data is now stored locally using IndexedDB, with optional cloud sync for backup and cross-device access.
