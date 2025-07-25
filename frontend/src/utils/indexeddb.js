@@ -184,8 +184,8 @@ export const getSchemaVersion = async () => {
             resolve(request.result ?? CUSTOM_CONTENT_DB_VERSION);
             db.close();
         };
-        request.onerror = () => {
-            reject(request.error);
+        request.onerror = (event) => {
+            reject(event.target.error);
             db.close();
         };
     });
@@ -204,15 +204,8 @@ export const saveItem = async (item) => {
                 db.close();
             };
             /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -235,18 +228,8 @@ export const getItems = async () => {
                 db.close();
             };
             /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -271,8 +254,9 @@ export const getItem = async (id) => {
             /* istanbul ignore next */
             /* istanbul ignore next */
             /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            /* istanbul ignore next */
+            request.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -295,12 +279,8 @@ export const saveProcess = async (process) => {
                 db.close();
             };
             /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -323,8 +303,8 @@ export const getProcesses = async () => {
                 db.close();
             };
             /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -347,8 +327,8 @@ export const getProcess = async (id) => {
                 db.close();
             };
             /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -371,8 +351,8 @@ export const deleteProcess = async (id) => {
                 db.close();
             };
             /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -395,8 +375,8 @@ export const saveQuest = async (quest) => {
                 db.close();
             };
             /* istanbul ignore next */
-            tx.onerror = () => {
-                reject(tx.error);
+            tx.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -419,8 +399,8 @@ export const getQuests = async () => {
                 db.close();
             };
             /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
@@ -443,8 +423,8 @@ export const getQuest = async (id) => {
                 db.close();
             };
             /* istanbul ignore next */
-            request.onerror = () => {
-                reject(request.error);
+            request.onerror = (event) => {
+                reject(event.target.error);
                 db.close();
             };
         });
