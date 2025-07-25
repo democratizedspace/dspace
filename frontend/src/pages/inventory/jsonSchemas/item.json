@@ -8,6 +8,7 @@
         "image": { "type": "string" },
         "price": { "type": "string" },
         "unit": { "type": "string" },
+        "priceExemptionReason": { "type": "string" },
         "type": { "type": "string" },
         "dependencies": {
             "type": "array",
