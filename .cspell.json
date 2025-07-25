@@ -21,6 +21,10 @@
     "frontend/src/pages/**/json/**",
     "frontend/src/pages/processes/processes.json"
   ],
-  "words": ["NPCs", "MPPT"],
+  "words": [
+    "NPCs",
+    "MPPT",
+    "SOULBOUND"
+  ],
   "useGitignore": true
 }
