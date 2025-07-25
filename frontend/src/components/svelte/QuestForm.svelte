@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher, onMount } from 'svelte'
+    import { createEventDispatcher, onMount } from 'svelte';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
     import { validateQuestData } from '../../utils/customQuestValidation.js';
 

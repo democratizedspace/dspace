@@ -136,12 +136,18 @@ export function getStoreForEntityType(entityType) {
     }
 }
 
+export const CUSTOM_CONTENT_DB_VERSION = 1;
+
 export const openCustomContentDB = () => {
     return new Promise((resolve, reject) => {
-        const request = window.indexedDB.open('CustomContent', 1);
+        const request = window.indexedDB.open('CustomContent', CUSTOM_CONTENT_DB_VERSION);
 
         request.onupgradeneeded = (e) => {
             const db = e.target.result;
+
+            if (!db.objectStoreNames.contains('meta')) {
+                db.createObjectStore('meta');
+            }
 
             // Create object stores if they don't exist
             if (!db.objectStoreNames.contains('items')) {
@@ -153,6 +159,9 @@ export const openCustomContentDB = () => {
             if (!db.objectStoreNames.contains('quests')) {
                 db.createObjectStore('quests', { keyPath: 'id' });
             }
+
+            const metaStore = request.transaction.objectStore('meta');
+            metaStore.put(CUSTOM_CONTENT_DB_VERSION, 'schemaVersion');
         };
 
         request.onsuccess = () => {
@@ -161,6 +170,23 @@ export const openCustomContentDB = () => {
 
         request.onerror = () => {
             reject(request.error);
+        };
+    });
+};
+
+export const getSchemaVersion = async () => {
+    const db = await openCustomContentDB();
+    const tx = db.transaction('meta', 'readonly');
+    const store = tx.objectStore('meta');
+    const request = store.get('schemaVersion');
+    return new Promise((resolve, reject) => {
+        request.onsuccess = () => {
+            resolve(request.result ?? CUSTOM_CONTENT_DB_VERSION);
+            db.close();
+        };
+        request.onerror = () => {
+            reject(request.error);
+            db.close();
         };
     });
 };
