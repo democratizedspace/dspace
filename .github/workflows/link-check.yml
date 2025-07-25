@@ -1,0 +1,17 @@
+name: link-check
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v1.9.0
+        with:
+          args: >-
+            --accept 403 --accept 429
+            --no-progress --verbose
+            "**/*.md"
+          fail: true
