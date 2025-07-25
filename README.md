@@ -205,6 +205,7 @@ npm test -- imageReferences     # verifies quest and NPC image files
 ## Built-in Items
 
 Item definitions live in `frontend/src/pages/inventory/json/items.json`. Assign new sequential `id` numbers and include an image path when adding items. See `frontend/src/pages/docs/md/item-guidelines.md` for detailed guidance.
+All item files must satisfy `frontend/src/pages/inventory/jsonSchemas/item.json`. Run `npm test -- itemValidation` to check the schema.
 
 ## Built-in Processes
 
