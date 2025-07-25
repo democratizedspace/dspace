@@ -9,6 +9,7 @@ const {
     setVersionNumber,
     getVersionNumber,
     importV1V2,
+    importV2V3,
     VERSIONS,
 } = require('../../src/utils/gameState.js');
 
@@ -112,5 +113,11 @@ describe('gameState top-level helpers', () => {
         importV1V2(items);
         expect(addItems).toHaveBeenCalledWith([{ id: '85', count: 1 }, ...items]);
         expect(mockGameState.versionNumberString).toBe(VERSIONS.V2);
+    });
+
+    test('importV2V3 updates version to V3', () => {
+        mockGameState.versionNumberString = VERSIONS.V2;
+        importV2V3();
+        expect(mockGameState.versionNumberString).toBe(VERSIONS.V3);
     });
 });
