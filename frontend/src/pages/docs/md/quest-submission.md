@@ -25,7 +25,15 @@ This guide describes how to submit your custom quests to become part of the offi
     npm test -- questQuality
     ```
     Review any warnings and make improvements where necessary.
-4. **Commit your quest** and open a pull request describing the content and inspiration.
-5. **Respond to feedback** from reviewers until your quest meets project standards.
+4. **Open the Quest Submission form** at `/quests/submit`.
+5. **Authorize GitHub** by entering a personal access token with `repo` scope. The token is only used client-side to push your quest.
+6. **Create the pull request** directly from the form. This uploads your quest to a new branch and opens a draft PR.
+7. **Respond to feedback** from reviewers until your quest meets project standards.
 
 Once merged, your quest will be included in the next game update!
+
+### GitHub Token Setup
+
+1. Visit [github.com/settings/tokens](https://github.com/settings/tokens) and generate a new **classic** token with `repo` scope.
+2. Copy the token and keep it somewhere safe. You can revoke it at any time.
+3. When using the submission form, paste the token into the "GitHub Token" field. The token is used solely in your browser to create the pull request.
