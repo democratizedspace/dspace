@@ -2,9 +2,14 @@
  * @jest-environment jsdom
  */
 import { openCustomContentDB } from '../src/utils/indexeddb.js';
+import * as migrations from '../src/utils/migrations.js';
 
 describe('openCustomContentDB', () => {
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
     test('creates stores and resolves with db on success', async () => {
+        jest.spyOn(migrations, 'runMigrations').mockResolvedValue();
         const db = {
             objectStoreNames: { contains: jest.fn().mockReturnValue(false) },
             createObjectStore: jest.fn(),
