@@ -1,0 +1,22 @@
+{
+    "id": "test/loop-with-finish",
+    "title": "Loop With Finish",
+    "description": "Quest with a finish path despite loops",
+    "image": "/assets/test.png",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Start",
+            "options": [{ "type": "goto", "goto": "middle", "text": "Middle" }]
+        },
+        {
+            "id": "middle",
+            "text": "Middle",
+            "options": [
+                { "type": "goto", "goto": "start", "text": "Loop" },
+                { "type": "finish", "text": "Finish" }
+            ]
+        }
+    ]
+}

@@ -67,4 +67,34 @@ describe('validateQuestData', () => {
 
         expect(result.valid).toBe(true);
     });
+
+    test('extra properties are allowed', () => {
+        const result = validateQuestData({
+            title: 'Extra Quest',
+            description: 'Valid description for quest.',
+            image: 'https://example.com/img.png',
+            unknown: 'field',
+        });
+        expect(result.valid).toBe(true);
+    });
+
+    test('requiresQuests must be array of strings', () => {
+        const result = validateQuestData({
+            title: 'Bad Quest',
+            description: 'Valid description for quest.',
+            image: 'https://example.com/img.png',
+            requiresQuests: [1, 2],
+        });
+        expect(result.valid).toBe(false);
+    });
+
+    test('requiresQuests as non-array fails', () => {
+        const result = validateQuestData({
+            title: 'Another Bad Quest',
+            description: 'Valid description for quest.',
+            image: 'https://example.com/img.png',
+            requiresQuests: 'q1',
+        });
+        expect(result.valid).toBe(false);
+    });
 });
