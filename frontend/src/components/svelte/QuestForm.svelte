@@ -361,4 +361,17 @@
         background-color: #88a889;
         cursor: not-allowed;
     }
+
+    @media (max-width: 480px) {
+        .quest-form {
+            padding: 10px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            font-size: 14px;
+        }
+    }
 </style>
