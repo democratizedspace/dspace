@@ -25,6 +25,8 @@ export const startProcess = (processId) => {
     gameState.processes[processId] = {
         startedAt: Date.now(),
         duration: durationInSeconds(process.duration) * 1000,
+        pausedAt: null,
+        elapsedBeforePause: 0,
     };
     saveGameState(gameState);
     burnItems(process.consumeItems);
@@ -34,6 +36,7 @@ export const ProcessStates = {
     NOT_STARTED: 'not started',
     IN_PROGRESS: 'in progress',
     FINISHED: 'finished',
+    PAUSED: 'paused',
 };
 
 export const getProcessState = (processId) => {
@@ -44,13 +47,22 @@ export const getProcessState = (processId) => {
         return { state: ProcessStates.NOT_STARTED, progress: 0 };
     }
 
-    const elapsed = Date.now() - process.startedAt;
-    let progress = Math.min(1, elapsed / process.duration);
+    let elapsed = process.elapsedBeforePause || 0;
+    if (process.pausedAt) {
+        elapsed += process.pausedAt - process.startedAt;
+    } else {
+        elapsed += Date.now() - process.startedAt;
+    }
 
+    let progress = Math.min(1, elapsed / process.duration);
     progress = progress < 0.001 ? 0 : progress;
 
-    if (process.startedAt + process.duration <= Date.now()) {
-        return { state: ProcessStates.FINISHED, progress: progress * 100 };
+    if (progress >= 1) {
+        return { state: ProcessStates.FINISHED, progress: 100 };
+    }
+
+    if (process.pausedAt) {
+        return { state: ProcessStates.PAUSED, progress: progress * 100 };
     }
 
     return { state: ProcessStates.IN_PROGRESS, progress: progress * 100 };
@@ -110,6 +122,31 @@ export const cancelProcess = (processId) => {
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
     addItems(consumeItems);
+};
+
+export const pauseProcess = (processId) => {
+    const stateInfo = getProcessState(processId);
+    if (stateInfo.state !== ProcessStates.IN_PROGRESS) {
+        return;
+    }
+
+    const gameState = loadGameState();
+    const process = gameState.processes[processId];
+    const now = Date.now();
+    process.elapsedBeforePause = (process.elapsedBeforePause || 0) + (now - process.startedAt);
+    process.pausedAt = now;
+    saveGameState(gameState);
+};
+
+export const resumeProcess = (processId) => {
+    const gameState = loadGameState();
+    const process = gameState.processes[processId];
+    if (!process || process.pausedAt === null) {
+        return;
+    }
+    process.startedAt = Date.now();
+    process.pausedAt = null;
+    saveGameState(gameState);
 };
 
 export const ProcessItemTypes = {
