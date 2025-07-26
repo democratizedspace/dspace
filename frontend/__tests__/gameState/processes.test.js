@@ -7,6 +7,8 @@ const {
     getProcessProgress,
     finishProcess,
     cancelProcess,
+    pauseProcess,
+    resumeProcess,
     getProcessesForItem,
     skipProcess,
 } = require('../../src/utils/gameState/processes.js');
@@ -81,6 +83,8 @@ describe('gameState - processes', () => {
         expect(mockGameState.processes['foo']).toEqual({
             startedAt: expect.any(Number),
             duration: expect.any(Number),
+            pausedAt: null,
+            elapsedBeforePause: 0,
         });
     });
 
@@ -89,6 +93,8 @@ describe('gameState - processes', () => {
         expect(mockGameState.processes['foo']).toEqual({
             startedAt: expect.any(Number),
             duration: expect.any(Number),
+            pausedAt: null,
+            elapsedBeforePause: 0,
         });
     });
 
@@ -207,6 +213,23 @@ describe('gameState - processes', () => {
         startProcess('foo');
         cancelProcess('foo');
         expect(mockGameState.inventory['2']).toBe(50);
+    });
+
+    test('pauseProcess should move process to paused state', () => {
+        startProcess('foo');
+        pauseProcess('foo');
+        expect(mockGameState.processes['foo'].pausedAt).toEqual(expect.any(Number));
+        expect(getProcessState('foo').state).toBe(ProcessStates.PAUSED);
+    });
+
+    test('resumeProcess should resume a paused process', () => {
+        startProcess('foo');
+        pauseProcess('foo');
+        const pausedAt = mockGameState.processes['foo'].pausedAt;
+        resumeProcess('foo');
+        expect(mockGameState.processes['foo'].pausedAt).toBeNull();
+        expect(mockGameState.processes['foo'].startedAt).toBeGreaterThanOrEqual(pausedAt);
+        expect(getProcessState('foo').state).toBe(ProcessStates.IN_PROGRESS);
     });
 
     test('getProcessesForItem should return the correct processes', () => {
