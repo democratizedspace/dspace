@@ -194,7 +194,7 @@ Use `npm run generate-quest` to scaffold a new quest with placeholder dialogue.
 Additional quality checks are available:
 
 ```bash
-npm test -- questQuality        # heuristics for dialogue quality (TODO: integrate OpenAI)
+npm test -- questQuality        # heuristics for dialogue quality via token.place
 npm test -- itemQuality         # validates items.json for realism and completeness
 npm test -- processQuality      # validates processes.json for realistic durations
 npm test -- imageReferences     # verifies quest and NPC image files

@@ -8,7 +8,7 @@ DSPACE is a free and open source web-based space exploration idle game where pla
 -   **Styling**: PostCSS with SCSS
 -   **Testing**: Jest with Testing Library
 -   **Documentation**: Markdown with Remarkable
--   **API Integration**: OpenAI
+-   **API Integration**: token.place
 -   **Code Quality**: ESLint, Prettier
 
 > 📖 For comprehensive documentation, see our [Developer Guide](../DEVELOPER_GUIDE.md).
