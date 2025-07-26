@@ -83,6 +83,17 @@ test.describe('Quest Management', () => {
         }
     });
 
+    test('should enforce schema validation on short fields', async ({ page }) => {
+        await page.fill('#title', 'ab');
+        await page.fill('#description', 'too short');
+
+        const submitButton = page.locator('button.submit-button, input[type="submit"]');
+        await submitButton.click();
+
+        await expect(page.locator('.error-message')).toBeVisible();
+        await expect(page).toHaveURL(/\/quests\/create/);
+    });
+
     test('should handle image upload', async ({ page }) => {
         // Fill in required fields
         await page.fill('#title', 'Quest with Image');
