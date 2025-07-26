@@ -212,6 +212,13 @@ Durations should mirror real-world expectations when possible. See
 `frontend/src/pages/docs/md/process-guidelines.md` for more tips on designing
 and balancing new processes.
 
+### Data Migration
+
+DSPACE stores custom content in IndexedDB. A migration system automatically
+updates old records when the database schema changes. On first run after an
+update, migrations add missing fields and bump the saved schema version to keep
+everything consistent.
+
 > **Tip:** We use the open-source LLM inference from
 > [`token.place`](https://github.com/futuroptimist/token.place) when generating quest
 > dialogue. Token.place itself doesn't host quests, but you can reuse the same

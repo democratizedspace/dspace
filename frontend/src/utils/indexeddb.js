@@ -1,4 +1,5 @@
 // import { log } from './devLog.js';
+import { runMigrations } from './migrations.js';
 
 const DB_NAME = 'dspaceDB';
 const DB_VERSION = 1;
@@ -136,7 +137,7 @@ export function getStoreForEntityType(entityType) {
     }
 }
 
-export const CUSTOM_CONTENT_DB_VERSION = 1;
+export const CUSTOM_CONTENT_DB_VERSION = 2;
 
 export const openCustomContentDB = () => {
     return new Promise((resolve, reject) => {
@@ -161,11 +162,19 @@ export const openCustomContentDB = () => {
             }
 
             const metaStore = request.transaction.objectStore('meta');
-            metaStore.put(CUSTOM_CONTENT_DB_VERSION, 'schemaVersion');
+            const oldVersion = e.oldVersion || 0;
+            const versionToStore = oldVersion === 0 ? CUSTOM_CONTENT_DB_VERSION : oldVersion;
+            metaStore.put(versionToStore, 'schemaVersion');
         };
 
-        request.onsuccess = () => {
-            resolve(request.result);
+        request.onsuccess = async () => {
+            const db = request.result;
+            try {
+                await runMigrations(db, CUSTOM_CONTENT_DB_VERSION);
+                resolve(db);
+            } catch (err) {
+                reject(err);
+            }
         };
 
         request.onerror = () => {
