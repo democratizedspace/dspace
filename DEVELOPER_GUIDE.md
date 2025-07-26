@@ -76,10 +76,10 @@ For a concise overview and debugging tips, see [UI Lifecycle Overview](./fronten
 ```svelte
 <script>
   import { onMount } from 'svelte';
-  
+
   // Define state variables
   let isClientSide = false;
-  
+
   // Use onMount to ensure client-side code only runs in browser
   onMount(() => {
     isClientSide = true;
@@ -87,7 +87,7 @@ For a concise overview and debugging tips, see [UI Lifecycle Overview](./fronten
   });
 </script>
 
-<div data-hydrated={isClientSide ? "true" : "false"}>
+<div data-hydrated={isClientSide ? 'true' : 'false'}>
   {#if isClientSide}
     <!-- Interactive client-side content -->
   {:else}
@@ -97,6 +97,7 @@ For a concise overview and debugging tips, see [UI Lifecycle Overview](./fronten
 ```
 
 This pattern ensures:
+
 - No hydration mismatches between server and client
 - Tests can detect when components are ready for interaction
 - Better user experience during initial load
@@ -134,6 +135,7 @@ npm run test:pr
 ```
 
 This command:
+
 - Works on both Windows and Unix-like systems
 - Runs linting and formatting checks
 - Executes all unit tests
@@ -196,6 +198,13 @@ npm run test:e2e:structure
 npm run test:e2e:integration
 ```
 
+To quickly populate your browser's IndexedDB with sample custom items, processes,
+and quests, run:
+
+```bash
+npm run seed:custom
+```
+
 ### Quick Testing During Development
 
 For faster development cycles:
@@ -213,6 +222,7 @@ This runs unit tests and a subset of critical E2E tests.
 ### Pre-Commit Hooks
 
 The repository includes a pre-commit hook that automatically runs:
+
 - Code formatting and linting checks
 - Quick test suite (unit tests + critical E2E tests)
 
@@ -223,14 +233,16 @@ This ensures that committed code maintains quality standards.
 When writing tests, keep in mind:
 
 1. **Hydration Awareness**: Wait for components to be hydrated before testing interactions
+
    ```typescript
    await page.waitForSelector('[data-hydrated="true"]');
    ```
 
 2. **Test Helpers**: Use helper functions for common operations:
+
    ```typescript
    import { waitForHydration } from './test-helpers';
-   
+
    await waitForHydration(page, 'ProcessForm');
    ```
 
@@ -241,6 +253,7 @@ When writing tests, keep in mind:
 The project uses a custom test runner for optimizing Playwright test execution. The optimizations include:
 
 1. **Test Grouping**: Tests are organized into logical groups that run in a specific sequence:
+
    - Structure Tests: Basic page structure and navigation
    - Item Tests: Creation and management of items
    - Process Tests: Process creation and execution
@@ -248,20 +261,22 @@ The project uses a custom test runner for optimizing Playwright test execution. 
    - Integration Tests: End-to-end workflows combining multiple features
 
 2. **Parallel Execution**: Most test groups run in parallel with multiple workers:
+
    ```javascript
    // Example from run-test-groups.mjs
    const TEST_GROUPS = [
-       {
-           name: 'Structure Tests',
-           files: ['page-structure.spec.ts'],
-           parallel: true,
-           workers: MAX_WORKERS, // Dynamically set based on CPU cores
-       },
-       // ...other groups
+     {
+       name: 'Structure Tests',
+       files: ['page-structure.spec.ts'],
+       parallel: true,
+       workers: MAX_WORKERS, // Dynamically set based on CPU cores
+     },
+     // ...other groups
    ];
    ```
 
 3. **Dynamic Worker Allocation**: The number of workers is determined based on the system's available CPU cores:
+
    ```javascript
    // Determine optimal number of workers based on CPU cores
    const CPU_CORES = os.cpus().length;
@@ -269,6 +284,7 @@ The project uses a custom test runner for optimizing Playwright test execution. 
    ```
 
 4. **Execution Strategy**:
+
    - Fast, independent tests use maximum parallelism
    - Tests with potential interactions use controlled parallelism
    - Integration tests run sequentially to prevent state conflicts
@@ -276,16 +292,19 @@ The project uses a custom test runner for optimizing Playwright test execution. 
 5. **Performance Reporting**: Each test group reports its execution time, helping identify bottlenecks.
 
 To run the optimized test suite:
+
 ```bash
 npm run test:e2e:groups
 ```
 
 For development purposes, you can run a faster subset of tests:
+
 ```bash
 npm run test:e2e:fast
 ```
 
 Each test group can also be run individually:
+
 ```bash
 npm run test:e2e:structure  # Page structure tests only
 npm run test:e2e:custom     # Custom content tests only
@@ -324,50 +343,62 @@ npm run lint:fix
 DSPACE uses ES Modules for the codebase, which has important implications for development and testing:
 
 1. **Package.json Configuration**: The project includes `"type": "module"` in the package.json, which means:
+
    - All .js files are treated as ES modules by default
    - Import/export syntax is required instead of CommonJS require/module.exports
    - Node.js environment variables like `__dirname` and `__filename` are not available directly
 
 2. **Working with ES Modules in Node.js Scripts**:
+
    ```javascript
    // Instead of:
    const path = require('path');
    const __dirname = process.cwd();
-   
+
    // Use:
    import path from 'path';
    import { fileURLToPath } from 'url';
-   
+
    const __filename = fileURLToPath(import.meta.url);
    const __dirname = path.dirname(__filename);
    ```
 
 3. **Script Extensions**:
+
    - `.js` files are treated as ES modules
    - Use `.cjs` extension to force CommonJS mode
    - Use `.mjs` extension to explicitly mark as ES modules
 
 4. **Testing Implications**:
+
    - Jest requires additional configuration to work with ES modules
    - Test scripts need to use import syntax instead of require
    - Use dynamic imports for conditional loading
 
 5. **Configuration Files**:
+
    - Jest configuration files need to use ES module export syntax:
+
      ```javascript
      const config = {
        // Jest configuration
      };
-     
+
      export default config;
      ```
+
    - Babel configuration should also use ES module syntax:
+
      ```javascript
      const config = {
-       presets: [/* ... */],
-       plugins: [/* ... */],
+       presets: [
+         /* ... */
+       ],
+       plugins: [
+         /* ... */
+       ],
      };
-     
+
      export default config;
      ```
 
@@ -381,22 +412,25 @@ DSPACE uses ES Modules for the codebase, which has important implications for de
 Our project uses both Prettier and ESLint to maintain code quality:
 
 1. **Configuration Files**:
-   - `.prettierrc.js` - Controls code formatting rules 
+
+   - `.prettierrc.js` - Controls code formatting rules
    - `.eslintrc.json` - Controls linting rules and code quality checks
 
 2. **Avoiding Conflicts**:
+
    - Prettier handles formatting concerns (indentation, quotes, etc.)
    - ESLint handles code quality concerns (unused variables, potential bugs)
    - The configurations are designed to work together without conflicts
 
 3. **Fixing Issues**:
+
    ```bash
    # Fix only linting issues
    npm run lint:fix
-   
+
    # Fix only formatting issues
    npm run format
-   
+
    # Fix both (prefer this)
    npm run lint:fix && npm run format
    ```
@@ -411,15 +445,21 @@ Our project uses both Prettier and ESLint to maintain code quality:
 If you encounter conflicts between ESLint and Prettier rules (common with indentation, quotes, spacing, etc.), follow these steps:
 
 1. **Configuration Setup**:
+
    - Ensure `eslint-config-prettier` is installed in the project
    - Make sure `.eslintrc.json` includes `"prettier"` in the `extends` array to disable ESLint rules that conflict with Prettier
    - Remove any formatting-related rules from ESLint (quotes, semi, indent) as these are handled by Prettier
 
 2. **Configuration Files**:
+
    - `.eslintrc.json` should have Prettier in the extends array and no formatting rules:
      ```json
      {
-       "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+       "extends": [
+         "eslint:recommended",
+         "plugin:@typescript-eslint/recommended",
+         "prettier"
+       ],
        "rules": {
          // Only include code quality rules, not formatting rules
          "@typescript-eslint/no-explicit-any": "warn"
@@ -437,6 +477,7 @@ If you encounter conflicts between ESLint and Prettier rules (common with indent
      ```
 
 3. **Fixing Issues**:
+
    ```bash
    npm run format              # Let Prettier format the files first
    npm run lint:fix            # Then let ESLint fix remaining issues
@@ -477,6 +518,7 @@ ComponentName/
 ### State Management
 
 For component state:
+
 - Use local state with Svelte's reactive variables where possible
 - Use stores for shared state across components
 - Leverage the game state system for persistent game data
@@ -514,11 +556,12 @@ DSPACE features several core game systems that work together to create the gamep
 ### Core Game Mechanics
 
 #### Items
-Items are the fundamental resources and objects in the game that players can acquire, use, and transform. 
+
+Items are the fundamental resources and objects in the game that players can acquire, use, and transform.
 
 - **Built-in Items**: Pre-defined items that come with the game (metals, components, tools, etc.)
 - **Custom Items**: User-created items that extend the game's item catalog
-- **Item Properties**: 
+- **Item Properties**:
   - Name and description
   - Image/icon
   - Category
@@ -528,6 +571,7 @@ Items are the fundamental resources and objects in the game that players can acq
 All items are displayed in the inventory system (under the `/inventory` route) and can be integrated into processes and quests.
 
 #### Processes
+
 Processes represent manufacturing, transformation, or creation activities that convert input items into output items over time.
 
 - **Built-in Processes**: Pre-defined manufacturing processes included with the game
@@ -542,6 +586,7 @@ Processes represent manufacturing, transformation, or creation activities that c
 Processes appear in the processes list and can be initiated from anywhere in the game that displays the process component.
 
 #### Quests
+
 Quests are missions or objectives that guide the player's progression through the game.
 
 - **Built-in Quests**: Pre-defined storylines and objectives included with the game
@@ -608,12 +653,14 @@ Through real-world testing and debugging sessions, we've gathered valuable insig
 
 Different test environments (local, CI, headless browsers) have different capabilities:
 
-1. **Missing localStorage**: 
+1. **Missing localStorage**:
+
    - Game save tests will fail if localStorage isn't available
    - Chat history tests may fail without persistence
    - Use detection patterns to gracefully handle missing capabilities
 
 2. **Cookie Restrictions**:
+
    - Session management tests can fail in environments with cookie restrictions
    - Profile tests may be affected
 
@@ -667,6 +714,7 @@ Our `test-coverage.spec.ts` file ensures no tests are left out of the test workf
 3. It reports any orphaned tests that aren't included in test groups
 
 When adding new test files:
+
 1. Add the file to an appropriate test group in `scripts/run-test-groups.mjs`
 2. Run `npx playwright test e2e/test-coverage.spec.ts` to verify no orphaned tests
 3. Tests left out of groups won't run during CI and may cause undetected regressions
@@ -676,14 +724,17 @@ When adding new test files:
 Playwright runs in strict mode, which has specific requirements:
 
 1. **Multiple Element Matches**:
+
    - Using `page.locator('button').click()` will fail if multiple buttons exist
    - Always use `.first()` or more specific selectors
 
 2. **Visibility Checks**:
+
    - Always check visibility before interaction
    - Use `await expect(element).toBeVisible()` before clicking
 
 3. **Best Practice Pattern**:
+
 ```typescript
 // Complete pattern for reliable element interaction
 const button = page.locator('button').filter({ hasText: 'Submit' }).first();
@@ -700,6 +751,7 @@ When tests fail, valuable artifacts are created to help diagnose issues:
 3. **Trace Files**: Detailed interaction logs viewable with `npx playwright show-trace [path]`
 
 These artifacts are especially useful for diagnosing:
+
 - Element visibility issues
 - Timing problems
 - Hydration failures
@@ -710,6 +762,7 @@ These artifacts are especially useful for diagnosing:
 Some tests may fail due to known limitations:
 
 1. **Chat System Tests**: May fail if:
+
    - Chat interface elements can't be found
    - localStorage isn't available for message persistence
    - Network calls for chat API are restricted
@@ -742,7 +795,7 @@ Solution: Ensure proper use of `isClientSide` flag and conditional rendering
 
 #### Test Failures
 
-Symptoms: E2E tests fail intermittently 
+Symptoms: E2E tests fail intermittently
 Solution: Add appropriate waiting for hydration, increase timeouts for async operations
 
 #### Build Errors
@@ -765,4 +818,4 @@ Solution: Check type definitions, resolve linting issues
 
 ---
 
-This guide is a living document that evolves with the project. If you find something missing or incorrect, please submit a PR to improve it. 
+This guide is a living document that evolves with the project. If you find something missing or incorrect, please submit a PR to improve it.
