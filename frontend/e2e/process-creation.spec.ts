@@ -97,6 +97,23 @@ test.describe('Process Creation', () => {
         }
     });
 
+    test('should create process with seconds duration', async ({ page }) => {
+        await createTestItems(page, 1);
+        await page.goto('/processes/create');
+        await page.waitForLoadState('networkidle');
+
+        const processTitle = `Seconds Duration ${Date.now()}`;
+        const success = await fillProcessForm(page, processTitle, '2m 30s', 1, 0, 0);
+        expect(success).toBe(true);
+
+        const submitButton = page.locator('button.submit-button');
+        await submitButton.click();
+        await page.waitForTimeout(3000);
+
+        const errorMessages = page.locator('.error-message');
+        expect(await errorMessages.count()).toBe(0);
+    });
+
     test('should test item selector in isolation', async ({ page }) => {
         // Create test items first
         await createTestItems(page, 2);
