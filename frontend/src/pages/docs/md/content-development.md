@@ -96,7 +96,7 @@ Before submitting:
 For more advanced contributors interested in extending core game functionality:
 
 -   Review the [DSPACE Architecture](/docs/architecture) documentation
--   Follow the [Developer Guide](https://github.com/democratizedspace/dspace/blob/main/DEVELOPER_GUIDE.md)
+-   Follow the [Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md)
 -   Start with small enhancements before proposing major changes
 
 ## Community Resources
@@ -104,6 +104,6 @@ For more advanced contributors interested in extending core game functionality:
 -   [Discord Community](https://discord.gg/A3UAfYvnxM): Discuss ideas and get feedback
 -   [GitHub Repository](https://github.com/democratizedspace/dspace): View source code and submit changes
 -   [Documentation](/docs): Browse all game documentation
--   [Contribution Guide](https://github.com/democratizedspace/dspace/blob/main/CONTRIBUTORS.md): General contribution guidelines
+-   [Contribution Guide](https://github.com/democratizedspace/dspace/blob/v3/CONTRIBUTORS.md): General contribution guidelines
 
 By following these guidelines, you'll create high-quality content that enhances the DSPACE experience while contributing to our mission of democratizing space exploration through practical, hands-on education.
