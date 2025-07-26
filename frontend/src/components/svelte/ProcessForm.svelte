@@ -3,6 +3,7 @@
     import ItemSelector from './ItemSelector.svelte';
     import ProcessPreview from './ProcessPreview.svelte';
     import items from '../../pages/inventory/json/items.json';
+    import { durationInSeconds } from '../../utils.js';
 
     export let title = '';
     export let duration = '';
@@ -56,9 +57,14 @@
     }
 
     function validateDuration(duration) {
-        // Duration should be in format like "1h 30m", "2h", "45m", etc.
-        const pattern = /^(\d+h\s*)?(\d+m\s*)?$/;
-        return pattern.test(duration.trim());
+        // Accept durations like "1h 30m", "45s", "0.5h" or any combination
+        // cspell:ignore dhms
+        const pattern = /^(\d+(?:\.\d+)?[dhms]\s*)+$/;
+        const trimmed = duration.trim();
+        if (!pattern.test(trimmed)) {
+            return false;
+        }
+        return durationInSeconds(trimmed) > 0;
     }
 
     function validateItems() {
