@@ -3,11 +3,13 @@
     import { writable } from 'svelte/store';
     import { loadGameState } from '../../../utils/gameState/common.js';
     import OpenAIChat from './OpenAIChat.svelte';
+    import TokenPlaceChat from './TokenPlaceChat.svelte';
 
     const apiKey = writable(loadGameState().openAI?.apiKey || '');
 </script>
 
 <div class="container">
+    <TokenPlaceChat />
     <div class="api-container">
         <OpenAIAPIKeySettings {apiKey} />
     </div>
