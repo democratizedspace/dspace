@@ -134,7 +134,7 @@ describe('ProcessForm Component', () => {
         });
     });
 
-    test('should validate duration format', () => {
+    test('should validate duration format including seconds and decimals', () => {
         const component = new ProcessForm({
             target: container,
         });
@@ -159,12 +159,15 @@ describe('ProcessForm Component', () => {
         form.dispatchEvent(new Event('submit', { cancelable: true }));
         expect(submittedData).toBeFalsy();
 
-        // Test valid duration format
-        durationInput.value = '1h 30m';
-        durationInput.dispatchEvent(new Event('input'));
-
-        form.dispatchEvent(new Event('submit', { cancelable: true }));
-        expect(submittedData).toBeTruthy();
+        // Test valid duration formats
+        const validDurations = ['1h 30m 10s', '0.5h'];
+        for (const val of validDurations) {
+            durationInput.value = val;
+            durationInput.dispatchEvent(new Event('input'));
+            form.dispatchEvent(new Event('submit', { cancelable: true }));
+            expect(submittedData).toBeTruthy();
+            submittedData = null;
+        }
     });
 
     test('should validate item counts', () => {
