@@ -34,6 +34,13 @@ describe('Quest dependency integrity', () => {
         expect(cycle).toBeTruthy();
     });
 
+    test('handles explicit missing quest entries', () => {
+        const broken = new Map();
+        broken.set('missing', undefined);
+        const issues = findQuestDependencyIssues(broken);
+        expect(issues).toEqual(['Missing quest missing']);
+    });
+
     test('handles quests without dependencies', () => {
         const simple = new Map();
         simple.set('root', { id: 'root' });
