@@ -42,6 +42,22 @@ describe('Quest dependency integrity', () => {
         expect(issues).toEqual([]);
     });
 
+    test('detects self dependency', () => {
+        const map = new Map();
+        map.set('loop', { id: 'loop', requiresQuests: ['loop'] });
+        const issues = findQuestDependencyIssues(map);
+        expect(issues).toEqual(['Circular dependency involving loop']);
+    });
+
+    test('resolves linear chains without repeating nodes', () => {
+        const chain = new Map();
+        chain.set('a', { id: 'a', requiresQuests: ['b'] });
+        chain.set('b', { id: 'b', requiresQuests: ['c'] });
+        chain.set('c', { id: 'c' });
+        const issues = findQuestDependencyIssues(chain);
+        expect(issues).toEqual([]);
+    });
+
     test('handles empty quest list', () => {
         const issues = findQuestDependencyIssues(new Map());
         expect(issues).toEqual([]);
