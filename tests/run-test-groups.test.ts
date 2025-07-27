@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
-import * as child from 'child_process';
+import { execSync } from 'child_process';
 import { runTestGroup, TEST_GROUPS } from '../frontend/scripts/run-test-groups.mjs';
+
+vi.mock('child_process', () => ({ execSync: vi.fn() }));
 
 // Basic sanity check that TEST_GROUPS is populated
 describe('run-test-groups', () => {
@@ -10,7 +12,8 @@ describe('run-test-groups', () => {
   });
 
   it('returns true when exec succeeds', () => {
-    const spy = vi.spyOn(child, 'execSync').mockImplementation(() => {} as any);
+    const spy = vi.mocked(execSync);
+    spy.mockImplementation(() => ({} as any));
     const result = runTestGroup({ name: 'Demo', files: ['demo.spec.ts'], parallel: false });
     expect(spy).toHaveBeenCalled();
     expect(result).toBe(true);
@@ -18,7 +21,8 @@ describe('run-test-groups', () => {
   });
 
   it('returns false when exec fails', () => {
-    const spy = vi.spyOn(child, 'execSync').mockImplementation(() => {
+    const spy = vi.mocked(execSync);
+    spy.mockImplementation(() => {
       throw new Error('fail');
     });
     const result = runTestGroup({ name: 'Fail', files: ['fail.spec.ts'], parallel: true, workers: 2 });
