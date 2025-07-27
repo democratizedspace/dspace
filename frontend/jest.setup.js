@@ -265,6 +265,7 @@ jest.mock('svelte/internal', () => {
                 console.warn('Error in dispatch_dev:', error);
             }
         },
+        globals: { Error },
         validate_component: jest.fn(),
         validate_slots: jest.fn(),
         validate_store: jest.fn(),
