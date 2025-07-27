@@ -62,4 +62,14 @@ describe('Quest dependency integrity', () => {
         const issues = findQuestDependencyIssues(new Map());
         expect(issues).toEqual([]);
     });
+
+    test('reports missing quests when map entry is undefined', () => {
+        const broken = new Map();
+        broken.set('a', { id: 'a', requiresQuests: ['b'] });
+        // Deliberately include the key but leave the value undefined
+        broken.set('b', undefined);
+
+        const issues = findQuestDependencyIssues(broken);
+        expect(issues).toContain('Missing quest b');
+    });
 });
