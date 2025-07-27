@@ -200,4 +200,22 @@ describe('ItemForm Component', () => {
             );
         });
     });
+
+    it('shows image preview after upload', async () => {
+        const { getByLabelText, findByAltText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        const file = new File(['mock content'], 'test.jpg', { type: 'image/jpeg' });
+        await act(async () => {
+            fireEvent.change(getByLabelText(/attach an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        expect(await findByAltText('Preview')).toBeInTheDocument();
+    });
 });
