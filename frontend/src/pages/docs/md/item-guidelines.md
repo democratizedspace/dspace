@@ -48,6 +48,10 @@ Currently, the `ItemForm.svelte` component supports creating items with the prop
 
 As you fill out the form, an `ItemPreview` component displays a live preview so you can confirm the details before submitting. The layout automatically adjusts on small screens so form fields expand to the full width for easier touch input.
 
+### Preview & Testing
+
+The live preview lets you verify how your item will appear once created. Automated end-to-end tests now confirm this preview renders correctly when fields are filled in.
+
 All items must now conform to the JSON schema located at `frontend/src/pages/inventory/jsonSchemas/item.json`. Run the `itemValidation` test to ensure any additions meet the schema requirements.
 
 ## Item Best Practices

@@ -46,6 +46,10 @@ Fractional values are allowed, so `0.5h` will be interpreted as thirty minutes.
 
 The current `ProcessForm.svelte` component supports creating processes with all the properties listed above. It includes item selection interfaces for each of the three item relationship types. A built-in preview shows how the process will appear once created, and form validation now accepts seconds and fractional durations in addition to hours and minutes. The form is also mobile-friendly with controls stacked vertically on small screens.
 
+### Preview & Testing
+
+Use the **Preview** button to inspect your process before saving. Our automated Playwright tests now verify that the preview renders correctly when valid data is provided.
+
 ## Process Categories
 
 When designing processes, consider these common categories:
