@@ -14,7 +14,7 @@ describe('runDbBenchmark', () => {
         expect(result.readMs).toBeGreaterThan(0);
     });
 
-    test('works with default options', async () => {
+    test('uses default count when none provided', async () => {
         const result = await runDbBenchmark();
         expect(result.itemCount).toBe(50);
         expect(result.processCount).toBe(50);

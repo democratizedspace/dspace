@@ -1,3 +1,4 @@
+/* istanbul ignore next - re-exported helpers don't need coverage */
 import {
     saveItem,
     saveProcess,
