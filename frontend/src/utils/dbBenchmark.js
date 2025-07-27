@@ -9,13 +9,15 @@ import {
     openCustomContentDB,
 } from './indexeddb.js';
 
+export const DEFAULT_BENCHMARK_COUNT = 50;
+
 /**
  * Run a simple performance benchmark of the custom content database.
  * @param {object} [options]
  * @param {number} [options.count=50] Number of records for each entity type
  * @returns {Promise<{insertMs:number, readMs:number, itemCount:number, processCount:number, questCount:number}>}
  */
-export async function runDbBenchmark({ count = 50 } = {}) {
+export async function runDbBenchmark({ count = DEFAULT_BENCHMARK_COUNT } = {}) {
     await openCustomContentDB();
     const startInsert = performance.now();
     for (let i = 0; i < count; i++) {

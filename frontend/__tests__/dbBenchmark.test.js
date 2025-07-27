@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import 'fake-indexeddb/auto';
-import { runDbBenchmark } from '../src/utils/dbBenchmark.js';
+import { runDbBenchmark, DEFAULT_BENCHMARK_COUNT } from '../src/utils/dbBenchmark.js';
 
 describe('runDbBenchmark', () => {
     test('returns timing metrics and counts', async () => {
@@ -21,5 +21,9 @@ describe('runDbBenchmark', () => {
         expect(result.questCount).toBe(50);
         expect(result.insertMs).toBeGreaterThan(0);
         expect(result.readMs).toBeGreaterThan(0);
+    });
+
+    test('exports default count constant', () => {
+        expect(DEFAULT_BENCHMARK_COUNT).toBe(50);
     });
 });
