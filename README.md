@@ -191,6 +191,8 @@ steps, run the dedicated test:
 Use `npm run generate-quest` to scaffold a new quest with placeholder dialogue.
 ```
 
+Custom quests often rely on new items or processes. Use [`scripts/create-content-bundle.js`](./scripts/create-content-bundle.js) to package these together. See the [Custom Content Bundles](docs/custom-bundles) guide for details.
+
 Additional quality checks are available:
 
 ```bash
@@ -264,3 +266,4 @@ files help prevent accidental removals.
 ## License
 
 DSPACE is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
