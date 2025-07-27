@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cd frontend && npm run dev",
-    "test": "vitest run --coverage tests/*.test.ts",
+    "test": "vitest run --coverage",
     "test:watch": "cd frontend && npm run test:watch",
     "test:e2e": "cd frontend && npm run test:e2e",
     "test:e2e:coverage": "cd frontend && npm run test:e2e:coverage",
