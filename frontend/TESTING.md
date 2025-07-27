@@ -230,6 +230,9 @@ We have specialized tests to ensure content quality:
 5. **Process Quality Tests** (`processQuality.test.js`):
     - Validates duration strings and item references
     - Warns when processes lack items or have extreme durations
+6. **Quest Dependency Tests** (`questDependencies.test.js`):
+    - Ensures quest chains reference existing quests
+    - Detects circular dependencies that could block progress
 
 These tests are designed to produce warnings rather than failures, allowing for ongoing development while still identifying quality issues to address.
 
@@ -241,6 +244,7 @@ npm test -- itemQuality
 npm test -- processQuality
 npm test -- imageReferences
 npm test -- questCanonical
+npm test -- questDependencies
 ```
 
 ### Performance Benchmarks
