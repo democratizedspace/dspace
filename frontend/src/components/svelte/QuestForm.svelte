@@ -15,6 +15,10 @@
     let allQuests = [];
     let validationErrors = {};
     let isSubmitting = false;
+    const MIN_TITLE_LENGTH = 3;
+    const MIN_DESC_LENGTH = 10;
+
+    let touched = { title: false, description: false };
 
     const dispatch = createEventDispatcher();
 
@@ -54,9 +58,11 @@
             };
             reader.readAsDataURL(file);
             image = file;
+            validateForm();
         } else {
             previewUrl = null;
             image = null;
+            validateForm();
         }
     }
 
@@ -64,15 +70,33 @@
         requiresQuests = Array.from(event.target.selectedOptions).map((opt) => opt.value);
     }
 
+    function handleTitleInput(event) {
+        title = event.target.value;
+        touched.title = true;
+        validateForm();
+    }
+
+    function handleDescriptionInput(event) {
+        description = event.target.value;
+        touched.description = true;
+        validateForm();
+    }
+
     async function validateForm() {
         const errors = {};
 
-        if (!title.trim()) {
+        const trimmedTitle = title.trim();
+        if (!trimmedTitle) {
             errors.title = 'Title is required';
+        } else if (trimmedTitle.length < MIN_TITLE_LENGTH) {
+            errors.title = `Title must be at least ${MIN_TITLE_LENGTH} characters`;
         }
 
-        if (!description.trim()) {
+        const trimmedDesc = description.trim();
+        if (!trimmedDesc) {
             errors.description = 'Description is required';
+        } else if (trimmedDesc.length < MIN_DESC_LENGTH) {
+            errors.description = `Description must be at least ${MIN_DESC_LENGTH} characters`;
         }
 
         if (!isEdit && !image && !previewUrl) {
@@ -182,6 +206,7 @@
             bind:value={title}
             placeholder="Gather resources"
             class:error={validationErrors.title}
+            on:input={handleTitleInput}
         />
         {#if validationErrors.title}
             <span class="error-message">{validationErrors.title}</span>
@@ -195,6 +220,7 @@
             bind:value={description}
             placeholder="Describe the quest in detail. What needs to be done?"
             class:error={validationErrors.description}
+            on:input={handleDescriptionInput}
         />
         {#if validationErrors.description}
             <span class="error-message">{validationErrors.description}</span>
