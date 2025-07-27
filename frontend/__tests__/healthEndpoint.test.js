@@ -1,5 +1,5 @@
 /** @jest-environment node */
-import { GET as healthGET } from '../src/pages/health.ts';
+import { GET as healthGET, prerender } from '../src/pages/health.ts';
 
 import { describe, it, expect } from '@jest/globals';
 
@@ -9,5 +9,8 @@ describe('health endpoint', () => {
         expect(res.status).toBe(200);
         const body = await res.json();
         expect(body).toEqual({ status: 'ok' });
+    });
+    it('is not prerendered', () => {
+        expect(prerender).toBe(false);
     });
 });
