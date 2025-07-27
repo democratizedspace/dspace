@@ -26,7 +26,6 @@ const config = {
         '!**/node_modules/**',
         '!**/vendor/**',
         '!e2e/**',
-        '!scripts/**',
         '!**/__tests__/**',
         '!src/pages/**/*.svelte',
         '!babel.config.js',
@@ -42,7 +41,7 @@ const config = {
     // coverageDirectory: undefined,
 
     // An array of regexp pattern strings used to skip coverage collection
-    coveragePathIgnorePatterns: ['/node_modules/', '/scripts/'],
+    coveragePathIgnorePatterns: ['/node_modules/'],
 
     // A list of reporter names that Jest uses when writing coverage reports
     // coverageReporters: [
