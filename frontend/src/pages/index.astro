@@ -1,10 +1,13 @@
 ---
 import Page from '../components/Page.astro';
 import WhatsNew from '../components/WhatsNew.astro';
+import UIResponsiveness from '../components/svelte/UIResponsiveness.svelte';
 ---
 
 <Page columns="1">
+    <script>window.dspaceStart = performance.now();</script>
     <WhatsNew />
+    <UIResponsiveness client:load />
 </Page>
 
 <style>
