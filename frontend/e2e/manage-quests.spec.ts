@@ -66,4 +66,33 @@ test.describe('Manage Quests', () => {
 
         expect(exists).toBe(false);
     });
+
+    test('should edit a custom quest title', async ({ page }) => {
+        const questTitle = `Edit Quest ${Date.now()}`;
+        const updatedTitle = questTitle + ' Updated';
+
+        await page.goto('/quests/create');
+        await page.fill('#title', questTitle);
+        await page.fill('#description', 'Quest to edit');
+        await page.click('button.submit-button');
+        await page.waitForLoadState('networkidle');
+
+        await page.goto('/quests/manage');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const questRow = page.locator('.quest-item', { hasText: questTitle }).first();
+        await questRow.locator('.edit-button').click();
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await page.fill('#title', updatedTitle);
+        await page.click('button.submit-button');
+        await page.waitForLoadState('networkidle');
+
+        await page.goto('/quests/manage');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(page.locator('.quest-item', { hasText: updatedTitle })).toBeVisible();
+    });
 });
