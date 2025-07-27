@@ -187,4 +187,16 @@
     .submit-button:hover {
         background-color: #005004;
     }
+
+    @media (max-width: 480px) {
+        .item-form {
+            padding: 10px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            font-size: 14px;
+        }
+    }
 </style>
