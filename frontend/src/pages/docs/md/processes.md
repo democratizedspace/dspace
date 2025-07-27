@@ -64,6 +64,12 @@ Starting with v3, you can create your own custom processes. When creating a cust
     - Consumed items are returned on cancellation
     - Progress is saved locally and persists between sessions
 
+## Process Management
+
+Use the **Manage Processes** page to review or delete custom entries. Built-in
+processes appear alongside any you've created locally. Access it at
+`/processes/manage`.
+
 ## Process Examples
 
 Here are some example processes from the base game:
