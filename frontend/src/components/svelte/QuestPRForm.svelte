@@ -7,10 +7,7 @@
     let validationErrors = {};
     const dispatch = createEventDispatcher();
     import { isValidGitHubToken } from '../../utils/githubToken.js';
-
-    function b64(str) {
-        return btoa(unescape(encodeURIComponent(str)));
-    }
+    import { submitQuestPR } from '../../utils/submitQuestPR.js';
 
     function validateForm() {
         const errors = {};
@@ -31,48 +28,17 @@
             return;
         }
         try {
-            const branchName = branch || `quest-${Date.now()}`;
-            const headers = {
-                Authorization: `token ${token}`,
-                'Content-Type': 'application/json',
-            };
-            const content = b64(questJson);
-            const filePath = `submissions/quests/${branchName}.json`;
-            const res = await fetch(
-                `https://api.github.com/repos/democratizedspace/dspace/contents/${filePath}`,
-                {
-                    method: 'PUT',
-                    headers,
-                    body: JSON.stringify({
-                        message: 'Add quest submission',
-                        content,
-                        branch: branchName,
-                    }),
-                }
-            );
-            if (!res.ok) throw new Error(await res.text());
-            const prRes = await fetch(
-                'https://api.github.com/repos/democratizedspace/dspace/pulls',
-                {
-                    method: 'POST',
-                    headers,
-                    body: JSON.stringify({
-                        title: `Quest submission: ${branchName}`,
-                        head: branchName,
-                        base: 'v3',
-                        body: 'Automated quest submission.',
-                    }),
-                }
-            );
-            if (!prRes.ok) throw new Error(await prRes.text());
-            const prData = await prRes.json();
-            prUrl = prData.html_url;
+            prUrl = await submitQuestPR(token, branch, questJson);
             dispatch('success', { message: 'Pull request created', url: prUrl });
+            token = '';
         } catch (err) {
             console.error(err);
             dispatch('error', { message: 'Failed to submit quest' });
+            token = '';
         }
     }
+
+    export { handleSubmit };
 </script>
 
 <form on:submit={handleSubmit} class="pr-form">

@@ -23,4 +23,9 @@ test('quest PR form submits and shows link', async ({ page }) => {
     await page.fill('#quest', '{"title":"t","description":"d"}');
     await page.click('button:has-text("Create Pull Request")');
     await expect(page.getByTestId('pr-link')).toHaveAttribute('href', 'https://example.com/pr/1');
+    await expect(page.locator('#token')).toHaveValue('');
+    const tokenKeys = await page.evaluate(() =>
+        Object.keys(localStorage).filter((k) => k.toLowerCase().includes('token'))
+    );
+    expect(tokenKeys.length).toBe(0);
 });
