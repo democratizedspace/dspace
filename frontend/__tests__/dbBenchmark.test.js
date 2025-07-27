@@ -13,4 +13,11 @@ describe('runDbBenchmark', () => {
         expect(result.insertMs).toBeGreaterThan(0);
         expect(result.readMs).toBeGreaterThan(0);
     });
+
+    test('uses default count when none provided', async () => {
+        const result = await runDbBenchmark();
+        expect(result.itemCount).toBe(50);
+        expect(result.processCount).toBe(50);
+        expect(result.questCount).toBe(50);
+    });
 });
