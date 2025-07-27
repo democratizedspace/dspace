@@ -28,7 +28,8 @@ Constraints:
   1. Global: Maintain ≥ 90 % line and branch coverage.
   2. Patch: For any file listed by
      git diff --name-only $(git merge-base origin/main HEAD)
-     ensure no metric falls below 90 % and no metric drops by > 0.20 percentage points compared with `origin/main`.
+     ensure lines, branches, statements and functions each reach **100 %**.
+     No metric may drop more than 0.20 percentage points compared with `origin/main`.
   3. Fail the job if either threshold is violated. Use one of:
      - Native Vitest: `vitest run --coverage --coverage.thresholds.perFile --coverage.thresholds.lines=90 ...`
      - Danger JS with `danger-plugin-istanbul-coverage` for per‑patch diffs
@@ -47,6 +48,6 @@ Output format
 2. Summary
 3. Tests & coverage
    npm run coverage
-   node scripts/checkPatchCoverage.cjs   # exit 1 on drop >0.2 pp
+   node scripts/checkPatchCoverage.cjs   # verifies 100% patch coverage
    npx playwright test
 ```

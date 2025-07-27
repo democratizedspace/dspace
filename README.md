@@ -100,6 +100,8 @@ npm run test:e2e:coverage
 
 # Generate unit test coverage
 npm run coverage
+# Verify 100% coverage for changed files
+node scripts/checkPatchCoverage.cjs
 # View the HTML report at
 frontend/coverage/lcov-report/index.html
 
