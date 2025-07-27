@@ -3,6 +3,7 @@
     export let token = '';
     export let branch = '';
     export let questJson = '';
+    let prUrl = '';
     const dispatch = createEventDispatcher();
 
     function b64(str) {
@@ -50,7 +51,9 @@
                 }
             );
             if (!prRes.ok) throw new Error(await prRes.text());
-            dispatch('success', { message: 'Pull request created' });
+            const prData = await prRes.json();
+            prUrl = prData.html_url;
+            dispatch('success', { message: 'Pull request created', url: prUrl });
         } catch (err) {
             console.error(err);
             dispatch('error', { message: 'Failed to submit quest' });
@@ -75,6 +78,13 @@
         <button type="submit">Create Pull Request</button>
     </div>
 </form>
+
+{#if prUrl}
+    <p class="success-message" data-testid="pr-success">
+        Pull request created:
+        <a href={prUrl} target="_blank" rel="noopener" data-testid="pr-link"> View PR </a>
+    </p>
+{/if}
 
 <style>
     .pr-form {
@@ -116,5 +126,9 @@
         border: none;
         border-radius: 8px;
         cursor: pointer;
+    }
+    .success-message {
+        margin-top: 10px;
+        color: #90ee90;
     }
 </style>
