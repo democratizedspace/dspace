@@ -25,14 +25,7 @@ function parseArgs(args) {
   return { quests, items, processes };
 }
 
-function main() {
-  if (process.argv.length < 4) {
-    console.error('Usage: node scripts/create-content-bundle.js <output> <quest-glob...> [--items <item-glob...>] [--processes <process-glob...>]');
-    process.exit(1);
-  }
-  const output = path.resolve(process.argv[2]);
-  const { quests, items, processes } = parseArgs(process.argv.slice(3));
-
+function createBundle(output, { quests = [], items = [], processes = [] }) {
   const bundle = {
     quests: collect(quests),
     items: collect(items),
@@ -40,9 +33,23 @@ function main() {
   };
 
   fs.writeFileSync(output, JSON.stringify(bundle, null, 4));
+  return bundle;
+}
+
+function main() {
+  if (process.argv.length < 4) {
+    console.error('Usage: node scripts/create-content-bundle.js <output> <quest-glob...> [--items <item-glob...>] [--processes <process-glob...>]');
+    process.exit(1);
+  }
+  const output = path.resolve(process.argv[2]);
+  const args = parseArgs(process.argv.slice(3));
+
+  createBundle(output, args);
   console.log(`Bundle written to ${output}`);
 }
 
 if (require.main === module) {
   main();
 }
+
+module.exports = { parseArgs, createBundle, collect };
