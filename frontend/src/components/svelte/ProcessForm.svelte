@@ -409,4 +409,20 @@
         text-align: center;
         margin-top: 20px;
     }
+
+    @media (max-width: 480px) {
+        .process-form {
+            padding: 10px;
+        }
+
+        input[type='text'] {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .item-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
 </style>
