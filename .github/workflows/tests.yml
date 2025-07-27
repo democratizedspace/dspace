@@ -17,6 +17,7 @@ jobs:
             package-lock.json
             frontend/package-lock.json
       - run: npm ci
+      - run: npm test
       - run: cd frontend && npm ci
       - run: cd frontend && npm test
 
