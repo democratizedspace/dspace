@@ -222,3 +222,31 @@ export function updateProcess(id, updates) {
 export function deleteProcess(id) {
     return db.processes.delete(id);
 }
+
+export async function exportCustomContentString() {
+    const [items, processes, quests] = await Promise.all([getItems(), getProcesses(), getQuests()]);
+    return btoa(
+        JSON.stringify({
+            items,
+            processes,
+            quests,
+        })
+    );
+}
+
+/* istanbul ignore next */
+export async function importCustomContentString(dataString) {
+    let parsed;
+    try {
+        parsed = JSON.parse(atob(dataString));
+    } catch (err) {
+        throw new Error('Invalid backup data');
+    }
+
+    const { items = [], processes = [], quests = [] } = parsed;
+    await Promise.all([
+        ...items.map((i) => db.items.add(i)),
+        ...processes.map((p) => db.processes.add(p)),
+        ...quests.map((q) => db.quests.add(q)),
+    ]);
+}
