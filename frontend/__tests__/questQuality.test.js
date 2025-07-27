@@ -451,8 +451,7 @@ describe('Quest Quality Validation', () => {
             issues.forEach((issue) => console.warn(`- ${issue}`));
         }
 
-        // For now, just output warnings but don't fail tests
-        expect(true).toBe(true);
+        expect(issues.length).toBe(0);
     });
 
     test('Quests reference valid items and processes sufficiently', () => {
