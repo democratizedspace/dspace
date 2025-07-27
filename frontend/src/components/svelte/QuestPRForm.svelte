@@ -78,7 +78,13 @@
 <form on:submit={handleSubmit} class="pr-form">
     <div class="form-group">
         <label for="token">GitHub Token*</label>
-        <input id="token" type="password" bind:value={token} class:error={validationErrors.token} required />
+        <input
+            id="token"
+            type="password"
+            bind:value={token}
+            class:error={validationErrors.token}
+            required
+        />
         {#if validationErrors.token}
             <span class="error-message">{validationErrors.token}</span>
         {/if}
@@ -89,7 +95,13 @@
     </div>
     <div class="form-group">
         <label for="quest">Quest JSON*</label>
-        <textarea id="quest" bind:value={questJson} rows="10" class:error={validationErrors.quest} required />
+        <textarea
+            id="quest"
+            bind:value={questJson}
+            rows="10"
+            class:error={validationErrors.quest}
+            required
+        />
         {#if validationErrors.quest}
             <span class="error-message">{validationErrors.quest}</span>
         {/if}
