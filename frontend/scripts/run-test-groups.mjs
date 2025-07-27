@@ -132,48 +132,62 @@ function runTestGroup(group) {
     }
 }
 
-// Main execution
-console.log(`${colors.bright}${colors.magenta}Starting DSpace Test Suite in Groups${colors.reset}`);
-console.log(`${colors.yellow}Total groups: ${TEST_GROUPS.length}${colors.reset}`);
-console.log(`${colors.yellow}System has ${CPU_CORES} CPU cores, using up to ${MAX_WORKERS} workers for parallel tests${colors.reset}\n`);
-
-let startTime = Date.now();
-let successCount = 0;
-let failureCount = 0;
-
-// Run each group in sequence
-for (let i = 0; i < TEST_GROUPS.length; i++) {
-    const group = TEST_GROUPS[i];
+function main() {
     console.log(
-        `${colors.yellow}Group ${i + 1}/${TEST_GROUPS.length}: ${group.name}${colors.reset}`
+        `${colors.bright}${colors.magenta}Starting DSpace Test Suite in Groups${colors.reset}`
+    );
+    console.log(`${colors.yellow}Total groups: ${TEST_GROUPS.length}${colors.reset}`);
+    console.log(
+        `${colors.yellow}System has ${CPU_CORES} CPU cores, using up to ${MAX_WORKERS} workers for parallel tests${colors.reset}\n`
     );
 
-    const groupStartTime = Date.now();
-    const success = runTestGroup(group);
-    const groupEndTime = Date.now();
-    const groupDuration = (groupEndTime - groupStartTime) / 1000;
+    let startTime = Date.now();
+    let successCount = 0;
+    let failureCount = 0;
 
-    if (success) {
-        successCount++;
+    // Run each group in sequence
+    for (let i = 0; i < TEST_GROUPS.length; i++) {
+        const group = TEST_GROUPS[i];
         console.log(
-            `${colors.green}Group completed in ${groupDuration.toFixed(2)} seconds${colors.reset}\n`
+            `${colors.yellow}Group ${i + 1}/${TEST_GROUPS.length}: ${group.name}${colors.reset}`
         );
-    } else {
-        failureCount++;
-        console.log(
-            `${colors.red}Group failed after ${groupDuration.toFixed(2)} seconds${colors.reset}\n`
-        );
+
+        const groupStartTime = Date.now();
+        const success = runTestGroup(group);
+        const groupEndTime = Date.now();
+        const groupDuration = (groupEndTime - groupStartTime) / 1000;
+
+        if (success) {
+            successCount++;
+            console.log(
+                `${colors.green}Group completed in ${groupDuration.toFixed(2)} seconds${colors.reset}\n`
+            );
+        } else {
+            failureCount++;
+            console.log(
+                `${colors.red}Group failed after ${groupDuration.toFixed(2)} seconds${colors.reset}\n`
+            );
+        }
     }
+
+    // Print summary
+    const endTime = Date.now();
+    const totalDuration = (endTime - startTime) / 1000;
+
+    console.log(`${colors.bright}${colors.magenta}Test Suite Summary:${colors.reset}`);
+    console.log(`${colors.green}✓ ${successCount} groups passed${colors.reset}`);
+    console.log(`${colors.red}✗ ${failureCount} groups failed${colors.reset}`);
+    console.log(`${colors.yellow}Total time: ${totalDuration.toFixed(2)} seconds${colors.reset}`);
+
+    // Exit with appropriate code
+    process.exit(failureCount > 0 ? 1 : 0);
 }
 
-// Print summary
-const endTime = Date.now();
-const totalDuration = (endTime - startTime) / 1000;
+if (
+    import.meta.url === `file://${process.argv[1]}` ||
+    process.argv[1].endsWith('run-test-groups.mjs')
+) {
+    main();
+}
 
-console.log(`${colors.bright}${colors.magenta}Test Suite Summary:${colors.reset}`);
-console.log(`${colors.green}✓ ${successCount} groups passed${colors.reset}`);
-console.log(`${colors.red}✗ ${failureCount} groups failed${colors.reset}`);
-console.log(`${colors.yellow}Total time: ${totalDuration.toFixed(2)} seconds${colors.reset}`);
-
-// Exit with appropriate code
-process.exit(failureCount > 0 ? 1 : 0);
+export { TEST_GROUPS, runTestGroup, main, CPU_CORES, MAX_WORKERS };
