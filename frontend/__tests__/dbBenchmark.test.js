@@ -19,5 +19,7 @@ describe('runDbBenchmark', () => {
         expect(result.itemCount).toBe(50);
         expect(result.processCount).toBe(50);
         expect(result.questCount).toBe(50);
+        expect(result.insertMs).toBeGreaterThan(0);
+        expect(result.readMs).toBeGreaterThan(0);
     });
 });
