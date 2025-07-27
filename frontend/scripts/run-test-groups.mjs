@@ -31,6 +31,7 @@ const TEST_GROUPS = [
             'error-pages.spec.ts',
             'svelte-component-hydration.spec.ts',
             'builtin-quests.spec.ts',
+            'custom-backup.spec.ts',
         ],
         parallel: true,
         workers: MAX_WORKERS,

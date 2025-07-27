@@ -49,6 +49,10 @@
         "href": "/gamesaves"
     },
     {
+        "name": "Custom Content Backup",
+        "href": "/contentbackup"
+    },
+    {
         "name": "Guilds",
         "href": "/guilds",
         "comingSoon": true
