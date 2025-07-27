@@ -335,7 +335,7 @@ Custom content integrates seamlessly with built-in game content.
 
 ## Contributing
 
-Please see the [Contribution Guide](https://github.com/democratizedspace/dspace/blob/v2.1/CONTRIBUTORS.md) and our [Developer Guide](../DEVELOPER_GUIDE.md) for detailed information on contributing to DSPACE.
+Please see the [Contribution Guide](../CONTRIBUTORS.md) and our [Developer Guide](../DEVELOPER_GUIDE.md) for detailed information on contributing to DSPACE.
 
 ## Community
 
