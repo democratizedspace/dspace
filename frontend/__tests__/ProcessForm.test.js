@@ -226,4 +226,27 @@ describe('ProcessForm Component', () => {
         form.dispatchEvent(new Event('submit', { cancelable: true }));
         expect(submittedData).toBeFalsy();
     });
+
+    test('shows preview when preview button clicked with valid data', () => {
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        // Set valid data
+        titleInput.value = 'Preview Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        // Click preview button
+        const previewButton = container.querySelector('button.preview-button');
+        previewButton.dispatchEvent(new Event('click'));
+
+        // Verify preview rendered
+        expect(container.querySelector('.process-preview')).toBeTruthy();
+    });
 });
