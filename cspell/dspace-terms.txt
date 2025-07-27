@@ -122,6 +122,7 @@ pciex
 permissionless
 pinting
 poweroff
+pousr
 prebuild
 previewcontainer
 pylint
