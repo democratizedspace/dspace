@@ -27,8 +27,13 @@
     "chart.js": "^4.5.0",
     "chartjs-node-canvas": "^5.0.0",
     "fake-indexeddb": "^6.0.0",
+    "@jest/globals": "^29.5.0",
+    "ajv": "^8.12.0",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "openai": "^3.2.1"
   },
   "license": "MIT"
 }
