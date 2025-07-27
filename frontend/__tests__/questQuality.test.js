@@ -480,8 +480,7 @@ describe('Quest Quality Validation', () => {
             issues.forEach((issue) => console.warn(`- ${issue}`));
         }
 
-        // For now, just output warnings but don't fail tests
-        expect(true).toBe(true);
+        expect(issues.length).toBe(0);
     });
 
     test('All quests are reachable from starting quests', () => {
