@@ -1,0 +1,9 @@
+---
+import Page from '../../components/Page.astro';
+import ManageItems from './svelte/ManageItems.svelte';
+import items from './json/items.json';
+---
+
+<Page title="Manage Items">
+    <ManageItems client:load items={items} />
+</Page>
