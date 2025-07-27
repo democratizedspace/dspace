@@ -51,6 +51,7 @@
                             class="item-row"
                             class:selected={selectedItemId === item.id}
                             on:click={() => handleItemSelect(item.id)}
+                            on:touchstart={() => handleItemSelect(item.id)}
                             on:keydown={(e) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
                                     handleItemSelect(item.id);
@@ -86,7 +87,14 @@
                         <h3>{selectedItem.name}</h3>
                     </div>
                 </div>
-                <button type="button" class="edit-button" on:click={toggleExpanded}> Edit </button>
+                <button
+                    type="button"
+                    class="edit-button"
+                    on:click={toggleExpanded}
+                    on:touchstart={toggleExpanded}
+                >
+                    Edit
+                </button>
             </div>
         {:else}
             <button
@@ -94,6 +102,7 @@
                 class="select-button"
                 id="item-select-control"
                 on:click={toggleExpanded}
+                on:touchstart={toggleExpanded}
             >
                 Select Item
             </button>
