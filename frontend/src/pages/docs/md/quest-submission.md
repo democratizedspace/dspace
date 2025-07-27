@@ -38,3 +38,4 @@ Once merged, your quest will be included in the next game update!
 1. Visit [github.com/settings/tokens](https://github.com/settings/tokens) and generate a new **classic** token with `repo` scope.
 2. Copy the token and keep it somewhere safe. You can revoke it at any time.
 3. When using the submission form, paste the token into the "GitHub Token" field. The token is used solely in your browser to create the pull request.
+4. The token is saved to your browser's localStorage for convenience. Use the **Clear Token** button when you're finished or revoke it on GitHub.
