@@ -36,7 +36,6 @@ const config = {
         '!playwright.config.ts',
         '!svelte.config.js',
         '!coverage/**',
-        '!src/components/**/*.svelte',
     ],
 
     // The directory where Jest should output its coverage files

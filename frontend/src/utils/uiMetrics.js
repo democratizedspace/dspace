@@ -4,4 +4,3 @@ export function calculateHydrationTime(start, end) {
     }
     return end - start;
 }
-

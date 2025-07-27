@@ -13,4 +13,3 @@ test.describe('UI Responsiveness Metrics', () => {
         expect(text).toMatch(/Hydration time: \d+ ms/);
     });
 });
-

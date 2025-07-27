@@ -11,4 +11,3 @@ describe('calculateHydrationTime', () => {
         expect(() => calculateHydrationTime(1, 'b')).toThrow();
     });
 });
-
