@@ -1,5 +1,10 @@
 const { describe, it, expect } = require('@jest/globals');
-const { isValidGitHubToken } = require('../src/utils/githubToken.js');
+const {
+    isValidGitHubToken,
+    storeGitHubToken,
+    getStoredGitHubToken,
+    clearGitHubToken,
+} = require('../src/utils/githubToken.js');
 
 describe('isValidGitHubToken', () => {
     it('validates typical tokens', () => {
@@ -11,5 +16,22 @@ describe('isValidGitHubToken', () => {
         expect(isValidGitHubToken('')).toBe(false);
         expect(isValidGitHubToken('short')).toBe(false);
         expect(isValidGitHubToken('ghp_invalid')).toBe(false);
+    });
+});
+
+describe('storage helpers', () => {
+    beforeEach(() => {
+        localStorage.clear();
+    });
+
+    it('stores and retrieves token', () => {
+        storeGitHubToken('abc');
+        expect(getStoredGitHubToken()).toBe('abc');
+    });
+
+    it('clears token', () => {
+        storeGitHubToken('abc');
+        clearGitHubToken();
+        expect(getStoredGitHubToken()).toBe('');
     });
 });

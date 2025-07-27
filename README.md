@@ -63,10 +63,10 @@ npx playwright install chromium
 
 This cross-platform script will:
 
--   Check code formatting and linting
--   Run all unit tests
--   Run all end-to-end tests in optimized groups
--   Provide helpful error messages if any tests fail
+- Check code formatting and linting
+- Run all unit tests
+- Run all end-to-end tests in optimized groups
+- Provide helpful error messages if any tests fail
 
 The `test:pr` command handles everything automatically, including starting and stopping the development server for end-to-end tests.
 
@@ -74,8 +74,8 @@ The `test:pr` command handles everything automatically, including starting and s
 
 For detailed information about our testing approach, please refer to:
 
--   [Testing Guide](./frontend/TESTING.md) - Comprehensive documentation on testing practices, common issues, and debugging techniques
--   [Developer Guide](./DEVELOPER_GUIDE.md#testing-strategy) - Higher-level overview of our testing strategy and approach
+- [Testing Guide](./frontend/TESTING.md) - Comprehensive documentation on testing practices, common issues, and debugging techniques
+- [Developer Guide](./DEVELOPER_GUIDE.md#testing-strategy) - Higher-level overview of our testing strategy and approach
 
 For common test commands, see the section below.
 
@@ -146,10 +146,10 @@ Trigger the workflow manually or on pushes to `v3` to update the Pi and restart 
 
 DSPACE uses a modern JavaScript architecture:
 
--   **ES Modules**: Native JavaScript modules with import/export syntax
--   **Astro SSR**: Server-side rendering with hydration of Svelte components
--   **Progressive Enhancement**: Core functionality works without JavaScript
--   **Continuous Testing**: Unit and e2e tests ensure consistent quality
+- **ES Modules**: Native JavaScript modules with import/export syntax
+- **Astro SSR**: Server-side rendering with hydration of Svelte components
+- **Progressive Enhancement**: Core functionality works without JavaScript
+- **Continuous Testing**: Unit and e2e tests ensure consistent quality
 
 For detailed information on the architecture, see our [Developer Guide](./DEVELOPER_GUIDE.md).
 
@@ -157,12 +157,12 @@ For detailed information on the architecture, see our [Developer Guide](./DEVELO
 
 For comprehensive information about developing DSPACE, see our [Developer Guide](./DEVELOPER_GUIDE.md). This guide includes:
 
--   Detailed architecture overview
--   Component development guidelines
--   [UI Lifecycle Overview](./frontend/src/pages/docs/md/ui-lifecycle.md) for understanding Astro SSR and Svelte hydration
--   Testing strategies
--   Performance considerations
--   Troubleshooting tips
+- Detailed architecture overview
+- Component development guidelines
+- [UI Lifecycle Overview](./frontend/src/pages/docs/md/ui-lifecycle.md) for understanding Astro SSR and Svelte hydration
+- Testing strategies
+- Performance considerations
+- Troubleshooting tips
 
 ## Built-in Quests
 
@@ -233,6 +233,10 @@ guide. It includes ready-made prompt templates for tools like GPT-4 or Claude to
 help you generate dialogue and structure quickly. Combine these with the
 [Quest Development Guidelines](docs/quest-guidelines), the [Quest Template Example](docs/quest-template), and the [Quest Submission Guide](docs/quest-submission) to streamline content creation and sharing.
 
+## Authentication
+
+Quest submissions require a GitHub personal access token. The token is stored in your browser so you don't have to enter it every time. See [Authentication Flow](docs/AUTHENTICATION.md) for details and how to clear or revoke the token.
+
 ### Staying Updated
 
 We frequently merge improvements from the `v3` branch. Keep your fork current:
@@ -266,4 +270,3 @@ files help prevent accidental removals.
 ## License
 
 DSPACE is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-

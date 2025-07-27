@@ -23,4 +23,7 @@ test('quest PR form submits and shows link', async ({ page }) => {
     await page.fill('#quest', '{"title":"t","description":"d"}');
     await page.click('button:has-text("Create Pull Request")');
     await expect(page.getByTestId('pr-link')).toHaveAttribute('href', 'https://example.com/pr/1');
+    await expect(page.locator('#token')).toHaveValue('t');
+    const gameState = await page.evaluate(() => localStorage.getItem('gameState'));
+    expect(JSON.parse(gameState).github.token).toBe('t');
 });
