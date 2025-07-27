@@ -398,6 +398,35 @@ function checkItemProcessUsage() {
     return issues;
 }
 
+// Ensure all quests are reachable from at least one starting quest
+function checkQuestReachability() {
+    const reverseDeps = new Map();
+    for (const [id] of quests.entries()) {
+        reverseDeps.set(id, []);
+    }
+    for (const [id, deps] of questDependencies.entries()) {
+        deps.forEach((dep) => {
+            if (reverseDeps.has(dep)) {
+                reverseDeps.get(dep).push(id);
+            }
+        });
+    }
+    const roots = [...quests.keys()].filter((id) => (questDependencies.get(id) || []).length === 0);
+    const visited = new Set(roots);
+    const queue = [...roots];
+    while (queue.length > 0) {
+        const id = queue.shift();
+        for (const child of reverseDeps.get(id) || []) {
+            if (!visited.has(child)) {
+                visited.add(child);
+                queue.push(child);
+            }
+        }
+    }
+    const unreachable = [...quests.keys()].filter((id) => !visited.has(id));
+    return unreachable;
+}
+
 describe('Quest Quality Validation', () => {
     beforeAll(() => {
         loadAllQuests();
@@ -453,6 +482,15 @@ describe('Quest Quality Validation', () => {
 
         // For now, just output warnings but don't fail tests
         expect(true).toBe(true);
+    });
+
+    test('All quests are reachable from starting quests', () => {
+        const unreachable = checkQuestReachability();
+        if (unreachable.length > 0) {
+            console.warn('Unreachable quests:');
+            unreachable.forEach((id) => console.warn(`- ${id}`));
+        }
+        expect(unreachable.length).toBe(0);
     });
 
     test('Quests reference valid items and processes sufficiently', () => {
