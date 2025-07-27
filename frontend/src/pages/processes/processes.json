@@ -1184,5 +1184,13 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "10m"
+    },
+    {
+        "id": "identify-constellations",
+        "title": "Identify constellations",
+        "requireItems": [{ "id": "134", "count": 1 }],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "15m"
     }
 ]
