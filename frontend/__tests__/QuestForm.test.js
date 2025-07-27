@@ -127,8 +127,16 @@ const mockQuestForm = {
 
             // Validate form
             const errors = {};
-            if (!formData.title.trim()) errors.title = 'Title is required';
-            if (!formData.description.trim()) errors.description = 'Description is required';
+            if (!formData.title.trim()) {
+                errors.title = 'Title is required';
+            } else if (formData.title.trim().length < 3) {
+                errors.title = 'Title must be at least 3 characters';
+            }
+            if (!formData.description.trim()) {
+                errors.description = 'Description is required';
+            } else if (formData.description.trim().length < 10) {
+                errors.description = 'Description must be at least 10 characters';
+            }
             if (!props.isEdit && !formData.image && !props.image)
                 errors.image = 'Image is required';
 
@@ -440,6 +448,23 @@ describe('QuestForm Component', () => {
                 requiresQuests: [],
             })
         );
+    });
+
+    it('validates minimum lengths', async () => {
+        component = mockQuestForm.render(container, { isEdit: false });
+
+        const { titleInput, descTextarea } = component.elements;
+        titleInput.value = 'ab';
+        descTextarea.value = 'short';
+
+        await act(async () => {
+            await component.handleSubmit();
+        });
+
+        await waitFor(() => {
+            expect(container.textContent).toContain('at least 3 characters');
+            expect(container.textContent).toContain('at least 10 characters');
+        });
     });
 });
 
