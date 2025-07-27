@@ -1,10 +1,10 @@
 ---
 import Page from '../../components/Page.astro';
-import QuestForm from '../../components/svelte/QuestForm.svelte';
+import QuestFormPage from '../../components/svelte/QuestFormPage.svelte';
 
 const quests = await Astro.glob('./json/*/*.json');
 ---
 
 <Page title="Create a New Quest">
-    <QuestForm client:load existingQuests={quests.map((q) => q.default)} />
+    <QuestFormPage client:load existingQuests={quests.map((q) => q.default)} />
 </Page>
