@@ -3,12 +3,7 @@ title: 'Codex Implementation Prompt'
 slug: 'prompts-codex'
 ---
 
-# OpenAI Codex Implementation Prompt
-
-Use this prompt whenever you want Codex to automatically clear backlog tasks.
-It instructs the agent to choose **any** unchecked item from the
-[September 1, 2025 changelog](/docs/changelog/20250901) and fully implement it.
-Each run should pick a different item until the checklist is complete.
+Copy the prompt below into Codex to automatically address backlog tasks.
 
 ```
 SYSTEM:
@@ -26,39 +21,32 @@ USER:
 
 OUTPUT:
 A pull request implementing the chosen changelog item with all tests green. Summarize which task was completed and highlight test results in the PR body.
+
+Constraints:
+
+- Coverage
+  1. Global: Maintain ≥ 90 % line and branch coverage.
+  2. Patch: For any file listed by
+     git diff --name-only $(git merge-base origin/main HEAD)
+     ensure no metric falls below 90 % and no metric drops by > 0.20 percentage points compared with `origin/main`.
+  3. Fail the job if either threshold is violated. Use one of:
+     - Native Vitest: `vitest run --coverage --coverage.thresholds.perFile --coverage.thresholds.lines=90 ...`
+     - Danger JS with `danger-plugin-istanbul-coverage` for per‑patch diffs
+     - Codecov Status Checks (`flags: patch`, `threshold: 0.2`) when you push `coverage/clover.xml` to CI
+
+- CI checks
+  Always modify workflows as part of the same PR if they are missing. Guarantee that:
+  1. The main test job is named `test-and-coverage` (unique across all workflows).
+  2. Workflow triggers include both `push` and `pull_request` events.
+  3. `test-and-coverage` appears in the repository’s branch-protection required status checks.
+  4. If secrets are needed, use `pull_request_target` only when absolutely required and scope secrets to that job.
+
+Output format
+
+1. Title
+2. Summary
+3. Tests & coverage
+   npm run coverage
+   node scripts/checkPatchCoverage.cjs   # exit 1 on drop >0.2 pp
+   npx playwright test
 ```
-
-Copy this entire block into Codex to automate the feature. After each successful run, refine the instructions in this file to keep them effective.
-
-## Constraints
-
--   **Coverage**
-
-    1. **Global**: Maintain ≥ 90 % line _and_ branch coverage.
-    2. **Patch**: For any file listed by
-        ```sh
-        git diff --name-only $(git merge-base origin/main HEAD)
-        ```
-        ensure **no metric falls below 90 %** _and_ **no metric drops by > 0.20 percentage points compared with `origin/main`**.
-    3. Fail the job if either threshold is violated. Use one of:
-        - Native Vitest: `vitest run --coverage --coverage.thresholds.perFile --coverage.thresholds.lines=90 ...`
-        - Danger JS with `danger-plugin-istanbul-coverage` for per‑patch diffs
-        - Codecov Status Checks (`flags: patch`, `threshold: 0.2`) when you push `coverage/clover.xml` to CI
-
--   **CI checks**  
-    _Always modify workflows as part of the same PR_ if they are missing. Guarantee that:
-    1. The main test job is named **`test-and-coverage`** (unique across all workflows).
-    2. Workflow triggers include both `push` **and** `pull_request` events.
-    3. `test-and-coverage` appears in the repository’s branch-protection “required status checks”.
-    4. If secrets are needed, use `pull_request_target` only when _absolutely_ required and scope secrets to that job.
-
-## Output format
-
-1. ### Title
-2. ### Summary
-3. ### Tests & coverage
-    ```sh
-    npm run coverage
-    node scripts/checkPatchCoverage.cjs   # exit 1 on drop >0.2 pp
-    npx playwright test
-    ```
