@@ -28,10 +28,11 @@ describe('githubToken utils', () => {
         expect(state.github.token).toBe('');
     });
 
-    test('validates token format', () => {
-        expect(isValidGitHubToken('')).toBe(false);
-        expect(isValidGitHubToken('ghp_short')).toBe(false);
+    test('validates tokens correctly', () => {
         expect(isValidGitHubToken('ghp_123456789012345678901234567890123456')).toBe(true);
-        expect(isValidGitHubToken('github_pat_abcdefghijklmnopqrstuvwxyz')).toBe(true);
+        expect(isValidGitHubToken('github_pat_abcdefghijklmnopqrstuvwxyz12')).toBe(true);
+        expect(isValidGitHubToken('')).toBe(false);
+        expect(isValidGitHubToken('short')).toBe(false);
+        expect(isValidGitHubToken('ghp_invalid')).toBe(false);
     });
 });
