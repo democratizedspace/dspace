@@ -22,3 +22,5 @@ node scripts/create-content-bundle.js submissions/bundles/my-bundle.json path/to
 ```
 
 The script resolves glob patterns so multiple files can be included at once. Commit the generated file in your pull request. Reviewers can load the bundle locally to verify your custom content.
+
+An example quest JSON used in our automated tests lives at `frontend/test-data/constellations-quest.json`. You can reference this file when experimenting with the bundle script.

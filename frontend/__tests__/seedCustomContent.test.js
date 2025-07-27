@@ -15,6 +15,6 @@ describe('seedCustomContent script', () => {
 
         expect(item.name).toBe('Seeded Item');
         expect(process.title).toBe('Seeded Process');
-        expect(quest.title).toBe('Test Quest');
+        expect(quest.title).toBe('Map the Constellations');
     });
 });

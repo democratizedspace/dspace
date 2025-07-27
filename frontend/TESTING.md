@@ -64,6 +64,10 @@ npm run test:e2e:groups
 # Run a specific test file
 npx playwright test e2e/custom-content.spec.ts
 
+# The `constellations-quest.spec.ts` file demonstrates creating a full quest
+# in the UI and validating it. Run it directly with:
+npx playwright test e2e/constellations-quest.spec.ts
+
 # Run tests with a specific tag or pattern
 npx playwright test -g "create a custom item"
 ```

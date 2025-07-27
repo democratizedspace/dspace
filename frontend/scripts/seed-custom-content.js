@@ -15,7 +15,7 @@ export async function seedCustomContent() {
     const itemId = await createItem('Seeded Item', 'Item added by seed script');
     const processId = await createProcess('Seeded Process', '15m', [{ id: itemId, count: 1 }]);
 
-    const questPath = path.join(process.cwd(), 'test-data', 'simple-quest.json');
+    const questPath = path.join(process.cwd(), 'test-data', 'constellations-quest.json');
     const questTemplate = JSON.parse(fs.readFileSync(questPath, 'utf8'));
     const questId = await createQuest(
         questTemplate.title,

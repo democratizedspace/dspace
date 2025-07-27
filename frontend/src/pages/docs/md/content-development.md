@@ -66,7 +66,7 @@ For contributors who want to leverage artificial intelligence in their content c
 -   Best practices for working with AI assistants
 -   Scientific accuracy verification techniques
 -   Dialogue refinement strategies
--   Full examples of AI-assisted content creation
+-   Full examples of AI-assisted content creation. Our Playwright test `constellations-quest.spec.ts` walks through creating the `constellations` quest end to end.
 
 These prompt engineering templates were initially created to help develop the first batches of quests for DSPACE and can be valuable tools for brainstorming ideas, refining dialogue, and ensuring scientific accuracy in your own content.
 
