@@ -46,7 +46,9 @@ Every item requires the following basic properties:
 
 Currently, the `ItemForm.svelte` component supports creating items with the properties listed above. The current implementation focuses on the fundamental aspects of items, with more advanced features planned for future updates.
 
-As you fill out the form, an `ItemPreview` component displays a live preview so you can confirm the details before submitting. The layout automatically adjusts on small screens so form fields expand to the full width for easier touch input.
+As you fill out the form, an `ItemPreview` component displays a live preview so you can confirm the details before submitting. The layout automatically adjusts on small screens so form fields expand to the full width for easier touch input. You can safely experiment with different values before saving—no data is written until you click **Create Item**.
+
+Automated Playwright tests verify that the preview appears when entering text and that uploaded images render correctly. This ensures cross-browser compatibility of the custom item workflow.
 
 All items must now conform to the JSON schema located at `frontend/src/pages/inventory/jsonSchemas/item.json`. Run the `itemValidation` test to ensure any additions meet the schema requirements.
 
