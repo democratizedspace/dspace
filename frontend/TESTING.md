@@ -243,6 +243,16 @@ npm test -- imageReferences
 npm test -- questCanonical
 ```
 
+### Performance Benchmarks
+
+To gauge the speed of IndexedDB operations, run:
+
+```bash
+npm run benchmark:db
+```
+
+This script adds and reads a batch of sample records and prints timing metrics so you can track performance regressions.
+
 ### End-to-End Tests
 
 -   E2E test files are in the `e2e/` directory

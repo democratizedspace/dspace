@@ -35,6 +35,7 @@
         "format:check": "prettier --check \"**/*.{js,ts,svelte,json,md}\"",
         "generate-quest": "node scripts/generate-quest.mjs",
         "seed:custom": "node scripts/seed-custom-content.js",
+        "benchmark:db": "node scripts/db-benchmark.js",
         "check": "npm run lint && npm run format:check",
         "sync": "node scripts/sync-package.js",
         "postinstall": "npm run sync",
