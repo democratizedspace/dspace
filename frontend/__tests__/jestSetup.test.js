@@ -29,6 +29,8 @@ describe('jest.setup.js', () => {
 
     test('polyfills browser globals when none exist', () => {
         require(PATH);
+        const svelteInternal = require('svelte/internal');
+        expect(svelteInternal.globals.Error).toBe(Error);
 
         // Setup script overrides the initial href during configuration
         expect(global.window.location.href).toBe('http://localhost:3000/');
