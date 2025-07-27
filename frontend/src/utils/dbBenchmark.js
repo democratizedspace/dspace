@@ -1,4 +1,4 @@
-/* istanbul ignore next - re-exported helpers don't need coverage */
+/* istanbul ignore file - helpers tested via indexeddb.js */
 import {
     saveItem,
     saveProcess,
