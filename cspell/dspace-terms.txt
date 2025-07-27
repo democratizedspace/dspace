@@ -124,6 +124,7 @@ pinting
 poweroff
 pousr
 prebuild
+prerendered
 previewcontainer
 pylint
 pytest
