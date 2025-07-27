@@ -11,4 +11,9 @@ describe('index.astro', () => {
         expect(content).toMatch(/window\.dspaceStart = performance\.now\(\)/);
         expect(content).toMatch(/<UIResponsiveness client:load \/>/);
     });
+
+    it('includes the FailoverStatus component', () => {
+        const content = fs.readFileSync(indexFile, 'utf8');
+        expect(content).toMatch(/<FailoverStatus client:load \/>/);
+    });
 });
