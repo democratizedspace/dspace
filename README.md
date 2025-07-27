@@ -134,6 +134,7 @@ npm hooks don't run during the build.
 The app will be available on port 3002. Point your Cloudflare Tunnel at `http://localhost:3002` to serve traffic.
 
 For a full Raspberry Pi setup, including k3s instructions, see [docs/RPI_DEPLOYMENT_GUIDE.md](./docs/RPI_DEPLOYMENT_GUIDE.md).
+To add Prometheus and Grafana monitoring, follow the steps in [docs/monitoring_setup.md](./docs/monitoring_setup.md).
 
 ### Automated Raspberry Pi Deployment
 
