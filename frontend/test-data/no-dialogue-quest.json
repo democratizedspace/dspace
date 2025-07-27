@@ -1,0 +1,7 @@
+{
+    "id": "test/no-dialogue",
+    "title": "No Dialogue",
+    "description": "Quest without dialogue",
+    "image": "/assets/test.png",
+    "start": "start"
+}
