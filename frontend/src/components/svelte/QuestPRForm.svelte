@@ -1,16 +1,22 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     export let token = '';
     export let branch = '';
     export let questJson = '';
     let prUrl = '';
     let validationErrors = {};
     const dispatch = createEventDispatcher();
-    import { isValidGitHubToken } from '../../utils/githubToken.js';
+    import {
+        isValidGitHubToken,
+        loadGitHubToken,
+        saveGitHubToken,
+        clearGitHubToken,
+    } from '../../utils/githubToken.js';
+    import { submitQuestPR } from '../../utils/submitQuestPR.js';
 
-    function b64(str) {
-        return btoa(unescape(encodeURIComponent(str)));
-    }
+    onMount(() => {
+        token = loadGitHubToken();
+    });
 
     function validateForm() {
         const errors = {};
@@ -31,60 +37,38 @@
             return;
         }
         try {
-            const branchName = branch || `quest-${Date.now()}`;
-            const headers = {
-                Authorization: `token ${token}`,
-                'Content-Type': 'application/json',
-            };
-            const content = b64(questJson);
-            const filePath = `submissions/quests/${branchName}.json`;
-            const res = await fetch(
-                `https://api.github.com/repos/democratizedspace/dspace/contents/${filePath}`,
-                {
-                    method: 'PUT',
-                    headers,
-                    body: JSON.stringify({
-                        message: 'Add quest submission',
-                        content,
-                        branch: branchName,
-                    }),
-                }
-            );
-            if (!res.ok) throw new Error(await res.text());
-            const prRes = await fetch(
-                'https://api.github.com/repos/democratizedspace/dspace/pulls',
-                {
-                    method: 'POST',
-                    headers,
-                    body: JSON.stringify({
-                        title: `Quest submission: ${branchName}`,
-                        head: branchName,
-                        base: 'v3',
-                        body: 'Automated quest submission.',
-                    }),
-                }
-            );
-            if (!prRes.ok) throw new Error(await prRes.text());
-            const prData = await prRes.json();
-            prUrl = prData.html_url;
+            prUrl = await submitQuestPR(token, branch, questJson);
             dispatch('success', { message: 'Pull request created', url: prUrl });
+            saveGitHubToken(token);
         } catch (err) {
             console.error(err);
             dispatch('error', { message: 'Failed to submit quest' });
         }
     }
+
+    function clearToken() {
+        token = '';
+        clearGitHubToken();
+    }
+
+    export { handleSubmit, clearToken };
 </script>
 
 <form on:submit={handleSubmit} class="pr-form">
-    <div class="form-group">
+    <div class="form-group token-group">
         <label for="token">GitHub Token*</label>
-        <input
-            id="token"
-            type="password"
-            bind:value={token}
-            class:error={validationErrors.token}
-            required
-        />
+        <div class="token-input">
+            <input
+                id="token"
+                type="password"
+                bind:value={token}
+                class:error={validationErrors.token}
+                required
+            />
+            <button type="button" on:click={clearToken} data-testid="clear-token"
+                >Clear Token</button
+            >
+        </div>
         {#if validationErrors.token}
             <span class="error-message">{validationErrors.token}</span>
         {/if}
@@ -175,5 +159,15 @@
         font-size: 14px;
         display: block;
         margin-top: 5px;
+    }
+
+    .token-input {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .token-group button {
+        padding: 6px 10px;
     }
 </style>

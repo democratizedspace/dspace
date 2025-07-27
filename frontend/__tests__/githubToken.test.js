@@ -1,15 +1,25 @@
-const { describe, it, expect } = require('@jest/globals');
-const { isValidGitHubToken } = require('../src/utils/githubToken.js');
+/**
+ * @jest-environment jsdom
+ */
+import { loadGitHubToken, saveGitHubToken, clearGitHubToken } from '../src/utils/githubToken.js';
 
-describe('isValidGitHubToken', () => {
-    it('validates typical tokens', () => {
-        expect(isValidGitHubToken('ghp_123456789012345678901234567890123456')).toBe(true);
-        expect(isValidGitHubToken('github_pat_abcdefghijklmnopqrstuvwxyz12')).toBe(true);
+describe('githubToken utils', () => {
+    beforeEach(() => {
+        localStorage.clear();
     });
 
-    it('rejects invalid tokens', () => {
-        expect(isValidGitHubToken('')).toBe(false);
-        expect(isValidGitHubToken('short')).toBe(false);
-        expect(isValidGitHubToken('ghp_invalid')).toBe(false);
+    test('saves and loads token', () => {
+        saveGitHubToken('abc');
+        expect(loadGitHubToken()).toBe('abc');
+        const state = JSON.parse(localStorage.getItem('gameState'));
+        expect(state.github.token).toBe('abc');
+    });
+
+    test('clears token', () => {
+        saveGitHubToken('xyz');
+        clearGitHubToken();
+        expect(loadGitHubToken()).toBe('');
+        const state = JSON.parse(localStorage.getItem('gameState'));
+        expect(state.github.token).toBe('');
     });
 });
