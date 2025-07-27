@@ -189,6 +189,8 @@ See [Quest Trees](docs/quest-trees) for an overview of the different categories 
 The repository includes a script that summarizes how many quests and lines of dialogue exist in each tree. Categories are sorted by quest count for readability.
 Run `node scripts/generate-quest-chart.js` to recreate `quest-tree-stats.txt` and a PNG image saved locally. The PNG is ignored in Git. Check the "Quest Chart" workflow artifacts for the latest generated image.
 
+Looking for a concrete walkthrough? The Playwright test `constellations-quest.spec.ts` demonstrates creating the "Map the Constellations" quest end to end and validating it using our quest checks.
+
 Aquarium quests progress through a gentle learning curve: set up a Walstad tank, test the water, install a sponge filter, ask Atlas to position the tank, add dwarf shrimp, introduce guppies, perform regular water changes, practice breeding, and finally keep a goldfish in a large tank.
 Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation. Each tree has been extended with follow-up tasks, such as tuning 3D printer retraction and refreshing hydroponic nutrients.
 The DevOps chain now covers deploying DSPACE on a Raspberry Pi cluster with Docker and k3s, setting up monitoring with Prometheus and Grafana, and scheduling nightly backups.

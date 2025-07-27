@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { questHasFinishPath } = require('../src/utils/simulateQuest.js');
 
-const questFile = path.join(__dirname, '../test-data/simple-quest.json');
+const questFile = path.join(__dirname, '../test-data/constellations-quest.json');
 const loopQuestFile = path.join(__dirname, '../test-data/loop-quest.json');
 const loopFinishQuestFile = path.join(__dirname, '../test-data/loop-finish-quest.json');
 const missingStartFile = path.join(__dirname, '../test-data/missing-start-quest.json');

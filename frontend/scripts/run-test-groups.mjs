@@ -52,7 +52,13 @@ const TEST_GROUPS = [
     },
     {
         name: 'Quest Tests',
-        files: ['test-quest-chat.spec.ts', 'tutorial-quest.spec.ts', 'quests.spec.ts', 'custom-content.spec.ts'],
+        files: [
+            'test-quest-chat.spec.ts',
+            'tutorial-quest.spec.ts',
+            'quests.spec.ts',
+            'constellations-quest.spec.ts',
+            'custom-content.spec.ts',
+        ],
         grep: 'create and view a custom quest|Quest Management',
         parallel: true,
         workers: 2,
