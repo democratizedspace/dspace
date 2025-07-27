@@ -10,21 +10,18 @@ export function findQuestDependencyIssues(quests) {
         }
         if (visited.has(id)) return;
         visited.add(id);
-        stack.add(id);
         const quest = quests.get(id);
         if (!quest) {
             issues.push(`Missing quest ${id}`);
-            /* istanbul ignore next */
-            stack.delete(id);
             return;
         }
+        stack.add(id);
         const deps = quest.requiresQuests || [];
         for (const dep of deps) {
             if (!quests.has(dep)) {
                 issues.push(`${id} depends on missing quest ${dep}`);
-            } else {
-                dfs(dep);
             }
+            dfs(dep);
         }
         stack.delete(id);
     }
