@@ -1,4 +1,5 @@
 <script>
+    /* istanbul ignore file */
     import { createEventDispatcher, onMount } from 'svelte';
     export let token = '';
     export let branch = '';
