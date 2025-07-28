@@ -1,12 +1,14 @@
 <script>
     import { onMount } from 'svelte';
     import Process from '../../../components/svelte/Process.svelte';
+    import ProcessPreview from '../../../components/svelte/ProcessPreview.svelte';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
 
     export let processes = [];
     let customProcesses = [];
     let mounted = false;
     let searchTerm = '';
+    let previewProcessId = null;
 
     onMount(async () => {
         customProcesses = await db.list(ENTITY_TYPES.PROCESS);
@@ -33,6 +35,10 @@
             }
         }
     }
+
+    function togglePreview(id) {
+        previewProcessId = previewProcessId === id ? null : id;
+    }
 </script>
 
 <div class="manage-processes">
@@ -48,8 +54,14 @@
                 {#each filteredProcesses as process (process.id)}
                     <div class="process-row">
                         <Process processId={process.id} />
-                        {#if process.custom}
-                            <div class="process-actions">
+                        <div class="process-actions">
+                            <button
+                                class="preview-button"
+                                on:click={() => togglePreview(process.id)}
+                            >
+                                Preview
+                            </button>
+                            {#if process.custom}
                                 <button class="edit-button" on:click={() => handleEdit(process.id)}>
                                     Edit
                                 </button>
@@ -59,7 +71,16 @@
                                 >
                                     Delete
                                 </button>
-                            </div>
+                            {/if}
+                        </div>
+                        {#if previewProcessId === process.id}
+                            <ProcessPreview
+                                title={process.title}
+                                duration={process.duration}
+                                requireItems={process.requireItems}
+                                consumeItems={process.consumeItems}
+                                createItems={process.createItems}
+                            />
                         {/if}
                     </div>
                 {/each}
@@ -105,6 +126,7 @@
         gap: 10px;
     }
 
+    .preview-button,
     .edit-button,
     .delete-button {
         padding: 8px 16px;
@@ -113,6 +135,11 @@
         cursor: pointer;
         font-size: 14px;
         transition: background-color 0.2s;
+    }
+
+    .preview-button {
+        background-color: #666;
+        color: white;
     }
 
     .edit-button {
@@ -131,6 +158,10 @@
 
     .delete-button:hover {
         background-color: #bb2222;
+    }
+
+    .preview-button:hover {
+        background-color: #555;
     }
 
     .no-processes {

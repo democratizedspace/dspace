@@ -13,4 +13,12 @@ describe('ManageItems component', () => {
         );
         expect(() => svelte.compile(source)).not.toThrow();
     });
+
+    it('contains preview button markup', () => {
+        const source = fs.readFileSync(
+            path.join(__dirname, '../src/pages/inventory/svelte/ManageItems.svelte'),
+            'utf8'
+        );
+        expect(source).toMatch(/preview-button/);
+    });
 });
