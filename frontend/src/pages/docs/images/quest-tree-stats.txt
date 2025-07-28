@@ -2,7 +2,7 @@ energy: 11 quests, 735 lines
 aquaria: 10 quests, 408 lines
 devops: 7 quests, 318 lines
 3dprinting: 6 quests, 360 lines
-astronomy: 5 quests, 188 lines
+astronomy: 6 quests, 228 lines
 hydroponics: 5 quests, 503 lines
 woodworking: 5 quests, 273 lines
 electronics: 4 quests, 214 lines

@@ -38,7 +38,7 @@
     "codecov": "^3.8.3",
     "fake-indexeddb": "^6.0.0",
     "jsdom": "^26.1.0",
-    "svelte": "^5.37.0",
+    "prettier-plugin-svelte": "^3.4.0",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   },

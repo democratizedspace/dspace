@@ -60,4 +60,23 @@ test.describe('Manage Processes', () => {
 
         expect(exists).toBe(false);
     });
+
+    test('should preview a custom process', async ({ page }) => {
+        const title = `Preview Process ${Date.now()}`;
+
+        await page.goto('/processes/create');
+        await fillProcessForm(page, title, '1m', 0, 0, 0);
+        const submit = page.locator('button.submit-button');
+        await submit.click();
+        await page.waitForLoadState('networkidle');
+
+        await page.goto('/processes/manage');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const row = page.locator('.process-row', { hasText: title }).first();
+        await expect(row).toBeVisible();
+        await row.locator('.preview-button').click();
+        await expect(row.locator('.process-preview')).toBeVisible();
+    });
 });

@@ -62,4 +62,24 @@ test.describe('Manage Items', () => {
 
         expect(exists).toBe(false);
     });
+
+    test('should preview a custom item', async ({ page }) => {
+        const name = `Preview Item ${Date.now()}`;
+
+        await page.goto('/inventory/create');
+        await page.fill('#name', name);
+        await page.fill('#description', 'Preview desc');
+        const submit = page.locator('button.submit-button, input[type="submit"]');
+        await submit.click();
+        await page.waitForLoadState('networkidle');
+
+        await page.goto('/inventory/manage');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const row = page.locator('.item-row', { hasText: name }).first();
+        await expect(row).toBeVisible();
+        await row.locator('.preview-button').click();
+        await expect(row.locator('.item-preview')).toBeVisible();
+    });
 });
