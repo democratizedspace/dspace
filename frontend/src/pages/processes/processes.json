@@ -1200,5 +1200,13 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "15m"
+    },
+    {
+        "id": "photograph-lunar-eclipse",
+        "title": "Photograph a lunar eclipse",
+        "requireItems": [{ "id": "134", "count": 1 }],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "20m"
     }
 ]

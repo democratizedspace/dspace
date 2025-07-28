@@ -1,0 +1,39 @@
+{
+    "id": "astronomy/lunar-eclipse",
+    "title": "Photograph a Lunar Eclipse",
+    "description": "Capture images of the Moon as it moves through Earth's shadow.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A total lunar eclipse is visible tonight. Let's document it for the record.",
+            "options": [{ "type": "goto", "goto": "capture", "text": "I'll set up my gear." }]
+        },
+        {
+            "id": "capture",
+            "text": "Attach your camera to the telescope and photograph each stage of the eclipse.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "photograph-lunar-eclipse",
+                    "text": "Taking photos"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [{ "id": "134", "count": 1 }],
+                    "text": "Got my shots"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent work! We'll compare these images with your earlier sketches to track your progress.",
+            "options": [{ "type": "finish", "text": "Can't wait!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/observe-moon"]
+}
