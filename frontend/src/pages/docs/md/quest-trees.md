@@ -21,7 +21,7 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 -   **Completionist** – track progress toward finishing all available quests
 -   **Woodworking** – build a sturdy workbench, sand projects smooth, then craft birdhouses, stools and shelves
 -   **First Aid** – assemble a kit and practice CPR so accidents don't derail progress
--   **Astronomy** – observe the Moon, build a telescope, track Jupiter's moons and map the constellations
+-   **Astronomy** – observe the Moon, build a telescope, track Jupiter's moons and map the constellations, and document a meteor shower
 
 ## Planned Quest Trees
 
