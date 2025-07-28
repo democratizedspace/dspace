@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cd frontend && npm run dev",
-    "test": "vitest run --coverage",
+    "test": "vitest run",
     "test:watch": "cd frontend && npm run test:watch",
     "test:e2e": "cd frontend && npm run test:e2e",
     "test:e2e:coverage": "cd frontend && npm run test:e2e:coverage",
@@ -20,7 +20,8 @@
     "lint:fix": "cd frontend && npm run lint:fix",
     "format": "cd frontend && npm run format",
     "build": "cd frontend && npm run build",
-    "quest:count": "node scripts/compareQuestCount.js"
+    "quest:count": "node scripts/compareQuestCount.js",
+    "ci": "pnpm test && pnpm test:e2e"
   },
   "devDependencies": {
     "@types/node": "^24.1.0",
@@ -31,10 +32,16 @@
     "@jest/globals": "^29.5.0",
     "ajv": "^8.12.0",
     "typescript": "^5.8.3",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "@playwright/test": "1.54.1"
   },
   "dependencies": {
     "openai": "^3.2.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "pnpm": {
+    "overrides": {
+      "@playwright/test": "1.54.1"
+    }
+  }
 }
