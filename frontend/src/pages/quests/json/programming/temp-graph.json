@@ -1,0 +1,34 @@
+{
+    "id": "programming/temp-graph",
+    "title": "Graph Temperature Trends",
+    "description": "Create a simple chart to visualize your logged temperature data.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've been collecting temperature data for days. Let's plot those readings into a simple line graph to spot patterns.",
+            "options": [{ "type": "goto", "goto": "prepare", "text": "How do I do that?" }]
+        },
+        {
+            "id": "prepare",
+            "text": "Use a library like Chart.js or even a spreadsheet program to turn your log file into a clear visual graph.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Graph generated!",
+                    "requiresItems": [{ "id": "58", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Visualizing data makes trends much easier to share and analyze.",
+            "options": [{ "type": "finish", "text": "Looks cool!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/temp-logger"]
+}
