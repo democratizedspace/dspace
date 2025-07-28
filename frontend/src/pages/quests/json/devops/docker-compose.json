@@ -41,5 +41,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/ssd-boot"]
+    "requiresQuests": ["devops/prepare-first-node"]
 }

@@ -1,0 +1,39 @@
+{
+    "id": "astronomy/meteor-shower",
+    "title": "Document a Meteor Shower",
+    "description": "Track and record meteors during a peak shower.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The Perseids are active tonight. Let's log as many meteors as we can.",
+            "options": [{ "type": "goto", "goto": "observe", "text": "Let's watch the sky." }]
+        },
+        {
+            "id": "observe",
+            "text": "Use your telescope or just your eyes in a dark area. Record each meteor's direction and brightness.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "observe-meteor-shower",
+                    "text": "Recording meteors."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [{ "id": "134", "count": 1 }],
+                    "text": "Observation complete."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Comparing notes with others helps confirm the shower's peak.",
+            "options": [{ "type": "finish", "text": "I'll share my data." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/jupiter-moons"]
+}

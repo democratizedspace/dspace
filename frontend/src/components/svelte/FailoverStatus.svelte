@@ -5,17 +5,23 @@
 
     let online = true;
     function updateStatus() {
-        online = navigator.onLine;
+        if (typeof navigator !== 'undefined') {
+            online = navigator.onLine;
+        }
     }
 
     onMount(() => {
-        updateStatus();
-        window.addEventListener('online', updateStatus);
-        window.addEventListener('offline', updateStatus);
+        if (typeof window !== 'undefined') {
+            updateStatus();
+            window.addEventListener('online', updateStatus);
+            window.addEventListener('offline', updateStatus);
+        }
     });
     onDestroy(() => {
-        window.removeEventListener('online', updateStatus);
-        window.removeEventListener('offline', updateStatus);
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('online', updateStatus);
+            window.removeEventListener('offline', updateStatus);
+        }
     });
 </script>
 

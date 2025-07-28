@@ -427,6 +427,39 @@ function checkQuestReachability() {
     return unreachable;
 }
 
+// Ensure no single quest category is disproportionately long
+function checkProgressionBalance() {
+    const depthCache = new Map();
+    function getDepth(id) {
+        if (depthCache.has(id)) return depthCache.get(id);
+        const deps = questDependencies.get(id) || [];
+        if (deps.length === 0) {
+            depthCache.set(id, 0);
+            return 0;
+        }
+        let max = 0;
+        for (const d of deps) {
+            if (quests.has(d)) {
+                const dep = getDepth(d) + 1;
+                if (dep > max) max = dep;
+            }
+        }
+        depthCache.set(id, max);
+        return max;
+    }
+
+    const averages = [];
+    for (const [category, ids] of questsByCategory.entries()) {
+        const depths = ids.map((id) => getDepth(id));
+        const avg = depths.reduce((a, b) => a + b, 0) / depths.length;
+        averages.push(avg);
+    }
+
+    const maxAvg = Math.max(...averages);
+    const minAvg = Math.min(...averages);
+    return maxAvg - minAvg;
+}
+
 describe('Quest Quality Validation', () => {
     beforeAll(() => {
         loadAllQuests();
@@ -500,5 +533,10 @@ describe('Quest Quality Validation', () => {
             issues.forEach((issue) => console.warn(`- ${issue}`));
         }
         expect(issues.length).toBe(0);
+    });
+
+    test('Quest progression is balanced across categories', () => {
+        const diff = checkProgressionBalance();
+        expect(diff).toBeLessThanOrEqual(6);
     });
 });
