@@ -69,6 +69,8 @@ Starting with v3, you can create your own custom processes. When creating a cust
 Use the **Manage Processes** page to review or delete custom entries. Built-in
 processes appear alongside any you've created locally. Access it at
 `/processes/manage`.
+Each row includes a **Preview** button that displays a live summary of the
+process so you can verify the details before editing or deleting it.
 
 ## Process Examples
 

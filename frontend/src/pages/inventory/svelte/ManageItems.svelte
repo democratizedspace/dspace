@@ -1,12 +1,14 @@
 <script>
     import { onMount } from 'svelte';
     import ItemCard from '../../../components/svelte/ItemCard.svelte';
+    import ItemPreview from '../../../components/svelte/ItemPreview.svelte';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
 
     export let items = [];
     let customItems = [];
     let mounted = false;
     let searchTerm = '';
+    let previewItemId = null;
 
     onMount(async () => {
         customItems = await db.list(ENTITY_TYPES.ITEM);
@@ -36,6 +38,10 @@
             }
         }
     }
+
+    function togglePreview(id) {
+        previewItemId = previewItemId === id ? null : id;
+    }
 </script>
 
 <div class="manage-items">
@@ -51,8 +57,11 @@
                 {#each filteredItems as item (item.id)}
                     <div class="item-row">
                         <ItemCard itemId={item.id} />
-                        {#if item.custom}
-                            <div class="item-actions">
+                        <div class="item-actions">
+                            <button class="preview-button" on:click={() => togglePreview(item.id)}>
+                                Preview
+                            </button>
+                            {#if item.custom}
                                 <button class="edit-button" on:click={() => handleEdit(item.id)}>
                                     Edit
                                 </button>
@@ -62,7 +71,17 @@
                                 >
                                     Delete
                                 </button>
-                            </div>
+                            {/if}
+                        </div>
+                        {#if previewItemId === item.id}
+                            <ItemPreview
+                                name={item.name}
+                                description={item.description}
+                                imageUrl={item.image}
+                                price={item.price}
+                                unit={item.unit}
+                                type={item.type}
+                            />
                         {/if}
                     </div>
                 {/each}
@@ -108,6 +127,7 @@
         gap: 10px;
     }
 
+    .preview-button,
     .edit-button,
     .delete-button {
         padding: 8px 16px;
@@ -116,6 +136,11 @@
         cursor: pointer;
         font-size: 14px;
         transition: background-color 0.2s;
+    }
+
+    .preview-button {
+        background-color: #666;
+        color: white;
     }
 
     .edit-button {
@@ -134,6 +159,10 @@
 
     .delete-button:hover {
         background-color: #bb2222;
+    }
+
+    .preview-button:hover {
+        background-color: #555;
     }
 
     .no-items {
