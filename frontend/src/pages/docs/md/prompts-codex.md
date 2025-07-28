@@ -5,49 +5,55 @@ slug: 'prompts-codex'
 
 Copy the prompt below into Codex to automatically address backlog tasks.
 
-```
+```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository. Choose **one** unchecked item from `frontend/src/pages/docs/md/changelog/20250901.md` and implement it completely. If the item has unchecked sub-tasks, complete those as well. Provide all required code, configuration, and documentation. Where browser interaction is relevant, write Playwright tests to verify functionality. Ensure all new code is fully covered by unit and integration tests.
+You are an automated contributor for the **DSPACE** repository.
 
-Always run `npm run test:pr` before committing to ensure code style and all tests pass. If browsers are missing run `npx playwright install chromium` or prefix commands with `SKIP_E2E=1`.
+LEGEND ­– task status in `frontend/src/pages/docs/md/changelog/20250901.md`
+• 💯  ‑ The row has been **fully implemented, Playwright‑tested (Chromium), and the tests pass in GitHub Actions**.  
+• ❌ ‑ The row is not proven; implementation and/or tests are missing.  
+(The legacy ✅ / ☑️ symbols are ignored – replace them with the correct emoji as part of your work.)
+
+INSTRUCTIONS
+1. Open `frontend/src/pages/docs/md/changelog/20250901.md`.
+2. Select **exactly one** task (row) that is marked ❌.
+   • If the task contains sub‑tasks, complete **all** of them.  
+   • After implementation and test verification, change the task’s leading emoji to 💯.  
+   • Remove any obsolete ✅ or ☑️ symbols that refer to the same task.
+3. Implement the feature using the existing project architecture and coding style.
+4. **Testing**
+   a. Unit tests – ensure ≥ 90 % global line & branch coverage.  
+   b. Browser tests – write Playwright (Chromium) specs that exercise the new UI/UX paths.  
+   c. CI – GitHub Actions workflow **test-and-coverage** must run `npm run test:pr` and
+      `npx playwright test`; the run must be green before you push.
+5. **Coverage thresholds**
+   • Global: ≥ 90 % lines & branches  
+   • Patch: **100 %** for every changed file; no metric may drop > 0.20 pp vs `origin/main`.
+6. If coverage tooling or workflows are missing, add or modify them in the same PR.
+7. Commit, push, and open a pull‑request.
+8. **PR body template**
+   ```
+   ### Completed task  
+   - <copy the text of the changelog row you implemented, now starting with 💯>
+
+   ### Verification
+   - ✅ Unit tests: <X/Y passed, Z % coverage>  
+   - ✅ Playwright: <number> specs, all green on GitHub Actions
+
+   ### Notes
+   <Optional lessons learned for the next Codex run>
+   ```
+
+CONSTRAINTS
+• Do **not** introduce additional failing tasks.  
+• Keep commits minimal and logically grouped.  
+• Never lower repository coverage or break branch‑protection checks.  
+• Use `SKIP_E2E=1` when Playwright is unavailable locally, but never in CI.
 
 USER:
-1. Open `frontend/src/pages/docs/md/changelog/20250901.md` and select an unchecked item that you are confident you can implement.
-2. Implement the selected feature, including all unchecked sub-tasks, using the existing project architecture and style.
-3. Add or update documentation describing the new functionality.
-4. Provide comprehensive unit tests and Playwright tests (when applicable) to achieve complete coverage for the newly added code.
-5. Run `npm run test:pr` and ensure all checks pass before committing.
-6. After the pull request is merged, revise this prompt to incorporate any lessons learned so the next run is even smoother.
+1. Follow the steps above.
+2. When the PR is ready for review, ping the maintainers in a comment.
 
 OUTPUT:
-A pull request implementing the chosen changelog item with all tests green. Summarize which task was completed and highlight test results in the PR body.
-
-Constraints:
-
-- Coverage
-  1. Global: Maintain ≥ 90 % line and branch coverage.
-  2. Patch: For any file listed by
-     git diff --name-only $(git merge-base origin/main HEAD)
-     ensure lines, branches, statements and functions each reach **100 %**.
-     No metric may drop more than 0.20 percentage points compared with `origin/main`.
-  3. Fail the job if either threshold is violated. Use one of:
-     - Native Vitest: `vitest run --coverage --coverage.thresholds.perFile --coverage.thresholds.lines=90 ...`
-     - Danger JS with `danger-plugin-istanbul-coverage` for per‑patch diffs
-     - Codecov Status Checks (`flags: patch`, `threshold: 0.2`) when you push `coverage/clover.xml` to CI
-
-- CI checks
-  Always modify workflows as part of the same PR if they are missing. Guarantee that:
-  1. The main test job is named `test-and-coverage` (unique across all workflows).
-  2. Workflow triggers include both `push` and `pull_request` events.
-  3. `test-and-coverage` appears in the repository’s branch-protection required status checks.
-  4. If secrets are needed, use `pull_request_target` only when absolutely required and scope secrets to that job.
-
-Output format
-
-1. Title
-2. Summary
-3. Tests & coverage
-   npm run coverage
-   node scripts/checkPatchCoverage.cjs   # verifies 100% patch coverage
-   npx playwright test
+A pull‑request that turns one ❌ row into 💯 with all tests passing, plus updated documentation (this prompt and the changelog file) reflecting the new status.
 ```
