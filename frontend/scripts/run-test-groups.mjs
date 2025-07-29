@@ -32,6 +32,7 @@ const TEST_GROUPS = [
             'svelte-component-hydration.spec.ts',
             'builtin-quests.spec.ts',
             'custom-backup.spec.ts',
+            'cloud-sync.spec.ts',
         ],
         parallel: true,
         workers: MAX_WORKERS,
@@ -75,7 +76,6 @@ const TEST_GROUPS = [
         parallel: true,
         workers: 2,
     },
-
 ];
 
 // Colors for console output
@@ -121,7 +121,11 @@ function runTestGroup(group) {
 
     try {
         console.log(`${colors.cyan}Command: ${command}${colors.reset}`);
-        console.log(`${colors.cyan}Using ${group.parallel ? (group.workers || MAX_WORKERS) : 1} worker(s)${colors.reset}`);
+        console.log(
+            `${colors.cyan}Using ${group.parallel ? group.workers || MAX_WORKERS : 1} worker(s)${
+                colors.reset
+            }`
+        );
         execSync(command, { stdio: 'inherit', cwd: rootDir });
         console.log(`${colors.green}✓ ${group.name} completed successfully${colors.reset}`);
         return true;
@@ -160,12 +164,16 @@ function main() {
         if (success) {
             successCount++;
             console.log(
-                `${colors.green}Group completed in ${groupDuration.toFixed(2)} seconds${colors.reset}\n`
+                `${colors.green}Group completed in ${groupDuration.toFixed(2)} seconds${
+                    colors.reset
+                }\n`
             );
         } else {
             failureCount++;
             console.log(
-                `${colors.red}Group failed after ${groupDuration.toFixed(2)} seconds${colors.reset}\n`
+                `${colors.red}Group failed after ${groupDuration.toFixed(2)} seconds${
+                    colors.reset
+                }\n`
             );
         }
     }

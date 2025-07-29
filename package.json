@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "cd frontend && npm run dev",
     "test": "vitest",
-    "test:backend": "vitest run --coverage \"backend/**/*.ts\" --reporter=default && codecov -F backend",
+    "test:backend": "vitest run --coverage backend/**/*.ts --reporter=default && codecov -F backend",
     "test:frontend": "vitest run --coverage frontend/src/components/**/*.svelte --reporter=default && codecov -F frontend",
     "test:all": "pnpm run test:backend && pnpm run test:frontend",
     "coverage:upload": "codecov",
