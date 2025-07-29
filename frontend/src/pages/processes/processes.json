@@ -430,6 +430,14 @@
         "duration": "1h"
     },
     {
+        "id": "purify-stevia",
+        "title": "purify stevia extract into crystals",
+        "requireItems": [],
+        "consumeItems": [{ "id": "122", "count": 1 }],
+        "createItems": [{ "id": "136", "count": 1 }],
+        "duration": "6h"
+    },
+    {
         "id": "sink",
         "title": "find your sink",
         "requireItems": [],

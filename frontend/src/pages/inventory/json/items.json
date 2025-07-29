@@ -958,5 +958,12 @@
         "description": "Adhesive bandages, gauze and antiseptic packed for emergencies.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "136",
+        "name": "stevia crystals",
+        "description": "Highly concentrated sweetener purified from stevia extract.",
+        "image": "/assets/dCarbon.jpg",
+        "price": "12 dUSD"
     }
 ]

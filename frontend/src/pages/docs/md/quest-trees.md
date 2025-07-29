@@ -27,7 +27,7 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 
 The following quest lines are being drafted to help achieve the "10x More Quests" goal announced for v3:
 
--   **Chemistry** – safe experiments that introduce sustainable rocket fuel principles and extract stevia into an artificial sweetener
+-   **Chemistry** – safe experiments that introduce sustainable rocket fuel principles, extract stevia into a sweetener, and purify it into crystals
 -   **Programming** – simple scripts for automating sensors and data collection
 -   **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s, then add monitoring and nightly backups
 

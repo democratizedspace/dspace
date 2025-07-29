@@ -1,0 +1,35 @@
+{
+    "id": "chemistry/stevia-crystals",
+    "title": "Refine Stevia Crystals",
+    "description": "Purify your extract into concentrated crystals",
+    "image": "/assets/quests/testprint.png",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to step up the purity? We'll separate the sweet compounds with a bit of alcohol.",
+            "options": [{ "type": "goto", "goto": "purify", "text": "Let's refine it." }]
+        },
+        {
+            "id": "purify",
+            "text": "Add a splash of food-grade ethanol and let the solution evaporate. Crystals will form as it dries.",
+            "options": [
+                { "type": "process", "process": "purify-stevia", "text": "Begin purification" },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I see white crystals!",
+                    "requiresItems": [{ "id": "136", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! These stevia crystals are intensely sweet and store well.",
+            "options": [{ "type": "finish", "text": "Thanks for the guidance!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["chemistry/stevia-extraction"]
+}
