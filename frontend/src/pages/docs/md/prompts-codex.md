@@ -12,18 +12,18 @@ file‑scoped prompt. :contentReference[oaicite:0]{index=0}
 > **TL;DR**  
 > 1. Scope the task to one or two files.  
 > 2. Say **exactly** what output you expect (diff, test, docs, etc.).  
-> 3. Stop talking when the spec is complete. Codex treats *all* remaining text as
->    mandatory instructions. :contentReference[oaicite:1]{index=1}
+> 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
+> mandatory instructions. :contentReference[oaicite:1]{index=1}
 
 ---
 
 ## 1 Quick start (Web vs CLI)
 
-| Use‑case | Codex Web (ChatGPT sidebar) | Codex CLI |
-|----------|----------------------------|-----------|
-| Ad‑hoc feature | “Code” button, attach repo | `codex "add buy‑button to ProcessView"` |
-| Ask a question | “Ask” button | `codex exec "explain utils/time.ts"` |
-| CI automation | – | `codex exec --full-auto "run npm test"` |
+| Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                               |
+| -------------- | --------------------------- | --------------------------------------- |
+| Ad‑hoc feature | “Code” button, attach repo  | `codex "add buy‑button to ProcessView"` |
+| Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`    |
+| CI automation  | –                           | `codex exec --full-auto "run npm test"` |
 
 See the upstream CLI reference for more flags. :contentReference[oaicite:2]{index=2}
 
@@ -31,11 +31,11 @@ See the upstream CLI reference for more flags. :contentReference[oaicite:2]{ind
 
 ## 2 Prompt ingredients
 
-| Ingredient | Why it matters |
-|------------|----------------|
-| **Goal sentence** | Gives the agent a north star (“Add sort dropdown to Item page”). |
-| **Files to touch** | Limits search space → faster & cheaper. |
-| **Constraints** | Coding style, a11y, perf, etc. |
+| Ingredient           | Why it matters                                                     |
+| -------------------- | ------------------------------------------------------------------ |
+| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”).   |
+| **Files to touch**   | Limits search space → faster & cheaper.                            |
+| **Constraints**      | Coding style, a11y, perf, etc.                                     |
 | **Acceptance check** | e.g. “All `npm test` suites pass” or “Return a unified diff only”. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
