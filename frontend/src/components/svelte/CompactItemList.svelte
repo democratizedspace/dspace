@@ -19,6 +19,7 @@
     let fullItemList = [];
     let isMounted = false;
     const itemCounts = writable(getItemCounts(itemList));
+    $: isEmpty = Object.values($itemCounts).every((qty) => qty === 0);
 
     // Generate the full item list with additional properties
     function generateFullItemList() {
@@ -50,38 +51,41 @@
 </script>
 
 {#if isMounted}
-    <div class="Container">
-        <Chip inverted={!inverted} {disabled} text="">
-            <div class="vertical">
-                {#each fullItemList as item (item.id)}
-                    <div class="horizontal">
-                        <DelayedRender delaySeconds={0.1}>
-                            <span slot="content">
-                                <a href={`/inventory/item/${item.id}`}>
-                                    <img src={item.image} class="icon" alt={item.name} />
-                                </a>
-                            </span>
+    {#if !isEmpty}
+        <div class="Container">
+            <Chip inverted={!inverted} {disabled} text="">
+                <div class="vertical">
+                    {#each fullItemList as item (item.id)}
+                        <div class="horizontal">
+                            <DelayedRender delaySeconds={0.1}>
+                                <span slot="content">
+                                    <a href={`/inventory/item/${item.id}`}>
+                                        <img src={item.image} class="icon" alt={item.name} />
+                                    </a>
+                                </span>
 
-                            <span slot="fallback">
-                                <img src={item.image} class="icon" alt={item.name} />
-                            </span>
-                        </DelayedRender>
-                        <p
-                            class:disabled={disabled || $itemCounts[item.id] < item.count}
-                            class:inverted
-                        >
-                            {prettyPrintNumber($itemCounts[item.id])}
-                            {#if item.count !== null}
-                                <span class={colorClass}>{sign}{prettyPrintNumber(item.count)}</span
-                                >
-                            {/if}
-                            x {item.name}
-                        </p>
-                    </div>
-                {/each}
-            </div>
-        </Chip>
-    </div>
+                                <span slot="fallback">
+                                    <img src={item.image} class="icon" alt={item.name} />
+                                </span>
+                            </DelayedRender>
+                            <p
+                                class:disabled={disabled || $itemCounts[item.id] < item.count}
+                                class:inverted
+                            >
+                                {prettyPrintNumber($itemCounts[item.id])}
+                                {#if item.count !== null}
+                                    <span class={colorClass}
+                                        >{sign}{prettyPrintNumber(item.count)}</span
+                                    >
+                                {/if}
+                                x {item.name}
+                            </p>
+                        </div>
+                    {/each}
+                </div>
+            </Chip>
+        </div>
+    {/if}
 {/if}
 
 <style>
