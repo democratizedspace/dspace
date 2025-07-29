@@ -78,4 +78,4 @@ The inventory interface allows you to:
 -   Manage custom items and preview them from the **Manage Items** page using
     the **Preview** button next to each entry
 
-All inventory data is now stored locally using IndexedDB, with optional cloud sync for backup and cross-device access.
+All inventory data is now stored locally using IndexedDB. For cross-device backups you can use the new [Cloud Sync](/cloudsync) feature.

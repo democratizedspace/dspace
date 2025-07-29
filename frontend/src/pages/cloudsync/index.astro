@@ -1,0 +1,19 @@
+---
+import Page from '../../components/Page.astro';
+import Syncer from './svelte/Syncer.svelte';
+---
+
+<Page columns="1">
+    <div class="vertical">
+        <Syncer client:idle />
+    </div>
+</Page>
+
+<style>
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+</style>
