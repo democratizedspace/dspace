@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "@jest/globals";
 import items from "../frontend/src/pages/inventory/json/items.json";
 import { approximateIrlPrice } from "../backend/approximateIrlPrice";
 
