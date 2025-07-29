@@ -1,0 +1,10 @@
+---
+import Page from '../../components/Page.astro';
+import ProcessView from './[slug]/ProcessView.svelte';
+
+const { slug } = Astro.params;
+---
+
+<Page columns="1">
+    <ProcessView slug={slug} client:load />
+</Page>
