@@ -6,6 +6,7 @@ import {
     uploadGameStateToGist,
     downloadGameStateFromGist,
     loadCloudGistId,
+    clearCloudGistId,
 } from '../src/utils/cloudSync.js';
 import { saveGameState, loadGameState } from '../src/utils/gameState/common.js';
 import { saveGitHubToken } from '../src/utils/githubToken.js';
@@ -55,5 +56,13 @@ describe('cloudSync', () => {
         await downloadGameStateFromGist('ghp_x', '1');
         expect(loadGameState().quests.q).toBe(true);
         expect(loadCloudGistId()).toBe('1');
+    });
+
+    test('clearCloudGistId resets stored id', () => {
+        localStorage.setItem('gameState', JSON.stringify({ cloudSync: { gistId: '42' } }));
+        clearCloudGistId();
+        expect(loadCloudGistId()).toBe('');
+        const state = JSON.parse(localStorage.getItem('gameState'));
+        expect(state.cloudSync.gistId).toBe('');
     });
 });

@@ -4,6 +4,7 @@
         loadCloudGistId,
         uploadGameStateToGist,
         downloadGameStateFromGist,
+        clearCloudGistId,
     } from '../../../utils/cloudSync.js';
     import {
         isValidGitHubToken,
@@ -43,6 +44,11 @@
         }
     };
 
+    const clearGistId = () => {
+        gistId = '';
+        clearCloudGistId();
+    };
+
     const handleDownload = async () => {
         try {
             if (!gistId) {
@@ -72,7 +78,12 @@
         </div>
         <div class="form-group">
             <label for="gist">Gist ID</label>
-            <input id="gist" type="text" bind:value={gistId} />
+            <div class="token-input">
+                <input id="gist" type="text" bind:value={gistId} />
+                <button type="button" on:click={clearGistId} data-testid="clear-gist-id"
+                    >Clear</button
+                >
+            </div>
         </div>
         <div class="buttons">
             <Chip text="Upload" on:click={handleUpload} inverted={true} />
