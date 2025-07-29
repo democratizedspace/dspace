@@ -1,8 +1,8 @@
 <script>
-import { onMount } from 'svelte';
-import { tokenPlaceChat } from '../../../utils/tokenPlace.js';
-import { writable } from 'svelte/store';
-import { messages, countTokens } from '../../../stores/chat.js';
+    import { onMount } from 'svelte';
+    import { tokenPlaceChat } from '../../../utils/tokenPlace.js';
+    import { writable } from 'svelte/store';
+    import { messages, countTokens } from '../../../stores/chat.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -21,7 +21,7 @@ import { messages, countTokens } from '../../../stores/chat.js';
         const userMessage = {
             role: 'user',
             content: $message,
-            tokens: countTokens($message)
+            tokens: countTokens($message),
         };
         addMessage(userMessage);
         showSpinner = true;
@@ -31,7 +31,7 @@ import { messages, countTokens } from '../../../stores/chat.js';
             const aiMessage = {
                 role: 'assistant',
                 content: aiResponse,
-                tokens: countTokens(aiResponse)
+                tokens: countTokens(aiResponse),
             };
             addMessage(aiMessage);
         } catch (error) {
@@ -39,7 +39,9 @@ import { messages, countTokens } from '../../../stores/chat.js';
             addMessage({
                 role: 'assistant',
                 content: "Sorry, I'm having some trouble and can't generate a response.",
-                tokens: countTokens("Sorry, I'm having some trouble and can't generate a response.")
+                tokens: countTokens(
+                    "Sorry, I'm having some trouble and can't generate a response."
+                ),
             });
         }
 
@@ -59,7 +61,7 @@ import { messages, countTokens } from '../../../stores/chat.js';
             const welcome = {
                 role: 'assistant',
                 content: welcomeMessage,
-                tokens: countTokens(welcomeMessage)
+                tokens: countTokens(welcomeMessage),
             };
             addMessage(welcome);
         }
