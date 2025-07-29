@@ -15,10 +15,10 @@ For the steps required to share your quests with the community, see the [Quest S
 
 Modern AI assistants can be powerful collaborators in content creation. Here are some tips for effective use:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus
--   **Use system prompts** to guide the AI toward appropriate tone and technical accuracy
--   **Iterate on outputs** rather than expecting perfect results on the first try
--   **Fact-check technical information** since AI systems can sometimes generate plausible-sounding but incorrect details
+- **Provide clear context** about DSPACE's educational mission and sustainability focus
+- **Use system prompts** to guide the AI toward appropriate tone and technical accuracy
+- **Iterate on outputs** rather than expecting perfect results on the first try
+- **Fact-check technical information** since AI systems can sometimes generate plausible-sounding but incorrect details
 
 ## Quest Development Prompts
 
@@ -231,7 +231,21 @@ Use this when you want help creating a bare-bones quest JSON for the custom ques
 Create a minimal DSPACE quest with the id `[CATEGORY]/[SHORT_ID]`. Populate the required fields according to the quest schema but keep dialogue text short and clearly marked as placeholders. Return only the JSON object.
 ```
 
-After generating the JSON, run `npm run generate-quest` and follow the prompts to save it under the correct category and assign an NPC.
+After generating the JSON, run the generator to create the actual file:
+
+```bash
+npm run generate-quest electronics/basic-led
+```
+
+Use the `--no-llm` flag if you prefer to skip the automatic placeholder dialogue.
+When you're done editing, verify the quest passes the canonical and quality checks:
+
+```bash
+npm test -- questCanonical
+npm test -- questQuality
+```
+
+Follow the prompts to save the quest under the correct category and assign an NPC.
 
 ## Example: Complete Quest Creation
 
@@ -245,9 +259,9 @@ Here's an example of how to use these prompts to create a complete quest:
 
 Remember that AI assistants are collaborative tools. You'll get the best results by:
 
--   Providing detailed context about DSPACE
--   Iterating on content rather than accepting first drafts
--   Focusing the AI on specific aspects at a time
--   Combining AI suggestions with your own knowledge and creativity
+- Providing detailed context about DSPACE
+- Iterating on content rather than accepting first drafts
+- Focusing the AI on specific aspects at a time
+- Combining AI suggestions with your own knowledge and creativity
 
 By following these guidelines, you can leverage AI to create high-quality, educational content that advances DSPACE's mission of democratizing space exploration through practical, hands-on learning.
