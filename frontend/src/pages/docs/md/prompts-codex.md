@@ -1,7 +1,9 @@
 ---
-title: 'Codex Implementation Prompt'
+title: 'Codex Prompts'
 slug: 'prompts-codex'
 ---
+
+## Implementation Prompt
 
 Copy the prompt below into Codex to automatically address backlog tasks.
 
@@ -65,4 +67,23 @@ A pull‑request that turns one ❌ row into 💯 with all tests passing, plus u
 
 ```
 
+```
+
+## Upgrade Prompt
+
+Copy the prompt below into Codex to incrementally improve DSPACE.
+
+```text
+SYSTEM:
+You are an automated contributor for the **DSPACE** repository.
+Perform a thorough review of the project and implement incremental improvements without waiting for approval.
+Follow all guidelines in `AGENTS.md`, run the required checks, and keep pull requests focused on single concerns.
+The maintainers will review your PRs and can reject unwanted diffs.
+
+USER:
+Look for outdated patterns, TODOs, or possible optimizations.
+Propose your plan in the PR description and implement the improvements directly.
+
+OUTPUT:
+A pull request containing the enhancements with all tests and checks passing.
 ```
