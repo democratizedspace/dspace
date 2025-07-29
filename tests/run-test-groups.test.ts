@@ -1,4 +1,4 @@
-import { describe, it, expect, jest } from '@jest/globals';
+import { describe, it, expect, vi } from 'vitest';
 import { execSync } from 'child_process';
 let runTestGroup: any;
 let TEST_GROUPS: any;
@@ -13,7 +13,7 @@ beforeAll(async () => {
   TEST_GROUPS = mod.TEST_GROUPS;
 });
 
-jest.mock('child_process', () => ({ execSync: jest.fn() }));
+vi.mock('child_process', () => ({ execSync: vi.fn() }));
 
 // Basic sanity check that TEST_GROUPS is populated
 describe.skip('run-test-groups', () => {
@@ -23,7 +23,7 @@ describe.skip('run-test-groups', () => {
   });
 
   it('returns true when exec succeeds', () => {
-    const spy = jest.mocked(execSync);
+    const spy = vi.mocked(execSync);
     spy.mockImplementation(() => ({} as any));
     const result = runTestGroup({ name: 'Demo', files: ['demo.spec.ts'], parallel: false });
     expect(spy).toHaveBeenCalled();
@@ -32,7 +32,7 @@ describe.skip('run-test-groups', () => {
   });
 
   it('returns false when exec fails', () => {
-    const spy = jest.mocked(execSync);
+    const spy = vi.mocked(execSync);
     spy.mockImplementation(() => {
       throw new Error('fail');
     });
