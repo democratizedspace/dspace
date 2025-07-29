@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "cd frontend && npm run dev",
     "test": "vitest",
-    "test:backend": "vitest run --coverage backend/**/*.ts --reporter=default && codecov -F backend",
-    "test:frontend": "vitest run --coverage frontend/src/components/**/*.svelte --reporter=default && codecov -F frontend",
     "test:backend": "jest --coverage backend tests && codecov -F backend",
+    "test:frontend": "vitest run --coverage frontend/src/components/**/*.svelte --reporter=default && codecov -F frontend",
     "test:all": "pnpm run test:backend && pnpm run test:frontend",
     "coverage:upload": "codecov",
     "test:watch": "cd frontend && npm run test:watch",
@@ -43,10 +42,12 @@
     "jsdom": "^26.1.0",
     "prettier-plugin-svelte": "^3.4.0",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite": "7.0.6",
+    "vitest": "3.2.4"
   },
   "dependencies": {
-    "openai": "^3.2.1"
+    "openai": "^3.3.0"
   },
   "license": "MIT"
 }
