@@ -8,8 +8,8 @@ export default defineConfig({
     globals: true,
     setupFiles: [],
     coverage: {
-      provider: 'c8',
-      reporter: ['text', 'html', 'lcov'],
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
       all: false,
       include: [
         'backend/**/*.ts',

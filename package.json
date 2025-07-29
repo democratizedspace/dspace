@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "cd frontend && npm run dev",
     "test": "vitest",
-    "test:backend": "vitest run --coverage backend/**/*.ts --reporter=default && codecov -F backend",
+    "test:backend": "vitest run --coverage \"backend/**/*.ts\" --reporter=default && codecov -F backend",
     "test:frontend": "vitest run --coverage frontend/src/components/**/*.svelte --reporter=default && codecov -F frontend",
     "test:all": "pnpm run test:backend && pnpm run test:frontend",
     "coverage:upload": "codecov",
@@ -31,7 +31,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.1.0",
     "@vitest/coverage-c8": "^0.33.0",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "3.2.4",
     "ajv": "^8.12.0",
     "chart.js": "^4.5.0",
     "chartjs-node-canvas": "^5.0.0",
