@@ -49,6 +49,10 @@
         "href": "/gamesaves"
     },
     {
+        "name": "Cloud Sync",
+        "href": "/cloudsync"
+    },
+    {
         "name": "Custom Content Backup",
         "href": "/contentbackup"
     },
