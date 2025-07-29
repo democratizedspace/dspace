@@ -41,7 +41,7 @@ This page provides a minimal quest JSON structure that you can use as a starting
         {
             "id": "finish",
             "text": "Excellent! Recognizing these patterns will help you orient spacecraft sightings and plan future observations.",
-            "options": [{ "type": "finish", "text": "Thanks, Nova!" }]
+            "options": [{ "type": "finish", "text": "Thanks, Nova!", "requiresGitHub": false }]
         }
     ],
     "rewards": [],

@@ -75,6 +75,9 @@
                                         "required": ["id", "count"]
                                     }
                                 },
+                                "requiresGitHub": {
+                                    "type": "boolean"
+                                },
                                 "text": {
                                     "type": "string"
                                 }
