@@ -190,6 +190,7 @@ const config = {
         '__tests__/ProcessPreview.test.js',
         '__tests__/Quests.test.js', // Used in quests/index.astro + e2e tested
         'src/components/__tests__',
+        'src/lib/__tests__',
     ],
 
     // The regexp pattern or array of patterns that Jest uses to detect test files
