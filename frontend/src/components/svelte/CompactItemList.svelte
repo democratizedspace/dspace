@@ -45,9 +45,11 @@
         fullItemList = generateFullItemList();
     }
 
-    // Determine the sign and color based on the flags increase and decrease
-    let sign = increase ? '+' : decrease ? '-' : '/';
-    let colorClass = increase ? 'blue' : decrease || !noRed ? 'red' : '';
+    function getQty(count) {
+        if (increase) return count;
+        if (decrease) return -count;
+        return count;
+    }
 </script>
 
 {#if isMounted}
@@ -68,15 +70,20 @@
                                     <img src={item.image} class="icon" alt={item.name} />
                                 </span>
                             </DelayedRender>
+
                             <p
                                 class:disabled={disabled || $itemCounts[item.id] < item.count}
                                 class:inverted
                             >
                                 {prettyPrintNumber($itemCounts[item.id])}
                                 {#if item.count !== null}
-                                    <span class={colorClass}
-                                        >{sign}{prettyPrintNumber(item.count)}</span
-                                    >
+                                    <span class="qty {getQty(item.count) < 0 && !noRed ? 'neg' : ''}">
+                                        {#if getQty(item.count) < 0}
+                                            −{prettyPrintNumber(Math.abs(getQty(item.count)))}
+                                        {:else}
+                                            {prettyPrintNumber(getQty(item.count))}
+                                        {/if}
+                                    </span>
                                 {/if}
                                 x {item.name}
                             </p>
@@ -114,19 +121,16 @@
         margin-top: 10px;
     }
 
-    .blue {
-        color: rgb(0, 118, 215);
-    }
-
-    .red {
-        color: rgb(255, 0, 0);
-    }
-
     .disabled {
         color: rgb(0, 0, 0);
     }
 
     .inverted {
         color: rgb(255, 255, 255);
+    }
+
+    .qty.neg {
+        color: var(--red-500);
+        font-weight: 600;
     }
 </style>
