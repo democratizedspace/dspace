@@ -1,74 +1,64 @@
-# AGENT INSTRUCTIONS
+# DSPACE Agents Guide
 
-## Scope
+> Instructions for automation, Codex agents and other LLMs interacting with this repository.
 
-These guidelines apply to all files in this repository.
+## Project Structure for OpenAI Codex Navigation
 
-## Development
+- `frontend/` – Svelte components and quests
+- `backend/` – server code
+- `quests/` – standalone quest content
+- `scripts/` – utilities for data and tests
 
--   Before submitting a pull request, run `npm run test:pr` to execute lint, unit and e2e tests.
--   If E2E tests complain that the browser executable is missing, run `npx playwright install chromium` to download the required browser.
--   If Playwright browsers aren't available, prefix the command with `SKIP_E2E=1`.
--   Use `npm run check` to verify formatting and linting prior to commit.
--   If these checks fail due to missing dev dependencies, mention the error in
-    your pull request summary.
--   If ESLint reports missing plugins, run `npm install` in both the repo root and the `frontend` directory to restore dev dependencies.
--   If dependencies seem missing or tests fail immediately, run `npm ci` in the repo root and `(cd frontend && npm ci)` to reinstall packages.
--   If formatting fails, run `npx prettier` on the affected files before
-    committing.
--   The lint script sets `ESLINT_USE_FLAT_CONFIG=false`. If you run ESLint
-    manually, be sure to export this variable so the old `.eslintrc.json` works.
--   Keep documentation up to date when adding or changing features.
--   Built-in quest files live in `frontend/src/pages/quests/json`. Maintain the schema in
-    `frontend/src/pages/quests/jsonSchemas` when adding quests.
--   Ensure quest dialogue contains at least a start, middle, and completion node
-    with at least one option per node.
--   Include a `finish` option in the final node so quests end cleanly. Quests
-    without a finish option will fail canonical tests.
--   Reference at least one inventory item or process in every quest. The
-    `questQuality` test now fails if a quest lacks both.
--   For rapid quest creation, reference `frontend/src/pages/docs/md/prompts-quests.md`
-    which contains AI prompt templates, including a **Quest Sequence Expansion**
-    section for brainstorming follow-up quests.
--   When generating dialogue with an LLM, consult the biography and sample
-    quotes in `frontend/src/pages/docs/md/npcs.md` so the character voice stays
-    consistent. Each NPC entry lists at least five example lines harvested from
-    existing quests. Keep these examples updated when quests change.
--   Review `frontend/src/pages/docs/md/quest-submission.md` for the submission workflow when contributing new quests.
--   See `frontend/src/pages/docs/md/quest-template.md` for a minimal quest JSON template that works with [token.place](https://github.com/futuroptimist/token.place).
--   Use `npm run generate-quest` to scaffold a new quest with placeholder dialogue.
--   The script is interactive; it lists categories and NPC usage statistics so you can assign the quest to an appropriate guide.
--   Document any new or updated NPCs in `frontend/src/pages/docs/md/npcs.md`.
--   Update quest progression tests in `frontend/__tests__/questQuality.test.js`
-    when introducing new aquaria quests or changing their order.
--   Provide simple Jest tests for any new Svelte components under
-    `frontend/__tests__` to help maintain Codecov coverage.
--   Follow the [UI Lifecycle Overview](frontend/src/pages/docs/md/ui-lifecycle.md)
-    when creating or modifying Svelte components. Ensure initialization code
-    runs in `onMount` and mark hydrated components with
-    `data-hydrated="true"` so tests can detect readiness.
--   Avoid committing large binary assets (e.g., PSD files). Convert graphics to
-    optimized formats before adding them to the repo.
--   Continuous integration runs `npm run test:pr` on pushes and pull requests.
-    Coverage uploads to Codecov when the `CODECOV_TOKEN` secret is set. You'll
-    see the results in the **Checks** tab of your PR. Ensure the README's Codecov badge tracks the `v3` branch so it reflects CI results.
-    Run `npm run coverage` locally and then `node scripts/checkPatchCoverage.cjs` to confirm changed files stay at 100% coverage before submitting changes.
--   Archive deprecated quests by moving them to `frontend/src/pages/quests/archive`.
--   token.place only provides open-source LLM inference. It does not host quests, but you can reuse the same prompts to generate dialogue here or in other projects.
--   After merging, run `npm ci` in the repo root and `(cd frontend && npm ci)` to
-    restore a clean state before validating quests.
--   To grow the quest tree across repositories, use token.place prompts to reuse
-    dialogue or items from sibling projects.
--   Quest JSON files are compatible with the [token.place](https://github.com/futuroptimist/token.place) project, so feel free to share content across repos.
--   The `test:pr` and `test:e2e:groups` scripts automatically start the dev
-    server. Avoid starting it manually unless running Playwright directly.
--   When adding inventory items in `frontend/src/pages/inventory/json/items.json`, assign the next numeric `id` and provide an image if possible.
--   Update `frontend/__tests__/itemQuality.test.js` when adding items so the quality ratio stays accurate.
--   Update `frontend/__tests__/processQuality.test.js` when introducing new processes or unusual durations.
--   The `questQuality` test enforces item or process usage in quests; fix any failures before committing.
--   If you add a quest that changes the tech tree order, document the new sequence in `README.md` and update `frontend/__tests__/questQuality.test.js` accordingly.
--   Summarize new categories in `frontend/src/pages/docs/md/quest-trees.md` when they are introduced.
+## Development Workflow
 
-## Pull Request Message
+Run checks locally before opening a pull request:
 
-Include a short summary of changes and note whether tests succeeded or failed.
+```bash
+# Full test suite including lint and unit tests
+SKIP_E2E=1 npm run test:pr
+```
+
+- Install Playwright browsers with `npx playwright install chromium` when E2E tests require it.
+- Use `npm run check` to verify formatting and linting.
+- If dependencies are missing, run `npm ci` in the repo root and `(cd frontend && npm ci)`.
+- Fix formatting issues with `npx prettier`.
+- Set `ESLINT_USE_FLAT_CONFIG=false` if running ESLint manually.
+
+## Quest Creation Guidelines
+
+- Quest JSON lives in `frontend/src/pages/quests/json` and must follow the schema in `frontend/src/pages/quests/jsonSchemas`.
+- Each quest needs start, middle and completion nodes with at least one option per node and a final `finish` option.
+- Reference at least one inventory item or process in every quest or the `questQuality` test will fail.
+- Consult `frontend/src/pages/docs/md/npcs.md` for character voice and keep it updated.
+- Use `npm run generate-quest` to scaffold dialogue quickly.
+- Archive deprecated quests under `frontend/src/pages/quests/archive`.
+
+## UI Guidelines
+
+- Astro renders pages on the server and hydrates Svelte components in the client.
+- Place interactive code in `onMount` and mark hydrated components with `data-hydrated="true"`.
+- Add Jest tests for new components in `frontend/__tests__`.
+- Avoid committing large binary assets.
+
+## Pull Request Guidelines
+
+1. Summarize your changes and whether tests passed.
+2. Keep PRs focused on a single concern.
+3. Ensure `npm run coverage` and `node scripts/checkPatchCoverage.cjs` succeed before merging.
+
+## Programmatic Checks
+
+```bash
+npm run lint
+npm run type-check
+npm run build
+```
+
+All checks must pass before an agent-created PR is merged.
+
+## Additional Resources
+
+- [Quest Submission Guide](frontend/src/pages/docs/md/quest-submission.md)
+- [UI Lifecycle Overview](frontend/src/pages/docs/md/ui-lifecycle.md)
+- [AGENTS.md Spec](https://gist.github.com/dpaluy/cc42d59243b0999c1b3f9cf60dfd3be6)
+- [Agents.md Guide](https://agentsmd.net/)
