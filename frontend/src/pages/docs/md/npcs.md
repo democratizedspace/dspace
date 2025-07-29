@@ -103,6 +103,7 @@ Phoenix is a professional chemist specializing in sustainable rocket fuel develo
 -   "Excellent job! Your fleet of Benchies is growing. Keep up the great work."
 -   "You've truly mastered the art of 3D printing Benchies. Now, let's take things to the next level. I want to see a fleet of 100 Benchies."
 -   "Dry those stevia leaves gently and we'll extract their sweetness."
+-   "Add a splash of ethanol and you'll get pure stevia crystals as it dries."
 
 ## Atlas
 

@@ -13,7 +13,7 @@
         },
         {
             "id": "extract",
-            "text": "Dry the leaves and steep them in hot water to pull out the steviol glycosides.",
+            "text": "Dry your homegrown leaves, crush them slightly, and steep them just below boiling. Filter the liquid using a funnel and paper as shown in [/docs/chemistry-lab](/docs/chemistry-lab).",
             "options": [
                 { "type": "process", "process": "extract-stevia", "text": "Begin extraction" },
                 {
@@ -26,7 +26,7 @@
         },
         {
             "id": "finish",
-            "text": "Great work! This homemade stevia extract will sweeten drinks without any sugar.",
+            "text": "Great work! This homemade stevia extract will sweeten drinks without any sugar. Next we'll purify it into crystals for longer storage.",
             "options": [{ "type": "finish", "text": "Thanks, Phoenix!" }]
         }
     ],
