@@ -8,7 +8,7 @@ export default defineConfig({
     globals: true,
     setupFiles: [],
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
       all: false,
       include: [
