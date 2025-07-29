@@ -1,7 +1,8 @@
 <script>
-    import { onMount } from 'svelte';
-    import { tokenPlaceChat } from '../../../utils/tokenPlace.js';
-    import { writable } from 'svelte/store';
+import { onMount } from 'svelte';
+import { tokenPlaceChat } from '../../../utils/tokenPlace.js';
+import { writable } from 'svelte/store';
+import { messages, countTokens } from '../../../stores/chat.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -11,24 +12,35 @@
     let welcomeMessage =
         "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say.";
 
+    function addMessage(msg) {
+        messageHistory.update((history) => [...history, msg]);
+        messages.update((all) => [...all, msg]);
+    }
+
     async function submitMessage() {
-        const userMessage = { role: 'user', content: $message };
-        messageHistory.update((history) => [...history, userMessage]);
+        const userMessage = {
+            role: 'user',
+            content: $message,
+            tokens: countTokens($message)
+        };
+        addMessage(userMessage);
         showSpinner = true;
 
         try {
             const aiResponse = await tokenPlaceChat([...$messageHistory, userMessage]);
-            const aiMessage = { role: 'assistant', content: aiResponse };
-            messageHistory.update((history) => [...history, aiMessage]);
+            const aiMessage = {
+                role: 'assistant',
+                content: aiResponse,
+                tokens: countTokens(aiResponse)
+            };
+            addMessage(aiMessage);
         } catch (error) {
             console.error(error);
-            messageHistory.update((history) => [
-                ...history,
-                {
-                    role: 'assistant',
-                    content: "Sorry, I'm having some trouble and can't generate a response.",
-                },
-            ]);
+            addMessage({
+                role: 'assistant',
+                content: "Sorry, I'm having some trouble and can't generate a response.",
+                tokens: countTokens("Sorry, I'm having some trouble and can't generate a response.")
+            });
         }
 
         message.set('');
@@ -44,10 +56,12 @@
 
     onMount(() => {
         if ($messageHistory.length === 0) {
-            messageHistory.update((history) => [
-                ...history,
-                { role: 'assistant', content: welcomeMessage },
-            ]);
+            const welcome = {
+                role: 'assistant',
+                content: welcomeMessage,
+                tokens: countTokens(welcomeMessage)
+            };
+            addMessage(welcome);
         }
     });
 </script>

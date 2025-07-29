@@ -1,7 +1,8 @@
 <script>
-    import { onMount } from 'svelte';
-    import { GPT35Turbo } from '../../../utils/openAI.js';
-    import { writable } from 'svelte/store';
+import { onMount } from 'svelte';
+import { GPT35Turbo } from '../../../utils/openAI.js';
+import { writable } from 'svelte/store';
+import { messages, countTokens } from '../../../stores/chat.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -11,28 +12,39 @@
     let welcomeMessage =
         "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say. I'm still learning! I should have some shiny new upgrades soon!";
 
+    function addMessage(msg) {
+        messageHistory.update((history) => [...history, msg]);
+        messages.update((all) => [...all, msg]);
+    }
+
     async function submitMessage() {
-        const userMessage = { role: 'user', content: $message };
+        const userMessage = {
+            role: 'user',
+            content: $message,
+            tokens: countTokens($message)
+        };
 
         // Add the user message to the chat history immediately
-        messageHistory.update((history) => [...history, userMessage]);
+        addMessage(userMessage);
         showSpinner = true;
 
         try {
             const aiResponse = await GPT35Turbo([...$messageHistory, userMessage]);
-            const aiMessage = { role: 'assistant', content: aiResponse };
+            const aiMessage = {
+                role: 'assistant',
+                content: aiResponse,
+                tokens: countTokens(aiResponse)
+            };
 
             // Update the chat history with the assistant's message
-            messageHistory.update((history) => [...history, aiMessage]);
+            addMessage(aiMessage);
         } catch (error) {
             console.error(error);
-            messageHistory.update((history) => [
-                ...history,
-                {
-                    role: 'assistant',
-                    content: "Sorry, I'm having some trouble and can't generate a response.",
-                },
-            ]);
+            addMessage({
+                role: 'assistant',
+                content: "Sorry, I'm having some trouble and can't generate a response.",
+                tokens: countTokens("Sorry, I'm having some trouble and can't generate a response.")
+            });
         }
 
         message.set(''); // clear text area
@@ -48,10 +60,12 @@
 
     onMount(async () => {
         if ($messageHistory.length === 0) {
-            messageHistory.update((history) => [
-                ...history,
-                { role: 'assistant', content: welcomeMessage },
-            ]);
+            const welcome = {
+                role: 'assistant',
+                content: welcomeMessage,
+                tokens: countTokens(welcomeMessage)
+            };
+            addMessage(welcome);
         }
     });
 </script>
