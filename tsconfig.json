@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["vitest/globals"]
+    "types": ["jest"]
   },
   "include": ["backend/**/*.ts", "common/**/*.ts", "src/**/*.ts", "tests/**/*.ts"]
 }
