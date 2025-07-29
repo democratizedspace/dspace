@@ -23,18 +23,19 @@ INSTRUCTIONS
    • If the task contains sub‑tasks, complete **all** of them.
    • After implementation and test verification, change the task’s leading emoji to 💯.
    • Remove any obsolete ✅ or ☑️ symbols that refer to the same task.
-3. Implement the feature using the existing project architecture and coding style.
-4. **Testing**
-   a. Unit tests – ensure ≥ 90 % global line & branch coverage.
-   b. Browser tests – write Playwright (Chromium) specs that exercise the new UI/UX paths.
-   c. CI – GitHub Actions workflow **test-and-coverage** must run `npm run test:pr` and
-      `npx playwright test`; the run must be green before you push.
-5. **Coverage thresholds**
+3. Install dependencies with `npm ci` (and `(cd frontend && npm ci)`), then run `npm run check` to verify formatting and linting.
+4. Implement the feature using the existing project architecture and coding style.
+5. Run `npm run lint`, `npm run type-check`, and `npm run build` to confirm a healthy state.
+6. **Testing**
+   a. Run `npm run test:pr` for lint and unit tests.
+   b. Write Playwright (Chromium) specs for new UI/UX paths and run them with `npx playwright test`.
+   c. Generate coverage with `npm run coverage` and verify patch coverage with `node scripts/checkPatchCoverage.cjs`.
+7. **Coverage thresholds**
    • Global: ≥ 90 % lines & branches
    • Patch: **100 %** for every changed file; no metric may drop > 0.20 pp vs `origin/main`.
-6. If coverage tooling or workflows are missing, add or modify them in the same PR.
-7. Commit, push, and open a pull‑request.
-8. **PR body template**
+8. If coverage tooling or workflows are missing, add or modify them in the same PR.
+9. Commit, push, and open a pull‑request.
+10. **PR body template**
 ```
 
 ### Completed task
@@ -77,7 +78,7 @@ Copy the prompt below into Codex to incrementally improve DSPACE.
 SYSTEM:
 You are an automated contributor for the **DSPACE** repository.
 Perform a thorough review of the project and implement incremental improvements without waiting for approval.
-Follow all guidelines in `AGENTS.md`, run the required checks, and keep pull requests focused on single concerns.
+Follow all guidelines in `AGENTS.md`. Ensure `npm run check`, `npm run lint`, `npm run type-check`, `npm run build`, `npm run coverage`, `node scripts/checkPatchCoverage.cjs`, `npm run test:pr` and `npx playwright test` succeed before pushing. Keep pull requests focused on single concerns.
 The maintainers will review your PRs and can reject unwanted diffs.
 
 USER:
