@@ -1,0 +1,27 @@
+{
+    "id": "welcome/connect-github",
+    "title": "Connect GitHub",
+    "description": "Link your GitHub account to enable cloud sync and quest submissions.",
+    "image": "/assets/quests/completionist.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's hook up your GitHub account so you can back up progress and share quests.",
+            "options": [{ "type": "goto", "goto": "token", "text": "I'm ready" }]
+        },
+        {
+            "id": "token",
+            "text": "Visit the cloud sync page and paste your personal access token. I'll store it locally so you can upload saves and create PRs.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Token saved" }]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your GitHub account is connected.",
+            "options": [{ "type": "finish", "text": "All set!", "requiresGitHub": true }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}

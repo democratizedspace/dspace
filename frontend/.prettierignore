@@ -19,4 +19,6 @@ test-videos/
 # Local development files
 .eslintrc.local.json
 .prettierrc.local.json
-.editorconfig.local 
+.editorconfig.local
+src/pages/docs/md/prompts-quests.md
+src/pages/docs/md/quest-guidelines.md

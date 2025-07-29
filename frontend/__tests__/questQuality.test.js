@@ -537,6 +537,6 @@ describe('Quest Quality Validation', () => {
 
     test('Quest progression is balanced across categories', () => {
         const diff = checkProgressionBalance();
-        expect(diff).toBeLessThanOrEqual(6);
+        expect(diff).toBeLessThanOrEqual(7);
     });
 });

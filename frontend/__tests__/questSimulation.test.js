@@ -10,6 +10,7 @@ const loopQuestFile = path.join(__dirname, '../test-data/loop-quest.json');
 const loopFinishQuestFile = path.join(__dirname, '../test-data/loop-finish-quest.json');
 const missingStartFile = path.join(__dirname, '../test-data/missing-start-quest.json');
 const noDialogueFile = path.join(__dirname, '../test-data/no-dialogue-quest.json');
+const githubFinishQuestFile = path.join(__dirname, '../test-data/github-finish-quest.json');
 
 describe('Quest simulation', () => {
     test('sample quest has a path to finish', () => {
@@ -35,5 +36,10 @@ describe('Quest simulation', () => {
     test('quest without dialogue returns false', () => {
         const quest = JSON.parse(fs.readFileSync(noDialogueFile));
         expect(questHasFinishPath(quest)).toBe(false);
+    });
+
+    test('quest requiring GitHub token still has finish path', () => {
+        const quest = JSON.parse(fs.readFileSync(githubFinishQuestFile));
+        expect(questHasFinishPath(quest)).toBe(true);
     });
 });
