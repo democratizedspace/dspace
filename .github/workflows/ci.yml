@@ -17,7 +17,7 @@ jobs:
       - uses: pnpm/action-setup@v2
         with: { version: 9 }
       - run: pnpm install --frozen-lockfile
-      - run: cd frontend && npm ci
+      - run: cd frontend && pnpm install --no-frozen-lockfile
       - name: Run & upload coverage
         run: |
           pnpm test:all
