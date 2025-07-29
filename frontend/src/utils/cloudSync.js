@@ -19,6 +19,14 @@ function saveCloudGistId(id) {
     localStorage.setItem(storageKey, JSON.stringify(state));
 }
 
+function clearCloudGistId() {
+    const state = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    if (state.cloudSync) {
+        state.cloudSync.gistId = '';
+    }
+    localStorage.setItem(storageKey, JSON.stringify(state));
+}
+
 async function uploadGameStateToGist(token) {
     if (!token) {
         token = loadGitHubToken();
@@ -68,4 +76,4 @@ async function downloadGameStateFromGist(token, gistId = loadCloudGistId()) {
     saveCloudGistId(gistId);
 }
 
-export { loadCloudGistId, uploadGameStateToGist, downloadGameStateFromGist };
+export { loadCloudGistId, uploadGameStateToGist, downloadGameStateFromGist, clearCloudGistId };
