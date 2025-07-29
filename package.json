@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "cd frontend && npm run dev",
-    "test": "vitest",
-    "test:backend": "vitest run --coverage \"backend/**/*.ts\" --reporter=default && codecov -F backend",
-    "test:frontend": "vitest run --coverage frontend/src/components/**/*.svelte --reporter=default && codecov -F frontend",
+    "test": "jest",
+    "test:backend": "jest --coverage backend tests && codecov -F backend",
+    "test:frontend": "cd frontend && npm test",
     "test:all": "pnpm run test:backend && pnpm run test:frontend",
     "coverage:upload": "codecov",
     "test:watch": "cd frontend && npm run test:watch",
@@ -29,19 +29,19 @@
     "@sveltejs/vite-plugin-svelte": "^6.1.0",
     "@testing-library/svelte": "^5.2.8",
     "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.6",
     "@types/node": "^24.1.0",
-    "@vitest/coverage-c8": "^0.33.0",
-    "@vitest/coverage-v8": "3.2.4",
     "ajv": "^8.12.0",
     "chart.js": "^4.5.0",
     "chartjs-node-canvas": "^5.0.0",
     "codecov": "^3.8.3",
     "fake-indexeddb": "^6.0.0",
+    "glob": "^7.2.3",
+    "jest": "^29.7.0",
     "jsdom": "^26.1.0",
     "prettier-plugin-svelte": "^3.4.0",
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.4",
-    "glob": "^7.2.3"
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "openai": "^3.2.1"
