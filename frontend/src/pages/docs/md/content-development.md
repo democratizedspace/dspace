@@ -60,7 +60,8 @@ Instructions for creating processes that transform or utilize items. Topics incl
 
 ## AI Assistance for Content Creation
 
-For contributors who want to leverage artificial intelligence in their content creation process, we provide [Quest Prompts](/docs/prompts-quests) that can be used with modern AI assistants. For automating backlog tasks, see the [Codex Implementation Prompt](/docs/prompts-codex). It walks Codex through selecting an unchecked item from the latest changelog and implementing it from start to finish. This guide includes:
+For contributors who want to leverage artificial intelligence in their content creation process, we provide [Quest Prompts](/docs/prompts-quests) that can be used with modern AI assistants. For automating backlog tasks, see the [Codex Implementation Prompt](/docs/prompts-codex#implementation-prompt). It walks Codex through selecting an unchecked item from the latest changelog and implementing it from start to finish. This guide includes:
+For general repository maintenance, the [Codex Upgrade Prompt](/docs/prompts-codex#upgrade-prompt) instructs Codex to scan the project for improvements and implement them automatically.
 
 -   Effective prompt templates for different content types
 -   Best practices for working with AI assistants
