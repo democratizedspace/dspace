@@ -233,6 +233,22 @@ Create a minimal DSPACE quest with the id `[CATEGORY]/[SHORT_ID]`. Populate the 
 
 After generating the JSON, run `npm run generate-quest` and follow the prompts to save it under the correct category and assign an NPC.
 
+### Custom Content Bundle
+
+Use this when you want to generate a single JSON file that groups quests, items and processes together. The bundle format is described in the [Custom Content Bundles guide](/docs/custom-bundles).
+
+```
+Create a DSPACE content bundle. Include minimal placeholder objects that follow the quest, item and process schemas:
+{
+    "quests": [],
+    "items": [],
+    "processes": []
+}
+Return only this JSON object.
+```
+
+After generating the bundle, run `node scripts/create-content-bundle.js` to combine your files under `submissions/bundles`.
+
 ## Example: Complete Quest Creation
 
 Here's an example of how to use these prompts to create a complete quest:
