@@ -53,7 +53,12 @@
 <div class="process-view">
     <Process processId={slug} />
     {#if process && process.requireItems && process.requireItems.length > 0}
-        <button class="primary" on:click={buyRequired} aria-disabled={disableBuy} disabled={disableBuy}>
+        <button
+            class="primary"
+            on:click={buyRequired}
+            aria-disabled={disableBuy}
+            disabled={disableBuy}
+        >
             Buy required items
         </button>
     {/if}

@@ -1,8 +1,8 @@
 <script>
-import { onMount } from 'svelte';
-import { GPT35Turbo } from '../../../utils/openAI.js';
-import { writable } from 'svelte/store';
-import { messages, countTokens } from '../../../stores/chat.js';
+    import { onMount } from 'svelte';
+    import { GPT35Turbo } from '../../../utils/openAI.js';
+    import { writable } from 'svelte/store';
+    import { messages, countTokens } from '../../../stores/chat.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -21,7 +21,7 @@ import { messages, countTokens } from '../../../stores/chat.js';
         const userMessage = {
             role: 'user',
             content: $message,
-            tokens: countTokens($message)
+            tokens: countTokens($message),
         };
 
         // Add the user message to the chat history immediately
@@ -33,7 +33,7 @@ import { messages, countTokens } from '../../../stores/chat.js';
             const aiMessage = {
                 role: 'assistant',
                 content: aiResponse,
-                tokens: countTokens(aiResponse)
+                tokens: countTokens(aiResponse),
             };
 
             // Update the chat history with the assistant's message
@@ -43,7 +43,9 @@ import { messages, countTokens } from '../../../stores/chat.js';
             addMessage({
                 role: 'assistant',
                 content: "Sorry, I'm having some trouble and can't generate a response.",
-                tokens: countTokens("Sorry, I'm having some trouble and can't generate a response.")
+                tokens: countTokens(
+                    "Sorry, I'm having some trouble and can't generate a response."
+                ),
             });
         }
 
@@ -63,7 +65,7 @@ import { messages, countTokens } from '../../../stores/chat.js';
             const welcome = {
                 role: 'assistant',
                 content: welcomeMessage,
-                tokens: countTokens(welcomeMessage)
+                tokens: countTokens(welcomeMessage),
             };
             addMessage(welcome);
         }

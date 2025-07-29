@@ -15,10 +15,10 @@ For the steps required to share your quests with the community, see the [Quest S
 
 Modern AI assistants can be powerful collaborators in content creation. Here are some tips for effective use:
 
-- **Provide clear context** about DSPACE's educational mission and sustainability focus
-- **Use system prompts** to guide the AI toward appropriate tone and technical accuracy
-- **Iterate on outputs** rather than expecting perfect results on the first try
-- **Fact-check technical information** since AI systems can sometimes generate plausible-sounding but incorrect details
+-   **Provide clear context** about DSPACE's educational mission and sustainability focus
+-   **Use system prompts** to guide the AI toward appropriate tone and technical accuracy
+-   **Iterate on outputs** rather than expecting perfect results on the first try
+-   **Fact-check technical information** since AI systems can sometimes generate plausible-sounding but incorrect details
 
 ## Quest Development Prompts
 
@@ -275,9 +275,9 @@ Here's an example of how to use these prompts to create a complete quest:
 
 Remember that AI assistants are collaborative tools. You'll get the best results by:
 
-- Providing detailed context about DSPACE
-- Iterating on content rather than accepting first drafts
-- Focusing the AI on specific aspects at a time
-- Combining AI suggestions with your own knowledge and creativity
+-   Providing detailed context about DSPACE
+-   Iterating on content rather than accepting first drafts
+-   Focusing the AI on specific aspects at a time
+-   Combining AI suggestions with your own knowledge and creativity
 
 By following these guidelines, you can leverage AI to create high-quality, educational content that advances DSPACE's mission of democratizing space exploration through practical, hands-on learning.

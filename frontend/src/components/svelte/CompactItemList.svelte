@@ -77,7 +77,9 @@
                             >
                                 {prettyPrintNumber($itemCounts[item.id])}
                                 {#if item.count !== null}
-                                    <span class="qty {getQty(item.count) < 0 && !noRed ? 'neg' : ''}">
+                                    <span
+                                        class="qty {getQty(item.count) < 0 && !noRed ? 'neg' : ''}"
+                                    >
                                         {#if getQty(item.count) < 0}
                                             −{prettyPrintNumber(Math.abs(getQty(item.count)))}
                                         {:else}
