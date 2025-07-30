@@ -1,0 +1,35 @@
+{
+    "id": "hydroponics/ph-test",
+    "title": "Test Hydroponic pH",
+    "description": "Check acidity so your plants stay healthy.",
+    "image": "/assets/hydroponics_nutrients.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A stable pH keeps nutrients available to your plants. We'll test the reservoir and adjust if necessary.",
+            "options": [{ "type": "goto", "goto": "measure", "text": "Let's test it." }]
+        },
+        {
+            "id": "measure",
+            "text": "Dip a pH strip into the solution. If the color is off, add small amounts of acid or base until you hit the target range around 6.5.",
+            "options": [
+                { "type": "process", "process": "measure-ph", "text": "Checking now." },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "pH adjusted",
+                    "requiresItems": [{ "id": "59", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Monitoring pH will keep your crops thriving and yields high.",
+            "options": [{ "type": "finish", "text": "I'll keep an eye on it." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/nutrient-check"]
+}

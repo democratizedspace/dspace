@@ -146,6 +146,7 @@ The server exposes two monitoring endpoints:
 For a full Raspberry Pi setup, including k3s instructions, see [docs/RPI_DEPLOYMENT_GUIDE.md](./docs/RPI_DEPLOYMENT_GUIDE.md).
 To add Prometheus and Grafana monitoring, follow the steps in [docs/monitoring_setup.md](./docs/monitoring_setup.md).
 For high availability, configure Cloudflare Load Balancing as described in [docs/cloudflare_load_balancing.md](./docs/cloudflare_load_balancing.md).
+See [docs/failover_procedures.md](./docs/failover_procedures.md) for handling outages and restoring nodes.
 
 ### Automated Raspberry Pi Deployment
 
@@ -189,7 +190,7 @@ Quest files are organized by category in subfolders, so feel free to expand any
 area—electronics, hydroponics, rocketry and more—with additional quests.
 See [Quest Trees](docs/quest-trees) for an overview of the different categories and their progression.
 The repository includes a script that summarizes how many quests and lines of dialogue exist in each tree. Categories are sorted by quest count for readability.
-Run `node scripts/generate-quest-chart.js` to recreate `quest-tree-stats.txt` and a PNG image saved locally. The PNG is ignored in Git. Check the "Quest Chart" workflow artifacts for the latest generated image. You can see how the quest catalog has grown by comparing the current count against v2.1 with `npm run quest:count`.
+Run `node scripts/generate-quest-chart.js` to recreate `quest-tree-stats.txt` and a PNG image saved locally. The PNG is ignored in Git. Check the "Quest Chart" workflow artifacts for the latest generated image. You can see how the quest catalog has grown by comparing the current count against v2.1 with `npm run quest:count`. Generate a map of which quests require or reward each item with `npm run generate:item-map`.
 
 Looking for a concrete walkthrough? The Playwright test `constellations-quest.spec.ts` demonstrates creating the "Map the Constellations" quest end to end and validating it using our quest checks.
 

@@ -1,7 +1,11 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
-    import { validateQuestData } from '../../utils/customQuestValidation.js';
+    import QuestPreview from './QuestPreview.svelte';
+    import {
+        validateQuestData,
+        validateQuestDependencies,
+    } from '../../utils/customQuestValidation.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -11,6 +15,7 @@
     let description = '';
     let image = null;
     let previewUrl = null;
+    let showPreview = false;
     let requiresQuests = [];
     let allQuests = [];
     let validationErrors = {};
@@ -113,6 +118,16 @@
             errors.schema = 'Invalid quest data';
         }
 
+        if (
+            requiresQuests.length > 0 &&
+            !validateQuestDependencies(
+                requiresQuests,
+                allQuests.map((q) => q.id)
+            )
+        ) {
+            errors.requiresQuests = 'Unknown quest dependency';
+        }
+
         validationErrors = errors;
         return Object.keys(errors).length === 0;
     }
@@ -143,6 +158,13 @@
             console.error('Error uploading image:', error);
             // Fall back to the data URL for demo/testing
             return previewUrl;
+        }
+    }
+
+    async function handlePreview() {
+        const isValid = await validateForm();
+        if (isValid) {
+            showPreview = true;
         }
     }
 
@@ -255,6 +277,9 @@
                 </option>
             {/each}
         </select>
+        {#if validationErrors.requiresQuests}
+            <span class="error-message">{validationErrors.requiresQuests}</span>
+        {/if}
     </div>
 
     <div class="form-submit">
@@ -267,8 +292,13 @@
                 Create Quest
             {/if}
         </button>
+        <button type="button" class="preview-button" on:click={handlePreview}> Preview </button>
     </div>
 </form>
+
+{#if showPreview}
+    <QuestPreview {title} {description} imageUrl={previewUrl} />
+{/if}
 
 <style>
     .quest-form {
@@ -386,6 +416,22 @@
     .submit-button:disabled {
         background-color: #88a889;
         cursor: not-allowed;
+    }
+
+    .preview-button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #0055cc;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .preview-button:hover {
+        background-color: #003d99;
     }
 
     @media (max-width: 480px) {
