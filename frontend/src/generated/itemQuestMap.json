@@ -1,0 +1,423 @@
+{
+    "0": {
+        "requires": ["3dprinter/start"],
+        "rewards": []
+    },
+    "1": {
+        "requires": [
+            "3dprinting/benchy_10",
+            "3dprinting/benchy_100",
+            "3dprinting/benchy_25",
+            "3dprinting/retraction-test",
+            "3dprinter/start"
+        ],
+        "rewards": []
+    },
+    "5": {
+        "requires": ["energy/solar"],
+        "rewards": [
+            "energy/dSolar-100kW",
+            "energy/dSolar-10kW",
+            "energy/dSolar-1kW",
+            "energy/dWatt-1e3",
+            "energy/dWatt-1e4",
+            "energy/dWatt-1e5",
+            "energy/dWatt-1e6",
+            "energy/dWatt-1e7",
+            "energy/solar-1kWh",
+            "energy/solar"
+        ]
+    },
+    "6": {
+        "requires": ["energy/battery-upgrade", "energy/solar"],
+        "rewards": []
+    },
+    "8": {
+        "requires": [],
+        "rewards": ["3dprinter/start"]
+    },
+    "9": {
+        "requires": ["hydroponics/basil"],
+        "rewards": []
+    },
+    "12": {
+        "requires": ["3dprinter/start"],
+        "rewards": ["3dprinting/benchy_10", "3dprinting/benchy_100", "3dprinting/benchy_25"]
+    },
+    "16": {
+        "requires": [],
+        "rewards": ["hydroponics/bucket_10"]
+    },
+    "17": {
+        "requires": ["hydroponics/basil"],
+        "rewards": []
+    },
+    "20": {
+        "requires": ["welcome/howtodoquests"],
+        "rewards": []
+    },
+    "22": {
+        "requires": [
+            "energy/dWatt-1e3",
+            "energy/dWatt-1e4",
+            "energy/dWatt-1e5",
+            "energy/dWatt-1e6",
+            "energy/dWatt-1e7",
+            "welcome/howtodoquests"
+        ],
+        "rewards": []
+    },
+    "24": {
+        "requires": [],
+        "rewards": ["3dprinter/start", "ubi/basicincome", "welcome/howtodoquests"]
+    },
+    "25": {
+        "requires": ["hydroponics/basil", "hydroponics/bucket_10"],
+        "rewards": []
+    },
+    "26": {
+        "requires": ["hydroponics/basil"],
+        "rewards": []
+    },
+    "27": {
+        "requires": ["hydroponics/basil"],
+        "rewards": []
+    },
+    "28": {
+        "requires": ["hydroponics/basil"],
+        "rewards": []
+    },
+    "29": {
+        "requires": ["welcome/howtodoquests", "welcome/intro-inventory"],
+        "rewards": []
+    },
+    "30": {
+        "requires": ["rocketry/firstlaunch"],
+        "rewards": []
+    },
+    "31": {
+        "requires": ["rocketry/firstlaunch"],
+        "rewards": []
+    },
+    "32": {
+        "requires": ["rocketry/firstlaunch"],
+        "rewards": []
+    },
+    "33": {
+        "requires": ["rocketry/firstlaunch"],
+        "rewards": []
+    },
+    "34": {
+        "requires": [],
+        "rewards": ["rocketry/parachute"]
+    },
+    "37": {
+        "requires": ["rocketry/firstlaunch"],
+        "rewards": ["rocketry/parachute"]
+    },
+    "38": {
+        "requires": ["rocketry/firstlaunch"],
+        "rewards": []
+    },
+    "39": {
+        "requires": ["rocketry/firstlaunch"],
+        "rewards": []
+    },
+    "40": {
+        "requires": ["rocketry/firstlaunch"],
+        "rewards": []
+    },
+    "41": {
+        "requires": [],
+        "rewards": ["rocketry/firstlaunch"]
+    },
+    "42": {
+        "requires": ["hydroponics/basil"],
+        "rewards": []
+    },
+    "44": {
+        "requires": ["hydroponics/basil"],
+        "rewards": []
+    },
+    "47": {
+        "requires": ["hydroponics/basil"],
+        "rewards": []
+    },
+    "48": {
+        "requires": [],
+        "rewards": ["hydroponics/basil"]
+    },
+    "49": {
+        "requires": [],
+        "rewards": ["energy/solar"]
+    },
+    "52": {
+        "requires": ["aquaria/goldfish"],
+        "rewards": []
+    },
+    "56": {
+        "requires": ["aquaria/position-tank"],
+        "rewards": []
+    },
+    "58": {
+        "requires": ["electronics/thermistor-reading", "programming/temp-logger"],
+        "rewards": []
+    },
+    "59": {
+        "requires": ["chemistry/ph-test"],
+        "rewards": []
+    },
+    "60": {
+        "requires": ["aquaria/goldfish"],
+        "rewards": []
+    },
+    "61": {
+        "requires": [
+            "energy/dSolar-100kW",
+            "energy/dSolar-10kW",
+            "energy/dSolar-1kW",
+            "energy/solar"
+        ],
+        "rewards": []
+    },
+    "65": {
+        "requires": [],
+        "rewards": ["aquaria/goldfish"]
+    },
+    "66": {
+        "requires": ["rocketry/static-test"],
+        "rewards": []
+    },
+    "67": {
+        "requires": ["rocketry/parachute"],
+        "rewards": []
+    },
+    "68": {
+        "requires": [],
+        "rewards": ["rocketry/parachute"]
+    },
+    "69": {
+        "requires": ["rocketry/parachute"],
+        "rewards": []
+    },
+    "72": {
+        "requires": ["ubi/first-payment"],
+        "rewards": ["ubi/basicincome"]
+    },
+    "78": {
+        "requires": [],
+        "rewards": ["welcome/howtodoquests"]
+    },
+    "79": {
+        "requires": ["energy/solar"],
+        "rewards": []
+    },
+    "80": {
+        "requires": ["energy/solar"],
+        "rewards": []
+    },
+    "81": {
+        "requires": ["energy/solar"],
+        "rewards": []
+    },
+    "82": {
+        "requires": ["energy/solar-1kWh"],
+        "rewards": []
+    },
+    "83": {
+        "requires": ["rocketry/firstlaunch"],
+        "rewards": []
+    },
+    "87": {
+        "requires": ["completionist/reminder"],
+        "rewards": ["completionist/v2"]
+    },
+    "89": {
+        "requires": [],
+        "rewards": ["hydroponics/bucket_10"]
+    },
+    "90": {
+        "requires": ["electronics/arduino-blink", "electronics/potentiometer-dimmer"],
+        "rewards": []
+    },
+    "91": {
+        "requires": ["electronics/potentiometer-dimmer"],
+        "rewards": []
+    },
+    "92": {
+        "requires": ["electronics/potentiometer-dimmer"],
+        "rewards": []
+    },
+    "93": {
+        "requires": [
+            "electronics/arduino-blink",
+            "electronics/basic-circuit",
+            "electronics/potentiometer-dimmer"
+        ],
+        "rewards": []
+    },
+    "94": {
+        "requires": [
+            "electronics/arduino-blink",
+            "electronics/basic-circuit",
+            "electronics/potentiometer-dimmer"
+        ],
+        "rewards": []
+    },
+    "95": {
+        "requires": [],
+        "rewards": ["electronics/basic-circuit"]
+    },
+    "96": {
+        "requires": ["robotics/line-follower", "robotics/servo-control", "robotics/servo-gripper"],
+        "rewards": ["electronics/arduino-blink"]
+    },
+    "97": {
+        "requires": ["3dprinting/phone-stand"],
+        "rewards": ["robotics/line-follower", "robotics/servo-control"]
+    },
+    "98": {
+        "requires": ["electronics/potentiometer-dimmer"],
+        "rewards": []
+    },
+    "99": {
+        "requires": ["hydroponics/lettuce"],
+        "rewards": ["hydroponics/lettuce"]
+    },
+    "100": {
+        "requires": [],
+        "rewards": ["aquaria/walstad"]
+    },
+    "101": {
+        "requires": [],
+        "rewards": ["aquaria/shrimp"]
+    },
+    "102": {
+        "requires": [],
+        "rewards": ["aquaria/breeding"]
+    },
+    "103": {
+        "requires": ["hydroponics/nutrient-check"],
+        "rewards": []
+    },
+    "104": {
+        "requires": ["aquaria/floating-plants"],
+        "rewards": []
+    },
+    "105": {
+        "requires": [],
+        "rewards": ["aquaria/water-testing"]
+    },
+    "106": {
+        "requires": [],
+        "rewards": ["aquaria/position-tank", "aquaria/water-change"]
+    },
+    "107": {
+        "requires": [],
+        "rewards": ["aquaria/guppy"]
+    },
+    "109": {
+        "requires": ["woodworking/birdhouse", "woodworking/bookshelf", "woodworking/step-stool"],
+        "rewards": []
+    },
+    "110": {
+        "requires": [
+            "woodworking/birdhouse",
+            "woodworking/bookshelf",
+            "woodworking/step-stool",
+            "woodworking/workbench"
+        ],
+        "rewards": []
+    },
+    "111": {
+        "requires": ["woodworking/finish-sanding"],
+        "rewards": []
+    },
+    "112": {
+        "requires": [
+            "woodworking/birdhouse",
+            "woodworking/bookshelf",
+            "woodworking/step-stool",
+            "woodworking/workbench"
+        ],
+        "rewards": []
+    },
+    "116": {
+        "requires": [],
+        "rewards": ["aquaria/sponge-filter"]
+    },
+    "118": {
+        "requires": ["hydroponics/stevia"],
+        "rewards": []
+    },
+    "119": {
+        "requires": ["hydroponics/stevia"],
+        "rewards": []
+    },
+    "122": {
+        "requires": ["chemistry/stevia-extraction"],
+        "rewards": []
+    },
+    "123": {
+        "requires": ["devops/pi-cluster-hardware", "devops/prepare-first-node"],
+        "rewards": []
+    },
+    "124": {
+        "requires": ["devops/pi-cluster-hardware"],
+        "rewards": []
+    },
+    "125": {
+        "requires": ["devops/pi-cluster-hardware"],
+        "rewards": []
+    },
+    "126": {
+        "requires": ["devops/pi-cluster-hardware"],
+        "rewards": []
+    },
+    "127": {
+        "requires": ["devops/docker-compose", "devops/pi-cluster-hardware"],
+        "rewards": []
+    },
+    "128": {
+        "requires": ["devops/docker-compose", "devops/pi-cluster-hardware"],
+        "rewards": []
+    },
+    "129": {
+        "requires": ["devops/pi-cluster-hardware"],
+        "rewards": []
+    },
+    "130": {
+        "requires": ["devops/prepare-first-node"],
+        "rewards": []
+    },
+    "131": {
+        "requires": ["devops/ssd-boot"],
+        "rewards": []
+    },
+    "132": {
+        "requires": ["devops/docker-compose", "devops/k3s-deploy", "devops/ssd-boot"],
+        "rewards": []
+    },
+    "133": {
+        "requires": ["devops/daily-backups", "devops/monitoring"],
+        "rewards": []
+    },
+    "134": {
+        "requires": [
+            "astronomy/basic-telescope",
+            "astronomy/constellations",
+            "astronomy/jupiter-moons",
+            "astronomy/lunar-eclipse",
+            "astronomy/meteor-shower"
+        ],
+        "rewards": []
+    },
+    "135": {
+        "requires": ["firstaid/assemble-kit", "firstaid/learn-cpr"],
+        "rewards": []
+    },
+    "136": {
+        "requires": ["chemistry/stevia-crystals"],
+        "rewards": []
+    }
+}
