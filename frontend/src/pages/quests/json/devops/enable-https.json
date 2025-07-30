@@ -1,0 +1,34 @@
+{
+    "id": "devops/enable-https",
+    "title": "Secure the Cluster with HTTPS",
+    "description": "Use Let's Encrypt to add TLS encryption to your services.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your services are running well. Let's protect them with HTTPS certificates.",
+            "options": [ { "type": "goto", "goto": "setup", "text": "I'm ready." } ]
+        },
+        {
+            "id": "setup",
+            "text": "Install certbot and configure automatic renewal for your domain.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Certificates installed",
+                    "requiresItems": [ { "id": "132", "count": 1 } ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! Traffic to your cluster is now encrypted.",
+            "options": [ { "type": "finish", "text": "All set" } ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/daily-backups"]
+}

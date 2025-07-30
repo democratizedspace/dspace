@@ -1,0 +1,34 @@
+{
+    "id": "robotics/wheel-encoders",
+    "title": "Add Wheel Encoders",
+    "description": "Improve your robot's navigation by measuring wheel rotation.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's give your bot some feedback. A pair of encoders will track how far it travels.",
+            "options": [ { "type": "goto", "goto": "mount", "text": "Sounds good." } ]
+        },
+        {
+            "id": "mount",
+            "text": "Attach one encoder to each wheel and wire them to your controller.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Installed and reading values!",
+                    "requiresItems": [ { "id": "96", "count": 2 } ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Now you can precisely measure distance and adjust your code for straighter paths.",
+            "options": [ { "type": "finish", "text": "Awesome!" } ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["robotics/servo-gripper"]
+}

@@ -1,0 +1,42 @@
+{
+    "id": "energy/dWatt-1e8",
+    "title": "Store a Colossal 100,000,000 dWatt",
+    "description": "Prove your dedication by collecting a staggering 100,000,000 dWatt.",
+    "image": "/assets/quests/dWatt_1e7.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your energy generation is off the charts! Think you can hit one hundred million dWatt?",
+            "options": [
+                { "type": "goto", "goto": "progress", "text": "Watch me." }
+            ]
+        },
+        {
+            "id": "progress",
+            "text": "Keep producing power until you reach the goal!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Goal reached!",
+                    "requiresItems": [
+                        { "id": "22", "count": 100000000 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Incredible! Few can claim such output. Take a well-deserved break before the next challenge.",
+            "options": [
+                { "type": "finish", "text": "Thanks, Orion!" }
+            ]
+        }
+    ],
+    "rewards": [
+        { "id": "5", "count": 50 }
+    ],
+    "requiresQuests": ["energy/dWatt-1e7"]
+}
