@@ -15,7 +15,11 @@
             "id": "rotate",
             "text": "Install logrotate and schedule it alongside your backup script. Compressed archives keep history without clutter.",
             "options": [
-                { "type": "process", "process": "configure-daily-backups", "text": "Scheduling rotation" },
+                {
+                    "type": "process",
+                    "process": "configure-daily-backups",
+                    "text": "Scheduling rotation"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",

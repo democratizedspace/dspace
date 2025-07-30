@@ -9,7 +9,7 @@
         {
             "id": "start",
             "text": "You've mapped constellations; now let's photograph their motion across the sky.",
-            "options": [ { "type": "goto", "goto": "expose", "text": "I'm excited!" } ]
+            "options": [{ "type": "goto", "goto": "expose", "text": "I'm excited!" }]
         },
         {
             "id": "expose",
@@ -19,14 +19,14 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Exposure complete",
-                    "requiresItems": [ { "id": "134", "count": 1 } ]
+                    "requiresItems": [{ "id": "134", "count": 1 }]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Beautiful! Those trails reveal our planet's steady spin.",
-            "options": [ { "type": "finish", "text": "Stunning!" } ]
+            "options": [{ "type": "finish", "text": "Stunning!" }]
         }
     ],
     "rewards": [],

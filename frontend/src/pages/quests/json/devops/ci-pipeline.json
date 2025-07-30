@@ -1,0 +1,34 @@
+{
+    "id": "devops/ci-pipeline",
+    "title": "Set Up a CI Pipeline",
+    "description": "Configure GitHub Actions to run tests whenever you push.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Automation keeps your code reliable. Let's add a CI workflow.",
+            "options": [{ "type": "goto", "goto": "edit", "text": "Walk me through it." }]
+        },
+        {
+            "id": "edit",
+            "text": "Create a `.github/workflows/ci.yml` file that installs dependencies and runs `npm run test:pr`.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Workflow added.",
+                    "requiresItems": [{ "id": "132", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Every push will now trigger tests automatically.",
+            "options": [{ "type": "finish", "text": "Nice!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/docker-compose"]
+}
