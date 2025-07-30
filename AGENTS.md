@@ -6,7 +6,7 @@
 
 - `frontend/` – Svelte components and quests
 - `backend/` – server code
-- `quests/` – standalone quest content
+- `frontend/src/pages/quests/` – canonical quest JSON
 - `scripts/` – utilities for data and tests
 
 ## Development Workflow
