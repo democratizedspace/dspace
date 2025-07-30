@@ -1,0 +1,34 @@
+{
+    "id": "astronomy/star-trails",
+    "title": "Capture Star Trails",
+    "description": "Use long-exposure photography to show the Earth's rotation.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've mapped constellations; now let's photograph their motion across the sky.",
+            "options": [ { "type": "goto", "goto": "expose", "text": "I'm excited!" } ]
+        },
+        {
+            "id": "expose",
+            "text": "Point your camera north and take a multi-minute exposure to capture circular star trails.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Exposure complete",
+                    "requiresItems": [ { "id": "134", "count": 1 } ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Beautiful! Those trails reveal our planet's steady spin.",
+            "options": [ { "type": "finish", "text": "Stunning!" } ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/constellations"]
+}

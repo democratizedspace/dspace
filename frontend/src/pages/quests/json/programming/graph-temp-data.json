@@ -1,0 +1,36 @@
+{
+    "id": "programming/graph-temp-data",
+    "title": "Graph Your Temperature Logs",
+    "description": "Use a short script to plot the readings you've been recording.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nice work gathering data! Let's visualize it with a simple chart.",
+            "options": [
+                { "type": "goto", "goto": "script", "text": "Show me how." }
+            ]
+        },
+        {
+            "id": "script",
+            "text": "Install matplotlib and plot your log file to see trends over time.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Graph generated!",
+                    "requiresItems": [ { "id": "90", "count": 1 } ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Visuals make patterns easy to spot. Keep logging and graphing for deeper insight.",
+            "options": [ { "type": "finish", "text": "Will do!" } ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/temp-logger"]
+}
