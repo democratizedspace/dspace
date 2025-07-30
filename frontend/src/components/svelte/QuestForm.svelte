@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
+    import QuestPreview from './QuestPreview.svelte';
     import {
         validateQuestData,
         validateQuestDependencies,
@@ -14,6 +15,7 @@
     let description = '';
     let image = null;
     let previewUrl = null;
+    let showPreview = false;
     let requiresQuests = [];
     let allQuests = [];
     let validationErrors = {};
@@ -159,6 +161,13 @@
         }
     }
 
+    async function handlePreview() {
+        const isValid = await validateForm();
+        if (isValid) {
+            showPreview = true;
+        }
+    }
+
     async function handleSubmit(event) {
         event.preventDefault();
 
@@ -283,8 +292,13 @@
                 Create Quest
             {/if}
         </button>
+        <button type="button" class="preview-button" on:click={handlePreview}> Preview </button>
     </div>
 </form>
+
+{#if showPreview}
+    <QuestPreview {title} {description} imageUrl={previewUrl} />
+{/if}
 
 <style>
     .quest-form {
@@ -402,6 +416,22 @@
     .submit-button:disabled {
         background-color: #88a889;
         cursor: not-allowed;
+    }
+
+    .preview-button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #0055cc;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .preview-button:hover {
+        background-color: #003d99;
     }
 
     @media (max-width: 480px) {
