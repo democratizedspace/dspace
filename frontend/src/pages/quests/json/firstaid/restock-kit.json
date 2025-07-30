@@ -1,0 +1,34 @@
+{
+    "id": "firstaid/restock-kit",
+    "title": "Restock Your First Aid Kit",
+    "description": "Replace used supplies so you're ready for emergencies.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "After a few busy projects some of your first aid supplies are running low. Let's get that kit restocked so you're prepared.",
+            "options": [{ "type": "goto", "goto": "gather", "text": "What should I replace?" }]
+        },
+        {
+            "id": "gather",
+            "text": "Pick up fresh bandages, gauze and antiseptic wipes. Swap out anything that's expired so the kit stays reliable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Everything's replaced",
+                    "requiresItems": [{ "id": "135", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Perfect! Keeping your kit stocked means small injuries won't slow you down.",
+            "options": [{ "type": "finish", "text": "Safety first!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/assemble-kit"]
+}
