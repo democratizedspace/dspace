@@ -1,0 +1,57 @@
+{
+    "id": "rocketry/recovery-run",
+    "title": "Practice Rocket Recovery",
+    "description": "Launch with a parachute and retrieve the rocket intact.",
+    "image": "/assets/quests/parachute.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Our last flight was great. Let's practice recovering the rocket so we can reuse it.",
+            "options": [{ "type": "goto", "goto": "prep", "text": "I'm ready." }]
+        },
+        {
+            "id": "prep",
+            "text": "Pack the recovery wadding and fold the parachute carefully.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "launch",
+                    "text": "Parachute packed",
+                    "requiresItems": [
+                        { "id": "67", "count": 1 },
+                        { "id": "84", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "launch",
+            "text": "Set up the pad and controller, then send it skyward.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "launch-rocket-parachute",
+                    "text": "Launching!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Rocket recovered!",
+                    "requiresItems": [
+                        { "id": "67", "count": 1 },
+                        { "id": "69", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! Smooth recoveries mean we can iterate faster on designs.",
+            "options": [{ "type": "finish", "text": "Can't wait for the next launch!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["rocketry/parachute"]
+}
