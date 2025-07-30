@@ -1,0 +1,35 @@
+{
+    "id": "devops/log-maintenance",
+    "title": "Set Up Log Rotation",
+    "description": "Prevent logs from filling your server by compressing old files.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "As your services run they generate plenty of logs. Without rotation those files will eat up disk space.",
+            "options": [{ "type": "goto", "goto": "rotate", "text": "How do I handle it?" }]
+        },
+        {
+            "id": "rotate",
+            "text": "Install logrotate and schedule it alongside your backup script. Compressed archives keep history without clutter.",
+            "options": [
+                { "type": "process", "process": "configure-daily-backups", "text": "Scheduling rotation" },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Rotation configured",
+                    "requiresItems": [{ "id": "133", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! Your nodes will now keep tidy logs so the cluster stays healthy.",
+            "options": [{ "type": "finish", "text": "Thanks Orion." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/daily-backups"]
+}
