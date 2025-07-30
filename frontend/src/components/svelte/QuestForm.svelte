@@ -1,7 +1,10 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
-    import { validateQuestData } from '../../utils/customQuestValidation.js';
+    import {
+        validateQuestData,
+        validateQuestDependencies,
+    } from '../../utils/customQuestValidation.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -111,6 +114,16 @@
         });
         if (!valid) {
             errors.schema = 'Invalid quest data';
+        }
+
+        if (
+            requiresQuests.length > 0 &&
+            !validateQuestDependencies(
+                requiresQuests,
+                allQuests.map((q) => q.id)
+            )
+        ) {
+            errors.requiresQuests = 'Unknown quest dependency';
         }
 
         validationErrors = errors;
@@ -255,6 +268,9 @@
                 </option>
             {/each}
         </select>
+        {#if validationErrors.requiresQuests}
+            <span class="error-message">{validationErrors.requiresQuests}</span>
+        {/if}
     </div>
 
     <div class="form-submit">
