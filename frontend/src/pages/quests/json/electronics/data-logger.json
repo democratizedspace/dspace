@@ -1,0 +1,42 @@
+{
+    "id": "electronics/data-logger",
+    "title": "Log Temperature Data",
+    "description": "Use a Raspberry Pi to record readings from your thermistor.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've got the sensor working. Let's connect a Pi to log temperatures automatically.",
+            "options": [{ "type": "goto", "goto": "setup", "text": "Sounds good!" }]
+        },
+        {
+            "id": "setup",
+            "text": "Plug the Arduino into the Pi with a USB cable and install the serial libraries.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "script",
+                    "text": "Hardware ready",
+                    "requiresItems": [
+                        { "id": "95", "count": 1 },
+                        { "id": "123", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "script",
+            "text": "Write a short program to read the sensor and append values to a file every minute.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Logging!" }]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! With data over time you can spot trends and trigger alerts.",
+            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/thermistor-reading"]
+}
