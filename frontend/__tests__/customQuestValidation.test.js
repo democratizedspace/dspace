@@ -1,7 +1,10 @@
 /**
  * @jest-environment node
  */
-import { validateQuestData } from '../src/utils/customQuestValidation.js';
+import {
+    validateQuestData,
+    validateQuestDependencies,
+} from '../src/utils/customQuestValidation.js';
 
 describe('validateQuestData', () => {
     test('valid quest passes', () => {
@@ -96,5 +99,15 @@ describe('validateQuestData', () => {
             requiresQuests: 'q1',
         });
         expect(result.valid).toBe(false);
+    });
+
+    test('validateQuestDependencies passes for existing ids', () => {
+        const result = validateQuestDependencies(['q1', 'q2'], ['q1', 'q2', 'q3']);
+        expect(result).toBe(true);
+    });
+
+    test('validateQuestDependencies fails for unknown ids', () => {
+        const result = validateQuestDependencies(['q1', 'q4'], ['q1', 'q2']);
+        expect(result).toBe(false);
     });
 });

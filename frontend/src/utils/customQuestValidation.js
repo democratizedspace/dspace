@@ -26,3 +26,8 @@ export function validateQuestData(data) {
     const valid = validate(data);
     return { valid, errors: validate.errors };
 }
+
+export function validateQuestDependencies(depIds = [], existingQuestIds = []) {
+    const set = new Set(existingQuestIds);
+    return depIds.every((id) => set.has(id));
+}
