@@ -1,0 +1,34 @@
+{
+    "id": "programming/temp-graph",
+    "title": "Graph Temperature Data",
+    "description": "Plot the values from your logger to visualize trends over time.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've been logging temperatures. Let's turn that data into a simple graph.",
+            "options": [{ "type": "goto", "goto": "code", "text": "Show me how." }]
+        },
+        {
+            "id": "code",
+            "text": "Use a plotting library like matplotlib or chart.js to create a line graph of the readings.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Graph generated!",
+                    "requiresItems": [{ "id": "58", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Visualizing data makes patterns much easier to spot.",
+            "options": [{ "type": "finish", "text": "Looks great!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/temp-logger"]
+}
