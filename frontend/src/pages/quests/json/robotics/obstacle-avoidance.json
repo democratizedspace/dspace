@@ -1,0 +1,34 @@
+{
+    "id": "robotics/obstacle-avoidance",
+    "title": "Add Obstacle Avoidance",
+    "description": "Equip your robot with a sensor so it can steer around objects.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your line follower works! Let's teach it to dodge obstacles using an ultrasonic sensor.",
+            "options": [{ "type": "goto", "goto": "build", "text": "Sounds challenging." }]
+        },
+        {
+            "id": "build",
+            "text": "Mount the sensor on the front and program the Arduino to turn away when something is too close.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It's dodging nicely!",
+                    "requiresItems": [{ "id": "96", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! With obstacle avoidance your bot can explore more complex tracks.",
+            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["robotics/line-follower"]
+}

@@ -1,0 +1,35 @@
+{
+    "id": "hydroponics/ph-check",
+    "title": "Check Solution pH",
+    "description": "Test the nutrient bath and adjust if needed for healthy growth.",
+    "image": "/assets/hydroponics_nutrients.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Keeping the pH in range helps plants absorb nutrients. Let's measure it now.",
+            "options": [{ "type": "goto", "goto": "measure", "text": "Ready." }]
+        },
+        {
+            "id": "measure",
+            "text": "Dip a pH strip into the solution. Aim for 5.5 to 6.5 for most greens.",
+            "options": [
+                { "type": "process", "process": "measure-ph", "text": "Measuring" },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading looks good",
+                    "requiresItems": [{ "id": "59", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Adjust with acid or base if it drifts out of range.",
+            "options": [{ "type": "finish", "text": "Will do." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/nutrient-check"]
+}
