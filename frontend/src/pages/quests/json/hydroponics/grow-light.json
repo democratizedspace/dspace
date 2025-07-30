@@ -1,0 +1,34 @@
+{
+    "id": "hydroponics/grow-light",
+    "title": "Install a Grow Light",
+    "description": "Provide your plants with artificial light to boost growth.",
+    "image": "/assets/hydroponic_lamp.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "To keep plants thriving indoors you'll need a grow light.",
+            "options": [{ "type": "goto", "goto": "install", "text": "Let's set it up." }]
+        },
+        {
+            "id": "install",
+            "text": "Hang the fixture above your tub and connect it to power. Run it for 12 hours each day.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Light installed.",
+                    "requiresItems": [{ "id": "43", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Proper lighting will keep your greens lush.",
+            "options": [{ "type": "finish", "text": "Looks bright!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/bucket_10"]
+}

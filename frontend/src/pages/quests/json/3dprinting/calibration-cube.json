@@ -1,0 +1,37 @@
+{
+    "id": "3dprinting/calibration-cube",
+    "title": "Print a Calibration Cube",
+    "description": "Ensure dimensional accuracy by printing a 20mm cube.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's dial in your printer with a quick 20mm calibration cube.",
+            "options": [{ "type": "goto", "goto": "print", "text": "Ready to print." }]
+        },
+        {
+            "id": "print",
+            "text": "Slice the cube model and print it with your usual settings.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cube looks good!",
+                    "requiresItems": [
+                        { "id": "0", "count": 1 },
+                        { "id": "12", "count": 15 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! Measure each side to see if further tweaking is needed.",
+            "options": [{ "type": "finish", "text": "Will do." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinter/start"]
+}

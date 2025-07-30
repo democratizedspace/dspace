@@ -1,0 +1,34 @@
+{
+    "id": "astronomy/iss-flyover",
+    "title": "Spot the ISS",
+    "description": "Use tracking apps and a small telescope to watch the International Space Station pass overhead.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The ISS is visible a few times each week. Let's catch a flyover.",
+            "options": [{ "type": "goto", "goto": "observe", "text": "When should I look?" }]
+        },
+        {
+            "id": "observe",
+            "text": "Check the schedule on your phone and aim your telescope as it rises in the west.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I saw it streak by!",
+                    "requiresItems": [{ "id": "134", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Awesome! It's inspiring to see humans living in orbit.",
+            "options": [{ "type": "finish", "text": "Agreed!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/observe-moon"]
+}
