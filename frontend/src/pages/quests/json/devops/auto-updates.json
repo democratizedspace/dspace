@@ -1,0 +1,34 @@
+{
+    "id": "devops/auto-updates",
+    "title": "Enable Automatic Updates",
+    "description": "Keep your Pi cluster secure with unattended upgrades.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Software gets old fast. Let's configure unattended-upgrades on each node.",
+            "options": [{ "type": "goto", "goto": "configure", "text": "Let's do it." }]
+        },
+        {
+            "id": "configure",
+            "text": "Edit the configuration file to enable security updates and schedule a weekly reboot.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Updates enabled",
+                    "requiresItems": [{ "id": "132", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your cluster will stay patched without manual work.",
+            "options": [{ "type": "finish", "text": "Thanks, Orion." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/monitoring"]
+}

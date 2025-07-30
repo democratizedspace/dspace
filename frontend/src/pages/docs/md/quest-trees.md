@@ -12,16 +12,17 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 -   **Welcome** – introductory tutorial showing how to accept and complete quests
 -   **3D Printing** – receive a printer, tackle small projects, fine-tune settings, and work up to larger print runs
 -   **Aquaria** – set up a Walstad tank, test the water, install a sponge filter, position the tank, add shrimp, introduce floating plants, keep guppies, perform water changes, breed them, and graduate to goldfish
--   **Hydroponics** – grow basil, expand to bucket systems, refresh nutrients, experiment with lettuce, and cultivate stevia for homemade sweetener
+-   **Hydroponics** – grow basil, expand to bucket systems, refresh nutrients, experiment with lettuce, cultivate stevia for homemade sweetener, and regrow it for repeat harvests
 -   **Electronics** – wire a basic circuit, program an Arduino, read sensors, and build a dimmer
 -   **Robotics** – assemble a line follower, build a servo gripper, and learn advanced control after completing electronics basics
 -   **Rocketry** – print and launch a model rocket with parachute recovery and perform a static engine test
--   **Energy** – harvest solar power, expand battery capacity, and accumulate dWatts toward higher milestones
+-   **Energy** – harvest solar power, expand battery capacity, harness wind with a turbine, and accumulate dWatts toward higher milestones
+-   **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s, then add monitoring, nightly backups and automatic updates
 -   **UBI** – an optional quest explaining the metaguild's basic income concept with daily payouts
 -   **Completionist** – track progress toward finishing all available quests
--   **Woodworking** – build a sturdy workbench, sand projects smooth, then craft birdhouses, stools and shelves
+-   **Woodworking** – build a sturdy workbench, sand projects smooth, then craft birdhouses, stools, shelves, and planter boxes
 -   **First Aid** – assemble a kit and practice CPR so accidents don't derail progress
--   **Astronomy** – observe the Moon, build a telescope, track Jupiter's moons and map the constellations, and document a meteor shower
+-   **Astronomy** – observe the Moon, build a telescope, track Jupiter's moons and map the constellations, document a meteor shower, and monitor passing satellites
 
 ## Planned Quest Trees
 
@@ -29,7 +30,7 @@ The following quest lines are being drafted to help achieve the "10x More Quests
 
 -   **Chemistry** – safe experiments that introduce sustainable rocket fuel principles, extract stevia into a sweetener, and purify it into crystals
 -   **Programming** – simple scripts for automating sensors and data collection
--   **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s, then add monitoring and nightly backups
+<!-- DevOps tree moved to existing section -->
 
 Check back as these new quests are fleshed out and integrated into the main progression.
 

@@ -1,0 +1,39 @@
+{
+    "id": "astronomy/satellite-pass",
+    "title": "Track a Satellite Pass",
+    "description": "Nova helps you follow an overhead satellite using your telescope.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A bright satellite is passing tonight. Let's try to track it across the sky.",
+            "options": [{ "type": "goto", "goto": "observe", "text": "I'll set up." }]
+        },
+        {
+            "id": "observe",
+            "text": "Point your telescope at the predicted path and use slow movements to keep it in view.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Following now"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I kept it in sight",
+                    "requiresItems": [{ "id": "134", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great tracking! Recording the time and path helps refine its orbit.",
+            "options": [{ "type": "finish", "text": "That was fun!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/meteor-shower"]
+}
