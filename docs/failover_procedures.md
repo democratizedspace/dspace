@@ -1,0 +1,30 @@
+# Failover Procedures
+
+This guide outlines how to handle downtime when running multiple DSPACE instances with Cloudflare Load Balancing.
+
+## Overview
+
+If an instance becomes unreachable, Cloudflare automatically routes traffic to a healthy node. However, you should still investigate the failed instance and restore it as soon as possible.
+
+## Steps
+
+1. **Confirm the outage**
+   - Visit your Cloudflare dashboard and check the Load Balancing pool health.
+   - You can also open `/health` on each instance directly.
+
+2. **Restart the container**
+   - SSH into the affected host and run:
+     ```bash
+     docker compose restart app
+     ```
+   - Wait a few seconds and verify that `curl http://localhost:3002/health` returns `{ "status": "ok" }`.
+
+3. **Check Prometheus metrics**
+   - Navigate to your Grafana dashboard (default `http://localhost:3001`) and ensure the `up` metric shows `1` for all instances.
+
+4. **Fallback option**
+   - If a node is corrupted or unreachable, spin up a new instance using the same deployment steps from [Raspberry Pi Deployment Guide](./RPI_DEPLOYMENT_GUIDE.md).
+   - Once the new node is running, add it to your Cloudflare load balancer as an origin.
+
+Cloudflare will automatically bring the restored instance back into rotation once it reports healthy.
+
