@@ -1,0 +1,35 @@
+{
+    "id": "hydroponics/regrow-stevia",
+    "title": "Regrow Your Stevia",
+    "description": "Hydro shows you how to coax another harvest from trimmed plants.",
+    "image": "/assets/quests/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Those stevia stalks you clipped will grow back if we treat them right. Ready to try?",
+            "options": [{ "type": "goto", "goto": "regrow", "text": "Absolutely!" }]
+        },
+        {
+            "id": "regrow",
+            "text": "Place the harvested plants under strong light and keep the tub topped off. We'll trigger the regrow process now.",
+            "options": [
+                { "type": "process", "process": "regrow-stevia", "text": "Starting regrowth." },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "New leaves sprouting!",
+                    "requiresItems": [{ "id": "119", "count": 11 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Keep them fed and you'll have another bundle of sweet leaves soon.",
+            "options": [{ "type": "finish", "text": "Thanks, Hydro!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/stevia"]
+}

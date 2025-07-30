@@ -1,0 +1,39 @@
+{
+    "id": "energy/wind-turbine",
+    "title": "Install a Wind Turbine",
+    "description": "Supplement your solar setup with power from the breeze.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your solar rig is humming. Let's capture wind energy too by mounting this 500W turbine.",
+            "options": [{ "type": "goto", "goto": "setup", "text": "Sounds great!" }]
+        },
+        {
+            "id": "setup",
+            "text": "Secure the turbine on a tall pole and wire it to your charge controller.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "7", "count": 1 }],
+                    "text": "Take the turbine"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All wired up",
+                    "requiresItems": [{ "id": "7", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! When the wind picks up you'll store power even faster.",
+            "options": [{ "type": "finish", "text": "Can't wait!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/solar-1kWh"]
+}
