@@ -1,0 +1,34 @@
+{
+    "id": "astronomy/iss-pass",
+    "title": "Spot the Space Station",
+    "description": "Track the International Space Station as it passes overhead.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready for a quick observation challenge? Let's spot the ISS tonight.",
+            "options": [{ "type": "goto", "goto": "prepare", "text": "I'm ready!" }]
+        },
+        {
+            "id": "prepare",
+            "text": "Check an orbit tracker online and point your telescope to the expected path.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I see it zooming by!",
+                    "requiresItems": [{ "id": "134", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great catch! It's fast, but you'll recognize it more easily next time.",
+            "options": [{ "type": "finish", "text": "Space is awesome!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/observe-moon"]
+}

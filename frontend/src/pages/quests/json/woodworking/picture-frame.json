@@ -1,0 +1,53 @@
+{
+    "id": "woodworking/picture-frame",
+    "title": "Craft a Picture Frame",
+    "description": "Practice precise cuts to build a small frame.",
+    "image": "/assets/workbench.jpg",
+    "npc": "/assets/npc/cedar.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want a quick project? Let's make a simple frame for your wall.",
+            "options": [{ "type": "goto", "goto": "cut", "text": "Sounds good!" }]
+        },
+        {
+            "id": "cut",
+            "text": "Measure your pine board and cut four pieces at 45° angles.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Pieces cut.",
+                    "requiresItems": [
+                        { "id": "108", "count": 1 },
+                        { "id": "109", "count": 1 },
+                        { "id": "112", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Glue the corners together and clamp until dry. A little sanding will finish it off.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Looks sharp!",
+                    "requiresItems": [
+                        { "id": "110", "count": 1 },
+                        { "id": "111", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! Display your favorite photo with pride.",
+            "options": [{ "type": "finish", "text": "Can't wait!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/workbench"]
+}

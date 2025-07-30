@@ -1,0 +1,34 @@
+{
+    "id": "devops/add-node",
+    "title": "Add a Second Pi Node",
+    "description": "Expand your cluster by assembling another Pi with PoE.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your first node is humming along. Ready to grow the cluster?",
+            "options": [{ "type": "goto", "goto": "build", "text": "Yes, let's expand." }]
+        },
+        {
+            "id": "build",
+            "text": "Assemble the hardware just like before and join it to the k3s master.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Node online!",
+                    "requiresItems": [{ "id": "132", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! More nodes mean more power for your services.",
+            "options": [{ "type": "finish", "text": "Onward to scale!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/prepare-first-node"]
+}

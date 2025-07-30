@@ -1,0 +1,34 @@
+{
+    "id": "electronics/energy-monitor",
+    "title": "Monitor Energy Usage",
+    "description": "Use a smart plug to track how much power your projects consume.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want to see exactly how much electricity your printer draws? Let's set up a smart plug.",
+            "options": [{ "type": "goto", "goto": "plug", "text": "Sounds useful." }]
+        },
+        {
+            "id": "plug",
+            "text": "Plug the smart device into the outlet and connect it to the app.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading watts now.",
+                    "requiresItems": [{ "id": "29", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Monitoring usage helps optimize your energy costs.",
+            "options": [{ "type": "finish", "text": "I'll keep an eye on it." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/arduino-blink"]
+}

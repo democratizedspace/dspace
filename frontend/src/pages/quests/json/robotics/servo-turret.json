@@ -1,0 +1,34 @@
+{
+    "id": "robotics/servo-turret",
+    "title": "Build a Servo Turret",
+    "description": "Use two servos to pan and tilt a small camera.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's combine two servos so your camera can look around.",
+            "options": [{ "type": "goto", "goto": "assemble", "text": "Let's do it." }]
+        },
+        {
+            "id": "assemble",
+            "text": "Stack the servos at right angles so one controls pan and the other tilt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It moves smoothly.",
+                    "requiresItems": [{ "id": "96", "count": 2 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Now you can scan the room or track targets.",
+            "options": [{ "type": "finish", "text": "Turret ready!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["robotics/servo-gripper"]
+}

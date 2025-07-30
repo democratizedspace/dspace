@@ -1,0 +1,34 @@
+{
+    "id": "hydroponics/grow-light",
+    "title": "Add a Grow Light",
+    "description": "Install lighting to keep your plants thriving indoors.",
+    "image": "/assets/hydroponic_lamp.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Some plants need more light than your window provides.",
+            "options": [{ "type": "goto", "goto": "install", "text": "Let's brighten things up." }]
+        },
+        {
+            "id": "install",
+            "text": "Hang the grow lamp above your tub and set a timer for 12 hours a day.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Lamp installed.",
+                    "requiresItems": [{ "id": "43", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! Consistent light will boost growth.",
+            "options": [{ "type": "finish", "text": "Thanks for the tip." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/basil"]
+}
