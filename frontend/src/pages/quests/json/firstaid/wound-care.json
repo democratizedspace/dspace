@@ -8,25 +8,25 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A well stocked kit is great, but let's practice using it. We'll cover simple wound cleaning and bandaging.",
-            "options": [ { "type": "goto", "goto": "clean", "text": "Let's go." } ]
+            "text": "Minor scrapes happen. Let's practice dressing them properly using your first aid kit.",
+            "options": [{ "type": "goto", "goto": "clean", "text": "Sounds good." }]
         },
         {
             "id": "clean",
-            "text": "Rinse the cut with clean water and apply antiseptic before placing a bandage.",
+            "text": "Clean the wound, dab on antiseptic, then cover it with a sterile bandage from your kit.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Bandage applied",
-                    "requiresItems": [ { "id": "135", "count": 1 } ]
+                    "text": "All bandaged up!",
+                    "requiresItems": [{ "id": "135", "count": 1 }]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nicely done! Keeping wounds clean prevents infection so you can keep building without delay.",
-            "options": [ { "type": "finish", "text": "Got it!" } ]
+            "text": "Great job! Keep it clean and change the dressing daily until healed.",
+            "options": [{ "type": "finish", "text": "Will do." }]
         }
     ],
     "rewards": [],
