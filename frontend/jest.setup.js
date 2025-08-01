@@ -1,6 +1,6 @@
 // Import necessary modules
-const { TextEncoder, TextDecoder } = require('util');
-const crypto = require('crypto');
+import { TextEncoder, TextDecoder } from 'node:util';
+import crypto from 'node:crypto';
 
 if (typeof globalThis.crypto === 'undefined') {
     globalThis.crypto = crypto.webcrypto || {
@@ -9,29 +9,31 @@ if (typeof globalThis.crypto === 'undefined') {
 }
 
 // Add polyfills for TextEncoder and TextDecoder if they're not defined
-if (typeof TextEncoder === 'undefined') {
-    global.TextEncoder = TextEncoder;
+if (typeof globalThis.TextEncoder === 'undefined') {
+    globalThis.TextEncoder = TextEncoder;
 }
-if (typeof TextDecoder === 'undefined') {
-    global.TextDecoder = TextDecoder;
+if (typeof globalThis.TextDecoder === 'undefined') {
+    globalThis.TextDecoder = TextDecoder;
 }
 
 // Add setImmediate polyfill for fake-indexeddb
-if (typeof setImmediate === 'undefined') {
-    global.setImmediate = (callback, ...args) => {
+if (typeof globalThis.setImmediate === 'undefined') {
+    globalThis.setImmediate = (callback, ...args) => {
         return setTimeout(callback, 0, ...args);
     };
 }
 
-if (typeof clearImmediate === 'undefined') {
-    global.clearImmediate = (id) => {
+export {};
+
+if (typeof globalThis.clearImmediate === 'undefined') {
+    globalThis.clearImmediate = (id) => {
         return clearTimeout(id);
     };
 }
 
 // Add structuredClone polyfill for fake-indexeddb
-if (typeof structuredClone === 'undefined') {
-    global.structuredClone = (obj) => {
+if (typeof globalThis.structuredClone === 'undefined') {
+    globalThis.structuredClone = (obj) => {
         try {
             return JSON.parse(JSON.stringify(obj));
         } catch (e) {
