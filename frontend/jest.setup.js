@@ -25,15 +25,15 @@ if (typeof globalThis.setImmediate === 'undefined') {
 
 export {};
 
-if (typeof clearImmediate === 'undefined') {
-    global.clearImmediate = (id) => {
+if (typeof globalThis.clearImmediate === 'undefined') {
+    globalThis.clearImmediate = (id) => {
         return clearTimeout(id);
     };
 }
 
 // Add structuredClone polyfill for fake-indexeddb
-if (typeof structuredClone === 'undefined') {
-    global.structuredClone = (obj) => {
+if (typeof globalThis.structuredClone === 'undefined') {
+    globalThis.structuredClone = (obj) => {
         try {
             return JSON.parse(JSON.stringify(obj));
         } catch (e) {
