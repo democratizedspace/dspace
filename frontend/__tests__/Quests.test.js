@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, jest, test } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, it, jest, test } from 'vitest';
 import Quests from '../src/pages/quests/svelte/Quests.svelte';
 import * as gameState from '../src/utils/gameState.js';
 

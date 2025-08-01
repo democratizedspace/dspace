@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'vitest';
 import { getQuestsForItem } from '../src/utils/itemDependencies.js';
 
 describe('item dependency tracking', () => {

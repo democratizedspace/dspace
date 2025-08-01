@@ -1,5 +1,5 @@
 /** @jest-environment jsdom */
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import * as svelte from 'svelte/compiler';

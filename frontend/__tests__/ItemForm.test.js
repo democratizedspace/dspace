@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, afterEach, describe, it, expect } from '@jest/globals';
+import { beforeEach, afterEach, describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, act, fireEvent, waitFor } from '@testing-library/svelte';
 import ItemForm from '../src/components/svelte/ItemForm.svelte';

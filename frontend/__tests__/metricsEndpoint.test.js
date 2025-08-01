@@ -2,7 +2,7 @@
 import { GET as metricsGET, prerender } from '../src/pages/metrics.ts';
 import { register } from '../src/utils/metrics.js';
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'vitest';
 
 describe('metrics endpoint', () => {
     it('returns prometheus metrics', async () => {
