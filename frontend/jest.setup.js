@@ -45,29 +45,6 @@ if (typeof structuredClone === 'undefined') {
 global.__SSR__ = false;
 global.__BROWSER__ = true;
 
-// Setup JSDOM environment
-global.window = {
-    location: {
-        href: 'http://localhost:3000/',
-    },
-    navigator: {
-        userAgent: 'node.js',
-    },
-    dispatchEvent: jest.fn(),
-};
-
-// Define CustomEvent
-class MockCustomEvent {
-    constructor(type, options = {}) {
-        this.type = type;
-        this.detail = options.detail || null;
-    }
-}
-global.CustomEvent = MockCustomEvent;
-global.Event = function (type) {
-    this.type = type;
-};
-
 // Define a function to create realistic DOM elements
 const createDomElement = (tag) => {
     const element = {
@@ -211,8 +188,29 @@ global.document = {
     head: createDomElement('head'),
 };
 
-// Make document.body accessible on window
-window.document = global.document;
+// Setup JSDOM environment
+global.window = {
+    location: {
+        href: 'http://localhost:3000/',
+    },
+    navigator: {
+        userAgent: 'node.js',
+    },
+    dispatchEvent: jest.fn(),
+    document: global.document,
+};
+
+// Define CustomEvent
+class MockCustomEvent {
+    constructor(type, options = {}) {
+        this.type = type;
+        this.detail = options.detail || null;
+    }
+}
+global.CustomEvent = MockCustomEvent;
+global.Event = function (type) {
+    this.type = type;
+};
 
 // Define necessary HTML elements
 global.Element = function () {};
