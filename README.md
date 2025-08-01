@@ -14,9 +14,12 @@ Check out the [docs](https://democratized.space/docs)!
 
 Clone and set up the project:
 
+Make sure you have **Node.js 18 or 20 LTS** installed.
+
 ```bash
 git clone https://github.com/democratizedspace/dspace.git
 cd dspace
+npm --version # ensure Node.js 18 or 20 is in use
 npm ci
 # Install frontend dependencies
 cd frontend && npm ci
