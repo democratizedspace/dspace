@@ -1,6 +1,6 @@
 // Import necessary modules
-import { TextEncoder, TextDecoder } from 'util';
-import crypto from 'crypto';
+const { TextEncoder, TextDecoder } = require('util');
+const crypto = require('crypto');
 
 // Add polyfills for TextEncoder and TextDecoder if they're not defined
 if (typeof TextEncoder === 'undefined') {

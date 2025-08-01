@@ -14,7 +14,7 @@ Check out the [docs](https://democratized.space/docs)!
 
 Clone and set up the project:
 
-Make sure you have **Node.js 18 or 20 LTS** installed.
+Make sure you have **Node.js 18 or 20 LTS** installed. The CI runs on Node.js 20.
 
 ```bash
 git clone https://github.com/democratizedspace/dspace.git
