@@ -1,6 +1,12 @@
 // Import necessary modules
-import { TextEncoder, TextDecoder } from 'util';
-import crypto from 'crypto';
+const { TextEncoder, TextDecoder } = require('util');
+const crypto = require('crypto');
+
+if (typeof globalThis.crypto === 'undefined') {
+    globalThis.crypto = crypto.webcrypto || {
+        getRandomValues: (arr) => crypto.randomFillSync(arr),
+    };
+}
 
 // Add polyfills for TextEncoder and TextDecoder if they're not defined
 if (typeof TextEncoder === 'undefined') {
@@ -43,9 +49,6 @@ global.__BROWSER__ = true;
 global.window = {
     location: {
         href: 'http://localhost:3000/',
-    },
-    crypto: {
-        getRandomValues: (arr) => crypto.randomFillSync(arr),
     },
     navigator: {
         userAgent: 'node.js',
