@@ -45,16 +45,7 @@ if (typeof structuredClone === 'undefined') {
 global.__SSR__ = false;
 global.__BROWSER__ = true;
 
-// Setup JSDOM environment
-global.window = {
-    location: {
-        href: 'http://localhost:3000/',
-    },
-    navigator: {
-        userAgent: 'node.js',
-    },
-    dispatchEvent: jest.fn(),
-};
+// Setup JSDOM environment -- window will be defined after document
 
 // Define CustomEvent
 class MockCustomEvent {
@@ -209,6 +200,18 @@ global.document = {
     dispatchEvent: jest.fn(),
     createComment: jest.fn(),
     head: createDomElement('head'),
+};
+
+// Now that document exists, define window with document attached
+global.window = {
+    location: {
+        href: 'http://localhost:3000/',
+    },
+    navigator: {
+        userAgent: 'node.js',
+    },
+    dispatchEvent: jest.fn(),
+    document: global.document,
 };
 
 // Make document.body accessible on window
