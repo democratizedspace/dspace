@@ -1,6 +1,6 @@
-// Import necessary modules
-const { TextEncoder, TextDecoder } = require('util');
-const crypto = require('crypto');
+// Import necessary modules using ESM syntax for Node 20
+import { TextEncoder, TextDecoder } from 'util';
+import crypto from 'crypto';
 
 if (typeof globalThis.crypto === 'undefined') {
     globalThis.crypto = crypto.webcrypto || {
