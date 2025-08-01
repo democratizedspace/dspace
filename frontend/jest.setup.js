@@ -45,28 +45,15 @@ if (typeof structuredClone === 'undefined') {
 global.__SSR__ = false;
 global.__BROWSER__ = true;
 
-// Setup JSDOM environment
-global.window = {
-    location: {
-        href: 'http://localhost:3000/',
-    },
-    navigator: {
-        userAgent: 'node.js',
-    },
-    dispatchEvent: jest.fn(),
-};
-
-// Define CustomEvent
-class MockCustomEvent {
-    constructor(type, options = {}) {
-        this.type = type;
-        this.detail = options.detail || null;
-    }
-}
-global.CustomEvent = MockCustomEvent;
-global.Event = function (type) {
-    this.type = type;
-};
+// Use a safe jest.fn wrapper when Jest isn't available
+const safeJestFn =
+    typeof jest !== 'undefined'
+        ? jest.fn
+        : () => {
+              const fn = () => {};
+              fn.mockImplementation = () => fn;
+              return fn;
+          };
 
 // Define a function to create realistic DOM elements
 const createDomElement = (tag) => {
@@ -75,14 +62,14 @@ const createDomElement = (tag) => {
         nodeType: 1,
         ownerDocument: global.document,
         toString: () => tag,
-        getAttribute: jest.fn(),
-        setAttribute: jest.fn(),
-        removeAttribute: jest.fn(),
+        getAttribute: safeJestFn(),
+        setAttribute: safeJestFn(),
+        removeAttribute: safeJestFn(),
         classList: {
-            add: jest.fn(),
-            remove: jest.fn(),
-            contains: jest.fn(),
-            toggle: jest.fn(),
+            add: safeJestFn(),
+            remove: safeJestFn(),
+            contains: safeJestFn(),
+            toggle: safeJestFn(),
         },
         style: {},
         children: [],
@@ -101,9 +88,9 @@ const createDomElement = (tag) => {
             }
             return child;
         },
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
+        addEventListener: safeJestFn(),
+        removeEventListener: safeJestFn(),
+        dispatchEvent: safeJestFn(),
         innerHTML: '',
         textContent: '',
         id: '',
@@ -187,32 +174,53 @@ const createDomElement = (tag) => {
 global.document = {
     body: createDomElement('body'),
     documentElement: createDomElement('html'),
-    createElement: jest.fn().mockImplementation((tag) => createDomElement(tag)),
-    createElementNS: jest.fn().mockImplementation((ns, tag) => createDomElement(tag)),
-    createTextNode: jest.fn().mockImplementation((text) => ({
+    createElement: safeJestFn().mockImplementation((tag) => createDomElement(tag)),
+    createElementNS: safeJestFn().mockImplementation((ns, tag) => createDomElement(tag)),
+    createTextNode: safeJestFn().mockImplementation((text) => ({
         nodeType: 3,
         textContent: text,
         nodeValue: text,
     })),
-    querySelector: jest.fn().mockImplementation((selector) => {
+    querySelector: safeJestFn().mockImplementation((selector) => {
         if (selector === '#app') {
             return createDomElement('div');
         }
         return document.body.querySelector(selector);
     }),
-    querySelectorAll: jest.fn().mockImplementation((selector) => {
+    querySelectorAll: safeJestFn().mockImplementation((selector) => {
         return document.body.querySelectorAll(selector);
     }),
-    getElementById: jest.fn().mockImplementation((id) => {
+    getElementById: safeJestFn().mockImplementation((id) => {
         return document.body.querySelector(`#${id}`);
     }),
-    dispatchEvent: jest.fn(),
-    createComment: jest.fn(),
+    dispatchEvent: safeJestFn(),
+    createComment: safeJestFn(),
     head: createDomElement('head'),
 };
 
-// Make document.body accessible on window
-window.document = global.document;
+// Setup JSDOM environment
+global.window = {
+    location: {
+        href: 'http://localhost:3000/',
+    },
+    navigator: {
+        userAgent: 'node.js',
+    },
+    dispatchEvent: safeJestFn(),
+    document: global.document,
+};
+
+// Define CustomEvent
+class MockCustomEvent {
+    constructor(type, options = {}) {
+        this.type = type;
+        this.detail = options.detail || null;
+    }
+}
+global.CustomEvent = MockCustomEvent;
+global.Event = function (type) {
+    this.type = type;
+};
 
 // Define necessary HTML elements
 global.Element = function () {};
@@ -228,22 +236,22 @@ global.Node = function () {};
 
 // Mock localStorage
 global.localStorage = {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    removeItem: jest.fn(),
-    clear: jest.fn(),
+    getItem: safeJestFn(),
+    setItem: safeJestFn(),
+    removeItem: safeJestFn(),
+    clear: safeJestFn(),
 };
 
 global.sessionStorage = {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    removeItem: jest.fn(),
-    clear: jest.fn(),
+    getItem: safeJestFn(),
+    setItem: safeJestFn(),
+    removeItem: safeJestFn(),
+    clear: safeJestFn(),
 };
 
 // Mock IndexedDB
 global.indexedDB = {
-    open: jest.fn().mockImplementation(() => ({
+    open: safeJestFn().mockImplementation(() => ({
         onupgradeneeded: null,
         onsuccess: null,
         onerror: null,
@@ -252,40 +260,42 @@ global.indexedDB = {
 
 // Define a mock EventTarget that's safe to use in jest.mock
 const mockEventTarget = {
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
+    addEventListener: safeJestFn(),
+    removeEventListener: safeJestFn(),
+    dispatchEvent: safeJestFn(),
 };
 
 // Svelte mocks
-jest.mock('svelte/internal', () => {
-    return {
-        dispatch_dev: function (type, detail) {
-            try {
-                // Extremely simplified implementation that doesn't reference any external variables
-                mockEventTarget.dispatchEvent({ type, detail });
-            } catch (error) {
-                console.warn('Error in dispatch_dev:', error);
-            }
-        },
-        globals: { Error },
-        validate_component: jest.fn(),
-        validate_slots: jest.fn(),
-        validate_store: jest.fn(),
-        insert: jest.fn(),
-        noop: () => {},
-        SvelteComponentDev: class SvelteComponentDev {
-            constructor(options) {
-                this.$$set = () => {};
-                this.$$prop_def = {};
-                this.$$slot_def = {};
-                this.$$root = null;
-            }
-            $destroy() {}
-            $on() {}
-        },
-    };
-});
+if (typeof jest !== 'undefined') {
+    jest.mock('svelte/internal', () => {
+        return {
+            dispatch_dev: function (type, detail) {
+                try {
+                    // Extremely simplified implementation that doesn't reference any external variables
+                    mockEventTarget.dispatchEvent({ type, detail });
+                } catch (error) {
+                    console.warn('Error in dispatch_dev:', error);
+                }
+            },
+            globals: { Error },
+            validate_component: jest.fn(),
+            validate_slots: jest.fn(),
+            validate_store: jest.fn(),
+            insert: jest.fn(),
+            noop: () => {},
+            SvelteComponentDev: class SvelteComponentDev {
+                constructor(options) {
+                    this.$$set = () => {};
+                    this.$$prop_def = {};
+                    this.$$slot_def = {};
+                    this.$$root = null;
+                }
+                $destroy() {}
+                $on() {}
+            },
+        };
+    });
+}
 
 // These help to make testing environment closer to browser
 window.requestAnimationFrame = function (callback) {
@@ -315,7 +325,7 @@ global.Blob = class Blob {
     }
 };
 
-global.fetch = jest.fn().mockImplementation(() =>
+global.fetch = safeJestFn().mockImplementation(() =>
     Promise.resolve({
         ok: true,
         text: () => Promise.resolve(''),
