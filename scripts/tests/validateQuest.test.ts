@@ -1,5 +1,6 @@
-const path = require('path');
-const fs = require('fs');
+import { describe, it, expect } from 'vitest';
+import path from 'path';
+import fs from 'fs';
 const validateQuest = require('../validate-quest');
 
 describe('validateQuest script', () => {
