@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { jest } from '@jest/globals';
 import { getLocalStorage } from '../src/utils/localStorage.js';
 
 describe('getLocalStorage', () => {

@@ -1,6 +1,7 @@
 /**
  * @jest-environment node
  */
+import { jest } from '@jest/globals';
 
 const PATH = '../setupJest.js';
 

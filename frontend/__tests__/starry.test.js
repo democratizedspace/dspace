@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { jest } from '@jest/globals';
 import { createStarryNight } from '../src/scripts/starry.js';
 
 describe('createStarryNight', () => {

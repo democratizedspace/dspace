@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { jest } from '@jest/globals';
 import QuestFormPage from '../src/components/svelte/QuestFormPage.svelte';
 
 jest.mock('../src/components/svelte/QuestForm.svelte', () => ({ default: {} }));

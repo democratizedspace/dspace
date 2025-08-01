@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { jest } from '@jest/globals';
 import { openCustomContentDB } from '../src/utils/indexeddb.js';
 import * as migrations from '../src/utils/migrations.js';
 

@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { jest } from '@jest/globals';
 
 import { createQuest, getQuest, ENTITY_TYPES } from '../src/utils/customcontent.js';
 import * as indexedDb from '../src/utils/indexeddb.js';

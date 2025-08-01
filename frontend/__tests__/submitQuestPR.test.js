@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { jest } from '@jest/globals';
 import { submitQuestPR } from '../src/utils/submitQuestPR.js';
 
 describe('submitQuestPR', () => {

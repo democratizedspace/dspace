@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { jest } from '@jest/globals';
 import 'fake-indexeddb/auto';
 import {
     uploadGameStateToGist,

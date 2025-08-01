@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import ProcessForm from '../src/components/svelte/ProcessForm.svelte';
 
 // Mock the items.json import

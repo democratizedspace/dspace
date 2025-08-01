@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 jest.mock('../src/utils/gameState.js', () => ({
     questFinished: jest.fn(),
     canStartQuest: jest.fn(),
