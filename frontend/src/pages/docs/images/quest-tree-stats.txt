@@ -14,3 +14,4 @@ rocketry: 5 quests, 474 lines
 welcome: 3 quests, 260 lines
 completionist: 2 quests, 94 lines
 ubi: 2 quests, 180 lines
+geothermal: 1 quests, 62 lines
