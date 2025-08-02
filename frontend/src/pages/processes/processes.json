@@ -1170,6 +1170,19 @@
         "duration": "1m"
     },
     {
+        "id": "adjust-ph",
+        "title": "Adjust solution pH",
+        "requireItems": [
+            { "id": "140", "count": 1 },
+            { "id": "141", "count": 1 },
+            { "id": "142", "count": 1 },
+            { "id": "143", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
         "id": "pack-first-aid-kit",
         "title": "Pack a basic first aid kit",
         "requireItems": [],

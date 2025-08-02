@@ -1,21 +1,22 @@
 {
     "id": "hydroponics/ph-check",
     "title": "Check Solution pH",
-    "description": "Test the nutrient bath and adjust if needed for healthy growth.",
+    "description": "Measure the nutrient bath's pH and correct it to keep plants happy.",
     "image": "/assets/hydroponics_nutrients.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Keeping the pH in range helps plants absorb nutrients. Let's measure it now.",
+            "text": "Healthy roots need a stable pH. Let's test your nutrient solution.",
             "options": [{ "type": "goto", "goto": "measure", "text": "Ready." }]
         },
         {
             "id": "measure",
-            "text": "Dip a pH strip into the solution. Aim for 5.5 to 6.5 for most greens.",
+            "text": "Dip a pH strip for a few seconds and compare the color chart. Aim for 5.5–6.5 for leafy greens.",
             "options": [
-                { "type": "process", "process": "measure-ph", "text": "Measuring" },
+                { "type": "process", "process": "measure-ph", "text": "Measure pH" },
+                { "type": "goto", "goto": "adjust", "text": "It's out of range" },
                 {
                     "type": "goto",
                     "goto": "finish",
@@ -25,8 +26,16 @@
             ]
         },
         {
+            "id": "adjust",
+            "text": "Put on gloves and goggles. Add a little pH up or pH down solution, stir, and re-test until you're back in range.",
+            "options": [
+                { "type": "process", "process": "adjust-ph", "text": "Adjust pH" },
+                { "type": "goto", "goto": "measure", "text": "Re-test" }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Adjust with acid or base if it drifts out of range.",
+            "text": "Nice work! Keep pH between 5.5 and 6.5 and recheck weekly to avoid nutrient lockout.",
             "options": [{ "type": "finish", "text": "Will do." }]
         }
     ],
