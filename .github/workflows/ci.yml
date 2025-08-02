@@ -7,8 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,7 +16,10 @@ jobs:
         with: { version: 9 }
       - run: pnpm install --frozen-lockfile
       - run: cd frontend && pnpm install --no-frozen-lockfile
-      - name: Run & upload coverage
-        run: |
-          pnpm test:all
-          # The upload commands inside package.json already add --flag
+      - name: Run tests with coverage
+        run: pnpm run coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: frontend/coverage/lcov.info
+          fail_ci_if_error: true
