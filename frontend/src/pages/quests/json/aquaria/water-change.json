@@ -8,17 +8,17 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Regular water changes keep your fish healthy. Let's remove about 25% of the water.",
+            "text": "Regular water changes keep fish healthy. Gather a siphon, bucket, and water conditioner, then remove about 25% of the water.",
             "options": [{ "type": "goto", "goto": "remove", "text": "Got it. How do I start?" }]
         },
         {
             "id": "remove",
-            "text": "Use a siphon to vacuum debris while draining into a bucket. Stop when you've removed about a quarter of the volume.",
+            "text": "Use a siphon or gravel vacuum to gently drain water into a clean bucket while lifting debris. Keep the intake away from fish and stop after roughly a quarter of the volume is gone.",
             "options": [{ "type": "goto", "goto": "refill", "text": "Water removed." }]
         },
         {
             "id": "refill",
-            "text": "Refill slowly with dechlorinated water that's close to the tank's temperature.",
+            "text": "Treat tap water with dechlorinator and match it to the tank's temperature before refilling. Pour slowly to avoid shocking fish.",
             "options": [{ "type": "finish", "text": "Tank refilled and fish are happy!" }]
         }
     ],
