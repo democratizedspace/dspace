@@ -17,6 +17,7 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 -   **Robotics** – assemble a line follower, build a servo gripper, and learn advanced control after completing electronics basics
 -   **Rocketry** – print and launch a model rocket with parachute recovery and perform a static engine test
 -   **Energy** – harvest solar power, expand battery capacity, harness wind with a turbine, and accumulate dWatts toward higher milestones
+-   **Geothermal** – survey ground temperature and install a ground-source heat pump for steady renewable energy
 -   **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s, then add monitoring, nightly backups and automatic updates
 -   **UBI** – an optional quest explaining the metaguild's basic income concept with daily payouts
 -   **Completionist** – track progress toward finishing all available quests
@@ -30,7 +31,6 @@ The following quest lines are being drafted to help achieve the "10x More Quests
 
 -   **Chemistry** – safe experiments that introduce sustainable rocket fuel principles, extract stevia into a sweetener, and purify it into crystals
 -   **Programming** – simple scripts for automating sensors and data collection
-<!-- DevOps tree moved to existing section -->
 
 Check back as these new quests are fleshed out and integrated into the main progression.
 
