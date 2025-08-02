@@ -15,7 +15,8 @@ This page provides a minimal quest JSON structure that you can use as a starting
     "hardening": {
         "passes": 0,
         "score": 0,
-        "emoji": "\uD83D\uDEE0\uFE0F"
+        "emoji": "🛠️",
+        "history": []
     },
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
@@ -55,7 +56,6 @@ This page provides a minimal quest JSON structure that you can use as a starting
 ```
 
 Use this template as a baseline and expand it with additional dialogue nodes, processes, item requirements, and rewards. For more in-depth guidance, see the [Quest Development Guidelines](/docs/quest-guidelines).
-The optional `hardening` block tracks how many upgrade passes a quest has survived.
-Increment `passes`, update `score` and switch the status `emoji` (🛠️ → 🌀 → ✅ → 💯)
-each time you run the quest hardening loop described in the [quest prompt guide](/docs/prompts-quests).
+The optional `hardening` block tracks how many upgrade passes a quest has survived and stores a history of Codex tasks.
+Increment `passes`, update `score`, switch the status `emoji` (🛠️ → 🌀 → ✅ → 💯) and append an entry to `history` with the task ID, date and score each time you run the quest hardening loop described in the [quest prompt guide](/docs/prompts-quests).
 An automated Playwright example (`constellations-quest.spec.ts`) walks through creating this quest step by step if you prefer a hands-on reference.
