@@ -6,7 +6,7 @@ hydroponics: 9 quests, 646 lines
 3dprinting: 8 quests, 433 lines
 robotics: 7 quests, 269 lines
 woodworking: 7 quests, 363 lines
-electronics: 6 quests, 301 lines
+electronics: 6 quests, 303 lines
 programming: 6 quests, 203 lines
 chemistry: 5 quests, 171 lines
 firstaid: 5 quests, 177 lines
