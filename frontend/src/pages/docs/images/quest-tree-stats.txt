@@ -1,4 +1,4 @@
-energy: 14 quests, 860 lines
+energy: 14 quests, 856 lines
 devops: 12 quests, 498 lines
 aquaria: 11 quests, 448 lines
 astronomy: 10 quests, 378 lines
@@ -10,7 +10,7 @@ woodworking: 7 quests, 363 lines
 chemistry: 6 quests, 211 lines
 electronics: 6 quests, 303 lines
 firstaid: 6 quests, 212 lines
-rocketry: 5 quests, 476 lines
+rocketry: 5 quests, 474 lines
 welcome: 3 quests, 260 lines
 completionist: 2 quests, 94 lines
 ubi: 2 quests, 180 lines
