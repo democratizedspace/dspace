@@ -1,4 +1,5 @@
-const { jest } = require('@jest/globals');
+const { vi } = require('vitest');
+const jest = vi;
 
 jest.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: jest.fn(() => ({ tokenPlace: { url: 'http://token.place' } })),

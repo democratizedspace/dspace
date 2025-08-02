@@ -1,9 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const glob = require('glob');
+import { describe, expect, test } from 'vitest';
+import fs from 'fs';
+import path from 'path';
+import glob from 'glob';
 
 const baselineFile = path.join(__dirname, '../baselines/contentCounts.json');
-const baseline = JSON.parse(fs.readFileSync(baselineFile));
+const baseline = JSON.parse(fs.readFileSync(baselineFile, 'utf8'));
 const questDir = path.join(__dirname, '../../frontend/src/pages/quests/json');
 const itemsFile = path.join(__dirname, '../../frontend/src/pages/inventory/json/items.json');
 const processesFile = path.join(__dirname, '../../frontend/src/pages/processes/processes.json');
@@ -11,8 +12,8 @@ const npcDir = path.join(__dirname, '../../frontend/public/assets/npc');
 
 function getCounts() {
     const quests = glob.sync(path.join(questDir, '**/*.json')).length;
-    const items = JSON.parse(fs.readFileSync(itemsFile)).length;
-    const processes = JSON.parse(fs.readFileSync(processesFile)).length;
+    const items = JSON.parse(fs.readFileSync(itemsFile, 'utf8')).length;
+    const processes = JSON.parse(fs.readFileSync(processesFile, 'utf8')).length;
     const npcImages = fs.readdirSync(npcDir).filter(f => /\.(png|jpe?g|webp)$/.test(f)).length;
     return { quests, items, processes, npcImages };
 }
