@@ -1,0 +1,37 @@
+{
+    "id": "3dprinting/cable-clip",
+    "title": "Print a Cable Clip",
+    "description": "Reduce clutter by 3D printing a simple cable clip.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Need a quick print project? Let's make a cable clip to tame those loose cords.",
+            "options": [{ "type": "goto", "goto": "print", "text": "Sounds good. What do I need?" }]
+        },
+        {
+            "id": "print",
+            "text": "Clean the bed, load some filament, slice the clip STL, and start the print. Keep the nozzle clear and watch the first layer stick.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "The clip printed great!",
+                    "requiresItems": [
+                        { "id": "0", "count": 1 },
+                        { "id": "12", "count": 5 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Snap it onto a cable and enjoy the tidy workspace.",
+            "options": [{ "type": "finish", "text": "Thanks for the tip!" }]
+        }
+    ],
+    "rewards": [{ "id": "24", "count": 5 }],
+    "requiresQuests": ["3dprinter/start"]
+}

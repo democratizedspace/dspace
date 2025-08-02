@@ -1,0 +1,55 @@
+{
+    "id": "hydroponics/reservoir-refresh",
+    "title": "Refresh the Reservoir",
+    "description": "Swap out old nutrient solution for a fresh batch.",
+    "image": "/assets/hydroponics_nutrients.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The nutrient bath gets gunky over time. Let's replace it to keep your roots happy.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "drain",
+                    "text": "Ready to refresh."
+                }
+            ]
+        },
+        {
+            "id": "drain",
+            "text": "Drain the old solution and dispose of it responsibly. Then mix a new batch of nutrients.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Mixing fresh solution."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "44",
+                            "count": 1
+                        }
+                    ],
+                    "text": "All filled up!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Sweet! Fresh nutrients mean faster growth and fewer pathogens.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to growing!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/basil"]
+}

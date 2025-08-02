@@ -5,34 +5,40 @@ import glob from 'glob';
 import { listMissingImages } from '../utils/fs-checks';
 
 const questsDir = path.join(__dirname, '../../frontend/src/pages/quests/json');
-const itemsFile = path.join(__dirname, '../../frontend/src/pages/inventory/json/items.json');
-const npcFile = path.join(__dirname, '../../frontend/src/pages/docs/md/npcs.md');
+const itemsFile = path.join(
+  __dirname,
+  '../../frontend/src/pages/inventory/json/items.json'
+);
+const npcFile = path.join(
+  __dirname,
+  '../../frontend/src/pages/docs/md/npcs.md'
+);
 
 function collectQuestImages() {
-    const files = glob.sync(path.join(questsDir, '**/*.json'));
-    const imgs = [];
-    files.forEach((file) => {
-        const data = JSON.parse(fs.readFileSync(file, 'utf8'));
-        if (data.image) imgs.push(data.image);
-        if (data.npc) imgs.push(data.npc);
-    });
-    return imgs;
+  const files = glob.sync(path.join(questsDir, '**/*.json'));
+  const imgs = [];
+  files.forEach((file) => {
+    const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (data.image) imgs.push(data.image);
+    if (data.npc) imgs.push(data.npc);
+  });
+  return imgs;
 }
 
 function collectItemImages() {
-    const items = JSON.parse(fs.readFileSync(itemsFile, 'utf8'));
-    return items.map((i) => i.image).filter(Boolean);
+  const items = JSON.parse(fs.readFileSync(itemsFile, 'utf8'));
+  return items.map((i) => i.image).filter(Boolean);
 }
 
 function collectNpcImages() {
-    const md = fs.readFileSync(npcFile, 'utf8');
-    const regex = /<img src="(.*?)"/g;
-    const imgs = [];
-    let match;
-    while ((match = regex.exec(md))) {
-        imgs.push(match[1]);
-    }
-    return imgs;
+  const md = fs.readFileSync(npcFile, 'utf8');
+  const regex = /<img src="(.*?)"/g;
+  const imgs = [];
+  let match;
+  while ((match = regex.exec(md))) {
+    imgs.push(match[1]);
+  }
+  return imgs;
 }
 
 describe('Image references', () => {

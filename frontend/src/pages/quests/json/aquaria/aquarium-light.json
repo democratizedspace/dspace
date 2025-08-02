@@ -1,0 +1,39 @@
+{
+    "id": "aquaria/aquarium-light",
+    "title": "Install an aquarium light",
+    "description": "Add LED lighting to support plant growth and fish health.",
+    "image": "/assets/aquarium_light.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your Walstad tank is cycling, but plants need steady light. Ready to install the lamp?",
+            "options": [{ "type": "goto", "goto": "mount", "text": "Let's mount the light." }]
+        },
+        {
+            "id": "mount",
+            "text": "Clip the light to the rim and route the cable so it stays dry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "schedule",
+                    "text": "Light secured.",
+                    "requiresItems": [{ "id": "57", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "schedule",
+            "text": "Plug it in and set a timer for eight hours of gentle daylight.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Timer set and lamp glowing." }]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your plants will thrive under consistent lighting.",
+            "options": [{ "type": "finish", "text": "Enjoy the glow." }]
+        }
+    ],
+    "rewards": [{ "id": "105", "count": 1 }],
+    "requiresQuests": ["aquaria/sponge-filter"]
+}
