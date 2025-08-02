@@ -112,7 +112,10 @@ Return only the diff with the new quest.
 ## Upgrade prompt for new quests
 
 Focus on quests recently added on the `v3` branch — [see the list](/docs/new-quests-v3) —
-to keep quality high as the codebase grows.
+to keep quality high as the codebase grows. This prompt uses the quest
+quality tests to ensure that every technological step is represented in
+the inventory (`items.json`) and process (`processes.json`) registries and
+grounded in reality with components that can be replicated in real life.
 
 ```text
 SYSTEM:
