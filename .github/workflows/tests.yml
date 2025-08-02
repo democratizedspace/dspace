@@ -43,4 +43,5 @@ jobs:
         with:
           files: frontend/coverage/lcov.info
           fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
