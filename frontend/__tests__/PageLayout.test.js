@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, afterEach, describe, it, expect } from '@jest/globals';
+import { beforeEach, afterEach, describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom';
 
 // Define SSR flag for client-side rendering

@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import 'fake-indexeddb/auto';
-import { jest } from '@jest/globals';
+import { jest } from 'vitest';
 
 // We import inside each test after resetting modules to ensure a fresh dbInstance
 

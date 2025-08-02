@@ -1,4 +1,13 @@
-const {
+import { vi } from 'vitest';
+
+vi.mock('../../src/utils/gameState/common.js', () => {
+    return {
+        loadGameState: vi.fn(),
+        saveGameState: vi.fn(),
+    };
+});
+
+import {
     addItems,
     burnItems,
     getItemCounts,
@@ -8,16 +17,9 @@ const {
     sellItems,
     hasItems,
     getSalesTaxPercentage,
-} = require('../../src/utils/gameState/inventory.js');
+} from '../../src/utils/gameState/inventory.js';
 
-const { loadGameState, saveGameState } = require('../../src/utils/gameState/common.js');
-
-jest.mock('../../src/utils/gameState/common.js', () => {
-    return {
-        loadGameState: jest.fn(),
-        saveGameState: jest.fn(),
-    };
-});
+import { loadGameState, saveGameState } from '../../src/utils/gameState/common.js';
 
 describe('gameState - inventory', () => {
     let mockGameState;

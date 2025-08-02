@@ -1,4 +1,5 @@
-const { jest } = require('@jest/globals');
+const { vi } = require('vitest');
+const jest = vi;
 
 const createChatCompletionMock = jest.fn().mockResolvedValue({
     data: { choices: [{ message: { content: 'mocked reply' } }] },

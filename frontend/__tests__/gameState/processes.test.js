@@ -1,4 +1,29 @@
-const {
+import { vi } from 'vitest';
+
+// Mock common.js imports
+vi.mock('../../src/utils/gameState/common.js', () => {
+    return {
+        loadGameState: vi.fn(),
+        saveGameState: vi.fn(),
+    };
+});
+
+// Mock processes import
+vi.mock('../../src/pages/processes/processes.json', () => {
+    return {
+        default: [
+            {
+                id: 'foo',
+                requireItems: [{ id: '1', count: 5 }],
+                consumeItems: [{ id: '2', count: 3 }],
+                createItems: [{ id: '3', count: 1 }],
+                duration: '10s',
+            },
+        ],
+    };
+});
+
+import {
     startProcess,
     hasRequiredAndConsumedItems,
     ProcessStates,
@@ -11,30 +36,9 @@ const {
     resumeProcess,
     getProcessesForItem,
     skipProcess,
-} = require('../../src/utils/gameState/processes.js');
+} from '../../src/utils/gameState/processes.js';
 
-const { loadGameState, saveGameState } = require('../../src/utils/gameState/common.js');
-
-// Mock common.js imports
-jest.mock('../../src/utils/gameState/common.js', () => {
-    return {
-        loadGameState: jest.fn(),
-        saveGameState: jest.fn(),
-    };
-});
-
-// Mock processes import
-jest.mock('../../src/pages/processes/processes.json', () => {
-    return [
-        {
-            id: 'foo',
-            requireItems: [{ id: '1', count: 5 }],
-            consumeItems: [{ id: '2', count: 3 }],
-            createItems: [{ id: '3', count: 1 }],
-            duration: '10s',
-        },
-    ];
-});
+import { loadGameState, saveGameState } from '../../src/utils/gameState/common.js';
 
 describe('gameState - processes', () => {
     let mockGameState;
