@@ -986,5 +986,33 @@
         "description": "Pre-moistened wipes that kill germs before bandaging.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "140",
+        "name": "nitrile gloves (pair)",
+        "description": "Disposable nitrile gloves to protect hands from chemicals.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "0.50 dUSD"
+    },
+    {
+        "id": "141",
+        "name": "safety goggles",
+        "description": "Clear goggles that shield eyes from splashes.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "5 dUSD"
+    },
+    {
+        "id": "142",
+        "name": "pH down solution (phosphoric acid)",
+        "description": "Dilute acid used to lower nutrient solution pH.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "8 dUSD"
+    },
+    {
+        "id": "143",
+        "name": "pH up solution (potassium carbonate)",
+        "description": "Alkaline solution used to raise nutrient solution pH.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "8 dUSD"
     }
 ]
