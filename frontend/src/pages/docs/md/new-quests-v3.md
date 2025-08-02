@@ -5,15 +5,17 @@ slug: 'new-quests-v3'
 
 # Quests added in v3
 
-These quests exist in the `v3` branch but are not present on `main` yet. Use this list when upgrading quests or proposing follow-up content.
+These quests exist in the `v3` branch but are not yet on `main`. Use this list when upgrading quests or proposing follow-up content.
 
 ### 3dprinting
+
 - 3dprinting/calibration-cube
 - 3dprinting/phone-stand
 - 3dprinting/retraction-test
 - 3dprinting/temperature-tower
 
 ### aquaria
+
 - aquaria/breeding
 - aquaria/floating-plants
 - aquaria/guppy
@@ -25,6 +27,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - aquaria/water-testing
 
 ### astronomy
+
 - astronomy/basic-telescope
 - astronomy/comet-tracking
 - astronomy/constellations
@@ -37,6 +40,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - astronomy/star-trails
 
 ### chemistry
+
 - chemistry/ph-test
 - chemistry/safe-reaction
 - chemistry/stevia-crystals
@@ -44,9 +48,11 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - chemistry/stevia-tasting
 
 ### completionist
+
 - completionist/reminder
 
 ### devops
+
 - devops/auto-updates
 - devops/ci-pipeline
 - devops/daily-backups
@@ -60,6 +66,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - devops/ssd-boot
 
 ### electronics
+
 - electronics/arduino-blink
 - electronics/basic-circuit
 - electronics/data-logger
@@ -68,11 +75,13 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - electronics/thermistor-reading
 
 ### energy
+
 - energy/battery-upgrade
 - energy/dWatt-1e8
 - energy/wind-turbine
 
 ### firstaid
+
 - firstaid/assemble-kit
 - firstaid/learn-cpr
 - firstaid/restock-kit
@@ -80,6 +89,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - firstaid/wound-care
 
 ### hydroponics
+
 - hydroponics/grow-light
 - hydroponics/lettuce
 - hydroponics/nutrient-check
@@ -89,6 +99,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - hydroponics/stevia
 
 ### programming
+
 - programming/graph-temp
 - programming/graph-temp-data
 - programming/hello-sensor
@@ -97,6 +108,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - programming/web-server
 
 ### robotics
+
 - robotics/line-follower
 - robotics/maze-navigation
 - robotics/obstacle-avoidance
@@ -106,17 +118,21 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - robotics/wheel-encoders
 
 ### rocketry
+
 - rocketry/recovery-run
 - rocketry/static-test
 
 ### ubi
+
 - ubi/first-payment
 
 ### welcome
+
 - welcome/connect-github
 - welcome/intro-inventory
 
 ### woodworking
+
 - woodworking/birdhouse
 - woodworking/bookshelf
 - woodworking/finish-sanding

@@ -15,6 +15,7 @@ guidelines live in our [Content Development Guide](/docs/content-development),
 which covers quests, items and processes in detail.
 
 > **TL;DR**
+>
 > 1. Scope changes to a single quest file.
 > 2. Say exactly what output you expect (diff, tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
@@ -24,11 +25,11 @@ which covers quests, items and processes in detail.
 
 ## 1 Quick start (Web vs CLI)
 
-| Use‑case              | Codex Web (ChatGPT sidebar)                   | Codex CLI                                                     |
-| --------------------- | --------------------------------------------- | ------------------------------------------------------------- |
-| Add or update a quest | “Code” button, attach repo                    | `codex "add quest solar/led-basics"`                          |
-| Ask about quest files | “Ask” button                                 | `codex exec "explain frontend/src/pages/quests/json/*.json"` |
-| Run quest tests       | –                                            | `codex exec --full-auto "npm test -- questCanonical questQuality"` |
+| Use‑case              | Codex Web (ChatGPT sidebar) | Codex CLI                                                          |
+| --------------------- | --------------------------- | ------------------------------------------------------------------ |
+| Add or update a quest | “Code” button, attach repo  | `codex "add quest solar/led-basics"`                               |
+| Ask about quest files | “Ask” button                | `codex exec "explain frontend/src/pages/quests/json/*.json"`       |
+| Run quest tests       | –                           | `codex exec --full-auto "npm test -- questCanonical questQuality"` |
 
 See the upstream CLI reference for more flags.
 
@@ -36,12 +37,12 @@ See the upstream CLI reference for more flags.
 
 ## 2 Prompt ingredients
 
-| Ingredient           | Why it matters                                                     |
-| -------------------- | ------------------------------------------------------------------ |
-| **Goal sentence**    | Gives the agent a north star (“Add safety step to `energy/solar`”).|
-| **Files to touch**   | Limits search space → faster & cheaper.                            |
-| **Constraints**      | Coding style, a11y, quest schema rules.                            |
-| **Acceptance check** | e.g. “`npm test -- questCanonical questQuality` passes”.           |
+| Ingredient           | Why it matters                                                      |
+| -------------------- | ------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add safety step to `energy/solar`”). |
+| **Files to touch**   | Limits search space → faster & cheaper.                             |
+| **Constraints**      | Coding style, a11y, quest schema rules.                             |
+| **Acceptance check** | e.g. “`npm test -- questCanonical questQuality` passes”.            |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
