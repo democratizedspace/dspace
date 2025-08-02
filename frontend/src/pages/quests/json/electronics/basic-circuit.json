@@ -1,7 +1,7 @@
 {
     "id": "electronics/basic-circuit",
     "title": "Build a basic LED circuit",
-    "description": "Learn electronics fundamentals by lighting up a simple LED.",
+    "description": "Learn electronics basics by safely wiring an LED on a breadboard.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -19,13 +19,15 @@
         },
         {
             "id": "materials",
-            "text": "You'll need an LED, a 330 ohm resistor, a breadboard, and a battery pack or USB power source. Ready to put it together?",
+            "text": "You'll need a breadboard, two jumper wires, an LED, and a 220 ohm resistor. We'll power it with a battery pack or USB cable. Disconnect power while building. Ready to put it together?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "assemble",
                     "text": "Yep, let's assemble it.",
                     "requiresItems": [
+                        { "id": "91", "count": 1 },
+                        { "id": "92", "count": 2 },
                         { "id": "93", "count": 1 },
                         { "id": "94", "count": 1 }
                     ]
@@ -34,7 +36,7 @@
         },
         {
             "id": "assemble",
-            "text": "Place the LED on the breadboard and connect the resistor in series with the long leg. Hook everything up to power and the LED should glow.",
+            "text": "Place the LED on the breadboard with the long leg on the positive side. Attach the 220 ohm resistor in series, then use jumper wires to connect power and ground. Check polarity and keep power off until the wiring is secure. When everything's set, apply power and the LED should glow.",
             "options": [
                 {
                     "type": "goto",
@@ -45,7 +47,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! You've built your first circuit and lit up an LED.",
+            "text": "Great job! You've built your first circuit and lit up an LED. Always disconnect power before making changes.",
             "options": [
                 {
                     "type": "finish",

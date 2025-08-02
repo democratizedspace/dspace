@@ -1,6 +1,6 @@
 {
     "0": {
-        "requires": ["3dprinter/start"],
+        "requires": ["3dprinting/calibration-cube", "3dprinter/start"],
         "rewards": []
     },
     "1": {
@@ -11,6 +11,10 @@
             "3dprinting/retraction-test",
             "3dprinter/start"
         ],
+        "rewards": []
+    },
+    "3": {
+        "requires": ["3dprinting/temperature-tower"],
         "rewards": []
     },
     "5": {
@@ -24,12 +28,17 @@
             "energy/dWatt-1e5",
             "energy/dWatt-1e6",
             "energy/dWatt-1e7",
+            "energy/dWatt-1e8",
             "energy/solar-1kWh",
             "energy/solar"
         ]
     },
     "6": {
         "requires": ["energy/battery-upgrade", "energy/solar"],
+        "rewards": []
+    },
+    "7": {
+        "requires": ["energy/wind-turbine"],
         "rewards": []
     },
     "8": {
@@ -41,7 +50,7 @@
         "rewards": []
     },
     "12": {
-        "requires": ["3dprinter/start"],
+        "requires": ["3dprinting/calibration-cube", "3dprinter/start"],
         "rewards": ["3dprinting/benchy_10", "3dprinting/benchy_100", "3dprinting/benchy_25"]
     },
     "16": {
@@ -63,6 +72,7 @@
             "energy/dWatt-1e5",
             "energy/dWatt-1e6",
             "energy/dWatt-1e7",
+            "energy/dWatt-1e8",
             "welcome/howtodoquests"
         ],
         "rewards": []
@@ -135,6 +145,10 @@
         "requires": ["hydroponics/basil"],
         "rewards": []
     },
+    "43": {
+        "requires": ["hydroponics/grow-light"],
+        "rewards": []
+    },
     "44": {
         "requires": ["hydroponics/basil"],
         "rewards": []
@@ -160,11 +174,16 @@
         "rewards": []
     },
     "58": {
-        "requires": ["electronics/thermistor-reading", "programming/temp-logger"],
+        "requires": [
+            "electronics/thermistor-reading",
+            "programming/graph-temp",
+            "programming/temp-graph",
+            "programming/temp-logger"
+        ],
         "rewards": []
     },
     "59": {
-        "requires": ["chemistry/ph-test"],
+        "requires": ["chemistry/ph-test", "hydroponics/ph-check", "hydroponics/ph-test"],
         "rewards": []
     },
     "60": {
@@ -189,7 +208,7 @@
         "rewards": []
     },
     "67": {
-        "requires": ["rocketry/parachute"],
+        "requires": ["rocketry/parachute", "rocketry/recovery-run"],
         "rewards": []
     },
     "68": {
@@ -197,7 +216,7 @@
         "rewards": ["rocketry/parachute"]
     },
     "69": {
-        "requires": ["rocketry/parachute"],
+        "requires": ["rocketry/parachute", "rocketry/recovery-run"],
         "rewards": []
     },
     "72": {
@@ -228,6 +247,10 @@
         "requires": ["rocketry/firstlaunch"],
         "rewards": []
     },
+    "84": {
+        "requires": ["rocketry/recovery-run"],
+        "rewards": []
+    },
     "87": {
         "requires": ["completionist/reminder"],
         "rewards": ["completionist/v2"]
@@ -237,15 +260,24 @@
         "rewards": ["hydroponics/bucket_10"]
     },
     "90": {
-        "requires": ["electronics/arduino-blink", "electronics/potentiometer-dimmer"],
+        "requires": [
+            "electronics/arduino-blink",
+            "electronics/potentiometer-dimmer",
+            "electronics/servo-sweep",
+            "programming/graph-temp-data"
+        ],
         "rewards": []
     },
     "91": {
-        "requires": ["electronics/potentiometer-dimmer"],
+        "requires": ["electronics/basic-circuit", "electronics/potentiometer-dimmer"],
         "rewards": []
     },
     "92": {
-        "requires": ["electronics/potentiometer-dimmer"],
+        "requires": [
+            "electronics/basic-circuit",
+            "electronics/potentiometer-dimmer",
+            "electronics/servo-sweep"
+        ],
         "rewards": []
     },
     "93": {
@@ -265,11 +297,20 @@
         "rewards": []
     },
     "95": {
-        "requires": [],
+        "requires": ["electronics/data-logger"],
         "rewards": ["electronics/basic-circuit"]
     },
     "96": {
-        "requires": ["robotics/line-follower", "robotics/servo-control", "robotics/servo-gripper"],
+        "requires": [
+            "electronics/servo-sweep",
+            "robotics/line-follower",
+            "robotics/maze-navigation",
+            "robotics/obstacle-avoidance",
+            "robotics/servo-arm",
+            "robotics/servo-control",
+            "robotics/servo-gripper",
+            "robotics/wheel-encoders"
+        ],
         "rewards": ["electronics/arduino-blink"]
     },
     "97": {
@@ -317,27 +358,35 @@
         "rewards": ["aquaria/guppy"]
     },
     "109": {
-        "requires": ["woodworking/birdhouse", "woodworking/bookshelf", "woodworking/step-stool"],
+        "requires": [
+            "woodworking/birdhouse",
+            "woodworking/bookshelf",
+            "woodworking/step-stool",
+            "woodworking/tool-rack"
+        ],
         "rewards": []
     },
     "110": {
         "requires": [
             "woodworking/birdhouse",
             "woodworking/bookshelf",
+            "woodworking/planter-box",
             "woodworking/step-stool",
             "woodworking/workbench"
         ],
         "rewards": []
     },
     "111": {
-        "requires": ["woodworking/finish-sanding"],
+        "requires": ["woodworking/finish-sanding", "woodworking/tool-rack"],
         "rewards": []
     },
     "112": {
         "requires": [
             "woodworking/birdhouse",
             "woodworking/bookshelf",
+            "woodworking/planter-box",
             "woodworking/step-stool",
+            "woodworking/tool-rack",
             "woodworking/workbench"
         ],
         "rewards": []
@@ -351,7 +400,7 @@
         "rewards": []
     },
     "119": {
-        "requires": ["hydroponics/stevia"],
+        "requires": ["hydroponics/regrow-stevia", "hydroponics/stevia"],
         "rewards": []
     },
     "122": {
@@ -359,7 +408,12 @@
         "rewards": []
     },
     "123": {
-        "requires": ["devops/pi-cluster-hardware", "devops/prepare-first-node"],
+        "requires": [
+            "devops/pi-cluster-hardware",
+            "devops/prepare-first-node",
+            "electronics/data-logger",
+            "programming/web-server"
+        ],
         "rewards": []
     },
     "124": {
@@ -395,29 +449,46 @@
         "rewards": []
     },
     "132": {
-        "requires": ["devops/docker-compose", "devops/k3s-deploy", "devops/ssd-boot"],
+        "requires": [
+            "devops/auto-updates",
+            "devops/ci-pipeline",
+            "devops/docker-compose",
+            "devops/enable-https",
+            "devops/k3s-deploy",
+            "devops/ssd-boot"
+        ],
         "rewards": []
     },
     "133": {
-        "requires": ["devops/daily-backups", "devops/monitoring"],
+        "requires": ["devops/daily-backups", "devops/log-maintenance", "devops/monitoring"],
         "rewards": []
     },
     "134": {
         "requires": [
             "astronomy/basic-telescope",
+            "astronomy/comet-tracking",
             "astronomy/constellations",
+            "astronomy/iss-flyover",
             "astronomy/jupiter-moons",
             "astronomy/lunar-eclipse",
-            "astronomy/meteor-shower"
+            "astronomy/meteor-shower",
+            "astronomy/satellite-pass",
+            "astronomy/star-trails"
         ],
         "rewards": []
     },
     "135": {
-        "requires": ["firstaid/assemble-kit", "firstaid/learn-cpr"],
+        "requires": [
+            "firstaid/assemble-kit",
+            "firstaid/learn-cpr",
+            "firstaid/restock-kit",
+            "firstaid/splint-limb",
+            "firstaid/wound-care"
+        ],
         "rewards": []
     },
     "136": {
-        "requires": ["chemistry/stevia-crystals"],
+        "requires": ["chemistry/stevia-crystals", "chemistry/stevia-tasting"],
         "rewards": []
     }
 }
