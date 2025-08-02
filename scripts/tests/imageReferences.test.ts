@@ -43,9 +43,10 @@ describe('Image references', () => {
             ...collectNpcImages(),
         ];
         const missing = listMissingImages(images);
-        if (missing.length) {
-            console.warn('Missing images:', missing);
+        const uniqueMissing = [...new Set(missing)];
+        if (uniqueMissing.length) {
+            console.warn('Missing images:', uniqueMissing);
         }
-        expect(missing.length).toBe(27);
+        expect(uniqueMissing.length).toBe(13);
     });
 });
