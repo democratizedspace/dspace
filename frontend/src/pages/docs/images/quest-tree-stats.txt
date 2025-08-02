@@ -1,4 +1,4 @@
-energy: 13 quests, 810 lines
+energy: 14 quests, 860 lines
 devops: 11 quests, 463 lines
 aquaria: 10 quests, 408 lines
 astronomy: 10 quests, 378 lines
