@@ -11,11 +11,11 @@ dChat is a compact, spherical smart assistant powered by large language models. 
 
 ### Sample Dialogue
 
--   "Greetings, adventurer! I'm dChat, an advanced AI sidekick crafted by the grand codemancers of this realm."
--   "Well, a friendly delivery robot dropped me off after you ordered me online."
--   "No worries! I'm low-maintenance and won't hog your power supply."
--   "Your quest, dear player, is to master the ancient art of ... questing."
--   "Aha! A seasoned adventurer, I see. Just say the word, and we'll call it a wrap. You'll still need this, though!"
+- "Greetings, adventurer! I'm dChat, an advanced AI sidekick crafted by the grand codemancers of this realm."
+- "Well, a friendly delivery robot dropped me off after you ordered me online."
+- "No worries! I'm low-maintenance and won't hog your power supply."
+- "Your quest, dear player, is to master the ancient art of ... questing."
+- "Aha! A seasoned adventurer, I see. Just say the word, and we'll call it a wrap. You'll still need this, though!"
 
 ## Sydney
 
@@ -25,11 +25,11 @@ Sydney, a tall and commanding woman, exudes an air of no-nonsense professionalis
 
 ### Sample Dialogue
 
--   "Hello, friend! I'm Sydney, a 3D printing expert with the metaguild."
--   "Fantastic! A 3D printer is an invaluable tool!"
--   "First things first, I need you to accept the 3D printer."
--   "Hey there, it's Sydney again! Ready for a quick project? Let's make a simple phone stand."
--   "Great job! This stand will keep your phone propped up while you work on more projects."
+- "Hello, friend! I'm Sydney, a 3D printing expert with the metaguild."
+- "Fantastic! A 3D printer is an invaluable tool!"
+- "First things first, I need you to accept the 3D printer."
+- "Hey there, it's Sydney again! Ready for a quick project? Let's make a simple phone stand."
+- "Great job! This stand will keep your phone propped up while you work on more projects."
 
 ## Nova
 
@@ -39,11 +39,11 @@ Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs an
 
 ### Sample Dialogue
 
--   "Hey friend! I'm Nova! I'm sure you've met some of my colleagues!"
--   "Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect conditions."
--   "Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no more than 1500 grams."
--   "Well first you've gotta print the rocket!"
--   "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you."
+- "Hey friend! I'm Nova! I'm sure you've met some of my colleagues!"
+- "Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect conditions."
+- "Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no more than 1500 grams."
+- "Well first you've gotta print the rocket!"
+- "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you."
 
 ## Hydro
 
@@ -53,12 +53,12 @@ Hydro, a relaxed and affable team member, has a gift for hydroponics and sustain
 
 ### Sample Dialogue
 
--   "Hey there! I'm Hydro, your local hydroponics expert!"
--   "Oh I could talk for hours but I'll give you the short version: hydroponics is a method of growing plants using mineral nutrient solutions."
--   "Excellent! First things first, I need you to accept this hydroponics tub."
--   "Now that you've got your hydroponics tub, you'll need some dechlorinated water."
--   "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems."
--   "Let's try stevia next. Its leaves are unbelievably sweet!"
+- "Hey there! I'm Hydro, your local hydroponics expert!"
+- "Oh I could talk for hours but I'll give you the short version: hydroponics is a method of growing plants using mineral nutrient solutions."
+- "Excellent! First things first, I need you to accept this hydroponics tub."
+- "Now that you've got your hydroponics tub, you'll need some dechlorinated water."
+- "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems."
+- "Let's try stevia next. Its leaves are unbelievably sweet!"
 
 ## Orion
 
@@ -68,12 +68,12 @@ Orion is an electrical engineer whose enthusiasm for robotics and microprocessor
 
 ### Sample Dialogue
 
--   "Hey there! I'm Orion. Want to see how easy electronics can be? Let's build a simple LED circuit together."
--   "You'll need an LED, a 330 ohm resistor, a breadboard, and a battery pack or USB power source."
--   "Place the LED on the breadboard and connect the resistor in series with the long leg."
--   "Hey there! Orion here. Ready to do something a bit more exciting? Let's make that LED blink with a microcontroller."
--   "Open the Arduino IDE, load the Blink example, select the correct port, and hit upload."
--   "Need a server check? I'm happy to spin up a fresh Pi and deploy the stack."
+- "Hey there! I'm Orion. Let's wire a safe LED circuit and see how simple electronics can be."
+- "Grab a Breadboard, two Jumper Wires, an LED, and a 220 Ω Resistor. Use a USB cable or battery pack for power and keep it unplugged while you assemble."
+- "Insert the LED with the long leg on the positive rail, put the resistor to the ground rail, and double-check everything before powering up."
+- "Hey there! Orion here. Ready to do something a bit more exciting? Let's make that LED blink with a microcontroller."
+- "Open the Arduino IDE, load the Blink example, select the correct port, and hit upload."
+- "Need a server check? I'm happy to spin up a fresh Pi and deploy the stack."
 
 ## Vega
 
@@ -83,11 +83,11 @@ Vega is an expert in aquariums and terrariums, with years of experience in desig
 
 ### Sample Dialogue
 
--   "Hi there! I'm Vega. Ready to try the Walstad method? It's a simple way to grow plants with minimal equipment."
--   "You'll want a 40 liter tank, some organic soil capped with gravel, and a bunch of easy plants."
--   "Your Walstad tank should be cycled now. A small colony of dwarf shrimp will keep algae in check."
--   "Those shrimp are thriving! Ready for a couple guppies? They prefer 24-28°C water."
--   "Guppies multiply quickly. Dense plants like hornwort give the fry shelter until they're bigger."
+- "Hi there! I'm Vega. Ready to try the Walstad method? It's a simple way to grow plants with minimal equipment."
+- "You'll want a 40 liter tank, some organic soil capped with gravel, and a bunch of easy plants."
+- "Your Walstad tank should be cycled now. A small colony of dwarf shrimp will keep algae in check."
+- "Those shrimp are thriving! Ready for a couple guppies? They prefer 24-28°C water."
+- "Guppies multiply quickly. Dense plants like hornwort give the fry shelter until they're bigger."
 
 ## Phoenix
 
@@ -97,13 +97,13 @@ Phoenix is a professional chemist specializing in sustainable rocket fuel develo
 
 ### Sample Dialogue
 
--   "You've made some impressive strides in 3D printing. Your next challenge is to print 10 Benchies."
--   "Well done! These Benchies look fantastic. Keep honing your 3D printing skills."
--   "You've shown great progress with your 3D printing! Your next goal is to print 25 Benchies."
--   "Excellent job! Your fleet of Benchies is growing. Keep up the great work."
--   "You've truly mastered the art of 3D printing Benchies. Now, let's take things to the next level. I want to see a fleet of 100 Benchies."
--   "Dry those stevia leaves gently and we'll extract their sweetness."
--   "Add a splash of ethanol and you'll get pure stevia crystals as it dries."
+- "You've made some impressive strides in 3D printing. Your next challenge is to print 10 Benchies."
+- "Well done! These Benchies look fantastic. Keep honing your 3D printing skills."
+- "You've shown great progress with your 3D printing! Your next goal is to print 25 Benchies."
+- "Excellent job! Your fleet of Benchies is growing. Keep up the great work."
+- "You've truly mastered the art of 3D printing Benchies. Now, let's take things to the next level. I want to see a fleet of 100 Benchies."
+- "Dry those stevia leaves gently and we'll extract their sweetness."
+- "Add a splash of ethanol and you'll get pure stevia crystals as it dries."
 
 ## Atlas
 
@@ -113,11 +113,11 @@ Atlas is a humanoid robot assistant designed to help with physical tasks that re
 
 ### Sample Dialogue
 
--   "Hello! I'm Atlas, your robotic assistant. Let me handle the heavy lifting."
--   "On three ... one, two, three! Easy does it."
--   "I'll keep the load steady while you guide it into place."
--   "Great work! The tank is secure on the stand."
--   "Anytime you need more muscle, just give me a shout."
+- "Hello! I'm Atlas, your robotic assistant. Let me handle the heavy lifting."
+- "On three ... one, two, three! Easy does it."
+- "I'll keep the load steady while you guide it into place."
+- "Great work! The tank is secure on the stand."
+- "Anytime you need more muscle, just give me a shout."
 
 ## Cedar
 
@@ -127,11 +127,11 @@ Cedar is a seasoned woodworker who loves guiding newcomers. Years of building fu
 
 ### Sample Dialogue
 
--   "Hey there! I'm Cedar. Let's make sure you've got a solid bench before we start cutting."
--   "Measure twice, cut once! That's a rule you'll hear often in my shop."
--   "Keep your fingers clear of the blade and let the saw do the work."
--   "Nice job on that birdhouse! Sand the edges so our feathered friends stay safe."
--   "Ready for a bigger project? A sturdy step stool will test your skills."
+- "Hey there! I'm Cedar. Let's make sure you've got a solid bench before we start cutting."
+- "Measure twice, cut once! That's a rule you'll hear often in my shop."
+- "Keep your fingers clear of the blade and let the saw do the work."
+- "Nice job on that birdhouse! Sand the edges so our feathered friends stay safe."
+- "Ready for a bigger project? A sturdy step stool will test your skills."
 
 <style>
     img {

@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there! I'm Orion. Want to see how easy electronics can be? Let's build a simple LED circuit together.",
+            "text": "Hey there! I'm Orion. Let's wire a safe LED circuit and see how simple electronics can be.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "You'll need a breadboard, two jumper wires, an LED, and a 220 ohm resistor. We'll power it with a battery pack or USB cable. Disconnect power while building. Ready to put it together?",
+            "text": "Grab a Breadboard (#91), two Jumper Wires (#92), an LED (#93), and a 220 Ω Resistor (#94). Use a USB cable (#95) or battery pack for power, and keep power disconnected while you assemble. Ready to put it together?",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "assemble",
-            "text": "Place the LED on the breadboard with the long leg on the positive side. Attach the 220 ohm resistor in series, then use jumper wires to connect power and ground. Check polarity and keep power off until the wiring is secure. When everything's set, apply power and the LED should glow.",
+            "text": "Insert the LED so its long (anode) leg reaches the positive rail. Place the 220 Ω resistor from the short leg to the ground rail, then use jumper wires to link the rails to power and ground. Verify the resistor value and LED orientation before applying power, and avoid touching bare metal once the circuit is live. When everything's set, plug in the power and the LED should glow.",
             "options": [
                 {
                     "type": "goto",
@@ -47,7 +47,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! You've built your first circuit and lit up an LED. Always disconnect power before making changes.",
+            "text": "Great job! You've built a safe circuit and lit up an LED. Always disconnect power before making changes and store the components for later projects.",
             "options": [
                 {
                     "type": "finish",
