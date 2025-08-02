@@ -118,6 +118,7 @@ npm run benchmark:db
 
 GitHub Actions automatically run `npm run test:pr` on every pull request and push to `v3`.
 If the `CODECOV_TOKEN` secret is configured, coverage reports upload to Codecov and update the badge at the top of this README.
+Coverage uploads use the official `codecov/codecov-action` and fail the build if the upload step errors.
 You'll find the CI results under the **Checks** tab of your pull request.
 
 ## Code Quality
