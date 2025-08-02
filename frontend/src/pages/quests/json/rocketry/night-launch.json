@@ -1,0 +1,70 @@
+{
+    "id": "rocketry/night-launch",
+    "title": "Night Launch",
+    "description": "Take your rocket experience to the stars with a night launch. Gather your gear and light up the sky.",
+    "image": "/assets/launch_controller.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready for some after-hours rocketry? The night sky is the perfect backdrop for a glowing plume!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Sounds awesome! What do I need?"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "We'll need the launchpad, controller, igniter, and your rocket with a parachute. Make sure everything is prepped and visible in the dark.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "launch",
+                    "requiresItems": [
+                        { "id": "83", "count": 1 },
+                        { "id": "38", "count": 1 },
+                        { "id": "37", "count": 1 },
+                        { "id": "67", "count": 1 }
+                    ],
+                    "text": "Gear's ready to go."
+                }
+            ]
+        },
+        {
+            "id": "launch",
+            "text": "Set up the pad, watch your surroundings, and let's send it!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "launch-rocket-parachute",
+                    "text": "Ignite into the night!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        { "id": "67", "count": 1 },
+                        { "id": "69", "count": 1 }
+                    ],
+                    "text": "Rocket recovered!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "What a sight! A bright streak across the stars and a safe touchdown. Nicely done!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "That was stellar!"
+                }
+            ]
+        }
+    ],
+    "rewards": [{ "id": "68", "count": 1 }],
+    "requiresQuests": ["rocketry/recovery-run"]
+}
