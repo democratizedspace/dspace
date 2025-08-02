@@ -12,6 +12,11 @@ This page provides a minimal quest JSON structure that you can use as a starting
     "id": "astronomy/constellations",
     "title": "Map the Constellations",
     "description": "Identify key star patterns to aid celestial navigation.",
+    "hardening": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "\uD83D\uDEE0\uFE0F"
+    },
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
@@ -50,4 +55,7 @@ This page provides a minimal quest JSON structure that you can use as a starting
 ```
 
 Use this template as a baseline and expand it with additional dialogue nodes, processes, item requirements, and rewards. For more in-depth guidance, see the [Quest Development Guidelines](/docs/quest-guidelines).
+The optional `hardening` block tracks how many upgrade passes a quest has survived.
+Increment `passes`, update `score` and switch the status `emoji` (🛠️ → 🌀 → ✅ → 💯)
+each time you run the quest hardening loop described in the [quest prompt guide](/docs/prompts-quests).
 An automated Playwright example (`constellations-quest.spec.ts`) walks through creating this quest step by step if you prefer a hands-on reference.

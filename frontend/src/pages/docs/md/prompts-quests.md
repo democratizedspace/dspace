@@ -128,6 +128,24 @@ OUTPUT:
 A pull request with the refined quest and passing tests.
 ```
 
+## Quest hardening feedback loop
+
+To measure how many refinement passes a quest has endured, add a `hardening`
+block to each quest's JSON. Every run of the upgrade prompt should increment
+`passes`, update the evaluator `score` and swap the status `emoji` according to
+these thresholds:
+
+| Passes | Score ≥ | Emoji | Meaning |
+| -----: | ------: | :---: | ------- |
+| 0      | 0       | 🛠️    | Draft |
+| ≥1     | 60      | 🌀    | First polishing pass |
+| ≥2     | 75      | ✅    | Meets internal quality bar |
+| ≥3     | 90      | 💯    | Hardened – locked until spec change |
+
+This mirrors the 100‑emoji loop used in the [September 1, 2025 changelog](/docs/changelog/20250901)
+and described in the [Codex implementation prompt](/docs/prompts-codex#implementation-prompt).
+
+
 ---
 
 ## Additional tips for AI assistance
