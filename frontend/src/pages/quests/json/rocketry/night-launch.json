@@ -65,8 +65,6 @@
             ]
         }
     ],
-    "rewards": [
-        { "id": "68", "count": 1 }
-    ],
+    "rewards": [{ "id": "68", "count": 1 }],
     "requiresQuests": ["rocketry/recovery-run"]
 }
