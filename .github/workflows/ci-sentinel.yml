@@ -11,5 +11,7 @@ jobs:
       - run: |
           test -f .github/workflows/tests.yml
           test -f .github/workflows/ci.yml
-          grep -q 'codecov/codecov-action@' .github/workflows/ci.yml
+          grep -q 'npm run coverage' .github/workflows/tests.yml
+          grep -q 'scripts/checkPatchCoverage.cjs' .github/workflows/tests.yml
+          grep -q 'codecov/codecov-action@' .github/workflows/tests.yml
 
