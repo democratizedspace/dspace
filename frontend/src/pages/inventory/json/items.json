@@ -965,5 +965,26 @@
         "description": "Highly concentrated sweetener purified from stevia extract.",
         "image": "/assets/dCarbon.jpg",
         "price": "12 dUSD"
+    },
+    {
+        "id": "137",
+        "name": "adhesive bandages",
+        "description": "Sterile strips to cover small cuts and scrapes.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "138",
+        "name": "sterile gauze pads",
+        "description": "Breathable squares for dressing medium wounds.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "139",
+        "name": "antiseptic wipes",
+        "description": "Pre-moistened wipes that kill germs before bandaging.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     }
 ]

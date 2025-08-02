@@ -8,24 +8,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "After a few busy projects some of your first aid supplies are running low. Let's get that kit restocked so you're prepared.",
+            "text": "Recent scrapes have thinned out your first aid kit. Let's top it up so you're ready for the next emergency.",
             "options": [{ "type": "goto", "goto": "gather", "text": "What should I replace?" }]
         },
         {
             "id": "gather",
-            "text": "Pick up fresh bandages, gauze and antiseptic wipes. Swap out anything that's expired so the kit stays reliable.",
+            "text": "Wash your hands, remove expired items, and add adhesive bandages, sterile gauze pads and antiseptic wipes. Keep everything sealed and dry.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Everything's replaced",
-                    "requiresItems": [{ "id": "135", "count": 1 }]
+                    "requiresItems": [
+                        { "id": "137", "count": 1 },
+                        { "id": "138", "count": 1 },
+                        { "id": "139", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Perfect! Keeping your kit stocked means small injuries won't slow you down.",
+            "text": "Perfect! Keeping your kit stocked and disposing of expired items safely means small injuries won't slow you down.",
             "options": [{ "type": "finish", "text": "Safety first!" }]
         }
     ],
