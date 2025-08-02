@@ -9,9 +9,7 @@
         {
             "id": "start",
             "text": "Got a phone running low? Let's use a portable panel and battery to juice it up anywhere.",
-            "options": [
-                { "type": "goto", "goto": "setup", "text": "Let's give it a try." }
-            ]
+            "options": [{ "type": "goto", "goto": "setup", "text": "Let's give it a try." }]
         },
         {
             "id": "setup",
@@ -39,9 +37,7 @@
         {
             "id": "finish",
             "text": "Nice work! With this setup you can stay powered even off-grid.",
-            "options": [
-                { "type": "finish", "text": "Handy!" }
-            ]
+            "options": [{ "type": "finish", "text": "Handy!" }]
         }
     ],
     "rewards": [],
