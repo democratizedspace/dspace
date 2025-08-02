@@ -1,19 +1,19 @@
 {
     "id": "firstaid/learn-cpr",
     "title": "Practice Basic CPR",
-    "description": "Use a dummy to rehearse chest compressions so you can respond safely in an emergency. Always call emergency services first.",
+    "description": "Use a training manikin and CPR mask to rehearse chest compressions so you can respond safely in an emergency. Always ensure the scene is safe and call emergency services before starting.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "With your first aid kit ready, review CPR. Ensure the area is safe and call emergency services before you begin.",
+            "text": "With your first aid kit ready, confirm the area is safe, call emergency services, and check the dummy's airway before you begin.",
             "options": [{ "type": "goto", "goto": "steps", "text": "I'm ready." }]
         },
         {
             "id": "steps",
-            "text": "Place the heel of your hand in the center of the chest. Push down 2 inches at 100-120 per minute and allow full recoil. Use a barrier mask from your kit for rescue breaths if trained.",
+            "text": "Place the heel of one hand in the center of the chest and interlock your fingers. Push down about 2 inches at 100-120 compressions per minute, allowing full recoil each time. Use the CPR mask from your kit for rescue breaths if you're trained.",
             "options": [
                 { "type": "process", "process": "practice-cpr", "text": "Practicing now." },
                 {
@@ -26,7 +26,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent work! Regular practice with a dummy and mask could save a life one day.",
+            "text": "Great job! Regular practice with a manikin and mask helps you respond calmly and safely. Remember, real emergencies should be handled by certified professionals whenever possible.",
             "options": [{ "type": "finish", "text": "I'll keep practicing." }]
         }
     ],
