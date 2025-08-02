@@ -1,19 +1,19 @@
 {
     "id": "firstaid/learn-cpr",
     "title": "Practice Basic CPR",
-    "description": "Use a dummy to rehearse chest compressions in case of emergencies.",
+    "description": "Use a dummy to rehearse chest compressions so you can respond safely in an emergency. Always call emergency services first.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Now that you have a kit, let's cover CPR so you're ready for serious situations.",
+            "text": "With your first aid kit ready, review CPR. Ensure the area is safe and call emergency services before you begin.",
             "options": [{ "type": "goto", "goto": "steps", "text": "I'm ready." }]
         },
         {
             "id": "steps",
-            "text": "Place the heel of your hand in the center of the chest and press hard and fast about 100 times per minute until help arrives.",
+            "text": "Place the heel of your hand in the center of the chest. Push down 2 inches at 100-120 per minute and allow full recoil. Use a barrier mask from your kit for rescue breaths if trained.",
             "options": [
                 { "type": "process", "process": "practice-cpr", "text": "Practicing now." },
                 {
@@ -26,7 +26,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent work! Regular practice could save a life one day.",
+            "text": "Excellent work! Regular practice with a dummy and mask could save a life one day.",
             "options": [{ "type": "finish", "text": "I'll keep practicing." }]
         }
     ],
