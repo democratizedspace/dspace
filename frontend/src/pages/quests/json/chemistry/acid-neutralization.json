@@ -1,0 +1,39 @@
+{
+    "id": "chemistry/acid-neutralization",
+    "title": "Neutralize an Acid Spill",
+    "description": "Use basic chemistry to make a workspace safe again.",
+    "image": "/assets/quests/testprint.png",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Oops, a bit of acid dripped on the bench. Let's neutralize it before it causes trouble.",
+            "options": [{ "type": "goto", "goto": "neutralize", "text": "I'll handle it." }]
+        },
+        {
+            "id": "neutralize",
+            "text": "Sprinkle baking soda until fizzing stops, then check the area with a pH strip.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "neutralize-acid",
+                    "text": "Sprinkling baking soda."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "The spill is neutralized.",
+                    "requiresItems": [{ "id": "59", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! A safe lab is a productive lab.",
+            "options": [{ "type": "finish", "text": "All cleaned up." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["chemistry/ph-test"]
+}
