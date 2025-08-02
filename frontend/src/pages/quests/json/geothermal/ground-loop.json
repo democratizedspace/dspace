@@ -1,0 +1,61 @@
+{
+    "id": "geothermal/ground-loop",
+    "title": "Survey for Geothermal Heat",
+    "description": "Measure the ground temperature to see if a heat pump will work.",
+    "image": "/assets/quests/charge.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey explorer! Want to tap the earth's warmth for energy? Let's start by surveying the site.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Absolutely, show me how."
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "You'll need a thermometer to check the ground temperature about a meter down.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "58", "count": 1 }],
+                    "text": "Thanks for the thermometer!"
+                },
+                {
+                    "type": "goto",
+                    "requiresItems": [{ "id": "58", "count": 1 }],
+                    "goto": "measure",
+                    "text": "I've got the tool ready."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Dig a small hole and measure the temperature. Consistent warmth means good geothermal potential.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "The ground is a steady 12°C."
+                }
+            ]
+        },
+        {
+            "id": "fin",
+            "text": "Great! Your site is ready for a ground loop. We'll use this heat in the next quest.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait to build the system."
+                }
+            ]
+        }
+    ],
+    "rewards": [{ "id": "49", "count": 1 }],
+    "requiresQuests": ["energy/solar"]
+}
