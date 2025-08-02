@@ -1191,6 +1191,19 @@
         "duration": "2m"
     },
     {
+        "id": "clean-minor-cut",
+        "title": "Clean and dress a minor cut",
+        "requireItems": [{ "id": "135", "count": 1 }],
+        "consumeItems": [
+            { "id": "140", "count": 1 },
+            { "id": "139", "count": 1 },
+            { "id": "137", "count": 1 },
+            { "id": "144", "count": 1 }
+        ],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
         "id": "practice-cpr",
         "title": "Practice CPR on a dummy",
         "requireItems": [{ "id": "135", "count": 1 }],
