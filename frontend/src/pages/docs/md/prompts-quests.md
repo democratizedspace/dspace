@@ -115,7 +115,8 @@ Focus on quests recently added on the `v3` branch — [see the list](/docs/new-q
 to keep quality high as the codebase grows. This prompt uses the quest
 quality tests to ensure that every technological step is represented in
 the inventory (`items.json`) and process (`processes.json`) registries and
-grounded in reality with components that can be replicated in real life.
+grounded in reality with components that can be replicated in real life,
+while the hardening loop tracks refinement passes over time.
 
 ```text
 SYSTEM:
@@ -129,46 +130,28 @@ USER:
    `frontend/src/pages/inventory/json/items.json` or
    `frontend/src/pages/processes/processes.json`. Add missing items or
    processes so quests stay grounded in reality and are reproducible IRL.
-4. Run `npm test -- questCanonical questQuality itemQuality processQuality` and
+4. Update the quest's `hardening` block, incrementing `passes`, refreshing the
+   evaluator `score`, swapping the status `emoji` and appending a history entry
+   with the Codex task ID, date and score. Choose the emoji based on:
+   - 0 passes → score 0 → 🛠️ Draft
+   - ≥1 pass & score ≥60 → 🌀 First polishing pass
+   - ≥2 passes & score ≥75 → ✅ Meets internal quality bar
+   - ≥3 passes & score ≥90 → 💯 Hardened – locked until spec change
+   Example:
+   "hardening": {
+     "passes": 1,
+     "score": 60,
+     "emoji": "🌀",
+     "history": [
+       { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
+     ]
+   }
+5. Run `npm test -- questCanonical questQuality itemQuality processQuality` and
    update docs if needed.
 
 OUTPUT:
-A pull request with the refined quest and passing tests.
+A pull request with the refined quest, updated hardening block and passing tests.
 ```
-
-## Quest hardening feedback loop
-
-To measure how many refinement passes a quest has endured, add a `hardening`
-block to each quest's JSON. Every run of the upgrade prompt should increment
-`passes`, update the evaluator `score`, swap the status `emoji` and append an
-entry to `hardening.history` noting the Codex task ID, date and score. Use these
-thresholds when choosing the emoji:
-
-| Passes | Score ≥ | Emoji | Meaning |
-| -----: | ------: | :---: | ------- |
-| 0      | 0       | 🛠️    | Draft |
-| ≥1     | 60      | 🌀    | First polishing pass |
-| ≥2     | 75      | ✅    | Meets internal quality bar |
-| ≥3     | 90      | 💯    | Hardened – locked until spec change |
-
-This mirrors the 100‑emoji loop used in the [September 1, 2025 changelog](/docs/changelog/20250901)
-and described in the [Codex implementation prompt](/docs/prompts-codex#implementation-prompt).
-
-Example `hardening` block with history entries:
-
-```json
-"hardening": {
-  "passes": 1,
-  "score": 60,
-  "emoji": "🌀",
-  "history": [
-    { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
-  ]
-}
-```
-
-
----
 
 ## Additional tips for AI assistance
 
