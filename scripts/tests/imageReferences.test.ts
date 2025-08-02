@@ -1,7 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const glob = require('glob');
-const { listMissingImages } = require('../utils/fs-checks');
+import { describe, expect, test } from 'vitest';
+import fs from 'fs';
+import path from 'path';
+import glob from 'glob';
+import { listMissingImages } from '../utils/fs-checks';
 
 const questsDir = path.join(__dirname, '../../frontend/src/pages/quests/json');
 const itemsFile = path.join(__dirname, '../../frontend/src/pages/inventory/json/items.json');
@@ -11,7 +12,7 @@ function collectQuestImages() {
     const files = glob.sync(path.join(questsDir, '**/*.json'));
     const imgs = [];
     files.forEach((file) => {
-        const data = JSON.parse(fs.readFileSync(file));
+        const data = JSON.parse(fs.readFileSync(file, 'utf8'));
         if (data.image) imgs.push(data.image);
         if (data.npc) imgs.push(data.npc);
     });
@@ -19,7 +20,7 @@ function collectQuestImages() {
 }
 
 function collectItemImages() {
-    const items = JSON.parse(fs.readFileSync(itemsFile));
+    const items = JSON.parse(fs.readFileSync(itemsFile, 'utf8'));
     return items.map((i) => i.image).filter(Boolean);
 }
 

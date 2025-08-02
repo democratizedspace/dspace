@@ -2,12 +2,10 @@
  * @jest-environment jsdom
  */
 
-import { createQuest, getQuest, ENTITY_TYPES } from '../src/utils/customcontent.js';
-import * as indexedDb from '../src/utils/indexeddb.js';
+import { vi, describe, test, expect, beforeEach } from 'vitest';
 
-// Mock the indexeddb module
-jest.mock('../src/utils/indexeddb.js', () => ({
-    getStoreForEntityType: jest.fn((entityType) => {
+vi.mock('../src/utils/indexeddb.js', () => ({
+    getStoreForEntityType: vi.fn((entityType) => {
         switch (entityType) {
             case 'quest':
                 return 'quests';
@@ -19,7 +17,7 @@ jest.mock('../src/utils/indexeddb.js', () => ({
                 throw new Error(`Unknown entity type: ${entityType}`);
         }
     }),
-    addEntity: jest.fn((entity) => {
+    addEntity: vi.fn((entity) => {
         // Return the input entity's id or generate a new one
         const entityWithDefaults = {
             ...entity,
@@ -27,7 +25,7 @@ jest.mock('../src/utils/indexeddb.js', () => ({
         };
         return Promise.resolve(entityWithDefaults.id);
     }),
-    getEntity: jest.fn(() =>
+    getEntity: vi.fn(() =>
         Promise.resolve({
             id: 'mocked-id',
             title: 'Mocked Quest',
@@ -37,13 +35,16 @@ jest.mock('../src/utils/indexeddb.js', () => ({
             custom: true,
         })
     ),
-    updateEntity: jest.fn(),
-    deleteEntity: jest.fn(),
+    updateEntity: vi.fn(),
+    deleteEntity: vi.fn(),
 }));
+
+import { createQuest, getQuest, ENTITY_TYPES } from '../src/utils/customcontent.js';
+import * as indexedDb from '../src/utils/indexeddb.js';
 
 describe('Quest Image Tests', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     test('should create and retrieve quest with image data URL', async () => {

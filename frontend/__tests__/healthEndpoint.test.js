@@ -1,7 +1,7 @@
 /** @jest-environment node */
 import { GET as healthGET, prerender } from '../src/pages/health.ts';
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'vitest';
 
 describe('health endpoint', () => {
     it('returns status ok', async () => {

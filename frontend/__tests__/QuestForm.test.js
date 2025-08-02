@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 // Import testing utilities
-import { beforeEach, afterEach, describe, it, expect } from '@jest/globals';
+import { beforeEach, afterEach, describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom';
-import { jest } from '@jest/globals';
+import { jest } from 'vitest';
 
 // Mock the db module
 const mockDb = {

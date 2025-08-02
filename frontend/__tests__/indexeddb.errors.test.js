@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import 'fake-indexeddb/auto';
-import { jest } from '@jest/globals';
+import { vi } from 'vitest';
 
 // We import inside each test after resetting modules to ensure a fresh dbInstance
 
@@ -10,18 +10,18 @@ describe('IndexedDB error handling', () => {
     const originalOpen = global.indexedDB.open;
 
     beforeEach(() => {
-        jest.resetModules();
+        vi.resetModules();
     });
 
     afterEach(() => {
         global.indexedDB.open = originalOpen;
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     test('addEntity rejects when opening DB fails', async () => {
         const error = new Error('open fail');
         const request = { onsuccess: null, onerror: null, onupgradeneeded: null };
-        global.indexedDB.open = jest.fn(() => request);
+        global.indexedDB.open = vi.fn(() => request);
         const { addEntity } = await import('../src/utils/indexeddb.js');
         const promise = addEntity({ name: 'fail' });
         request.onerror({ target: { error } });
@@ -31,10 +31,10 @@ describe('IndexedDB error handling', () => {
     test('getEntity rejects on get error', async () => {
         const openReq = { onsuccess: null, onerror: null, onupgradeneeded: null };
         const getReq = {};
-        const store = { get: jest.fn(() => getReq) };
-        const transaction = { objectStore: jest.fn(() => store) };
-        const db = { transaction: jest.fn(() => transaction) };
-        global.indexedDB.open = jest.fn(() => openReq);
+        const store = { get: vi.fn(() => getReq) };
+        const transaction = { objectStore: vi.fn(() => store) };
+        const db = { transaction: vi.fn(() => transaction) };
+        global.indexedDB.open = vi.fn(() => openReq);
         const { getEntity } = await import('../src/utils/indexeddb.js');
         const promise = getEntity(1);
         openReq.onsuccess({ target: { result: db } });
@@ -53,10 +53,10 @@ describe('IndexedDB error handling', () => {
     test('deleteEntity rejects on delete error', async () => {
         const openReq = { onsuccess: null, onerror: null, onupgradeneeded: null };
         const delReq = {};
-        const store = { delete: jest.fn(() => delReq) };
-        const transaction = { objectStore: jest.fn(() => store) };
-        const db = { transaction: jest.fn(() => transaction) };
-        global.indexedDB.open = jest.fn(() => openReq);
+        const store = { delete: vi.fn(() => delReq) };
+        const transaction = { objectStore: vi.fn(() => store) };
+        const db = { transaction: vi.fn(() => transaction) };
+        global.indexedDB.open = vi.fn(() => openReq);
         const { deleteEntity } = await import('../src/utils/indexeddb.js');
         const promise = deleteEntity(1);
         openReq.onsuccess({ target: { result: db } });
@@ -72,7 +72,7 @@ describe('IndexedDB error handling', () => {
         const error = new Error('fail');
         async function expectFailure(fn) {
             const req = { onupgradeneeded: null, onsuccess: null, onerror: null };
-            global.indexedDB.open = jest.fn(() => req);
+            global.indexedDB.open = vi.fn(() => req);
             const promise = fn();
             await Promise.resolve();
             await Promise.resolve();

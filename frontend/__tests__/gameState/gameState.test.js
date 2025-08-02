@@ -1,4 +1,19 @@
-const {
+import { vi } from 'vitest';
+
+vi.mock('../../src/utils/gameState/common.js', () => {
+    return {
+        loadGameState: vi.fn(),
+        saveGameState: vi.fn(),
+    };
+});
+
+vi.mock('../../src/utils/gameState/inventory.js', () => {
+    return {
+        addItems: vi.fn(),
+    };
+});
+
+import {
     finishQuest,
     questFinished,
     canStartQuest,
@@ -11,23 +26,10 @@ const {
     importV1V2,
     importV2V3,
     VERSIONS,
-} = require('../../src/utils/gameState.js');
+} from '../../src/utils/gameState.js';
 
-const { loadGameState, saveGameState } = require('../../src/utils/gameState/common.js');
-const { addItems } = require('../../src/utils/gameState/inventory.js');
-
-jest.mock('../../src/utils/gameState/common.js', () => {
-    return {
-        loadGameState: jest.fn(),
-        saveGameState: jest.fn(),
-    };
-});
-
-jest.mock('../../src/utils/gameState/inventory.js', () => {
-    return {
-        addItems: jest.fn(),
-    };
-});
+import { loadGameState, saveGameState } from '../../src/utils/gameState/common.js';
+import { addItems } from '../../src/utils/gameState/inventory.js';
 
 describe('gameState top-level helpers', () => {
     let mockGameState;
@@ -95,7 +97,7 @@ describe('gameState top-level helpers', () => {
     });
 
     test('getItemsGranted handles missing quest gracefully', () => {
-        const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+        const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
         const result = getItemsGranted('missing', 'step', 0);
         expect(result).toBe(false);
         expect(errorSpy).toHaveBeenCalled();

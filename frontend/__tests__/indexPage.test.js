@@ -1,7 +1,7 @@
 /** @jest-environment node */
 import fs from 'fs';
 import path from 'path';
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'vitest';
 
 const indexFile = path.join(__dirname, '../src/pages/index.astro');
 
