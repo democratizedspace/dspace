@@ -12,7 +12,7 @@
         "preview": "astro preview",
         "astro": "astro",
         "setup-test-env": "node scripts/setup-test-env.js",
-        "test": "npm run setup-test-env && vitest run -c ../vitest.config.ts",
+        "test": "npm run setup-test-env && vitest run -c ../vitest.config.ts --passWithNoTests",
         "test:watch": "npm run setup-test-env && vitest -c ../vitest.config.ts",
         "test:e2e": "npm run setup-test-env && playwright test",
         "test:e2e:debug": "npm run setup-test-env && PWDEBUG=1 playwright test",

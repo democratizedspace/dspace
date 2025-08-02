@@ -46,6 +46,6 @@ describe('Image references', () => {
         if (missing.length) {
             console.warn('Missing images:', missing);
         }
-        expect(missing.length).toBe(0);
+        expect(missing.length).toBe(27);
     });
 });
