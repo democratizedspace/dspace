@@ -1,6 +1,11 @@
 {
     "0": {
-        "requires": ["3dprinting/calibration-cube", "3dprinter/start"],
+        "requires": [
+            "3dprinting/cable-clip",
+            "3dprinting/calibration-cube",
+            "3dprinting/phone-stand",
+            "3dprinter/start"
+        ],
         "rewards": []
     },
     "1": {
@@ -14,11 +19,11 @@
         "rewards": []
     },
     "3": {
-        "requires": ["3dprinting/temperature-tower"],
+        "requires": ["3dprinting/phone-stand", "3dprinting/temperature-tower"],
         "rewards": []
     },
     "5": {
-        "requires": ["energy/solar"],
+        "requires": ["energy/offgrid-charger", "energy/solar"],
         "rewards": [
             "energy/dSolar-100kW",
             "energy/dSolar-10kW",
@@ -34,7 +39,7 @@
         ]
     },
     "6": {
-        "requires": ["energy/battery-upgrade", "energy/solar"],
+        "requires": ["energy/battery-upgrade", "energy/offgrid-charger", "energy/solar"],
         "rewards": []
     },
     "7": {
@@ -50,7 +55,7 @@
         "rewards": []
     },
     "12": {
-        "requires": ["3dprinting/calibration-cube", "3dprinter/start"],
+        "requires": ["3dprinting/cable-clip", "3dprinting/calibration-cube", "3dprinter/start"],
         "rewards": ["3dprinting/benchy_10", "3dprinting/benchy_100", "3dprinting/benchy_25"]
     },
     "16": {
@@ -79,7 +84,12 @@
     },
     "24": {
         "requires": [],
-        "rewards": ["3dprinter/start", "ubi/basicincome", "welcome/howtodoquests"]
+        "rewards": [
+            "3dprinting/cable-clip",
+            "3dprinter/start",
+            "ubi/basicincome",
+            "welcome/howtodoquests"
+        ]
     },
     "25": {
         "requires": ["hydroponics/basil", "hydroponics/bucket_10"],
@@ -122,11 +132,11 @@
         "rewards": ["rocketry/parachute"]
     },
     "37": {
-        "requires": ["rocketry/firstlaunch"],
+        "requires": ["rocketry/firstlaunch", "rocketry/night-launch"],
         "rewards": ["rocketry/parachute"]
     },
     "38": {
-        "requires": ["rocketry/firstlaunch"],
+        "requires": ["rocketry/firstlaunch", "rocketry/night-launch"],
         "rewards": []
     },
     "39": {
@@ -150,7 +160,7 @@
         "rewards": []
     },
     "44": {
-        "requires": ["hydroponics/basil"],
+        "requires": ["hydroponics/basil", "hydroponics/reservoir-refresh"],
         "rewards": []
     },
     "47": {
@@ -163,7 +173,7 @@
     },
     "49": {
         "requires": [],
-        "rewards": ["energy/solar"]
+        "rewards": ["energy/solar", "geothermal/survey-ground-temperature"]
     },
     "52": {
         "requires": ["aquaria/goldfish"],
@@ -173,9 +183,14 @@
         "requires": ["aquaria/position-tank"],
         "rewards": []
     },
+    "57": {
+        "requires": ["aquaria/aquarium-light"],
+        "rewards": []
+    },
     "58": {
         "requires": [
             "electronics/thermistor-reading",
+            "geothermal/survey-ground-temperature",
             "programming/graph-temp",
             "programming/temp-graph",
             "programming/temp-logger"
@@ -183,7 +198,12 @@
         "rewards": []
     },
     "59": {
-        "requires": ["chemistry/ph-test", "hydroponics/ph-check", "hydroponics/ph-test"],
+        "requires": [
+            "chemistry/acid-neutralization",
+            "chemistry/ph-test",
+            "hydroponics/ph-check",
+            "hydroponics/ph-test"
+        ],
         "rewards": []
     },
     "60": {
@@ -208,15 +228,15 @@
         "rewards": []
     },
     "67": {
-        "requires": ["rocketry/parachute", "rocketry/recovery-run"],
+        "requires": ["rocketry/night-launch", "rocketry/parachute", "rocketry/recovery-run"],
         "rewards": []
     },
     "68": {
         "requires": [],
-        "rewards": ["rocketry/parachute"]
+        "rewards": ["rocketry/night-launch", "rocketry/parachute"]
     },
     "69": {
-        "requires": ["rocketry/parachute", "rocketry/recovery-run"],
+        "requires": ["rocketry/night-launch", "rocketry/parachute", "rocketry/recovery-run"],
         "rewards": []
     },
     "72": {
@@ -244,7 +264,7 @@
         "rewards": []
     },
     "83": {
-        "requires": ["rocketry/firstlaunch"],
+        "requires": ["rocketry/firstlaunch", "rocketry/night-launch"],
         "rewards": []
     },
     "84": {
@@ -347,7 +367,7 @@
     },
     "105": {
         "requires": [],
-        "rewards": ["aquaria/water-testing"]
+        "rewards": ["aquaria/aquarium-light", "aquaria/water-testing"]
     },
     "106": {
         "requires": [],
@@ -412,6 +432,7 @@
             "devops/pi-cluster-hardware",
             "devops/prepare-first-node",
             "electronics/data-logger",
+            "programming/avg-temp",
             "programming/web-server"
         ],
         "rewards": []
@@ -454,6 +475,7 @@
             "devops/ci-pipeline",
             "devops/docker-compose",
             "devops/enable-https",
+            "devops/firewall-rules",
             "devops/k3s-deploy",
             "devops/ssd-boot"
         ],
@@ -481,14 +503,26 @@
         "requires": [
             "firstaid/assemble-kit",
             "firstaid/learn-cpr",
-            "firstaid/restock-kit",
             "firstaid/splint-limb",
+            "firstaid/treat-burn",
             "firstaid/wound-care"
         ],
         "rewards": []
     },
     "136": {
         "requires": ["chemistry/stevia-crystals", "chemistry/stevia-tasting"],
+        "rewards": []
+    },
+    "137": {
+        "requires": ["firstaid/restock-kit"],
+        "rewards": []
+    },
+    "138": {
+        "requires": ["firstaid/restock-kit"],
+        "rewards": []
+    },
+    "139": {
+        "requires": ["firstaid/restock-kit"],
         "rewards": []
     }
 }
