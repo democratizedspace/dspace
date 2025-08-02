@@ -1,0 +1,34 @@
+{
+    "id": "programming/avg-temp",
+    "title": "Compute Average Temperature",
+    "description": "Write a small script that reads your log file and prints the daily average temperature.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've been logging data. Let's crunch the numbers for an average.",
+            "options": [{ "type": "goto", "goto": "code", "text": "Let's calculate." }]
+        },
+        {
+            "id": "code",
+            "text": "Parse the temperature log and compute the mean for the day.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Average computed!",
+                    "requiresItems": [{ "id": "123", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Those stats will help spot trends.",
+            "options": [{ "type": "finish", "text": "Sweet!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/temp-logger"]
+}
