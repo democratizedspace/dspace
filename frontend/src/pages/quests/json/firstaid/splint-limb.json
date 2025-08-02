@@ -1,19 +1,19 @@
 {
     "id": "firstaid/splint-limb",
     "title": "Splint a Minor Fracture",
-    "description": "Learn to immobilize an injured limb until help arrives.",
+    "description": "Practice immobilizing a minor limb injury with supplies from a first aid kit. Only attempt this on stable injuries and call emergency services for serious fractures.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Accidents happen. Let's practice applying a simple splint.",
+            "text": "Accidents happen. Make sure the area is safe and call for help before touching the injury. Let's practice applying a simple splint.",
             "options": [{ "type": "goto", "goto": "wrap", "text": "Okay, walk me through it." }]
         },
         {
             "id": "wrap",
-            "text": "Place padding around the injury and secure a rigid support with bandage wraps.",
+            "text": "Place soft padding around the injury, then position rigid supports on each side. Use bandages from your first aid kit to tie the splint snugly without cutting off circulation.",
             "options": [
                 {
                     "type": "goto",
@@ -25,7 +25,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Keep the limb immobilized and seek medical attention.",
+            "text": "Nice work! Keep the limb immobilized, monitor fingers or toes for color and warmth, and seek medical attention.",
             "options": [{ "type": "finish", "text": "Will do." }]
         }
     ],
