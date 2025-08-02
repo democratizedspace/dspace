@@ -1,19 +1,19 @@
 {
     "id": "electronics/servo-sweep",
     "title": "Sweep a Servo",
-    "description": "Use an Arduino to rotate a servo back and forth.",
+    "description": "Upload the Arduino Servo library's sweep example to rotate a motor safely.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's move beyond LEDs. We'll write a short sketch to sweep a servo.",
+            "text": "Let's move beyond LEDs. We'll upload a short sketch to sweep a servo.",
             "options": [{ "type": "goto", "goto": "wire", "text": "What do I connect?" }]
         },
         {
             "id": "wire",
-            "text": "Plug the servo signal wire into pin 9 and supply 5V and ground.",
+            "text": "Disconnect power while wiring. Plug the servo signal wire into pin 9 and supply 5V and ground. Use an external 5V source if the servo draws over 500 mA.",
             "options": [
                 {
                     "type": "goto",
@@ -22,6 +22,7 @@
                     "requiresItems": [
                         { "id": "90", "count": 1 },
                         { "id": "92", "count": 3 },
+                        { "id": "95", "count": 1 },
                         { "id": "96", "count": 1 }
                     ]
                 }
@@ -29,8 +30,15 @@
         },
         {
             "id": "code",
-            "text": "Use the Servo library's sweep example to rotate it back and forth.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Servo is moving." }]
+            "text": "Open the Arduino IDE and load the Servo library's 'Sweep' example. Upload it and keep fingers clear while it swings from 0° to 180°.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Servo is moving.",
+                    "process": "arduino-servo-sweep"
+                }
+            ]
         },
         {
             "id": "finish",
@@ -39,5 +47,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/arduino-blink"]
+    "requiresQuests": ["electronics/arduino-blink"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-upgrade-2025-08-02", "date": "2025-08-02", "score": 60 }
+        ]
+    }
 }
