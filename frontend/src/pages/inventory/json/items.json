@@ -1014,5 +1014,12 @@
         "description": "Alkaline solution used to raise nutrient solution pH.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "8 dUSD"
+    },
+    {
+        "id": "144",
+        "name": "liquid soap",
+        "description": "Mild hand soap for cleaning skin before treating a wound.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "3 dUSD"
     }
 ]
