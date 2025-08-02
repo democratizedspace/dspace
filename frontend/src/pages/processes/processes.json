@@ -1204,7 +1204,10 @@
     {
         "id": "observe-meteor-shower",
         "title": "Observe a meteor shower",
-        "requireItems": [{ "id": "134", "count": 1 }],
+        "requireItems": [
+            { "id": "134", "count": 1 },
+            { "id": "137", "count": 1 }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "15m"

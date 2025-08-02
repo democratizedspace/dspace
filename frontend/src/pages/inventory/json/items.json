@@ -965,5 +965,12 @@
         "description": "Highly concentrated sweetener purified from stevia extract.",
         "image": "/assets/dCarbon.jpg",
         "price": "12 dUSD"
+    },
+    {
+        "id": "137",
+        "name": "red flashlight",
+        "description": "Dim red LED flashlight for safe nighttime navigation.",
+        "image": "/assets/quests/solar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     }
 ]
