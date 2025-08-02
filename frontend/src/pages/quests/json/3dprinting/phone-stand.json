@@ -8,21 +8,25 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there, it's Sydney again! Ready for a quick project? Let's make a simple phone stand.",
+            "text": "Hey there, it's Sydney again! Ready for a quick project? We'll print a simple phone stand. Grab your 3D printer and some PLA.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "print",
-                    "text": "Sounds good, what do I need?"
+                    "text": "Sounds good. What's next?"
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Load the STL into your slicer and start printing. It only takes a little filament.",
+            "text": "Clean and level the build plate, load PLA filament, then slice the stand STL and begin printing. Keep hands away from the hot nozzle and ensure the area is ventilated.",
             "options": [
                 {
                     "type": "grantsItems",
+                    "requiresItems": [
+                        { "id": "0", "count": 1 },
+                        { "id": "3", "count": 15 }
+                    ],
                     "grantsItems": [{ "id": "97", "count": 1 }],
                     "text": "Print started!"
                 },
@@ -30,13 +34,13 @@
                     "type": "goto",
                     "goto": "finish",
                     "requiresItems": [{ "id": "97", "count": 1 }],
-                    "text": "The stand is finished!"
+                    "text": "The stand is finished and cooled!"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! This stand will keep your phone propped up while you work on more projects.",
+            "text": "Great job! Let the print cool before removing it, then enjoy a sturdy stand for your phone. Remember to turn off the printer.",
             "options": [{ "type": "finish", "text": "Thanks, Sydney!" }]
         }
     ],
