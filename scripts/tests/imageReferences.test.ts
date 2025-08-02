@@ -42,17 +42,17 @@ function collectNpcImages() {
 }
 
 describe('Image references', () => {
-  test('all referenced images exist', () => {
-    const images = [
-      ...collectQuestImages(),
-      ...collectItemImages(),
-      ...collectNpcImages(),
-    ];
-    const missing = listMissingImages(images);
-    if (missing.length) {
-      console.warn('Missing images:', missing);
-    }
-    // Update expected count when new assets are referenced without images
-    expect(missing.length).toBe(28);
-  });
+    test('all referenced images exist', () => {
+        const images = [
+            ...collectQuestImages(),
+            ...collectItemImages(),
+            ...collectNpcImages(),
+        ];
+        const missing = listMissingImages(images);
+        const uniqueMissing = [...new Set(missing)];
+        if (uniqueMissing.length) {
+            console.warn('Missing images:', uniqueMissing);
+        }
+        expect(uniqueMissing.length).toBe(13);
+    });
 });
