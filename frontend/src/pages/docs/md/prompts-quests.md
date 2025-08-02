@@ -3,282 +3,138 @@ title: 'Quest Prompts'
 slug: 'prompts-quests'
 ---
 
-# AI-Assisted Content Development for DSPACE
+# Writing great quest prompts for the _dspace_ repo (v3)
 
-This guide provides structured prompts for using AI assistants like Claude, GPT-4, and others to help create content for DSPACE. These prompts serve as starting templates that you can customize for your specific content needs.
+Codex is a sandboxed engineering agent that can open this repository,
+run its own tests, and send you a ready‑made PR—but only if you give it a
+clear, file‑scoped prompt. Use this guide alongside
+[Codex Prompts](/docs/prompts-codex) when working on quests. For the steps
+required to share quests with the community, see the
+[Quest Submission Guide](/docs/quest-submission). Comprehensive content
+guidelines live in our [Content Development Guide](/docs/content-development),
+which covers quests, items and processes in detail.
 
-For the steps required to share your quests with the community, see the [Quest Submission Guide](/docs/quest-submission).
+> **TL;DR**
+>
+> 1. Scope changes to a single quest file.
+> 2. Say exactly what output you expect (diff, tests, docs).
+> 3. Stop when the spec is complete. Codex treats all remaining text as
+>    mandatory instructions.
 
-> **Note:** For comprehensive content development guidelines, please refer to our [Content Development Guide](/docs/content-development), which includes specific documentation for [Quests](/docs/quest-guidelines), [Items](/docs/item-guidelines), and [Processes](/docs/process-guidelines).
+---
 
-## Getting Started with AI Assistance
+## 1 Quick start (Web vs CLI)
 
-Modern AI assistants can be powerful collaborators in content creation. Here are some tips for effective use:
+| Use‑case              | Codex Web (ChatGPT sidebar) | Codex CLI                                                          |
+| --------------------- | --------------------------- | ------------------------------------------------------------------ |
+| Add or update a quest | “Code” button, attach repo  | `codex "add quest solar/led-basics"`                               |
+| Ask about quest files | “Ask” button                | `codex exec "explain frontend/src/pages/quests/json/*.json"`       |
+| Run quest tests       | –                           | `codex exec --full-auto "npm test -- questCanonical questQuality"` |
 
-- **Provide clear context** about DSPACE's educational mission and sustainability focus
-- **Use system prompts** to guide the AI toward appropriate tone and technical accuracy
-- **Iterate on outputs** rather than expecting perfect results on the first try
-- **Fact-check technical information** since AI systems can sometimes generate plausible-sounding but incorrect details
+See the upstream CLI reference for more flags.
 
-## Quest Development Prompts
+---
 
-### Basic Quest Structure
+## 2 Prompt ingredients
 
-```
-I'm developing content for DSPACE, an educational game that teaches real-world skills related to space exploration and sustainability. I need help creating a quest about [TOPIC].
+| Ingredient           | Why it matters                                                      |
+| -------------------- | ------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add safety step to `energy/solar`”). |
+| **Files to touch**   | Limits search space → faster & cheaper.                             |
+| **Constraints**      | Coding style, a11y, quest schema rules.                             |
+| **Acceptance check** | e.g. “`npm test -- questCanonical questQuality` passes”.            |
 
-The quest should:
-1. Be scientifically accurate and educational
-2. Focus on something people can actually build or do at home
-3. Follow a logical progression of steps
-4. Include relevant safety considerations
-5. Match the appropriate difficulty level ([BEGINNER/INTERMEDIATE/ADVANCED])
+Codex merges those instructions with any `AGENTS.md` files it finds, so keep
+prompt‑level rules short and concrete.
 
-Please help me brainstorm:
-1. A compelling title and description
-2. An appropriate NPC character to guide the player
-3. The key learning objectives
-4. The main steps/activities in the quest
-5. Required materials or prerequisites
-6. Potential branching paths in the dialogue
-```
+---
 
-### Dialogue Development
+## 3 Reusable template
 
-```
-I'm creating dialogue for a quest in DSPACE about [TOPIC]. The NPC guiding the player is [NPC NAME], who is [BRIEF CHARACTER DESCRIPTION].
+```text
+You are working in democratizedspace/dspace (branch v3).
 
-Please help me write natural-sounding dialogue that:
-1. Explains [CONCEPT] in an accessible way
-2. Maintains a consistent voice for the character
-3. Includes both educational content and engaging interaction
-4. Provides clear instructions for the player
-5. Offers meaningful choices where appropriate
+GOAL: <one sentence quest addition or edit>.
 
-The dialogue should follow this general structure:
-1. Introduction and explanation of the quest
-2. Instructions for gathering materials/prerequisites
-3. Step-by-step guidance through the process
-4. Troubleshooting common issues
-5. Conclusion and next steps
-```
+FILES OF INTEREST
+- frontend/src/pages/quests/json/<quest-id>.json   ← quest definition
 
-### Quest Schema Reference
+REQUIREMENTS
+1. Follow the quest schema.
+2. Reference at least one inventory item or process.
+3. Run `npm test -- questCanonical questQuality` and fix any failures.
+4. Update docs or dialogue as needed.
 
-All quests conform to this structure:
-
-```json
-{
-    "id": "string", // Unique identifier (category/name format)
-    "title": "string", // Display title
-    "description": "string", // Brief quest description
-    "image": "string", // Path to quest image
-    "npc": "string", // Path to NPC avatar image
-    "start": "string", // ID of the starting dialogue node
-    "dialogue": [
-        {
-            "id": "string", // Node identifier
-            "text": "string", // NPC's dialogue text
-            "options": [
-                {
-                    "type": "string", // goto, finish, process, or grantsItems
-                    "text": "string", // Player's response text
-                    "goto": "string", // For type:goto, target node ID
-                    "process": "string", // For type:process, process ID
-                    "requiresItems": [
-                        // Optional items needed to select option
-                        { "id": "string", "count": "number" }
-                    ],
-                    "grantsItems": [
-                        // Optional items given when selecting option
-                        { "id": "string", "count": "number" }
-                    ],
-                    "requiresGitHub": true // Set to true to gate option until a GitHub token is saved
-                }
-            ]
-        }
-    ],
-    "rewards": [
-        // Items given upon quest completion
-        { "id": "string", "count": "number" }
-    ],
-    "requiresQuests": [
-        // Quest IDs that must be completed first
-        "string"
-    ]
-}
+OUTPUT
+Return **only** the patch (diff) needed.
 ```
 
-## Item Development Prompts
+## Implementation Prompt
 
-### Basic Item Creation
+Use this when you want Codex to automatically create or upgrade a quest.
 
-```
-I'm creating items for DSPACE, an educational game about space exploration and sustainability. I need help designing [NUMBER] items related to [CATEGORY].
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Edit or create
+quests under `frontend/src/pages/quests/json`. Ensure start, middle and
+completion nodes, at least one item or process reference, and passing
+`npm test -- questCanonical questQuality`.
 
-For each item, please provide:
-1. A clear, descriptive name
-2. A concise but informative description (1-2 sentences)
-3. Appropriate classification (Resource, Tool, Component, or Consumable)
-4. Realistic properties or specifications
-5. Potential uses in space-related activities
+USER:
+1. Follow the steps above.
+2. Run the quest tests before committing.
+3. Summarize the new or updated quest in the PR description.
 
-The items should be:
-- Scientifically accurate
-- Realistically obtainable or creatable
-- Educational about their real-world counterparts
-- Relevant to space exploration challenges
-```
-
-### Item Categories Reference
-
-DSPACE items fall into these main categories:
-
-1. **Resources**: Raw materials and basic resources (e.g., water, energy units, metals)
-2. **Tools & Equipment**: Items used to perform tasks (e.g., 3D printers, solar panels)
-3. **Components**: Parts used in larger systems (e.g., circuit boards, structural elements)
-4. **Consumables**: Items that get used up (e.g., fuel, food, plant nutrients)
-5. **Educational**: Items that represent knowledge or skills (e.g., blueprints, certifications)
-
-## Process Development Prompts
-
-### Basic Process Creation
-
-```
-I'm creating processes for DSPACE, an educational game about space exploration and sustainability. I need help designing a process for [ACTIVITY].
-
-Please provide:
-1. A clear, descriptive title
-2. An appropriate duration (format: "2h 30m" or "3d")
-3. Required items (tools/equipment needed but not consumed)
-4. Consumed items (resources used up during the process)
-5. Created items (output of the process)
-
-The process should:
-- Reflect realistic time requirements
-- Maintain logical resource conservation (input ≈ output)
-- Represent an actual scientific or engineering procedure
-- Have educational value relevant to space exploration
-- Balance effort and reward appropriately
+OUTPUT:
+A pull request implementing the quest with all tests green.
 ```
 
-### Process Categories Reference
+## One-click random quest
 
-DSPACE processes generally fall into these categories:
+Spin up a brand‑new quest in a random quest tree with this drop‑in prompt. The
+hand‑crafted quests on `main` are good references for tone and structure.
 
-1. **Manufacturing**: Creating physical components (e.g., 3D printing, assembly)
-2. **Biological**: Growing organisms or managing ecosystems (e.g., hydroponics, composting)
-3. **Energy**: Generating or transforming energy (e.g., solar power generation, battery charging)
-4. **Educational**: Learning and experimentation (e.g., simulations, data analysis)
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository (branch v3). List
+the folders under `frontend/src/pages/quests/json` and pick one at random. Use
+existing quests in that tree as examples for tone and structure.
 
-## Content Review and Improvement
+USER:
+1. Create a new quest JSON in the chosen tree following the quest schema.
+2. Reference at least one inventory item or process.
+3. Run `npm test -- questCanonical questQuality` and fix any failures.
 
-### Scientific Accuracy Check
-
-```
-I've created the following content for DSPACE, an educational game about space exploration:
-
-[PASTE CONTENT HERE]
-
-Please review this for scientific accuracy and provide feedback on:
-1. Any factual errors or misconceptions
-2. Realistic timeframes and resource requirements
-3. Safety considerations that should be addressed
-4. Technical terminology usage
-5. Educational value and clarity
-
-If you identify issues, please suggest specific corrections.
+OUTPUT:
+Return only the diff with the new quest.
 ```
 
-### Dialogue Polish
+## Upgrade prompt for new quests
 
-```
-I've written the following dialogue for a quest in DSPACE:
+Focus on quests recently added on the `v3` branch — [see the list](/docs/new-quests-v3) —
+to keep quality high as the codebase grows.
 
-[PASTE DIALOGUE HERE]
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository (branch v3).
 
-The NPC is [CHARACTER NAME], who is [BRIEF CHARACTER DESCRIPTION].
+USER:
+1. Pick a quest ID from `frontend/src/pages/quests/json` that also appears in
+   `/docs/new-quests-v3`.
+2. Improve clarity, safety notes and item or process references.
+3. Run `npm test -- questCanonical questQuality` and update docs if needed.
 
-Please help me improve this dialogue by:
-1. Making it sound more natural and conversational
-2. Ensuring consistent character voice
-3. Simplifying overly complex explanations
-4. Adding engagement through appropriate questions
-5. Maintaining educational value while being entertaining
-6. Identifying any confusing instructions or unclear directions
-
-Suggest specific improvements rather than rewriting the entire dialogue.
-```
-
-### Quest Sequence Expansion
-
-Use this when you want an AI assistant to propose follow-up quests that build on
-existing content.
-
-```
-I maintain a quest tree for DSPACE. The latest quest I added was [LAST QUEST ID].
-Suggest several logical next quests that would follow it. For each quest propose:
-1. A short title
-2. A one-sentence summary
-3. The most fitting NPC guide
-4. Key items or processes that should be introduced, focusing on hands-on steps rather than purely conversational beats
+OUTPUT:
+A pull request with the refined quest and passing tests.
 ```
 
-### Custom Quest Scaffolding
+---
 
-Use this when you want help creating a bare-bones quest JSON for the custom quest system.
+## Additional tips for AI assistance
 
-```
-Create a minimal DSPACE quest with the id `[CATEGORY]/[SHORT_ID]`. Populate the required fields according to the quest schema but keep dialogue text short and clearly marked as placeholders. Return only the JSON object.
-```
+Modern assistants can be powerful collaborators. Keep in mind:
 
-After generating the JSON, run the generator to create the actual file:
-
-```bash
-npm run generate-quest electronics/basic-led
-```
-
-Use the `--no-llm` flag if you prefer to skip the automatic placeholder dialogue.
-When you're done editing, verify the quest passes the canonical and quality checks:
-
-```bash
-npm test -- questCanonical
-npm test -- questQuality
-```
-
-Follow the prompts to save the quest under the correct category and assign an NPC.
-
-### Custom Content Bundle
-
-Use this when you want to generate a single JSON file that groups quests, items and processes together. The bundle format is described in the [Custom Content Bundles guide](/docs/custom-bundles).
-
-```
-Create a DSPACE content bundle. Include minimal placeholder objects that follow the quest, item and process schemas:
-{
-    "quests": [],
-    "items": [],
-    "processes": []
-}
-Return only this JSON object.
-```
-
-After generating the bundle, run `node scripts/create-content-bundle.js` to combine your files under `submissions/bundles`.
-
-## Example: Complete Quest Creation
-
-Here's an example of how to use these prompts to create a complete quest:
-
-1. Start with the Basic Quest Structure prompt to outline your quest
-2. Use the Dialogue Development prompt to create the core narrative
-3. Refine the dialogue using the Dialogue Polish prompt
-4. Check for scientific accuracy with the Scientific Accuracy Check prompt
-5. Format the content into the proper JSON structure using the Quest Schema Reference
-
-Remember that AI assistants are collaborative tools. You'll get the best results by:
-
-- Providing detailed context about DSPACE
-- Iterating on content rather than accepting first drafts
-- Focusing the AI on specific aspects at a time
-- Combining AI suggestions with your own knowledge and creativity
-
-By following these guidelines, you can leverage AI to create high-quality, educational content that advances DSPACE's mission of democratizing space exploration through practical, hands-on learning.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible but incorrect details.
