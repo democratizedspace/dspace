@@ -8,7 +8,7 @@ programming: 7 quests, 238 lines
 robotics: 7 quests, 269 lines
 woodworking: 7 quests, 363 lines
 chemistry: 6 quests, 211 lines
-electronics: 6 quests, 352 lines
+electronics: 6 quests, 353 lines
 firstaid: 6 quests, 227 lines
 rocketry: 5 quests, 474 lines
 welcome: 3 quests, 260 lines
