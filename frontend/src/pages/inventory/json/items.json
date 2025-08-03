@@ -1021,5 +1021,19 @@
         "description": "Mild hand soap for cleaning skin before treating a wound.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "3 dUSD"
+    },
+    {
+        "id": "145",
+        "name": "Thermistor (10k NTC)",
+        "description": "A temperature-sensitive resistor for Arduino voltage dividers.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "146",
+        "name": "10k Ohm Resistor",
+        "description": "A resistor for sensor voltage divider circuits.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     }
 ]
