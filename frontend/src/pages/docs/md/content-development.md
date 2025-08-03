@@ -60,8 +60,9 @@ Instructions for creating processes that transform or utilize items. Topics incl
 
 ## AI Assistance for Content Creation
 
-For contributors who want to leverage artificial intelligence in their content creation process, we provide [Quest Prompts](/docs/prompts-quests) that can be used with modern AI assistants. For automating backlog tasks, see the [Codex Implementation Prompt](/docs/prompts-codex#implementation-prompt). It walks Codex through selecting an unchecked item from the latest changelog and implementing it from start to finish. This guide includes:
-For general repository maintenance, the [Codex Upgrade Prompt](/docs/prompts-codex#upgrade-prompt) instructs Codex to scan the project for improvements and implement them automatically.
+For contributors who want to leverage artificial intelligence in their content creation process, we provide [Quest Prompts](/docs/prompts-quests), [Item Prompts](/docs/prompts-items) and [Process Prompts](/docs/prompts-processes) that can be used with modern AI assistants. For automating backlog tasks, see the [Codex Implementation Prompt](/docs/prompts-codex#implementation-prompt); it walks Codex through selecting an unchecked item from the latest changelog and implementing it from start to finish. For general repository maintenance, the [Codex Upgrade Prompt](/docs/prompts-codex#upgrade-prompt) instructs Codex to scan the project for improvements and implement them automatically.
+
+These guides include:
 
 -   Effective prompt templates for different content types
 -   Best practices for working with AI assistants
@@ -108,3 +109,4 @@ For more advanced contributors interested in extending core game functionality:
 -   [Contribution Guide](https://github.com/democratizedspace/dspace/blob/v3/CONTRIBUTORS.md): General contribution guidelines
 
 By following these guidelines, you'll create high-quality content that enhances the DSPACE experience while contributing to our mission of democratizing space exploration through practical, hands-on education.
+Remember to run `npm run check` to verify formatting and linting before submitting.
