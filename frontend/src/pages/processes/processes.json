@@ -1319,7 +1319,12 @@
     {
         "id": "assemble-basic-telescope",
         "title": "Assemble a basic telescope",
-        "requireItems": [],
+        "requireItems": [
+            { "id": "148", "count": 1 },
+            { "id": "149", "count": 1 },
+            { "id": "150", "count": 1 },
+            { "id": "151", "count": 1 }
+        ],
         "consumeItems": [],
         "createItems": [
             {

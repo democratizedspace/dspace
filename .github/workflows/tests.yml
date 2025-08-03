@@ -3,6 +3,15 @@ on:
   push:
     branches: [v3]
   pull_request:
+    paths:
+      - '**/*.js'
+      - '**/*.ts'
+      - '**/*.json'
+      - '**/*.svelte'
+      - '**/*.md'
+      - '**/*.yml'
+      - '**/*.yaml'
+      - '.github/workflows/**'
 jobs:
   test:
     runs-on: ubuntu-latest
