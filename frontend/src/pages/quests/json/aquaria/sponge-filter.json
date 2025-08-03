@@ -9,21 +9,43 @@
         {
             "id": "start",
             "text": "A sponge filter keeps water clean without too much flow. Let's set it up.",
-            "options": [{ "type": "goto", "goto": "prepare", "text": "Sounds good, what's first?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prepare",
+                    "text": "Sounds good, what's first?"
+                }
+            ]
         },
         {
             "id": "prepare",
             "text": "Rinse the sponge in tank water, then attach it to an air pump with tubing.",
             "options": [
-                { "type": "goto", "goto": "install", "text": "Sponge rinsed and tubing attached." }
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Sponge rinsed and tubing attached."
+                }
             ]
         },
         {
             "id": "install",
             "text": "Place the filter in a corner and plug in the pump. Bubbles show it's working.",
-            "options": [{ "type": "finish", "text": "Filter bubbling nicely!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Filter bubbling nicely!"
+                }
+            ]
         }
     ],
-    "rewards": [{ "id": "116", "count": 1 }],
-    "requiresQuests": ["aquaria/water-testing"]
+    "rewards": [
+        {
+            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/water-testing"
+    ]
 }

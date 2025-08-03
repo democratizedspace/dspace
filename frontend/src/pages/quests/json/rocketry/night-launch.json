@@ -25,10 +25,22 @@
                     "type": "goto",
                     "goto": "launch",
                     "requiresItems": [
-                        { "id": "83", "count": 1 },
-                        { "id": "38", "count": 1 },
-                        { "id": "37", "count": 1 },
-                        { "id": "67", "count": 1 }
+                        {
+                            "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                            "count": 1
+                        },
+                        {
+                            "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                            "count": 1
+                        },
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        }
                     ],
                     "text": "Gear's ready to go."
                 }
@@ -47,8 +59,14 @@
                     "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
-                        { "id": "67", "count": 1 },
-                        { "id": "69", "count": 1 }
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                            "count": 1
+                        }
                     ],
                     "text": "Rocket recovered!"
                 }
@@ -65,6 +83,13 @@
             ]
         }
     ],
-    "rewards": [{ "id": "68", "count": 1 }],
-    "requiresQuests": ["rocketry/recovery-run"]
+    "rewards": [
+        {
+            "id": "d660dc50-7afb-4a2f-9508-a42490aae5e4",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "rocketry/recovery-run"
+    ]
 }

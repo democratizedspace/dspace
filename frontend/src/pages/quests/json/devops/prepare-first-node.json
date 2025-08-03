@@ -10,12 +10,21 @@
             "id": "start",
             "text": "Let's get that first Pi running. Flash Raspberry Pi OS to a microSD card so we can update everything.",
             "options": [
-                { "type": "process", "process": "flash-sd-card", "text": "Flashing now." },
+                {
+                    "type": "process",
+                    "process": "flash-sd-card",
+                    "text": "Flashing now."
+                },
                 {
                     "type": "goto",
                     "goto": "update",
                     "text": "Card flashed and booted.",
-                    "requiresItems": [{ "id": "130", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -27,21 +36,39 @@
                     "type": "goto",
                     "goto": "docker",
                     "text": "System updated.",
-                    "requiresItems": [{ "id": "123", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "docker",
             "text": "Clone the DSPACE repo and install Docker. Use `sudo apt install -y docker.io docker-compose`, add yourself to the docker group, and run `newgrp docker` to refresh.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Docker ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Docker ready."
+                }
+            ]
         },
         {
             "id": "finish",
             "text": "Great job! The first node is set up and waiting for an SSD.",
-            "options": [{ "type": "finish", "text": "Onward!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Onward!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/pi-cluster-hardware"]
+    "requiresQuests": [
+        "devops/pi-cluster-hardware"
+    ]
 }

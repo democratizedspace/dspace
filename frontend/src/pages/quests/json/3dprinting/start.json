@@ -36,11 +36,11 @@
                     "type": "grantsItems",
                     "grantsItems": [
                         {
-                            "id": "0",
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                             "count": 1
                         },
                         {
-                            "id": "12",
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                             "count": 1000
                         }
                     ],
@@ -51,11 +51,11 @@
                     "goto": "benchy",
                     "requiresItems": [
                         {
-                            "id": "0",
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                             "count": 1
                         },
                         {
-                            "id": "12",
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                             "count": 1000
                         }
                     ],
@@ -77,7 +77,7 @@
                     "goto": "finish",
                     "requiresItems": [
                         {
-                            "id": "1",
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
                             "count": 1
                         }
                     ],
@@ -98,13 +98,15 @@
     ],
     "rewards": [
         {
-            "id": "24",
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
             "count": 100
         },
         {
-            "id": "8",
+            "id": "fe46e236-5d03-4c95-9b38-68b045a0df03",
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"]
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ]
 }

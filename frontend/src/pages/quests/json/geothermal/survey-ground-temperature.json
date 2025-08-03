@@ -23,12 +23,22 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [{ "id": "58", "count": 1 }],
+                    "grantsItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ],
                     "text": "Thanks for the thermometer!"
                 },
                 {
                     "type": "goto",
-                    "requiresItems": [{ "id": "58", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ],
                     "goto": "measure",
                     "text": "I've got the tool ready."
                 }
@@ -56,6 +66,13 @@
             ]
         }
     ],
-    "rewards": [{ "id": "49", "count": 1 }],
-    "requiresQuests": ["energy/solar"]
+    "rewards": [
+        {
+            "id": "5bba251a-d223-4e22-aa30-b65238b17516",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "energy/solar"
+    ]
 }

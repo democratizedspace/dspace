@@ -68,7 +68,7 @@
                     "type": "grantsItems",
                     "grantsItems": [
                         {
-                            "id": "29",
+                            "id": "a5395e29-1862-4eb7-8517-5d161635e032",
                             "count": 1
                         }
                     ],
@@ -78,7 +78,7 @@
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "29",
+                            "id": "a5395e29-1862-4eb7-8517-5d161635e032",
                             "count": 1
                         }
                     ],
@@ -116,11 +116,11 @@
                     "type": "grantsItems",
                     "grantsItems": [
                         {
-                            "id": "20",
+                            "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
                             "count": 10
                         },
                         {
-                            "id": "24",
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
                             "count": 100
                         }
                     ],
@@ -131,7 +131,7 @@
                     "goto": "processes",
                     "requiresItems": [
                         {
-                            "id": "20",
+                            "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
                             "count": 1
                         }
                     ],
@@ -147,7 +147,7 @@
                     "type": "grantsItems",
                     "grantsItems": [
                         {
-                            "id": "29",
+                            "id": "a5395e29-1862-4eb7-8517-5d161635e032",
                             "count": 1
                         }
                     ],
@@ -163,7 +163,7 @@
                     "goto": "hangofthis",
                     "requiresItems": [
                         {
-                            "id": "22",
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                             "count": 3000
                         }
                     ],
@@ -184,11 +184,11 @@
     ],
     "rewards": [
         {
-            "id": "78",
+            "id": "4910a316-5019-4fcd-b185-1d6ce1c0040b",
             "count": 1
         },
         {
-            "id": "24",
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
             "count": 1000
         }
     ],

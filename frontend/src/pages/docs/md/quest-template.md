@@ -42,7 +42,7 @@ Ready-to-use JSON templates live in `frontend/src/pages/quests/templates`. Copy 
                     "type": "goto",
                     "goto": "finish",
                     "text": "I can spot them easily now!",
-                    "requiresItems": [{ "id": "134", "count": 1 }]
+                    "requiresItems": [{ "id": "item-id", "count": 1 }]
                 }
             ]
         },

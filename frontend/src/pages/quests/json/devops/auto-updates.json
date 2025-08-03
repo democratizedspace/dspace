@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Software gets old fast. Let's configure unattended-upgrades on each node.",
-            "options": [{ "type": "goto", "goto": "configure", "text": "Let's do it." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "configure",
+                    "text": "Let's do it."
+                }
+            ]
         },
         {
             "id": "configure",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Updates enabled",
-                    "requiresItems": [{ "id": "132", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! Your cluster will stay patched without manual work.",
-            "options": [{ "type": "finish", "text": "Thanks, Orion." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/monitoring"]
+    "requiresQuests": [
+        "devops/monitoring"
+    ]
 }

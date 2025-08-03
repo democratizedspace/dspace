@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "You've got the sensor working. Let's connect a Pi to log temperatures automatically.",
-            "options": [{ "type": "goto", "goto": "setup", "text": "Sounds good!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Sounds good!"
+                }
+            ]
         },
         {
             "id": "setup",
@@ -20,8 +26,14 @@
                     "goto": "script",
                     "text": "Hardware ready",
                     "requiresItems": [
-                        { "id": "95", "count": 1 },
-                        { "id": "123", "count": 1 }
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -29,14 +41,27 @@
         {
             "id": "script",
             "text": "Write a short program to read the sensor and append values to a file every minute.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Logging!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logging!"
+                }
+            ]
         },
         {
             "id": "finish",
             "text": "Nice work! With data over time you can spot trends and trigger alerts.",
-            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/thermistor-reading"]
+    "requiresQuests": [
+        "electronics/thermistor-reading"
+    ]
 }

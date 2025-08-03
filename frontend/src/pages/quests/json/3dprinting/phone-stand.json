@@ -24,16 +24,32 @@
                 {
                     "type": "grantsItems",
                     "requiresItems": [
-                        { "id": "0", "count": 1 },
-                        { "id": "3", "count": 15 }
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 15
+                        }
                     ],
-                    "grantsItems": [{ "id": "97", "count": 1 }],
+                    "grantsItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        }
+                    ],
                     "text": "Print started!"
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [{ "id": "97", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        }
+                    ],
                     "text": "The stand is finished and cooled!"
                 }
             ]
@@ -41,8 +57,15 @@
         {
             "id": "finish",
             "text": "Great job! Let the print cool before removing it, then enjoy a sturdy stand for your phone. Remember to turn off the printer.",
-            "options": [{ "type": "finish", "text": "Thanks, Sydney!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Sydney!"
+                }
+            ]
         }
     ],
-    "requiresQuests": ["3dprinter/start"]
+    "requiresQuests": [
+        "3dprinter/start"
+    ]
 }

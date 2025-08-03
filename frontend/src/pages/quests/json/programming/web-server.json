@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Let's share data over the network. We'll create a simple server.",
-            "options": [{ "type": "goto", "goto": "code", "text": "Sounds good." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Sounds good."
+                }
+            ]
         },
         {
             "id": "code",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Server running!",
-                    "requiresItems": [{ "id": "123", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent! You can expand this into a full API later.",
-            "options": [{ "type": "finish", "text": "Cool!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Cool!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/hello-sensor"]
+    "requiresQuests": [
+        "programming/hello-sensor"
+    ]
 }

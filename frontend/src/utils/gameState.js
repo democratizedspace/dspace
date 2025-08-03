@@ -1,5 +1,8 @@
 import { loadGameState, saveGameState } from './gameState/common.js';
 import { addItems } from './gameState/inventory.js';
+import items from '../pages/inventory/json/items.json' assert { type: 'json' };
+
+const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 
 // ---------------------
 // QUESTS
@@ -111,7 +114,7 @@ export const importV1V2 = (itemList) => {
     const gameState = loadGameState();
 
     const award = {
-        id: '85',
+        id: EARLY_ADOPTER_ID,
         count: 1,
     };
 

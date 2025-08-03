@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "If you want high availability, let's turn the cluster into a k3s setup.",
-            "options": [{ "type": "goto", "goto": "install", "text": "Sounds good." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Sounds good."
+                }
+            ]
         },
         {
             "id": "install",
@@ -19,7 +25,12 @@
                     "type": "goto",
                     "goto": "join",
                     "text": "Token ready.",
-                    "requiresItems": [{ "id": "132", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -27,21 +38,42 @@
             "id": "join",
             "text": "Run the installer on each extra node with `curl -sfL https://get.k3s.io | K3S_URL=https://<CONTROL_PLANE_IP>:6443 K3S_TOKEN=<NODE_TOKEN> sh -`. Verify all nodes with `sudo kubectl get nodes -o wide`.",
             "options": [
-                { "type": "process", "process": "join-k3s-cluster", "text": "Joining now." },
-                { "type": "goto", "goto": "load", "text": "Nodes joined." }
+                {
+                    "type": "process",
+                    "process": "join-k3s-cluster",
+                    "text": "Joining now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "load",
+                    "text": "Nodes joined."
+                }
             ]
         },
         {
             "id": "load",
             "text": "Build the DSPACE image and import it: `docker build -t dspace-app:latest -f frontend/Dockerfile ./frontend && k3s ctr images import dspace-app:latest`. Apply the manifests from `k8s/` to deploy.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Deployed." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Deployed."
+                }
+            ]
         },
         {
             "id": "finish",
             "text": "That's it! Your cluster now runs DSPACE via k3s. Expose the service with a Cloudflare Tunnel and enjoy.",
-            "options": [{ "type": "finish", "text": "Mission accomplished." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Mission accomplished."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/docker-compose"]
+    "requiresQuests": [
+        "devops/docker-compose"
+    ]
 }

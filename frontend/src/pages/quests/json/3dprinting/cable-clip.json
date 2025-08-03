@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Need a quick print project? Let's make a cable clip to tame those loose cords.",
-            "options": [{ "type": "goto", "goto": "print", "text": "Sounds good. What do I need?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Sounds good. What do I need?"
+                }
+            ]
         },
         {
             "id": "print",
@@ -20,8 +26,14 @@
                     "goto": "finish",
                     "text": "The clip printed great!",
                     "requiresItems": [
-                        { "id": "0", "count": 1 },
-                        { "id": "12", "count": 5 }
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 5
+                        }
                     ]
                 }
             ]
@@ -29,9 +41,21 @@
         {
             "id": "finish",
             "text": "Nice work! Snap it onto a cable and enjoy the tidy workspace.",
-            "options": [{ "type": "finish", "text": "Thanks for the tip!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks for the tip!"
+                }
+            ]
         }
     ],
-    "rewards": [{ "id": "24", "count": 5 }],
-    "requiresQuests": ["3dprinter/start"]
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 5
+        }
+    ],
+    "requiresQuests": [
+        "3dprinter/start"
+    ]
 }

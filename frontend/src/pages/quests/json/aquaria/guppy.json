@@ -10,27 +10,53 @@
             "id": "start",
             "text": "Those shrimp are thriving! Ready for some guppies? They prefer 24-28°C water, so let's warm the tank first.",
             "options": [
-                { "type": "process", "process": "heat-walstad", "text": "Install the heater." }
+                {
+                    "type": "process",
+                    "process": "heat-walstad",
+                    "text": "Install the heater."
+                }
             ]
         },
         {
             "id": "acquire",
             "text": "Pick three females and one male and float the bag in the tank to match temperature.",
-            "options": [{ "type": "goto", "goto": "release", "text": "Temperature matched." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "release",
+                    "text": "Temperature matched."
+                }
+            ]
         },
         {
             "id": "release",
             "text": "Gently net the guppies into the tank and discard the store water.",
             "options": [
-                { "type": "process", "process": "stock-guppies", "text": "Introduce them." }
+                {
+                    "type": "process",
+                    "process": "stock-guppies",
+                    "text": "Introduce them."
+                }
             ]
         },
         {
             "id": "finish",
             "text": "Fish are in and seem happy!",
-            "options": [{ "type": "finish", "text": "All done." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All done."
+                }
+            ]
         }
     ],
-    "rewards": [{ "id": "107", "count": 1 }],
-    "requiresQuests": ["aquaria/shrimp"]
+    "rewards": [
+        {
+            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/shrimp"
+    ]
 }

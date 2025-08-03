@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Oops, a bit of acid dripped on the bench. Let's neutralize it before it causes trouble.",
-            "options": [{ "type": "goto", "goto": "neutralize", "text": "I'll handle it." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "neutralize",
+                    "text": "I'll handle it."
+                }
+            ]
         },
         {
             "id": "neutralize",
@@ -24,16 +30,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "The spill is neutralized.",
-                    "requiresItems": [{ "id": "59", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice work! A safe lab is a productive lab.",
-            "options": [{ "type": "finish", "text": "All cleaned up." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All cleaned up."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["chemistry/ph-test"]
+    "requiresQuests": [
+        "chemistry/ph-test"
+    ]
 }

@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Your Walstad tank is cycling, but plants need steady light. Ready to install the lamp?",
-            "options": [{ "type": "goto", "goto": "mount", "text": "Let's mount the light." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Let's mount the light."
+                }
+            ]
         },
         {
             "id": "mount",
@@ -19,21 +25,44 @@
                     "type": "goto",
                     "goto": "schedule",
                     "text": "Light secured.",
-                    "requiresItems": [{ "id": "57", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "schedule",
             "text": "Plug it in and set a timer for eight hours of gentle daylight.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Timer set and lamp glowing." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Timer set and lamp glowing."
+                }
+            ]
         },
         {
             "id": "finish",
             "text": "Great! Your plants will thrive under consistent lighting.",
-            "options": [{ "type": "finish", "text": "Enjoy the glow." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Enjoy the glow."
+                }
+            ]
         }
     ],
-    "rewards": [{ "id": "105", "count": 1 }],
-    "requiresQuests": ["aquaria/sponge-filter"]
+    "rewards": [
+        {
+            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/sponge-filter"
+    ]
 }

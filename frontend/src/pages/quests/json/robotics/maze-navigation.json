@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Ready to put your line following skills to the test? Let's try a small maze.",
-            "options": [{ "type": "goto", "goto": "program", "text": "I'm ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "program",
+                    "text": "I'm ready."
+                }
+            ]
         },
         {
             "id": "program",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "It made it through!",
-                    "requiresItems": [{ "id": "96", "count": 2 }]
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great job! Complex navigation is within reach.",
-            "options": [{ "type": "finish", "text": "Onward!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Onward!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/line-follower"]
+    "requiresQuests": [
+        "robotics/line-follower"
+    ]
 }

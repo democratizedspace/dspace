@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Now that you've read a sensor, let's automate data collection with a short program that logs temperature over time.",
-            "options": [{ "type": "goto", "goto": "code", "text": "Let's code." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Let's code."
+                }
+            ]
         },
         {
             "id": "code",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Script running",
-                    "requiresItems": [{ "id": "58", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent! With regular logs you'll spot interesting patterns in your environment.",
-            "options": [{ "type": "finish", "text": "Cool!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Cool!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/thermistor-reading"]
+    "requiresQuests": [
+        "electronics/thermistor-reading"
+    ]
 }

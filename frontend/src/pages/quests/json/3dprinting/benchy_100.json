@@ -27,7 +27,7 @@
                     "text": "I have enough!",
                     "requiresItems": [
                         {
-                            "id": "1",
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
                             "count": 100
                         }
                     ]
@@ -37,19 +37,32 @@
         {
             "id": "congrats",
             "text": "One hundred Benchies! The print farm is in full swing and you've proven your dedication.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "That was intense!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "That was intense!"
+                }
+            ]
         },
         {
             "id": "finish",
             "text": "Incredible! You've constructed a formidable fleet of Benchies. Your 3D printing skills are truly remarkable. Remember, every Benchy is a testament to your growing capabilities. I'll be back with another challenge soon. Until then, keep printing!",
-            "options": [{ "type": "finish", "text": "Bring on the next challenge!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Bring on the next challenge!"
+                }
+            ]
         }
     ],
     "rewards": [
         {
-            "id": "12",
+            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
             "count": 100000
         }
     ],
-    "requiresQuests": ["3dprinting/benchy_25"]
+    "requiresQuests": [
+        "3dprinting/benchy_25"
+    ]
 }

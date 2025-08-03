@@ -10,7 +10,11 @@
             "id": "start",
             "text": "Let's take your servo skills further. We'll build a tiny robot that follows a dark line on the floor.",
             "options": [
-                { "type": "goto", "goto": "parts", "text": "I'm in! What parts do I need?" }
+                {
+                    "type": "goto",
+                    "goto": "parts",
+                    "text": "I'm in! What parts do I need?"
+                }
             ]
         },
         {
@@ -21,16 +25,33 @@
                     "type": "goto",
                     "goto": "code",
                     "text": "Hardware assembled.",
-                    "requiresItems": [{ "id": "96", "count": 2 }]
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "code",
             "text": "Upload a simple PID loop that adjusts motor speed based on the sensors. Place the bot on a black line and watch it drive!",
-            "options": [{ "type": "finish", "text": "It works!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "It works!"
+                }
+            ]
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
-    "rewards": [{ "id": "97", "count": 1 }]
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
+    "rewards": [
+        {
+            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+            "count": 1
+        }
+    ]
 }

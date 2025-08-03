@@ -21,7 +21,7 @@
                     "type": "goto",
                     "goto": "skip",
                     "text": "Skip the lesson",
-                    "requiresItems": [{ "id": "134", "count": 1 }]
+                    "requiresItems": [{ "id": "item-id", "count": 1 }]
                 }
             ]
         },

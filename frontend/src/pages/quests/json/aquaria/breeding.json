@@ -9,19 +9,43 @@
         {
             "id": "start",
             "text": "Guppies multiply quickly. Dense plants like hornwort and guppy grass keep the fry safe right in the main tank.",
-            "options": [{ "type": "goto", "goto": "wait", "text": "I'll add lots of plants." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wait",
+                    "text": "I'll add lots of plants."
+                }
+            ]
         },
         {
             "id": "wait",
             "text": "Once the fry are born, feed them crushed flakes several times a day so they grow quickly.",
-            "options": [{ "type": "goto", "goto": "release", "text": "They're growing fast." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "release",
+                    "text": "They're growing fast."
+                }
+            ]
         },
         {
             "id": "release",
             "text": "When they're large enough not to be eaten, just enjoy watching them join the community tank.",
-            "options": [{ "type": "finish", "text": "Tiny fish everywhere!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Tiny fish everywhere!"
+                }
+            ]
         }
     ],
-    "rewards": [{ "id": "102", "count": 1 }],
-    "requiresQuests": ["aquaria/guppy"]
+    "rewards": [
+        {
+            "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/guppy"
+    ]
 }

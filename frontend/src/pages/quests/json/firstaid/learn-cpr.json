@@ -9,17 +9,32 @@
         {
             "id": "start",
             "text": "Slip on gloves, confirm the area is safe, call emergency services, and check the manikin's airway before you begin.",
-            "options": [{ "type": "goto", "goto": "steps", "text": "I'm ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "steps",
+                    "text": "I'm ready."
+                }
+            ]
         },
         {
             "id": "steps",
             "text": "Place the heel of one hand in the center of the chest and interlock your fingers. Keep your arms straight and press about 2 inches deep at 100–120 compressions per minute, letting the chest return fully. After 30 compressions, give two rescue breaths through the CPR mask if you're trained.",
             "options": [
-                { "type": "process", "process": "practice-cpr", "text": "Practicing now." },
+                {
+                    "type": "process",
+                    "process": "practice-cpr",
+                    "text": "Practicing now."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [{ "id": "135", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ],
                     "text": "I know the basics."
                 }
             ]
@@ -27,9 +42,16 @@
         {
             "id": "finish",
             "text": "Great job! Regular practice with a manikin, gloves, and mask helps you respond calmly and safely. Remember, real emergencies should be handled by certified professionals whenever possible.",
-            "options": [{ "type": "finish", "text": "I'll keep practicing." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll keep practicing."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/assemble-kit"]
+    "requiresQuests": [
+        "firstaid/assemble-kit"
+    ]
 }

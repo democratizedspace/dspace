@@ -27,7 +27,7 @@
                     "text": "I have enough!",
                     "requiresItems": [
                         {
-                            "id": "22",
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                             "count": 10000000
                         }
                     ]
@@ -47,9 +47,11 @@
     ],
     "rewards": [
         {
-            "id": "5",
+            "id": "02b32152-a7b2-458e-9643-7b754c722165",
             "count": 25
         }
     ],
-    "requiresQuests": ["energy/dWatt-1e5"]
+    "requiresQuests": [
+        "energy/dWatt-1e5"
+    ]
 }

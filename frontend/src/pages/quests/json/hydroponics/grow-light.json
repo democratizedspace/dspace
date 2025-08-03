@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "To keep plants thriving indoors you'll need a grow light.",
-            "options": [{ "type": "goto", "goto": "install", "text": "Let's set it up." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Let's set it up."
+                }
+            ]
         },
         {
             "id": "install",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Light installed.",
-                    "requiresItems": [{ "id": "43", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! Proper lighting will keep your greens lush.",
-            "options": [{ "type": "finish", "text": "Looks bright!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looks bright!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/bucket_10"]
+    "requiresQuests": [
+        "hydroponics/bucket_10"
+    ]
 }

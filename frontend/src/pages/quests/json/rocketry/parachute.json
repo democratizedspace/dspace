@@ -30,7 +30,7 @@
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "67",
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
                             "count": 1
                         }
                     ],
@@ -53,7 +53,7 @@
                     "goto": "success",
                     "requiresItems": [
                         {
-                            "id": "69",
+                            "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
                             "count": 2
                         }
                     ],
@@ -74,17 +74,19 @@
     ],
     "rewards": [
         {
-            "id": "37",
+            "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
             "count": 10
         },
         {
-            "id": "34",
+            "id": "4d817f1c-d78d-4fac-a514-402bce330693",
             "count": 5
         },
         {
-            "id": "68",
+            "id": "d660dc50-7afb-4a2f-9508-a42490aae5e4",
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/firstlaunch"]
+    "requiresQuests": [
+        "rocketry/firstlaunch"
+    ]
 }

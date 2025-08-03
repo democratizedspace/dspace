@@ -10,7 +10,11 @@
             "id": "start",
             "text": "Nice work with the basil! Ready for another crop? Lettuce is easy to grow and perfect for salads.",
             "options": [
-                { "type": "goto", "goto": "plant", "text": "Sounds tasty! How do I start?" }
+                {
+                    "type": "goto",
+                    "goto": "plant",
+                    "text": "Sounds tasty! How do I start?"
+                }
             ]
         },
         {
@@ -21,16 +25,33 @@
                     "type": "goto",
                     "goto": "harvest",
                     "text": "Seedlings look great!",
-                    "requiresItems": [{ "id": "99", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "harvest",
             "text": "Transfer the plugs to your tub and let them grow for a few weeks. Harvest outer leaves as needed for fresh salads!",
-            "options": [{ "type": "finish", "text": "Can't wait to taste it!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait to taste it!"
+                }
+            ]
         }
     ],
-    "requiresQuests": ["hydroponics/basil"],
-    "rewards": [{ "id": "99", "count": 1 }]
+    "requiresQuests": [
+        "hydroponics/basil"
+    ],
+    "rewards": [
+        {
+            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+            "count": 1
+        }
+    ]
 }

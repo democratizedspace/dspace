@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Plants can quickly deplete minerals. Let's replenish the solution so your basil stays strong.",
-            "options": [{ "type": "goto", "goto": "add", "text": "Okay." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "add",
+                    "text": "Okay."
+                }
+            ]
         },
         {
             "id": "add",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Done",
-                    "requiresItems": [{ "id": "103", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! Monitor the water level every few days and add more as needed.",
-            "options": [{ "type": "finish", "text": "Thanks!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/basil"]
+    "requiresQuests": [
+        "hydroponics/basil"
+    ]
 }

@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Let's give your bot some feedback. A pair of encoders will track how far it travels.",
-            "options": [{ "type": "goto", "goto": "mount", "text": "Sounds good." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Sounds good."
+                }
+            ]
         },
         {
             "id": "mount",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Installed and reading values!",
-                    "requiresItems": [{ "id": "96", "count": 2 }]
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! Now you can precisely measure distance and adjust your code for straighter paths.",
-            "options": [{ "type": "finish", "text": "Awesome!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Awesome!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/servo-gripper"]
+    "requiresQuests": [
+        "robotics/servo-gripper"
+    ]
 }

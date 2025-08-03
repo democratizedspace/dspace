@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "You've been logging temperatures. Let's turn that data into a simple graph.",
-            "options": [{ "type": "goto", "goto": "code", "text": "Show me how." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Show me how."
+                }
+            ]
         },
         {
             "id": "code",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Graph generated!",
-                    "requiresItems": [{ "id": "58", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice work! Visualizing data makes patterns much easier to spot.",
-            "options": [{ "type": "finish", "text": "Looks great!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looks great!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-logger"]
+    "requiresQuests": [
+        "programming/temp-logger"
+    ]
 }

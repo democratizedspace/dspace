@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Your shrimp are thriving. To keep algae in check, let's add some floating plants that soak up excess nutrients.",
-            "options": [{ "type": "goto", "goto": "place", "text": "Sounds good." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "place",
+                    "text": "Sounds good."
+                }
+            ]
         },
         {
             "id": "place",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Plants added",
-                    "requiresItems": [{ "id": "104", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! Keep an eye out so it doesn't block the light for other plants.",
-            "options": [{ "type": "finish", "text": "Will do." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/shrimp"]
+    "requiresQuests": [
+        "aquaria/shrimp"
+    ]
 }

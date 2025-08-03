@@ -62,7 +62,7 @@
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "82",
+                            "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
                             "count": 1
                         }
                     ],
@@ -89,9 +89,11 @@
     ],
     "rewards": [
         {
-            "id": "5",
+            "id": "02b32152-a7b2-458e-9643-7b754c722165",
             "count": 3
         }
     ],
-    "requiresQuests": ["energy/solar"]
+    "requiresQuests": [
+        "energy/solar"
+    ]
 }

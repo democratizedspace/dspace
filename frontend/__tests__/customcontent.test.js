@@ -108,9 +108,9 @@ describe('Custom Content Functions', () => {
         test('should create and retrieve a process', async () => {
             const title = 'Test Process';
             const duration = '1h 30m';
-            const requireItems = [{ id: '1', count: 2 }];
-            const consumeItems = [{ id: '2', count: 1 }];
-            const createItems = [{ id: '3', count: 3 }];
+            const requireItems = [{ id: 'item-1', count: 2 }];
+            const consumeItems = [{ id: 'item-2', count: 1 }];
+            const createItems = [{ id: 'item-3', count: 3 }];
 
             const id = await createProcess(
                 title,
@@ -149,13 +149,13 @@ describe('Custom Content Functions', () => {
             const updates = {
                 title: 'Updated Process Title',
                 duration: '2h',
-                requireItems: [{ id: '4', count: 1 }],
+                requireItems: [{ id: 'item-4', count: 1 }],
             };
             await updateProcess(id, updates);
             const updatedProcess = await getProcess(id);
             expect(updatedProcess.title).toBe('Updated Process Title');
             expect(updatedProcess.duration).toBe('2h');
-            expect(updatedProcess.requireItems).toEqual([{ id: '4', count: 1 }]);
+            expect(updatedProcess.requireItems).toEqual([{ id: 'item-4', count: 1 }]);
         });
 
         test('should delete a process', async () => {

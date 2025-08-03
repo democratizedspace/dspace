@@ -9,17 +9,32 @@
         {
             "id": "start",
             "text": "dChat here! Even experienced builders should keep a first aid kit nearby.",
-            "options": [{ "type": "goto", "goto": "gather", "text": "What do I need?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "What do I need?"
+                }
+            ]
         },
         {
             "id": "gather",
             "text": "Include adhesive bandages, gauze, antiseptic wipes and gloves. Pack them so they stay clean and dry.",
             "options": [
-                { "type": "process", "process": "pack-first-aid-kit", "text": "Packing now." },
+                {
+                    "type": "process",
+                    "process": "pack-first-aid-kit",
+                    "text": "Packing now."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [{ "id": "135", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ],
                     "text": "Supplies packed."
                 }
             ]
@@ -27,7 +42,12 @@
         {
             "id": "finish",
             "text": "Great! Keep this kit handy so minor mishaps don't halt your progress.",
-            "options": [{ "type": "finish", "text": "Will do!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do!"
+                }
+            ]
         }
     ],
     "rewards": [],

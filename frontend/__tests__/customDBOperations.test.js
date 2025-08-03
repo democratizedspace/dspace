@@ -17,9 +17,9 @@ import {
 
 describe('Custom DB operations', () => {
     test('saveItem and getItem work correctly', async () => {
-        const item = { id: '123', name: 'Widget' };
+        const item = { id: 'abc-123', name: 'Widget' };
         await saveItem(item);
-        const result = await getItem('123');
+        const result = await getItem('abc-123');
         expect(result).toEqual(item);
     });
 

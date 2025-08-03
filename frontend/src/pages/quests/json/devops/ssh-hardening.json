@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Let's secure your node's SSH service.",
-            "options": [{ "type": "goto", "goto": "keys", "text": "Ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "keys",
+                    "text": "Ready."
+                }
+            ]
         },
         {
             "id": "keys",
@@ -19,7 +25,12 @@
                     "type": "goto",
                     "goto": "config",
                     "text": "Key installed.",
-                    "requiresItems": [{ "id": "132", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -37,9 +48,16 @@
         {
             "id": "finish",
             "text": "SSH is now locked down to your key. Nice work.",
-            "options": [{ "type": "finish", "text": "Security first." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Security first."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/firewall-rules"]
+    "requiresQuests": [
+        "devops/firewall-rules"
+    ]
 }

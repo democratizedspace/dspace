@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Sketching the Moon was a great start. Now let's build a basic telescope so you can see much farther into the sky.",
-            "options": [{ "type": "goto", "goto": "build", "text": "I'm ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "I'm ready."
+                }
+            ]
         },
         {
             "id": "build",
@@ -24,16 +30,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "I can see Jupiter!",
-                    "requiresItems": [{ "id": "134", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent craftsmanship! Regular stargazing will sharpen your navigation skills for future missions.",
-            "options": [{ "type": "finish", "text": "Thanks, Nova." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Nova."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/observe-moon"]
+    "requiresQuests": [
+        "astronomy/observe-moon"
+    ]
 }

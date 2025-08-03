@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Now that your bench is ready, let's try a small project. A birdhouse is perfect for practicing basic cuts and assembly.",
-            "options": [{ "type": "goto", "goto": "gather", "text": "Sounds fun!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Sounds fun!"
+                }
+            ]
         },
         {
             "id": "gather",
@@ -18,9 +24,18 @@
                 {
                     "type": "grantsItems",
                     "grantsItems": [
-                        { "id": "112", "count": 1 },
-                        { "id": "110", "count": 1 },
-                        { "id": "109", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        }
                     ],
                     "text": "Gather materials"
                 },
@@ -28,9 +43,18 @@
                     "type": "goto",
                     "goto": "build",
                     "requiresItems": [
-                        { "id": "112", "count": 1 },
-                        { "id": "110", "count": 1 },
-                        { "id": "109", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        }
                     ],
                     "text": "Materials ready"
                 }
@@ -39,7 +63,13 @@
         {
             "id": "build",
             "text": "Cut the board into panels, glue the walls together, then attach the roof. After the glue dries, smooth all edges with sandpaper so birds won't get hurt.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "The birdhouse is complete" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "The birdhouse is complete"
+                }
+            ]
         },
         {
             "id": "finish",
@@ -47,13 +77,23 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [{ "id": "113", "count": 1 }],
+                    "grantsItems": [
+                        {
+                            "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
+                            "count": 1
+                        }
+                    ],
                     "text": "Take the birdhouse"
                 },
-                { "type": "finish", "text": "Thanks for the lesson!" }
+                {
+                    "type": "finish",
+                    "text": "Thanks for the lesson!"
+                }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench"]
+    "requiresQuests": [
+        "woodworking/workbench"
+    ]
 }

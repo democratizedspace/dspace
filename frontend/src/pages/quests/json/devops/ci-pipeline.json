@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Automation keeps your code reliable. Let's add a CI workflow.",
-            "options": [{ "type": "goto", "goto": "edit", "text": "Walk me through it." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "edit",
+                    "text": "Walk me through it."
+                }
+            ]
         },
         {
             "id": "edit",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Workflow added.",
-                    "requiresItems": [{ "id": "132", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! Every push will now trigger tests automatically.",
-            "options": [{ "type": "finish", "text": "Nice!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Nice!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/docker-compose"]
+    "requiresQuests": [
+        "devops/docker-compose"
+    ]
 }

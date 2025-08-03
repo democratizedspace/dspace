@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Our last flight was great. Let's practice recovering the rocket so we can reuse it.",
-            "options": [{ "type": "goto", "goto": "prep", "text": "I'm ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "I'm ready."
+                }
+            ]
         },
         {
             "id": "prep",
@@ -20,8 +26,14 @@
                     "goto": "launch",
                     "text": "Parachute packed",
                     "requiresItems": [
-                        { "id": "67", "count": 1 },
-                        { "id": "84", "count": 1 }
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "9477a618-591b-45e0-9d81-18d60b848490",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -40,8 +52,14 @@
                     "goto": "finish",
                     "text": "Rocket recovered!",
                     "requiresItems": [
-                        { "id": "67", "count": 1 },
-                        { "id": "69", "count": 1 }
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -49,9 +67,16 @@
         {
             "id": "finish",
             "text": "Excellent! Smooth recoveries mean we can iterate faster on designs.",
-            "options": [{ "type": "finish", "text": "Can't wait for the next launch!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait for the next launch!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["rocketry/parachute"]
+    "requiresQuests": [
+        "rocketry/parachute"
+    ]
 }

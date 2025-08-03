@@ -9,19 +9,43 @@
         {
             "id": "start",
             "text": "Regular water changes keep fish healthy. Gather a siphon, bucket, and water conditioner, then remove about 25% of the water.",
-            "options": [{ "type": "goto", "goto": "remove", "text": "Got it. How do I start?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "remove",
+                    "text": "Got it. How do I start?"
+                }
+            ]
         },
         {
             "id": "remove",
             "text": "Use a siphon or gravel vacuum to gently drain water into a clean bucket while lifting debris. Keep the intake away from fish and stop after roughly a quarter of the volume is gone.",
-            "options": [{ "type": "goto", "goto": "refill", "text": "Water removed." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "refill",
+                    "text": "Water removed."
+                }
+            ]
         },
         {
             "id": "refill",
             "text": "Treat tap water with dechlorinator and match it to the tank's temperature before refilling. Pour slowly to avoid shocking fish.",
-            "options": [{ "type": "finish", "text": "Tank refilled and fish are happy!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Tank refilled and fish are happy!"
+                }
+            ]
         }
     ],
-    "rewards": [{ "id": "106", "count": 1 }],
-    "requiresQuests": ["aquaria/guppy"]
+    "rewards": [
+        {
+            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/guppy"
+    ]
 }

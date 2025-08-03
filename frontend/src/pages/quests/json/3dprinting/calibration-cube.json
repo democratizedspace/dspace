@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Let's dial in your printer with a quick 20mm calibration cube.",
-            "options": [{ "type": "goto", "goto": "print", "text": "Ready to print." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Ready to print."
+                }
+            ]
         },
         {
             "id": "print",
@@ -20,8 +26,14 @@
                     "goto": "finish",
                     "text": "Cube looks good!",
                     "requiresItems": [
-                        { "id": "0", "count": 1 },
-                        { "id": "12", "count": 15 }
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 15
+                        }
                     ]
                 }
             ]
@@ -29,9 +41,16 @@
         {
             "id": "finish",
             "text": "Excellent! Measure each side to see if further tweaking is needed.",
-            "options": [{ "type": "finish", "text": "Will do." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"]
+    "requiresQuests": [
+        "3dprinter/start"
+    ]
 }

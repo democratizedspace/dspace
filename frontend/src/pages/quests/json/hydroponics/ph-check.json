@@ -9,19 +9,38 @@
         {
             "id": "start",
             "text": "Healthy roots need a stable pH. Let's test your nutrient solution.",
-            "options": [{ "type": "goto", "goto": "measure", "text": "Ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Ready."
+                }
+            ]
         },
         {
             "id": "measure",
             "text": "Dip a pH strip for a few seconds and compare the color chart. Aim for 5.5–6.5 for leafy greens.",
             "options": [
-                { "type": "process", "process": "measure-ph", "text": "Measure pH" },
-                { "type": "goto", "goto": "adjust", "text": "It's out of range" },
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Measure pH"
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "It's out of range"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Reading looks good",
-                    "requiresItems": [{ "id": "59", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -29,16 +48,31 @@
             "id": "adjust",
             "text": "Put on gloves and goggles. Add a little pH up or pH down solution, stir, and re-test until you're back in range.",
             "options": [
-                { "type": "process", "process": "adjust-ph", "text": "Adjust pH" },
-                { "type": "goto", "goto": "measure", "text": "Re-test" }
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Adjust pH"
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Re-test"
+                }
             ]
         },
         {
             "id": "finish",
             "text": "Nice work! Keep pH between 5.5 and 6.5 and recheck weekly to avoid nutrient lockout.",
-            "options": [{ "type": "finish", "text": "Will do." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/nutrient-check"]
+    "requiresQuests": [
+        "hydroponics/nutrient-check"
+    ]
 }

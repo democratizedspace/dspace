@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Ready for another project? Let's make a wooden planter box for your hydroponic experiments.",
-            "options": [{ "type": "goto", "goto": "gather", "text": "Sure thing!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Sure thing!"
+                }
+            ]
         },
         {
             "id": "gather",
@@ -18,8 +24,14 @@
                 {
                     "type": "grantsItems",
                     "grantsItems": [
-                        { "id": "112", "count": 4 },
-                        { "id": "110", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        }
                     ],
                     "text": "Gather materials"
                 },
@@ -28,8 +40,14 @@
                     "goto": "build",
                     "text": "Materials ready",
                     "requiresItems": [
-                        { "id": "112", "count": 4 },
-                        { "id": "110", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -37,14 +55,27 @@
         {
             "id": "build",
             "text": "Cut the boards to length, glue them into a rectangle, and let everything dry overnight.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Box assembled" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Box assembled"
+                }
+            ]
         },
         {
             "id": "finish",
             "text": "Great job! This planter will hold soil or even a small hydroponic tub.",
-            "options": [{ "type": "finish", "text": "Looks sturdy!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looks sturdy!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench"]
+    "requiresQuests": [
+        "woodworking/workbench"
+    ]
 }

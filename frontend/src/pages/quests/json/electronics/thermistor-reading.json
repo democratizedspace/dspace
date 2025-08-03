@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Let's expand your sensor skills. A thermistor and resistor can report ambient temperature for all sorts of projects.",
-            "options": [{ "type": "goto", "goto": "wire", "text": "Show me." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Show me."
+                }
+            ]
         },
         {
             "id": "wire",
@@ -20,12 +26,30 @@
                     "goto": "monitor",
                     "text": "Circuit ready.",
                     "requiresItems": [
-                        { "id": "90", "count": 1 },
-                        { "id": "91", "count": 1 },
-                        { "id": "92", "count": 3 },
-                        { "id": "95", "count": 1 },
-                        { "id": "145", "count": 1 },
-                        { "id": "146", "count": 1 }
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 3
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                            "count": 1
+                        },
+                        {
+                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -45,15 +69,28 @@
         {
             "id": "finish",
             "text": "Nice job! Logging data over time will help automate your experiments.",
-            "options": [{ "type": "finish", "text": "Neat!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Neat!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/potentiometer-dimmer"],
+    "requiresQuests": [
+        "electronics/potentiometer-dimmer"
+    ],
     "hardening": {
         "passes": 1,
         "score": 60,
         "emoji": "🌀",
-        "history": [{ "task": "codex-upgrade-2025-08-03", "date": "2025-08-03", "score": 60 }]
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-03",
+                "date": "2025-08-03",
+                "score": 60
+            }
+        ]
     }
 }

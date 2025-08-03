@@ -64,13 +64,13 @@ describe('additional coverage for utils.js', () => {
     });
 
     test('getCookies and getCookieItems parse cookies', () => {
-        const str = 'foo=bar; item-1=2; item-2=0';
+        const str = 'foo=bar; item-alpha=2; item-beta=0';
         expect(getCookies(str)).toEqual([
             { key: 'foo', value: 'bar' },
-            { key: 'item-1', value: '2' },
-            { key: 'item-2', value: '0' },
+            { key: 'item-alpha', value: '2' },
+            { key: 'item-beta', value: '0' },
         ]);
-        expect(getCookieItems(str)).toEqual([{ id: '1', count: 2 }]);
+        expect(getCookieItems(str)).toEqual([{ id: 'alpha', count: 2 }]);
     });
 
     test('prettyPrintDuration handles fractions and days', () => {

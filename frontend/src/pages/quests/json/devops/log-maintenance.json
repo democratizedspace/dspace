@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "As your services run they generate plenty of logs. Without rotation those files will eat up disk space.",
-            "options": [{ "type": "goto", "goto": "rotate", "text": "How do I handle it?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rotate",
+                    "text": "How do I handle it?"
+                }
+            ]
         },
         {
             "id": "rotate",
@@ -24,16 +30,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Rotation configured",
-                    "requiresItems": [{ "id": "133", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent! Your nodes will now keep tidy logs so the cluster stays healthy.",
-            "options": [{ "type": "finish", "text": "Thanks Orion." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks Orion."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/daily-backups"]
+    "requiresQuests": [
+        "devops/daily-backups"
+    ]
 }

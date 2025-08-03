@@ -30,6 +30,9 @@ import {
 
 import { loadGameState, saveGameState } from '../../src/utils/gameState/common.js';
 import { addItems } from '../../src/utils/gameState/inventory.js';
+import items from '../../src/pages/inventory/json/items.json' assert { type: 'json' };
+
+const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token').id;
 
 describe('gameState top-level helpers', () => {
     let mockGameState;
@@ -113,7 +116,7 @@ describe('gameState top-level helpers', () => {
     test('importV1V2 adds award item and sets version', () => {
         const items = [{ id: '5', count: 2 }];
         importV1V2(items);
-        expect(addItems).toHaveBeenCalledWith([{ id: '85', count: 1 }, ...items]);
+        expect(addItems).toHaveBeenCalledWith([{ id: EARLY_ADOPTER_ID, count: 1 }, ...items]);
         expect(mockGameState.versionNumberString).toBe(VERSIONS.V2);
     });
 

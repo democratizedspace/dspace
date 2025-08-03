@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Let's move beyond LEDs. We'll upload a short sketch to sweep a servo.",
-            "options": [{ "type": "goto", "goto": "wire", "text": "What do I connect?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "What do I connect?"
+                }
+            ]
         },
         {
             "id": "wire",
@@ -20,10 +26,22 @@
                     "goto": "code",
                     "text": "Wired up!",
                     "requiresItems": [
-                        { "id": "90", "count": 1 },
-                        { "id": "92", "count": 3 },
-                        { "id": "95", "count": 1 },
-                        { "id": "96", "count": 1 }
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 3
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -43,15 +61,28 @@
         {
             "id": "finish",
             "text": "Nice work! Servos unlock all kinds of robotics projects.",
-            "options": [{ "type": "finish", "text": "Can't wait!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/arduino-blink"],
+    "requiresQuests": [
+        "electronics/arduino-blink"
+    ],
     "hardening": {
         "passes": 1,
         "score": 60,
         "emoji": "🌀",
-        "history": [{ "task": "codex-upgrade-2025-08-02", "date": "2025-08-02", "score": 60 }]
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-02",
+                "date": "2025-08-02",
+                "score": 60
+            }
+        ]
     }
 }

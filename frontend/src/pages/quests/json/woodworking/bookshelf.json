@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "For a final challenge we'll make a bookshelf. It's larger than the stool but uses the same techniques you've learned.",
-            "options": [{ "type": "goto", "goto": "gather", "text": "Let's do it" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Let's do it"
+                }
+            ]
         },
         {
             "id": "gather",
@@ -18,9 +24,18 @@
                 {
                     "type": "grantsItems",
                     "grantsItems": [
-                        { "id": "112", "count": 4 },
-                        { "id": "110", "count": 1 },
-                        { "id": "109", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        }
                     ],
                     "text": "Buy lumber"
                 },
@@ -28,9 +43,18 @@
                     "type": "goto",
                     "goto": "assemble",
                     "requiresItems": [
-                        { "id": "112", "count": 4 },
-                        { "id": "110", "count": 1 },
-                        { "id": "109", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        }
                     ],
                     "text": "All materials ready"
                 }
@@ -39,7 +63,13 @@
         {
             "id": "assemble",
             "text": "Cut the side panels and shelves, glue and clamp everything square, then let it dry. Finish by sanding the surfaces smooth.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Bookshelf built" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bookshelf built"
+                }
+            ]
         },
         {
             "id": "finish",
@@ -47,13 +77,23 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [{ "id": "115", "count": 1 }],
+                    "grantsItems": [
+                        {
+                            "id": "619d485d-803f-4875-a048-157ce28d31c4",
+                            "count": 1
+                        }
+                    ],
                     "text": "Take the bookshelf"
                 },
-                { "type": "finish", "text": "Thank you, Cedar" }
+                {
+                    "type": "finish",
+                    "text": "Thank you, Cedar"
+                }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/step-stool"]
+    "requiresQuests": [
+        "woodworking/step-stool"
+    ]
 }

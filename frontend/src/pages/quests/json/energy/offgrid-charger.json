@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Got a phone running low? Let's use a portable panel and battery to juice it up anywhere.",
-            "options": [{ "type": "goto", "goto": "setup", "text": "Let's give it a try." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Let's give it a try."
+                }
+            ]
         },
         {
             "id": "setup",
@@ -18,8 +24,14 @@
                 {
                     "type": "grantsItems",
                     "grantsItems": [
-                        { "id": "5", "count": 1 },
-                        { "id": "6", "count": 1 }
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
                     ],
                     "text": "Take the solar kit"
                 },
@@ -28,8 +40,14 @@
                     "goto": "finish",
                     "text": "Phone is charging!",
                     "requiresItems": [
-                        { "id": "5", "count": 1 },
-                        { "id": "6", "count": 1 }
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -37,9 +55,16 @@
         {
             "id": "finish",
             "text": "Nice work! With this setup you can stay powered even off-grid.",
-            "options": [{ "type": "finish", "text": "Handy!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Handy!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["energy/solar"]
+    "requiresQuests": [
+        "energy/solar"
+    ]
 }

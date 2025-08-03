@@ -36,19 +36,19 @@
                     "type": "grantsItems",
                     "grantsItems": [
                         {
-                            "id": "5",
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
                             "count": 1
                         },
                         {
-                            "id": "6",
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                             "count": 1
                         },
                         {
-                            "id": "79",
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
                             "count": 1
                         },
                         {
-                            "id": "80",
+                            "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
                             "count": 1
                         }
                     ],
@@ -58,19 +58,19 @@
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "5",
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
                             "count": 1
                         },
                         {
-                            "id": "6",
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                             "count": 1
                         },
                         {
-                            "id": "79",
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
                             "count": 1
                         },
                         {
-                            "id": "80",
+                            "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
                             "count": 1
                         }
                     ],
@@ -92,7 +92,7 @@
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "81",
+                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
                             "count": 1
                         }
                     ],
@@ -114,7 +114,7 @@
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "61",
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
                             "count": 200
                         }
                     ],
@@ -136,13 +136,15 @@
     ],
     "rewards": [
         {
-            "id": "5",
+            "id": "02b32152-a7b2-458e-9643-7b754c722165",
             "count": 1
         },
         {
-            "id": "49",
+            "id": "5bba251a-d223-4e22-aa30-b65238b17516",
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"]
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ]
 }

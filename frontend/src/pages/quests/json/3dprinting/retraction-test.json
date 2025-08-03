@@ -9,27 +9,49 @@
         {
             "id": "start",
             "text": "Retraction distance controls how far the filament pulls back between moves. Let's print another Benchy to dial it in.",
-            "options": [{ "type": "goto", "goto": "print", "text": "Let's try it." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Let's try it."
+                }
+            ]
         },
         {
             "id": "print",
             "text": "Slice the model with a 1 mm retraction setting and start the job. Compare the surface finish to your last print.",
             "options": [
-                { "type": "process", "process": "3dprint-benchy", "text": "Printing now." },
+                {
+                    "type": "process",
+                    "process": "3dprint-benchy",
+                    "text": "Printing now."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Looks smoother!",
-                    "requiresItems": [{ "id": "1", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! Keep experimenting with small adjustments until stringing disappears.",
-            "options": [{ "type": "finish", "text": "Will do." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinting/phone-stand"]
+    "requiresQuests": [
+        "3dprinting/phone-stand"
+    ]
 }

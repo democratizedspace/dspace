@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Hey there! Orion here. Ready to build a little cluster to run DSPACE on your own hardware?",
-            "options": [{ "type": "goto", "goto": "list", "text": "Absolutely!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "list",
+                    "text": "Absolutely!"
+                }
+            ]
         },
         {
             "id": "list",
@@ -20,13 +26,34 @@
                     "goto": "finish",
                     "text": "I've gathered the parts.",
                     "requiresItems": [
-                        { "id": "123", "count": 1 },
-                        { "id": "124", "count": 1 },
-                        { "id": "125", "count": 1 },
-                        { "id": "126", "count": 1 },
-                        { "id": "127", "count": 1 },
-                        { "id": "128", "count": 1 },
-                        { "id": "129", "count": 1 }
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
+                            "count": 1
+                        },
+                        {
+                            "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
+                            "count": 1
+                        },
+                        {
+                            "id": "36042a2b-861a-4192-a991-98778898963a",
+                            "count": 1
+                        },
+                        {
+                            "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                            "count": 1
+                        },
+                        {
+                            "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                            "count": 1
+                        },
+                        {
+                            "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -34,7 +61,12 @@
         {
             "id": "finish",
             "text": "Excellent! With the hardware ready we can prepare the first node.",
-            "options": [{ "type": "finish", "text": "Let's do it." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Let's do it."
+                }
+            ]
         }
     ],
     "rewards": [],

@@ -10,12 +10,21 @@
             "id": "start",
             "text": "From the project directory run `docker compose up --build -d` to launch the game on port 3002.",
             "options": [
-                { "type": "process", "process": "run-docker-compose", "text": "Starting it up." },
+                {
+                    "type": "process",
+                    "process": "run-docker-compose",
+                    "text": "Starting it up."
+                },
                 {
                     "type": "goto",
                     "goto": "tunnel",
                     "text": "Container running.",
-                    "requiresItems": [{ "id": "132", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -28,8 +37,14 @@
                     "goto": "finish",
                     "text": "Tunnel online.",
                     "requiresItems": [
-                        { "id": "127", "count": 1 },
-                        { "id": "128", "count": 1 }
+                        {
+                            "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                            "count": 1
+                        },
+                        {
+                            "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -37,9 +52,16 @@
         {
             "id": "finish",
             "text": "Everything is up and running! For a multi-node setup you can follow Orion's k3s guide later.",
-            "options": [{ "type": "finish", "text": "Will do." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/prepare-first-node"]
+    "requiresQuests": [
+        "devops/prepare-first-node"
+    ]
 }

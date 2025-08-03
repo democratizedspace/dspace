@@ -131,13 +131,15 @@
     ],
     "rewards": [
         {
-            "id": "24",
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
             "count": 100
         },
         {
-            "id": "72",
+            "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
             "count": 100
         }
     ],
-    "requiresQuests": ["3dprinter/start"]
+    "requiresQuests": [
+        "3dprinter/start"
+    ]
 }

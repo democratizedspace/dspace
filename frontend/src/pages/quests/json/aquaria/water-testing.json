@@ -9,19 +9,43 @@
         {
             "id": "start",
             "text": "The tank should be cycling nicely. Let's test the water to make sure it's safe for shrimp.",
-            "options": [{ "type": "goto", "goto": "explain", "text": "How do I test it?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "explain",
+                    "text": "How do I test it?"
+                }
+            ]
         },
         {
             "id": "explain",
             "text": "Use a liquid test kit. Check ammonia and nitrite first—they should read zero. Nitrate should stay under 40 ppm.",
-            "options": [{ "type": "goto", "goto": "results", "text": "Okay, I'll test now." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "results",
+                    "text": "Okay, I'll test now."
+                }
+            ]
         },
         {
             "id": "results",
             "text": "If you see ammonia or nitrite, give the tank more time. If nitrate is high, perform a partial water change.",
-            "options": [{ "type": "finish", "text": "All clear! Levels look good." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All clear! Levels look good."
+                }
+            ]
         }
     ],
-    "rewards": [{ "id": "105", "count": 1 }],
-    "requiresQuests": ["aquaria/walstad"]
+    "rewards": [
+        {
+            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/walstad"
+    ]
 }

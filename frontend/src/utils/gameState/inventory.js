@@ -1,4 +1,8 @@
 import { loadGameState, saveGameState } from './common.js';
+import items from '../../pages/inventory/json/items.json' assert { type: 'json' };
+
+const dUSDId = items.find((i) => i.name === 'dUSD')?.id;
+const dCarbonId = items.find((i) => i.name === 'dCarbon')?.id;
 
 export const addItems = (items) => {
     const gameState = loadGameState();
@@ -35,14 +39,14 @@ export const getItemCount = (itemId) => {
 };
 
 export const getCurrentdUSD = () => {
-    return getItemCount('24');
+    return getItemCount(dUSDId);
 };
 
 export const getSalesTaxPercentage = () => {
     const gameState = loadGameState();
 
-    if (getItemCount('20') > 0) {
-        const dCarbonCount = gameState.inventory['20'] || 0;
+    if (dCarbonId && getItemCount(dCarbonId) > 0) {
+        const dCarbonCount = gameState.inventory[dCarbonId] || 0;
         return Math.min(Math.floor(dCarbonCount / 1000) * 10, 90);
     }
     return 0; // No tax for other items
@@ -53,7 +57,7 @@ export const buyItems = (items) => {
 
     items.forEach((item) => {
         const { price, quantity } = item;
-        const currencyId = '24'; // Assuming the currency ID is always "24"
+        const currencyId = dUSDId;
 
         const totalPrice = parseFloat(price) * parseFloat(quantity);
 
@@ -69,7 +73,7 @@ export const buyItems = (items) => {
 
 export const sellItems = (items) => {
     const gameState = loadGameState();
-    const currencyId = '24';
+    const currencyId = dUSDId;
 
     items.forEach((item) => {
         const { id, quantity, price } = item;
