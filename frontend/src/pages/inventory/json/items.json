@@ -972,6 +972,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "b397aa70-3503-4e40-b84a-4d5609578d2b",
+        "name": "CPR training manikin",
+        "description": "Life-size torso manikin for practicing chest compressions and rescue breaths.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
         "name": "stevia crystals",
         "description": "Highly concentrated sweetener purified from stevia extract.",
