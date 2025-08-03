@@ -1,14 +1,14 @@
 {
     "id": "electronics/basic-circuit",
     "title": "Build a basic LED circuit",
-    "description": "Learn electronics fundamentals by safely wiring an LED with a resistor on a breadboard.",
+    "description": "Learn the basics of circuits by wiring an LED with a current-limiting resistor on a breadboard.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there! I'm Orion. Ready to see how simple electronics can be? We'll safely wire an LED with a resistor on a breadboard.",
+            "text": "Hey there! I'm Orion. Ready to see how simple electronics can be? We'll wire a 5 mm LED with a 220 Ω resistor on a breadboard and keep things safe.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "Grab a breadboard, two jumper wires, a 5 mm LED, a 220 ohm resistor, and a 5V power supply (battery pack or USB adapter). Keep the supply unplugged while wiring. The resistor limits current so the LED doesn't burn out. Ready to assemble?",
+            "text": "Gather a breadboard, two jumper wires, a 5 mm LED, a 220 Ω resistor and a 5 V power supply (battery pack or USB adapter). Keep the supply unplugged while wiring; the resistor protects the LED from too much current. Ready to assemble?",
             "options": [
                 {
                     "type": "goto",
@@ -37,7 +37,7 @@
         },
         {
             "id": "assemble",
-            "text": "Place the LED on the breadboard with the long leg (anode) on the positive rail. Connect the 220 ohm resistor in series, then use jumper wires to link the resistor to +5V and the LED's short leg to ground. Double-check polarity and keep the power supply disconnected until everything is secure. Once it's all set, connect the 5V supply and the LED should glow.",
+            "text": "Insert the LED into the breadboard with the long leg (anode) on the positive rail. Place the 220 Ω resistor from the anode's row to a new row, then use jumper wires to link the resistor to +5 V and the LED's short leg (cathode) to ground. Confirm the resistor is in series and polarity is correct before applying power. When it all looks secure, connect the 5 V power supply and the LED should glow.",
             "options": [
                 {
                     "type": "goto",
@@ -48,7 +48,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! You've built your first circuit and lit up an LED. Always disconnect power before adjusting any connections.",
+            "text": "Great job! You've built your first circuit and lit up an LED. Always disconnect power before changing any connections.",
             "options": [
                 {
                     "type": "finish",
@@ -60,11 +60,12 @@
     "requiresQuests": [],
     "rewards": [{ "id": "95", "count": 1 }],
     "hardening": {
-        "passes": 1,
-        "score": 65,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
-            { "task": "codex-quest-refinement-2025-08-03", "date": "2025-08-03", "score": 65 }
+            { "task": "codex-quest-refinement-2025-08-03", "date": "2025-08-03", "score": 65 },
+            { "task": "codex-upgrade-2025-08-03", "date": "2025-08-03", "score": 80 }
         ]
     }
 }
