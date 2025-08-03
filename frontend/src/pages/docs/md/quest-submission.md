@@ -31,6 +31,8 @@ This guide describes how to submit your custom quests to become part of the offi
 7. **Create the pull request** directly from the form. This uploads your quest to a new branch and opens a draft PR.
 8. **Respond to feedback** from reviewers until your quest meets project standards.
 
+Maintainers can review submitted quests at `/quests/review`, approving or rejecting them before merge.
+
 Once merged, your quest will be included in the next game update!
 
 ### GitHub Token Setup
