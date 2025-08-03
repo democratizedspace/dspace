@@ -1,0 +1,37 @@
+{
+    "id": "hydroponics/pump-maintenance",
+    "title": "Clean Hydroponic Pump",
+    "description": "Keep water moving by cleaning the pump intake.",
+    "image": "/assets/hydroponics.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The pump's a real workhorse. Let's clean it so flow stays strong.",
+            "options": [
+                { "type": "goto", "goto": "clean", "text": "I'm on it." }
+            ]
+        },
+        {
+            "id": "clean",
+            "text": "Unplug the pump and remove the intake cover. Give everything a quick scrub and rinse.",
+            "options": [
+                { "type": "process", "process": "clean-pump", "text": "Scrubbing away gunk." },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pump is spotless!",
+                    "requiresItems": [{ "id": "44", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! A clean pump keeps water circulating and roots oxygenated.",
+            "options": [{ "type": "finish", "text": "Back to growing." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/reservoir-refresh"]
+}
