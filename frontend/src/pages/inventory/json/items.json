@@ -1035,5 +1035,12 @@
         "description": "A resistor for sensor voltage divider circuits.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "147",
+        "name": "5V Power Supply",
+        "description": "A battery pack or USB adapter that provides a stable 5V DC output.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     }
 ]
