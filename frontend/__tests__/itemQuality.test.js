@@ -59,7 +59,6 @@ describe('Item Quality Validation', () => {
             console.warn('Item Quality Issues:');
             issues.forEach((i) => console.warn(`- ${i}`));
         }
-
-        expect(true).toBe(true);
+        expect(issues.length).toBe(0);
     });
 });
