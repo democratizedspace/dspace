@@ -1,5 +1,5 @@
 energy: 14 quests, 856 lines
-devops: 12 quests, 498 lines
+devops: 13 quests, 544 lines
 aquaria: 11 quests, 448 lines
 astronomy: 10 quests, 378 lines
 hydroponics: 10 quests, 711 lines
