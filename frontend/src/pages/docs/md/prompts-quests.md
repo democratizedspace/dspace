@@ -111,7 +111,7 @@ Return only the diff with the new quest.
 
 ## Upgrade prompt for new quests
 
-Focus on quests recently added on the `v3` branch — [see the list](/docs/new-quests-v3) —
+Focus on quests recently added on the `v3` branch — [see the list](./new-quests-v3.md) —
 to keep quality high as the codebase grows. This prompt uses the quest
 quality tests to ensure that every technological step is represented in
 the inventory (`items.json`) and process (`processes.json`) registries and
@@ -124,7 +124,7 @@ You are an automated contributor for the DSPACE repository (branch v3).
 
 USER:
 1. Pick a quest ID from `frontend/src/pages/quests/json` that also appears in
-   `/docs/new-quests-v3`.
+   `./new-quests-v3.md`.
 2. Improve clarity, safety notes and item or process references.
 3. Check that every technology mentioned has a granular, real‑world entry in
    `frontend/src/pages/inventory/json/items.json` or
