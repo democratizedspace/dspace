@@ -24,13 +24,19 @@ Prometheus is preconfigured to scrape the DSPACE metrics endpoint at
 `http://host.docker.internal:3002/metrics`. If you run DSPACE on a different
 port or host, update `monitoring/prometheus/prometheus.yml` accordingly.
 
-To prevent unauthorized access to metrics, set a token and expose it via the
-`METRICS_TOKEN` environment variable when running DSPACE. Prometheus can send
-the same token using the `authorization.credentials_file` option in its
-`prometheus.yml`.
-
 You can now create dashboards to track container resource usage and the metrics
 exposed by your DSPACE instance.
+
+## Security Considerations
+
+- The bundled `docker-compose.yml` binds Prometheus and Grafana to `127.0.0.1`
+  so they are not reachable from other machines. If you need remote access,
+  change the port mappings but ensure a firewall protects these services.
+- Set custom Grafana credentials by exporting
+  `GRAFANA_ADMIN_USER` and `GRAFANA_ADMIN_PASSWORD` before running
+  `docker compose up`.
+- The DSPACE metrics endpoint may expose operational details. Restrict access
+  to trusted networks or add authentication if exposing it beyond localhost.
 
 ## Configuration
 
