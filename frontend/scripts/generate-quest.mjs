@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import { writeFileSync, mkdirSync, readdirSync, readFileSync, statSync } from 'fs';
 import glob from 'glob';
-import { fileURLToPath } from 'url';
 import path from 'path';
 import readline from 'readline';
 
@@ -34,10 +33,25 @@ async function main() {
     const { categories, npcCounts } = gatherStats();
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
     const questRoot = path.join('frontend', 'src', 'pages', 'quests', 'json');
-    const existing = glob.sync(path.join(questRoot, '**/*.json')).map((f) => path.relative(questRoot, f).replace(/\.json$/, ''));
+    const existing = glob
+        .sync(path.join(questRoot, '**/*.json'))
+        .map((f) => path.relative(questRoot, f).replace(/\.json$/, ''));
 
-    const noLlm = process.argv.includes('--no-llm');
-    let questId = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : null;
+    const args = process.argv.slice(2);
+    let questId = null;
+    let noLlm = false;
+    let templateName = null;
+    for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
+        if (arg === '--no-llm') {
+            noLlm = true;
+        } else if (arg === '--template' && i + 1 < args.length) {
+            templateName = args[i + 1];
+            i++;
+        } else if (!questId && !arg.startsWith('--')) {
+            questId = arg;
+        }
+    }
     if (!questId) {
         console.log('Available categories:', categories.join(', '));
         const category = (await ask('Choose a category or type a new one: ', rl)).trim();
@@ -69,23 +83,59 @@ async function main() {
     const npcName = npcs[parseInt(npcChoice, 10) - 1] || 'vega';
     rl.close();
 
-    const quest = {
-        id: questId,
-        title,
-        description: 'Describe the quest objectives here.',
-        image: '/assets/quests/howtodoquests.jpg',
-        npc: `/assets/npc/${npcName}.jpg`,
-        start: 'start',
-        dialogue: [
-            {
-                id: 'start',
-                text: 'Generating...',
-                options: [{ type: 'finish', text: 'Finish' }],
-            },
-        ],
-        rewards: [],
-        requiresQuests: [],
-    };
+    let quest;
+    if (templateName) {
+        const templatePath = path.join(
+            'frontend',
+            'src',
+            'pages',
+            'quests',
+            'templates',
+            `${templateName}.json`
+        );
+        try {
+            quest = JSON.parse(readFileSync(templatePath, 'utf8'));
+        } catch (e) {
+            console.error(`Template ${templateName} not found.`);
+            process.exit(1);
+        }
+        quest.id = questId;
+        quest.title = title;
+        quest.description = 'Describe the quest objectives here.';
+        quest.npc = `/assets/npc/${npcName}.jpg`;
+        quest.rewards = [];
+        quest.requiresQuests = [];
+        if (quest.dialogue && quest.dialogue.length) {
+            quest.dialogue[0].text = 'Generating...';
+        } else {
+            quest.start = 'start';
+            quest.dialogue = [
+                {
+                    id: 'start',
+                    text: 'Generating...',
+                    options: [{ type: 'finish', text: 'Finish' }],
+                },
+            ];
+        }
+    } else {
+        quest = {
+            id: questId,
+            title,
+            description: 'Describe the quest objectives here.',
+            image: '/assets/quests/howtodoquests.jpg',
+            npc: `/assets/npc/${npcName}.jpg`,
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Generating...',
+                    options: [{ type: 'finish', text: 'Finish' }],
+                },
+            ],
+            rewards: [],
+            requiresQuests: [],
+        };
+    }
 
     if (!noLlm) {
         const { scoreQuest } = await import('../../scripts/utils/llm.js');

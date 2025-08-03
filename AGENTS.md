@@ -30,7 +30,7 @@ SKIP_E2E=1 npm run test:pr
 - Each quest needs start, middle and completion nodes with at least one option per node and a final `finish` option.
 - Reference at least one inventory item or process in every quest or the `questQuality` test will fail.
 - Consult `frontend/src/pages/docs/md/npcs.md` for character voice and keep it updated.
-- Use `npm run generate-quest` to scaffold dialogue quickly.
+- Use `npm run generate-quest [--template <name>]` to scaffold dialogue quickly; templates live in `frontend/src/pages/quests/templates`.
 - Archive deprecated quests under `frontend/src/pages/quests/archive`.
 
 ## UI Guidelines
