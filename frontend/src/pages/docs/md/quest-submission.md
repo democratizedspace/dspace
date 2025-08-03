@@ -14,7 +14,7 @@ This guide describes how to submit your custom quests to become part of the offi
 
 ## Steps
 
-1. **Create your quest** using the in-game editor or by editing a JSON file under `frontend/src/pages/quests/json`. The command `npm run generate-quest` can scaffold a template for you.
+1. **Create your quest** using the in-game editor or by editing a JSON file under `frontend/src/pages/quests/json`. Copy one of the examples from `frontend/src/pages/quests/templates` or run `npm run generate-quest` to scaffold a template.
 2. **Bundle related items and processes** using `scripts/create-content-bundle.js`. This script collects quests, items, and processes into a single JSON file under `submissions/bundles`.
 3. **Validate** the quest structure by running:
     ```bash

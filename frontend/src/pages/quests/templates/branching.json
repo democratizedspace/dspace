@@ -1,0 +1,53 @@
+{
+    "id": "template/branching-example",
+    "title": "Branching Quest Example",
+    "description": "Demonstrates branching dialogue options.",
+    "hardening": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "\ud83d\udd27",
+        "history": []
+    },
+    "image": "/assets/quests/example.jpg",
+    "npc": "/assets/npc/placeholder.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Choose your path.",
+            "options": [
+                { "type": "goto", "goto": "study", "text": "Study the stars" },
+                {
+                    "type": "goto",
+                    "goto": "skip",
+                    "text": "Skip the lesson",
+                    "requiresItems": [{ "id": "134", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "study",
+            "text": "Learning is fun!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Complete study"
+                },
+                { "type": "goto", "goto": "finish", "text": "Finish" }
+            ]
+        },
+        {
+            "id": "skip",
+            "text": "Skipping ahead!",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Continue" }]
+        },
+        {
+            "id": "finish",
+            "text": "You've completed the branching quest example.",
+            "options": [{ "type": "finish", "text": "Done", "requiresGitHub": false }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}
