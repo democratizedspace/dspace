@@ -16,14 +16,9 @@
             "text": "Sprinkle baking soda until fizzing stops, then check the area with a pH strip.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "neutralize-acid",
-                    "text": "Sprinkling baking soda."
-                },
-                {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "The spill is neutralized.",
+                    "text": "Sprinkle baking soda until fizzing stops.",
                     "requiresItems": [{ "id": "59", "count": 1 }]
                 }
             ]

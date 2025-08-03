@@ -41,6 +41,11 @@ try {
         });
     }
 
+    // Run quest quality tests from the repository root
+    execSync('npx vitest run scripts/tests/questQuality.test.ts', {
+        stdio: 'inherit'
+    });
+
     console.log(`\n${colors.bright}${colors.green}All tests completed successfully!${colors.reset}`);
     process.exit(0);
 } catch (error) {

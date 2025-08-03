@@ -2,7 +2,11 @@ name: tests
 on:
   push:
     branches: [v3]
+    paths:
+      - '**'
   pull_request:
+    paths:
+      - '**'
 jobs:
   test:
     runs-on: ubuntu-latest
