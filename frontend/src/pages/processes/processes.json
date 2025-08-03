@@ -1205,8 +1205,13 @@
     },
     {
         "id": "practice-cpr",
-        "title": "Practice CPR on a dummy",
-        "requireItems": [{ "id": "135", "count": 1 }],
+        "title": "Practice CPR on a manikin",
+        "requireItems": [
+            { "id": "135", "count": 1 },
+            { "id": "140", "count": 1 },
+            { "id": "148", "count": 1 },
+            { "id": "149", "count": 1 }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "1m"

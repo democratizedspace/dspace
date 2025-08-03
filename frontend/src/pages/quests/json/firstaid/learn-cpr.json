@@ -1,19 +1,19 @@
 {
     "id": "firstaid/learn-cpr",
     "title": "Practice Basic CPR",
-    "description": "Put on gloves, use a training manikin and a CPR mask from your first aid kit to rehearse chest compressions and rescue breaths. Always verify the scene is safe and call emergency services before starting.",
+    "description": "Slide on nitrile gloves, set a CPR manikin on a firm surface and fit a CPR mask to rehearse 30 chest compressions and two rescue breaths. Practice only on the manikin and ensure emergency services are contacted before any real attempt.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Slip on gloves, confirm the area is safe, call emergency services, and check the manikin's airway before you begin.",
+            "text": "Wear nitrile gloves, make sure the area is safe, and have someone call emergency services. Position the manikin on its back and tilt the head to open the airway.",
             "options": [{ "type": "goto", "goto": "steps", "text": "I'm ready." }]
         },
         {
             "id": "steps",
-            "text": "Place the heel of one hand in the center of the chest and interlock your fingers. Keep your arms straight and press about 2 inches deep at 100–120 compressions per minute, letting the chest return fully. After 30 compressions, give two rescue breaths through the CPR mask if you're trained.",
+            "text": "With the CPR mask sealed over the mouth, place the heel of one hand at the center of the chest and interlock your fingers. Keep your arms straight and press about 2 inches deep at 100–120 compressions per minute, letting the chest return fully. After 30 compressions, give two slow rescue breaths through the mask, watching for chest rise.",
             "options": [
                 { "type": "process", "process": "practice-cpr", "text": "Practicing now." },
                 {
@@ -26,10 +26,18 @@
         },
         {
             "id": "finish",
-            "text": "Great job! Regular practice with a manikin, gloves, and mask helps you respond calmly and safely. Remember, real emergencies should be handled by certified professionals whenever possible.",
+            "text": "Great job! Regular practice with a manikin, gloves, and mask builds muscle memory. Never practice on a real person, and in an actual emergency let certified professionals take over when they arrive.",
             "options": [{ "type": "finish", "text": "I'll keep practicing." }]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/assemble-kit"]
+    "requiresQuests": ["firstaid/assemble-kit"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-upgrade-2025-08-03", "date": "2025-08-03", "score": 60 }
+        ]
+    }
 }

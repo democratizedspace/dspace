@@ -1048,5 +1048,19 @@
         "description": "A battery pack or USB adapter that provides a stable 5V DC output.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "148",
+        "name": "CPR training manikin",
+        "description": "A torso manikin for practicing chest compressions and rescue breaths.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "35 dUSD"
+    },
+    {
+        "id": "149",
+        "name": "CPR mask",
+        "description": "A one-way valve mask that protects you when giving rescue breaths.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "5 dUSD"
     }
 ]
