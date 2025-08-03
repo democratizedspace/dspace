@@ -1048,5 +1048,33 @@
         "description": "A battery pack or USB adapter that provides a stable 5V DC output.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "148",
+        "name": "50 mm magnifying lens",
+        "description": "Glass lens with ~50 mm focal length used as a telescope objective.",
+        "image": "/assets/quests/solar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "149",
+        "name": "20 mm magnifying lens",
+        "description": "Small lens with ~20 mm focal length for use as a telescope eyepiece.",
+        "image": "/assets/quests/solar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "150",
+        "name": "cardboard mailing tube",
+        "description": "Sturdy cardboard tube about 40 cm long to hold telescope optics.",
+        "image": "/assets/quests/solar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "151",
+        "name": "camera tripod",
+        "description": "Adjustable three-legged stand for stabilizing cameras or small telescopes.",
+        "image": "/assets/quests/solar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     }
 ]
