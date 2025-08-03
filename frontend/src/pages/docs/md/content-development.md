@@ -32,42 +32,42 @@ Before creating any content, we recommend:
 
 Comprehensive instructions for creating engaging, educational quests that guide players through practical space-related activities. Topics include:
 
--   Quest philosophy and educational goals
--   Quest categories and progression paths
--   Dialogue structure and NPC interactions
--   Technical requirements and JSON structure
--   Submission and review process
+- Quest philosophy and educational goals
+- Quest categories and progression paths
+- Dialogue structure and NPC interactions
+- Technical requirements and JSON structure
+- Submission and review process
 
 ### [Item Development Guidelines](/docs/item-guidelines)
 
 Detailed guide for creating virtual items that represent resources, tools, and components. Topics include:
 
--   Item categories and classification
--   Properties and attributes
--   Relationship to processes and quests
--   Best practices for naming and descriptions
--   Technical implementation details
+- Item categories and classification
+- Properties and attributes
+- Relationship to processes and quests
+- Best practices for naming and descriptions
+- Technical implementation details
 
 ### [Process Development Guidelines](/docs/process-guidelines)
 
 Instructions for creating processes that transform or utilize items. Topics include:
 
--   Process structure and duration formatting
--   Item requirements, consumption, and production
--   Balancing time and rewards
--   Process states and lifecycle
--   Creating process chains for progression
+- Process structure and duration formatting
+- Item requirements, consumption, and production
+- Balancing time and rewards
+- Process states and lifecycle
+- Creating process chains for progression
 
 ## AI Assistance for Content Creation
 
-For contributors who want to leverage artificial intelligence in their content creation process, we provide [Quest Prompts](/docs/prompts-quests) that can be used with modern AI assistants. For automating backlog tasks, see the [Codex Implementation Prompt](/docs/prompts-codex#implementation-prompt). It walks Codex through selecting an unchecked item from the latest changelog and implementing it from start to finish. This guide includes:
+For contributors who want to leverage artificial intelligence in their content creation process, we provide [Quest Prompts](/docs/prompts-quests), [Item Prompts](/docs/prompts-items), and [Process Prompts](/docs/prompts-processes) that can be used with modern AI assistants. For automating backlog tasks, see the [Codex Implementation Prompt](/docs/prompts-codex#implementation-prompt). It walks Codex through selecting an unchecked item from the latest changelog and implementing it from start to finish. This guide includes:
 For general repository maintenance, the [Codex Upgrade Prompt](/docs/prompts-codex#upgrade-prompt) instructs Codex to scan the project for improvements and implement them automatically.
 
--   Effective prompt templates for different content types
--   Best practices for working with AI assistants
--   Scientific accuracy verification techniques
--   Dialogue refinement strategies
--   Full examples of AI-assisted content creation. Our Playwright test `constellations-quest.spec.ts` walks through creating the `constellations` quest end to end.
+- Effective prompt templates for different content types
+- Best practices for working with AI assistants
+- Scientific accuracy verification techniques
+- Dialogue refinement strategies
+- Full examples of AI-assisted content creation. Our Playwright test `constellations-quest.spec.ts` walks through creating the `constellations` quest end to end.
 
 These prompt engineering templates were initially created to help develop the first batches of quests for DSPACE and can be valuable tools for brainstorming ideas, refining dialogue, and ensuring scientific accuracy in your own content.
 
@@ -86,25 +86,25 @@ The general workflow for content development in DSPACE is:
 
 Before submitting:
 
--   **Technical validation**: Ensure your content follows all required formats
--   **Educational value**: Verify that your content teaches meaningful concepts
--   **Progression fit**: Check that your content fits logically in existing progression paths
--   **Consistency**: Maintain consistency with existing game content
--   **Balance**: Ensure appropriate difficulty and reward balance
+- **Technical validation**: Ensure your content follows all required formats
+- **Educational value**: Verify that your content teaches meaningful concepts
+- **Progression fit**: Check that your content fits logically in existing progression paths
+- **Consistency**: Maintain consistency with existing game content
+- **Balance**: Ensure appropriate difficulty and reward balance
 
 ## Contributing to Core Game Systems
 
 For more advanced contributors interested in extending core game functionality:
 
--   Review the [DSPACE Architecture](/docs/architecture) documentation
--   Follow the [Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md)
--   Start with small enhancements before proposing major changes
+- Review the [DSPACE Architecture](/docs/architecture) documentation
+- Follow the [Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md)
+- Start with small enhancements before proposing major changes
 
 ## Community Resources
 
--   [Discord Community](https://discord.gg/A3UAfYvnxM): Discuss ideas and get feedback
--   [GitHub Repository](https://github.com/democratizedspace/dspace): View source code and submit changes
--   [Documentation](/docs): Browse all game documentation
--   [Contribution Guide](https://github.com/democratizedspace/dspace/blob/v3/CONTRIBUTORS.md): General contribution guidelines
+- [Discord Community](https://discord.gg/A3UAfYvnxM): Discuss ideas and get feedback
+- [GitHub Repository](https://github.com/democratizedspace/dspace): View source code and submit changes
+- [Documentation](/docs): Browse all game documentation
+- [Contribution Guide](https://github.com/democratizedspace/dspace/blob/v3/CONTRIBUTORS.md): General contribution guidelines
 
 By following these guidelines, you'll create high-quality content that enhances the DSPACE experience while contributing to our mission of democratizing space exploration through practical, hands-on education.
