@@ -20,7 +20,12 @@ This guide explains how to run Prometheus and Grafana to monitor your self-hoste
 
 3. Add Prometheus as a data source in Grafana using the URL `http://prometheus:9090`.
 
-You can now create dashboards to track container resource usage and any custom metrics you expose.
+Prometheus is preconfigured to scrape the DSPACE metrics endpoint at
+`http://host.docker.internal:3002/metrics`. If you run DSPACE on a different
+port or host, update `monitoring/prometheus/prometheus.yml` accordingly.
+
+You can now create dashboards to track container resource usage and the metrics
+exposed by your DSPACE instance.
 
 ## Configuration
 
@@ -29,4 +34,5 @@ The `docker-compose.yml` file defines two services:
 - **prometheus** – stores metrics using the configuration in `prometheus/prometheus.yml`.
 - **grafana** – visualizes data from Prometheus and persists settings in the `grafana-data` volume.
 
-Feel free to modify `prometheus/prometheus.yml` to scrape additional targets such as node exporters.
+Feel free to modify `prometheus/prometheus.yml` to scrape additional targets
+such as node exporters or remote DSPACE instances.
