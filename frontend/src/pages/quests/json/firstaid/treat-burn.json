@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Cooking mishap? Let's cool that burn before it blisters.",
-            "options": [{ "type": "goto", "goto": "cool", "text": "How?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cool",
+                    "text": "How?"
+                }
+            ]
         },
         {
             "id": "cool",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Cooled off and ready to cover",
-                    "requiresItems": [{ "id": "135", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! Apply a sterile dressing from your kit and watch for signs of infection.",
-            "options": [{ "type": "finish", "text": "I'll keep an eye on it." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll keep an eye on it."
+                }
+            ]
         }
     ],
     "rewards": [],

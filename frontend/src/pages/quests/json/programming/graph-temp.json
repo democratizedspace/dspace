@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Now that you've been collecting temperature readings, let's learn how to turn that list of numbers into a useful chart. Visualization makes trends easy to spot.",
-            "options": [{ "type": "goto", "goto": "script", "text": "Let's create a graph." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "script",
+                    "text": "Let's create a graph."
+                }
+            ]
         },
         {
             "id": "script",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "My chart looks great!",
-                    "requiresItems": [{ "id": "58", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent work! Graphing your sensor data opens the door to more advanced analytics down the road.",
-            "options": [{ "type": "finish", "text": "Thanks dChat!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks dChat!"
+                }
+            ]
         }
     ],
     "rewards": [],

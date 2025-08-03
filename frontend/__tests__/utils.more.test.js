@@ -13,6 +13,7 @@ const {
     jsonToQuery,
     queryToJson,
 } = require('../src/utils.js');
+const items = require('../src/pages/inventory/json/items.json');
 
 describe('number and boolean utilities', () => {
     test('prettyPrintNumber handles small and large numbers', () => {
@@ -84,8 +85,10 @@ describe('string and object helpers', () => {
     });
 
     test('getSymbolFromId reads item price', () => {
-        expect(getSymbolFromId('0')).toBe('dUSD');
-        expect(getSymbolFromId('1')).toBe('');
+        const firstId = items[0].id;
+        const secondId = items[1].id;
+        expect(getSymbolFromId(firstId)).toBe('dUSD');
+        expect(getSymbolFromId(secondId)).toBe('');
     });
 
     test('constructLink appends redirect', () => {

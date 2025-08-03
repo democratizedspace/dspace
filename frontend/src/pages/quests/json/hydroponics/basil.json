@@ -36,7 +36,7 @@
                     "type": "grantsItems",
                     "grantsItems": [
                         {
-                            "id": "9",
+                            "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
                             "count": 1
                         }
                     ],
@@ -47,7 +47,7 @@
                     "goto": "water",
                     "requiresItems": [
                         {
-                            "id": "9",
+                            "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
                             "count": 1
                         }
                     ],
@@ -63,7 +63,7 @@
                     "type": "grantsItems",
                     "grantsItems": [
                         {
-                            "id": "28",
+                            "id": "799ace33-1336-46c0-904a-9f16778230f1",
                             "count": 1
                         }
                     ],
@@ -74,7 +74,7 @@
                     "goto": "bucket",
                     "requiresItems": [
                         {
-                            "id": "28",
+                            "id": "799ace33-1336-46c0-904a-9f16778230f1",
                             "count": 1
                         }
                     ],
@@ -96,7 +96,7 @@
                     "goto": "dechlorinate",
                     "requiresItems": [
                         {
-                            "id": "17",
+                            "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
                             "count": 1
                         }
                     ],
@@ -118,7 +118,7 @@
                     "goto": "fill",
                     "requiresItems": [
                         {
-                            "id": "25",
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                             "count": 1
                         }
                     ],
@@ -140,7 +140,7 @@
                     "goto": "germinate",
                     "requiresItems": [
                         {
-                            "id": "26",
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
                             "count": 11
                         }
                     ],
@@ -162,7 +162,7 @@
                     "goto": "transfer",
                     "requiresItems": [
                         {
-                            "id": "27",
+                            "id": "5712947f-716c-4f71-b28d-fcb811631080",
                             "count": 11
                         }
                     ],
@@ -178,7 +178,7 @@
                     "type": "grantsItems",
                     "grantsItems": [
                         {
-                            "id": "14",
+                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
                             "count": 1
                         }
                     ],
@@ -194,7 +194,7 @@
                     "goto": "lighting",
                     "requiresItems": [
                         {
-                            "id": "44",
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
                     ],
@@ -210,7 +210,7 @@
                     "type": "grantsItems",
                     "grantsItems": [
                         {
-                            "id": "43",
+                            "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
                             "count": 1
                         }
                     ],
@@ -231,7 +231,7 @@
                     "goto": "harvest",
                     "requiresItems": [
                         {
-                            "id": "42",
+                            "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
                             "count": 11
                         }
                     ],
@@ -253,7 +253,7 @@
                     "goto": "regrow",
                     "requiresItems": [
                         {
-                            "id": "47",
+                            "id": "29190faf-8581-4769-b871-f0ee283840e1",
                             "count": 11
                         }
                     ],
@@ -284,7 +284,7 @@
     ],
     "rewards": [
         {
-            "id": "48",
+            "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
             "count": 1
         }
     ],

@@ -6,6 +6,7 @@ const {
     getPriceStringComponents,
     getSymbolFromId,
 } = require('../src/utils.js');
+const items = require('../src/pages/inventory/json/items.json');
 
 describe('encoding helpers', () => {
     test('jsonToQuery and queryToJson roundtrip', () => {
@@ -45,6 +46,7 @@ describe('currency utilities', () => {
     });
 
     test('getSymbolFromId fetches symbol from items', () => {
-        expect(getSymbolFromId('0')).toBe('dUSD');
+        const firstId = items[0].id;
+        expect(getSymbolFromId(firstId)).toBe('dUSD');
     });
 });

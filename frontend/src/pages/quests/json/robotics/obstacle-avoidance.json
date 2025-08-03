@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Your line follower works! Let's teach it to dodge obstacles using an ultrasonic sensor.",
-            "options": [{ "type": "goto", "goto": "build", "text": "Sounds challenging." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Sounds challenging."
+                }
+            ]
         },
         {
             "id": "build",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "It's dodging nicely!",
-                    "requiresItems": [{ "id": "96", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! With obstacle avoidance your bot can explore more complex tracks.",
-            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
         }
     ],
     "rewards": [],

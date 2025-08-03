@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "With your telescope assembled, let's watch Jupiter. Its bright moons move quickly!",
-            "options": [{ "type": "goto", "goto": "observe", "text": "Pointing the scope." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Pointing the scope."
+                }
+            ]
         },
         {
             "id": "observe",
@@ -23,7 +29,12 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [{ "id": "134", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ],
                     "text": "Week complete."
                 }
             ]
@@ -31,7 +42,12 @@
         {
             "id": "finish",
             "text": "Excellent diligence! Tracking these moons builds the skills needed for future navigation challenges.",
-            "options": [{ "type": "finish", "text": "Space feels closer already." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Space feels closer already."
+                }
+            ]
         }
     ],
     "rewards": [],

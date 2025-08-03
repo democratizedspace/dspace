@@ -4,23 +4,23 @@
         "title": "Generate 1000 dWatt using your outlet.",
         "requireItems": [
             {
-                "id": "29",
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "24",
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
                 "count": 0.18
             }
         ],
         "createItems": [
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 1000
             },
             {
-                "id": "20",
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
                 "count": 0.977023939064
             }
         ],
@@ -31,23 +31,23 @@
         "title": "generate 1E4 dWatt using your outlet",
         "requireItems": [
             {
-                "id": "29",
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "24",
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
                 "count": 1.8
             }
         ],
         "createItems": [
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 10000
             },
             {
-                "id": "20",
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
                 "count": 9.77023939064
             }
         ],
@@ -58,23 +58,23 @@
         "title": "generate 1E5 dWatt using your outlet",
         "requireItems": [
             {
-                "id": "29",
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "24",
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
                 "count": 18
             }
         ],
         "createItems": [
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 100000
             },
             {
-                "id": "20",
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
                 "count": 97.7023939064
             }
         ],
@@ -85,19 +85,19 @@
         "title": "fill a bucket with tap water",
         "requireItems": [
             {
-                "id": "28",
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "16",
+                "id": "0564d441-7367-412e-b709-dad770814a39",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "17",
+                "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
                 "count": 1
             }
         ],
@@ -109,29 +109,29 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "12",
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                 "count": 33
             },
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 231.25
             }
         ],
         "createItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "1",
+                "id": "7892ffc6-c651-445f-946b-7edc998cf389",
                 "count": 1
             },
             {
-                "id": "88",
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
                 "count": 33
             }
         ],
@@ -143,29 +143,29 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "12",
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                 "count": 91
             },
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 1610.10417
             }
         ],
         "createItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "11",
+                "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
                 "count": 1
             },
             {
-                "id": "88",
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
                 "count": 91
             }
         ],
@@ -177,13 +177,13 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "17",
+                "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "25",
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                 "count": 1
             }
         ],
@@ -194,19 +194,19 @@
         "title": "soak your hydroponic starter plugs",
         "requireItems": [
             {
-                "id": "25",
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "13",
+                "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
                 "count": 11
             }
         ],
         "createItems": [
             {
-                "id": "26",
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
                 "count": 11
             }
         ],
@@ -218,17 +218,17 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "10",
+                "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
                 "count": 1
             },
             {
-                "id": "26",
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
                 "count": 11
             }
         ],
         "createItems": [
             {
-                "id": "27",
+                "id": "5712947f-716c-4f71-b28d-fcb811631080",
                 "count": 11
             }
         ],
@@ -240,21 +240,21 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "9",
+                "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
                 "count": 1
             },
             {
-                "id": "25",
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                 "count": 1
             },
             {
-                "id": "14",
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "44",
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                 "count": 1
             }
         ],
@@ -266,17 +266,17 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "45",
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
                 "count": 1
             },
             {
-                "id": "14",
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "44",
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                 "count": 1
             }
         ],
@@ -287,31 +287,31 @@
         "title": "grow basil until it's ready to harvest",
         "requireItems": [
             {
-                "id": "43",
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "27",
+                "id": "5712947f-716c-4f71-b28d-fcb811631080",
                 "count": 11
             },
             {
-                "id": "44",
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                 "count": 1
             },
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 16128
             }
         ],
         "createItems": [
             {
-                "id": "42",
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
                 "count": 11
             },
             {
-                "id": "45",
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
                 "count": 1
             }
         ],
@@ -323,25 +323,25 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "47",
+                "id": "29190faf-8581-4769-b871-f0ee283840e1",
                 "count": 11
             },
             {
-                "id": "44",
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                 "count": 1
             },
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 8064
             }
         ],
         "createItems": [
             {
-                "id": "42",
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
                 "count": 11
             },
             {
-                "id": "45",
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
                 "count": 1
             }
         ],
@@ -353,17 +353,17 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "42",
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
                 "count": 11
             }
         ],
         "createItems": [
             {
-                "id": "46",
+                "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
                 "count": 11
             },
             {
-                "id": "47",
+                "id": "29190faf-8581-4769-b871-f0ee283840e1",
                 "count": 11
             }
         ],
@@ -374,24 +374,55 @@
         "title": "germinate stevia seeds",
         "requireItems": [],
         "consumeItems": [
-            { "id": "117", "count": 1 },
-            { "id": "26", "count": 11 }
+            {
+                "id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
+                "count": 1
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 11
+            }
         ],
-        "createItems": [{ "id": "118", "count": 11 }],
+        "createItems": [
+            {
+                "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                "count": 11
+            }
+        ],
         "duration": "7d"
     },
     {
         "id": "grow-stevia",
         "title": "grow stevia until it's ready to harvest",
-        "requireItems": [{ "id": "43", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
         "consumeItems": [
-            { "id": "118", "count": 11 },
-            { "id": "44", "count": 1 },
-            { "id": "22", "count": 16128 }
+            {
+                "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 16128
+            }
         ],
         "createItems": [
-            { "id": "119", "count": 11 },
-            { "id": "45", "count": 1 }
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
         ],
         "duration": "28d"
     },
@@ -400,13 +431,28 @@
         "title": "regrow stevia after harvest",
         "requireItems": [],
         "consumeItems": [
-            { "id": "121", "count": 11 },
-            { "id": "44", "count": 1 },
-            { "id": "22", "count": 8064 }
+            {
+                "id": "b2248af9-151b-4268-989d-4bb408a6147c",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 8064
+            }
         ],
         "createItems": [
-            { "id": "119", "count": 11 },
-            { "id": "45", "count": 1 }
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
         ],
         "duration": "14d"
     },
@@ -414,10 +460,21 @@
         "id": "harvest-stevia",
         "title": "Harvest your hydroponic stevia plants",
         "requireItems": [],
-        "consumeItems": [{ "id": "119", "count": 11 }],
+        "consumeItems": [
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 11
+            }
+        ],
         "createItems": [
-            { "id": "120", "count": 11 },
-            { "id": "121", "count": 11 }
+            {
+                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                "count": 11
+            },
+            {
+                "id": "b2248af9-151b-4268-989d-4bb408a6147c",
+                "count": 11
+            }
         ],
         "duration": "1m"
     },
@@ -425,16 +482,36 @@
         "id": "extract-stevia",
         "title": "extract sweetener from stevia leaves",
         "requireItems": [],
-        "consumeItems": [{ "id": "120", "count": 11 }],
-        "createItems": [{ "id": "122", "count": 1 }],
+        "consumeItems": [
+            {
+                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            }
+        ],
         "duration": "1h"
     },
     {
         "id": "purify-stevia",
         "title": "purify stevia extract into crystals",
         "requireItems": [],
-        "consumeItems": [{ "id": "122", "count": 1 }],
-        "createItems": [{ "id": "136", "count": 1 }],
+        "consumeItems": [
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                "count": 1
+            }
+        ],
         "duration": "6h"
     },
     {
@@ -444,7 +521,7 @@
         "consumeItems": [],
         "createItems": [
             {
-                "id": "28",
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
                 "count": 1
             }
         ],
@@ -456,29 +533,29 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "12",
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                 "count": 18.48
             },
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 266.67
             }
         ],
         "createItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "31",
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
                 "count": 1
             },
             {
-                "id": "88",
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
                 "count": 18.48
             }
         ],
@@ -490,29 +567,29 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "12",
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                 "count": 6.32
             },
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 112.92
             }
         ],
         "createItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "33",
+                "id": "05c339ee-f50b-419a-804a-341f850b85e9",
                 "count": 1
             },
             {
-                "id": "88",
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
                 "count": 6.32
             }
         ],
@@ -524,29 +601,29 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "12",
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                 "count": 13.9
             },
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 223.4375
             }
         ],
         "createItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "30",
+                "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
                 "count": 1
             },
             {
-                "id": "88",
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
                 "count": 13.9
             }
         ],
@@ -558,29 +635,29 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "12",
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                 "count": 52.3
             },
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 1006.70139
             }
         ],
         "createItems": [
             {
-                "id": "0",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {
-                "id": "32",
+                "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
                 "count": 1
             },
             {
-                "id": "88",
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
                 "count": 52.3
             }
         ],
@@ -592,33 +669,33 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "30",
+                "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
                 "count": 1
             },
             {
-                "id": "31",
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
                 "count": 1
             },
             {
-                "id": "32",
+                "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
                 "count": 1
             },
             {
-                "id": "33",
+                "id": "05c339ee-f50b-419a-804a-341f850b85e9",
                 "count": 1
             },
             {
-                "id": "34",
+                "id": "4d817f1c-d78d-4fac-a514-402bce330693",
                 "count": 1
             },
             {
-                "id": "35",
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
                 "count": 0.1
             }
         ],
         "createItems": [
             {
-                "id": "39",
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
                 "count": 1
             }
         ],
@@ -629,31 +706,31 @@
         "title": "Launch your rocket!",
         "requireItems": [
             {
-                "id": "38",
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
                 "count": 1
             },
             {
-                "id": "83",
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "39",
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
                 "count": 1
             },
             {
-                "id": "37",
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "40",
+                "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
                 "count": 1
             },
             {
-                "id": "69",
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
                 "count": 1
             }
         ],
@@ -664,31 +741,31 @@
         "title": "rocket with parachute",
         "requireItems": [
             {
-                "id": "38",
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
                 "count": 1
             },
             {
-                "id": "83",
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "67",
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
                 "count": 1
             },
             {
-                "id": "37",
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "67",
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
                 "count": 1
             },
             {
-                "id": "69",
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
                 "count": 1
             }
         ],
@@ -700,17 +777,17 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "39",
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
                 "count": 1
             },
             {
-                "id": "66",
+                "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "67",
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
                 "count": 1
             }
         ],
@@ -722,25 +799,25 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "5",
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
                 "count": 1
             },
             {
-                "id": "6",
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                 "count": 1
             },
             {
-                "id": "79",
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
                 "count": 1
             },
             {
-                "id": "80",
+                "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "81",
+                "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
                 "count": 1
             }
         ],
@@ -752,25 +829,25 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "81",
+                "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "5",
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
                 "count": 1
             },
             {
-                "id": "6",
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                 "count": 1
             },
             {
-                "id": "79",
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
                 "count": 1
             },
             {
-                "id": "80",
+                "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
                 "count": 1
             }
         ],
@@ -782,25 +859,25 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "5",
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
                 "count": 1
             },
             {
-                "id": "76",
+                "id": "7246c1c8-f22e-4d31-acd3-967f91b8626a",
                 "count": 1
             },
             {
-                "id": "79",
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
                 "count": 1
             },
             {
-                "id": "80",
+                "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "82",
+                "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
                 "count": 1
             }
         ],
@@ -812,25 +889,25 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "82",
+                "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "5",
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
                 "count": 1
             },
             {
-                "id": "6",
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                 "count": 1
             },
             {
-                "id": "79",
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
                 "count": 1
             },
             {
-                "id": "80",
+                "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
                 "count": 1
             }
         ],
@@ -841,18 +918,18 @@
         "title": "Generate 200 Wh of electricity using solar",
         "requireItems": [
             {
-                "id": "81",
+                "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
                 "count": 1
             }
         ],
         "consumeItems": [],
         "createItems": [
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 200
             },
             {
-                "id": "61",
+                "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
                 "count": 200
             }
         ],
@@ -863,18 +940,18 @@
         "title": "Generate 1000 Wh of electricity using solar",
         "requireItems": [
             {
-                "id": "82",
+                "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
                 "count": 1
             }
         ],
         "consumeItems": [],
         "createItems": [
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 1000
             },
             {
-                "id": "61",
+                "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
                 "count": 1000
             }
         ],
@@ -886,41 +963,41 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "51",
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
                 "count": 1
             },
             {
-                "id": "25",
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                 "count": 1
             },
             {
-                "id": "55",
+                "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
                 "count": 1
             },
             {
-                "id": "56",
+                "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
                 "count": 1
             },
             {
-                "id": "57",
+                "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
                 "count": 1
             },
             {
-                "id": "58",
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                 "count": 1
             },
             {
-                "id": "62",
+                "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
                 "count": 20
             }
         ],
         "createItems": [
             {
-                "id": "16",
+                "id": "0564d441-7367-412e-b709-dad770814a39",
                 "count": 1
             },
             {
-                "id": "60",
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
                 "count": 1
             }
         ],
@@ -931,23 +1008,23 @@
         "title": "Add a goldfish to your aquarium",
         "requireItems": [
             {
-                "id": "63",
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "60",
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
                 "count": 1
             },
             {
-                "id": "53",
+                "id": "40920981-bf9f-4b89-b887-bebe7006f7dc",
                 "count": 1
             }
         ],
         "createItems": [
             {
-                "id": "52",
+                "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
                 "count": 1
             }
         ],
@@ -958,19 +1035,19 @@
         "title": "Feed your goldfish",
         "requireItems": [
             {
-                "id": "52",
+                "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "54",
+                "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
                 "count": 0.1
             }
         ],
         "createItems": [
             {
-                "id": "64",
+                "id": "36a1168f-0109-4a8c-b70b-45f8ca582297",
                 "count": 1
             }
         ],
@@ -981,10 +1058,21 @@
         "title": "Install a heater in your Walstad tank",
         "requireItems": [],
         "consumeItems": [
-            { "id": "100", "count": 1 },
-            { "id": "56", "count": 1 }
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            },
+            {
+                "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                "count": 1
+            }
         ],
-        "createItems": [{ "id": "106", "count": 1 }],
+        "createItems": [
+            {
+                "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                "count": 1
+            }
+        ],
         "duration": "5m"
     },
     {
@@ -992,10 +1080,21 @@
         "title": "Add guppies to your heated Walstad tank",
         "requireItems": [],
         "consumeItems": [
-            { "id": "106", "count": 1 },
-            { "id": "102", "count": 1 }
+            {
+                "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                "count": 1
+            },
+            {
+                "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
+                "count": 1
+            }
         ],
-        "createItems": [{ "id": "107", "count": 1 }],
+        "createItems": [
+            {
+                "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                "count": 1
+            }
+        ],
         "duration": "1m"
     },
     {
@@ -1004,17 +1103,17 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "20",
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
                 "count": 1
             },
             {
-                "id": "24",
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
                 "count": 10
             }
         ],
         "createItems": [
             {
-                "id": "70",
+                "id": "b0ac46e6-6c60-48f0-b753-d9b6ad9935a6",
                 "count": 1
             }
         ],
@@ -1026,17 +1125,17 @@
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "20",
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
                 "count": 10
             },
             {
-                "id": "24",
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
                 "count": 100
             }
         ],
         "createItems": [
             {
-                "id": "70",
+                "id": "b0ac46e6-6c60-48f0-b753-d9b6ad9935a6",
                 "count": 10
             }
         ],
@@ -1049,11 +1148,11 @@
         "consumeItems": [],
         "createItems": [
             {
-                "id": "24",
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
                 "count": 100
             },
             {
-                "id": "72",
+                "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
                 "count": 100
             }
         ],
@@ -1064,23 +1163,23 @@
         "title": "Charge your Hypercar",
         "requireItems": [
             {
-                "id": "73",
+                "id": "5258f098-6cae-4ee5-8888-435b08f1675a",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "74",
+                "id": "5e283c0b-fd3c-4884-ae32-9a237f02a40e",
                 "count": 1
             },
             {
-                "id": "22",
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                 "count": 32400
             }
         ],
         "createItems": [
             {
-                "id": "21",
+                "id": "1498a7a1-2739-4943-a32f-4c277244a825",
                 "count": 1
             }
         ],
@@ -1090,8 +1189,18 @@
         "id": "flash-sd-card",
         "title": "Flash Raspberry Pi OS to microSD",
         "requireItems": [],
-        "consumeItems": [{ "id": "126", "count": 1 }],
-        "createItems": [{ "id": "130", "count": 1 }],
+        "consumeItems": [
+            {
+                "id": "36042a2b-861a-4192-a991-98778898963a",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
+                "count": 1
+            }
+        ],
         "duration": "5m"
     },
     {
@@ -1099,10 +1208,21 @@
         "title": "Clone OS to M.2 SSD",
         "requireItems": [],
         "consumeItems": [
-            { "id": "130", "count": 1 },
-            { "id": "125", "count": 1 }
+            {
+                "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
+                "count": 1
+            },
+            {
+                "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
+                "count": 1
+            }
         ],
-        "createItems": [{ "id": "131", "count": 1 }],
+        "createItems": [
+            {
+                "id": "4af856b5-b5c1-494f-8037-9b6559785633",
+                "count": 1
+            }
+        ],
         "duration": "10m"
     },
     {
@@ -1110,18 +1230,40 @@
         "title": "Assemble a Pi cluster node",
         "requireItems": [],
         "consumeItems": [
-            { "id": "123", "count": 1 },
-            { "id": "124", "count": 1 },
-            { "id": "131", "count": 1 },
-            { "id": "129", "count": 1 }
+            {
+                "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                "count": 1
+            },
+            {
+                "id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
+                "count": 1
+            },
+            {
+                "id": "4af856b5-b5c1-494f-8037-9b6559785633",
+                "count": 1
+            },
+            {
+                "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
+                "count": 1
+            }
         ],
-        "createItems": [{ "id": "132", "count": 1 }],
+        "createItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
         "duration": "5m"
     },
     {
         "id": "run-docker-compose",
         "title": "Launch DSPACE with Docker Compose",
-        "requireItems": [{ "id": "132", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "1m"
@@ -1129,7 +1271,12 @@
     {
         "id": "join-k3s-cluster",
         "title": "Join nodes to a k3s cluster",
-        "requireItems": [{ "id": "132", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "5m"
@@ -1137,17 +1284,33 @@
     {
         "id": "install-monitoring-stack",
         "title": "Install Prometheus and Grafana",
-        "requireItems": [{ "id": "132", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
-        "createItems": [{ "id": "133", "count": 1 }],
+        "createItems": [
+            {
+                "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                "count": 1
+            }
+        ],
         "duration": "10m"
     },
     {
         "id": "configure-daily-backups",
         "title": "Configure daily backups to SSD",
         "requireItems": [
-            { "id": "132", "count": 1 },
-            { "id": "133", "count": 1 }
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -1163,13 +1326,23 @@
             { "id": "151", "count": 1 }
         ],
         "consumeItems": [],
-        "createItems": [{ "id": "134", "count": 1 }],
+        "createItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
         "duration": "5m"
     },
     {
         "id": "measure-ph",
         "title": "Measure solution pH",
-        "requireItems": [{ "id": "59", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "1m"
@@ -1178,10 +1351,22 @@
         "id": "adjust-ph",
         "title": "Adjust solution pH",
         "requireItems": [
-            { "id": "140", "count": 1 },
-            { "id": "141", "count": 1 },
-            { "id": "142", "count": 1 },
-            { "id": "143", "count": 1 }
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "7c811503-d0ca-4254-825a-ebeb06a88231",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -1192,18 +1377,40 @@
         "title": "Pack a basic first aid kit",
         "requireItems": [],
         "consumeItems": [],
-        "createItems": [{ "id": "135", "count": 1 }],
+        "createItems": [
+            {
+                "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                "count": 1
+            }
+        ],
         "duration": "2m"
     },
     {
         "id": "clean-minor-cut",
         "title": "Clean and dress a minor cut",
-        "requireItems": [{ "id": "135", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                "count": 1
+            }
+        ],
         "consumeItems": [
-            { "id": "140", "count": 1 },
-            { "id": "139", "count": 1 },
-            { "id": "137", "count": 1 },
-            { "id": "144", "count": 1 }
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+                "count": 1
+            },
+            {
+                "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
+                "count": 1
+            },
+            {
+                "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
+                "count": 1
+            }
         ],
         "createItems": [],
         "duration": "5m"
@@ -1211,7 +1418,12 @@
     {
         "id": "practice-cpr",
         "title": "Practice CPR on a dummy",
-        "requireItems": [{ "id": "135", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "1m"
@@ -1219,7 +1431,12 @@
     {
         "id": "observe-jupiter-moons",
         "title": "Observe Jupiter's moons",
-        "requireItems": [{ "id": "134", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "10m"
@@ -1227,7 +1444,12 @@
     {
         "id": "identify-constellations",
         "title": "Identify constellations",
-        "requireItems": [{ "id": "134", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "15m"
@@ -1235,7 +1457,12 @@
     {
         "id": "observe-meteor-shower",
         "title": "Observe a meteor shower",
-        "requireItems": [{ "id": "134", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "15m"
@@ -1243,7 +1470,12 @@
     {
         "id": "photograph-lunar-eclipse",
         "title": "Photograph a lunar eclipse",
-        "requireItems": [{ "id": "134", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "20m"
@@ -1252,10 +1484,22 @@
         "id": "arduino-servo-sweep",
         "title": "upload servo sweep example in Arduino IDE",
         "requireItems": [
-            { "id": "90", "count": 1 },
-            { "id": "92", "count": 3 },
-            { "id": "95", "count": 1 },
-            { "id": "96", "count": 1 }
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -1265,12 +1509,30 @@
         "id": "arduino-thermistor-read",
         "title": "Log temperature with a thermistor on Arduino",
         "requireItems": [
-            { "id": "90", "count": 1 },
-            { "id": "91", "count": 1 },
-            { "id": "92", "count": 3 },
-            { "id": "95", "count": 1 },
-            { "id": "145", "count": 1 },
-            { "id": "146", "count": 1 }
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                "count": 1
+            },
+            {
+                "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],

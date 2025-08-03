@@ -81,7 +81,7 @@ describe('IndexedDB error handling', () => {
             await expect(promise).rejects.toBe(error);
         }
 
-        await expectFailure(() => module.saveItem({ id: '1' }));
+        await expectFailure(() => module.saveItem({ id: 'item-1' }));
         await expectFailure(() => module.getItems());
         await expectFailure(() => module.getItem('x'));
         await expectFailure(() => module.saveProcess({ id: 'p' }));

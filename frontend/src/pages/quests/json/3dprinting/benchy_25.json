@@ -27,7 +27,7 @@
                     "text": "I have enough!",
                     "requiresItems": [
                         {
-                            "id": "1",
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
                             "count": 25
                         }
                     ]
@@ -37,17 +37,28 @@
         {
             "id": "congrats",
             "text": "Twenty-five prints later and you've got a respectable armada. Each one is a testament to your patience and persistence.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "All done!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All done!"
+                }
+            ]
         },
         {
             "id": "finish",
             "text": "Excellent job! Your fleet of Benchies is growing. Keep up the great work. I'll return with an even bigger challenge soon!",
-            "options": [{ "type": "finish", "text": "I'm ready for anything!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'm ready for anything!"
+                }
+            ]
         }
     ],
     "rewards": [
         {
-            "id": "12",
+            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
             "count": 10000
         }
     ],

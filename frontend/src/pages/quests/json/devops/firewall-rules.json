@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Open ports invite trouble. Let's add a firewall to your node.",
-            "options": [{ "type": "goto", "goto": "setup", "text": "Show me." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Show me."
+                }
+            ]
         },
         {
             "id": "setup",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Rules applied.",
-                    "requiresItems": [{ "id": "132", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice! Your node now exposes only the ports it needs.",
-            "options": [{ "type": "finish", "text": "System secured." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "System secured."
+                }
+            ]
         }
     ],
     "rewards": [],

@@ -186,7 +186,9 @@ export function createItem(
     unit = null,
     type = null
 ) {
-    return db.items.add({ name, description, image, price, unit, type });
+    const id = crypto.randomUUID();
+    db.items.add({ id, name, description, image, price, unit, type });
+    return id;
 }
 
 export function getItem(id) {

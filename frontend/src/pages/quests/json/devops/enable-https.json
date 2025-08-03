@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Your services are running well. Let's protect them with HTTPS certificates.",
-            "options": [{ "type": "goto", "goto": "setup", "text": "I'm ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "I'm ready."
+                }
+            ]
         },
         {
             "id": "setup",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Certificates installed",
-                    "requiresItems": [{ "id": "132", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent! Traffic to your cluster is now encrypted.",
-            "options": [{ "type": "finish", "text": "All set" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All set"
+                }
+            ]
         }
     ],
     "rewards": [],

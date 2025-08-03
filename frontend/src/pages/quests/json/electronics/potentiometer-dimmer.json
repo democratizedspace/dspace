@@ -26,13 +26,34 @@
                     "goto": "program",
                     "text": "Wired up! What's the code?",
                     "requiresItems": [
-                        { "id": "90", "count": 1 },
-                        { "id": "91", "count": 1 },
-                        { "id": "92", "count": 3 },
-                        { "id": "93", "count": 1 },
-                        { "id": "94", "count": 1 },
-                        { "id": "95", "count": 1 },
-                        { "id": "98", "count": 1 }
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 3
+                        },
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -51,7 +72,12 @@
         {
             "id": "finish",
             "text": "Great job! Potentiometers open up lots of control options. Always disconnect power before changing the circuit, and try using the knob to control motors or sensor thresholds next!",
-            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
         }
     ],
     "requiresQuests": ["electronics/arduino-blink"]

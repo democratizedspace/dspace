@@ -9,25 +9,45 @@
         {
             "id": "start",
             "text": "Ready to try out the basic income system? Let's trigger your first payout so you see how it works.",
-            "options": [{ "type": "goto", "goto": "claim", "text": "Absolutely." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "claim",
+                    "text": "Absolutely."
+                }
+            ]
         },
         {
             "id": "claim",
             "text": "Open the wallet page and click the claim button. Your balance will increase instantly once the transaction finishes.",
             "options": [
-                { "type": "process", "process": "basic-income", "text": "Claiming now." },
+                {
+                    "type": "process",
+                    "process": "basic-income",
+                    "text": "Claiming now."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Funds received",
-                    "requiresItems": [{ "id": "72", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice! Come back tomorrow for another payment and watch your savings grow.",
-            "options": [{ "type": "finish", "text": "See you then." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "See you then."
+                }
+            ]
         }
     ],
     "rewards": [],

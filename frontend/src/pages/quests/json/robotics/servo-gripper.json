@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "A gripper is a simple way to interact with the world. Let's add one to your robot using a standard servo motor.",
-            "options": [{ "type": "goto", "goto": "attach", "text": "Sounds fun." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "attach",
+                    "text": "Sounds fun."
+                }
+            ]
         },
         {
             "id": "attach",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Works great",
-                    "requiresItems": [{ "id": "96", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice! You can now grab and carry small parts for future builds.",
-            "options": [{ "type": "finish", "text": "Sweet!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sweet!"
+                }
+            ]
         }
     ],
     "rewards": [],

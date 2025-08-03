@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "The ISS is visible a few times each week. Let's catch a flyover.",
-            "options": [{ "type": "goto", "goto": "observe", "text": "When should I look?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "When should I look?"
+                }
+            ]
         },
         {
             "id": "observe",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "I saw it streak by!",
-                    "requiresItems": [{ "id": "134", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Awesome! It's inspiring to see humans living in orbit.",
-            "options": [{ "type": "finish", "text": "Agreed!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Agreed!"
+                }
+            ]
         }
     ],
     "rewards": [],

@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "You've been logging data. Let's crunch the numbers for an average.",
-            "options": [{ "type": "goto", "goto": "code", "text": "Let's calculate." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Let's calculate."
+                }
+            ]
         },
         {
             "id": "code",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Average computed!",
-                    "requiresItems": [{ "id": "123", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice work! Those stats will help spot trends.",
-            "options": [{ "type": "finish", "text": "Sweet!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sweet!"
+                }
+            ]
         }
     ],
     "rewards": [],

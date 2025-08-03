@@ -9,24 +9,52 @@
         {
             "id": "start",
             "text": "Hi there! I'm Vega. Ready to try the Walstad method? It's a simple way to grow plants with minimal equipment.",
-            "options": [{ "type": "goto", "goto": "materials", "text": "Sure! What do I need?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Sure! What do I need?"
+                }
+            ]
         },
         {
             "id": "materials",
             "text": "You'll want an 80 liter tank, some organic soil capped with gravel, and easy plants like hornwort, guppy grass, and duckweed. Grab a light and we'll get started.",
-            "options": [{ "type": "goto", "goto": "setup", "text": "Got it. Let's set it up." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Got it. Let's set it up."
+                }
+            ]
         },
         {
             "id": "setup",
             "text": "Spread the soil, add gravel, plant everything, then fill gently with dechlorinated water. Let it settle for a day or two.",
-            "options": [{ "type": "goto", "goto": "cycle", "text": "Looks good so far." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cycle",
+                    "text": "Looks good so far."
+                }
+            ]
         },
         {
             "id": "cycle",
             "text": "Great! Give the tank a couple weeks to cycle before adding livestock. Keep the light on about eight hours a day.",
-            "options": [{ "type": "finish", "text": "I'll let it cycle. Thanks!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll let it cycle. Thanks!"
+                }
+            ]
         }
     ],
-    "rewards": [{ "id": "100", "count": 1 }],
+    "rewards": [
+        {
+            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["welcome/howtodoquests"]
 }

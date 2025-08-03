@@ -24,9 +24,11 @@ describe('customcontent extra coverage', () => {
     });
 
     test('query filters entities', async () => {
-        await saveItem({ id: '1', name: 'cheap', price: 1 });
-        await saveItem({ id: '2', name: 'expensive', price: 100 });
+        const cheap = { id: 'cheap', name: 'cheap', price: 1 };
+        const expensive = { id: 'expensive', name: 'expensive', price: 100 };
+        await saveItem(cheap);
+        await saveItem(expensive);
         const results = await db.query(ENTITY_TYPES.ITEM, (item) => Number(item.price) > 50);
-        expect(results.map((r) => r.id)).toEqual(['2']);
+        expect(results.map((r) => r.id)).toEqual(['expensive']);
     });
 });

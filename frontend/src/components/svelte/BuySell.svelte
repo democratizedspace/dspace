@@ -8,8 +8,8 @@
     export let itemId;
     export let gameState;
 
-    const dUSDId = '24';
-    const dCarbonId = '20';
+    const dUSDId = items.find((i) => i.name === 'dUSD').id;
+    const dCarbonId = items.find((i) => i.name === 'dCarbon').id;
 
     let itemList = [{ id: itemId }, { id: dUSDId }];
 

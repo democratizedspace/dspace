@@ -27,7 +27,7 @@
                     "text": "I have enough!",
                     "requiresItems": [
                         {
-                            "id": "61",
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
                             "count": 100000
                         }
                     ]
@@ -47,7 +47,7 @@
     ],
     "rewards": [
         {
-            "id": "5",
+            "id": "02b32152-a7b2-458e-9643-7b754c722165",
             "count": 10
         }
     ],

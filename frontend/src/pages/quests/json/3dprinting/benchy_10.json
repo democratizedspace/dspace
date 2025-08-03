@@ -27,7 +27,7 @@
                     "text": "I have enough!",
                     "requiresItems": [
                         {
-                            "id": "1",
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
                             "count": 10
                         }
                     ]
@@ -37,17 +37,28 @@
         {
             "id": "congrats",
             "text": "That's a full fleet of ten Benchies! Your printer handled the run like a champ and each hull looks smooth and shiny.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "What's next?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "What's next?"
+                }
+            ]
         },
         {
             "id": "finish",
             "text": "Well done! These Benchies look fantastic. Keep honing your 3D printing skills. I'll be back with a new challenge soon!",
-            "options": [{ "type": "finish", "text": "I'm ready for more!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'm ready for more!"
+                }
+            ]
         }
     ],
     "rewards": [
         {
-            "id": "12",
+            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
             "count": 1000
         }
     ],

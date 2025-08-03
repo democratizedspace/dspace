@@ -9,25 +9,45 @@
         {
             "id": "start",
             "text": "Phoenix here. Those stevia leaves you grew can be turned into a potent sweetener. Interested in an extraction demo?",
-            "options": [{ "type": "goto", "goto": "extract", "text": "Show me how!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "extract",
+                    "text": "Show me how!"
+                }
+            ]
         },
         {
             "id": "extract",
             "text": "Dry your homegrown leaves, crush them slightly, and steep them just below boiling. Filter the liquid using a funnel and paper as shown in [/docs/chemistry-lab](/docs/chemistry-lab).",
             "options": [
-                { "type": "process", "process": "extract-stevia", "text": "Begin extraction" },
+                {
+                    "type": "process",
+                    "process": "extract-stevia",
+                    "text": "Begin extraction"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "The extract looks ready!",
-                    "requiresItems": [{ "id": "122", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great work! This homemade stevia extract will sweeten drinks without any sugar. Next we'll purify it into crystals for longer storage.",
-            "options": [{ "type": "finish", "text": "Thanks, Phoenix!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Phoenix!"
+                }
+            ]
         }
     ],
     "rewards": [],
