@@ -1,0 +1,45 @@
+{
+    "id": "devops/ssh-hardening",
+    "title": "Harden SSH Access",
+    "description": "Use key-based authentication and disable password logins.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's secure your node's SSH service.",
+            "options": [{ "type": "goto", "goto": "keys", "text": "Ready." }]
+        },
+        {
+            "id": "keys",
+            "text": "Generate an SSH key pair and copy the public key into ~/.ssh/authorized_keys on the node.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "config",
+                    "text": "Key installed.",
+                    "requiresItems": [{ "id": "132", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "config",
+            "text": "Edit /etc/ssh/sshd_config to disable password authentication and root login, then restart the service.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Service restarted."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "SSH is now locked down to your key. Nice work.",
+            "options": [{ "type": "finish", "text": "Security first." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/firewall-rules"]
+}
