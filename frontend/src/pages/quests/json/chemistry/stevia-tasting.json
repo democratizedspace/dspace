@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Your extraction went well. Let's test the crystals to judge their flavor.",
-            "options": [{ "type": "goto", "goto": "mix", "text": "Sure!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Sure!"
+                }
+            ]
         },
         {
             "id": "mix",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Quite sweet!",
-                    "requiresItems": [{ "id": "136", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! We'll refine the process even further next time.",
-            "options": [{ "type": "finish", "text": "Looking forward to it." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looking forward to it."
+                }
+            ]
         }
     ],
     "rewards": [],

@@ -2,9 +2,9 @@ import ProcessForm from '../src/components/svelte/ProcessForm.svelte';
 
 // Mock the items.json import
 jest.mock('../src/pages/inventory/json/items.json', () => [
-    { id: '1', name: 'Test Item 1', description: 'Description 1' },
-    { id: '2', name: 'Test Item 2', description: 'Description 2' },
-    { id: '3', name: 'Test Item 3', description: 'Description 3' },
+    { id: 'item-1', name: 'Test Item 1', description: 'Description 1' },
+    { id: 'item-2', name: 'Test Item 2', description: 'Description 2' },
+    { id: 'item-3', name: 'Test Item 3', description: 'Description 3' },
 ]);
 
 describe('ProcessForm Component', () => {
@@ -55,9 +55,9 @@ describe('ProcessForm Component', () => {
 
         // Add items
         component.$$set({
-            requireItems: [{ id: '1', count: 2 }],
-            consumeItems: [{ id: '2', count: 1 }],
-            createItems: [{ id: '3', count: 3 }],
+            requireItems: [{ id: 'item-1', count: 2 }],
+            consumeItems: [{ id: 'item-2', count: 1 }],
+            createItems: [{ id: 'item-3', count: 3 }],
         });
 
         // Submit form
@@ -68,9 +68,9 @@ describe('ProcessForm Component', () => {
         const formData = submittedData;
         expect(formData.get('title')).toBe('Test Process');
         expect(formData.get('duration')).toBe('1h 30m');
-        expect(JSON.parse(formData.get('requireItems'))).toEqual([{ id: '1', count: 2 }]);
-        expect(JSON.parse(formData.get('consumeItems'))).toEqual([{ id: '2', count: 1 }]);
-        expect(JSON.parse(formData.get('createItems'))).toEqual([{ id: '3', count: 3 }]);
+        expect(JSON.parse(formData.get('requireItems'))).toEqual([{ id: 'item-1', count: 2 }]);
+        expect(JSON.parse(formData.get('consumeItems'))).toEqual([{ id: 'item-2', count: 1 }]);
+        expect(JSON.parse(formData.get('createItems'))).toEqual([{ id: 'item-3', count: 3 }]);
     });
 
     test('should handle form submission with minimal fields', () => {
@@ -177,7 +177,7 @@ describe('ProcessForm Component', () => {
 
         // Try to set negative count
         component.$$set({
-            requireItems: [{ id: '1', count: -1 }],
+            requireItems: [{ id: 'item-1', count: -1 }],
         });
 
         const form = container.querySelector('form');
@@ -202,7 +202,7 @@ describe('ProcessForm Component', () => {
 
         // Set valid count
         component.$$set({
-            requireItems: [{ id: '1', count: 1 }],
+            requireItems: [{ id: 'item-1', count: 1 }],
         });
 
         form.dispatchEvent(new Event('submit', { cancelable: true }));

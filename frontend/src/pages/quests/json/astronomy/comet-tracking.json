@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "A bright comet is passing by. Let's chart its position each evening.",
-            "options": [{ "type": "goto", "goto": "observe", "text": "I'll set up." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "I'll set up."
+                }
+            ]
         },
         {
             "id": "observe",
@@ -24,14 +30,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Path recorded",
-                    "requiresItems": [{ "id": "134", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent observations! Comparing notes over multiple nights reveals its orbit.",
-            "options": [{ "type": "finish", "text": "Fascinating!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Fascinating!"
+                }
+            ]
         }
     ],
     "rewards": [],

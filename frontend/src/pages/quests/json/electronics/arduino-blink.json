@@ -26,9 +26,18 @@
                     "goto": "upload",
                     "text": "Got it all wired up. What's next?",
                     "requiresItems": [
-                        { "id": "90", "count": 1 },
-                        { "id": "93", "count": 1 },
-                        { "id": "94", "count": 1 }
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -56,5 +65,10 @@
         }
     ],
     "requiresQuests": ["electronics/basic-circuit"],
-    "rewards": [{ "id": "96", "count": 1 }]
+    "rewards": [
+        {
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+            "count": 1
+        }
+    ]
 }

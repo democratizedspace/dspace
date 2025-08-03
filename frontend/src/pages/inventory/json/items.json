@@ -1,27 +1,27 @@
 [
     {
-        "id": "0",
+        "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
         "name": "Real Printer 1",
         "description": "A basic cheap printer that is easy to use and has a large community of users.",
         "image": "/assets/3dprinter.jpg",
         "price": "200 dUSD"
     },
     {
-        "id": "1",
+        "id": "7892ffc6-c651-445f-946b-7edc998cf389",
         "name": "Benchy",
         "description": "A basic test print that is used to test the quality of a printer.",
         "image": "/assets/benchy.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "2",
+        "id": "92261497-d605-4db1-8710-953cf73d765c",
         "name": "hydroponics kit",
         "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
         "image": "/assets/amazing1.jpg",
         "price": "30 dUSD"
     },
     {
-        "id": "3",
+        "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
         "name": "white PLA filament",
         "description": "1 gram of white PLA filament for an FDM printer.",
         "image": "/assets/pla_white.jpg",
@@ -29,14 +29,14 @@
         "unit": "g"
     },
     {
-        "id": "4",
+        "id": "8f54a592-09de-4340-829b-7288897eb4c7",
         "name": "Edison Model M",
         "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities.",
         "image": "/assets/ev.jpg",
         "price": "40000 dUSD"
     },
     {
-        "id": "5",
+        "id": "02b32152-a7b2-458e-9643-7b754c722165",
         "name": "portable solar panel",
         "description": "Foldable 200 W monocrystalline panel with MC4 connectors supplying ~20 V DC in full sun.",
         "price": "220 dUSD",
@@ -45,46 +45,52 @@
             "passes": 1,
             "score": 60,
             "emoji": "🌀",
-            "history": [{ "task": "codex-hardening-2025-08-03", "date": "2025-08-03", "score": 60 }]
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-03",
+                    "date": "2025-08-03",
+                    "score": 60
+                }
+            ]
         }
     },
     {
-        "id": "6",
+        "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
         "name": "200 Wh battery pack",
         "description": "A 200 Wh battery pack that can be used to store energy from a solar panel or a wind turbine.",
         "price": "130 dUSD",
         "image": "/assets/battery.jpg"
     },
     {
-        "id": "7",
+        "id": "743681a7-d2e7-465c-af07-43665079bf4d",
         "name": "500W wind turbine",
         "description": "A 500W wind turbine that can be used to generate electricity.",
         "price": "200 dUSD",
         "image": "/assets/turbine.jpg"
     },
     {
-        "id": "8",
+        "id": "fe46e236-5d03-4c95-9b38-68b045a0df03",
         "name": "Benchy Award",
         "description": "Cause it's a bench! Get it? Benchy?",
         "image": "/assets/benchy_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "9",
+        "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
         "name": "Beginner hydroponics tub",
         "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
         "image": "/assets/hydroponics_tub.jpg",
         "price": "30 dUSD"
     },
     {
-        "id": "10",
+        "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
         "name": "basil seeds",
         "description": "A packet of basil seeds.",
         "image": "/assets/basil_seeds.jpg",
         "price": "5 dUSD"
     },
     {
-        "id": "11",
+        "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
         "name": "3D printed model rocket",
         "description": "A 3D-printed model rocket that can be used to launch small payloads into space.",
         "image": "/assets/modelrocket.jpg",
@@ -92,7 +98,7 @@
         "price": "25 dUSD"
     },
     {
-        "id": "12",
+        "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
         "name": "green PLA filament",
         "description": "1 gram of green PLA filament for an FDM printer.",
         "image": "/assets/pla_green.jpg",
@@ -100,14 +106,14 @@
         "unit": "g"
     },
     {
-        "id": "13",
+        "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
         "name": "hydroponic starter plug",
         "description": "1 rockwool starter plug for hydroponic seed germination.",
         "image": "/assets/rockwool.jpg",
         "price": "0.35 dUSD"
     },
     {
-        "id": "14",
+        "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
         "name": "hydroponics nutrients",
         "description": "A bottle of hydroponics nutrients that can be used to grow plants. NPK: 9-3-6",
         "image": "/assets/hydroponics_nutrients.jpg",
@@ -115,154 +121,154 @@
         "unit": " L"
     },
     {
-        "id": "15",
+        "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
         "name": "3D printing kit",
         "description": "A kit that contains all the parts you need to get started with 3D printing. Everything is fully assembled.",
         "image": "/assets/amazing1.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "16",
+        "id": "0564d441-7367-412e-b709-dad770814a39",
         "name": "5 gallon bucket",
         "description": "A 5 gallon bucket that can be used to store water or other liquids.",
         "image": "/assets/bucket.jpg",
         "price": "8 dUSD"
     },
     {
-        "id": "17",
+        "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
         "name": "5 gallon bucket of tap water (chlorinated)",
         "description": "A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics.",
         "image": "/assets/bucket_water.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "18",
+        "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
         "name": "Motor Award",
         "description": "A trophy granted for being one of the first people to buy an Edison Model M",
         "image": "/assets/motor_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "19",
+        "id": "946b07b7-2b2c-4507-a725-edb270d8e910",
         "name": "Rocket Award",
         "description": "A trophy granted for printing your first model rocket.",
         "image": "/assets/rocket_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "20",
+        "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
         "name": "dCarbon",
         "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
         "image": "/assets/dCarbon.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "21",
+        "id": "1498a7a1-2739-4943-a32f-4c277244a825",
         "name": "Hypercar (80% charge)",
         "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 80% charged.",
         "image": "/assets/hypercar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "22",
+        "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
         "name": "dWatt",
         "description": "A token that represents 1 watt of electricity that can be consumed by machines. To acquire 1 dWatt, you need to either prepay the dCarbon cost, or generate and store it in a battery without accruing dCarbon.",
         "image": "/assets/dWatts.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "23",
+        "id": "c2e3bbb6-0ded-4923-98e1-37e5ac3c7d77",
         "name": "Hypervan",
         "description": "A futuristic electric van with Fully Supervised Driving (FSD) capabilities.",
         "image": "/assets/hypervan.jpg",
         "price": "75000 dUSD"
     },
     {
-        "id": "24",
+        "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
         "name": "dUSD",
         "description": "An in-game tokenized version of the USD currency. Not backed by or in any way associated with actual USD.",
         "image": "/assets/dUSD.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "25",
+        "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
         "name": "5 gallon bucket of tap water (dechlorinated)",
         "description": "A 5 gallon bucket of water. This water is dechlorinated and can be used for hydroponics.",
         "image": "/assets/bucket_water.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "26",
+        "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
         "name": "soaked hydroponic starter plug",
         "description": "A hydroponic starter plug soaked in water. Used to germinate seeds.",
         "image": "/assets/rockwool_wet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "27",
+        "id": "5712947f-716c-4f71-b28d-fcb811631080",
         "name": "basil seedling",
         "description": "A basil seedling that has been germinated in a rockwool cube.",
         "image": "/assets/basil_seedlings.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "28",
+        "id": "799ace33-1336-46c0-904a-9f16778230f1",
         "name": "sink",
         "description": "Generates tap water.",
         "image": "/assets/tap.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "29",
+        "id": "a5395e29-1862-4eb7-8517-5d161635e032",
         "name": "smart plug",
         "description": "A smart plug that plugs into a wall outlet to measure energy usage.",
         "image": "/assets/smart_plug.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "30",
+        "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
         "name": "3D printed nosecone",
         "description": "A nosecone for a modular model rocket.",
         "image": "/assets/3dprinted_rocket_nosecone.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "31",
+        "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
         "name": "3D printed body tube",
         "description": "A body tube for a modular model rocket.",
         "image": "/assets/3dprinted_rocket_body_tube.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "32",
+        "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
         "name": "3D printed fincan",
         "description": "A fincan for a modular model rocket.",
         "image": "/assets/3dprinted_rocket_fincan.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "33",
+        "id": "05c339ee-f50b-419a-804a-341f850b85e9",
         "name": "3D printed nosecone coupler",
         "description": "A nosecone coupler for a modular model rocket.",
         "image": "/assets/3dprinted_rocket_nosecone_coupler.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "34",
+        "id": "4d817f1c-d78d-4fac-a514-402bce330693",
         "name": "hobbyist solid rocket motor",
         "description": "18mm in diameter, 70mm long, weighing 17.9g. Max thrust: 31.3 Newtons. Thrust duration: 0.80s.",
         "image": "/assets/rocket_motor.jpg",
         "price": "10 dUSD"
     },
     {
-        "id": "35",
+        "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
         "name": "superglue",
         "description": "Don't get it on your hands!",
         "image": "/assets/superglue.jpg",
         "price": "10 dUSD"
     },
     {
-        "id": "36",
+        "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6",
         "name": "kevlar shock cord",
         "description": "Perfect for model rocketry. Used to attach the rocket body to the parachute.",
         "image": "/assets/kevlar_cord.jpg",
@@ -270,182 +276,182 @@
         "unit": " m"
     },
     {
-        "id": "37",
+        "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
         "name": "rocket igniter",
         "description": "Ignite a rocket motor with electricity.",
         "image": "/assets/rocket_igniter.jpg",
         "price": "0.1 dUSD"
     },
     {
-        "id": "38",
+        "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
         "name": "launch controller",
         "description": "A controller for launching model rockets.",
         "image": "/assets/launch_controller.jpg",
         "price": "20 dUSD"
     },
     {
-        "id": "39",
+        "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
         "name": "launch-capable model rocket",
         "description": "A model rocket ready for launch. Ignite remotely using the launch controller.",
         "image": "/assets/rocket_field.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "40",
+        "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
         "name": "damaged model rocket",
         "description": "Badly damaged and broken in several places.",
         "image": "/assets/rocket_damaged.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "41",
+        "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
         "name": "Rocketeer Award",
         "description": "Awarded for launching your first rocket!",
         "image": "/assets/rocketeer_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "42",
+        "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
         "name": "harvestable basil plant",
         "description": "A basil plant that is ready to be harvested. Growing medium: rockwool.",
         "image": "/assets/hydroponic_basil_adult.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "43",
+        "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
         "name": "hydroponic grow lamp",
         "description": "Nice pink lighting that completely changes the vibe of your room. Also used for growing plants. Energy consumption: 36W.",
         "image": "/assets/hydroponic_lamp.jpg",
         "price": "50 dUSD"
     },
     {
-        "id": "44",
+        "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
         "name": "hydroponics tub (ready)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
         "image": "/assets/hydroponics_tub.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "45",
+        "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
         "name": "hydroponics tub (nutrient deficient)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
         "image": "/assets/hydroponics_tub.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "46",
+        "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
         "name": "bundle of basil leaves",
         "description": "A bundle of basil leaves. Maybe we can make pesto in the future? For now, maybe just sell it.",
         "image": "/assets/basil_harvested.jpg",
         "price": "3 dUSD"
     },
     {
-        "id": "47",
+        "id": "29190faf-8581-4769-b871-f0ee283840e1",
         "name": "harvested basil plant",
         "description": "A basil plant that has been freshly harvested. Don't worry, it'll grow back eventually!",
         "image": "/assets/hydroponic_basil_harvested.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "48",
+        "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
         "name": "Green Thumb Award",
         "description": "Awarded for growing and harvesting your first batch of hydroponic basil!",
         "image": "/assets/green_thumb_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "49",
+        "id": "5bba251a-d223-4e22-aa30-b65238b17516",
         "name": "Solarpunk Award",
         "description": "Awarded for generating dWatt using solar panels!",
         "image": "/assets/solarpunk_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "50",
+        "id": "1394c366-5078-49cf-b24e-c748e8428234",
         "name": "Completionist Award",
         "description": "Awarded for completing all of the quests available on January 1, 2023.",
         "image": "/assets/completionist_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "51",
+        "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
         "name": "aquarium (150 L)",
         "description": "A glass tank for housing fish.",
         "image": "/assets/aquarium_empty.jpg",
         "price": "60 dUSD"
     },
     {
-        "id": "52",
+        "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
         "name": "aquarium (goldfish) (150 L)",
         "description": "An aquarium containing a goldfish.",
         "image": "/assets/aquarium_goldfish.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "53",
+        "id": "40920981-bf9f-4b89-b887-bebe7006f7dc",
         "name": "goldfish",
         "description": "A goldfish.",
         "image": "/assets/goldfish.jpg",
         "price": "10 dUSD"
     },
     {
-        "id": "54",
+        "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
         "name": "goldfish food",
         "description": "Food suitable for a goldfish.",
         "image": "/assets/goldfish_food.jpg",
         "price": "10 dUSD"
     },
     {
-        "id": "55",
+        "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
         "name": "aquarium filter",
         "description": "A filter for a fish tank.",
         "image": "/assets/aquarium_filter.jpg",
         "price": "30 dUSD"
     },
     {
-        "id": "56",
+        "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
         "name": "aquarium heater",
         "description": "A heater for a fish tank.",
         "image": "/assets/aquarium_heater.jpg",
         "price": "20 dUSD"
     },
     {
-        "id": "57",
+        "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
         "name": "aquarium light",
         "description": "A light for a fish tank.",
         "image": "/assets/aquarium_light.jpg",
         "price": "15 dUSD"
     },
     {
-        "id": "58",
+        "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
         "name": "Thermometer",
         "description": "A thermometer for measuring temperature.",
         "image": "/assets/aquarium_thermometer.jpg",
         "price": "15 dUSD"
     },
     {
-        "id": "59",
+        "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
         "name": "pH strip",
         "description": "A pH strip for measuring pH.",
         "image": "/assets/pH_strip.jpg",
         "price": "0.15 dUSD"
     },
     {
-        "id": "60",
+        "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
         "name": "7 pH freshwater aquarium (150 L)",
         "description": "An freshwater aquarium with a pH of 7.",
         "image": "/assets/aquarium_filled.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "61",
+        "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
         "name": "dSolar",
         "description": "a token that represents 1 Watt of energy generated using a solar panel.",
         "image": "/assets/dSolar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "62",
+        "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
         "name": "gravel",
         "description": "Loose gravel suitable for use in an aquarium.",
         "image": "/assets/gravel.jpg",
@@ -453,490 +459,490 @@
         "unit": " kg"
     },
     {
-        "id": "63",
+        "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
         "name": "aquarium net",
         "description": "A net for catching fish.",
         "image": "/assets/aquarium_net.jpg",
         "price": "5 dUSD"
     },
     {
-        "id": "64",
+        "id": "36a1168f-0109-4a8c-b70b-45f8ca582297",
         "name": "dGoldfish",
         "description": "A token granted for feeding a goldfish",
         "image": "/assets/dGoldfish.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "65",
+        "id": "a07b75e3-f828-4cb1-81d6-1ab0e9857a79",
         "name": "Fish Friend Award",
         "description": "An award given for setting up your first goldfish aquarium.",
         "image": "/assets/fish_friend_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "66",
+        "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
         "name": "parachute",
         "description": "A parachute for model rockets.",
         "image": "/assets/parachute.jpg",
         "price": "30 dUSD"
     },
     {
-        "id": "67",
+        "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
         "name": "launch-capable model rocket (parachute)",
         "description": "A reusable rocket with a parachute",
         "image": "/assets/rocket_field.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "68",
+        "id": "d660dc50-7afb-4a2f-9508-a42490aae5e4",
         "name": "Rocket Descent (animated)",
         "description": "A rocket descending to the ground with a parachute.",
         "image": "/assets/rocket_min.gif",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "69",
+        "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
         "name": "dLaunch",
         "description": "1 dLaunch = 1 launch of a rocket. Any launch counts, even a model rocket launch.",
         "image": "/assets/dLaunch.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "70",
+        "id": "b0ac46e6-6c60-48f0-b753-d9b6ad9935a6",
         "name": "dOffset",
         "description": "1 dOffset is granted for reducing dCarbon with dUSD. ",
         "image": "/assets/dOffset.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "71",
+        "id": "96e11500-a2ce-4531-a1b5-3a92c44fcb9d",
         "name": "Tree Hugger Award",
         "description": "Awarded for converting dCarbon to dOffset.",
         "image": "/assets/tree_hugger_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "72",
+        "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
         "name": "dBI",
         "description": "Awarded for every dUSD earned through Basic Income. See the Wallet page for more details.",
         "image": "/assets/dBI.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "73",
+        "id": "5258f098-6cae-4ee5-8888-435b08f1675a",
         "name": "EV charger",
         "description": "A charger for electric vehicles.",
         "image": "/assets/ev_charger.jpg",
         "price": "500 dUSD"
     },
     {
-        "id": "74",
+        "id": "5e283c0b-fd3c-4884-ae32-9a237f02a40e",
         "name": "Hypercar (20% charge)",
         "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 20% charged.",
         "image": "/assets/hypercar.jpg",
         "price": "30000 dUSD"
     },
     {
-        "id": "75",
+        "id": "3486ebb3-d262-4e90-8873-b19ed69afee8",
         "name": "Hypercar (animated)",
         "description": "A hypercar driving down the road.",
         "image": "/assets/hypercar.gif",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "76",
+        "id": "7246c1c8-f22e-4d31-acd3-967f91b8626a",
         "name": "1 kWh battery pack",
         "description": "A 1kWh Wh battery pack that can be used to store energy from a solar panel or a wind turbine.",
         "price": "1000 dUSD",
         "image": "/assets/battery_1kwh.jpg"
     },
     {
-        "id": "77",
+        "id": "11a2a77a-0c43-47a9-b13a-1412ac475ce2",
         "name": "The grass is always greener (still)",
         "description": "A still image of a Hypercar on a grassy field.",
         "image": "/assets/hypercar_grassy.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "78",
+        "id": "4910a316-5019-4fcd-b185-1d6ce1c0040b",
         "name": "dChat",
         "description": "An offline-first conversational digital assistant. You ask it questions, it answers! Powered by LLMs!",
         "image": "/assets/npc/dChat.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "79",
+        "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
         "name": "Solar charge controller",
         "description": "A charge controller for a solar panel. Used to regular the voltage and current from a solar panel to protect the battery.",
         "image": "/assets/solar_charge_controller.jpg",
         "price": "30 dUSD"
     },
     {
-        "id": "80",
+        "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
         "name": "Small solar enclosure",
         "description": "A solar enclosure with enough room for a single panel, a charge controller, and a 200 Wh battery.",
         "image": "/assets/solar_enclosure_small.jpg",
         "price": "100 dUSD"
     },
     {
-        "id": "81",
+        "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
         "name": "Solar setup (200 Wh)",
         "description": "A 200 W solar panel, charge controller, and 200 Wh battery in a weatherproof enclosure. Ready to use!",
         "image": "/assets/solar_setup_small.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "82",
+        "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
         "name": "Solar setup (1 kWh)",
         "description": "A 200 W solar panel, charge controller, and 1 kWh battery in a weatherproof enclosure. Ready to use!",
         "image": "/assets/solar_setup_small.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "83",
+        "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
         "name": "Model rocket launchpad",
         "description": "A launchpad for model rockets.",
         "image": "/assets/launchpad.jpg",
         "price": "35 dUSD"
     },
     {
-        "id": "84",
+        "id": "9477a618-591b-45e0-9d81-18d60b848490",
         "name": "flame-resistant recovery wadding",
         "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
         "image": "/assets/recovery_wadding.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "85",
+        "id": "7cbb9db5-1d15-481e-b0bb-a1eed889063b",
         "name": "Early Adopter Token",
         "description": "The early bird gets the worm.",
         "image": "/assets/early_adopter_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "86",
+        "id": "1a84a672-e0b7-4f71-af2f-8e742a6777f8",
         "name": "Newcomer Token",
         "description": "You're new here, aren't you?",
         "image": "/assets/newcomer_token.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "87",
+        "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
         "name": "Completionist Award II",
         "description": "Awarded for completing all of the quests available on June 30, 2023.",
         "image": "/assets/completionist_award_ii.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "88",
+        "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
         "name": "dPrint",
         "description": "A token that represents 1 gram of 3D pinting filament used while printing.",
         "image": "/assets/dPrint.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "89",
+        "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
         "name": "Hydro Award",
         "description": "An award for bringing dChat 10 buckets of dechlorinated water.",
         "image": "/assets/hydro_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "90",
+        "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
         "name": "Arduino Uno",
         "description": "A beginner-friendly microcontroller board ideal for electronics projects.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "91",
+        "id": "d1105b87-8185-4a30-ba55-406384be169f",
         "name": "Breadboard",
         "description": "A reusable board for prototyping circuits without soldering.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "92",
+        "id": "3cd82744-d2aa-414e-9f03-80024b624066",
         "name": "Jumper Wires",
         "description": "Flexible wires with pin connectors for building temporary circuits.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "93",
+        "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
         "name": "LED",
         "description": "A light emitting diode useful for basic electronics experiments.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "94",
+        "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
         "name": "220 Ohm Resistor",
         "description": "A resistor commonly used to limit current to an LED.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "95",
+        "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
         "name": "USB Cable",
         "description": "Connects the Arduino to your computer for programming.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "96",
+        "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "97",
+        "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
         "name": "3D Printed Phone Stand",
         "description": "A simple stand to hold your smartphone upright on a desk.",
         "image": "/assets/3dprinter.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "98",
+        "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",
         "name": "Potentiometer",
         "description": "Variable resistor for adjusting signal levels in circuits.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "99",
+        "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
         "name": "Lettuce Seeds",
         "description": "Seeds for growing crisp hydroponic lettuce.",
         "image": "/assets/hydroponic_lettuce.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "100",
+        "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
         "name": "Walstad aquarium (80 L)",
         "description": "A planted tank using the low-tech Walstad method.",
         "image": "/assets/walstad.jpg",
         "price": "80 dUSD"
     },
     {
-        "id": "101",
+        "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
         "name": "Dwarf shrimp",
         "description": "Hardy shrimp perfect for planted aquariums.",
         "image": "/assets/quests/shrimp.svg",
         "price": "3 dUSD"
     },
     {
-        "id": "102",
+        "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
         "name": "Guppy group",
         "description": "Three females and one male guppy ready to breed.",
         "image": "/assets/guppy.jpg",
         "price": "6 dUSD"
     },
     {
-        "id": "103",
+        "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
         "name": "Hornwort cuttings",
         "description": "Fast-growing stems that provide cover for fry.",
         "image": "/assets/hornwort.jpg",
         "price": "1 dUSD"
     },
     {
-        "id": "104",
+        "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
         "name": "Guppy grass starter",
         "description": "Easy floating plant ideal for breeding tanks.",
         "image": "/assets/guppy_grass.jpg",
         "price": "1 dUSD"
     },
     {
-        "id": "105",
+        "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
         "name": "Duckweed portion",
         "description": "Floating plant that helps absorb excess nutrients.",
         "image": "/assets/duckweed.jpg",
         "price": "1 dUSD"
     },
     {
-        "id": "106",
+        "id": "8c0f72a2-db79-4238-b80f-97721def169f",
         "name": "Heated Walstad aquarium (80 L, 26°C)",
         "description": "An 80 L Walstad tank equipped with a heater set to 26°C.",
         "image": "/assets/walstad.jpg",
         "price": "85 dUSD"
     },
     {
-        "id": "107",
+        "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
         "name": "Walstad tank with guppies",
         "description": "An 80 L heated Walstad aquarium containing three female and one male guppy.",
         "image": "/assets/guppy.jpg",
         "price": "90 dUSD"
     },
     {
-        "id": "108",
+        "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
         "name": "Workbench",
         "description": "A sturdy table that provides a safe space for sawing and assembly.",
         "image": "/assets/workbench.jpg",
         "price": "120 dUSD"
     },
     {
-        "id": "109",
+        "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
         "name": "Handsaw",
         "description": "Basic saw for cutting lumber to size.",
         "image": "/assets/handsaw.jpg",
         "price": "15 dUSD"
     },
     {
-        "id": "110",
+        "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
         "name": "Wood glue",
         "description": "Adhesive designed for bonding wooden pieces.",
         "image": "/assets/wood_glue.jpg",
         "price": "5 dUSD"
     },
     {
-        "id": "111",
+        "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
         "name": "Sandpaper pack",
         "description": "Assorted grits for smoothing rough lumber and finished projects.",
         "image": "/assets/sandpaper.jpg",
         "price": "3 dUSD"
     },
     {
-        "id": "112",
+        "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
         "name": "Pine board",
         "description": "A lightweight plank ideal for beginner projects.",
         "image": "/assets/pine_board.jpg",
         "price": "8 dUSD"
     },
     {
-        "id": "113",
+        "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
         "name": "Birdhouse",
         "description": "A small wooden shelter perfect for backyard birds.",
         "image": "/assets/birdhouse.jpg",
         "price": "18 dUSD"
     },
     {
-        "id": "114",
+        "id": "0d4a7b77-f241-4c19-9365-c74647066802",
         "name": "Step stool",
         "description": "A compact stool that helps reach higher shelves safely.",
         "image": "/assets/step_stool.jpg",
         "price": "25 dUSD"
     },
     {
-        "id": "115",
+        "id": "619d485d-803f-4875-a048-157ce28d31c4",
         "name": "Bookshelf",
         "description": "A simple wooden shelf ready to hold your growing library.",
         "image": "/assets/bookshelf.jpg",
         "price": "45 dUSD"
     },
     {
-        "id": "116",
+        "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
         "name": "Sponge filter",
         "description": "A gentle air-driven filter ideal for small aquariums.",
         "image": "/assets/aquarium_filter.jpg",
         "price": "6 dUSD"
     },
     {
-        "id": "117",
+        "id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
         "name": "stevia seeds",
         "description": "Seeds of the Stevia rebaudiana plant.",
         "image": "/assets/basil_seeds.jpg",
         "price": "5 dUSD"
     },
     {
-        "id": "118",
+        "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
         "name": "stevia seedling",
         "description": "A young stevia plant sprouted in rockwool.",
         "image": "/assets/basil_seedlings.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "119",
+        "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
         "name": "harvestable stevia plant",
         "description": "A mature stevia plant ready for leaf harvest.",
         "image": "/assets/hydroponic_basil_adult.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "120",
+        "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
         "name": "bundle of stevia leaves",
         "description": "Fresh stevia leaves with natural sweetness.",
         "image": "/assets/basil_harvested.jpg",
         "price": "3 dUSD"
     },
     {
-        "id": "121",
+        "id": "b2248af9-151b-4268-989d-4bb408a6147c",
         "name": "harvested stevia plant",
         "description": "A stevia plant trimmed of leaves but still alive.",
         "image": "/assets/hydroponic_basil_harvested.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "122",
+        "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
         "name": "stevia extract",
         "description": "Concentrated sweetener derived from stevia leaves.",
         "image": "/assets/dCarbon.jpg",
         "price": "8 dUSD"
     },
     {
-        "id": "123",
+        "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
         "name": "Raspberry Pi 5 board",
         "description": "A compact single-board computer with plenty of power for small clusters.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "124",
+        "id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
         "name": "M.2 PoE+ HAT",
         "description": "Provides power over Ethernet and an M.2 slot for NVMe drives.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "125",
+        "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
         "name": "1TB 2230 M.2 SSD",
         "description": "A tiny NVMe drive perfect for booting a Pi.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "126",
+        "id": "36042a2b-861a-4192-a991-98778898963a",
         "name": "64GB microSD card",
         "description": "Used to flash the operating system before cloning to the SSD.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "127",
+        "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
         "name": "PoE+ switch",
         "description": "Powers multiple devices and provides network connectivity.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "128",
+        "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
         "name": "Ethernet cable",
         "description": "A simple cable for wired network connections.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "129",
+        "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
         "name": "fan case",
         "description": "Keeps a Raspberry Pi cool during heavy workloads.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "130",
+        "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
         "name": "flashed microSD card",
         "description": "Contains Raspberry Pi OS ready for cloning to SSD.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "131",
+        "id": "4af856b5-b5c1-494f-8037-9b6559785633",
         "name": "bootable 1TB SSD",
         "description": "An M.2 drive with the OS cloned and ready to boot.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "132",
+        "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
         "name": "Pi cluster node",
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
         "image": "/assets/quests/basic_circuit.svg",
@@ -944,14 +950,14 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "133",
+        "id": "849eb5e1-9f63-488b-80d3-913492049090",
         "name": "external backup SSD",
         "description": "Stores nightly database dumps from your cluster.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "134",
+        "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
         "image": "/assets/quests/solar.jpg",
@@ -959,91 +965,91 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "135",
+        "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
         "name": "first aid kit",
         "description": "Adhesive bandages, gauze and antiseptic packed for emergencies.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "136",
+        "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
         "name": "stevia crystals",
         "description": "Highly concentrated sweetener purified from stevia extract.",
         "image": "/assets/dCarbon.jpg",
         "price": "12 dUSD"
     },
     {
-        "id": "137",
+        "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
         "name": "adhesive bandages",
         "description": "Sterile strips to cover small cuts and scrapes.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "138",
+        "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
         "name": "sterile gauze pads",
         "description": "Breathable squares for dressing medium wounds.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "139",
+        "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
         "name": "antiseptic wipes",
         "description": "Pre-moistened wipes that kill germs before bandaging.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "140",
+        "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
         "name": "nitrile gloves (pair)",
         "description": "Disposable nitrile gloves to protect hands from chemicals.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "0.50 dUSD"
     },
     {
-        "id": "141",
+        "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
         "name": "safety goggles",
         "description": "Clear goggles that shield eyes from splashes.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "5 dUSD"
     },
     {
-        "id": "142",
+        "id": "7c811503-d0ca-4254-825a-ebeb06a88231",
         "name": "pH down solution (phosphoric acid)",
         "description": "Dilute acid used to lower nutrient solution pH.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "8 dUSD"
     },
     {
-        "id": "143",
+        "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
         "name": "pH up solution (potassium carbonate)",
         "description": "Alkaline solution used to raise nutrient solution pH.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "8 dUSD"
     },
     {
-        "id": "144",
+        "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
         "name": "liquid soap",
         "description": "Mild hand soap for cleaning skin before treating a wound.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "3 dUSD"
     },
     {
-        "id": "145",
+        "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
         "name": "Thermistor (10k NTC)",
         "description": "A temperature-sensitive resistor for Arduino voltage dividers.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "146",
+        "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
         "name": "10k Ohm Resistor",
         "description": "A resistor for sensor voltage divider circuits.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "147",
+        "id": "828d6c3b-66a5-4064-b221-97630274502b",
         "name": "5V Power Supply",
         "description": "A battery pack or USB adapter that provides a stable 5V DC output.",
         "image": "/assets/quests/basic_circuit.svg",

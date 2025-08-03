@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Let's dial in your filament settings with a temperature tower.",
-            "options": [{ "type": "goto", "goto": "print", "text": "Great idea!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Great idea!"
+                }
+            ]
         },
         {
             "id": "print",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Tower complete",
-                    "requiresItems": [{ "id": "3", "count": 30 }]
+                    "requiresItems": [
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 30
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Check which layer looks best and use that temp for future prints.",
-            "options": [{ "type": "finish", "text": "Got it, thanks!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Got it, thanks!"
+                }
+            ]
         }
     ],
     "rewards": [],

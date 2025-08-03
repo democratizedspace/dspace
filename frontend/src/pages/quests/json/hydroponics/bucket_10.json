@@ -27,7 +27,7 @@
                     "text": "I have enough!",
                     "requiresItems": [
                         {
-                            "id": "25",
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                             "count": 10
                         }
                     ]
@@ -37,7 +37,13 @@
         {
             "id": "congrats",
             "text": "You managed to wrangle all ten buckets of dechlorinated water. That's a lot of arm work!",
-            "options": [{ "type": "goto", "goto": "finish", "text": "My arms are tired!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "My arms are tired!"
+                }
+            ]
         },
         {
             "id": "finish",
@@ -52,11 +58,11 @@
     ],
     "rewards": [
         {
-            "id": "89",
+            "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
             "count": 1
         },
         {
-            "id": "16",
+            "id": "0564d441-7367-412e-b709-dad770814a39",
             "count": 10
         }
     ],

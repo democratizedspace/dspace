@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "You're getting comfortable with servos. Let's take the next step and build a small robotic arm that can pick things up and set them down.",
-            "options": [{ "type": "goto", "goto": "build", "text": "Sounds challenging!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Sounds challenging!"
+                }
+            ]
         },
         {
             "id": "build",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Arm works well",
-                    "requiresItems": [{ "id": "96", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great job! With this arm you can experiment with more complex motions later on.",
-            "options": [{ "type": "finish", "text": "Can't wait!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait!"
+                }
+            ]
         }
     ],
     "rewards": [],

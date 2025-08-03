@@ -14,7 +14,12 @@
                     "type": "goto",
                     "goto": "hookup",
                     "text": "Yes! How do I hook it up?",
-                    "requiresItems": [{ "id": "96", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -52,5 +57,10 @@
         }
     ],
     "requiresQuests": ["electronics/arduino-blink"],
-    "rewards": [{ "id": "97", "count": 1 }]
+    "rewards": [
+        {
+            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+            "count": 1
+        }
+    ]
 }

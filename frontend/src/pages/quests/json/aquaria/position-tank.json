@@ -9,17 +9,35 @@
         {
             "id": "start",
             "text": "Hello! I'm Atlas. Vega said you needed help moving that 80 liter tank onto the stand.",
-            "options": [{ "type": "goto", "goto": "lift", "text": "Yes please, it's heavy." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "lift",
+                    "text": "Yes please, it's heavy."
+                }
+            ]
         },
         {
             "id": "lift",
             "text": "I'll take most of the weight. On three... one, two, three!",
-            "options": [{ "type": "goto", "goto": "place", "text": "Heave-ho!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "place",
+                    "text": "Heave-ho!"
+                }
+            ]
         },
         {
             "id": "place",
             "text": "Great job keeping it level. The tank is secure on the stand now.",
-            "options": [{ "type": "goto", "goto": "heat", "text": "What's next?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "heat",
+                    "text": "What's next?"
+                }
+            ]
         },
         {
             "id": "heat",
@@ -29,12 +47,25 @@
                     "type": "process",
                     "process": "heat-walstad",
                     "text": "Install the heater",
-                    "requiresItems": [{ "id": "56", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                            "count": 1
+                        }
+                    ]
                 },
-                { "type": "finish", "text": "Heater installed, thanks!" }
+                {
+                    "type": "finish",
+                    "text": "Heater installed, thanks!"
+                }
             ]
         }
     ],
     "requiresQuests": ["aquaria/walstad"],
-    "rewards": [{ "id": "106", "count": 1 }]
+    "rewards": [
+        {
+            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+            "count": 1
+        }
+    ]
 }

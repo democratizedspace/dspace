@@ -24,7 +24,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "I can spot them easily now!",
-                    "requiresItems": [{ "id": "134", "count": 1 }]
+                    "requiresItems": [{ "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }]
                 }
             ]
         },

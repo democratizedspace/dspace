@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Your workbench is piling up with loose tools. Let's craft a wall-mounted rack to keep everything within reach.",
-            "options": [{ "type": "goto", "goto": "cut", "text": "Great idea!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cut",
+                    "text": "Great idea!"
+                }
+            ]
         },
         {
             "id": "cut",
@@ -20,9 +26,18 @@
                     "goto": "finish",
                     "text": "Rack is ready",
                     "requiresItems": [
-                        { "id": "112", "count": 1 },
-                        { "id": "109", "count": 1 },
-                        { "id": "111", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -30,7 +45,12 @@
         {
             "id": "finish",
             "text": "Nice work! Mount the rack near your bench so tools are always organized and easy to grab.",
-            "options": [{ "type": "finish", "text": "Everything in its place!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Everything in its place!"
+                }
+            ]
         }
     ],
     "rewards": [],

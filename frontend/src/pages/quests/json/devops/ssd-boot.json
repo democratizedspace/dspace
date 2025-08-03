@@ -9,18 +9,33 @@
         {
             "id": "start",
             "text": "Next we'll copy the OS to the SSD so the Pi boots quicker and lasts longer.",
-            "options": [{ "type": "goto", "goto": "clone", "text": "I'm ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "I'm ready."
+                }
+            ]
         },
         {
             "id": "clone",
             "text": "Run `lsblk` to locate the drive then use `sudo rpi-clone /dev/sda` to clone the system. Set the boot order to USB boot in raspi-config and power down when it finishes.",
             "options": [
-                { "type": "process", "process": "clone-os-to-ssd", "text": "Cloning now." },
+                {
+                    "type": "process",
+                    "process": "clone-os-to-ssd",
+                    "text": "Cloning now."
+                },
                 {
                     "type": "goto",
                     "goto": "move",
                     "text": "Clone complete.",
-                    "requiresItems": [{ "id": "131", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "4af856b5-b5c1-494f-8037-9b6559785633",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -37,14 +52,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Booted from SSD.",
-                    "requiresItems": [{ "id": "132", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice! The Pi now runs from the SSD. Time to launch DSPACE.",
-            "options": [{ "type": "finish", "text": "Let's launch it." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Let's launch it."
+                }
+            ]
         }
     ],
     "rewards": [],

@@ -14,9 +14,9 @@ vi.mock('../../src/pages/processes/processes.json', () => {
         default: [
             {
                 id: 'foo',
-                requireItems: [{ id: '1', count: 5 }],
-                consumeItems: [{ id: '2', count: 3 }],
-                createItems: [{ id: '3', count: 1 }],
+                requireItems: [{ id: 'item-1', count: 5 }],
+                consumeItems: [{ id: 'item-2', count: 3 }],
+                createItems: [{ id: 'item-3', count: 1 }],
                 duration: '10s',
             },
         ],
@@ -46,8 +46,8 @@ describe('gameState - processes', () => {
     beforeEach(() => {
         mockGameState = {
             inventory: {
-                1: 10,
-                2: 50,
+                'item-1': 10,
+                'item-2': 50,
             },
             processes: {},
         };
@@ -67,7 +67,7 @@ describe('gameState - processes', () => {
     });
 
     test('hasRequiredAndConsumedItems should return false if any item is missing', () => {
-        mockGameState.inventory['1'] = 0;
+        mockGameState.inventory['item-1'] = 0;
         expect(hasRequiredAndConsumedItems('foo')).toBe(false);
     });
 
@@ -76,7 +76,7 @@ describe('gameState - processes', () => {
     });
 
     test('startProcess should not start if any item is missing', () => {
-        mockGameState.inventory['1'] = 0;
+        mockGameState.inventory['item-1'] = 0;
         startProcess('foo');
         expect(mockGameState.processes['foo']).toBeUndefined();
     });
@@ -104,12 +104,12 @@ describe('gameState - processes', () => {
 
     test('calling startProcess should burn the consume items', () => {
         startProcess('foo');
-        expect(mockGameState.inventory['2']).toBe(47);
+        expect(mockGameState.inventory['item-2']).toBe(47);
     });
 
     test('calling startProcess should not burn the require items', () => {
         startProcess('foo');
-        expect(mockGameState.inventory['1']).toBe(10);
+        expect(mockGameState.inventory['item-1']).toBe(10);
     });
 
     test('getProcessState should return NOT_STARTED if the process has not started', () => {
@@ -216,7 +216,7 @@ describe('gameState - processes', () => {
     test('cancelProcess should return the consumed items to the inventory', () => {
         startProcess('foo');
         cancelProcess('foo');
-        expect(mockGameState.inventory['2']).toBe(50);
+        expect(mockGameState.inventory['item-2']).toBe(50);
     });
 
     test('pauseProcess should move process to paused state', () => {
@@ -237,14 +237,14 @@ describe('gameState - processes', () => {
     });
 
     test('getProcessesForItem should return the correct processes', () => {
-        expect(getProcessesForItem('1')).toEqual({ requireItem: ['foo'] });
-        expect(getProcessesForItem('2')).toEqual({ consumeItem: ['foo'] });
-        expect(getProcessesForItem('3')).toEqual({ createItem: ['foo'] });
+        expect(getProcessesForItem('item-1')).toEqual({ requireItem: ['foo'] });
+        expect(getProcessesForItem('item-2')).toEqual({ consumeItem: ['foo'] });
+        expect(getProcessesForItem('item-3')).toEqual({ createItem: ['foo'] });
     });
 
     test('getProcessesForItem should return an empty array if no processes are found', () => {
         // hypothetical invalid item ID
-        expect(getProcessesForItem('999')).toEqual({});
+        expect(getProcessesForItem('nonexistent')).toEqual({});
     });
 
     test('skipProcess should work even if the process is not started', () => {
@@ -291,6 +291,6 @@ describe('gameState - processes', () => {
     test('skipProcess should remove the consume items from the inventory', () => {
         startProcess('foo');
         skipProcess('foo');
-        expect(mockGameState.inventory['2']).toBe(47);
+        expect(mockGameState.inventory['item-2']).toBe(47);
     });
 });

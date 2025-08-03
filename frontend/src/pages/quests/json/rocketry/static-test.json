@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Before launch day let's conduct a static burn. Secure the rocket to a stand and record the thrust curve.",
-            "options": [{ "type": "goto", "goto": "burn", "text": "Ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "burn",
+                    "text": "Ready."
+                }
+            ]
         },
         {
             "id": "burn",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Data captured",
-                    "requiresItems": [{ "id": "66", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent! Reviewing the numbers will help ensure a safe first flight.",
-            "options": [{ "type": "finish", "text": "Will do." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
         }
     ],
     "rewards": [],

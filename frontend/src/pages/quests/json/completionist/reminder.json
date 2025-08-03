@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "More quests are added all the time. Keep an eye on the board so you can maintain that shiny Completionist trophy!",
-            "options": [{ "type": "goto", "goto": "remind", "text": "I'll check back" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "remind",
+                    "text": "I'll check back"
+                }
+            ]
         },
         {
             "id": "remind",
@@ -19,14 +25,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Reminder set",
-                    "requiresItems": [{ "id": "87", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! Your dedication keeps the metaguild growing.",
-            "options": [{ "type": "finish", "text": "Happy to help." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Happy to help."
+                }
+            ]
         }
     ],
     "rewards": [],

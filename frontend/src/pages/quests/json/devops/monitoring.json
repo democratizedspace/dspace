@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "With the cluster online it's time to keep an eye on resource usage.",
-            "options": [{ "type": "goto", "goto": "install", "text": "Show me how." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Show me how."
+                }
+            ]
         },
         {
             "id": "install",
@@ -24,14 +30,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Dashboard up.",
-                    "requiresItems": [{ "id": "133", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! You can now track CPU load and memory usage from the browser.",
-            "options": [{ "type": "finish", "text": "Looks good." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looks good."
+                }
+            ]
         }
     ],
     "rewards": [],

@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Your first panel works well. To store more energy, let's install a 1 kWh battery and matching enclosure.",
-            "options": [{ "type": "goto", "goto": "install", "text": "Let's do it." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Let's do it."
+                }
+            ]
         },
         {
             "id": "install",
@@ -24,14 +30,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "All set",
-                    "requiresItems": [{ "id": "6", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent! With more storage you can run equipment longer into the night.",
-            "options": [{ "type": "finish", "text": "Awesome!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Awesome!"
+                }
+            ]
         }
     ],
     "rewards": [],

@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "A total lunar eclipse is visible tonight. Let's document it for the record.",
-            "options": [{ "type": "goto", "goto": "capture", "text": "I'll set up my gear." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "I'll set up my gear."
+                }
+            ]
         },
         {
             "id": "capture",
@@ -23,7 +29,12 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [{ "id": "134", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ],
                     "text": "Got my shots"
                 }
             ]
@@ -31,7 +42,12 @@
         {
             "id": "finish",
             "text": "Excellent work! We'll compare these images with your earlier sketches to track your progress.",
-            "options": [{ "type": "finish", "text": "Can't wait!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait!"
+                }
+            ]
         }
     ],
     "rewards": [],

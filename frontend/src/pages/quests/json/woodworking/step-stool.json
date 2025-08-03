@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "You've mastered small projects. Let's tackle something bigger: a step stool sturdy enough to stand on.",
-            "options": [{ "type": "goto", "goto": "gather", "text": "I'm ready" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "I'm ready"
+                }
+            ]
         },
         {
             "id": "gather",
@@ -18,9 +24,18 @@
                 {
                     "type": "grantsItems",
                     "grantsItems": [
-                        { "id": "112", "count": 2 },
-                        { "id": "110", "count": 1 },
-                        { "id": "109", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 2
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        }
                     ],
                     "text": "Gather parts"
                 },
@@ -28,9 +43,18 @@
                     "type": "goto",
                     "goto": "assemble",
                     "requiresItems": [
-                        { "id": "112", "count": 2 },
-                        { "id": "110", "count": 1 },
-                        { "id": "109", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 2
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        }
                     ],
                     "text": "Parts ready"
                 }
@@ -39,7 +63,13 @@
         {
             "id": "assemble",
             "text": "Cut the boards to length, glue the frame, and add cross supports. Once dry, test the stool carefully before trusting your weight on it.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Stool assembled" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Stool assembled"
+                }
+            ]
         },
         {
             "id": "finish",
@@ -47,10 +77,18 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [{ "id": "114", "count": 1 }],
+                    "grantsItems": [
+                        {
+                            "id": "0d4a7b77-f241-4c19-9365-c74647066802",
+                            "count": 1
+                        }
+                    ],
                     "text": "Take the stool"
                 },
-                { "type": "finish", "text": "Onward!" }
+                {
+                    "type": "finish",
+                    "text": "Onward!"
+                }
             ]
         }
     ],

@@ -7,14 +7,14 @@ const {
 } = require('../src/utils.js');
 
 describe('cookie utilities', () => {
-    const cookie = 'foo=bar; item-1=2; hello=world; item-2=3';
+    const cookie = 'foo=bar; item-alpha=2; hello=world; item-beta=3';
 
     test('parseCookie parses key/value pairs', () => {
         expect(parseCookie(cookie)).toEqual({
             foo: 'bar',
-            'item-1': '2',
+            'item-alpha': '2',
             hello: 'world',
-            'item-2': '3',
+            'item-beta': '3',
         });
     });
 
@@ -25,16 +25,16 @@ describe('cookie utilities', () => {
     test('getCookies returns array of objects', () => {
         expect(getCookies(cookie)).toEqual([
             { key: 'foo', value: 'bar' },
-            { key: 'item-1', value: '2' },
+            { key: 'item-alpha', value: '2' },
             { key: 'hello', value: 'world' },
-            { key: 'item-2', value: '3' },
+            { key: 'item-beta', value: '3' },
         ]);
     });
 
     test('getCookieItems extracts item counts', () => {
         expect(getCookieItems(cookie)).toEqual([
-            { id: '1', count: 2 },
-            { id: '2', count: 3 },
+            { id: 'alpha', count: 2 },
+            { id: 'beta', count: 3 },
         ]);
     });
 });

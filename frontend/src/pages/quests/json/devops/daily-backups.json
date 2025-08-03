@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Let's protect your work by backing up the cluster.",
-            "options": [{ "type": "goto", "goto": "script", "text": "Good plan." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "script",
+                    "text": "Good plan."
+                }
+            ]
         },
         {
             "id": "script",
@@ -24,14 +30,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Backup script running.",
-                    "requiresItems": [{ "id": "133", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Backups are running daily. Store them off-site for extra safety.",
-            "options": [{ "type": "finish", "text": "Will do." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
         }
     ],
     "rewards": [],

@@ -90,19 +90,19 @@
                     "goto": "assemble",
                     "requiresItems": [
                         {
-                            "id": "30",
+                            "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
                             "count": 1
                         },
                         {
-                            "id": "31",
+                            "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
                             "count": 1
                         },
                         {
-                            "id": "32",
+                            "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
                             "count": 1
                         },
                         {
-                            "id": "33",
+                            "id": "05c339ee-f50b-419a-804a-341f850b85e9",
                             "count": 1
                         }
                     ],
@@ -123,7 +123,7 @@
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "39",
+                            "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
                             "count": 1
                         }
                     ],
@@ -140,15 +140,15 @@
                     "type": "grantsItems",
                     "grantsItems": [
                         {
-                            "id": "38",
+                            "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
                             "count": 1
                         },
                         {
-                            "id": "37",
+                            "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
                             "count": 1
                         },
                         {
-                            "id": "83",
+                            "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
                             "count": 1
                         }
                     ],
@@ -158,15 +158,15 @@
                     "type": "goto",
                     "requiresItems": [
                         {
-                            "id": "38",
+                            "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
                             "count": 1
                         },
                         {
-                            "id": "37",
+                            "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
                             "count": 1
                         },
                         {
-                            "id": "83",
+                            "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
                             "count": 1
                         }
                     ],
@@ -189,7 +189,7 @@
                     "goto": "done",
                     "requiresItems": [
                         {
-                            "id": "40",
+                            "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
                             "count": 1
                         }
                     ],
@@ -210,7 +210,7 @@
     ],
     "rewards": [
         {
-            "id": "41",
+            "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
             "count": 1
         }
     ],

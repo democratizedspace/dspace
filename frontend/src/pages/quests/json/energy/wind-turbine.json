@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Your solar rig is humming. Let's capture wind energy too by mounting this 500W turbine.",
-            "options": [{ "type": "goto", "goto": "setup", "text": "Sounds great!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Sounds great!"
+                }
+            ]
         },
         {
             "id": "setup",
@@ -17,21 +23,36 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [{ "id": "7", "count": 1 }],
+                    "grantsItems": [
+                        {
+                            "id": "743681a7-d2e7-465c-af07-43665079bf4d",
+                            "count": 1
+                        }
+                    ],
                     "text": "Take the turbine"
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "All wired up",
-                    "requiresItems": [{ "id": "7", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "743681a7-d2e7-465c-af07-43665079bf4d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent! When the wind picks up you'll store power even faster.",
-            "options": [{ "type": "finish", "text": "Can't wait!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait!"
+                }
+            ]
         }
     ],
     "rewards": [],

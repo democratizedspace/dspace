@@ -19,7 +19,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "All bandaged up!",
-                    "requiresItems": [{ "id": "135", "count": 1 }]
+                    "requiresItems": [{ "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 }]
                 }
             ]
         },

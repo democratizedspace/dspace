@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Your energy generation is off the charts! Think you can hit one hundred million dWatt?",
-            "options": [{ "type": "goto", "goto": "progress", "text": "Watch me." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "progress",
+                    "text": "Watch me."
+                }
+            ]
         },
         {
             "id": "progress",
@@ -19,16 +25,31 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Goal reached!",
-                    "requiresItems": [{ "id": "22", "count": 100000000 }]
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 100000000
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Incredible! Few can claim such output. Take a well-deserved break before the next challenge.",
-            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
         }
     ],
-    "rewards": [{ "id": "5", "count": 50 }],
+    "rewards": [
+        {
+            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "count": 50
+        }
+    ],
     "requiresQuests": ["energy/dWatt-1e7"]
 }

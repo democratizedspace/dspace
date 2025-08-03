@@ -15,9 +15,9 @@ describe('ItemSelector Component', () => {
     });
 
     const mockItems = [
-        { id: '1', name: 'Test Item 1', description: 'Description 1' },
-        { id: '2', name: 'Test Item 2', description: 'Description 2' },
-        { id: '3', name: 'Another Item', description: 'Description 3' },
+        { id: 'item-1', name: 'Test Item 1', description: 'Description 1' },
+        { id: 'item-2', name: 'Test Item 2', description: 'Description 2' },
+        { id: 'item-3', name: 'Another Item', description: 'Description 3' },
     ];
 
     test('should mount component', () => {
@@ -75,7 +75,7 @@ describe('ItemSelector Component', () => {
         const firstItem = container.querySelector('.item-row');
         firstItem.click();
 
-        expect(selectedId).toBe('1');
+        expect(selectedId).toBe('item-1');
     });
 
     test('should emit select event on touch', () => {
@@ -96,7 +96,7 @@ describe('ItemSelector Component', () => {
         const firstItem = container.querySelector('.item-row');
         firstItem.dispatchEvent(new Event('touchstart'));
 
-        expect(selectedId).toBe('1');
+        expect(selectedId).toBe('item-1');
     });
 
     test('should show selected item when selectedItemId is provided', () => {
@@ -104,7 +104,7 @@ describe('ItemSelector Component', () => {
             target: container,
             props: {
                 items: mockItems,
-                selectedItemId: '2',
+                selectedItemId: 'item-2',
                 label: 'Select Item',
             },
         });
@@ -119,7 +119,7 @@ describe('ItemSelector Component', () => {
             target: container,
             props: {
                 items: mockItems,
-                selectedItemId: '2',
+                selectedItemId: 'item-2',
                 label: 'Select Item',
             },
         });
