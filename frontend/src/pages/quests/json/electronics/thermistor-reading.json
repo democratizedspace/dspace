@@ -8,18 +8,37 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's expand your sensor skills. A simple thermistor can report ambient temperature for all sorts of projects.",
+            "text": "Let's expand your sensor skills. A thermistor and resistor can report ambient temperature for all sorts of projects.",
             "options": [{ "type": "goto", "goto": "wire", "text": "Show me." }]
         },
         {
             "id": "wire",
-            "text": "Connect the thermistor to an analog pin with a 10k resistor as a divider. Use the serial monitor to see the readings.",
+            "text": "Disconnect power before wiring. Place the thermistor and a 10k Ω resistor in a voltage divider on the breadboard and run the middle node to A0. Reconnect the USB cable once everything is secure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Circuit ready.",
+                    "requiresItems": [
+                        { "id": "90", "count": 1 },
+                        { "id": "91", "count": 1 },
+                        { "id": "92", "count": 3 },
+                        { "id": "95", "count": 1 },
+                        { "id": "145", "count": 1 },
+                        { "id": "146", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "monitor",
+            "text": "Upload a sketch that reads the analog value and prints the temperature. Use the Arduino serial monitor and keep liquids away from the electronics.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Numbers are scrolling!",
-                    "requiresItems": [{ "id": "58", "count": 1 }]
+                    "text": "Readings look good.",
+                    "process": "arduino-thermistor-read"
                 }
             ]
         },
@@ -30,5 +49,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/potentiometer-dimmer"]
+    "requiresQuests": ["electronics/potentiometer-dimmer"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [{ "task": "codex-upgrade-2025-08-03", "date": "2025-08-03", "score": 60 }]
+    }
 }

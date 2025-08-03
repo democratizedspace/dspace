@@ -1255,5 +1255,20 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "5m"
+    },
+    {
+        "id": "arduino-thermistor-read",
+        "title": "Log temperature with a thermistor on Arduino",
+        "requireItems": [
+            { "id": "90", "count": 1 },
+            { "id": "91", "count": 1 },
+            { "id": "92", "count": 3 },
+            { "id": "95", "count": 1 },
+            { "id": "145", "count": 1 },
+            { "id": "146", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
     }
 ]
