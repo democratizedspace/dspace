@@ -70,8 +70,7 @@ describe('Process Quality Validation', () => {
             console.warn('Process Quality Issues:');
             issues.forEach((i) => console.warn(`- ${i}`));
         }
-
-        expect(true).toBe(true);
+        expect(issues.length).toBe(0);
     });
 
     test('duration sanity checks', () => {
