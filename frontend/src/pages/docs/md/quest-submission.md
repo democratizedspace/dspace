@@ -25,7 +25,7 @@ This guide describes how to submit your custom quests to become part of the offi
     ```bash
     npm test -- questQuality
     ```
-    Review any warnings and make improvements where necessary.
+    Fix any reported errors until the test passes.
 5. **Open the Quest Submission form** at `/quests/submit`.
 6. **Authorize GitHub** by entering a personal access token with `repo` scope. The token is only used client-side to push your quest.
 7. **Create the pull request** directly from the form. This uploads your quest to a new branch and opens a draft PR.

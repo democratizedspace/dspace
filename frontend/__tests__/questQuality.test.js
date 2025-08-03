@@ -475,15 +475,11 @@ describe('Quest Quality Validation', () => {
         }
 
         if (allIssues.length > 0) {
-            console.warn('Dialogue Style Issues:');
-            allIssues.forEach((issue) => console.warn(`- ${issue}`));
+            console.error('Dialogue Style Issues:');
+            allIssues.forEach((issue) => console.error(`- ${issue}`));
         }
 
-        // Fail the test if we have critical issues (uncomment to enforce)
-        // expect(allIssues.length).toBe(0);
-
-        // For now, just output warnings but don't fail tests
-        expect(true).toBe(true);
+        expect(allIssues.length).toBe(0);
     });
 
     test('Aquarium quests follow ethical care guidelines', () => {
@@ -497,12 +493,11 @@ describe('Quest Quality Validation', () => {
         }
 
         if (allIssues.length > 0) {
-            console.warn('Aquarium Ethics Issues:');
-            allIssues.forEach((issue) => console.warn(`- ${issue}`));
+            console.error('Aquarium Ethics Issues:');
+            allIssues.forEach((issue) => console.error(`- ${issue}`));
         }
 
-        // For now, just output warnings but don't fail tests
-        expect(true).toBe(true);
+        expect(allIssues.length).toBe(0);
     });
 
     test('Quest dependencies form a logical progression', () => {
