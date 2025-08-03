@@ -213,8 +213,8 @@ We have specialized tests to ensure content quality:
 
 1. **Quest Quality Tests** (`questQuality.test.js`):
 
-    - Validates NPC dialogue style consistency
-    - Checks for ethical considerations in aquarium quests
+    - Validates NPC dialogue style consistency and fails on mismatches
+    - Checks for ethical considerations in aquarium quests and fails on violations
     - Verifies proper quest progression and dependencies. Failures now occur if any quest chain issues are detected.
     - Identifies dialogue that doesn't match NPC personalities
     - Uses simple heuristics for now; integration with the OpenAI API is planned
@@ -238,7 +238,7 @@ We have specialized tests to ensure content quality:
     - Ensures quest chains reference existing quests
     - Detects circular dependencies that could block progress
 
-These tests are designed to produce warnings rather than failures, allowing for ongoing development while still identifying quality issues to address.
+Most of these tests produce warnings rather than failures, but quest quality issues now cause the test suite to error, ensuring regressions are caught early.
 
 To run these tests specifically:
 
