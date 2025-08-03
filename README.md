@@ -244,12 +244,16 @@ everything consistent.
 > dialogue. Token.place itself doesn't host quests, but you can reuse the same
 > prompts to create content across your projects.
 
-### AI-Assisted Quest Creation
+### AI-Assisted Content Creation
 
-For faster quest development, consult our [Quest Prompts](docs/prompts-quests)
-guide. It includes ready-made prompt templates for tools like GPT-4 or Claude to
-help you generate dialogue and structure quickly. Combine these with the
-[Quest Development Guidelines](docs/quest-guidelines), the [Quest Template Example](docs/quest-template), and the [Quest Submission Guide](docs/quest-submission) to streamline content creation and sharing.
+For faster content development, consult our prompt guides for
+[quests](docs/prompts-quests), [items](docs/prompts-items), and
+[processes](docs/prompts-processes). Each includes ready-made templates for
+tools like GPT-4 or Claude. Combine these with the [Quest Development
+Guidelines](docs/quest-guidelines), the [Quest Template Example](docs/quest-template),
+the [Item Development Guidelines](docs/item-guidelines), the [Process Development
+Guidelines](docs/process-guidelines), and the [Quest Submission
+Guide](docs/quest-submission) to streamline content creation and sharing.
 
 ## Authentication
 

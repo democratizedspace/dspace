@@ -23,7 +23,7 @@ DSPACE is designed as an extensible platform where community members can create 
 -   **[Develop Custom Items](/docs/item-guidelines)** - Create virtual resources, tools, and components
 -   **[Design Custom Processes](/docs/process-guidelines)** - Build activities that transform or utilize items
 
-Our [Content Development Guide](/docs/content-development) provides a comprehensive overview of all content creation options, workflows, and best practices. We also offer [Quest Prompts](/docs/prompts-quests) for those looking to leverage AI tools in their content creation process.
+Our [Content Development Guide](/docs/content-development) provides a comprehensive overview of all content creation options, workflows, and best practices. We also offer [Quest Prompts](/docs/prompts-quests), [Item Prompts](/docs/prompts-items), and [Process Prompts](/docs/prompts-processes) for those looking to leverage AI tools in their content creation process.
 
 ## Code Contributions
 
