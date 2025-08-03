@@ -317,7 +317,11 @@
         "rewards": []
     },
     "95": {
-        "requires": ["electronics/data-logger"],
+        "requires": [
+            "electronics/data-logger",
+            "electronics/potentiometer-dimmer",
+            "electronics/servo-sweep"
+        ],
         "rewards": ["electronics/basic-circuit"]
     },
     "96": {
