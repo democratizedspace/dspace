@@ -144,7 +144,9 @@ The app will be available on port 3002. Point your Cloudflare Tunnel at `http://
 The server exposes two monitoring endpoints:
 
 - `GET /health` returns `{ "status": "ok" }` for basic liveness checks.
-- `GET /metrics` serves Prometheus-formatted metrics using `prom-client`.
+- `GET /metrics` serves Prometheus-formatted metrics using `prom-client`. Set a
+  `METRICS_TOKEN` environment variable to require
+  `Authorization: Bearer <token>` for this endpoint.
 
 For a full Raspberry Pi setup, including k3s instructions, see [docs/RPI_DEPLOYMENT_GUIDE.md](./docs/RPI_DEPLOYMENT_GUIDE.md).
 To add Prometheus and Grafana monitoring, follow the steps in [docs/monitoring_setup.md](./docs/monitoring_setup.md).
