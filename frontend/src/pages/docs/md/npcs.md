@@ -121,7 +121,7 @@ Atlas is a humanoid robot assistant designed to help with physical tasks that re
 
 ## Cedar
 
-<img src="/assets/npc/cedar.jpg" />
+<img src="/assets/npc/atlas.jpg" />
 
 Cedar is a seasoned woodworker who loves guiding newcomers. Years of building furniture have made them patient and detail-oriented. Cedar will help you master safe tool use and gradually tackle bigger projects.
 

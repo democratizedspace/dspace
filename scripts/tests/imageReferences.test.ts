@@ -53,7 +53,7 @@ describe('Image references', () => {
     if (uniqueMissing.length) {
       console.warn('Missing images:', uniqueMissing);
     }
-    // Update expected count when new image references are added without assets
-    expect(uniqueMissing.length).toBe(14);
+    // All referenced images should exist
+    expect(uniqueMissing.length).toBe(0);
   });
 });

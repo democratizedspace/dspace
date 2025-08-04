@@ -2,7 +2,7 @@
     "id": "hydroponics/pump-install",
     "title": "Install Submersible Pump",
     "description": "Add circulation to keep nutrients moving.",
-    "image": "/assets/submersible_pump.jpg",
+    "image": "/assets/hydroponics_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

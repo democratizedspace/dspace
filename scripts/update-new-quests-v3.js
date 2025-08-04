@@ -1,6 +1,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const glob = require('glob');
 
 const outputFile = path.join(
   __dirname,
@@ -31,6 +32,11 @@ function getNewQuestPaths() {
   }
   const baseRef = getBaseRef();
   try {
+    execSync(`git merge-base ${baseRef} HEAD`, { stdio: 'ignore' });
+  } catch (err) {
+    return glob.sync('frontend/src/pages/quests/json/**/*.json');
+  }
+  try {
     const diff = execSync(
       `git diff --name-only --diff-filter=A ${baseRef}...HEAD -- frontend/src/pages/quests/json`,
       { encoding: 'utf8' }
@@ -40,7 +46,6 @@ function getNewQuestPaths() {
       .map((p) => p.trim())
       .filter(Boolean);
   } catch (err) {
-    // If the diff fails (e.g. no merge base between branches), assume no new quests
     return [];
   }
 }

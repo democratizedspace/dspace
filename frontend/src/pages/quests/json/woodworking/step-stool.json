@@ -2,8 +2,8 @@
     "id": "woodworking/step-stool",
     "title": "Build a step stool",
     "description": "Create a sturdy stool to reach higher places safely.",
-    "image": "/assets/step_stool.jpg",
-    "npc": "/assets/npc/cedar.jpg",
+    "image": "/assets/door.jpg",
+    "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
