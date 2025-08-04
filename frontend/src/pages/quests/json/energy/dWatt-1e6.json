@@ -23,7 +23,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "congrats",
+                    "goto": "legendary",
                     "text": "I have enough!",
                     "requiresItems": [
                         {

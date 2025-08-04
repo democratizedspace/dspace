@@ -13,7 +13,8 @@
                 {
                     "type": "process",
                     "process": "heat-walstad",
-                    "text": "Install the heater."
+                    "text": "Install the heater.",
+                    "goto": "acquire"
                 }
             ]
         },
@@ -35,7 +36,8 @@
                 {
                     "type": "process",
                     "process": "stock-guppies",
-                    "text": "Introduce them."
+                    "text": "Introduce them.",
+                    "goto": "finish"
                 }
             ]
         },
