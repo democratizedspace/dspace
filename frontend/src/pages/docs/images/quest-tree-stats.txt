@@ -7,7 +7,7 @@ hydroponics: 11 quests, 924 lines
 electronics: 8 quests, 651 lines
 robotics: 8 quests, 429 lines
 chemistry: 7 quests, 373 lines
-firstaid: 7 quests, 415 lines
+firstaid: 7 quests, 418 lines
 programming: 7 quests, 334 lines
 woodworking: 7 quests, 574 lines
 rocketry: 5 quests, 536 lines
