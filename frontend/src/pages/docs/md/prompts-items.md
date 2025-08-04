@@ -22,13 +22,13 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 ## 1 Quick start (Web vs CLI)
 
-| Use‑case              | Codex Web (ChatGPT sidebar) | Codex CLI                                                           |
+| Use‑case              | Codex Web (ChatGPT sidebar) | [Codex CLI](https://www.npmjs.com/package/codex-cli)                |
 | --------------------- | --------------------------- | ------------------------------------------------------------------- |
 | Add or update an item | “Code” button, attach repo  | `codex "add item solar-cell-junction-box"`                          |
 | Ask about item data   | “Ask” button                | `codex exec "explain frontend/src/pages/inventory/json/items.json"` |
 | Run item tests        | –                           | `codex exec --full-auto "npm test -- itemValidation itemQuality"`   |
 
-See the upstream CLI reference for more flags.
+See the [Codex CLI documentation](https://www.npmjs.com/package/codex-cli) for more flags.
 
 ---
 
