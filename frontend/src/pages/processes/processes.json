@@ -795,7 +795,7 @@
     },
     {
         "id": "setup-solar-enclosure-200Wh",
-        "title": "Add a 200 Wh battery, charge controller, and 200 W solar panel to an outdoor watertight enclosure",
+        "title": "Add a 200 Wh battery pack, charge controller, and 200 W solar panel to an outdoor watertight enclosure",
         "requireItems": [],
         "consumeItems": [
             {
@@ -899,7 +899,7 @@
                 "count": 1
             },
             {
-                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "id": "7246c1c8-f22e-4d31-acd3-967f91b8626a",
                 "count": 1
             },
             {
@@ -1417,7 +1417,7 @@
     },
     {
         "id": "practice-cpr",
-        "title": "Practice CPR on a training manikin",
+        "title": "Practice 30:2 CPR on a training manikin",
         "requireItems": [
             {
                 "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
@@ -1430,12 +1430,15 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "15m",
+        "duration": "20m",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [{ "task": "codex-hardening-2025-08-03", "date": "2025-08-03", "score": 60 }]
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                { "task": "codex-hardening-2025-08-03", "date": "2025-08-03", "score": 60 },
+                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 80 }
+            ]
         }
     },
     {
@@ -1445,7 +1448,8 @@
             {
                 "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                 "count": 1
-            }
+            },
+            { "id": "151", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -1487,16 +1491,30 @@
     },
     {
         "id": "photograph-lunar-eclipse",
-        "title": "Photograph a lunar eclipse",
+        "title": "Photograph a lunar eclipse with a telescope",
         "requireItems": [
             {
                 "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                "count": 1
+            },
+            {
+                "id": "151",
                 "count": 1
             }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "20m"
+        "duration": "45m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-process-2025-08-04", "date": "2025-08-04", "score": 60 }]
+        }
     },
     {
         "id": "arduino-servo-sweep",
@@ -1562,7 +1580,7 @@
     },
     {
         "id": "drip-acclimate-shrimp",
-        "title": "Drip acclimate dwarf shrimp",
+        "title": "Drip acclimate dwarf shrimp to your aquarium",
         "requireItems": [
             {
                 "id": "60e517b4-5807-4983-afb8-e2aad1566587",
@@ -1571,10 +1589,24 @@
             {
                 "id": "0564d441-7367-412e-b709-dad770814a39",
                 "count": 1
+            },
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
             }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 70 }]
+        }
     }
 ]
