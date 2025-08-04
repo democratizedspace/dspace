@@ -46,7 +46,7 @@
         },
         {
             "id": "upgrades",
-            "text": "Alright, we can simply swap in a higher capacity battery. 1 kWh is still pretty small, so it should fit in this enclosure just fine. Just disassemble your existing enclosure and put everything back together with the bigger battery! Oh, and I'm kinda running low on funds so you'll have to source that bigger battery yourself. I'm sure you've got some spare dUSD lying around!",
+            "text": "Alright, we can simply swap in a higher capacity battery pack. 1 kWh is still pretty small, so it should fit in this enclosure just fine. Just disassemble your existing enclosure and put everything back together with the bigger battery pack! Oh, and I'm kinda running low on funds so you'll have to source that bigger battery pack yourself. I'm sure you've got some spare dUSD lying around!",
             "options": [
                 {
                     "type": "process",

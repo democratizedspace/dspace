@@ -57,7 +57,7 @@
     {
         "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
         "name": "200 Wh battery pack",
-        "description": "Compact 200 Wh lithium-ion battery pack delivering 12 V DC storage for solar or wind energy.",
+        "description": "12 V 16 Ah lithium iron phosphate battery pack (≈200 Wh) with built-in BMS for renewable energy storage.",
         "price": "120 dUSD",
         "image": "/assets/battery.jpg",
         "hardening": {
@@ -601,14 +601,14 @@
     {
         "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
         "name": "Small solar enclosure",
-        "description": "A solar enclosure with enough room for a single panel, a charge controller, and a 200 Wh battery.",
+        "description": "A solar enclosure with enough room for a single panel, a charge controller, and a 200 Wh battery pack.",
         "image": "/assets/solar_enclosure_small.jpg",
         "price": "100 dUSD"
     },
     {
         "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
         "name": "Solar setup (200 Wh)",
-        "description": "A 200 W solar panel, charge controller, and 200 Wh battery in a weatherproof enclosure. Ready to use!",
+        "description": "A 200 W solar panel, charge controller, and 200 Wh battery pack in a weatherproof enclosure. Ready to use!",
         "image": "/assets/solar_setup_small.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
