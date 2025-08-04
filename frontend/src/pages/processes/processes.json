@@ -1440,16 +1440,25 @@
     },
     {
         "id": "observe-jupiter-moons",
-        "title": "Observe Jupiter's moons",
+        "title": "Observe Jupiter's Galilean moons through a telescope",
         "requireItems": [
             {
                 "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                 "count": 1
-            }
+            },
+            { "id": "151", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "10m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-process-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }
+            ]
+        }
     },
     {
         "id": "identify-constellations",
