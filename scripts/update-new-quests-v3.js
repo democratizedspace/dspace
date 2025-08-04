@@ -22,6 +22,21 @@ function getBaseRef() {
   }
 }
 
+function readExistingList() {
+  try {
+    const content = fs.readFileSync(outputFile, 'utf8');
+    return content
+      .split('\n')
+      .filter((line) => line.startsWith('- '))
+      .map((line) => line.slice(2).trim())
+      .map((q) =>
+        path.posix.join('frontend/src/pages/quests/json', `${q}.json`)
+      );
+  } catch (err) {
+    return [];
+  }
+}
+
 function getNewQuestPaths() {
   try {
     // Ensure enough history for a merge base even in shallow clones
@@ -30,6 +45,11 @@ function getNewQuestPaths() {
     // ignore fetch errors
   }
   const baseRef = getBaseRef();
+  try {
+    execSync(`git merge-base ${baseRef} HEAD`, { stdio: 'ignore' });
+  } catch (err) {
+    return readExistingList();
+  }
   try {
     const diff = execSync(
       `git diff --name-only --diff-filter=A ${baseRef}...HEAD -- frontend/src/pages/quests/json`,
@@ -40,8 +60,7 @@ function getNewQuestPaths() {
       .map((p) => p.trim())
       .filter(Boolean);
   } catch (err) {
-    // If the diff fails (e.g. no merge base between branches), assume no new quests
-    return [];
+    return readExistingList();
   }
 }
 

@@ -2,8 +2,8 @@
     "id": "woodworking/birdhouse",
     "title": "Build a birdhouse",
     "description": "Use simple tools to craft a home for local birds.",
-    "image": "/assets/birdhouse.jpg",
-    "npc": "/assets/npc/cedar.jpg",
+    "image": "/assets/door.jpg",
+    "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {

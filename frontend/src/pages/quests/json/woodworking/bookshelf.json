@@ -2,8 +2,8 @@
     "id": "woodworking/bookshelf",
     "title": "Build a small bookshelf",
     "description": "Apply your skills to assemble a functional bookshelf.",
-    "image": "/assets/bookshelf.jpg",
-    "npc": "/assets/npc/cedar.jpg",
+    "image": "/assets/door.jpg",
+    "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {

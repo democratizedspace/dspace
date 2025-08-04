@@ -2,7 +2,7 @@
     "id": "rocketry/night-launch",
     "title": "Night Launch",
     "description": "Take your rocket experience to the stars with a night launch. Gather your gear and light up the sky.",
-    "image": "/assets/rocketry.jpg",
+    "image": "/assets/rocket_launch.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
