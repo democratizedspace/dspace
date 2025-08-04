@@ -1426,6 +1426,14 @@
             {
                 "id": "b397aa70-3503-4e40-b84a-4d5609578d2b",
                 "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "157a5b8d-15a7-4581-b64c-e8cc0ef848ec",
+                "count": 1
             }
         ],
         "consumeItems": [],
@@ -1458,9 +1466,7 @@
             "passes": 1,
             "score": 65,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }]
         }
     },
     {
