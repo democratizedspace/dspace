@@ -95,6 +95,9 @@ describe('ProcessForm Component', () => {
         durationInput.value = '1h';
         durationInput.dispatchEvent(new Event('input'));
 
+        // Add minimal required item relationship
+        component.$$set({ requireItems: [{ id: 'item-1', count: 1 }] });
+
         // Submit form
         form.dispatchEvent(new Event('submit', { cancelable: true }));
 
@@ -103,9 +106,33 @@ describe('ProcessForm Component', () => {
         const formData = submittedData;
         expect(formData.get('title')).toBe('Test Process');
         expect(formData.get('duration')).toBe('1h');
-        expect(JSON.parse(formData.get('requireItems'))).toEqual([]);
+        expect(JSON.parse(formData.get('requireItems'))).toEqual([{ id: 'item-1', count: 1 }]);
         expect(JSON.parse(formData.get('consumeItems'))).toEqual([]);
         expect(JSON.parse(formData.get('createItems'))).toEqual([]);
+    });
+
+    test('should reject submission without item relationships', () => {
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        let submittedData = null;
+        component.$on('submit', (event) => {
+            submittedData = event.detail;
+        });
+
+        titleInput.value = 'Test Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        expect(submittedData).toBeFalsy();
     });
 
     test('should handle adding and removing items', () => {

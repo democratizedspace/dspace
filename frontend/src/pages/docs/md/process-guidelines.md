@@ -31,6 +31,17 @@ Every process requires the following properties:
 
 At least one of `requireItems`, `consumeItems`, or `createItems` must be specified for a process to be useful.
 
+### Validation
+
+Custom processes are validated against a JSON schema when created. The schema ensures:
+
+-   Titles have at least three characters
+-   Durations use the `h`, `m`, or `s` units (decimals allowed)
+-   Item relationships include positive counts
+-   At least one of `requireItems`, `consumeItems`, or `createItems` is present
+
+Processes that fail validation will not be saved and the form displays helpful error messages.
+
 ### Duration Format
 
 Duration must follow the pattern `(\d+h\s*)?(\d+m\s*)?(\d+s\s*)?`, for example:
