@@ -1466,7 +1466,7 @@
     },
     {
         "id": "observe-meteor-shower",
-        "title": "Observe a meteor shower",
+        "title": "Watch a meteor shower with your telescope",
         "requireItems": [
             {
                 "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -1475,7 +1475,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "15m"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }]
+        }
     },
     {
         "id": "photograph-lunar-eclipse",
