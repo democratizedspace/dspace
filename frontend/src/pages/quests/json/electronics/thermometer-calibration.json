@@ -1,0 +1,50 @@
+{
+    "id": "electronics/thermometer-calibration",
+    "title": "Calibrate a Thermometer",
+    "description": "Use water baths to verify your thermometer's accuracy.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your new thermometer might be a bit off. Let's calibrate it with ice and warm water baths.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Thermometer ready",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Immerse the thermometer in ice water to check 0°C, then in warm water to confirm higher readings. Adjust the offset in your code if needed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Calibration done"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Accurate readings will make your data trustworthy.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/thermistor-reading"]
+}
