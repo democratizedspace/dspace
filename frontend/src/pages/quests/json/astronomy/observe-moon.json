@@ -1,27 +1,45 @@
 {
     "id": "astronomy/observe-moon",
     "title": "Observe the Moon",
-    "description": "Nova encourages you to sketch lunar features as an introduction to observational astronomy.",
+    "description": "Nova guides you to sketch lunar craters with binoculars as a first step in observational astronomy.",
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here! Before we engineer spacecraft, it's helpful to study the skies. Tonight let's observe the Moon together.",
+            "text": "Nova here! Before we engineer spacecraft, it's helpful to study the skies. Find a safe spot away from traffic and bright lights, and let's observe the Moon together.",
             "options": [{ "type": "goto", "goto": "record", "text": "I'm ready" }]
         },
         {
             "id": "record",
-            "text": "Use a small telescope or binoculars and sketch the major craters you see. This design practice sharpens your eye for future missions.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Sketch completed" }]
+            "text": "Set up a pair of binoculars or a small telescope to sketch prominent lunar craters. Never aim your optics at the Sun.",
+            "options": [
+                { "type": "process", "process": "sketch-lunar-craters", "text": "Sketching..." },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Sketch completed",
+                    "requiresItems": [
+                        { "id": "edac6775-f92f-40f5-b735-718aceff5a6e", "count": 1 }
+                    ]
+                }
+            ]
         },
         {
             "id": "finish",
-            "text": "Nice work! With regular observation you'll overcome many challenges when plotting real rocket trajectories.",
+            "text": "Nice work! Regular night-sky practice will sharpen your eye for plotting future rocket trajectories.",
             "options": [{ "type": "finish", "text": "Onward!" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": []
+    "requiresQuests": [],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-observe-moon-2025-08-04", "date": "2025-08-04", "score": 60 }
+        ]
+    }
 }

@@ -1006,6 +1006,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "edac6775-f92f-40f5-b735-718aceff5a6e",
+        "name": "binoculars",
+        "description": "Handheld optics with 8x magnification for casual skywatching.",
+        "image": "/assets/quests/solar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
         "name": "first aid kit",
         "description": "Adhesive bandages, gauze and antiseptic packed for emergencies.",

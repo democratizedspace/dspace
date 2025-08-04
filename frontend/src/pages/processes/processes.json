@@ -1464,6 +1464,27 @@
         }
     },
     {
+        "id": "sketch-lunar-craters",
+        "title": "Sketch prominent lunar craters using binoculars",
+        "requireItems": [
+            {
+                "id": "edac6775-f92f-40f5-b735-718aceff5a6e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": [
+                { "task": "codex-observe-moon-2025-08-04", "date": "2025-08-04", "score": 0 }
+            ]
+        }
+    },
+    {
         "id": "identify-constellations",
         "title": "Identify constellations",
         "requireItems": [
