@@ -20,5 +20,4 @@ test-videos/
 .eslintrc.local.json
 .prettierrc.local.json
 .editorconfig.local
-src/pages/docs/md/prompts-quests.md
 src/pages/docs/md/quest-guidelines.md

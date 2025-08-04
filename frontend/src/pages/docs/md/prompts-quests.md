@@ -62,8 +62,9 @@ FILES OF INTEREST
 REQUIREMENTS
 1. Follow the quest schema.
 2. Reference at least one inventory item or process.
-3. Run `npm test -- questCanonical questQuality` and fix any failures.
-4. Update docs or dialogue as needed.
+3. Run `npm run lint`, `npm run type-check` and `npm run build`.
+4. Run `npm test -- questCanonical questQuality` and fix any failures.
+5. Update docs or dialogue as needed.
 
 OUTPUT
 Return **only** the patch (diff) needed.
@@ -77,12 +78,13 @@ Use this when you want Codex to automatically create or upgrade a quest.
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
 quests under `frontend/src/pages/quests/json`. Ensure start, middle and
-completion nodes, at least one item or process reference, and passing
-`npm test -- questCanonical questQuality`.
+completion nodes, at least one item or process reference, and passing checks
+(`npm run lint`, `npm run type-check`, `npm run build`, and
+`npm test -- questCanonical questQuality`).
 
 USER:
 1. Follow the steps above.
-2. Run the quest tests before committing.
+2. Run the commands listed in the system prompt before committing.
 3. Summarize the new or updated quest in the PR description.
 
 OUTPUT:
@@ -103,7 +105,8 @@ existing quests in that tree as examples for tone and structure.
 USER:
 1. Create a new quest JSON in the chosen tree following the quest schema.
 2. Reference at least one inventory item or process.
-3. Run `npm test -- questCanonical questQuality` and fix any failures.
+3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+   `npm test -- questCanonical questQuality`. Fix any failures.
 
 OUTPUT:
 Return only the diff with the new quest.
@@ -146,8 +149,9 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm test -- questCanonical questQuality itemQuality processQuality` and
-   update docs if needed.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm test --
+   questCanonical questQuality itemQuality processQuality`. Update docs if
+   needed.
 
 OUTPUT:
 A pull request with the refined quest, updated hardening block and passing tests.
@@ -157,7 +161,7 @@ A pull request with the refined quest, updated hardening block and passing tests
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
-- **Provide clear context** about DSPACE's educational mission and sustainability focus.
-- **Use system prompts** to guide tone and technical accuracy.
-- **Iterate on outputs** rather than expecting perfection on the first try.
-- **Fact-check technical information** since AI systems can generate plausible but incorrect details.
+-   **Provide clear context** about DSPACE's educational mission and sustainability focus.
+-   **Use system prompts** to guide tone and technical accuracy.
+-   **Iterate on outputs** rather than expecting perfection on the first try.
+-   **Fact-check technical information** since AI systems can generate plausible but incorrect details.
