@@ -4,6 +4,7 @@
     import ProcessPreview from './ProcessPreview.svelte';
     import items from '../../pages/inventory/json/items.json';
     import { durationInSeconds } from '../../utils.js';
+    import { validateProcessData } from '../../utils/customProcessValidation.js';
 
     export let title = '';
     export let duration = '';
@@ -86,6 +87,32 @@
 
         if (!validateItems()) {
             errors.items = 'Item counts must be positive';
+        }
+
+        const { valid, errors: schemaErrors } = validateProcessData({
+            title,
+            duration,
+            requireItems,
+            consumeItems,
+            createItems,
+        });
+
+        if (!valid && schemaErrors) {
+            schemaErrors.forEach((err) => {
+                if (err.keyword === 'anyOf') {
+                    errors.items = 'At least one item relationship is required';
+                } else if (err.instancePath === '/title') {
+                    errors.title = err.message || 'Invalid title';
+                } else if (err.instancePath === '/duration') {
+                    errors.duration = err.message || 'Invalid duration';
+                } else if (
+                    err.instancePath.startsWith('/requireItems') ||
+                    err.instancePath.startsWith('/consumeItems') ||
+                    err.instancePath.startsWith('/createItems')
+                ) {
+                    errors.items = err.message || 'Invalid items';
+                }
+            });
         }
 
         validationErrors = errors;
