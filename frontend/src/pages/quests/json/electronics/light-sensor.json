@@ -9,9 +9,7 @@
         {
             "id": "start",
             "text": "Hey again! Let's hook up a photoresistor so the Arduino can detect light levels.",
-            "options": [
-                { "type": "goto", "goto": "wire", "text": "What do I need?" }
-            ]
+            "options": [{ "type": "goto", "goto": "wire", "text": "What do I need?" }]
         },
         {
             "id": "wire",
@@ -31,16 +29,12 @@
         {
             "id": "code",
             "text": "Upload a sketch that reads the analog value from A0 and prints it to the serial monitor. Watch the numbers change as light levels vary.",
-            "options": [
-                { "type": "goto", "goto": "finish", "text": "Numbers are changing!" }
-            ]
+            "options": [{ "type": "goto", "goto": "finish", "text": "Numbers are changing!" }]
         },
         {
             "id": "finish",
             "text": "Nice work! You've built a basic light sensor for your future projects.",
-            "options": [
-                { "type": "finish", "text": "Cool!" }
-            ]
+            "options": [{ "type": "finish", "text": "Cool!" }]
         }
     ],
     "rewards": [],
