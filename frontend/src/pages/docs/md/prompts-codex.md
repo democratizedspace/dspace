@@ -7,13 +7,14 @@ slug: 'prompts-codex'
 
 Codex (Web + CLI) is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR — but only if you give it a clear,
-file‑scoped prompt. :contentReference[oaicite:0]{index=0}
+file‑scoped prompt. This document stores the baseline instructions used when
+invoking Codex on DSPACE and should evolve alongside the project.
 
 > **TL;DR**  
 > 1. Scope the task to one or two files.  
 > 2. Say **exactly** what output you expect (diff, test, docs, etc.).  
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
-> mandatory instructions. :contentReference[oaicite:1]{index=1}
+> mandatory instructions.
 
 ---
 
@@ -25,7 +26,7 @@ file‑scoped prompt. :contentReference[oaicite:0]{index=0}
 | Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`    |
 | CI automation  | –                           | `codex exec --full-auto "run npm test"` |
 
-See the upstream CLI reference for more flags. :contentReference[oaicite:2]{index=2}
+See the upstream CLI reference for more flags.
 
 ---
 
@@ -39,7 +40,7 @@ See the upstream CLI reference for more flags. :contentReference[oaicite:2]{ind
 | **Acceptance check** | e.g. “All `npm test` suites pass” or “Return a unified diff only”. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
-prompt‑level rules short and concrete. :contentReference[oaicite:3]{index=3}
+prompt‑level rules short and concrete.
 
 ---
 
@@ -83,9 +84,10 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository. Choose one item
 from `frontend/src/pages/docs/md/changelog/20250901.md` that is either `[ ]` or
 `[x]` without 💯. Implement it fully, completing any sub-tasks. Provide all code,
-tests and documentation required. Always run `npm run test:pr` before
-committing. If Playwright browsers are missing run `npx playwright install
-chromium` or prefix commands with `SKIP_E2E=1`.
+tests and documentation required. Follow `AGENTS.md` and ensure `npm run lint`,
+`npm run type-check`, `npm run build`, and `SKIP_E2E=1 npm run test:pr` all pass
+before committing. If Playwright browsers are missing run `npx playwright
+install chromium`.
 
 USER:
 1. Follow the steps above.
@@ -96,4 +98,24 @@ USER:
 OUTPUT:
 A pull request implementing the chosen item with all tests green. Summarize the
 completed task and test results in the PR body.
+```
+
+## Upgrade Prompt
+
+Use this prompt to refine DSPACE's own prompt documentation.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`. Ensure `npm run lint`, `npm run type-check` and `npm run build`
+pass before committing.
+
+USER:
+1. Pick one prompt doc under `frontend/src/pages/docs/md/` (for example,
+   `prompts-items.md`).
+2. Fix outdated instructions, links or formatting.
+3. Run the checks above.
+
+OUTPUT:
+A pull request with the improved prompt doc and passing checks.
 ```
