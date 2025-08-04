@@ -1137,5 +1137,26 @@
         "description": "Mirrorless camera capable of long-exposure astrophotography.",
         "image": "/assets/quests/solar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+        "name": "Aquarium liquid test kit",
+        "description": "Reagent-based kit for measuring ammonia, nitrite and nitrate levels in aquarium water.",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "price": "25 dUSD"
+    },
+    {
+        "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+        "name": "Water conditioner",
+        "description": "Detoxifying drops that remove chlorine and chloramine from tap water before aquarium use.",
+        "image": "/assets/aquarium_filled.jpg",
+        "price": "5 dUSD"
+    },
+    {
+        "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+        "name": "Gravel vacuum",
+        "description": "Siphon tube for cleaning substrate and removing aquarium water.",
+        "image": "/assets/aquarium_empty.jpg",
+        "price": "10 dUSD"
     }
 ]

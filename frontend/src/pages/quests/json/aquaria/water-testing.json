@@ -1,7 +1,7 @@
 {
     "id": "aquaria/water-testing",
     "title": "Test water parameters",
-    "description": "Use a liquid test kit to check for ammonia, nitrite and nitrate before adding shrimp.",
+    "description": "Use a liquid test kit to check ammonia, nitrite and nitrate before adding shrimp. Wear gloves and follow kit instructions.",
     "image": "/assets/quests/walstad.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
@@ -19,19 +19,34 @@
         },
         {
             "id": "explain",
-            "text": "Use a liquid test kit. Check ammonia and nitrite first—they should read zero. Nitrate should stay under 40 ppm.",
+            "text": "Use a liquid test kit. Wear nitrile gloves and avoid splashing the reagents. Check ammonia and nitrite first—they should read zero. Nitrate should stay under 40 ppm.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "results",
-                    "text": "Okay, I'll test now."
+                    "text": "Okay, I'll test now.",
+                    "requiresItems": [
+                        {
+                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "results",
-            "text": "If you see ammonia or nitrite, give the tank more time. If nitrate is high, perform a partial water change.",
+            "text": "If you see ammonia or nitrite, give the tank more time. If nitrate is high, start a partial water change to dilute it.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Nitrate is high—start a partial water change."
+                },
                 {
                     "type": "finish",
                     "text": "All clear! Levels look good."
@@ -45,5 +60,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/walstad"]
+    "requiresQuests": ["aquaria/walstad"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }
+        ]
+    }
 }
