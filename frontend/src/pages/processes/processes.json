@@ -1585,6 +1585,19 @@
         "duration": "5m"
     },
     {
+        "id": "test-aquarium-water",
+        "title": "Test aquarium water for ammonia and nitrite",
+        "requireItems": [
+            {
+                "id": "cbc4edb1-54a7-4f03-9a59-c7f84b977322",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
         "id": "drip-acclimate-shrimp",
         "title": "Drip acclimate dwarf shrimp to your aquarium",
         "requireItems": [

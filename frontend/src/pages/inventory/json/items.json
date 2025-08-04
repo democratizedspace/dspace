@@ -773,6 +773,13 @@
         "price": "2 dUSD"
     },
     {
+        "id": "cbc4edb1-54a7-4f03-9a59-c7f84b977322",
+        "name": "Aquarium test kit",
+        "description": "Liquid reagents for measuring ammonia and nitrite levels.",
+        "image": "/assets/aquarium_empty.jpg",
+        "price": "25 dUSD"
+    },
+    {
         "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
         "name": "Guppy group",
         "description": "Three females and one male guppy ready to breed.",

@@ -547,5 +547,9 @@
     "2770ee5d-f9a0-4dc8-9c79-4f031fefd093": {
         "requires": ["woodworking/finish-sanding", "woodworking/tool-rack"],
         "rewards": []
+    },
+    "cbc4edb1-54a7-4f03-9a59-c7f84b977322": {
+        "requires": ["aquaria/shrimp"],
+        "rewards": []
     }
 }
