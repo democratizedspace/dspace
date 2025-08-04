@@ -1,14 +1,14 @@
 {
     "id": "aquaria/shrimp",
     "title": "Add dwarf shrimp",
-    "description": "Introduce hardy shrimp to help keep the tank clean.",
+    "description": "Introduce hardy shrimp to help keep the tank clean while maintaining good water quality.",
     "image": "/assets/quests/shrimp.svg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your Walstad tank should be cycled now. A small colony of dwarf shrimp will keep algae in check.",
+            "text": "Your Walstad tank should be fully cycled now. A small colony of dwarf shrimp will graze on algae and highlight any water quality issues.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "acquire",
-            "text": "Pick up a few shrimp from the store and float the bag in your tank to equalize temperature.",
+            "text": "Pick up a few healthy shrimp from the store. Keep the bag sealed, verify ammonia and nitrite are zero, and float it in your tank for 15 minutes to equalize temperature.",
             "options": [
                 {
                     "type": "goto",
@@ -30,7 +30,33 @@
         },
         {
             "id": "acclimate",
-            "text": "Slowly drip tank water into the bag for about an hour. Then release the shrimp gently.",
+            "text": "Set up a drip acclimation using a clean bucket and airline tubing so tank water drips into the bag for about an hour.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "drip-acclimate-shrimp",
+                    "text": "Start drip acclimation",
+                    "requiresItems": [
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "release",
+                    "text": "Water is matched."
+                }
+            ]
+        },
+        {
+            "id": "release",
+            "text": "Use a net to move the shrimp into the tank. Discard the store water to avoid contamination.",
             "options": [
                 {
                     "type": "finish",
@@ -45,5 +71,17 @@
             "count": 3
         }
     ],
-    "requiresQuests": ["aquaria/walstad"]
+    "requiresQuests": ["aquaria/walstad"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            }
+        ]
+    }
 }

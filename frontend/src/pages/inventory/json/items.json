@@ -732,6 +732,13 @@
         "price": "3 dUSD"
     },
     {
+        "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+        "name": "Airline tubing",
+        "description": "Flexible tubing for aquarium air pumps and drip acclimation.",
+        "image": "/assets/aquarium_empty.jpg",
+        "price": "2 dUSD"
+    },
+    {
         "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
         "name": "Guppy group",
         "description": "Three females and one male guppy ready to breed.",
