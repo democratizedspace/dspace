@@ -121,7 +121,7 @@ Every quest JSON file must include:
         - `grantsItems`: Optional items given when selecting option
         - `requiresGitHub`: Set to `true` to disable the option until a GitHub token is saved
 - `rewards`: Items given upon quest completion
-- `requiresQuests`: Array of quest IDs that must be completed first
+- `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest form under **Quest Requirements**)
 
 ### Current Implementation State
 

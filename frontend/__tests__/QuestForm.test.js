@@ -413,6 +413,7 @@ describe('QuestForm Component', () => {
             title: 'Existing Quest',
             description: 'Existing quest description',
             image: 'existing-image-url',
+            requiresQuests: ['q1'],
         };
 
         // Mock for edit mode
@@ -432,6 +433,8 @@ describe('QuestForm Component', () => {
         // Check if form is pre-filled with existing data
         expect(container.querySelector('#title').value).toBe(existingQuest.title);
         expect(container.querySelector('#description').value).toBe(existingQuest.description);
+        const reqSelect = container.querySelector('#requires');
+        expect(reqSelect.options[0].selected).toBe(true);
 
         // Submit form without changes
         await act(async () => {
@@ -445,7 +448,7 @@ describe('QuestForm Component', () => {
                 title: existingQuest.title,
                 description: existingQuest.description,
                 image: 'mocked-image-url',
-                requiresQuests: [],
+                requiresQuests: ['q1'],
             })
         );
     });
