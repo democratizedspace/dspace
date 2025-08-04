@@ -357,6 +357,13 @@
         "price": "50 dUSD"
     },
     {
+        "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+        "name": "submersible water pump",
+        "description": "Compact pump that circulates nutrient solution in hydroponic systems.",
+        "image": "/assets/submersible_pump.jpg",
+        "price": "15 dUSD"
+    },
+    {
         "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
         "name": "hydroponics tub (ready)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
