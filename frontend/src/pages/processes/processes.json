@@ -795,7 +795,7 @@
     },
     {
         "id": "setup-solar-enclosure-200Wh",
-        "title": "Add a 200 Wh battery, charge controller, and 200 W solar panel to an outdoor watertight enclosure",
+        "title": "Add a 200 Wh battery pack, charge controller, and 200 W solar panel to an outdoor watertight enclosure",
         "requireItems": [],
         "consumeItems": [
             {
