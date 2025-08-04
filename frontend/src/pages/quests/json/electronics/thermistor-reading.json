@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's expand your sensor skills. A thermistor and resistor can report ambient temperature for all sorts of projects.",
+            "text": "Let's expand your sensor skills. A thermistor paired with a 10k Ω resistor can report ambient temperature for future automations.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect power before wiring. Place the thermistor and a 10k Ω resistor in a voltage divider on the breadboard and run the middle node to A0. Reconnect the USB cable once everything is secure.",
+            "text": "Unplug the USB cable before wiring. On the breadboard, form a voltage divider by connecting one thermistor lead to 5V, the other through the 10k Ω resistor to ground, then run the junction to A0 with jumper wires. Double-check connections before powering back up.",
             "options": [
                 {
                     "type": "goto",
@@ -56,7 +56,7 @@
         },
         {
             "id": "monitor",
-            "text": "Upload a sketch that reads the analog value and prints the temperature. Use the Arduino serial monitor and keep liquids away from the electronics.",
+            "text": "Upload the sketch from the arduino-thermistor-read process to sample the analog value and convert it to temperature. Open the Arduino serial monitor to watch the values and keep liquids and loose metal away from the board.",
             "options": [
                 {
                     "type": "goto",
@@ -80,14 +80,19 @@
     "rewards": [],
     "requiresQuests": ["electronics/potentiometer-dimmer"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-03",
                 "date": "2025-08-03",
                 "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
             }
         ]
     }
