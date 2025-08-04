@@ -105,37 +105,42 @@
     },
     {
         "id": "3dprint-benchy",
-        "title": "Make a test print",
-        "requireItems": [],
-        "consumeItems": [
+        "title": "3D print a Benchy calibration model",
+        "requireItems": [
             {
                 "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
-            },
+            }
+        ],
+        "consumeItems": [
             {
                 "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                "count": 33
+                "count": 15
             },
             {
                 "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
-                "count": 231.25
+                "count": 150
             }
         ],
         "createItems": [
-            {
-                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                "count": 1
-            },
             {
                 "id": "7892ffc6-c651-445f-946b-7edc998cf389",
                 "count": 1
             },
             {
                 "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
-                "count": 33
+                "count": 15
             }
         ],
-        "duration": "1h 51m"
+        "duration": "1h 30m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }
+            ]
+        }
     },
     {
         "id": "3dprint-rocket",
