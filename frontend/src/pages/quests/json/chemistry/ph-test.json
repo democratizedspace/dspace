@@ -1,14 +1,22 @@
 {
     "id": "chemistry/ph-test",
     "title": "Measure Solution pH",
-    "description": "Use test strips to check the acidity of your latest experiment.",
+    "description": "Use pH strips to check the acidity of your latest experiment while staying safe.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }
+        ]
+    },
     "image": "/assets/pH_strip.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Before we mix anything more reactive, let's practice measuring pH so you can record accurate data in future trials.",
+            "text": "Before we mix anything more reactive, let's practice measuring pH. Gather a pH strip, nitrile gloves, and safety goggles so you can record accurate data safely.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +27,7 @@
         },
         {
             "id": "measure",
-            "text": "Dip a strip into your solution and compare the color to the chart. Precision here helps keep reactions predictable.",
+            "text": "With gloves and goggles on, dip a pH strip into your solution, avoid splashes, and compare the color to the chart. Precise readings keep reactions predictable.",
             "options": [
                 {
                     "type": "process",
@@ -34,6 +42,14 @@
                         {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                             "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ]
                 }
@@ -41,7 +57,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! We'll use those readings when formulating safer propellants.",
+            "text": "Nice work! We'll use those readings when formulating safer propellants. Dispose of the used strip and rinse any glassware.",
             "options": [
                 {
                     "type": "finish",
