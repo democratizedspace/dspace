@@ -93,9 +93,22 @@
     {
         "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
         "name": "basil seeds",
-        "description": "A packet of basil seeds.",
+        "description": "Packet of ~50 Genovese basil seeds for hydroponic germination.",
         "image": "/assets/basil_seeds.jpg",
-        "price": "5 dUSD"
+        "price": "2 dUSD",
+        "unit": "packet",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
