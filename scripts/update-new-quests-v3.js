@@ -2,7 +2,25 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const outputFile = path.join(__dirname, '..', 'frontend', 'src', 'pages', 'docs', 'md', 'new-quests-v3.md');
+const outputFile = path.join(
+    __dirname,
+    '..',
+    'frontend',
+    'src',
+    'pages',
+    'docs',
+    'md',
+    'new-quests-v3.md'
+);
+
+function getBaseRef() {
+    try {
+        execSync('git show-ref --verify --quiet refs/remotes/origin/main');
+        return 'origin/main';
+    } catch (err) {
+        return 'main';
+    }
+}
 
 function getNewQuestPaths() {
     try {
@@ -10,8 +28,9 @@ function getNewQuestPaths() {
     } catch (err) {
         // ignore fetch errors
     }
+    const baseRef = getBaseRef();
     const diff = execSync(
-        'git diff --name-only --diff-filter=A origin/main...HEAD -- frontend/src/pages/quests/json',
+        `git diff --name-only --diff-filter=A ${baseRef}...HEAD -- frontend/src/pages/quests/json`,
         { encoding: 'utf8' }
     );
     return diff
@@ -64,4 +83,13 @@ function main() {
     fs.writeFileSync(outputFile, content + '\n');
 }
 
-main();
+if (require.main === module) {
+    main();
+}
+
+module.exports = {
+    getNewQuestPaths,
+    groupQuests,
+    generateMarkdown,
+    main,
+};
