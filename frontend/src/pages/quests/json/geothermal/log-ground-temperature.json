@@ -1,0 +1,35 @@
+{
+    "id": "geothermal/log-ground-temperature",
+    "title": "Log Ground Temperature",
+    "description": "Use a buried thermistor with Arduino to monitor ground temperature over time.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to take your geothermal survey further? Let's log the ground temperature for a few days.",
+            "options": [{ "type": "goto", "goto": "deploy", "text": "How do I do that?" }]
+        },
+        {
+            "id": "deploy",
+            "text": "Wire a thermistor as in the arduino-thermistor-read process and bury the sensor about a meter deep. Connect the Arduino to record readings.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Sensor logging",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [{ "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! With consistent data you'll know if a heat pump will work year-round.",
+            "options": [{ "type": "finish", "text": "Can't wait for the results." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/survey-ground-temperature"]
+}
