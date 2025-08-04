@@ -8,23 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The Perseids are active tonight. Let's log as many meteors as we can.",
+            "text": "The Perseids peak tonight. Set up your basic telescope in a safe, open spot and get your meteor observation log ready.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "observe",
-                    "text": "Let's watch the sky."
+                    "text": "I'll prepare the gear."
                 }
             ]
         },
         {
             "id": "observe",
-            "text": "Use your telescope or just your eyes in a dark area. Record each meteor's direction and brightness.",
+            "text": "Once your eyes adjust, track each streak through the telescope and note its direction, time and brightness in the log. Stay aware of trip hazards in the dark.",
             "options": [
                 {
                     "type": "process",
                     "process": "observe-meteor-shower",
-                    "text": "Recording meteors."
+                    "text": "Start logging meteors"
                 },
                 {
                     "type": "goto",
@@ -32,6 +32,10 @@
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "150dc01f-5739-4f4f-ba22-d994ac9eb348",
                             "count": 1
                         }
                     ],
@@ -51,5 +55,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/jupiter-moons"]
+    "requiresQuests": ["astronomy/jupiter-moons"],
+    "hardening": {
+        "passes": 1,
+        "score": 70,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 70
+            }
+        ]
+    }
 }

@@ -1478,10 +1478,14 @@
     },
     {
         "id": "observe-meteor-shower",
-        "title": "Watch a meteor shower with your telescope",
+        "title": "Watch and log a meteor shower with your telescope",
         "requireItems": [
             {
                 "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "150dc01f-5739-4f4f-ba22-d994ac9eb348",
                 "count": 1
             }
         ],

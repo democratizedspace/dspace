@@ -1006,6 +1006,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "150dc01f-5739-4f4f-ba22-d994ac9eb348",
+        "name": "meteor observation log",
+        "description": "Printed sheet or notebook for noting meteor times, directions and brightness.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
         "name": "first aid kit",
         "description": "Adhesive bandages, gauze and antiseptic packed for emergencies.",
