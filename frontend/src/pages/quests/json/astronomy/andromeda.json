@@ -1,0 +1,55 @@
+{
+    "id": "astronomy/andromeda",
+    "title": "Locate the Andromeda Galaxy",
+    "description": "Use constellation patterns to find our neighboring galaxy in the night sky.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Tonight we hunt for the Andromeda Galaxy. Ready to chart the stars?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "search",
+                    "text": "Absolutely."
+                }
+            ]
+        },
+        {
+            "id": "search",
+            "text": "First find the distinctive W of Cassiopeia and follow it to a faint smudge.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Spotting Cassiopeia."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I see Andromeda."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Observing Andromeda gets easier every season.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Amazing view."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}
