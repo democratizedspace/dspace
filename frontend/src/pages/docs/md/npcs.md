@@ -71,8 +71,8 @@ Orion is an electrical engineer whose enthusiasm for robotics and microprocessor
 -   "Hey there! I'm Orion. Want to see how easy electronics can be? Let's build a simple LED circuit together."
 -   "You'll need an LED, a 330 ohm resistor, a breadboard, and a battery pack or USB power source."
 -   "Place the LED on the breadboard and connect the resistor in series with the long leg."
- -   "Hey there! Orion here. Ready to do something a bit more exciting? Let's make that LED blink with a microcontroller. Keep the board unplugged while we set things up."
- -   "Plug the board into the laptop with the USB cable, open the Arduino IDE, load the Blink example, select the correct board and port, then hit Upload."
+-   "Hey there! Orion here. Ready to do something a bit more exciting? Let's make that LED blink with a microcontroller. Keep the board unplugged while we set things up."
+-   "Plug the board into the laptop with the USB cable, open the Arduino IDE, load the Blink example, select the correct board and port, then hit Upload."
 -   "Need a server check? I'm happy to spin up a fresh Pi and deploy the stack."
 
 ## Vega
