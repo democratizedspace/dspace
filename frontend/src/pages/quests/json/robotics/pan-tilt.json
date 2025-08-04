@@ -1,0 +1,50 @@
+{
+    "id": "robotics/pan-tilt",
+    "title": "Make a Pan-Tilt Mount",
+    "description": "Use two servos to scan your surroundings.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to give your bot some neck muscles? We'll build a simple pan-tilt mount for sensors.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "parts",
+                    "text": "Tell me what I need."
+                }
+            ]
+        },
+        {
+            "id": "parts",
+            "text": "Stack one servo on another to create horizontal and vertical movement. Attach a bracket or small platform for your sensor.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Servos mounted.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Write a sketch that sweeps both axes to scan the area. Try pointing an ultrasonic sensor to map obstacles.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sweep complete!"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["robotics/servo-control"],
+    "rewards": []
+}
