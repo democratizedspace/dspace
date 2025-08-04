@@ -214,25 +214,42 @@
     },
     {
         "id": "germinate-basil",
-        "title": "grow basil seedlings",
-        "requireItems": [],
+        "title": "Germinate basil seeds in starter plugs",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
-                "count": 1
+                "count": 10
             },
             {
                 "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
-                "count": 11
+                "count": 10
             }
         ],
         "createItems": [
             {
                 "id": "5712947f-716c-4f71-b28d-fcb811631080",
-                "count": 11
+                "count": 10
             }
         ],
-        "duration": "7d"
+        "duration": "7d",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "prepare-hydroponic-tub",
