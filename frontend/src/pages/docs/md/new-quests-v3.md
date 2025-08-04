@@ -11,134 +11,162 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 
 ### 3dprinting
 
--   3dprinting/calibration-cube
--   3dprinting/phone-stand
--   3dprinting/retraction-test
--   3dprinting/temperature-tower
+- 3dprinting/cable-clip
+- 3dprinting/calibration-cube
+- 3dprinting/phone-stand
+- 3dprinting/retraction-test
+- 3dprinting/temperature-tower
 
 ### aquaria
 
--   aquaria/breeding
--   aquaria/floating-plants
--   aquaria/guppy
--   aquaria/position-tank
--   aquaria/shrimp
--   aquaria/sponge-filter
--   aquaria/walstad
--   aquaria/water-change
--   aquaria/water-testing
+- aquaria/aquarium-light
+- aquaria/breeding
+- aquaria/floating-plants
+- aquaria/guppy
+- aquaria/position-tank
+- aquaria/shrimp
+- aquaria/sponge-filter
+- aquaria/walstad
+- aquaria/water-change
+- aquaria/water-testing
 
 ### astronomy
 
--   astronomy/basic-telescope
--   astronomy/comet-tracking
--   astronomy/constellations
--   astronomy/iss-flyover
--   astronomy/jupiter-moons
--   astronomy/lunar-eclipse
--   astronomy/meteor-shower
--   astronomy/observe-moon
--   astronomy/satellite-pass
--   astronomy/star-trails
+- astronomy/andromeda
+- astronomy/basic-telescope
+- astronomy/comet-tracking
+- astronomy/constellations
+- astronomy/iss-flyover
+- astronomy/jupiter-moons
+- astronomy/lunar-eclipse
+- astronomy/meteor-shower
+- astronomy/north-star
+- astronomy/observe-moon
+- astronomy/satellite-pass
+- astronomy/star-trails
 
 ### chemistry
 
--   chemistry/ph-test
--   chemistry/safe-reaction
--   chemistry/stevia-crystals
--   chemistry/stevia-extraction
--   chemistry/stevia-tasting
+- chemistry/acid-neutralization
+- chemistry/ph-adjustment
+- chemistry/ph-test
+- chemistry/safe-reaction
+- chemistry/stevia-crystals
+- chemistry/stevia-extraction
+- chemistry/stevia-tasting
 
 ### completionist
 
--   completionist/reminder
+- completionist/polish
+- completionist/reminder
 
 ### devops
 
--   devops/auto-updates
--   devops/ci-pipeline
--   devops/daily-backups
--   devops/docker-compose
--   devops/enable-https
--   devops/k3s-deploy
--   devops/log-maintenance
--   devops/monitoring
--   devops/pi-cluster-hardware
--   devops/prepare-first-node
--   devops/ssd-boot
+- devops/auto-updates
+- devops/ci-pipeline
+- devops/daily-backups
+- devops/docker-compose
+- devops/enable-https
+- devops/firewall-rules
+- devops/k3s-deploy
+- devops/log-maintenance
+- devops/monitoring
+- devops/pi-cluster-hardware
+- devops/prepare-first-node
+- devops/ssd-boot
+- devops/ssh-hardening
 
 ### electronics
 
--   electronics/arduino-blink
--   electronics/basic-circuit
--   electronics/data-logger
--   electronics/potentiometer-dimmer
--   electronics/servo-sweep
--   electronics/thermistor-reading
+- electronics/arduino-blink
+- electronics/basic-circuit
+- electronics/data-logger
+- electronics/light-sensor
+- electronics/potentiometer-dimmer
+- electronics/servo-sweep
+- electronics/thermistor-reading
+- electronics/thermometer-calibration
 
 ### energy
 
--   energy/battery-upgrade
--   energy/dWatt-1e8
--   energy/wind-turbine
+- energy/battery-upgrade
+- energy/dWatt-1e8
+- energy/hand-crank-generator
+- energy/offgrid-charger
+- energy/wind-turbine
 
 ### firstaid
 
--   firstaid/assemble-kit
--   firstaid/learn-cpr
--   firstaid/restock-kit
--   firstaid/splint-limb
--   firstaid/wound-care
+- firstaid/assemble-kit
+- firstaid/learn-cpr
+- firstaid/restock-kit
+- firstaid/splint-limb
+- firstaid/stop-nosebleed
+- firstaid/treat-burn
+- firstaid/wound-care
+
+### geothermal
+
+- geothermal/log-ground-temperature
+- geothermal/monitor-heat-pump-energy
+- geothermal/survey-ground-temperature
 
 ### hydroponics
 
--   hydroponics/grow-light
--   hydroponics/lettuce
--   hydroponics/nutrient-check
--   hydroponics/ph-check
--   hydroponics/ph-test
--   hydroponics/regrow-stevia
--   hydroponics/stevia
+- hydroponics/grow-light
+- hydroponics/lettuce
+- hydroponics/nutrient-check
+- hydroponics/ph-check
+- hydroponics/ph-test
+- hydroponics/pump-install
+- hydroponics/regrow-stevia
+- hydroponics/reservoir-refresh
+- hydroponics/stevia
 
 ### programming
 
--   programming/graph-temp
--   programming/graph-temp-data
--   programming/hello-sensor
--   programming/temp-graph
--   programming/temp-logger
--   programming/web-server
+- programming/avg-temp
+- programming/graph-temp
+- programming/graph-temp-data
+- programming/hello-sensor
+- programming/temp-graph
+- programming/temp-logger
+- programming/web-server
 
 ### robotics
 
--   robotics/line-follower
--   robotics/maze-navigation
--   robotics/obstacle-avoidance
--   robotics/servo-arm
--   robotics/servo-control
--   robotics/servo-gripper
--   robotics/wheel-encoders
+- robotics/line-follower
+- robotics/maze-navigation
+- robotics/obstacle-avoidance
+- robotics/pan-tilt
+- robotics/servo-arm
+- robotics/servo-control
+- robotics/servo-gripper
+- robotics/wheel-encoders
 
 ### rocketry
 
--   rocketry/recovery-run
--   rocketry/static-test
+- rocketry/night-launch
+- rocketry/recovery-run
+- rocketry/static-test
 
 ### ubi
 
--   ubi/first-payment
+- ubi/first-payment
 
 ### welcome
 
--   welcome/connect-github
--   welcome/intro-inventory
+- welcome/connect-github
+- welcome/intro-inventory
+- welcome/smart-plug-test
 
 ### woodworking
 
--   woodworking/birdhouse
--   woodworking/bookshelf
--   woodworking/finish-sanding
--   woodworking/planter-box
--   woodworking/step-stool
--   woodworking/tool-rack
--   woodworking/workbench
+- woodworking/birdhouse
+- woodworking/bookshelf
+- woodworking/finish-sanding
+- woodworking/planter-box
+- woodworking/step-stool
+- woodworking/tool-rack
+- woodworking/workbench
+
