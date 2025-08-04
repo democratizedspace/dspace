@@ -11,7 +11,7 @@ programming: 7 quests, 334 lines
 woodworking: 7 quests, 574 lines
 electronics: 6 quests, 522 lines
 rocketry: 5 quests, 536 lines
+welcome: 4 quests, 332 lines
 completionist: 3 quests, 161 lines
-welcome: 3 quests, 276 lines
 ubi: 2 quests, 200 lines
 geothermal: 1 quests, 77 lines
