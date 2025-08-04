@@ -59,8 +59,9 @@ FILES OF INTEREST
 REQUIREMENTS
 1. Follow the process schema.
 2. Use realistic durations and item relationships.
-3. Run `npm test -- processQuality itemQuality` and fix any failures.
-4. Update docs or items if needed.
+3. Run `npm run lint`, `npm run type-check` and `npm run build`.
+4. Run `npm test -- processQuality itemQuality` and fix any failures.
+5. Update docs or items if needed.
 
 OUTPUT
 Return **only** the patch (diff) needed.
@@ -74,11 +75,12 @@ Use this when you want Codex to automatically create or upgrade a process.
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/processes.json`. Ensure realistic
-steps, durations, item references, and passing `npm test -- processQuality itemQuality`.
+steps, durations, item references, and passing checks (`npm run lint`, `npm run
+type-check`, `npm run build`, and `npm test -- processQuality itemQuality`).
 
 USER:
 1. Follow the steps above.
-2. Run the process tests before committing.
+2. Run the commands listed in the system prompt before committing.
 3. Summarize the new or updated process in the PR description.
 
 OUTPUT:
@@ -115,7 +117,8 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-4. Run `npm test -- processQuality itemQuality` and update docs or items if needed.
+4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+   `npm test -- processQuality itemQuality`. Update docs or items if needed.
 
 OUTPUT:
 A pull request with the refined process, updated hardening block and passing tests.
@@ -125,7 +128,7 @@ A pull request with the refined process, updated hardening block and passing tes
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus.
--   **Use system prompts** to guide tone and technical accuracy.
--   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible but incorrect details.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible but incorrect details.
