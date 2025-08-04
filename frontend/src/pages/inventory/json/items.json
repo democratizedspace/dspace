@@ -1191,5 +1191,12 @@
         "description": "Siphon tube for cleaning substrate and removing aquarium water.",
         "image": "/assets/aquarium_empty.jpg",
         "price": "10 dUSD"
+    },
+    {
+        "id": "b465a7e3-f26d-4416-a598-2f8167557240",
+        "name": "astronaut poster",
+        "description": "A glossy poster featuring NASA astronauts floating in microgravity.",
+        "image": "/assets/astronauts.jpg",
+        "price": "5 dUSD"
     }
 ]
