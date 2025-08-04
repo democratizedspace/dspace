@@ -1199,5 +1199,12 @@
         "image": "/assets/quests/basic_circuit.svg",
         "price": "20 dUSD",
         "type": "tool"
+    },
+    }
+        "id": "b465a7e3-f26d-4416-a598-2f8167557240",
+        "name": "astronaut poster",
+        "description": "A glossy poster featuring NASA astronauts floating in microgravity.",
+        "image": "/assets/astronauts.jpg",
+        "price": "5 dUSD"
     }
 ]

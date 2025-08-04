@@ -1,0 +1,76 @@
+{
+    "id": "geothermal/monitor-heat-pump-energy",
+    "title": "Monitor Heat Pump Energy Use",
+    "description": "Install a smart plug to track how much power your ground loop consumes.",
+    "image": "/assets/quests/charge.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to see how efficient your setup is? Let's measure the heat pump's appetite for watts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Sounds good, what do I need?"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "Grab a smart plug so we can record power usage over time.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Here's the smart plug."
+                },
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "monitor",
+                    "text": "I've got one ready."
+                }
+            ]
+        },
+        {
+            "id": "monitor",
+            "text": "Plug the heat pump through the smart plug and note the watts shown in the app.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "It's drawing 800 watts."
+                }
+            ]
+        },
+        {
+            "id": "fin",
+            "text": "Nice! With this data we can fine-tune the system for maximum efficiency next time.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looking forward to optimizing."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["geothermal/survey-ground-temperature"]
+}
