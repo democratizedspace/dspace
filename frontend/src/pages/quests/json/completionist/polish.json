@@ -1,0 +1,50 @@
+{
+    "id": "completionist/polish",
+    "title": "Polish Your Trophy",
+    "description": "Keep your Completionist Award shiny and proud.",
+    "image": "/assets/quests/completionist.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "That award is looking a bit dusty. Want to give it a quick shine?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "polish",
+                    "text": "Absolutely, let's polish it"
+                }
+            ]
+        },
+        {
+            "id": "polish",
+            "text": "A soft cloth and some elbow grease will do the trick. Show me when it sparkles!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Here it is, sparkling",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Brilliant! A clean trophy reflects a dedicated adventurer.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, dChat!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["completionist/v2"]
+}
