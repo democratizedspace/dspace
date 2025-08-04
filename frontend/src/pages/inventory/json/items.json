@@ -64,9 +64,7 @@
             "passes": 1,
             "score": 65,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }]
         }
     },
     {
@@ -1128,6 +1126,13 @@
         "id": "151",
         "name": "camera tripod",
         "description": "Adjustable three-legged stand for stabilizing cameras or small telescopes.",
+        "image": "/assets/quests/solar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "152",
+        "name": "masking tape",
+        "description": "Low-tack paper tape for temporarily securing lenses during assembly.",
         "image": "/assets/quests/solar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
