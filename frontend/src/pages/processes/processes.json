@@ -1523,6 +1523,27 @@
         }
     },
     {
+        "id": "arduino-ide-install",
+        "title": "Install the Arduino IDE",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 60 }
+            ]
+        }
+    },
+    {
         "id": "arduino-servo-sweep",
         "title": "Upload Servo Sweep example in Arduino IDE",
         "requireItems": [

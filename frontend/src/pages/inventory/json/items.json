@@ -724,6 +724,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+        "name": "Laptop Computer",
+        "description": "A portable computer capable of running the Arduino IDE and uploading sketches.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
