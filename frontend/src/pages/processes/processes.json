@@ -1547,5 +1547,22 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "5m"
+    },
+    {
+        "id": "drip-acclimate-shrimp",
+        "title": "Drip acclimate dwarf shrimp",
+        "requireItems": [
+            {
+                "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1h"
     }
 ]
