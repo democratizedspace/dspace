@@ -709,8 +709,8 @@
     },
     {
         "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
-        "name": "LED",
-        "description": "A light emitting diode useful for basic electronics experiments.",
+        "name": "5 mm LED",
+        "description": "A 5 mm red light-emitting diode for basic electronics projects.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
@@ -1124,8 +1124,8 @@
     },
     {
         "id": "828d6c3b-66a5-4064-b221-97630274502b",
-        "name": "5V Power Supply",
-        "description": "A battery pack or USB adapter that provides a stable 5V DC output.",
+        "name": "5 V Power Supply",
+        "description": "A battery pack or USB adapter that provides a stable 5 V DC output.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
