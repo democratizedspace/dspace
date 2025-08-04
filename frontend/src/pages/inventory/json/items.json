@@ -1158,6 +1158,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "152",
+        "name": "masking tape",
+        "description": "Low-tack paper tape for temporarily securing lenses during assembly.",
+        "image": "/assets/quests/solar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
         "name": "digital camera",
         "description": "Mirrorless camera capable of long-exposure astrophotography.",
