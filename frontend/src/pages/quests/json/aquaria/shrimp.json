@@ -19,18 +19,24 @@
         },
         {
             "id": "acquire",
-            "text": "Pick up a few healthy shrimp from the store. Keep the bag sealed, verify ammonia and nitrite are zero, and float it in your tank for 15 minutes to equalize temperature.",
+            "text": "Pick up a few healthy shrimp from the store. Keep the bag sealed, use an aquarium test kit to confirm ammonia and nitrite are zero, and float the bag in your tank for 15 minutes to match temperature.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "acclimate",
-                    "text": "Bag is floating."
+                    "text": "Bag is floating.",
+                    "requiresItems": [
+                        {
+                            "id": "115ebb2e-6da5-449f-9c37-8b02316225a7",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "acclimate",
-            "text": "Set up a drip acclimation using a clean bucket and airline tubing so tank water drips into the bag for about an hour.",
+            "text": "Set up a drip acclimation using a clean, soap-free bucket and airline tubing. Start a slow siphon so tank water drips into the bag for about an hour.",
             "options": [
                 {
                     "type": "process",
@@ -56,11 +62,17 @@
         },
         {
             "id": "release",
-            "text": "Use a net to move the shrimp into the tank. Discard the store water to avoid contamination.",
+            "text": "Use an aquarium net to move the shrimp into the tank. Pour the store water down the drain to avoid contamination.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Shrimp are in and exploring!"
+                    "text": "Shrimp are in and exploring!",
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -73,14 +85,19 @@
     ],
     "requiresQuests": ["aquaria/walstad"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
                 "date": "2025-08-04",
                 "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
             }
         ]
     }

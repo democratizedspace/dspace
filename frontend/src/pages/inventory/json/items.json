@@ -471,6 +471,13 @@
         "price": "0.15 dUSD"
     },
     {
+        "id": "115ebb2e-6da5-449f-9c37-8b02316225a7",
+        "name": "aquarium test kit",
+        "description": "Liquid kit for measuring ammonia and nitrite levels.",
+        "image": "/assets/pH_strip.jpg",
+        "price": "20 dUSD"
+    },
+    {
         "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
         "name": "7 pH freshwater aquarium (150 L)",
         "description": "An freshwater aquarium with a pH of 7.",
