@@ -1,7 +1,7 @@
 {
     "id": "aquaria/water-testing",
     "title": "Test water parameters",
-    "description": "Use a liquid test kit to check ammonia, nitrite and nitrate before adding shrimp. Wear gloves and follow kit instructions.",
+    "description": "Use an Aquarium liquid test kit to check ammonia, nitrite and nitrate before adding shrimp. Wear nitrile gloves and safety goggles, and follow the kit instructions carefully.",
     "image": "/assets/quests/walstad.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
@@ -19,7 +19,7 @@
         },
         {
             "id": "explain",
-            "text": "Use a liquid test kit. Wear nitrile gloves and avoid splashing the reagents. Check ammonia and nitrite first—they should read zero. Nitrate should stay under 40 ppm.",
+            "text": "Use an Aquarium liquid test kit. Rinse test tubes with tank water, then add reagents per the instructions. Wear nitrile gloves and safety goggles to avoid chemical contact. Check ammonia and nitrite first—they should read zero. Nitrate should stay under 40 ppm.",
             "options": [
                 {
                     "type": "goto",
@@ -33,6 +33,10 @@
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ]
                 }
@@ -40,7 +44,7 @@
         },
         {
             "id": "results",
-            "text": "If you see ammonia or nitrite, give the tank more time. If nitrate is high, start a partial water change to dilute it.",
+            "text": "If you see ammonia or nitrite, give the tank more time. If nitrate is high, start a partial water change to dilute it and dispose of used test water safely.",
             "options": [
                 {
                     "type": "process",
@@ -62,11 +66,12 @@
     ],
     "requiresQuests": ["aquaria/walstad"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
-            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }
+            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
+            { "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 80 }
         ]
     }
 }
