@@ -1193,6 +1193,13 @@
         "price": "10 dUSD"
     },
     {
+        "id": "c687abb3-7b52-4344-97dc-8b7e0881ed9d",
+        "name": "LED grow light (20W)",
+        "description": "Full-spectrum LED fixture delivering 20 watts of light for seedlings and herbs.",
+        "image": "/assets/aquarium_light.jpg",
+        "price": "30 dUSD"
+    },
+    }
         "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
         "name": "soldering iron kit",
         "description": "Compact 30 W iron with stand and lead-free solder for assembling electronics.",
