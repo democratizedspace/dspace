@@ -1580,7 +1580,7 @@
     },
     {
         "id": "drip-acclimate-shrimp",
-        "title": "Drip acclimate dwarf shrimp",
+        "title": "Drip acclimate dwarf shrimp to your aquarium",
         "requireItems": [
             {
                 "id": "60e517b4-5807-4983-afb8-e2aad1566587",
@@ -1589,10 +1589,24 @@
             {
                 "id": "0564d441-7367-412e-b709-dad770814a39",
                 "count": 1
+            },
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
             }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 70 }]
+        }
     }
 ]
