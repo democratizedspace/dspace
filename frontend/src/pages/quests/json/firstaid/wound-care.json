@@ -1,14 +1,14 @@
 {
     "id": "firstaid/wound-care",
     "title": "Practice Basic Wound Care",
-    "description": "Learn to clean and bandage a minor cut safely.",
+    "description": "Practice cleaning a minor cut with soap, gloves, antiseptic wipe and bandage.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Minor scrapes happen. We'll practice cleaning and dressing them with your first aid kit. If the cut is deep, gaping, or bleeding heavily, stop and seek medical help instead.",
+            "text": "Minor scrapes happen. We'll practice cleaning and dressing one with your first aid kit. Only treat small, superficial cuts; if the wound is deep, gaping, or bleeding heavily, stop and seek medical help instead.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "clean",
-            "text": "Wash your hands with liquid soap, put on nitrile gloves, gently rinse the wound with clean water, wipe with an antiseptic wipe, then cover it with an adhesive bandage.",
+            "text": "Wash your hands with liquid soap, put on nitrile gloves, gently rinse the cut with clean water, wipe around it with an antiseptic wipe, let it air dry, then cover it with an adhesive bandage. Dispose of used materials properly and stop if pain worsens.",
             "options": [
                 {
                     "type": "process",
@@ -41,7 +41,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! Keep the wound clean and dry, change the dressing daily, and watch for infection.",
+            "text": "Great job! Keep the wound clean and dry, change the dressing daily, and seek medical care if redness, swelling, or fever develops.",
             "options": [
                 {
                     "type": "finish",
@@ -53,14 +53,19 @@
     "rewards": [],
     "requiresQuests": ["firstaid/learn-cpr"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-02",
                 "date": "2025-08-02",
                 "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
             }
         ]
     }
