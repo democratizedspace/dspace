@@ -5,10 +5,10 @@ astronomy: 11 quests, 586 lines
 hydroponics: 10 quests, 850 lines
 3dprinting: 9 quests, 604 lines
 robotics: 8 quests, 429 lines
+chemistry: 7 quests, 359 lines
 firstaid: 7 quests, 392 lines
 programming: 7 quests, 334 lines
 woodworking: 7 quests, 574 lines
-chemistry: 6 quests, 303 lines
 electronics: 6 quests, 522 lines
 rocketry: 5 quests, 536 lines
 completionist: 3 quests, 161 lines
