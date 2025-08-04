@@ -1,14 +1,14 @@
 {
     "id": "electronics/servo-sweep",
     "title": "Sweep a Servo",
-    "description": "Upload the Arduino Servo library's sweep example to rotate a motor safely.",
+    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0° to 180°.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Time to move beyond LEDs. Let's program your Arduino to sweep a servo arm back and forth.",
+            "text": "Time to move beyond LEDs. Use your Arduino Uno to sweep a servo arm back and forth.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB before wiring. Connect the servo's signal lead to pin 9, red to 5 V, and brown or black to GND. If the servo pulls more than 500 mA, power it from an external 5 V supply to avoid brownouts.",
+            "text": "Disconnect the USB cable from the Arduino Uno before wiring. Use jumper wires to connect the servo: signal (yellow/white) to digital pin 9, red to 5 V, and brown or black to GND. If the servo draws over 500 mA, power it from a 5 V supply and tie the grounds together to avoid brownouts.",
             "options": [
                 {
                     "type": "goto",
@@ -52,7 +52,7 @@
         },
         {
             "id": "code",
-            "text": "Open the Arduino IDE, load the Servo library's 'Sweep' example, select the correct board and port, and upload. Secure the servo and keep fingers clear as it sweeps from 0° to 180°.",
+            "text": "Reconnect the USB cable, open the Arduino IDE, load the Servo library's 'Sweep' example, select the correct board and port, then upload. Secure the servo motor and keep fingers clear as it sweeps between 0° and 180°.",
             "options": [
                 {
                     "type": "goto",
@@ -76,9 +76,9 @@
     "rewards": [],
     "requiresQuests": ["electronics/arduino-blink"],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-02",
@@ -89,6 +89,11 @@
                 "task": "codex-quest-refinement-2025-02-14",
                 "date": "2025-02-14",
                 "score": 80
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-04",
+                "date": "2025-08-04",
+                "score": 92
             }
         ]
     }
