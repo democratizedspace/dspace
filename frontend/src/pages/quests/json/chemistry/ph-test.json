@@ -6,9 +6,7 @@
         "passes": 1,
         "score": 60,
         "emoji": "\ud83c\udf00",
-        "history": [
-            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }
-        ]
+        "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }]
     },
     "image": "/assets/pH_strip.jpg",
     "npc": "/assets/npc/phoenix.jpg",

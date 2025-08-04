@@ -1501,9 +1501,7 @@
             "passes": 1,
             "score": 65,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-process-2025-08-04", "date": "2025-08-04", "score": 65 }
-            ]
+            "history": [{ "task": "codex-process-2025-08-04", "date": "2025-08-04", "score": 65 }]
         }
     },
     {
@@ -1568,9 +1566,7 @@
             "passes": 1,
             "score": 60,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 60 }
-            ]
+            "history": [{ "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 60 }]
         }
     },
     {

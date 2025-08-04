@@ -83,8 +83,6 @@
         "passes": 1,
         "score": 60,
         "emoji": "🌀",
-        "history": [
-            { "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 60 }
-        ]
+        "history": [{ "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 60 }]
     }
 }
