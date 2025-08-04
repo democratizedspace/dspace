@@ -1,0 +1,82 @@
+{
+    "id": "energy/hand-crank-generator",
+    "title": "Build a Hand Crank Generator",
+    "description": "Generate emergency power with your own muscles.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Need a quick burst of power off-grid? Let's build a hand crank generator.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Sounds handy!"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "You'll need a small motor and a battery pack. I'll loan you a spare battery.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Take the battery pack"
+                },
+                {
+                    "type": "goto",
+                    "goto": "generate",
+                    "text": "Got the parts. What's next?",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "generate",
+            "text": "Mount the motor, attach a crank, and wire it to your battery. Ready to spin?",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "hand-crank-50Wh",
+                    "text": "Crank away!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "Battery's charged!",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 50
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "fin",
+            "text": "Nice work! Muscle power is a reliable backup when the sun's hiding.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll keep cranking!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/solar"]
+}
