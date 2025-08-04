@@ -20,7 +20,7 @@ This guide describes how to submit your custom quests to become part of the offi
     ```bash
     npm test -- questValidation
     ```
-    Ensure your quest file passes all schema checks.
+    Ensure your quest file passes all schema checks. See the [Quest Schema Requirements](/docs/quest-schema) for field definitions.
 4. **Check quest quality** with:
     ```bash
     npm test -- questQuality
