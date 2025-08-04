@@ -9,7 +9,7 @@ chemistry: 7 quests, 375 lines
 firstaid: 7 quests, 400 lines
 programming: 7 quests, 334 lines
 woodworking: 7 quests, 574 lines
-electronics: 6 quests, 522 lines
+electronics: 6 quests, 538 lines
 rocketry: 5 quests, 536 lines
 welcome: 4 quests, 332 lines
 completionist: 3 quests, 161 lines
