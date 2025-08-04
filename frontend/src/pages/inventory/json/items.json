@@ -57,9 +57,17 @@
     {
         "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
         "name": "200 Wh battery pack",
-        "description": "A 200 Wh battery pack that can be used to store energy from a solar panel or a wind turbine.",
-        "price": "130 dUSD",
-        "image": "/assets/battery.jpg"
+        "description": "Compact 200 Wh lithium-ion battery pack delivering 12 V DC storage for solar or wind energy.",
+        "price": "120 dUSD",
+        "image": "/assets/battery.jpg",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }
+            ]
+        }
     },
     {
         "id": "743681a7-d2e7-465c-af07-43665079bf4d",
