@@ -8,26 +8,37 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Plants can quickly deplete minerals. Let's replenish the solution so your basil stays strong.",
+            "text": "Plants quickly deplete minerals in recirculating systems. Let's top off the reservoir so your basil stays strong.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "add",
-                    "text": "Okay."
+                    "text": "Sounds good!"
                 }
             ]
         },
         {
             "id": "add",
-            "text": "Mix this bottle according to the label and pour it into the reservoir. Keep the pump running so everything circulates well.",
+            "text": "Put on gloves and goggles. Measure the hydroponic nutrients per the label, dilute them in water, then pour into the reservoir. Keep the submersible pump running so the solution circulates.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Mix and circulate.",
+                    "requiresItems": [
+                        {
+                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Done",
+                    "text": "Reservoir topped off!",
                     "requiresItems": [
                         {
-                            "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
                     ]
@@ -36,7 +47,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Monitor the water level every few days and add more as needed.",
+            "text": "Great! Monitor the water level every few days, and store nutrients safely away from kids and pets.",
             "options": [
                 {
                     "type": "finish",
@@ -46,5 +57,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/basil"]
+    "requiresQuests": ["hydroponics/basil"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            }
+        ]
+    }
 }

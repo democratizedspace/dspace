@@ -64,9 +64,7 @@
             "passes": 1,
             "score": 65,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }]
         }
     },
     {
@@ -357,6 +355,13 @@
         "description": "Nice pink lighting that completely changes the vibe of your room. Also used for growing plants. Energy consumption: 36W.",
         "image": "/assets/hydroponic_lamp.jpg",
         "price": "50 dUSD"
+    },
+    {
+        "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+        "name": "submersible water pump",
+        "description": "Compact pump that circulates nutrient solution in hydroponic systems.",
+        "image": "/assets/submersible_pump.jpg",
+        "price": "15 dUSD"
     },
     {
         "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
