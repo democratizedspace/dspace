@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's move beyond LEDs. We'll upload a short sketch to sweep a servo.",
+            "text": "Time to move beyond LEDs. Let's program your Arduino to sweep a servo arm back and forth.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect power while wiring. Plug the servo signal wire into pin 9 and supply 5V and ground. Use an external 5V source if the servo draws over 500 mA.",
+            "text": "Disconnect the USB before wiring. Connect the servo's signal lead to pin 9, red to 5 V, and brown or black to GND. If the servo pulls more than 500 mA, power it from an external 5 V supply to avoid brownouts.",
             "options": [
                 {
                     "type": "goto",
@@ -41,6 +41,10 @@
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
                             "count": 1
+                        },
+                        {
+                            "id": "828d6c3b-66a5-4064-b221-97630274502b",
+                            "count": 1
                         }
                     ]
                 }
@@ -48,7 +52,7 @@
         },
         {
             "id": "code",
-            "text": "Open the Arduino IDE and load the Servo library's 'Sweep' example. Upload it and keep fingers clear while it swings from 0° to 180°.",
+            "text": "Open the Arduino IDE, load the Servo library's 'Sweep' example, select the correct board and port, and upload. Secure the servo and keep fingers clear as it sweeps from 0° to 180°.",
             "options": [
                 {
                     "type": "goto",
@@ -72,14 +76,19 @@
     "rewards": [],
     "requiresQuests": ["electronics/arduino-blink"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-02",
                 "date": "2025-08-02",
                 "score": 60
+            },
+            {
+                "task": "codex-quest-refinement-2025-02-14",
+                "date": "2025-02-14",
+                "score": 80
             }
         ]
     }
