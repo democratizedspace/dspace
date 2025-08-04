@@ -4,8 +4,8 @@ aquaria: 11 quests, 720 lines
 astronomy: 11 quests, 586 lines
 hydroponics: 10 quests, 850 lines
 3dprinting: 9 quests, 604 lines
+robotics: 8 quests, 429 lines
 programming: 7 quests, 334 lines
-robotics: 7 quests, 378 lines
 woodworking: 7 quests, 574 lines
 chemistry: 6 quests, 303 lines
 electronics: 6 quests, 522 lines
