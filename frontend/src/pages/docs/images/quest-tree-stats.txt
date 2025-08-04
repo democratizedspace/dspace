@@ -13,5 +13,5 @@ electronics: 6 quests, 551 lines
 rocketry: 5 quests, 536 lines
 welcome: 4 quests, 332 lines
 completionist: 3 quests, 161 lines
-geothermal: 2 quests, 154 lines
+geothermal: 3 quests, 190 lines
 ubi: 2 quests, 200 lines
