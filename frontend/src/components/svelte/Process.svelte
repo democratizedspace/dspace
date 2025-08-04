@@ -5,6 +5,8 @@
         startProcess,
         cancelProcess,
         finishProcess,
+        pauseProcess,
+        resumeProcess,
         getProcessState,
         ProcessStates,
         getProcessStartedAt,
@@ -44,6 +46,18 @@
     const onProcessComplete = () => {
         clearInterval(intervalId);
         finishProcess(processId);
+        updateState();
+    };
+
+    const onProcessPause = () => {
+        clearInterval(intervalId);
+        pauseProcess(processId);
+        updateState();
+    };
+
+    const onProcessResume = () => {
+        resumeProcess(processId);
+        intervalId = setInterval(updateState, 100);
         updateState();
     };
 
@@ -89,6 +103,14 @@
                 <Chip text="Start" onClick={onProcessStart} inverted={true} />
             {:else if state === ProcessStates.IN_PROGRESS}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
+                <Chip text="Pause" onClick={onProcessPause} inverted={true} />
+                <ProgressBar
+                    startDate={processStartedAt}
+                    totalDurationSeconds={durationInSeconds(process.duration)}
+                />
+            {:else if state === ProcessStates.PAUSED}
+                <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
+                <Chip text="Resume" onClick={onProcessResume} inverted={true} />
                 <ProgressBar
                     startDate={processStartedAt}
                     totalDurationSeconds={durationInSeconds(process.duration)}

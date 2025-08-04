@@ -109,6 +109,10 @@ In this state, a process is waiting to be started. You can start a process by cl
 
 In this state, the process is active. You have the option to terminate an active process by clicking the Cancel button. If you cancel a process, your items will be returned to you. A countdown to the process's completion and a progress bar are also displayed in this state.
 
+### PAUSED
+
+In this state, the process is temporarily halted. The countdown stops until you choose to resume. You may resume the process later or cancel it to reclaim consumed items.
+
 ### FINISHED
 
 <img src="/assets/docs/process_finished.jpg">
