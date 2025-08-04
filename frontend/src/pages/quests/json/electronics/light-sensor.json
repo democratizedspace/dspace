@@ -1,0 +1,48 @@
+{
+    "id": "electronics/light-sensor",
+    "title": "Build a Light Sensor",
+    "description": "Use a photoresistor to measure ambient brightness with an Arduino.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey again! Let's hook up a photoresistor so the Arduino can detect light levels.",
+            "options": [
+                { "type": "goto", "goto": "wire", "text": "What do I need?" }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Place the photoresistor and a 10 kΩ resistor on the breadboard to form a voltage divider. Connect the junction to A0 on the Arduino and power the circuit.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Wired up!",
+                    "requiresItems": [
+                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
+                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Upload a sketch that reads the analog value from A0 and prints it to the serial monitor. Watch the numbers change as light levels vary.",
+            "options": [
+                { "type": "goto", "goto": "finish", "text": "Numbers are changing!" }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! You've built a basic light sensor for your future projects.",
+            "options": [
+                { "type": "finish", "text": "Cool!" }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}

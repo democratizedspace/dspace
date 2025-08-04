@@ -82,7 +82,7 @@
     },
     {
         "id": "bucket-water-chlorinated",
-        "title": "fill a bucket with tap water",
+        "title": "fill a 5 gallon bucket with tap water",
         "requireItems": [
             {
                 "id": "799ace33-1336-46c0-904a-9f16778230f1",
@@ -173,7 +173,7 @@
     },
     {
         "id": "bucket-water-dechlorinated",
-        "title": "dechlorinate a bucket of water",
+        "title": "dechlorinate a 5 gallon bucket of tap water",
         "requireItems": [],
         "consumeItems": [
             {
@@ -1670,7 +1670,9 @@
             { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
             { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 }
         ],
-        "consumeItems": [{ "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 }],
+        "consumeItems": [
+            { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 0.05 }
+        ],
         "createItems": [],
         "duration": "30m"
     },
