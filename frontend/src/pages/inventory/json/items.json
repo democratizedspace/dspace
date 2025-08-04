@@ -1181,9 +1181,17 @@
     {
         "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
         "name": "Water conditioner",
-        "description": "Detoxifying drops that remove chlorine and chloramine from tap water before aquarium use.",
+        "description": "50 mL bottle of sodium thiosulfate solution that neutralizes chlorine and chloramine in tap water before aquarium use.",
         "image": "/assets/aquarium_filled.jpg",
-        "price": "5 dUSD"
+        "price": "6 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }
+            ]
+        }
     },
     {
         "id": "97317bc3-507a-4e2c-912b-507d586cee87",

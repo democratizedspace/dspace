@@ -1671,7 +1671,7 @@
             { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 }
         ],
         "consumeItems": [
-            { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 }
+            { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 0.05 }
         ],
         "createItems": [],
         "duration": "30m"
