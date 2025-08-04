@@ -26,7 +26,7 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 | --------------------- | --------------------------- | ------------------------------------------------------------------- |
 | Add or update an item | “Code” button, attach repo  | `codex "add item solar-cell-junction-box"`                          |
 | Ask about item data   | “Ask” button                | `codex exec "explain frontend/src/pages/inventory/json/items.json"` |
-| Run item tests        | –                           | `codex exec --full-auto "npm test -- itemValidation itemQuality"`   |
+| Run item tests        | –                           | `codex exec "npm test -- itemValidation itemQuality"`               |
 
 See the upstream CLI reference for more flags.
 
