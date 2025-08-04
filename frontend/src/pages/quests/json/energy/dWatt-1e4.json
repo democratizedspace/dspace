@@ -23,7 +23,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "congrats",
+                    "goto": "wellDone",
                     "text": "I have enough!",
                     "requiresItems": [
                         {

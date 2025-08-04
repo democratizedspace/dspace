@@ -23,7 +23,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "congrats",
+                    "goto": "epicAchievement",
                     "text": "I have enough!",
                     "requiresItems": [
                         {

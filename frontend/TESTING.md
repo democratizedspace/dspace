@@ -235,8 +235,13 @@ We have specialized tests to ensure content quality:
     - Validates duration strings and item references
     - Warns when processes lack items or have extreme durations
 6. **Quest Dependency Tests** (`questDependencies.test.js`):
+
     - Ensures quest chains reference existing quests
     - Detects circular dependencies that could block progress
+
+7. **Quest Simulation Tests** (`questCanonical.test.js`, `questSimulation.test.js`):
+    - Simulate dialogue flow to verify a path exists from the start node to a finish option
+    - Prevent quests from having unreachable end states or dead-ends
 
 Most of these tests produce warnings rather than failures, but quest quality issues now cause the test suite to error, ensuring regressions are caught early.
 

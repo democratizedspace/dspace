@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
+const { questHasFinishPath } = require('../src/utils/simulateQuest.js');
 
 describe('Quest canonical structure', () => {
     const questDir = path.join(__dirname, '../src/pages/quests/json');
@@ -30,6 +31,9 @@ describe('Quest canonical structure', () => {
                 Array.isArray(lastNode.options) &&
                 lastNode.options.some((o) => o.type === 'finish');
             expect(hasFinish).toBe(true);
+
+            // Ensure a path exists from start to a finish option
+            expect(questHasFinishPath(quest)).toBe(true);
         });
     });
 });
