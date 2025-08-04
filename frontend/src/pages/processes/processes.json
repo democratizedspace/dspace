@@ -1417,7 +1417,7 @@
     },
     {
         "id": "practice-cpr",
-        "title": "Practice CPR on a training manikin",
+        "title": "Practice 30:2 CPR on a training manikin",
         "requireItems": [
             {
                 "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
@@ -1430,12 +1430,15 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "15m",
+        "duration": "20m",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [{ "task": "codex-hardening-2025-08-03", "date": "2025-08-03", "score": 60 }]
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                { "task": "codex-hardening-2025-08-03", "date": "2025-08-03", "score": 60 },
+                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 80 }
+            ]
         }
     },
     {
