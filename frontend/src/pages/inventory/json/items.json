@@ -288,9 +288,17 @@
     {
         "id": "4d817f1c-d78d-4fac-a514-402bce330693",
         "name": "hobbyist solid rocket motor",
-        "description": "18mm in diameter, 70mm long, weighing 17.9g. Max thrust: 31.3 Newtons. Thrust duration: 0.80s.",
+        "description": "Single-use black powder motor for model rockets. 18 mm diameter × 70 mm length, mass 18 g. Provides up to 31 N peak thrust over a 0.8 s burn.",
         "image": "/assets/rocket_motor.jpg",
-        "price": "10 dUSD"
+        "price": "4 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }
+            ]
+        }
     },
     {
         "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
