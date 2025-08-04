@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there! I'm Orion. Ready to see how simple electronics can be? We'll wire a 5 mm LED with a 220 Ω resistor on a breadboard and keep things safe.",
+            "text": "Hey there! I'm Orion. Ready to see how simple electronics can be? We'll wire a 5 mm LED with a 220 Ω resistor on a breadboard. Make sure the power supply is unplugged before starting.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "Gather a breadboard, two jumper wires, a 5 mm LED, a 220 Ω resistor and a 5 V power supply (battery pack or USB adapter). Keep the supply unplugged while wiring; the resistor protects the LED from too much current. Ready to assemble?",
+            "text": "Gather a breadboard, two jumper wires, a 5 mm LED, a 220 Ω resistor and a 5 V power supply such as a battery pack or USB adapter. Keep the supply unplugged while wiring; the resistor limits current so the LED doesn't burn out. Ready to assemble?",
             "options": [
                 {
                     "type": "goto",
@@ -52,7 +52,7 @@
         },
         {
             "id": "assemble",
-            "text": "Insert the LED into the breadboard with the long leg (anode) on the positive rail. Place the 220 Ω resistor from the anode's row to a new row, then use jumper wires to link the resistor to +5 V and the LED's short leg (cathode) to ground. Confirm the resistor is in series and polarity is correct before applying power. When it all looks secure, connect the 5 V power supply and the LED should glow.",
+            "text": "Insert the LED into the breadboard with its long leg (anode) toward the positive rail. Place the 220 Ω resistor from the anode's row to a new row, then use jumper wires to link the resistor to +5 V and the LED's short leg (cathode) to ground. Double-check orientation and that the resistor is in series before applying power. When everything is secure, connect the 5 V supply and the LED should glow.",
             "options": [
                 {
                     "type": "goto",
@@ -63,7 +63,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! You've built your first circuit and lit up an LED. Always disconnect power before changing any connections.",
+            "text": "Great job! You've built your first circuit and lit up an LED. Disconnect power before changing connections and avoid shorting the power rails.",
             "options": [
                 {
                     "type": "finish",
@@ -80,9 +80,9 @@
         }
     ],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-03",
@@ -93,6 +93,11 @@
                 "task": "codex-upgrade-2025-08-03",
                 "date": "2025-08-03",
                 "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 92
             }
         ]
     }
