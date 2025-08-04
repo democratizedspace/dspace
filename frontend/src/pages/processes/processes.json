@@ -1465,16 +1465,22 @@
     },
     {
         "id": "identify-constellations",
-        "title": "Identify constellations",
+        "title": "Identify constellations with a star chart",
         "requireItems": [
-            {
-                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
-                "count": 1
-            }
+            { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 },
+            { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "15m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-process-2025-08-04", "date": "2025-08-04", "score": 65 }
+            ]
+        }
     },
     {
         "id": "observe-meteor-shower",

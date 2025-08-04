@@ -1006,6 +1006,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+        "name": "planisphere star chart",
+        "description": "A rotating sky map for matching constellations to the current date and time.",
+        "image": "/assets/quests/start.png",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
         "name": "first aid kit",
         "description": "Adhesive bandages, gauze and antiseptic packed for emergencies.",
