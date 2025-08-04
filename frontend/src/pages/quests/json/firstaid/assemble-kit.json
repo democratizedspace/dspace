@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "Include adhesive bandages, gauze, antiseptic wipes and gloves. Pack them so they stay clean and dry.",
+            "text": "Gather adhesive bandages, sterile gauze pads, antiseptic wipes and a pair of nitrile gloves. Wash your hands, then pack everything so it stays clean and dry.",
             "options": [
                 {
                     "type": "process",
@@ -51,5 +51,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": []
+    "requiresQuests": [],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }
+        ]
+    }
 }
