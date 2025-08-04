@@ -232,9 +232,7 @@
             "passes": 1,
             "score": 65,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }]
         }
     },
     {
@@ -1204,9 +1202,7 @@
             "passes": 1,
             "score": 65,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }]
         }
     },
     {
@@ -1223,7 +1219,7 @@
         "image": "/assets/aquarium_light.jpg",
         "price": "30 dUSD"
     },
-    }
+    {
         "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
         "name": "soldering iron kit",
         "description": "Compact 30 W iron with stand and lead-free solder for assembling electronics.",
@@ -1231,7 +1227,7 @@
         "price": "20 dUSD",
         "type": "tool"
     },
-    }
+    {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",
         "name": "astronaut poster",
         "description": "A glossy poster featuring NASA astronauts floating in microgravity.",
