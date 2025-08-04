@@ -64,9 +64,7 @@
             "passes": 1,
             "score": 65,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 }]
         }
     },
     {
@@ -1009,6 +1007,13 @@
         "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
         "name": "first aid kit",
         "description": "Adhesive bandages, gauze and antiseptic packed for emergencies.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+        "name": "CPR pocket mask",
+        "description": "A reusable one-way valve mask for delivering rescue breaths safely.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },

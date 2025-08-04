@@ -1,14 +1,14 @@
 {
     "id": "firstaid/learn-cpr",
     "title": "Practice Basic CPR",
-    "description": "Put on gloves, use a training manikin and a CPR mask from your first aid kit to rehearse chest compressions and rescue breaths. Always verify the scene is safe and call emergency services before starting.",
+    "description": "Put on nitrile gloves and use a CPR pocket mask with a training manikin to rehearse chest compressions and rescue breaths. Always verify the scene is safe and call emergency services before starting.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Slip on gloves, confirm the area is safe, call emergency services, and check the manikin's airway before you begin.",
+            "text": "Slip on nitrile gloves, make sure the area is safe, call emergency services, and check the manikin's airway before you begin.",
             "options": [
                 {
                     "type": "goto",
@@ -19,21 +19,27 @@
         },
         {
             "id": "steps",
-            "text": "Place the heel of one hand in the center of the chest and interlock your fingers. Keep your arms straight and press about 2 inches deep at 100–120 compressions per minute, letting the chest return fully. After 30 compressions, give two rescue breaths through the CPR mask if you're trained.",
+            "text": "Place the heel of one hand in the center of the chest and interlock your fingers. Keep your arms straight and press about 2 inches deep at 100–120 compressions per minute, letting the chest return fully. After 30 compressions, seal the CPR pocket mask over the manikin's mouth and give two rescue breaths if you're trained.",
             "options": [
                 {
                     "type": "process",
                     "process": "practice-cpr",
-                    "text": "Practicing now."
+                    "text": "Practicing now.",
+                    "requiresItems": [
+                        { "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 },
+                        { "id": "b397aa70-3503-4e40-b84a-4d5609578d2b", "count": 1 }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
-                        {
-                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
-                            "count": 1
-                        }
+                        { "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 },
+                        { "id": "b397aa70-3503-4e40-b84a-4d5609578d2b", "count": 1 }
                     ],
                     "text": "I know the basics."
                 }
@@ -51,5 +57,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/assemble-kit"]
+    "requiresQuests": ["firstaid/assemble-kit"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }]
+    }
 }
