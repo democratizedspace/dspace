@@ -1,0 +1,55 @@
+{
+    "id": "welcome/smart-plug-test",
+    "title": "Smart Plug Test",
+    "description": "Generate a quick burst of dWatt with your smart plug.",
+    "image": "/assets/quests/howtodoquests.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's see what your new smart plug can do. Ready to make some energy?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Sounds fun!"
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Start the outlet process and watch the dWatt roll in.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "outlet-dWatt-1e3",
+                    "text": "Run the smart plug"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wrapup",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 1000
+                        }
+                    ],
+                    "text": "dWatt generated!"
+                }
+            ]
+        },
+        {
+            "id": "wrapup",
+            "text": "Nice surge! That smart plug will come in handy for bigger quests.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Neat!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["welcome/howtodoquests"]
+}
