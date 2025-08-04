@@ -1,0 +1,50 @@
+{
+    "id": "firstaid/stop-nosebleed",
+    "title": "Stop a Nosebleed",
+    "description": "Lean forward and pinch your nose to control a minor bleed.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nosebleed? Let's stop it before it drips everywhere.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pressure",
+                    "text": "How do I stop it?"
+                }
+            ]
+        },
+        {
+            "id": "pressure",
+            "text": "Sit upright, lean slightly forward, and pinch the soft part of your nose for ten minutes. Gloves and gauze from your kit keep things clean.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Holding pressure now.",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "If the bleeding hasn't stopped after 20 minutes, seek medical help. Otherwise, rest and avoid blowing your nose for a while.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/assemble-kit"]
+}
