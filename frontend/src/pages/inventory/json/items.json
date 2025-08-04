@@ -1096,5 +1096,12 @@
         "description": "Adjustable three-legged stand for stabilizing cameras or small telescopes.",
         "image": "/assets/quests/solar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+        "name": "digital camera",
+        "description": "Mirrorless camera capable of long-exposure astrophotography.",
+        "image": "/assets/quests/solar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     }
 ]

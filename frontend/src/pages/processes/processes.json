@@ -1491,16 +1491,32 @@
     },
     {
         "id": "photograph-lunar-eclipse",
-        "title": "Photograph a lunar eclipse",
+        "title": "Photograph a lunar eclipse with a telescope",
         "requireItems": [
             {
                 "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                "count": 1
+            },
+            {
+                "id": "151",
                 "count": 1
             }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "20m"
+        "duration": "45m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-process-2025-08-04", "date": "2025-08-04", "score": 60 }
+            ]
+        }
     },
     {
         "id": "arduino-servo-sweep",
