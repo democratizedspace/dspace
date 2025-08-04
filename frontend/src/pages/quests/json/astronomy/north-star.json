@@ -1,0 +1,55 @@
+{
+    "id": "astronomy/north-star",
+    "title": "Locate the North Star",
+    "description": "Use the Big Dipper to spot Polaris for navigation practice.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Polaris anchors the night sky. Let's identify it to orient ourselves.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "locate",
+                    "text": "Show me the steps."
+                }
+            ]
+        },
+        {
+            "id": "locate",
+            "text": "Find the Big Dipper and draw a line through its pointer stars to reach Polaris. Confirm with your telescope.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Scanning the stars."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Polaris spotted."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! Polaris now anchors your night sky orientation.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Navigation feels easier now."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/constellations"]
+}
