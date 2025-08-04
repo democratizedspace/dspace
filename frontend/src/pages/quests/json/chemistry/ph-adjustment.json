@@ -1,0 +1,55 @@
+{
+    "id": "chemistry/ph-adjustment",
+    "title": "Adjust Solution pH",
+    "description": "Bring a nutrient solution into range using acid or base.",
+    "image": "/assets/pH_strip.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Once you know the current pH, we can tweak it to the ideal level.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Let's balance it."
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Add a few drops of acid or base, stir, and recheck. Protective gear keeps splashes harmless.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Carefully adding and stirring."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "The pH is on target.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great, the solution is balanced and safe to use.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Chemistry in harmony."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["chemistry/ph-test"]
+}
