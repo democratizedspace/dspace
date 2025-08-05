@@ -362,9 +362,18 @@
     {
         "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
         "name": "launch controller",
-        "description": "A controller for launching model rockets.",
+        "description": "Handheld 9 V-powered controller with removable safety key and 6 m (20 ft) leads for remote ignition of model rockets.",
         "image": "/assets/launch_controller.jpg",
-        "price": "20 dUSD"
+        "price": "25 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+            ]
+        }
     },
     {
         "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
