@@ -3,7 +3,7 @@
     "title": "Build a Tool Rack",
     "description": "Organize your workspace with a simple rack for hand tools.",
     "image": "/assets/quests/basic_circuit.svg",
-    "npc": "/assets/npc/cedar.jpg",
+    "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
