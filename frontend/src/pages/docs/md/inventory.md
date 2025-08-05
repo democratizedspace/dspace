@@ -79,3 +79,10 @@ The inventory interface allows you to:
     the **Preview** button next to each entry
 
 All inventory data is now stored locally using IndexedDB. For cross-device backups you can use the new [Cloud Sync](/cloudsync) feature.
+
+## Browser Support
+
+IndexedDB functionality has been verified in the latest versions of Chrome,
+Firefox, Safari and Edge. DSPACE automatically falls back to vendor-prefixed
+implementations when needed, ensuring consistent inventory storage across major
+browsers.
