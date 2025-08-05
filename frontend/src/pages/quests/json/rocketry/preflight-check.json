@@ -1,0 +1,69 @@
+{
+    "id": "rocketry/preflight-check",
+    "title": "Preflight Checklist",
+    "description": "Confirm gear and run a quick launch sequence.",
+    "image": "/assets/quests/nightlaunch.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey friend! Nova here. Before we launch, we need a preflight check. Ready to run through it?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "supplies",
+                    "text": "Let's check the gear."
+                }
+            ]
+        },
+        {
+            "id": "supplies",
+            "text": "You'll need a launch pad, an igniter, and a controller. Once you've got them, we can proceed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "arm",
+                    "requiresItems": [
+                        { "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b", "count": 1 },
+                        { "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac", "count": 1 },
+                        { "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d", "count": 1 }
+                    ],
+                    "text": "All set, gear in hand."
+                }
+            ]
+        },
+        {
+            "id": "arm",
+            "text": "Everything looks good. Ready to fire?",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "launch-rocket",
+                    "text": "Initiate launch!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "requiresItems": [
+                        { "id": "63362e5c-9897-4710-8ef6-26540fabd0ca", "count": 1 }
+                    ],
+                    "text": "Launch successful!"
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Nice work! Preflight complete and rocket soaring.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Mission accomplished."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        { "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52", "count": 1 }
+    ]
+}
