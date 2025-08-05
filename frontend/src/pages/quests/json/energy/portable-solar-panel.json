@@ -1,0 +1,82 @@
+{
+    "id": "energy/portable-solar-panel",
+    "title": "Test a Portable Solar Panel",
+    "description": "Harvest sunshine anywhere with a foldable panel.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want off-grid power on the go? I have a portable solar panel you can try.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "loan",
+                    "text": "I'd love to test it!"
+                }
+            ]
+        },
+        {
+            "id": "loan",
+            "text": "I'll loan you this foldable panel. Set it up facing the sun.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Take the panel"
+                },
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "It's deployed!",
+                    "requiresItems": [
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "charge",
+            "text": "Connect the panel to your battery and gather some power.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solar-200Wh",
+                    "text": "Start charging"
+                },
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "Battery's full!",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "fin",
+            "text": "Nice work! Portable solar keeps your gear juiced wherever you roam.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sun power for the win!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/solar"]
+}
