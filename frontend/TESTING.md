@@ -185,6 +185,7 @@ In CI environments, tests run with special settings:
 
 -   No server reuse (`reuseExistingServer: false`)
 -   Headless browsers
+-   Runs Chromium, Firefox, and WebKit to ensure cross-browser compatibility
 -   Parallel execution based on available CPU cores
 
 The `test:pr` command simulates this environment locally before you submit a PR.
