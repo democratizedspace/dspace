@@ -3,6 +3,7 @@
     import Process from '../../../components/svelte/Process.svelte';
     import ProcessPreview from '../../../components/svelte/ProcessPreview.svelte';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
+    import { togglePreviewId } from '../../../utils/preview.js';
 
     export let processes = [];
     let customProcesses = [];
@@ -37,7 +38,7 @@
     }
 
     function togglePreview(id) {
-        previewProcessId = previewProcessId === id ? null : id;
+        previewProcessId = togglePreviewId(previewProcessId, id);
     }
 </script>
 

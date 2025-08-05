@@ -3,6 +3,7 @@
     import ItemCard from '../../../components/svelte/ItemCard.svelte';
     import ItemPreview from '../../../components/svelte/ItemPreview.svelte';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
+    import { togglePreviewId } from '../../../utils/preview.js';
 
     export let items = [];
     let customItems = [];
@@ -40,7 +41,7 @@
     }
 
     function togglePreview(id) {
-        previewItemId = previewItemId === id ? null : id;
+        previewItemId = togglePreviewId(previewItemId, id);
     }
 </script>
 
