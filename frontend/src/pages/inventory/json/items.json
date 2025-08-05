@@ -1185,6 +1185,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
+        "name": "Photoresistor",
+        "description": "A light-dependent resistor for measuring brightness.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "828d6c3b-66a5-4064-b221-97630274502b",
         "name": "5 V Power Supply",
         "description": "A battery pack or USB adapter that provides a stable 5 V DC output.",
