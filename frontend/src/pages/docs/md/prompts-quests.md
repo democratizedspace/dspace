@@ -139,8 +139,9 @@ USER:
    `frontend/src/pages/inventory/json/items.json` or
    `frontend/src/pages/processes/processes.json`. Add missing items or
    processes so quests stay grounded in reality and are reproducible IRL.
-4. Update the quest's `hardening` block, incrementing `passes`, refreshing the
-   evaluator `score`, swapping the status `emoji` and appending a history entry
+4. If the quest includes an image, reuse an existing image URL already in the repository; do not add new or external images.
+5. Update the quest's `hardening` block, incrementing `passes`, refreshing the
+    evaluator `score`, swapping the status `emoji` and appending a history entry
    with the Codex task ID, date and score. Choose the emoji based on:
    - 0 passes → score 0 → 🛠️ Draft
    - ≥1 pass & score ≥60 → 🌀 First polishing pass
@@ -155,7 +156,7 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm test --
+6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm test --
    questCanonical questQuality itemQuality processQuality`. Update docs if
    needed.
 
