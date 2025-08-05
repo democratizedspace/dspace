@@ -1,42 +1,73 @@
 {
     "id": "electronics/light-sensor",
     "title": "Build a Light Sensor",
-    "description": "Use a photoresistor to measure ambient brightness with an Arduino.",
+    "description": "Use a photoresistor and Arduino to measure ambient brightness.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey again! Let's hook up a photoresistor so the Arduino can detect light levels.",
-            "options": [{ "type": "goto", "goto": "wire", "text": "What do I need?" }]
+            "text": "Hey again! Orion here. We'll build a light sensor. Work on a non-conductive surface and keep the board unplugged while wiring.",
+            "options": [
+                { "type": "goto", "goto": "materials", "text": "What do I need?" }
+            ]
         },
         {
-            "id": "wire",
-            "text": "Place the photoresistor and a 10 kΩ resistor on the breadboard to form a voltage divider. Connect the junction to A0 on the Arduino and power the circuit.",
+            "id": "materials",
+            "text": "Gather an Arduino Uno, breadboard, three jumper wires, a photoresistor, a 10 kΩ resistor, a USB cable and a laptop with the Arduino IDE installed.",
             "options": [
+                { "type": "process", "process": "arduino-ide-install", "text": "Install the Arduino IDE" },
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Wired up!",
+                    "goto": "wire",
+                    "text": "Ready to wire!",
                     "requiresItems": [
                         { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
-                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 }
+                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
+                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 3 },
+                        { "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3", "count": 1 },
+                        { "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac", "count": 1 },
+                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
                     ]
                 }
             ]
         },
         {
+            "id": "wire",
+            "text": "Disconnect the USB cable. Place the photoresistor and 10 kΩ resistor on the breadboard as a voltage divider: one end of the photoresistor to 5 V, the other to the resistor, then to GND. Run a jumper from the junction to A0. Double-check connections before powering up.",
+            "options": [
+                { "type": "goto", "goto": "code", "text": "Wired up!" }
+            ]
+        },
+        {
             "id": "code",
-            "text": "Upload a sketch that reads the analog value from A0 and prints it to the serial monitor. Watch the numbers change as light levels vary.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Numbers are changing!" }]
+            "text": "Reconnect the USB cable and upload a sketch that reads A0 and prints values to the serial monitor. Shield the sensor from bright light and watch the numbers change.",
+            "options": [
+                { "type": "goto", "goto": "finish", "text": "Numbers are changing!" }
+            ]
         },
         {
             "id": "finish",
-            "text": "Nice work! You've built a basic light sensor for your future projects.",
-            "options": [{ "type": "finish", "text": "Cool!" }]
+            "text": "Nice work! Unplug the board before changing any wires. You've built a basic light sensor for future projects.",
+            "options": [
+                { "type": "finish", "text": "Cool!" }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": []
+    "requiresQuests": [],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            }
+        ]
+    }
 }
