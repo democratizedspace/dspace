@@ -41,3 +41,9 @@ docker compose up --build -d
 ```
 
 Stop the containers with `docker compose down`.
+
+## High Availability
+
+For redundancy across multiple hosts, use [Cloudflare Load Balancing](../cloudflare_load_balancing.md)
+to distribute traffic among instances. Each host exposes port **3002** through its own Cloudflare
+Tunnel, and the load balancer handles health checks automatically.
