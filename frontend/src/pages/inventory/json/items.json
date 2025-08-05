@@ -1287,10 +1287,18 @@
     {
         "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
         "name": "digital multimeter",
-        "description": "Measures voltage, current, and resistance in circuits. Features auto-ranging display.",
+        "description": "Handheld multimeter with manual 20 V DC range, measures up to 600 V, 10 A and 2 MΩ. Includes test probes and replaceable fuse.",
         "image": "/assets/launch_controller.jpg",
-        "price": "15 dUSD",
-        "type": "tool"
+        "price": "20 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 65 }
+            ]
+        }
     },
     {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",
