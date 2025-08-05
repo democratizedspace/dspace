@@ -1,0 +1,50 @@
+{
+    "id": "electronics/tin-soldering-iron",
+    "title": "Tin a Soldering Iron",
+    "description": "Prepare your soldering iron for clean joints by tinning the tip.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Good to see you progressing! Before soldering, let's tin that iron tip. Plug in your station and have a damp sponge ready.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "tin",
+                    "text": "Iron is heating up.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "tin",
+            "text": "Once the tip is hot, melt a little solder across it, then wipe on the damp sponge to leave a thin, shiny layer that resists oxidation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Tip looks shiny."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! A tinned tip makes future joints easier and cleaner. Unplug the iron and let it cool safely.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All done."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/basic-circuit"]
+}
