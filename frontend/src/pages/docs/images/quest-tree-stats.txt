@@ -11,7 +11,7 @@ firstaid: 7 quests, 438 lines
 programming: 7 quests, 334 lines
 woodworking: 7 quests, 574 lines
 rocketry: 6 quests, 602 lines
-welcome: 4 quests, 332 lines
+welcome: 5 quests, 361 lines
 completionist: 3 quests, 161 lines
 geothermal: 3 quests, 190 lines
 ubi: 2 quests, 200 lines
