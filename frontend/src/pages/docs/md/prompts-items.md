@@ -22,11 +22,11 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 ## 1 Quick start (Web vs CLI)
 
-| Use‑case              | Codex Web (ChatGPT sidebar) | [Codex CLI][codex-cli] |
-| --------------------- | --------------------------- | ---------------------- |
-| Add or update an item | “Code” button, attach repo  | `codex "add item solar-cell-junction-box"` |
+| Use‑case              | Codex Web (ChatGPT sidebar) | [Codex CLI][codex-cli]                                              |
+| --------------------- | --------------------------- | ------------------------------------------------------------------- |
+| Add or update an item | “Code” button, attach repo  | `codex "add item solar-cell-junction-box"`                          |
 | Ask about item data   | “Ask” button                | `codex exec "explain frontend/src/pages/inventory/json/items.json"` |
-| Run item tests        | –                           | `codex exec --full-auto "npm test -- itemValidation itemQuality"` |
+| Run item tests        | –                           | `codex exec --full-auto "npm test -- itemValidation itemQuality"`   |
 
 See the [Codex CLI documentation][codex-cli] for more flags.
 
@@ -60,9 +60,13 @@ FILES OF INTEREST
 REQUIREMENTS
 1. Follow the item schema.
 2. Reflect real-world materials or devices.
-3. Run `npm run lint`, `npm run type-check` and `npm run build`.
-4. Run `npm test -- itemValidation itemQuality` and fix any failures.
-5. Update docs or processes if needed.
+3. Ensure any quest or process mentioning this item references its ID; add the
+   item to those quests or processes if missing.
+4. Use an existing image from `frontend/public/assets`. Do **not** add image
+   files to the PR.
+5. Run `npm run lint`, `npm run type-check` and `npm run build`.
+6. Run `npm test -- itemValidation itemQuality` and fix any failures.
+7. Update docs or processes if needed.
 
 OUTPUT
 Return **only** the patch (diff) needed.
@@ -77,12 +81,17 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
 items under `frontend/src/pages/inventory/json/items.json`. Ensure realistic
 details, required fields, and passing checks (`npm run lint`, `npm run type-check`,
-`npm run build`, and `npm test -- itemValidation itemQuality`).
+`npm run build`, and `npm test -- itemValidation itemQuality`). Link the item to
+any quests or processes that mention it and add those references if missing.
+Use existing images from `frontend/public/assets`; do **not** commit new image
+files.
 
 USER:
 1. Follow the steps above.
-2. Run the commands listed in the system prompt before committing.
-3. Summarize the new or updated item in the PR description.
+2. Update quests or processes so they reference this item where appropriate.
+3. Reuse an existing image asset and avoid adding image files.
+4. Run the commands listed in the system prompt before committing.
+5. Summarize the new or updated item in the PR description.
 
 OUTPUT:
 A pull request implementing the item with all tests green.
@@ -119,7 +128,8 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+4. Reuse an existing image asset; do **not** add image files to the PR.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm test -- itemValidation itemQuality processQuality`. Update docs if
    needed.
 
@@ -131,9 +141,9 @@ A pull request with the refined item, updated hardening block and passing tests.
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus.
--   **Use system prompts** to guide tone and technical accuracy.
--   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible but incorrect details.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible but incorrect details.
 
 [codex-cli]: https://www.npmjs.com/package/codex-cli

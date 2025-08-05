@@ -62,9 +62,15 @@ FILES OF INTEREST
 REQUIREMENTS
 1. Follow the quest schema.
 2. Reference at least one inventory item or process.
-3. Run `npm run lint`, `npm run type-check` and `npm run build`.
-4. Run `npm test -- questCanonical questQuality` and fix any failures.
-5. Update docs or dialogue as needed.
+3. Ensure every referenced item or technology exists in `items.json` or
+   `processes.json`; create missing entries and link them.
+4. Use an existing image from `frontend/public/assets` for new items or
+   processes. Do **not** add image files to the PR.
+5. Update `requiresQuests` so this quest naturally follows its
+   prerequisites and adjust the dependency graph as needed.
+6. Run `npm run lint`, `npm run type-check` and `npm run build`.
+7. Run `npm test -- questCanonical questQuality` and fix any failures.
+8. Update docs or dialogue as needed.
 
 OUTPUT
 Return **only** the patch (diff) needed.
@@ -80,12 +86,20 @@ You are an automated contributor for the DSPACE repository. Edit or create
 quests under `frontend/src/pages/quests/json`. Ensure start, middle and
 completion nodes, at least one item or process reference, and passing checks
 (`npm run lint`, `npm run type-check`, `npm run build`, and
-`npm test -- questCanonical questQuality`).
+`npm test -- questCanonical questQuality`). Cross‑check that all referenced
+items or processes exist in the registries and add any that are missing. Use
+existing images from `frontend/public/assets` for any new items or processes;
+do **not** commit image files. Adjust `requiresQuests` so the quest follows
+naturally from previous work and verify any processes used have realistic
+durations.
 
 USER:
 1. Follow the steps above.
-2. Run the commands listed in the system prompt before committing.
-3. Summarize the new or updated quest in the PR description.
+2. Add any missing items or processes to their registries and update the
+   quest's `requiresQuests` so the narrative flows.
+3. Reuse an existing image asset; avoid adding images to the commit.
+4. Run the commands listed in the system prompt before committing.
+5. Summarize the new or updated quest in the PR description.
 
 OUTPUT:
 A pull request implementing the quest with all tests green.
@@ -104,8 +118,12 @@ existing quests in that tree as examples for tone and structure.
 
 USER:
 1. Create a new quest JSON in the chosen tree following the quest schema.
-2. Reference at least one inventory item or process.
-3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+2. Reference at least one inventory item or process and add missing entries to
+   `items.json` or `processes.json`.
+3. Reuse an existing image asset; do **not** add image files to the PR.
+4. Update `requiresQuests` so the new quest fits naturally after existing
+   quests.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm test -- questCanonical questQuality`. Fix any failures.
 
 OUTPUT:
@@ -149,7 +167,8 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm test --
+5. Reuse an existing image asset; do **not** add image files to the PR.
+6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm test --
    questCanonical questQuality itemQuality processQuality`. Update docs if
    needed.
 
