@@ -1738,5 +1738,13 @@
         "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 15 }],
         "createItems": [{ "id": "7892ffc6-c651-445f-946b-7edc998cf389", "count": 1 }],
         "duration": "1h 30m"
+    },
+    {
+        "id": "print-phone-stand",
+        "title": "3D print a smartphone stand",
+        "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
+        "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 20 }],
+        "createItems": [{ "id": "9018feac-7213-4eef-9654-b06dbd9404ea", "count": 1 }],
+        "duration": "2h"
     }
 ]
