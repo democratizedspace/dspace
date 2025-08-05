@@ -1,0 +1,55 @@
+{
+    "id": "astronomy/light-pollution",
+    "title": "Measure Light Pollution",
+    "description": "Count Orion's stars to gauge your sky's brightness.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "How dark is your sky? We'll use Orion to find out.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Let's do it."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Use your star chart to find Orion and count the stars you see.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Consulting the chart."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Count recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Comparing star counts shows how your sky conditions change.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll keep tracking."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/constellations"]
+}
