@@ -3,7 +3,7 @@ title: 'Item Prompts'
 slug: 'prompts-items'
 ---
 
-# Writing great item prompts for the _dspace_ repo (v3)
+# Writing great item prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR—but only if you give it a
@@ -22,11 +22,11 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 ## 1 Quick start (Web vs CLI)
 
-| Use‑case              | Codex Web (ChatGPT sidebar) | [Codex CLI][codex-cli]                                              |
-| --------------------- | --------------------------- | ------------------------------------------------------------------- |
-| Add or update an item | “Code” button, attach repo  | `codex "add item solar-cell-junction-box"`                          |
-| Ask about item data   | “Ask” button                | `codex exec "explain frontend/src/pages/inventory/json/items.json"` |
-| Run item tests        | –                           | `codex exec --full-auto "npm test -- itemValidation itemQuality"`   |
+| Use‑case              | Codex Web (ChatGPT sidebar) | [Codex CLI][codex-cli]                                                |
+| --------------------- | --------------------------- | --------------------------------------------------------------------- |
+| Add or update an item | “Code” button, attach repo  | `npx codex "add item solar-cell-junction-box"`                        |
+| Ask about item data   | “Ask” button                | `npx codex exec "explain frontend/src/pages/inventory/json/items.json"` |
+| Run item tests        | –                           | `npx codex exec --full-auto "npm test -- itemValidation itemQuality"`   |
 
 See the [Codex CLI documentation][codex-cli] for more flags.
 
@@ -49,7 +49,7 @@ prompt‑level rules short and concrete.
 ## 3 Reusable template
 
 ```text
-You are working in democratizedspace/dspace (branch v3).
+You are working in democratizedspace/dspace on the main branch.
 
 GOAL: <one sentence item addition or edit>.
 
@@ -99,7 +99,7 @@ Apply this prompt to refine items and track quality over time.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository (branch v3).
+You are an automated contributor for the DSPACE repository on the main branch.
 
 USER:
 1. Pick an item from `frontend/src/pages/inventory/json/items.json` that lacks a
