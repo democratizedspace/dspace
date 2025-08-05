@@ -1,14 +1,14 @@
 {
     "id": "electronics/check-battery-voltage",
     "title": "Check a battery pack's voltage",
-    "description": "Use a multimeter to verify a 200 Wh battery pack's charge level.",
+    "description": "Use a digital multimeter to verify the voltage of a 12 V 200 Wh LiFePO4 battery pack.",
     "image": "/assets/battery.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey! Want to make sure your battery pack is in good shape? Let's measure its voltage with a multimeter.",
+            "text": "Hey! Let's confirm your 12 V pack is healthy. We'll work on a non-conductive surface and measure its voltage with a digital multimeter.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "measure",
-            "text": "Set your multimeter to the 20 V DC range. Touch the red probe to the pack's positive terminal and the black probe to the negative. A healthy pack should read around 12 V.",
+            "text": "Set the multimeter to the 20 V DC range. Hold probes by the insulated grips, touch red to the positive terminal and black to the negative without letting them touch. A healthy pack should read about 12 V.",
             "options": [
                 {
                     "type": "goto",
@@ -29,6 +29,10 @@
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                             "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
                         }
                     ]
                 }
@@ -36,7 +40,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Your battery pack looks charged and ready.",
+            "text": "Nice work! Disconnect the probes—your battery pack looks charged and ready.",
             "options": [
                 {
                     "type": "finish",
@@ -51,5 +55,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": []
+    "requiresQuests": [],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+        ]
+    }
 }
