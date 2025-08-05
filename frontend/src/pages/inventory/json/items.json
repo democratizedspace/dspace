@@ -316,9 +316,17 @@
     {
         "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
         "name": "superglue",
-        "description": "Don't get it on your hands!",
+        "description": "Small 3 g tube of cyanoacrylate adhesive for quick repairs. Bonds plastic and wood in seconds—avoid skin contact.",
         "image": "/assets/superglue.jpg",
-        "price": "10 dUSD"
+        "price": "3 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+            ]
+        }
     },
     {
         "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6",
