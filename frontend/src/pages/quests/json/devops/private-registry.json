@@ -1,0 +1,55 @@
+{
+    "id": "devops/private-registry",
+    "title": "Run a Private Docker Registry",
+    "description": "Host your own Docker images on the cluster.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Set up a private registry so you can store images locally.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Sounds handy."
+                }
+            ]
+        },
+        {
+            "id": "deploy",
+            "text": "Use docker compose with a registry service and mount storage at `/data/registry`.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "run-docker-compose",
+                    "text": "Registry containers launched."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Images pushed.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Your private registry is up. Tag and push images as needed.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/docker-compose"]
+}
