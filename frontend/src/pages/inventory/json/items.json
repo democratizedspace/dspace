@@ -1228,9 +1228,17 @@
     {
         "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
         "name": "Aquarium liquid test kit",
-        "description": "Reagent-based kit for measuring ammonia, nitrite and nitrate levels in aquarium water.",
+        "description": "Liquid reagent kit for aquariums. Four 15 mL bottles and test tubes provide ~130 tests for ammonia, nitrite and nitrate.",
         "image": "/assets/aquarium_thermometer.jpg",
-        "price": "25 dUSD"
+        "price": "25 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 65 }
+            ]
+        }
     },
     {
         "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
