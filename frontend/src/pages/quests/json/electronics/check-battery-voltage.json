@@ -1,14 +1,14 @@
 {
     "id": "electronics/check-battery-voltage",
     "title": "Check a battery pack's voltage",
-    "description": "Verify a 12 V 200 Wh LiFePO4 battery pack using a digital multimeter on a non-conductive surface.",
+    "description": "Use a digital multimeter to verify a 12 V 200 Wh LiFePO4 battery pack on a non-conductive surface while wearing safety goggles.",
     "image": "/assets/battery.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey! Let's confirm your 12 V pack is healthy. We'll work on a non-conductive surface, wear safety glasses, and follow the measure-battery-voltage process with a digital multimeter.",
+            "text": "Hey! Let's confirm your 12 V pack is healthy. Place it on a non-conductive surface, put on safety goggles, and follow the measure-battery-voltage process with a digital multimeter.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "measure",
-            "text": "Set the multimeter to the 20 V DC range. Keep fingers behind the probe guards, touch red to the positive terminal and black to the negative without letting them meet. A healthy pack should read about 12 V.",
+            "text": "Set the multimeter to the 20 V DC range. Keep fingers behind the probe guards, touch red to the positive terminal and black to the negative without letting them meet, and stop if the leads get warm. A healthy pack should read about 12 V.",
             "options": [
                 {
                     "type": "goto",
@@ -33,6 +33,10 @@
                         {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
                             "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ]
                 }
@@ -40,7 +44,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Disconnect the probes and store the battery safely—your pack looks charged and ready.",
+            "text": "Nice work! Disconnect the probes, take off your goggles, and store the battery safely—your pack looks charged and ready.",
             "options": [
                 {
                     "type": "finish",
@@ -57,12 +61,13 @@
     ],
     "requiresQuests": [],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
-            { "task": "codex-upgrade-2025-08-05", "date": "2025-08-05", "score": 80 }
+            { "task": "codex-upgrade-2025-08-05", "date": "2025-08-05", "score": 80 },
+            { "task": "codex-polish-2025-08-05", "date": "2025-08-05", "score": 92 }
         ]
     }
 }
