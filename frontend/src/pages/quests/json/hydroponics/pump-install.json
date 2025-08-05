@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Standing water can stagnate. Let's add a submersible pump to keep things lively.",
+            "text": "Standing water can stagnate. Let's add a submersible water pump to keep things lively.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "place",
-            "text": "Set the pump in the reservoir and hook up the tubing. Once it's humming, nutrients flow evenly.",
+            "text": "Set the submersible water pump in the reservoir and hook up the tubing. Once it's humming, nutrients flow evenly.",
             "options": [
                 {
                     "type": "goto",
