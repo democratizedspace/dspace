@@ -1752,6 +1752,19 @@
         "duration": "1h 30m"
     },
     {
+        "id": "solder-led-resistor",
+        "title": "Solder a 5 mm LED to a 220 Ω resistor with jumper wires",
+        "requireItems": [
+            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+            { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "20m"
+    },
+    {
         "id": "print-phone-stand",
         "title": "3D print a smartphone stand",
         "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
