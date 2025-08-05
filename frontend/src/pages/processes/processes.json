@@ -1863,11 +1863,19 @@
     },
     {
         "id": "check-iss-pass",
-        "title": "Check ISS pass time with a smartphone app",
+        "title": "Use a smartphone astronomy app to check the next ISS flyover",
         "requireItems": [{ "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 }],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+            ]
+        }
     },
     {
         "id": "measure-aquarium-ph",
