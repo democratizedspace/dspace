@@ -1721,15 +1721,26 @@
     },
     {
         "id": "partial-water-change",
-        "title": "Perform a partial aquarium water change",
+        "title": "Use a gravel vacuum and bucket to change 5% of water in a 150 L aquarium",
         "requireItems": [
+            { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
             { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
             { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
             { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 }
         ],
-        "consumeItems": [{ "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 0.05 }],
+        "consumeItems": [
+            { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 0.05 }
+        ],
         "createItems": [],
-        "duration": "30m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 70 }
+            ]
+        }
     },
     {
         "id": "print-benchy",
