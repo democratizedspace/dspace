@@ -68,6 +68,13 @@
         }
     },
     {
+        "id": "82577af7-6724-4cb2-8922-f7140e550145",
+        "name": "Smartphone",
+        "description": "A typical 5 V USB-charged mobile phone.",
+        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "743681a7-d2e7-465c-af07-43665079bf4d",
         "name": "500W wind turbine",
         "description": "A 500W wind turbine that can be used to generate electricity.",
