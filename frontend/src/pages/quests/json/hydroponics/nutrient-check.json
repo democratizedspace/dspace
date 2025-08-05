@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Plants quickly deplete minerals in recirculating systems. Let's top off the reservoir so your basil stays strong.",
+            "text": "Plants quickly deplete minerals in recirculating systems. We'll top off the reservoir so your basil stays strong and avoid nutrient deficiencies.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "add",
-            "text": "Put on gloves and goggles. Measure the hydroponic nutrients per the label, dilute them in water, then pour into the reservoir. Keep the submersible pump running so the solution circulates.",
+            "text": "Put on nitrile gloves and safety goggles. Measure nutrients according to the label, dilute in clean water, then pour into the reservoir. Keep the submersible water pump running so the solution circulates and avoid splashes.",
             "options": [
                 {
                     "type": "process",
@@ -47,7 +47,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Monitor the water level every few days, and store nutrients safely away from kids and pets.",
+            "text": "Great! Monitor the water level every few days, rinse your measuring tools, wash your hands after mixing, and store nutrients safely away from kids and pets.",
             "options": [
                 {
                     "type": "finish",
@@ -59,14 +59,19 @@
     "rewards": [],
     "requiresQuests": ["hydroponics/basil"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
                 "date": "2025-08-04",
                 "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
             }
         ]
     }
