@@ -1,7 +1,7 @@
 [
     {
         "id": "outlet-dWatt-1e3",
-        "title": "Generate 1000 dWatt using your outlet.",
+        "title": "Buy 1 kWh of electricity from a wall outlet",
         "requireItems": [
             {
                 "id": "a5395e29-1862-4eb7-8517-5d161635e032",
@@ -21,10 +21,18 @@
             },
             {
                 "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
-                "count": 0.977023939064
+                "count": 0.98
             }
         ],
-        "duration": "2s"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+            ]
+        }
     },
     {
         "id": "outlet-dWatt-1e4",
