@@ -107,9 +107,10 @@ USER:
 2. Improve clarity, realism and units. Ensure prices and descriptions match
    real-world expectations and that related processes reference the item
    correctly.
-3. Update or create the item's `hardening` block, incrementing `passes`,
-   refreshing the evaluator `score`, swapping the status `emoji` and appending a
-   history entry with the Codex task ID, date and score. Choose the emoji based
+3. When modifying the `image` field, reuse an existing image URL already in the repository; do not add new or external images.
+4. Update or create the item's `hardening` block, incrementing `passes`,
+    refreshing the evaluator `score`, swapping the status `emoji` and appending a
+    history entry with the Codex task ID, date and score. Choose the emoji based
    on:
    - 0 passes → score 0 → 🛠️ Draft
    - ≥1 pass & score ≥60 → 🌀 First polishing pass
@@ -124,7 +125,7 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm test -- itemValidation itemQuality processQuality`. Update docs if
    needed.
 
@@ -136,9 +137,9 @@ A pull request with the refined item, updated hardening block and passing tests.
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus.
--   **Use system prompts** to guide tone and technical accuracy.
--   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible but incorrect details.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible but incorrect details.
 
 [codex-cli]: https://www.npmjs.com/package/codex-cli
