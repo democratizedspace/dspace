@@ -60,9 +60,12 @@ FILES OF INTEREST
 REQUIREMENTS
 1. Follow the item schema.
 2. Reflect real-world materials or devices.
-3. Run `npm run lint`, `npm run type-check` and `npm run build`.
-4. Run `npm test -- itemValidation itemQuality` and fix any failures.
-5. Update docs or processes if needed.
+3. Ensure the item is referenced by at least one quest or process; update those
+   files and create missing processes as needed.
+4. Use only existing image assets; do not add new image files.
+5. Run `npm run lint`, `npm run type-check` and `npm run build`.
+6. Run `npm test -- itemValidation itemQuality` and fix any failures.
+7. Update docs or processes if needed.
 
 OUTPUT
 Return **only** the patch (diff) needed.
@@ -76,8 +79,10 @@ Use this when you want Codex to automatically create or upgrade an item.
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
 items under `frontend/src/pages/inventory/json/items.json`. Ensure realistic
-details, required fields, and passing checks (`npm run lint`, `npm run type-check`,
-`npm run build`, and `npm test -- itemValidation itemQuality`).
+details, required fields, and passing checks (`npm run lint`, `npm run
+type-check`, `npm run build`, and `npm test -- itemValidation itemQuality`).
+Verify the item appears in at least one quest or process, creating those links
+if missing, and reuse existing image assets.
 
 USER:
 1. Follow the steps above.

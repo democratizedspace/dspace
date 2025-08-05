@@ -1021,7 +1021,7 @@
                 "count": 1
             }
         ],
-        "duration": "30m"
+        "duration": "2h"
     },
     {
         "id": "add-goldfish",
@@ -1203,7 +1203,7 @@
                 "count": 1
             }
         ],
-        "duration": "30m"
+        "duration": "2h"
     },
     {
         "id": "flash-sd-card",
