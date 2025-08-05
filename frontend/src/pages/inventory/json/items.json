@@ -331,10 +331,18 @@
     {
         "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6",
         "name": "kevlar shock cord",
-        "description": "Perfect for model rocketry. Used to attach the rocket body to the parachute.",
+        "description": "1 m length of 2 mm Kevlar cord rated for 68 kg (150 lb). Attaches the rocket body to the parachute for reliable recovery.",
         "image": "/assets/kevlar_cord.jpg",
-        "price": "0.3 dUSD",
-        "unit": " m"
+        "price": "2 dUSD",
+        "unit": "m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+            ]
+        }
     },
     {
         "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",

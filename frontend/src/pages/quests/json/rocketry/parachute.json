@@ -19,7 +19,7 @@
         },
         {
             "id": "parachute",
-            "text": "Adding a parachute will help slow down the descent of the rocket, ensuring a gentler landing. This will increase the chances of a successful recovery and potential reuse of the rocket. We'll need a few extra components for this task: a parachute, shock cord, and recovery wadding. The recovery wadding safeguards the parachute from the ejection charge of the rocket motor. Once we have those items, we can proceed with the modifications.",
+            "text": "Adding a parachute will help slow down the descent of the rocket, ensuring a gentler landing. This will increase the chances of a successful recovery and potential reuse of the rocket. We'll need a few extra components for this task: a parachute, Kevlar shock cord, and recovery wadding. The recovery wadding safeguards the parachute from the ejection charge of the rocket motor. Once we have those items, we can proceed with the modifications.",
             "options": [
                 {
                     "type": "process",
