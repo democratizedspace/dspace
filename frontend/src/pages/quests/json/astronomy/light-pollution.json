@@ -1,14 +1,14 @@
 {
     "id": "astronomy/light-pollution",
     "title": "Measure Light Pollution",
-    "description": "Count Orion's stars to gauge your sky's brightness.",
+    "description": "Use a planisphere star chart to count Orion's visible stars and estimate local light pollution. Pick a safe, dark spot and give your eyes time to adapt.",
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "How dark is your sky? We'll use Orion to find out.",
+            "text": "How dark is your sky? Find a safe area away from streetlights, let your eyes adjust, and we'll use Orion to find out.",
             "options": [
                 {
                     "type": "goto",
@@ -19,17 +19,17 @@
         },
         {
             "id": "measure",
-            "text": "Use your star chart to find Orion and count the stars you see.",
+            "text": "Use your planisphere star chart to locate Orion and count the stars you can see. Watch your footing in the dark.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Consulting the chart."
+                    "text": "Referencing the star chart."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Count recorded.",
+                    "text": "Count recorded in my log.",
                     "requiresItems": [
                         {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
@@ -41,7 +41,7 @@
         },
         {
             "id": "finish",
-            "text": "Great work! Comparing star counts shows how your sky conditions change.",
+            "text": "Great work! Tracking how many stars you see helps monitor changes in light pollution.",
             "options": [
                 {
                     "type": "finish",
@@ -51,5 +51,19 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/constellations"]
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-light-pollution-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            }
+        ]
+    }
 }
