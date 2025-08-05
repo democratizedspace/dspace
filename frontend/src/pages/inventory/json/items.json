@@ -301,15 +301,16 @@
     {
         "id": "4d817f1c-d78d-4fac-a514-402bce330693",
         "name": "hobbyist solid rocket motor",
-        "description": "Single-use black powder motor for model rockets. 18 mm diameter × 70 mm length, mass 18 g. Provides up to 31 N peak thrust over a 0.8 s burn.",
+        "description": "Single-use 18 mm (0.7 in) × 70 mm (2.8 in) black powder motor weighing 18 g. Delivers ~31 N peak thrust for 0.8 s with ~2.5 N·s total impulse.",
         "image": "/assets/rocket_motor.jpg",
-        "price": "4 dUSD",
+        "price": "5 dUSD",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
             "history": [
-                { "task": "codex-item-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }
+                { "task": "codex-item-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 80 }
             ]
         }
     },
@@ -1235,9 +1236,17 @@
     {
         "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
         "name": "Aquarium liquid test kit",
-        "description": "Reagent-based kit for measuring ammonia, nitrite and nitrate levels in aquarium water.",
+        "description": "Liquid reagent kit for aquariums. Four 15 mL bottles and test tubes provide ~130 tests for ammonia, nitrite and nitrate.",
         "image": "/assets/aquarium_thermometer.jpg",
-        "price": "25 dUSD"
+        "price": "25 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 65 }
+            ]
+        }
     },
     {
         "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
@@ -1254,10 +1263,18 @@
     },
     {
         "id": "97317bc3-507a-4e2c-912b-507d586cee87",
-        "name": "Gravel vacuum",
-        "description": "Siphon tube for cleaning substrate and removing aquarium water.",
+        "name": "gravel vacuum",
+        "description": "Manual siphon with 2 m (6.5 ft) flexible tubing and 4 cm intake for cleaning aquarium substrate and removing water.",
         "image": "/assets/aquarium_empty.jpg",
-        "price": "10 dUSD"
+        "price": "10 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+            ]
+        }
     },
     {
         "id": "c687abb3-7b52-4344-97dc-8b7e0881ed9d",
@@ -1277,10 +1294,18 @@
     {
         "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
         "name": "digital multimeter",
-        "description": "Measures voltage, current, and resistance in circuits. Features auto-ranging display.",
+        "description": "Handheld multimeter with manual 20 V DC range, measures up to 600 V, 10 A and 2 MΩ. Includes test probes and replaceable fuse.",
         "image": "/assets/launch_controller.jpg",
-        "price": "15 dUSD",
-        "type": "tool"
+        "price": "20 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 65 }
+            ]
+        }
     },
     {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",

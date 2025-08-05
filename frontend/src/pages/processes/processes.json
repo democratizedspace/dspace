@@ -82,7 +82,7 @@
     },
     {
         "id": "bucket-water-chlorinated",
-        "title": "fill a 5 gallon bucket with tap water",
+        "title": "Use a sink to fill a 5 gallon bucket with tap water",
         "requireItems": [
             {
                 "id": "799ace33-1336-46c0-904a-9f16778230f1",
@@ -101,7 +101,15 @@
                 "count": 1
             }
         ],
-        "duration": "30s"
+        "duration": "30s",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+            ]
+        }
     },
     {
         "id": "3dprint-benchy",
@@ -1373,6 +1381,17 @@
         "duration": "1m"
     },
     {
+        "id": "measure-battery-voltage",
+        "title": "Measure battery voltage with a multimeter",
+        "requireItems": [
+            { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+            { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "adjust-ph",
         "title": "Adjust solution pH",
         "requireItems": [
@@ -1751,7 +1770,7 @@
     },
     {
         "id": "partial-water-change",
-        "title": "Use a gravel vacuum and bucket to change 5% of water in a 150 L aquarium",
+        "title": "Use a gravel vacuum with 2 m hose and bucket to change 5% of water in a 150 L aquarium",
         "requireItems": [
             { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
             { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
@@ -1770,15 +1789,23 @@
     },
     {
         "id": "print-benchy",
-        "title": "3D print a Benchy test model",
+        "title": "3D print a Benchy calibration boat on Real Printer 1 using 15 g of white PLA",
         "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
         "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 15 }],
         "createItems": [{ "id": "7892ffc6-c651-445f-946b-7edc998cf389", "count": 1 }],
-        "duration": "1h 30m"
+        "duration": "1h 30m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 65 }
+            ]
+        }
     },
     {
         "id": "solder-led-resistor",
-        "title": "Solder a 5 mm LED to a 220 Ω resistor and attach two jumper wires",
+        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 Ω resistor with two jumper wires",
         "requireItems": [
             { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 }
         ],

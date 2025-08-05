@@ -38,6 +38,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - astronomy/constellations
 - astronomy/iss-flyover
 - astronomy/jupiter-moons
+- astronomy/light-pollution
 - astronomy/lunar-eclipse
 - astronomy/meteor-shower
 - astronomy/north-star
