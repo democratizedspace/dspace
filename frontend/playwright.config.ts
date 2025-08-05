@@ -65,6 +65,16 @@ export default defineConfig({
             snapshotDir: './test-screenshots/',
             outputDir: './test-videos/',
         },
+        {
+            name: 'firefox',
+            snapshotDir: './test-screenshots/',
+            outputDir: './test-videos/',
+        },
+        {
+            name: 'webkit',
+            snapshotDir: './test-screenshots/',
+            outputDir: './test-videos/',
+        },
     ],
     // Configure webServer to start the app server before running tests
     webServer: {
