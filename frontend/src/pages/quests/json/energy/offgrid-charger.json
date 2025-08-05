@@ -1,14 +1,14 @@
 {
     "id": "energy/offgrid-charger",
     "title": "Charge a Device Off-Grid",
-    "description": "Top off your phone using only sunlight and a battery pack.",
+    "description": "Top off a smartphone using sunlight, a solar charge controller, and a 200 Wh battery pack.",
     "image": "/assets/quests/solar_200Wh.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Got a phone running low? Let's use a portable panel and battery to juice it up anywhere.",
+            "text": "Phone running low? We'll use a 200 W foldable panel, charge controller, and 200 Wh LiFePO4 pack to juice it up anywhere.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "setup",
-            "text": "Unfold the panel and hook it to the battery before connecting your device.",
+            "text": "Unfold the panel, connect it to the charge controller, then to the battery. Keep the battery shaded and double-check polarity before using the USB cable to plug in your device.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -30,6 +30,14 @@
                         },
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
                             "count": 1
                         }
                     ],
@@ -46,6 +54,14 @@
                         },
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
                             "count": 1
                         }
                     ]
@@ -64,5 +80,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["energy/solar"]
+    "requiresQuests": ["energy/solar"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+        ]
+    }
 }

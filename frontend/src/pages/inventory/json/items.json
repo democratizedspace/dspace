@@ -68,6 +68,13 @@
         }
     },
     {
+        "id": "82577af7-6724-4cb2-8922-f7140e550145",
+        "name": "Smartphone",
+        "description": "A typical 5 V USB-charged mobile phone.",
+        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "743681a7-d2e7-465c-af07-43665079bf4d",
         "name": "500W wind turbine",
         "description": "A 500W wind turbine that can be used to generate electricity.",
@@ -1228,10 +1235,32 @@
         "type": "tool"
     },
     {
+        "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+        "name": "digital multimeter",
+        "description": "Measures voltage, current, and resistance in circuits. Features auto-ranging display.",
+        "image": "/assets/multimeter.jpg",
+        "price": "15 dUSD",
+        "type": "tool"
+    },
+    {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",
         "name": "astronaut poster",
         "description": "A glossy poster featuring NASA astronauts floating in microgravity.",
         "image": "/assets/astronauts.jpg",
         "price": "5 dUSD"
+    },
+    {
+        "id": "70bb8d86-2c4e-4330-9705-371891934686",
+        "name": "mission logbook",
+        "description": "Bound logbook with pre-numbered pages for recording daily mission events and maintenance notes.",
+        "image": "/assets/paperwork.jpg",
+        "price": "2 dUSD"
+    },
+    {
+        "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+        "name": "feather quill",
+        "description": "A traditional writing quill with a metal nib for calligraphy.",
+        "image": "/assets/quill.jpg",
+        "price": "3 dUSD"
     }
 ]

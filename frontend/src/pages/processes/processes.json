@@ -1720,6 +1720,18 @@
         }
     },
     {
+        "id": "rinse-aquarium-filter",
+        "title": "Rinse aquarium filter media in dechlorinated water",
+        "requireItems": [
+            { "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1", "count": 1 }
+        ],
+        "consumeItems": [
+            { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }
+        ],
+        "createItems": [],
+        "duration": "15m"
+    },
+    {
         "id": "partial-water-change",
         "title": "Perform a partial aquarium water change",
         "requireItems": [
@@ -1746,5 +1758,17 @@
         "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 20 }],
         "createItems": [{ "id": "9018feac-7213-4eef-9654-b06dbd9404ea", "count": 1 }],
         "duration": "2h"
+    },
+    {
+        "id": "measure-aquarium-ph",
+        "title": "Measure your aquarium pH with a strip",
+        "requireItems": [
+            { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 }
+        ],
+        "consumeItems": [
+            { "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }
+        ],
+        "createItems": [],
+        "duration": "1m"
     }
 ]
