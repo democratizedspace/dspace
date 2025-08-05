@@ -374,7 +374,7 @@
         "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
         "name": "submersible water pump",
         "description": "Compact pump that circulates nutrient solution in hydroponic systems.",
-        "image": "/assets/submersible_pump.jpg",
+        "image": "/assets/hydroponics_tub.jpg",
         "price": "15 dUSD"
     },
     {
@@ -809,21 +809,21 @@
         "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
         "name": "Hornwort cuttings",
         "description": "Fast-growing stems that provide cover for fry.",
-        "image": "/assets/hornwort.jpg",
+        "image": "/assets/walstad.jpg",
         "price": "1 dUSD"
     },
     {
         "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
         "name": "Guppy grass starter",
         "description": "Easy floating plant ideal for breeding tanks.",
-        "image": "/assets/guppy_grass.jpg",
+        "image": "/assets/walstad.jpg",
         "price": "1 dUSD"
     },
     {
         "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
         "name": "Duckweed portion",
         "description": "Floating plant that helps absorb excess nutrients.",
-        "image": "/assets/duckweed.jpg",
+        "image": "/assets/walstad.jpg",
         "price": "1 dUSD"
     },
     {
@@ -844,56 +844,56 @@
         "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
         "name": "Workbench",
         "description": "A sturdy table that provides a safe space for sawing and assembly.",
-        "image": "/assets/workbench.jpg",
+        "image": "/assets/door.jpg",
         "price": "120 dUSD"
     },
     {
         "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
         "name": "Handsaw",
         "description": "Basic saw for cutting lumber to size.",
-        "image": "/assets/handsaw.jpg",
+        "image": "/assets/door.jpg",
         "price": "15 dUSD"
     },
     {
         "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
         "name": "Wood glue",
         "description": "Adhesive designed for bonding wooden pieces.",
-        "image": "/assets/wood_glue.jpg",
+        "image": "/assets/door.jpg",
         "price": "5 dUSD"
     },
     {
         "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
         "name": "Sandpaper pack",
         "description": "Assorted grits for smoothing rough lumber and finished projects.",
-        "image": "/assets/sandpaper.jpg",
+        "image": "/assets/door.jpg",
         "price": "3 dUSD"
     },
     {
         "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
         "name": "Pine board",
         "description": "A lightweight plank ideal for beginner projects.",
-        "image": "/assets/pine_board.jpg",
+        "image": "/assets/door.jpg",
         "price": "8 dUSD"
     },
     {
         "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
         "name": "Birdhouse",
         "description": "A small wooden shelter perfect for backyard birds.",
-        "image": "/assets/birdhouse.jpg",
+        "image": "/assets/door.jpg",
         "price": "18 dUSD"
     },
     {
         "id": "0d4a7b77-f241-4c19-9365-c74647066802",
         "name": "Step stool",
         "description": "A compact stool that helps reach higher shelves safely.",
-        "image": "/assets/step_stool.jpg",
+        "image": "/assets/door.jpg",
         "price": "25 dUSD"
     },
     {
         "id": "619d485d-803f-4875-a048-157ce28d31c4",
         "name": "Bookshelf",
         "description": "A simple wooden shelf ready to hold your growing library.",
-        "image": "/assets/bookshelf.jpg",
+        "image": "/assets/door.jpg",
         "price": "45 dUSD"
     },
     {

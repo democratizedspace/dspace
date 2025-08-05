@@ -1,6 +1,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+// Fallback uses existing list on disk; glob not required
 
 const outputFile = path.join(
   __dirname,
@@ -31,6 +32,11 @@ function getNewQuestPaths() {
   }
   const baseRef = getBaseRef();
   try {
+    execSync(`git merge-base ${baseRef} HEAD`, { stdio: 'ignore' });
+  } catch (err) {
+    return readPathsFromFile();
+  }
+  try {
     const diff = execSync(
       `git diff --name-only --diff-filter=A ${baseRef}...HEAD -- frontend/src/pages/quests/json`,
       { encoding: 'utf8' }
@@ -40,7 +46,18 @@ function getNewQuestPaths() {
       .map((p) => p.trim())
       .filter(Boolean);
   } catch (err) {
-    // If the diff fails (e.g. no merge base between branches), assume no new quests
+    return [];
+  }
+}
+
+function readPathsFromFile() {
+  try {
+    const content = fs.readFileSync(outputFile, 'utf8');
+    return content
+      .split('\n')
+      .filter((line) => line.startsWith('- '))
+      .map((line) => `frontend/src/pages/quests/json/${line.slice(2)}.json`);
+  } catch (err) {
     return [];
   }
 }
@@ -98,4 +115,5 @@ module.exports = {
   groupQuests,
   generateMarkdown,
   main,
+  readPathsFromFile,
 };
