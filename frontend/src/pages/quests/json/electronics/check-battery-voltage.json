@@ -1,0 +1,55 @@
+{
+    "id": "electronics/check-battery-voltage",
+    "title": "Check a battery pack's voltage",
+    "description": "Use a multimeter to verify a 200 Wh battery pack's charge level.",
+    "image": "/assets/quests/battery_check.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey! Want to make sure your battery pack is in good shape? Let's measure its voltage with a multimeter.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "I'm ready."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Set your multimeter to the 20 V DC range. Touch the red probe to the pack's positive terminal and the black probe to the negative. A healthy pack should read around 12 V.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It reads about 12.6 V.",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Your battery pack looks charged and ready.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+            "count": 1
+        }
+    ],
+    "requiresQuests": []
+}
