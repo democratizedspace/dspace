@@ -1620,7 +1620,7 @@
     },
     {
         "id": "arduino-thermistor-read",
-        "title": "Log temperature with a thermistor on Arduino",
+        "title": "Log temperature from a thermistor using an Arduino Uno",
         "requireItems": [
             {
                 "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -1649,7 +1649,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "arduino-led-blink",
