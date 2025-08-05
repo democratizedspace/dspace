@@ -1309,10 +1309,18 @@
     {
         "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
         "name": "soldering iron kit",
-        "description": "Compact 30 W iron with stand and lead-free solder for assembling electronics.",
+        "description": "Pen-style 30 W iron with stand, cleaning sponge and 1 m of 0.8 mm lead-free solder for hobby electronics.",
         "image": "/assets/quests/basic_circuit.svg",
-        "price": "20 dUSD",
-        "type": "tool"
+        "price": "25 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+            ]
+        }
     },
     {
         "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
