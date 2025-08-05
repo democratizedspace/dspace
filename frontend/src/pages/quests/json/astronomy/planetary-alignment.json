@@ -1,0 +1,46 @@
+{
+    "id": "astronomy/planetary-alignment",
+    "title": "Planetary Alignment",
+    "description": "Use a star chart to track a rare alignment of planets.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Several planets are lining up tonight. Want to check it out?",
+            "options": [
+                { "type": "goto", "goto": "middle", "text": "Absolutely, let's prepare." }
+            ]
+        },
+        {
+            "id": "middle",
+            "text": "Here's a star chart to guide your telescope.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }
+                    ],
+                    "text": "Thanks for the chart!"
+                },
+                { "type": "process", "process": "identify-constellations", "text": "Mapping the alignment." },
+                {
+                    "type": "goto",
+                    "goto": "completion",
+                    "requiresItems": [
+                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }
+                    ],
+                    "text": "Alignment confirmed."
+                }
+            ]
+        },
+        {
+            "id": "completion",
+            "text": "Great work! The planetary lineup is documented.",
+            "options": [ { "type": "finish", "text": "Celestial success!" } ]
+        }
+    ],
+    "rewards": [ { "id": "5247a603-294a-4a34-a884-1ae20969b2a1", "count": 100 } ],
+    "requiresQuests": []
+}
