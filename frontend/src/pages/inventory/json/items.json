@@ -1247,10 +1247,18 @@
     },
     {
         "id": "97317bc3-507a-4e2c-912b-507d586cee87",
-        "name": "Gravel vacuum",
-        "description": "Siphon tube for cleaning substrate and removing aquarium water.",
+        "name": "gravel vacuum",
+        "description": "Manual siphon with 2 m (6.5 ft) flexible tubing and 4 cm intake for cleaning aquarium substrate and removing water.",
         "image": "/assets/aquarium_empty.jpg",
-        "price": "10 dUSD"
+        "price": "10 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+            ]
+        }
     },
     {
         "id": "c687abb3-7b52-4344-97dc-8b7e0881ed9d",

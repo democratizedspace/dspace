@@ -1751,7 +1751,7 @@
     },
     {
         "id": "partial-water-change",
-        "title": "Use a gravel vacuum and bucket to change 5% of water in a 150 L aquarium",
+        "title": "Use a gravel vacuum with 2 m hose and bucket to change 5% of water in a 150 L aquarium",
         "requireItems": [
             { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
             { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
