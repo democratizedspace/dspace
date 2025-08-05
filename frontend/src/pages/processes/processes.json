@@ -1737,11 +1737,19 @@
     },
     {
         "id": "rinse-aquarium-filter",
-        "title": "Rinse aquarium filter media in dechlorinated water",
+        "title": "Rinse aquarium filter media in a bucket of dechlorinated water to preserve beneficial bacteria",
         "requireItems": [{ "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1", "count": 1 }],
         "consumeItems": [{ "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }],
         "createItems": [],
-        "duration": "15m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 70 }
+            ]
+        }
     },
     {
         "id": "partial-water-change",
