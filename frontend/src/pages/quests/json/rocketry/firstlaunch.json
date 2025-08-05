@@ -112,7 +112,7 @@
         },
         {
             "id": "assemble",
-            "text": "It's time for assembly!! There are a few more things you'll need: a solid rocket motor, some superglue, and some kevlar cord! You know how to buy those, right? I'm sure you do. I'll wait here while you go get them and assemble this thing. Here, use this handy schematic!",
+            "text": "It's time for assembly!! There are a few more things you'll need: a solid rocket motor, some superglue, and some Kevlar shock cord! You know how to buy those, right? I'm sure you do. I'll wait here while you go get them and assemble this thing. Here, use this handy schematic!",
             "options": [
                 {
                     "type": "process",
