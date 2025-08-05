@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "dChat here! Even experienced builders should keep a first aid kit nearby for minor injuries.",
+            "text": "dChat here! Even seasoned makers keep a stocked first aid kit within reach for minor mishaps.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "Gather adhesive bandages, sterile gauze pads, antiseptic wipes, and a pair of nitrile gloves. Wash and dry your hands, check expiration dates, then pack the supplies so they stay clean and dry.",
+            "text": "Gather adhesive bandages, sterile gauze pads, antiseptic wipes, and a pair of nitrile gloves. Wash and dry your hands, check each item's seal and expiration date, then pack the supplies so they stay clean and dry.",
             "options": [
                 {
                     "type": "process",
@@ -41,7 +41,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Keep this kit handy so minor mishaps don't halt your progress.",
+            "text": "Great! Store the kit in a cool, dry place away from children, and replace items as they're used.",
             "options": [
                 {
                     "type": "finish",
@@ -53,12 +53,13 @@
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 },
-            { "task": "codex-refine-2025-08-04", "date": "2025-08-04", "score": 80 }
+            { "task": "codex-refine-2025-08-04", "date": "2025-08-04", "score": 80 },
+            { "task": "codex-refine-2025-08-05", "date": "2025-08-05", "score": 90 }
         ]
     }
 }
