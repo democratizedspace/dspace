@@ -58,10 +58,13 @@ FILES OF INTEREST
 
 REQUIREMENTS
 1. Follow the process schema.
-2. Use realistic durations and item relationships.
-3. Run `npm run lint`, `npm run type-check` and `npm run build`.
-4. Run `npm test -- processQuality itemQuality` and fix any failures.
-5. Update docs or items if needed.
+2. Use realistic durations and item relationships grounded in real-world timing.
+3. Ensure the process is referenced by at least one quest or item; create
+   missing items or quest hooks as needed.
+4. Use only existing image assets; do not add new image files.
+5. Run `npm run lint`, `npm run type-check` and `npm run build`.
+6. Run `npm test -- processQuality itemQuality` and fix any failures.
+7. Update docs or items if needed.
 
 OUTPUT
 Return **only** the patch (diff) needed.
@@ -77,6 +80,8 @@ You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/processes.json`. Ensure realistic
 steps, durations, item references, and passing checks (`npm run lint`, `npm run
 type-check`, `npm run build`, and `npm test -- processQuality itemQuality`).
+Verify the process links to existing quests or items, add missing registry
+entries if needed, and reuse existing image assets.
 
 USER:
 1. Follow the steps above.

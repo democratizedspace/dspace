@@ -90,4 +90,26 @@ describe('Process Quality Validation', () => {
         expect(checkProcess(shortProc)).toContain('duration under 30s');
         expect(checkProcess(longProc)).not.toContain('duration longer than 72h');
     });
+
+    test('semantic duration expectations', () => {
+        const hints = [
+            { pattern: /^(grow|regrow)/i, min: 7 * 24 * 3600 },
+            { pattern: /^charge/i, min: 3600 },
+        ];
+        const issues = [];
+        processes.forEach((proc) => {
+            const seconds = durationInSeconds(proc.duration);
+            const title = proc.title.toLowerCase();
+            hints.forEach(({ pattern, min }) => {
+                if (pattern.test(title) && seconds < min) {
+                    issues.push(`${proc.id} duration ${proc.duration} unrealistically short`);
+                }
+            });
+        });
+        if (issues.length > 0) {
+            console.warn('Semantic Duration Issues:');
+            issues.forEach((i) => console.warn(`- ${i}`));
+        }
+        expect(issues.length).toBe(0);
+    });
 });

@@ -61,10 +61,14 @@ FILES OF INTEREST
 
 REQUIREMENTS
 1. Follow the quest schema.
-2. Reference at least one inventory item or process.
-3. Run `npm run lint`, `npm run type-check` and `npm run build`.
-4. Run `npm test -- questCanonical questQuality` and fix any failures.
-5. Update docs or dialogue as needed.
+2. Reference at least one inventory item or process. Create missing items or
+   processes in their registries and link them in the quest.
+3. Find the most natural predecessor quest and update the `requiresQuests`
+   chain so progression flows logically.
+4. Use only existing image assets; do not add new image files.
+5. Run `npm run lint`, `npm run type-check` and `npm run build`.
+6. Run `npm test -- questCanonical questQuality` and fix any failures.
+7. Update docs or dialogue as needed.
 
 OUTPUT
 Return **only** the patch (diff) needed.
@@ -80,7 +84,9 @@ You are an automated contributor for the DSPACE repository. Edit or create
 quests under `frontend/src/pages/quests/json`. Ensure start, middle and
 completion nodes, at least one item or process reference, and passing checks
 (`npm run lint`, `npm run type-check`, `npm run build`, and
-`npm test -- questCanonical questQuality`).
+`npm test -- questCanonical questQuality`). Survey existing quests to pick a
+natural predecessor and update `requiresQuests` accordingly. Add missing items
+or processes to their registries and reuse existing image assets.
 
 USER:
 1. Follow the steps above.
