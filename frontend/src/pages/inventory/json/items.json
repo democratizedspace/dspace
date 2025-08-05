@@ -1233,5 +1233,12 @@
         "description": "A glossy poster featuring NASA astronauts floating in microgravity.",
         "image": "/assets/astronauts.jpg",
         "price": "5 dUSD"
+    },
+    {
+        "id": "70bb8d86-2c4e-4330-9705-371891934686",
+        "name": "mission logbook",
+        "description": "Bound logbook with pre-numbered pages for recording daily mission events and maintenance notes.",
+        "image": "/assets/paperwork.jpg",
+        "price": "2 dUSD"
     }
 ]
