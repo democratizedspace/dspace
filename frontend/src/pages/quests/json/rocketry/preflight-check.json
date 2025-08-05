@@ -2,7 +2,7 @@
     "id": "rocketry/preflight-check",
     "title": "Preflight Checklist",
     "description": "Confirm gear and run a quick launch sequence.",
-    "image": "/assets/quests/nightlaunch.jpg",
+    "image": "/assets/rocket_launch.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
@@ -45,9 +45,7 @@
                 {
                     "type": "goto",
                     "goto": "done",
-                    "requiresItems": [
-                        { "id": "63362e5c-9897-4710-8ef6-26540fabd0ca", "count": 1 }
-                    ],
+                    "requiresItems": [{ "id": "63362e5c-9897-4710-8ef6-26540fabd0ca", "count": 1 }],
                     "text": "Launch successful!"
                 }
             ]
@@ -63,7 +61,5 @@
             ]
         }
     ],
-    "rewards": [
-        { "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52", "count": 1 }
-    ]
+    "rewards": [{ "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52", "count": 1 }]
 }

@@ -117,7 +117,7 @@ When creating custom items, consider how they might connect to:
 {
     "name": "Multimeter",
     "description": "A device for measuring electrical voltage, current, and resistance. Essential for testing and troubleshooting electronic circuits.",
-    "image": "/assets/multimeter.jpg",
+    "image": "/assets/launch_controller.jpg",
     "price": "250",
     "unit": "unit",
     "type": "tool"

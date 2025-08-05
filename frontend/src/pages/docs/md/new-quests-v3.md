@@ -42,6 +42,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - astronomy/meteor-shower
 - astronomy/north-star
 - astronomy/observe-moon
+- astronomy/planetary-alignment
 - astronomy/satellite-pass
 - astronomy/star-trails
 
@@ -80,10 +81,13 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 
 - electronics/arduino-blink
 - electronics/basic-circuit
+- electronics/check-battery-voltage
 - electronics/data-logger
 - electronics/light-sensor
 - electronics/potentiometer-dimmer
 - electronics/servo-sweep
+- electronics/solder-wire
+- electronics/soldering-intro
 - electronics/thermistor-reading
 - electronics/thermometer-calibration
 
@@ -93,6 +97,8 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - energy/dWatt-1e8
 - energy/hand-crank-generator
 - energy/offgrid-charger
+- energy/portable-solar-panel
+- energy/power-inverter
 - energy/wind-turbine
 
 ### firstaid
@@ -122,6 +128,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - hydroponics/regrow-stevia
 - hydroponics/reservoir-refresh
 - hydroponics/stevia
+- hydroponics/top-off
 
 ### programming
 
@@ -147,6 +154,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 ### rocketry
 
 - rocketry/night-launch
+- rocketry/preflight-check
 - rocketry/recovery-run
 - rocketry/static-test
 
@@ -169,4 +177,3 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - woodworking/step-stool
 - woodworking/tool-rack
 - woodworking/workbench
-

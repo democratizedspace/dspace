@@ -1246,7 +1246,7 @@
         "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
         "name": "digital multimeter",
         "description": "Measures voltage, current, and resistance in circuits. Features auto-ranging display.",
-        "image": "/assets/multimeter.jpg",
+        "image": "/assets/launch_controller.jpg",
         "price": "15 dUSD",
         "type": "tool"
     },

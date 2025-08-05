@@ -9,9 +9,7 @@
         {
             "id": "start",
             "text": "A sensor lead snapped. Want to solder it back together?",
-            "options": [
-                { "type": "goto", "goto": "prep", "text": "Let's fix it." }
-            ]
+            "options": [{ "type": "goto", "goto": "prep", "text": "Let's fix it." }]
         },
         {
             "id": "prep",
@@ -33,9 +31,7 @@
         {
             "id": "finish",
             "text": "Nice work. The connection is strong and conductive again.",
-            "options": [
-                { "type": "finish", "text": "Thanks, Orion!" }
-            ]
+            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],

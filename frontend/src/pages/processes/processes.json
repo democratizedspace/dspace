@@ -1734,12 +1734,8 @@
     {
         "id": "rinse-aquarium-filter",
         "title": "Rinse aquarium filter media in dechlorinated water",
-        "requireItems": [
-            { "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1", "count": 1 }
-        ],
-        "consumeItems": [
-            { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }
-        ],
+        "requireItems": [{ "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1", "count": 1 }],
+        "consumeItems": [{ "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }],
         "createItems": [],
         "duration": "15m"
     },
@@ -1752,18 +1748,14 @@
             { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
             { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 }
         ],
-        "consumeItems": [
-            { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 0.05 }
-        ],
+        "consumeItems": [{ "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 0.05 }],
         "createItems": [],
         "duration": "30m",
         "hardening": {
             "passes": 1,
             "score": 70,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 70 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 70 }]
         }
     },
     {
@@ -1798,12 +1790,8 @@
     {
         "id": "measure-aquarium-ph",
         "title": "Measure your aquarium pH with a strip",
-        "requireItems": [
-            { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 }
-        ],
-        "consumeItems": [
-            { "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }
-        ],
+        "requireItems": [{ "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 }],
+        "consumeItems": [{ "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }],
         "createItems": [],
         "duration": "1m"
     }
