@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey! Let's confirm your 12 V pack is healthy. We'll work on a non-conductive surface, wear safety glasses, and follow the measure-battery-voltage process with a digital multimeter.",
+            "text": "Set the pack on a wooden table, disconnect any chargers, and put on safety goggles. We'll follow the measure-battery-voltage process using your digital multimeter.",
             "options": [
                 {
                     "type": "goto",
@@ -19,12 +19,13 @@
         },
         {
             "id": "measure",
-            "text": "Set the multimeter to the 20 V DC range. Keep fingers behind the probe guards, touch red to the positive terminal and black to the negative without letting them meet. A healthy pack should read about 12 V.",
+            "text": "Set the multimeter to 20 V DC. Keep fingers behind probe guards and never let the tips touch each other or the battery case. Touch red to the positive terminal and black to the negative; a healthy pack reads about 12 V.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "It reads about 12.6 V.",
+                    "process": "measure-battery-voltage",
                     "requiresItems": [
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
@@ -32,6 +33,10 @@
                         },
                         {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                             "count": 1
                         }
                     ]
@@ -57,12 +62,13 @@
     ],
     "requiresQuests": [],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
-            { "task": "codex-upgrade-2025-08-05", "date": "2025-08-05", "score": 80 }
+            { "task": "codex-upgrade-2025-08-05", "date": "2025-08-05", "score": 80 },
+            { "task": "codex-quest-refinement-2025-08-05", "date": "2025-08-05", "score": 90 }
         ]
     }
 }
