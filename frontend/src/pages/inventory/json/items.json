@@ -339,9 +339,17 @@
     {
         "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
         "name": "rocket igniter",
-        "description": "Ignite a rocket motor with electricity.",
+        "description": "Single-use nichrome bridge-wire igniter with 30 cm leads for remote ignition of model rocket motors.",
         "image": "/assets/rocket_igniter.jpg",
-        "price": "0.1 dUSD"
+        "price": "1 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }
+            ]
+        }
     },
     {
         "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
