@@ -2,7 +2,7 @@
     "id": "electronics/check-battery-voltage",
     "title": "Check a battery pack's voltage",
     "description": "Use a multimeter to verify a 200 Wh battery pack's charge level.",
-    "image": "/assets/quests/battery_check.jpg",
+    "image": "/assets/battery.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

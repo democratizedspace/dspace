@@ -96,14 +96,17 @@ function generateMarkdown(groups) {
     quests.forEach((q) => lines.push(`- ${q}`));
     lines.push('');
   });
-  return lines.join('\n');
+  if (lines[lines.length - 1] === '') {
+    lines.pop();
+  }
+  return lines.join('\n') + '\n';
 }
 
 function main() {
   const paths = getNewQuestPaths();
   const groups = groupQuests(paths);
   const content = generateMarkdown(groups);
-  fs.writeFileSync(outputFile, content + '\n');
+  fs.writeFileSync(outputFile, content);
 }
 
 if (require.main === module) {
