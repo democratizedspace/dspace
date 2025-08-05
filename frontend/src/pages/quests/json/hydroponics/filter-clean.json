@@ -1,0 +1,50 @@
+{
+    "id": "hydroponics/filter-clean",
+    "title": "Rinse Grow Bed Filter",
+    "description": "Clear out the gunk so the roots can breathe.",
+    "image": "/assets/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The filter's looking grimy. A quick rinse will keep the roots happy.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "I'll clean it now."
+                }
+            ]
+        },
+        {
+            "id": "rinse",
+            "text": "Remove the sponge and rinse it with a bucket of fresh dechlorinated water.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Filter's all clean!",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. Clean filters keep nutrient flow steady.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to growing."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/top-off"]
+}
