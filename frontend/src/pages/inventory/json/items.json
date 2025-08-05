@@ -1228,6 +1228,14 @@
         "type": "tool"
     },
     {
+        "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+        "name": "digital multimeter",
+        "description": "Measures voltage, current, and resistance in circuits. Features auto-ranging display.",
+        "image": "/assets/multimeter.jpg",
+        "price": "15 dUSD",
+        "type": "tool"
+    },
+    {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",
         "name": "astronaut poster",
         "description": "A glossy poster featuring NASA astronauts floating in microgravity.",
@@ -1240,5 +1248,12 @@
         "description": "Bound logbook with pre-numbered pages for recording daily mission events and maintenance notes.",
         "image": "/assets/paperwork.jpg",
         "price": "2 dUSD"
+    },
+    {
+        "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+        "name": "feather quill",
+        "description": "A traditional writing quill with a metal nib for calligraphy.",
+        "image": "/assets/quill.jpg",
+        "price": "3 dUSD"
     }
 ]
