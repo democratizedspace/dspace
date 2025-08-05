@@ -1721,7 +1721,7 @@
     },
     {
         "id": "partial-water-change",
-        "title": "Perform a partial aquarium water change",
+        "title": "Perform a 25% aquarium water change using a gravel vacuum",
         "requireItems": [
             { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
             { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
@@ -1729,7 +1729,19 @@
         ],
         "consumeItems": [{ "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 0.05 }],
         "createItems": [],
-        "duration": "30m"
+        "duration": "20m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "print-benchy",
