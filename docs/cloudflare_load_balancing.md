@@ -4,7 +4,9 @@ This guide explains how to load balance multiple DSPACE instances using Cloudfla
 
 ## Overview
 
-Instead of running an Nginx reverse proxy, each DSPACE instance exposes port **3002** through its own Cloudflare Tunnel. Cloudflare's load balancer distributes incoming traffic across these tunnels, providing high availability without additional infrastructure.
+Instead of running an Nginx reverse proxy, each DSPACE instance exposes port **3002** through its
+own Cloudflare Tunnel. Cloudflare's load balancer distributes incoming traffic across these
+tunnels, providing high availability without additional infrastructure.
 
 ## Steps
 
@@ -22,9 +24,24 @@ Instead of running an Nginx reverse proxy, each DSPACE instance exposes port **3
    - Optionally configure session affinity or geographic routing.
 
 3. **Update DNS**
-   Cloudflare manages the DNS records automatically for each tunnel. Once the load balancer is active, users are directed to a healthy instance.
+   Cloudflare manages the DNS records automatically for each tunnel. Once the load balancer is
+   active, users are directed to a healthy instance.
+
+## Testing
+
+After configuring the load balancer, verify that traffic fails over when an instance goes offline.
+
+1. Stop one DSPACE node so its tunnel reports unhealthy.
+2. Run:
+   ```bash
+   curl -I https://dspace.example.com
+   ```
+   The request should still return `200`, showing Cloudflare routed to a healthy node.
+3. Start the stopped node and repeat to confirm it re-enters rotation.
 
 ## Related Guides
 
-- [Raspberry Pi Deployment Guide](./RPI_DEPLOYMENT_GUIDE.md) – shows how to run DSPACE on a k3s cluster with Cloudflare Tunnel.
-- [Monitoring Setup](./monitoring_setup.md) – add Prometheus and Grafana to watch the health of each instance.
+- [Raspberry Pi Deployment Guide](./RPI_DEPLOYMENT_GUIDE.md) – shows how to run DSPACE on a k3s
+  cluster with Cloudflare Tunnel.
+- [Monitoring Setup](./monitoring_setup.md) – add Prometheus and Grafana to watch the health of
+  each instance.
