@@ -7,13 +7,24 @@ const STORE_NAME = 'quests';
 
 let dbInstance = null;
 
+function getIndexedDB() {
+    const g = typeof window !== 'undefined' ? window : globalThis;
+    return g.indexedDB || g.webkitIndexedDB || g.mozIndexedDB || g.msIndexedDB || null;
+}
+
 function openDB() {
     return new Promise((resolve, reject) => {
         if (dbInstance) {
             return resolve(dbInstance);
         }
 
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        const idb = getIndexedDB();
+        if (!idb) {
+            reject(new Error('IndexedDB is not supported'));
+            return;
+        }
+
+        const request = idb.open(DB_NAME, DB_VERSION);
 
         request.onupgradeneeded = (event) => {
             const db = event.target.result;
@@ -141,7 +152,12 @@ export const CUSTOM_CONTENT_DB_VERSION = 2;
 
 export const openCustomContentDB = () => {
     return new Promise((resolve, reject) => {
-        const request = window.indexedDB.open('CustomContent', CUSTOM_CONTENT_DB_VERSION);
+        const idb = getIndexedDB();
+        if (!idb) {
+            reject(new Error('IndexedDB is not supported'));
+            return;
+        }
+        const request = idb.open('CustomContent', CUSTOM_CONTENT_DB_VERSION);
 
         request.onupgradeneeded = (e) => {
             const db = e.target.result;
