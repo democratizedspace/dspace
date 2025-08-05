@@ -25,6 +25,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "It reads about 12.6 V.",
+                    "process": "measure-battery-voltage",
                     "requiresItems": [
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",

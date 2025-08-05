@@ -105,9 +105,10 @@ USER:
    `hardening` block or has a low score.
 2. Improve clarity, realism and item references. Ensure durations are feasible
    and related items exist in `frontend/src/pages/inventory/json/items.json`.
-3. Update or create the process's `hardening` block, incrementing `passes`,
-   refreshing the evaluator `score`, swapping the status `emoji` and appending a
-   history entry with the Codex task ID, date and score. Choose the emoji based
+3. When updating the `image` field, reuse an existing image URL already in the repository; do not introduce new or external images.
+4. Update or create the process's `hardening` block, incrementing `passes`,
+    refreshing the evaluator `score`, swapping the status `emoji` and appending a
+    history entry with the Codex task ID, date and score. Choose the emoji based
    on:
    - 0 passes → score 0 → 🛠️ Draft
    - ≥1 pass & score ≥60 → 🌀 First polishing pass
@@ -122,7 +123,7 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm test -- processQuality itemQuality`. Update docs or items if needed.
 
 OUTPUT:
@@ -133,7 +134,7 @@ A pull request with the refined process, updated hardening block and passing tes
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus.
--   **Use system prompts** to guide tone and technical accuracy.
--   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible but incorrect details.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible but incorrect details.
