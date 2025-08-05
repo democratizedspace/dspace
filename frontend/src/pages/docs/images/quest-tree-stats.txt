@@ -7,7 +7,7 @@ electronics: 11 quests, 803 lines
 3dprinting: 9 quests, 604 lines
 robotics: 8 quests, 429 lines
 chemistry: 7 quests, 376 lines
-firstaid: 7 quests, 419 lines
+firstaid: 7 quests, 422 lines
 programming: 7 quests, 334 lines
 woodworking: 7 quests, 574 lines
 rocketry: 6 quests, 602 lines
