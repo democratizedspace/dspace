@@ -1,12 +1,15 @@
 {
     "id": "chemistry/ph-test",
     "title": "Measure Solution pH",
-    "description": "Use pH strips to check the acidity of your latest experiment while staying safe.",
+    "description": "Use pH strips to check solution acidity with proper protective gear.",
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "\ud83c\udf00",
-        "history": [{ "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 }]
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
+        "history": [
+            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
+            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 80 }
+        ]
     },
     "image": "/assets/pH_strip.jpg",
     "npc": "/assets/npc/phoenix.jpg",
@@ -14,7 +17,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Before we mix anything more reactive, let's practice measuring pH. Gather a pH strip, nitrile gloves, and safety goggles so you can record accurate data safely.",
+            "text": "Before we mix anything more reactive, let's practice measuring pH. Gather a pH strip, a pair of nitrile gloves, and safety goggles. Place your solution on a stable surface so you can log data safely.",
             "options": [
                 {
                     "type": "goto",
@@ -25,7 +28,7 @@
         },
         {
             "id": "measure",
-            "text": "With gloves and goggles on, dip a pH strip into your solution, avoid splashes, and compare the color to the chart. Precise readings keep reactions predictable.",
+            "text": "With gloves and goggles on, hold the pH strip by the dry end, dip for a second, avoid splashes, and compare the color to the chart. Precise readings keep reactions predictable.",
             "options": [
                 {
                     "type": "process",
@@ -55,7 +58,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! We'll use those readings when formulating safer propellants. Dispose of the used strip and rinse any glassware.",
+            "text": "Nice work! We'll use those readings when formulating safer propellants. Toss the used strip in the trash and wash your hands.",
             "options": [
                 {
                     "type": "finish",

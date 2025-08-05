@@ -1,0 +1,55 @@
+{
+    "id": "hydroponics/top-off",
+    "title": "Top Off the Reservoir",
+    "description": "Add fresh water to keep nutrient levels stable.",
+    "image": "/assets/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Evaporation and thirsty roots lower the solution level. Let's top off your reservoir.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fill",
+                    "text": "Let's do it."
+                }
+            ]
+        },
+        {
+            "id": "fill",
+            "text": "Grab a bucket of dechlorinated water and pour until the roots are covered again.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "I need to prep some water first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Water added!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Keeping the reservoir topped off maintains nutrient concentration and pump performance.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All set."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/pump-install"]
+}

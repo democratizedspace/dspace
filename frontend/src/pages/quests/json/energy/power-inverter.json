@@ -1,0 +1,50 @@
+{
+    "id": "energy/power-inverter",
+    "title": "Install a Power Inverter",
+    "description": "Convert your battery's DC output into AC for household gear.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your battery bank works great. Let's add a 300W inverter so you can run AC gadgets.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "I'm ready."
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Connect the inverter to the battery using thick leads and a fuse.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Inverter humming!",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! You've got AC power off-grid.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Time to plug in."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/battery-upgrade"]
+}
