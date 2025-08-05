@@ -4,6 +4,8 @@
     export let offlineText = 'Offline - changes will sync when connection restores';
 
     let online = true;
+    let isClientSide = false;
+
     function updateStatus() {
         if (typeof navigator !== 'undefined') {
             online = navigator.onLine;
@@ -11,6 +13,7 @@
     }
 
     onMount(() => {
+        isClientSide = true;
         if (typeof window !== 'undefined') {
             updateStatus();
             window.addEventListener('online', updateStatus);
@@ -25,7 +28,11 @@
     });
 </script>
 
-<div data-testid="connection-status" class="connection-status">
+<div
+    data-testid="connection-status"
+    class="connection-status"
+    data-hydrated={isClientSide ? 'true' : 'false'}
+>
     {#if online}
         {onlineText}
     {:else}
