@@ -1,0 +1,43 @@
+{
+    "id": "electronics/solder-wire",
+    "title": "Solder a Wire Connection",
+    "description": "Use a soldering iron to join two wires and restore a circuit.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A sensor lead snapped. Want to solder it back together?",
+            "options": [
+                { "type": "goto", "goto": "prep", "text": "Let's fix it." }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Strip a little insulation, twist the ends, then heat the joint with your iron while feeding solder until it flows.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Joint looks solid.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. The connection is strong and conductive again.",
+            "options": [
+                { "type": "finish", "text": "Thanks, Orion!" }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}
