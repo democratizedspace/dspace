@@ -1724,6 +1724,22 @@
         "duration": "10m"
     },
     {
+        "id": "arduino-light-sensor",
+        "title": "Read a photoresistor with Arduino",
+        "requireItems": [
+            { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
+            { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 3 },
+            { "id": "d407f02d-1c24-4aef-83ac-6973a56941e3", "count": 1 },
+            { "id": "640faf83-912f-4d85-9ab1-db16363afbf0", "count": 1 },
+            { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
+            { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
         "id": "drip-acclimate-shrimp",
         "title": "Drip acclimate dwarf shrimp to your aquarium",
         "requireItems": [

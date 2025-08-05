@@ -777,6 +777,20 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "640faf83-912f-4d85-9ab1-db16363afbf0",
+        "name": "10 kΩ Resistor",
+        "description": "A resistor commonly used in sensor voltage dividers.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "d407f02d-1c24-4aef-83ac-6973a56941e3",
+        "name": "Photoresistor",
+        "description": "A light-dependent resistor that changes resistance with brightness.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
         "name": "LED indicator module",
         "description": "5 mm red LED pre-wired with a 220 Ω resistor and jumper leads for breadboard projects.",

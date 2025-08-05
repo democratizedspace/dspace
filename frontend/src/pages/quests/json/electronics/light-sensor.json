@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey again! Let's hook up a photoresistor so the Arduino can detect light levels.",
+            "text": "Hey again! Let's hook up a photoresistor so the Arduino can detect light levels. Work on a non-conductive surface and keep the board unplugged while wiring.",
             "options": [{ "type": "goto", "goto": "wire", "text": "What do I need?" }]
         },
         {
             "id": "wire",
-            "text": "Place the photoresistor and a 10 kΩ resistor on the breadboard to form a voltage divider. Connect the junction to A0 on the Arduino and power the circuit.",
+            "text": "Gather an Arduino Uno, breadboard, three jumper wires, a photoresistor, a 10 kΩ resistor, a USB cable and a laptop with the Arduino IDE. Insert the photoresistor and 10 kΩ resistor to form a voltage divider, connect the junction to A0 and the other legs to 5V and GND, then double-check connections before powering the board.",
             "options": [
                 {
                     "type": "goto",
@@ -21,22 +21,42 @@
                     "text": "Wired up!",
                     "requiresItems": [
                         { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
-                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 }
+                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
+                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 3 },
+                        { "id": "d407f02d-1c24-4aef-83ac-6973a56941e3", "count": 1 },
+                        { "id": "640faf83-912f-4d85-9ab1-db16363afbf0", "count": 1 },
+                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "code",
-            "text": "Upload a sketch that reads the analog value from A0 and prints it to the serial monitor. Watch the numbers change as light levels vary.",
+            "text": "Plug the board into the laptop, open the Arduino IDE and load a sketch that uses analogRead(A0) and Serial.println to print the value. Select Board > Arduino Uno and the correct port, upload, then open the Serial Monitor to watch numbers shift as you cover or shine light on the sensor. Avoid staring into bright lights and keep tools clear while powered.",
             "options": [{ "type": "goto", "goto": "finish", "text": "Numbers are changing!" }]
         },
         {
             "id": "finish",
-            "text": "Nice work! You've built a basic light sensor for your future projects.",
-            "options": [{ "type": "finish", "text": "Cool!" }]
+            "text": "Nice work! You've built a basic light sensor for your future projects. Unplug the USB cable before reworking the circuit. For a detailed walkthrough later, see the 'Read a photoresistor with Arduino' process.",
+            "options": [
+                { "type": "process", "process": "arduino-light-sensor", "text": "Open the detailed light sensor process" },
+                { "type": "finish", "text": "Cool!" }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": []
+    "requiresQuests": [],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-refine-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            }
+        ]
+    }
 }
