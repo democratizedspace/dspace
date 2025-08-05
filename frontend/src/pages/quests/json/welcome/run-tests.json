@@ -1,0 +1,28 @@
+{
+    "id": "welcome/run-tests",
+    "title": "Run the Test Suite",
+    "description": "Learn how to run DSPACE's automated tests to ensure your changes are correct.",
+    "image": "/assets/quests/completionist.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Testing your work is helpful to keep DSPACE reliable. I'll guide you through running the tests locally so you can assist future explorers.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Run tests" }]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! Running the test suite provides useful information and ensures your contributions are solid.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All tests passed",
+                    "grantsItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }]
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}
