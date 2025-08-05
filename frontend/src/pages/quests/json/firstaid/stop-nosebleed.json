@@ -1,14 +1,14 @@
 {
     "id": "firstaid/stop-nosebleed",
     "title": "Stop a Nosebleed",
-    "description": "Sit up straight, lean forward, and pinch the soft part of your nose with sterile gauze to control a minor bleed.",
+    "description": "Sit up straight, lean forward, and pinch the soft part of your nose with sterile gauze to control a minor bleed. Wear nitrile gloves and avoid tilting your head back.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You're bleeding from the nose. Let's handle it safely before it drips everywhere.",
+            "text": "You're bleeding from the nose. Take a seat, stay calm, and let's stop it safely.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "pressure",
-            "text": "Sit upright and lean slightly forward so blood drains out. With nitrile gloves on, press a sterile gauze pad against the soft part of your nose and pinch for at least ten minutes.",
+            "text": "Sit upright on a chair and lean slightly forward so blood drains out instead of down your throat. Put on nitrile gloves, fold a sterile gauze pad over the soft part of your nose, and pinch firmly. Breathe through your mouth and keep steady pressure for at least 10 minutes without checking early.",
             "options": [
                 {
                     "type": "goto",
@@ -40,8 +40,13 @@
         },
         {
             "id": "finish",
-            "text": "If bleeding hasn't stopped after 20 minutes, is heavy, or you feel faint, seek medical help. Otherwise rest and avoid blowing your nose for a while.",
+            "text": "If bleeding hasn't stopped after 20 minutes, is heavy, or you feel faint, seek medical help. Otherwise rest, keep your head elevated, and avoid blowing or picking your nose for the rest of the day.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "stop-nosebleed",
+                    "text": "Review nosebleed control steps"
+                },
                 {
                     "type": "finish",
                     "text": "Will do."
@@ -52,14 +57,19 @@
     "rewards": [],
     "requiresQuests": ["firstaid/assemble-kit"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 75,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",
                 "date": "2025-08-05",
                 "score": 60
+            },
+            {
+                "task": "codex-refine-2025-08-05",
+                "date": "2025-08-05",
+                "score": 75
             }
         ]
     }

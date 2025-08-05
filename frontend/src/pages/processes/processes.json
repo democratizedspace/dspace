@@ -1850,5 +1850,16 @@
         "consumeItems": [{ "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }],
         "createItems": [],
         "duration": "1m"
+    },
+    {
+        "id": "stop-nosebleed",
+        "title": "Control a minor nosebleed",
+        "requireItems": [],
+        "consumeItems": [
+            { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+            { "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9", "count": 1 }
+        ],
+        "createItems": [],
+        "duration": "10m"
     }
 ]
