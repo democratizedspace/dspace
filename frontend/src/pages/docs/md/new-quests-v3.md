@@ -120,6 +120,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 
 ### hydroponics
 
+- hydroponics/filter-clean
 - hydroponics/grow-light
 - hydroponics/lettuce
 - hydroponics/nutrient-check
@@ -167,6 +168,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 
 - welcome/connect-github
 - welcome/intro-inventory
+- welcome/run-tests
 - welcome/smart-plug-test
 
 ### woodworking
