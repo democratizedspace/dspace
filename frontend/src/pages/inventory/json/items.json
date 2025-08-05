@@ -777,6 +777,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
+        "name": "LED indicator module",
+        "description": "5 mm red LED pre-wired with a 220 Ω resistor and jumper leads for breadboard projects.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
         "name": "USB Cable",
         "description": "Connects the Arduino to your computer for programming.",

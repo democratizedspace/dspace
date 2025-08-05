@@ -1807,20 +1807,23 @@
         "id": "solder-led-resistor",
         "title": "Use a soldering iron kit to join a 5 mm LED and a 220 Ω resistor with two jumper wires",
         "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 }
+        ],
+        "consumeItems": [
             { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
             { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
             { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
         ],
-        "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            { "id": "6da4a788-b743-4682-8dbe-f23d71435aa4", "count": 1 }
+        ],
         "duration": "15m",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 70,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-hardening-2025-06-24", "date": "2025-06-24", "score": 65 }
+                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 70 }
             ]
         }
     },
