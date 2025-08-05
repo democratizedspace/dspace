@@ -1829,11 +1829,29 @@
     },
     {
         "id": "print-phone-stand",
-        "title": "3D print a smartphone stand",
-        "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
-        "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 20 }],
-        "createItems": [{ "id": "9018feac-7213-4eef-9654-b06dbd9404ea", "count": 1 }],
-        "duration": "2h"
+        "title": "3D print a smartphone stand on Real Printer 1 using 20 g of white PLA",
+        "requireItems": [
+            { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }
+        ],
+        "consumeItems": [
+            { "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 20 }
+        ],
+        "createItems": [
+            { "id": "9018feac-7213-4eef-9654-b06dbd9404ea", "count": 1 }
+        ],
+        "duration": "2h",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "check-iss-pass",
