@@ -1228,6 +1228,14 @@
         "type": "tool"
     },
     {
+        "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+        "name": "digital multimeter",
+        "description": "Measures voltage, current, and resistance in circuits. Features auto-ranging display.",
+        "image": "/assets/multimeter.jpg",
+        "price": "15 dUSD",
+        "type": "tool"
+    },
+    {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",
         "name": "astronaut poster",
         "description": "A glossy poster featuring NASA astronauts floating in microgravity.",
