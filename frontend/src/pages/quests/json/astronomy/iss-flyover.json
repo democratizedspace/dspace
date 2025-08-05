@@ -1,14 +1,22 @@
 {
     "id": "astronomy/iss-flyover",
     "title": "Spot the ISS",
-    "description": "Use tracking apps and a small telescope to watch the International Space Station pass overhead.",
+    "description": "Use a satellite-tracking app and a basic telescope to watch the International Space Station pass overhead.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+        ]
+    },
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The ISS is visible a few times each week. Let's catch a flyover.",
+            "text": "The ISS crosses our sky a few times each week. We'll use an app to plan tonight's flyover.",
             "options": [
                 {
                     "type": "goto",
@@ -19,8 +27,13 @@
         },
         {
             "id": "observe",
-            "text": "Check the schedule on your phone and aim your telescope as it rises in the west.",
+            "text": "Open a tracker like Heavens-Above on your smartphone to find tonight's pass. Set the telescope on stable ground, watch for trip hazards, and never aim it near the Sun.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "check-iss-pass",
+                    "text": "The app shows a flyover soon."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
@@ -36,7 +49,7 @@
         },
         {
             "id": "finish",
-            "text": "Awesome! It's inspiring to see humans living in orbit.",
+            "text": "Awesome! It's inspiring to see humans living in orbit. Pack up and watch your footing in the dark.",
             "options": [
                 {
                     "type": "finish",
@@ -48,3 +61,4 @@
     "rewards": [],
     "requiresQuests": ["astronomy/observe-moon"]
 }
+
