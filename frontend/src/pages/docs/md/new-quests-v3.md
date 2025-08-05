@@ -74,6 +74,7 @@ These quests exist in the `v3` branch but are not present on `main` yet. Use thi
 - devops/monitoring
 - devops/pi-cluster-hardware
 - devops/prepare-first-node
+- devops/private-registry
 - devops/ssd-boot
 - devops/ssh-hardening
 
