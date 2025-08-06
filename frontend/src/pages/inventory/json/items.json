@@ -1,10 +1,19 @@
 [
     {
         "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-        "name": "Real Printer 1",
-        "description": "A basic cheap printer that is easy to use and has a large community of users.",
+        "name": "entry-level FDM 3D printer",
+        "description": "Entry-level FDM printer with 220 x 220 x 250 mm build volume and heated bed; open-source firmware.",
         "image": "/assets/3dprinter.jpg",
-        "price": "200 dUSD"
+        "price": "200 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     },
     {
         "id": "7892ffc6-c651-445f-946b-7edc998cf389",
