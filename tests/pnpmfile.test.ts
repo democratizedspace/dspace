@@ -1,13 +1,11 @@
+import pnpmfile from '../pnpmfile.cjs';
 import { describe, it, expect } from 'vitest';
 
-describe('pnpmfile.cjs', () => {
-  it('pre-approves native builds', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const pnpmfile = require('../pnpmfile.cjs');
-    expect(pnpmfile?.config?.allowedBuiltDependencies).toEqual([
-      'canvas',
-      'esbuild',
-      '@swc/core'
-    ]);
+describe('pnpmfile', () => {
+  it('pre-approves native build dependencies', () => {
+    const context = { resolutionBuilds: new Set<string>() };
+    const lockfile = {};
+    pnpmfile.hooks.afterAllResolved(lockfile, context as any);
+    expect([...context.resolutionBuilds]).toEqual(['canvas', 'esbuild', '@swc/core']);
   });
 });
