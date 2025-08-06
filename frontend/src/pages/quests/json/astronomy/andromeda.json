@@ -8,48 +8,50 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Tonight we hunt for the Andromeda Galaxy. Ready to chart the stars?",
+            "text": "Nova here. Head to a dark site, let your eyes adjust for 15 minutes, and keep screens dim. Bring a planisphere star chart and a red flashlight to protect night vision. Ready?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "search",
-                    "text": "Absolutely."
+                    "text": "Gear ready.",
+                    "requiresItems": [
+                        { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 },
+                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "search",
-            "text": "First find the distinctive W of Cassiopeia and follow it to a faint smudge.",
+            "text": "Use the star chart to find Cassiopeia's W. From its midpoint, sweep a bit to a faint smudge—that's Andromeda. Keep the telescope steady and never aim near the Sun or aircraft.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Spotting Cassiopeia."
+                    "text": "Following the chart."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
-                            "count": 1
-                        }
-                    ],
-                    "text": "I see Andromeda."
+                    "requiresItems": [{ "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }],
+                    "text": "Galaxy in sight."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great work! Observing Andromeda gets easier every season.",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Amazing view."
-                }
-            ]
+            "text": "Nice work! Note the position for next time, then pack the chart, flashlight, and telescope before leaving.",
+            "options": [{ "type": "finish", "text": "Logging observations." }]
         }
     ],
     "rewards": [],
-    "requiresQuests": []
+    "requiresQuests": [],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 60 }
+        ]
+    }
 }
