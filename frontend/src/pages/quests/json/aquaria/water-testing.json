@@ -1,7 +1,7 @@
 {
     "id": "aquaria/water-testing",
     "title": "Test water parameters",
-    "description": "Use an Aquarium liquid test kit to check ammonia, nitrite and nitrate before adding shrimp. Wear nitrile gloves and safety goggles, and follow the kit instructions carefully.",
+    "description": "Check ammonia, nitrite and nitrate with an Aquarium liquid test kit before adding shrimp. Wear nitrile gloves, safety goggles and discard reagents per the manual.",
     "image": "/assets/quests/walstad.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
@@ -19,7 +19,7 @@
         },
         {
             "id": "explain",
-            "text": "Use an Aquarium liquid test kit. Rinse test tubes with tank water, then add reagents per the instructions. Wear nitrile gloves and safety goggles to avoid chemical contact. Check ammonia and nitrite first—they should read zero. Nitrate should stay under 40 ppm.",
+            "text": "Use an Aquarium liquid test kit. Rinse each tube with tank water, fill to the line, then add the specified drops. Cap and shake away from your face. Wear nitrile gloves and safety goggles to avoid splashes. Ammonia and nitrite must be 0 ppm; keep nitrate under 40 ppm.",
             "options": [
                 {
                     "type": "goto",
@@ -44,7 +44,7 @@
         },
         {
             "id": "results",
-            "text": "If you see ammonia or nitrite, give the tank more time. If nitrate is high, start a partial water change to dilute it and dispose of used test water safely.",
+            "text": "If ammonia or nitrite shows up, let the tank cycle longer. If nitrate is high, start a partial water change to dilute it. Pour spent test water down the drain and rinse the tubes before storing.",
             "options": [
                 {
                     "type": "process",
@@ -66,12 +66,13 @@
     ],
     "requiresQuests": ["aquaria/walstad"],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
-            { "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 80 }
+            { "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 80 },
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 }
         ]
     }
 }
