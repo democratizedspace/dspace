@@ -537,9 +537,17 @@
     {
         "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
         "name": "aquarium (150 L)",
-        "description": "A glass tank for housing fish.",
+        "description": "90×45×45 cm (150 L/40 gal) glass aquarium with 6 mm tempered panels; shipped empty without lid.",
         "image": "/assets/aquarium_empty.jpg",
-        "price": "60 dUSD"
+        "price": "120 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     },
     {
         "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
