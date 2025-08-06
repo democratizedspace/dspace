@@ -9,3 +9,4 @@ DSPACE avoids traditional user accounts. The only time authentication occurs is 
 5. You can clear the saved token using the **Clear Token** button or by removing it from your GitHub settings.
 
 Tokens are never sent to any server other than GitHub. Remember to revoke the token from GitHub whenever you no longer need it.
+User-generated markdown is sanitized with DOMPurify before rendering to prevent cross-site scripting (XSS).
