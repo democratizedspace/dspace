@@ -17,9 +17,13 @@ module.exports = {
   "frontend/**/*.ts": [
     () => "npm run check"
   ],
-  
+
+  // Validate quest JSON files
+  "frontend/src/pages/quests/json/**/*.json": (files) =>
+    files.map((file) => `node scripts/validate-quest.js ${file}`),
+
   // Format JSON, markdown, and CSS files
   "frontend/**/*.{json,md,css,scss}": [
     "npm run format -- --quiet"
   ]
-} 
+}

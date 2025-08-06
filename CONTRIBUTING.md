@@ -19,10 +19,11 @@ Thank you for your interest in helping the project! Below is a quick overview of
   npm run check
   ```
 - The test suite verifies file formatting, so unformatted changes will fail CI.
-- The pre-commit hook runs `lint-staged`, `npm run check`, and then `SKIP_E2E=1 npm test` to make sure tests are green. You can run it manually with:
-  ```bash
-  SKIP_E2E=1 npm test
-  ```
+- The pre-commit hook validates quest schemas, runs `lint-staged`, `npm run check`,
+  and `SKIP_E2E=1 npm test`. Run it manually with:
+    ```bash
+    SKIP_E2E=1 npm test
+    ```
 - If Playwright browsers are missing, install them with `npx playwright install chromium` or set `SKIP_E2E=1`.
 
 ## Opening a Pull Request

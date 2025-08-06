@@ -227,6 +227,7 @@ This runs unit tests and a subset of critical E2E tests.
 The repository includes a pre-commit hook that automatically runs:
 
 - Code formatting and linting checks
+- Quest schema validation for changed quests
 - Quick test suite (unit tests + critical E2E tests)
 
 This ensures that committed code maintains quality standards.
