@@ -1382,9 +1382,17 @@
     {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",
         "name": "astronaut poster",
-        "description": "A glossy poster featuring NASA astronauts floating in microgravity.",
+        "description": "61×91 cm (24×36 in) 150 g/m² poster of NASA astronauts in microgravity.",
         "image": "/assets/astronauts.jpg",
-        "price": "5 dUSD"
+        "price": "10 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     },
     {
         "id": "70bb8d86-2c4e-4330-9705-371891934686",
