@@ -1,14 +1,14 @@
 {
     "id": "firstaid/learn-cpr",
     "title": "Practice Basic CPR",
-    "description": "Practice 30:2 chest compressions on a manikin with nitrile gloves and a CPR pocket mask. Make sure the area is safe, call emergency services before starting and sanitize gear afterward.",
+    "description": "Practice 30:2 compressions on a CPR manikin using nitrile gloves, a pocket mask and antiseptic wipes from your first aid kit. Confirm the area is safe, call emergency services first and sanitize gear after. This exercise does not replace formal certification.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the manikin on a firm surface, put on nitrile gloves and fit the CPR pocket mask from your first aid kit. Check the area for hazards, then call emergency services before beginning.",
+            "text": "Place the manikin on a firm surface. Put on nitrile gloves, set the pocket mask and open antiseptic wipes from your first aid kit. Check for hazards, call emergency services, then begin.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "steps",
-            "text": "With the manikin on its back, place the heel of one hand on the center of its chest and interlock your fingers. Keep your arms straight and press 2 inches deep at 100–120 compressions per minute, allowing full recoil. After 30 compressions, tilt the head, seal the pocket mask and give two breaths if trained.",
+            "text": "With the manikin on its back, place the heel of one hand on the chest center and interlock your fingers. Keep arms straight and push 2 inches deep at 100–120 compressions per minute, letting the chest rise fully. After 30 compressions, tilt the head, seal the mask and give two breaths if trained. Stop if anything seems unsafe.",
             "options": [
                 {
                     "type": "process",
@@ -29,7 +29,8 @@
                         { "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 },
                         { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
                         { "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 },
-                        { "id": "b397aa70-3503-4e40-b84a-4d5609578d2b", "count": 1 }
+                        { "id": "b397aa70-3503-4e40-b84a-4d5609578d2b", "count": 1 },
+                        { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 1 }
                     ]
                 },
                 {
@@ -39,7 +40,8 @@
                         { "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 },
                         { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
                         { "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 },
-                        { "id": "b397aa70-3503-4e40-b84a-4d5609578d2b", "count": 1 }
+                        { "id": "b397aa70-3503-4e40-b84a-4d5609578d2b", "count": 1 },
+                        { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 1 }
                     ],
                     "text": "I know the basics."
                 }
@@ -47,7 +49,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job. Wipe the manikin and mask with antiseptic wipes and return everything to your first aid kit. Real emergencies should be handled by certified professionals whenever possible.",
+            "text": "Great job. Clean the manikin and pocket mask with antiseptic wipes and return everything to your first aid kit. Real emergencies should be handled by certified professionals whenever possible.",
             "options": [
                 {
                     "type": "finish",
@@ -59,13 +61,14 @@
     "rewards": [],
     "requiresQuests": ["firstaid/assemble-kit"],
     "hardening": {
-        "passes": 3,
-        "score": 92,
+        "passes": 4,
+        "score": 95,
         "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
             { "task": "codex-refine-cpr-2025-02-14", "date": "2025-02-14", "score": 80 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 }
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 },
+            { "task": "codex-refresh-cpr-2025-08-06", "date": "2025-08-06", "score": 95 }
         ]
     }
 }
