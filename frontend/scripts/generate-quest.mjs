@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { writeFileSync, mkdirSync, readdirSync, readFileSync, statSync } from 'fs';
-import glob from 'glob';
+import { globSync } from 'glob';
 import path from 'path';
 import readline from 'readline';
 
@@ -33,8 +33,7 @@ async function main() {
     const { categories, npcCounts } = gatherStats();
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
     const questRoot = path.join('frontend', 'src', 'pages', 'quests', 'json');
-    const existing = glob
-        .sync(path.join(questRoot, '**/*.json'))
+    const existing = globSync(path.join(questRoot, '**/*.json'))
         .map((f) => path.relative(questRoot, f).replace(/\.json$/, ''));
 
     const args = process.argv.slice(2);

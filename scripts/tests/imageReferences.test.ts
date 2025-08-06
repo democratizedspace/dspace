@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import fs from 'fs';
 import path from 'path';
-import glob from 'glob';
+import { globSync } from 'glob';
 import { listMissingImages } from '../utils/fs-checks';
 
 const questsDir = path.join(__dirname, '../../frontend/src/pages/quests/json');
@@ -15,7 +15,7 @@ const npcFile = path.join(
 );
 
 function collectQuestImages() {
-  const files = glob.sync(path.join(questsDir, '**/*.json'));
+  const files = globSync(path.join(questsDir, '**/*.json'));
   const imgs = [];
   files.forEach((file) => {
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));

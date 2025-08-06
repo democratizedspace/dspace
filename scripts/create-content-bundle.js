@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
+const { globSync } = require('glob');
 
 function collect(patterns) {
-  const files = patterns.flatMap((p) => glob.sync(p));
+  const files = patterns.flatMap((p) => globSync(p));
   return files.map((f) => JSON.parse(fs.readFileSync(f, 'utf8')));
 }
 

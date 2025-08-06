@@ -3,12 +3,12 @@
  */
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
+const { globSync } = require('glob');
 const { findQuestDependencyIssues } = require('../src/utils/questDependencies.js');
 
 describe('Quest dependency integrity', () => {
     const questDir = path.join(__dirname, '../src/pages/quests/json');
-    const files = glob.sync(path.join(questDir, '**/*.json'));
+    const files = globSync(path.join(questDir, '**/*.json'));
     const quests = new Map();
 
     files.forEach((file) => {

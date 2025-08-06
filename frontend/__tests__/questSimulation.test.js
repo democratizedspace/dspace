@@ -3,7 +3,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
+const { globSync } = require('glob');
 const { questHasFinishPath } = require('../src/utils/simulateQuest.js');
 
 const questFile = path.join(__dirname, '../test-data/constellations-quest.json');
@@ -46,7 +46,7 @@ describe('Quest simulation', () => {
 
     test('all canonical quests have a path to finish', () => {
         const questDir = path.join(__dirname, '../src/pages/quests/json');
-        const files = glob.sync(path.join(questDir, '**/*.json'));
+        const files = globSync(path.join(questDir, '**/*.json'));
         files.forEach((file) => {
             const quest = JSON.parse(fs.readFileSync(file));
             expect(questHasFinishPath(quest)).toBe(true);

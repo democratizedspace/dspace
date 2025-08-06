@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
+const { globSync } = require('glob');
 
 const questsPattern = path.join(
   __dirname,
@@ -49,7 +49,7 @@ function collectItemDeps(obj, questId, map) {
 }
 
 function buildMap() {
-  const files = glob.sync(questsPattern);
+  const files = globSync(questsPattern);
   const map = {};
   files.forEach((file) => {
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));
