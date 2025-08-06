@@ -245,7 +245,8 @@
     },
     {
         "id": "bucket-water-dechlorinated",
-        "title": "dechlorinate a 5 gallon bucket of tap water",
+        "title": "Leave a 5 gal bucket of tap water uncovered for 48h so chlorine dissipates",
+        "image": "/assets/bucket_water.jpg",
         "requireItems": [],
         "consumeItems": [
             {
@@ -259,7 +260,19 @@
                 "count": 1
             }
         ],
-        "duration": "48h"
+        "duration": "48h",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "rockwool-soak",
