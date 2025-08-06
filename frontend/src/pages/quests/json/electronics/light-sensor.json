@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey again! Orion here. Let's build a light sensor. Place everything on a wooden or plastic work area, touch grounded metal to dump static, keep hands dry, and unplug the board while wiring so nothing shorts out.",
+            "text": "Hey again! Orion here. Let's build a light sensor. Work on a non-conductive surface, discharge static by touching grounded metal, keep hands dry, and unplug the board before wiring to avoid shorts.",
             "options": [{ "type": "goto", "goto": "materials", "text": "What do I need?" }]
         },
         {
             "id": "materials",
-            "text": "Collect an Arduino Uno, a breadboard, three jumper wires, a photoresistor, a 10 kΩ resistor, a USB cable, and a laptop running the Arduino IDE. Lay parts out separately so metal leads can't touch.",
+            "text": "Gather one Arduino Uno, a breadboard, three jumper wires, one photoresistor, one 10 kΩ resistor, one USB cable, a digital multimeter, and a laptop with the Arduino IDE installed. Keep components organized so leads don't touch or short.",
             "options": [
                 {
                     "type": "process",
@@ -31,6 +31,7 @@
                         { "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3", "count": 1 },
                         { "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac", "count": 1 },
                         { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
                         { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
                     ]
                 }
@@ -38,7 +39,7 @@
         },
         {
             "id": "wire",
-            "text": "Unplug the USB cable. On the breadboard, tie one leg of the photoresistor to 5 V and the other leg to one side of the 10 kΩ resistor. Join the resistor's free leg to GND, then run a jumper from their junction to A0. Verify the resistor value and ensure no bare wires contact before restoring power.",
+            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5 V and the other to one side of the 10 kΩ resistor, then connect the resistor's far leg to GND. Use the multimeter to confirm roughly 10 kΩ, run a jumper from the junction to A0, and make sure no bare wires touch before powering up.",
             "options": [{ "type": "goto", "goto": "code", "text": "Wired up!" }]
         },
         {
