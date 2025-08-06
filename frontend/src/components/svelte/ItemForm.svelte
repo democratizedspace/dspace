@@ -11,6 +11,7 @@
     export let type = '';
 
     const dispatch = createEventDispatcher();
+    let validationErrors = {};
 
     function handleImageUpload(event) {
         const file = event.target.files[0];
@@ -21,20 +22,37 @@
             };
             reader.readAsDataURL(file);
             image = file;
+            delete validationErrors.image;
         } else {
             previewUrl = null;
             image = null;
         }
     }
 
+    function validateForm() {
+        const errors = {};
+        if (!name.trim()) {
+            errors.name = 'Name is required';
+        }
+        if (!description.trim()) {
+            errors.description = 'Description is required';
+        }
+        if (!image) {
+            errors.image = 'Image is required';
+        }
+        validationErrors = errors;
+        return Object.keys(errors).length === 0;
+    }
+
     function handleSubmit(event) {
         event.preventDefault();
+        if (!validateForm()) {
+            return;
+        }
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
-        if (image) {
-            formData.append('image', image);
-        }
+        formData.append('image', image);
         if (price) {
             formData.append('price', price);
         }
@@ -52,7 +70,16 @@
 <form on:submit={handleSubmit} enctype="multipart/form-data" class="item-form">
     <div class="form-group">
         <label for="name">Name*</label>
-        <input type="text" id="name" bind:value={name} placeholder="Item name" required />
+        <input
+            type="text"
+            id="name"
+            bind:value={name}
+            placeholder="Item name"
+            class:error={validationErrors.name}
+        />
+        {#if validationErrors.name}
+            <span class="error-message">{validationErrors.name}</span>
+        {/if}
     </div>
 
     <div class="form-group">
@@ -61,13 +88,25 @@
             id="description"
             bind:value={description}
             placeholder="Describe the item in detail"
-            required
+            class:error={validationErrors.description}
         />
+        {#if validationErrors.description}
+            <span class="error-message">{validationErrors.description}</span>
+        {/if}
     </div>
 
     <div class="form-group">
-        <label for="image">Attach an Image</label>
-        <input type="file" id="image" accept="image/*" on:change={handleImageUpload} />
+        <label for="image">Attach an Image*</label>
+        <input
+            type="file"
+            id="image"
+            accept="image/*"
+            on:change={handleImageUpload}
+            class:error={validationErrors.image}
+        />
+        {#if validationErrors.image}
+            <span class="error-message">{validationErrors.image}</span>
+        {/if}
         {#if previewUrl}
             <div class="image-preview-container">
                 <img src={previewUrl} class="image-preview" alt="Preview" />
@@ -157,6 +196,19 @@
         border-radius: 8px;
         font-size: 14px;
         cursor: pointer;
+    }
+
+    input.error,
+    textarea.error,
+    input[type='file'].error {
+        border-color: #ff3e3e;
+    }
+
+    .error-message {
+        color: #ff3e3e;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
     }
 
     .image-preview-container {

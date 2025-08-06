@@ -37,7 +37,7 @@ Every item requires the following basic properties:
 
 -   **name**: Descriptive name of the item (required)
 -   **description**: Detailed explanation of the item's purpose and use (required)
--   **image**: Visual representation of the item (optional, but recommended)
+    -   **image**: Visual representation of the item (required)
 -   **price**: Value in game currency (optional)
 -   **unit**: Measurement unit for the item (e.g., kg, L, watts) (optional)
 -   **type**: Classification or category (optional)
@@ -48,7 +48,7 @@ Currently, the `ItemForm.svelte` component supports creating items with the prop
 
 As you fill out the form, an `ItemPreview` component displays a live preview so you can confirm the details before submitting. The layout automatically adjusts on small screens so form fields expand to the full width for easier touch input. You can safely experiment with different values before saving—no data is written until you click **Create Item**.
 
-Automated Playwright tests verify that the preview appears when entering text and that uploaded images render correctly. This ensures cross-browser compatibility of the custom item workflow.
+The form provides inline validation messages if you attempt to submit without a name, description, or image, helping ensure items meet basic requirements before saving. Automated Playwright tests verify that the preview appears when entering text and that uploaded images render correctly. This ensures cross-browser compatibility of the custom item workflow.
 
 All items must now conform to the JSON schema located at `frontend/src/pages/inventory/jsonSchemas/item.json`. Run the `itemValidation` test to ensure any additions meet the schema requirements.
 
