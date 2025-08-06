@@ -898,6 +898,20 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "3326e89c-5883-473d-a68f-3ea560093966",
+        "name": "3D printed generator housing",
+        "description": "PLA housing that holds the motor and crank.",
+        "image": "/assets/3dprinter.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
+        "name": "3D printed crank handle",
+        "description": "PLA crank handle to spin a generator.",
+        "image": "/assets/3dprinter.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",
         "name": "Potentiometer",
         "description": "Variable resistor for adjusting signal levels in circuits.",
