@@ -1,14 +1,14 @@
 {
     "id": "electronics/check-battery-voltage",
     "title": "Check a battery pack's voltage",
-    "description": "Use a digital multimeter to check a 12 V LiFePO4 pack on a non-conductive surface while wearing safety goggles.",
+    "description": "Use a digital multimeter to check a 12 V LiFePO4 battery pack after disconnecting it and placing it on a dry, non-conductive surface. Wear safety goggles throughout.",
     "image": "/assets/battery.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Put on safety goggles, set the pack on a non-conductive surface, then follow the measure-battery-voltage process with your digital multimeter.",
+            "text": "Ensure the pack is disconnected and free of damage. Put on safety goggles, set the battery on a dry, non-conductive surface, then follow the measure-battery-voltage process with your digital multimeter.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "measure",
-            "text": "Set the multimeter to the 20 V DC range. Keep fingers behind the probe guards, touch red to the positive terminal and black to the negative without letting them meet, and stop if the leads get warm. A healthy pack should read 12.4–13.6 V.",
+            "text": "Set the multimeter to the 20 V DC range and confirm the probes are in the voltage ports. Keep fingers behind the guards, touch red to the positive terminal and black to the negative without letting them touch, and stop if the leads warm or spark. A healthy LiFePO4 pack should read 12.4–13.6 V.",
             "options": [
                 {
                     "type": "goto",
@@ -45,7 +45,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Disconnect the probes, remove your goggles, and store the battery in a dry, fire-safe spot—your pack looks charged and ready.",
+            "text": "Nice work! Disconnect the probes, power down the meter, remove your goggles, and store the battery in a dry, fire-safe spot—your pack looks charged and ready.",
             "options": [
                 {
                     "type": "finish",
@@ -62,14 +62,15 @@
     ],
     "requiresQuests": [],
     "hardening": {
-        "passes": 4,
-        "score": 94,
+        "passes": 5,
+        "score": 95,
         "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
             { "task": "codex-upgrade-2025-08-05", "date": "2025-08-05", "score": 80 },
             { "task": "codex-polish-2025-08-05", "date": "2025-08-05", "score": 92 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 94 }
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 94 },
+            { "task": "codex-refine-2025-08-06", "date": "2025-08-06", "score": 95 }
         ]
     }
 }
