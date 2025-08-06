@@ -1903,13 +1903,21 @@
     },
     {
         "id": "stop-nosebleed",
-        "title": "Control a minor nosebleed",
-        "requireItems": [],
+        "title": "Use gloves, gauze, and antiseptic from a first aid kit to control a minor nosebleed",
+        "image": "/assets/rescue.jpg",
+        "requireItems": [{ "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 }],
         "consumeItems": [
             { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
-            { "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9", "count": 1 }
+            { "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9", "count": 1 },
+            { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 1 }
         ],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }]
+        }
     }
 ]
