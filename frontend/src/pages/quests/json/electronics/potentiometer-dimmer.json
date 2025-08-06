@@ -3,12 +3,25 @@
     "title": "Dim an LED with a Potentiometer",
     "description": "Adjust LED brightness using a potentiometer and an Arduino.",
     "hardening": {
-        "passes": 2,
-        "score": 75,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
-            { "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 60 },
-            { "task": "codex-hardening-2025-09-30", "date": "2025-09-30", "score": 75 }
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-09-30",
+                "date": "2025-09-30",
+                "score": 75
+            },
+            {
+                "task": "codex-quest-refine-2025-08-06",
+                "date": "2025-08-06",
+                "score": 90
+            }
         ]
     },
     "image": "/assets/quests/basic_circuit.svg",
@@ -17,7 +30,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion here again! Ready to add some interactivity? We'll twist a potentiometer to control an LED. Work on a static-safe, non-conductive surface and keep the Arduino unplugged so nothing shorts while you build.",
+            "text": "Orion here again! Let's add interactivity by twisting a potentiometer to control an LED. Work on a dry, static-safe surface and keep the Arduino unplugged while wiring to avoid shorts.",
             "options": [
                 {
                     "type": "goto",
@@ -28,7 +41,7 @@
         },
         {
             "id": "materials",
-            "text": "Gather an Arduino Uno, a breadboard, three jumper wires, a 5 mm LED, a 220 Ω resistor, a potentiometer, a USB cable, and a laptop with the Arduino IDE. Keep components organized so leads don't touch.",
+            "text": "Gather an Arduino Uno, a breadboard, three jumper wires, a 5 mm LED, a 220 Ω resistor, a potentiometer, a USB Type-A to USB-B cable, and a laptop with the Arduino IDE installed. Check the resistor's red-red-brown bands and confirm the LED's longer leg is the anode.",
             "options": [
                 {
                     "type": "process",
@@ -40,21 +53,45 @@
                     "goto": "wire",
                     "text": "Parts ready!",
                     "requiresItems": [
-                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
-                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
-                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 3 },
-                        { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
-                        { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
-                        { "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d", "count": 1 },
-                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
-                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 3
+                        },
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",
+                            "count": 1
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
                     ]
                 }
             ]
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB cable. Set the potentiometer on the breadboard with its flat side facing you. Wire the outer legs to 5 V and GND, run the middle wiper to A0, and place the LED on pin 9 through the 220 Ω resistor so it survives. Use jumper wires, avoid crossing power rails, and double-check for shorts before powering up.",
+            "text": "Disconnect the USB cable. Place the potentiometer on the breadboard with its flat side facing you. Wire the outer legs to 5 V and GND, run the middle wiper to A0, and route the LED's anode to pin 9 through the 220 Ω resistor with the cathode to GND. Arrange jumper wires neatly and double-check for shorts before powering up.",
             "options": [
                 {
                     "type": "goto",
@@ -65,7 +102,7 @@
         },
         {
             "id": "program",
-            "text": "Reconnect the USB cable and open the Arduino IDE. Load the 'AnalogInOutSerial' example; it reads analogRead(A0), maps 0‑1023 to 0‑255, then analogWrite(9, value) to fade the LED. Select the correct port, upload, and avoid staring directly into the LED.",
+            "text": "Reconnect the USB cable and open the Arduino IDE. Load File > Examples > 03.Analog > AnalogInOutSerial; it reads analogRead(A0), maps 0‑1023 to 0‑255, then analogWrite(9, value) to dim the LED. Select the correct board and port, upload, and avoid staring directly into the LED or touching the board while it's powered.",
             "options": [
                 {
                     "type": "goto",
@@ -76,8 +113,13 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Potentiometers give smooth control over voltage. Unplug the board before making changes, coil the USB cable, and store the parts for your next build.",
+            "text": "Nice work! Potentiometers give smooth control over voltage. Unplug the board before making changes, coil the USB cable, and store the parts for your next build. For a full walkthrough, see the 'Dim an LED with a potentiometer on Arduino' process.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-potentiometer-dimmer",
+                    "text": "View the detailed potentiometer dimmer process"
+                },
                 {
                     "type": "finish",
                     "text": "Thanks, Orion!"
