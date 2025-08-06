@@ -3,7 +3,7 @@ title: 'Codex Prompts'
 slug: 'prompts-codex'
 ---
 
-# Writing great Codex prompts for the _dspace_ repo (v3)
+# Writing great Codex prompts for the _dspace_ repo
 
 Codex (Web + CLI) is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR — but only if you give it a clear,
@@ -48,7 +48,7 @@ prompt‑level rules short and concrete. :contentReference[oaicite:3]{index=3}
 ## 3 Reusable template
 
 ```text
-You are working in democratizedspace/dspace (branch v3).
+You are working in democratizedspace/dspace.
 
 GOAL: <one sentence>.
 

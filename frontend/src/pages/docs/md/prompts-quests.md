@@ -3,7 +3,7 @@ title: 'Quest Prompts'
 slug: 'prompts-quests'
 ---
 
-# Writing great quest prompts for the _dspace_ repo (v3)
+# Writing great quest prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR—but only if you give it a
@@ -25,11 +25,18 @@ which covers quests, items and processes in detail.
 
 ## 1 Quick start (Web vs CLI)
 
-| Use‑case              | Codex Web (ChatGPT sidebar) | Codex CLI                                                          |
-| --------------------- | --------------------------- | ------------------------------------------------------------------ |
-| Add or update a quest | “Code” button, attach repo  | `codex "add quest solar/led-basics"`                               |
-| Ask about quest files | “Ask” button                | `codex exec "explain frontend/src/pages/quests/json/*.json"`       |
-| Run quest tests       | –                           | `codex exec --full-auto "npm test -- questCanonical questQuality"` |
+- **Add or update a quest**
+  - Web: use the “Code” button and attach the repo.
+  - CLI: `codex "add quest solar/led-basics"`
+- **Ask about quest files**
+  - Web: use the “Ask” button.
+  - CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
+- **Run quest tests**
+  - Web: –
+  - CLI:
+    ```bash
+    codex exec "npm test -- questCanonical questQuality"
+    ```
 
 See the upstream CLI reference for more flags.
 
@@ -52,7 +59,7 @@ prompt‑level rules short and concrete.
 ## 3 Reusable template
 
 ```text
-You are working in democratizedspace/dspace (branch v3).
+You are working in democratizedspace/dspace.
 
 GOAL: <one sentence quest addition or edit>.
 
@@ -104,7 +111,7 @@ hand‑crafted quests on `main` are good references for tone and structure.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository (branch v3). List
+You are an automated contributor for the DSPACE repository. List
 the folders under `frontend/src/pages/quests/json` and pick one at random. Use
 existing quests in that tree as examples for tone and structure.
 
@@ -120,7 +127,7 @@ Return only the diff with the new quest.
 
 ## Upgrade prompt for new quests
 
-Focus on quests recently added on the `v3` branch — [see the list](/docs/new-quests-v3) —
+Focus on recently added quests — [see the list](/docs/new-quests-v3) —
 to keep quality high as the codebase grows. This prompt uses the quest
 quality tests to ensure that every technological step is represented in
 the inventory (`items.json`) and process (`processes.json`) registries and
@@ -129,7 +136,7 @@ while the hardening loop tracks refinement passes over time.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository (branch v3).
+You are an automated contributor for the DSPACE repository.
 
 USER:
 1. Pick a quest ID from `frontend/src/pages/quests/json` that also appears in
@@ -139,9 +146,10 @@ USER:
    `frontend/src/pages/inventory/json/items.json` or
    `frontend/src/pages/processes/processes.json`. Add missing items or
    processes so quests stay grounded in reality and are reproducible IRL.
-4. If the quest includes an image, reuse an existing image URL already in the repository; do not add new or external images.
+4. If the quest includes an image, reuse an existing image URL already in the
+   repository; do not add new or external images.
 5. Update the quest's `hardening` block, incrementing `passes`, refreshing the
-    evaluator `score`, swapping the status `emoji` and appending a history entry
+   evaluator `score`, swapping the status `emoji` and appending a history entry
    with the Codex task ID, date and score. Choose the emoji based on:
    - 0 passes → score 0 → 🛠️ Draft
    - ≥1 pass & score ≥60 → 🌀 First polishing pass
@@ -170,4 +178,5 @@ Modern assistants can be powerful collaborators. Keep in mind:
 - **Provide clear context** about DSPACE's educational mission and sustainability focus.
 - **Use system prompts** to guide tone and technical accuracy.
 - **Iterate on outputs** rather than expecting perfection on the first try.
-- **Fact-check technical information** since AI systems can generate plausible but incorrect details.
+- **Fact-check technical information** since AI systems can generate plausible
+  but incorrect details.
