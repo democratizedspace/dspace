@@ -379,9 +379,17 @@
     {
         "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
         "name": "launch-capable model rocket",
-        "description": "A model rocket ready for launch. Ignite remotely using the launch controller.",
-        "image": "/assets/rocket_field.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "description": "30 cm (12 in) cardboard rocket with nose cone and fins. Motor and streamer included for launch.",
+        "image": "/assets/modelrocket.jpg",
+        "price": "30 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }
+            ]
+        }
     },
     {
         "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
