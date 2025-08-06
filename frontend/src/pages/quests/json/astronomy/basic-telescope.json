@@ -8,18 +8,25 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sketching the Moon was a great start. Gather a 50 mm magnifying lens, a 20 mm magnifying lens, a cardboard mailing tube, masking tape and a camera tripod. Inspect the lenses for chips and keep the tube pointed away from the Sun. Ready?",
+            "text": "Sketching the Moon was a great start. Gather a 50 mm magnifying lens, a 20 mm magnifying lens, a cardboard mailing tube, masking tape and a camera tripod. Inspect each lens for chips, work in a shaded area and keep the tube pointed away from the Sun. Ready?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "build",
-                    "text": "I'm ready."
+                    "text": "I'm ready.",
+                    "requiresItems": [
+                        { "id": "148", "count": 1 },
+                        { "id": "149", "count": 1 },
+                        { "id": "150", "count": 1 },
+                        { "id": "151", "count": 1 },
+                        { "id": "152", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "build",
-            "text": "Tape the 50 mm magnifying lens to the front of the cardboard mailing tube and the 20 mm magnifying lens at the back as the eyepiece. Mount the tube on a camera tripod, check that the tape holds securely, handle the glass with care and never aim at the Sun.",
+            "text": "Tape the 50 mm magnifying lens to the front of the mailing tube as the objective and the 20 mm lens at the back as the eyepiece. Mount the tube securely on the camera tripod with masking tape, verify the tripod is stable, handle the glass edges carefully and never aim at the Sun.",
             "options": [
                 {
                     "type": "process",
@@ -41,7 +48,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent craftsmanship! Regular stargazing will sharpen your navigation skills for future missions.",
+            "text": "Excellent craftsmanship! Regular stargazing will sharpen your navigation skills for future missions. Cap both lenses with masking tape when storing and keep the telescope out of direct sunlight.",
             "options": [
                 {
                     "type": "finish",
@@ -53,13 +60,14 @@
     "rewards": [],
     "requiresQuests": ["astronomy/observe-moon"],
     "hardening": {
-        "passes": 3,
-        "score": 92,
+        "passes": 4,
+        "score": 94,
         "emoji": "💯",
         "history": [
             { "task": "codex-basic-telescope-2025-08-03", "date": "2025-08-03", "score": 60 },
             { "task": "codex-basic-telescope-2025-08-04", "date": "2025-08-04", "score": 80 },
-            { "task": "codex-basic-telescope-2025-08-05", "date": "2025-08-05", "score": 92 }
+            { "task": "codex-basic-telescope-2025-08-05", "date": "2025-08-05", "score": 92 },
+            { "task": "codex-quest-upgrade-2025-08-06", "date": "2025-08-06", "score": 94 }
         ]
     }
 }

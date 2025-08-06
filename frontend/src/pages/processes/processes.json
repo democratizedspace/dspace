@@ -351,7 +351,8 @@
     },
     {
         "id": "prepare-hydroponic-tub",
-        "title": "prepare your hydroponic tub",
+        "title": "Prepare a hydroponics tub with water and nutrients",
+        "image": "/assets/hydroponics_tub.jpg",
         "requireItems": [],
         "consumeItems": [
             {
@@ -373,7 +374,13 @@
                 "count": 1
             }
         ],
-        "duration": "2m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 60 }]
+        }
     },
     {
         "id": "refresh-hydroponic-tub",
@@ -1796,7 +1803,8 @@
     },
     {
         "id": "arduino-led-blink",
-        "title": "Blink an LED with Arduino",
+        "title": "Upload the Blink sketch to an Arduino Uno and flash a 5 mm LED on a breadboard",
+        "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
                 "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -1808,7 +1816,7 @@
             },
             {
                 "id": "3cd82744-d2aa-414e-9f03-80024b624066",
-                "count": 3
+                "count": 2
             },
             {
                 "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
@@ -1829,7 +1837,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "arduino-potentiometer-dimmer",
@@ -1951,6 +1971,20 @@
         }
     },
     {
+        "id": "verify-resistor-color-code",
+        "title": "Check resistor value using color bands",
+        "requireItems": [{ "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 }],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "print-phone-stand",
         "title": "3D print a smartphone stand on an entry-level FDM 3D printer using 20 g of white PLA filament",
         "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
@@ -1972,16 +2006,23 @@
     },
     {
         "id": "check-iss-pass",
-        "title": "Use a smartphone astronomy app to check the next ISS flyover",
-        "requireItems": [{ "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 }],
+        "title": "Find and log the next ISS flyover with a smartphone app and mission logbook",
+        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "requireItems": [
+            { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 },
+            { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "2m",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }]
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
+                { "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 80 }
+            ]
         }
     },
     {
