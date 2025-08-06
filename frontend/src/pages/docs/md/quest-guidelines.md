@@ -126,7 +126,10 @@ Every quest JSON file must include:
 
 ### Current Implementation State
 
-> **Note:** The full quest editing interface is still under development. The current implementation in `QuestForm.svelte` supports basic quest properties (title, description, image) with more complete dialogue editing planned for future updates.
+> **Note:** The full quest editing interface is still under development. The current implementation in
+> `QuestForm.svelte` supports basic quest properties (title, description, image) with more complete
+> dialogue editing planned for future updates. The form is mobile‑responsive and stacks action buttons
+> on small screens.
 
 While the user interface for editing complex dialogue trees is being developed, quests are currently created using JSON files or through the custom content API. The future implementation will include:
 You can run `npm run generate-quest --template basic` (or `branching`) to scaffold a template JSON file with placeholder dialogue.
