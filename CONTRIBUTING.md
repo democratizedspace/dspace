@@ -8,9 +8,8 @@ Thank you for your interest in helping the project! Below is a quick overview of
 2. Install dependencies:
    ```bash
    pnpm install
-   npx husky install
    ```
-   Husky installs Git hooks that run checks before each commit and push.
+   Husky hooks install automatically. Use `npm run ci:install` in CI to skip them.
 
 ## Development Workflow
 

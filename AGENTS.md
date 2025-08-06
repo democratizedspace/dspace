@@ -21,7 +21,8 @@ SKIP_E2E=1 npm test
 - Install Playwright browsers with `npx playwright install chromium` when E2E tests require it.
 - Use `npm run check` to verify formatting and linting.
 - Use `npm run audit:ci` to fail on high-severity dependency vulnerabilities.
-- If dependencies are missing, run `npm ci` in the repo root and `npm ci --prefix frontend`.
+- If dependencies are missing, run `npm ci` in the repo root and `npm ci --prefix frontend`. In
+  CI environments, use `npm run ci:install` to skip Husky hooks.
 - Fix formatting issues with `npx prettier`.
 - Set `ESLINT_USE_FLAT_CONFIG=false` if running ESLint manually.
 - If a proxy is required, set `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables
