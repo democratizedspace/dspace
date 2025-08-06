@@ -397,6 +397,12 @@
         margin-top: 10px;
     }
 
+    .form-submit {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
     .submit-button {
         font-size: 16px;
         padding: 10px 20px;
@@ -444,6 +450,20 @@
         select {
             width: 100%;
             font-size: 14px;
+        }
+
+        .form-submit {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .preview-button {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .submit-button {
+            width: 100%;
         }
     }
 </style>
