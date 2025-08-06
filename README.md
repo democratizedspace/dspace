@@ -20,10 +20,7 @@ Make sure you have **Node.js 18 or 20 LTS** installed. The CI runs on Node.js 20
 git clone https://github.com/democratizedspace/dspace.git
 cd dspace
 npm --version # ensure Node.js 18 or 20 is in use
-npm ci
-# Install frontend dependencies
-cd frontend && npm ci
-cd ..
+pnpm install
 ```
 
 Start the development server:
@@ -268,8 +265,7 @@ We frequently merge improvements from the `v3` branch. Keep your fork current:
 ```bash
 git fetch origin
 git merge origin/v3
-npm ci
-(cd frontend && npm ci)
+pnpm install
 ```
 
 ## Want to contribute?
