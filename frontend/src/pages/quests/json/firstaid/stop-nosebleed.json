@@ -1,14 +1,14 @@
 {
     "id": "firstaid/stop-nosebleed",
     "title": "Stop a Nosebleed",
-    "description": "Sit up straight, lean forward, and pinch the soft part of your nose with sterile gauze to control a minor bleed. Wear nitrile gloves and avoid tilting your head back.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "description": "Sit upright, lean forward, and pinch the soft part of your nose with sterile gauze to control a minor nosebleed. Wear nitrile gloves from a first aid kit, clean around your nostrils with an antiseptic wipe afterward, and avoid tilting your head back.",
+    "image": "/assets/rescue.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You're bleeding from the nose. Take a seat, stay calm, and let's stop it safely.",
+            "text": "You're bleeding from the nose. Take a seat, stay calm, and we'll stop it safely.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "pressure",
-            "text": "Sit upright on a chair and lean slightly forward so blood drains out instead of down your throat. Put on nitrile gloves, fold a sterile gauze pad over the soft part of your nose, and pinch firmly. Breathe through your mouth and keep steady pressure for at least 10 minutes without checking early.",
+            "text": "Sit upright on a chair and lean slightly forward so blood drains out instead of down your throat. Put on nitrile gloves from a first aid kit, fold a sterile gauze pad over the soft part of your nose, and pinch firmly. Breathe through your mouth and keep steady pressure for at least 10 minutes without checking early. Once bleeding slows, gently clean around the nostrils with an antiseptic wipe without inserting anything into the nose.",
             "options": [
                 {
                     "type": "goto",
@@ -33,6 +33,10 @@
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
+                        },
+                        {
+                            "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+                            "count": 1
                         }
                     ]
                 }
@@ -40,7 +44,7 @@
         },
         {
             "id": "finish",
-            "text": "If bleeding hasn't stopped after 20 minutes, is heavy, or you feel faint, seek medical help. Otherwise rest, keep your head elevated, and avoid blowing or picking your nose for the rest of the day.",
+            "text": "If bleeding hasn't stopped after 20 minutes, is heavy, you're on blood thinners, or you feel faint, seek medical help. Otherwise rest, keep your head elevated, dispose of used supplies, wash your hands, and avoid blowing or picking your nose for the rest of the day.",
             "options": [
                 {
                     "type": "process",
@@ -57,9 +61,9 @@
     "rewards": [],
     "requiresQuests": ["firstaid/assemble-kit"],
     "hardening": {
-        "passes": 2,
-        "score": 75,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",
@@ -70,6 +74,11 @@
                 "task": "codex-refine-2025-08-05",
                 "date": "2025-08-05",
                 "score": 75
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
             }
         ]
     }
