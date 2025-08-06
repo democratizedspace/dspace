@@ -19,7 +19,9 @@ Thank you for your interest in helping the project! Below is a quick overview of
   npm run check
   ```
 - The test suite verifies file formatting, so unformatted changes will fail CI.
-- The pre-commit hook runs `lint-staged`, `npm run check`, and then `SKIP_E2E=1 npm test` to make sure tests are green. You can run it manually with:
+- The pre-commit hook runs `lint-staged` (including quest schema validation for
+  changed quests), `npm run check`, and then `SKIP_E2E=1 npm test` to make sure
+  tests are green. You can run it manually with:
   ```bash
   SKIP_E2E=1 npm test
   ```
