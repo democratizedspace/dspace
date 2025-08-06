@@ -28,11 +28,14 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 -   **Ask about item data**
     -   Web: use the “Ask” button.
     -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items.json"`
--   **Run item tests**
+-   **Run item checks**
+
     -   Web: –
     -   CLI:
+
         ```bash
-        codex exec "npm run itemValidation && npm run test:root -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && \
+        npm run itemValidation && npm run test:root -- itemQuality"
         ```
 
 See the [Codex CLI documentation][codex-cli] for more flags.

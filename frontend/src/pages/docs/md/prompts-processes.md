@@ -28,11 +28,14 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
 -   **Ask about process data**
     -   Web: use the “Ask” button.
     -   CLI: `codex exec "explain frontend/src/pages/processes/processes.json"`
--   **Run process tests**
+-   **Run process checks**
+
     -   Web: –
     -   CLI:
+
         ```bash
-        codex exec "npm run test:root"
+        codex exec "npm run lint && npm run type-check && npm run build && \
+        npm run test:root"
         ```
 
 See the upstream CLI reference for more flags.

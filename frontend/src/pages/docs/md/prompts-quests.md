@@ -26,17 +26,19 @@ which covers quests, items and processes in detail.
 ## 1 Quick start (Web vs CLI)
 
 - **Add or update a quest**
-  - Web: use the “Code” button and attach the repo.
-  - CLI: `codex "add quest solar/led-basics"`
+    - Web: use the “Code” button and attach the repo.
+    - CLI: `codex "add quest solar/led-basics"`
 - **Ask about quest files**
-  - Web: use the “Ask” button.
-  - CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
-- **Run quest tests**
-  - Web: –
-  - CLI:
-    ```bash
-    codex exec "npm test -- questCanonical questQuality"
-    ```
+    - Web: use the “Ask” button.
+    - CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
+- **Run quest checks**
+    - Web: –
+    - CLI:
+
+        ```bash
+        codex exec "npm run lint && npm run type-check && npm run build && \
+        npm test -- questCanonical questQuality"
+        ```
 
 See the upstream CLI reference for more flags.
 
