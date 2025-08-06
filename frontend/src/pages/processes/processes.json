@@ -1903,13 +1903,26 @@
     },
     {
         "id": "stop-nosebleed",
-        "title": "Control a minor nosebleed",
+        "title": "Use nitrile gloves and sterile gauze pads to stop a minor nosebleed",
+        "image": "/assets/rescue.jpg",
         "requireItems": [],
         "consumeItems": [
             { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
             { "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9", "count": 1 }
         ],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]
