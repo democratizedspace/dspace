@@ -1,0 +1,19 @@
+name: npm-check-updates
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  npm-check-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check root dependencies
+        run: npx -y npm-check-updates
+      - name: Check frontend dependencies
+        run: npx -y npm-check-updates --cwd frontend
