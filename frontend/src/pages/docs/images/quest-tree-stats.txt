@@ -1,4 +1,4 @@
-energy: 17 quests, 1176 lines
+energy: 17 quests, 1168 lines
 astronomy: 14 quests, 768 lines
 devops: 14 quests, 860 lines
 hydroponics: 13 quests, 1053 lines
