@@ -1,11 +1,11 @@
 {
     "id": "hydroponics/grow-light",
     "title": "Install a Grow Light",
-    "description": "Install a full-spectrum lamp and schedule daily lighting.",
+    "description": "Mount a full-spectrum LED grow lamp and automate a 12 h light cycle with a smart plug.",
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-06",
@@ -16,6 +16,11 @@
                 "task": "codex-quest-refinement-2025-08-06-2",
                 "date": "2025-08-06",
                 "score": 80
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06-3",
+                "date": "2025-08-06",
+                "score": 92
             }
         ]
     },
@@ -25,7 +30,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Healthy greens need steady light. Unplug gear and clear a dry space above the hydro tub.",
+            "text": "Healthy greens need steady light. Unplug gear, dry your hands, and clear a dry space above the tub for the hydroponic grow lamp.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +41,7 @@
         },
         {
             "id": "install",
-            "text": "Hang the LED panel 25–30 cm above plants. Loop the cord downward so drips miss the outlet. Plug the lamp into a smart plug and set a 12 h on/off cycle.",
+            "text": "Hang the LED panel 25–30 cm above plants with the included hanger. Route the cord downward to form a drip loop so any moisture falls away from the outlet. Plug the lamp into the smart plug and use its app to set a 12 h on/off cycle.",
             "options": [
                 {
                     "type": "goto",
@@ -58,7 +63,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Proper lighting keeps greens lush. Let the lamp cool and unplug before adjusting height.",
+            "text": "Great! Proper lighting keeps greens lush. Let the lamp cool and unplug the smart plug before moving or adjusting the panel.",
             "options": [
                 {
                     "type": "finish",
