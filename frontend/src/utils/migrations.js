@@ -1,3 +1,7 @@
+import { validateProcessData } from './customProcessValidation.js';
+import { validateQuestData } from './customQuestValidation.js';
+import { validateItemData } from './customItemValidation.js';
+
 export const MIGRATIONS = {
     2: async (db) => {
         const stores = ['items', 'processes', 'quests'];
@@ -54,4 +58,37 @@ export async function runMigrations(db, targetVersion) {
         await setSchemaVersion(db, next);
         current = next;
     }
+    const errors = await validateDataIntegrity(db);
+    if (errors.length) {
+        throw new Error('Data integrity validation failed');
+    }
+}
+
+export async function validateDataIntegrity(db) {
+    const checks = [
+        { store: 'items', validator: validateItemData },
+        { store: 'processes', validator: validateProcessData },
+        { store: 'quests', validator: validateQuestData },
+    ];
+    const errors = [];
+    for (const { store, validator } of checks) {
+        const tx = db.transaction(store, 'readonly');
+        const storeObj = tx.objectStore(store);
+        const req = storeObj.getAll();
+        const records = await new Promise((resolve, reject) => {
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = (e) => reject(e.target.error);
+        });
+        for (const record of records) {
+            const { valid, errors: valErrors } = validator(record);
+            if (!valid) {
+                errors.push({ store, id: record.id, errors: valErrors });
+            }
+        }
+        await new Promise((resolve, reject) => {
+            tx.oncomplete = resolve;
+            tx.onerror = (e) => reject(e.target.error);
+        });
+    }
+    return errors;
 }

@@ -65,7 +65,7 @@ DSPACE uses Astro's Server-Side Rendering (SSR) with partial hydration of Svelte
 1. **Astro Framework**: Handles routing, SSR, and overall application structure
 2. **Svelte Components**: Provides interactive UI elements with minimal JS
 3. **Game State Management**: Custom state management for game data
-4. **Persistence Layer**: LocalStorage and IndexedDB for saving progress
+4. **Persistence Layer**: LocalStorage and IndexedDB for saving progress, with migrations validating data integrity
 
 ### Hydration Pattern
 
