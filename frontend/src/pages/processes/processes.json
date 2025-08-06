@@ -263,7 +263,8 @@
     },
     {
         "id": "rockwool-soak",
-        "title": "soak your hydroponic starter plugs",
+        "title": "Soak 11 hydroponic starter plugs in a 5 gallon bucket of dechlorinated tap water",
+        "image": "/assets/rockwool_wet.jpg",
         "requireItems": [
             {
                 "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -282,7 +283,19 @@
                 "count": 11
             }
         ],
-        "duration": "15m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "germinate-basil",
