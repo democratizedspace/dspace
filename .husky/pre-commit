@@ -11,6 +11,12 @@ else
   echo "Running linting on staged files..."
   npx lint-staged
   cd ..
+  echo "Validating staged quests..."
+  node scripts/validate-staged-quests.js
+  if [ $? -ne 0 ]; then
+    echo "❌ Quest validation failed. Commit aborted."
+    exit 1
+  fi
   echo "Running full code checks..."
   npm run check
   echo "Running full test suite (without e2e)..."
