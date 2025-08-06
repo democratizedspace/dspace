@@ -3,7 +3,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
+const { globSync } = require('glob');
 
 // Define paths
 const questDirectoryRelativePath = '../src/pages/quests/json/';
@@ -63,7 +63,7 @@ const CRITERIA = {
 // Load all quest files
 function loadAllQuests() {
     const directoryPath = path.join(__dirname, questDirectoryRelativePath);
-    const files = glob.sync(path.join(directoryPath, '**/*.json'));
+    const files = globSync(path.join(directoryPath, '**/*.json'));
 
     files.forEach((file) => {
         try {
