@@ -45,13 +45,13 @@ Before submitting a pull request, run the comprehensive test suite with:
 
 ```bash
 # Skip Playwright tests if browsers aren't installed
-SKIP_E2E=1 npm run test:pr
+SKIP_E2E=1 npm test
 ```
 
 If Playwright browsers are available, omit `SKIP_E2E=1` to run the full suite:
 
 ```bash
-npm run test:pr
+npm test
 ```
 
 If you encounter an error like `browserType.launch: Executable doesn't exist`,
@@ -68,7 +68,7 @@ This cross-platform script will:
 - Run all end-to-end tests in optimized groups
 - Provide helpful error messages if any tests fail
 
-The `test:pr` command handles everything automatically, including starting and stopping the development server for end-to-end tests.
+The `npm test` command (alias `npm run test:pr`) handles everything automatically, including starting and stopping the development server for end-to-end tests.
 
 ### Testing Information
 
@@ -113,7 +113,7 @@ npm run benchmark:db
 
 ### Continuous Integration
 
-GitHub Actions automatically run `npm run test:pr` on every pull request and push to `v3`.
+GitHub Actions automatically run `npm test` on every pull request and push to `v3`.
 If the `CODECOV_TOKEN` secret is configured, coverage reports upload to Codecov and update the badge at the top of this README.
 You'll find the CI results under the **Checks** tab of your pull request.
 

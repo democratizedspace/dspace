@@ -39,6 +39,6 @@ These guidelines outline the process for contributing your custom quests to the 
 
 -   Keep dialogue concise and educational.
 -   Include safety notes where appropriate.
--   Run `SKIP_E2E=1 npm run test:pr` before opening a pull request.
+-   Run `SKIP_E2E=1 npm test` before opening a pull request.
 
 Happy quest building!
