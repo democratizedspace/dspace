@@ -7,8 +7,7 @@ Thank you for your interest in helping the project! Below is a quick overview of
 1. Fork and clone the repo.
 2. Install dependencies:
    ```bash
-   npm ci
-   (cd frontend && npm ci)
+   pnpm install
    npx husky install
    ```
    Husky installs Git hooks that run checks before each commit and push.
