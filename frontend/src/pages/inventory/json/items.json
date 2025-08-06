@@ -1380,9 +1380,17 @@
     {
         "id": "70bb8d86-2c4e-4330-9705-371891934686",
         "name": "mission logbook",
-        "description": "Bound logbook with pre-numbered pages for recording daily mission events and maintenance notes.",
+        "description": "A5 (148 × 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
         "image": "/assets/paperwork.jpg",
-        "price": "2 dUSD"
+        "price": "8 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }
+            ]
+        }
     },
     {
         "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
