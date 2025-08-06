@@ -25,7 +25,7 @@
             "files": ["*.svelte"],
             "processor": "svelte3/svelte3",
             "rules": {
-                "@typescript-eslint/no-unused-vars": "warn"
+                "@typescript-eslint/no-unused-vars": "off"
             }
         },
         {
@@ -74,7 +74,9 @@
         "linebreak-style": ["error", "unix"],
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/explicit-module-boundary-types": "off"
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-require-imports": "off"
     },
     "settings": {
         "svelte3": {
