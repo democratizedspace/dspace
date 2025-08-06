@@ -1,12 +1,16 @@
 {
     "id": "energy/hand-crank-generator",
     "title": "Build a Hand Crank Generator",
-    "description": "Generate emergency power with your own muscles.",
+    "description": "Print parts and assemble a hand crank generator to charge a 200 Wh battery pack.",
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
-        "history": [{ "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }]
+        "passes": 3,
+        "score": 85,
+        "emoji": "✅",
+        "history": [
+            { "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 60 },
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 78 },
+            { "task": "codex-upgrade-2025-08-06b", "date": "2025-08-06", "score": 85 }
+        ]
     },
     "image": "/assets/quests/solar_200Wh.jpg",
     "npc": "/assets/npc/orion.jpg",
@@ -14,18 +18,43 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Need power when sunlight fades? Build a crank generator. Keep fingers clear.",
+            "text": "Need power when sunlight fades? Let's 3D print a hand crank generator. Work on a stable surface and keep fingers clear of the hot nozzle and moving parts.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "print",
+                    "text": "Let's print the parts!"
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Fire up the entry-level FDM 3D printer with white PLA. Print the crank handle and generator housing before gathering electronics.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-crank-handle",
+                    "text": "Print the crank handle"
+                },
+                {
+                    "type": "process",
+                    "process": "print-generator-housing",
+                    "text": "Print the generator housing"
+                },
+                {
+                    "type": "goto",
                     "goto": "materials",
-                    "text": "Sounds handy!"
+                    "text": "Printed parts ready",
+                    "requiresItems": [
+                        { "id": "d715cf3d-c616-47a6-b753-ae24c87714f3", "count": 1 },
+                        { "id": "3326e89c-5883-473d-a68f-3ea560093966", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "Bring 12 V DC motor and battery pack. I'll loan the battery. Check polarity.",
+            "text": "Gather a 12 V DC motor and the 200 Wh battery pack I'm lending you. Use the motor leads and double-check polarity before connecting.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -35,44 +64,52 @@
                             "count": 1
                         }
                     ],
-                    "text": "Take the battery pack"
+                    "text": "Take the 200 Wh battery pack"
                 },
                 {
                     "type": "goto",
-                    "goto": "generate",
-                    "text": "Got the parts. What's next?",
+                    "goto": "assemble",
+                    "text": "Parts ready—time to assemble",
                     "requiresItems": [
                         { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
-                        { "id": "6caa08d8-815c-4a0e-9297-0fda4516659d", "count": 1 }
+                        { "id": "6caa08d8-815c-4a0e-9297-0fda4516659d", "count": 1 },
+                        { "id": "d715cf3d-c616-47a6-b753-ae24c87714f3", "count": 1 },
+                        { "id": "3326e89c-5883-473d-a68f-3ea560093966", "count": 1 }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Mount the motor in the printed housing, secure the crank handle, and keep wiring tidy to avoid shorts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "generate",
+                    "text": "Generator assembled!"
                 }
             ]
         },
         {
             "id": "generate",
-            "text": "Secure motor, add crank, wire to battery with insulated leads. Ready to spin?",
+            "text": "Connect the leads to the battery pack and crank to charge. Keep wires clear of the crank. Ready to spin up some power?",
             "options": [
                 {
                     "type": "process",
                     "process": "hand-crank-50Wh",
-                    "text": "Crank away!"
+                    "text": "Crank to generate 50 dWatts!"
                 },
                 {
                     "type": "goto",
                     "goto": "fin",
-                    "text": "Battery's charged!",
-                    "requiresItems": [
-                        {
-                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
-                            "count": 50
-                        }
-                    ]
+                    "text": "Battery's charged with 50 dWatts!",
+                    "requiresItems": [{ "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 50 }]
                 }
             ]
         },
         {
             "id": "fin",
-            "text": "Nice work! Muscle power is a solid backup. Store the battery in a cool spot.",
+            "text": "Nice work! Muscle power is a solid backup. Disconnect the leads and store the battery in a cool, dry spot.",
             "options": [
                 {
                     "type": "finish",

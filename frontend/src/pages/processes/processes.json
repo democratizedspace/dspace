@@ -2005,6 +2005,46 @@
         }
     },
     {
+        "id": "print-generator-housing",
+        "title": "3D print a generator housing on an entry-level FDM printer using 40 g of white PLA filament",
+        "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
+        "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 40 }],
+        "createItems": [{ "id": "3326e89c-5883-473d-a68f-3ea560093966", "count": 1 }],
+        "duration": "4h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "print-crank-handle",
+        "title": "3D print a crank handle on an entry-level FDM printer using 20 g of white PLA filament",
+        "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
+        "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 20 }],
+        "createItems": [{ "id": "d715cf3d-c616-47a6-b753-ae24c87714f3", "count": 1 }],
+        "duration": "2h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "check-iss-pass",
         "title": "Find and log the next ISS flyover with a smartphone app and mission logbook",
         "image": "/assets/changelog/20230630/smartphone.jpg",
