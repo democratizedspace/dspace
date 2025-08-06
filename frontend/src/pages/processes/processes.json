@@ -1803,7 +1803,8 @@
     },
     {
         "id": "arduino-led-blink",
-        "title": "Blink an LED with Arduino",
+        "title": "Upload the Blink sketch to an Arduino Uno and flash a 5 mm LED on a breadboard",
+        "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
                 "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -1815,7 +1816,7 @@
             },
             {
                 "id": "3cd82744-d2aa-414e-9f03-80024b624066",
-                "count": 3
+                "count": 2
             },
             {
                 "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
@@ -1836,7 +1837,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "arduino-potentiometer-dimmer",
