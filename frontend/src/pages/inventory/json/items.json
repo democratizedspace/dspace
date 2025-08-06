@@ -379,15 +379,15 @@
     {
         "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
         "name": "launch-capable model rocket",
-        "description": "30 cm (12 in) cardboard rocket with nose cone and fins. Motor and streamer included for launch.",
-        "image": "/assets/modelrocket.jpg",
-        "price": "30 dUSD",
+        "description": "35 cm rocket with B6-4 motor and recovery wadding; launch remotely via controller.",
+        "image": "/assets/rocket_field.jpg",
+        "price": "20 dUSD",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 70,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 70 }
             ]
         }
     },
