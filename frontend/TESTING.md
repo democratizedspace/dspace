@@ -18,7 +18,7 @@ To run the complete test suite:
 
 ```bash
 # From the project root
-SKIP_E2E=1 npm run test:pr  # omit SKIP_E2E=1 for full suite
+SKIP_E2E=1 npm test  # omit SKIP_E2E=1 for full suite
 
 # Or from the frontend directory
 npm run test:all
@@ -112,7 +112,7 @@ We have automated checks to ensure no test files are orphaned from the test work
     - Important Jest test files are properly configured
     - Your browser environment supports the capabilities needed for testing
 
-This test runs as part of the `test:pr` and `test:e2e:groups` commands.
+This test runs as part of the `npm test` (alias `test:pr`) and `test:e2e:groups` commands.
 
 ## Writing New Tests
 
@@ -188,7 +188,7 @@ In CI environments, tests run with special settings:
 -   Runs Chromium, Firefox, and WebKit to ensure cross-browser compatibility
 -   Parallel execution based on available CPU cores
 
-The `test:pr` command simulates this environment locally before you submit a PR.
+The `npm test` command (alias `test:pr`) simulates this environment locally before you submit a PR.
 
 ## Test Structure
 

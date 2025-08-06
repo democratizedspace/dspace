@@ -7,7 +7,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "cd frontend && npm run dev",
-    "test": "vitest",
+    "test": "npm run test:pr",
+    "test:root": "vitest run --testTimeout 20000",
     "coverage": "vitest run --coverage",
     "test:watch": "cd frontend && npm run test:watch",
     "test:e2e": "cd frontend && npm run test:e2e",

@@ -15,7 +15,7 @@ Run checks locally before opening a pull request:
 
 ```bash
 # Full test suite including lint and unit tests
-SKIP_E2E=1 npm run test:pr
+SKIP_E2E=1 npm test
 ```
 
 - Install Playwright browsers with `npx playwright install chromium` when E2E tests require it.
