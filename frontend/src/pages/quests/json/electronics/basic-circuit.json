@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there! I'm Orion. Ready to see how simple electronics can be? We'll wire a 5 mm LED with a 220 Ω resistor on a breadboard. Make sure the power supply is disconnected and double-check the resistor's color bands before starting.",
+            "text": "Hey there! I'm Orion. We'll light a 5 mm LED with a 220 Ω resistor on a Breadboard. Keep the power supply unplugged and run verify-resistor-color-code before starting.",
             "options": [
                 {
                     "type": "goto",
@@ -19,12 +19,13 @@
         },
         {
             "id": "materials",
-            "text": "Gather a breadboard, two jumper wires, a 5 mm LED, a 220 Ω resistor, and a 5 V power supply such as a battery pack or USB adapter. Keep the supply unplugged while wiring—the resistor limits current so the LED doesn't burn out. Ready to assemble?",
+            "text": "Gather a Breadboard, two Jumper Wires, a 5 mm LED, a 220 Ω Resistor, and a 5 V Power Supply such as a battery pack or USB adapter. Keep the supply unplugged while wiring so the LED doesn't burn out. Ready to assemble?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "assemble",
                     "text": "Yep, let's assemble it.",
+                    "process": "verify-resistor-color-code",
                     "requiresItems": [
                         {
                             "id": "d1105b87-8185-4a30-ba55-406384be169f",
@@ -52,7 +53,7 @@
         },
         {
             "id": "assemble",
-            "text": "Insert the 5 mm LED into the breadboard with its long leg (anode) toward the positive rail. Place the 220 Ω resistor from that anode row to an empty row, then use jumper wires to link the resistor to +5 V and the LED's short leg (cathode) to ground. Confirm the resistor is in series and nothing bridges the power rails before applying power. When everything is secure, connect the 5 V supply and the LED should glow.",
+            "text": "Insert the 5 mm LED into the Breadboard with its long leg toward the positive rail. Place the 220 Ω Resistor from that anode row to an empty row, then use Jumper Wires to link the resistor to +5 V and the LED's short leg to ground. Confirm the resistor is in series, the LED orientation is correct and nothing bridges the power rails before applying power. When everything is secure, connect the 5 V supply and the LED should glow.",
             "options": [
                 {
                     "type": "goto",
@@ -63,7 +64,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! You've built your first circuit and lit up an LED. Disconnect power before making changes and avoid shorting the power rails.",
+            "text": "Great job! You've built your first circuit and lit up an LED. Disconnect power before changes and keep metal tools away from the rails.",
             "options": [
                 {
                     "type": "finish",
@@ -80,8 +81,8 @@
         }
     ],
     "hardening": {
-        "passes": 4,
-        "score": 94,
+        "passes": 5,
+        "score": 95,
         "emoji": "💯",
         "history": [
             {
@@ -103,6 +104,11 @@
                 "task": "codex-upgrade-2025-08-04b",
                 "date": "2025-08-04",
                 "score": 94
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
             }
         ]
     }
