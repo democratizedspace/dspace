@@ -14,7 +14,7 @@ Set-Location -Path "$scriptDir\.."
 try {
     # Step 1: Run linting and formatting
     Write-Host "Step 1/3: Checking code formatting and linting..."
-    npm run check
+    pnpm run check
     if ($LASTEXITCODE -ne 0) {
         Write-Host "❌ Formatting or linting issues found. Please fix them before submitting your PR." -ForegroundColor Red
         Set-Location -Path $originalDir
@@ -24,7 +24,7 @@ try {
 
     # Step 2: Run unit tests
     Write-Host "`nStep 2/3: Running unit tests..."
-    npm test
+    pnpm test
     if ($LASTEXITCODE -ne 0) {
         Write-Host "❌ Unit tests failed. Please fix them before submitting your PR." -ForegroundColor Red
         Set-Location -Path $originalDir
@@ -34,7 +34,7 @@ try {
 
     # Step 3: Run grouped E2E tests
     Write-Host "`nStep 3/3: Running end-to-end tests (grouped)..."
-    npm run test:e2e:groups
+    pnpm run test:e2e:groups
     if ($LASTEXITCODE -ne 0) {
         Write-Host "❌ End-to-end tests failed. Please fix them before submitting your PR." -ForegroundColor Red
         Set-Location -Path $originalDir
