@@ -1,12 +1,15 @@
 {
     "id": "astronomy/iss-flyover",
     "title": "Spot the ISS",
-    "description": "Use a satellite-tracking app and a basic telescope to watch the International Space Station pass overhead.",
+    "description": "Use a satellite-tracking app on your smartphone and a basic telescope to watch the International Space Station pass overhead.",
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
-        "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }]
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
+        "history": [
+            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
+            { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 80 }
+        ]
     },
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
@@ -14,7 +17,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The ISS crosses our sky a few times each week. We'll use an app to plan tonight's flyover.",
+            "text": "The ISS crosses our sky a few times each week. We'll use a tracker app on your smartphone to plan tonight's flyover. Find an open area and keep the telescope capped until you're outside to avoid pointing near the Sun.",
             "options": [
                 {
                     "type": "goto",
@@ -25,7 +28,7 @@
         },
         {
             "id": "observe",
-            "text": "Open a tracker like Heavens-Above on your smartphone to find tonight's pass. Set the telescope on stable ground, watch for trip hazards, and never aim it near the Sun.",
+            "text": "Open a satellite-tracking app like Heavens-Above on your smartphone and allow location access to find tonight's pass. Level your basic telescope on stable ground, keep paths clear, and never aim it near the Sun.",
             "options": [
                 {
                     "type": "process",
@@ -47,7 +50,7 @@
         },
         {
             "id": "finish",
-            "text": "Awesome! It's inspiring to see humans living in orbit. Pack up and watch your footing in the dark.",
+            "text": "Awesome! It's inspiring to see humans living in orbit. Cap the telescope, pack up, and watch your footing in the dark.",
             "options": [
                 {
                     "type": "finish",
