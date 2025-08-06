@@ -1,14 +1,14 @@
 {
     "id": "energy/offgrid-charger",
     "title": "Charge a Device Off-Grid",
-    "description": "Top off a smartphone with a 200 W folding panel, solar charge controller, and 200 Wh LiFePO4 battery.",
+    "description": "Charge a phone off-grid with a 200 W panel, charge controller, 200 Wh LiFePO4 battery and USB cable.",
     "image": "/assets/quests/solar_200Wh.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phone running low? We'll use a portable 200 W panel, solar charge controller, and 200 Wh LiFePO4 pack. Keep everything dry and handle connectors by the insulated parts.",
+            "text": "Phone low? Set up a 200 W panel, charge controller, 200 Wh LiFePO4 battery and USB cable on dry ground. Handle connectors by their insulation and stop if cables warm or weather turns.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "setup",
-            "text": "Face the panel toward the sun, attach its MC4 leads to the charge controller, then connect the controller to the battery. Keep the battery shaded, verify red to positive and black to negative, and plug your smartphone in with the USB cable. Stop if cables heat up or weather turns.",
+            "text": "Unfold the panel toward the sun, snap its MC4 leads into the charge controller, then connect the controller to the battery. Keep the battery shaded on a nonflammable surface, double-check red to positive and black to negative, and run the USB cable from the controller to your smartphone.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -59,7 +59,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Disconnect everything, coil the cable, and stash the gear out of direct sun.",
+            "text": "Nice work! Disconnect in reverse order, coil the USB cable, and store the panel and battery out of direct sun.",
             "options": [
                 {
                     "type": "finish",
@@ -71,12 +71,13 @@
     "rewards": [],
     "requiresQuests": ["energy/solar"],
     "hardening": {
-        "passes": 2,
-        "score": 78,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 78 }
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 78 },
+            { "task": "codex-offgrid-charger-2025-08-06", "date": "2025-08-06", "score": 90 }
         ]
     }
 }
