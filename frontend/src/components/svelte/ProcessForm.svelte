@@ -433,7 +433,9 @@
     }
 
     .form-submit {
-        text-align: center;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
         margin-top: 20px;
     }
 
@@ -450,6 +452,17 @@
         .item-row {
             flex-direction: column;
             align-items: flex-start;
+        }
+
+        .form-submit {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .submit-button,
+        .preview-button {
+            width: 100%;
+            margin-left: 0;
         }
     }
 </style>
