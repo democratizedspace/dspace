@@ -74,7 +74,8 @@
     },
     {
         "id": "outlet-dWatt-1e5",
-        "title": "generate 1E5 dWatt using your outlet",
+        "title": "Use a smart plug to buy 100 kWh of electricity from a wall outlet",
+        "image": "/assets/smart_plug.jpg",
         "requireItems": [
             {
                 "id": "a5395e29-1862-4eb7-8517-5d161635e032",
@@ -94,10 +95,22 @@
             },
             {
                 "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
-                "count": 97.7023939064
+                "count": 97.7
             }
         ],
-        "duration": "2s"
+        "duration": "100h",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "smart-plug-schedule-12h",
