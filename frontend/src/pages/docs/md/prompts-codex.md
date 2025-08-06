@@ -112,7 +112,7 @@ and `README.md`. Ensure `npm run lint`, `npm run type-check` and `npm run build`
 pass before committing.
 
 USER:
-1. Pick one prompt doc under `frontend/src/pages/docs/md/` (for example,
+1. Pick one or more prompt docs under `frontend/src/pages/docs/md/` (for example,
    `prompts-items.md`).
 2. Fix outdated instructions, links or formatting.
 3. Run the checks above.
