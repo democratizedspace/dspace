@@ -25,7 +25,8 @@
     "build": "cd frontend && npm run build",
     "quest:count": "node scripts/compareQuestCount.js",
     "generate:item-map": "node scripts/generate-item-dependencies.js",
-    "new-quests:update": "node scripts/update-new-quests-v3.js"
+    "new-quests:update": "node scripts/update-new-quests-v3.js",
+    "audit:ci": "npm audit --audit-level=high && npm --prefix frontend audit --audit-level=high"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
