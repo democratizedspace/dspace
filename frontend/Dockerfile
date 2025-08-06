@@ -6,15 +6,15 @@ RUN apk add --no-cache curl
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies
-COPY package*.json ./
-COPY scripts ./scripts
+# Copy workspace and package files
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json .npmrc ./
+COPY frontend/package.json frontend/
 
-# Install dependencies without executing any npm scripts
-RUN npm ci --omit=dev --ignore-scripts
+# Install dependencies without running scripts
+RUN corepack enable && pnpm install --filter frontend --frozen-lockfile --ignore-scripts --prod
 
 # Copy the rest of the application
-COPY . .
+COPY frontend ./frontend
 
 # Set environment variables for the port and host
 ENV PORT=3002
@@ -26,4 +26,4 @@ EXPOSE 3002
 HEALTHCHECK CMD curl -f http://localhost:3002/health || exit 1
 
 # Run the application
-CMD ["npm", "run", "dev"]
+CMD ["pnpm", "--filter", "frontend", "run", "dev"]

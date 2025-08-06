@@ -6,8 +6,8 @@
  */
 
 const { execSync } = require('child_process');
-const path = require('path');
 const os = require('os');
+const { hasZeroTests } = require('./scripts/utils/detect-zero-tests');
 
 // ANSI color codes for pretty output
 const colors = {
@@ -24,10 +24,17 @@ const colors = {
 console.log(`${colors.bright}${colors.magenta}DSPACE Testing Suite${colors.reset}`);
 console.log(`${colors.cyan}Running comprehensive tests before PR submission...${colors.reset}\n`);
 
-// Get the frontend directory path
-const frontendDir = path.join(__dirname, 'frontend');
-
 try {
+    console.log(`${colors.yellow}Running root unit tests...${colors.reset}`);
+    const rootOutput = execSync('npm run test:root', {
+        encoding: 'utf-8',
+        stdio: 'pipe'
+    });
+    process.stdout.write(rootOutput);
+    if (hasZeroTests(rootOutput)) {
+        console.warn(`${colors.yellow}Warning: no root tests were run.${colors.reset}`);
+    }
+
     // Determine which script to run based on OS
     if (os.platform() === 'win32') {
         console.log(`${colors.yellow}Detected Windows OS, running PowerShell script...${colors.reset}`);

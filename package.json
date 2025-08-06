@@ -7,7 +7,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "cd frontend && npm run dev",
-    "test": "vitest",
+    "test": "npm run test:pr",
+    "test:root": "vitest run --testTimeout 20000",
     "coverage": "vitest run --coverage",
     "test:watch": "cd frontend && npm run test:watch",
     "test:e2e": "cd frontend && npm run test:e2e",
@@ -25,7 +26,9 @@
     "build": "cd frontend && npm run build",
     "quest:count": "node scripts/compareQuestCount.js",
     "generate:item-map": "node scripts/generate-item-dependencies.js",
-    "new-quests:update": "node scripts/update-new-quests-v3.js"
+    "new-quests:update": "node scripts/update-new-quests-v3.js",
+    "audit:ci": "npm audit --audit-level=high && npm --prefix frontend audit --audit-level=high",
+    "ci:install": "HUSKY=0 npm ci && HUSKY=0 npm ci --prefix frontend"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",

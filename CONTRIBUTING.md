@@ -7,11 +7,9 @@ Thank you for your interest in helping the project! Below is a quick overview of
 1. Fork and clone the repo.
 2. Install dependencies:
    ```bash
-   npm ci
-   (cd frontend && npm ci)
-   npx husky install
+   pnpm install
    ```
-   Husky installs Git hooks that run checks before each commit and push.
+   Husky hooks install automatically. Use `npm run ci:install` in CI to skip them.
 
 ## Development Workflow
 
@@ -21,9 +19,9 @@ Thank you for your interest in helping the project! Below is a quick overview of
   npm run check
   ```
 - The test suite verifies file formatting, so unformatted changes will fail CI.
-- The pre-commit hook runs `lint-staged`, `npm run check`, and then `SKIP_E2E=1 npm run test:pr` to make sure tests are green. You can run it manually with:
+- The pre-commit hook runs `lint-staged`, `npm run check`, and then `SKIP_E2E=1 npm test` to make sure tests are green. You can run it manually with:
   ```bash
-  SKIP_E2E=1 npm run test:pr
+  SKIP_E2E=1 npm test
   ```
 - If Playwright browsers are missing, install them with `npx playwright install chromium` or set `SKIP_E2E=1`.
 
@@ -31,7 +29,7 @@ Thank you for your interest in helping the project! Below is a quick overview of
 
 1. Run the full suite before submitting:
    ```bash
-   npm run test:pr
+   npm test
    ```
    Include `SKIP_E2E=1` if you cannot run the browsers.
 2. Update documentation when adding or changing features.

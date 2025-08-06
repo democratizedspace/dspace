@@ -44,12 +44,12 @@
         },
         {
             "id": "code",
-            "text": "Reconnect the USB cable and upload a sketch that reads A0 and prints values to the serial monitor. Cover and uncover the sensor to watch the numbers change, and avoid shining lasers or staring into bright lights while testing.",
+            "text": "Plug the USB cable back in and upload a sketch that reads A0 and prints to the serial monitor. Shade and expose the sensor to watch the values shift. Skip lasers and avoid staring into bright lamps during testing.",
             "options": [{ "type": "goto", "goto": "finish", "text": "Numbers are changing!" }]
         },
         {
             "id": "finish",
-            "text": "Nice work! Unplug the board before adjusting the circuit and store the parts for future projects.",
+            "text": "Nice work! Unplug the board before making changes, then coil the USB cable and store all parts for future builds.",
             "options": [{ "type": "finish", "text": "Cool!" }]
         }
     ],

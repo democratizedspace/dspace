@@ -117,7 +117,7 @@ We follow a feature branch workflow:
 
 1. Update documentation for any new features
 2. Add or update tests as necessary
-3. Ensure all tests pass with `npm run test:pr`
+3. Ensure all tests pass with `npm test`
 4. Get approval from at least one maintainer
 5. Squash and merge into the main branch
 
@@ -131,7 +131,7 @@ Before submitting a pull request, run the comprehensive cross-platform test suit
 
 ```bash
 # From project root
-npm run test:pr
+npm test
 ```
 
 This command:
@@ -154,6 +154,9 @@ npm test
 npm run coverage
 ```
 
+Running `npm test` emits a warning if it detects zero tests, helping catch missing or
+misconfigured suites early.
+
 ### End-to-End Tests
 
 E2E tests verify the application behaves correctly from a user's perspective:
@@ -169,7 +172,7 @@ npm run test:e2e
 npm run test:e2e:groups
 ```
 
-> **Important:** When using `npm run test:pr` or `npm run test:e2e:groups`, the
+> **Important:** When using `npm test` or `npm run test:e2e:groups`, the
 > development server is started automatically. Start the server yourself only if
 > you run Playwright commands directly.
 
