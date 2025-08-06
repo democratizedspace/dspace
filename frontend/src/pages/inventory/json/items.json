@@ -32,10 +32,22 @@
     {
         "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
         "name": "white PLA filament",
-        "description": "1 gram of white PLA filament for an FDM printer.",
+        "description": "1 g of 1.75 mm white PLA filament for FDM printers; sold by weight to suit small prints.",
         "image": "/assets/pla_white.jpg",
-        "price": "0.02499 dUSD",
-        "unit": "g"
+        "price": "0.025 dUSD",
+        "unit": "g",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "8f54a592-09de-4340-829b-7288897eb4c7",
