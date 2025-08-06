@@ -1,14 +1,26 @@
 {
     "id": "hydroponics/grow-light",
     "title": "Install a Grow Light",
-    "description": "Provide your plants with artificial light to boost growth.",
+    "description": "Install a full-spectrum lamp and schedule daily lighting.",
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 65
+            }
+        ]
+    },
     "image": "/assets/hydroponic_lamp.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "To keep plants thriving indoors you'll need a grow light.",
+            "text": "Indoor greens need steady light. Mount a lamp above the hydro tub.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +31,7 @@
         },
         {
             "id": "install",
-            "text": "Hang the fixture above your tub and connect it to power. Run it for 12 hours each day.",
+            "text": "Hang lamp 25–30 cm up. Smart plug 12 h/day. Keep cords dry with a drip loop.",
             "options": [
                 {
                     "type": "goto",
@@ -29,6 +41,10 @@
                         {
                             "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
                             "count": 1
+                        },
+                        {
+                            "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                            "count": 1
                         }
                     ]
                 }
@@ -36,7 +52,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Proper lighting will keep your greens lush.",
+            "text": "Great! Proper lighting keeps greens lush. Unplug before adjusting height.",
             "options": [
                 {
                     "type": "finish",
@@ -46,5 +62,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/bucket_10"]
+    "requiresQuests": [
+        "hydroponics/bucket_10"
+    ]
 }
