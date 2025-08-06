@@ -3,14 +3,19 @@
     "title": "Install a Grow Light",
     "description": "Install a full-spectrum lamp and schedule daily lighting.",
     "hardening": {
-        "passes": 1,
-        "score": 65,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-hardening-2025-08-06",
                 "date": "2025-08-06",
                 "score": 65
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06-2",
+                "date": "2025-08-06",
+                "score": 80
             }
         ]
     },
@@ -20,7 +25,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Indoor greens need steady light. Mount a lamp above the hydro tub.",
+            "text": "Healthy greens need steady light. Unplug gear and clear a dry space above the hydro tub.",
             "options": [
                 {
                     "type": "goto",
@@ -31,12 +36,13 @@
         },
         {
             "id": "install",
-            "text": "Hang lamp 25–30 cm up. Smart plug 12 h/day. Keep cords dry with a drip loop.",
+            "text": "Hang the LED panel 25–30 cm above plants. Loop the cord downward so drips miss the outlet. Plug the lamp into a smart plug and set a 12 h on/off cycle.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Light installed.",
+                    "process": "smart-plug-schedule-12h",
                     "requiresItems": [
                         {
                             "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
@@ -52,7 +58,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Proper lighting keeps greens lush. Unplug before adjusting height.",
+            "text": "Great! Proper lighting keeps greens lush. Let the lamp cool and unplug before adjusting height.",
             "options": [
                 {
                     "type": "finish",

@@ -87,6 +87,31 @@
         "duration": "2s"
     },
     {
+        "id": "smart-plug-schedule-12h",
+        "title": "Set smart plug to a 12 h on/off cycle",
+        "requireItems": [
+            {
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "bucket-water-chlorinated",
         "title": "Use a sink to fill a 5 gallon bucket with tap water",
         "requireItems": [
