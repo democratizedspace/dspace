@@ -34,7 +34,8 @@
     },
     {
         "id": "outlet-dWatt-1e4",
-        "title": "generate 1E4 dWatt using your outlet",
+        "title": "Use a smart plug to buy 10 kWh of electricity from a wall outlet",
+        "image": "/assets/smart_plug.jpg",
         "requireItems": [
             {
                 "id": "a5395e29-1862-4eb7-8517-5d161635e032",
@@ -54,10 +55,22 @@
             },
             {
                 "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
-                "count": 9.77023939064
+                "count": 9.77
             }
         ],
-        "duration": "2s"
+        "duration": "10h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-upgrade-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "outlet-dWatt-1e5",
