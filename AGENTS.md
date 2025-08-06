@@ -20,7 +20,8 @@ SKIP_E2E=1 npm run test:pr
 
 - Install Playwright browsers with `npx playwright install chromium` when E2E tests require it.
 - Use `npm run check` to verify formatting and linting.
-- If dependencies are missing, run `pnpm install` in the repo root.
+- Use `npm run audit:ci` to fail on high-severity dependency vulnerabilities.
+- If dependencies are missing, run `npm ci` in the repo root and `npm ci --prefix frontend`.
 - Fix formatting issues with `npx prettier`.
 - Set `ESLINT_USE_FLAT_CONFIG=false` if running ESLint manually.
 - If a proxy is required, set `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables
