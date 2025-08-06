@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey again! Orion here. Let's build a light sensor. Work on a non-conductive surface, keep your hands dry, and unplug the board while wiring to avoid shorts.",
+            "text": "Hey again! Orion here. Let's build a light sensor. Work on a non-conductive surface, touch grounded metal to discharge static, keep your hands dry, and unplug the board while wiring to avoid shorts.",
             "options": [{ "type": "goto", "goto": "materials", "text": "What do I need?" }]
         },
         {
             "id": "materials",
-            "text": "Gather an Arduino Uno, breadboard, three jumper wires, a photoresistor, a 10 kΩ resistor, a USB cable and a laptop with the Arduino IDE installed. Keep components organized so leads don't touch.",
+            "text": "Gather one Arduino Uno, a breadboard, three jumper wires, one photoresistor, one 10 kΩ resistor, one USB cable, and a laptop with the Arduino IDE installed. Keep components organized so leads don't touch or short.",
             "options": [
                 {
                     "type": "process",
@@ -38,12 +38,12 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5 V, its other leg to one side of the 10 kΩ resistor, then connect the resistor's other leg to GND. Run a jumper from the junction to A0 and make sure no bare wires touch before powering up.",
+            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5 V, its other leg to one side of the 10 kΩ resistor, then connect the resistor's other leg to GND. Run a jumper from the junction to A0, check the resistor value, and make sure no bare wires touch before powering up.",
             "options": [{ "type": "goto", "goto": "code", "text": "Wired up!" }]
         },
         {
             "id": "code",
-            "text": "Reconnect the USB cable and upload a sketch that reads A0 and prints values to the serial monitor. Cover and uncover the sensor to watch the numbers change, and don't stare into bright lights while testing.",
+            "text": "Reconnect the USB cable and upload a sketch that reads A0 and prints values to the serial monitor. Cover and uncover the sensor to watch the numbers change, and avoid shining lasers or staring into bright lights while testing.",
             "options": [{ "type": "goto", "goto": "finish", "text": "Numbers are changing!" }]
         },
         {
@@ -55,9 +55,9 @@
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-05",
@@ -68,6 +68,11 @@
                 "task": "codex-quest-refinement-2025-08-05-2",
                 "date": "2025-08-05",
                 "score": 80
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06-3",
+                "date": "2025-08-06",
+                "score": 90
             }
         ]
     }
