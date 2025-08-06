@@ -1816,7 +1816,7 @@
     },
     {
         "id": "print-benchy",
-        "title": "3D print a Benchy calibration boat on Real Printer 1 using 15 g of white PLA",
+        "title": "3D print a Benchy calibration boat on an entry-level FDM 3D printer using 15 g of white PLA",
         "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
         "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 15 }],
         "createItems": [{ "id": "7892ffc6-c651-445f-946b-7edc998cf389", "count": 1 }],
@@ -1848,7 +1848,7 @@
     },
     {
         "id": "print-phone-stand",
-        "title": "3D print a smartphone stand on Real Printer 1 using 20 g of white PLA",
+        "title": "3D print a smartphone stand on an entry-level FDM 3D printer using 20 g of white PLA",
         "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
         "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 20 }],
         "createItems": [{ "id": "9018feac-7213-4eef-9654-b06dbd9404ea", "count": 1 }],
@@ -1903,13 +1903,21 @@
     },
     {
         "id": "stop-nosebleed",
-        "title": "Control a minor nosebleed",
-        "requireItems": [],
+        "title": "Use gloves, gauze, and antiseptic from a first aid kit to control a minor nosebleed",
+        "image": "/assets/rescue.jpg",
+        "requireItems": [{ "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 }],
         "consumeItems": [
             { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
-            { "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9", "count": 1 }
+            { "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9", "count": 1 },
+            { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 1 }
         ],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }]
+        }
     }
 ]

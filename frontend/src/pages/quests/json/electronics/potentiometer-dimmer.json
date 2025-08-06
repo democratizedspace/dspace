@@ -3,10 +3,13 @@
     "title": "Dim an LED with a Potentiometer",
     "description": "Adjust LED brightness using a potentiometer and an Arduino.",
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
-        "history": [{ "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }]
+        "passes": 2,
+        "score": 75,
+        "emoji": "✅",
+        "history": [
+            { "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 60 },
+            { "task": "codex-hardening-2025-09-30", "date": "2025-09-30", "score": 75 }
+        ]
     },
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
@@ -14,23 +17,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion here again! Ready to add some interactivity? We'll twist a potentiometer to control an LED. Unplug the Arduino first so nothing shorts while you build.",
+            "text": "Orion here again! Ready to add some interactivity? We'll twist a potentiometer to control an LED. Work on a static-safe, non-conductive surface and keep the Arduino unplugged so nothing shorts while you build.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "wire",
-                    "text": "Sounds good! What do I need?"
+                    "goto": "materials",
+                    "text": "What do I need?"
                 }
             ]
         },
         {
-            "id": "wire",
-            "text": "Set the potentiometer on your breadboard. With power off, wire the outer legs to 5V and GND and run the middle wiper to A0. Keep the LED on pin 9 through a 220 Ω resistor so it survives. Use jumper wires and double-check for shorts.",
+            "id": "materials",
+            "text": "Gather an Arduino Uno, a breadboard, three jumper wires, a 5 mm LED, a 220 Ω resistor, a potentiometer, a USB cable, and a laptop with the Arduino IDE. Keep components organized so leads don't touch.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "arduino-ide-install",
+                    "text": "Install the Arduino IDE"
+                },
+                {
                     "type": "goto",
-                    "goto": "program",
-                    "text": "Wired up! What's the code?",
+                    "goto": "wire",
+                    "text": "Parts ready!",
                     "requiresItems": [
                         { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
                         { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
@@ -45,19 +53,30 @@
             ]
         },
         {
+            "id": "wire",
+            "text": "Disconnect the USB cable. Set the potentiometer on the breadboard with its flat side facing you. Wire the outer legs to 5 V and GND, run the middle wiper to A0, and place the LED on pin 9 through the 220 Ω resistor so it survives. Use jumper wires, avoid crossing power rails, and double-check for shorts before powering up.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "program",
+                    "text": "Circuit built!"
+                }
+            ]
+        },
+        {
             "id": "program",
-            "text": "Reconnect the USB cable and launch the Arduino IDE. Load the 'AnalogInOutSerial' example; it reads analogRead(A0), uses map(0,1023,0,255), then analogWrite(9, value) to fade the LED. Select the right port before uploading.",
+            "text": "Reconnect the USB cable and open the Arduino IDE. Load the 'AnalogInOutSerial' example; it reads analogRead(A0), maps 0‑1023 to 0‑255, then analogWrite(9, value) to fade the LED. Select the correct port, upload, and avoid staring directly into the LED.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Uploaded! The LED changes brightness as I turn the knob."
+                    "text": "Uploaded! The LED dims smoothly."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Potentiometers give smooth control over voltage. Always unplug the board before rewiring and try using the knob to drive motor speed or sensor thresholds next.",
+            "text": "Nice work! Potentiometers give smooth control over voltage. Unplug the board before making changes, coil the USB cable, and store the parts for your next build.",
             "options": [
                 {
                     "type": "finish",
