@@ -26,6 +26,10 @@ SKIP_E2E=1 npm run test:pr
 - If a proxy is required, set `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables
   instead of using `.npmrc` proxy settings.
 
+## Dependency Management
+
+- GitHub Dependabot automatically opens weekly PRs for npm updates (see `.github/dependabot.yml`).
+
 ## Quest Creation Guidelines
 
 - Quest JSON lives in `frontend/src/pages/quests/json` and must follow the schema in `frontend/src/pages/quests/jsonSchemas`.
