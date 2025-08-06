@@ -25,9 +25,17 @@
     {
         "id": "92261497-d605-4db1-8710-953cf73d765c",
         "name": "hydroponics kit",
-        "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
-        "image": "/assets/amazing1.jpg",
-        "price": "30 dUSD"
+        "description": "Starter kit with a 10 L reservoir, pump, tubing and net pots for indoor hydroponics.",
+        "image": "/assets/hydroponics.jpg",
+        "price": "50 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hydroponics-kit-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     },
     {
         "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
