@@ -351,7 +351,8 @@
     },
     {
         "id": "prepare-hydroponic-tub",
-        "title": "prepare your hydroponic tub",
+        "title": "Prepare a hydroponics tub with water and nutrients",
+        "image": "/assets/hydroponics_tub.jpg",
         "requireItems": [],
         "consumeItems": [
             {
@@ -373,7 +374,13 @@
                 "count": 1
             }
         ],
-        "duration": "2m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 60 }]
+        }
     },
     {
         "id": "refresh-hydroponic-tub",
