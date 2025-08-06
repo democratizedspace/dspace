@@ -10,6 +10,12 @@ export default defineConfig({
     style: {
         postcss: {},
     },
+    markdown: {
+        syntaxHighlight: 'prism',
+        prism: {
+            map: { text: 'plaintext' },
+        },
+    },
     vite: {
         server: {
             port: parseInt(process.env.PORT) || 3002, // Use PORT env var or default to 3000

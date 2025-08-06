@@ -7,7 +7,7 @@ DSPACE is a free and open source web-based space exploration idle game where pla
 -   **Framework**: [Astro](https://astro.build/) with [Svelte](https://svelte.dev/) components
 -   **Styling**: PostCSS with SCSS
 -   **Testing**: Jest with Testing Library
--   **Documentation**: Markdown with Remarkable
+-   **Documentation**: Markdown with Remarkable and Prism code highlighting (maps `text` to `plaintext`)
 -   **API Integration**: token.place
 -   **Code Quality**: ESLint, Prettier
 
