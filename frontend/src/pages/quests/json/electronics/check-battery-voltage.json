@@ -1,14 +1,14 @@
 {
     "id": "electronics/check-battery-voltage",
     "title": "Check a battery pack's voltage",
-    "description": "Use a digital multimeter to verify a 12 V 200 Wh LiFePO4 battery pack on a non-conductive surface while wearing safety goggles.",
+    "description": "Use a digital multimeter to check a 12 V LiFePO4 pack on a non-conductive surface while wearing safety goggles.",
     "image": "/assets/battery.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey! Let's confirm your 12 V pack is healthy. Place it on a non-conductive surface, put on safety goggles, and follow the measure-battery-voltage process with a digital multimeter.",
+            "text": "Put on safety goggles, set the pack on a non-conductive surface, then follow the measure-battery-voltage process with your digital multimeter.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "measure",
-            "text": "Set the multimeter to the 20 V DC range. Keep fingers behind the probe guards, touch red to the positive terminal and black to the negative without letting them meet, and stop if the leads get warm. A healthy pack should read about 12 V.",
+            "text": "Set the multimeter to the 20 V DC range. Keep fingers behind the probe guards, touch red to the positive terminal and black to the negative without letting them meet, and stop if the leads get warm. A healthy pack should read 12.4–13.6 V.",
             "options": [
                 {
                     "type": "goto",
@@ -45,7 +45,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Disconnect the probes, take off your goggles, and store the battery safely—your pack looks charged and ready.",
+            "text": "Nice work! Disconnect the probes, remove your goggles, and store the battery in a dry, fire-safe spot—your pack looks charged and ready.",
             "options": [
                 {
                     "type": "finish",
@@ -62,13 +62,14 @@
     ],
     "requiresQuests": [],
     "hardening": {
-        "passes": 3,
-        "score": 92,
+        "passes": 4,
+        "score": 94,
         "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
             { "task": "codex-upgrade-2025-08-05", "date": "2025-08-05", "score": 80 },
-            { "task": "codex-polish-2025-08-05", "date": "2025-08-05", "score": 92 }
+            { "task": "codex-polish-2025-08-05", "date": "2025-08-05", "score": 92 },
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 94 }
         ]
     }
 }
