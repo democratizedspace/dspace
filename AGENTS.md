@@ -24,6 +24,10 @@ SKIP_E2E=1 npm run test:pr
 - Fix formatting issues with `npx prettier`.
 - Set `ESLINT_USE_FLAT_CONFIG=false` if running ESLint manually.
 
+## Dependency Management
+
+- GitHub Dependabot automatically opens weekly PRs for npm updates (see `.github/dependabot.yml`).
+
 ## Quest Creation Guidelines
 
 - Quest JSON lives in `frontend/src/pages/quests/json` and must follow the schema in `frontend/src/pages/quests/jsonSchemas`.
