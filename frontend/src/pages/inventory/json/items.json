@@ -468,9 +468,17 @@
     {
         "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
         "name": "bundle of basil leaves",
-        "description": "A bundle of basil leaves. Maybe we can make pesto in the future? For now, maybe just sell it.",
+        "description": "Fresh-cut 30 g (1 oz) bundle of Genovese basil leaves from hydroponic plants; use or sell soon.",
         "image": "/assets/basil_harvested.jpg",
-        "price": "3 dUSD"
+        "price": "2 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }
+            ]
+        }
     },
     {
         "id": "29190faf-8581-4769-b871-f0ee283840e1",
