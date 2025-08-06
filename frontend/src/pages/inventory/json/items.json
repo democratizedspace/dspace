@@ -468,9 +468,17 @@
     {
         "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
         "name": "bundle of basil leaves",
-        "description": "A bundle of basil leaves. Maybe we can make pesto in the future? For now, maybe just sell it.",
+        "description": "Fresh-cut 30 g (1 oz) bundle of Genovese basil leaves from hydroponic plants; use or sell soon.",
         "image": "/assets/basil_harvested.jpg",
-        "price": "3 dUSD"
+        "price": "2 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }
+            ]
+        }
     },
     {
         "id": "29190faf-8581-4769-b871-f0ee283840e1",
@@ -1311,15 +1319,16 @@
     {
         "id": "97317bc3-507a-4e2c-912b-507d586cee87",
         "name": "gravel vacuum",
-        "description": "Manual siphon with 2 m (6.5 ft) flexible tubing and 4 cm intake for cleaning aquarium substrate and removing water.",
-        "image": "/assets/aquarium_empty.jpg",
+        "description": "Self-priming siphon with 2 m (6.5 ft) hose and 4 cm (1.6 in) tube; moves ~3 L/min to clear debris.",
+        "image": "/assets/gravel.jpg",
         "price": "10 dUSD",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
             "history": [
-                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
+                { "task": "codex-item-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 80 }
             ]
         }
     },
@@ -1380,9 +1389,17 @@
     {
         "id": "70bb8d86-2c4e-4330-9705-371891934686",
         "name": "mission logbook",
-        "description": "Bound logbook with pre-numbered pages for recording daily mission events and maintenance notes.",
+        "description": "A5 (148 × 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
         "image": "/assets/paperwork.jpg",
-        "price": "2 dUSD"
+        "price": "8 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }
+            ]
+        }
     },
     {
         "id": "aa82b02f-2617-4474-a91b-29647e4a9780",

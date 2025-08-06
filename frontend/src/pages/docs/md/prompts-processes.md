@@ -71,7 +71,8 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm run test:root` and fix any failures.
-7. Update docs or items if needed.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+8. Update docs or items if needed.
 
 OUTPUT
 Return **only** the patch (diff) needed.
@@ -85,15 +86,17 @@ Use this when you want Codex to automatically create or upgrade a process.
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/processes.json`. Ensure realistic
-steps, durations, item references, and passing checks (`npm run lint`, `npm run
-type-check`, `npm run build`, and `npm run test:root`).
-Verify the process links to existing quests or items, add missing registry
-entries if needed, and reuse existing image assets.
+steps, durations, item references, and passing checks (`npm run lint`,
+`npm run type-check`, `npm run build`, and `npm run test:root`). Verify the
+process links to existing quests or items, add missing registry entries if
+needed, reuse existing image assets, and scan for secrets with `git diff
+--cached | ./scripts/scan-secrets.py` before committing.
 
 USER:
 1. Follow the steps above.
 2. Run the commands listed in the system prompt before committing.
 3. Summarize the new or updated process in the PR description.
+4. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request implementing the process with all tests green.
@@ -133,6 +136,8 @@ USER:
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:root`. Update docs or items if needed.
+6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+7. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with the refined process, updated hardening block and passing tests.
