@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "dChat here! Even seasoned makers keep a stocked first aid kit within reach for minor mishaps.",
+            "text": "dChat here! Keep a first aid kit nearby for the inevitable minor mishap.",
             "options": [
                 {
                     "type": "goto",
@@ -19,12 +19,25 @@
         },
         {
             "id": "gather",
-            "text": "Gather adhesive bandages, sterile gauze pads, antiseptic wipes, and a pair of nitrile gloves. Wash and dry your hands, check each item's seal and expiration date, then pack the supplies so they stay clean and dry.",
+            "text": "Wash hands with soap 20 sec, then dry. Get bandages, gauze, wipes, gloves.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Hands are clean",
+                    "goto": "pack"
+                }
+            ]
+        },
+        {
+            "id": "pack",
+            "text": "Check seals and dates, then store items in a dry container to keep sterile.",
             "options": [
                 {
                     "type": "process",
                     "process": "pack-first-aid-kit",
-                    "text": "Packing now."
+                    "text": "Packing now",
+                    "goto": "finish"
                 },
                 {
                     "type": "goto",
@@ -35,13 +48,13 @@
                             "count": 1
                         }
                     ],
-                    "text": "Supplies packed."
+                    "text": "Supplies packed"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Store the kit in a cool, dry place away from children, and replace items as they're used.",
+            "text": "Great! Keep kit in a cool, dry spot away from kids. Replace items after use.",
             "options": [
                 {
                     "type": "finish",
@@ -53,13 +66,14 @@
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 3,
-        "score": 90,
+        "passes": 4,
+        "score": 92,
         "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 },
             { "task": "codex-refine-2025-08-04", "date": "2025-08-04", "score": 80 },
-            { "task": "codex-refine-2025-08-05", "date": "2025-08-05", "score": 90 }
+            { "task": "codex-refine-2025-08-05", "date": "2025-08-05", "score": 90 },
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 }
         ]
     }
 }

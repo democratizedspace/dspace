@@ -1446,6 +1446,19 @@
         "duration": "5m"
     },
     {
+        "id": "wash-hands",
+        "title": "Wash hands with soap and water",
+        "requireItems": [
+            {
+                "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "20s"
+    },
+    {
         "id": "pack-first-aid-kit",
         "title": "Pack a basic first aid kit",
         "requireItems": [],
