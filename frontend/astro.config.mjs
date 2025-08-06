@@ -14,11 +14,6 @@ export default defineConfig({
     server: {
       port: parseInt(process.env.PORT) || 3002, // Use PORT env var or default to 3000
       host: "0.0.0.0",
-    },
-    resolve: {
-      alias: {
-        "node-domexception": "/domexception-shim.js"
-      }
     }
   }
 });
