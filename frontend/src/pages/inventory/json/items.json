@@ -1316,10 +1316,18 @@
     },
     {
         "id": "c687abb3-7b52-4344-97dc-8b7e0881ed9d",
-        "name": "LED grow light (20W)",
-        "description": "Full-spectrum LED fixture delivering 20 watts of light for seedlings and herbs.",
-        "image": "/assets/aquarium_light.jpg",
-        "price": "30 dUSD"
+        "name": "20 W LED grow light",
+        "description": "20 W full-spectrum panel lights 0.2 m²; includes hanger and 12 V adapter.",
+        "image": "/assets/hydroponic_lamp.jpg",
+        "price": "20 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     },
     {
         "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
