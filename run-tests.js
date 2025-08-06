@@ -7,6 +7,7 @@
 
 const { execSync } = require('child_process');
 const os = require('os');
+const { hasZeroTests } = require('./scripts/utils/detect-zero-tests');
 
 // ANSI color codes for pretty output
 const colors = {
@@ -25,7 +26,14 @@ console.log(`${colors.cyan}Running comprehensive tests before PR submission...${
 
 try {
     console.log(`${colors.yellow}Running root unit tests...${colors.reset}`);
-    execSync('npm run test:root', { stdio: 'inherit' });
+    const rootOutput = execSync('npm run test:root', {
+        encoding: 'utf-8',
+        stdio: 'pipe'
+    });
+    process.stdout.write(rootOutput);
+    if (hasZeroTests(rootOutput)) {
+        console.warn(`${colors.yellow}Warning: no root tests were run.${colors.reset}`);
+    }
 
     // Determine which script to run based on OS
     if (os.platform() === 'win32') {
