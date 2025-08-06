@@ -32,10 +32,10 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
     -   Web: –
     -   CLI:
         ```bash
-        codex exec "npm run test:root"
+        codex exec "npm run test:root -- processQuality"
         ```
 
-See the upstream CLI reference for more flags.
+See the [Codex CLI documentation][codex-cli] for more flags.
 
 ---
 
@@ -46,7 +46,7 @@ See the upstream CLI reference for more flags.
 | **Goal sentence**    | Gives the agent a north star (“Add lettuce seed input to hydroponics”). |
 | **Files to touch**   | Limits search space → faster & cheaper.                                 |
 | **Constraints**      | Coding style, a11y, process schema rules.                               |
-| **Acceptance check** | e.g. “`npm run test:root` passes”.                                      |
+| **Acceptance check** | e.g. “`npm run test:root -- processQuality` passes”.                    |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
@@ -70,8 +70,8 @@ REQUIREMENTS
    missing items or quest hooks as needed.
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
-6. Run `npm run test:root` and fix any failures.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+6. Run `npm run test:root -- processQuality` and fix any failures.
+7. Run `git diff --cached | ripsecrets` and ensure no secrets.
 8. Update docs or items if needed.
 
 OUTPUT
@@ -87,10 +87,10 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/processes.json`. Ensure realistic
 steps, durations, item references, and passing checks (`npm run lint`,
-`npm run type-check`, `npm run build`, and `npm run test:root`). Verify the
-process links to existing quests or items, add missing registry entries if
-needed, reuse existing image assets, and scan for secrets with `git diff
---cached | ./scripts/scan-secrets.py` before committing.
+`npm run type-check`, `npm run build`, and `npm run test:root -- processQuality`).
+Verify the process links to existing quests or items, add missing registry
+entries if needed, reuse existing image assets, and scan for secrets with
+`git diff --cached | ripsecrets` before committing.
 
 USER:
 1. Follow the steps above.
@@ -135,8 +135,8 @@ USER:
      ]
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
-   `npm run test:root`. Update docs or items if needed.
-6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+   `npm run test:root -- processQuality`. Update docs or items if needed.
+6. Run `git diff --cached | ripsecrets` before committing.
 7. Use an emoji-prefixed commit message.
 
 OUTPUT:
@@ -152,3 +152,5 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Iterate on outputs** rather than expecting perfection on the first try.
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
+
+[codex-cli]: https://www.npmjs.com/package/codex-cli
