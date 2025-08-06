@@ -157,8 +157,7 @@ USER:
      ]
    }
 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm test --
-   questCanonical questQuality itemQuality processQuality`. Update docs if
-   needed.
+   questCanonical questQuality`. Update docs if needed.
 
 OUTPUT:
 A pull request with the refined quest, updated hardening block and passing tests.
