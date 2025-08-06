@@ -63,3 +63,4 @@ test-artifacts/**/*.jpeg
 # Ignore generated quest tree image
 frontend/src/pages/docs/images/quest-tree-stats.png
 
+frontend/package-lock.json

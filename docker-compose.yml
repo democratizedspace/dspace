@@ -2,7 +2,8 @@ version: '3.8'
 services:
     app:
         build:
-            context: ./frontend
+            context: .
+            dockerfile: frontend/Dockerfile
         container_name: dspace-app
         platform: linux/arm64
         ports:
