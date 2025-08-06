@@ -429,9 +429,17 @@
     {
         "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
         "name": "harvestable basil plant",
-        "description": "A basil plant that is ready to be harvested. Growing medium: rockwool.",
+        "description": "Mature Genovese basil in a 4 cm rockwool cube, ~20 cm tall and ready to harvest.",
         "image": "/assets/hydroponic_basil_adult.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "5 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }
+            ]
+        }
     },
     {
         "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
