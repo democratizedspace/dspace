@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion here again! Ready to add some interactivity? We'll use a potentiometer as a dimmer for your LED. Make sure the Arduino is unplugged before wiring.",
+            "text": "Orion here again! Ready to add some interactivity? We'll use a potentiometer as a dimmer for your LED. Work on a non-conductive surface and keep the Arduino unplugged while wiring.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "wire",
-            "text": "Place a potentiometer on your breadboard. Disconnect power, then connect the side pins to 5V and ground and the wiper to analog pin A0. Keep the LED on pin 9 through a 220 Ω resistor to limit current. Use jumper wires to make the connections.",
+            "text": "Set a potentiometer on the breadboard. With power off, connect its side legs to 5 V and GND and the center wiper to A0. Run the 5 mm LED from pin 9 through a 220 Ω resistor to GND. Use three jumper wires, check the resistor reads red-red-brown and the LED's long leg is the anode before plugging in.",
             "options": [
                 {
                     "type": "goto",
@@ -51,6 +51,10 @@
                             "count": 1
                         },
                         {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
                             "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",
                             "count": 1
                         }
@@ -60,8 +64,13 @@
         },
         {
             "id": "program",
-            "text": "Plug the Arduino back in and open the Arduino IDE. Read the potentiometer with analogRead(A0) and map the 0–1023 value to 0–255 before analogWrite(9, result) to dim the LED. The 'AnalogInOutSerial' example shows the basics.",
+            "text": "Connect the board to your laptop with the USB cable and open the Arduino IDE. Read the potentiometer with analogRead(A0), map the 0–1023 value to 0–255 and analogWrite(9, result) to dim the LED. The 'AnalogInOutSerial' example shows the basics. Keep tools clear while the circuit is powered.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-ide-install",
+                    "text": "Install the Arduino IDE"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
@@ -71,7 +80,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! Potentiometers open up lots of control options. Always disconnect power before changing the circuit, and try using the knob to control motors or sensor thresholds next!",
+            "text": "Great job! Potentiometers open up lots of control options. Always disconnect power before changing the circuit, and try using the knob to control motors or sensor thresholds next.",
             "options": [
                 {
                     "type": "finish",
@@ -80,5 +89,17 @@
             ]
         }
     ],
-    "requiresQuests": ["electronics/arduino-blink"]
+    "requiresQuests": ["electronics/arduino-blink"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-refine-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    }
 }
