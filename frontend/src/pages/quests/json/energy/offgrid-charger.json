@@ -1,14 +1,14 @@
 {
     "id": "energy/offgrid-charger",
     "title": "Charge a Device Off-Grid",
-    "description": "Top off a smartphone using sunlight, a solar charge controller, and a 200 Wh battery pack.",
+    "description": "Top off a smartphone with a 200 W folding panel, solar charge controller, and 200 Wh LiFePO4 battery.",
     "image": "/assets/quests/solar_200Wh.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phone running low? We'll use a 200 W foldable panel, charge controller, and 200 Wh LiFePO4 pack to juice it up anywhere.",
+            "text": "Phone running low? We'll use a portable 200 W panel, solar charge controller, and 200 Wh LiFePO4 pack. Keep everything dry and handle connectors by the insulated parts.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "setup",
-            "text": "Unfold the panel, connect it to the charge controller, then to the battery. Keep the battery shaded and double-check polarity before using the USB cable to plug in your device.",
+            "text": "Face the panel toward the sun, attach its MC4 leads to the charge controller, then connect the controller to the battery. Keep the battery shaded, verify red to positive and black to negative, and plug your smartphone in with the USB cable. Stop if cables heat up or weather turns.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -48,29 +48,18 @@
                     "goto": "finish",
                     "text": "Phone is charging!",
                     "requiresItems": [
-                        {
-                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
-                            "count": 1
-                        },
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        },
-                        {
-                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
-                            "count": 1
-                        },
-                        {
-                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
-                            "count": 1
-                        }
+                        { "id": "02b32152-a7b2-458e-9643-7b754c722165", "count": 1 },
+                        { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
+                        { "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b", "count": 1 },
+                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
+                        { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! With this setup you can stay powered even off-grid.",
+            "text": "Nice work! Disconnect everything, coil the cable, and stash the gear out of direct sun.",
             "options": [
                 {
                     "type": "finish",
@@ -82,9 +71,12 @@
     "rewards": [],
     "requiresQuests": ["energy/solar"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
-        "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }]
+        "passes": 2,
+        "score": 78,
+        "emoji": "✅",
+        "history": [
+            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 78 }
+        ]
     }
 }

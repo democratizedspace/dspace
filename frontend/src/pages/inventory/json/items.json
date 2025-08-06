@@ -683,7 +683,7 @@
     {
         "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
         "name": "Solar charge controller",
-        "description": "A charge controller for a solar panel. Used to regular the voltage and current from a solar panel to protect the battery.",
+        "description": "Regulates solar panel output to safely charge a battery and prevent reverse current.",
         "image": "/assets/solar_charge_controller.jpg",
         "price": "30 dUSD"
     },
@@ -802,7 +802,7 @@
     {
         "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
         "name": "USB Cable",
-        "description": "Connects the Arduino to your computer for programming.",
+        "description": "Standard USB cable for charging or data transfer between devices.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
