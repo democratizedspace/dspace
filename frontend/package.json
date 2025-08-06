@@ -38,8 +38,7 @@
         "benchmark:db": "node scripts/db-benchmark.js",
         "check": "npm run lint && npm run format:check",
         "sync": "node scripts/sync-package.js",
-        "postinstall": "npm run sync",
-        "prepare": "husky"
+        "postinstall": "npm run sync && node ./scripts/husky-install.js"
     },
     "devDependencies": {
         "@astrojs/svelte": "^2.1.0",
