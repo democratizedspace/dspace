@@ -3,7 +3,7 @@ title: 'Process Prompts'
 slug: 'prompts-processes'
 ---
 
-# Writing great process prompts for the _dspace_ repo (v3)
+# Writing great process prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR—but only if you give it a
@@ -22,11 +22,18 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
 
 ## 1 Quick start (Web vs CLI)
 
-| Use‑case                | Codex Web (ChatGPT sidebar) | [Codex CLI][codex-cli]                                             |
-| ----------------------- | --------------------------- | ------------------------------------------------------------------ |
-| Add or update a process | “Code” button, attach repo  | `codex "add process 3dprinting/solar-mount"`                       |
-| Ask about process data  | “Ask” button                | `codex exec "explain frontend/src/pages/processes/processes.json"` |
-| Run process tests       | –                           | `codex exec --full-auto "npm run test:root"`                       |
+-   **Add or update a process**
+    -   Web: use the “Code” button and attach the repo.
+    -   CLI: `codex "add process 3dprinting/solar-mount"`
+-   **Ask about process data**
+    -   Web: use the “Ask” button.
+    -   CLI: `codex exec "explain frontend/src/pages/processes/processes.json"`
+-   **Run process tests**
+    -   Web: –
+    -   CLI:
+        ```bash
+        codex exec "npm run test:root"
+        ```
 
 See the upstream CLI reference for more flags.
 
@@ -49,7 +56,7 @@ prompt‑level rules short and concrete.
 ## 3 Reusable template
 
 ```text
-You are working in democratizedspace/dspace (branch v3).
+You are working in democratizedspace/dspace.
 
 GOAL: <one sentence process addition or edit>.
 
@@ -101,17 +108,18 @@ Use this prompt to refine processes and track quality as the game evolves.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository (branch v3).
+You are an automated contributor for the DSPACE repository.
 
 USER:
 1. Pick a process from `frontend/src/pages/processes/processes.json` that lacks a
    `hardening` block or has a low score.
 2. Improve clarity, realism and item references. Ensure durations are feasible
    and related items exist in `frontend/src/pages/inventory/json/items.json`.
-3. When updating the `image` field, reuse an existing image URL already in the repository; do not introduce new or external images.
+3. When updating the `image` field, reuse an existing image URL already in the
+   repository; do not introduce new or external images.
 4. Update or create the process's `hardening` block, incrementing `passes`,
-    refreshing the evaluator `score`, swapping the status `emoji` and appending a
-    history entry with the Codex task ID, date and score. Choose the emoji based
+   refreshing the evaluator `score`, swapping the status `emoji` and appending a
+   history entry with the Codex task ID, date and score. Choose the emoji based
    on:
    - 0 passes → score 0 → 🛠️ Draft
    - ≥1 pass & score ≥60 → 🌀 First polishing pass
@@ -142,6 +150,5 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Provide clear context** about DSPACE's educational mission and sustainability focus.
 -   **Use system prompts** to guide tone and technical accuracy.
 -   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible but incorrect details.
-
-[codex-cli]: https://www.npmjs.com/package/codex-cli
+-   **Fact-check technical information** since AI systems can generate plausible
+    but incorrect details.

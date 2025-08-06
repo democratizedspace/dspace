@@ -3,7 +3,7 @@ title: 'Item Prompts'
 slug: 'prompts-items'
 ---
 
-# Writing great item prompts for the _dspace_ repo (v3)
+# Writing great item prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready-made PR—but only if you give it a
@@ -22,11 +22,18 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 ## 1 Quick start (Web vs CLI)
 
-| Use-case              | Codex Web (ChatGPT sidebar) | [Codex CLI][codex-cli]                                                                |
-| --------------------- | --------------------------- | ------------------------------------------------------------------------------------- |
-| Add or update an item | “Code” button, attach repo  | `codex "add item solar-cell-junction-box"`                                            |
-| Ask about item data   | “Ask” button                | `codex exec "explain frontend/src/pages/inventory/json/items.json"`                   |
-| Run item tests        | –                           | `codex exec --full-auto "npm run itemValidation && npm run test:root -- itemQuality"` |
+-   **Add or update an item**
+    -   Web: use the “Code” button and attach the repo.
+    -   CLI: `codex "add item solar-cell-junction-box"`
+-   **Ask about item data**
+    -   Web: use the “Ask” button.
+    -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items.json"`
+-   **Run item tests**
+    -   Web: –
+    -   CLI:
+        ```bash
+        codex exec "npm run itemValidation && npm run test:root -- itemQuality"
+        ```
 
 See the [Codex CLI documentation][codex-cli] for more flags.
 
@@ -34,12 +41,12 @@ See the [Codex CLI documentation][codex-cli] for more flags.
 
 ## 2 Prompt ingredients
 
-| Ingredient           | Why it matters                                                               |
-| -------------------- | ---------------------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add price to `white PLA filament`”).          |
-| **Files to touch**   | Limits search space → faster & cheaper.                                      |
-| **Constraints**      | Coding style, a11y, item schema rules.                                       |
-| **Acceptance check** | e.g. “`npm run itemValidation` and `npm run test:root -- itemQuality` pass”. |
+| Ingredient           | Why it matters                                                           |
+| -------------------- | ------------------------------------------------------------------------ |
+| **Goal sentence**    | Gives the agent a north star (“Add price to `white PLA filament`”).      |
+| **Files to touch**   | Limits search space → faster & cheaper.                                  |
+| **Constraints**      | Coding style, a11y, item schema rules.                                   |
+| **Acceptance check** | `npm run itemValidation` and<br>`npm run test:root -- itemQuality` pass. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt-level rules short and concrete.
@@ -49,7 +56,7 @@ prompt-level rules short and concrete.
 ## 3 Reusable template
 
 ```text
-You are working in democratizedspace/dspace (branch v3).
+You are working in democratizedspace/dspace.
 
 GOAL: <one sentence item addition or edit>.
 
@@ -79,7 +86,7 @@ Use this when you want Codex to automatically create or upgrade an item.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository (branch v3). Edit or
+You are an automated contributor for the DSPACE repository. Edit or
 create items under `frontend/src/pages/inventory/json/items.json`. Ensure
 realistic details, required fields, and passing checks (`npm run lint`, `npm run
 type-check`, `npm run build`, `npm run itemValidation`, and `npm run test:root -- itemQuality`).
@@ -103,7 +110,7 @@ Apply this prompt to refine items and track quality over time.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository (branch v3).
+You are an automated contributor for the DSPACE repository.
 
 USER:
 1. Pick an item from `frontend/src/pages/inventory/json/items.json` that lacks a
