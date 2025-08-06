@@ -1,14 +1,14 @@
 {
     "id": "firstaid/learn-cpr",
     "title": "Practice Basic CPR",
-    "description": "Gather your first aid kit, nitrile gloves, CPR pocket mask and a training manikin. Verify the scene is safe, call emergency services before you start and sanitize the gear afterward.",
+    "description": "Practice 30:2 chest compressions on a manikin with nitrile gloves and a CPR pocket mask. Make sure the area is safe, call emergency services before starting and sanitize gear afterward.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Set the manikin on a firm surface, put on nitrile gloves, ready your CPR pocket mask from the first aid kit, make sure the scene is safe, then call emergency services before starting.",
+            "text": "Place the manikin on a firm surface, put on nitrile gloves and fit the CPR pocket mask from your first aid kit. Check the area for hazards, then call emergency services before beginning.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "steps",
-            "text": "Place the heel of one hand at the center of the manikin's chest and interlock your fingers. Keep your arms straight and press about 2 inches deep at 100–120 compressions per minute, letting the chest return fully. After 30 compressions, lift the chin, seal the CPR pocket mask over the manikin's mouth and give two rescue breaths if you're trained.",
+            "text": "With the manikin on its back, place the heel of one hand on the center of its chest and interlock your fingers. Keep your arms straight and press 2 inches deep at 100–120 compressions per minute, allowing full recoil. After 30 compressions, tilt the head, seal the pocket mask and give two breaths if trained.",
             "options": [
                 {
                     "type": "process",
@@ -47,7 +47,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! Wipe down the manikin and pocket mask with antiseptic wipes and store them in your first aid kit. Real emergencies should be handled by certified professionals whenever possible.",
+            "text": "Great job. Wipe the manikin and mask with antiseptic wipes and return everything to your first aid kit. Real emergencies should be handled by certified professionals whenever possible.",
             "options": [
                 {
                     "type": "finish",
@@ -59,12 +59,13 @@
     "rewards": [],
     "requiresQuests": ["firstaid/assemble-kit"],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
-            { "task": "codex-refine-cpr-2025-02-14", "date": "2025-02-14", "score": 80 }
+            { "task": "codex-refine-cpr-2025-02-14", "date": "2025-02-14", "score": 80 },
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 }
         ]
     }
 }
