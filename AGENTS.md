@@ -23,6 +23,8 @@ SKIP_E2E=1 npm run test:pr
 - If dependencies are missing, run `npm ci` in the repo root and `npm ci --prefix frontend`.
 - Fix formatting issues with `npx prettier`.
 - Set `ESLINT_USE_FLAT_CONFIG=false` if running ESLint manually.
+- If a proxy is required, set `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables
+  instead of using `.npmrc` proxy settings.
 
 ## Quest Creation Guidelines
 
