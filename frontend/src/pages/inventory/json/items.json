@@ -1438,8 +1438,16 @@
     {
         "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
         "name": "feather quill",
-        "description": "A traditional writing quill with a metal nib for calligraphy.",
+        "description": "20 cm goose feather quill with stainless steel nib; 3 g. Dip in ink for calligraphy.",
         "image": "/assets/quill.jpg",
-        "price": "3 dUSD"
+        "price": "5 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     }
 ]
