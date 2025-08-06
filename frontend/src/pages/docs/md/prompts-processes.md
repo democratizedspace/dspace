@@ -134,7 +134,7 @@ A pull request with the refined process, updated hardening block and passing tes
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
-- **Provide clear context** about DSPACE's educational mission and sustainability focus.
-- **Use system prompts** to guide tone and technical accuracy.
-- **Iterate on outputs** rather than expecting perfection on the first try.
-- **Fact-check technical information** since AI systems can generate plausible but incorrect details.
+-   **Provide clear context** about DSPACE's educational mission and sustainability focus.
+-   **Use system prompts** to guide tone and technical accuracy.
+-   **Iterate on outputs** rather than expecting perfection on the first try.
+-   **Fact-check technical information** since AI systems can generate plausible but incorrect details.

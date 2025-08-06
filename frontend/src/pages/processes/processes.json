@@ -29,9 +29,7 @@
             "passes": 1,
             "score": 60,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }]
         }
     },
     {
@@ -114,9 +112,7 @@
             "passes": 1,
             "score": 60,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }]
         }
     },
     {
@@ -1806,47 +1802,33 @@
             "passes": 1,
             "score": 65,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 65 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 65 }]
         }
     },
     {
         "id": "solder-led-resistor",
         "title": "Use a soldering iron kit to join a 5 mm LED and a 220 Ω resistor with two jumper wires",
-        "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 }
-        ],
+        "requireItems": [{ "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 }],
         "consumeItems": [
             { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
             { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
             { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
         ],
-        "createItems": [
-            { "id": "6da4a788-b743-4682-8dbe-f23d71435aa4", "count": 1 }
-        ],
+        "createItems": [{ "id": "6da4a788-b743-4682-8dbe-f23d71435aa4", "count": 1 }],
         "duration": "15m",
         "hardening": {
             "passes": 1,
             "score": 70,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 70 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 70 }]
         }
     },
     {
         "id": "print-phone-stand",
         "title": "3D print a smartphone stand on Real Printer 1 using 20 g of white PLA",
-        "requireItems": [
-            { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }
-        ],
-        "consumeItems": [
-            { "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 20 }
-        ],
-        "createItems": [
-            { "id": "9018feac-7213-4eef-9654-b06dbd9404ea", "count": 1 }
-        ],
+        "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
+        "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 20 }],
+        "createItems": [{ "id": "9018feac-7213-4eef-9654-b06dbd9404ea", "count": 1 }],
         "duration": "2h",
         "hardening": {
             "passes": 1,
@@ -1872,9 +1854,7 @@
             "passes": 1,
             "score": 60,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 }]
         }
     },
     {
