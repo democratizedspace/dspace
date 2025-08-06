@@ -23,6 +23,9 @@ node --version # ensure Node.js 18 or 20 is in use
 pnpm install
 ```
 
+The repo includes a `pnpmfile.cjs` that pre-approves native builds for `canvas`,
+`esbuild`, and `@swc/core`, so `pnpm install` runs without interactive prompts.
+
 Start the development server:
 
 ```bash

@@ -24,11 +24,15 @@ try {
 
     # Step 2: Run unit tests
     Write-Host "`nStep 2/3: Running unit tests..."
-    npm test
+    $testOutput = npm test 2>&1
+    Write-Host $testOutput
     if ($LASTEXITCODE -ne 0) {
         Write-Host "❌ Unit tests failed. Please fix them before submitting your PR." -ForegroundColor Red
         Set-Location -Path $originalDir
         exit 1
+    }
+    if ($testOutput -match 'Test Files\s+0' -or $testOutput -match 'Tests\s+0' -or $testOutput -match 'No test files? found') {
+        Write-Warning "No unit tests were run."
     }
     Write-Host "✅ Unit tests passed!" -ForegroundColor Green
 
