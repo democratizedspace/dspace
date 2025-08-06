@@ -1,14 +1,14 @@
 {
     "id": "aquaria/shrimp",
     "title": "Add dwarf shrimp",
-    "description": "Introduce hardy shrimp to help keep the tank clean while maintaining good water quality.",
+    "description": "Introduce hardy shrimp with drip acclimation to keep the tank clean and water stable.",
     "image": "/assets/quests/shrimp.svg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your Walstad tank should be fully cycled now. A small colony of dwarf shrimp will graze on algae and highlight any water quality issues.",
+            "text": "Your Walstad tank should read 0 ammonia and nitrite. Dwarf shrimp graze algae and expose any issues.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "acquire",
-            "text": "Pick up a few healthy shrimp from the store. Keep the bag sealed, ensure the water shows zero ammonia and nitrite, and float it in your tank for 15 minutes to match temperature.",
+            "text": "Pick up healthy shrimp in a sealed bag. Test for 0 ammonia and nitrite, keep it shaded, and float it in your tank for 15 minutes to match temperature.",
             "options": [
                 {
                     "type": "goto",
@@ -30,7 +30,7 @@
         },
         {
             "id": "acclimate",
-            "text": "Set up a drip acclimation with a dedicated bucket and airline tubing, letting tank water drip 2–4 drops per second into the bag for about an hour.",
+            "text": "Set up a drip acclimation with a clean 5 gallon bucket and airline tubing reserved for aquarium use. Siphon tank water 2–4 drops per second into the bag for about an hour to match chemistry.",
             "options": [
                 {
                     "type": "process",
@@ -56,7 +56,7 @@
         },
         {
             "id": "release",
-            "text": "Use an aquarium net to gently move the shrimp into the tank. Discard the store water and wash your hands to avoid contamination.",
+            "text": "Use an aquarium net to move the shrimp into the tank. Pour the bag water down a drain, rinse the bucket, and wash your hands to avoid contamination.",
             "options": [
                 {
                     "type": "finish",
@@ -79,9 +79,9 @@
     ],
     "requiresQuests": ["aquaria/walstad"],
     "hardening": {
-        "passes": 2,
-        "score": 78,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
@@ -92,6 +92,11 @@
                 "task": "codex-upgrade-2025-08-04",
                 "date": "2025-08-04",
                 "score": 78
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06",
+                "date": "2025-08-06",
+                "score": 90
             }
         ]
     }
