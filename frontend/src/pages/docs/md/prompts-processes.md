@@ -26,7 +26,7 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
 | ----------------------- | --------------------------- | ------------------------------------------------------------------ |
 | Add or update a process | “Code” button, attach repo  | `codex "add process 3dprinting/solar-mount"`                       |
 | Ask about process data  | “Ask” button                | `codex exec "explain frontend/src/pages/processes/processes.json"` |
-| Run process tests       | –                           | `codex exec --full-auto "npm test -- processQuality itemQuality"`  |
+| Run process tests       | –                           | `codex exec --full-auto "npm run test:root"`                       |
 
 See the upstream CLI reference for more flags.
 
@@ -39,7 +39,7 @@ See the upstream CLI reference for more flags.
 | **Goal sentence**    | Gives the agent a north star (“Add lettuce seed input to hydroponics”). |
 | **Files to touch**   | Limits search space → faster & cheaper.                                 |
 | **Constraints**      | Coding style, a11y, process schema rules.                               |
-| **Acceptance check** | e.g. “`npm test -- processQuality itemQuality` passes”.                 |
+| **Acceptance check** | e.g. “`npm run test:root` passes”.                                      |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
@@ -63,7 +63,7 @@ REQUIREMENTS
    missing items or quest hooks as needed.
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
-6. Run `npm test -- processQuality itemQuality` and fix any failures.
+6. Run `npm run test:root` and fix any failures.
 7. Update docs or items if needed.
 
 OUTPUT
@@ -79,7 +79,7 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/processes.json`. Ensure realistic
 steps, durations, item references, and passing checks (`npm run lint`, `npm run
-type-check`, `npm run build`, and `npm test -- processQuality itemQuality`).
+type-check`, `npm run build`, and `npm run test:root`).
 Verify the process links to existing quests or items, add missing registry
 entries if needed, and reuse existing image assets.
 
@@ -124,7 +124,7 @@ USER:
      ]
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
-   `npm test -- processQuality itemQuality`. Update docs or items if needed.
+   `npm run test:root`. Update docs or items if needed.
 
 OUTPUT:
 A pull request with the refined process, updated hardening block and passing tests.
