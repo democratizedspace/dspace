@@ -24,6 +24,15 @@ SKIP_E2E=1 npm run test:pr
 - Fix formatting issues with `npx prettier`.
 - Set `ESLINT_USE_FLAT_CONFIG=false` if running ESLint manually.
 
+### Proxy Environment Variables
+
+If you are behind a proxy, set these variables before running commands:
+
+- `HTTP_PROXY` / `HTTPS_PROXY` – proxy server URLs
+- `NO_PROXY` – comma-separated hosts that bypass the proxy
+
+npm and other tools honor these variables, replacing deprecated `.npmrc` proxy keys.
+
 ## Quest Creation Guidelines
 
 - Quest JSON lives in `frontend/src/pages/quests/json` and must follow the schema in `frontend/src/pages/quests/jsonSchemas`.
