@@ -1,14 +1,15 @@
 {
     "id": "astronomy/iss-flyover",
     "title": "Spot the ISS",
-    "description": "Use a satellite-tracking app on your smartphone and a basic telescope to watch the International Space Station pass overhead.",
+    "description": "Use a tracker app on your smartphone and a basic telescope to watch the ISS pass overhead.",
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
-            { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 80 }
+            { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 80 },
+            { "task": "codex-quest-refresh-2025-02-14", "date": "2025-02-14", "score": 90 }
         ]
     },
     "image": "/assets/quests/solar.jpg",
@@ -17,7 +18,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The ISS crosses our sky a few times each week. We'll use a tracker app on your smartphone to plan tonight's flyover. Find an open area and keep the telescope capped until you're outside to avoid pointing near the Sun.",
+            "text": "The ISS crosses our sky a few times each week. Use your phone's tracker app to plan tonight's pass. Choose a clear spot away from traffic and keep the telescope capped until you're outside so it never points near the Sun.",
             "options": [
                 {
                     "type": "goto",
@@ -28,7 +29,7 @@
         },
         {
             "id": "observe",
-            "text": "Open a satellite-tracking app like Heavens-Above on your smartphone and allow location access to find tonight's pass. Level your basic telescope on stable ground, keep paths clear, and never aim it near the Sun.",
+            "text": "Open a satellite-tracking app like Heavens-Above on your phone and allow location access to find tonight's pass. Mount your basic telescope on stable ground or a tripod, keep paths clear, and never aim it near the Sun or people.",
             "options": [
                 {
                     "type": "process",
@@ -50,7 +51,7 @@
         },
         {
             "id": "finish",
-            "text": "Awesome! It's inspiring to see humans living in orbit. Cap the telescope, pack up, and watch your footing in the dark.",
+            "text": "Awesome! It's inspiring to see humans living in orbit. Cap the telescope, close the app, pack up your gear, and watch your footing in the dark.",
             "options": [
                 {
                     "type": "finish",
