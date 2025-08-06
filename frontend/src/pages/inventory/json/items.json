@@ -1111,6 +1111,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+        "name": "red flashlight",
+        "description": "A flashlight with a red filter to preserve night vision.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "5 dUSD"
+    },
+    {
         "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
         "name": "first aid kit",
         "description": "Adhesive bandages, sterile gauze pads, antiseptic wipes and nitrile gloves packed for emergencies.",
