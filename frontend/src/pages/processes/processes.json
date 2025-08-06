@@ -179,37 +179,43 @@
     },
     {
         "id": "3dprint-rocket",
-        "title": "3D print a model rocket",
-        "requireItems": [],
-        "consumeItems": [
+        "title": "3D print a 100 mm model rocket using 91 g of green PLA on an entry-level FDM printer",
+        "image": "/assets/modelrocket.jpg",
+        "requireItems": [
             {
                 "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
-            },
+            }
+        ],
+        "consumeItems": [
             {
                 "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                 "count": 91
             },
             {
                 "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
-                "count": 1610.10417
+                "count": 1600
             }
         ],
         "createItems": [
             {
-                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                "count": 1
-            },
-            {
                 "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
                 "count": 1
-            },
-            {
-                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
-                "count": 91
             }
         ],
-        "duration": "12h 52m 51s"
+        "duration": "13h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "bucket-water-dechlorinated",
