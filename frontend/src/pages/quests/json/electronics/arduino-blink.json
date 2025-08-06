@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there! Orion here. Ready to do something a bit more exciting? Let's make that LED blink with a microcontroller. Work on a non-conductive surface and keep the board unplugged while we set things up to avoid shorts.",
+            "text": "Hey there! Orion here. Ready to make this LED blink with a microcontroller? Set up on a dry, non-conductive surface and keep power disconnected until the wiring is double-checked.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "Gather an Arduino Uno, breadboard, two jumper wires, a 220 Ω resistor, the 5 mm LED from before, a USB cable and a laptop with the Arduino IDE installed. If you haven't yet, follow the 'Install the Arduino IDE' process. Verify the resistor reads red-red-brown and the LED's longer leg is the anode. Keep the board unplugged while wiring. Use the jumper wires to connect the LED's anode to pin 13 through the resistor and the cathode to GND.",
+            "text": "Gather an Arduino Uno, a solderless breadboard, two male-to-male jumper wires, a 220 Ω resistor, a 5 mm LED, a USB Type-A to USB-B cable and a laptop with the Arduino IDE installed. If you haven't yet, follow the 'Install the Arduino IDE' process. Check the resistor's color bands (red-red-brown) and confirm the LED's longer leg is the anode. With the board unplugged, use jumper wires to connect the anode to pin 13 through the resistor and the cathode to GND.",
             "options": [
                 {
                     "type": "process",
@@ -65,7 +65,7 @@
         },
         {
             "id": "upload",
-            "text": "Plug the board into the laptop with the USB cable, open the Arduino IDE and load File > Examples > 01.Basics > Blink. In Tools choose Board > Arduino Uno and Port > your device, then click Upload and wait for 'Done uploading'. The microcontroller resets and the LED blinks once per second. Keep fingers and tools clear while it's powered.",
+            "text": "Connect the board to the laptop with the USB cable, open the Arduino IDE and load File > Examples > 01.Basics > Blink. In Tools choose Board > Arduino Uno and Port > your device, then click Upload and wait for 'Done uploading'. The microcontroller resets and the LED blinks once per second. Avoid touching the board while it's powered.",
             "options": [
                 {
                     "type": "goto",
@@ -76,7 +76,7 @@
         },
         {
             "id": "finish",
-            "text": "Look at that! You just programmed a microcontroller. Always unplug the USB cable before changing any wires. For a deeper walkthrough later, see the 'Blink an LED with Arduino' process. Keep experimenting with different patterns and sensors—this skill will come in handy for bigger projects.",
+            "text": "Look at that! You just programmed a microcontroller. Always unplug the USB cable before modifying the circuit. For a deeper walkthrough, see the 'Blink an LED with Arduino' process. Keep experimenting with different patterns and sensors—this skill will come in handy for bigger projects.",
             "options": [
                 {
                     "type": "process",
@@ -98,8 +98,8 @@
         }
     ],
     "hardening": {
-        "passes": 3,
-        "score": 90,
+        "passes": 4,
+        "score": 95,
         "emoji": "💯",
         "history": [
             {
@@ -116,6 +116,11 @@
                 "task": "codex-refine-2025-08-05",
                 "date": "2025-08-05",
                 "score": 90
+            },
+            {
+                "task": "codex-improve-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
             }
         ]
     }
