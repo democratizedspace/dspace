@@ -9,4 +9,6 @@ If you plug a machine in the wall (on Earth, at least), chances are you're still
 
 ## Renewable energy
 
-You can buy a solar panel or handheld wind turbine from [Amazing](/docs/amazing). These will generate electricity for you, and you can use them to power your machines. You can also sell the electricity you generate to other players.
+You can buy a solar panel or 500 W wind turbine from [Amazing](/docs/amazing).
+These will generate electricity for you, and you can use them to power your machines.
+You can also sell the electricity you generate to other players.
