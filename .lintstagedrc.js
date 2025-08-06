@@ -22,6 +22,10 @@ module.exports = {
   "frontend/src/pages/quests/json/**/*.json": (files) =>
     files.map((file) => `node scripts/validate-quest.js ${file}`),
 
+  // Validate item JSON files
+  "frontend/src/pages/inventory/json/**/*.json": (files) =>
+    files.map((file) => `node scripts/validate-item.js ${file}`),
+
   // Format JSON, markdown, and CSS files
   "frontend/**/*.{json,md,css,scss}": [
     "npm run format -- --quiet"

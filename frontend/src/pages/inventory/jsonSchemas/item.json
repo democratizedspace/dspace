@@ -14,6 +14,29 @@
             "type": "array",
             "items": { "type": "string" },
             "default": []
+        },
+        "hardening": {
+            "type": "object",
+            "properties": {
+                "passes": { "type": "integer" },
+                "score": { "type": "number" },
+                "emoji": { "type": "string" },
+                "history": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "task": { "type": "string" },
+                            "date": { "type": "string" },
+                            "score": { "type": "number" }
+                        },
+                        "required": ["task", "date", "score"],
+                        "additionalProperties": false
+                    },
+                    "default": []
+                }
+            },
+            "additionalProperties": false
         }
     },
     "required": ["id", "name", "description", "image"],
