@@ -529,8 +529,9 @@ For component state:
 - During development you can quickly wipe progress by calling
   `resetGameState()` from `frontend/src/utils/gameState/common.js`.
 - If something goes wrong, use `rollbackGameState()` to restore the last
-  saved state. The helper `validateGameState()` runs on load to keep the
-  structure intact.
+  saved state (see [Game State Rollback](/docs/rollback) for details).
+  The helper `validateGameState()` runs on load to keep the structure
+  intact.
 
 #### Rollback Use Cases
 

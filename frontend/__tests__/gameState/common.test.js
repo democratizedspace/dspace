@@ -61,4 +61,19 @@ describe('gameState - common utilities', () => {
         const rolled = loadGameState();
         expect(rolled.inventory['1']).toBe(1);
     });
+
+    test('rollbackGameState does nothing when no backup exists', () => {
+        const state = loadGameState();
+        state.inventory['1'] = 3;
+        saveGameState(state);
+
+        const updated = loadGameState();
+        updated.inventory['1'] = 4;
+        saveGameState(updated);
+        localStorage.removeItem('gameStateBackup');
+
+        rollbackGameState();
+        const rolled = loadGameState();
+        expect(rolled.inventory['1']).toBe(4);
+    });
 });
