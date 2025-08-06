@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "dChat here! Keep a first aid kit nearby for the inevitable minor mishap.",
+            "text": "dChat here! Minor cuts happen. A first aid kit helps you respond fast.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "Wash hands with soap 20 sec, then dry. Get bandages, gauze, wipes, gloves.",
+            "text": "Wash with soap 20s, dry. Set out bandages, sterile gauze pads, wipes, gloves.",
             "options": [
                 {
                     "type": "process",
@@ -31,7 +31,7 @@
         },
         {
             "id": "pack",
-            "text": "Check seals and dates, then store items in a dry container to keep sterile.",
+            "text": "Check seals and dates. Pack items in a dry, labeled box to keep sterile.",
             "options": [
                 {
                     "type": "process",
@@ -54,7 +54,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Keep kit in a cool, dry spot away from kids. Replace items after use.",
+            "text": "Great! Keep kit cool, dry, out of reach. Restock; seek help for injuries.",
             "options": [
                 {
                     "type": "finish",
@@ -66,14 +66,15 @@
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 4,
-        "score": 92,
+        "passes": 5,
+        "score": 94,
         "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 },
             { "task": "codex-refine-2025-08-04", "date": "2025-08-04", "score": 80 },
             { "task": "codex-refine-2025-08-05", "date": "2025-08-05", "score": 90 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 }
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 },
+            { "task": "codex-refine-2025-08-06", "date": "2025-08-06", "score": 94 }
         ]
     }
 }
