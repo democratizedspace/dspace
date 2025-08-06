@@ -1,14 +1,14 @@
 {
     "id": "astronomy/andromeda",
     "title": "Locate the Andromeda Galaxy",
-    "description": "Use constellation patterns to find our neighboring galaxy in the night sky.",
+    "description": "Use a planisphere star chart, red flashlight and basic telescope to locate our neighboring galaxy without ruining night vision.",
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Head to a dark site, let your eyes adjust for 15 minutes, and keep screens dim. Bring a planisphere star chart and a red flashlight to protect night vision. Ready?",
+            "text": "Nova here. Find a safe dark site, check the forecast, and let your eyes adjust for at least 15 minutes. Keep screens dim, then use a planisphere star chart and a red flashlight to preserve night vision. Ready?",
             "options": [
                 {
                     "type": "goto",
@@ -23,7 +23,7 @@
         },
         {
             "id": "search",
-            "text": "Use the star chart to find Cassiopeia's W. From its midpoint, sweep a bit to a faint smudge—that's Andromeda. Keep the telescope steady and never aim near the Sun or aircraft.",
+            "text": "Shield the red flashlight and trace Cassiopeia's W on the star chart. From its midpoint, sweep the basic telescope slightly toward a faint smudge—that's Andromeda. Keep the scope steady, watch your footing, and never aim near the Sun or aircraft.",
             "options": [
                 {
                     "type": "process",
@@ -40,18 +40,19 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Note the position for next time, then pack the chart, flashlight, and telescope before leaving.",
+            "text": "Nice work! Record the position for next time, power down and cap the telescope, then pack the chart and flashlight before leaving the site.",
             "options": [{ "type": "finish", "text": "Logging observations." }]
         }
     ],
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
-            { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 60 }
+            { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 60 },
+            { "task": "codex-quest-polish-2025-08-06", "date": "2025-08-06", "score": 80 }
         ]
     }
 }
