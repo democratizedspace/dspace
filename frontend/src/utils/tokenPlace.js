@@ -2,8 +2,20 @@ import { loadGameState } from './gameState/common.js';
 
 const DEFAULT_URL = 'https://token.place/api';
 
+const getEnvUrl = () => {
+    // Prefer Vite-style environment variables but fall back to Node env for tests
+    if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_TOKEN_PLACE_URL) {
+        return import.meta.env.VITE_TOKEN_PLACE_URL;
+    }
+    if (typeof process !== 'undefined' && process.env?.VITE_TOKEN_PLACE_URL) {
+        return process.env.VITE_TOKEN_PLACE_URL;
+    }
+    return null;
+};
+
 export const tokenPlaceChat = async (messages) => {
-    const baseUrl = loadGameState().tokenPlace?.url || DEFAULT_URL;
+    const envUrl = getEnvUrl();
+    const baseUrl = loadGameState().tokenPlace?.url || envUrl || DEFAULT_URL;
 
     const systemMessage = {
         role: 'system',

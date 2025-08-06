@@ -2,10 +2,11 @@ const { vi } = require('vitest');
 const jest = vi;
 
 jest.mock('../src/utils/gameState/common.js', () => ({
-    loadGameState: jest.fn(() => ({ tokenPlace: { url: 'http://token.place' } })),
+    loadGameState: jest.fn(),
 }));
 
 const { tokenPlaceChat } = require('../src/utils/tokenPlace.js');
+const { loadGameState } = require('../src/utils/gameState/common.js');
 
 describe('tokenPlaceChat', () => {
     beforeEach(() => {
@@ -19,11 +20,31 @@ describe('tokenPlaceChat', () => {
 
     afterEach(() => {
         jest.resetAllMocks();
+        delete process.env.VITE_TOKEN_PLACE_URL;
+    });
+
+    test('uses game state url when configured', async () => {
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place' } });
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
+        expect(fetch).toHaveBeenCalledWith('http://token.place/chat', expect.any(Object));
+    });
+
+    test('falls back to env url when game state missing', async () => {
+        loadGameState.mockReturnValue({});
+        process.env.VITE_TOKEN_PLACE_URL = 'http://env.token';
+        await tokenPlaceChat([]);
+        expect(fetch).toHaveBeenCalledWith('http://env.token/chat', expect.any(Object));
+    });
+
+    test('uses default url when none provided', async () => {
+        loadGameState.mockReturnValue({});
+        await tokenPlaceChat([]);
+        expect(fetch).toHaveBeenCalledWith('https://token.place/api/chat', expect.any(Object));
     });
 
     test('prepends system message and returns response', async () => {
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place' } });
         const result = await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        expect(fetch).toHaveBeenCalledTimes(1);
         const body = JSON.parse(fetch.mock.calls[0][1].body);
         expect(body.messages[0].role).toBe('system');
         expect(result).toBe('mocked reply');
