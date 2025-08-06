@@ -2010,5 +2010,28 @@
             "emoji": "🌀",
             "history": [{ "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 65 }]
         }
+    },
+    {
+        "id": "hand-crank-50Wh",
+        "title": "Generate 50 Wh with a hand crank generator",
+        "requireItems": [
+            { "id": "6caa08d8-815c-4a0e-9297-0fda4516659d", "count": 1 },
+            { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [{ "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 50 }],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]

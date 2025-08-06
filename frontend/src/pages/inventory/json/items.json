@@ -858,6 +858,25 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
+        "name": "12 V DC motor",
+        "description": "Small brushed 12 V DC motor suited for hand-crank generators.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
         "name": "3D Printed Phone Stand",
         "description": "A simple stand to hold your smartphone upright on a desk.",

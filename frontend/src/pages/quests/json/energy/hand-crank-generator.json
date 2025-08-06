@@ -2,13 +2,19 @@
     "id": "energy/hand-crank-generator",
     "title": "Build a Hand Crank Generator",
     "description": "Generate emergency power with your own muscles.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [{ "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }]
+    },
     "image": "/assets/quests/solar_200Wh.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Need a quick burst of power off-grid? Let's build a hand crank generator.",
+            "text": "Need power when sunlight fades? Build a crank generator. Keep fingers clear.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +25,7 @@
         },
         {
             "id": "materials",
-            "text": "You'll need a small motor and a battery pack. I'll loan you a spare battery.",
+            "text": "Bring 12 V DC motor and battery pack. I'll loan the battery. Check polarity.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -36,17 +42,15 @@
                     "goto": "generate",
                     "text": "Got the parts. What's next?",
                     "requiresItems": [
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        }
+                        { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
+                        { "id": "6caa08d8-815c-4a0e-9297-0fda4516659d", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "generate",
-            "text": "Mount the motor, attach a crank, and wire it to your battery. Ready to spin?",
+            "text": "Secure motor, add crank, wire to battery with insulated leads. Ready to spin?",
             "options": [
                 {
                     "type": "process",
@@ -68,7 +72,7 @@
         },
         {
             "id": "fin",
-            "text": "Nice work! Muscle power is a reliable backup when the sun's hiding.",
+            "text": "Nice work! Muscle power is a solid backup. Store the battery in a cool spot.",
             "options": [
                 {
                     "type": "finish",
