@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import glob from 'glob';
+import { globSync } from 'glob';
 
 /**
  * Fails if any file in the repository still contains unresolved merge-conflict markers.
@@ -22,7 +22,7 @@ describe('repository sanity ‑ no merge-conflict markers', () => {
 
   const patterns = ['**/*'];
   const files = patterns.flatMap((pattern) =>
-    glob.sync(pattern, {
+    globSync(pattern, {
       cwd: REPO_ROOT,
       nodir: true,
       ignore,
