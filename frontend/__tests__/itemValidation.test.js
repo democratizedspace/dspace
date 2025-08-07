@@ -5,14 +5,17 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const schema = require('../src/pages/inventory/jsonSchemas/item.json');
-const itemsFile = path.join(__dirname, '../src/pages/inventory/json/items.json');
+const itemsDir = path.join(__dirname, '../src/pages/inventory/json/items');
 
 const ajv = new Ajv();
 const validate = ajv.compile(schema);
 
 describe('item validation', () => {
-    test('items.json conforms to schema', () => {
-        const items = JSON.parse(fs.readFileSync(itemsFile));
+    test('item files conform to schema', () => {
+        const items = fs
+            .readdirSync(itemsDir)
+            .filter((f) => f.endsWith('.json'))
+            .flatMap((f) => JSON.parse(fs.readFileSync(path.join(itemsDir, f))));
         const ids = new Set(items.map((it) => it.id));
         for (const item of items) {
             const valid = validate(item);

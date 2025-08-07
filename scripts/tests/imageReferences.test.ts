@@ -5,10 +5,7 @@ import { globSync } from 'glob';
 import { listMissingImages } from '../utils/fs-checks';
 
 const questsDir = path.join(__dirname, '../../frontend/src/pages/quests/json');
-const itemsFile = path.join(
-  __dirname,
-  '../../frontend/src/pages/inventory/json/items.json'
-);
+const itemsDir = path.join(__dirname, '../../frontend/src/pages/inventory/json/items');
 const npcFile = path.join(
   __dirname,
   '../../frontend/src/pages/docs/md/npcs.md'
@@ -26,7 +23,8 @@ function collectQuestImages() {
 }
 
 function collectItemImages() {
-  const items = JSON.parse(fs.readFileSync(itemsFile, 'utf8'));
+  const files = globSync(path.join(itemsDir, '*.json'));
+  const items = files.flatMap((file) => JSON.parse(fs.readFileSync(file, 'utf8')));
   return items.map((i) => i.image).filter(Boolean);
 }
 

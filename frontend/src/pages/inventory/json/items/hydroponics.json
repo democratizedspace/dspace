@@ -1,0 +1,253 @@
+[
+    {
+        "id": "92261497-d605-4db1-8710-953cf73d765c",
+        "name": "hydroponics kit",
+        "description": "Starter kit with a 10 L reservoir, pump, tubing and net pots for indoor hydroponics.",
+        "image": "/assets/hydroponics.jpg",
+        "price": "50 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hydroponics-kit-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+        "name": "Beginner hydroponics tub",
+        "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
+        "image": "/assets/hydroponics_tub.jpg",
+        "price": "30 dUSD"
+    },
+    {
+        "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
+        "name": "basil seeds",
+        "description": "Packet of ~50 Genovese basil seeds for hydroponic germination.",
+        "image": "/assets/basil_seeds.jpg",
+        "price": "2 dUSD",
+        "unit": "packet",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
+        "name": "hydroponic starter plug",
+        "description": "One 1-inch rockwool cube for germinating seeds in hydroponic systems.",
+        "image": "/assets/rockwool.jpg",
+        "price": "0.35 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+        "name": "hydroponics nutrients",
+        "description": "A bottle of hydroponics nutrients that can be used to grow plants. NPK: 9-3-6",
+        "image": "/assets/hydroponics_nutrients.jpg",
+        "price": "25 dUSD",
+        "unit": " L"
+    },
+    {
+        "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+        "name": "5 gallon bucket of tap water (chlorinated)",
+        "description": "A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics.",
+        "image": "/assets/bucket_water.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+        "name": "5 gallon bucket of dechlorinated tap water",
+        "description": "A standard 19 L (5 gal) bucket filled with tap water that's been left for 48 hours so chlorine dissipates. Ready for hydroponic use.",
+        "image": "/assets/bucket_water.jpg",
+        "price": "8.20 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+        "name": "soaked hydroponic starter plug",
+        "description": "A hydroponic starter plug soaked in water. Used to germinate seeds.",
+        "image": "/assets/rockwool_wet.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "5712947f-716c-4f71-b28d-fcb811631080",
+        "name": "basil seedling",
+        "description": "A basil seedling that has been germinated in a rockwool cube.",
+        "image": "/assets/basil_seedlings.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+        "name": "harvestable basil plant",
+        "description": "Mature Genovese basil in a 4 cm rockwool cube, ~20 cm tall and ready to harvest.",
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "price": "5 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+        "name": "hydroponic grow lamp",
+        "description": "Full-spectrum LED panel delivering 36 W of light, enough to cover a 0.25 m² grow area for seedlings and herbs. Includes hanging kit and 12 V power adapter.",
+        "image": "/assets/hydroponic_lamp.jpg",
+        "price": "30 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+        "name": "submersible water pump",
+        "description": "12 V DC pump rated at 200 L/h (53 gph) for circulating nutrient solution in small hydroponic systems; draws 3 W and includes 8 mm outlet barb.",
+        "image": "/assets/hydroponics_tub.jpg",
+        "price": "15 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+        "name": "hydroponics tub (ready)",
+        "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
+        "image": "/assets/hydroponics_tub.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+        "name": "hydroponics tub (nutrient deficient)",
+        "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
+        "image": "/assets/hydroponics_tub.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
+        "name": "bundle of basil leaves",
+        "description": "Fresh-cut 30 g (1 oz) bundle of Genovese basil leaves from hydroponic plants; use or sell soon.",
+        "image": "/assets/basil_harvested.jpg",
+        "price": "2 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "29190faf-8581-4769-b871-f0ee283840e1",
+        "name": "harvested basil plant",
+        "description": "A basil plant that has been freshly harvested. Don't worry, it'll grow back eventually!",
+        "image": "/assets/hydroponic_basil_harvested.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
+        "name": "Green Thumb Award",
+        "description": "Awarded for growing and harvesting your first batch of hydroponic basil!",
+        "image": "/assets/green_thumb_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "5bba251a-d223-4e22-aa30-b65238b17516",
+        "name": "Solarpunk Award",
+        "description": "Awarded for generating dWatt using solar panels!",
+        "image": "/assets/solarpunk_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+        "name": "Lettuce Seeds",
+        "description": "Seeds for growing crisp hydroponic lettuce.",
+        "image": "/assets/hydroponic_lettuce.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "c687abb3-7b52-4344-97dc-8b7e0881ed9d",
+        "name": "LED grow light (20W)",
+        "description": "Full-spectrum 20 W LED panel lights 0.2 m² for seedlings or herbs; includes kit and 12 V adapter.",
+        "image": "/assets/hydroponic_lamp.jpg",
+        "price": "25 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
+    }
+]

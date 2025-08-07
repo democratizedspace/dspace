@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { expect, test } from 'vitest';
@@ -13,12 +13,10 @@ const schema = JSON.parse(
     'utf8'
   )
 );
-const items = JSON.parse(
-  readFileSync(
-    join(__dirname, '../frontend/src/pages/inventory/json/items.json'),
-    'utf8'
-  )
-);
+const itemsDir = join(__dirname, '../frontend/src/pages/inventory/json/items');
+const items = readdirSync(itemsDir)
+  .filter((f) => f.endsWith('.json'))
+  .flatMap((f) => JSON.parse(readFileSync(join(itemsDir, f), 'utf8')));
 
 test('items conform to schema', () => {
   const ajv = new Ajv({ allErrors: true });

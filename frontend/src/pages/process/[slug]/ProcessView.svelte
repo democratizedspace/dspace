@@ -1,7 +1,7 @@
 <script>
     import Process from '../../../components/svelte/Process.svelte';
     import processes from '../../processes/processes.json';
-    import items from '../../inventory/json/items.json';
+    import items from '../../inventory/json/items';
     import { buyItems, getItemCount } from '../../../utils/gameState/inventory.js';
     import { getPriceStringComponents } from '../../../utils.js';
     import { onMount } from 'svelte';

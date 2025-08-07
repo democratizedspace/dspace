@@ -2,7 +2,7 @@
     import { createEventDispatcher, onMount } from 'svelte';
     import ItemSelector from './ItemSelector.svelte';
     import ProcessPreview from './ProcessPreview.svelte';
-    import items from '../../pages/inventory/json/items.json';
+    import items from '../../pages/inventory/json/items';
     import { durationInSeconds } from '../../utils.js';
     import { validateProcessData } from '../../utils/customProcessValidation.js';
 

@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import items from '../../pages/inventory/json/items.json';
+    import items from '../../pages/inventory/json/items';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { prettyPrintNumber } from '../../utils.js';
     import Chip from './Chip.svelte';

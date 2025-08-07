@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { getQuestsForItem } from '../src/utils/itemDependencies.js';
-import items from '../src/pages/inventory/json/items.json' assert { type: 'json' };
+import items from '../src/pages/inventory/json/items';
 
 const getIdByName = (name) => items.find((item) => item.name === name)?.id;
 

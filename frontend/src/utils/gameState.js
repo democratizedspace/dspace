@@ -1,6 +1,6 @@
 import { loadGameState, saveGameState } from './gameState/common.js';
 import { addItems } from './gameState/inventory.js';
-import items from '../pages/inventory/json/items.json' assert { type: 'json' };
+import items from '../pages/inventory/json/items';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 

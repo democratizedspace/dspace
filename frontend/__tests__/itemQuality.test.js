@@ -4,10 +4,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const itemsFile = path.join(__dirname, '../src/pages/inventory/json/items.json');
+const itemsDir = path.join(__dirname, '../src/pages/inventory/json/items');
 const publicDir = path.join(__dirname, '../public');
 
-const items = JSON.parse(fs.readFileSync(itemsFile));
+const items = fs
+    .readdirSync(itemsDir)
+    .filter((f) => f.endsWith('.json'))
+    .flatMap((f) => JSON.parse(fs.readFileSync(path.join(itemsDir, f))));
 
 function checkItem(item) {
     const issues = [];

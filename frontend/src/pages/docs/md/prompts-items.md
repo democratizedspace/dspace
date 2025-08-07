@@ -27,7 +27,7 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
     -   CLI: `codex "add item solar-cell-junction-box"`
 -   **Ask about item data**
     -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items.json"`
+    -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items"`
 -   **Run item tests**
     -   Web: –
     -   CLI:
@@ -61,7 +61,7 @@ You are working in democratizedspace/dspace.
 GOAL: <one sentence item addition or edit>.
 
 FILES OF INTEREST
-- frontend/src/pages/inventory/json/items.json   ← item registry
+- frontend/src/pages/inventory/json/items/*  ← item registry
 - frontend/src/pages/inventory/jsonSchemas/item.json   ← schema
 
 REQUIREMENTS
@@ -87,7 +87,7 @@ Use this when you want Codex to automatically create or upgrade an item.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or
-create items under `frontend/src/pages/inventory/json/items.json`. Ensure
+create items under `frontend/src/pages/inventory/json/items`, choosing the appropriate category file. Ensure
 realistic details, required fields, and passing checks (`npm run lint`, `npm run
 type-check`, `npm run build`, `npm run itemValidation`, and `npm run test:root -- itemQuality`).
 Verify the item appears in at least one quest or process, reuse existing image
@@ -113,7 +113,7 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository.
 
 USER:
-1. Pick an item from `frontend/src/pages/inventory/json/items.json` that lacks a
+1. Pick an item from `frontend/src/pages/inventory/json/items` that lacks a
    `hardening` block or has a low score.
 2. Improve clarity, realism and units. Ensure prices and descriptions match
    real-world expectations and that related processes reference the item

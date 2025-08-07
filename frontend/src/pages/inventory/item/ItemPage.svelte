@@ -6,7 +6,7 @@
     import { getProcessesForItem, ProcessItemTypes } from '../../../utils/gameState/processes.js';
     import { getItemCounts } from '../../../utils/gameState/inventory.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
-    import items from '../json/items.json';
+    import items from '../json/items';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
 

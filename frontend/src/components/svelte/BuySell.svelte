@@ -1,7 +1,7 @@
 <script>
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
-    import items from '../../pages/inventory/json/items.json';
+    import items from '../../pages/inventory/json/items';
     import { getPriceStringComponents } from '../../utils';
     import { buyItems, sellItems, getSalesTaxPercentage } from '../../utils/gameState/inventory.js';
 

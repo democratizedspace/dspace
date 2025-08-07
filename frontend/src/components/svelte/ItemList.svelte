@@ -1,7 +1,7 @@
 <script>
     import { writable } from 'svelte/store';
     import ItemCard from './ItemCard.svelte';
-    import items from '../../pages/inventory/json/items.json';
+    import items from '../../pages/inventory/json/items';
     import SearchBar from './SearchBar.svelte';
     import Sorter from './Sorter.svelte';
     import { getPriceStringComponents } from '../../utils.js';

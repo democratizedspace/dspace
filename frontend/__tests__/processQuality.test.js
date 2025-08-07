@@ -6,10 +6,13 @@ const path = require('path');
 const { durationInSeconds } = require('../src/utils.js');
 
 const processesFile = path.join(__dirname, '../src/pages/processes/processes.json');
-const itemsFile = path.join(__dirname, '../src/pages/inventory/json/items.json');
+const itemsDir = path.join(__dirname, '../src/pages/inventory/json/items');
 
 const processes = JSON.parse(fs.readFileSync(processesFile));
-const items = JSON.parse(fs.readFileSync(itemsFile));
+const items = fs
+    .readdirSync(itemsDir)
+    .filter((f) => f.endsWith('.json'))
+    .flatMap((f) => JSON.parse(fs.readFileSync(path.join(itemsDir, f))));
 const itemIds = new Set(items.map((i) => i.id));
 
 function checkProcess(proc) {
