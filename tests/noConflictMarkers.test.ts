@@ -35,7 +35,7 @@ describe('repository sanity ‑ no merge-conflict markers', () => {
     files.forEach((relativePath) => {
       const fullPath = join(REPO_ROOT, relativePath);
       const content = readFileSync(fullPath, 'utf8');
-      if (/<<<<<<< |>>>>>>> |======= /.test(content)) {
+      if (/^<<<<<<< |^>>>>>>> |^======= $/m.test(content)) {
         offenders.push(relativePath);
       }
     });
