@@ -139,7 +139,7 @@
     },
     {
         "id": "bucket-water-chlorinated",
-        "title": "Use a sink to fill a 5 gallon bucket with tap water",
+        "title": "Use a sink to fill a 19 L (5 gal) bucket with tap water",
         "requireItems": [
             {
                 "id": "799ace33-1336-46c0-904a-9f16778230f1",
@@ -1938,7 +1938,7 @@
     },
     {
         "id": "partial-water-change",
-        "title": "Use a gravel vacuum with 2 m hose and bucket to change 5% of water in a 150 L aquarium",
+        "title": "Use gravel vacuum with 2 m hose and 19 L (5 gal) bucket to change 5% of water in 150 L aquarium",
         "requireItems": [
             { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
             { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
