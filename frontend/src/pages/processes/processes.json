@@ -1131,7 +1131,8 @@
     },
     {
         "id": "add-goldfish",
-        "title": "Add a goldfish to your aquarium",
+        "title": "Introduce a goldfish to a prepared freshwater aquarium using a net",
+        "image": "/assets/aquarium_goldfish.jpg",
         "requireItems": [
             {
                 "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
@@ -1154,7 +1155,19 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "feed-goldfish",
