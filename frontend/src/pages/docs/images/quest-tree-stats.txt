@@ -5,10 +5,10 @@ devops: 14 quests, 860 lines
 aquaria: 12 quests, 817 lines
 electronics: 12 quests, 1037 lines
 3dprinting: 9 quests, 622 lines
+programming: 8 quests, 385 lines
 robotics: 8 quests, 429 lines
 chemistry: 7 quests, 377 lines
 firstaid: 7 quests, 497 lines
-programming: 7 quests, 334 lines
 woodworking: 7 quests, 574 lines
 rocketry: 6 quests, 602 lines
 geothermal: 5 quests, 279 lines
