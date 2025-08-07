@@ -106,10 +106,22 @@
     {
         "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
         "name": "3D printed model rocket",
-        "description": "A 3D-printed model rocket that can be used to launch small payloads into space.",
+        "description": "100 mm (10 cm) PLA model rocket, ~90 g, reaches ~30 m with A8-3 motor (not included).",
         "image": "/assets/modelrocket.jpg",
         "type": "3dprint",
-        "price": "25 dUSD"
+        "price": "25 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
@@ -138,9 +150,21 @@
     {
         "id": "0564d441-7367-412e-b709-dad770814a39",
         "name": "5 gallon bucket",
-        "description": "A 5 gallon bucket that can be used to store water or other liquids.",
+        "description": "19 L (5 gal) high-density polyethylene bucket with metal handle for carrying liquids.",
         "image": "/assets/bucket.jpg",
-        "price": "8 dUSD"
+        "price": "8 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",

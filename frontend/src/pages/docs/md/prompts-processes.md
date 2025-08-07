@@ -35,7 +35,7 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
         codex exec "npm run test:root -- processQuality"
         ```
 
-See the upstream CLI reference for more flags.
+See the [Codex CLI documentation][codex-cli] for more flags.
 
 ---
 
@@ -152,3 +152,5 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Iterate on outputs** rather than expecting perfection on the first try.
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
+
+[codex-cli]: https://www.npmjs.com/package/codex-cli

@@ -1,0 +1,46 @@
+{
+    "id": "geothermal/calibrate-ground-sensor",
+    "title": "Calibrate Ground Sensor",
+    "description": "Use ice and boiling water to calibrate your thermistor before burying it.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Accurate readings need calibration. Ready to dial in that thermistor?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "How do I calibrate it?"
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Log readings in ice then boiling water with arduino-thermistor-read.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Calibration complete",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Sweet! Now your sensor's ready for long-term ground monitoring.",
+            "options": [{ "type": "finish", "text": "Time to bury it." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/survey-ground-temperature"]
+}

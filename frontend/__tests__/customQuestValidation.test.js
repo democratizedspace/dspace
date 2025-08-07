@@ -81,6 +81,22 @@ describe('validateQuestData', () => {
         expect(result.valid).toBe(true);
     });
 
+    test('HTML tags are rejected', () => {
+        const result = validateQuestData({
+            title: 'Quest',
+            description: 'This <b>quest</b> uses HTML.',
+            image: 'https://example.com/img.png',
+        });
+        expect(result.valid).toBe(false);
+
+        const result2 = validateQuestData({
+            title: '<script>alert(1)</script>',
+            description: 'Valid description for quest.',
+            image: 'https://example.com/img.png',
+        });
+        expect(result2.valid).toBe(false);
+    });
+
     test('requiresQuests must be array of strings', () => {
         const result = validateQuestData({
             title: 'Bad Quest',

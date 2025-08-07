@@ -1,14 +1,14 @@
 {
     "id": "3dprinting/calibration-cube",
     "title": "Print a Calibration Cube",
-    "description": "Ensure dimensional accuracy by printing a 20mm cube.",
+    "description": "Ensure dimensional accuracy by printing and measuring a 20 mm cube.",
     "image": "/assets/quests/benchy_25.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's dial in your printer with a quick 20mm calibration cube.",
+            "text": "Let's dial in your printer with a quick 20 mm calibration cube.",
             "options": [
                 {
                     "type": "goto",
@@ -19,36 +19,54 @@
         },
         {
             "id": "print",
-            "text": "Slice the cube model and print it with your usual settings.",
+            "text": "Level the build plate, load 15 g of green PLA, slice the cube, and start the print. Keep hands clear of the moving nozzle, ensure good ventilation, and stay nearby. Let the cube cool before removal.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "print-calibration-cube",
+                    "text": "Need printing steps?"
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Cube looks good!",
+                    "goto": "measure",
+                    "text": "Cube printed and cooled.",
                     "requiresItems": [
-                        {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 15
-                        }
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 15 }
                     ]
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Excellent! Measure each side to see if further tweaking is needed.",
+            "id": "measure",
+            "text": "Use digital calipers to measure each side; the goal is 20.00 mm on every axis. If dimensions are off, adjust your printer's steps per millimeter before reprinting.",
             "options": [
                 {
-                    "type": "finish",
-                    "text": "Will do."
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Dimensions noted.",
+                    "requiresItems": [{ "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 }]
                 }
             ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! Record the measurements and tweak firmware or slicer settings as needed before your next print.",
+            "options": [{ "type": "finish", "text": "All set." }]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"]
+    "requiresQuests": ["3dprinter/start"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-07",
+                "date": "2025-08-07",
+                "score": 65
+            }
+        ]
+    }
 }
