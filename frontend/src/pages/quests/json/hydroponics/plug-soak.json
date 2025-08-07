@@ -1,0 +1,55 @@
+{
+    "id": "hydroponics/plug-soak",
+    "title": "Soak Starter Plugs",
+    "description": "Hydrate rockwool cubes so seeds sprout happily.",
+    "image": "/assets/rockwool_wet.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Rockwool cubes arrive dry. They need a good soak before any seeds touch them.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "How do I soak them?"
+                }
+            ]
+        },
+        {
+            "id": "soak",
+            "text": "Fill a bucket with dechlorinated water and submerge the starter plugs until saturated.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rockwool-soak",
+                    "text": "Soak the plugs."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 11
+                        }
+                    ],
+                    "text": "They're fully soaked!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great. Moist cubes give seedlings an even start.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Ready for seeds."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/top-off"]
+}
