@@ -1508,13 +1508,15 @@
     {
         "id": "measure-battery-voltage",
         "title": "Measure battery voltage with a multimeter",
+        "image": "/assets/battery.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-            { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 }
+            { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "2m"
     },
     {
         "id": "adjust-ph",
