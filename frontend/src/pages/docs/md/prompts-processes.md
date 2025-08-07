@@ -35,7 +35,7 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
         codex exec "npm run test:root -- processQuality"
         ```
 
-See the [Codex CLI documentation][codex-cli] for more flags.
+See the upstream CLI reference for more flags.
 
 ---
 
@@ -71,7 +71,7 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm run test:root -- processQuality` and fix any failures.
-7. Run `git diff --cached | ripsecrets` and ensure no secrets.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 8. Update docs or items if needed.
 
 OUTPUT
@@ -90,7 +90,7 @@ steps, durations, item references, and passing checks (`npm run lint`,
 `npm run type-check`, `npm run build`, and `npm run test:root -- processQuality`).
 Verify the process links to existing quests or items, add missing registry
 entries if needed, reuse existing image assets, and scan for secrets with
-`git diff --cached | ripsecrets` before committing.
+`git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 USER:
 1. Follow the steps above.
@@ -136,7 +136,7 @@ USER:
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:root -- processQuality`. Update docs or items if needed.
-6. Run `git diff --cached | ripsecrets` before committing.
+6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 7. Use an emoji-prefixed commit message.
 
 OUTPUT:
@@ -152,5 +152,3 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Iterate on outputs** rather than expecting perfection on the first try.
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
-
-[codex-cli]: https://www.npmjs.com/package/codex-cli
