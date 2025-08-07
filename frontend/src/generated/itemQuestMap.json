@@ -194,6 +194,7 @@
         "requires": [
             "programming/temp-logger",
             "programming/temp-graph",
+            "programming/temp-alert",
             "programming/graph-temp",
             "geothermal/survey-ground-temperature",
             "electronics/thermometer-calibration"
@@ -423,6 +424,18 @@
     "8bfdedf6-79a4-4527-a43d-4d57f793ac52": {
         "requires": ["energy/solar-1kWh"],
         "rewards": []
+    },
+    "fb60696a-6c94-4e5e-9277-b62377ee6d73": {
+        "requires": [
+            "energy/offgrid-charger",
+            "electronics/thermistor-reading",
+            "electronics/servo-sweep",
+            "electronics/potentiometer-dimmer",
+            "electronics/light-sensor",
+            "electronics/data-logger",
+            "electronics/arduino-blink"
+        ],
+        "rewards": ["electronics/check-battery-voltage", "electronics/basic-circuit"]
     },
     "fb60696a-6c94-4e5e-9277-b62377ee6d73": {
         "requires": [
