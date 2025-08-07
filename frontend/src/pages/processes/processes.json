@@ -1988,6 +1988,23 @@
         }
     },
     {
+        "id": "solder-wire-connection",
+        "title": "Join two wires with a soldering iron kit and safety goggles",
+        "requireItems": [
+            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-refine-2025-08-07", "date": "2025-08-07", "score": 60 }]
+        }
+    },
+    {
         "id": "verify-resistor-color-code",
         "title": "Check resistor value using color bands",
         "requireItems": [{ "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 }],
