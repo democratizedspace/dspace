@@ -406,7 +406,8 @@
     },
     {
         "id": "grow-basil",
-        "title": "grow basil until it's ready to harvest",
+        "title": "Grow 11 basil seedlings under a hydroponic lamp for four weeks until harvest-ready",
+        "image": "/assets/hydroponic_basil_adult.jpg",
         "requireItems": [
             {
                 "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
@@ -424,7 +425,7 @@
             },
             {
                 "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
-                "count": 16128
+                "count": 24192
             }
         ],
         "createItems": [
@@ -437,7 +438,19 @@
                 "count": 1
             }
         ],
-        "duration": "28d"
+        "duration": "28d",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "regrow-basil",
