@@ -4,7 +4,7 @@
 
 Astro renders pages server-side and hydrates Svelte components on the client. Place interactive code in `onMount` and mark hydrated components with `data-hydrated="true"` so tests can wait for readiness.
 
-Run `SKIP_E2E=1 npm test` before submitting changes. Install Playwright browsers with `npx playwright install chromium` when needed. Use `npm run check` for lint and format verification.
+Run `npm test` before submitting changes. Install Playwright browsers with `npx playwright install chromium` when needed or use `SKIP_E2E=1 npm test` to skip. Use `npm run check` for lint and format verification.
 
 Quest files live in `frontend/src/pages/quests/json` and must follow the schema in `frontend/src/pages/quests/jsonSchemas`. Each quest requires start, middle and completion nodes plus a `finish` option and at least one inventory item or process.
 

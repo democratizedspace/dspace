@@ -14,7 +14,10 @@
 Run checks locally before opening a pull request:
 
 ```bash
-# Full test suite including lint and unit tests
+# Full test suite including lint, unit, and E2E tests
+npm test
+
+# Skip E2E tests only if browsers are unavailable
 SKIP_E2E=1 npm test
 ```
 
