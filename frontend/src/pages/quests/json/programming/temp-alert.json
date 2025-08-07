@@ -1,0 +1,50 @@
+{
+    "id": "programming/temp-alert",
+    "title": "Set Temperature Alert",
+    "description": "Write a script that warns you when the sensor crosses a threshold.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've graphed your data, now let's add an alert for high temperatures.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "script",
+                    "text": "I'm ready."
+                }
+            ]
+        },
+        {
+            "id": "script",
+            "text": "Watch the sensor and trigger a notification if the reading goes above your limit.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Alert works!",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! Now your system can warn you before things overheat.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Handy!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/temp-graph"]
+}
