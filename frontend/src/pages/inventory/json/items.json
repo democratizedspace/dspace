@@ -185,11 +185,19 @@
     },
     {
         "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
-        "name": "hydroponics nutrients",
-        "description": "A bottle of hydroponics nutrients that can be used to grow plants. NPK: 9-3-6",
+        "name": "hydroponic nutrient solution",
+        "description": "1 L bottle of liquid hydroponic nutrient concentrate (NPK 9-3-6) for leafy greens; dilute before use.",
         "image": "/assets/hydroponics_nutrients.jpg",
-        "price": "25 dUSD",
-        "unit": " L"
+        "price": "15 dUSD",
+        "unit": "L",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     },
     {
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
