@@ -14,8 +14,8 @@ jobs:
           node-version: 20
       - uses: pnpm/action-setup@v2
         with: { version: 9 }
-      - run: pnpm install --frozen-lockfile
-      - run: cd frontend && pnpm install --no-frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --reporter=append-only
       - name: Run tests with coverage
         run: pnpm run coverage
       - name: Upload coverage to Codecov
