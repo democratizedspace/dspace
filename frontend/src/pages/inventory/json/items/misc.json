@@ -138,9 +138,21 @@
     {
         "id": "0564d441-7367-412e-b709-dad770814a39",
         "name": "5 gallon bucket",
-        "description": "A 5 gallon bucket that can be used to store water or other liquids.",
+        "description": "19 L (5 gal) high-density polyethylene bucket with metal handle for carrying liquids.",
         "image": "/assets/bucket.jpg",
-        "price": "8 dUSD"
+        "price": "8 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
