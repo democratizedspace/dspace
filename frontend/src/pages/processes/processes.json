@@ -1746,18 +1746,11 @@
     },
     {
         "id": "arduino-servo-sweep",
-        "title": "Upload Servo Sweep example in Arduino IDE",
+        "title": "Upload and run the Servo Sweep example on an Arduino Uno",
+        "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
                 "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
-                "count": 1
-            },
-            {
-                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
-                "count": 3
-            },
-            {
-                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
                 "count": 1
             },
             {
@@ -1767,11 +1760,31 @@
             {
                 "id": "828d6c3b-66a5-4064-b221-97630274502b",
                 "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
             }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "arduino-thermistor-read",
