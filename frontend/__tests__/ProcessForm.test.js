@@ -1,7 +1,7 @@
 import ProcessForm from '../src/components/svelte/ProcessForm.svelte';
 
-// Mock the items.json import
-jest.mock('../src/pages/inventory/json/items.json', () => [
+// Mock the item registry import
+jest.mock('../src/pages/inventory/json/items', () => [
     { id: 'item-1', name: 'Test Item 1', description: 'Description 1' },
     { id: 'item-2', name: 'Test Item 2', description: 'Description 2' },
     { id: 'item-3', name: 'Test Item 3', description: 'Description 3' },

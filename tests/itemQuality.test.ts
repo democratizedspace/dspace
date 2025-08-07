@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import items from "../frontend/src/pages/inventory/json/items.json";
+import items from "../frontend/src/pages/inventory/json/items";
 import { approximateIrlPrice } from "../backend/approximateIrlPrice";
 
 enum PriceExemptionReason {

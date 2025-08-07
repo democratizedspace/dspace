@@ -1,0 +1,89 @@
+[
+    {
+        "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+        "name": "entry-level FDM 3D printer",
+        "description": "Entry-level FDM printer with 220 x 220 x 250 mm build volume and heated bed; open-source firmware.",
+        "image": "/assets/3dprinter.jpg",
+        "price": "200 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+        "name": "Benchy",
+        "description": "A basic test print that is used to test the quality of a printer.",
+        "image": "/assets/benchy.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+        "name": "launch controller",
+        "description": "Handheld 9 V-powered controller with removable safety key and 6 m (20 ft) leads for remote ignition of model rockets.",
+        "image": "/assets/launch_controller.jpg",
+        "price": "25 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+        "name": "soldering iron kit",
+        "description": "Pen-style 30 W iron with stand, cleaning sponge and 1 m of 0.8 mm lead-free solder for hobby electronics.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "25 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+        "name": "digital multimeter",
+        "description": "Handheld multimeter with manual 20 V DC range, measures up to 600 V, 10 A and 2 MΩ. Includes test probes and replaceable fuse.",
+        "image": "/assets/launch_controller.jpg",
+        "price": "20 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
+    }
+]

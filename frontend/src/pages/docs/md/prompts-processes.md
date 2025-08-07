@@ -114,7 +114,7 @@ USER:
 1. Pick a process from `frontend/src/pages/processes/processes.json` that lacks a
    `hardening` block or has a low score.
 2. Improve clarity, realism and item references. Ensure durations are feasible
-   and related items exist in `frontend/src/pages/inventory/json/items.json`.
+   and related items exist in `frontend/src/pages/inventory/json/items`.
 3. When updating the `image` field, reuse an existing image URL already in the
    repository; do not introduce new or external images.
 4. Update or create the process's `hardening` block, incrementing `passes`,

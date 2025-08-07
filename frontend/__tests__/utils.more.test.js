@@ -1,4 +1,4 @@
-const {
+import {
     prettyPrintNumber,
     parseBool,
     datetimeAfterDuration,
@@ -12,8 +12,8 @@ const {
     base64ToObject,
     jsonToQuery,
     queryToJson,
-} = require('../src/utils.js');
-const items = require('../src/pages/inventory/json/items.json');
+} from '../src/utils.js';
+import items from '../src/pages/inventory/json/items';
 
 describe('number and boolean utilities', () => {
     test('prettyPrintNumber handles small and large numbers', () => {

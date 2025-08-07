@@ -1,5 +1,5 @@
 import { loadGameState, saveGameState } from './common.js';
-import items from '../../pages/inventory/json/items.json' assert { type: 'json' };
+import items from '../../pages/inventory/json/items';
 
 const dUSDId = items.find((i) => i.name === 'dUSD')?.id;
 const dCarbonId = items.find((i) => i.name === 'dCarbon')?.id;

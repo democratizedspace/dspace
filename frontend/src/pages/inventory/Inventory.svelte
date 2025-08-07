@@ -1,7 +1,7 @@
 <script>
     import { state } from '../../utils/gameState/common.js';
     import ItemList from '../../components/svelte/ItemList.svelte';
-    import items from './json/items.json';
+    import items from './json/items';
     import { onMount } from 'svelte';
 
     let showAllItems = false;

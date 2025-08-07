@@ -1,4 +1,4 @@
-import items from './pages/inventory/json/items.json';
+import items from './pages/inventory/json/items';
 import { questFinished, canStartQuest } from './utils/gameState.js';
 
 export const prettyPrintNumber = (number) => {

@@ -1,0 +1,210 @@
+[
+    {
+        "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+        "name": "aquarium (150 L)",
+        "description": "90×45×45 cm (150 L/40 gal) glass aquarium with 6 mm tempered panels; shipped empty without lid.",
+        "image": "/assets/aquarium_empty.jpg",
+        "price": "120 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
+        "name": "aquarium (goldfish) (150 L)",
+        "description": "An aquarium containing a goldfish.",
+        "image": "/assets/aquarium_goldfish.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "40920981-bf9f-4b89-b887-bebe7006f7dc",
+        "name": "goldfish",
+        "description": "A goldfish.",
+        "image": "/assets/goldfish.jpg",
+        "price": "10 dUSD"
+    },
+    {
+        "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
+        "name": "goldfish food",
+        "description": "Food suitable for a goldfish.",
+        "image": "/assets/goldfish_food.jpg",
+        "price": "10 dUSD"
+    },
+    {
+        "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
+        "name": "aquarium filter",
+        "description": "A filter for a fish tank.",
+        "image": "/assets/aquarium_filter.jpg",
+        "price": "30 dUSD"
+    },
+    {
+        "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+        "name": "aquarium heater",
+        "description": "A heater for a fish tank.",
+        "image": "/assets/aquarium_heater.jpg",
+        "price": "20 dUSD"
+    },
+    {
+        "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+        "name": "aquarium light",
+        "description": "A light for a fish tank.",
+        "image": "/assets/aquarium_light.jpg",
+        "price": "15 dUSD"
+    },
+    {
+        "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+        "name": "Thermometer",
+        "description": "A thermometer for measuring temperature.",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "price": "15 dUSD"
+    },
+    {
+        "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+        "name": "7 pH freshwater aquarium (150 L)",
+        "description": "An freshwater aquarium with a pH of 7.",
+        "image": "/assets/aquarium_filled.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
+        "name": "gravel",
+        "description": "Loose gravel suitable for use in an aquarium.",
+        "image": "/assets/gravel.jpg",
+        "price": "1 dUSD",
+        "unit": " kg"
+    },
+    {
+        "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+        "name": "aquarium net",
+        "description": "A net for catching fish.",
+        "image": "/assets/aquarium_net.jpg",
+        "price": "5 dUSD"
+    },
+    {
+        "id": "36a1168f-0109-4a8c-b70b-45f8ca582297",
+        "name": "dGoldfish",
+        "description": "A token granted for feeding a goldfish",
+        "image": "/assets/dGoldfish.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "a07b75e3-f828-4cb1-81d6-1ab0e9857a79",
+        "name": "Fish Friend Award",
+        "description": "An award given for setting up your first goldfish aquarium.",
+        "image": "/assets/fish_friend_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+        "name": "Walstad aquarium (80 L)",
+        "description": "A planted tank using the low-tech Walstad method.",
+        "image": "/assets/walstad.jpg",
+        "price": "80 dUSD"
+    },
+    {
+        "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+        "name": "Dwarf shrimp",
+        "description": "Hardy shrimp perfect for planted aquariums.",
+        "image": "/assets/quests/shrimp.svg",
+        "price": "3 dUSD"
+    },
+    {
+        "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+        "name": "Airline tubing",
+        "description": "Flexible tubing for aquarium air pumps and drip acclimation.",
+        "image": "/assets/aquarium_empty.jpg",
+        "price": "2 dUSD"
+    },
+    {
+        "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+        "name": "Heated Walstad aquarium (80 L, 26°C)",
+        "description": "An 80 L Walstad tank equipped with a heater set to 26°C.",
+        "image": "/assets/walstad.jpg",
+        "price": "85 dUSD"
+    },
+    {
+        "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+        "name": "Walstad tank with guppies",
+        "description": "An 80 L heated Walstad aquarium containing three female and one male guppy.",
+        "image": "/assets/guppy.jpg",
+        "price": "90 dUSD"
+    },
+    {
+        "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+        "name": "Sponge filter",
+        "description": "A gentle air-driven filter ideal for small aquariums.",
+        "image": "/assets/aquarium_filter.jpg",
+        "price": "6 dUSD"
+    },
+    {
+        "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+        "name": "Aquarium liquid test kit",
+        "description": "Liquid reagent kit for aquariums. Four 15 mL bottles and test tubes provide ~130 tests for ammonia, nitrite and nitrate.",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "price": "25 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+        "name": "Water conditioner",
+        "description": "50 mL bottle of sodium thiosulfate solution that neutralizes chlorine and chloramine in tap water before aquarium use.",
+        "image": "/assets/aquarium_filled.jpg",
+        "price": "6 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+        "name": "gravel vacuum",
+        "description": "Self-priming siphon with 2 m (6.5 ft) hose and 4 cm (1.6 in) tube; moves ~3 L/min to clear debris.",
+        "image": "/assets/gravel.jpg",
+        "price": "10 dUSD",
+        "hardening": {
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 80
+                }
+            ]
+        }
+    }
+]

@@ -1,12 +1,12 @@
-const {
+import {
     base64ToObject,
     jsonToQuery,
     queryToJson,
     constructLink,
     getPriceStringComponents,
     getSymbolFromId,
-} = require('../src/utils.js');
-const items = require('../src/pages/inventory/json/items.json');
+} from '../src/utils.js';
+import items from '../src/pages/inventory/json/items';
 
 describe('encoding helpers', () => {
     test('jsonToQuery and queryToJson roundtrip', () => {

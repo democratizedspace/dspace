@@ -13,9 +13,11 @@ const npcFilePath = '../src/pages/docs/md/npcs.md';
 const quests = new Map();
 const questDependencies = new Map();
 const questsByCategory = new Map();
-const items = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '../src/pages/inventory/json/items.json'))
-);
+const itemsDir = path.join(__dirname, '../src/pages/inventory/json/items');
+const items = fs
+    .readdirSync(itemsDir)
+    .filter((f) => f.endsWith('.json'))
+    .flatMap((f) => JSON.parse(fs.readFileSync(path.join(itemsDir, f))));
 const processes = JSON.parse(
     fs.readFileSync(path.join(__dirname, '../src/pages/processes/processes.json'))
 );
