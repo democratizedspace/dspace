@@ -506,12 +506,18 @@
     },
     {
         "id": "germinate-stevia",
-        "title": "germinate stevia seeds",
-        "requireItems": [],
+        "title": "Germinate stevia seeds in starter plugs",
+        "image": "/assets/basil_seedlings.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
-                "count": 1
+                "count": 11
             },
             {
                 "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
@@ -524,7 +530,19 @@
                 "count": 11
             }
         ],
-        "duration": "7d"
+        "duration": "7d",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "grow-stevia",
