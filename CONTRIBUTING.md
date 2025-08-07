@@ -33,6 +33,7 @@ Thank you for your interest in helping the project! Below is a quick overview of
    npm test
    ```
    Include `SKIP_E2E=1` only if you cannot run the browsers.
+   The CI workflow runs E2E tests and will fail your PR if any of them fail.
 2. Update documentation when adding or changing features.
 3. Open a PR using the provided template and describe your changes.
 

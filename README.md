@@ -56,6 +56,7 @@ If Playwright browsers aren't installed, you may skip E2E tests:
 SKIP_E2E=1 npm test
 ```
 
+GitHub Actions runs the E2E tests and fails pull requests when they do not pass.
 If you encounter an error like `browserType.launch: Executable doesn't exist`,
 download the browsers with:
 

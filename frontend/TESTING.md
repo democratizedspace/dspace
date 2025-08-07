@@ -27,6 +27,8 @@ SKIP_E2E=1 npm test
 npm run test:all
 ```
 
+CI runs the E2E suite and blocks pull requests when any E2E test fails.
+
 ### Preventing Playwright Artifact Errors
 
 When running Playwright tests or developing with a recent test history, you might encounter ENOENT errors related to missing trace or network files. We've added tools to prevent these errors:

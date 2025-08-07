@@ -21,10 +21,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --reporter=append-only
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
       - name: Run test suite
         env:
           NODE_OPTIONS: --experimental-vm-modules
-          SKIP_E2E: '1'
         run: npm run test:pr
 
       - name: Generate coverage report
