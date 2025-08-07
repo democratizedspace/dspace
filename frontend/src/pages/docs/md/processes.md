@@ -39,7 +39,7 @@ These are the items produced by the process, which are added to your inventory u
 
 <img src="/assets/docs/process_duration.jpg">
 
-Duration indicates the amount of time required for the process to complete. It's expressed in the form 1d 2h 3m 4s, meaning 1 day, 2 hours, 3 minutes, and 4 seconds. Process durations can range from mere seconds to several months or even years.
+Duration indicates the amount of time required for the process to complete. It's expressed in the form 1d 2h 3m 4s, meaning 1 day, 2 hours, 3 minutes, and 4 seconds. Process durations can range from mere seconds to several months or even years. The form normalizes input like `0.5h 30s` to `30m 30s` for consistency.
 
 #### Duration Examples
 
@@ -53,7 +53,7 @@ The system automatically converts these durations into milliseconds for precise 
 
 Starting with v3, you can create your own custom processes. When creating a custom process, keep in mind:
 
-1. Duration Format: Must follow the pattern `(\d+h\s*)?(\d+m\s*)?(\d+s\s*)?` (e.g., "1h 30m", "45s", "2h")
+1. Duration Format: Accepts days (`d`), hours (`h`), minutes (`m`), and seconds (`s`), each optionally fractional (e.g., `1h 30m`, `45s`, `0.5h`). Values are normalized to a canonical format on submit.
 2. Item Requirements:
     - Required items are checked but not consumed
     - Consumed items are removed at process start

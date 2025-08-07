@@ -3,7 +3,7 @@
     import ItemSelector from './ItemSelector.svelte';
     import ProcessPreview from './ProcessPreview.svelte';
     import items from '../../pages/inventory/json/items';
-    import { durationInSeconds } from '../../utils.js';
+    import { durationInSeconds, prettyPrintDuration } from '../../utils.js';
     import { validateProcessData } from '../../utils/customProcessValidation.js';
 
     export let title = '';
@@ -126,13 +126,15 @@
             return;
         }
 
+        const normalizedDuration = prettyPrintDuration(durationInSeconds(duration));
+
         const formData = new FormData();
         formData.append('title', title);
-        formData.append('duration', duration);
+        formData.append('duration', normalizedDuration);
         formData.append('requireItems', JSON.stringify(requireItems));
         formData.append('consumeItems', JSON.stringify(consumeItems));
         formData.append('createItems', JSON.stringify(createItems));
-
+        duration = normalizedDuration;
         dispatch('submit', formData);
     }
 </script>
