@@ -1956,6 +1956,20 @@
         }
     },
     {
+        "id": "print-calibration-cube",
+        "title": "3D print a 20 mm calibration cube on an entry-level FDM 3D printer using 15 g of green PLA filament",
+        "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
+        "consumeItems": [{ "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 15 }],
+        "createItems": [],
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-hardening-2025-08-07", "date": "2025-08-07", "score": 65 }]
+        }
+    },
+    {
         "id": "print-benchy",
         "title": "3D print a Benchy calibration boat on an entry-level FDM 3D printer using 15 g of white PLA filament",
         "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
