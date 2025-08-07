@@ -48,10 +48,22 @@
     },
     {
         "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
-        "name": "aquarium heater",
-        "description": "A heater for a fish tank.",
+        "name": "aquarium heater (150 W)",
+        "description": "Submersible 150 W heater with adjustable thermostat (20–30°C) for 150 L tanks; operates on 120 V.",
         "image": "/assets/aquarium_heater.jpg",
-        "price": "20 dUSD"
+        "price": "25 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
