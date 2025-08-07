@@ -1,0 +1,55 @@
+{
+    "id": "hydroponics/root-rinse",
+    "title": "Rinse the Roots",
+    "description": "Flush salts from the root zone with clean water.",
+    "image": "/assets/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Salt buildup can stress plants. Let's give those roots a quick rinse.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Sounds good."
+                }
+            ]
+        },
+        {
+            "id": "rinse",
+            "text": "Fill a bucket with dechlorinated water and pour it through the grow media to wash away salts.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "I'll prep the fresh water."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Roots rinsed and happy!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Clearing excess salts keeps nutrient uptake smooth.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to growing."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/filter-clean"]
+}
