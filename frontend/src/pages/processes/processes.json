@@ -384,25 +384,29 @@
     },
     {
         "id": "refresh-hydroponic-tub",
-        "title": "refresh the nutrient solution",
+        "title": "Refresh the nutrient solution in a hydroponics tub",
+        "image": "/assets/hydroponics_tub.jpg",
         "requireItems": [],
         "consumeItems": [
-            {
-                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
-                "count": 1
-            },
-            {
-                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
-                "count": 1
-            }
+            { "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77", "count": 1 },
+            { "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150", "count": 1 }
         ],
         "createItems": [
-            {
-                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                "count": 1
-            }
+            { "id": "fc2bb989-f192-4891-8bde-78ae631dae78", "count": 1 }
         ],
-        "duration": "30s"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "grow-basil",

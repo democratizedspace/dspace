@@ -485,14 +485,14 @@
     {
         "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
         "name": "hydroponics tub (ready)",
-        "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
+        "description": "A hydroponics grow tub filled with balanced nutrient solution, ready for leafy greens.",
         "image": "/assets/hydroponics_tub.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
         "name": "hydroponics tub (nutrient deficient)",
-        "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
+        "description": "A hydroponics grow tub with depleted solution that must be refreshed before planting.",
         "image": "/assets/hydroponics_tub.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
