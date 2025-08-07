@@ -95,10 +95,18 @@
     },
     {
         "id": "82577af7-6724-4cb2-8922-f7140e550145",
-        "name": "Smartphone",
-        "description": "A typical 5 V USB-charged mobile phone.",
+        "name": "smartphone",
+        "description": "150 g smartphone with 6 in (15 cm) screen and 128 GB storage; charges via 5 V USB-C.",
         "image": "/assets/changelog/20230630/smartphone.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "200 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     },
     {
         "id": "743681a7-d2e7-465c-af07-43665079bf4d",
