@@ -351,7 +351,7 @@
     },
     {
         "id": "prepare-hydroponic-tub",
-        "title": "Prepare a hydroponics tub with water and nutrients",
+        "title": "Prepare a hydroponics tub with water and nutrient solution",
         "image": "/assets/hydroponics_tub.jpg",
         "requireItems": [],
         "consumeItems": [
@@ -1563,10 +1563,15 @@
     },
     {
         "id": "clean-minor-cut",
-        "title": "Clean and dress a minor cut",
+        "title": "Wash and bandage a minor cut",
+        "image": "/assets/rescue.jpg",
         "requireItems": [
             {
                 "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                "count": 1
+            },
+            {
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
                 "count": 1
             }
         ],
@@ -1589,7 +1594,19 @@
             }
         ],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "practice-cpr",

@@ -35,7 +35,7 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
         codex exec "npm run itemValidation && npm run test:root -- itemQuality"
         ```
 
-See the [Codex CLI documentation][codex-cli] for more flags.
+See the upstream CLI reference for more flags.
 
 ---
 
@@ -72,7 +72,7 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm run itemValidation` and `npm run test:root -- itemQuality`, fixing any failures.
-7. Run `git diff --cached | ripsecrets` and ensure no secrets.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 8. Use an emoji-prefixed commit message.
 9. Update docs or processes if needed.
 
@@ -91,7 +91,7 @@ create items under `frontend/src/pages/inventory/json/items`, choosing the appro
 realistic details, required fields, and passing checks (`npm run lint`, `npm run
 type-check`, `npm run build`, `npm run itemValidation`, and `npm run test:root -- itemQuality`).
 Verify the item appears in at least one quest or process, reuse existing image
-assets, and scan for secrets with `git diff --cached | ripsecrets` before
+assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
 committing.
 
 USER:
@@ -139,7 +139,7 @@ USER:
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run itemValidation`,
    and `npm run test:root -- itemQuality`. Update docs if needed.
-6. Run `git diff --cached | ripsecrets` before committing.
+6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 7. Use an emoji-prefixed commit message.
 
 OUTPUT:
@@ -155,5 +155,3 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Iterate on outputs** rather than expecting perfection on the first try.
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
-
-[codex-cli]: https://www.npmjs.com/package/codex-cli

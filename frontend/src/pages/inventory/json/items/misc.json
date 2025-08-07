@@ -71,10 +71,18 @@
     },
     {
         "id": "82577af7-6724-4cb2-8922-f7140e550145",
-        "name": "Smartphone",
-        "description": "A typical 5 V USB-charged mobile phone.",
+        "name": "smartphone",
+        "description": "150 g smartphone with 6 in (15 cm) screen and 128 GB storage; charges via 5 V USB-C.",
         "image": "/assets/changelog/20230630/smartphone.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "200 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     },
     {
         "id": "743681a7-d2e7-465c-af07-43665079bf4d",
@@ -112,11 +120,21 @@
         "unit": "g"
     },
     {
+
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
         "name": "3D printing kit",
-        "description": "A kit that contains all the parts you need to get started with 3D printing. Everything is fully assembled.",
-        "image": "/assets/amazing1.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "description": "Assembled FDM printer, 0.4 mm nozzle, 180×180×180 mm build with 500 g PLA.",
+        "image": "/assets/3dprinter.jpg",
+        "price": "220 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     },
     {
         "id": "0564d441-7367-412e-b709-dad770814a39",
