@@ -1,0 +1,49 @@
+{
+    "id": "aquaria/filter-rinse",
+    "title": "Rinse Sponge Filter",
+    "description": "Give your sponge filter a quick rinse in dechlorinated water.",
+    "image": "/assets/aquarium_filter.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The sponge filter is clogging up. A rinse will keep flow gentle for shrimp.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "I'll rinse it now."
+                }
+            ]
+        },
+        {
+            "id": "rinse",
+            "text": "Remove the sponge and squeeze it in a bucket of dechlorinated water until the gunk is gone.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Filter's clean again!",
+                    "process": "rinse-aquarium-filter",
+                    "requiresItems": [
+                        { "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1", "count": 1 },
+                        { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Clean media keeps beneficial bacteria thriving.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to watching fish."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["aquaria/sponge-filter"]
+}

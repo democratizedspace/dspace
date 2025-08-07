@@ -139,7 +139,7 @@
     },
     {
         "id": "bucket-water-chlorinated",
-        "title": "Use a sink to fill a 5 gallon bucket with tap water",
+        "title": "Use a sink to fill a 19 L (5 gal) bucket with tap water",
         "requireItems": [
             {
                 "id": "799ace33-1336-46c0-904a-9f16778230f1",
@@ -406,7 +406,8 @@
     },
     {
         "id": "grow-basil",
-        "title": "grow basil until it's ready to harvest",
+        "title": "Grow 11 basil seedlings under a hydroponic lamp for four weeks until harvest-ready",
+        "image": "/assets/hydroponic_basil_adult.jpg",
         "requireItems": [
             {
                 "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
@@ -424,7 +425,7 @@
             },
             {
                 "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
-                "count": 16128
+                "count": 24192
             }
         ],
         "createItems": [
@@ -437,7 +438,19 @@
                 "count": 1
             }
         ],
-        "duration": "28d"
+        "duration": "28d",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "regrow-basil",
@@ -493,12 +506,18 @@
     },
     {
         "id": "germinate-stevia",
-        "title": "germinate stevia seeds",
-        "requireItems": [],
+        "title": "Germinate stevia seeds in starter plugs",
+        "image": "/assets/basil_seedlings.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
-                "count": 1
+                "count": 11
             },
             {
                 "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
@@ -511,7 +530,19 @@
                 "count": 11
             }
         ],
-        "duration": "7d"
+        "duration": "7d",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "grow-stevia",
@@ -1477,13 +1508,15 @@
     {
         "id": "measure-battery-voltage",
         "title": "Measure battery voltage with a multimeter",
+        "image": "/assets/battery.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-            { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 }
+            { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "2m"
     },
     {
         "id": "adjust-ph",
@@ -1746,18 +1779,11 @@
     },
     {
         "id": "arduino-servo-sweep",
-        "title": "Upload Servo Sweep example in Arduino IDE",
+        "title": "Upload and run the Servo Sweep example on an Arduino Uno",
+        "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
                 "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
-                "count": 1
-            },
-            {
-                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
-                "count": 3
-            },
-            {
-                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
                 "count": 1
             },
             {
@@ -1767,11 +1793,31 @@
             {
                 "id": "828d6c3b-66a5-4064-b221-97630274502b",
                 "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
             }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "arduino-thermistor-read",
@@ -1938,7 +1984,7 @@
     },
     {
         "id": "partial-water-change",
-        "title": "Use a gravel vacuum with 2 m hose and bucket to change 5% of water in a 150 L aquarium",
+        "title": "Use gravel vacuum with 2 m hose and 19 L (5 gal) bucket to change 5% of water in 150 L aquarium",
         "requireItems": [
             { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
             { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
@@ -1953,6 +1999,20 @@
             "score": 70,
             "emoji": "🌀",
             "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 70 }]
+        }
+    },
+    {
+        "id": "print-calibration-cube",
+        "title": "3D print a 20 mm calibration cube on an entry-level FDM 3D printer using 15 g of green PLA filament",
+        "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
+        "consumeItems": [{ "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 15 }],
+        "createItems": [],
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-hardening-2025-08-07", "date": "2025-08-07", "score": 65 }]
         }
     },
     {
@@ -1985,6 +2045,23 @@
             "score": 70,
             "emoji": "🌀",
             "history": [{ "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 70 }]
+        }
+    },
+    {
+        "id": "solder-wire-connection",
+        "title": "Join two wires with a soldering iron kit and safety goggles",
+        "requireItems": [
+            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-refine-2025-08-07", "date": "2025-08-07", "score": 60 }]
         }
     },
     {
@@ -2144,5 +2221,34 @@
                 }
             ]
         }
+    },
+    {
+        "id": "charge-smartphone",
+        "title": "Charge a smartphone from a battery pack using a USB cable",
+        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "requireItems": [
+            { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 },
+            { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
+            { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }
+        ],
+        "consumeItems": [{ "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 10 }],
+        "createItems": [],
+        "duration": "30m"
+    },
+    {
+        "id": "charge-battery-pack-solar",
+        "title": "Charge a 200 Wh battery pack using a 200 W solar panel and charge controller",
+        "image": "/assets/solar_setup_small.jpg",
+        "requireItems": [
+            { "id": "02b32152-a7b2-458e-9643-7b754c722165", "count": 1 },
+            { "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b", "count": 1 },
+            { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            { "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 200 },
+            { "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a", "count": 200 }
+        ],
+        "duration": "1h"
     }
 ]

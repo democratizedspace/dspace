@@ -804,6 +804,7 @@
       "astronomy/star-trails",
       "astronomy/satellite-pass",
       "astronomy/planetary-alignment",
+      "astronomy/orion-nebula",
       "astronomy/north-star",
       "astronomy/meteor-shower",
       "astronomy/lunar-eclipse",
@@ -818,6 +819,7 @@
   },
   "98f6252e-95c2-468a-b110-69d47604df2c": {
     "requires": [
+      "astronomy/orion-nebula",
       "astronomy/light-pollution",
       "astronomy/andromeda"
     ],
@@ -825,6 +827,7 @@
   },
   "9a72fb16-fc69-45c5-beca-f25c27028977": {
     "requires": [
+      "astronomy/orion-nebula",
       "astronomy/light-pollution",
       "astronomy/andromeda"
     ],
