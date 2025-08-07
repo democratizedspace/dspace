@@ -1,0 +1,54 @@
+{
+    "id": "electronics/led-polarity",
+    "title": "Check LED polarity with a multimeter",
+    "description": "Use the diode mode of a digital multimeter to confirm an LED's orientation before wiring.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Grab your digital multimeter and a loose 5 mm LED.\nWe'll use diode test mode to identify the positive lead.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "test",
+                    "text": "Let's test it."
+                }
+            ]
+        },
+        {
+            "id": "test",
+            "text": "Set the meter to diode mode. Touch the red probe to the LED's long leg and the black to the short leg without forcing the leads.\nThe LED should glow dimly or show about 1.8 V. Reverse the probes and it should stay dark or show OL.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It lights one way only.",
+                    "requiresItems": [
+                        { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Now you know which lead is positive.\nDisconnect the probes and store the LED for your next circuit.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [{ "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }],
+    "requiresQuests": ["electronics/check-battery-voltage"],
+    "hardening": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "🌀",
+        "history": []
+    }
+}

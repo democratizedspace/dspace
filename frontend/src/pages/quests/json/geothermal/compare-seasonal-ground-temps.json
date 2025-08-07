@@ -1,0 +1,41 @@
+{
+    "id": "geothermal/compare-seasonal-ground-temps",
+    "title": "Compare Seasonal Ground Temps",
+    "description": "Use a second thermistor to log ground temperatures in different seasons.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've already logged ground temps. Want to see how they shift over the year?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Yes, let's gather more data."
+                }
+            ]
+        },
+        {
+            "id": "deploy",
+            "text": "Bury a second thermistor and record readings for a few months.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Sensor logging",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [{ "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Comparing seasons reveals how stable your geothermal source is.",
+            "options": [{ "type": "finish", "text": "Can't wait to analyze." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/log-ground-temperature"]
+}

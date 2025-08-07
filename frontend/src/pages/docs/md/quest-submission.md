@@ -21,6 +21,7 @@ This guide describes how to submit your custom quests to become part of the offi
     npm test -- questValidation
     ```
     Ensure your quest file passes all schema checks. See the [Quest Schema Requirements](/docs/quest-schema) for field definitions.
+    Quest titles and descriptions must be plain text with no HTML tags.
 4. **Check quest quality** with:
     ```bash
     npm test -- questQuality

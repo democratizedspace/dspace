@@ -2,9 +2,17 @@
     {
         "id": "fe46e236-5d03-4c95-9b38-68b045a0df03",
         "name": "Benchy Award",
-        "description": "Cause it's a bench! Get it? Benchy?",
+        "description": "Resin trophy of classic 3D Benchy boat for your first calibration print.",
         "image": "/assets/benchy_award.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 60 }
+            ]
+        }
     },
     {
         "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
