@@ -1,39 +1,48 @@
 {
     "id": "electronics/solder-wire",
     "title": "Solder a Wire Connection",
-    "description": "Use a soldering iron to join two wires and restore a circuit.",
+    "description": "Join wires with a soldering iron kit and goggles to restore a circuit.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A sensor lead snapped. Want to solder it back together?",
-            "options": [{ "type": "goto", "goto": "prep", "text": "Let's fix it." }]
+            "text": "Lead snapped. Repair it? Ventilate, wear goggles, keep iron on stand.",
+            "options": [{ "type": "goto", "goto": "prep", "text": "What gear do I need?" }]
         },
         {
             "id": "prep",
-            "text": "Strip a little insulation, twist the ends, then heat the joint with your iron while feeding solder until it flows.",
+            "text": "Kit and wires ready. Goggles on, heat the iron on its stand, keep area clear.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "solder-wire-connection",
+                    "text": "Review soldering steps"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Joint looks solid.",
+                    "text": "Wire joined and cool",
                     "requiresItems": [
-                        {
-                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
-                            "count": 1
-                        }
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work. The connection is strong and conductive again.",
+            "text": "Nice work! Unplug the iron, let it cool, then store the kit and goggles.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": []
+    "requiresQuests": [],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [{ "task": "codex-refine-2025-08-07", "date": "2025-08-07", "score": 60 }]
+    }
 }

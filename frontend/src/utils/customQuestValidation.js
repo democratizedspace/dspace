@@ -3,8 +3,8 @@ import Ajv from 'ajv';
 export const customQuestSchema = {
     type: 'object',
     properties: {
-        title: { type: 'string', minLength: 3 },
-        description: { type: 'string', minLength: 10 },
+        title: { type: 'string', minLength: 3, pattern: '^[^<>]*$' },
+        description: { type: 'string', minLength: 10, pattern: '^[^<>]*$' },
         image: {
             type: 'string',
             minLength: 1,

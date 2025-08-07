@@ -1,14 +1,14 @@
 {
     "id": "astronomy/andromeda",
     "title": "Locate the Andromeda Galaxy",
-    "description": "Use a planisphere star chart, red flashlight and basic telescope to locate our neighboring galaxy without ruining night vision.",
+    "description": "Use a planisphere star chart, a red flashlight and a basic telescope to locate our neighboring galaxy while preserving night vision.",
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Find a safe dark site, check the forecast, and let your eyes adjust for at least 15 minutes. Keep screens dim, then use a planisphere star chart and a red flashlight to preserve night vision. Ready?",
+            "text": "Nova here. Choose a dark, open spot away from traffic, check the forecast and let your eyes adjust for 15 minutes. Keep screens dim, secure your basic telescope and use a planisphere star chart with a red flashlight to preserve night vision. Ready?",
             "options": [
                 {
                     "type": "goto",
@@ -23,7 +23,7 @@
         },
         {
             "id": "search",
-            "text": "Shield the red flashlight and trace Cassiopeia's W on the star chart. From its midpoint, sweep the basic telescope slightly toward a faint smudge—that's Andromeda. Keep the scope steady, watch your footing, and never aim near the Sun or aircraft.",
+            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge—that's Andromeda. Keep footing sure, mind your surroundings and never aim near the Sun or aircraft.",
             "options": [
                 {
                     "type": "process",
@@ -40,19 +40,20 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Record the position for next time, power down and cap the telescope, then pack the chart and flashlight before leaving the site.",
+            "text": "Nice work! Log the position for next time, cap the telescope, switch off the flashlight and pack your gear before leaving the site.",
             "options": [{ "type": "finish", "text": "Logging observations." }]
         }
     ],
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
             { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 60 },
-            { "task": "codex-quest-polish-2025-08-06", "date": "2025-08-06", "score": 80 }
+            { "task": "codex-quest-polish-2025-08-06", "date": "2025-08-06", "score": 80 },
+            { "task": "codex-quest-refine-2025-08-07", "date": "2025-08-07", "score": 90 }
         ]
     }
 }
