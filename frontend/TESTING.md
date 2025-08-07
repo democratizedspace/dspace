@@ -18,11 +18,16 @@ To run the complete test suite:
 
 ```bash
 # From the project root
-SKIP_E2E=1 npm test  # omit SKIP_E2E=1 for full suite
+npm test
+
+# Skip E2E tests if browsers are missing
+SKIP_E2E=1 npm test
 
 # Or from the frontend directory
 npm run test:all
 ```
+
+CI runs the E2E suite and blocks pull requests when any E2E test fails.
 
 ### Preventing Playwright Artifact Errors
 

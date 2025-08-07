@@ -20,11 +20,11 @@ Thank you for your interest in helping the project! Below is a quick overview of
   ```
 - The test suite verifies file formatting, so unformatted changes will fail CI.
 - The pre-commit hook validates quest and item schemas, runs `lint-staged`, `npm run check`,
-  and `SKIP_E2E=1 npm test`. Run it manually with:
+  and `npm test`. Run it manually with:
     ```bash
-    SKIP_E2E=1 npm test
+    npm test
     ```
-- If Playwright browsers are missing, install them with `npx playwright install chromium` or set `SKIP_E2E=1`.
+- If Playwright browsers are missing, install them with `npx playwright install chromium` or run `SKIP_E2E=1 npm test`.
 
 ## Opening a Pull Request
 
@@ -32,7 +32,8 @@ Thank you for your interest in helping the project! Below is a quick overview of
    ```bash
    npm test
    ```
-   Include `SKIP_E2E=1` if you cannot run the browsers.
+   Include `SKIP_E2E=1` only if you cannot run the browsers.
+   The CI workflow runs E2E tests and will fail your PR if any of them fail.
 2. Update documentation when adding or changing features.
 3. Open a PR using the provided template and describe your changes.
 

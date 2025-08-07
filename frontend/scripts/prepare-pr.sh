@@ -50,6 +50,7 @@ if [ -z "$SKIP_E2E" ]; then
   echo "✅ End-to-end tests passed!"
 else
   echo -e "\nStep 3/3: SKIP_E2E is set, skipping end-to-end tests..."
+  echo "⚠️ Remember to run them locally before submitting your PR."
 fi
 
 # All done!

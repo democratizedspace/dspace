@@ -44,19 +44,19 @@ DSPACE uses a comprehensive testing suite to ensure code quality and prevent reg
 
 ### Pre-PR Testing
 
-Before submitting a pull request, run the comprehensive test suite with:
-
-```bash
-# Skip Playwright tests if browsers aren't installed
-SKIP_E2E=1 npm test
-```
-
-If Playwright browsers are available, omit `SKIP_E2E=1` to run the full suite:
+Before submitting a pull request, run the comprehensive test suite:
 
 ```bash
 npm test
 ```
 
+If Playwright browsers aren't installed, you may skip E2E tests:
+
+```bash
+SKIP_E2E=1 npm test
+```
+
+GitHub Actions runs the E2E tests and fails pull requests when they do not pass.
 If you encounter an error like `browserType.launch: Executable doesn't exist`,
 download the browsers with:
 

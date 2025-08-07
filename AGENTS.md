@@ -14,10 +14,14 @@
 Run checks locally before opening a pull request:
 
 ```bash
-# Full test suite including lint and unit tests
+# Full test suite including lint, unit, and E2E tests
+npm test
+
+# Skip E2E tests only if browsers are unavailable
 SKIP_E2E=1 npm test
 ```
 
+- The CI workflow always runs E2E tests and will fail pull requests when they fail.
 - Install Playwright browsers with `npx playwright install chromium` when E2E tests require it.
 - Use `npm run check` to verify formatting and linting.
 - Use `npm run audit:ci` to fail on high-severity dependency vulnerabilities.
