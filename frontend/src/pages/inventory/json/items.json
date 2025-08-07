@@ -194,9 +194,18 @@
     {
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
         "name": "3D printing kit",
-        "description": "A kit that contains all the parts you need to get started with 3D printing. Everything is fully assembled.",
-        "image": "/assets/amazing1.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "description": "Assembled FDM printer, 0.4 mm nozzle, 180×180×180 mm build with 500 g PLA.",
+        "image": "/assets/3dprinter.jpg",
+        "price": "220 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+            ]
+        }
     },
     {
         "id": "0564d441-7367-412e-b709-dad770814a39",
