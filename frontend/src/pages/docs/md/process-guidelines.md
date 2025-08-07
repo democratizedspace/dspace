@@ -51,7 +51,7 @@ Duration must follow the pattern `(\d+h\s*)?(\d+m\s*)?(\d+s\s*)?`, for example:
 -   "1h 30m" (1 hour, 30 minutes)
 -   "5m 30s" (5 minutes, 30 seconds)
 
-Fractional values are allowed, so `0.5h` will be interpreted as thirty minutes.
+Fractional values are allowed, so `0.5h` will be interpreted as thirty minutes. Submitted values are normalized; for example, `0.5h 30s` becomes `30m 30s` on save.
 
 ### Implementation State
 

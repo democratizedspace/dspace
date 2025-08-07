@@ -197,6 +197,33 @@ describe('ProcessForm Component', () => {
         }
     });
 
+    test('normalizes duration before submission', () => {
+        const component = new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        let submittedData = null;
+        component.$on('submit', (event) => {
+            submittedData = event.detail;
+        });
+
+        titleInput.value = 'Test Process';
+        titleInput.dispatchEvent(new Event('input'));
+
+        durationInput.value = '0.5h 30s';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        expect(submittedData).toBeTruthy();
+        expect(submittedData.get('duration')).toBe('30m 30s');
+    });
+
     test('should validate item counts', () => {
         const component = new ProcessForm({
             target: container,
