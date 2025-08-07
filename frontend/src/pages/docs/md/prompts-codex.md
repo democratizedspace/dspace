@@ -27,7 +27,7 @@ invoking Codex on DSPACE and should evolve alongside the project.
 | Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`    |
 | CI automation  | –                           | `codex exec --full-auto "run npm test"` |
 
-See the [Codex CLI documentation][codex-cli] for more flags.
+See the upstream CLI reference for more flags.
 
 ---
 
@@ -120,5 +120,3 @@ USER:
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.
 ```
-
-[codex-cli]: https://www.npmjs.com/package/codex-cli
