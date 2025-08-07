@@ -2144,5 +2144,21 @@
                 }
             ]
         }
+    },
+    {
+        "id": "charge-battery-pack-solar",
+        "title": "Charge a 200 Wh battery pack using a 200 W solar panel and charge controller",
+        "image": "/assets/solar_setup_small.jpg",
+        "requireItems": [
+            { "id": "02b32152-a7b2-458e-9643-7b754c722165", "count": 1 },
+            { "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b", "count": 1 },
+            { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            { "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 200 },
+            { "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a", "count": 200 }
+        ],
+        "duration": "1h"
     }
 ]
