@@ -19,7 +19,7 @@
         },
         {
             "id": "cut",
-            "text": "Measure a pine board to length, cut slots for your screwdrivers and chisels, then sand the edges smooth for a professional finish.",
+            "text": "Measure a pine board to length, carve slots with a wood chisel, then sand the edges smooth.",
             "options": [
                 {
                     "type": "goto",
@@ -32,6 +32,10 @@
                         },
                         {
                             "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
                             "count": 1
                         },
                         {

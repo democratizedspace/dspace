@@ -641,6 +641,13 @@
         "price": "15 dUSD"
     },
     {
+        "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
+        "name": "wood chisel",
+        "description": "12 mm chisel with hardened steel blade for carving joinery and cleaning out slots.",
+        "image": "/assets/door.jpg",
+        "price": "12 dUSD"
+    },
+    {
         "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
         "name": "Wood glue",
         "description": "Adhesive designed for bonding wooden pieces.",
