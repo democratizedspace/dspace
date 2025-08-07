@@ -85,5 +85,25 @@
                 }
             ]
         }
+    },
+    {
+        "id": "5e4eff6e-5d1c-4be3-bc5b-1b4d0eaf0e4a",
+        "name": "wire strippers",
+        "description": "Spring-loaded tool for stripping 18–26 AWG insulation with integrated wire cutter.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "12 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-09-07",
+                    "date": "2025-09-07",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]
