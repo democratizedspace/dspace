@@ -22,31 +22,32 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 ## 1 Quick start (Web vs CLI)
 
--   **Add or update an item**
-    -   Web: use the “Code” button and attach the repo.
-    -   CLI: `codex "add item solar-cell-junction-box"`
--   **Ask about item data**
-    -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items.json"`
--   **Run item tests**
-    -   Web: –
-    -   CLI:
+- **Add or update an item**
+    - Web: use the “Code” button and attach the repo.
+    - CLI: `codex "add item solar-cell-junction-box"`
+- **Ask about item data**
+    - Web: use the “Ask” button.
+    - CLI: `codex exec "explain frontend/src/pages/inventory/json/items.json"`
+- **Run item checks**
+    - Web: –
+    - CLI:
         ```bash
-        codex exec "npm run itemValidation && npm run test:root -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && \
+        npm run itemValidation && npm run test:root -- itemQuality"
         ```
 
-See the [Codex CLI documentation][codex-cli] for more flags.
+See the [Codex CLI docs][codex-cli] for more flags.
 
 ---
 
 ## 2 Prompt ingredients
 
-| Ingredient           | Why it matters                                                           |
-| -------------------- | ------------------------------------------------------------------------ |
-| **Goal sentence**    | Gives the agent a north star (“Add price to `white PLA filament`”).      |
-| **Files to touch**   | Limits search space → faster & cheaper.                                  |
-| **Constraints**      | Coding style, a11y, item schema rules.                                   |
-| **Acceptance check** | `npm run itemValidation` and<br>`npm run test:root -- itemQuality` pass. |
+| Ingredient           | Why it matters                                                                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add price to `white PLA filament`”).                                                                 |
+| **Files to touch**   | Limits search space → faster & cheaper.                                                                                             |
+| **Constraints**      | Coding style, a11y, item schema rules.                                                                                              |
+| **Acceptance check** | `npm run lint`, `npm run type-check`, `npm run build`,<br>`npm run itemValidation`, and<br>`npm run test:root -- itemQuality` pass. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt-level rules short and concrete.
@@ -72,7 +73,7 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm run itemValidation` and `npm run test:root -- itemQuality`, fixing any failures.
-7. Run `git diff --cached | ripsecrets` and ensure no secrets.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 8. Use an emoji-prefixed commit message.
 9. Update docs or processes if needed.
 
@@ -88,11 +89,11 @@ Use this when you want Codex to automatically create or upgrade an item.
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or
 create items under `frontend/src/pages/inventory/json/items.json`. Ensure
-realistic details, required fields, and passing checks (`npm run lint`, `npm run
-type-check`, `npm run build`, `npm run itemValidation`, and `npm run test:root -- itemQuality`).
-Verify the item appears in at least one quest or process, reuse existing image
-assets, and scan for secrets with `git diff --cached | ripsecrets` before
-committing.
+realistic details, required fields, and passing checks (`npm run lint`,
+`npm run type-check`, `npm run build`, `npm run itemValidation`, and
+`npm run test:root -- itemQuality`). Verify the item appears in at least one
+quest or process, reuse existing image assets, and scan for secrets with
+`git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 USER:
 1. Follow the steps above.
@@ -137,9 +138,10 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run itemValidation`,
-   and `npm run test:root -- itemQuality`. Update docs if needed.
-6. Run `git diff --cached | ripsecrets` before committing.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`,
+   `npm run itemValidation`, and `npm run test:root -- itemQuality`.
+   Update docs if needed.
+6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 7. Use an emoji-prefixed commit message.
 
 OUTPUT:
@@ -150,10 +152,10 @@ A pull request with the refined item, updated hardening block and passing tests.
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus.
--   **Use system prompts** to guide tone and technical accuracy.
--   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible
-    but incorrect details.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible
+  but incorrect details.
 
 [codex-cli]: https://www.npmjs.com/package/codex-cli
