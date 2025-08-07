@@ -216,6 +216,26 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "7318a5ba-fac3-476e-a532-c813ed9b18e5",
+        "name": "smart power strip",
+        "description": "Four-outlet WiFi strip that monitors energy use and schedules devices remotely.",
+        "image": "/assets/smart_plug.jpg",
+        "price": "35 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
         "name": "3D printed nosecone",
         "description": "A nosecone for a modular model rocket.",

@@ -66,6 +66,12 @@
     ],
     "rewards": []
   },
+  "7318a5ba-fac3-476e-a532-c813ed9b18e5": {
+    "requires": [],
+    "rewards": [
+      "welcome/smart-plug-test"
+    ]
+  },
   "061fd221-404a-4bd1-9432-3e25b0f17a2c": {
     "requires": [
       "welcome/smart-plug-test",

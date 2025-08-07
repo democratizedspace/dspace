@@ -50,6 +50,11 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "7318a5ba-fac3-476e-a532-c813ed9b18e5",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["welcome/howtodoquests"]
 }
