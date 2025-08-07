@@ -1131,7 +1131,8 @@
     },
     {
         "id": "add-goldfish",
-        "title": "Add a goldfish to your aquarium",
+        "title": "Acclimate a goldfish into your 150 L freshwater aquarium with an aquarium net",
+        "image": "/assets/aquarium_goldfish.jpg",
         "requireItems": [
             {
                 "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
@@ -1154,7 +1155,19 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "feed-goldfish",
