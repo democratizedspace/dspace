@@ -105,5 +105,25 @@
                 }
             ]
         }
+    },
+    {
+        "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+        "name": "wire stripper",
+        "description": "Self-adjusting tool for stripping 24-10 AWG insulation cleanly.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "15 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-08",
+                    "date": "2025-08-08",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]
