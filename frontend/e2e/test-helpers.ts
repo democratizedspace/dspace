@@ -407,6 +407,17 @@ export async function addTestItems(page: Page): Promise<void> {
             inventory.items = {};
         }
 
+        // Add demo item expected by the shop page
+        inventory.items['a0ffb451-1cb0-420d-8a5b-80999ec3e755'] = {
+            id: 'a0ffb451-1cb0-420d-8a5b-80999ec3e755',
+            name: 'demo item',
+            description: 'Basic item for shop page',
+            category: 'test',
+            quantity: 1,
+            value: 1,
+            custom: true,
+        };
+
         // Add a basic item
         inventory.items['test-item-1'] = {
             id: 'test-item-1',

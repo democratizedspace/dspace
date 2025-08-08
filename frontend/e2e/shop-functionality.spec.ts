@@ -26,6 +26,18 @@ test.describe('Shop Functionality', () => {
         ).toBeVisible();
     });
 
+    test('shop page displays an item or fallback message', async ({ page }) => {
+        await page.goto('/shop');
+        await page.waitForLoadState('networkidle');
+
+        const fallback = page.locator('text=No item found.');
+        if (await fallback.count()) {
+            await expect(fallback).toBeVisible();
+        } else {
+            await expect(page.locator('img').first()).toBeVisible();
+        }
+    });
+
     test('should navigate to buy page and display items for purchase', async ({ page }) => {
         await page.goto('/shop/buy');
         await page.waitForLoadState('networkidle');

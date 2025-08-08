@@ -77,6 +77,13 @@ npx playwright test e2e/constellations-quest.spec.ts
 npx playwright test -g "create a custom item"
 ```
 
+### Shop Page Data
+
+The shop index expects an inventory item with
+`id: "a0ffb451-1cb0-420d-8a5b-80999ec3e755"`. Test helpers add this
+item automatically, but keep `frontend/src/pages/inventory/json/items/starter.json`
+or update the shop page when changing inventory data.
+
 ## Automated Server Management
 
 **Important:** Playwright automatically starts and stops the development server for E2E tests. You should **not** manually start a server when running tests.

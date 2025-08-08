@@ -1,0 +1,9 @@
+[
+    {
+        "id": "a0ffb451-1cb0-420d-8a5b-80999ec3e755",
+        "name": "demo item",
+        "description": "Basic item for shop page.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    }
+]
