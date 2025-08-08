@@ -40,9 +40,7 @@
         {
             "id": "finish",
             "text": "Nice! Coil the cable loosely and store it dry. Replace it if any pins fail the test.",
-            "options": [
-                { "type": "finish", "text": "Thanks, Orion!" }
-            ]
+            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],

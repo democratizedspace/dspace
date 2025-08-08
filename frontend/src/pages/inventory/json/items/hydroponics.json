@@ -272,6 +272,15 @@
         "hardening": {
             "passes": 1,
             "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-08",
+                    "date": "2025-08-08",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "71655665-4a59-41f4-9084-dad4d976df91",
