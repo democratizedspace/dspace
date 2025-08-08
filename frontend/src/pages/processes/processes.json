@@ -2311,6 +2311,18 @@
         "duration": "1h"
     },
     {
+        "id": "test-cable-continuity",
+        "title": "Check USB cable continuity with a multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+            { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "charge-battery-pack-wind",
         "title": "Charge a 200 Wh battery pack using a 500 W wind turbine",
         "image": "/assets/turbine.jpg",
