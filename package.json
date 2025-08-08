@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
+    "@playwright/test": "^1.51.0",
     "@sveltejs/vite-plugin-svelte": "^6.1.0",
     "@testing-library/svelte": "^5.2.8",
     "@testing-library/user-event": "^14.6.1",
