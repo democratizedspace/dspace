@@ -1,0 +1,50 @@
+{
+    "id": "electronics/continuity-test",
+    "title": "Check cable continuity",
+    "description": "Use a digital multimeter to confirm a USB cable conducts end to end.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Have a USB cable acting flaky? Unplug both ends and grab your digital multimeter.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "probe",
+                    "text": "Ready to test."
+                }
+            ]
+        },
+        {
+            "id": "probe",
+            "text": "Set meter to continuity. Probe pins on each end. Keep fingers behind guards.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "test-cable-continuity",
+                    "text": "Checking continuity."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It beeped and showed near zero ohms.",
+                    "requiresItems": [
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Coil the cable loosely and store it dry. Replace it if any pins fail the test.",
+            "options": [
+                { "type": "finish", "text": "Thanks, Orion!" }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/solder-wire"]
+}
