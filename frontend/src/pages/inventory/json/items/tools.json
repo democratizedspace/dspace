@@ -111,7 +111,7 @@
         "name": "claw hammer",
         "description": "450 g (16 oz) steel claw hammer with fiberglass handle for driving and removing nails.",
         "image": "/assets/door.jpg",
-        "price": "10 dUSD",
+        "price": "10 dUSD"
     },
     {
         "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",

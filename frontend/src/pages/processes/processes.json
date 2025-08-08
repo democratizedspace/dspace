@@ -278,16 +278,12 @@
         "id": "condition-bucket-water",
         "title": "Neutralize chlorine in a 5 gal bucket using water conditioner",
         "image": "/assets/bucket_water.jpg",
-        "requireItems": [
-            { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 }
-        ],
+        "requireItems": [{ "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 }],
         "consumeItems": [
             { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 0.05 },
             { "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e", "count": 1 }
         ],
-        "createItems": [
-            { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }
-        ],
+        "createItems": [{ "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }],
         "duration": "1m"
     },
     {

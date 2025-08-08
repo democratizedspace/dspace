@@ -100,7 +100,8 @@ function generateMarkdown(sections) {
     lines.push('');
     if (section.version === 'v3') {
       lines.push(
-        'These quests exist in the `v3` branch but are not present on `main` yet. Use this list when upgrading quests or proposing follow-up content.',
+        'These quests exist in the `v3` branch but are not present on `main` yet.',
+        'Use this list when upgrading quests or proposing follow-up content.',
         ''
       );
     }
@@ -113,7 +114,7 @@ function generateMarkdown(sections) {
     section.groups.forEach(({ tree, quests }) => {
       lines.push(`### ${tree}`);
       lines.push('');
-      quests.forEach((q) => lines.push(`-   ${q}`));
+      quests.forEach((q) => lines.push(`- ${q}`));
       lines.push('');
     });
   });
@@ -144,4 +145,3 @@ module.exports = {
   V2_COMMIT,
   V21_COMMIT,
 };
-
