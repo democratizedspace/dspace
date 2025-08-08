@@ -86,10 +86,22 @@
     },
     {
         "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-        "name": "Thermometer",
-        "description": "A thermometer for measuring temperature.",
+        "name": "aquarium thermometer (0–50°C)",
+        "description": "Stick-on strip thermometer for aquariums; 0–50°C range with ±1°C accuracy.",
         "image": "/assets/aquarium_thermometer.jpg",
-        "price": "15 dUSD"
+        "price": "7 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
