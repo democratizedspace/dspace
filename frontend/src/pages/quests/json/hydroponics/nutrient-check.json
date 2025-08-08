@@ -19,7 +19,7 @@
         },
         {
             "id": "add",
-            "text": "Slip on nitrile gloves and safety goggles. Measure the manufacturer-recommended dose of hydroponic nutrient solution, dissolve it in a bucket of clean water, then slowly pour it into the reservoir. Keep the submersible water pump running so the solution mixes evenly and wipe up any splashes immediately.",
+            "text": "Slip on nitrile gloves and safety goggles. Measure the manufacturer-recommended dose of hydroponic nutrient solution, dissolve it in a bucket of clean water, then slowly pour it into the reservoir. Keep the submersible water pump running so the solution mixes evenly, wipe up any splashes immediately, and dip a pH strip to confirm the solution is between 5.5 and 6.5.",
             "options": [
                 {
                     "type": "process",
@@ -40,6 +40,10 @@
                         },
                         {
                             "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        },
+                        {
+                            "id": "092dae11-237a-43cc-b342-246aabbba258",
                             "count": 1
                         }
                     ]

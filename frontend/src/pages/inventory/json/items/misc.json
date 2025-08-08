@@ -126,10 +126,18 @@
     {
         "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
         "name": "green PLA filament",
-        "description": "1 gram of green PLA filament for an FDM printer.",
+        "description": "1 g of 1.75 mm green PLA filament for FDM printers; sold by weight.",
         "image": "/assets/pla_green.jpg",
-        "price": "0.02499 dUSD",
-        "unit": "g"
+        "price": "0.025 dUSD",
+        "unit": "g",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 65 }
+            ]
+        }
     },
     {
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",

@@ -303,4 +303,18 @@ describe('ProcessForm Component', () => {
         // Verify preview rendered
         expect(container.querySelector('.process-preview')).toBeTruthy();
     });
+
+    test('item count inputs enforce minimum of 1', () => {
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const addRequired = Array.from(container.querySelectorAll('button')).find((btn) =>
+            btn.textContent.includes('Add Required Item')
+        );
+        addRequired.click();
+
+        const countInput = container.querySelector('#required-items-section input[type="number"]');
+        expect(countInput.getAttribute('min')).toBe('1');
+    });
 });

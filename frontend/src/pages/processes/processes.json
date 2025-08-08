@@ -385,7 +385,12 @@
     {
         "id": "refresh-hydroponic-tub",
         "title": "refresh the nutrient solution",
-        "requireItems": [],
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
@@ -2049,10 +2054,11 @@
     },
     {
         "id": "solder-wire-connection",
-        "title": "Join two wires with a soldering iron kit and safety goggles",
+        "title": "Join two jumper wires with a soldering iron kit and safety goggles",
         "requireItems": [
             { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
         ],
         "consumeItems": [],
         "createItems": [],

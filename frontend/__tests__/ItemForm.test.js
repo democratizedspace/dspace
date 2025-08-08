@@ -211,7 +211,7 @@ describe('ItemForm Component', () => {
 
         const file = new File(['mock content'], 'test.jpg', { type: 'image/jpeg' });
         await act(async () => {
-            fireEvent.change(getByLabelText(/attach an image/i), {
+            fireEvent.change(getByLabelText(/upload an image/i), {
                 target: { files: [file] },
             });
         });
