@@ -123,6 +123,21 @@
         "price": "80 dUSD"
     },
     {
+        "id": "98609b23-4811-4275-8d83-ad59a2797753",
+        "name": "aquarium stand (80 L)",
+        "description": "Sturdy wooden stand rated to hold a filled 80 L aquarium.",
+        "image": "/assets/walstad.jpg",
+        "price": "40 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 60 }
+            ]
+        }
+    },
+    {
         "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
         "name": "Dwarf shrimp",
         "description": "Hardy shrimp perfect for planted aquariums.",
