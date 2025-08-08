@@ -9,9 +9,7 @@
         {
             "id": "start",
             "text": "A lead snapped. Ventilate and wear safety goggles. Keep the iron on its stand and clear clutter.",
-            "options": [
-                { "type": "goto", "goto": "prep", "text": "What gear do I need?" }
-            ]
+            "options": [{ "type": "goto", "goto": "prep", "text": "What gear do I need?" }]
         },
         {
             "id": "prep",

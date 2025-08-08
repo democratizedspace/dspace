@@ -7,15 +7,15 @@ slug: 'new-quests'
 
 # Quests added in v3
 
-These quests exist in the `v3` branch but are not present on `main` yet. Use this
-list when upgrading quests or proposing follow-up content.
+These quests exist in the `v3` branch but are not present on `main` yet. Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 152
-New quests in this release: 130
+Current quest count: 159
+New quests in this release: 137
 
 ### 3dprinting
 
+-   3dprinting/bed-leveling
 -   3dprinting/cable-clip
 -   3dprinting/calibration-cube
 -   3dprinting/phone-stand
@@ -66,6 +66,7 @@ New quests in this release: 130
 
 ### completionist
 
+-   completionist/display
 -   completionist/polish
 -   completionist/reminder
 
@@ -91,10 +92,12 @@ New quests in this release: 130
 -   electronics/arduino-blink
 -   electronics/basic-circuit
 -   electronics/check-battery-voltage
+-   electronics/continuity-test
 -   electronics/data-logger
 -   electronics/led-polarity
 -   electronics/light-sensor
 -   electronics/potentiometer-dimmer
+-   electronics/resistor-color-check
 -   electronics/servo-sweep
 -   electronics/solder-wire
 -   electronics/soldering-intro
@@ -151,6 +154,8 @@ New quests in this release: 130
 -   programming/graph-temp
 -   programming/graph-temp-data
 -   programming/hello-sensor
+-   programming/json-api
+-   programming/json-endpoint
 -   programming/temp-alert
 -   programming/temp-graph
 -   programming/temp-logger
@@ -177,6 +182,7 @@ New quests in this release: 130
 ### ubi
 
 -   ubi/first-payment
+-   ubi/reminder
 
 ### welcome
 
