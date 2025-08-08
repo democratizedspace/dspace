@@ -24,6 +24,19 @@ jobs:
       - name: Install Playwright browsers
         run: npx --prefix frontend playwright install --with-deps chromium
 
+      - name: Build frontend
+        run: pnpm --filter frontend build
+
+      - name: Start frontend server
+        run: |
+          pnpm --filter frontend run preview &
+        env:
+          NODE_ENV: test
+          PORT: 3002
+
+      - name: Wait for frontend server
+        run: npx wait-on http://localhost:3002/
+
       - name: Run test suite
         env:
           NODE_OPTIONS: --experimental-vm-modules
