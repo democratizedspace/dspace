@@ -22,7 +22,7 @@ jobs:
         run: pnpm install --frozen-lockfile --reporter=append-only
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx --prefix frontend playwright install --with-deps chromium
 
       - name: Run test suite
         env:
