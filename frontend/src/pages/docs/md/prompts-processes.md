@@ -29,7 +29,7 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
     -   Web: use the “Ask” button.
     -   CLI: `codex exec "explain frontend/src/pages/processes/processes.json"`
 -   **Run process tests**
-    -   Web: –
+    -   Web: not supported yet.
     -   CLI:
         ```bash
         codex exec "npm run test:root -- processQuality"
@@ -96,7 +96,7 @@ USER:
 1. Follow the steps above.
 2. Run the commands listed in the system prompt before committing.
 3. Summarize the new or updated process in the PR description.
-4. Use an emoji-prefixed commit message.
+4. Use an emoji-prefixed commit message like `📝 : update process`.
 
 OUTPUT:
 A pull request implementing the process with all tests green.
@@ -137,7 +137,7 @@ USER:
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:root -- processQuality`. Update docs or items if needed.
 6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-7. Use an emoji-prefixed commit message.
+7. Use an emoji-prefixed commit message like `📝 : refine process details`.
 
 OUTPUT:
 A pull request with the refined process, updated hardening block and passing tests.

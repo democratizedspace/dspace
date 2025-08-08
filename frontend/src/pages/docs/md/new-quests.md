@@ -10,8 +10,8 @@ slug: 'new-quests'
 These quests exist in the `v3` branch but are not present on `main` yet. Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 144
-New quests in this release: 122
+Current quest count: 152
+New quests in this release: 130
 
 ### 3dprinting
 
@@ -25,6 +25,7 @@ New quests in this release: 122
 
 -   aquaria/aquarium-light
 -   aquaria/breeding
+-   aquaria/filter-rinse
 -   aquaria/floating-plants
 -   aquaria/guppy
 -   aquaria/position-tank
@@ -47,6 +48,7 @@ New quests in this release: 122
 -   astronomy/meteor-shower
 -   astronomy/north-star
 -   astronomy/observe-moon
+-   astronomy/orion-nebula
 -   astronomy/planetary-alignment
 -   astronomy/satellite-pass
 -   astronomy/star-trails
@@ -89,6 +91,7 @@ New quests in this release: 122
 -   electronics/basic-circuit
 -   electronics/check-battery-voltage
 -   electronics/data-logger
+-   electronics/led-polarity
 -   electronics/light-sensor
 -   electronics/potentiometer-dimmer
 -   electronics/servo-sweep
@@ -119,6 +122,8 @@ New quests in this release: 122
 
 ### geothermal
 
+-   geothermal/calibrate-ground-sensor
+-   geothermal/compare-seasonal-ground-temps
 -   geothermal/log-ground-temperature
 -   geothermal/monitor-heat-pump-energy
 -   geothermal/survey-ground-temperature
@@ -131,9 +136,11 @@ New quests in this release: 122
 -   hydroponics/nutrient-check
 -   hydroponics/ph-check
 -   hydroponics/ph-test
+-   hydroponics/plug-soak
 -   hydroponics/pump-install
 -   hydroponics/regrow-stevia
 -   hydroponics/reservoir-refresh
+-   hydroponics/root-rinse
 -   hydroponics/stevia
 -   hydroponics/top-off
 
@@ -143,6 +150,7 @@ New quests in this release: 122
 -   programming/graph-temp
 -   programming/graph-temp-data
 -   programming/hello-sensor
+-   programming/temp-alert
 -   programming/temp-graph
 -   programming/temp-logger
 -   programming/web-server
