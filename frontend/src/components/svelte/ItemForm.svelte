@@ -1,6 +1,7 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     import ItemPreview from './ItemPreview.svelte';
+    import { addEntity, updateEntity } from '../../utils/indexeddb.js';
 
     export let name = '';
     export let description = '';
@@ -9,6 +10,8 @@
     export let price = '';
     export let unit = '';
     export let type = '';
+    export let isEdit = false;
+    export let itemData = null;
 
     const dispatch = createEventDispatcher();
     let validationErrors = {};
@@ -37,34 +40,60 @@
         if (!description.trim()) {
             errors.description = 'Description is required';
         }
-        if (!image) {
+        if (!image && !previewUrl) {
             errors.image = 'Image is required';
         }
         validationErrors = errors;
         return Object.keys(errors).length === 0;
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         if (!validateForm()) {
             return;
         }
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('description', description);
-        formData.append('image', image);
-        if (price) {
-            formData.append('price', price);
-        }
-        if (unit) {
-            formData.append('unit', unit);
-        }
-        if (type) {
-            formData.append('type', type);
+
+        let imageUrl = previewUrl;
+        if (image instanceof File) {
+            const uploadData = new FormData();
+            uploadData.append('image', image);
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: uploadData,
+            });
+            const data = await response.json();
+            imageUrl = data.url;
         }
 
-        dispatch('submit', formData);
+        const payload = {
+            name,
+            description,
+            image: imageUrl,
+            ...(price && { price }),
+            ...(unit && { unit }),
+            ...(type && { type }),
+        };
+
+        if (isEdit && itemData?.id) {
+            payload.id = itemData.id;
+            await updateEntity(payload);
+        } else {
+            await addEntity(payload);
+        }
+
+        dispatch('submit', payload);
     }
+
+    onMount(() => {
+        if (isEdit && itemData) {
+            name = itemData.name || '';
+            description = itemData.description || '';
+            price = itemData.price || '';
+            unit = itemData.unit || '';
+            type = itemData.type || '';
+            previewUrl = itemData.image || null;
+        }
+    });
 </script>
 
 <form on:submit={handleSubmit} enctype="multipart/form-data" class="item-form">
@@ -96,7 +125,7 @@
     </div>
 
     <div class="form-group">
-        <label for="image">Attach an Image*</label>
+        <label for="image">Upload an Image*</label>
         <input
             type="file"
             id="image"
@@ -130,7 +159,8 @@
     </div>
 
     <div class="form-submit">
-        <button type="submit" class="submit-button">Create Item</button>
+        <button type="submit" class="submit-button">{isEdit ? 'Update Item' : 'Create Item'}</button
+        >
     </div>
 </form>
 
