@@ -1,19 +1,21 @@
 {
     "id": "electronics/solder-wire",
     "title": "Solder a Wire Connection",
-    "description": "Strip and join wires with a wire stripper, soldering iron kit and goggles to restore a circuit.",
+    "description": "Join two jumper wires with a soldering iron kit. Ventilate and wear safety goggles.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Lead snapped. Repair it? Ventilate, wear goggles, keep iron on stand.",
-            "options": [{ "type": "goto", "goto": "prep", "text": "What gear do I need?" }]
+            "text": "A lead snapped. Ventilate and wear safety goggles. Keep the iron on its stand and clear clutter.",
+            "options": [
+                { "type": "goto", "goto": "prep", "text": "What gear do I need?" }
+            ]
         },
         {
             "id": "prep",
-            "text": "Strip 5 mm of insulation with a wire stripper, heat the iron on its stand, keep the area clear.",
+            "text": "Gather the soldering iron kit, two stripped jumper wires and safety goggles. Heat the iron on its stand, keep cords tidy and avoid fumes.",
             "options": [
                 {
                     "type": "process",
@@ -27,23 +29,26 @@
                     "requiresItems": [
                         { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
                         { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-                        { "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f", "count": 1 }
+                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Unplug the iron, let it cool, then store the kit and goggles.",
+            "text": "Nice work! Unplug the iron, cool it on the stand, wipe the tip and store all gear.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
-        "history": [{ "task": "codex-refine-2025-08-07", "date": "2025-08-07", "score": 60 }]
+        "passes": 2,
+        "score": 78,
+        "emoji": "✅",
+        "history": [
+            { "task": "codex-refine-2025-08-07", "date": "2025-08-07", "score": 60 },
+            { "task": "codex-solder-wire-polish-2025-08-07", "date": "2025-08-07", "score": 78 }
+        ]
     }
 }

@@ -2054,10 +2054,11 @@
     },
     {
         "id": "solder-wire-connection",
-        "title": "Join two wires with a soldering iron kit and safety goggles",
+        "title": "Join two jumper wires with a soldering iron kit and safety goggles",
         "requireItems": [
             { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
         ],
         "consumeItems": [],
         "createItems": [],
