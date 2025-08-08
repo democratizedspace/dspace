@@ -385,7 +385,12 @@
     {
         "id": "refresh-hydroponic-tub",
         "title": "refresh the nutrient solution",
-        "requireItems": [],
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",

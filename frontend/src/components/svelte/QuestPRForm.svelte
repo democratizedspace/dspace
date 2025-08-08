@@ -5,6 +5,7 @@
     export let questJson = '';
     let prUrl = '';
     let validationErrors = {};
+    let submitError = '';
     const dispatch = createEventDispatcher();
     import {
         isValidGitHubToken,
@@ -32,16 +33,20 @@
 
     async function handleSubmit(event) {
         event.preventDefault();
+        submitError = '';
         if (!validateForm()) {
+            submitError = 'Please fix the errors above';
             dispatch('error', { message: 'Validation failed' });
             return;
         }
         try {
             prUrl = await submitQuestPR(token, branch, questJson);
+            submitError = '';
             dispatch('success', { message: 'Pull request created', url: prUrl });
             saveGitHubToken(token);
         } catch (err) {
             console.error(err);
+            submitError = 'Failed to submit quest';
             dispatch('error', { message: 'Failed to submit quest' });
         }
     }
@@ -100,6 +105,10 @@
         Pull request created:
         <a href={prUrl} target="_blank" rel="noopener" data-testid="pr-link"> View PR </a>
     </p>
+{/if}
+
+{#if submitError}
+    <p class="error-message" data-testid="submit-error">{submitError}</p>
 {/if}
 
 <style>
