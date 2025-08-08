@@ -1,0 +1,50 @@
+{
+    "id": "programming/json-endpoint",
+    "title": "Serve JSON Data",
+    "description": "Extend your server to respond with structured JSON.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your web server works. Let's make it return JSON for API clients.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Let's build it."
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Use your server to return a JSON object at /api.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Endpoint responds!",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Now clients can fetch structured data from your device.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "API online."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/web-server"]
+}

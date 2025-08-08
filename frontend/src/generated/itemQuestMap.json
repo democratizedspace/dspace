@@ -269,7 +269,8 @@
       "programming/avg-temp",
       "electronics/data-logger",
       "devops/prepare-first-node",
-      "devops/pi-cluster-hardware"
+      "devops/pi-cluster-hardware",
+      "programming/json-endpoint"
     ],
     "rewards": []
   },
