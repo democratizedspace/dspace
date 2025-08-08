@@ -263,6 +263,17 @@
         }
     },
     {
+        "id": "092dae11-237a-43cc-b342-246aabbba258",
+        "name": "pH test strip pack",
+        "description": "50 litmus strips for checking hydroponic nutrient solution between pH 4 and 9.",
+        "image": "/assets/pH_strip.jpg",
+        "price": "5 dUSD",
+        "unit": "pack",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+    },
+    {
         "id": "71655665-4a59-41f4-9084-dad4d976df91",
         "name": "EC meter",
         "description": "Handheld EC meter (0–2000 ppm) for monitoring hydroponic nutrient strength.",
@@ -276,7 +287,7 @@
                 {
                     "task": "codex-item-hardening-2025-08-08",
                     "date": "2025-08-08",
-                    "score": 60
+                    "score": 65
                 }
             ]
         }
