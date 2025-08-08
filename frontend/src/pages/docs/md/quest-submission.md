@@ -39,6 +39,8 @@ This guide describes how to submit your custom quests to become part of the offi
 
 Maintainers can review submitted quests at `/quests/review`, approving or rejecting them before merge.
 
+If something goes wrong, the submission form will display an error message so you can adjust and try again.
+
 Once merged, your quest will be included in the next game update!
 
 ### GitHub Token Setup

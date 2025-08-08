@@ -275,6 +275,22 @@
         }
     },
     {
+        "id": "condition-bucket-water",
+        "title": "Neutralize chlorine in a 5 gal bucket using water conditioner",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [
+            { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 }
+        ],
+        "consumeItems": [
+            { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 0.05 },
+            { "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e", "count": 1 }
+        ],
+        "createItems": [
+            { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }
+        ],
+        "duration": "1m"
+    },
+    {
         "id": "rockwool-soak",
         "title": "Soak 11 hydroponic starter plugs in a 5 gallon bucket of dechlorinated tap water",
         "image": "/assets/rockwool_wet.jpg",
@@ -385,7 +401,12 @@
     {
         "id": "refresh-hydroponic-tub",
         "title": "refresh the nutrient solution",
-        "requireItems": [],
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
@@ -1519,6 +1540,19 @@
         "duration": "2m"
     },
     {
+        "id": "measure-resistance",
+        "title": "Measure resistor value with a multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "adjust-ph",
         "title": "Adjust solution pH",
         "requireItems": [
@@ -2049,10 +2083,11 @@
     },
     {
         "id": "solder-wire-connection",
-        "title": "Join two wires with a soldering iron kit and safety goggles",
+        "title": "Join two jumper wires with a soldering iron kit and safety goggles",
         "requireItems": [
             { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -2160,6 +2195,18 @@
         }
     },
     {
+        "id": "write-mission-log-entry",
+        "title": "Record a mission log entry with a quill pen",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 },
+            { "id": "aa82b02f-2617-4474-a91b-29647e4a9780", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [{ "id": "280ed361-ac70-4ab9-bcd9-aee481790faf", "count": 1 }],
+        "duration": "5m"
+    },
+    {
         "id": "measure-aquarium-ph",
         "title": "Test the pH of a 150 L freshwater aquarium using a disposable strip",
         "image": "/assets/pH_strip.jpg",
@@ -2224,8 +2271,8 @@
     },
     {
         "id": "charge-smartphone",
-        "title": "Charge a smartphone from a battery pack using a USB cable",
-        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "title": "Fully charge a smartphone from a 200 Wh battery pack using a USB cable",
+        "image": "/assets/battery.jpg",
         "requireItems": [
             { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 },
             { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
@@ -2233,7 +2280,19 @@
         ],
         "consumeItems": [{ "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 10 }],
         "createItems": [],
-        "duration": "30m"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-08",
+                    "date": "2025-08-08",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "charge-battery-pack-solar",
@@ -2248,6 +2307,33 @@
         "createItems": [
             { "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 200 },
             { "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a", "count": 200 }
+        ],
+        "duration": "1h"
+    },
+    {
+        "id": "test-cable-continuity",
+        "title": "Check USB cable continuity with a multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+            { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "charge-battery-pack-wind",
+        "title": "Charge a 200 Wh battery pack using a 500 W wind turbine",
+        "image": "/assets/turbine.jpg",
+        "requireItems": [
+            { "id": "743681a7-d2e7-465c-af07-43665079bf4d", "count": 1 },
+            { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            { "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 200 },
+            { "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67", "count": 200 }
         ],
         "duration": "1h"
     }

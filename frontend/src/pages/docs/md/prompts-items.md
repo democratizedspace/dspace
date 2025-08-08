@@ -29,10 +29,11 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
     -   Web: use the “Ask” button.
     -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items"`
 -   **Run item tests**
-    -   Web: –
+    -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run itemValidation && npm run test:root -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && \
+        npm run itemValidation && npm run test:root -- itemQuality"
         ```
 
 See the [Codex CLI documentation][codex-cli] for more flags.
@@ -73,7 +74,7 @@ REQUIREMENTS
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm run itemValidation` and `npm run test:root -- itemQuality`, fixing any failures.
 7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-8. Use an emoji-prefixed commit message.
+8. Use an emoji-prefixed commit message like `📝 : add price field`.
 9. Update docs or processes if needed.
 
 OUTPUT
@@ -87,9 +88,10 @@ Use this when you want Codex to automatically create or upgrade an item.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or
-create items under `frontend/src/pages/inventory/json/items`, choosing the appropriate category file. Ensure
-realistic details, required fields, and passing checks (`npm run lint`, `npm run
-type-check`, `npm run build`, `npm run itemValidation`, and `npm run test:root -- itemQuality`).
+create items under `frontend/src/pages/inventory/json/items`, choosing the
+appropriate category file. Ensure realistic details, required fields, and
+passing checks (`npm run lint`, `npm run type-check`, `npm run build`,
+`npm run itemValidation`, and `npm run test:root -- itemQuality`).
 Verify the item appears in at least one quest or process, reuse existing image
 assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
 committing.
@@ -98,7 +100,7 @@ USER:
 1. Follow the steps above.
 2. Run the commands listed in the system prompt before committing.
 3. Summarize the new or updated item in the PR description.
-4. Use an emoji-prefixed commit message.
+4. Use an emoji-prefixed commit message like `📝 : add price field`.
 
 OUTPUT:
 A pull request implementing the item with all tests green.
@@ -140,7 +142,7 @@ USER:
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run itemValidation`,
    and `npm run test:root -- itemQuality`. Update docs if needed.
 6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-7. Use an emoji-prefixed commit message.
+7. Use an emoji-prefixed commit message like `📝 : refine item details`.
 
 OUTPUT:
 A pull request with the refined item, updated hardening block and passing tests.
@@ -156,4 +158,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[codex-cli]: https://www.npmjs.com/package/codex-cli
+[codex-cli]: https://github.com/openai/codex-cli
