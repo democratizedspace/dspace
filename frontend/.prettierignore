@@ -23,3 +23,5 @@ test-videos/
 src/pages/docs/md/prompts-quests.md
 src/pages/docs/md/quest-guidelines.md
 src/pages/docs/md/new-quests-v3.md
+src/generated/itemQuestMap.json
+src/pages/docs/md/new-quests.md

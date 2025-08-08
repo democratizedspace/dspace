@@ -44,7 +44,7 @@ Every item requires the following basic properties:
 
 ### Implementation State
 
-Currently, the `ItemForm.svelte` component supports creating items with the properties listed above. The current implementation focuses on the fundamental aspects of items, with more advanced features planned for future updates.
+Currently, the `ItemForm.svelte` component supports creating and editing items with the properties listed above. It uploads images, persists data to IndexedDB, and focuses on the fundamental aspects of items, with more advanced features planned for future updates.
 
 As you fill out the form, an `ItemPreview` component displays a live preview so you can confirm the details before submitting. The layout automatically adjusts on small screens so form fields expand to the full width for easier touch input. You can safely experiment with different values before saving—no data is written until you click **Create Item**.
 
