@@ -59,6 +59,12 @@
     ],
     "rewards": []
   },
+  "7f78fea7-e017-411d-bb4b-82c8b0940d34": {
+    "requires": [
+      "woodworking/tool-rack"
+    ],
+    "rewards": []
+  },
   "2770ee5d-f9a0-4dc8-9c79-4f031fefd093": {
     "requires": [
       "woodworking/tool-rack",
@@ -277,6 +283,7 @@
     "requires": [
       "programming/temp-logger",
       "programming/temp-graph",
+      "programming/temp-alert",
       "programming/graph-temp",
       "geothermal/survey-ground-temperature",
       "electronics/thermometer-calibration"
@@ -287,6 +294,8 @@
     "requires": [
       "programming/graph-temp-data",
       "geothermal/log-ground-temperature",
+      "geothermal/compare-seasonal-ground-temps",
+      "geothermal/calibrate-ground-sensor",
       "electronics/thermistor-reading",
       "electronics/servo-sweep",
       "electronics/potentiometer-dimmer",
@@ -298,9 +307,11 @@
   "71efa72a-8c87-4dc2-8e2c-9119bb28fe50": {
     "requires": [
       "hydroponics/top-off",
+      "hydroponics/root-rinse",
       "hydroponics/filter-clean",
       "hydroponics/bucket_10",
-      "hydroponics/basil"
+      "hydroponics/basil",
+      "aquaria/filter-rinse"
     ],
     "rewards": []
   },
@@ -329,6 +340,13 @@
     "requires": [
       "hydroponics/pump-install",
       "hydroponics/nutrient-check"
+    ],
+    "rewards": []
+  },
+  "545aeb15-7e8b-489d-be4a-af2a59f447e1": {
+    "requires": [
+      "hydroponics/plug-soak",
+      "hydroponics/basil"
     ],
     "rewards": []
   },
@@ -362,9 +380,16 @@
   "c9b51052-4594-42d7-a723-82b815ab8cc2": {
     "requires": [
       "hydroponics/nutrient-check",
+      "electronics/solder-wire",
       "electronics/check-battery-voltage",
       "chemistry/ph-test",
       "aquaria/water-testing"
+    ],
+    "rewards": []
+  },
+  "71655665-4a59-41f4-9084-dad4d976df91": {
+    "requires": [
+      "hydroponics/nutrient-check"
     ],
     "rewards": []
   },
@@ -415,12 +440,6 @@
     "rewards": []
   },
   "156d06b2-ff10-4265-9ae9-3b7753c0206e": {
-    "requires": [
-      "hydroponics/basil"
-    ],
-    "rewards": []
-  },
-  "545aeb15-7e8b-489d-be4a-af2a59f447e1": {
     "requires": [
       "hydroponics/basil"
     ],
@@ -586,6 +605,7 @@
       "electronics/arduino-blink"
     ],
     "rewards": [
+      "electronics/led-polarity",
       "electronics/check-battery-voltage",
       "electronics/basic-circuit"
     ]
@@ -665,6 +685,7 @@
   "48cf736e-184c-4bd1-b9b0-15b7e9721646": {
     "requires": [
       "electronics/potentiometer-dimmer",
+      "electronics/led-polarity",
       "electronics/basic-circuit",
       "electronics/arduino-blink"
     ],
@@ -701,6 +722,7 @@
   "5127e156-3009-4db4-85ac-e3ea070b68f2": {
     "requires": [
       "electronics/light-sensor",
+      "electronics/led-polarity",
       "electronics/check-battery-voltage"
     ],
     "rewards": []
@@ -925,6 +947,12 @@
     ],
     "rewards": []
   },
+  "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1": {
+    "requires": [
+      "aquaria/filter-rinse"
+    ],
+    "rewards": []
+  },
   "3f1cc002-1f7a-4301-a1c6-343f65e7f21a": {
     "requires": [],
     "rewards": [
@@ -978,6 +1006,12 @@
       "3dprinting/benchy_25",
       "3dprinting/benchy_100",
       "3dprinting/benchy_10"
+    ],
+    "rewards": []
+  },
+  "e37c86b0-caaf-485d-b5c1-c15f7029973c": {
+    "requires": [
+      "3dprinting/calibration-cube"
     ],
     "rewards": []
   }
