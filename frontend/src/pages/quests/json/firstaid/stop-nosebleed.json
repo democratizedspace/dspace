@@ -1,14 +1,14 @@
 {
     "id": "firstaid/stop-nosebleed",
     "title": "Stop a Nosebleed",
-    "description": "Sit upright, lean slightly forward, and pinch the soft part of your nose with a sterile gauze pad. Wear a pair of nitrile gloves from a first aid kit, wipe around your nostrils with an antiseptic wipe, and keep your head tilted forward the whole time.",
+    "description": "Sit upright, lean forward, and pinch the soft part of your nose with a sterile gauze pad. Wear nitrile gloves from a first aid kit, use an antiseptic wipe around your nostrils after bleeding slows, and keep your head tilted forward the whole time. Never tilt your head back or insert anything into the nostrils.",
     "image": "/assets/rescue.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You're bleeding from the nose. Sit down, stay calm, and grab your first aid kit.",
+            "text": "You're bleeding from the nose. Stay calm, sit upright, and grab your first aid kit.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "pressure",
-            "text": "Sit upright on a chair and lean forward about 30° so blood drains out, not down your throat. Put on nitrile gloves from a first aid kit, fold a sterile gauze pad over the soft part of your nose, and pinch firmly. Breathe through your mouth and hold steady pressure for at least 10 minutes without checking early. When bleeding slows, wipe around the nostrils with an antiseptic wipe without inserting anything into the nose.",
+            "text": "Sit upright and lean forward about 30° so blood drains out, not down your throat. Put on nitrile gloves from a first aid kit, fold a sterile gauze pad over the soft part of your nose, and pinch firmly. Breathe through your mouth and hold steady pressure for at least 10 minutes without checking early. When bleeding slows, wipe around the nostrils with an antiseptic wipe without inserting anything into the nose. Do not tilt your head back or stuff anything into the nostrils.",
             "options": [
                 {
                     "type": "goto",
@@ -48,7 +48,7 @@
         },
         {
             "id": "finish",
-            "text": "If bleeding hasn't stopped after 20 minutes, is heavy, you're on blood thinners, or you feel faint, seek medical help or call emergency services. If it does stop, rest with your head elevated, throw away used supplies, wash your hands, and avoid blowing or picking your nose for the rest of the day.",
+            "text": "If bleeding hasn't stopped after 20 minutes, is heavy, you're on blood thinners, or you feel faint, seek medical help or call emergency services. After it stops, rest with your head elevated, throw away used supplies, wash your hands, and avoid blowing or picking your nose for the rest of the day.",
             "options": [
                 {
                     "type": "process",
@@ -65,8 +65,8 @@
     "rewards": [],
     "requiresQuests": ["firstaid/assemble-kit"],
     "hardening": {
-        "passes": 4,
-        "score": 94,
+        "passes": 5,
+        "score": 96,
         "emoji": "💯",
         "history": [
             {
@@ -88,6 +88,11 @@
                 "task": "codex-refine-2025-08-06",
                 "date": "2025-08-06",
                 "score": 94
+            },
+            {
+                "task": "codex-refine-2025-08-07",
+                "date": "2025-08-07",
+                "score": 96
             }
         ]
     }
