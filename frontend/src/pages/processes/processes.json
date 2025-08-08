@@ -2224,8 +2224,8 @@
     },
     {
         "id": "charge-smartphone",
-        "title": "Charge a smartphone from a battery pack using a USB cable",
-        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "title": "Fully charge a smartphone from a 200 Wh battery pack using a USB cable",
+        "image": "/assets/battery.jpg",
         "requireItems": [
             { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 },
             { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
@@ -2233,7 +2233,19 @@
         ],
         "consumeItems": [{ "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 10 }],
         "createItems": [],
-        "duration": "30m"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-08",
+                    "date": "2025-08-08",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "charge-battery-pack-solar",
