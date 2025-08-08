@@ -1,0 +1,50 @@
+{
+    "id": "completionist/display",
+    "title": "Show Off Your Trophy",
+    "description": "Give your Completionist Award a dedicated spot on the shelf.",
+    "image": "/assets/quests/completionist.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "That award deserves the center of your shelf. Want to set it up?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "place",
+                    "text": "Let's find the perfect spot"
+                }
+            ]
+        },
+        {
+            "id": "place",
+            "text": "Grab a microfiber cloth to dust it off before putting it on display.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It's proudly displayed",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Looks amazing! Every hero's story deserves a spotlight.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks for the guidance!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["completionist/v2"]
+}
