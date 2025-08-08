@@ -31,11 +31,11 @@ which covers quests, items and processes in detail.
 - **Ask about quest files**
     - Web: use the “Ask” button.
     - CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
-- **Run quest tests**
+- **Run quest checks**
     - Web: –
     - CLI:
         ```bash
-        codex exec "npm run test:root -- questCanonical questQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && npm run test:root -- questCanonical questQuality"
         ```
 
 See the [Codex CLI documentation][codex-cli] for more flags.
