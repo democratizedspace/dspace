@@ -32,7 +32,8 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
     -   Web: –
     -   CLI:
         ```bash
-        codex exec "npm run itemValidation && npm run test:root -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && \
+        npm run itemValidation && npm run test:root -- itemQuality"
         ```
 
 See the [Codex CLI documentation][codex-cli] for more flags.
@@ -87,9 +88,10 @@ Use this when you want Codex to automatically create or upgrade an item.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or
-create items under `frontend/src/pages/inventory/json/items`, choosing the appropriate category file. Ensure
-realistic details, required fields, and passing checks (`npm run lint`, `npm run
-type-check`, `npm run build`, `npm run itemValidation`, and `npm run test:root -- itemQuality`).
+create items under `frontend/src/pages/inventory/json/items`, choosing the
+appropriate category file. Ensure realistic details, required fields, and
+passing checks (`npm run lint`, `npm run type-check`, `npm run build`,
+`npm run itemValidation`, and `npm run test:root -- itemQuality`).
 Verify the item appears in at least one quest or process, reuse existing image
 assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
 committing.
@@ -156,4 +158,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[codex-cli]: https://www.npmjs.com/package/codex-cli
+[codex-cli]: https://github.com/openai/codex-cli
