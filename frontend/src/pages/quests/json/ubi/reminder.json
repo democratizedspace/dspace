@@ -1,0 +1,49 @@
+{
+    "id": "ubi/reminder",
+    "title": "Set a UBI Reminder",
+    "description": "Schedule a daily reminder so you never miss your dUSD payout.",
+    "image": "/assets/quests/basicincome.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want help remembering to claim your basic income each day? I can set up a reminder for you.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Yes, please set a reminder."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Great! This will ping you when it's time to claim tomorrow's payment.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "basic-income",
+                    "text": "Schedule the reminder."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All set!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "You're good to go. Come back each day when the reminder fires to keep the dUSD flowing.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks for the tip!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["ubi/first-payment"]
+}

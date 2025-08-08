@@ -183,7 +183,12 @@
                                 label="Select Required Item"
                                 on:select={(e) => handleItemSelect(e, 'require', index)}
                             />
-                            <input type="number" bind:value={item.count} placeholder="Count" />
+                            <input
+                                type="number"
+                                bind:value={item.count}
+                                placeholder="Count"
+                                min="1"
+                            />
                             <button
                                 type="button"
                                 class="remove-button"
@@ -208,7 +213,12 @@
                                 label="Select Consumed Item"
                                 on:select={(e) => handleItemSelect(e, 'consume', index)}
                             />
-                            <input type="number" bind:value={item.count} placeholder="Count" />
+                            <input
+                                type="number"
+                                bind:value={item.count}
+                                placeholder="Count"
+                                min="1"
+                            />
                             <button
                                 type="button"
                                 class="remove-button"
@@ -233,7 +243,12 @@
                                 label="Select Created Item"
                                 on:select={(e) => handleItemSelect(e, 'create', index)}
                             />
-                            <input type="number" bind:value={item.count} placeholder="Count" />
+                            <input
+                                type="number"
+                                bind:value={item.count}
+                                placeholder="Count"
+                                min="1"
+                            />
                             <button
                                 type="button"
                                 class="remove-button"

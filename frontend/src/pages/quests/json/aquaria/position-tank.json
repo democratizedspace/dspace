@@ -1,25 +1,29 @@
 {
     "id": "aquaria/position-tank",
     "title": "Move the Walstad tank",
-    "description": "Use Atlas to safely place the heavy aquarium on its stand.",
-    "image": "/assets/walstad.jpg",
+    "description": "With Atlas's help, lift the empty 80 L Walstad aquarium onto a sturdy stand. Clear the path, lift with your legs and keep the glass supported.",
+    "image": "/assets/quests/walstad.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hello! I'm Atlas. Vega said you needed help moving that 80 liter tank onto the stand.",
+            "text": "Hello! I'm Atlas. Vega said you needed help moving that empty 80 liter tank onto the stand. Make sure the path is clear and lift with your legs, not your back.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "lift",
-                    "text": "Yes please, it's heavy."
+                    "text": "Yes please, it's heavy.",
+                    "requiresItems": [
+                        { "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48", "count": 1 },
+                        { "id": "98609b23-4811-4275-8d83-ad59a2797753", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "lift",
-            "text": "I'll take most of the weight. On three... one, two, three!",
+            "text": "I'll take most of the weight. On three—one, two, three! Keep the tank level and your back straight.",
             "options": [
                 {
                     "type": "goto",
@@ -30,7 +34,7 @@
         },
         {
             "id": "place",
-            "text": "Great job keeping it level. The tank is secure on the stand now.",
+            "text": "Great job. Set it down gently, then check the stand is level and the corners are supported before letting go.",
             "options": [
                 {
                     "type": "goto",
@@ -41,17 +45,15 @@
         },
         {
             "id": "heat",
-            "text": "Let's warm up the tank with the heater before adding livestock.",
+            "text": "Let's warm up the tank with the heater before adding livestock. Ensure the heater is submerged before plugging it into a GFCI outlet.",
             "options": [
                 {
                     "type": "process",
                     "process": "heat-walstad",
-                    "text": "Install the heater",
+                    "text": "Install the heater and set it to 26°C",
                     "requiresItems": [
-                        {
-                            "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
-                            "count": 1
-                        }
+                        { "id": "0b85f058-38f2-4e9a-93e9-d47441608619", "count": 1 },
+                        { "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48", "count": 1 }
                     ]
                 },
                 {
@@ -67,5 +69,11 @@
             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
             "count": 1
         }
-    ]
+    ],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [{ "task": "codex-upgrade-2025-08-07", "date": "2025-08-07", "score": 60 }]
+    }
 }

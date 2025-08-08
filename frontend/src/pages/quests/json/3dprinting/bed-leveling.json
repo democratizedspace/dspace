@@ -1,0 +1,50 @@
+{
+    "id": "3dprinting/bed-leveling",
+    "title": "Level the Print Bed",
+    "description": "Ensure the first layer sticks by leveling your build plate.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Uneven prints? Let's get that bed level for a perfect first layer.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "level",
+                    "text": "I'm ready. How do we start?"
+                }
+            ]
+        },
+        {
+            "id": "level",
+            "text": "Use a sheet of paper to adjust each corner until you feel slight drag.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bed is level and ready!",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Your first layers should stick like a charm now.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Time to print!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinter/start"]
+}

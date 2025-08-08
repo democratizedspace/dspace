@@ -67,17 +67,41 @@
     },
     {
         "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
-        "name": "aquarium light",
-        "description": "A light for a fish tank.",
+        "name": "aquarium LED light (20 W)",
+        "description": "Clip-on 20 W LED light (6500 K) for 60–80 L freshwater tanks; 1.5 m cord with switch.",
         "image": "/assets/aquarium_light.jpg",
-        "price": "15 dUSD"
+        "price": "20 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-        "name": "Thermometer",
-        "description": "A thermometer for measuring temperature.",
+        "name": "aquarium thermometer (0–50°C)",
+        "description": "Stick-on strip thermometer for aquariums; 0–50°C range with ±1°C accuracy.",
         "image": "/assets/aquarium_thermometer.jpg",
-        "price": "15 dUSD"
+        "price": "7 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
@@ -121,6 +145,21 @@
         "description": "A planted tank using the low-tech Walstad method.",
         "image": "/assets/walstad.jpg",
         "price": "80 dUSD"
+    },
+    {
+        "id": "98609b23-4811-4275-8d83-ad59a2797753",
+        "name": "aquarium stand (80 L)",
+        "description": "Sturdy wooden stand rated to hold a filled 80 L aquarium.",
+        "image": "/assets/walstad.jpg",
+        "price": "40 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 60 }
+            ]
+        }
     },
     {
         "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
