@@ -49,6 +49,10 @@
         ],
         "rewards": []
     },
+    "7f78fea7-e017-411d-bb4b-82c8b0940d34": {
+        "requires": ["woodworking/tool-rack"],
+        "rewards": []
+    },
     "2770ee5d-f9a0-4dc8-9c79-4f031fefd093": {
         "requires": ["woodworking/tool-rack", "woodworking/finish-sanding"],
         "rewards": []
@@ -198,6 +202,7 @@
         "requires": [
             "programming/temp-logger",
             "programming/temp-graph",
+            "programming/temp-alert",
             "programming/graph-temp",
             "geothermal/survey-ground-temperature",
             "electronics/thermometer-calibration"
@@ -208,6 +213,8 @@
         "requires": [
             "programming/graph-temp-data",
             "geothermal/log-ground-temperature",
+            "geothermal/compare-seasonal-ground-temps",
+            "geothermal/calibrate-ground-sensor",
             "electronics/thermistor-reading",
             "electronics/servo-sweep",
             "electronics/potentiometer-dimmer",
@@ -219,9 +226,11 @@
     "71efa72a-8c87-4dc2-8e2c-9119bb28fe50": {
         "requires": [
             "hydroponics/top-off",
+            "hydroponics/root-rinse",
             "hydroponics/filter-clean",
             "hydroponics/bucket_10",
-            "hydroponics/basil"
+            "hydroponics/basil",
+            "aquaria/filter-rinse"
         ],
         "rewards": []
     },
@@ -243,6 +252,10 @@
     },
     "584ca717-4ce1-4ca1-bcd3-38272a52768a": {
         "requires": ["hydroponics/pump-install", "hydroponics/nutrient-check"],
+        "rewards": []
+    },
+    "545aeb15-7e8b-489d-be4a-af2a59f447e1": {
+        "requires": ["hydroponics/plug-soak", "hydroponics/basil"],
         "rewards": []
     },
     "13167d6a-5617-4931-8a6e-6f463c6b8835": {
@@ -273,6 +286,7 @@
     "c9b51052-4594-42d7-a723-82b815ab8cc2": {
         "requires": [
             "hydroponics/nutrient-check",
+            "electronics/solder-wire",
             "electronics/check-battery-voltage",
             "chemistry/ph-test",
             "aquaria/water-testing"
@@ -438,7 +452,11 @@
             "electronics/data-logger",
             "electronics/arduino-blink"
         ],
-        "rewards": ["electronics/check-battery-voltage", "electronics/basic-circuit"]
+        "rewards": [
+            "electronics/led-polarity",
+            "electronics/check-battery-voltage",
+            "electronics/basic-circuit"
+        ]
     },
     "82577af7-6724-4cb2-8922-f7140e550145": {
         "requires": ["energy/offgrid-charger"],
@@ -496,6 +514,7 @@
     "48cf736e-184c-4bd1-b9b0-15b7e9721646": {
         "requires": [
             "electronics/potentiometer-dimmer",
+            "electronics/led-polarity",
             "electronics/basic-circuit",
             "electronics/arduino-blink"
         ],
@@ -526,7 +545,11 @@
         "rewards": []
     },
     "5127e156-3009-4db4-85ac-e3ea070b68f2": {
-        "requires": ["electronics/light-sensor", "electronics/check-battery-voltage"],
+        "requires": [
+            "electronics/light-sensor",
+            "electronics/led-polarity",
+            "electronics/check-battery-voltage"
+        ],
         "rewards": []
     },
     "df7e94e2-76b9-4865-b843-2ec21feb258e": {
@@ -634,7 +657,7 @@
         "rewards": ["aquaria/water-change", "aquaria/position-tank"]
     },
     "785fa6f3-bb66-4197-a43f-52fea9cebd48": {
-        "requires": [],
+        "requires": ["aquaria/position-tank"],
         "rewards": ["aquaria/walstad"]
     },
     "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56": {
@@ -651,6 +674,10 @@
     },
     "ee7d437d-7426-47cd-b691-386dd20f4e47": {
         "requires": ["aquaria/shrimp"],
+        "rewards": []
+    },
+    "98609b23-4811-4275-8d83-ad59a2797753": {
+        "requires": ["aquaria/position-tank"],
         "rewards": []
     },
     "0b85f058-38f2-4e9a-93e9-d47441608619": {
@@ -675,6 +702,10 @@
     },
     "0704e829-ce72-4c7d-91b0-8a774b11575d": {
         "requires": ["aquaria/floating-plants"],
+        "rewards": []
+    },
+    "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1": {
+        "requires": ["aquaria/filter-rinse"],
         "rewards": []
     },
     "3f1cc002-1f7a-4301-a1c6-343f65e7f21a": {
@@ -714,6 +745,10 @@
             "3dprinting/benchy_100",
             "3dprinting/benchy_10"
         ],
+        "rewards": []
+    },
+    "e37c86b0-caaf-485d-b5c1-c15f7029973c": {
+        "requires": ["3dprinting/calibration-cube"],
         "rewards": []
     }
 }

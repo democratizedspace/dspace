@@ -126,10 +126,18 @@
     {
         "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
         "name": "green PLA filament",
-        "description": "1 gram of green PLA filament for an FDM printer.",
+        "description": "1 g of 1.75 mm green PLA filament for FDM printers; sold by weight.",
         "image": "/assets/pla_green.jpg",
-        "price": "0.02499 dUSD",
-        "unit": "g"
+        "price": "0.025 dUSD",
+        "unit": "g",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 65 }
+            ]
+        }
     },
     {
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
@@ -383,6 +391,13 @@
         "name": "dSolar",
         "description": "a token that represents 1 Watt of energy generated using a solar panel.",
         "image": "/assets/dSolar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67",
+        "name": "dWind",
+        "description": "a token that represents 1 Watt of energy generated using a wind turbine.",
+        "image": "/assets/turbine.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1085,5 +1100,12 @@
                 }
             ]
         }
+    },
+    {
+        "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+        "name": "mission log entry",
+        "description": "One handwritten entry recording a mission event in the logbook.",
+        "image": "/assets/paperwork.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     }
 ]
