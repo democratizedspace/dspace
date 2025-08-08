@@ -32,7 +32,8 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run test:root -- processQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && \
+        npm run test:root -- processQuality"
         ```
 
 See the [Codex CLI documentation][codex-cli] for more flags.
