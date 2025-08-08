@@ -7,11 +7,11 @@ A compact home lab lets you extract useful compounds from plants and practice su
 
 ## Core tools
 
--   **Hot plate** – provides steady heat for boiling or evaporation
--   **Thermometer** – monitors solution temperature
--   **Beakers** – hold and mix liquids
--   **Glass funnel & filter paper** – remove plant solids from a solution
--   **Scale** – measure ingredients accurately
+- **Hot plate** – provides steady heat for boiling or evaporation
+- **Aquarium thermometer** – monitors solution temperature
+- **Beakers** – hold and mix liquids
+- **Glass funnel & filter paper** – remove plant solids from a solution
+- **Scale** – measure ingredients accurately
 
 ## Safety tips
 

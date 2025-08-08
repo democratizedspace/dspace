@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "You'll need a few pine boards and some wood glue. I'll supply what you don't have.",
+            "text": "You'll need a few pine boards, some wood glue, and a claw hammer. I'll supply what you don't have.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -30,6 +30,10 @@
                         },
                         {
                             "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
                             "count": 1
                         }
                     ],
@@ -47,6 +51,10 @@
                         {
                             "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
                             "count": 1
+                        },
+                        {
+                            "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
+                            "count": 1
                         }
                     ]
                 }
@@ -54,7 +62,7 @@
         },
         {
             "id": "build",
-            "text": "Cut the boards to length, glue them into a rectangle, and let everything dry overnight.",
+            "text": "Cut the boards to length, use the hammer and glue to assemble the box, and let everything dry overnight.",
             "options": [
                 {
                     "type": "goto",

@@ -105,5 +105,32 @@
                 }
             ]
         }
+    },
+    {
+        "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
+        "name": "claw hammer",
+        "description": "450 g (16 oz) steel claw hammer with fiberglass handle for driving and removing nails.",
+        "image": "/assets/door.jpg",
+        "price": "10 dUSD",
+    },
+    {
+        "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+        "name": "wire stripper",
+        "description": "Self-adjusting tool for stripping 24-10 AWG insulation cleanly.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "15 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-08",
+                    "date": "2025-08-08",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]
