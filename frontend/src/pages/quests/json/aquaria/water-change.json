@@ -8,12 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Regular water changes keep fish healthy. Gather a siphon, bucket, and water conditioner, then remove about 25% of the water.",
+            "text": "Regular water changes keep fish healthy. Gather a siphon, bucket, water conditioner, and a utility cart to haul the water, then remove about 25% of the water.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "remove",
-                    "text": "Got it. How do I start?"
+                    "text": "Got it. How do I start?",
+                    "requiresItems": [
+                        { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
+                        { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 },
+                        { "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0", "count": 1 }
+                    ]
                 }
             ]
         },
