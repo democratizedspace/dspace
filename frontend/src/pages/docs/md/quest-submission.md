@@ -33,7 +33,7 @@ This guide describes how to submit your custom quests to become part of the offi
     ```
     This validates that at least one path leads to a `finish` option.
 6. **Open the Quest Submission form** at `/quests/submit`.
-7. **Authorize GitHub** by entering a personal access token with `repo` scope. The token is only used client-side to push your quest.
+7. **Authorize GitHub** by entering a personal access token with `repo` scope. The token is only used client-side to push your quest and is stored locally so you won't need to re-enter it (see [Authentication Flow](/docs/authentication)).
 8. **Create the pull request** directly from the form. This uploads your quest to a new branch and opens a draft PR.
 9. **Respond to feedback** from reviewers until your quest meets project standards.
 
@@ -48,4 +48,4 @@ Once merged, your quest will be included in the next game update!
 1. Visit [github.com/settings/tokens](https://github.com/settings/tokens) and generate a new **classic** token with `repo` scope.
 2. Copy the token and keep it somewhere safe. You can revoke it at any time.
 3. When using the submission form, paste the token into the "GitHub Token" field. The token is used solely in your browser to create the pull request.
-4. The token is saved to your browser's localStorage for convenience. Use the **Clear Token** button when you're finished or revoke it on GitHub.
+4. The token is saved to your browser's `localStorage` under `gameState.github.token` for convenience. Use the **Clear Token** button when you're finished or revoke it on GitHub. See the [Authentication Flow](/docs/authentication) for more details.
