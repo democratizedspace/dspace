@@ -1556,6 +1556,14 @@
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
             { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+    },
+    {
+        "id": "measure-ec-solution",
+        "title": "Measure hydroponic nutrient solution EC with a handheld meter",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            { "id": "71655665-4a59-41f4-9084-dad4d976df91", "count": 1 },
+            { "id": "fc2bb989-f192-4891-8bde-78ae631dae78", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -2305,7 +2313,7 @@
     },
     {
         "id": "charge-battery-pack-solar",
-        "title": "Charge a 200 Wh battery pack using a 200 W solar panel and charge controller",
+        "title": "Charge a 200 Wh battery pack in direct sun using a 200 W solar panel and charge controller",
         "image": "/assets/solar_setup_small.jpg",
         "requireItems": [
             { "id": "02b32152-a7b2-458e-9643-7b754c722165", "count": 1 },
@@ -2317,19 +2325,37 @@
             { "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 200 },
             { "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a", "count": 200 }
         ],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-09",
+                    "date": "2025-08-09",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "test-cable-continuity",
-        "title": "Check USB cable continuity with a multimeter",
-        "image": "/assets/quests/basic_circuit.svg",
+        "title": "Verify USB cable continuity with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-hardening-2025-08-09", "date": "2025-08-09", "score": 60 }]
+        }
     },
     {
         "id": "charge-battery-pack-wind",
@@ -2345,5 +2371,21 @@
             { "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67", "count": 200 }
         ],
         "duration": "1h"
+    },
+    {
+        "id": "build-birdhouse",
+        "title": "Build a wooden birdhouse",
+        "image": "/assets/door.jpg",
+        "requireItems": [
+            { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
+            { "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34", "count": 1 }
+        ],
+        "consumeItems": [
+            { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 1 },
+            { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+            { "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093", "count": 1 }
+        ],
+        "createItems": [{ "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8", "count": 1 }],
+        "duration": "2h"
     }
 ]
