@@ -13,4 +13,20 @@ describe('process quality', () => {
       }
     }
   });
+
+  it('includes required fields', () => {
+    const required = [
+      'id',
+      'title',
+      'requireItems',
+      'consumeItems',
+      'createItems',
+      'duration',
+    ];
+    for (const proc of processes as Array<any>) {
+      for (const field of required) {
+        expect(proc[field]).not.toBeUndefined();
+      }
+    }
+  });
 });
