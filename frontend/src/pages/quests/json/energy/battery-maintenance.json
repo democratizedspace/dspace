@@ -1,0 +1,52 @@
+{
+    "id": "energy/battery-maintenance",
+    "title": "Maintain Your Battery Pack",
+    "description": "Cycle your 200 Wh battery pack with solar to keep it healthy.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A battery lasts longer when you cycle it occasionally. Ready for a quick health check?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cycle",
+                    "text": "Let's give it some exercise."
+                }
+            ]
+        },
+        {
+            "id": "cycle",
+            "text": "Discharge your pack a bit, then hook it to the solar kit and top it off.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "charge-battery-pack-solar",
+                    "text": "Charge with solar"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Battery cycled",
+                    "requiresItems": [
+                        { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Your pack is ready for more adventures.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Power up!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/solar"]
+}
