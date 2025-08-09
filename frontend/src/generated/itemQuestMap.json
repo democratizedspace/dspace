@@ -1,24 +1,4 @@
 {
-    "148": {
-        "requires": ["astronomy/basic-telescope"],
-        "rewards": []
-    },
-    "149": {
-        "requires": ["astronomy/basic-telescope"],
-        "rewards": []
-    },
-    "150": {
-        "requires": ["astronomy/basic-telescope"],
-        "rewards": []
-    },
-    "151": {
-        "requires": ["astronomy/basic-telescope"],
-        "rewards": []
-    },
-    "152": {
-        "requires": ["astronomy/basic-telescope"],
-        "rewards": []
-    },
     "6c075116-ebd1-4147-8666-ec6338ca251e": {
         "requires": [
             "woodworking/workbench",
@@ -58,6 +38,10 @@
     },
     "2770ee5d-f9a0-4dc8-9c79-4f031fefd093": {
         "requires": ["woodworking/tool-rack", "woodworking/finish-sanding"],
+        "rewards": []
+    },
+    "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913": {
+        "requires": ["woodworking/planter-box"],
         "rewards": []
     },
     "7318a5ba-fac3-476e-a532-c813ed9b18e5": {
@@ -194,6 +178,8 @@
     "ce140453-c7ef-42c9-b9f9-38acfb4219cf": {
         "requires": [
             "programming/web-server",
+            "programming/json-endpoint",
+            "programming/json-api",
             "programming/avg-temp",
             "electronics/data-logger",
             "devops/prepare-first-node",
@@ -205,6 +191,7 @@
         "requires": [
             "programming/temp-logger",
             "programming/temp-graph",
+            "programming/temp-email",
             "programming/temp-alert",
             "programming/graph-temp",
             "geothermal/survey-ground-temperature",
@@ -296,6 +283,10 @@
         ],
         "rewards": []
     },
+    "092dae11-237a-43cc-b342-246aabbba258": {
+        "requires": ["hydroponics/nutrient-check"],
+        "rewards": []
+    },
     "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57": {
         "requires": ["hydroponics/lettuce"],
         "rewards": ["hydroponics/lettuce"]
@@ -325,10 +316,6 @@
         "rewards": []
     },
     "156d06b2-ff10-4265-9ae9-3b7753c0206e": {
-        "requires": ["hydroponics/basil"],
-        "rewards": []
-    },
-    "545aeb15-7e8b-489d-be4a-af2a59f447e1": {
         "requires": ["hydroponics/basil"],
         "rewards": []
     },
@@ -453,9 +440,11 @@
             "electronics/potentiometer-dimmer",
             "electronics/light-sensor",
             "electronics/data-logger",
+            "electronics/continuity-test",
             "electronics/arduino-blink"
         ],
         "rewards": [
+            "electronics/resistor-color-check",
             "electronics/led-polarity",
             "electronics/check-battery-voltage",
             "electronics/basic-circuit"
@@ -490,6 +479,7 @@
     "3cd82744-d2aa-414e-9f03-80024b624066": {
         "requires": [
             "electronics/thermistor-reading",
+            "electronics/solder-wire",
             "electronics/servo-sweep",
             "electronics/potentiometer-dimmer",
             "electronics/light-sensor",
@@ -514,18 +504,19 @@
         "requires": ["electronics/servo-sweep", "electronics/basic-circuit"],
         "rewards": []
     },
-    "48cf736e-184c-4bd1-b9b0-15b7e9721646": {
+    "037e6065-68a7-4ad1-9b0b-7778ecfe0662": {
         "requires": [
+            "electronics/resistor-color-check",
             "electronics/potentiometer-dimmer",
-            "electronics/led-polarity",
             "electronics/basic-circuit",
             "electronics/arduino-blink"
         ],
         "rewards": []
     },
-    "037e6065-68a7-4ad1-9b0b-7778ecfe0662": {
+    "48cf736e-184c-4bd1-b9b0-15b7e9721646": {
         "requires": [
             "electronics/potentiometer-dimmer",
+            "electronics/led-polarity",
             "electronics/basic-circuit",
             "electronics/arduino-blink"
         ],
@@ -551,6 +542,7 @@
         "requires": [
             "electronics/light-sensor",
             "electronics/led-polarity",
+            "electronics/continuity-test",
             "electronics/check-battery-voltage"
         ],
         "rewards": []
@@ -606,7 +598,7 @@
         "rewards": []
     },
     "c01676ec-27e5-4a53-9a47-24bf6c5a56a9": {
-        "requires": ["completionist/reminder", "completionist/polish"],
+        "requires": ["completionist/reminder", "completionist/polish", "completionist/display"],
         "rewards": ["completionist/v2"]
     },
     "e1714868-aa17-4f04-ac09-13ac4d7ecea0": {
@@ -645,6 +637,26 @@
     },
     "70bb8d86-2c4e-4330-9705-371891934686": {
         "requires": ["astronomy/light-pollution"],
+        "rewards": []
+    },
+    "0254a829-9002-4a75-8af2-03cd961601da": {
+        "requires": ["astronomy/basic-telescope"],
+        "rewards": []
+    },
+    "7aafe032-86e2-449e-8e25-8148f8c58c17": {
+        "requires": ["astronomy/basic-telescope"],
+        "rewards": []
+    },
+    "2794503d-fbe7-4031-a63e-deac531f9784": {
+        "requires": ["astronomy/basic-telescope"],
+        "rewards": []
+    },
+    "49fb255e-a4c3-48e4-bca7-4c3781fdb98b": {
+        "requires": ["astronomy/basic-telescope"],
+        "rewards": []
+    },
+    "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed": {
+        "requires": ["astronomy/basic-telescope"],
         "rewards": []
     },
     "c5a7574e-515f-4e9a-83fc-350703131f25": {
@@ -732,7 +744,8 @@
             "3dprinter/start",
             "3dprinting/phone-stand",
             "3dprinting/calibration-cube",
-            "3dprinting/cable-clip"
+            "3dprinting/cable-clip",
+            "3dprinting/bed-leveling"
         ],
         "rewards": []
     },
