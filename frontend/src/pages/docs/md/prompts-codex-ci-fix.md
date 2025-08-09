@@ -60,5 +60,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 
 > Agents: append a bullet after each successful fix.
 
-- 2025-03-?? – prompt no longer requires a failing job URL; agents must inspect
-  workflows and run local checks when none is provided.
+-   2025-03-?? – prompt no longer requires a failing job URL; agents must inspect
+    workflows and run local checks when none is provided.
