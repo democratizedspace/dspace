@@ -132,5 +132,25 @@
                 }
             ]
         }
+    },
+    {
+        "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+        "name": "wire cutters",
+        "description": "Angled-cutting pliers for trimming component leads and wires cleanly.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "12 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-09-17",
+                    "date": "2025-09-17",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]

@@ -2312,7 +2312,8 @@
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-            { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }
+            { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
+            { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
