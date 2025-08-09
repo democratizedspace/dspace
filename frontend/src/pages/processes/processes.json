@@ -1494,11 +1494,11 @@
         "id": "assemble-basic-telescope",
         "title": "Assemble a basic telescope",
         "requireItems": [
-            { "id": "148", "count": 1 },
-            { "id": "149", "count": 1 },
-            { "id": "150", "count": 1 },
-            { "id": "151", "count": 1 },
-            { "id": "152", "count": 1 }
+            { "id": "0254a829-9002-4a75-8af2-03cd961601da", "count": 1 },
+            { "id": "7aafe032-86e2-449e-8e25-8148f8c58c17", "count": 1 },
+            { "id": "2794503d-fbe7-4031-a63e-deac531f9784", "count": 1 },
+            { "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b", "count": 1 },
+            { "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [
@@ -1713,7 +1713,7 @@
                 "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                 "count": 1
             },
-            { "id": "151", "count": 1 }
+            { "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -1774,7 +1774,7 @@
                 "count": 1
             },
             {
-                "id": "151",
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
                 "count": 1
             }
         ],

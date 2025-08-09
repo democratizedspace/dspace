@@ -1003,35 +1003,35 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "148",
+        "id": "0254a829-9002-4a75-8af2-03cd961601da",
         "name": "50 mm magnifying lens",
         "description": "Glass lens with ~50 mm focal length used as a telescope objective.",
         "image": "/assets/quests/solar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "149",
+        "id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
         "name": "20 mm magnifying lens",
         "description": "Small lens with ~20 mm focal length for use as a telescope eyepiece.",
         "image": "/assets/quests/solar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "150",
+        "id": "2794503d-fbe7-4031-a63e-deac531f9784",
         "name": "cardboard mailing tube",
         "description": "Sturdy cardboard tube about 40 cm long to hold telescope optics.",
         "image": "/assets/quests/solar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "151",
+        "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
         "name": "camera tripod",
         "description": "Adjustable three-legged stand for stabilizing cameras or small telescopes.",
         "image": "/assets/quests/solar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
-        "id": "152",
+        "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
         "name": "masking tape",
         "description": "Low-tack paper tape for temporarily securing lenses during assembly.",
         "image": "/assets/quests/solar.jpg",
