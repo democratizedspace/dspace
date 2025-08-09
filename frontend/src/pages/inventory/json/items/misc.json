@@ -22,9 +22,21 @@
     {
         "id": "8f54a592-09de-4340-829b-7288897eb4c7",
         "name": "Edison Model M",
-        "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities.",
+        "description": "Mid-size electric sedan with 75 kWh battery (~400 km range) and highway driver-assist; seats five.",
         "image": "/assets/ev.jpg",
-        "price": "40000 dUSD"
+        "price": "40000 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-09",
+                    "date": "2025-08-09",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "02b32152-a7b2-458e-9643-7b754c722165",
