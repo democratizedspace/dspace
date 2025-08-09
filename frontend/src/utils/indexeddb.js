@@ -1,9 +1,10 @@
 // import { log } from './devLog.js';
 import { runMigrations } from './migrations.js';
 
+// Legacy DB helpers (kept for backward compatibility)
 const DB_NAME = 'dspaceDB';
 const DB_VERSION = 1;
-const STORE_NAME = 'quests';
+const LEGACY_STORE_NAME = 'quests';
 
 let dbInstance = null;
 
@@ -28,8 +29,8 @@ function openDB() {
 
         request.onupgradeneeded = (event) => {
             const db = event.target.result;
-            if (!db.objectStoreNames.contains(STORE_NAME)) {
-                db.createObjectStore(STORE_NAME, {
+            if (!db.objectStoreNames.contains(LEGACY_STORE_NAME)) {
+                db.createObjectStore(LEGACY_STORE_NAME, {
                     keyPath: 'id',
                     autoIncrement: true,
                 });
@@ -49,14 +50,15 @@ function openDB() {
 }
 
 function getTransaction(storeName, mode) {
-    return openDB().then((db) => {
+    return openCustomContentDB().then((db) => {
         const transaction = db.transaction([storeName], mode);
         return transaction.objectStore(storeName);
     });
 }
 
 export function addEntity(entity) {
-    return getTransaction(STORE_NAME, 'readwrite').then((store) => {
+    const storeName = getStoreForEntityType(entity.type);
+    return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
             const request = store.add(entity);
             request.onsuccess = () => resolve(request.result);
@@ -69,8 +71,9 @@ export function addEntity(entity) {
     });
 }
 
-export function getEntity(id) {
-    return getTransaction(STORE_NAME, 'readonly').then((store) => {
+export function getEntity(id, entityType) {
+    const storeName = getStoreForEntityType(entityType);
+    return getTransaction(storeName, 'readonly').then((store) => {
         return new Promise((resolve, reject) => {
             const request = store.get(id);
             request.onsuccess = () => resolve(request.result);
@@ -84,7 +87,8 @@ export function getEntity(id) {
 }
 
 export async function updateEntity(updatedEntity) {
-    return getTransaction(STORE_NAME, 'readwrite').then((store) => {
+    const storeName = getStoreForEntityType(updatedEntity.type);
+    return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
             const getRequest = store.get(updatedEntity.id);
 
@@ -115,8 +119,9 @@ export async function updateEntity(updatedEntity) {
     });
 }
 
-export function deleteEntity(id) {
-    return getTransaction(STORE_NAME, 'readwrite').then((store) => {
+export function deleteEntity(id, entityType) {
+    const storeName = getStoreForEntityType(entityType);
+    return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
             const request = store.delete(id);
             request.onsuccess = () => resolve();

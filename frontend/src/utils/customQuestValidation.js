@@ -8,7 +8,7 @@ export const customQuestSchema = {
         image: {
             type: 'string',
             minLength: 1,
-            pattern: '^(data:image/|https?://)',
+            pattern: '^(data:image/|https?://|/)',
         },
         requiresQuests: {
             type: 'array',

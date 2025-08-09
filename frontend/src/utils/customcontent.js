@@ -37,7 +37,7 @@ export const db = {
     },
 
     get: (entityType, id) => {
-        return getEntity(id).then((entity) => {
+        return getEntity(id, entityType).then((entity) => {
             if (entity && entity.type === entityType) {
                 return entity;
             }
@@ -46,7 +46,7 @@ export const db = {
     },
 
     update: (entityType, id, updates) => {
-        return getEntity(id).then((entity) => {
+        return getEntity(id, entityType).then((entity) => {
             if (!entity || entity.type !== entityType) {
                 throw new Error(`${entityType} not found with id: ${id}`);
             }
@@ -62,11 +62,11 @@ export const db = {
     },
 
     delete: (entityType, id) => {
-        return getEntity(id).then((entity) => {
+        return getEntity(id, entityType).then((entity) => {
             if (!entity || entity.type !== entityType) {
                 throw new Error(`${entityType} not found with id: ${id}`);
             }
-            return deleteEntity(id);
+            return deleteEntity(id, entityType);
         });
     },
 
@@ -163,7 +163,8 @@ export const db = {
 // Convenience functions for common operations
 
 export function createQuest(title, description, image = '/assets/quests/howtodoquests.jpg') {
-    return db.quests.add({ title, description, image });
+    const id = crypto.randomUUID();
+    return db.quests.add({ id, title, description, image }).then(() => id);
 }
 
 export function getQuest(id) {
@@ -210,7 +211,10 @@ export function createProcess(
     consumeItems = [],
     createItems = []
 ) {
-    return db.processes.add({ title, duration, requireItems, consumeItems, createItems });
+    const id = crypto.randomUUID();
+    return db.processes
+        .add({ id, title, duration, requireItems, consumeItems, createItems })
+        .then(() => id);
 }
 
 export function getProcess(id) {

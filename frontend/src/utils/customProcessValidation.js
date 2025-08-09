@@ -14,7 +14,7 @@ export const customProcessSchema = {
         createItems: { $ref: '#/definitions/items' },
     },
     required: ['title', 'duration'],
-    additionalProperties: false,
+    additionalProperties: true,
     definitions: {
         items: {
             type: 'array',
