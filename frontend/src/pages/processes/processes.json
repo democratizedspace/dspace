@@ -1549,6 +1549,18 @@
         "duration": "1m"
     },
     {
+        "id": "measure-ec-solution",
+        "title": "Measure hydroponic nutrient solution EC with a handheld meter",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            { "id": "71655665-4a59-41f4-9084-dad4d976df91", "count": 1 },
+            { "id": "fc2bb989-f192-4891-8bde-78ae631dae78", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "adjust-ph",
         "title": "Adjust solution pH",
         "requireItems": [
