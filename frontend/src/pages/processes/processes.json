@@ -2320,7 +2320,7 @@
     },
     {
         "id": "test-cable-continuity",
-        "title": "Test USB cable continuity with a digital multimeter",
+        "title": "Verify USB cable continuity with a digital multimeter",
         "image": "/assets/launch_controller.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
@@ -2328,7 +2328,7 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "3m",
+        "duration": "2m",
         "hardening": {
             "passes": 1,
             "score": 60,
