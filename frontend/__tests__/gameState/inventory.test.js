@@ -59,8 +59,8 @@ describe('gameState - inventory', () => {
         const expectedInventory = {
             1: 15, // The count of item "1" should have increased by 5
             2: 3, // The count of new item "2" should be 3
-            24: 50, // The counts of other items should not change
-            20: 0,
+            [dUSDId]: 50, // The counts of other items should not change
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -73,8 +73,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 5, // The count of item "1" should have decreased by 5
-            24: 50, // The counts of other items should not change
-            20: 0,
+            [dUSDId]: 50, // The counts of other items should not change
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -87,8 +87,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same as burning more than available was attempted
-            24: 50, // The counts of other items should not change
-            20: 0,
+            [dUSDId]: 50, // The counts of other items should not change
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -126,8 +126,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 12, // The count of item "1" should have increased by 2
-            24: 40, // The count of dUSD should have decreased by 10 (2 items * price 5)
-            20: 0,
+            [dUSDId]: 40, // The count of dUSD should have decreased by 10 (2 items * price 5)
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -140,8 +140,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same as buying more than available was attempted
-            24: 50, // The count of dUSD should not change
-            20: 0,
+            [dUSDId]: 50, // The count of dUSD should not change
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -154,8 +154,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 12, // The count of item "1" should have increased by 2
-            24: 40, // The count of dUSD should have decreased by 10 (2 items * price 5)
-            20: 0,
+            [dUSDId]: 40, // The count of dUSD should have decreased by 10 (2 items * price 5)
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -168,8 +168,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 12, // The count of item "1" should have increased by 2
-            24: 40, // The count of dUSD should have decreased by 10 (2 items * price 5)
-            20: 0,
+            [dUSDId]: 40, // The count of dUSD should have decreased by 10 (2 items * price 5)
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -204,8 +204,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same since we tried to sell more than we have
-            24: 50, // The count of dUSD should not change since no items were sold
-            20: 0,
+            [dUSDId]: 50, // The count of dUSD should not change since no items were sold
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -218,8 +218,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 5, // The count of item "1" should have decreased by 5
-            24: 75, // The count of dUSD should have increased by 25 (5 items * price 5) considering there's no tax
-            20: 0,
+            [dUSDId]: 75, // The count of dUSD should have increased by 25 (5 items * price 5) considering there's no tax
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -232,8 +232,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 5, // The count of item "1" should have decreased by 5
-            24: 75, // The count of dUSD should have increased by 25 (5 items * price 5) considering there's no tax
-            20: 0,
+            [dUSDId]: 75, // The count of dUSD should have increased by 25 (5 items * price 5) considering there's no tax
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -247,8 +247,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same since the price was negative
-            24: 50, // The count of dUSD should not change since no items were sold
-            20: 0,
+            [dUSDId]: 50, // The count of dUSD should not change since no items were sold
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -261,8 +261,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same since the price was negative
-            24: 50, // The count of dUSD should not change since no items were sold
-            20: 0,
+            [dUSDId]: 50, // The count of dUSD should not change since no items were sold
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -275,8 +275,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same since the price was negative
-            24: 50, // The count of dUSD should not change since no items were sold
-            20: 0,
+            [dUSDId]: 50, // The count of dUSD should not change since no items were sold
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
@@ -289,8 +289,8 @@ describe('gameState - inventory', () => {
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same since the count was negative
-            24: 50, // The count of dUSD should not change since no items were sold
-            20: 0,
+            [dUSDId]: 50, // The count of dUSD should not change since no items were sold
+            [dCarbonId]: 0,
         };
 
         expect(mockGameState.inventory).toEqual(expectedInventory);
