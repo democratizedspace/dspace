@@ -1895,6 +1895,26 @@
         }
     },
     {
+        "id": "plot-temperature-data",
+        "title": "Plot logged temperature data using Python and Matplotlib",
+        "requireItems": [],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
         "id": "arduino-led-blink",
         "title": "Upload the Blink sketch to an Arduino Uno and flash a 5 mm LED on a breadboard",
         "image": "/assets/quests/basic_circuit.svg",
