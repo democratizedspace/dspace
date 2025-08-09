@@ -108,20 +108,20 @@
     },
     {
         "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
-        "name": "claw hammer",
-        "description": "450 g (16 oz) steel claw hammer with 330 mm (13 in) fiberglass handle for driving and pulling nails.",
+        "name": "claw hammer (16 oz)",
+        "description": "450 g (16 oz) drop-forged steel head, curved claw and 330 mm (13 in) fiberglass handle for nails.",
         "image": "/assets/door.jpg",
-        "price": "12 dUSD",
+        "price": "10 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 60,
             "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-09",
                     "date": "2025-08-09",
-                    "score": 65
+                    "score": 60
                 }
             ]
         }
