@@ -1,0 +1,55 @@
+{
+    "id": "hydroponics/tub-scrub",
+    "title": "Scrub the Grow Tub",
+    "description": "Remove biofilm from the reservoir walls.",
+    "image": "/assets/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Slimy walls restrict nutrient flow. Let's scrub the tub clean.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "scrub",
+                    "text": "Grab the brush."
+                }
+            ]
+        },
+        {
+            "id": "scrub",
+            "text": "Use a bucket of dechlorinated water and a soft brush to wipe down the reservoir.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Need to prep water first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Walls are spotless!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Clean surfaces deter algae and keep roots healthy.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to growing."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/reservoir-refresh"]
+}
