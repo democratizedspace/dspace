@@ -2316,7 +2316,7 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m",
+        "duration": "3m",
         "hardening": {
             "passes": 1,
             "score": 60,
