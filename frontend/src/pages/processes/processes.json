@@ -1549,6 +1549,19 @@
         "duration": "1m"
     },
     {
+        "id": "check-led-polarity",
+        "title": "Check LED polarity with a multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+            { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "adjust-ph",
         "title": "Adjust solution pH",
         "requireItems": [
