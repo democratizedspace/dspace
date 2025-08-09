@@ -2319,6 +2319,22 @@
         "duration": "1m"
     },
     {
+        "id": "solder-led-indicator-module",
+        "title": "Solder a 220 \u03a9 resistor to a 5 mm LED with jumper wires to make an indicator module",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+            { "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f", "count": 1 }
+        ],
+        "consumeItems": [
+            { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
+        ],
+        "createItems": [{ "id": "6da4a788-b743-4682-8dbe-f23d71435aa4", "count": 1 }],
+        "duration": "10m"
+    },
+    {
         "id": "charge-battery-pack-wind",
         "title": "Charge a 200 Wh battery pack using a 500 W wind turbine",
         "image": "/assets/turbine.jpg",
