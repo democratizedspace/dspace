@@ -619,7 +619,7 @@ The design of the application ensures that custom content has the same capabilit
 ### Content Storage
 
 - **Built-in Content**: Stored as JSON files in the repository under `frontend/src/pages/[content-type]/json/`
-- **Custom Content**: Stored in the browser's IndexedDB database and managed through the customcontent.js utility
+- **Custom Content**: Stored in the browser's IndexedDB database and managed through the `customcontent.js` utility. Each quest, item, and process uses a UUID string ID and lives in its own IndexedDB object store.
 - **Archiving**: Move deprecated quests to `frontend/src/pages/quests/archive` instead of deleting them.
 
 ### UI Integration
