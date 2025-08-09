@@ -18,7 +18,7 @@ beforeEach(async () => {
 });
 
 describe('data migration system', () => {
-  test('adds createdAt field and bumps version', async () => {
+  test('adds createdAt and updatedAt fields and bumps version', async () => {
     const db = await openCustomContentDB();
     await saveQuest({
       id: 'q1',
@@ -30,6 +30,7 @@ describe('data migration system', () => {
     await runMigrations(db, CUSTOM_CONTENT_DB_VERSION);
     const quest = await getQuest('q1');
     expect(quest.createdAt).toBeDefined();
+    expect(quest.updatedAt).toBeDefined();
     const version = await getSchemaVersion();
     expect(version).toBe(CUSTOM_CONTENT_DB_VERSION);
     const errors = await validateDataIntegrity(db);

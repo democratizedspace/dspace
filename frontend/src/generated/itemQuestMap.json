@@ -288,6 +288,20 @@
     ],
     "rewards": []
   },
+  "72b4448e-27d9-4746-bd3a-967ff13f501b": {
+    "requires": [
+      "programming/graph-temp-data",
+      "geothermal/log-ground-temperature",
+      "geothermal/compare-seasonal-ground-temps",
+      "geothermal/calibrate-ground-sensor",
+      "electronics/thermistor-reading",
+      "electronics/servo-sweep",
+      "electronics/potentiometer-dimmer",
+      "electronics/light-sensor",
+      "electronics/arduino-blink"
+    ],
+    "rewards": []
+  },
   "71efa72a-8c87-4dc2-8e2c-9119bb28fe50": {
     "requires": [
       "hydroponics/top-off",
@@ -365,6 +379,7 @@
     "requires": [
       "hydroponics/nutrient-check",
       "electronics/solder-wire",
+      "electronics/measure-resistance",
       "electronics/check-battery-voltage",
       "chemistry/ph-test",
       "aquaria/water-testing"
@@ -673,6 +688,7 @@
     "requires": [
       "electronics/resistor-color-check",
       "electronics/potentiometer-dimmer",
+      "electronics/measure-resistance",
       "electronics/basic-circuit",
       "electronics/arduino-blink"
     ],
@@ -709,10 +725,19 @@
   },
   "5127e156-3009-4db4-85ac-e3ea070b68f2": {
     "requires": [
+  "5127e156-3009-4db4-85ac-e3ea070b68f2": {
+    "requires": [
+      "electronics/measure-resistance",
       "electronics/light-sensor",
       "electronics/led-polarity",
       "electronics/continuity-test",
       "electronics/check-battery-voltage"
+    ],
+    "rewards": []
+  },
+  "6301ff22-49c9-468b-88aa-cafedfd5dcd3": {
+    "requires": [
+      "electronics/light-sensor"
     ],
     "rewards": []
   },

@@ -1,0 +1,50 @@
+{
+    "id": "hydroponics/air-stone-soak",
+    "title": "Soak Air Stone",
+    "description": "Prime the air stone so bubbles stay even.",
+    "image": "/assets/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "New air stones shed dust. Give it a soak before it meets the roots.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "What's the method?"
+                }
+            ]
+        },
+        {
+            "id": "soak",
+            "text": "Drop the stone in a bucket of dechlorinated water and wait ten minutes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ],
+                    "text": "It's soaked and ready."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great. A primed stone keeps the reservoir oxygenated.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to the tub."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/filter-clean"]
+}

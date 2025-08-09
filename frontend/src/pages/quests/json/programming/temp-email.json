@@ -1,0 +1,50 @@
+{
+    "id": "programming/temp-email",
+    "title": "Email Temperature Alert",
+    "description": "Trigger an email when the sensor exceeds a set temperature.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've set up a local alert. Let's send yourself an email when things get too warm.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Sounds useful."
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Use a mail API to send a message when the script detects high temperature.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Email sent!",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Remote notifications keep you informed wherever you are.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Stay updated."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/temp-alert"]
+}

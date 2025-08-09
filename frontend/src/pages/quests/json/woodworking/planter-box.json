@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "You'll need a few pine boards, some wood glue, and a claw hammer. I'll supply what you don't have.",
+            "text": "You'll need a few pine boards, some wood glue, and a 16 oz claw hammer. I'll supply what you lack.",
             "options": [
                 {
                     "type": "grantsItems",

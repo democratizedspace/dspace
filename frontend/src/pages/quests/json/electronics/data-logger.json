@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've got the sensor working. Let's connect a Pi to log temperatures automatically.",
+            "text": "Sensor works. Connect it to a Raspberry Pi to log temperatures. Use a dry, static-safe surface and keep power off until wiring is checked.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "setup",
-            "text": "Plug the Arduino into the Pi with a USB cable and install the serial libraries.",
+            "text": "Link the Arduino Uno to the Raspberry Pi with a USB cable and install `pyserial` using `sudo apt install python3-serial`. Keep cases closed and avoid tugging cables.",
             "options": [
                 {
                     "type": "goto",
@@ -33,6 +33,10 @@
                         {
                             "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
                             "count": 1
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
                         }
                     ]
                 }
@@ -40,18 +44,23 @@
         },
         {
             "id": "script",
-            "text": "Write a short program to read the sensor and append values to a file every minute.",
+            "text": "Make `log_temp.py` to read `/dev/ttyACM0` at 9600 baud and append timestamped data to `temps.csv` each minute. Use the logging process for code samples.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "raspberry-pi-serial-log",
+                    "text": "Open the serial logging process"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Logging!"
+                    "text": "Script is logging data!"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! With data over time you can spot trends and trigger alerts.",
+            "text": "Nice work! Logs help spot trends and alerts. Stop with Ctrl+C and unplug the USB cable before moving parts.",
             "options": [
                 {
                     "type": "finish",
@@ -61,5 +70,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/thermistor-reading"]
+    "requiresQuests": ["electronics/thermistor-reading"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-refine-2025-08-09",
+                "date": "2025-08-09",
+                "score": 60
+            }
+        ]
+    }
 }
