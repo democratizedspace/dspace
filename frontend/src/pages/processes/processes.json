@@ -2321,7 +2321,7 @@
     {
         "id": "test-cable-continuity",
         "title": "Test USB cable continuity with a digital multimeter",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }
@@ -2333,9 +2333,7 @@
             "passes": 1,
             "score": 60,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-09", "date": "2025-08-09", "score": 60 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-09", "date": "2025-08-09", "score": 60 }]
         }
     },
     {
