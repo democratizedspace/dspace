@@ -147,6 +147,13 @@
         }
     },
     {
+        "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
+        "name": "utility cart",
+        "description": "Two-shelf steel utility cart with 120 kg capacity for moving gear around a lab.",
+        "image": "/assets/cart.jpg",
+        "price": "60 dUSD",
+    },
+    {
         "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
         "name": "wire cutters",
         "description": "Angled-cutting pliers for trimming component leads and wires cleanly.",
@@ -159,9 +166,8 @@
             "emoji": "🌀",
             "history": [
                 {
-                    "task": "codex-item-hardening-2025-09-17",
-                    "date": "2025-09-17",
-                    "score": 60
+                    "task": "codex-item-hardening-2025-08-09",
+                    "date": "2025-08-09",
                 }
             ]
         }
