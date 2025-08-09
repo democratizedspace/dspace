@@ -48,7 +48,8 @@
     "prettier-plugin-svelte": "^3.4.0",
     "ts-jest": "^29.1.1",
     "typescript": "^5.8.3",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "wait-on": "^7.0.1"
   },
   "dependencies": {
     "openai": "^3.2.1"
