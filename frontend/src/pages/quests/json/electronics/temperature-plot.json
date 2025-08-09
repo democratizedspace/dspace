@@ -1,0 +1,67 @@
+{
+    "id": "electronics/temperature-plot",
+    "title": "Plot Temperature Data",
+    "description": "Generate a chart from your thermistor log using Python.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've been logging temperatures with your Pi. Let's turn that data into a chart.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "I'm ready."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Copy the log file to your computer and install matplotlib. Keep a backup of the data.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "Log file copied.",
+                    "requiresItems": [
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plot",
+            "text": "Run a short Python script to read the CSV and render a line chart of temperature over time.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Chart looks good.",
+                    "process": "plot-temperature-data"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Visualizing trends will help you spot anomalies quickly.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Cool!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/data-logger"]
+}
+
