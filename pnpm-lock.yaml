@@ -29,6 +29,9 @@ importers:
       '@types/node':
         specifier: ^24.1.0
         version: 24.1.0
+      '@types/prismjs':
+        specifier: ^1.26.5
+        version: 1.26.5
       '@vitest/coverage-v8':
         specifier: ^3.2.4
         version: 3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.1.0)(jsdom@26.1.0(canvas@3.1.2))(yaml@2.8.1))
@@ -56,6 +59,12 @@ importers:
       prettier-plugin-svelte:
         specifier: ^3.4.0
         version: 3.4.0(prettier@3.6.2)(svelte@5.37.0)
+      prism-svelte:
+        specifier: ^0.5.0
+        version: 0.5.0
+      prismjs:
+        specifier: ^1.30.0
+        version: 1.30.0
       ts-jest:
         specifier: ^29.1.1
         version: 29.4.0(@babel/core@7.28.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.28.0))(jest-util@29.7.0)(jest@29.7.0(@types/node@24.1.0))(typescript@5.8.3)
@@ -2803,6 +2812,9 @@ packages:
       {
         integrity: sha512-SuT16Q1K51EAVPz1K29DJ/sXjhSQ0zjvsypYJ6tlwVsRV9jwW5Adq2ch8Dq8kDBCkYnELS7N7VNCSB5nC56t/g==,
       }
+
+  '@types/prismjs@1.26.5':
+    resolution: {integrity: sha512-AUZTa7hQ2KY5L7AmtSiqxlhWxb4ina0yd8hNbl4TWuqnv/pFP0nDMb3YrfSBf4hJVGLh2YEIBfKaBW/9UEl6IQ==}
 
   '@types/resolve@1.20.6':
     resolution:
@@ -7193,6 +7205,9 @@ packages:
       }
     engines: { node: ^14.15.0 || ^16.10.0 || >=18.0.0 }
 
+  prism-svelte@0.5.0:
+    resolution: {integrity: sha512-db91Bf3pRGKDPz1lAqLFSJXeW13mulUJxhycysFpfXV5MIK7RgWWK2E5aPAa71s8TCzQUXxF5JOV42/iOs6QkA==}
+
   prismjs@1.30.0:
     resolution:
       {
@@ -10759,6 +10774,8 @@ snapshots:
 
   '@types/parse5@6.0.3': {}
 
+  '@types/prismjs@1.26.5': {}
+
   '@types/resolve@1.20.6': {}
 
   '@types/stack-utils@2.0.3': {}
@@ -13974,6 +13991,8 @@ snapshots:
       '@jest/schemas': 29.6.3
       ansi-styles: 5.2.0
       react-is: 18.3.1
+
+  prism-svelte@0.5.0: {}
 
   prismjs@1.30.0: {}
 

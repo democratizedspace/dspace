@@ -225,7 +225,7 @@ We have specialized tests to ensure content quality:
     - Identifies dialogue that doesn't match NPC personalities
     - Uses simple heuristics for now; integration with the OpenAI API is planned
 
-2. **Image Reference Tests** (`imageReferences.test.js`):
+2. **Image Reference Tests** (`scripts/tests/imageReferences.test.ts`):
     - Scans all quest JSON files for image references
     - Verifies that referenced images exist in the public directory
     - Checks for proper image naming conventions
@@ -722,7 +722,8 @@ Unit tests focus on testing individual components, functions, or modules in isol
 
 ### Image Reference Tests
 
-The `imageReferences.test.js` file performs comprehensive validation of all images referenced in quest files:
+The `scripts/tests/imageReferences.test.ts` file performs comprehensive validation of all images
+referenced in quest files:
 
 1. **Existence Verification**: Checks that all referenced images exist in the public directory
 2. **Size Validation**: Warns if images exceed recommended file size limits (150KB)
