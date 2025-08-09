@@ -26,7 +26,8 @@
             "woodworking/step-stool",
             "woodworking/planter-box",
             "woodworking/bookshelf",
-            "woodworking/birdhouse"
+            "woodworking/birdhouse",
+            "woodworking/coffee-table"
         ],
         "rewards": []
     },
@@ -36,7 +37,8 @@
             "woodworking/step-stool",
             "woodworking/planter-box",
             "woodworking/bookshelf",
-            "woodworking/birdhouse"
+            "woodworking/birdhouse",
+            "woodworking/coffee-table"
         ],
         "rewards": []
     },
@@ -45,7 +47,8 @@
             "woodworking/tool-rack",
             "woodworking/step-stool",
             "woodworking/bookshelf",
-            "woodworking/birdhouse"
+            "woodworking/birdhouse",
+            "woodworking/coffee-table"
         ],
         "rewards": []
     },
