@@ -41,11 +41,16 @@ echo "✅ Unit tests passed!"
 # Step 3: Run grouped E2E tests (unless disabled)
 if [ -z "$SKIP_E2E" ]; then
   echo -e "\nStep 3/3: Running end-to-end tests (grouped)..."
-  npm run test:e2e:groups
-  if [ $? -ne 0 ]; then
+  E2E_OUTPUT=$(npm run test:e2e:groups 2>&1)
+  E2E_EXIT=$?
+  echo "$E2E_OUTPUT"
+  if [ $E2E_EXIT -ne 0 ]; then
     echo "❌ End-to-end tests failed. Please fix them before submitting your PR."
     cd "$ORIGINAL_DIR" || exit 1
     exit 1
+  fi
+  if echo "$E2E_OUTPUT" | grep -Eq "Test Files\\s+0|Tests\\s+0|No test files? found"; then
+    echo "⚠️  Warning: no end-to-end tests were run."
   fi
   echo "✅ End-to-end tests passed!"
 else

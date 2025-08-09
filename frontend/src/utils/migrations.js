@@ -25,6 +25,28 @@ export const MIGRATIONS = {
             });
         }
     },
+    3: async (db) => {
+        const stores = ['items', 'processes', 'quests'];
+        for (const storeName of stores) {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const req = store.getAll();
+            const records = await new Promise((resolve, reject) => {
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = (e) => reject(e.target.error);
+            });
+            for (const record of records) {
+                if (!record.updatedAt) {
+                    record.updatedAt = record.createdAt || new Date().toISOString();
+                    store.put(record);
+                }
+            }
+            await new Promise((resolve, reject) => {
+                tx.oncomplete = resolve;
+                tx.onerror = (e) => reject(e.target.error);
+            });
+        }
+    },
 };
 
 export async function getCurrentSchemaVersion(db) {

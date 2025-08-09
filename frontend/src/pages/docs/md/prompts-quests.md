@@ -23,7 +23,7 @@ which covers quests, items and processes in detail.
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1 Quick start (Web vs CLI)
 
 - **Add or update a quest**
     - Web: use the “Code” button and attach the repo.
@@ -32,7 +32,7 @@ which covers quests, items and processes in detail.
     - Web: use the “Ask” button.
     - CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
 - **Run quest tests**
-    - Web: –
+    - Web: not supported yet.
     - CLI:
         ```bash
         codex exec "npm run lint && npm run type-check && npm run build && \
@@ -43,11 +43,11 @@ See the [Codex CLI documentation][codex-cli] for more flags.
 
 ---
 
-## 2 Prompt ingredients
+## 2 Prompt ingredients
 
 | Ingredient           | Why it matters                                                      |
 | -------------------- | ------------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add safety step to `energy/solar`”). |
+| **Goal sentence**    | Gives the agent a north star (“Add safety step to `energy/solar`”). |
 | **Files to touch**   | Limits search space → faster & cheaper.                             |
 | **Constraints**      | Coding style, a11y, quest schema rules.                             |
 | **Acceptance check** | e.g. “`npm run test:root -- questCanonical questQuality` passes”.   |
@@ -57,7 +57,7 @@ prompt‑level rules short and concrete.
 
 ---
 
-## 3 Reusable template
+## 3 Reusable template
 
 ```text
 You are working in democratizedspace/dspace.
@@ -158,10 +158,10 @@ USER:
 5. Update the quest's `hardening` block, incrementing `passes`, refreshing the
    evaluator `score`, swapping the status `emoji` and appending a history entry
    with the Codex task ID, date and score. Choose the emoji based on:
-   - 0 passes → score 0 → 🛠️ Draft
-   - ≥1 pass & score ≥60 → 🌀 First polishing pass
-   - ≥2 passes & score ≥75 → ✅ Meets internal quality bar
-   - ≥3 passes & score ≥90 → 💯 Hardened – locked until spec change
+   - 0 passes → score 0 → 🛠️ Draft
+   - ≥1 pass & score ≥60 → 🌀 First polishing pass
+   - ≥2 passes & score ≥75 → ✅ Meets internal quality bar
+   - ≥3 passes & score ≥90 → 💯 Hardened – locked until spec change
    Example:
    "hardening": {
      "passes": 1,

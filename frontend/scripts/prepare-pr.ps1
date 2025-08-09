@@ -38,11 +38,15 @@ try {
 
     # Step 3: Run grouped E2E tests
     Write-Host "`nStep 3/3: Running end-to-end tests (grouped)..."
-    npm run test:e2e:groups
+    $e2eOutput = npm run test:e2e:groups 2>&1
+    Write-Host $e2eOutput
     if ($LASTEXITCODE -ne 0) {
         Write-Host "❌ End-to-end tests failed. Please fix them before submitting your PR." -ForegroundColor Red
         Set-Location -Path $originalDir
         exit 1
+    }
+    if ($e2eOutput -match 'Test Files\s+0' -or $e2eOutput -match 'Tests\s+0' -or $e2eOutput -match 'No test files? found') {
+        Write-Warning "No end-to-end tests were run."
     }
     Write-Host "✅ End-to-end tests passed!" -ForegroundColor Green
 

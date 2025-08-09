@@ -20,7 +20,7 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1 Quick start (Web vs CLI)
 
 -   **Add or update a process**
     -   Web: use the “Code” button and attach the repo.
@@ -40,11 +40,11 @@ See the [Codex CLI documentation][codex-cli] for more flags.
 
 ---
 
-## 2 Prompt ingredients
+## 2 Prompt ingredients
 
 | Ingredient           | Why it matters                                                          |
 | -------------------- | ----------------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add lettuce seed input to hydroponics”). |
+| **Goal sentence**    | Gives the agent a north star (“Add lettuce seed input to hydroponics”). |
 | **Files to touch**   | Limits search space → faster & cheaper.                                 |
 | **Constraints**      | Coding style, a11y, process schema rules.                               |
 | **Acceptance check** | e.g. “`npm run test:root -- processQuality` passes”.                    |
@@ -54,7 +54,7 @@ prompt‑level rules short and concrete.
 
 ---
 
-## 3 Reusable template
+## 3 Reusable template
 
 ```text
 You are working in democratizedspace/dspace.
@@ -122,10 +122,10 @@ USER:
    refreshing the evaluator `score`, swapping the status `emoji` and appending a
    history entry with the Codex task ID, date and score. Choose the emoji based
    on:
-   - 0 passes → score 0 → 🛠️ Draft
-   - ≥1 pass & score ≥60 → 🌀 First polishing pass
-   - ≥2 passes & score ≥75 → ✅ Meets internal quality bar
-   - ≥3 passes & score ≥90 → 💯 Hardened – locked until spec change
+   - 0 passes → score 0 → 🛠️ Draft
+   - ≥1 pass & score ≥60 → 🌀 First polishing pass
+   - ≥2 passes & score ≥75 → ✅ Meets internal quality bar
+   - ≥3 passes & score ≥90 → 💯 Hardened – locked until spec change
    Example:
    "hardening": {
      "passes": 1,
