@@ -22,9 +22,9 @@
     {
         "id": "7892ffc6-c651-445f-946b-7edc998cf389",
         "name": "Benchy",
-        "description": "A basic test print that is used to test the quality of a printer.",
+        "description": "Small 3D-printed boat used to benchmark FDM printer quality.",
         "image": "/assets/benchy.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "1 dUSD"
     },
     {
         "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
