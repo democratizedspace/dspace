@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey again! Orion here. Let's build a light sensor. Work on a non-conductive surface, discharge static by touching grounded metal, keep hands dry, and unplug the board before wiring to avoid shorts.",
+            "text": "Hey again! Orion here. Let's build a light sensor. Work on a non-conductive surface, wear safety goggles, discharge static by touching grounded metal, keep hands dry, and unplug the board before wiring to avoid shorts.",
             "options": [{ "type": "goto", "goto": "materials", "text": "What do I need?" }]
         },
         {
             "id": "materials",
-            "text": "Gather one Arduino Uno, a breadboard, three jumper wires, one photoresistor, one 10 kΩ resistor, one USB cable, a digital multimeter, and a laptop with the Arduino IDE installed. Keep components organized so leads don't touch or short.",
+            "text": "Gather one Arduino Uno, a breadboard, three jumper wires, one photoresistor, one 10 kΩ resistor, one USB cable, a digital multimeter, safety goggles, and a laptop with the Arduino IDE installed. Keep components in a tray so leads don't touch or short.",
             "options": [
                 {
                     "type": "process",
@@ -32,6 +32,7 @@
                         { "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac", "count": 1 },
                         { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
                         { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
                         { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
                     ]
                 }
@@ -39,25 +40,25 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5 V and the other to one side of the 10 kΩ resistor, then connect the resistor's far leg to GND. Use the multimeter to confirm roughly 10 kΩ, run a jumper from the junction to A0, and make sure no bare wires touch before powering up.",
+            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5 V and the other to one side of the 10 kΩ resistor, then connect the resistor's far leg to GND. Use the multimeter to confirm roughly 10 kΩ, run a jumper from the junction to A0, keep your goggles on, and make sure no bare wires touch before powering up.",
             "options": [{ "type": "goto", "goto": "code", "text": "Wired up!" }]
         },
         {
             "id": "code",
-            "text": "Plug the USB cable back in and upload a sketch that reads A0 and prints to the serial monitor. Shade and expose the sensor to watch the values shift. Skip lasers and avoid staring into bright lamps during testing.",
+            "text": "Plug the USB cable back in and upload a sketch that reads A0 and prints to the serial monitor. Shade and expose the sensor to watch the values shift. Avoid pointing lasers at the sensor and don't stare into bright lamps during testing.",
             "options": [{ "type": "goto", "goto": "finish", "text": "Numbers are changing!" }]
         },
         {
             "id": "finish",
-            "text": "Nice work! Unplug the board before making changes, then coil the USB cable and store all parts for future builds.",
+            "text": "Nice work! Unplug the board before making changes, coil the USB cable, and store all parts for future builds.",
             "options": [{ "type": "finish", "text": "Cool!" }]
         }
     ],
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 4,
-        "score": 95,
+        "passes": 5,
+        "score": 96,
         "emoji": "💯",
         "history": [
             {
@@ -79,6 +80,11 @@
                 "task": "codex-quest-refinement-2025-08-06-4",
                 "date": "2025-08-06",
                 "score": 95
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-09",
+                "date": "2025-08-09",
+                "score": 96
             }
         ]
     }
