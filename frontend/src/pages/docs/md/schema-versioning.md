@@ -21,3 +21,8 @@ console.log(`Custom content schema version: ${version}`);
 
 The helper ensures that a missing or outdated entry defaults to the latest schema version so the
 database stays in sync with the application.
+
+## Migration History
+
+-   **v2** – adds a `createdAt` timestamp to items, processes and quests.
+-   **v3** – adds an `updatedAt` timestamp to all records.

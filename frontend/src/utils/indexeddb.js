@@ -153,7 +153,7 @@ export function getStoreForEntityType(entityType) {
     }
 }
 
-export const CUSTOM_CONTENT_DB_VERSION = 2;
+export const CUSTOM_CONTENT_DB_VERSION = 3;
 
 export const openCustomContentDB = () => {
     return new Promise((resolve, reject) => {
