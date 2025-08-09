@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 159
-New quests in this release: 137
+Current quest count: 167
+New quests in this release: 145
 
 ### 3dprinting
 
@@ -97,16 +97,19 @@ New quests in this release: 137
 - electronics/data-logger
 - electronics/led-polarity
 - electronics/light-sensor
+- electronics/measure-resistance
 - electronics/potentiometer-dimmer
 - electronics/resistor-color-check
 - electronics/servo-sweep
 - electronics/solder-wire
 - electronics/soldering-intro
+- electronics/temperature-plot
 - electronics/thermistor-reading
 - electronics/thermometer-calibration
 
 ### energy
 
+- energy/battery-maintenance
 - energy/battery-upgrade
 - energy/dWatt-1e8
 - energy/hand-crank-generator
@@ -135,6 +138,7 @@ New quests in this release: 137
 
 ### hydroponics
 
+- hydroponics/air-stone-soak
 - hydroponics/filter-clean
 - hydroponics/grow-light
 - hydroponics/lettuce
@@ -148,6 +152,7 @@ New quests in this release: 137
 - hydroponics/root-rinse
 - hydroponics/stevia
 - hydroponics/top-off
+- hydroponics/tub-scrub
 
 ### programming
 
@@ -158,6 +163,7 @@ New quests in this release: 137
 - programming/json-api
 - programming/json-endpoint
 - programming/temp-alert
+- programming/temp-email
 - programming/temp-graph
 - programming/temp-logger
 - programming/web-server
@@ -171,6 +177,7 @@ New quests in this release: 137
 - robotics/servo-arm
 - robotics/servo-control
 - robotics/servo-gripper
+- robotics/servo-radar
 - robotics/wheel-encoders
 
 ### rocketry
@@ -196,6 +203,7 @@ New quests in this release: 137
 
 - woodworking/birdhouse
 - woodworking/bookshelf
+- woodworking/coffee-table
 - woodworking/finish-sanding
 - woodworking/planter-box
 - woodworking/step-stool
