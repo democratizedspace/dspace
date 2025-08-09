@@ -20,21 +20,21 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1 Quick start (web vs CLI)
 
--   **Add or update a process**
-    -   Web: use the “Code” button and attach the repo.
-    -   CLI: `codex "add process 3dprinting/solar-mount"`
--   **Ask about process data**
-    -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/pages/processes/processes.json"`
--   **Run process tests**
-    -   Web: not supported yet.
-    -   CLI:
-        ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && \
-        npm run test:root -- processQuality"
-        ```
+- **Add or update a process**
+  - Web: use the "Code" button and attach the repo.
+  - CLI: `codex "add process 3dprinting/solar-mount"`
+- **Ask about process data**
+  - Web: use the "Ask" button.
+  - CLI: `codex exec "explain frontend/src/pages/processes/processes.json"`
+- **Run process tests**
+  - Web: not supported yet.
+  - CLI:
+    ```bash
+    codex exec "npm run lint && npm run type-check && npm run build && \
+    npm run test:root -- processQuality"
+    ```
 
 See the [Codex CLI documentation][codex-cli] for more flags.
 
@@ -148,10 +148,10 @@ A pull request with the refined process, updated hardening block and passing tes
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus.
--   **Use system prompts** to guide tone and technical accuracy.
--   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible
-    but incorrect details.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible
+  but incorrect details.
 
 [codex-cli]: https://www.npmjs.com/package/codex-cli
