@@ -101,10 +101,10 @@ test('verify Jest test files are included in package.json test configuration', a
 
     scanDirectory(testsDir);
 
-    // Check that our specific files exist
-    const importantTestFiles = ['questQuality.test.js', 'imageReferences.test.js'];
+    // Check that our important Jest test files exist
+    const importantJestTestFiles = ['questQuality.test.js'];
 
-    for (const file of importantTestFiles) {
+    for (const file of importantJestTestFiles) {
         const exists = allJestTestFiles.some(
             (testFile) => testFile === file || testFile.endsWith(`/${file}`)
         );
@@ -116,6 +116,18 @@ test('verify Jest test files are included in package.json test configuration', a
 
         expect(exists).toBeTruthy();
     }
+
+    // Ensure critical vitest file exists in scripts/tests
+    const imageReferencesTestPath = path.resolve(
+        __dirname,
+        '../../scripts/tests/imageReferences.test.ts'
+    );
+    const imageReferencesExists = fs.existsSync(imageReferencesTestPath);
+    if (!imageReferencesExists) {
+        console.error(`Important test file not found: ${imageReferencesTestPath}`);
+        test.fail(true, `Important test file not found: ${imageReferencesTestPath}`);
+    }
+    expect(imageReferencesExists).toBeTruthy();
 
     // Check that Jest config in package.json includes our test pattern
     let jestConfigCapturesAllFiles = false;
