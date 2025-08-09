@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's give your bot some feedback. A pair of encoders will track how far it travels.",
+            "text": "Let's add feedback. Two wheel encoders and an Arduino Uno will log travel.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "mount",
-            "text": "Attach one encoder to each wheel and wire them to your controller.",
+            "text": "Cut power, mount one encoder per wheel, then wire outputs to the Arduino.",
             "options": [
                 {
                     "type": "goto",
@@ -27,8 +27,12 @@
                     "text": "Installed and reading values!",
                     "requiresItems": [
                         {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
                             "count": 2
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
                         }
                     ]
                 }
@@ -36,7 +40,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Now you can precisely measure distance and adjust your code for straighter paths.",
+            "text": "Great! Now you can measure distance and tune code for straighter paths.",
             "options": [
                 {
                     "type": "finish",
@@ -46,5 +50,18 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/servo-gripper"]
+    "requiresQuests": ["robotics/servo-gripper"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-09",
+                "date": "2025-08-09",
+                "score": 60
+            }
+        ]
+    }
 }
+

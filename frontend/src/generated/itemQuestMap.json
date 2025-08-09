@@ -220,9 +220,29 @@
     ],
     "rewards": []
   },
-  "e976bae6-e33c-428a-a20d-0aa8fde13c6c": {
+  "71fafa9a-3998-4763-a63a-279acc4ca603": {
+    "requires": [
+      "robotics/wheel-encoders"
+    ],
+    "rewards": []
+  },
+  "72b4448e-27d9-4746-bd3a-967ff13f501b": {
     "requires": [
       "robotics/wheel-encoders",
+      "programming/graph-temp-data",
+      "geothermal/log-ground-temperature",
+      "geothermal/compare-seasonal-ground-temps",
+      "geothermal/calibrate-ground-sensor",
+      "electronics/thermistor-reading",
+      "electronics/servo-sweep",
+      "electronics/potentiometer-dimmer",
+      "electronics/light-sensor",
+      "electronics/arduino-blink"
+    ],
+    "rewards": []
+  },
+  "e976bae6-e33c-428a-a20d-0aa8fde13c6c": {
+    "requires": [
       "robotics/servo-gripper",
       "robotics/servo-control",
       "robotics/servo-arm",
@@ -697,6 +717,14 @@
     ],
     "rewards": []
   },
+  "6301ff22-49c9-468b-88aa-cafedfd5dcd3": {
+    "requires": [
+      "electronics/light-sensor"
+    ],
+    "rewards": []
+  },
+  "5127e156-3009-4db4-85ac-e3ea070b68f2": {
+    "requires": [
   "5127e156-3009-4db4-85ac-e3ea070b68f2": {
     "requires": [
       "electronics/measure-resistance",

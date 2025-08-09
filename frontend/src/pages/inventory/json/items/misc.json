@@ -623,6 +623,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+        "name": "Wheel Encoder",
+        "description": "Pair of low-resolution quadrature encoders for tracking robot wheel rotation.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
         "name": "12 V DC motor",
         "description": "Small brushed 12 V DC motor suited for hand-crank generators.",
