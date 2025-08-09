@@ -1,14 +1,14 @@
 {
     "id": "electronics/led-polarity",
     "title": "Check LED polarity with a multimeter",
-    "description": "Use the diode mode of a digital multimeter to confirm an LED's orientation before wiring.",
+    "description": "Use the diode mode of a digital multimeter to confirm an LED's orientation before wiring. Wear safety goggles for protection.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Grab your digital multimeter and a loose 5 mm LED.\nWe'll use diode test mode to identify the positive lead.",
+            "text": "Grab your digital multimeter, a loose 5 mm LED, and safety goggles.\nWe'll use diode test mode to identify the positive lead.",
             "options": [
                 {
                     "type": "goto",
@@ -19,15 +19,17 @@
         },
         {
             "id": "test",
-            "text": "Set the meter to diode mode. Touch the red probe to the LED's long leg and the black to the short leg without forcing the leads.\nThe LED should glow dimly or show about 1.8 V. Reverse the probes and it should stay dark or show OL.",
+            "text": "With your goggles on, set the meter to diode mode. Touch the red probe to the LED's long leg and the black to the short leg without forcing the leads.\nThe LED should glow dimly or show about 1.8 V. Reverse the probes and it should stay dark or show OL.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "It lights one way only.",
+                    "process": "check-led-polarity",
                     "requiresItems": [
                         { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 }
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
                     ]
                 }
             ]
