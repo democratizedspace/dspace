@@ -13,6 +13,10 @@ function getIndexedDB() {
     return g.indexedDB || g.webkitIndexedDB || g.mozIndexedDB || g.msIndexedDB || null;
 }
 
+function hasIndexedDB() {
+    return !!getIndexedDB();
+}
+
 function openDB() {
     return new Promise((resolve, reject) => {
         if (dbInstance) {
@@ -50,6 +54,9 @@ function openDB() {
 }
 
 function getTransaction(storeName, mode) {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
     return openCustomContentDB().then((db) => {
         const transaction = db.transaction([storeName], mode);
         return transaction.objectStore(storeName);
@@ -57,6 +64,9 @@ function getTransaction(storeName, mode) {
 }
 
 export function addEntity(entity) {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
     const storeName = getStoreForEntityType(entity.type);
     return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
@@ -72,6 +82,9 @@ export function addEntity(entity) {
 }
 
 export function getEntity(id, entityType) {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
     const storeName = getStoreForEntityType(entityType);
     return getTransaction(storeName, 'readonly').then((store) => {
         return new Promise((resolve, reject) => {
@@ -87,6 +100,9 @@ export function getEntity(id, entityType) {
 }
 
 export async function updateEntity(updatedEntity) {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
     const storeName = getStoreForEntityType(updatedEntity.type);
     return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
@@ -120,6 +136,9 @@ export async function updateEntity(updatedEntity) {
 }
 
 export function deleteEntity(id, entityType) {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
     const storeName = getStoreForEntityType(entityType);
     return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
@@ -205,6 +224,9 @@ export const openCustomContentDB = () => {
 };
 
 export const getSchemaVersion = async () => {
+    if (!hasIndexedDB()) {
+        return CUSTOM_CONTENT_DB_VERSION;
+    }
     const db = await openCustomContentDB();
     const tx = db.transaction('meta', 'readonly');
     const store = tx.objectStore('meta');
@@ -223,6 +245,9 @@ export const getSchemaVersion = async () => {
 
 // DB Transaction
 export const saveItem = async (item) => {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
     try {
         const db = await openCustomContentDB();
         const tx = db.transaction('items', 'readwrite');
@@ -247,6 +272,9 @@ export const saveItem = async (item) => {
 
 // Get all items
 export const getItems = async () => {
+    if (!hasIndexedDB()) {
+        return [];
+    }
     try {
         const db = await openCustomContentDB();
         const tx = db.transaction('items', 'readonly');
@@ -271,6 +299,9 @@ export const getItems = async () => {
 
 // Get an item by id
 export const getItem = async (id) => {
+    if (!hasIndexedDB()) {
+        return null;
+    }
     try {
         const db = await openCustomContentDB();
         const tx = db.transaction('items', 'readonly');
@@ -281,9 +312,6 @@ export const getItem = async (id) => {
                 resolve(request.result);
                 db.close();
             };
-            /* istanbul ignore next */
-            /* istanbul ignore next */
-            /* istanbul ignore next */
             /* istanbul ignore next */
             request.onerror = (event) => {
                 reject(event.target.error);
@@ -298,6 +326,9 @@ export const getItem = async (id) => {
 
 // DB Transaction
 export const saveProcess = async (process) => {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
     try {
         const db = await openCustomContentDB();
         const tx = db.transaction('processes', 'readwrite');
@@ -322,6 +353,9 @@ export const saveProcess = async (process) => {
 
 // Get all processes
 export const getProcesses = async () => {
+    if (!hasIndexedDB()) {
+        return [];
+    }
     try {
         const db = await openCustomContentDB();
         const tx = db.transaction('processes', 'readonly');
@@ -346,6 +380,9 @@ export const getProcesses = async () => {
 
 // Get a process by id
 export const getProcess = async (id) => {
+    if (!hasIndexedDB()) {
+        return null;
+    }
     try {
         const db = await openCustomContentDB();
         const tx = db.transaction('processes', 'readonly');
@@ -370,6 +407,9 @@ export const getProcess = async (id) => {
 
 // Delete processes by id
 export const deleteProcess = async (id) => {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
     try {
         const db = await openCustomContentDB();
         const tx = db.transaction('processes', 'readwrite');
@@ -394,6 +434,9 @@ export const deleteProcess = async (id) => {
 
 // DB Transaction
 export const saveQuest = async (quest) => {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
     try {
         const db = await openCustomContentDB();
         const tx = db.transaction('quests', 'readwrite');
@@ -418,6 +461,9 @@ export const saveQuest = async (quest) => {
 
 // Get all quests
 export const getQuests = async () => {
+    if (!hasIndexedDB()) {
+        return [];
+    }
     try {
         const db = await openCustomContentDB();
         const tx = db.transaction('quests', 'readonly');
@@ -442,6 +488,9 @@ export const getQuests = async () => {
 
 // Get a quest by id
 export const getQuest = async (id) => {
+    if (!hasIndexedDB()) {
+        return null;
+    }
     try {
         const db = await openCustomContentDB();
         const tx = db.transaction('quests', 'readonly');
