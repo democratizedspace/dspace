@@ -9,9 +9,7 @@
         {
             "id": "start",
             "text": "Have a resistor ready? Grab your multimeter and goggles so we can confirm its value before wiring.",
-            "options": [
-                { "type": "goto", "goto": "measure", "text": "Ready." }
-            ]
+            "options": [{ "type": "goto", "goto": "measure", "text": "Ready." }]
         },
         {
             "id": "measure",
@@ -33,7 +31,7 @@
         {
             "id": "finish",
             "text": "Nice work. Label the resistor and stow the meter with the probes unplugged.",
-            "options": [ { "type": "finish", "text": "Thanks, Orion!" } ]
+            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],

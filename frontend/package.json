@@ -9,7 +9,7 @@
         "fix-artifacts": "node scripts/fix-artifact-error.js",
         "start": "astro dev --host 0.0.0.0 --port=$PORT",
         "build": "astro build",
-        "preview": "astro preview",
+        "preview": "astro preview --host 0.0.0.0 --port=3002",
         "astro": "astro",
         "setup-test-env": "node scripts/setup-test-env.js",
         "test": "npm run setup-test-env && vitest run -c ../vitest.config.ts --passWithNoTests",

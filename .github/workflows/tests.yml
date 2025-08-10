@@ -11,24 +11,27 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --reporter=append-only
 
       - name: Install Playwright browsers
-        run: npx --prefix frontend playwright install --with-deps chromium
+        run: npx --prefix frontend playwright install --with-deps
 
-      - name: Start frontend server
+      - name: Build frontend
+        run: pnpm --filter ./frontend run build
+
+      - name: Start frontend preview server
         run: |
-          pnpm --filter ./frontend run dev --port 3002 &
+          nohup pnpm --filter ./frontend run preview >/tmp/preview.log 2>&1 &
           npx wait-on http://localhost:3002/ --timeout 60000
 
       - name: Run test suite
@@ -50,3 +53,7 @@ jobs:
           files: frontend/coverage/lcov.info
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Show preview server logs on failure
+        if: failure()
+        run: cat /tmp/preview.log
