@@ -75,3 +75,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 -   2025-08-09 – Installing only Chromium left Firefox and WebKit missing; install all
     browsers with `playwright install --with-deps` and print the preview log on failure for
     easier debugging.
+-   2025-08-10 – Missing `test:ci` script broke local CI diagnostics; alias it to `test:pr` so
+    prompts run the complete test suite.

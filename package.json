@@ -16,6 +16,7 @@
     "test:e2e:groups": "cd frontend && npm run test:e2e:groups",
     "test:e2e:custom": "cd frontend && npm run test:e2e:custom",
     "test:quick": "cd frontend && npm run test:quick",
+    "test:ci": "npm run test:pr",
     "test:pr": "node run-tests.js",
     "check": "cd frontend && npm run check",
     "itemValidation": "cd frontend && npm run itemValidation",
