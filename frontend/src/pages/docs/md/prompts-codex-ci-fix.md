@@ -62,3 +62,16 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 
 -   2025-03-?? – prompt no longer requires a failing job URL; agents must inspect
     workflows and run local checks when none is provided.
+-   2025-08-09 – JSON parse failures in `processes.json` and an outdated
+    generated map broke type-check and build; ensure data files stay valid and
+    regenerate artifacts.
+-   2025-08-09 – `pnpm` must be installed before Node caching; place `pnpm/action-setup`
+    ahead of `actions/setup-node` to prevent missing executable errors.
+-   2025-08-09 – Passing an extra `--port` to the dev server made Astro fall back to port 3000;
+    rely on the script's configured port so test waits succeed.
+-   2025-08-09 – Playwright tests received `ERR_CONNECTION_REFUSED` when the workflow's dev
+    server step exited early; start a preview server with `--host 0.0.0.0` and wait on it so
+    the frontend stays reachable.
+-   2025-08-09 – Installing only Chromium left Firefox and WebKit missing; install all
+    browsers with `playwright install --with-deps` and print the preview log on failure for
+    easier debugging.
