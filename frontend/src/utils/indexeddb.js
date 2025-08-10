@@ -13,7 +13,9 @@ function getIndexedDB() {
     return g.indexedDB || g.webkitIndexedDB || g.mozIndexedDB || g.msIndexedDB || null;
 }
 
-const hasIndexedDB = typeof globalThis !== 'undefined' && 'indexedDB' in globalThis;
+function hasIndexedDB() {
+    return !!getIndexedDB();
+}
 
 function openDB() {
     return new Promise((resolve, reject) => {
@@ -52,7 +54,7 @@ function openDB() {
 }
 
 function getTransaction(storeName, mode) {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     return openCustomContentDB().then((db) => {
@@ -62,7 +64,7 @@ function getTransaction(storeName, mode) {
 }
 
 export function addEntity(entity) {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entity.type);
@@ -80,7 +82,7 @@ export function addEntity(entity) {
 }
 
 export function getEntity(id, entityType) {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entityType);
@@ -98,7 +100,7 @@ export function getEntity(id, entityType) {
 }
 
 export async function updateEntity(updatedEntity) {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(updatedEntity.type);
@@ -134,7 +136,7 @@ export async function updateEntity(updatedEntity) {
 }
 
 export function deleteEntity(id, entityType) {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entityType);
@@ -222,7 +224,7 @@ export const openCustomContentDB = () => {
 };
 
 export const getSchemaVersion = async () => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return CUSTOM_CONTENT_DB_VERSION;
     }
     const db = await openCustomContentDB();
@@ -243,7 +245,7 @@ export const getSchemaVersion = async () => {
 
 // DB Transaction
 export const saveItem = async (item) => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     try {
@@ -270,7 +272,7 @@ export const saveItem = async (item) => {
 
 // Get all items
 export const getItems = async () => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return [];
     }
     try {
@@ -297,7 +299,7 @@ export const getItems = async () => {
 
 // Get an item by id
 export const getItem = async (id) => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return null;
     }
     try {
@@ -324,7 +326,7 @@ export const getItem = async (id) => {
 
 // DB Transaction
 export const saveProcess = async (process) => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     try {
@@ -351,7 +353,7 @@ export const saveProcess = async (process) => {
 
 // Get all processes
 export const getProcesses = async () => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return [];
     }
     try {
@@ -378,7 +380,7 @@ export const getProcesses = async () => {
 
 // Get a process by id
 export const getProcess = async (id) => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return null;
     }
     try {
@@ -405,7 +407,7 @@ export const getProcess = async (id) => {
 
 // Delete processes by id
 export const deleteProcess = async (id) => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     try {
@@ -432,7 +434,7 @@ export const deleteProcess = async (id) => {
 
 // DB Transaction
 export const saveQuest = async (quest) => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     try {
@@ -459,7 +461,7 @@ export const saveQuest = async (quest) => {
 
 // Get all quests
 export const getQuests = async () => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return [];
     }
     try {
@@ -486,7 +488,7 @@ export const getQuests = async () => {
 
 // Get a quest by id
 export const getQuest = async (id) => {
-    if (!hasIndexedDB) {
+    if (!hasIndexedDB()) {
         return null;
     }
     try {
