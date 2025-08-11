@@ -2487,7 +2487,8 @@
         "image": "/assets/door.jpg",
         "requireItems": [
             { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
-            { "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34", "count": 1 }
+            { "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34", "count": 1 },
+            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
         ],
         "consumeItems": [
             { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 1 },
