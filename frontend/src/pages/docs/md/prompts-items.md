@@ -73,7 +73,7 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm run itemValidation` and `npm test -- itemQuality`, fixing any failures.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+7. Run `git diff --cached | detect-secrets scan --string` and ensure no secrets.
 8. Use an emoji-prefixed commit message like `📝 : add price field`.
 9. Update docs or processes if needed.
 
@@ -93,7 +93,7 @@ appropriate category file. Ensure realistic details, required fields, and
 passing checks (`npm run lint`, `npm run type-check`, `npm run build`,
 `npm run itemValidation`, and `npm test -- itemQuality`).
 Verify the item appears in at least one quest or process, reuse existing image
-assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
+assets, and scan for secrets with `git diff --cached | detect-secrets scan --string` before
 committing.
 
 USER:
@@ -141,7 +141,7 @@ USER:
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run itemValidation`,
    and `npm test -- itemQuality`. Update docs if needed.
-6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Run `git diff --cached | detect-secrets scan --string` before committing.
 7. Use an emoji-prefixed commit message like `📝 : refine item details`.
 
 OUTPUT:
