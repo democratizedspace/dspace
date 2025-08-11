@@ -1524,8 +1524,8 @@
     },
     {
         "id": "measure-battery-voltage",
-        "title": "Measure battery voltage with a multimeter",
-        "image": "/assets/battery.jpg",
+        "title": "Check a 12 V battery pack's voltage with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
@@ -1533,7 +1533,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "3m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "measure-resistance",
