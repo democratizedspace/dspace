@@ -296,6 +296,18 @@ test.describe('Profile Page Functionality', () => {
 });
 ```
 
+#### Touch Interactions
+
+Mobile workflows are covered with Playwright's touchscreen API and unit tests that dispatch `touchstart` events:
+
+```typescript
+const box = await page.locator('.selector').boundingBox();
+await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+
+// Unit test example
+element.dispatchEvent(new Event('touchstart'));
+```
+
 ## Best Practices for Playwright Tests
 
 ### 1. Use Proper Waiting Mechanisms
