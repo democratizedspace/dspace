@@ -78,3 +78,7 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 -   2025-08-10 – `__dirname` in an ES module test and a nested Chip wrapper hid the
     Cloud Sync upload button; derive paths with `import.meta.url` and use a plain container so
     Playwright can locate the control.
+-   2025-08-10 – `npm run test:ci` was undefined, breaking CI instructions; add a script
+    alias that runs `test:pr` with `SKIP_E2E` to keep checks green.
+-   2025-08-10 – `listMissingImages` treated URLs with query strings as missing files; strip
+    query and hash parts before checking so coverage tests don't flag valid assets.

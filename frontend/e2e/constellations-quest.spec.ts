@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 import { clearUserData } from './test-helpers';
 
 const __filename = fileURLToPath(import.meta.url);
