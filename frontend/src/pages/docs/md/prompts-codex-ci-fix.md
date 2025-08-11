@@ -84,5 +84,7 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     alias that runs `test:pr` with `SKIP_E2E` to keep checks green.
 -   2025-08-10 – `listMissingImages` treated URLs with query strings as missing files; strip
     query and hash parts before checking so coverage tests don't flag valid assets.
+-   2025-08-10 – `checkPatchCoverage.cjs` assumed `origin/main`; detect the origin's HEAD branch
+    so patch coverage checks work on repositories where the default branch is `v3`.
 -   2025-08-11 – `openai` v3 pulled a vulnerable `axios`; upgrade to v5 to satisfy
     `npm run audit:ci`.
