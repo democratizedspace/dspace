@@ -75,5 +75,7 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 -   2025-08-09 – Installing only Chromium left Firefox and WebKit missing; install all
     browsers with `playwright install --with-deps` and print the preview log on failure for
     easier debugging.
+-   2025-08-10 – `npm run test:ci` was undefined, breaking CI instructions; add a script
+    alias that runs `test:pr` with `SKIP_E2E` to keep checks green.
 -   2025-08-10 – `listMissingImages` treated URLs with query strings as missing files; strip
     query and hash parts before checking so coverage tests don't flag valid assets.
