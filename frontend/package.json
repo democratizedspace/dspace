@@ -36,6 +36,7 @@
         "generate-quest": "node scripts/generate-quest.mjs",
         "seed:custom": "node scripts/seed-custom-content.js",
         "benchmark:db": "node scripts/db-benchmark.js",
+        "loadtest:custom-content": "node scripts/custom-content-load-test.js",
         "check": "npm run lint && npm run format:check",
         "sync": "node scripts/sync-package.js",
         "postinstall": "node scripts/postinstall.js"

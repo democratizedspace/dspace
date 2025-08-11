@@ -110,6 +110,9 @@ frontend/coverage/lcov-report/index.html
 
 # Run IndexedDB performance benchmark
 npm run benchmark:db
+
+# Run custom content load test
+npm run loadtest:custom-content
 ```
 
 > **Important:** End-to-end (E2E) tests use Playwright, which automatically starts and stops the development server when needed. You should not manually start a server when running these tests, as this could lead to port conflicts or unexpected behavior.
