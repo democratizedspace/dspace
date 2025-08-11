@@ -1,0 +1,51 @@
+{
+    "id": "geothermal/replace-faulty-thermistor",
+    "title": "Replace Faulty Thermistor",
+    "description": "Swap out a dead probe and verify readings stay true.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "One probe's gone quiet. Ready to swap in a fresh thermistor?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "replace",
+                    "text": "Yeah, how do I do that?"
+                }
+            ]
+        },
+        {
+            "id": "replace",
+            "text": "Install the spare and log a reading with arduino-thermistor-read.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Probe replaced and reading logged.",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your ground data is back online.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "On to monitoring."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/install-backup-thermistor"]
+}
