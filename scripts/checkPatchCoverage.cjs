@@ -2,8 +2,29 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
+function getDefaultBranch() {
+  try {
+    const info = execSync('git remote show origin', { stdio: ['pipe', 'pipe', 'ignore'] }).toString();
+    const match = info.match(/HEAD branch: (.+)/);
+    if (match) return match[1].trim();
+  } catch {}
+  return 'main';
+}
+
 function getChangedFiles() {
-  const base = execSync('git merge-base origin/main HEAD').toString().trim();
+  const branch = getDefaultBranch();
+  let base = '';
+  try {
+    base = execSync(`git merge-base origin/${branch} HEAD`, {
+      stdio: ['pipe', 'pipe', 'ignore']
+    }).toString().trim();
+  } catch {
+    try {
+      base = execSync(`git merge-base ${branch} HEAD`, {
+        stdio: ['pipe', 'pipe', 'ignore']
+      }).toString().trim();
+    } catch {}
+  }
   if (!base) return [];
   const diff = execSync(`git diff --name-only ${base}`).toString();
   return diff.split('\n').filter(Boolean);
@@ -41,5 +62,8 @@ function checkCoverage() {
     console.log('Patch coverage 100%');
   }
 }
+if (require.main === module) {
+  checkCoverage();
+}
 
-checkCoverage();
+module.exports = { getDefaultBranch };
