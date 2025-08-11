@@ -609,6 +609,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+        "name": "USB Type-A to Type-B cable",
+        "description": "Standard USB 2.0 cable for connecting an Arduino Uno to a computer.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
         "name": "Laptop Computer",
         "description": "A portable computer capable of running the Arduino IDE and uploading sketches.",
