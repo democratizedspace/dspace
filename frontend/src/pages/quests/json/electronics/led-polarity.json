@@ -1,14 +1,14 @@
 {
     "id": "electronics/led-polarity",
     "title": "Check LED polarity with a multimeter",
-    "description": "Use a digital multimeter's diode mode to confirm a loose 5 mm LED's orientation before wiring. Keep power off, work on a dry surface, and wear safety goggles.",
+    "description": "Use a digital multimeter in diode mode to confirm a loose 5 mm LED's orientation before wiring. Disconnect power sources, work on a dry surface, and wear safety goggles.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Lay the LED and meter on a dry, non-conductive surface and put on safety goggles.\nWe'll use diode-test mode to identify the positive lead.",
+            "text": "Place the LED and meter on a dry, non-conductive surface and put on safety goggles.\nWe'll use diode-test mode to find the positive lead.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "test",
-            "text": "Set the digital multimeter to diode mode and keep fingers behind the probe guards. Touch the red probe to the LED's long leg and the black to the short leg without forcing the leads or letting probes touch.\nThe LED should glow faintly or show about 1.8 V. Reverse the probes; it should stay dark or display OL. Stop if the leads heat up.",
+            "text": "Set the multimeter to diode mode and confirm the probes are in the diode ports. Keep fingers behind the guards. Touch the red probe to the LED's long leg (anode) and the black to the short leg (cathode) without forcing the leads or letting probes touch.\nThe LED should glow faintly or show about 1.8 V. Swap the probes; it should stay dark or display OL. Stop if the leads heat up or spark.",
             "options": [
                 {
                     "type": "goto",
@@ -48,11 +48,12 @@
     "rewards": [{ "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }],
     "requiresQuests": ["electronics/check-battery-voltage"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 78,
+        "emoji": "✅",
         "history": [
-            { "task": "codex-quest-refinement-2025-08-10", "date": "2025-08-10", "score": 60 }
+            { "task": "codex-quest-refinement-2025-08-10", "date": "2025-08-10", "score": 60 },
+            { "task": "codex-refine-2025-08-11", "date": "2025-08-11", "score": 78 }
         ]
     }
 }
