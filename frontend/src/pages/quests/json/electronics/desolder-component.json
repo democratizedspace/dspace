@@ -1,0 +1,48 @@
+{
+    "id": "electronics/desolder-component",
+    "title": "Desolder a component",
+    "description": "Desolder a through-hole resistor from scrap PCB safely.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A resistor is misplaced. Ventilate and wear goggles before heating.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "What should I grab?"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Grab iron kit and solder sucker or braid. Heat iron; keep leads tidy.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "desolder",
+                    "text": "Tools ready.",
+                    "requiresItems": [
+                        { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "desolder",
+            "text": "Heat a joint, trigger the sucker, hit other lead, then wiggle the part free.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Component removed." }]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Clean the tip, unplug the iron, and recycle the scrap PCB.",
+            "options": [{ "type": "finish", "text": "All cleaned up." }]
+        }
+    ],
+    "requiresQuests": ["electronics/solder-wire"],
+    "rewards": []
+}

@@ -1,13 +1,10 @@
 import { loadGameState } from './gameState/common.js';
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 
 const apiKey = (loadGameState().openAI && loadGameState().openAI.apiKey) || '';
 
 export const GPT35Turbo = async (messages) => {
-    const configuration = new Configuration({
-        apiKey: apiKey,
-    });
-    const openai = new OpenAIApi(configuration);
+    const openai = new OpenAI({ apiKey });
 
     const systemMessage = {
         role: 'system',
@@ -28,10 +25,10 @@ export const GPT35Turbo = async (messages) => {
         combinedMessages = [systemMessage, ...combinedMessages];
     }
 
-    const response = await openai.createChatCompletion({
+    const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages: combinedMessages,
     });
 
-    return response.data.choices[0].message.content;
+    return response.choices[0].message.content;
 };

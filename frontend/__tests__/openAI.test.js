@@ -2,15 +2,14 @@ const { vi } = require('vitest');
 const jest = vi;
 
 const createChatCompletionMock = jest.fn().mockResolvedValue({
-    data: { choices: [{ message: { content: 'mocked reply' } }] },
+    choices: [{ message: { content: 'mocked reply' } }],
 });
 
 jest.mock('openai', () => {
     return {
         __esModule: true,
-        Configuration: jest.fn(),
-        OpenAIApi: jest.fn().mockImplementation(function () {
-            this.createChatCompletion = createChatCompletionMock;
+        default: jest.fn().mockImplementation(function () {
+            this.chat = { completions: { create: createChatCompletionMock } };
         }),
     };
 });
