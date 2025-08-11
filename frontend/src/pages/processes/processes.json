@@ -1603,6 +1603,18 @@
         "duration": "1m"
     },
     {
+        "id": "calibrate-multimeter",
+        "title": "Verify multimeter accuracy with a 220 Ω resistor",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
         "id": "wear-anti-static-wrist-strap",
         "title": "Attach an anti-static wrist strap before handling electronics",
         "image": "/assets/quests/basic_circuit.svg",
