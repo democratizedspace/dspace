@@ -7,6 +7,8 @@
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 You can find the game at [democratized.space](https://democratized.space).
+The production instance is now self-hosted; see
+[Netlify Migration](docs/netlify-migration.md) for background.
 
 Check out the [docs](https://democratized.space/docs)!
 
