@@ -1,14 +1,14 @@
 {
     "id": "electronics/led-polarity",
     "title": "Check LED polarity with a multimeter",
-    "description": "Use the diode mode of a digital multimeter to confirm an LED's orientation before wiring. Wear safety goggles for protection.",
+    "description": "Use a digital multimeter's diode mode to confirm a loose 5 mm LED's orientation before wiring. Keep power off, work on a dry surface, and wear safety goggles.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Grab your digital multimeter, a loose 5 mm LED, and safety goggles.\nWe'll use diode test mode to identify the positive lead.",
+            "text": "Lay the LED and meter on a dry, non-conductive surface and put on safety goggles.\nWe'll use diode-test mode to identify the positive lead.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "test",
-            "text": "With your goggles on, set the meter to diode mode. Touch the red probe to the LED's long leg and the black to the short leg without forcing the leads.\nThe LED should glow dimly or show about 1.8 V. Reverse the probes and it should stay dark or show OL.",
+            "text": "Set the digital multimeter to diode mode and keep fingers behind the probe guards. Touch the red probe to the LED's long leg and the black to the short leg without forcing the leads or letting probes touch.\nThe LED should glow faintly or show about 1.8 V. Reverse the probes; it should stay dark or display OL. Stop if the leads heat up.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice! Now you know which lead is positive.\nDisconnect the probes and store the LED for your next circuit.",
+            "text": "Nice! Now you know which lead is positive.\nTurn off the meter, disconnect the probes, and store the LED for your next circuit.",
             "options": [
                 {
                     "type": "finish",
@@ -48,9 +48,11 @@
     "rewards": [{ "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }],
     "requiresQuests": ["electronics/check-battery-voltage"],
     "hardening": {
-        "passes": 0,
-        "score": 0,
+        "passes": 1,
+        "score": 60,
         "emoji": "🌀",
-        "history": []
+        "history": [
+            { "task": "codex-quest-refinement-2025-08-10", "date": "2025-08-10", "score": 60 }
+        ]
     }
 }
