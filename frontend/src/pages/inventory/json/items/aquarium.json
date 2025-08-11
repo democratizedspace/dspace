@@ -47,9 +47,22 @@
     {
         "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
         "name": "goldfish food",
-        "description": "Food suitable for a goldfish.",
+        "description": "1 g of balanced goldfish flakes; feed about 0.1 g per fish daily.",
         "image": "/assets/goldfish_food.jpg",
-        "price": "10 dUSD"
+        "price": "0.07 dUSD",
+        "unit": "g",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-11",
+                    "date": "2025-08-11",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
