@@ -28,9 +28,21 @@
     {
         "id": "40920981-bf9f-4b89-b887-bebe7006f7dc",
         "name": "goldfish",
-        "description": "A goldfish.",
+        "description": "Juvenile common goldfish (Carassius auratus) about 5 cm long; requires a dechlorinated 150 L+ aquarium kept at 18–22°C.",
         "image": "/assets/goldfish.jpg",
-        "price": "10 dUSD"
+        "price": "5 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
