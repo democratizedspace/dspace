@@ -172,5 +172,25 @@
                 }
             ]
         }
+    },
+    {
+        "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+        "name": "precision screwdriver set",
+        "description": "Set of four mini Phillips and flathead screwdrivers for electronics repairs and robot assembly.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "12 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]
