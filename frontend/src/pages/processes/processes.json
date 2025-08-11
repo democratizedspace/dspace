@@ -2499,13 +2499,21 @@
         },
     {
         "id": "start-compost-bin",
-        "title": "Start a kitchen compost bucket",
+        "title": "Start a kitchen compost bucket using a 5 gallon bucket",
         "image": "/assets/bucket.jpg",
         "requireItems": [
             { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-11", "date": "2025-08-11", "score": 60 }
+            ]
+        }
     }
 ]
