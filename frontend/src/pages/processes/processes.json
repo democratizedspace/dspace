@@ -1523,6 +1523,18 @@
         "duration": "1m"
     },
     {
+        "id": "measure-ec",
+        "title": "Measure hydroponic nutrient EC",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            { "id": "71655665-4a59-41f4-9084-dad4d976df91", "count": 1 },
+            { "id": "fc2bb989-f192-4891-8bde-78ae631dae78", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "measure-battery-voltage",
         "title": "Measure battery voltage with a multimeter",
         "image": "/assets/battery.jpg",
