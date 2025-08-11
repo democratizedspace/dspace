@@ -78,7 +78,7 @@ Here are some example processes from the base game:
 
 ### 3D Printing
 
--   Benchy test print: 1h 51m, consumes 33g filament and 231.25 dWatt
+-   Benchy test print: 1h 30m, consumes 15 g filament and 150 dWatt
 -   Rocket body tube: 2h 8m 11s, consumes 18.48g filament and 266.67 dWatt
 -   Full rocket: 12h 52m 51s, consumes 91g filament and 1610.10 dWatt
 

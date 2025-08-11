@@ -147,6 +147,7 @@ subfolders
 sunpower
 svgs
 testprint
+tugboat
 upvote
 usermod
 wakey

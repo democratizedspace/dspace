@@ -22,9 +22,21 @@
     {
         "id": "7892ffc6-c651-445f-946b-7edc998cf389",
         "name": "Benchy",
-        "description": "Small 3D-printed boat used to benchmark FDM printer quality.",
+        "description": "60 mm long 3D-printed tugboat calibration model weighing about 15 g of PLA.",
         "image": "/assets/benchy.jpg",
-        "price": "1 dUSD"
+        "price": "0.50 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-11",
+                    "date": "2025-08-11",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
