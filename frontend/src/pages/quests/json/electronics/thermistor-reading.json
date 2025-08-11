@@ -8,8 +8,13 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's expand your sensor skills. A 10 kΩ NTC thermistor paired with a matching resistor forms a simple voltage divider to report ambient temperature for future automations.",
+            "text": "Let's expand your sensor skills. A 10 kΩ NTC thermistor with a matching resistor forms a simple voltage divider for an Arduino Uno. Work on a non-conductive surface and keep power disconnected while wiring.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-ide-install",
+                    "text": "Install the Arduino IDE"
+                },
                 {
                     "type": "goto",
                     "goto": "wire",
@@ -19,7 +24,7 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB cable before wiring. On the breadboard, plug the thermistor and 10 kΩ resistor in series between 5V and ground to form a voltage divider, then run their junction to A0 on the Arduino Uno with jumper wires. Keep leads separated and double-check connections before reconnecting power.",
+            "text": "Disconnect the USB cable before wiring. On the breadboard, place the thermistor and 10 kΩ resistor in series between 5 V and GND to form a voltage divider. Use jumper wires to link their junction to A0 on the Arduino Uno. Keep leads separated, verify resistor values and double-check connections before reconnecting power.",
             "options": [
                 {
                     "type": "goto",
@@ -49,6 +54,10 @@
                         {
                             "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
                             "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
                         }
                     ]
                 }
@@ -56,7 +65,7 @@
         },
         {
             "id": "monitor",
-            "text": "Upload the sketch from the arduino-thermistor-read process to sample the analog voltage and convert it to temperature. Use the Arduino IDE's Serial Monitor to watch the readings, and keep liquids and loose metal away from the powered board.",
+            "text": "Reconnect the USB cable to your Laptop Computer and upload the sketch from the arduino-thermistor-read process to sample the analog voltage and convert it to temperature. Open the Arduino IDE's Serial Monitor to watch the readings and keep liquids and loose metal away from the powered board.",
             "options": [
                 {
                     "type": "goto",
@@ -80,8 +89,8 @@
     "rewards": [],
     "requiresQuests": ["electronics/potentiometer-dimmer"],
     "hardening": {
-        "passes": 3,
-        "score": 92,
+        "passes": 4,
+        "score": 95,
         "emoji": "💯",
         "history": [
             {
@@ -98,6 +107,11 @@
                 "task": "codex-quest-refinement-2025-08-05",
                 "date": "2025-08-05",
                 "score": 92
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-11",
+                "date": "2025-08-11",
+                "score": 95
             }
         ]
     }

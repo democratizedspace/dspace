@@ -1,0 +1,65 @@
+{
+    "id": "hydroponics/netcup-clean",
+    "title": "Clean Net Cups",
+    "description": "Sanitize net cups to keep roots disease-free.",
+    "image": "/assets/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Got grimy net cups? A quick scrub prevents root rot.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "Let's clean them."
+                }
+            ]
+        },
+        {
+            "id": "soak",
+            "text": "Fill a bucket with dechlorinated water and add a splash of peroxide.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prepare rinse water"
+                },
+                {
+                    "type": "goto",
+                    "goto": "scrub",
+                    "text": "Water is ready"
+                }
+            ]
+        },
+        {
+            "id": "scrub",
+            "text": "Scrub each net cup with a brush, then rinse them clean.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cups look clean"
+                },
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "Need to soak again"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Let the cups dry before the next planting.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All set."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}

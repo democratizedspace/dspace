@@ -1,0 +1,55 @@
+{
+    "id": "composting/turn-pile",
+    "title": "Turn Your Compost Bucket",
+    "description": "Aerate the compost by stirring the mix so microbes stay active.",
+    "image": "/assets/bucket.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A stagnant bucket can get smelly. Let's give your compost some fresh air.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "I'm ready to turn it."
+                }
+            ]
+        },
+        {
+            "id": "mix",
+            "text": "Stir the greens and browns together until the pile feels loose and damp, not soggy.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "turn-compost-bucket",
+                    "text": "Stir the bucket"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Looks aerated now"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Turning every few days keeps microbes happy and speeds decomposition.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Nova!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["composting/start"]
+}
