@@ -14,7 +14,7 @@ const priceTable: Record<string, number> = {
   "thermometer": 15,
   "hydroponics_kit": 60,
   "aquarium_150l": 60,
-  "goldfish": 10,
+  "goldfish": 5,
   "ev_charger": 500,
   "battery_pack_1kwh": 1000,
   "solar_panel_200w": 200,
