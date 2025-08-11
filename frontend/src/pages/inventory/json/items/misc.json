@@ -1156,6 +1156,25 @@
         }
     },
     {
+        "id": "50ada74c-686d-4818-9421-e02d98444579",
+        "name": "roll of coins",
+        "description": "Paper-wrapped roll of twenty 0.5 dUSD coins for arcade machines and small purchases.",
+        "image": "/assets/coins.jpg",
+        "price": "10 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-11",
+                    "date": "2025-08-11",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
         "name": "mission log entry",
         "description": "One handwritten entry recording a mission event in the logbook.",
