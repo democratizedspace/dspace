@@ -54,9 +54,17 @@
     {
         "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
         "name": "aquarium filter",
-        "description": "A filter for a fish tank.",
+        "description": "Hang-on-back filter with 10 W pump moving 200 L/h for 150 L tanks; includes sponge and carbon.",
         "image": "/assets/aquarium_filter.jpg",
-        "price": "30 dUSD"
+        "price": "30 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-update-2025-08-11", "date": "2025-08-11", "score": 60 }
+            ]
+        }
     },
     {
         "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
