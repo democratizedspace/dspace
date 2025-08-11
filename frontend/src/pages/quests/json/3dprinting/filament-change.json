@@ -1,0 +1,54 @@
+{
+    "id": "3dprinting/filament-change",
+    "title": "Swap Filament",
+    "description": "Change your 3D printer to a new filament color.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to swap colors? We'll unload the old spool and load the new one.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "swap",
+                    "text": "Let's do it."
+                }
+            ]
+        },
+        {
+            "id": "swap",
+            "text": "Heat the nozzle, retract the old filament, and feed the green strand until it extrudes clean.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "New filament loaded.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your printer's ready to lay down that fresh green plastic.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Time to print!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinter/start"]
+}
