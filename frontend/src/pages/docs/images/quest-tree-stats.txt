@@ -11,7 +11,7 @@ woodworking: 9 quests, 702 lines
 geothermal: 8 quests, 462 lines
 chemistry: 7 quests, 381 lines
 firstaid: 7 quests, 502 lines
-rocketry: 6 quests, 602 lines
+rocketry: 6 quests, 609 lines
 completionist: 5 quests, 263 lines
 welcome: 5 quests, 375 lines
 ubi: 3 quests, 250 lines
