@@ -973,6 +973,13 @@
         "price": "5 dUSD"
     },
     {
+        "id": "3455faac-8811-4991-b818-cecb98e8fff7",
+        "name": "lab coat",
+        "description": "Knee-length cotton lab coat with snap buttons and two pockets; one size fits most.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "15 dUSD"
+    },
+    {
         "id": "7c811503-d0ca-4254-825a-ebeb06a88231",
         "name": "pH down solution (phosphoric acid)",
         "description": "Dilute acid used to lower nutrient solution pH.",
