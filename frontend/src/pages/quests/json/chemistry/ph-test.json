@@ -18,7 +18,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Before working with anything reactive, let's practice measuring pH. Gather one pH strip, a pair of nitrile gloves, and safety goggles. Set the solution on a stable surface, keep food and drinks away, and suit up before opening the strip packet.",
+            "text": "Before working with anything reactive, let's practice measuring pH. Gather one pH strip, a pair of nitrile gloves, safety goggles, and a lab coat. Set the solution on a stable surface, keep food and drinks away, and suit up before opening the strip packet.",
             "options": [
                 {
                     "type": "goto",
@@ -29,7 +29,7 @@
         },
         {
             "id": "measure",
-            "text": "With gloves and goggles on, open the strip packet, hold the strip by the dry end, and dip just the tip for one second. Keep your face back to avoid fumes, shake off excess liquid, and immediately compare the color to the chart to log the value.",
+            "text": "With gloves, goggles, and lab coat on, open the strip packet, hold the strip by the dry end, and dip just the tip for one second. Keep your face back to avoid fumes, shake off excess liquid, and immediately compare the color to the chart to log the value.",
             "options": [
                 {
                     "type": "process",
@@ -51,6 +51,10 @@
                         },
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "3455faac-8811-4991-b818-cecb98e8fff7",
                             "count": 1
                         }
                     ]
