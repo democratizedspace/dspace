@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey again! Orion here. Let's build a light sensor. Work on a non-conductive surface, wear safety goggles, discharge static by touching grounded metal, keep hands dry, and unplug the board before wiring to avoid shorts.",
+            "text": "Hey again! Orion here. Let's build a light sensor. Work on a non-conductive surface, wear safety goggles and an anti-static wrist strap, discharge static by touching grounded metal, keep hands dry, and unplug the board before wiring to avoid shorts.",
             "options": [{ "type": "goto", "goto": "materials", "text": "What do I need?" }]
         },
         {
             "id": "materials",
-            "text": "Gather one Arduino Uno, a breadboard, three jumper wires, one photoresistor, one 10 kΩ resistor, one USB cable, a digital multimeter, safety goggles, and a laptop with the Arduino IDE installed. Keep components in a tray so leads don't touch or short.",
+            "text": "Gather one Arduino Uno, a breadboard, three jumper wires, one photoresistor, one 10 kΩ resistor, one USB cable, a digital multimeter, safety goggles, an anti-static wrist strap, and a laptop with the Arduino IDE installed. Keep components in a tray so leads don't touch or short.",
             "options": [
                 {
                     "type": "process",
@@ -33,6 +33,7 @@
                         { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
                         { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
                         { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2", "count": 1 },
                         { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
                     ]
                 }
