@@ -87,7 +87,7 @@ The automated server is configured in `playwright.config.ts`:
 
 ```typescript
 webServer: {
-  command: 'npm run dev',
+  command: 'npm run preview',
   url: 'http://localhost:3002',
   reuseExistingServer: !process.env.CI,
   stdout: 'ignore',
@@ -97,7 +97,7 @@ webServer: {
 
 This configuration:
 
-1. Starts a server using `npm run dev` before tests begin
+1. Starts a server using `npm run preview` before tests begin
 2. Waits for the server to be available at `http://localhost:3002`
 3. Runs tests against this server
 4. Shuts down the server when tests finish
@@ -272,6 +272,14 @@ npm run benchmark:db
 
 This script adds and reads a batch of sample records and prints timing metrics so you can track performance regressions.
 
+To stress test the custom content database with concurrent writes, run:
+
+```bash
+npm run loadtest:custom-content
+```
+
+It inserts many items, processes, and quests in parallel and reports how long the operations take.
+
 ### End-to-End Tests
 
 -   E2E test files are in the `e2e/` directory
@@ -286,6 +294,18 @@ test.describe('Profile Page Functionality', () => {
         // Test code here
     });
 });
+```
+
+#### Touch Interactions
+
+Mobile workflows are covered with Playwright's touchscreen API and unit tests that dispatch `touchstart` events:
+
+```typescript
+const box = await page.locator('.selector').boundingBox();
+await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+
+// Unit test example
+element.dispatchEvent(new Event('touchstart'));
 ```
 
 ## Best Practices for Playwright Tests
@@ -562,7 +582,7 @@ if ((await chatButton.count()) > 0) {
 
 Remember that E2E tests require a running development server:
 
--   Server must be running on port 3002 (`npm run dev`)
+-   Server must be running on port 3002 (`npm run preview`)
 -   Run your server in a separate terminal before starting tests
 -   If tests show connection errors, check that your server is running
 

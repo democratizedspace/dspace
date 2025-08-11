@@ -745,6 +745,15 @@
     ],
     "rewards": []
   },
+  "d30d7a65-bd11-42a2-89c1-2828e990a3b2": {
+    "requires": [
+      "electronics/light-sensor"
+  "be3aaed8-13cc-4937-95d5-6e2c952c6612": {
+    "requires": [
+      "electronics/arduino-blink"
+    ],
+    "rewards": []
+  },
   "df7e94e2-76b9-4865-b843-2ec21feb258e": {
     "requires": [
       "devops/ssh-hardening",
