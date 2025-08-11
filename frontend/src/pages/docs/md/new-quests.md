@@ -11,14 +11,15 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 167
-New quests in this release: 145
+Current quest count: 174
+New quests in this release: 152
 
 ### 3dprinting
 
 - 3dprinting/bed-leveling
 - 3dprinting/cable-clip
 - 3dprinting/calibration-cube
+- 3dprinting/filament-change
 - 3dprinting/phone-stand
 - 3dprinting/retraction-test
 - 3dprinting/temperature-tower
@@ -71,6 +72,10 @@ New quests in this release: 145
 - completionist/polish
 - completionist/reminder
 
+### composting
+
+- composting/start
+
 ### devops
 
 - devops/auto-updates
@@ -95,6 +100,7 @@ New quests in this release: 145
 - electronics/check-battery-voltage
 - electronics/continuity-test
 - electronics/data-logger
+- electronics/desolder-component
 - electronics/led-polarity
 - electronics/light-sensor
 - electronics/measure-resistance
@@ -116,6 +122,7 @@ New quests in this release: 145
 - energy/offgrid-charger
 - energy/portable-solar-panel
 - energy/power-inverter
+- energy/solar-tracker
 - energy/wind-turbine
 
 ### firstaid
@@ -131,7 +138,9 @@ New quests in this release: 145
 ### geothermal
 
 - geothermal/calibrate-ground-sensor
+- geothermal/compare-depth-ground-temps
 - geothermal/compare-seasonal-ground-temps
+- geothermal/install-backup-thermistor
 - geothermal/log-ground-temperature
 - geothermal/monitor-heat-pump-energy
 - geothermal/survey-ground-temperature
@@ -139,6 +148,7 @@ New quests in this release: 145
 ### hydroponics
 
 - hydroponics/air-stone-soak
+- hydroponics/ec-check
 - hydroponics/filter-clean
 - hydroponics/grow-light
 - hydroponics/lettuce

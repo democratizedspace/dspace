@@ -234,7 +234,9 @@
       "robotics/wheel-encoders",
       "programming/graph-temp-data",
       "geothermal/log-ground-temperature",
+      "geothermal/install-backup-thermistor",
       "geothermal/compare-seasonal-ground-temps",
+      "geothermal/compare-depth-ground-temps",
       "geothermal/calibrate-ground-sensor",
       "electronics/thermistor-reading",
       "electronics/servo-sweep",
@@ -331,6 +333,7 @@
     "requires": [
       "hydroponics/reservoir-refresh",
       "hydroponics/nutrient-check",
+      "hydroponics/ec-check",
       "hydroponics/basil"
     ],
     "rewards": []
@@ -383,6 +386,7 @@
       "electronics/measure-resistance",
       "electronics/light-sensor",
       "electronics/led-polarity",
+      "electronics/desolder-component",
       "electronics/check-battery-voltage",
       "chemistry/ph-test",
       "aquaria/water-testing"
@@ -397,7 +401,8 @@
   },
   "71655665-4a59-41f4-9084-dad4d976df91": {
     "requires": [
-      "hydroponics/nutrient-check"
+      "hydroponics/nutrient-check",
+      "hydroponics/ec-check"
     ],
     "rewards": []
   },
@@ -423,6 +428,7 @@
   },
   "0564d441-7367-412e-b709-dad770814a39": {
     "requires": [
+      "composting/start",
       "aquaria/water-change",
       "aquaria/shrimp"
     ],
@@ -584,7 +590,8 @@
   },
   "e0590418-22c7-4885-9c9e-1d1cdafb78d6": {
     "requires": [
-      "energy/solar"
+      "energy/solar",
+      "energy/solar-tracker"
     ],
     "rewards": []
   },
@@ -613,8 +620,7 @@
       "electronics/potentiometer-dimmer",
       "electronics/light-sensor",
       "electronics/data-logger",
-      "electronics/continuity-test",
-      "electronics/arduino-blink"
+      "electronics/continuity-test"
     ],
     "rewards": [
       "electronics/resistor-color-check",
@@ -685,7 +691,8 @@
   "4379a2f8-7cec-4bea-949b-ad50514d36ff": {
     "requires": [
       "electronics/tin-soldering-iron",
-      "electronics/solder-wire"
+      "electronics/solder-wire",
+      "electronics/desolder-component"
     ],
     "rewards": []
   },
@@ -748,6 +755,9 @@
   "d30d7a65-bd11-42a2-89c1-2828e990a3b2": {
     "requires": [
       "electronics/light-sensor"
+    ],
+    "rewards": []
+  },
   "be3aaed8-13cc-4937-95d5-6e2c952c6612": {
     "requires": [
       "electronics/arduino-blink"
@@ -846,6 +856,12 @@
   "a7cb182c-f491-4f49-8d36-964886d0d055": {
     "requires": [
       "chemistry/stevia-extraction"
+    ],
+    "rewards": []
+  },
+  "3455faac-8811-4991-b818-cecb98e8fff7": {
+    "requires": [
+      "chemistry/ph-test"
     ],
     "rewards": []
   },
@@ -1066,6 +1082,7 @@
     "requires": [
       "3dprinter/start",
       "3dprinting/phone-stand",
+      "3dprinting/filament-change",
       "3dprinting/calibration-cube",
       "3dprinting/cable-clip",
       "3dprinting/bed-leveling"
@@ -1075,6 +1092,7 @@
   "d3590107-25ff-4de5-af3a-46e2497bfc52": {
     "requires": [
       "3dprinter/start",
+      "3dprinting/filament-change",
       "3dprinting/calibration-cube",
       "3dprinting/cable-clip"
     ],
