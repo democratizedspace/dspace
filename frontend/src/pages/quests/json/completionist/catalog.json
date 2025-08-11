@@ -1,0 +1,50 @@
+{
+    "id": "completionist/catalog",
+    "title": "Catalog Your Trophy",
+    "description": "Log your Completionist Award II so you never misplace it.",
+    "image": "/assets/quests/completionist.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want to log that shiny award in your inventory so future you can find it?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "record",
+                    "text": "Yeah, let's catalog it"
+                }
+            ]
+        },
+        {
+            "id": "record",
+            "text": "Jot down the serial and snap a pic for the archive.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All logged",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Future you will thank present you for the tidy records.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "dChat out!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["completionist/v2"]
+}
