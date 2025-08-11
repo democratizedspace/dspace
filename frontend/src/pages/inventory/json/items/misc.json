@@ -420,6 +420,13 @@
         "price": "30 dUSD"
     },
     {
+        "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
+        "name": "parachute harness kit",
+        "description": "Nylon harness with swivel clips that secures a model rocket's body to its parachute.",
+        "image": "/assets/rocket_parachute.jpg",
+        "price": "5 dUSD"
+    },
+    {
         "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
         "name": "launch-capable model rocket (parachute)",
         "description": "A reusable rocket with a parachute",
