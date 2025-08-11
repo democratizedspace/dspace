@@ -13,6 +13,6 @@ chemistry: 7 quests, 381 lines
 firstaid: 7 quests, 502 lines
 rocketry: 6 quests, 602 lines
 completionist: 5 quests, 263 lines
-welcome: 5 quests, 372 lines
+welcome: 5 quests, 375 lines
 ubi: 3 quests, 250 lines
 composting: 1 quests, 53 lines
