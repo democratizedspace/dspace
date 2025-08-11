@@ -8,7 +8,7 @@ programming: 11 quests, 538 lines
 3dprinting: 10 quests, 678 lines
 robotics: 9 quests, 496 lines
 woodworking: 8 quests, 656 lines
-chemistry: 7 quests, 377 lines
+chemistry: 7 quests, 381 lines
 firstaid: 7 quests, 502 lines
 rocketry: 6 quests, 602 lines
 geothermal: 5 quests, 279 lines
