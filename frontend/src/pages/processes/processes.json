@@ -2403,7 +2403,7 @@
     },
     {
         "id": "charge-battery-pack-wind",
-        "title": "Charge a 200 Wh battery pack using a 500 W wind turbine",
+        "title": "Charge a 200 Wh battery pack with a 500 W wind turbine",
         "image": "/assets/turbine.jpg",
         "requireItems": [
             { "id": "743681a7-d2e7-465c-af07-43665079bf4d", "count": 1 },
@@ -2414,7 +2414,19 @@
             { "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 200 },
             { "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67", "count": 200 }
         ],
-        "duration": "1h"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "build-birdhouse",
