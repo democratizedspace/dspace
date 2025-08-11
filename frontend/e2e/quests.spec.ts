@@ -90,7 +90,7 @@ test.describe('Quest Management', () => {
         const submitButton = page.locator('button.submit-button, input[type="submit"]');
         await submitButton.click();
 
-        await expect(page.locator('.error-message')).toBeVisible();
+        await expect(page.locator('.error-message').first()).toBeVisible();
         await expect(page).toHaveURL(/\/quests\/create/);
     });
 

@@ -75,3 +75,6 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 -   2025-08-09 – Installing only Chromium left Firefox and WebKit missing; install all
     browsers with `playwright install --with-deps` and print the preview log on failure for
     easier debugging.
+-   2025-08-10 – `__dirname` in an ES module test and a nested Chip wrapper hid the
+    Cloud Sync upload button; derive paths with `import.meta.url` and use a plain container so
+    Playwright can locate the control.
