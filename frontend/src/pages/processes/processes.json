@@ -2431,5 +2431,16 @@
         ],
         "createItems": [{ "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8", "count": 1 }],
         "duration": "2h"
+        },
+    {
+        "id": "start-compost-bin",
+        "title": "Start a kitchen compost bucket",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
     }
 ]
