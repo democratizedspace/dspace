@@ -64,7 +64,7 @@
     };
 </script>
 
-<Chip text="">
+<div class="chip-container">
     <div class="vertical">
         <div class="form-group">
             <label for="token">GitHub Token*</label>
@@ -93,7 +93,7 @@
             <p class="message">{message}</p>
         {/if}
     </div>
-</Chip>
+</div>
 
 <style>
     .vertical {
@@ -121,5 +121,21 @@
         flex: 1;
         padding: 5px;
         border-radius: 6px;
+    }
+
+    .chip-container {
+        text-align: center;
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        opacity: 0.8;
+        background-color: #007006;
+        border-radius: 0.4rem;
+        color: white;
+        margin: 1px;
+        padding: 5px;
+    }
+    .chip-container:hover {
+        opacity: 1;
     }
 </style>
