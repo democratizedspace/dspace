@@ -19,7 +19,7 @@
         },
         {
             "id": "build",
-            "text": "Bolt the servo to a sturdy base, attach a short arm segment, and program it to move smoothly between positions. Test with light loads before trying anything heavier.",
+            "text": "Bolt the servo to a sturdy base with a precision screwdriver set, attach a short arm segment, and program it to move smoothly between positions. Test with light loads before trying anything heavier.",
             "options": [
                 {
                     "type": "goto",
@@ -28,6 +28,10 @@
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
                             "count": 1
                         }
                     ]

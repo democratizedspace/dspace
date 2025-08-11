@@ -270,6 +270,12 @@
       "robotics/line-follower"
     ]
   },
+  "8299ac3f-c232-46d4-a007-2ad86ec70361": {
+    "requires": [
+      "robotics/servo-arm"
+    ],
+    "rewards": []
+  },
   "ce140453-c7ef-42c9-b9f9-38acfb4219cf": {
     "requires": [
       "programming/web-server",
