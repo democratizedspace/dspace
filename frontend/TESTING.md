@@ -87,7 +87,7 @@ The automated server is configured in `playwright.config.ts`:
 
 ```typescript
 webServer: {
-  command: 'npm run dev',
+  command: 'npm run preview',
   url: 'http://localhost:3002',
   reuseExistingServer: !process.env.CI,
   stdout: 'ignore',
@@ -97,7 +97,7 @@ webServer: {
 
 This configuration:
 
-1. Starts a server using `npm run dev` before tests begin
+1. Starts a server using `npm run preview` before tests begin
 2. Waits for the server to be available at `http://localhost:3002`
 3. Runs tests against this server
 4. Shuts down the server when tests finish
@@ -582,7 +582,7 @@ if ((await chatButton.count()) > 0) {
 
 Remember that E2E tests require a running development server:
 
--   Server must be running on port 3002 (`npm run dev`)
+-   Server must be running on port 3002 (`npm run preview`)
 -   Run your server in a separate terminal before starting tests
 -   If tests show connection errors, check that your server is running
 
