@@ -980,6 +980,14 @@
         "price": "5 dUSD"
     },
     {
+        "id": "96083990-f333-4e42-ab04-7eb2a234570e",
+        "name": "heat-shrink tubing",
+        "description": "Polyolefin tube that shrinks when heated to insulate exposed wire joints; sold per centimeter.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "0.05 dUSD",
+        "unit": "cm"
+    },
+    {
         "id": "3455faac-8811-4991-b818-cecb98e8fff7",
         "name": "lab coat",
         "description": "Knee-length cotton lab coat with snap buttons and two pockets; one size fits most.",
