@@ -40,8 +40,20 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5 V and the other to one side of the 10 kΩ resistor, then connect the resistor's far leg to GND. Use the multimeter to confirm roughly 10 kΩ, run a jumper from the junction to A0, keep your goggles on, and make sure no bare wires touch before powering up.",
-            "options": [{ "type": "goto", "goto": "code", "text": "Wired up!" }]
+            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5 V and the other to one side of the 10 kΩ resistor, then connect the resistor's far leg to GND. Measure the photoresistor's resistance in ambient light with the multimeter, run a jumper from the junction to A0, keep your goggles on, and make sure no bare wires touch before powering up.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Wired up and measured.",
+                    "process": "measure-photoresistor",
+                    "requiresItems": [
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ]
+                }
+            ]
         },
         {
             "id": "code",
