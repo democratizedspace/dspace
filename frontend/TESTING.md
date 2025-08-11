@@ -272,6 +272,14 @@ npm run benchmark:db
 
 This script adds and reads a batch of sample records and prints timing metrics so you can track performance regressions.
 
+To stress test the custom content database with concurrent writes, run:
+
+```bash
+npm run loadtest:custom-content
+```
+
+It inserts many items, processes, and quests in parallel and reports how long the operations take.
+
 ### End-to-End Tests
 
 -   E2E test files are in the `e2e/` directory
