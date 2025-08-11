@@ -609,6 +609,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+        "name": "USB Type-A to Type-B cable",
+        "description": "Standard USB 2.0 cable for connecting an Arduino Uno to a computer.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
         "name": "Laptop Computer",
         "description": "A portable computer capable of running the Arduino IDE and uploading sketches.",
@@ -979,6 +986,13 @@
         "image": "/assets/quests/basic_circuit.svg",
         "price": "0.05 dUSD",
         "unit": "cm"
+    },
+    {
+        "id": "3455faac-8811-4991-b818-cecb98e8fff7",
+        "name": "lab coat",
+        "description": "Knee-length cotton lab coat with snap buttons and two pockets; one size fits most.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "15 dUSD"
     },
     {
         "id": "7c811503-d0ca-4254-825a-ebeb06a88231",

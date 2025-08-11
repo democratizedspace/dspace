@@ -1523,9 +1523,21 @@
         "duration": "1m"
     },
     {
+        "id": "measure-ec",
+        "title": "Measure hydroponic nutrient EC",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            { "id": "71655665-4a59-41f4-9084-dad4d976df91", "count": 1 },
+            { "id": "fc2bb989-f192-4891-8bde-78ae631dae78", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "measure-battery-voltage",
-        "title": "Measure battery voltage with a multimeter",
-        "image": "/assets/battery.jpg",
+        "title": "Check a 12 V battery pack's voltage with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
@@ -1533,7 +1545,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "3m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "measure-resistance",
@@ -1555,6 +1579,19 @@
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "measure-photoresistor",
+        "title": "Measure photoresistor value with a multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+            { "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3", "count": 1 },
             { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
         ],
         "consumeItems": [],
@@ -1965,7 +2002,7 @@
                 "count": 1
             },
             {
-                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
                 "count": 1
             },
             {
@@ -2108,6 +2145,20 @@
             "emoji": "🌀",
             "history": [{ "task": "codex-hardening-2025-08-07", "date": "2025-08-07", "score": 65 }]
         }
+    },
+    {
+        "id": "measure-calibration-cube",
+        "title": "Measure a 20 mm calibration cube with digital calipers and log results",
+        "requireItems": [
+            { "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 },
+            { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 },
+            { "id": "aa82b02f-2617-4474-a91b-29647e4a9780", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            { "id": "280ed361-ac70-4ab9-bcd9-aee481790faf", "count": 1 }
+        ],
+        "duration": "2m"
     },
     {
         "id": "print-benchy",
@@ -2405,7 +2456,7 @@
     },
     {
         "id": "charge-battery-pack-wind",
-        "title": "Charge a 200 Wh battery pack using a 500 W wind turbine",
+        "title": "Charge a 200 Wh battery pack with a 500 W wind turbine",
         "image": "/assets/turbine.jpg",
         "requireItems": [
             { "id": "743681a7-d2e7-465c-af07-43665079bf4d", "count": 1 },
@@ -2416,7 +2467,19 @@
             { "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 200 },
             { "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67", "count": 200 }
         ],
-        "duration": "1h"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "build-birdhouse",
@@ -2433,5 +2496,16 @@
         ],
         "createItems": [{ "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8", "count": 1 }],
         "duration": "2h"
+        },
+    {
+        "id": "start-compost-bin",
+        "title": "Start a kitchen compost bucket",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
     }
 ]

@@ -1,0 +1,53 @@
+{
+    "id": "hydroponics/ec-check",
+    "title": "Check Solution EC",
+    "description": "Measure nutrient strength with an EC meter.",
+    "image": "/assets/aquarium_thermometer.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's make sure the nutrients are at the right strength.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "How's the mix?"
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Dip the EC meter into the reservoir and compare the reading to your plant's target range.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ec-solution",
+                    "text": "Meter reading looks good.",
+                    "requiresItems": [
+                        { "id": "71655665-4a59-41f4-9084-dad4d976df91", "count": 1 },
+                        { "id": "fc2bb989-f192-4891-8bde-78ae631dae78", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "EC adjusted!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Log the value and recheck weekly to keep nutrients on target.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/ph-check"]
+}

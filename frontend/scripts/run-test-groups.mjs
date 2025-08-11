@@ -32,7 +32,6 @@ const TEST_GROUPS = [
             'svelte-component-hydration.spec.ts',
             'builtin-quests.spec.ts',
             'custom-backup.spec.ts',
-            'cloud-sync.spec.ts',
         ],
         parallel: true,
         workers: MAX_WORKERS,

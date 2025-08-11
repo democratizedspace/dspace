@@ -42,6 +42,11 @@
             "text": "Use digital calipers to measure each side; the goal is 20.00 mm on every axis. If dimensions are off, adjust your printer's steps per millimeter before reprinting.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "measure-calibration-cube",
+                    "text": "Need measuring steps?"
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Dimensions noted.",
