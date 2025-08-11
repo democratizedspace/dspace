@@ -22,18 +22,17 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 ## 1 Quick start (Web vs CLI)
 
--   **Add or update an item**
-    -   Web: use the “Code” button and attach the repo.
-    -   CLI: `codex "add item solar-cell-junction-box"`
--   **Ask about item data**
-    -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items"`
--   **Run item tests**
-    -   Web: not supported yet.
-    -   CLI:
+- **Add or update an item**
+    - Web: use the “Code” button and attach the repo.
+    - CLI: `codex "add item solar-cell-junction-box"`
+- **Ask about item data**
+    - Web: use the “Ask” button.
+    - CLI: `codex exec "explain frontend/src/pages/inventory/json/items/*.json"`
+- **Run item tests**
+    - Web: not supported yet.
+    - CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && \
-        npm run itemValidation && npm test -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && npm run itemValidation && npm test -- itemQuality"
         ```
 
 See the [Codex CLI documentation][codex-cli] for more flags.
@@ -42,12 +41,12 @@ See the [Codex CLI documentation][codex-cli] for more flags.
 
 ## 2 Prompt ingredients
 
-| Ingredient           | Why it matters                                                      |
-| -------------------- | ------------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add price to `white PLA filament`”). |
-| **Files to touch**   | Limits search space → faster & cheaper.                             |
-| **Constraints**      | Coding style, a11y, item schema rules.                              |
-| **Acceptance check** | `npm run itemValidation` and<br>`npm test -- itemQuality` pass.     |
+| Ingredient           | Why it matters                                                                                                          |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add price to `white PLA filament`”).                                                     |
+| **Files to touch**   | Limits search space → faster & cheaper.                                                                                 |
+| **Constraints**      | Coding style, a11y, item schema rules.                                                                                  |
+| **Acceptance check** | `npm run lint`, `npm run type-check`, `npm run build`,<br>`npm run itemValidation`, and `npm test -- itemQuality` pass. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt-level rules short and concrete.
@@ -152,10 +151,10 @@ A pull request with the refined item, updated hardening block and passing tests.
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus.
--   **Use system prompts** to guide tone and technical accuracy.
--   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible
-    but incorrect details.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible
+  but incorrect details.
 
 [codex-cli]: https://www.npmjs.com/package/codex-cli
