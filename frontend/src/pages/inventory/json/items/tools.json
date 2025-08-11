@@ -149,9 +149,18 @@
     {
         "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
         "name": "utility cart",
-        "description": "Two-shelf steel utility cart with 120 kg capacity for moving gear around a lab.",
+        "description": "Two-shelf steel cart, 90×50×80 cm, weighs 15 kg and holds up to 120 kg of lab equipment.",
         "image": "/assets/cart.jpg",
-        "price": "60 dUSD"
+        "price": "80 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-11", "date": "2025-08-11", "score": 65 }
+            ]
+        }
     },
     {
         "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
