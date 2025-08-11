@@ -21,9 +21,21 @@
     {
         "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
         "name": "Beginner hydroponics tub",
-        "description": "A hydroponics tub with all the basic features you need to grow your own plants.",
+        "description": "20 L (5 gal) plastic tub with lid, six 50 mm net pots and airline grommet for starter hydroponics.",
         "image": "/assets/hydroponics_tub.jpg",
-        "price": "30 dUSD"
+        "price": "35 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
