@@ -1,0 +1,55 @@
+{
+    "id": "astronomy/saturn-rings",
+    "title": "Spot Saturn's Rings",
+    "description": "Use your basic telescope to glimpse Saturn's rings when the planet is bright.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "With Jupiter's moons tracked, let's aim for Saturn. Assemble your telescope and tripod, avoid city lights, and never point near the Sun. Ready?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Let's find Saturn.",
+                    "requiresItems": [
+                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 },
+                        { "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Use a star chart or app to locate Saturn. Focus until the rings come into view, keeping gear stable and eyes dark adapted.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "observe-saturn-rings",
+                    "text": "Peering at the ringed giant."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I saw the rings!",
+                    "requiresItems": [{ "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Saturn's rings are unforgettable. Keep notes and revisit during opposition for the sharpest view.",
+            "options": [{ "type": "finish", "text": "I'll log the observation." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/jupiter-moons"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [{ "task": "codex-quest-2025-08-04", "date": "2025-08-04", "score": 65 }]
+    }
+}
