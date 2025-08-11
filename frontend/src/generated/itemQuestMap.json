@@ -688,6 +688,15 @@
     ],
     "rewards": []
   },
+  "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d": {
+    "requires": [
+      "electronics/thermistor-reading",
+      "electronics/potentiometer-dimmer",
+      "electronics/light-sensor",
+      "electronics/arduino-blink"
+    ],
+    "rewards": []
+  },
   "4379a2f8-7cec-4bea-949b-ad50514d36ff": {
     "requires": [
       "electronics/tin-soldering-iron",
@@ -725,14 +734,6 @@
   "2a767901-6d4d-4a90-b520-50f0076a9c7d": {
     "requires": [
       "electronics/potentiometer-dimmer"
-    ],
-    "rewards": []
-  },
-  "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d": {
-    "requires": [
-      "electronics/potentiometer-dimmer",
-      "electronics/light-sensor",
-      "electronics/arduino-blink"
     ],
     "rewards": []
   },
