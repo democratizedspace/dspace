@@ -1599,6 +1599,17 @@
         "duration": "1m"
     },
     {
+        "id": "wear-anti-static-wrist-strap",
+        "title": "Attach an anti-static wrist strap before handling electronics",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
+    },
+    {
         "id": "measure-ec-solution",
         "title": "Measure hydroponic nutrient solution EC with a handheld meter",
         "image": "/assets/aquarium_thermometer.jpg",
