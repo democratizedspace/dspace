@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       openai:
-        specifier: ^3.2.1
-        version: 3.3.0
+        specifier: ^5.12.2
+        version: 5.12.2(ws@8.18.3)(zod@3.25.76)
     devDependencies:
       '@jest/globals':
         specifier: ^29.5.0
@@ -124,8 +124,8 @@ importers:
         specifier: ^3.3.1
         version: 3.3.2
       openai:
-        specifier: ^3.2.1
-        version: 3.3.0
+        specifier: ^5.12.2
+        version: 5.12.2(ws@8.18.3)(zod@3.25.76)
       postcss:
         specifier: ^8.4.23
         version: 8.5.6
@@ -2113,9 +2113,6 @@ packages:
     peerDependencies:
       postcss: ^8.1.0
 
-  axios@0.26.1:
-    resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
-
   axios@1.11.0:
     resolution: {integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==}
 
@@ -4008,8 +4005,17 @@ packages:
     resolution: {integrity: sha512-VXJjc87FScF88uafS3JllDgvAm+c/Slfz06lorj2uAY34rlUu0Nt+v8wreiImcrgAjjIHp1rXpTDlLOGw29WwQ==}
     engines: {node: '>=18'}
 
-  openai@3.3.0:
-    resolution: {integrity: sha512-uqxI/Au+aPRnsaQRe8CojU0eCR7I0mBiKjD3sNMzY6DaC1ZVrc85u98mtJW6voDug8fgGN+DIZmTDxTthxb7dQ==}
+  openai@5.12.2:
+    resolution: {integrity: sha512-xqzHHQch5Tws5PcKR2xsZGX9xtch+JQFz5zb14dGqlshmmDAFBFEWmeIpf7wVqWV+w7Emj7jRgkNJakyKE0tYQ==}
+    hasBin: true
+    peerDependencies:
+      ws: ^8.18.0
+      zod: ^3.23.8
+    peerDependenciesMeta:
+      ws:
+        optional: true
+      zod:
+        optional: true
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -7545,12 +7551,6 @@ snapshots:
       postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
-  axios@0.26.1:
-    dependencies:
-      follow-redirects: 1.15.9
-    transitivePeerDependencies:
-      - debug
-
   axios@1.11.0:
     dependencies:
       follow-redirects: 1.15.9
@@ -10035,12 +10035,10 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  openai@3.3.0:
-    dependencies:
-      axios: 0.26.1
-      form-data: 4.0.4
-    transitivePeerDependencies:
-      - debug
+  openai@5.12.2(ws@8.18.3)(zod@3.25.76):
+    optionalDependencies:
+      ws: 8.18.3
+      zod: 3.25.76
 
   optionator@0.9.4:
     dependencies:

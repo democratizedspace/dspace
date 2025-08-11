@@ -93,7 +93,7 @@
         "markdown-it": "^13.0.1",
         "marked": "^4.3.0",
         "node-fetch": "^3.3.1",
-        "openai": "^3.2.1",
+        "openai": "^5.12.2",
         "postcss": "^8.4.23",
         "pretty-date": "^0.2.0",
         "prom-client": "^15.1.0",
