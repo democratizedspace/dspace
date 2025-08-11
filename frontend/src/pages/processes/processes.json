@@ -2135,6 +2135,20 @@
         }
     },
     {
+        "id": "measure-calibration-cube",
+        "title": "Measure a 20 mm calibration cube with digital calipers and log results",
+        "requireItems": [
+            { "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 },
+            { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 },
+            { "id": "aa82b02f-2617-4474-a91b-29647e4a9780", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            { "id": "280ed361-ac70-4ab9-bcd9-aee481790faf", "count": 1 }
+        ],
+        "duration": "2m"
+    },
+    {
         "id": "print-benchy",
         "title": "3D print a Benchy calibration boat on an entry-level FDM 3D printer using 15 g of white PLA filament",
         "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
