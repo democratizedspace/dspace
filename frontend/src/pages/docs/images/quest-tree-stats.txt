@@ -1,6 +1,6 @@
 energy: 19 quests, 1327 lines
 hydroponics: 19 quests, 1432 lines
-electronics: 17 quests, 1376 lines
+electronics: 17 quests, 1400 lines
 astronomy: 15 quests, 857 lines
 devops: 14 quests, 860 lines
 aquaria: 12 quests, 832 lines
