@@ -1574,6 +1574,19 @@
         "duration": "1m"
     },
     {
+        "id": "measure-photoresistor",
+        "title": "Measure photoresistor value with a multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+            { "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "measure-ec-solution",
         "title": "Measure hydroponic nutrient solution EC with a handheld meter",
         "image": "/assets/aquarium_thermometer.jpg",
