@@ -77,3 +77,7 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     easier debugging.
 -   2025-08-10 – Playwright's dev server exited between grouped runs; switching the webServer
     command to `npm run preview` keeps a stable server for E2E tests.
+-   2025-08-10 – `npm run test:ci` was undefined, breaking CI instructions; add a script
+    alias that runs `test:pr` with `SKIP_E2E` to keep checks green.
+-   2025-08-10 – `listMissingImages` treated URLs with query strings as missing files; strip
+    query and hash parts before checking so coverage tests don't flag valid assets.

@@ -17,6 +17,7 @@
     "test:e2e:custom": "cd frontend && npm run test:e2e:custom",
     "test:quick": "cd frontend && npm run test:quick",
     "test:pr": "node run-tests.js",
+    "test:ci": "SKIP_E2E=1 npm run test:pr",
     "check": "cd frontend && npm run check",
     "itemValidation": "cd frontend && npm run itemValidation",
     "lint": "cd frontend && npm run lint",

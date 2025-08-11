@@ -1,14 +1,14 @@
 {
     "id": "aquaria/water-testing",
     "title": "Test water parameters",
-    "description": "Check ammonia, nitrite and nitrate with an Aquarium liquid test kit before adding shrimp. Wear nitrile gloves, safety goggles and discard reagents per the manual.",
+    "description": "Use the Aquarium liquid test kit to check ammonia, nitrite and nitrate before adding shrimp. Put on nitrile gloves and safety goggles, work in a ventilated area and discard reagents per the kit manual.",
     "image": "/assets/quests/walstad.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The tank should be cycling nicely. Let's test the water to make sure it's safe for shrimp.",
+            "text": "The tank should be cycling nicely. Grab the Aquarium liquid test kit and protective gear so we can confirm it's safe for shrimp.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "explain",
-            "text": "Use an Aquarium liquid test kit. Rinse each tube with tank water, fill to the line, then add the specified drops. Cap and shake away from your face. Wear nitrile gloves and safety goggles to avoid splashes. Ammonia and nitrite must be 0 ppm; keep nitrate under 40 ppm.",
+            "text": "Rinse each tube with tank water, fill to the 5 mL line, then add the specified drops from the Aquarium liquid test kit. Cap and shake away from your face. Wear nitrile gloves and safety goggles to avoid contact with the reagents. Ammonia and nitrite must read 0 ppm; keep nitrate under 40 ppm.",
             "options": [
                 {
                     "type": "goto",
@@ -44,7 +44,7 @@
         },
         {
             "id": "results",
-            "text": "If ammonia or nitrite shows up, let the tank cycle longer. If nitrate is high, start a partial water change to dilute it. Pour spent test water down the drain and rinse the tubes before storing.",
+            "text": "If ammonia or nitrite shows up, let the tank cycle longer. If nitrate reads over 40 ppm, run the partial-water-change process to dilute it. Pour used test water down a sink with running water, rinse the tubes and store them dry.",
             "options": [
                 {
                     "type": "process",
@@ -66,13 +66,14 @@
     ],
     "requiresQuests": ["aquaria/walstad"],
     "hardening": {
-        "passes": 3,
-        "score": 92,
+        "passes": 4,
+        "score": 94,
         "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
             { "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 80 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 }
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 },
+            { "task": "codex-upgrade-2025-08-10", "date": "2025-08-10", "score": 94 }
         ]
     }
 }
