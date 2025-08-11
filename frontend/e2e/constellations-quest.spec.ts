@@ -1,8 +1,11 @@
 import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'node:url';
 import { clearUserData } from './test-helpers';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const questPath = path.resolve(__dirname, '../test-data/constellations-quest.json');
 const questTemplate = JSON.parse(fs.readFileSync(questPath, 'utf8'));
 

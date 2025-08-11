@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Have a USB cable acting flaky? Unplug both ends and grab your digital multimeter.",
+            "text": "Flaky cable? Unplug both ends, inspect it, and grab a digital multimeter. Keep wire cutters ready.",
             "options": [
                 {
                     "type": "goto",
@@ -19,17 +19,17 @@
         },
         {
             "id": "probe",
-            "text": "Set meter to continuity. Probe pins on each end. Keep fingers behind guards.",
+            "text": "Set meter to continuity. Probe one pin at each end. Keep fingers behind guards; avoid bridging.",
             "options": [
                 {
                     "type": "process",
                     "process": "test-cable-continuity",
-                    "text": "Checking continuity."
+                    "text": "Run the continuity test."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "It beeped and showed near zero ohms.",
+                    "text": "It beeped and read near zero ohms.",
                     "requiresItems": [
                         { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
                         { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }
@@ -39,10 +39,22 @@
         },
         {
             "id": "finish",
-            "text": "Nice! Coil the cable loosely and store it dry. Replace it if any pins fail the test.",
+            "text": "Nice! Coil the cable loosely and store it dry. If any pin failed, cut it up with wire cutters.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/solder-wire"]
+    "requiresQuests": ["electronics/solder-wire"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-10",
+                "date": "2025-08-10",
+                "score": 60
+            }
+        ]
+    }
 }
