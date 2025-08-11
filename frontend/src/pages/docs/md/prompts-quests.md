@@ -39,7 +39,7 @@ which covers quests, items and processes in detail.
         npm test -- questCanonical questQuality"
         ```
 
-See the [Codex CLI documentation][codex-cli] for more flags.
+See the [Codex CLI repository][codex-cli] for more flags.
 
 ---
 
@@ -190,4 +190,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[codex-cli]: https://www.npmjs.com/package/codex-cli
+[codex-cli]: https://github.com/microsoft/Codex-CLI

@@ -35,7 +35,7 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
         codex exec "npm run lint && npm run type-check && npm run build && npm run itemValidation && npm test -- itemQuality"
         ```
 
-See the [Codex CLI documentation][codex-cli] for more flags.
+See the [Codex CLI repository][codex-cli] for more flags.
 
 ---
 
@@ -157,4 +157,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 - **Fact-check technical information** since AI systems can generate plausible
   but incorrect details.
 
-[codex-cli]: https://www.npmjs.com/package/codex-cli
+[codex-cli]: https://github.com/microsoft/Codex-CLI
