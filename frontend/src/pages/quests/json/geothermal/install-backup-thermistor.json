@@ -1,0 +1,78 @@
+{
+    "id": "geothermal/install-backup-thermistor",
+    "title": "Install Backup Thermistor",
+    "description": "Add a second probe so you can cross-check ground temperature readings.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Redundancy keeps data honest. Ready to add a backup thermistor?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Sure, what do I need?"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "You'll need another thermistor wired to your logger.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Here's a spare thermistor."
+                },
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I've got the parts."
+                }
+            ]
+        },
+        {
+            "id": "install",
+            "text": "Wire it up and log a baseline reading with arduino-thermistor-read.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading logged.",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Now any drift in your sensors will stand out.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "On to data collection."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/calibrate-ground-sensor"]
+}
