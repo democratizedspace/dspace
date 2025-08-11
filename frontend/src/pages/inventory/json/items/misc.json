@@ -499,9 +499,10 @@
     {
         "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
         "name": "Solar charge controller",
-        "description": "Regulates solar panel output to safely charge a battery and prevent reverse current.",
+        "description": "30 A PWM controller for 12/24 V batteries; prevents overcharge and reverse current.",
         "image": "/assets/solar_charge_controller.jpg",
-        "price": "30 dUSD"
+        "price": "30 dUSD",
+        "type": "tool"
     },
     {
         "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
