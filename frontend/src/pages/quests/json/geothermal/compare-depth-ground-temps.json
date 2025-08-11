@@ -1,0 +1,51 @@
+{
+    "id": "geothermal/compare-depth-ground-temps",
+    "title": "Compare Depth Ground Temps",
+    "description": "Bury two thermistors at different depths and log their readings for a day.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Curious how ground temperature changes with depth? Let's find out.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "How do we measure that?"
+                }
+            ]
+        },
+        {
+            "id": "deploy",
+            "text": "Wire two sensors using arduino-thermistor-read. Bury one shallow, one deep, and log both.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logs collected",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Awesome! Compare the logs to see how quickly the soil cools with depth.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Analyze data"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/log-ground-temperature"]
+}
