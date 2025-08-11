@@ -13,12 +13,15 @@
         },
         {
             "id": "finish",
-            "text": "Great job! Running the test suite provides useful information and ensures your contributions are solid.",
+            "text": "Great job! Running the test suite keeps DSPACE reliable. Enjoy a roll of coins as a bonus!",
             "options": [
                 {
                     "type": "finish",
                     "text": "All tests passed",
-                    "grantsItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }]
+                    "grantsItems": [
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "50ada74c-686d-4818-9421-e02d98444579", "count": 1 }
+                    ]
                 }
             ]
         }

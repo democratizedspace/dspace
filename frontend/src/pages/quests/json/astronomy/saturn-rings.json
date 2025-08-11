@@ -1,0 +1,48 @@
+{
+    "id": "astronomy/saturn-rings",
+    "title": "Spot Saturn's Rings",
+    "description": "Use a planisphere and your basic telescope to find Saturn and resolve its rings.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here. Saturn is up tonight—let's aim your scope and catch those rings.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "locate",
+                    "text": "Where do I point?",
+                    "requiresItems": [
+                        { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 },
+                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "locate",
+            "text": "Use the planisphere to spot Saturn near Aquarius. Center it and gently focus until the rings separate from the planet's disk.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I see the rings!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Log the observation and give the scope a rest.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Observation logged."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/basic-telescope"]
+}

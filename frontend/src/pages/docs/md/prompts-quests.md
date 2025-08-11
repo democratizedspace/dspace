@@ -39,7 +39,7 @@ which covers quests, items and processes in detail.
         npm test -- questCanonical questQuality"
         ```
 
-See the [Codex CLI documentation][codex-cli] for more flags.
+See the [Codex CLI repository][codex-cli] for more flags.
 
 ---
 
@@ -76,7 +76,7 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm test -- questCanonical questQuality` and fix any failures.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+7. Run `git diff --cached | detect-secrets scan --string` and ensure no secrets.
 8. Update docs or dialogue as needed.
 
 OUTPUT
@@ -96,7 +96,7 @@ completion nodes, at least one item or process reference, and passing checks
 `npm test -- questCanonical questQuality`). Survey existing quests to
 pick a natural predecessor and update `requiresQuests` accordingly. Add missing
 items or processes to their registries, reuse existing image assets, and scan
-for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
+for secrets with `git diff --cached | detect-secrets scan --string` before
 committing.
 
 USER:
@@ -125,7 +125,7 @@ USER:
 2. Reference at least one inventory item or process.
 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm test -- questCanonical questQuality`. Fix any failures.
-4. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
+4. Scan for secrets with `git diff --cached | detect-secrets scan --string` before committing.
 5. Use an emoji-prefixed commit message.
 
 OUTPUT:
@@ -173,7 +173,7 @@ USER:
    }
     6. Run `npm run lint`, `npm run type-check`, `npm run build`, and
     `npm test -- questCanonical questQuality`. Update docs if needed.
-   7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+   7. Run `git diff --cached | detect-secrets scan --string` and ensure no secrets.
    8. Use an emoji-prefixed commit message.
 
 OUTPUT:
@@ -190,4 +190,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[codex-cli]: https://www.npmjs.com/package/codex-cli
+[codex-cli]: https://github.com/microsoft/Codex-CLI

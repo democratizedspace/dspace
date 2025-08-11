@@ -1,0 +1,47 @@
+{
+    "id": "aquaria/ph-strip-test",
+    "title": "Check aquarium pH",
+    "description": "Use a disposable strip to confirm your tank's pH.",
+    "image": "/assets/pH_strip.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's make sure your aquarium's pH is in range. Grab a test strip.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }],
+                    "text": "I need a strip."
+                },
+                {
+                    "type": "goto",
+                    "goto": "dip",
+                    "requiresItems": [{ "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }],
+                    "text": "Strip ready."
+                }
+            ]
+        },
+        {
+            "id": "dip",
+            "text": "Dip it in tank water and compare the color chart.",
+            "options": [
+                { "type": "process", "process": "measure-aquarium-ph", "text": "Measure pH." },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [{ "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 }],
+                    "text": "Looks stable."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Check weekly to keep fish happy.",
+            "options": [{ "type": "finish", "text": "Will do." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["aquaria/water-testing"]
+}
