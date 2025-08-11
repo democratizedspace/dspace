@@ -973,6 +973,14 @@
         "price": "5 dUSD"
     },
     {
+        "id": "96083990-f333-4e42-ab04-7eb2a234570e",
+        "name": "heat-shrink tubing",
+        "description": "Polyolefin tube that shrinks when heated to insulate exposed wire joints; sold per centimeter.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "0.05 dUSD",
+        "unit": "cm"
+    },
+    {
         "id": "7c811503-d0ca-4254-825a-ebeb06a88231",
         "name": "pH down solution (phosphoric acid)",
         "description": "Dilute acid used to lower nutrient solution pH.",
