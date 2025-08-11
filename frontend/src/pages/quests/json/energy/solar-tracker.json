@@ -1,0 +1,65 @@
+{
+    "id": "energy/solar-tracker",
+    "title": "Build a Solar Tracker",
+    "description": "Rotate your 200 Wh kit to follow the sun.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Fixed panels miss watts. Let's mount your 200 Wh kit on a swivel stand to chase the sun.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "track",
+                    "text": "Sounds efficient!"
+                }
+            ]
+        },
+        {
+            "id": "track",
+            "text": "Rest the kit on a pivot and turn it hourly toward the sun. Keep cables slack and the base weighted.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Take the kit"
+                },
+                {
+                    "type": "process",
+                    "process": "solar-200Wh",
+                    "text": "Track and generate"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Tracker humming",
+                    "requiresItems": [
+                        {
+                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Following the sun stretched your daily harvest.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sun chasing!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/solar"]
+}
