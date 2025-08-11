@@ -202,7 +202,7 @@ test('verify playwright web server is properly configured', async ({ page }) => 
 
     // Check that the webServer config exists and is properly configured
     expect(configContent).toContain('webServer:');
-    expect(configContent).toContain("command: 'npm run dev'");
+    expect(configContent).toContain("command: 'npm run preview'");
     expect(configContent).toContain('url: baseURL');
 
     console.log('Playwright webServer is properly configured and running');
