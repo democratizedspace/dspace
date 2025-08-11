@@ -595,6 +595,13 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+        "name": "resistor color chart",
+        "description": "Printed reference sheet for decoding resistor color bands.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
         "name": "LED indicator module",
         "description": "5 mm red LED pre-wired with a 220 Ω resistor and jumper leads for breadboard projects.",

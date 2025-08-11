@@ -2155,9 +2155,7 @@
             { "id": "aa82b02f-2617-4474-a91b-29647e4a9780", "count": 1 }
         ],
         "consumeItems": [],
-        "createItems": [
-            { "id": "280ed361-ac70-4ab9-bcd9-aee481790faf", "count": 1 }
-        ],
+        "createItems": [{ "id": "280ed361-ac70-4ab9-bcd9-aee481790faf", "count": 1 }],
         "duration": "2m"
     },
     {
@@ -2200,9 +2198,7 @@
             { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
             { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
         ],
-        "consumeItems": [
-            { "id": "96083990-f333-4e42-ab04-7eb2a234570e", "count": 5 }
-        ],
+        "consumeItems": [{ "id": "96083990-f333-4e42-ab04-7eb2a234570e", "count": 5 }],
         "createItems": [],
         "duration": "10m",
         "hardening": {
@@ -2215,7 +2211,10 @@
     {
         "id": "verify-resistor-color-code",
         "title": "Check resistor value using color bands",
-        "requireItems": [{ "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 }],
+        "requireItems": [
+            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+            { "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88", "count": 1 }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "2m",
@@ -2496,14 +2495,12 @@
         ],
         "createItems": [{ "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8", "count": 1 }],
         "duration": "2h"
-        },
+    },
     {
         "id": "start-compost-bin",
         "title": "Start a kitchen compost bucket",
         "image": "/assets/bucket.jpg",
-        "requireItems": [
-            { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
-        ],
+        "requireItems": [{ "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }],
         "consumeItems": [],
         "createItems": [],
         "duration": "1m"
