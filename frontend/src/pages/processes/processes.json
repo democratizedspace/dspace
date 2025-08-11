@@ -396,7 +396,8 @@
     },
     {
         "id": "refresh-hydroponic-tub",
-        "title": "refresh the nutrient solution",
+        "title": "Refresh a hydroponic tub's nutrient solution",
+        "image": "/assets/hydroponics_tub.jpg",
         "requireItems": [
             {
                 "id": "71655665-4a59-41f4-9084-dad4d976df91",
@@ -419,7 +420,7 @@
                 "count": 1
             }
         ],
-        "duration": "30s"
+        "duration": "5m"
     },
     {
         "id": "grow-basil",
