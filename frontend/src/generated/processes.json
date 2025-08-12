@@ -3448,5 +3448,27 @@
                 }
             ]
         }
+    },
+    {
+        "id": "desolder-through-hole",
+        "title": "Remove solder from a joint using a desoldering pump",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m"
     }
 ]
