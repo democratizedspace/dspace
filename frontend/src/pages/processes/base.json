@@ -198,7 +198,7 @@
     },
     {
         "id": "condition-bucket-water",
-        "title": "Neutralize chlorine in a 5 gal bucket using water conditioner",
+        "title": "Add 5 mL of water conditioner to a 5 gal bucket to neutralize chlorine",
         "image": "/assets/bucket_water.jpg",
         "requireItems": [
             {
@@ -209,7 +209,7 @@
         "consumeItems": [
             {
                 "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
-                "count": 0.05
+                "count": 0.1
             },
             {
                 "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
@@ -222,7 +222,7 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "2m"
     },
     {
         "id": "rockwool-soak",
