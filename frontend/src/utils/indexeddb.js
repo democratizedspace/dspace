@@ -324,6 +324,33 @@ export const getItem = async (id) => {
     }
 };
 
+// Delete an item by id
+export const deleteItem = async (id) => {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
+    try {
+        const db = await openCustomContentDB();
+        const tx = db.transaction('items', 'readwrite');
+        const store = tx.objectStore('items');
+        store.delete(id);
+        return new Promise((resolve, reject) => {
+            tx.oncomplete = () => {
+                resolve();
+                db.close();
+            };
+            /* istanbul ignore next */
+            tx.onerror = (event) => {
+                reject(event.target.error);
+                db.close();
+            };
+        });
+    } catch (error) {
+        console.error('Error deleting item:', error);
+        return Promise.reject(error);
+    }
+};
+
 // DB Transaction
 export const saveProcess = async (process) => {
     if (!hasIndexedDB()) {
@@ -509,6 +536,33 @@ export const getQuest = async (id) => {
         });
     } catch (error) {
         console.error('Error getting quest:', error);
+        return Promise.reject(error);
+    }
+};
+
+// Delete a quest by id
+export const deleteQuest = async (id) => {
+    if (!hasIndexedDB()) {
+        return Promise.reject(new Error('IndexedDB is not supported'));
+    }
+    try {
+        const db = await openCustomContentDB();
+        const tx = db.transaction('quests', 'readwrite');
+        const store = tx.objectStore('quests');
+        store.delete(id);
+        return new Promise((resolve, reject) => {
+            tx.oncomplete = () => {
+                resolve();
+                db.close();
+            };
+            /* istanbul ignore next */
+            tx.onerror = (event) => {
+                reject(event.target.error);
+                db.close();
+            };
+        });
+    } catch (error) {
+        console.error('Error deleting quest:', error);
         return Promise.reject(error);
     }
 };
