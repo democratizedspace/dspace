@@ -2641,8 +2641,8 @@
     },
     {
         "id": "measure-arduino-5v",
-        "title": "Measure 5 V output on an Arduino Uno with a digital multimeter",
-        "image": "/assets/quests/basic_circuit.svg",
+        "title": "Measure the 5 V pin on an Arduino Uno using a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             {
                 "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -2663,7 +2663,7 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "5m"
     },
     {
         "id": "turn-compost-bucket",
