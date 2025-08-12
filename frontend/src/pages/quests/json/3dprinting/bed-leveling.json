@@ -1,14 +1,14 @@
 {
     "id": "3dprinting/bed-leveling",
     "title": "Level the Print Bed",
-    "description": "Ensure the first layer sticks by leveling your build plate.",
+    "description": "Ensure the first layer sticks by safely leveling your build plate.",
     "image": "/assets/quests/benchy_25.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Uneven prints? Let's get that bed level for a perfect first layer.",
+            "text": "Uneven prints? Let's get that bed level safely for a perfect first layer.",
             "options": [
                 {
                     "type": "goto",
@@ -19,17 +19,20 @@
         },
         {
             "id": "level",
-            "text": "Use a sheet of paper to adjust each corner until you feel slight drag.",
+            "text": "Let the bed cool, then slide a sheet of printer paper between the nozzle and bed. Adjust each corner until you feel slight drag and keep fingers clear of hot surfaces.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Walk me through the steps."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Bed is level and ready!",
                     "requiresItems": [
-                        {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        }
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0", "count": 1 }
                     ]
                 }
             ]
@@ -46,5 +49,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"]
+    "requiresQuests": ["3dprinter/start"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-12",
+                "date": "2025-08-12",
+                "score": 65
+            }
+        ]
+    }
 }
