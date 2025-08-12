@@ -1566,8 +1566,8 @@
     },
     {
         "id": "measure-resistance",
-        "title": "Measure resistor value with a multimeter",
-        "image": "/assets/quests/basic_circuit.svg",
+        "title": "Measure a 220 Ω resistor with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
@@ -1575,12 +1575,24 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "check-led-polarity",
-        "title": "Check LED polarity with a multimeter",
-        "image": "/assets/quests/basic_circuit.svg",
+        "title": "Identify LED anode and cathode using a multimeter's diode mode",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
@@ -1588,7 +1600,35 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-12", "date": "2025-08-12", "score": 60 }
+            ]
+        }
+    },
+    {
+        "id": "assemble-led-indicator-module",
+        "title": "Assemble an LED indicator module on a breadboard",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 3 },
+            { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 }
+        ],
+        "consumeItems": [
+            { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 3 }
+        ],
+        "createItems": [
+            { "id": "6da4a788-b743-4682-8dbe-f23d71435aa4", "count": 1 }
+        ],
+        "duration": "5m"
     },
     {
         "id": "measure-photoresistor",
@@ -2217,6 +2257,31 @@
         }
     },
     {
+        "id": "strip-jumper-wire",
+        "title": "Strip 5 mm of insulation from a jumper wire",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 1 },
+            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-strip-jumper-wire-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "solder-wire-connection",
         "title": "Join two jumper wires with a soldering iron kit and safety goggles",
         "requireItems": [
@@ -2364,6 +2429,17 @@
                 }
             ]
         }
+    },
+    {
+        "id": "check-aquarium-temperature",
+        "title": "Check aquarium water temperature with an attached strip thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
     },
     {
         "id": "stop-nosebleed",
@@ -2538,13 +2614,25 @@
             "history": [{ "task": "codex-hardening-2025-08-11", "date": "2025-08-11", "score": 60 }]
         }
     },
+    
     {
         "id": "turn-compost-bucket",
-        "title": "Turn a compost bucket to aerate contents",
+        "title": "Aerate compost in a 5 gallon bucket by rotating contents",
         "image": "/assets/bucket.jpg",
-        "requireItems": [{ "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }],
+        "requireItems": [
+            { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
+            { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 }
+        ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-12", "date": "2025-08-12", "score": 60 }
+            ]
+        }
     }
 ]
