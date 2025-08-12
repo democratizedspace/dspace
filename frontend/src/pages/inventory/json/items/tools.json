@@ -262,10 +262,19 @@
     {
         "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
         "name": "safety goggles",
-        "description": "Clear polycarbonate goggles with side shields and elastic strap for eye protection.",
+        "description": "ANSI Z87.1 polycarbonate goggles with side shields, adjustable strap; fit over glasses, 80 g.",
         "image": "/assets/rescue.jpg",
-        "price": "5 dUSD",
-        "type": "tool"
+        "price": "8 dUSD",
+        "type": "tool",
+        "unit": "pair",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-12", "date": "2025-08-12", "score": 65 }
+            ]
+        }
     },
     {
         "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32",
