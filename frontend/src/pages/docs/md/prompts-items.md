@@ -42,7 +42,7 @@ See the [Codex CLI repository][codex-cli] for more flags.
 
 ## 2 Prompt ingredients
 
--   **Goal sentence**: Gives the agent a north star (“Add price to `white PLA filament`).
+-   **Goal sentence**: Gives the agent a north star (“Add price to `white PLA filament`”).
 -   **Files to touch**: Limits search space → faster & cheaper.
 -   **Constraints**: Coding style, a11y, item schema rules.
 -   **Acceptance check**:
