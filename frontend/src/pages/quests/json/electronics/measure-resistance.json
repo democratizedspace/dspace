@@ -1,19 +1,19 @@
 {
     "id": "electronics/measure-resistance",
     "title": "Measure a Resistor",
-    "description": "Orion walks you through measuring a resistor's value with a digital multimeter.",
+    "description": "Orion walks you through confirming a resistor's value with a digital multimeter.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Have a resistor ready? Grab your multimeter and goggles so we can confirm its value before wiring.",
+            "text": "Place the loose resistor on a dry surface and disconnect any power.\nPut on safety goggles and set your digital multimeter to the \u03a9 range.",
             "options": [{ "type": "goto", "goto": "measure", "text": "Ready." }]
         },
         {
             "id": "measure",
-            "text": "Goggles on, set meter to \u03a9. Touch probes to each lead, avoid metal contact, keep it isolated.",
+            "text": "With goggles on, hold the resistor by its body. Touch the black probe to one lead and the red to the other without letting fingers or probes touch.\nThe meter should settle near the color-band value; stop if it heats or the reading jumps.",
             "options": [
                 {
                     "type": "goto",
@@ -30,10 +30,22 @@
         },
         {
             "id": "finish",
-            "text": "Nice work. Label the resistor and stow the meter with the probes unplugged.",
+            "text": "Nice work. Label the resistor, power down the meter, and unplug and stow the probes.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/resistor-color-check"]
+    "requiresQuests": ["electronics/resistor-color-check"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-quest-refine-2025-08-12",
+                "date": "2025-08-12",
+                "score": 65
+            }
+        ]
+    }
 }
