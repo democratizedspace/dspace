@@ -1,19 +1,19 @@
 {
     "id": "electronics/solder-wire",
     "title": "Solder a Wire Connection",
-    "description": "Join two jumper wires with a soldering iron kit. Ventilate and wear safety goggles.",
+    "description": "Join jumper wires with a soldering kit and heat-shrink tubing. Ventilate and wear safety goggles.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A lead snapped. Ventilate and wear safety goggles. Keep the iron on its stand and clear clutter.",
+            "text": "A lead snapped. Ventilate, wear goggles, keep the hot iron on its stand, and clear flammables.",
             "options": [{ "type": "goto", "goto": "prep", "text": "What gear do I need?" }]
         },
         {
             "id": "prep",
-            "text": "Gather the soldering iron kit, wire stripper, two jumper wires and safety goggles. Strip the wire ends, heat the iron on its stand, keep cords tidy and avoid fumes.",
+            "text": "Gather the soldering iron kit, wire stripper, two jumper wires, 5 cm of heat-shrink tubing, and safety goggles. Strip the wire ends with the wire stripper, slide the tubing over one lead, heat the iron on its stand, keep cords tidy, and avoid fumes.",
             "options": [
                 {
                     "type": "process",
@@ -32,26 +32,29 @@
                     "requiresItems": [
                         { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
                         { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
+                        { "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f", "count": 1 },
+                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 },
+                        { "id": "96083990-f333-4e42-ab04-7eb2a234570e", "count": 5 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Unplug the iron, cool it on the stand, wipe the tip and store all gear.",
+            "text": "Nice work! Unplug the iron, let it cool on its stand, shrink tubing, wipe the tip, and store gear.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 2,
-        "score": 78,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             { "task": "codex-refine-2025-08-07", "date": "2025-08-07", "score": 60 },
-            { "task": "codex-solder-wire-polish-2025-08-07", "date": "2025-08-07", "score": 78 }
+            { "task": "codex-solder-wire-polish-2025-08-07", "date": "2025-08-07", "score": 78 },
+            { "task": "codex-solder-wire-hardening-2025-08-12", "date": "2025-08-12", "score": 92 }
         ]
     }
 }
