@@ -2700,5 +2700,23 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "1m"
+    },
+    {
+        "id": "check-flashlight-battery",
+        "title": "Measure flashlight battery voltage with a digital multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
     }
 ]
