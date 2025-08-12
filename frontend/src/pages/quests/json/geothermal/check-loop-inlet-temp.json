@@ -1,0 +1,35 @@
+{
+    "id": "geothermal/check-loop-inlet-temp",
+    "title": "Check Loop Inlet Temperature",
+    "description": "Use an Arduino to log the water temperature entering the heat pump.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Curious how cool the loop returns? Let's measure the inlet temperature.",
+            "options": [{ "type": "goto", "goto": "setup", "text": "Show me how." }]
+        },
+        {
+            "id": "setup",
+            "text": "Use an Arduino Uno, run arduino-thermistor-read, dip in inlet, log data.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Temperature recorded",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [{ "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Logging inlet temps helps spot loop performance issues early.",
+            "options": [{ "type": "finish", "text": "Can't wait to analyze." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/survey-ground-temperature"]
+}
