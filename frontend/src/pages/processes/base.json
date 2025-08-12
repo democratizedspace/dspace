@@ -2700,5 +2700,27 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "1m"
+    },
+    {
+        "id": "trim-resistor-leads",
+        "title": "Trim resistor leads with wire cutters",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
     }
 ]
