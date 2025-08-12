@@ -2704,7 +2704,7 @@
     },
     {
         "id": "tin-soldering-iron-tip",
-        "title": "Tin the tip of a soldering iron before use",
+        "title": "Tin a soldering iron tip with fresh solder before first use",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -2718,7 +2718,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "3m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "check-flashlight-battery",
