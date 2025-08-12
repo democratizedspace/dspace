@@ -1,0 +1,35 @@
+{
+    "id": "geothermal/check-loop-outlet-temp",
+    "title": "Check Loop Outlet Temperature",
+    "description": "Log the water temperature leaving the heat pump with an Arduino thermistor.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want to see how much heat the pump pulls? Let's measure the outlet temperature.",
+            "options": [{ "type": "goto", "goto": "setup", "text": "I'm ready." }]
+        },
+        {
+            "id": "setup",
+            "text": "Wire a thermistor to your Arduino using arduino-thermistor-read. Dip it in the outlet line and log.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Data captured",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [{ "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Sweet! Comparing inlet and outlet temps tells you how efficient your heat pump is.",
+            "options": [{ "type": "finish", "text": "Efficiency noted." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/check-loop-inlet-temp"]
+}
