@@ -13,7 +13,7 @@ invoking Codex on DSPACE and should evolve alongside the project.
 > **TL;DR**
 >
 > 1. Scope the task to one or two files.
-> 2. Say **exactly** what output you expect (diff, test, docs, etc.).
+> 2. Say **exactly** what output you expect (tests, docs, etc.).
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
 
@@ -33,12 +33,12 @@ See the upstream CLI reference for more flags.
 
 ## 2 Prompt ingredients
 
-| Ingredient           | Why it matters                                                     |
-| -------------------- | ------------------------------------------------------------------ |
-| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”).   |
-| **Files to touch**   | Limits search space → faster & cheaper.                            |
-| **Constraints**      | Coding style, a11y, perf, etc.                                     |
-| **Acceptance check** | e.g. “All `npm test` suites pass” or “Return a unified diff only”. |
+| Ingredient           | Why it matters                                                   |
+| -------------------- | ---------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”). |
+| **Files to touch**   | Limits search space → faster & cheaper.                          |
+| **Constraints**      | Coding style, a11y, perf, etc.                                   |
+| **Acceptance check** | e.g. “All `npm test` suites pass”.                               |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
@@ -62,7 +62,7 @@ REQUIREMENTS
 3. …
 
 OUTPUT
-Return **only** the patch (diff) needed.
+A pull request with the required changes and tests.
 ```
 
 ## Implementation Prompt

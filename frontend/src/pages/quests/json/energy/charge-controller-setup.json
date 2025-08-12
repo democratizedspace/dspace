@@ -1,0 +1,64 @@
+{
+    "id": "energy/charge-controller-setup",
+    "title": "Configure a Solar Charge Controller",
+    "description": "Wire and configure a charge controller to safely charge your 200 Wh battery.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A charge controller keeps your battery safe. Ready to set one up?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Let's do it!"
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Wire controller between panel and battery, match red to + and black to -.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b", "count": 1 }],
+                    "text": "Take the controller"
+                },
+                {
+                    "type": "goto",
+                    "goto": "configure",
+                    "text": "It's wired up",
+                    "requiresItems": [{ "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "configure",
+            "text": "Set the controller to LiFePO4 mode and start charging in direct sun.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solar-200Wh",
+                    "text": "Start charging"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Battery topped off",
+                    "requiresItems": [
+                        { "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a", "count": 200 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! The controller will guard your battery while sun fills it up.",
+            "options": [{ "type": "finish", "text": "Sun power secured!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/solar"]
+}

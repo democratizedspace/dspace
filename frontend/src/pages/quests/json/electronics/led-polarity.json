@@ -1,14 +1,14 @@
 {
     "id": "electronics/led-polarity",
     "title": "Check LED polarity with a multimeter",
-    "description": "Use a digital multimeter's diode mode to identify a loose 5 mm LED's anode and cathode before wiring. Disconnect power, work on a dry surface, and wear safety goggles.",
+    "description": "Use a digital multimeter's diode-test mode to identify a loose 5 mm LED's anode and cathode before wiring. Disconnect all power, set parts on a dry non-conductive surface, and wear safety goggles.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Set the LED and multimeter on a dry, non-conductive surface. Put on safety goggles and keep all power sources disconnected.\nWe'll use diode-test mode to find the positive lead.",
+            "text": "Place the 5 mm LED, digital multimeter, and safety goggles on a dry, non-conductive surface. Put on the goggles and confirm all power sources are disconnected.\nWe'll use the multimeter's diode-test mode to find the anode.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "test",
-            "text": "Switch the multimeter to diode mode and confirm the probes are in the diode sockets. Keep fingers behind the guards.\nTouch the red probe to the LED's long leg (anode) and the black probe to the short leg (cathode) without letting probes or leads touch.\nThe LED should glow faintly or read about 1.8 V. Reverse the probes; it should stay dark or display OL. Stop if the LED heats up or sparks.",
+            "text": "Set the multimeter to diode-test and insert the red probe into the VΩmA port and the black probe into COM. Keep fingers behind the guards.\nTouch the red probe to the LED's long leg (anode) and the black probe to the short leg (cathode) without letting probes or leads touch.\nThe LED should glow faintly or read about 1.8 V. Reverse the probes; it should stay dark or display OL. Stop if the LED warms or sparks.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! The glowing orientation marks the anode.\nTurn off the meter, disconnect the probes, and store the LED for your next circuit.",
+            "text": "Nice! The glowing orientation marks the anode.\nTurn off the meter, remove the probes, and store the LED for your next circuit.",
             "options": [
                 {
                     "type": "finish",
@@ -48,13 +48,14 @@
     "rewards": [{ "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }],
     "requiresQuests": ["electronics/check-battery-voltage"],
     "hardening": {
-        "passes": 3,
-        "score": 92,
+        "passes": 4,
+        "score": 95,
         "emoji": "💯",
         "history": [
             { "task": "codex-quest-refinement-2025-08-10", "date": "2025-08-10", "score": 60 },
             { "task": "codex-refine-2025-08-11", "date": "2025-08-11", "score": 78 },
-            { "task": "codex-hardening-2025-08-12", "date": "2025-08-12", "score": 92 }
+            { "task": "codex-hardening-2025-08-12", "date": "2025-08-12", "score": 92 },
+            { "task": "codex-hardening-2025-08-12-refresh", "date": "2025-08-12", "score": 95 }
         ]
     }
 }
