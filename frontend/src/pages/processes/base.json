@@ -1472,7 +1472,7 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "3m"
+        "duration": "5m"
     },
     {
         "id": "measure-resistance",
