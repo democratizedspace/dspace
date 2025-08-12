@@ -30,6 +30,7 @@
     "quest:count": "node scripts/compareQuestCount.js",
     "generate:item-map": "node scripts/generate-item-dependencies.js",
     "new-quests:update": "node scripts/update-new-quests.js",
+    "changelog:index": "node scripts/generateChangelogIndex.js",
     "audit:ci": "npm audit --omit=dev --audit-level=high && npm --prefix frontend install --package-lock-only --ignore-scripts && npm --prefix frontend audit --omit=dev --audit-level=high && rm frontend/package-lock.json",
     "ci:install": "HUSKY=0 pnpm install --frozen-lockfile --reporter=append-only",
     "db:benchmark": "node frontend/scripts/db-benchmark.js"

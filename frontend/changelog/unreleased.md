@@ -1,7 +1,3 @@
-# Changelog
-
-## Unreleased
-
 ### Added
 
 -   `setup-test-env.js` script to ensure Playwright test directories and artifacts exist
@@ -22,18 +18,3 @@
 -   Added detailed instructions for preventing Playwright artifact errors
 -   Added documentation for image reference tests
 -   Updated root README with `dev:safe` command information
-
-## Releases
-
--   [September 1, 2025](src/pages/docs/md/changelog/20250901.md)
--   [September 15, 2023](src/pages/docs/md/changelog/20230915.md)
--   [June 30, 2023](src/pages/docs/md/changelog/20230630.md)
--   [January 31, 2023](src/pages/docs/md/changelog/20230131.md)
--   [January 5, 2023](src/pages/docs/md/changelog/20230105.md)
--   [January 1, 2023](src/pages/docs/md/changelog/20230101.md)
--   [December 10, 2022](src/pages/docs/md/changelog/20221210.md)
--   [October 31, 2022](src/pages/docs/md/changelog/20221031.md)
--   [October 19, 2022](src/pages/docs/md/changelog/20221019.md)
--   [October 15, 2022](src/pages/docs/md/changelog/20221015.md)
--   [October 5, 2022](src/pages/docs/md/changelog/20221005.md)
--   [October 3, 2022](src/pages/docs/md/changelog/20221003.md)
