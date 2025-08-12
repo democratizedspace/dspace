@@ -122,10 +122,27 @@
       "ubi/basicincome"
     ]
   },
+  "df7e94e2-76b9-4865-b843-2ec21feb258e": {
+    "requires": [
+      "sysadmin/resource-monitoring",
+      "sysadmin/basic-commands",
+      "devops/ssh-hardening",
+      "devops/ssd-boot",
+      "devops/private-registry",
+      "devops/k3s-deploy",
+      "devops/firewall-rules",
+      "devops/enable-https",
+      "devops/docker-compose",
+      "devops/ci-pipeline",
+      "devops/auto-updates"
+    ],
+    "rewards": []
+  },
   "80a83ecc-bcd2-400e-a469-8488a6453bb8": {
     "requires": [
       "rocketry/static-test",
-      "rocketry/parachute"
+      "rocketry/parachute",
+      "rocketry/fuel-mixture"
     ],
     "rewards": []
   },
@@ -156,6 +173,7 @@
     "requires": [],
     "rewards": [
       "rocketry/preflight-check",
+      "rocketry/fuel-mixture",
       "rocketry/firstlaunch"
     ]
   },
@@ -317,6 +335,23 @@
     ],
     "rewards": []
   },
+  "5a6bb713-ed34-4463-94ee-cfe7b8faa45c": {
+    "requires": [
+      "programming/thermistor-calibration",
+      "electronics/thermistor-reading",
+      "electronics/data-logger"
+    ],
+    "rewards": []
+  },
+  "ffe0b74a-f111-4d66-b4c3-d82965a976ac": {
+    "requires": [
+      "programming/thermistor-calibration",
+      "electronics/thermistor-reading",
+      "electronics/light-sensor",
+      "electronics/data-logger"
+    ],
+    "rewards": []
+  },
   "8e81b5e5-4aee-402c-bd04-fed9188f8c07": {
     "requires": [
       "programming/temp-logger",
@@ -334,6 +369,7 @@
       "hydroponics/tub-scrub",
       "hydroponics/top-off",
       "hydroponics/root-rinse",
+      "hydroponics/netcup-clean",
       "hydroponics/filter-clean",
       "hydroponics/bucket_10",
       "hydroponics/basil",
@@ -378,13 +414,19 @@
     ],
     "rewards": []
   },
+  "6360b1e7-84d6-4256-b085-f36fc53ef299": {
+    "requires": [
+      "hydroponics/ph-test"
+    ],
+    "rewards": []
+  },
   "13167d6a-5617-4931-8a6e-6f463c6b8835": {
     "requires": [
-      "hydroponics/ph-test",
       "hydroponics/ph-check",
       "chemistry/ph-test",
       "chemistry/ph-adjustment",
       "chemistry/acid-neutralization",
+      "chemistry/acid-dilution",
       "aquaria/ph-strip-test"
     ],
     "rewards": []
@@ -401,7 +443,9 @@
       "firstaid/wound-care",
       "firstaid/stop-nosebleed",
       "firstaid/learn-cpr",
+      "firstaid/dispose-expired",
       "chemistry/ph-test",
+      "chemistry/acid-dilution",
       "aquaria/water-testing"
     ],
     "rewards": []
@@ -409,13 +453,17 @@
   "c9b51052-4594-42d7-a723-82b815ab8cc2": {
     "requires": [
       "hydroponics/nutrient-check",
+      "firstaid/dispose-expired",
       "electronics/solder-wire",
       "electronics/measure-resistance",
       "electronics/light-sensor",
       "electronics/led-polarity",
       "electronics/desolder-component",
+      "electronics/data-logger",
+      "electronics/continuity-test",
       "electronics/check-battery-voltage",
       "chemistry/ph-test",
+      "chemistry/acid-dilution",
       "aquaria/water-testing"
     ],
     "rewards": []
@@ -606,7 +654,8 @@
   "67a682f8-a8a4-4a14-8806-5ccd3620fd3b": {
     "requires": [
       "energy/solar",
-      "energy/offgrid-charger"
+      "energy/offgrid-charger",
+      "energy/charge-controller-setup"
     ],
     "rewards": []
   },
@@ -629,7 +678,8 @@
       "energy/portable-solar-panel",
       "energy/dSolar-1kW",
       "energy/dSolar-10kW",
-      "energy/dSolar-100kW"
+      "energy/dSolar-100kW",
+      "energy/charge-controller-setup"
     ],
     "rewards": []
   },
@@ -646,7 +696,6 @@
       "electronics/temperature-plot",
       "electronics/servo-sweep",
       "electronics/potentiometer-dimmer",
-      "electronics/light-sensor",
       "electronics/data-logger",
       "electronics/continuity-test"
     ],
@@ -703,19 +752,6 @@
     ],
     "rewards": []
   },
-  "5a6bb713-ed34-4463-94ee-cfe7b8faa45c": {
-    "requires": [
-      "electronics/thermistor-reading"
-    ],
-    "rewards": []
-  },
-  "ffe0b74a-f111-4d66-b4c3-d82965a976ac": {
-    "requires": [
-      "electronics/thermistor-reading",
-      "electronics/light-sensor"
-    ],
-    "rewards": []
-  },
   "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d": {
     "requires": [
       "electronics/thermistor-reading",
@@ -752,7 +788,8 @@
   },
   "bf3d2784-d48d-4b12-b12a-75f563b5dc88": {
     "requires": [
-      "electronics/resistor-color-check"
+      "electronics/resistor-color-check",
+      "electronics/basic-circuit"
     ],
     "rewards": []
   },
@@ -787,29 +824,23 @@
     ],
     "rewards": []
   },
-  "d30d7a65-bd11-42a2-89c1-2828e990a3b2": {
-    "requires": [
-      "electronics/light-sensor"
-    ],
-    "rewards": []
-  },
   "be3aaed8-13cc-4937-95d5-6e2c952c6612": {
     "requires": [
+      "electronics/light-sensor",
       "electronics/arduino-blink"
     ],
     "rewards": []
   },
-  "df7e94e2-76b9-4865-b843-2ec21feb258e": {
+  "d30d7a65-bd11-42a2-89c1-2828e990a3b2": {
     "requires": [
-      "devops/ssh-hardening",
-      "devops/ssd-boot",
-      "devops/private-registry",
-      "devops/k3s-deploy",
-      "devops/firewall-rules",
-      "devops/enable-https",
-      "devops/docker-compose",
-      "devops/ci-pipeline",
-      "devops/auto-updates"
+      "electronics/light-sensor",
+      "electronics/data-logger"
+    ],
+    "rewards": []
+  },
+  "ce92a1a9-c817-40f0-92b1-24aff053903d": {
+    "requires": [
+      "electronics/continuity-test"
     ],
     "rewards": []
   },
@@ -868,6 +899,12 @@
       "devops/monitoring",
       "devops/log-maintenance",
       "devops/daily-backups"
+    ],
+    "rewards": []
+  },
+  "4d21c498-9225-4d0b-9a1a-ed65e349f0a8": {
+    "requires": [
+      "composting/turn-pile"
     ],
     "rewards": []
   },
@@ -984,6 +1021,12 @@
     "requires": [
       "aquaria/water-testing",
       "aquaria/shrimp"
+    ],
+    "rewards": []
+  },
+  "b8602362-2035-4f00-9376-f48d8668cf38": {
+    "requires": [
+      "aquaria/water-testing"
     ],
     "rewards": []
   },

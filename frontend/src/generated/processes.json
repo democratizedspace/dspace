@@ -317,7 +317,7 @@
     },
     {
         "id": "condition-bucket-water",
-        "title": "Neutralize chlorine in a 5 gal bucket using water conditioner",
+        "title": "Add 5 mL of water conditioner to a 5 gal bucket to neutralize chlorine",
         "image": "/assets/bucket_water.jpg",
         "requireItems": [
             {
@@ -328,7 +328,7 @@
         "consumeItems": [
             {
                 "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
-                "count": 0.05
+                "count": 0.1
             },
             {
                 "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
@@ -341,7 +341,19 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "rockwool-soak",
@@ -950,6 +962,10 @@
             {
                 "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
                 "count": 1
+            },
+            {
+                "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
+                "count": 1
             }
         ],
         "consumeItems": [
@@ -984,6 +1000,10 @@
             },
             {
                 "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
                 "count": 1
             }
         ],
@@ -1643,16 +1663,21 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "3m",
+        "duration": "5m",
         "hardening": {
-            "passes": 1,
-            "score": 65,
+            "passes": 2,
+            "score": 70,
             "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-10",
                     "date": "2025-08-10",
                     "score": 65
+                },
+                {
+                    "task": "codex-hardening-2025-09-25",
+                    "date": "2025-09-25",
+                    "score": 70
                 }
             ]
         }
@@ -2922,7 +2947,7 @@
     },
     {
         "id": "write-mission-log-entry",
-        "title": "Record a mission log entry with a quill pen",
+        "title": "Record a mission log entry with a quill pen and black ink",
         "image": "/assets/paperwork.jpg",
         "requireItems": [
             {
@@ -3316,8 +3341,8 @@
     },
     {
         "id": "measure-arduino-5v",
-        "title": "Measure 5 V output on an Arduino Uno with a digital multimeter",
-        "image": "/assets/quests/basic_circuit.svg",
+        "title": "Measure the 5 V pin on an Arduino Uno using a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             {
                 "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -3338,7 +3363,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "turn-compost-bucket",
@@ -3387,5 +3424,35 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "1m"
+    },
+    {
+        "id": "check-flashlight-battery",
+        "title": "Measure flashlight battery voltage with a digital multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]

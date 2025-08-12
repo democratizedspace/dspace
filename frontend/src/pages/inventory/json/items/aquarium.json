@@ -21,9 +21,21 @@
     {
         "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
         "name": "aquarium (goldfish) (150 L)",
-        "description": "An aquarium containing a goldfish.",
+        "description": "90×45×45 cm (150 L) freshwater tank with 5 cm goldfish; includes water and sponge filter; no lid.",
         "image": "/assets/aquarium_goldfish.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "125 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "40920981-bf9f-4b89-b887-bebe7006f7dc",

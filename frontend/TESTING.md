@@ -222,6 +222,7 @@ We have specialized tests to ensure content quality:
     - Validates NPC dialogue style consistency and fails on mismatches
     - Checks for ethical considerations in aquarium quests and fails on violations
     - Verifies proper quest progression and dependencies. Failures now occur if any quest chain issues are detected.
+    - Ensures progression is balanced across quest categories to maintain a consistent difficulty curve
     - Identifies dialogue that doesn't match NPC personalities
     - Uses simple heuristics for now; integration with the OpenAI API is planned
 

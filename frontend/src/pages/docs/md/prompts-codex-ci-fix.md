@@ -34,6 +34,7 @@ CONTEXT:
     `npm run test:ci` locally.
   * Study project docs to understand how to run the test suite and emulate the
     GitHub Actions environment.
+- Consult existing outage entries in `/outages` for similar symptoms.
 - Constraints:
   * Keep existing behaviour intact.
   * Follow `AGENTS.md` and project style.
@@ -42,12 +43,15 @@ CONTEXT:
   * After fixing, append a bullet to the "Lessons learned" section of
     `frontend/src/pages/docs/md/prompts-codex-ci-fix.md` summarizing the cause
     and remedy.
+  * Record the incident in `/outages/YYYY-MM-DD-<slug>.json` using
+    `outages/schema.json`.
 
 REQUEST:
 1. Explain in the pull-request body why the failure occurred (or would occur).
 2. Commit the minimal changes needed to fix it.
-3. Push to a branch named `codex/ci-fix/<short-description>`.
-4. Open a pull request that leaves all CI checks green.
+3. Create `outages/YYYY-MM-DD-<slug>.json` describing the incident.
+4. Push to a branch named `codex/ci-fix/<short-description>`.
+5. Open a pull request that leaves all CI checks green.
 
 OUTPUT:
 A GitHub pull request URL. Include a summary of the root cause and evidence that
@@ -88,3 +92,9 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     so patch coverage checks work on repositories where the default branch is `v3`.
 -   2025-08-11 – `openai` v3 pulled a vulnerable `axios`; upgrade to v5 to satisfy
     `npm run audit:ci`.
+-   2025-08-11 – Introduced a structured outage catalog under `/outages` so agents
+    can recall past incidents.
+-   2025-08-12 – `listMissingImages` flagged remote URLs as missing assets; skip `http` and
+    `https` paths so coverage checks ignore external images.
+-   2025-08-12 – `.npmrc`'s `packageManager` key made npm warn; drop the file and
+    set `packageManager` in `package.json` to keep installs quiet.

@@ -1,19 +1,19 @@
 {
     "id": "electronics/measure-resistance",
     "title": "Measure a Resistor",
-    "description": "Orion walks you through confirming a resistor's value with a digital multimeter.",
+    "description": "Use a digital multimeter to confirm a loose resistor's value. Disconnect all power, keep metal jewelry off, set components on a dry non-conductive surface, and wear safety goggles.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the loose resistor on a dry surface and disconnect any power.\nPut on safety goggles and set your digital multimeter to the \u03a9 range.",
+            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into V\u03a9mA, then set the meter to resistance (\u03a9) mode at a range above the resistor's expected value.",
             "options": [{ "type": "goto", "goto": "measure", "text": "Ready." }]
         },
         {
             "id": "measure",
-            "text": "With goggles on, hold the resistor by its body. Touch the black probe to one lead and the red to the other without letting fingers or probes touch.\nThe meter should settle near the color-band value; stop if it heats or the reading jumps.",
+            "text": "Hold the resistor by its body so fingers stay off the leads. Grip the probes by their insulated handles, touching the black probe to one lead and the red to the other without the probes or your fingers touching.\nWait for the reading to stabilize near the color-band value; stop if the resistor warms, the reading spikes, or the probes slip.",
             "options": [
                 {
                     "type": "goto",
@@ -30,21 +30,26 @@
         },
         {
             "id": "finish",
-            "text": "Nice work. Label the resistor, power down the meter, and unplug and stow the probes.",
+            "text": "Label the resistor's value, turn off the meter, unplug the probes, and store everything.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],
     "requiresQuests": ["electronics/resistor-color-check"],
     "hardening": {
-        "passes": 1,
-        "score": 65,
-        "emoji": "\ud83c\udf00",
+        "passes": 2,
+        "score": 78,
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-quest-refine-2025-08-12",
                 "date": "2025-08-12",
                 "score": 65
+            },
+            {
+                "task": "codex-upgrade-2025-08-12",
+                "date": "2025-08-12",
+                "score": 78
             }
         ]
     }

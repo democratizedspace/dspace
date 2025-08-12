@@ -7,4 +7,10 @@ describe('listMissingImages', () => {
     const missing = listMissingImages(images);
     expect(missing).toEqual([]);
   });
+
+  test('ignores remote URLs', () => {
+    const images = ['https://example.com/remote.png'];
+    const missing = listMissingImages(images);
+    expect(missing).toEqual([]);
+  });
 });
