@@ -41,17 +41,15 @@ See the [Codex CLI repository][codex-cli] for more flags.
 
 ## 2 Prompt ingredients
 
-| Ingredient           | Why it matters                                                                                                          |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add price to `white PLA filament`”).                                                     |
-| **Files to touch**   | Limits search space → faster & cheaper.                                                                                 |
-| **Constraints**      | Coding style, a11y, item schema rules.                                                                                  |
-| **Acceptance check** | `npm run lint`, `npm run type-check`, `npm run build`,<br>`npm run itemValidation`, and `npm test -- itemQuality` pass. |
-
-Codex merges those instructions with any `AGENTS.md` files it finds, so keep
-prompt-level rules short and concrete.
-
----
+-   **Goal sentence**: Gives the agent a north star (“Add price to `white PLA filament`).
+-   **Files to touch**: Limits search space → faster & cheaper.
+-   **Constraints**: Coding style, a11y, item schema rules.
+-   **Acceptance check**:
+    -   `npm run lint`
+    -   `npm run type-check`
+    -   `npm run build`
+    -   `npm run itemValidation`
+    -   `npm test -- itemQuality` pass
 
 ## 3 Reusable template
 
@@ -72,7 +70,7 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm run itemValidation` and `npm test -- itemQuality`, fixing any failures.
-7. Run `git diff --cached | detect-secrets scan --string` and ensure no secrets.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 8. Use an emoji-prefixed commit message like `📝 : add price field`.
 9. Update docs or processes if needed.
 
@@ -142,7 +140,7 @@ USER:
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run itemValidation`,
    and `npm test -- itemQuality`. Update docs if needed.
-6. Run `git diff --cached | detect-secrets scan --string` before committing.
+6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 7. Use an emoji-prefixed commit message like `📝 : refine item details`.
 
 OUTPUT:

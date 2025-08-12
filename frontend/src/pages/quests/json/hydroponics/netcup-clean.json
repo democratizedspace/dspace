@@ -29,7 +29,8 @@
                 {
                     "type": "goto",
                     "goto": "scrub",
-                    "text": "Water is ready"
+                    "text": "Water is ready",
+                    "requiresItems": [{ "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }]
                 }
             ]
         },
@@ -61,5 +62,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": []
+    "requiresQuests": ["hydroponics/tub-scrub"]
 }
