@@ -2386,6 +2386,17 @@
         }
     },
     {
+        "id": "check-aquarium-temperature",
+        "title": "Check aquarium water temperature with an attached strip thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
+    },
+    {
         "id": "stop-nosebleed",
         "title": "Use gloves, gauze, and antiseptic from a first aid kit to control a minor nosebleed",
         "image": "/assets/rescue.jpg",
