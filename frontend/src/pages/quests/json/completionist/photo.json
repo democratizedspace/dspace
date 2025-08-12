@@ -1,0 +1,50 @@
+{
+    "id": "completionist/photo",
+    "title": "Capture the Moment",
+    "description": "Photograph your Completionist Award for the guild archives.",
+    "image": "/assets/quests/completionist.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your trophy deserves a spot in the hall of fame. Want to snap a photo?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "snap",
+                    "text": "Absolutely, let's photograph it"
+                }
+            ]
+        },
+        {
+            "id": "snap",
+            "text": "Hold your digital camera steady and frame the award before shooting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Captured the moment!",
+                    "requiresItems": [
+                        {
+                            "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Perfect shot! The community will see your dedication.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Happy to share"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["completionist/v2"]
+}
