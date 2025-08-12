@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 183
-New quests in this release: 161
+Current quest count: 184
+New quests in this release: 162
 
 ### 3dprinting
 
@@ -198,6 +198,7 @@ New quests in this release: 161
 
 ### rocketry
 
+- rocketry/fuel-mixture
 - rocketry/night-launch
 - rocketry/preflight-check
 - rocketry/recovery-run
