@@ -120,3 +120,28 @@ USER:
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.
 ```
+
+## Outage Prompt
+
+Use this snippet when fixing an incident so knowledge lands in the outage catalog.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository.
+
+PURPOSE:
+Diagnose an outage, implement a fix, and document it.
+
+CONTEXT:
+- Review existing records under `/outages` for similar failures.
+- After resolving, add `outages/YYYY-MM-DD-<slug>.json` matching `outages/schema.json`.
+- Keep behaviour intact, add tests, and update documentation.
+
+REQUEST:
+1. Apply the fix with appropriate tests.
+2. Commit the outage entry and related docs.
+3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+
+OUTPUT:
+A pull request referencing the new outage record and passing checks.
+```
