@@ -1,0 +1,50 @@
+{
+    "id": "sysadmin/resource-monitoring",
+    "title": "Monitor System Resources",
+    "description": "Track CPU, memory, and disk on Ubuntu 24.04 LTS Minimal using top and df.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's watch how the system behaves under load.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Open top"
+                }
+            ]
+        },
+        {
+            "id": "monitor",
+            "text": "Use top for processes and df for disk space. Notice memory hungry tasks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Resources monitored",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Your Ubuntu 24.04 LTS Minimal node stays healthy with your watchful eye.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Done"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["sysadmin/basic-commands"]
+}
