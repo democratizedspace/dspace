@@ -3463,7 +3463,7 @@
     },
     {
         "id": "tin-soldering-iron-tip",
-        "title": "Tin the tip of a soldering iron before use",
+        "title": "Heat the soldering iron and melt solder on the tip while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -3477,7 +3477,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "check-flashlight-battery",
