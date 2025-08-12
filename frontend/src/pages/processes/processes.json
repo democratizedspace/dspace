@@ -2235,6 +2235,18 @@
         }
     },
     {
+        "id": "strip-jumper-wire",
+        "title": "Strip 1 cm of insulation from a jumper wire",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
+    },
+    {
         "id": "verify-resistor-color-code",
         "title": "Check resistor value using color bands",
         "requireItems": [
