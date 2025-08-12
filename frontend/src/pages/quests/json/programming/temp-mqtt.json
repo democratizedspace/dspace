@@ -1,0 +1,51 @@
+{
+    "id": "programming/temp-mqtt",
+    "title": "Stream Temp over MQTT",
+    "description": "Publish sensor readings to an MQTT topic.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want to stream your sensor data to others? Let's publish it via MQTT.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "publish",
+                    "text": "Show me."
+                }
+            ]
+        },
+        {
+            "id": "publish",
+            "text": "Sample thermistor with arduino-thermistor-read and publish to an MQTT topic.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Data is streaming.",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Your MQTT feed is humming along.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sweet."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/thermistor-reading"]
+}
