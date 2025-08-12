@@ -1566,8 +1566,8 @@
     },
     {
         "id": "measure-resistance",
-        "title": "Measure resistor value with a multimeter",
-        "image": "/assets/quests/basic_circuit.svg",
+        "title": "Measure a 220 Ω resistor with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
@@ -1575,7 +1575,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "check-led-polarity",
