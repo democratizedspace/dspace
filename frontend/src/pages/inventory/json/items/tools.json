@@ -217,9 +217,22 @@
     {
         "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
         "name": "precision screwdriver set",
-        "description": "Set of four mini Phillips and flathead screwdrivers for electronics repairs and robot assembly.",
+        "description": "Four-piece set with #00/#0 Phillips and 1.5/2.5 mm flathead drivers for electronics and robots.",
         "image": "/assets/quests/basic_circuit.svg",
-        "price": "12 dUSD"
+        "price": "12 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
