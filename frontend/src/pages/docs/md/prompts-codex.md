@@ -73,28 +73,32 @@ tracked with Markdown checkboxes and an emoji status:
 
 -   `- [ ]` – work not started
 -   `- [x]` or `- [x] <emoji>` – implemented but not fully vetted
+-   `- [x] ✅` – implemented before robustness checks; replace with `💯` once verified
 -   `- [x] 💯` – thoroughly tested and reviewed
 
 Codex should pick a single entry that is either unchecked or checked without a
-💯 and implement it completely. After all tests pass, update that row so the line
-ends with `💯`. When possible, also promote any previously completed rows lacking
-the 💯 emoji.
+💯 (for example, entries marked with ✅) and implement it completely. After all
+tests pass, update that row so the line ends with `💯`. When possible, also
+promote any previously completed rows lacking the 💯 emoji by swapping `✅` for
+`💯`.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Choose one item
 from `frontend/src/pages/docs/md/changelog/20250901.md` that is either `[ ]` or
-`[x]` without 💯. Implement it fully, completing any sub-tasks. Provide all code,
-tests and documentation required. Follow `AGENTS.md` and ensure `npm run lint`,
-`npm run type-check`, `npm run build`, and `npm test` all pass before
-committing. If Playwright browsers are missing run `npx playwright install
-chromium` or use `SKIP_E2E=1 npm test`.
+`[x]` without 💯 (including those marked with ✅). Implement it fully, completing
+any sub-tasks. Provide all code, tests and documentation required. Follow
+`AGENTS.md` and ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm test` all pass before committing. If Playwright browsers are missing
+run `npx playwright install chromium` or use `SKIP_E2E=1 npm test`.
 
 USER:
 1. Follow the steps above.
 2. After verifying the implementation, mark the corresponding changelog line
-   with `💯` (replacing any other emoji).
-3. Document new functionality as needed.
+   with `💯`, replacing any `✅` or other emoji.
+3. Replace any remaining `✅` entries in the changelog with `💯` once they meet
+   the robustness standard.
+4. Document new functionality as needed.
 
 OUTPUT:
 A pull request implementing the chosen item with all tests green. Summarize the
