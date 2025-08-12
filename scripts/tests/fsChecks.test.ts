@@ -13,4 +13,16 @@ describe('listMissingImages', () => {
     const missing = listMissingImages(images);
     expect(missing).toEqual([]);
   });
+
+  test('ignores data URLs', () => {
+    const images = ['data:image/png;base64,AAAA'];
+    const missing = listMissingImages(images);
+    expect(missing).toEqual([]);
+  });
+
+  test('ignores protocol-relative URLs', () => {
+    const images = ['//cdn.example.com/remote.png'];
+    const missing = listMissingImages(images);
+    expect(missing).toEqual([]);
+  });
 });
