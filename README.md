@@ -157,6 +157,7 @@ For a full Raspberry Pi setup, including k3s instructions, see [docs/RPI_DEPLOYM
 To add Prometheus and Grafana monitoring, follow the steps in [docs/monitoring_setup.md](./docs/monitoring_setup.md).
 For high availability, configure Cloudflare Load Balancing as described in [docs/cloudflare_load_balancing.md](./docs/cloudflare_load_balancing.md).
 See [docs/failover_procedures.md](./docs/failover_procedures.md) for handling outages and restoring nodes.
+Nightly backups use the script documented in [docs/backup_system.md](./docs/backup_system.md).
 
 ### Automated Raspberry Pi Deployment
 

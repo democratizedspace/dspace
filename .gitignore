@@ -64,3 +64,6 @@ test-artifacts/**/*.jpeg
 frontend/src/pages/docs/images/quest-tree-stats.png
 
 frontend/package-lock.json
+
+# Backups
+backups/
