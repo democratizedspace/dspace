@@ -32,6 +32,7 @@ The following quest lines are being drafted to help achieve the "10x More Quests
 
 -   **Chemistry** – safe experiments that introduce sustainable rocket fuel principles, extract stevia into a sweetener, and purify it into crystals
 -   **Programming** – simple scripts for automating sensors and data collection
+-   **Physics** – fundamentals of motion beginning with Newton's first law and inertia demos
 
 Check back as these new quests are fleshed out and integrated into the main progression.
 
