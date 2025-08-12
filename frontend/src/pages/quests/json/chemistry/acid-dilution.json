@@ -1,0 +1,54 @@
+{
+    "id": "chemistry/acid-dilution",
+    "title": "Dilute Concentrated Acid",
+    "description": "Add acid to water slowly for a safer solution.",
+    "image": "/assets/pH_strip.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Concentrated acids demand respect. Gather a beaker, stir rod, gloves, goggles, and a lab coat before we begin.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "dilute",
+                    "text": "Gear on and ready."
+                }
+            ]
+        },
+        {
+            "id": "dilute",
+            "text": "Slowly pour acid into water while stirring. Keep your face back and movements steady.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Rinsing any splashes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Solution mixed safely.",
+                    "requiresItems": [
+                        { "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Label the diluted acid and store it with the cap tight.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Safety first."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["chemistry/ph-test"]
+}
