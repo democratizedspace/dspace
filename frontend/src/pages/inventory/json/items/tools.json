@@ -281,5 +281,19 @@
                 }
             ]
         }
+    },
+    {
+        "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+        "name": "compost thermometer",
+        "description": "30 cm stainless probe thermometer reading 0–100 °C for monitoring compost core temperature.",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "price": "12 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
