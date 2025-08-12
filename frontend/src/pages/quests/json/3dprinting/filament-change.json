@@ -1,7 +1,7 @@
 {
     "id": "3dprinting/filament-change",
     "title": "Swap Filament",
-    "description": "Change your 3D printer to a new filament color.",
+    "description": "Change your entry-level FDM 3D printer to a new filament color safely.",
     "image": "/assets/quests/benchy_25.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
@@ -19,21 +19,21 @@
         },
         {
             "id": "swap",
-            "text": "Heat the nozzle, retract the old filament, and feed the green strand until it extrudes clean.",
+            "text": "Put on safety goggles, preheat the nozzle to 200 °C, retract the old filament, and feed the green PLA until the color runs clean.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "swap-green-pla-filament",
+                    "text": "Need detailed steps?"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "New filament loaded.",
                     "requiresItems": [
-                        {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 10
-                        }
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 10 },
+                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
                     ]
                 }
             ]
@@ -50,5 +50,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"]
+    "requiresQuests": ["3dprinter/start"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-quest-hardening-2025-08-12", "date": "2025-08-12", "score": 60 }
+        ]
+    }
 }
