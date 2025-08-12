@@ -1,0 +1,48 @@
+{
+    "id": "firstaid/hand-wash",
+    "title": "Wash Your Hands",
+    "description": "Practice washing hands with soap and water before treating wounds.",
+    "image": "/assets/rescue.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Clean hands prevent infection. Let's practice proper hand washing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wash",
+                    "text": "Show me how"
+                }
+            ]
+        },
+        {
+            "id": "wash",
+            "text": "Use running water and soap, scrubbing all surfaces for at least 20 seconds.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Hands scrubbed and rinsed",
+                    "requiresItems": [
+                        { "id": "799ace33-1336-46c0-904a-9f16778230f1", "count": 1 },
+                        { "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All clean and dry"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Dry your hands with a clean towel and you're ready for first aid.",
+            "options": [{ "type": "finish", "text": "Ready to help!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/assemble-kit"]
+}
