@@ -20,6 +20,20 @@
         }
     },
     {
+        "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+        "name": "sheet of printer paper",
+        "description": "Single 216 x 279 mm (8.5 x 11 in) sheet of 80 g/m² copy paper.",
+        "image": "/assets/paperwork.jpg",
+        "price": "0.01 dUSD",
+        "unit": "sheet",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "8f54a592-09de-4340-829b-7288897eb4c7",
         "name": "Edison Model M",
         "description": "Mid-size electric sedan with 75 kWh battery (~400 km range) and highway driver-assist; seats five.",
