@@ -1177,9 +1177,21 @@
     {
         "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
         "name": "camera tripod",
-        "description": "Adjustable three-legged stand for stabilizing cameras or small telescopes.",
+        "description": "Aluminum tripod with 3-way pan head; extends 0.5–1.5 m, supports up to 3 kg, weighs 1.2 kg.",
         "image": "/assets/quests/solar.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "30 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
