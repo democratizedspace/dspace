@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 181
-New quests in this release: 159
+Current quest count: 182
+New quests in this release: 160
 
 ### 3dprinting
 
@@ -137,6 +137,7 @@ New quests in this release: 159
 - firstaid/splint-limb
 - firstaid/stop-nosebleed
 - firstaid/treat-burn
+- firstaid/treat-sprain
 - firstaid/wound-care
 
 ### geothermal
