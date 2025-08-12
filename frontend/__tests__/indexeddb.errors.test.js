@@ -84,6 +84,7 @@ describe('IndexedDB error handling', () => {
         await expectFailure(() => module.saveItem({ id: 'item-1' }));
         await expectFailure(() => module.getItems());
         await expectFailure(() => module.getItem('x'));
+        await expectFailure(() => module.deleteItem('x'));
         await expectFailure(() => module.saveProcess({ id: 'p' }));
         await expectFailure(() => module.getProcesses());
         await expectFailure(() => module.getProcess('x'));
@@ -91,6 +92,7 @@ describe('IndexedDB error handling', () => {
         await expectFailure(() => module.saveQuest({ id: 'q' }));
         await expectFailure(() => module.getQuests());
         await expectFailure(() => module.getQuest('x'));
+        await expectFailure(() => module.deleteQuest('x'));
     });
 
     // Suppress unhandled rejections from causing Jest failures

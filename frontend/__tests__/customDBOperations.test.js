@@ -6,6 +6,7 @@ import {
     saveItem,
     getItems,
     getItem,
+    deleteItem,
     saveProcess,
     getProcesses,
     getProcess,
@@ -13,6 +14,7 @@ import {
     saveQuest,
     getQuests,
     getQuest,
+    deleteQuest,
 } from '../src/utils/indexeddb.js';
 
 describe('Custom DB operations', () => {
@@ -30,6 +32,14 @@ describe('Custom DB operations', () => {
         await saveItem(itemB);
         const items = await getItems();
         expect(items).toEqual(expect.arrayContaining([itemA, itemB]));
+    });
+
+    test('item functions delete correctly', async () => {
+        const item = { id: 'todelete', name: 'Remove me' };
+        await saveItem(item);
+        await deleteItem('todelete');
+        const afterDelete = await getItem('todelete');
+        expect(afterDelete).toBeUndefined();
     });
 
     test('process functions save and delete correctly', async () => {
@@ -59,5 +69,13 @@ describe('Custom DB operations', () => {
         expect(result).toEqual(quest);
         const quests = await getQuests();
         expect(quests).toEqual(expect.arrayContaining([quest]));
+    });
+
+    test('quest functions delete correctly', async () => {
+        const quest = { id: 'qdel', title: 'Remove' };
+        await saveQuest(quest);
+        await deleteQuest('qdel');
+        const afterDelete = await getQuest('qdel');
+        expect(afterDelete).toBeUndefined();
     });
 });
