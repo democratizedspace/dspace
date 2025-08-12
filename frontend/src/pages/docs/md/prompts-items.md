@@ -71,7 +71,7 @@ REQUIREMENTS
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm run itemValidation` and `npm test -- itemQuality`, fixing any failures.
 7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-8. Use an emoji-prefixed commit message like `📝 : add price field`.
+8. Use an emoji-prefixed commit message like `📝: add price field`.
 9. Update docs or processes if needed.
 
 OUTPUT
@@ -99,7 +99,7 @@ USER:
 2. Run the commands listed in the system prompt before committing, including quest quality
    checks when quests are modified.
 3. Summarize the new or updated item in the PR description.
-4. Use an emoji-prefixed commit message like `📝 : add price field`.
+4. Use an emoji-prefixed commit message like `📝: add price field`.
 
 OUTPUT:
 A pull request implementing the item with all tests green.
@@ -141,7 +141,7 @@ USER:
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run itemValidation`,
    and `npm test -- itemQuality`. Update docs if needed.
 6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-7. Use an emoji-prefixed commit message like `📝 : refine item details`.
+7. Use an emoji-prefixed commit message like `📝: refine item details`.
 
 OUTPUT:
 A pull request with the refined item, updated hardening block and passing tests.
