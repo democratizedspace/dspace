@@ -1611,6 +1611,26 @@
         }
     },
     {
+        "id": "assemble-led-indicator-module",
+        "title": "Assemble an LED indicator module on a breadboard",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 3 },
+            { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 }
+        ],
+        "consumeItems": [
+            { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+            { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 3 }
+        ],
+        "createItems": [
+            { "id": "6da4a788-b743-4682-8dbe-f23d71435aa4", "count": 1 }
+        ],
+        "duration": "5m"
+    },
+    {
         "id": "measure-photoresistor",
         "title": "Measure photoresistor value with a multimeter",
         "image": "/assets/quests/basic_circuit.svg",
