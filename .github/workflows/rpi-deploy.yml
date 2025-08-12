@@ -23,8 +23,8 @@ jobs:
     # Skip the job on push events unless all secrets are defined
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (secrets.RPI_HOST != '' && secrets.RPI_USER != '' &&
-       secrets.RPI_SSH_KEY != '' && secrets.GHCR_TOKEN != '')
+      (secrets.RPI_HOST && secrets.RPI_USER &&
+       secrets.RPI_SSH_KEY && secrets.GHCR_TOKEN)
     runs-on: ubuntu-latest
     env:
       RPI_HOST: ${{ secrets.RPI_HOST || inputs.RPI_HOST }}
