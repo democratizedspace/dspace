@@ -1,0 +1,40 @@
+{
+    "id": "aquaria/thermometer",
+    "title": "Attach Aquarium Thermometer",
+    "description": "Stick a strip thermometer to monitor water temperature.",
+    "image": "/assets/aquarium_thermometer.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your heater's running, but let's keep an eye on the temperature. Wipe a dry spot on the outside of the tank, just below the waterline.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "attach",
+                    "text": "Ready to stick it on."
+                }
+            ]
+        },
+        {
+            "id": "attach",
+            "text": "Peel the backing and press the thermometer firmly against the glass. Wait a few minutes for it to display.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Thermometer attached",
+                    "requiresItems": [{ "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Now you can monitor the water temperature at a glance.",
+            "options": [{ "type": "finish", "text": "All set!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["aquaria/position-tank"]
+}

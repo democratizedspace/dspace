@@ -281,6 +281,7 @@
       "geothermal/install-backup-thermistor",
       "geothermal/compare-seasonal-ground-temps",
       "geothermal/compare-depth-ground-temps",
+      "geothermal/check-loop-inlet-temp",
       "geothermal/calibrate-ground-sensor",
       "electronics/thermistor-reading",
       "electronics/servo-sweep",
@@ -360,7 +361,8 @@
       "programming/temp-alert",
       "programming/graph-temp",
       "geothermal/survey-ground-temperature",
-      "electronics/thermometer-calibration"
+      "electronics/thermometer-calibration",
+      "aquaria/thermometer"
     ],
     "rewards": []
   },
@@ -580,6 +582,12 @@
     "requires": [
       "firstaid/wound-care",
       "firstaid/restock-kit"
+    ],
+    "rewards": []
+  },
+  "7a4b8892-365f-4a56-93ce-127aa989f50d": {
+    "requires": [
+      "firstaid/wound-care"
     ],
     "rewards": []
   },
@@ -1195,9 +1203,21 @@
     ],
     "rewards": []
   },
+  "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4": {
+    "requires": [
+      "3dprinting/calibration-cube"
+    ],
+    "rewards": []
+  },
   "e37c86b0-caaf-485d-b5c1-c15f7029973c": {
     "requires": [
       "3dprinting/calibration-cube"
+    ],
+    "rewards": []
+  },
+  "60409c3f-56cf-4b9e-9e60-ca480d4896d0": {
+    "requires": [
+      "3dprinting/bed-leveling"
     ],
     "rewards": []
   }
