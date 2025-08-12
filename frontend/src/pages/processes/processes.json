@@ -2541,7 +2541,6 @@
                 { "task": "codex-hardening-2025-08-11", "date": "2025-08-11", "score": 60 }
             ]
         }
-        "duration": "1m"
     },
     {
         "id": "turn-compost-bucket",
