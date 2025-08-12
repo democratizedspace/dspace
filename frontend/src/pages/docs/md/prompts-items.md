@@ -50,7 +50,7 @@ See the [Codex CLI repository][codex-cli] for more flags.
     -   `npm run build`
     -   `npm run test:ci`
     -   `npm run itemValidation`
-    -   `npm test -- itemQuality` pass
+    -   `npm run test:ci -- itemQuality` pass
 
 ## 3 Reusable template
 
