@@ -13,8 +13,13 @@
         },
         {
             "id": "prep",
-            "text": "Gather the soldering iron kit, two stripped jumper wires and safety goggles. Heat the iron on its stand, keep cords tidy and avoid fumes.",
+            "text": "Gather the soldering iron kit, wire stripper, two jumper wires and safety goggles. Strip the wire ends, heat the iron on its stand, keep cords tidy and avoid fumes.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "strip-jumper-wire",
+                    "text": "Strip the jumper wires"
+                },
                 {
                     "type": "process",
                     "process": "solder-wire-connection",
