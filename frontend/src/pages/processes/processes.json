@@ -1722,7 +1722,10 @@
         "title": "Wash your hands with soap and running water",
         "image": "/assets/tap.jpg",
         "requireItems": [{ "id": "799ace33-1336-46c0-904a-9f16778230f1", "count": 1 }],
-        "consumeItems": [{ "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72", "count": 1 }],
+        "consumeItems": [
+            { "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72", "count": 1 },
+            { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 }
+        ],
         "createItems": [],
         "duration": "1m",
         "hardening": {

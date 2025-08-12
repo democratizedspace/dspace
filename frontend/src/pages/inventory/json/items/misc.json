@@ -1066,6 +1066,26 @@
         "price": "3 dUSD"
     },
     {
+        "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+        "name": "paper towel",
+        "description": "Single sheet for drying hands or cleaning small spills.",
+        "image": "/assets/paperwork.jpg",
+        "price": "0.05 dUSD",
+        "unit": "sheet",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
         "name": "Thermistor (10k NTC)",
         "description": "A temperature-sensitive resistor for Arduino voltage dividers.",
