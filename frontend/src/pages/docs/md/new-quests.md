@@ -137,6 +137,7 @@ New quests in this release: 161
 - firstaid/splint-limb
 - firstaid/stop-nosebleed
 - firstaid/treat-burn
+- firstaid/treat-sprain
 - firstaid/wound-care
 
 ### geothermal
