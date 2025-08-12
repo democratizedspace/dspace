@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The tank should be cycling nicely. Grab the Aquarium liquid test kit and protective gear so we can confirm it's safe for shrimp.",
+            "text": "The tank should be cycling nicely. Grab the Aquarium liquid test kit, protective gear, and a logbook so we can confirm it's safe for shrimp.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "explain",
-            "text": "Rinse each tube with tank water, fill to the 5 mL line, then add the specified drops from the Aquarium liquid test kit. Cap and shake away from your face. Wear nitrile gloves and safety goggles to avoid contact with the reagents. Ammonia and nitrite must read 0 ppm; keep nitrate under 40 ppm.",
+            "text": "Rinse each tube with tank water, fill to the 5 mL line, then add the specified drops from the Aquarium liquid test kit. Cap and shake away from your face. Wear nitrile gloves and safety goggles to avoid contact with the reagents, then log the readings in your water test logbook. Ammonia and nitrite must read 0 ppm; keep nitrate under 40 ppm.",
             "options": [
                 {
                     "type": "goto",
@@ -36,6 +36,10 @@
                         },
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
                             "count": 1
                         }
                     ]
@@ -66,14 +70,15 @@
     ],
     "requiresQuests": ["aquaria/walstad"],
     "hardening": {
-        "passes": 4,
-        "score": 94,
+        "passes": 5,
+        "score": 95,
         "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
             { "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 80 },
             { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 },
-            { "task": "codex-upgrade-2025-08-10", "date": "2025-08-10", "score": 94 }
+            { "task": "codex-upgrade-2025-08-10", "date": "2025-08-10", "score": 94 },
+            { "task": "codex-quest-refinement-2025-08-12", "date": "2025-08-12", "score": 95 }
         ]
     }
 }
