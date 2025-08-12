@@ -1153,6 +1153,19 @@
         }
     },
     {
+        "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
+        "name": "bottle of black ink",
+        "description": "30 mL bottle of archival black ink for quill pens; screw cap prevents leaks.",
+        "image": "/assets/quill.jpg",
+        "price": "3 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
         "name": "feather quill",
         "description": "20 cm goose feather quill with stainless steel nib; 3 g. Dip in ink for calligraphy.",
