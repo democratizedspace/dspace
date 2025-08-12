@@ -1,19 +1,31 @@
 {
     "id": "devops/docker-compose",
     "title": "Launch DSPACE in Docker",
-    "description": "Start the container and open a Cloudflare Tunnel.",
+    "description": "Launch the container and share it through a secure Cloudflare Tunnel.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            }
+        ]
+    },
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "From the project directory run `docker compose up --build -d` to launch the game on port 3002.",
+            "text": "Run `docker compose up --build -d` in the project directory. Use `docker compose down` to stop.",
             "options": [
                 {
                     "type": "process",
                     "process": "run-docker-compose",
-                    "text": "Starting it up."
+                    "text": "Start container."
                 },
                 {
                     "type": "goto",
@@ -30,8 +42,13 @@
         },
         {
             "id": "tunnel",
-            "text": "Create a Cloudflare Tunnel pointing at `http://localhost:3002` so friends can reach your Pi from anywhere.",
+            "text": "Expose the service with `cloudflared tunnel --url http://localhost:3002`. Keep the token private.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "create-cloudflare-tunnel",
+                    "text": "Run cloudflared."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",

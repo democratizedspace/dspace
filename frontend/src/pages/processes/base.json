@@ -1352,6 +1352,23 @@
         "duration": "1m"
     },
     {
+        "id": "create-cloudflare-tunnel",
+        "title": "Create a Cloudflare Tunnel to port 3002",
+        "requireItems": [
+            {
+                "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                "count": 1
+            },
+            {
+                "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
         "id": "join-k3s-cluster",
         "title": "Join nodes to a k3s cluster",
         "requireItems": [
