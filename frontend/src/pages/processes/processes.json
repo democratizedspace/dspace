@@ -1579,8 +1579,8 @@
     },
     {
         "id": "check-led-polarity",
-        "title": "Check LED polarity with a multimeter",
-        "image": "/assets/quests/basic_circuit.svg",
+        "title": "Identify LED anode and cathode using a multimeter's diode mode",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
@@ -1588,7 +1588,15 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-12", "date": "2025-08-12", "score": 60 }
+            ]
+        }
     },
     {
         "id": "measure-photoresistor",
