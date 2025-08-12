@@ -1,0 +1,50 @@
+{
+    "id": "sysadmin/basic-commands",
+    "title": "Learn Basic Linux Commands",
+    "description": "Practice core shell commands on an Ubuntu 24.04 LTS Minimal server.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ubuntu 24.04 LTS Minimal is rock solid in 2030. Ready to navigate its shell?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "practice",
+                    "text": "Show me the basics"
+                }
+            ]
+        },
+        {
+            "id": "practice",
+            "text": "Use cd, ls, grep, awk and sed to explore directories and files.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Commands practiced",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. Those commands are the backbone of every sysadmin.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "On to the next task"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}

@@ -19,6 +19,7 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 -   **Energy** – harvest solar power, expand battery capacity, harness wind with a turbine, and accumulate dWatts toward higher milestones
 -   **Geothermal** – survey ground temperature and install a ground-source heat pump for steady renewable energy
 -   **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s, then add monitoring, nightly backups and automatic updates
+-   **Sysadmin** – learn core Linux commands and monitor resources on Ubuntu 24.04 LTS Minimal
 -   **UBI** – an optional quest explaining the metaguild's basic income concept with daily payouts
 -   **Completionist** – track progress toward finishing all available quests
 -   **Woodworking** – build a sturdy workbench, sand projects smooth, then craft birdhouses, stools, shelves, and planter boxes
