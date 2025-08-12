@@ -236,9 +236,21 @@
     {
         "id": "8c0f72a2-db79-4238-b80f-97721def169f",
         "name": "Heated Walstad aquarium (80 L, 26°C)",
-        "description": "An 80 L Walstad tank equipped with a heater set to 26°C.",
+        "description": "80 L (21 gal) Walstad tank with a 150 W heater preset to 26°C; includes soil and sand cap.",
         "image": "/assets/walstad.jpg",
-        "price": "85 dUSD"
+        "price": "120 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
