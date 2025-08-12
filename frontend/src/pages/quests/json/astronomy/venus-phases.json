@@ -1,0 +1,50 @@
+{
+    "id": "astronomy/venus-phases",
+    "title": "Track the phases of Venus",
+    "description": "Use your homemade telescope to watch Venus change shape over weeks. Never point near the Sun.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your telescope works! Venus shows phases like the Moon. Wait for dusk or dawn and keep the lens away from sunlight.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "How do I find Venus?"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Look low in the west after sunset or east before dawn. Mount the scope on a steady tripod and avoid daylight glare.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Venus is in view.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Through the eyepiece, Venus gleams as a bright crescent. Sketch it and log the date to track the phase cycle.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Phase recorded."
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["astronomy/basic-telescope"],
+    "rewards": []
+}
