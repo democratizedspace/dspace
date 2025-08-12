@@ -2,6 +2,18 @@
     "id": "composting/turn-pile",
     "title": "Turn Your Compost Bucket",
     "description": "Aerate the compost by stirring the mix so microbes stay active.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            }
+        ]
+    },
     "image": "/assets/bucket.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
@@ -28,6 +40,17 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "temp",
+                    "requiresItems": [
+                        {
+                            "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Check core temperature"
+                },
+                {
+                    "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
                         {
@@ -36,6 +59,17 @@
                         }
                     ],
                     "text": "Looks aerated now"
+                }
+            ]
+        },
+        {
+            "id": "temp",
+            "text": "The probe reads about 55 °C—perfect for active decomposition.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Great, I'll keep turning"
                 }
             ]
         },

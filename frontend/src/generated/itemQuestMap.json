@@ -902,6 +902,12 @@
     ],
     "rewards": []
   },
+  "4d21c498-9225-4d0b-9a1a-ed65e349f0a8": {
+    "requires": [
+      "composting/turn-pile"
+    ],
+    "rewards": []
+  },
   "c01676ec-27e5-4a53-9a47-24bf6c5a56a9": {
     "requires": [
       "completionist/reminder",
