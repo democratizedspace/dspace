@@ -1619,9 +1619,7 @@
         "id": "wear-anti-static-wrist-strap",
         "title": "Attach an anti-static wrist strap before handling electronics",
         "image": "/assets/quests/basic_circuit.svg",
-        "requireItems": [
-            { "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2", "count": 1 }
-        ],
+        "requireItems": [{ "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2", "count": 1 }],
         "consumeItems": [],
         "createItems": [],
         "duration": "30s"
@@ -2537,11 +2535,8 @@
             "passes": 1,
             "score": 60,
             "emoji": "🌀",
-            "history": [
-                { "task": "codex-hardening-2025-08-11", "date": "2025-08-11", "score": 60 }
-            ]
+            "history": [{ "task": "codex-hardening-2025-08-11", "date": "2025-08-11", "score": 60 }]
         }
-        "duration": "1m"
     },
     {
         "id": "turn-compost-bucket",
