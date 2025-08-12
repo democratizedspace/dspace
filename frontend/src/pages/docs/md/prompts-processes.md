@@ -27,7 +27,7 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
     -   CLI: `codex "add process 3dprinting/solar-mount"`
 -   **Ask about process data**
     -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/pages/processes/processes.json"`
+    -   CLI: `codex exec "explain frontend/src/generated/processes.json"`
 -   **Run process tests**
     -   Web: not supported yet.
     -   CLI:
@@ -62,7 +62,8 @@ You are working in democratizedspace/dspace.
 GOAL: <one sentence process addition or edit>.
 
 FILES OF INTEREST
-- frontend/src/pages/processes/processes.json   ← process registry
+- frontend/src/pages/processes/base.json   ← process registry
+- frontend/src/pages/processes/hardening/* ← hardening metadata
 
 REQUIREMENTS
 1. Follow the process schema.
@@ -86,7 +87,8 @@ Use this when you want Codex to automatically create or upgrade a process.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
-processes under `frontend/src/pages/processes/processes.json`. Ensure realistic
+processes under `frontend/src/pages/processes/base.json` with corresponding
+hardening files in `frontend/src/pages/processes/hardening`. Ensure realistic
 steps, durations, item references, and passing checks (`npm run lint`,
 `npm run type-check`, `npm run build`, and `npm test -- processQuality`).
 Verify the process links to existing quests or items, add missing registry
@@ -112,7 +114,7 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository.
 
 USER:
-1. Pick a process from `frontend/src/pages/processes/processes.json` that lacks a
+1. Pick a process from `frontend/src/generated/processes.json` that lacks a
    `hardening` block or has a low score.
 2. Improve clarity, realism and item references. Ensure durations are feasible
    and related items exist in `frontend/src/pages/inventory/json/items`.

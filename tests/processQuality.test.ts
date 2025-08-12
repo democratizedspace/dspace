@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import processes from '../frontend/src/pages/processes/processes.json';
+import processes from '../frontend/src/generated/processes.json';
 import items from '../frontend/src/pages/inventory/json/items';
 
 describe('process quality', () => {

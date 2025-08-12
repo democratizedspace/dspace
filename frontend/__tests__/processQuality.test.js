@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { durationInSeconds } = require('../src/utils.js');
 
-const processesFile = path.join(__dirname, '../src/pages/processes/processes.json');
+const processesFile = path.join(__dirname, '../src/generated/processes.json');
 const itemsDir = path.join(__dirname, '../src/pages/inventory/json/items');
 
 const processes = JSON.parse(fs.readFileSync(processesFile));

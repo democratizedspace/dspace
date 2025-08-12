@@ -6,6 +6,8 @@
   },
   "main": "index.js",
   "scripts": {
+    "pretest": "node frontend/scripts/build-processes.mjs",
+    "pretest:root": "node frontend/scripts/build-processes.mjs",
     "dev": "cd frontend && npm run dev",
     "test": "npm run test:pr",
     "test:root": "vitest run --testTimeout 20000",
