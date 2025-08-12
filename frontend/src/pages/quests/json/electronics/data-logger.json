@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sensor works. Connect it to a Raspberry Pi to log temperatures. Use a dry, static-safe surface and keep power off until wiring is checked.",
+            "text": "Your thermistor circuit works. Set it on a dry, static-safe surface, put on safety goggles and an anti-static wrist strap, and keep power disconnected until wiring is double-checked.",
             "options": [
                 {
                     "type": "goto",
@@ -19,32 +19,32 @@
         },
         {
             "id": "setup",
-            "text": "Link the Arduino Uno to the Raspberry Pi with a USB cable and install `pyserial` using `sudo apt install python3-serial`. Keep cases closed and avoid tugging cables.",
+            "text": "Connect the Arduino Uno to the Raspberry Pi with a USB cable. Run `sudo apt update && sudo apt install python3-serial` to add pyserial. Keep cases closed, avoid tugging cables, and keep drinks away.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "pyserial-install",
+                    "text": "Install pyserial"
+                },
                 {
                     "type": "goto",
                     "goto": "script",
                     "text": "Hardware ready",
                     "requiresItems": [
-                        {
-                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
-                            "count": 1
-                        },
-                        {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
-                            "count": 1
-                        },
-                        {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
-                            "count": 1
-                        }
+                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
+                        { "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf", "count": 1 },
+                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
+                        { "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c", "count": 1 },
+                        { "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "script",
-            "text": "Make `log_temp.py` to read `/dev/ttyACM0` at 9600 baud and append timestamped data to `temps.csv` each minute. Use the logging process for code samples.",
+            "text": "Create `log_temp.py` to read `/dev/ttyACM0` at 9600 baud and append timestamped temperatures to `temps.csv` each minute. Use the Raspberry Pi serial logging process for sample code and run `python3 log_temp.py`.",
             "options": [
                 {
                     "type": "process",
@@ -60,7 +60,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Logs help spot trends and alerts. Stop with Ctrl+C and unplug the USB cable before moving parts.",
+            "text": "Nice work! Logs help spot trends. Stop the script with Ctrl+C, shut down the Pi, then unplug the USB cable before moving parts.",
             "options": [
                 {
                     "type": "finish",
@@ -72,14 +72,19 @@
     "rewards": [],
     "requiresQuests": ["electronics/thermistor-reading"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-refine-2025-08-09",
                 "date": "2025-08-09",
                 "score": 60
+            },
+            {
+                "task": "codex-refine-2025-08-12",
+                "date": "2025-08-12",
+                "score": 80
             }
         ]
     }
