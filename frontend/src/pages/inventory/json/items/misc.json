@@ -387,6 +387,19 @@
         }
     },
     {
+        "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
+        "name": "rocket launch checklist",
+        "description": "Laminated preflight checklist covering pad setup, arming and countdown steps.",
+        "image": "/assets/paperwork.jpg",
+        "price": "2 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
         "name": "launch-capable model rocket",
         "description": "35 cm rocket with B6-4 motor and recovery wadding; launch remotely via controller.",
@@ -1009,6 +1022,13 @@
         "price": "0.50 dUSD"
     },
     {
+        "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+        "name": "biohazard waste bag",
+        "description": "1 L red bag for used bandages and gloves; tie shut to contain contaminated waste.",
+        "image": "/assets/rescue.jpg",
+        "price": "0.10 dUSD"
+    },
+    {
         "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
         "name": "safety goggles",
         "description": "Polycarbonate goggles with vents and adjustable strap; fit over glasses, block splashes. 100 g.",
@@ -1201,14 +1221,16 @@
     {
         "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
         "name": "bottle of black ink",
-        "description": "30 mL bottle of archival black ink for quill pens; screw cap prevents leaks.",
+        "description": "30 mL glass bottle of waterproof black ink for quill pens; screw cap prevents leaks; ~60 g.",
         "image": "/assets/quill.jpg",
-        "price": "3 dUSD",
+        "price": "7 dUSD",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-12", "date": "2025-08-12", "score": 65 }
+            ]
         }
     },
     {

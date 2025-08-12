@@ -19,7 +19,7 @@
         },
         {
             "id": "measure",
-            "text": "Dip a pH strip into the solution. If the color is off, add small amounts of acid or base until you hit the target range around 6.5.",
+            "text": "Use a pH strip or digital meter. Add acid or base slowly until the reading hits 6.5.",
             "options": [
                 {
                     "type": "process",
@@ -32,7 +32,7 @@
                     "text": "pH adjusted",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
                             "count": 1
                         }
                     ]
@@ -51,5 +51,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/nutrient-check"]
+    "requiresQuests": ["hydroponics/nutrient-check"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-14",
+                "date": "2025-08-14",
+                "score": 65
+            }
+        ]
+    }
 }

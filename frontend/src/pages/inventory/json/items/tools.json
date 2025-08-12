@@ -41,19 +41,24 @@
     {
         "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
         "name": "launch controller",
-        "description": "Handheld 9 V-powered controller with removable safety key and 6 m (20 ft) leads for remote ignition of model rockets.",
+        "description": "Handheld launch controller uses a 9 V battery, safety key, LED, and 6 m (20 ft) of 18 AWG leads.",
         "image": "/assets/launch_controller.jpg",
         "price": "25 dUSD",
         "type": "tool",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
                     "date": "2025-08-05",
                     "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 80
                 }
             ]
         }
