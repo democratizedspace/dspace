@@ -32,7 +32,8 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && npm run itemValidation && npm test -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && \
+        npm run itemValidation && npm run test:ci -- itemQuality"
         ```
 
 See the [Codex CLI repository][codex-cli] for more flags.
@@ -49,7 +50,7 @@ See the [Codex CLI repository][codex-cli] for more flags.
     -   `npm run type-check`
     -   `npm run build`
     -   `npm run itemValidation`
-    -   `npm test -- itemQuality` pass
+    -   `npm run test:ci -- itemQuality` pass
 
 ## 3 Reusable template
 
@@ -69,7 +70,7 @@ REQUIREMENTS
    files and create missing processes as needed.
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
-6. Run `npm run itemValidation` and `npm test -- itemQuality`, fixing any failures.
+6. Run `npm run itemValidation` and `npm run test:ci -- itemQuality`, fixing any failures.
 7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 8. Use an emoji-prefixed commit message like `📝: add price field`.
 9. Update docs or processes if needed.
@@ -88,7 +89,7 @@ You are an automated contributor for the DSPACE repository. Edit or
 create items under `frontend/src/pages/inventory/json/items`, choosing the
 appropriate category file. Ensure realistic details, required fields, and
 passing checks (`npm run lint`, `npm run type-check`, `npm run build`,
-`npm run itemValidation`, and `npm test -- itemQuality`).
+`npm run itemValidation`, and `npm run test:ci -- itemQuality`).
 Verify the item appears in at least one quest or process, reuse existing image
 assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
 committing. If a quest's text changes, run `npm test -- questQuality` and update the quest's
@@ -139,7 +140,7 @@ USER:
      ]
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run itemValidation`,
-   and `npm test -- itemQuality`. Update docs if needed.
+    and `npm run test:ci -- itemQuality`. Update docs if needed.
 6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 7. Use an emoji-prefixed commit message like `📝: refine item details`.
 
