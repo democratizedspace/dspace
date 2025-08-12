@@ -21,3 +21,4 @@ JSON file matching [`outages/schema.json`](../../../../outages/schema.json).
 3. Submit a PR with the new file.
 
 Agents can parse the JSON files to reason about prior outages and avoid repeating mistakes.
+Prompts for incident response should instruct agents to consult this catalog and add new entries.

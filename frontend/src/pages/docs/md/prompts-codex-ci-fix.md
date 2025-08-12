@@ -34,6 +34,7 @@ CONTEXT:
     `npm run test:ci` locally.
   * Study project docs to understand how to run the test suite and emulate the
     GitHub Actions environment.
+- Consult existing outage entries in `/outages` for similar symptoms.
 - Constraints:
   * Keep existing behaviour intact.
   * Follow `AGENTS.md` and project style.
@@ -42,12 +43,15 @@ CONTEXT:
   * After fixing, append a bullet to the "Lessons learned" section of
     `frontend/src/pages/docs/md/prompts-codex-ci-fix.md` summarizing the cause
     and remedy.
+  * Record the incident in `/outages/YYYY-MM-DD-<slug>.json` using
+    `outages/schema.json`.
 
 REQUEST:
 1. Explain in the pull-request body why the failure occurred (or would occur).
 2. Commit the minimal changes needed to fix it.
-3. Push to a branch named `codex/ci-fix/<short-description>`.
-4. Open a pull request that leaves all CI checks green.
+3. Create `outages/YYYY-MM-DD-<slug>.json` describing the incident.
+4. Push to a branch named `codex/ci-fix/<short-description>`.
+5. Open a pull request that leaves all CI checks green.
 
 OUTPUT:
 A GitHub pull request URL. Include a summary of the root cause and evidence that
