@@ -19,7 +19,7 @@
         },
         {
             "id": "print",
-            "text": "Level the build plate, preheat to PLA temps, load 15 g of green PLA filament, slice, and start the print. Wear safety goggles, keep hands clear of the moving nozzle, ensure ventilation, stay nearby, and let the cube cool before removal.",
+            "text": "Level the build plate, preheat to PLA temps, load 15 g of green PLA filament, slice, and start the print. Wear safety goggles, keep hands clear of the moving nozzle, ensure ventilation, stay nearby, let the cube cool, then lift it off the plate with a print removal scraper.",
             "options": [
                 {
                     "type": "process",
@@ -29,11 +29,12 @@
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Cube printed and cooled.",
+                    "text": "Cube cooled and removed.",
                     "requiresItems": [
                         { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
                         { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 15 },
-                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
+                        { "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4", "count": 1 }
                     ]
                 }
             ]
@@ -64,8 +65,8 @@
     "rewards": [],
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
-        "passes": 2,
-        "score": 80,
+        "passes": 3,
+        "score": 82,
         "emoji": "✅",
         "history": [
             {
@@ -77,6 +78,11 @@
                 "task": "codex-quest-hardening-2025-08-12",
                 "date": "2025-08-12",
                 "score": 80
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-13",
+                "date": "2025-08-13",
+                "score": 82
             }
         ]
     }
