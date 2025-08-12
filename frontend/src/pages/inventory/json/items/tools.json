@@ -253,13 +253,5 @@
                 }
             ]
         }
-    },
-    {
-        "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
-        "name": "safety goggles",
-        "description": "Clear polycarbonate goggles with side shields and elastic strap for eye protection.",
-        "image": "/assets/rescue.jpg",
-        "price": "5 dUSD",
-        "type": "tool"
     }
 ]

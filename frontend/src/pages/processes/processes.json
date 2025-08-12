@@ -2295,7 +2295,7 @@
         "requireItems": [
             { "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f", "count": 1 },
             { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 1 },
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -2620,6 +2620,8 @@
         "image": "/assets/door.jpg",
         "requireItems": [
             { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
+            { "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
             { "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913", "count": 1 },
             { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
             { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 }

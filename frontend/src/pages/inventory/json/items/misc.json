@@ -1011,9 +1011,23 @@
     {
         "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
         "name": "safety goggles",
-        "description": "Clear goggles that shield eyes from splashes.",
-        "image": "/assets/quests/basic_circuit.svg",
-        "price": "5 dUSD"
+        "description": "Polycarbonate goggles with vents and adjustable strap; fit over glasses, block splashes. 100 g.",
+        "image": "/assets/rescue.jpg",
+        "price": "8 dUSD",
+        "type": "tool",
+        "unit": "pair",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "96083990-f333-4e42-ab04-7eb2a234570e",
