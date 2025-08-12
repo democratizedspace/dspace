@@ -96,3 +96,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     can recall past incidents.
 -   2025-08-12 – `listMissingImages` flagged remote URLs as missing assets; skip `http` and
     `https` paths so coverage checks ignore external images.
+-   2025-08-12 – `.npmrc`'s `packageManager` key made npm warn; drop the file and
+    set `packageManager` in `package.json` to keep installs quiet.
