@@ -32,8 +32,7 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && \
-        npm test -- processQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && npm run test:ci -- processQuality"
         ```
 
 See the [Codex CLI repository][codex-cli] for more flags.
@@ -47,7 +46,7 @@ See the [Codex CLI repository][codex-cli] for more flags.
 | **Goal sentence**    | Gives the agent a north star (“Add lettuce seed input to hydroponics”). |
 | **Files to touch**   | Limits search space → faster & cheaper.                                 |
 | **Constraints**      | Coding style, a11y, process schema rules.                               |
-| **Acceptance check** | e.g. “`npm test -- processQuality` passes”.                             |
+| **Acceptance check** | e.g. “`npm run test:ci -- processQuality` passes”.                      |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
@@ -71,8 +70,8 @@ REQUIREMENTS
 3. Ensure the process is referenced by at least one quest or item; create
    missing items or quest hooks as needed.
 4. Use only existing image assets; do not add new image files.
-5. Run `npm run lint`, `npm run type-check` and `npm run build`.
-6. Run `npm test -- processQuality` and fix any failures.
+5. Run `npm run lint`, `npm run type-check`, and `npm run build`.
+6. Run `npm run test:ci -- processQuality` and fix any failures.
 7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 8. Update docs or items if needed.
 
@@ -90,7 +89,7 @@ You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/base.json` with corresponding
 hardening files in `frontend/src/pages/processes/hardening`. Ensure realistic
 steps, durations, item references, and passing checks (`npm run lint`,
-`npm run type-check`, `npm run build`, and `npm test -- processQuality`).
+`npm run type-check`, `npm run build`, and `npm run test:ci -- processQuality`).
 Verify the process links to existing quests or items, add missing registry
 entries if needed, reuse existing image assets, and scan for secrets with
 `git diff --cached | ./scripts/scan-secrets.py` before committing.
@@ -99,7 +98,7 @@ USER:
 1. Follow the steps above.
 2. Run the commands listed in the system prompt before committing.
 3. Summarize the new or updated process in the PR description.
-4. Use an emoji-prefixed commit message like `📝: update process`.
+4. Use an emoji-prefixed commit message like `📝 : – update process`.
 
 OUTPUT:
 A pull request implementing the process with all tests green.
@@ -138,9 +137,9 @@ USER:
      ]
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
-   `npm test -- processQuality`. Update docs or items if needed.
+   `npm run test:ci -- processQuality`. Update docs or items if needed.
 6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-7. Use an emoji-prefixed commit message like `📝: refine process details`.
+7. Use an emoji-prefixed commit message like `📝 : – refine process details`.
 
 OUTPUT:
 A pull request with the refined process, updated hardening block and passing tests.
