@@ -217,9 +217,22 @@
     {
         "id": "60e517b4-5807-4983-afb8-e2aad1566587",
         "name": "Airline tubing",
-        "description": "Flexible tubing for aquarium air pumps and drip acclimation.",
-        "image": "/assets/aquarium_empty.jpg",
-        "price": "2 dUSD"
+        "description": "1 m of 4 mm ID clear PVC tubing for aquarium air pumps and drip acclimation.",
+        "image": "/assets/kevlar_cord.jpg",
+        "price": "1 dUSD",
+        "unit": "m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "8c0f72a2-db79-4238-b80f-97721def169f",
