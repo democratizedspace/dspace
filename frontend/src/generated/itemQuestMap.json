@@ -55,6 +55,12 @@
     ],
     "rewards": []
   },
+  "2dfe683c-56f6-4026-b9e9-2d01a03b1878": {
+    "requires": [
+      "woodworking/birdhouse"
+    ],
+    "rewards": []
+  },
   "7318a5ba-fac3-476e-a532-c813ed9b18e5": {
     "requires": [],
     "rewards": [

@@ -92,12 +92,14 @@ appropriate category file. Ensure realistic details, required fields, and
 passing checks (`npm run lint`, `npm run type-check`, `npm run build`,
 `npm run itemValidation`, and `npm test -- itemQuality`).
 Verify the item appears in at least one quest or process, reuse existing image
-assets, and scan for secrets with `git diff --cached | detect-secrets scan --string` before
-committing.
+assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
+committing. If a quest's text changes, run `npm test -- questQuality` and update the quest's
+`hardening` block with a fresh evaluation score.
 
 USER:
 1. Follow the steps above.
-2. Run the commands listed in the system prompt before committing.
+2. Run the commands listed in the system prompt before committing, including quest quality
+   checks when quests are modified.
 3. Summarize the new or updated item in the PR description.
 4. Use an emoji-prefixed commit message like `📝 : add price field`.
 

@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "You'll need a pine board, wood glue, and your handsaw. I'll hand over what you don't already have so we can get started right away.",
+            "text": "You'll need a pine board, wood glue, your handsaw, and a tape measure. I'll supply missing gear.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -34,6 +34,10 @@
                         },
                         {
                             "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
                             "count": 1
                         }
                     ],
@@ -53,6 +57,10 @@
                         },
                         {
                             "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
                             "count": 1
                         }
                     ],
@@ -93,5 +101,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench"]
+    "requiresQuests": ["woodworking/workbench"],
+    "hardening": {
+        "passes": 1,
+        "score": 80,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 80
+            }
+        ]
+    }
 }

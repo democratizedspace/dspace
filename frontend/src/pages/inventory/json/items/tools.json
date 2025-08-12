@@ -195,6 +195,26 @@
         }
     },
     {
+        "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+        "name": "tape measure",
+        "description": "3 m (10 ft) retractable steel tape measure with metric and imperial markings.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "8 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
         "name": "precision screwdriver set",
         "description": "Set of four mini Phillips and flathead screwdrivers for electronics repairs and robot assembly.",
