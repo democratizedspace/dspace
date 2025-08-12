@@ -224,9 +224,21 @@
     {
         "id": "799ace33-1336-46c0-904a-9f16778230f1",
         "name": "sink",
-        "description": "Generates tap water.",
+        "description": "Steel sink with faucet; ~50×40×20 cm basin (~5 kg). Provides tap water.",
         "image": "/assets/tap.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "120 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "a5395e29-1862-4eb7-8517-5d161635e032",
