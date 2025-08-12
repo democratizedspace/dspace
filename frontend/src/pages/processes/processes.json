@@ -2226,11 +2226,19 @@
     },
     {
         "id": "print-benchy",
-        "title": "3D print a 60 mm Benchy calibration boat on an entry-level FDM printer with 15 g white PLA",
-        "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
-        "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 15 }],
-        "createItems": [{ "id": "7892ffc6-c651-445f-946b-7edc998cf389", "count": 1 }],
-        "duration": "1h 30m",
+        "title": "3D print a Benchy calibration model",
+        "image": "/assets/benchy.jpg",
+        "requireItems": [
+            { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+            { "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 15 }
+        ],
+        "consumeItems": [
+            { "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 15 }
+        ],
+        "createItems": [
+            { "id": "7892ffc6-c651-445f-946b-7edc998cf389", "count": 1 }
+        ],
+        "duration": "1h",
         "hardening": {
             "passes": 1,
             "score": 65,
