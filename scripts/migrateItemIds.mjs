@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 const root = path.resolve(__dirname, '..');
 
 const itemsDir = path.join(root, 'frontend/src/pages/inventory/json/items');
-const processesPath = path.join(root, 'frontend/src/pages/processes/processes.json');
+const processesPath = path.join(root, 'frontend/src/pages/processes/base.json');
 const questsDir = path.join(root, 'frontend/src/pages/quests/json');
 
 const idMapPath = path.join(root, 'scripts', 'item-id-map.json');

@@ -4,6 +4,8 @@
     "type": "module",
     "description": "A free and open source web-based space exploration idle game",
     "scripts": {
+        "prebuild": "node scripts/build-processes.mjs",
+        "pretest": "node scripts/build-processes.mjs",
         "dev": "astro dev --host 0.0.0.0 --port=3002",
         "dev:safe": "concurrently \"npm run dev\" \"npm run fix-artifacts\"",
         "fix-artifacts": "node scripts/fix-artifact-error.js",

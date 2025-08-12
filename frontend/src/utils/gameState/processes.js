@@ -2,7 +2,7 @@ import { loadGameState, saveGameState } from './common.js';
 import { hasItems, burnItems, addItems } from './inventory.js';
 import { durationInSeconds } from '../../utils.js';
 
-import processes from '../../pages/processes/processes.json';
+import processes from '../../generated/processes.json';
 
 export const hasRequiredAndConsumedItems = (processId) => {
     const process = processes.find((p) => p.id === processId);

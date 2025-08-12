@@ -7,7 +7,7 @@ const baselineFile = path.join(__dirname, '../baselines/contentCounts.json');
 const baseline = JSON.parse(fs.readFileSync(baselineFile, 'utf8'));
 const questDir = path.join(__dirname, '../../frontend/src/pages/quests/json');
 const itemsDir = path.join(__dirname, '../../frontend/src/pages/inventory/json/items');
-const processesFile = path.join(__dirname, '../../frontend/src/pages/processes/processes.json');
+const processesFile = path.join(__dirname, '../../frontend/src/generated/processes.json');
 const npcDir = path.join(__dirname, '../../frontend/public/assets/npc');
 
 function getCounts() {

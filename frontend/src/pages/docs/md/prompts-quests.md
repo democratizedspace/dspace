@@ -137,7 +137,7 @@ A pull request with the new quest.
 Focus on recently added quests — [see the list](/docs/new-quests) —
 to keep quality high as the codebase grows. This prompt uses the quest
 quality tests to ensure that every technological step is represented in
-the inventory (item registry) and process (`processes.json`) registries and
+the inventory (item registry) and process (`generated/processes.json`) registries and
 grounded in reality with components that can be replicated in real life,
 while the hardening loop tracks refinement passes over time.
 
@@ -150,8 +150,8 @@ USER:
    `/docs/new-quests`.
 2. Improve clarity, safety notes and item or process references.
 3. Check that every technology mentioned has a granular, real‑world entry in
-   `frontend/src/pages/inventory/json/items` or
-   `frontend/src/pages/processes/processes.json`. Add missing items or
+    `frontend/src/pages/inventory/json/items` or
+    `frontend/src/generated/processes.json`. Add missing items or
    processes so quests stay grounded in reality and are reproducible IRL.
 4. If the quest includes an image, reuse an existing image URL already in the
    repository; do not add new or external images.

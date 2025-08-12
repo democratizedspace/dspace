@@ -19,7 +19,7 @@ const items = fs
     .filter((f) => f.endsWith('.json'))
     .flatMap((f) => JSON.parse(fs.readFileSync(path.join(itemsDir, f))));
 const processes = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '../src/pages/processes/processes.json'))
+    fs.readFileSync(path.join(__dirname, '../src/generated/processes.json'))
 );
 const itemIds = new Set(items.map((i) => i.id));
 const processIds = new Set(processes.map((p) => p.id));

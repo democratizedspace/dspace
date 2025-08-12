@@ -62,7 +62,7 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 
 -   2025-03-?? – prompt no longer requires a failing job URL; agents must inspect
     workflows and run local checks when none is provided.
--   2025-08-09 – JSON parse failures in `processes.json` and an outdated
+-   2025-08-09 – JSON parse failures in `generated/processes.json` and an outdated
     generated map broke type-check and build; ensure data files stay valid and
     regenerate artifacts.
 -   2025-08-09 – `pnpm` must be installed before Node caching; place `pnpm/action-setup`

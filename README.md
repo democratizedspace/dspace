@@ -223,7 +223,7 @@ Additional quality checks are available:
 ```bash
 npm test -- questQuality        # heuristics for dialogue quality via token.place
 npm test -- itemQuality         # validates item registry for realism and completeness
-npm test -- processQuality      # validates processes.json for realistic durations
+npm test -- processQuality      # validates generated process data for realistic durations
 npm test -- imageReferences     # verifies quest and NPC image files
 ```
 
@@ -234,7 +234,9 @@ All item files must satisfy `frontend/src/pages/inventory/jsonSchemas/item.json`
 
 ## Built-in Processes
 
-Process definitions are stored in `frontend/src/pages/processes/processes.json`.
+Process definitions live in `frontend/src/pages/processes/base.json` with
+hardening metadata under `frontend/src/pages/processes/hardening`. These
+compile into `frontend/src/generated/processes.json`.
 Durations should mirror real-world expectations when possible. See
 `frontend/src/pages/docs/md/process-guidelines.md` for more tips on designing
 and balancing new processes.
