@@ -17,7 +17,7 @@ which covers quests, items and processes in detail.
 > **TL;DR**
 >
 > 1. Scope changes to a single quest file.
-> 2. Say exactly what output you expect (diff, tests, docs).
+> 2. Say exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
 
@@ -25,15 +25,15 @@ which covers quests, items and processes in detail.
 
 ## 1 Quick start (Web vs CLI)
 
--   **Add or update a quest**
-    -   Web: use the “Code” button and attach the repo.
-    -   CLI: `codex "add quest solar/led-basics"`
--   **Ask about quest files**
-    -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
--   **Run quest tests**
-    -   Web: not supported yet.
-    -   CLI:
+- **Add or update a quest**
+    - Web: use the “Code” button and attach the repo.
+    - CLI: `codex "add quest solar/led-basics"`
+- **Ask about quest files**
+    - Web: use the “Ask” button.
+    - CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
+- **Run quest tests**
+    - Web: not supported yet.
+    - CLI:
         ```bash
         codex exec "npm run lint && npm run type-check && npm run build && \
         npm test -- questCanonical questQuality"
@@ -80,7 +80,7 @@ REQUIREMENTS
 8. Update docs or dialogue as needed.
 
 OUTPUT
-Return **only** the patch (diff) needed.
+A pull request with the completed quest and passing checks.
 ```
 
 ## Implementation Prompt
@@ -129,7 +129,7 @@ USER:
 5. Use an emoji-prefixed commit message.
 
 OUTPUT:
-Return only the diff with the new quest.
+A pull request with the new quest.
 ```
 
 ## Upgrade prompt for new quests
@@ -184,10 +184,10 @@ A pull request with the refined quest, updated hardening block and passing tests
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus.
--   **Use system prompts** to guide tone and technical accuracy.
--   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible
-    but incorrect details.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible
+  but incorrect details.
 
 [codex-cli]: https://github.com/microsoft/Codex-CLI

@@ -14,7 +14,7 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
 > **TL;DR**
 >
 > 1. Scope changes to a single process entry.
-> 2. Say exactly what output you expect (diff, tests, docs).
+> 2. Say exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
 
@@ -76,7 +76,7 @@ REQUIREMENTS
 8. Update docs or items if needed.
 
 OUTPUT
-Return **only** the patch (diff) needed.
+A pull request with the completed process and passing checks.
 ```
 
 ## Implementation Prompt
