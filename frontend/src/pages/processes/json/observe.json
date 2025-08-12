@@ -1,0 +1,32 @@
+[
+    {
+        "id": "observe-jupiter-moons",
+        "title": "Observe Jupiter's four Galilean moons through a basic telescope",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "20m"
+    },
+    {
+        "id": "observe-meteor-shower",
+        "title": "Watch a meteor shower with your telescope",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1h"
+    }
+]

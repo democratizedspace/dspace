@@ -1,0 +1,20 @@
+[
+    {
+        "id": "flash-sd-card",
+        "title": "Flash Raspberry Pi OS to microSD",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "36042a2b-861a-4192-a991-98778898963a",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    }
+]

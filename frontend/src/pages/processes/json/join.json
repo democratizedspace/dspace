@@ -1,0 +1,15 @@
+[
+    {
+        "id": "join-k3s-cluster",
+        "title": "Join nodes to a k3s cluster",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    }
+]

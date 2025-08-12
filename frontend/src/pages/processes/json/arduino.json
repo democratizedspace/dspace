@@ -1,0 +1,157 @@
+[
+    {
+        "id": "arduino-ide-install",
+        "title": "Install the Arduino IDE",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "arduino-led-blink",
+        "title": "Upload the Blink sketch to an Arduino Uno and flash a 5 mm LED on a breadboard",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 2
+            },
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "arduino-potentiometer-dimmer",
+        "title": "Dim an LED with a potentiometer on Arduino",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            },
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "arduino-servo-sweep",
+        "title": "Upload and run the Servo Sweep example on an Arduino Uno",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "828d6c3b-66a5-4064-b221-97630274502b",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "arduino-thermistor-read",
+        "title": "Log temperature from a thermistor using an Arduino Uno",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                "count": 1
+            },
+            {
+                "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "15m"
+    }
+]

@@ -1,0 +1,29 @@
+[
+    {
+        "id": "add-goldfish",
+        "title": "Add a goldfish to your aquarium",
+        "requireItems": [
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            },
+            {
+                "id": "40920981-bf9f-4b89-b887-bebe7006f7dc",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    }
+]

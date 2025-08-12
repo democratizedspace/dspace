@@ -1,0 +1,24 @@
+[
+    {
+        "id": "stock-guppies",
+        "title": "Add guppies to your heated Walstad tank",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                "count": 1
+            },
+            {
+                "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    }
+]

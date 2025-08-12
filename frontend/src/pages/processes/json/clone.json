@@ -1,0 +1,24 @@
+[
+    {
+        "id": "clone-os-to-ssd",
+        "title": "Clone OS to M.2 SSD",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
+                "count": 1
+            },
+            {
+                "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "4af856b5-b5c1-494f-8037-9b6559785633",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    }
+]

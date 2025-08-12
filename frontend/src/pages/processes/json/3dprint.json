@@ -1,0 +1,197 @@
+[
+    {
+        "id": "3dprint-benchy",
+        "title": "3D print a 60 mm Benchy calibration model",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 15
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 150
+            }
+        ],
+        "createItems": [
+            {
+                "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 15
+            }
+        ],
+        "duration": "1h 30m"
+    },
+    {
+        "id": "3dprint-rocket",
+        "title": "3D print a 100 mm model rocket using 91 g of green PLA on an entry-level FDM printer",
+        "image": "/assets/modelrocket.jpg",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 91
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1600
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
+                "count": 1
+            }
+        ],
+        "duration": "13h"
+    },
+    {
+        "id": "3dprint-rocket-body-tube",
+        "title": "3D Print a rocket body tube",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 18.48
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 266.67
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 18.48
+            }
+        ],
+        "duration": "2h 8m 11s"
+    },
+    {
+        "id": "3dprint-rocket-fincan",
+        "title": "3D print a rocket fincan",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 52.3
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1006.70139
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 52.3
+            }
+        ],
+        "duration": "8h 3m 13s"
+    },
+    {
+        "id": "3dprint-rocket-nosecone",
+        "title": "3D print a rocket nosecone",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 13.9
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 223.4375
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 13.9
+            }
+        ],
+        "duration": "1h 47m 15s"
+    },
+    {
+        "id": "3dprint-rocket-nosecone-coupler",
+        "title": "3D print a rocket nosecone coupler",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 6.32
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 112.92
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "05c339ee-f50b-419a-804a-341f850b85e9",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 6.32
+            }
+        ],
+        "duration": "54m 12s"
+    }
+]

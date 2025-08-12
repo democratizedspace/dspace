@@ -1,0 +1,62 @@
+[
+    {
+        "id": "regrow-basil",
+        "title": "regrow basil after harvest",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "29190faf-8581-4769-b871-f0ee283840e1",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 8064
+            }
+        ],
+        "createItems": [
+            {
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "14d"
+    },
+    {
+        "id": "regrow-stevia",
+        "title": "regrow stevia after harvest",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "b2248af9-151b-4268-989d-4bb408a6147c",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 8064
+            }
+        ],
+        "createItems": [
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "14d"
+    }
+]

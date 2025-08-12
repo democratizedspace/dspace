@@ -1,0 +1,62 @@
+[
+    {
+        "id": "setup-solar-enclosure-1kWh",
+        "title": "Add a 1 kWh battery, charge controller, and 200 W solar panel to an outdoor watertight enclosure",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "7246c1c8-f22e-4d31-acd3-967f91b8626a",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "setup-solar-enclosure-200Wh",
+        "title": "Add a 200 Wh battery pack, charge controller, and 200 W solar panel to an outdoor watertight enclosure",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    }
+]

@@ -1,0 +1,46 @@
+[
+    {
+        "id": "dCarbon-dOffset-1",
+        "title": "dCarbon to dOffset",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                "count": 1
+            },
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "b0ac46e6-6c60-48f0-b753-d9b6ad9935a6",
+                "count": 1
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "dCarbon-dOffset-10",
+        "title": "dCarbon to dOffset",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                "count": 10
+            },
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 100
+            }
+        ],
+        "createItems": [
+            {
+                "id": "b0ac46e6-6c60-48f0-b753-d9b6ad9935a6",
+                "count": 10
+            }
+        ],
+        "duration": "5s"
+    }
+]

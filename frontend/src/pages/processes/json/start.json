@@ -1,0 +1,16 @@
+[
+    {
+        "id": "start-compost-bin",
+        "title": "Start a kitchen compost bucket using a 5 gallon bucket",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    }
+]

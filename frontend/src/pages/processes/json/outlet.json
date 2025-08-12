@@ -1,0 +1,85 @@
+[
+    {
+        "id": "outlet-dWatt-1e3",
+        "title": "Buy 1 kWh of electricity from a wall outlet",
+        "requireItems": [
+            {
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 0.18
+            }
+        ],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1000
+            },
+            {
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                "count": 0.98
+            }
+        ],
+        "duration": "1h"
+    },
+    {
+        "id": "outlet-dWatt-1e4",
+        "title": "Use a smart plug to buy 10 kWh of electricity from a wall outlet",
+        "image": "/assets/smart_plug.jpg",
+        "requireItems": [
+            {
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 1.8
+            }
+        ],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 10000
+            },
+            {
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                "count": 9.77
+            }
+        ],
+        "duration": "10h"
+    },
+    {
+        "id": "outlet-dWatt-1e5",
+        "title": "Use a smart plug to buy 100 kWh of electricity from a wall outlet",
+        "image": "/assets/smart_plug.jpg",
+        "requireItems": [
+            {
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 18
+            }
+        ],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 100000
+            },
+            {
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                "count": 97.7
+            }
+        ],
+        "duration": "100h"
+    }
+]

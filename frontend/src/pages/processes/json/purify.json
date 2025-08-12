@@ -1,0 +1,20 @@
+[
+    {
+        "id": "purify-stevia",
+        "title": "purify stevia extract into crystals",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                "count": 1
+            }
+        ],
+        "duration": "6h"
+    }
+]

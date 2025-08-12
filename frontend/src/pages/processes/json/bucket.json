@@ -1,0 +1,44 @@
+[
+    {
+        "id": "bucket-water-chlorinated",
+        "title": "Use a sink to fill a 19 L (5 gal) bucket with tap water",
+        "requireItems": [
+            {
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+                "count": 1
+            }
+        ],
+        "duration": "30s"
+    },
+    {
+        "id": "bucket-water-dechlorinated",
+        "title": "Leave a 5 gal bucket of tap water uncovered for 48h so chlorine dissipates",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "duration": "48h"
+    }
+]

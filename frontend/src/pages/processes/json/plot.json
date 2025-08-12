@@ -1,0 +1,10 @@
+[
+    {
+        "id": "plot-temperature-data",
+        "title": "Plot logged temperature data using Python and Matplotlib",
+        "requireItems": [],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    }
+]

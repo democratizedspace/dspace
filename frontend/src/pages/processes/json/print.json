@@ -1,0 +1,112 @@
+[
+    {
+        "id": "print-benchy",
+        "title": "3D print a 60 mm Benchy calibration boat on an entry-level FDM printer with 15 g white PLA",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 15
+            }
+        ],
+        "createItems": [
+            {
+                "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                "count": 1
+            }
+        ],
+        "duration": "1h 30m"
+    },
+    {
+        "id": "print-calibration-cube",
+        "title": "3D print a 20 mm calibration cube on an entry-level FDM 3D printer using 15 g of green PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 15
+            }
+        ],
+        "createItems": [],
+        "duration": "1h"
+    },
+    {
+        "id": "print-crank-handle",
+        "title": "3D print a crank handle on an entry-level FDM printer using 20 g of white PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 20
+            }
+        ],
+        "createItems": [
+            {
+                "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
+                "count": 1
+            }
+        ],
+        "duration": "2h"
+    },
+    {
+        "id": "print-generator-housing",
+        "title": "3D print a generator housing on an entry-level FDM printer using 40 g of white PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 40
+            }
+        ],
+        "createItems": [
+            {
+                "id": "3326e89c-5883-473d-a68f-3ea560093966",
+                "count": 1
+            }
+        ],
+        "duration": "4h"
+    },
+    {
+        "id": "print-phone-stand",
+        "title": "3D print a smartphone stand on an entry-level FDM 3D printer using 20 g of white PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 20
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                "count": 1
+            }
+        ],
+        "duration": "2h"
+    }
+]

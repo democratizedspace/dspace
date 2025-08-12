@@ -1,0 +1,19 @@
+[
+    {
+        "id": "verify-resistor-color-code",
+        "title": "Check resistor value using color bands",
+        "requireItems": [
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    }
+]

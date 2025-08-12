@@ -1,0 +1,19 @@
+[
+    {
+        "id": "identify-constellations",
+        "title": "Identify constellations with a star chart",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30m"
+    }
+]

@@ -1,0 +1,75 @@
+[
+    {
+        "id": "prepare-aquarium",
+        "title": "Prepare a 150 L aquarium",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
+                "count": 1
+            },
+            {
+                "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                "count": 1
+            },
+            {
+                "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            },
+            {
+                "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
+                "count": 20
+            }
+        ],
+        "createItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            }
+        ],
+        "duration": "2h"
+    },
+    {
+        "id": "prepare-hydroponic-tub",
+        "title": "Prepare a hydroponics tub with water and nutrient solution",
+        "image": "/assets/hydroponics_tub.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    }
+]

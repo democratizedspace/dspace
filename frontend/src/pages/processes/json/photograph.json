@@ -1,0 +1,23 @@
+[
+    {
+        "id": "photograph-lunar-eclipse",
+        "title": "Photograph a lunar eclipse with a telescope",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "45m"
+    }
+]

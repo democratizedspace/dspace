@@ -1,0 +1,188 @@
+[
+    {
+        "id": "measure-aquarium-ph",
+        "title": "Test the pH of a 150 L freshwater aquarium using a disposable strip",
+        "image": "/assets/pH_strip.jpg",
+        "requireItems": [
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "measure-arduino-5v",
+        "title": "Measure 5 V output on an Arduino Uno with a digital multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "measure-battery-voltage",
+        "title": "Check a 12 V battery pack's voltage with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m"
+    },
+    {
+        "id": "measure-calibration-cube",
+        "title": "Measure a 20 mm calibration cube with digital calipers and log results",
+        "requireItems": [
+            {
+                "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            },
+            {
+                "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "2m"
+    },
+    {
+        "id": "measure-ec",
+        "title": "Measure hydroponic nutrient EC",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "measure-ec-solution",
+        "title": "Measure hydroponic nutrient solution EC with a handheld meter",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "measure-ph",
+        "title": "Measure solution pH",
+        "requireItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "measure-photoresistor",
+        "title": "Measure a photoresistor's resistance using a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "measure-resistance",
+        "title": "Measure a 220 Ω resistor with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    }
+]

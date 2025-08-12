@@ -1,0 +1,46 @@
+[
+    {
+        "id": "solar-1000Wh",
+        "title": "Generate 1000 Wh of electricity using solar",
+        "requireItems": [
+            {
+                "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1000
+            },
+            {
+                "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                "count": 1000
+            }
+        ],
+        "duration": "5h"
+    },
+    {
+        "id": "solar-200Wh",
+        "title": "Generate 200 Wh of electricity using solar",
+        "requireItems": [
+            {
+                "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 200
+            },
+            {
+                "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                "count": 200
+            }
+        ],
+        "duration": "1h"
+    }
+]

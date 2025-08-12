@@ -1,0 +1,178 @@
+[
+    {
+        "id": "assemble-basic-telescope",
+        "title": "Assemble a basic telescope",
+        "requireItems": [
+            {
+                "id": "0254a829-9002-4a75-8af2-03cd961601da",
+                "count": 1
+            },
+            {
+                "id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
+                "count": 1
+            },
+            {
+                "id": "2794503d-fbe7-4031-a63e-deac531f9784",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            },
+            {
+                "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "assemble-led-indicator-module",
+        "title": "Assemble an LED indicator module on a breadboard",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            }
+        ],
+        "createItems": [
+            {
+                "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "assemble-pi-node",
+        "title": "Assemble a Pi cluster node",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                "count": 1
+            },
+            {
+                "id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
+                "count": 1
+            },
+            {
+                "id": "4af856b5-b5c1-494f-8037-9b6559785633",
+                "count": 1
+            },
+            {
+                "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "assemble-rocket",
+        "title": "Assemble your rocket",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
+                "count": 1
+            },
+            {
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+                "count": 1
+            },
+            {
+                "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
+                "count": 1
+            },
+            {
+                "id": "05c339ee-f50b-419a-804a-341f850b85e9",
+                "count": 1
+            },
+            {
+                "id": "4d817f1c-d78d-4fac-a514-402bce330693",
+                "count": 1
+            },
+            {
+                "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "assemble-rocket-parachute",
+        "title": "Assemble a rocket with a parachute. A ",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            },
+            {
+                "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                "count": 1
+            },
+            {
+                "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            }
+        ],
+        "duration": "60s"
+    }
+]

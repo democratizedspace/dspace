@@ -1,0 +1,57 @@
+[
+    {
+        "id": "germinate-basil",
+        "title": "Germinate basil seeds in starter plugs",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
+                "count": 10
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5712947f-716c-4f71-b28d-fcb811631080",
+                "count": 10
+            }
+        ],
+        "duration": "7d"
+    },
+    {
+        "id": "germinate-stevia",
+        "title": "Germinate stevia seeds in starter plugs",
+        "image": "/assets/basil_seedlings.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
+                "count": 11
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                "count": 11
+            }
+        ],
+        "duration": "7d"
+    }
+]

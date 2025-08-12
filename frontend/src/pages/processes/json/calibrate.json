@@ -1,0 +1,20 @@
+[
+    {
+        "id": "calibrate-multimeter",
+        "title": "Calibrate a digital multimeter using a 220 Ω reference resistor",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m"
+    }
+]

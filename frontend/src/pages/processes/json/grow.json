@@ -1,0 +1,73 @@
+[
+    {
+        "id": "grow-basil",
+        "title": "Grow 11 basil seedlings under a hydroponic lamp for four weeks until harvest-ready",
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5712947f-716c-4f71-b28d-fcb811631080",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 24192
+            }
+        ],
+        "createItems": [
+            {
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "28d"
+    },
+    {
+        "id": "grow-stevia",
+        "title": "grow stevia until it's ready to harvest",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 16128
+            }
+        ],
+        "createItems": [
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "28d"
+    }
+]

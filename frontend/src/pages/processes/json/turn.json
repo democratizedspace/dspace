@@ -1,0 +1,20 @@
+[
+    {
+        "id": "turn-compost-bucket",
+        "title": "Aerate compost in a 5 gallon bucket by rotating contents",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    }
+]

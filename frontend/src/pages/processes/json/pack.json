@@ -1,0 +1,32 @@
+[
+    {
+        "id": "pack-first-aid-kit",
+        "title": "Pack a basic first aid kit",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
+                "count": 1
+            },
+            {
+                "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
+                "count": 1
+            },
+            {
+                "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                "count": 1
+            }
+        ],
+        "duration": "2m"
+    }
+]

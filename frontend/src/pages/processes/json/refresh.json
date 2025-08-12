@@ -1,0 +1,30 @@
+[
+    {
+        "id": "refresh-hydroponic-tub",
+        "title": "Refresh a hydroponic tub's nutrient solution",
+        "image": "/assets/hydroponics_tub.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            },
+            {
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    }
+]

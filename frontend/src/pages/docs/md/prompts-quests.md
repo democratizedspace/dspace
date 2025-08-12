@@ -151,7 +151,7 @@ USER:
 2. Improve clarity, safety notes and item or process references.
 3. Check that every technology mentioned has a granular, real‑world entry in
    `frontend/src/pages/inventory/json/items` or
-   `frontend/src/pages/processes/processes.json`. Add missing items or
+   `frontend/src/pages/processes/json`. Add missing items or
    processes so quests stay grounded in reality and are reproducible IRL.
 4. If the quest includes an image, reuse an existing image URL already in the
    repository; do not add new or external images.

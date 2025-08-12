@@ -1,0 +1,72 @@
+[
+    {
+        "id": "launch-rocket",
+        "title": "Launch your rocket!",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
+                "count": 1
+            },
+            {
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                "count": 1
+            }
+        ],
+        "duration": "30s"
+    },
+    {
+        "id": "launch-rocket-parachute",
+        "title": "rocket with parachute",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                "count": 1
+            }
+        ],
+        "duration": "45s"
+    }
+]

@@ -1,0 +1,19 @@
+[
+    {
+        "id": "configure-daily-backups",
+        "title": "Configure daily backups to SSD",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    }
+]

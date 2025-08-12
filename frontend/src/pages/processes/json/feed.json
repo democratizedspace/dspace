@@ -1,0 +1,25 @@
+[
+    {
+        "id": "feed-goldfish",
+        "title": "Feed your goldfish",
+        "requireItems": [
+            {
+                "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "36a1168f-0109-4a8c-b70b-45f8ca582297",
+                "count": 1
+            }
+        ],
+        "duration": "8h"
+    }
+]
