@@ -1,0 +1,54 @@
+{
+    "id": "astronomy/pleiades",
+    "title": "Locate the Pleiades",
+    "description": "Star hop to Pleiades with planisphere and red light, keeping night vision.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Seven Sisters are out. Use planisphere and red light, then let eyes adjust.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "search",
+                    "text": "Ready to hunt the cluster.",
+                    "requiresItems": [
+                        { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 },
+                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "search",
+            "text": "Find Taurus on a planisphere, then sweep near its shoulder to spot Pleiades.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Tracing the star chart."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Seven Sisters in sight!",
+                    "requiresItems": [{ "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Log the sighting and pack up before dew settles on the optics.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Stargazing complete."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/light-pollution"]
+}
