@@ -1,0 +1,59 @@
+{
+    "id": "3dprinting/keychain",
+    "title": "Print a Custom Keychain",
+    "description": "Create a simple personalized keychain on your 3D printer.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want to make something useful? Let's print a custom keychain.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "design",
+                    "text": "Sounds good!"
+                }
+            ]
+        },
+        {
+            "id": "design",
+            "text": "Design a small tag with your initials and a hole for the ring.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Model ready!"
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Slice the model and print it with 20% infill. Let it cool before removing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Keychain printed.",
+                    "requiresItems": [
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 5 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Attach it to your keys and show it off.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Sydney!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinting/phone-stand"]
+}

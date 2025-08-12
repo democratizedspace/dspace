@@ -5,6 +5,7 @@
       "woodworking/tool-rack",
       "woodworking/step-stool",
       "woodworking/planter-box",
+      "woodworking/picture-frame",
       "woodworking/coffee-table",
       "woodworking/bookshelf",
       "woodworking/birdhouse"
@@ -16,6 +17,7 @@
       "woodworking/workbench",
       "woodworking/step-stool",
       "woodworking/planter-box",
+      "woodworking/picture-frame",
       "woodworking/coffee-table",
       "woodworking/bookshelf",
       "woodworking/birdhouse"
@@ -26,6 +28,7 @@
     "requires": [
       "woodworking/tool-rack",
       "woodworking/step-stool",
+      "woodworking/picture-frame",
       "woodworking/coffee-table",
       "woodworking/bookshelf",
       "woodworking/birdhouse"
@@ -41,6 +44,7 @@
   "2770ee5d-f9a0-4dc8-9c79-4f031fefd093": {
     "requires": [
       "woodworking/tool-rack",
+      "woodworking/picture-frame",
       "woodworking/finish-sanding"
     ],
     "rewards": []
@@ -114,7 +118,8 @@
   },
   "80a83ecc-bcd2-400e-a469-8488a6453bb8": {
     "requires": [
-      "rocketry/static-test"
+      "rocketry/static-test",
+      "rocketry/parachute"
     ],
     "rewards": []
   },
@@ -128,7 +133,8 @@
   },
   "9477a618-591b-45e0-9d81-18d60b848490": {
     "requires": [
-      "rocketry/recovery-run"
+      "rocketry/recovery-run",
+      "rocketry/parachute"
     ],
     "rewards": []
   },
@@ -193,6 +199,25 @@
       "rocketry/night-launch"
     ]
   },
+  "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d": {
+    "requires": [
+      "rocketry/parachute",
+      "rocketry/firstlaunch"
+    ],
+    "rewards": []
+  },
+  "0484a3ab-92e7-42fa-a5e6-25a4afe841d6": {
+    "requires": [
+      "rocketry/parachute"
+    ],
+    "rewards": []
+  },
+  "84324403-0bd8-411a-b575-a3c966c8a73e": {
+    "requires": [
+      "rocketry/parachute"
+    ],
+    "rewards": []
+  },
   "7ca9cad5-4bc2-420b-9733-24d1e38c2324": {
     "requires": [
       "rocketry/firstlaunch"
@@ -217,12 +242,6 @@
     ],
     "rewards": []
   },
-  "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d": {
-    "requires": [
-      "rocketry/firstlaunch"
-    ],
-    "rewards": []
-  },
   "71fafa9a-3998-4763-a63a-279acc4ca603": {
     "requires": [
       "robotics/wheel-encoders"
@@ -233,6 +252,7 @@
     "requires": [
       "robotics/wheel-encoders",
       "programming/graph-temp-data",
+      "geothermal/replace-faulty-thermistor",
       "geothermal/log-ground-temperature",
       "geothermal/install-backup-thermistor",
       "geothermal/compare-seasonal-ground-temps",
@@ -358,7 +378,8 @@
       "hydroponics/ph-check",
       "chemistry/ph-test",
       "chemistry/ph-adjustment",
-      "chemistry/acid-neutralization"
+      "chemistry/acid-neutralization",
+      "aquaria/ph-strip-test"
     ],
     "rewards": []
   },
@@ -428,6 +449,7 @@
   },
   "0564d441-7367-412e-b709-dad770814a39": {
     "requires": [
+      "composting/turn-pile",
       "composting/start",
       "aquaria/water-change",
       "aquaria/shrimp"
@@ -722,6 +744,12 @@
     ],
     "rewards": []
   },
+  "bf3d2784-d48d-4b12-b12a-75f563b5dc88": {
+    "requires": [
+      "electronics/resistor-color-check"
+    ],
+    "rewards": []
+  },
   "48cf736e-184c-4bd1-b9b0-15b7e9721646": {
     "requires": [
       "electronics/potentiometer-dimmer",
@@ -841,7 +869,8 @@
     "requires": [
       "completionist/reminder",
       "completionist/polish",
-      "completionist/display"
+      "completionist/display",
+      "completionist/catalog"
     ],
     "rewards": [
       "completionist/v2"
@@ -869,6 +898,7 @@
   "f439b57a-9df3-4bd9-9b6e-042476ceecf5": {
     "requires": [
       "astronomy/star-trails",
+      "astronomy/saturn-rings",
       "astronomy/satellite-pass",
       "astronomy/planetary-alignment",
       "astronomy/orion-nebula",
@@ -886,6 +916,7 @@
   },
   "98f6252e-95c2-468a-b110-69d47604df2c": {
     "requires": [
+      "astronomy/saturn-rings",
       "astronomy/orion-nebula",
       "astronomy/light-pollution",
       "astronomy/andromeda"
@@ -1018,6 +1049,13 @@
     ],
     "rewards": []
   },
+  "ca7c1069-4ba3-4339-9a10-0b690a690e60": {
+    "requires": [
+      "aquaria/ph-strip-test",
+      "aquaria/goldfish"
+    ],
+    "rewards": []
+  },
   "21247ab3-427f-4448-8b68-4d8ad742cb7a": {
     "requires": [],
     "rewards": [
@@ -1029,12 +1067,6 @@
     "rewards": [
       "aquaria/goldfish"
     ]
-  },
-  "ca7c1069-4ba3-4339-9a10-0b690a690e60": {
-    "requires": [
-      "aquaria/goldfish"
-    ],
-    "rewards": []
   },
   "76307a8e-4e0e-4dfa-abc2-7917d384d82c": {
     "requires": [
@@ -1083,6 +1115,7 @@
     "requires": [
       "3dprinter/start",
       "3dprinting/phone-stand",
+      "3dprinting/keychain",
       "3dprinting/filament-change",
       "3dprinting/calibration-cube",
       "3dprinting/cable-clip",
@@ -1093,6 +1126,7 @@
   "d3590107-25ff-4de5-af3a-46e2497bfc52": {
     "requires": [
       "3dprinter/start",
+      "3dprinting/keychain",
       "3dprinting/filament-change",
       "3dprinting/calibration-cube",
       "3dprinting/cable-clip"
