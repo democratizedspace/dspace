@@ -25,15 +25,15 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 -   **Add or update an item**
     -   Web: use the “Code” button and attach the repo.
     -   CLI: `codex "add item solar-cell-junction-box"`
--   **Ask about item data**
-    -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items/*.json"`
--   **Run item tests**
+-   **Ask about item data** - Web: use the “Ask” button. - CLI: `codex exec "explain frontend/src/pages/inventory/json/items/*.json"`
+    -   **Run item tests**
     -   Web: not supported yet.
     -   CLI:
-        ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && npm run test:ci && npm run itemValidation && npm test -- itemQuality"
-        ```
+
+```bash
+codex exec "npm run lint && npm run type-check && npm run build && npm run test:ci && \
+npm run itemValidation && npm test -- itemQuality"
+```
 
 See the [Codex CLI repository][codex-cli] for more flags.
 
