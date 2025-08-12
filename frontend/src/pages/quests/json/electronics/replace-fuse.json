@@ -1,0 +1,49 @@
+{
+    "id": "electronics/replace-fuse",
+    "title": "Replace a blown fuse",
+    "description": "Isolate power and swap a burnt glass fuse using a multimeter and screwdriver set. Wear safety goggles and work on a dry surface.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Unplug the device and set it on a non-conductive bench. Put on safety goggles and grab a precision screwdriver set and your digital multimeter before we dive in.",
+            "options": [{ "type": "goto", "goto": "inspect", "text": "Ready to open it." }]
+        },
+        {
+            "id": "inspect",
+            "text": "Use the screwdriver to remove the cover and expose the fuse holder. Keep track of screws and avoid touching other circuitry. Once the fuse is visible, switch the multimeter to continuity mode.",
+            "options": [{ "type": "goto", "goto": "replace", "text": "Fuse reads OL, it's blown." }]
+        },
+        {
+            "id": "replace",
+            "text": "Lift the spent fuse out and press a matching spare into the clips. Ensure the metal caps seat firmly. Reinstall the cover and verify everything is aligned before powering back up.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "New fuse installed and cover secured.",
+                    "requiresItems": [
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "8299ac3f-c232-46d4-a007-2ad86ec70361", "count": 1 },
+                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job restoring the circuit's protection. Label the device with the fuse rating for next time and stow your tools. Remove your goggles once everything is tidy.",
+            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/continuity-test"],
+    "hardening": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "🌀",
+        "history": []
+    }
+}
