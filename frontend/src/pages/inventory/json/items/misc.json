@@ -231,9 +231,18 @@
     {
         "id": "a5395e29-1862-4eb7-8517-5d161635e032",
         "name": "smart plug",
-        "description": "A smart plug that plugs into a wall outlet to measure energy usage.",
+        "description": "Wi-Fi plug rated for 120 V AC loads up to 15 A (1.8 kW). Tracks energy use and schedules via app.",
         "image": "/assets/smart_plug.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "15 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-12", "date": "2025-08-12", "score": 65 }
+            ]
+        }
     },
     {
         "id": "7318a5ba-fac3-476e-a532-c813ed9b18e5",
