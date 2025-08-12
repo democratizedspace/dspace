@@ -5,7 +5,7 @@ astronomy: 16 quests, 906 lines
 devops: 14 quests, 860 lines
 aquaria: 13 quests, 885 lines
 programming: 12 quests, 581 lines
-3dprinting: 11 quests, 739 lines
+3dprinting: 11 quests, 754 lines
 geothermal: 9 quests, 498 lines
 robotics: 9 quests, 500 lines
 woodworking: 9 quests, 722 lines
