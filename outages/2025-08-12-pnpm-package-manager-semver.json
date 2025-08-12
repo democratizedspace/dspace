@@ -1,0 +1,10 @@
+{
+  "id": "2025-08-12-pnpm-package-manager-semver",
+  "date": "2025-08-12",
+  "component": "build",
+  "rootCause": "package.json used pnpm@9 without full semver, so corepack blocked installs",
+  "resolution": "updated package.json to pin pnpm@9.0.0 and added a test to enforce semver",
+  "references": [
+    "README.md#local-development"
+  ]
+}

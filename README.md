@@ -22,6 +22,7 @@ Make sure you have **Node.js 18 or 20 LTS** installed. The CI runs on Node.js 20
 git clone https://github.com/democratizedspace/dspace.git
 cd dspace
 node --version # ensure Node.js 18 or 20 is in use
+# pnpm 9.0.0 is configured via packageManager
 pnpm install
 ```
 
