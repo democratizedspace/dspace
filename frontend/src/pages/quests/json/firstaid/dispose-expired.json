@@ -1,0 +1,49 @@
+{
+    "id": "firstaid/dispose-expired",
+    "title": "Dispose Expired First Aid Supplies",
+    "description": "Clear out old items so your first aid kit stays reliable.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Expired bandages can fail when needed most. Let's remove them.",
+            "options": [{ "type": "goto", "goto": "prep", "text": "Show me what to do" }]
+        },
+        {
+            "id": "prep",
+            "text": "Wash your hands, put on nitrile gloves and safety goggles, then open the kit.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Hands are washed",
+                    "goto": "sort"
+                }
+            ]
+        },
+        {
+            "id": "sort",
+            "text": "Check labels and pull expired items. Bag them for disposal per rules.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Expired items discarded",
+                    "requiresItems": [
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Your kit is clean and ready for fresh supplies.",
+            "options": [{ "type": "finish", "text": "Safety first!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/restock-kit"]
+}
