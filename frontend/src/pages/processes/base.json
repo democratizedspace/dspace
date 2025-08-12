@@ -2700,5 +2700,23 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "1m"
+    },
+    {
+        "id": "dark-adapt-eyes",
+        "title": "Dark-adapt your eyes for stargazing",
+        "image": "/assets/quests/start.png",
+        "requireItems": [
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            },
+            {
+                "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "15m"
     }
 ]
