@@ -1,0 +1,50 @@
+{
+    "id": "astronomy/venus-phases",
+    "title": "Track Venus's Phases",
+    "description": "Use your telescope to observe how Venus waxes and wanes like our Moon.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've charted planetary alignments; now let's follow Venus itself.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Ready for evening observations"
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "At dusk, aim your telescope at the bright planet and sketch the phase each week.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "observe-venus-phases",
+                    "text": "Recording sketches"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "My log is growing",
+                    "requiresItems": [{ "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Regular notes reveal how Venus's orbit mirrors our own.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Nova!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/planetary-alignment"]
+}
