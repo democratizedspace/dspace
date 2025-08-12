@@ -2899,7 +2899,7 @@
     },
     {
         "id": "write-mission-log-entry",
-        "title": "Record a mission log entry with a quill pen",
+        "title": "Record a mission log entry with a quill pen and black ink",
         "image": "/assets/paperwork.jpg",
         "requireItems": [
             {
