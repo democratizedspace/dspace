@@ -1,0 +1,63 @@
+{
+    "id": "electronics/measure-led-current",
+    "title": "Measure LED Current",
+    "description": "Use a digital multimeter to measure the current through a basic LED circuit.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your LED circuit is glowing, but how much current flows? Disconnect the power before measuring.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Let's find out."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Break the circuit between the supply and resistor, then insert the meter in series on the mA range. Keep probes steady and avoid shorting the supply.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Meter in series.",
+                    "requiresItems": [
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
+                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 },
+                        { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+                        { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+                        { "id": "828d6c3b-66a5-4064-b221-97630274502b", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Reconnect power. The LED should light as current flows through the meter. Read the display and stop if anything heats or flickers.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It shows about 20 mA."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! That's a safe current for a red LED. Power down and remove the meter before rejoining the circuit.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Got it."
+                }
+            ]
+        }
+    ],
+    "rewards": [{ "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }],
+    "requiresQuests": ["electronics/basic-circuit"]
+}
