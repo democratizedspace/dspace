@@ -1,6 +1,7 @@
 {
   "name": "dspace",
   "version": "3.0.0",
+  "packageManager": "pnpm@9",
   "engines": {
     "node": ">=18 <22"
   },

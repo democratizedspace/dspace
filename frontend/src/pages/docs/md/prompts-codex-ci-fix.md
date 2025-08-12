@@ -88,3 +88,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     so patch coverage checks work on repositories where the default branch is `v3`.
 -   2025-08-11 – `openai` v3 pulled a vulnerable `axios`; upgrade to v5 to satisfy
     `npm run audit:ci`.
+-   2025-08-12 – `.npmrc`'s `packageManager` key made npm warn; drop the file and
+    set `packageManager` in `package.json` to keep installs quiet.
