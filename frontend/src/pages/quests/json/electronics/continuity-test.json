@@ -1,14 +1,14 @@
 {
     "id": "electronics/continuity-test",
-    "title": "Check cable continuity",
-    "description": "Use a digital multimeter to confirm a USB cable conducts end to end.",
+    "title": "Check USB cable continuity",
+    "description": "Verify a USB cable conducts end to end with a digital multimeter in continuity mode. Keep the cable unplugged and wear safety goggles.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Flaky cable? Unplug both ends, inspect it, and grab a digital multimeter. Keep wire cutters ready.",
+            "text": "Unplug both ends of the USB cable and look for cuts or frays. Put on safety goggles, set the cable on a dry surface, and grab a digital multimeter and wire cutters just in case.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "probe",
-            "text": "Set meter to continuity. Probe one pin at each end. Keep fingers behind guards; avoid bridging.",
+            "text": "Set the multimeter to continuity. Touch a probe to the same pin at each end of the cable, keeping fingers behind the guards and avoiding contact with adjacent pins.",
             "options": [
                 {
                     "type": "process",
@@ -32,28 +32,35 @@
                     "text": "It beeped and read near zero ohms.",
                     "requiresItems": [
                         { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }
+                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Coil the cable loosely and store it dry. If any pin failed, cut it up with wire cutters.",
+            "text": "Nice work! Power down the meter, coil the cable loosely, and store it dry. If any pin failed, cut the cable into pieces with wire cutters before recycling. Remove your goggles.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],
     "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-10",
                 "date": "2025-08-10",
                 "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-12",
+                "date": "2025-08-12",
+                "score": 80
             }
         ]
     }
