@@ -1,0 +1,50 @@
+{
+    "id": "firstaid/treat-sprain",
+    "title": "Treat a Sprained Ankle",
+    "description": "Stabilize a sprained ankle to reduce swelling and pain.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Twisted your ankle? RICE helps: rest, ice, compression, elevation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wrap",
+                    "text": "Show me."
+                }
+            ]
+        },
+        {
+            "id": "wrap",
+            "text": "Sit, elevate the ankle, then wrap it snugly with an elastic bandage.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bandaged and raised",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Keep it elevated and seek medical care if swelling or pain persists.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/assemble-kit"]
+}
