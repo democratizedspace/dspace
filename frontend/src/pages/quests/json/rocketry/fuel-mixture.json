@@ -1,0 +1,55 @@
+{
+    "id": "rocketry/fuel-mixture",
+    "title": "Fuel Mixture Calibration",
+    "description": "Dial in a safe oxidizer-to-fuel ratio before launch.",
+    "image": "/assets/rocket_launch.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey friend! Nova here. Want to help me calibrate today's propellant mix?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Absolutely, let's measure it."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "We'll weigh out the fuel and oxidizer. Grab a scale and place the canister on it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "requiresItems": [{ "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8", "count": 1 }],
+                    "text": "Scale ready, mixture measured."
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "The mix is a tad rich. Add binder until the ratio looks right.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Blend complete, looks perfect."
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Nice work! This mix should burn steady when we launch.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait to see it fly."
+                }
+            ]
+        }
+    ],
+    "rewards": [{ "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52", "count": 1 }]
+}
