@@ -1,0 +1,42 @@
+{
+    "id": "programming/thermistor-calibration",
+    "title": "Calibrate a Thermistor",
+    "description": "Use a 10k thermistor to measure temperature accurately with an Arduino script.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to get precise temperature readings? Let's calibrate a thermistor together!",
+            "options": [{ "type": "goto", "goto": "wire", "text": "Sounds good" }]
+        },
+        {
+            "id": "wire",
+            "text": "Wire the thermistor with a 10k resistor as a voltage divider so the microcontroller can read it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "script",
+                    "text": "Hardware ready",
+                    "requiresItems": [
+                        { "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c", "count": 1 },
+                        { "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "script",
+            "text": "Upload a sketch that converts the analog reading into Celsius using the Steinhart-Hart equation.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Temp looks right!" }]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Your calibrated thermistor will keep future projects in the comfort zone.",
+            "options": [{ "type": "finish", "text": "Sweet" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/hello-sensor"]
+}
