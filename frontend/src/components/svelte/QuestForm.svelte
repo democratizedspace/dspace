@@ -108,14 +108,18 @@
             errors.image = 'Image is required';
         }
 
-        const { valid } = validateQuestData({
+        const { valid, errors: schemaErrors } = validateQuestData({
             title: title.trim(),
             description: description.trim(),
             image: previewUrl || '',
             requiresQuests,
         });
         if (!valid) {
-            errors.schema = 'Invalid quest data';
+            for (const [field, message] of Object.entries(schemaErrors)) {
+                if (!errors[field]) {
+                    errors[field] = message;
+                }
+            }
         }
 
         if (
