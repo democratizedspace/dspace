@@ -6,6 +6,10 @@ describe('approximateIrlPrice', () => {
     expect(approximateIrlPrice('3d_printer')).toBe(350)
   })
 
+  it('handles case and separator variations', () => {
+    expect(approximateIrlPrice('3D-Printer')).toBe(350)
+  })
+
   it('returns null for unknown item', () => {
     expect(approximateIrlPrice('nonexistent')).toBeNull()
   })

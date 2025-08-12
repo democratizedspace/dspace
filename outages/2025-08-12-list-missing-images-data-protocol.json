@@ -1,0 +1,10 @@
+{
+  "id": "2025-08-12-list-missing-images-data-protocol",
+  "date": "2025-08-12",
+  "component": "scripts",
+  "rootCause": "listMissingImages flagged data URIs and protocol-relative sources as missing files",
+  "resolution": "ignore data and protocol-relative URLs so coverage checks only verify local assets",
+  "references": [
+    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md#lessons-learned"
+  ]
+}

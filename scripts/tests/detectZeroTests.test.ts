@@ -8,6 +8,13 @@ describe('hasZeroTests', () => {
     expect(hasZeroTests(output)).toBe(true);
   });
 
+  test('detects zero tests when ANSI colors are present', () => {
+    const output =
+      '\u001b[32mTest Files\u001b[0m  \u001b[31m0\u001b[0m passed\n' +
+      '\u001b[32mTests\u001b[0m  \u001b[31m0\u001b[0m passed';
+    expect(hasZeroTests(output)).toBe(true);
+  });
+
   test('does not trigger when tests are present', () => {
     const output = 'Test Files  1 passed\nTests  5 passed';
     expect(hasZeroTests(output)).toBe(false);

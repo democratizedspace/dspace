@@ -17,6 +17,9 @@ The DSPACE ecosystem supports several types of custom content:
 
 Each content type follows specific guidelines to ensure consistency, educational value, and alignment with DSPACE's mission of democratizing space exploration through practical, hands-on learning.
 
+Management pages (`/quests/manage`, `/items/manage`, and `/processes/manage`) let you
+edit or delete custom entries stored locally in IndexedDB.
+
 ## Getting Started
 
 Before creating any content, we recommend:

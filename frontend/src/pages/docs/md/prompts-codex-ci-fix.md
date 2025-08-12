@@ -98,3 +98,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     `https` paths so coverage checks ignore external images.
 -   2025-08-12 – `.npmrc`'s `packageManager` key made npm warn; drop the file and
     set `packageManager` in `package.json` to keep installs quiet.
+-   2025-08-12 – `listMissingImages` flagged data URIs and protocol-relative sources as missing;
+    ignore `data:` and `//` URLs so coverage checks only test local assets.

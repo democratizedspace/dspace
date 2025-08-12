@@ -22,6 +22,13 @@ const priceTable: Record<string, number> = {
   "ssd_1tb": 120
 };
 
+/**
+ * Look up a real‑world price for a game item.
+ *
+ * The lookup is case‑insensitive and normalizes spaces or hyphens to underscores
+ * so callers can pass identifiers like `3D-Printer` or `3d printer`.
+ */
 export function approximateIrlPrice(id: string): number | null {
-  return priceTable[id] ?? null;
+  const normalized = id.toLowerCase().replace(/[\s-]+/g, '_');
+  return priceTable[normalized] ?? null;
 }

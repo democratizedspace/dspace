@@ -1088,6 +1088,7 @@
     {
         "id": "add-goldfish",
         "title": "Add a goldfish to your aquarium",
+        "image": "/assets/aquarium_goldfish.jpg",
         "requireItems": [
             {
                 "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
@@ -1110,7 +1111,7 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "10m"
     },
     {
         "id": "feed-goldfish",
@@ -1692,6 +1693,25 @@
         ],
         "createItems": [],
         "duration": "1m"
+    },
+    {
+        "id": "dry-hands",
+        "title": "Dry your hands with a paper towel",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            {
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "30s"
     },
     {
         "id": "pack-first-aid-kit",
@@ -2425,6 +2445,10 @@
         "requireItems": [
             {
                 "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                 "count": 1
             }
         ],
