@@ -2584,11 +2584,11 @@
     },
     {
         "id": "build-birdhouse",
-        "title": "Build a wooden birdhouse",
+        "title": "Assemble a pine birdhouse with hand tools",
         "image": "/assets/door.jpg",
         "requireItems": [
             { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
-            { "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34", "count": 1 },
+            { "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913", "count": 1 },
             { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
             { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 }
         ],
@@ -2598,7 +2598,15 @@
             { "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093", "count": 1 }
         ],
         "createItems": [{ "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8", "count": 1 }],
-        "duration": "2h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-12", "date": "2025-08-12", "score": 60 }
+            ]
+        }
     },
     {
         "id": "start-compost-bin",
