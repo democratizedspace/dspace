@@ -1645,7 +1645,7 @@
     },
     {
         "id": "calibrate-multimeter",
-        "title": "Verify multimeter accuracy with a 220 Ω resistor",
+        "title": "Calibrate a digital multimeter using a 220 Ω reference resistor",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
@@ -1653,7 +1653,15 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "3m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-12", "date": "2025-08-12", "score": 65 }
+            ]
+        }
     },
     {
         "id": "wear-anti-static-wrist-strap",
