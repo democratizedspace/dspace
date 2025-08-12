@@ -361,7 +361,8 @@
       "programming/temp-alert",
       "programming/graph-temp",
       "geothermal/survey-ground-temperature",
-      "electronics/thermometer-calibration"
+      "electronics/thermometer-calibration",
+      "aquaria/thermometer"
     ],
     "rewards": []
   },
