@@ -1268,6 +1268,7 @@
     {
         "id": "add-goldfish",
         "title": "Add a goldfish to your aquarium",
+        "image": "/assets/aquarium_goldfish.jpg",
         "requireItems": [
             {
                 "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
@@ -1290,7 +1291,13 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "feed-goldfish",
