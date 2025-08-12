@@ -2655,7 +2655,22 @@
             "history": [{ "task": "codex-hardening-2025-08-11", "date": "2025-08-11", "score": 60 }]
         }
     },
-    
+
+    {
+        "id": "measure-arduino-5v",
+        "title": "Measure 5 V output on an Arduino Uno with a digital multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
+            { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+            { "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612", "count": 1 },
+            { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+
     {
         "id": "turn-compost-bucket",
         "title": "Aerate compost in a 5 gallon bucket by rotating contents",
