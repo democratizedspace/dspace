@@ -1,14 +1,14 @@
 {
     "id": "3dprinting/calibration-cube",
     "title": "Print a Calibration Cube",
-    "description": "Ensure dimensional accuracy by printing and measuring a 20 mm cube.",
+    "description": "Print and measure a 20 mm calibration cube to verify your printer's accuracy.",
     "image": "/assets/quests/benchy_25.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's dial in your printer with a quick 20 mm calibration cube.",
+            "text": "Let's dial in your entry-level FDM 3D printer with a quick 20 mm calibration cube.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "print",
-            "text": "Level the build plate, load 15 g of green PLA, slice the cube, and start the print. Keep hands clear of the moving nozzle, ensure good ventilation, and stay nearby. Let the cube cool before removal.",
+            "text": "Level the build plate, preheat to PLA temps, load 15 g of green PLA filament, slice, and start the print. Wear safety goggles, keep hands clear of the moving nozzle, ensure ventilation, stay nearby, and let the cube cool before removal.",
             "options": [
                 {
                     "type": "process",
@@ -32,14 +32,15 @@
                     "text": "Cube printed and cooled.",
                     "requiresItems": [
                         { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 15 }
+                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 15 },
+                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Use digital calipers to measure each side; the goal is 20.00 mm on every axis. If dimensions are off, adjust your printer's steps per millimeter before reprinting.",
+            "text": "Use digital calipers to measure each side; each axis should read 20.00 mm. If dimensions are off, adjust steps per millimeter before reprinting.",
             "options": [
                 {
                     "type": "process",
@@ -63,14 +64,19 @@
     "rewards": [],
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
-        "passes": 1,
-        "score": 65,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-07",
                 "date": "2025-08-07",
                 "score": 65
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 80
             }
         ]
     }
