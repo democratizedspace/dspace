@@ -1,0 +1,49 @@
+{
+    "id": "aquaria/heater-install",
+    "title": "Install an aquarium heater",
+    "description": "Mount and set a heater to keep tropical fish warm.",
+    "image": "/assets/aquarium_heater.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Tropical species need stable warmth. Ready to add the heater?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Yes, let's mount it."
+                }
+            ]
+        },
+        {
+            "id": "mount",
+            "text": "Suction the heater near the filter outlet for even flow.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "set",
+                    "text": "Mounted and secured.",
+                    "requiresItems": [
+                        { "id": "0b85f058-38f2-4e9a-93e9-d47441608619", "count": 1 },
+                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "set",
+            "text": "Dial the thermostat to 26°C and verify with the thermometer.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Temperature holding steady.",
+                    "process": "heat-walstad"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["aquaria/sponge-filter"]
+}
