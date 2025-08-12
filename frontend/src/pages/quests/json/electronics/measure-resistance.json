@@ -8,8 +8,14 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the loose resistor on a dry surface and disconnect any power.\nPut on safety goggles and set your digital multimeter to the \u03a9 range.",
-            "options": [{ "type": "goto", "goto": "measure", "text": "Ready." }]
+            "text": "Place the loose resistor on a dry surface and disconnect any power.\nPut on safety goggles and set your digital multimeter to the Ω range.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Ready."
+                }
+            ]
         },
         {
             "id": "measure",
@@ -21,9 +27,18 @@
                     "text": "It reads about what the color bands predicted.",
                     "process": "measure-resistance",
                     "requiresItems": [
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-                        { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -31,21 +46,14 @@
         {
             "id": "finish",
             "text": "Nice work. Label the resistor, power down the meter, and unplug and stow the probes.",
-            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/resistor-color-check"],
-    "hardening": {
-        "passes": 1,
-        "score": 65,
-        "emoji": "\ud83c\udf00",
-        "history": [
-            {
-                "task": "codex-quest-refine-2025-08-12",
-                "date": "2025-08-12",
-                "score": 65
-            }
-        ]
-    }
+    "requiresQuests": ["electronics/resistor-color-check"]
 }

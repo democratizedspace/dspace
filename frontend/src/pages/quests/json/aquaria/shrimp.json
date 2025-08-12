@@ -14,7 +14,12 @@
                     "type": "goto",
                     "goto": "acquire",
                     "text": "Sounds good!",
-                    "requiresItems": [{ "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -38,8 +43,14 @@
                     "process": "drip-acclimate-shrimp",
                     "text": "Start drip acclimation",
                     "requiresItems": [
-                        { "id": "60e517b4-5807-4983-afb8-e2aad1566587", "count": 1 },
-                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        }
                     ]
                 },
                 {
@@ -56,7 +67,12 @@
                 {
                     "type": "finish",
                     "text": "Shrimp are in and exploring!",
-                    "requiresItems": [{ "id": "ee7d437d-7426-47cd-b691-386dd20f4e47", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -67,32 +83,5 @@
             "count": 3
         }
     ],
-    "requiresQuests": ["aquaria/walstad"],
-    "hardening": {
-        "passes": 4,
-        "score": 92,
-        "emoji": "💯",
-        "history": [
-            {
-                "task": "codex-hardening-2025-08-04",
-                "date": "2025-08-04",
-                "score": 60
-            },
-            {
-                "task": "codex-upgrade-2025-08-04",
-                "date": "2025-08-04",
-                "score": 78
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-06",
-                "date": "2025-08-06",
-                "score": 90
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-12",
-                "date": "2025-08-12",
-                "score": 92
-            }
-        ]
-    }
+    "requiresQuests": ["aquaria/walstad"]
 }

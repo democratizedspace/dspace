@@ -1,0 +1,55 @@
+[
+    {
+        "id": "sink",
+        "title": "find your sink",
+        "requireItems": [],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                "count": 1
+            }
+        ],
+        "duration": "10s"
+    },
+    {
+        "id": "basic-income",
+        "title": "basic income",
+        "requireItems": [],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 100
+            },
+            {
+                "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
+                "count": 100
+            }
+        ],
+        "duration": "1d"
+    },
+    {
+        "id": "write-mission-log-entry",
+        "title": "Record a mission log entry with a quill pen",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            },
+            {
+                "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    }
+]

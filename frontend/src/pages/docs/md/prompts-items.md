@@ -94,7 +94,7 @@ passing checks (`npm run lint`, `npm run type-check`, `npm run build`,
 Verify the item appears in at least one quest or process, reuse existing image
 assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
 committing. If a quest's text changes, run `npm test -- questQuality` and update the quest's
-`hardening` block with a fresh evaluation score.
+hardening entry in `hardening/quests.json` with a fresh evaluation score.
 
 USER:
 1. Follow the steps above.
@@ -116,14 +116,14 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository.
 
 USER:
-1. Pick an item from `frontend/src/pages/inventory/json/items` that lacks a
-   `hardening` block or has a low score.
+1. Pick an item from `frontend/src/pages/inventory/json/items` that lacks an
+   entry in `hardening/items.json` or has a low score.
 2. Improve clarity, realism and units. Ensure prices and descriptions match
    real-world expectations and that related processes reference the item
    correctly.
 3. When modifying the `image` field, reuse an existing image URL already in the
    repository; do not add new or external images.
-4. Update or create the item's `hardening` block, incrementing `passes`,
+4. Update or create the item's entry in `hardening/items.json`, incrementing `passes`,
     refreshing the evaluator `score`, swapping the status `emoji` and appending a
     history entry with the Codex task ID, date and score. Choose the emoji based
    on:
@@ -146,7 +146,7 @@ USER:
 7. Use an emoji-prefixed commit message like `📝 : refine item details`.
 
 OUTPUT:
-A pull request with the refined item, updated hardening block and passing tests.
+A pull request with the refined item, updated hardening entry and passing tests.
 ```
 
 ## Additional tips for AI assistance

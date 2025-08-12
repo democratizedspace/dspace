@@ -5,115 +5,42 @@
         "description": "1 g of 1.75 mm white PLA filament for FDM printers; sold by weight to suit small prints.",
         "image": "/assets/pla_white.jpg",
         "price": "0.025 dUSD",
-        "unit": "g",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 65
-                }
-            ]
-        }
+        "unit": "g"
     },
     {
         "id": "8f54a592-09de-4340-829b-7288897eb4c7",
         "name": "Edison Model M",
         "description": "Mid-size electric sedan with 75 kWh battery (~400 km range) and highway driver-assist; seats five.",
         "image": "/assets/ev.jpg",
-        "price": "40000 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-09",
-                    "date": "2025-08-09",
-                    "score": 65
-                }
-            ]
-        }
+        "price": "40000 dUSD"
     },
     {
         "id": "02b32152-a7b2-458e-9643-7b754c722165",
         "name": "portable solar panel",
         "description": "Foldable 200 W monocrystalline panel with MC4 leads; outputs 20 V at 10A.",
         "price": "200 dUSD",
-        "image": "/assets/solar_setup_small.jpg",
-        "hardening": {
-            "passes": 2,
-            "score": 80,
-            "emoji": "✅",
-            "history": [
-                {
-                    "task": "codex-hardening-2025-08-03",
-                    "date": "2025-08-03",
-                    "score": 60
-                },
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 80
-                }
-            ]
-        }
+        "image": "/assets/solar_setup_small.jpg"
     },
     {
         "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
         "name": "200 Wh battery pack",
         "description": "12 V 16 Ah lithium iron phosphate battery pack (≈200 Wh) with built-in BMS for renewable energy storage.",
         "price": "120 dUSD",
-        "image": "/assets/battery.jpg",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-hardening-2025-08-04",
-                    "date": "2025-08-04",
-                    "score": 65
-                }
-            ]
-        }
+        "image": "/assets/battery.jpg"
     },
     {
         "id": "82577af7-6724-4cb2-8922-f7140e550145",
         "name": "smartphone",
         "description": "150 g smartphone with 6 in (15 cm) screen and 128 GB storage; charges via 5 V USB-C.",
         "image": "/assets/changelog/20230630/smartphone.jpg",
-        "price": "200 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
-            ]
-        }
+        "price": "200 dUSD"
     },
     {
         "id": "743681a7-d2e7-465c-af07-43665079bf4d",
         "name": "500 W wind turbine",
         "description": "500 W three-blade horizontal-axis wind turbine kit with integrated charge controller providing 24 V DC output.",
         "price": "700 dUSD",
-        "image": "/assets/turbine.jpg",
-        "hardening": {
-            "passes": 1,
-            "score": 70,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 70
-                }
-            ]
-        }
+        "image": "/assets/turbine.jpg"
     },
     {
         "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
@@ -121,19 +48,7 @@
         "description": "100 mm (10 cm) PLA model rocket, ~90 g, reaches ~30 m with A8-3 motor (not included).",
         "image": "/assets/modelrocket.jpg",
         "type": "3dprint",
-        "price": "25 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-07",
-                    "date": "2025-08-07",
-                    "score": 60
-                }
-            ]
-        }
+        "price": "25 dUSD"
     },
     {
         "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
@@ -141,15 +56,7 @@
         "description": "1 g of 1.75 mm green PLA filament for FDM printers; sold by weight.",
         "image": "/assets/pla_green.jpg",
         "price": "0.025 dUSD",
-        "unit": "g",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 65 }
-            ]
-        }
+        "unit": "g"
     },
     {
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
@@ -157,34 +64,14 @@
         "description": "Assembled FDM printer, 0.4 mm nozzle, 180×180×180 mm build with 500 g PLA.",
         "image": "/assets/3dprinter.jpg",
         "price": "220 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "0564d441-7367-412e-b709-dad770814a39",
         "name": "5 gallon bucket",
         "description": "19 L (5 gal) high-density polyethylene bucket with metal handle for carrying liquids.",
         "image": "/assets/bucket.jpg",
-        "price": "8 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-07",
-                    "date": "2025-08-07",
-                    "score": 60
-                }
-            ]
-        }
+        "price": "8 dUSD"
     },
     {
         "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
@@ -234,15 +121,7 @@
         "description": "Wi-Fi plug rated for 120 V AC loads up to 15 A (1.8 kW). Tracks energy use and schedules via app.",
         "image": "/assets/smart_plug.jpg",
         "price": "15 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                { "task": "codex-item-hardening-2025-08-12", "date": "2025-08-12", "score": 65 }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "7318a5ba-fac3-476e-a532-c813ed9b18e5",
@@ -250,19 +129,7 @@
         "description": "Four-outlet WiFi strip that monitors energy use and schedules devices remotely.",
         "image": "/assets/smart_plug.jpg",
         "price": "35 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 60
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
@@ -297,43 +164,14 @@
         "name": "hobbyist solid rocket motor",
         "description": "Single-use 18 mm (0.7 in) × 70 mm (2.8 in) black powder motor weighing 18 g. Delivers ~31 N peak thrust for 0.8 s with ~2.5 N·s total impulse.",
         "image": "/assets/rocket_motor.jpg",
-        "price": "5 dUSD",
-        "hardening": {
-            "passes": 2,
-            "score": 80,
-            "emoji": "✅",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-04",
-                    "date": "2025-08-04",
-                    "score": 60
-                },
-                {
-                    "task": "codex-item-hardening-2025-08-05",
-                    "date": "2025-08-05",
-                    "score": 80
-                }
-            ]
-        }
+        "price": "5 dUSD"
     },
     {
         "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
         "name": "superglue",
         "description": "Small 3 g tube of cyanoacrylate adhesive for quick repairs. Bonds plastic and wood in seconds—avoid skin contact.",
         "image": "/assets/superglue.jpg",
-        "price": "3 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-05",
-                    "date": "2025-08-05",
-                    "score": 60
-                }
-            ]
-        }
+        "price": "3 dUSD"
     },
     {
         "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6",
@@ -341,57 +179,21 @@
         "description": "1 m length of 2 mm Kevlar cord rated for 68 kg (150 lb). Attaches the rocket body to the parachute for reliable recovery.",
         "image": "/assets/kevlar_cord.jpg",
         "price": "2 dUSD",
-        "unit": "m",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-05",
-                    "date": "2025-08-05",
-                    "score": 60
-                }
-            ]
-        }
+        "unit": "m"
     },
     {
         "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
         "name": "rocket igniter",
         "description": "Single-use nichrome bridge-wire igniter with 30 cm leads for remote ignition of model rocket motors.",
         "image": "/assets/rocket_igniter.jpg",
-        "price": "1 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 65
-                }
-            ]
-        }
+        "price": "1 dUSD"
     },
     {
         "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
         "name": "launch-capable model rocket",
         "description": "35 cm rocket with B6-4 motor and recovery wadding; launch remotely via controller.",
         "image": "/assets/rocket_field.jpg",
-        "price": "20 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 70,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 70
-                }
-            ]
-        }
+        "price": "20 dUSD"
     },
     {
         "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
@@ -665,19 +467,7 @@
         "name": "12 V DC motor",
         "description": "Small brushed 12 V DC motor suited for hand-crank generators.",
         "image": "/assets/quests/basic_circuit.svg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 60
-                }
-            ]
-        }
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
@@ -1114,81 +904,28 @@
         "name": "astronaut poster",
         "description": "61×91 cm (24×36 in) matte poster on 150 g/m² paper; NASA crew, ~85 g.",
         "image": "/assets/astronauts.jpg",
-        "price": "12 dUSD",
-        "hardening": {
-            "passes": 2,
-            "score": 78,
-            "emoji": "✅",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 60
-                },
-                {
-                    "task": "codex-item-hardening-2025-08-09",
-                    "date": "2025-08-09",
-                    "score": 78
-                }
-            ]
-        }
+        "price": "12 dUSD"
     },
     {
         "id": "70bb8d86-2c4e-4330-9705-371891934686",
         "name": "mission logbook",
         "description": "A5 (148 × 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
         "image": "/assets/paperwork.jpg",
-        "price": "8 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 65
-                }
-            ]
-        }
+        "price": "8 dUSD"
     },
     {
         "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
         "name": "feather quill",
         "description": "20 cm goose feather quill with stainless steel nib; 3 g. Dip in ink for calligraphy.",
         "image": "/assets/quill.jpg",
-        "price": "5 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 60
-                }
-            ]
-        }
+        "price": "5 dUSD"
     },
     {
         "id": "50ada74c-686d-4818-9421-e02d98444579",
         "name": "roll of coins",
         "description": "Paper-wrapped roll of twenty 0.5 dUSD coins for arcade machines and small purchases.",
         "image": "/assets/coins.jpg",
-        "price": "10 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-11",
-                    "date": "2025-08-11",
-                    "score": 60
-                }
-            ]
-        }
+        "price": "10 dUSD"
     },
     {
         "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",

@@ -4,19 +4,7 @@
         "name": "aquarium (150 L)",
         "description": "90×45×45 cm (150 L/40 gal) glass aquarium with 6 mm tempered panels; shipped empty without lid.",
         "image": "/assets/aquarium_empty.jpg",
-        "price": "120 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 65
-                }
-            ]
-        }
+        "price": "120 dUSD"
     },
     {
         "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
@@ -30,19 +18,7 @@
         "name": "goldfish",
         "description": "Juvenile common goldfish (Carassius auratus) about 5 cm long; requires a dechlorinated 150 L+ aquarium kept at 18–22°C.",
         "image": "/assets/goldfish.jpg",
-        "price": "5 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-10",
-                    "date": "2025-08-10",
-                    "score": 60
-                }
-            ]
-        }
+        "price": "5 dUSD"
     },
     {
         "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
@@ -50,91 +26,35 @@
         "description": "1 g of balanced goldfish flakes; feed about 0.1 g per fish daily.",
         "image": "/assets/goldfish_food.jpg",
         "price": "0.07 dUSD",
-        "unit": "g",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-11",
-                    "date": "2025-08-11",
-                    "score": 60
-                }
-            ]
-        }
+        "unit": "g"
     },
     {
         "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
         "name": "aquarium filter",
         "description": "Hang-on-back filter with 10 W pump moving 200 L/h for 150 L tanks; includes sponge and carbon.",
         "image": "/assets/aquarium_filter.jpg",
-        "price": "30 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                { "task": "codex-item-update-2025-08-11", "date": "2025-08-11", "score": 60 }
-            ]
-        }
+        "price": "30 dUSD"
     },
     {
         "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
         "name": "aquarium heater (150 W)",
         "description": "Submersible 150 W heater with adjustable thermostat (20–30°C) for 150 L tanks; operates on 120 V.",
         "image": "/assets/aquarium_heater.jpg",
-        "price": "25 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-07",
-                    "date": "2025-08-07",
-                    "score": 60
-                }
-            ]
-        }
+        "price": "25 dUSD"
     },
     {
         "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
         "name": "aquarium LED light (20 W)",
         "description": "Clip-on 20 W LED light (6500 K) for 60–80 L freshwater tanks; 1.5 m cord with switch.",
         "image": "/assets/aquarium_light.jpg",
-        "price": "20 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-07",
-                    "date": "2025-08-07",
-                    "score": 60
-                }
-            ]
-        }
+        "price": "20 dUSD"
     },
     {
         "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
         "name": "aquarium thermometer (0–50°C)",
         "description": "Stick-on strip thermometer for aquariums; 0–50°C range with ±1°C accuracy.",
         "image": "/assets/aquarium_thermometer.jpg",
-        "price": "7 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-07",
-                    "date": "2025-08-07",
-                    "score": 65
-                }
-            ]
-        }
+        "price": "7 dUSD"
     },
     {
         "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
@@ -184,15 +104,7 @@
         "name": "aquarium stand (80 L)",
         "description": "Sturdy wooden stand rated to hold a filled 80 L aquarium.",
         "image": "/assets/walstad.jpg",
-        "price": "40 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 60 }
-            ]
-        }
+        "price": "40 dUSD"
     },
     {
         "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
@@ -200,19 +112,7 @@
         "description": "Neocaridina davidi (~1.5 cm) algae grazer for 20-26°C planted tanks.",
         "image": "/assets/quests/shrimp.svg",
         "price": "3 dUSD",
-        "unit": "each",
-        "hardening": {
-            "passes": 1,
-            "score": 70,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-refine-2025-08-12",
-                    "date": "2025-08-12",
-                    "score": 70
-                }
-            ]
-        }
+        "unit": "each"
     },
     {
         "id": "60e517b4-5807-4983-afb8-e2aad1566587",
@@ -247,61 +147,20 @@
         "name": "Aquarium liquid test kit",
         "description": "Liquid reagent kit for aquariums. Four 15 mL bottles and test tubes provide ~130 tests for ammonia, nitrite and nitrate.",
         "image": "/assets/aquarium_thermometer.jpg",
-        "price": "25 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-05",
-                    "date": "2025-08-05",
-                    "score": 65
-                }
-            ]
-        }
+        "price": "25 dUSD"
     },
     {
         "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
         "name": "Water conditioner",
         "description": "50 mL bottle of sodium thiosulfate solution that neutralizes chlorine and chloramine in tap water before aquarium use.",
         "image": "/assets/aquarium_filled.jpg",
-        "price": "6 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-hardening-2025-08-04",
-                    "date": "2025-08-04",
-                    "score": 65
-                }
-            ]
-        }
+        "price": "6 dUSD"
     },
     {
         "id": "97317bc3-507a-4e2c-912b-507d586cee87",
         "name": "gravel vacuum",
         "description": "Self-priming siphon with 2 m (6.5 ft) hose and 4 cm (1.6 in) tube; moves ~3 L/min to clear debris.",
         "image": "/assets/gravel.jpg",
-        "price": "10 dUSD",
-        "hardening": {
-            "passes": 2,
-            "score": 80,
-            "emoji": "✅",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-05",
-                    "date": "2025-08-05",
-                    "score": 60
-                },
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 80
-                }
-            ]
-        }
+        "price": "10 dUSD"
     }
 ]

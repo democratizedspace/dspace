@@ -1,0 +1,624 @@
+{
+    "outlet-dWatt-1e3": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            }
+        ]
+    },
+    "outlet-dWatt-1e4": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "outlet-dWatt-1e5": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 65
+            }
+        ]
+    },
+    "smart-plug-schedule-12h": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-process-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "bucket-water-chlorinated": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            }
+        ]
+    },
+    "3dprint-benchy": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            }
+        ]
+    },
+    "3dprint-rocket": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "bucket-water-dechlorinated": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 65
+            }
+        ]
+    },
+    "rockwool-soak": {
+        "passes": 1,
+        "score": 70,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 70
+            }
+        ]
+    },
+    "germinate-basil": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 65
+            }
+        ]
+    },
+    "prepare-hydroponic-tub": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "grow-basil": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-07",
+                "date": "2025-08-07",
+                "score": 60
+            }
+        ]
+    },
+    "germinate-stevia": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-07",
+                "date": "2025-08-07",
+                "score": 65
+            }
+        ]
+    },
+    "measure-battery-voltage": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-10",
+                "date": "2025-08-10",
+                "score": 65
+            }
+        ]
+    },
+    "measure-resistance": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            }
+        ]
+    },
+    "check-led-polarity": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            }
+        ]
+    },
+    "wash-hands": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "clean-minor-cut": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 65
+            }
+        ]
+    },
+    "practice-cpr": {
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-03",
+                "date": "2025-08-03",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            }
+        ]
+    },
+    "observe-jupiter-moons": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 65
+            }
+        ]
+    },
+    "identify-constellations": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-process-2025-08-04",
+                "date": "2025-08-04",
+                "score": 65
+            }
+        ]
+    },
+    "observe-meteor-shower": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 65
+            }
+        ]
+    },
+    "photograph-lunar-eclipse": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-process-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            }
+        ]
+    },
+    "arduino-ide-install": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            }
+        ]
+    },
+    "arduino-servo-sweep": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-07",
+                "date": "2025-08-07",
+                "score": 65
+            }
+        ]
+    },
+    "arduino-thermistor-read": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-process-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 65
+            }
+        ]
+    },
+    "plot-temperature-data": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-process-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 65
+            }
+        ]
+    },
+    "arduino-led-blink": {
+        "passes": 1,
+        "score": 70,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 70
+            }
+        ]
+    },
+    "arduino-potentiometer-dimmer": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "raspberry-pi-serial-log": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "🛠️",
+        "history": []
+    },
+    "drip-acclimate-shrimp": {
+        "passes": 1,
+        "score": 70,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 70
+            }
+        ]
+    },
+    "rinse-aquarium-filter": {
+        "passes": 1,
+        "score": 70,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 70
+            }
+        ]
+    },
+    "partial-water-change": {
+        "passes": 1,
+        "score": 70,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 70
+            }
+        ]
+    },
+    "print-calibration-cube": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-07",
+                "date": "2025-08-07",
+                "score": 65
+            }
+        ]
+    },
+    "print-benchy": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 65
+            }
+        ]
+    },
+    "solder-led-resistor": {
+        "passes": 1,
+        "score": 70,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 70
+            }
+        ]
+    },
+    "strip-jumper-wire": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-strip-jumper-wire-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            }
+        ]
+    },
+    "solder-wire-connection": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-refine-2025-08-07",
+                "date": "2025-08-07",
+                "score": 60
+            }
+        ]
+    },
+    "verify-resistor-color-code": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "🛠️",
+        "history": []
+    },
+    "print-phone-stand": {
+        "passes": 1,
+        "score": 70,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 70
+            }
+        ]
+    },
+    "print-generator-housing": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "print-crank-handle": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "check-iss-pass": {
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 80
+            }
+        ]
+    },
+    "measure-aquarium-ph": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "stop-nosebleed": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 65
+            }
+        ]
+    },
+    "hand-crank-50Wh": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "charge-smartphone": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-08",
+                "date": "2025-08-08",
+                "score": 65
+            }
+        ]
+    },
+    "charge-battery-pack-solar": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-09",
+                "date": "2025-08-09",
+                "score": 60
+            }
+        ]
+    },
+    "test-cable-continuity": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-09",
+                "date": "2025-08-09",
+                "score": 60
+            }
+        ]
+    },
+    "charge-battery-pack-wind": {
+        "passes": 1,
+        "score": 70,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-10",
+                "date": "2025-08-10",
+                "score": 70
+            }
+        ]
+    },
+    "start-compost-bin": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-11",
+                "date": "2025-08-11",
+                "score": 60
+            }
+        ]
+    },
+    "turn-compost-bucket": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            }
+        ]
+    }
+}

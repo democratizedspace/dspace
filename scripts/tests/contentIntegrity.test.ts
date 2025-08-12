@@ -7,14 +7,17 @@ const baselineFile = path.join(__dirname, '../baselines/contentCounts.json');
 const baseline = JSON.parse(fs.readFileSync(baselineFile, 'utf8'));
 const questDir = path.join(__dirname, '../../frontend/src/pages/quests/json');
 const itemsDir = path.join(__dirname, '../../frontend/src/pages/inventory/json/items');
-const processesFile = path.join(__dirname, '../../frontend/src/pages/processes/processes.json');
+const processesDir = path.join(__dirname, '../../frontend/src/pages/processes/json');
 const npcDir = path.join(__dirname, '../../frontend/public/assets/npc');
 
 function getCounts() {
     const quests = globSync(path.join(questDir, '**/*.json')).length;
     const itemFiles = globSync(path.join(itemsDir, '*.json'));
     const items = itemFiles.reduce((sum, file) => sum + JSON.parse(fs.readFileSync(file, 'utf8')).length, 0);
-    const processes = JSON.parse(fs.readFileSync(processesFile, 'utf8')).length;
+    const processes = globSync(path.join(processesDir, '*.json')).reduce(
+        (sum, file) => sum + JSON.parse(fs.readFileSync(file, 'utf8')).length,
+        0
+    );
     const npcImages = fs.readdirSync(npcDir).filter(f => /\.(png|jpe?g|webp)$/.test(f)).length;
     return { quests, items, processes, npcImages };
 }

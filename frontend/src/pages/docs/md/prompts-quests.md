@@ -137,7 +137,7 @@ Return only the diff with the new quest.
 Focus on recently added quests — [see the list](/docs/new-quests) —
 to keep quality high as the codebase grows. This prompt uses the quest
 quality tests to ensure that every technological step is represented in
-the inventory (item registry) and process (`processes.json`) registries and
+the inventory (item registry) and process registry and
 grounded in reality with components that can be replicated in real life,
 while the hardening loop tracks refinement passes over time.
 
@@ -151,13 +151,13 @@ USER:
 2. Improve clarity, safety notes and item or process references.
 3. Check that every technology mentioned has a granular, real‑world entry in
    `frontend/src/pages/inventory/json/items` or
-   `frontend/src/pages/processes/processes.json`. Add missing items or
+   `frontend/src/pages/processes/json`. Add missing items or
    processes so quests stay grounded in reality and are reproducible IRL.
 4. If the quest includes an image, reuse an existing image URL already in the
    repository; do not add new or external images.
-5. Update the quest's `hardening` block, incrementing `passes`, refreshing the
-   evaluator `score`, swapping the status `emoji` and appending a history entry
-   with the Codex task ID, date and score. Choose the emoji based on:
+5. Update the quest's entry in `hardening/quests.json`, incrementing `passes`,
+   refreshing the evaluator `score`, swapping the status `emoji` and appending a
+   history entry with the Codex task ID, date and score. Choose the emoji based on:
    - 0 passes → score 0 → 🛠️ Draft
    - ≥1 pass & score ≥60 → 🌀 First polishing pass
    - ≥2 passes & score ≥75 → ✅ Meets internal quality bar
@@ -177,7 +177,7 @@ USER:
    8. Use an emoji-prefixed commit message.
 
 OUTPUT:
-A pull request with the refined quest, updated hardening block and passing tests.
+A pull request with the refined quest, updated hardening entry and passing tests.
 ```
 
 ## Additional tips for AI assistance

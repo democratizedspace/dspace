@@ -1,0 +1,491 @@
+[
+    {
+        "id": "bucket-water-chlorinated",
+        "title": "Use a sink to fill a 19 L (5 gal) bucket with tap water",
+        "requireItems": [
+            {
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+                "count": 1
+            }
+        ],
+        "duration": "30s"
+    },
+    {
+        "id": "bucket-water-dechlorinated",
+        "title": "Leave a 5 gal bucket of tap water uncovered for 48h so chlorine dissipates",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "duration": "48h"
+    },
+    {
+        "id": "condition-bucket-water",
+        "title": "Neutralize chlorine in a 5 gal bucket using water conditioner",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [
+            {
+                "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                "count": 0.05
+            },
+            {
+                "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "rockwool-soak",
+        "title": "Soak 11 hydroponic starter plugs in a 5 gallon bucket of dechlorinated tap water",
+        "image": "/assets/rockwool_wet.jpg",
+        "requireItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 11
+            }
+        ],
+        "duration": "30m"
+    },
+    {
+        "id": "germinate-basil",
+        "title": "Germinate basil seeds in starter plugs",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
+                "count": 10
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5712947f-716c-4f71-b28d-fcb811631080",
+                "count": 10
+            }
+        ],
+        "duration": "7d"
+    },
+    {
+        "id": "prepare-hydroponic-tub",
+        "title": "Prepare a hydroponics tub with water and nutrient solution",
+        "image": "/assets/hydroponics_tub.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "refresh-hydroponic-tub",
+        "title": "Refresh a hydroponic tub's nutrient solution",
+        "image": "/assets/hydroponics_tub.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            },
+            {
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "grow-basil",
+        "title": "Grow 11 basil seedlings under a hydroponic lamp for four weeks until harvest-ready",
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5712947f-716c-4f71-b28d-fcb811631080",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 24192
+            }
+        ],
+        "createItems": [
+            {
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "28d"
+    },
+    {
+        "id": "regrow-basil",
+        "title": "regrow basil after harvest",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "29190faf-8581-4769-b871-f0ee283840e1",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 8064
+            }
+        ],
+        "createItems": [
+            {
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "14d"
+    },
+    {
+        "id": "harvest-basil",
+        "title": "Harvest your hydroponic basil plants",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
+                "count": 11
+            },
+            {
+                "id": "29190faf-8581-4769-b871-f0ee283840e1",
+                "count": 11
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "germinate-stevia",
+        "title": "Germinate stevia seeds in starter plugs",
+        "image": "/assets/basil_seedlings.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
+                "count": 11
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                "count": 11
+            }
+        ],
+        "duration": "7d"
+    },
+    {
+        "id": "grow-stevia",
+        "title": "grow stevia until it's ready to harvest",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 16128
+            }
+        ],
+        "createItems": [
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "28d"
+    },
+    {
+        "id": "regrow-stevia",
+        "title": "regrow stevia after harvest",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "b2248af9-151b-4268-989d-4bb408a6147c",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 8064
+            }
+        ],
+        "createItems": [
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "14d"
+    },
+    {
+        "id": "harvest-stevia",
+        "title": "Harvest your hydroponic stevia plants",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                "count": 11
+            },
+            {
+                "id": "b2248af9-151b-4268-989d-4bb408a6147c",
+                "count": 11
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "extract-stevia",
+        "title": "extract sweetener from stevia leaves",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            }
+        ],
+        "duration": "1h"
+    },
+    {
+        "id": "purify-stevia",
+        "title": "purify stevia extract into crystals",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                "count": 1
+            }
+        ],
+        "duration": "6h"
+    },
+    {
+        "id": "measure-ph",
+        "title": "Measure solution pH",
+        "requireItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "measure-ec",
+        "title": "Measure hydroponic nutrient EC",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "measure-ec-solution",
+        "title": "Measure hydroponic nutrient solution EC with a handheld meter",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "adjust-ph",
+        "title": "Adjust solution pH",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "7c811503-d0ca-4254-825a-ebeb06a88231",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    }
+]

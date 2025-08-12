@@ -63,37 +63,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/assemble-kit"],
-    "hardening": {
-        "passes": 5,
-        "score": 96,
-        "emoji": "💯",
-        "history": [
-            {
-                "task": "codex-hardening-2025-08-05",
-                "date": "2025-08-05",
-                "score": 60
-            },
-            {
-                "task": "codex-refine-2025-08-05",
-                "date": "2025-08-05",
-                "score": 75
-            },
-            {
-                "task": "codex-upgrade-2025-08-06",
-                "date": "2025-08-06",
-                "score": 92
-            },
-            {
-                "task": "codex-refine-2025-08-06",
-                "date": "2025-08-06",
-                "score": 94
-            },
-            {
-                "task": "codex-refine-2025-08-07",
-                "date": "2025-08-07",
-                "score": 96
-            }
-        ]
-    }
+    "requiresQuests": ["firstaid/assemble-kit"]
 }

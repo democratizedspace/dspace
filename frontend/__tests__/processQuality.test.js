@@ -5,10 +5,13 @@ const fs = require('fs');
 const path = require('path');
 const { durationInSeconds } = require('../src/utils.js');
 
-const processesFile = path.join(__dirname, '../src/pages/processes/processes.json');
+const processesDir = path.join(__dirname, '../src/pages/processes/json');
 const itemsDir = path.join(__dirname, '../src/pages/inventory/json/items');
 
-const processes = JSON.parse(fs.readFileSync(processesFile));
+const processes = fs
+    .readdirSync(processesDir)
+    .filter((f) => f.endsWith('.json'))
+    .flatMap((f) => JSON.parse(fs.readFileSync(path.join(processesDir, f))));
 const items = fs
     .readdirSync(itemsDir)
     .filter((f) => f.endsWith('.json'))

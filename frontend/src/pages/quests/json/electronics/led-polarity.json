@@ -27,9 +27,18 @@
                     "text": "It lights one way only.",
                     "process": "check-led-polarity",
                     "requiresItems": [
-                        { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -45,16 +54,11 @@
             ]
         }
     ],
-    "rewards": [{ "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }],
-    "requiresQuests": ["electronics/check-battery-voltage"],
-    "hardening": {
-        "passes": 3,
-        "score": 92,
-        "emoji": "💯",
-        "history": [
-            { "task": "codex-quest-refinement-2025-08-10", "date": "2025-08-10", "score": 60 },
-            { "task": "codex-refine-2025-08-11", "date": "2025-08-11", "score": 78 },
-            { "task": "codex-hardening-2025-08-12", "date": "2025-08-12", "score": 92 }
-        ]
-    }
+    "rewards": [
+        {
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/check-battery-voltage"]
 }

@@ -70,17 +70,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/thermistor-reading"],
-    "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
-        "history": [
-            {
-                "task": "codex-refine-2025-08-09",
-                "date": "2025-08-09",
-                "score": 60
-            }
-        ]
-    }
+    "requiresQuests": ["electronics/thermistor-reading"]
 }

@@ -53,8 +53,14 @@
                     "process": "measure-ec-solution",
                     "text": "Check EC levels.",
                     "requiresItems": [
-                        { "id": "71655665-4a59-41f4-9084-dad4d976df91", "count": 1 },
-                        { "id": "fc2bb989-f192-4891-8bde-78ae631dae78", "count": 1 }
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
                     ]
                 },
                 {
@@ -82,27 +88,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/basil"],
-    "hardening": {
-        "passes": 3,
-        "score": 90,
-        "emoji": "💯",
-        "history": [
-            {
-                "task": "codex-hardening-2025-08-04",
-                "date": "2025-08-04",
-                "score": 60
-            },
-            {
-                "task": "codex-hardening-2025-08-05",
-                "date": "2025-08-05",
-                "score": 80
-            },
-            {
-                "task": "codex-refine-2025-08-05",
-                "date": "2025-08-05",
-                "score": 90
-            }
-        ]
-    }
+    "requiresQuests": ["hydroponics/basil"]
 }

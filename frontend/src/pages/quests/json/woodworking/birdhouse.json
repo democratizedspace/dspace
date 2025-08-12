@@ -101,17 +101,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench"],
-    "hardening": {
-        "passes": 1,
-        "score": 80,
-        "emoji": "🌀",
-        "history": [
-            {
-                "task": "codex-quest-hardening-2025-08-12",
-                "date": "2025-08-12",
-                "score": 80
-            }
-        ]
-    }
+    "requiresQuests": ["woodworking/workbench"]
 }

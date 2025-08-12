@@ -59,27 +59,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/constellations"],
-    "hardening": {
-        "passes": 3,
-        "score": 90,
-        "emoji": "💯",
-        "history": [
-            {
-                "task": "codex-light-pollution-2025-08-05",
-                "date": "2025-08-05",
-                "score": 60
-            },
-            {
-                "task": "codex-light-pollution-refine-2025-08-06",
-                "date": "2025-08-06",
-                "score": 78
-            },
-            {
-                "task": "codex-light-pollution-harden-2025-08-06",
-                "date": "2025-08-06",
-                "score": 90
-            }
-        ]
-    }
+    "requiresQuests": ["astronomy/constellations"]
 }

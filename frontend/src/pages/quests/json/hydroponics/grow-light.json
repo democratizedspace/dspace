@@ -2,28 +2,6 @@
     "id": "hydroponics/grow-light",
     "title": "Install a Grow Light",
     "description": "Mount a full-spectrum LED grow lamp and automate a 12 h light cycle with a smart plug.",
-    "hardening": {
-        "passes": 3,
-        "score": 92,
-        "emoji": "💯",
-        "history": [
-            {
-                "task": "codex-hardening-2025-08-06",
-                "date": "2025-08-06",
-                "score": 65
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-06-2",
-                "date": "2025-08-06",
-                "score": 80
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-06-3",
-                "date": "2025-08-06",
-                "score": 92
-            }
-        ]
-    },
     "image": "/assets/hydroponic_lamp.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",

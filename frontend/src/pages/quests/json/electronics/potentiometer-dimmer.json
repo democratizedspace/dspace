@@ -2,33 +2,6 @@
     "id": "electronics/potentiometer-dimmer",
     "title": "Dim an LED with a Potentiometer",
     "description": "Adjust LED brightness using a potentiometer and an Arduino.",
-    "hardening": {
-        "passes": 4,
-        "score": 93,
-        "emoji": "💯",
-        "history": [
-            {
-                "task": "codex-hardening-2025-08-06",
-                "date": "2025-08-06",
-                "score": 60
-            },
-            {
-                "task": "codex-hardening-2025-09-30",
-                "date": "2025-09-30",
-                "score": 75
-            },
-            {
-                "task": "codex-quest-refine-2025-08-06",
-                "date": "2025-08-06",
-                "score": 90
-            },
-            {
-                "task": "codex-touchup-2025-08-06",
-                "date": "2025-08-06",
-                "score": 93
-            }
-        ]
-    },
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",

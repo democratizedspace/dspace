@@ -1,0 +1,122 @@
+[
+    {
+        "id": "assemble-basic-telescope",
+        "title": "Assemble a basic telescope",
+        "requireItems": [
+            {
+                "id": "0254a829-9002-4a75-8af2-03cd961601da",
+                "count": 1
+            },
+            {
+                "id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
+                "count": 1
+            },
+            {
+                "id": "2794503d-fbe7-4031-a63e-deac531f9784",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            },
+            {
+                "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "observe-jupiter-moons",
+        "title": "Observe Jupiter's four Galilean moons through a basic telescope",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "20m"
+    },
+    {
+        "id": "identify-constellations",
+        "title": "Identify constellations with a star chart",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30m"
+    },
+    {
+        "id": "observe-meteor-shower",
+        "title": "Watch a meteor shower with your telescope",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1h"
+    },
+    {
+        "id": "photograph-lunar-eclipse",
+        "title": "Photograph a lunar eclipse with a telescope",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "45m"
+    },
+    {
+        "id": "check-iss-pass",
+        "title": "Find and log the next ISS flyover with a smartphone app and mission logbook",
+        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "requireItems": [
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    }
+]

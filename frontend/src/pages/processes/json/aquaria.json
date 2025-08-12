@@ -1,0 +1,248 @@
+[
+    {
+        "id": "prepare-aquarium",
+        "title": "Prepare a 150 L aquarium",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
+                "count": 1
+            },
+            {
+                "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                "count": 1
+            },
+            {
+                "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            },
+            {
+                "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
+                "count": 20
+            }
+        ],
+        "createItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            }
+        ],
+        "duration": "2h"
+    },
+    {
+        "id": "add-goldfish",
+        "title": "Add a goldfish to your aquarium",
+        "requireItems": [
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            },
+            {
+                "id": "40920981-bf9f-4b89-b887-bebe7006f7dc",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "feed-goldfish",
+        "title": "Feed your goldfish",
+        "requireItems": [
+            {
+                "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "36a1168f-0109-4a8c-b70b-45f8ca582297",
+                "count": 1
+            }
+        ],
+        "duration": "8h"
+    },
+    {
+        "id": "heat-walstad",
+        "title": "Install a heater in your Walstad tank",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            },
+            {
+                "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "stock-guppies",
+        "title": "Add guppies to your heated Walstad tank",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                "count": 1
+            },
+            {
+                "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "drip-acclimate-shrimp",
+        "title": "Drip acclimate dwarf shrimp to your aquarium",
+        "requireItems": [
+            {
+                "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1h"
+    },
+    {
+        "id": "rinse-aquarium-filter",
+        "title": "Rinse aquarium filter media in a bucket of dechlorinated water to preserve beneficial bacteria",
+        "requireItems": [
+            {
+                "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "partial-water-change",
+        "title": "Use gravel vacuum with 2 m hose and 19 L (5 gal) bucket to change 5% of water in 150 L aquarium",
+        "requireItems": [
+            {
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "count": 1
+            },
+            {
+                "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                "count": 0.05
+            }
+        ],
+        "createItems": [],
+        "duration": "30m"
+    },
+    {
+        "id": "measure-aquarium-ph",
+        "title": "Test the pH of a 150 L freshwater aquarium using a disposable strip",
+        "image": "/assets/pH_strip.jpg",
+        "requireItems": [
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "check-aquarium-temperature",
+        "title": "Check aquarium water temperature with an attached strip thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
+    }
+]

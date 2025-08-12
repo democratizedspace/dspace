@@ -4,30 +4,14 @@
         "name": "Benchy Award",
         "description": "Resin trophy of classic 3D Benchy boat for your first calibration print.",
         "image": "/assets/benchy_award.jpg",
-        "priceExemptionReason": "TROPHY",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 60 }
-            ]
-        }
+        "priceExemptionReason": "TROPHY"
     },
     {
         "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
         "name": "Motor Award",
         "description": "12 cm tall brushed aluminum trophy shaped like an Edison Model M motor; awarded to early buyers.",
         "image": "/assets/motor_award.jpg",
-        "priceExemptionReason": "TROPHY",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                { "task": "codex-item-hardening-2025-08-10", "date": "2025-08-10", "score": 65 }
-            ]
-        }
+        "priceExemptionReason": "TROPHY"
     },
     {
         "id": "946b07b7-2b2c-4507-a725-edb270d8e910",

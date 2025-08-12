@@ -1,0 +1,748 @@
+{
+    "3dprinting/calibration-cube": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-07",
+                "date": "2025-08-07",
+                "score": 65
+            }
+        ]
+    },
+    "aquaria/position-tank": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-07",
+                "date": "2025-08-07",
+                "score": 60
+            }
+        ]
+    },
+    "aquaria/shrimp": {
+        "passes": 4,
+        "score": 92,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 78
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06",
+                "date": "2025-08-06",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-12",
+                "date": "2025-08-12",
+                "score": 92
+            }
+        ]
+    },
+    "aquaria/water-testing": {
+        "passes": 4,
+        "score": 94,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
+            },
+            {
+                "task": "codex-upgrade-2025-08-10",
+                "date": "2025-08-10",
+                "score": 94
+            }
+        ]
+    },
+    "astronomy/andromeda": {
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-polish-2025-08-06",
+                "date": "2025-08-06",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-refine-2025-08-07",
+                "date": "2025-08-07",
+                "score": 90
+            }
+        ]
+    },
+    "astronomy/basic-telescope": {
+        "passes": 4,
+        "score": 94,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-basic-telescope-2025-08-03",
+                "date": "2025-08-03",
+                "score": 60
+            },
+            {
+                "task": "codex-basic-telescope-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            },
+            {
+                "task": "codex-basic-telescope-2025-08-05",
+                "date": "2025-08-05",
+                "score": 92
+            },
+            {
+                "task": "codex-quest-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 94
+            }
+        ]
+    },
+    "astronomy/iss-flyover": {
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06",
+                "date": "2025-08-06",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-refresh-2025-02-14",
+                "date": "2025-02-14",
+                "score": 90
+            }
+        ]
+    },
+    "astronomy/light-pollution": {
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-light-pollution-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-light-pollution-refine-2025-08-06",
+                "date": "2025-08-06",
+                "score": 78
+            },
+            {
+                "task": "codex-light-pollution-harden-2025-08-06",
+                "date": "2025-08-06",
+                "score": 90
+            }
+        ]
+    },
+    "chemistry/ph-test": {
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
+            }
+        ]
+    },
+    "electronics/arduino-blink": {
+        "passes": 6,
+        "score": 99,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-refine-2025-08-05",
+                "date": "2025-08-05",
+                "score": 90
+            },
+            {
+                "task": "codex-improve-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            },
+            {
+                "task": "codex-refresh-2025-08-07",
+                "date": "2025-08-07",
+                "score": 98
+            },
+            {
+                "task": "codex-quest-update-2025-09-16",
+                "date": "2025-09-16",
+                "score": 99
+            }
+        ]
+    },
+    "electronics/basic-circuit": {
+        "passes": 5,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-03",
+                "date": "2025-08-03",
+                "score": 65
+            },
+            {
+                "task": "codex-upgrade-2025-08-03",
+                "date": "2025-08-03",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 92
+            },
+            {
+                "task": "codex-upgrade-2025-08-04b",
+                "date": "2025-08-04",
+                "score": 94
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            }
+        ]
+    },
+    "electronics/check-battery-voltage": {
+        "passes": 5,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-polish-2025-08-05",
+                "date": "2025-08-05",
+                "score": 92
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 94
+            },
+            {
+                "task": "codex-refine-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            }
+        ]
+    },
+    "electronics/continuity-test": {
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-10",
+                "date": "2025-08-10",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-12",
+                "date": "2025-08-12",
+                "score": 80
+            }
+        ]
+    },
+    "electronics/data-logger": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-refine-2025-08-09",
+                "date": "2025-08-09",
+                "score": 60
+            }
+        ]
+    },
+    "electronics/led-polarity": {
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-10",
+                "date": "2025-08-10",
+                "score": 60
+            },
+            {
+                "task": "codex-refine-2025-08-11",
+                "date": "2025-08-11",
+                "score": 78
+            },
+            {
+                "task": "codex-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 92
+            }
+        ]
+    },
+    "electronics/light-sensor": {
+        "passes": 5,
+        "score": 96,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-05-2",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06-3",
+                "date": "2025-08-06",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06-4",
+                "date": "2025-08-06",
+                "score": 95
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-09",
+                "date": "2025-08-09",
+                "score": 96
+            }
+        ]
+    },
+    "electronics/measure-resistance": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-refine-2025-08-12",
+                "date": "2025-08-12",
+                "score": 65
+            }
+        ]
+    },
+    "electronics/potentiometer-dimmer": {
+        "passes": 4,
+        "score": 93,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-09-30",
+                "date": "2025-09-30",
+                "score": 75
+            },
+            {
+                "task": "codex-quest-refine-2025-08-06",
+                "date": "2025-08-06",
+                "score": 90
+            },
+            {
+                "task": "codex-touchup-2025-08-06",
+                "date": "2025-08-06",
+                "score": 93
+            }
+        ]
+    },
+    "electronics/resistor-color-check": {
+        "passes": 2,
+        "score": 78,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-refine-2025-08-07",
+                "date": "2025-08-07",
+                "score": 60
+            },
+            {
+                "task": "codex-refine-2025-08-11",
+                "date": "2025-08-11",
+                "score": 78
+            }
+        ]
+    },
+    "electronics/servo-sweep": {
+        "passes": 4,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-02",
+                "date": "2025-08-02",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-refinement-2025-02-14",
+                "date": "2025-02-14",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-04",
+                "date": "2025-08-04",
+                "score": 92
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            }
+        ]
+    },
+    "electronics/solder-wire": {
+        "passes": 2,
+        "score": 78,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-refine-2025-08-07",
+                "date": "2025-08-07",
+                "score": 60
+            },
+            {
+                "task": "codex-solder-wire-polish-2025-08-07",
+                "date": "2025-08-07",
+                "score": 78
+            }
+        ]
+    },
+    "electronics/thermistor-reading": {
+        "passes": 4,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-03",
+                "date": "2025-08-03",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-05",
+                "date": "2025-08-05",
+                "score": 92
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-11",
+                "date": "2025-08-11",
+                "score": 95
+            }
+        ]
+    },
+    "energy/hand-crank-generator": {
+        "passes": 3,
+        "score": 85,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 78
+            },
+            {
+                "task": "codex-upgrade-2025-08-06b",
+                "date": "2025-08-06",
+                "score": 85
+            }
+        ]
+    },
+    "energy/offgrid-charger": {
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 78
+            },
+            {
+                "task": "codex-offgrid-charger-2025-08-06",
+                "date": "2025-08-06",
+                "score": 90
+            }
+        ]
+    },
+    "firstaid/assemble-kit": {
+        "passes": 6,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 65
+            },
+            {
+                "task": "codex-refine-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            },
+            {
+                "task": "codex-refine-2025-08-05",
+                "date": "2025-08-05",
+                "score": 90
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
+            },
+            {
+                "task": "codex-refine-2025-08-06",
+                "date": "2025-08-06",
+                "score": 94
+            },
+            {
+                "task": "codex-cleanup-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            }
+        ]
+    },
+    "firstaid/learn-cpr": {
+        "passes": 4,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-refine-cpr-2025-02-14",
+                "date": "2025-02-14",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
+            },
+            {
+                "task": "codex-refresh-cpr-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            }
+        ]
+    },
+    "firstaid/stop-nosebleed": {
+        "passes": 5,
+        "score": 96,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-refine-2025-08-05",
+                "date": "2025-08-05",
+                "score": 75
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
+            },
+            {
+                "task": "codex-refine-2025-08-06",
+                "date": "2025-08-06",
+                "score": 94
+            },
+            {
+                "task": "codex-refine-2025-08-07",
+                "date": "2025-08-07",
+                "score": 96
+            }
+        ]
+    },
+    "firstaid/wound-care": {
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-02",
+                "date": "2025-08-02",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 90
+            }
+        ]
+    },
+    "hydroponics/grow-light": {
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 65
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06-2",
+                "date": "2025-08-06",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06-3",
+                "date": "2025-08-06",
+                "score": 92
+            }
+        ]
+    },
+    "hydroponics/nutrient-check": {
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-refine-2025-08-05",
+                "date": "2025-08-05",
+                "score": 90
+            }
+        ]
+    },
+    "robotics/wheel-encoders": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-09",
+                "date": "2025-08-09",
+                "score": 60
+            }
+        ]
+    },
+    "welcome/howtodoquests": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            }
+        ]
+    },
+    "woodworking/birdhouse": {
+        "passes": 1,
+        "score": 80,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 80
+            }
+        ]
+    }
+}

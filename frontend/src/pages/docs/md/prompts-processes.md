@@ -27,7 +27,7 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
     -   CLI: `codex "add process 3dprinting/solar-mount"`
 -   **Ask about process data**
     -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/pages/processes/processes.json"`
+    -   CLI: `codex exec "explain frontend/src/pages/processes/json"`
 -   **Run process tests**
     -   Web: not supported yet.
     -   CLI:
@@ -62,7 +62,7 @@ You are working in democratizedspace/dspace.
 GOAL: <one sentence process addition or edit>.
 
 FILES OF INTEREST
-- frontend/src/pages/processes/processes.json   ← process registry
+- frontend/src/pages/processes/json   ← process registry
 
 REQUIREMENTS
 1. Follow the process schema.
@@ -86,7 +86,7 @@ Use this when you want Codex to automatically create or upgrade a process.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
-processes under `frontend/src/pages/processes/processes.json`. Ensure realistic
+processes under `frontend/src/pages/processes/json`. Ensure realistic
 steps, durations, item references, and passing checks (`npm run lint`,
 `npm run type-check`, `npm run build`, and `npm test -- processQuality`).
 Verify the process links to existing quests or items, add missing registry
@@ -112,13 +112,13 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository.
 
 USER:
-1. Pick a process from `frontend/src/pages/processes/processes.json` that lacks a
-   `hardening` block or has a low score.
+1. Pick a process from `frontend/src/pages/processes/json` that lacks an
+   entry in `hardening/processes.json` or has a low score.
 2. Improve clarity, realism and item references. Ensure durations are feasible
    and related items exist in `frontend/src/pages/inventory/json/items`.
 3. When updating the `image` field, reuse an existing image URL already in the
    repository; do not introduce new or external images.
-4. Update or create the process's `hardening` block, incrementing `passes`,
+4. Update or create the process's entry in `hardening/processes.json`, incrementing `passes`,
    refreshing the evaluator `score`, swapping the status `emoji` and appending a
    history entry with the Codex task ID, date and score. Choose the emoji based
    on:
@@ -141,7 +141,7 @@ USER:
 7. Use an emoji-prefixed commit message like `📝 : refine process details`.
 
 OUTPUT:
-A pull request with the refined process, updated hardening block and passing tests.
+A pull request with the refined process, updated hardening entry and passing tests.
 ```
 
 ## Additional tips for AI assistance

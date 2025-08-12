@@ -15,8 +15,14 @@
                     "goto": "search",
                     "text": "Gear ready.",
                     "requiresItems": [
-                        { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 },
-                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 }
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -33,7 +39,12 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [{ "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ],
                     "text": "Galaxy in sight."
                 }
             ]
@@ -41,19 +52,14 @@
         {
             "id": "finish",
             "text": "Nice work! Log the position for next time, cap the telescope, switch off the flashlight and pack your gear before leaving the site.",
-            "options": [{ "type": "finish", "text": "Logging observations." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Logging observations."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": [],
-    "hardening": {
-        "passes": 3,
-        "score": 90,
-        "emoji": "💯",
-        "history": [
-            { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 60 },
-            { "task": "codex-quest-polish-2025-08-06", "date": "2025-08-06", "score": 80 },
-            { "task": "codex-quest-refine-2025-08-07", "date": "2025-08-07", "score": 90 }
-        ]
-    }
+    "requiresQuests": []
 }

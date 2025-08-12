@@ -64,18 +64,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [],
-    "hardening": {
-        "passes": 6,
-        "score": 95,
-        "emoji": "💯",
-        "history": [
-            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 65 },
-            { "task": "codex-refine-2025-08-04", "date": "2025-08-04", "score": 80 },
-            { "task": "codex-refine-2025-08-05", "date": "2025-08-05", "score": 90 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 },
-            { "task": "codex-refine-2025-08-06", "date": "2025-08-06", "score": 94 },
-            { "task": "codex-cleanup-2025-08-06", "date": "2025-08-06", "score": 95 }
-        ]
-    }
+    "requiresQuests": []
 }

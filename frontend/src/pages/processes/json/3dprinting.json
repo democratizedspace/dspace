@@ -1,0 +1,471 @@
+[
+    {
+        "id": "3dprint-benchy",
+        "title": "3D print a 60 mm Benchy calibration model",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 15
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 150
+            }
+        ],
+        "createItems": [
+            {
+                "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 15
+            }
+        ],
+        "duration": "1h 30m"
+    },
+    {
+        "id": "3dprint-rocket",
+        "title": "3D print a 100 mm model rocket using 91 g of green PLA on an entry-level FDM printer",
+        "image": "/assets/modelrocket.jpg",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 91
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1600
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
+                "count": 1
+            }
+        ],
+        "duration": "13h"
+    },
+    {
+        "id": "3dprint-rocket-body-tube",
+        "title": "3D Print a rocket body tube",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 18.48
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 266.67
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 18.48
+            }
+        ],
+        "duration": "2h 8m 11s"
+    },
+    {
+        "id": "3dprint-rocket-nosecone-coupler",
+        "title": "3D print a rocket nosecone coupler",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 6.32
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 112.92
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "05c339ee-f50b-419a-804a-341f850b85e9",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 6.32
+            }
+        ],
+        "duration": "54m 12s"
+    },
+    {
+        "id": "3dprint-rocket-nosecone",
+        "title": "3D print a rocket nosecone",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 13.9
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 223.4375
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 13.9
+            }
+        ],
+        "duration": "1h 47m 15s"
+    },
+    {
+        "id": "3dprint-rocket-fincan",
+        "title": "3D print a rocket fincan",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 52.3
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1006.70139
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 52.3
+            }
+        ],
+        "duration": "8h 3m 13s"
+    },
+    {
+        "id": "assemble-rocket",
+        "title": "Assemble your rocket",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
+                "count": 1
+            },
+            {
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+                "count": 1
+            },
+            {
+                "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
+                "count": 1
+            },
+            {
+                "id": "05c339ee-f50b-419a-804a-341f850b85e9",
+                "count": 1
+            },
+            {
+                "id": "4d817f1c-d78d-4fac-a514-402bce330693",
+                "count": 1
+            },
+            {
+                "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "launch-rocket",
+        "title": "Launch your rocket!",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
+                "count": 1
+            },
+            {
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                "count": 1
+            }
+        ],
+        "duration": "30s"
+    },
+    {
+        "id": "launch-rocket-parachute",
+        "title": "rocket with parachute",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                "count": 1
+            }
+        ],
+        "duration": "45s"
+    },
+    {
+        "id": "assemble-rocket-parachute",
+        "title": "Assemble a rocket with a parachute. A ",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            },
+            {
+                "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                "count": 1
+            },
+            {
+                "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            }
+        ],
+        "duration": "60s"
+    },
+    {
+        "id": "print-calibration-cube",
+        "title": "3D print a 20 mm calibration cube on an entry-level FDM 3D printer using 15 g of green PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 15
+            }
+        ],
+        "createItems": [],
+        "duration": "1h"
+    },
+    {
+        "id": "measure-calibration-cube",
+        "title": "Measure a 20 mm calibration cube with digital calipers and log results",
+        "requireItems": [
+            {
+                "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            },
+            {
+                "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "2m"
+    },
+    {
+        "id": "print-benchy",
+        "title": "3D print a 60 mm Benchy calibration boat on an entry-level FDM printer with 15 g white PLA",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 15
+            }
+        ],
+        "createItems": [
+            {
+                "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                "count": 1
+            }
+        ],
+        "duration": "1h 30m"
+    },
+    {
+        "id": "print-phone-stand",
+        "title": "3D print a smartphone stand on an entry-level FDM 3D printer using 20 g of white PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 20
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                "count": 1
+            }
+        ],
+        "duration": "2h"
+    },
+    {
+        "id": "print-generator-housing",
+        "title": "3D print a generator housing on an entry-level FDM printer using 40 g of white PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 40
+            }
+        ],
+        "createItems": [
+            {
+                "id": "3326e89c-5883-473d-a68f-3ea560093966",
+                "count": 1
+            }
+        ],
+        "duration": "4h"
+    },
+    {
+        "id": "print-crank-handle",
+        "title": "3D print a crank handle on an entry-level FDM printer using 20 g of white PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 20
+            }
+        ],
+        "createItems": [
+            {
+                "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
+                "count": 1
+            }
+        ],
+        "duration": "2h"
+    }
+]

@@ -2,16 +2,6 @@
     "id": "astronomy/iss-flyover",
     "title": "Spot the ISS",
     "description": "Use a tracker app on your smartphone and a basic telescope to watch the ISS pass overhead.",
-    "hardening": {
-        "passes": 3,
-        "score": 90,
-        "emoji": "💯",
-        "history": [
-            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
-            { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 80 },
-            { "task": "codex-quest-refresh-2025-02-14", "date": "2025-02-14", "score": 90 }
-        ]
-    },
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",

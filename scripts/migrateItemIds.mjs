@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 const root = path.resolve(__dirname, '..');
 
 const itemsDir = path.join(root, 'frontend/src/pages/inventory/json/items');
-const processesPath = path.join(root, 'frontend/src/pages/processes/processes.json');
+const processesDir = path.join(root, 'frontend/src/pages/processes/json');
 const questsDir = path.join(root, 'frontend/src/pages/quests/json');
 
 const idMapPath = path.join(root, 'scripts', 'item-id-map.json');
@@ -73,9 +73,12 @@ for (const file of itemFiles) {
 }
 saveJSON(idMapPath, idMap);
 
-const processes = loadJSON(processesPath);
-replaceIds(processes, idMap);
-saveJSON(processesPath, processes);
+for (const file of fs.readdirSync(processesDir).filter((f) => f.endsWith('.json'))) {
+  const full = path.join(processesDir, file);
+  const data = loadJSON(full);
+  replaceIds(data, idMap);
+  saveJSON(full, data);
+}
 
 walk(questsDir, (file) => {
   const data = loadJSON(file);

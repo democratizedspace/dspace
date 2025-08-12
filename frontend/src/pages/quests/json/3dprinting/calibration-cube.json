@@ -31,8 +31,14 @@
                     "goto": "measure",
                     "text": "Cube printed and cooled.",
                     "requiresItems": [
-                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 15 }
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 15
+                        }
                     ]
                 }
             ]
@@ -50,28 +56,26 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Dimensions noted.",
-                    "requiresItems": [{ "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent! Record the measurements and tweak firmware or slicer settings as needed before your next print.",
-            "options": [{ "type": "finish", "text": "All set." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All set."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"],
-    "hardening": {
-        "passes": 1,
-        "score": 65,
-        "emoji": "🌀",
-        "history": [
-            {
-                "task": "codex-quest-refinement-2025-08-07",
-                "date": "2025-08-07",
-                "score": 65
-            }
-        ]
-    }
+    "requiresQuests": ["3dprinter/start"]
 }

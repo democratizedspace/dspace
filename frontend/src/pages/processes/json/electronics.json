@@ -1,0 +1,284 @@
+[
+    {
+        "id": "measure-battery-voltage",
+        "title": "Check a 12 V battery pack's voltage with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m"
+    },
+    {
+        "id": "measure-resistance",
+        "title": "Measure a 220 Ω resistor with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "check-led-polarity",
+        "title": "Identify LED anode and cathode using a multimeter's diode mode",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "assemble-led-indicator-module",
+        "title": "Assemble an LED indicator module on a breadboard",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            }
+        ],
+        "createItems": [
+            {
+                "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "measure-photoresistor",
+        "title": "Measure photoresistor value with a multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "calibrate-multimeter",
+        "title": "Verify multimeter accuracy with a 220 Ω resistor",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "wear-anti-static-wrist-strap",
+        "title": "Attach an anti-static wrist strap before handling electronics",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
+    },
+    {
+        "id": "solder-led-resistor",
+        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 Ω resistor with two jumper wires",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 2
+            }
+        ],
+        "createItems": [
+            {
+                "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
+                "count": 1
+            }
+        ],
+        "duration": "15m"
+    },
+    {
+        "id": "strip-jumper-wire",
+        "title": "Strip 5 mm of insulation from a jumper wire",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
+    },
+    {
+        "id": "solder-wire-connection",
+        "title": "Join two jumper wires with a soldering iron kit and safety goggles",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 2
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "96083990-f333-4e42-ab04-7eb2a234570e",
+                "count": 5
+            }
+        ],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "verify-resistor-color-code",
+        "title": "Check resistor value using color bands",
+        "requireItems": [
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "test-cable-continuity",
+        "title": "Verify USB cable continuity with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    }
+]

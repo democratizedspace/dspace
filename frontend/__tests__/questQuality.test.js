@@ -18,9 +18,11 @@ const items = fs
     .readdirSync(itemsDir)
     .filter((f) => f.endsWith('.json'))
     .flatMap((f) => JSON.parse(fs.readFileSync(path.join(itemsDir, f))));
-const processes = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '../src/pages/processes/processes.json'))
-);
+const processesDir = path.join(__dirname, '../src/pages/processes/json');
+const processes = fs
+    .readdirSync(processesDir)
+    .filter((f) => f.endsWith('.json'))
+    .flatMap((f) => JSON.parse(fs.readFileSync(path.join(processesDir, f))));
 const itemIds = new Set(items.map((i) => i.id));
 const processIds = new Set(processes.map((p) => p.id));
 

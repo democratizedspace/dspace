@@ -15,8 +15,14 @@
                     "goto": "lift",
                     "text": "Yes please, it's heavy.",
                     "requiresItems": [
-                        { "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48", "count": 1 },
-                        { "id": "98609b23-4811-4275-8d83-ad59a2797753", "count": 1 }
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        },
+                        {
+                            "id": "98609b23-4811-4275-8d83-ad59a2797753",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -52,8 +58,14 @@
                     "process": "heat-walstad",
                     "text": "Install the heater and set it to 26°C",
                     "requiresItems": [
-                        { "id": "0b85f058-38f2-4e9a-93e9-d47441608619", "count": 1 },
-                        { "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48", "count": 1 }
+                        {
+                            "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                            "count": 1
+                        },
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
                     ]
                 },
                 {
@@ -69,11 +81,5 @@
             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
             "count": 1
         }
-    ],
-    "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
-        "history": [{ "task": "codex-upgrade-2025-08-07", "date": "2025-08-07", "score": 60 }]
-    }
+    ]
 }

@@ -9,7 +9,7 @@ vi.mock('../../src/utils/gameState/common.js', () => {
 });
 
 // Mock processes import
-vi.mock('../../src/pages/processes/processes.json', () => {
+vi.mock('../../src/pages/processes/json', () => {
     return {
         default: [
             {

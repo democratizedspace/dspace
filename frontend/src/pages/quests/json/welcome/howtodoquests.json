@@ -192,11 +192,5 @@
             "count": 1000
         }
     ],
-    "requiresQuests": [],
-    "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
-        "history": [{ "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }]
-    }
+    "requiresQuests": []
 }

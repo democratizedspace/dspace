@@ -14,12 +14,6 @@ Ready-to-use JSON templates live in `frontend/src/pages/quests/templates`. Copy 
     "id": "astronomy/constellations",
     "title": "Map the Constellations",
     "description": "Identify key star patterns to aid celestial navigation.",
-    "hardening": {
-        "passes": 0,
-        "score": 0,
-        "emoji": "🛠️",
-        "history": []
-    },
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
@@ -58,6 +52,6 @@ Ready-to-use JSON templates live in `frontend/src/pages/quests/templates`. Copy 
 ```
 
 Use this template as a baseline and expand it with additional dialogue nodes, processes, item requirements, and rewards. For more in-depth guidance, see the [Quest Development Guidelines](/docs/quest-guidelines).
-The optional `hardening` block tracks how many upgrade passes a quest has survived and stores a history of Codex tasks.
+Quality metadata lives in `hardening/quests.json`, which tracks how many upgrade passes a quest has survived and stores a history of Codex tasks.
 Increment `passes`, update `score`, switch the status `emoji` (🛠️ → 🌀 → ✅ → 💯) and append an entry to `history` with the task ID, date and score each time you run the quest hardening loop described in the [quest prompt guide](/docs/prompts-quests).
 An automated Playwright example (`constellations-quest.spec.ts`) walks through creating this quest step by step if you prefer a hands-on reference.

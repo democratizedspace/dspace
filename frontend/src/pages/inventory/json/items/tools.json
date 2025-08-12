@@ -5,38 +5,14 @@
         "description": "Entry-level FDM printer with 220 x 220 x 250 mm build volume and heated bed; open-source firmware.",
         "image": "/assets/3dprinter.jpg",
         "price": "200 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 60
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "7892ffc6-c651-445f-946b-7edc998cf389",
         "name": "Benchy",
         "description": "60 mm long 3D-printed tugboat calibration model weighing about 15 g of PLA.",
         "image": "/assets/benchy.jpg",
-        "price": "0.50 dUSD",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-11",
-                    "date": "2025-08-11",
-                    "score": 65
-                }
-            ]
-        }
+        "price": "0.50 dUSD"
     },
     {
         "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
@@ -44,19 +20,7 @@
         "description": "Handheld 9 V-powered controller with removable safety key and 6 m (20 ft) leads for remote ignition of model rockets.",
         "image": "/assets/launch_controller.jpg",
         "price": "25 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-05",
-                    "date": "2025-08-05",
-                    "score": 60
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
@@ -64,19 +28,7 @@
         "description": "Pen-style 30 W iron with stand, cleaning sponge and 1 m of 0.8 mm lead-free solder for hobby electronics.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "25 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-05",
-                    "date": "2025-08-05",
-                    "score": 60
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
@@ -84,19 +36,7 @@
         "description": "Handheld multimeter with manual 20 V DC range, measures up to 600 V, 10 A and 2 MΩ. Includes test probes and replaceable fuse.",
         "image": "/assets/launch_controller.jpg",
         "price": "20 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-05",
-                    "date": "2025-08-05",
-                    "score": 65
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
@@ -104,19 +44,7 @@
         "description": "150 mm stainless steel digital calipers with 0.01 mm resolution and auto-off.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "15 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-07",
-                    "date": "2025-08-07",
-                    "score": 65
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
@@ -124,19 +52,7 @@
         "description": "450 g (16 oz) drop-forged steel head, curved claw and 330 mm (13 in) fiberglass handle for nails.",
         "image": "/assets/door.jpg",
         "price": "10 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-09",
-                    "date": "2025-08-09",
-                    "score": 60
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
@@ -144,19 +60,7 @@
         "description": "Self-adjusting tool for stripping 24-10 AWG insulation cleanly.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "15 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-08",
-                    "date": "2025-08-08",
-                    "score": 60
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
@@ -164,15 +68,7 @@
         "description": "Two-shelf steel cart, 90×50×80 cm, weighs 15 kg and holds up to 120 kg of lab equipment.",
         "image": "/assets/cart.jpg",
         "price": "80 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                { "task": "codex-item-hardening-2025-08-11", "date": "2025-08-11", "score": 65 }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
@@ -180,19 +76,7 @@
         "description": "Angled-cutting pliers for trimming component leads and wires cleanly.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "12 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-09",
-                    "date": "2025-08-09",
-                    "score": 60
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
@@ -200,19 +84,7 @@
         "description": "3 m (10 ft) retractable steel tape measure with metric and imperial markings.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "8 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-12",
-                    "date": "2025-08-12",
-                    "score": 60
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
@@ -227,19 +99,7 @@
         "description": "Adjustable wrist strap with grounding cord to prevent electrostatic discharge while handling components.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "7 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-10",
-                    "date": "2025-08-10",
-                    "score": 60
-                }
-            ]
-        }
+        "type": "tool"
     },
     {
         "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",

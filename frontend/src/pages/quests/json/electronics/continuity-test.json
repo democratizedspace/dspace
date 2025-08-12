@@ -31,10 +31,22 @@
                     "goto": "finish",
                     "text": "It beeped and read near zero ohms.",
                     "requiresItems": [
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 }
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -42,26 +54,14 @@
         {
             "id": "finish",
             "text": "Nice work! Power down the meter, coil the cable loosely, and store it dry. If any pin failed, cut the cable into pieces with wire cutters before recycling. Remove your goggles.",
-            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/solder-wire"],
-    "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
-        "history": [
-            {
-                "task": "codex-upgrade-2025-08-10",
-                "date": "2025-08-10",
-                "score": 60
-            },
-            {
-                "task": "codex-upgrade-2025-08-12",
-                "date": "2025-08-12",
-                "score": 80
-            }
-        ]
-    }
+    "requiresQuests": ["electronics/solder-wire"]
 }

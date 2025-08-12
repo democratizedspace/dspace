@@ -60,17 +60,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [],
-    "hardening": {
-        "passes": 5,
-        "score": 95,
-        "emoji": "💯",
-        "history": [
-            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
-            { "task": "codex-upgrade-2025-08-05", "date": "2025-08-05", "score": 80 },
-            { "task": "codex-polish-2025-08-05", "date": "2025-08-05", "score": 92 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 94 },
-            { "task": "codex-refine-2025-08-06", "date": "2025-08-06", "score": 95 }
-        ]
-    }
+    "requiresQuests": []
 }

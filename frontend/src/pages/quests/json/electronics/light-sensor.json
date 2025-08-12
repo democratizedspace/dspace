@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Hey again! Orion here. Let's build a light sensor. Work on a non-conductive surface, wear safety goggles and an anti-static wrist strap, discharge static by touching grounded metal, keep hands dry, and unplug the board before wiring to avoid shorts.",
-            "options": [{ "type": "goto", "goto": "materials", "text": "What do I need?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "What do I need?"
+                }
+            ]
         },
         {
             "id": "materials",
@@ -25,16 +31,46 @@
                     "goto": "wire",
                     "text": "Ready to wire!",
                     "requiresItems": [
-                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
-                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
-                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 3 },
-                        { "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3", "count": 1 },
-                        { "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac", "count": 1 },
-                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2", "count": 1 },
-                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 3
+                        },
+                        {
+                            "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
+                            "count": 1
+                        },
+                        {
+                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                            "count": 1
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -49,9 +85,18 @@
                     "text": "Wired up and measured.",
                     "process": "measure-photoresistor",
                     "requiresItems": [
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-                        { "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -59,46 +104,25 @@
         {
             "id": "code",
             "text": "Plug the USB cable back in and upload a sketch that reads A0 and prints to the serial monitor. Shade and expose the sensor to watch the values shift. Avoid pointing lasers at the sensor and don't stare into bright lamps during testing.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Numbers are changing!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Numbers are changing!"
+                }
+            ]
         },
         {
             "id": "finish",
             "text": "Nice work! Unplug the board before making changes, coil the USB cable, and store all parts for future builds.",
-            "options": [{ "type": "finish", "text": "Cool!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Cool!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": [],
-    "hardening": {
-        "passes": 5,
-        "score": 96,
-        "emoji": "💯",
-        "history": [
-            {
-                "task": "codex-quest-refinement-2025-08-05",
-                "date": "2025-08-05",
-                "score": 60
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-05-2",
-                "date": "2025-08-05",
-                "score": 80
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-06-3",
-                "date": "2025-08-06",
-                "score": 90
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-06-4",
-                "date": "2025-08-06",
-                "score": 95
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-09",
-                "date": "2025-08-09",
-                "score": 96
-            }
-        ]
-    }
+    "requiresQuests": []
 }

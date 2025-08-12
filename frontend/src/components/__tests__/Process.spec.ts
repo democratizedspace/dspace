@@ -19,7 +19,7 @@ const resumeProcess = vi.fn(() => {
     stateInfo.state = ProcessStates.IN_PROGRESS;
 });
 
-vi.mock('../../pages/processes/processes.json', () => ({
+vi.mock('../../pages/processes/json', () => ({
     default: [
         {
             id: 'p1',

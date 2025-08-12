@@ -79,32 +79,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/arduino-blink"],
-    "hardening": {
-        "passes": 4,
-        "score": 95,
-        "emoji": "💯",
-        "history": [
-            {
-                "task": "codex-upgrade-2025-08-02",
-                "date": "2025-08-02",
-                "score": 60
-            },
-            {
-                "task": "codex-quest-refinement-2025-02-14",
-                "date": "2025-02-14",
-                "score": 80
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-04",
-                "date": "2025-08-04",
-                "score": 92
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-06",
-                "date": "2025-08-06",
-                "score": 95
-            }
-        ]
-    }
+    "requiresQuests": ["electronics/arduino-blink"]
 }
