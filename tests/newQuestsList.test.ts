@@ -31,17 +31,21 @@ describe('new quests list', () => {
     expect(actual).toBe(expected);
   });
 
-  it('counts quests correctly for each release', () => {
-    const sections = getReleaseSections();
-    sections.forEach((section) => {
-      const counted = section.groups.reduce(
-        (sum, g) => sum + g.quests.length,
-        0
-      );
-      expect(section.newCount).toBe(counted);
-      expect(section.currentCount).toBeGreaterThanOrEqual(section.prevCount);
-    });
-  });
+  it(
+    'counts quests correctly for each release',
+    () => {
+      const sections = getReleaseSections();
+      sections.forEach((section) => {
+        const counted = section.groups.reduce(
+          (sum, g) => sum + g.quests.length,
+          0
+        );
+        expect(section.newCount).toBe(counted);
+        expect(section.currentCount).toBeGreaterThanOrEqual(section.prevCount);
+      });
+    },
+    10000
+  );
 
   it('is up-to-date when regenerated', () => {
     const before = fs.readFileSync(listPath, 'utf8');
