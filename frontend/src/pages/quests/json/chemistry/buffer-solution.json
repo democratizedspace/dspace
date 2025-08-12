@@ -1,0 +1,50 @@
+{
+    "id": "chemistry/buffer-solution",
+    "title": "Prepare a Buffer Solution",
+    "description": "Mix vinegar and baking soda to resist pH swings.",
+    "image": "/assets/pH_strip.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's mix a buffer. Gather vinegar, baking soda, a beaker, gloves, goggles, and a lab coat.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Ready to mix."
+                }
+            ]
+        },
+        {
+            "id": "mix",
+            "text": "Dissolve a teaspoon of baking soda in water. Stir in vinegar dropwise and check pH.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Testing the solution."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "pH is stable around 7.",
+                    "requiresItems": [{ "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Label the buffer and store it sealed for later experiments.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Buffer ready."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["chemistry/ph-test"]
+}
