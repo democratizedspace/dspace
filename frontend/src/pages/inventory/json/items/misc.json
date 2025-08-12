@@ -387,6 +387,19 @@
         }
     },
     {
+        "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
+        "name": "rocket launch checklist",
+        "description": "Laminated preflight checklist covering pad setup, arming and countdown steps.",
+        "image": "/assets/paperwork.jpg",
+        "price": "2 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
         "name": "launch-capable model rocket",
         "description": "35 cm rocket with B6-4 motor and recovery wadding; launch remotely via controller.",
