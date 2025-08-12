@@ -312,5 +312,24 @@
                 }
             ]
         }
+    },
+    {
+        "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
+        "name": "digital pH meter",
+        "description": "Pocket-sized meter measures pH 0–14 with ±0.1 accuracy; includes calibration solution.",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "price": "15 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
     }
 ]
