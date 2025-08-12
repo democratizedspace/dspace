@@ -8,18 +8,19 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your Walstad tank should read 0 ammonia and nitrite. Dwarf shrimp graze algae and expose any issues.",
+            "text": "Your Walstad tank reads 0 ammonia and nitrite when checked with a liquid test kit. Dwarf shrimp graze algae and reveal any stability issues.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "acquire",
-                    "text": "Sounds good!"
+                    "text": "Sounds good!",
+                    "requiresItems": [{ "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 }]
                 }
             ]
         },
         {
             "id": "acquire",
-            "text": "Pick up healthy shrimp in a sealed bag. Test for 0 ammonia and nitrite, keep it shaded, and float it in your tank for 15 minutes to match temperature.",
+            "text": "Pick up healthy shrimp in a sealed, shaded bag. Verify the water shows 0 ammonia and nitrite, then float it in your tank for 15 minutes to match temperature.",
             "options": [
                 {
                     "type": "goto",
@@ -30,21 +31,15 @@
         },
         {
             "id": "acclimate",
-            "text": "Set up a drip acclimation with a clean 5 gallon bucket and airline tubing reserved for aquarium use. Siphon tank water 2–4 drops per second into the bag for about an hour to match chemistry.",
+            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2–4 drops per second for about an hour until parameters match.",
             "options": [
                 {
                     "type": "process",
                     "process": "drip-acclimate-shrimp",
                     "text": "Start drip acclimation",
                     "requiresItems": [
-                        {
-                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
-                            "count": 1
-                        },
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        }
+                        { "id": "60e517b4-5807-4983-afb8-e2aad1566587", "count": 1 },
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
                     ]
                 },
                 {
@@ -56,17 +51,12 @@
         },
         {
             "id": "release",
-            "text": "Use an aquarium net to move the shrimp into the tank. Pour the bag water down a drain, rinse the bucket, and wash your hands to avoid contamination.",
+            "text": "Use an aquarium net to move the shrimp into the tank. Never pour store water into your aquarium; discard it down a drain, rinse the bucket, and wash your hands.",
             "options": [
                 {
                     "type": "finish",
                     "text": "Shrimp are in and exploring!",
-                    "requiresItems": [
-                        {
-                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "ee7d437d-7426-47cd-b691-386dd20f4e47", "count": 1 }]
                 }
             ]
         }
@@ -79,8 +69,8 @@
     ],
     "requiresQuests": ["aquaria/walstad"],
     "hardening": {
-        "passes": 3,
-        "score": 90,
+        "passes": 4,
+        "score": 92,
         "emoji": "💯",
         "history": [
             {
@@ -97,6 +87,11 @@
                 "task": "codex-quest-refinement-2025-08-06",
                 "date": "2025-08-06",
                 "score": 90
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-12",
+                "date": "2025-08-12",
+                "score": 92
             }
         ]
     }
