@@ -15,5 +15,5 @@ rocketry: 7 quests, 665 lines
 completionist: 5 quests, 263 lines
 welcome: 5 quests, 375 lines
 ubi: 3 quests, 250 lines
-composting: 2 quests, 109 lines
+composting: 2 quests, 143 lines
 sysadmin: 2 quests, 102 lines
