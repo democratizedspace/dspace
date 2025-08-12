@@ -1,0 +1,49 @@
+{
+    "id": "astronomy/pleiades",
+    "title": "Spot the Pleiades Cluster",
+    "description": "Use a planisphere star chart and red flashlight to find the Pleiades and log its brightness.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The Pleiades shimmer like a mini-dipper. Grab a planisphere and red flashlight, let eyes adjust for 15 minutes and keep screens dim. Ready to step outside?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "scan",
+                    "text": "Heading out.",
+                    "requiresItems": [
+                        { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 },
+                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "scan",
+            "text": "Face east after dusk, shield the red light and trace Taurus on the star chart. Sweep slowly until the Pleiades sparkle into view. Mind your footing and avoid shining lights at others.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Cross-checking with the chart."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cluster found.",
+                    "requiresItems": [{ "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice observation! Log the date and brightness, cap your telescope and pack up without leaving trace.",
+            "options": [{ "type": "finish", "text": "Logging my notes." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}
