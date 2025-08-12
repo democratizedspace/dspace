@@ -1,0 +1,71 @@
+{
+    "id": "rocketry/wind-check",
+    "title": "Check the Launch Winds",
+    "description": "Measure wind speed to ensure safe rocket launches.",
+    "image": "/assets/rocket_launch.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Skies look a little gusty. Let's make sure it's safe to fly!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Got it, let's check the wind."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Hold an anemometer at launch height and take a reading.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-wind-speed",
+                    "text": "Hold up the anemometer and note the gusts."
+                },
+                {
+                    "type": "goto",
+                    "goto": "ready",
+                    "requiresItems": [
+                        {
+                            "id": "451d86d9-96e0-4829-af27-8a8b0be65ae4",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Reading taken—winds are calm."
+                }
+            ]
+        },
+        {
+            "id": "ready",
+            "text": "Looks good! With winds under control, our launch window is open.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Sweet, let's get this bird in the air!"
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Great job! Always respect the wind; rockets love smooth skies.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Launch conditions verified."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["rocketry/preflight-check"]
+}
