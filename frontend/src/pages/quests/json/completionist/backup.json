@@ -1,0 +1,50 @@
+{
+    "id": "completionist/backup",
+    "title": "Backup Your Trophy",
+    "description": "Make a digital copy so your Completionist Award lives on.",
+    "image": "/assets/quests/completionist.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Photos fade, storage fails. Want to archive your trophy safely?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Let's secure a backup"
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Snap a crisp photo and upload it to your vault.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Backup complete",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Now even a meteor can't erase your accomplishment.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Safe and sound"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["completionist/v2"]
+}
