@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 184
-New quests in this release: 162
+Current quest count: 188
+New quests in this release: 166
 
 ### 3dprinting
 
@@ -60,6 +60,7 @@ New quests in this release: 162
 
 ### chemistry
 
+- chemistry/acid-dilution
 - chemistry/acid-neutralization
 - chemistry/ph-adjustment
 - chemistry/ph-test
@@ -121,6 +122,7 @@ New quests in this release: 162
 
 - energy/battery-maintenance
 - energy/battery-upgrade
+- energy/charge-controller-setup
 - energy/dWatt-1e8
 - energy/hand-crank-generator
 - energy/offgrid-charger
@@ -132,6 +134,7 @@ New quests in this release: 162
 ### firstaid
 
 - firstaid/assemble-kit
+- firstaid/dispose-expired
 - firstaid/learn-cpr
 - firstaid/restock-kit
 - firstaid/splint-limb
@@ -182,6 +185,7 @@ New quests in this release: 162
 - programming/temp-email
 - programming/temp-graph
 - programming/temp-logger
+- programming/thermistor-calibration
 - programming/web-server
 
 ### robotics
