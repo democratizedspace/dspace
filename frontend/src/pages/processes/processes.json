@@ -1632,8 +1632,8 @@
     },
     {
         "id": "measure-photoresistor",
-        "title": "Measure photoresistor value with a multimeter",
-        "image": "/assets/quests/basic_circuit.svg",
+        "title": "Measure a photoresistor's resistance using a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
         "requireItems": [
             { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
             { "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3", "count": 1 },
@@ -1641,7 +1641,15 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-hardening-2025-08-12", "date": "2025-08-12", "score": 60 }
+            ]
+        }
     },
     {
         "id": "calibrate-multimeter",
