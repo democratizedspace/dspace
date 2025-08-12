@@ -20,7 +20,7 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1. Quick start (Web vs CLI)
 
 -   **Add or update an item**
     -   Web: use the “Code” button and attach the repo.
@@ -32,7 +32,7 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && npm run itemValidation && npm test -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && npm run test:ci && npm run itemValidation && npm test -- itemQuality"
         ```
 
 See the [Codex CLI repository][codex-cli] for more flags.
@@ -48,6 +48,7 @@ See the [Codex CLI repository][codex-cli] for more flags.
     -   `npm run lint`
     -   `npm run type-check`
     -   `npm run build`
+    -   `npm run test:ci`
     -   `npm run itemValidation`
     -   `npm test -- itemQuality` pass
 
@@ -68,10 +69,10 @@ REQUIREMENTS
 3. Ensure the item is referenced by at least one quest or process; update those
    files and create missing processes as needed.
 4. Use only existing image assets; do not add new image files.
-5. Run `npm run lint`, `npm run type-check` and `npm run build`.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Run `npm run itemValidation` and `npm test -- itemQuality`, fixing any failures.
 7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-8. Use an emoji-prefixed commit message like `📝 : add price field`.
+8. Use an emoji-prefixed commit message like `📝 : – add price field`.
 9. Update docs or processes if needed.
 
 OUTPUT
@@ -87,7 +88,7 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or
 create items under `frontend/src/pages/inventory/json/items`, choosing the
 appropriate category file. Ensure realistic details, required fields, and
-passing checks (`npm run lint`, `npm run type-check`, `npm run build`,
+passing checks (`npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci`,
 `npm run itemValidation`, and `npm test -- itemQuality`).
 Verify the item appears in at least one quest or process, reuse existing image
 assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
@@ -99,7 +100,7 @@ USER:
 2. Run the commands listed in the system prompt before committing, including quest quality
    checks when quests are modified.
 3. Summarize the new or updated item in the PR description.
-4. Use an emoji-prefixed commit message like `📝 : add price field`.
+4. Use an emoji-prefixed commit message like `📝 : – add price field`.
 
 OUTPUT:
 A pull request implementing the item with all tests green.
@@ -138,10 +139,10 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run itemValidation`,
-   and `npm test -- itemQuality`. Update docs if needed.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci`,
+   `npm run itemValidation`, and `npm test -- itemQuality`. Update docs if needed.
 6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-7. Use an emoji-prefixed commit message like `📝 : refine item details`.
+7. Use an emoji-prefixed commit message like `📝 : – refine item details`.
 
 OUTPUT:
 A pull request with the refined item, updated hardening block and passing tests.
