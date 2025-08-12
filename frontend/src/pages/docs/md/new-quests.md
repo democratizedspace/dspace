@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 174
-New quests in this release: 152
+Current quest count: 181
+New quests in this release: 159
 
 ### 3dprinting
 
@@ -31,6 +31,7 @@ New quests in this release: 152
 - aquaria/filter-rinse
 - aquaria/floating-plants
 - aquaria/guppy
+- aquaria/ph-strip-test
 - aquaria/position-tank
 - aquaria/shrimp
 - aquaria/sponge-filter
@@ -54,6 +55,7 @@ New quests in this release: 152
 - astronomy/orion-nebula
 - astronomy/planetary-alignment
 - astronomy/satellite-pass
+- astronomy/saturn-rings
 - astronomy/star-trails
 
 ### chemistry
@@ -68,6 +70,7 @@ New quests in this release: 152
 
 ### completionist
 
+- completionist/catalog
 - completionist/display
 - completionist/polish
 - completionist/reminder
@@ -75,6 +78,7 @@ New quests in this release: 152
 ### composting
 
 - composting/start
+- composting/turn-pile
 
 ### devops
 
@@ -143,6 +147,7 @@ New quests in this release: 152
 - geothermal/install-backup-thermistor
 - geothermal/log-ground-temperature
 - geothermal/monitor-heat-pump-energy
+- geothermal/replace-faulty-thermistor
 - geothermal/survey-ground-temperature
 
 ### hydroponics
@@ -152,6 +157,7 @@ New quests in this release: 152
 - hydroponics/filter-clean
 - hydroponics/grow-light
 - hydroponics/lettuce
+- hydroponics/netcup-clean
 - hydroponics/nutrient-check
 - hydroponics/ph-check
 - hydroponics/ph-test
@@ -215,6 +221,7 @@ New quests in this release: 152
 - woodworking/bookshelf
 - woodworking/coffee-table
 - woodworking/finish-sanding
+- woodworking/picture-frame
 - woodworking/planter-box
 - woodworking/step-stool
 - woodworking/tool-rack
