@@ -19,12 +19,24 @@
         },
         {
             "id": "gather",
-            "text": "Wash with soap and water 20s. Set out bandages, gauze pads, antiseptic wipes, nitrile gloves.",
+            "text": "Wash with soap and water 20s, then dry with a paper towel. Set out bandages, gauze pads, antiseptic wipes, nitrile gloves.",
             "options": [
                 {
                     "type": "process",
                     "process": "wash-hands",
                     "text": "Hands are clean",
+                    "goto": "dry"
+                }
+            ]
+        },
+        {
+            "id": "dry",
+            "text": "Dry your hands before handling supplies.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "dry-hands",
+                    "text": "Hands are dry",
                     "goto": "pack"
                 }
             ]
