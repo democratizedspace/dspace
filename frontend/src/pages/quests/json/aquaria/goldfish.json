@@ -86,6 +86,11 @@
                     "text": "Wakey wakey, eggs and bakey! I hope you enjoy!"
                 },
                 {
+                    "type": "process",
+                    "process": "check-aquarium-temperature",
+                    "text": "Is the water at a comfy temperature?"
+                },
+                {
                     "type": "goto",
                     "goto": "fin",
                     "requiresItems": [
