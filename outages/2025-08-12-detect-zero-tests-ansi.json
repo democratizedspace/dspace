@@ -1,0 +1,11 @@
+{
+  "id": "2025-08-12-detect-zero-tests-ansi",
+  "date": "2025-08-12",
+  "component": "test harness",
+  "rootCause": "ANSI color codes in vitest output prevented zero-test detection",
+  "resolution": "strip ANSI escape sequences before checking test output",
+  "references": [
+    "DEVELOPER_GUIDE.md#run-unit-tests",
+    "scripts/utils/detect-zero-tests.js"
+  ]
+}
