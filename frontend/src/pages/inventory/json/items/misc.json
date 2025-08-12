@@ -1009,6 +1009,13 @@
         "price": "0.50 dUSD"
     },
     {
+        "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+        "name": "biohazard waste bag",
+        "description": "1 L red bag for used bandages and gloves; tie shut to contain contaminated waste.",
+        "image": "/assets/rescue.jpg",
+        "price": "0.10 dUSD"
+    },
+    {
         "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
         "name": "safety goggles",
         "description": "Polycarbonate goggles with vents and adjustable strap; fit over glasses, block splashes. 100 g.",
