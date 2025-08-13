@@ -13,6 +13,10 @@ elif command -v powershell >/dev/null 2>&1; then
   powershell -NoProfile -ExecutionPolicy Bypass -File .husky/pre-commit.ps1
 else
   echo "PowerShell not found, falling back to bash script"
+  if command -v pre-commit >/dev/null 2>&1; then
+    echo "Running pre-commit checks..."
+    pre-commit run --files $(git diff --cached --name-only)
+  fi
   cd frontend
   echo "Running linting on staged files..."
   npx lint-staged
