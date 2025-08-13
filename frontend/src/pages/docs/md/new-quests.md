@@ -189,6 +189,7 @@ New quests in this release: 174
 - programming/hello-sensor
 - programming/json-api
 - programming/json-endpoint
+- programming/plot-temp-cli
 - programming/temp-alert
 - programming/temp-email
 - programming/temp-graph
