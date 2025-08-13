@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Grab iron kit and solder sucker or braid. Heat iron; keep leads tidy.",
+            "text": "Grab iron kit, safety goggles, and solder sucker or braid. Heat iron; keep leads tidy.",
             "options": [
                 {
                     "type": "goto",
@@ -27,6 +27,7 @@
                     "text": "Tools ready.",
                     "requiresItems": [
                         { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+                        { "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22", "count": 1 },
                         { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
                     ]
                 }
@@ -44,5 +45,11 @@
         }
     ],
     "requiresQuests": ["electronics/solder-wire"],
-    "rewards": []
+    "rewards": [],
+    "hardening": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

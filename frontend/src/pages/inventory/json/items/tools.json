@@ -86,7 +86,7 @@
     {
         "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
         "name": "desoldering pump",
-        "description": "Spring-loaded vacuum pump for removing molten solder from circuit boards.",
+        "description": "Spring-loaded aluminum pump with 1 mm PTFE tip for removing molten solder; 30 g.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "8 dUSD",
         "type": "tool",
