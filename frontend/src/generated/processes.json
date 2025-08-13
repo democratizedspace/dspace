@@ -223,7 +223,7 @@
     },
     {
         "id": "level-3d-printer-bed",
-        "title": "Level a 3D printer bed with a sheet of paper",
+        "title": "Level a 3D printer bed with a sheet of printer paper",
         "requireItems": [
             {
                 "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
