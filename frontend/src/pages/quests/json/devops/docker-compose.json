@@ -1,16 +1,21 @@
 {
     "id": "devops/docker-compose",
     "title": "Launch DSPACE in Docker",
-    "description": "Launch the container and share it through a secure Cloudflare Tunnel.",
+    "description": "Start a DSPACE container with Docker Compose and share it through a Cloudflare Tunnel.",
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 78,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-hardening-2025-08-12",
                 "date": "2025-08-12",
                 "score": 60
+            },
+            {
+                "task": "codex-refine-2025-08-13",
+                "date": "2025-08-13",
+                "score": 78
             }
         ]
     },
@@ -20,7 +25,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Run `docker compose up --build -d` in the project directory. Use `docker compose down` to stop.",
+            "text": "Run `docker compose up --build -d`. Watch `docker compose logs -f`; stop with `docker compose down`.",
             "options": [
                 {
                     "type": "process",
@@ -42,7 +47,7 @@
         },
         {
             "id": "tunnel",
-            "text": "Expose the service with `cloudflared tunnel --url http://localhost:3002`. Keep the token private.",
+            "text": "Use `cloudflared tunnel --url http://localhost:3002`. Keep token in env var; Ctrl+C ends.",
             "options": [
                 {
                     "type": "process",
@@ -68,7 +73,7 @@
         },
         {
             "id": "finish",
-            "text": "Everything is up and running! For a multi-node setup you can follow Orion's k3s guide later.",
+            "text": "Setup complete! Stop tunnel and containers when done. For scaling, see Orion's k3s guide.",
             "options": [
                 {
                     "type": "finish",
