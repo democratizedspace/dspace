@@ -25,8 +25,10 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
 -   **Add or update an item**
     -   Web: use the “Code” button and attach the repo.
     -   CLI: `codex "add item solar-cell-junction-box"`
--   **Ask about item data** - Web: use the “Ask” button. - CLI: `codex exec "explain frontend/src/pages/inventory/json/items/*.json"`
-    -   **Run item tests**
+-   **Ask about item data**
+    -   Web: use the “Code” button (the “Ask” button also works).
+    -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items/*.json"`
+-   **Run item tests**
     -   Web: not supported yet.
     -   CLI:
         ```bash
@@ -87,10 +89,10 @@ You are an automated contributor for the DSPACE repository. Edit or
 create items under `frontend/src/pages/inventory/json/items`, choosing the
 appropriate category file. Ensure realistic details, required fields, and
 passing checks (`npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci`,
-`npm run itemValidation`, and `npm test -- itemQuality`).
+`npm run itemValidation`, and `npm run test:ci -- itemQuality`).
 Verify the item appears in at least one quest or process, reuse existing image
 assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
-committing. If a quest's text changes, run `npm test -- questQuality` and update the quest's
+committing. If a quest's text changes, run `npm run test:ci -- questQuality` and update the quest's
 `hardening` block with a fresh evaluation score.
 
 USER:
@@ -138,7 +140,7 @@ USER:
      ]
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci`,
-   `npm run itemValidation`, and `npm test -- itemQuality`. Update docs if needed.
+   `npm run itemValidation`, and `npm run test:ci -- itemQuality`. Update docs if needed.
 6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 7. Use an emoji-prefixed commit message like `📝 : – refine item details`.
 

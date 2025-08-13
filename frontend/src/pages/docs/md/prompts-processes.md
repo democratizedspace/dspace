@@ -20,7 +20,7 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1. Quick start (Web vs CLI)
 
 -   **Add or update a process**
     -   Web: use the “Code” button and attach the repo.
