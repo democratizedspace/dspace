@@ -13,4 +13,8 @@ describe('approximateIrlPrice', () => {
   it('returns null for unknown item', () => {
     expect(approximateIrlPrice('nonexistent')).toBeNull()
   })
+
+  it('ignores surrounding whitespace', () => {
+    expect(approximateIrlPrice(' 3d printer ')).toBe(350)
+  })
 })
