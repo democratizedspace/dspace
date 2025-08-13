@@ -282,6 +282,12 @@
         {/if}
     </div>
 
+    {#if validationErrors.schema}
+        <div class="form-group">
+            <span class="error-message">{validationErrors.schema}</span>
+        </div>
+    {/if}
+
     <div class="form-submit">
         <button type="submit" class="submit-button" disabled={isSubmitting}>
             {#if isSubmitting}
