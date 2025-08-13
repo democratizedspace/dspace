@@ -108,14 +108,24 @@
             errors.image = 'Image is required';
         }
 
-        const { valid } = validateQuestData({
+        const { valid, errors: schemaErrors } = validateQuestData({
             title: title.trim(),
             description: description.trim(),
             image: previewUrl || '',
             requiresQuests,
         });
-        if (!valid) {
-            errors.schema = 'Invalid quest data';
+        if (!valid && schemaErrors) {
+            schemaErrors.forEach((err) => {
+                const field = err.instancePath.replace('/', '');
+                if (!field) return;
+                if (field === 'image' && !errors.image) {
+                    errors.image = 'Invalid image format';
+                } else if (field === 'requiresQuests' && !errors.requiresQuests) {
+                    errors.requiresQuests = 'Invalid quest dependency';
+                } else if (!errors[field]) {
+                    errors[field] = 'Invalid characters';
+                }
+            });
         }
 
         if (

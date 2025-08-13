@@ -20,6 +20,7 @@ New quests in this release: 174
 - 3dprinting/cable-clip
 - 3dprinting/calibration-cube
 - 3dprinting/filament-change
+- 3dprinting/nozzle-cleaning
 - 3dprinting/phone-stand
 - 3dprinting/retraction-test
 - 3dprinting/temperature-tower
@@ -44,6 +45,7 @@ New quests in this release: 174
 ### astronomy
 
 - astronomy/andromeda
+- astronomy/aurora-watch
 - astronomy/basic-telescope
 - astronomy/comet-tracking
 - astronomy/constellations
@@ -67,6 +69,7 @@ New quests in this release: 174
 - chemistry/buffer-solution
 - chemistry/ph-adjustment
 - chemistry/ph-test
+- chemistry/precipitation-reaction
 - chemistry/safe-reaction
 - chemistry/stevia-crystals
 - chemistry/stevia-extraction
@@ -166,6 +169,7 @@ New quests in this release: 174
 - hydroponics/filter-clean
 - hydroponics/grow-light
 - hydroponics/lettuce
+- hydroponics/mint-cutting
 - hydroponics/netcup-clean
 - hydroponics/nutrient-check
 - hydroponics/ph-check
@@ -188,6 +192,7 @@ New quests in this release: 174
 - programming/json-api
 - programming/json-endpoint
 - programming/led-blink
+- programming/plot-temp-cli
 - programming/temp-alert
 - programming/temp-email
 - programming/temp-graph
@@ -235,6 +240,7 @@ New quests in this release: 174
 
 ### woodworking
 
+- woodworking/apply-finish
 - woodworking/birdhouse
 - woodworking/bookshelf
 - woodworking/coffee-table

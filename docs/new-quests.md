@@ -235,6 +235,7 @@ New quests in this release: 174
 
 ### woodworking
 
+- woodworking/apply-finish
 - woodworking/birdhouse
 - woodworking/bookshelf
 - woodworking/coffee-table

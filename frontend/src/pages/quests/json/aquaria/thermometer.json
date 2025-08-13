@@ -1,14 +1,14 @@
 {
     "id": "aquaria/thermometer",
     "title": "Attach Aquarium Thermometer",
-    "description": "Stick a strip thermometer to monitor water temperature.",
+    "description": "Stick a strip thermometer on the outside glass to monitor water temperature.",
     "image": "/assets/aquarium_thermometer.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your heater's running, but let's keep an eye on the temperature. Wipe a dry spot on the outside of the tank, just below the waterline.",
+            "text": "Your heater's running, but let's keep an eye on the temperature. Use a paper towel to dry a 5 cm patch on the outside glass just below the waterline.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "attach",
-            "text": "Peel the backing and press the thermometer firmly against the glass. Wait a few minutes for it to display.",
+            "text": "Peel the backing without touching the adhesive. Align the strip at eye level and press it to the glass from top to bottom for 30 seconds. Keep the strip outside the tank and away from heaters.",
             "options": [
                 {
                     "type": "goto",
@@ -31,10 +31,18 @@
         },
         {
             "id": "finish",
-            "text": "Great! Now you can monitor the water temperature at a glance.",
+            "text": "Great! Wait a few minutes for the numbers to stabilize, then monitor the water temperature at a glance.",
             "options": [{ "type": "finish", "text": "All set!" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/position-tank"]
+    "requiresQuests": ["aquaria/position-tank"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-quest-hardening-2025-08-13", "date": "2025-08-13", "score": 60 }
+        ]
+    }
 }

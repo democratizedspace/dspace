@@ -1,0 +1,49 @@
+{
+    "id": "woodworking/apply-finish",
+    "title": "Apply a Wood Finish",
+    "description": "Seal your project with a protective coat.",
+    "image": "/assets/door.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Time to give your work a durable sheen. Ready to begin?",
+            "options": [{ "type": "goto", "goto": "gather", "text": "What do I need?" }]
+        },
+        {
+            "id": "gather",
+            "text": "You'll need a paintbrush and a can of finish. I'll loan you the brush.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32", "count": 1 }],
+                    "text": "Take the brush"
+                },
+                {
+                    "type": "goto",
+                    "goto": "apply",
+                    "text": "Ready to apply",
+                    "requiresItems": [{ "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "apply",
+            "text": "Brush on a thin coat with the grain, ventilate, and keep sparks away.",
+            "options": [{ "type": "goto", "goto": "dry", "text": "Coat applied" }]
+        },
+        {
+            "id": "dry",
+            "text": "Let the finish dry completely before handling.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "It's dry" }]
+        },
+        {
+            "id": "finish",
+            "text": "Your project is protected and gleaming.",
+            "options": [{ "type": "finish", "text": "Looks great!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/finish-sanding"]
+}

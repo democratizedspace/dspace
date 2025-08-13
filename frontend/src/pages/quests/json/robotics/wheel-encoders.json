@@ -1,14 +1,14 @@
 {
     "id": "robotics/wheel-encoders",
     "title": "Add Wheel Encoders",
-    "description": "Improve your robot's navigation by measuring wheel rotation.",
+    "description": "Install wheel encoders to log wheel rotation for straighter paths. Disconnect power and secure the robot before wiring.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's add feedback. Two wheel encoders and an Arduino Uno will log travel.",
+            "text": "Gather two wheel encoders and an Arduino Uno. We'll log wheel rotation to measure distance. Disconnect power and put on safety goggles.",
             "options": [
                 {
                     "type": "goto",
@@ -19,12 +19,12 @@
         },
         {
             "id": "mount",
-            "text": "Cut power, mount one encoder per wheel, then wire outputs to the Arduino.",
+            "text": "Raise the powered-off robot so wheels can't turn. Mount one encoder on each wheel hub using its bracket.\nRun 5 V and GND to the Arduino, then connect each signal wire to digital pins 2 and 3. Keep wiring clear of moving parts before restoring power.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Installed and reading values!",
+                    "text": "Installed and reading pulses!",
                     "requiresItems": [
                         {
                             "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
@@ -32,6 +32,10 @@
                         },
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                             "count": 1
                         }
                     ]
@@ -52,14 +56,19 @@
     "rewards": [],
     "requiresQuests": ["robotics/servo-gripper"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 78,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-09",
                 "date": "2025-08-09",
                 "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-13",
+                "date": "2025-08-13",
+                "score": 78
             }
         ]
     }

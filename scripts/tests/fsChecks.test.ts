@@ -1,4 +1,7 @@
 import { describe, expect, test } from 'vitest';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import { listMissingImages } from '../utils/fs-checks';
 
 describe('listMissingImages', () => {
@@ -24,5 +27,18 @@ describe('listMissingImages', () => {
     const images = ['//cdn.example.com/remote.png'];
     const missing = listMissingImages(images);
     expect(missing).toEqual([]);
+  });
+
+  test('resolves percent-encoded paths', () => {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'images-'));
+    try {
+      const filename = 'encoded image.png';
+      fs.writeFileSync(path.join(tmp, filename), '');
+      const images = ['encoded%20image.png'];
+      const missing = listMissingImages(images, tmp);
+      expect(missing).toEqual([]);
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
   });
 });

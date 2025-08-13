@@ -122,7 +122,11 @@ Every quest JSON file must include:
         - `requiresGitHub`: Set to `true` to disable the option until a GitHub token is saved
 - `rewards`: Items given upon quest completion
 - `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest form under **Quest Requirements**).
-  Automated tests ensure these dependencies reference existing quests and avoid cycles.
+Automated tests ensure these dependencies reference existing quests and avoid cycles.
+
+Quest data is validated against a JSON schema. Titles and descriptions reject
+`<` and `>` characters, and `image` must be a data URL, an absolute HTTP(S)
+link, or a root-relative path.
 
 ### Current Implementation State
 

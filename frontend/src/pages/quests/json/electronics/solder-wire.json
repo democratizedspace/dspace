@@ -45,7 +45,7 @@
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
-    "rewards": [],
+    "rewards": [{ "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c", "count": 1 }],
     "requiresQuests": [],
     "hardening": {
         "passes": 3,

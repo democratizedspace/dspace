@@ -229,9 +229,22 @@
     {
         "id": "60e517b4-5807-4983-afb8-e2aad1566587",
         "name": "Airline tubing",
-        "description": "Flexible tubing for aquarium air pumps and drip acclimation.",
-        "image": "/assets/aquarium_empty.jpg",
-        "price": "2 dUSD"
+        "description": "2 m of 4 mm inner diameter clear PVC tubing for aquarium air pumps or drip acclimation.",
+        "image": "/assets/bucket.jpg",
+        "price": "2 dUSD",
+        "unit": "2 m coil",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "8c0f72a2-db79-4238-b80f-97721def169f",
@@ -254,10 +267,22 @@
     },
     {
         "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
-        "name": "Walstad tank with guppies",
-        "description": "An 80 L heated Walstad aquarium containing three female and one male guppy.",
-        "image": "/assets/guppy.jpg",
-        "price": "90 dUSD"
+        "name": "Heated Walstad aquarium with guppies (80 L, 26°C)",
+        "description": "80 L (21 gal) Walstad tank with soil and 150 W heater at 26°C; stocked with four guppies (1♂, 3♀).",
+        "image": "/assets/walstad.jpg",
+        "price": "126 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
