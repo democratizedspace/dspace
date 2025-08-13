@@ -151,7 +151,7 @@
     },
     {
         "id": "level-3d-printer-bed",
-        "title": "Level a 3D printer bed with a sheet of paper",
+        "title": "Level a 3D printer bed with a sheet of printer paper",
         "requireItems": [
             { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
             { "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0", "count": 1 }
@@ -728,6 +728,25 @@
             }
         ],
         "duration": "8h 3m 13s"
+    },
+    {
+        "id": "mask-rocket-body-tube",
+        "title": "Mask a rocket body tube with masking tape for painting",
+        "image": "/assets/modelrocket.jpg",
+        "requireItems": [
+            {
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
+                "count": 0.1
+            }
+        ],
+        "createItems": [],
+        "duration": "3m"
     },
     {
         "id": "assemble-rocket",
@@ -2483,6 +2502,19 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "30s"
+    },
+    {
+        "id": "log-aquarium-test-results",
+        "title": "Record aquarium water parameters in a logbook using a liquid test kit",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
+            { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 },
+            { "id": "b8602362-2035-4f00-9376-f48d8668cf38", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
     },
     {
         "id": "stop-nosebleed",

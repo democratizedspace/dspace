@@ -22,19 +22,24 @@
     {
         "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
         "name": "sheet of printer paper",
-        "description": "Single 216 x 279 mm (8.5 x 11 in) sheet of 80 g/m² copy paper.",
+        "description": "Single 216 × 279 mm (8.5 × 11 in) sheet of 80 g/m² letter printer paper.",
         "image": "/assets/paperwork.jpg",
-        "price": "0.01 dUSD",
-        "unit": "each",
+        "price": "0.02 dUSD",
+        "unit": "sheet",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
                     "date": "2025-08-12",
                     "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 80
                 }
             ]
         }
