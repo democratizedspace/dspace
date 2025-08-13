@@ -9,7 +9,12 @@ Thank you for your interest in helping the project! Below is a quick overview of
    ```bash
    pnpm install
    ```
-   Husky hooks install automatically. Use `npm run ci:install` in CI to skip them.
+  Husky hooks install automatically. Use `npm run ci:install` in CI to skip them.
+
+3. Install additional Git hooks via [pre-commit](https://pre-commit.com/):
+   ```bash
+   pre-commit install
+   ```
 
 ## Development Workflow
 
@@ -19,8 +24,8 @@ Thank you for your interest in helping the project! Below is a quick overview of
   npm run check
   ```
 - The test suite verifies file formatting, so unformatted changes will fail CI.
-- The pre-commit hook validates quest and item schemas, runs `lint-staged`, `npm run check`,
-  and `npm test`. Run it manually with:
+- The pre-commit hook validates quest and item schemas, runs `lint-staged`, checks from
+  `.pre-commit-config.yaml`, `npm run check`, and `npm test`. Run it manually with:
     ```bash
     npm test
     ```
