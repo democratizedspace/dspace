@@ -19,7 +19,7 @@
         },
         {
             "id": "deploy",
-            "text": "Use docker compose with a registry service and mount storage at `/data/registry`.",
+            "text": "Use docker compose with a registry service in your `docker-compose.yml` and mount storage at `/data/registry`.",
             "options": [
                 {
                     "type": "process",
@@ -33,6 +33,10 @@
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "57cfb7ae-7a1b-41cf-a029-f9a5287c89c1",
                             "count": 1
                         }
                     ]

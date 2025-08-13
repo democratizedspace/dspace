@@ -928,6 +928,20 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "57cfb7ae-7a1b-41cf-a029-f9a5287c89c1",
+        "name": "docker-compose.yml",
+        "description": "Configuration file that defines services for Docker Compose.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "446ec2c3-437b-420b-bd13-eed6f702e1d2",
+        "name": "Cloudflare tunnel token",
+        "description": "Auth token used by cloudflared to expose a local service via Cloudflare.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
         "name": "fan case",
         "description": "Keeps a Raspberry Pi cool during heavy workloads.",

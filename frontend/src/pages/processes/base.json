@@ -1345,6 +1345,10 @@
             {
                 "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
                 "count": 1
+            },
+            {
+                "id": "57cfb7ae-7a1b-41cf-a029-f9a5287c89c1",
+                "count": 1
             }
         ],
         "consumeItems": [],
@@ -1356,11 +1360,11 @@
         "title": "Create a Cloudflare Tunnel to port 3002",
         "requireItems": [
             {
-                "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
                 "count": 1
             },
             {
-                "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                "id": "446ec2c3-437b-420b-bd13-eed6f702e1d2",
                 "count": 1
             }
         ],
