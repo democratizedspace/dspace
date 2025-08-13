@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 195
-New quests in this release: 173
+Current quest count: 196
+New quests in this release: 174
 
 ### 3dprinting
 
@@ -67,6 +67,7 @@ New quests in this release: 173
 - chemistry/buffer-solution
 - chemistry/ph-adjustment
 - chemistry/ph-test
+- chemistry/precipitation-reaction
 - chemistry/safe-reaction
 - chemistry/stevia-crystals
 - chemistry/stevia-extraction
