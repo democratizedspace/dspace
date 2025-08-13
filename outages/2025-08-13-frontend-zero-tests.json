@@ -1,0 +1,11 @@
+{
+  "id": "2025-08-13-frontend-zero-tests",
+  "date": "2025-08-13",
+  "component": "frontend tests",
+  "rootCause": "`npm run test:ci` reported no unit tests because the frontend test directory was empty",
+  "resolution": "Add a minimal smoke test so the frontend suite always executes at least one file",
+  "references": [
+    "frontend/tests/smoke.test.ts",
+    "frontend/scripts/prepare-pr.sh"
+  ]
+}

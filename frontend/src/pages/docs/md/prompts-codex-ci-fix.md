@@ -100,3 +100,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     set `packageManager` in `package.json` to keep installs quiet.
 -   2025-08-12 – `listMissingImages` flagged data URIs and protocol-relative sources as missing;
     ignore `data:` and `//` URLs so coverage checks only test local assets.
+-   2025-08-13 – `npm run test:ci` reported no unit tests in `frontend`; add a
+    smoke test so the suite always exercises at least one file.
