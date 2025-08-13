@@ -1304,6 +1304,20 @@
         }
     },
     {
+        "id": "f9145674-887d-472c-a2dc-51e7fe6b181b",
+        "name": "docker-compose.yml",
+        "description": "Configuration file that defines services for Docker Compose.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "da050481-d306-4611-9305-a42d865b20cc",
+        "name": "cloudflared tunnel token",
+        "description": "Token from Cloudflare Zero Trust to authenticate a tunnel.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
         "name": "mission log entry",
         "description": "One handwritten entry recording a mission event in the logbook.",

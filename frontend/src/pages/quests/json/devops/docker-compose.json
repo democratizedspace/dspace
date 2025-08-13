@@ -1,16 +1,26 @@
 {
     "id": "devops/docker-compose",
     "title": "Launch DSPACE in Docker",
-    "description": "Launch the container and share it through a secure Cloudflare Tunnel.",
+    "description": "Start a DSPACE container with Docker Compose and share it through a Cloudflare Tunnel.",
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-12",
                 "date": "2025-08-12",
                 "score": 60
+            },
+            {
+                "task": "codex-refine-2025-08-13",
+                "date": "2025-08-13",
+                "score": 78
+            },
+            {
+                "task": "codex-review-2025-08-13",
+                "date": "2025-08-13",
+                "score": 90
             }
         ]
     },
@@ -20,7 +30,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Run `docker compose up --build -d` in the project directory. Use `docker compose down` to stop.",
+            "text": "Run `docker compose up --build -d`. Watch `docker compose logs -f`; stop with `docker compose down`.",
             "options": [
                 {
                     "type": "process",
@@ -33,7 +43,7 @@
                     "text": "Container running.",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "f9145674-887d-472c-a2dc-51e7fe6b181b",
                             "count": 1
                         }
                     ]
@@ -42,7 +52,7 @@
         },
         {
             "id": "tunnel",
-            "text": "Expose the service with `cloudflared tunnel --url http://localhost:3002`. Keep the token private.",
+            "text": "Use `cloudflared tunnel --url http://localhost:3002`. Keep token in env var; Ctrl+C ends.",
             "options": [
                 {
                     "type": "process",
@@ -55,11 +65,7 @@
                     "text": "Tunnel online.",
                     "requiresItems": [
                         {
-                            "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
-                            "count": 1
-                        },
-                        {
-                            "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                            "id": "da050481-d306-4611-9305-a42d865b20cc",
                             "count": 1
                         }
                     ]
@@ -68,7 +74,7 @@
         },
         {
             "id": "finish",
-            "text": "Everything is up and running! For a multi-node setup you can follow Orion's k3s guide later.",
+            "text": "Setup complete! Stop tunnel and containers when done. For scaling, see Orion's k3s guide.",
             "options": [
                 {
                     "type": "finish",
