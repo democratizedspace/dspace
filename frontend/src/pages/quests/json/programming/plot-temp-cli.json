@@ -1,0 +1,49 @@
+{
+    "id": "programming/plot-temp-cli",
+    "title": "Plot Temperature Data via CLI",
+    "description": "Use Python to turn your temperature log into a line chart.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've gathered plenty of readings. Let's transform them into a picture.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "script",
+                    "text": "Show me the script"
+                }
+            ]
+        },
+        {
+            "id": "script",
+            "text": "Run a Python script to read the log and draw a line graph with Matplotlib.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Running the plot script"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "The chart is rendered"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Visualizing data makes patterns jump out.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Done"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/temp-logger"]
+}
