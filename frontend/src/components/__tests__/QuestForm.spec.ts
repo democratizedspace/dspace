@@ -36,3 +36,11 @@ test('shows image preview after upload', async () => {
 
     g.FileReader = original;
 });
+
+test('rejects title with forbidden characters', async () => {
+    const { getByLabelText, getByRole, findByText } = render(QuestForm);
+    const titleInput = getByLabelText(/Title/i);
+    await fireEvent.input(titleInput, { target: { value: '<b>' } });
+    await fireEvent.submit(getByRole('form'));
+    await findByText('Invalid characters');
+});

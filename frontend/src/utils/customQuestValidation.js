@@ -19,7 +19,7 @@ export const customQuestSchema = {
     required: ['title', 'description', 'image'],
 };
 
-const ajv = new Ajv();
+const ajv = new Ajv({ allErrors: true });
 const validate = ajv.compile(customQuestSchema);
 
 export function validateQuestData(data) {
