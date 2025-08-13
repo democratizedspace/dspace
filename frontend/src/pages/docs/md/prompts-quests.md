@@ -101,7 +101,8 @@ committing.
 
 USER:
 1. Follow the steps above.
-2. Run the commands listed in the system prompt before committing.
+2. Run the commands listed in the system prompt, then `npm run new-quests:update`, before
+   committing.
 3. Summarize the new or updated quest in the PR description.
 4. Use an emoji-prefixed commit message.
 
@@ -125,8 +126,9 @@ USER:
 2. Reference at least one inventory item or process.
 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm test -- questCanonical questQuality`. Fix any failures.
-4. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
-5. Use an emoji-prefixed commit message.
+4. Run `npm run new-quests:update` to refresh the quest count docs.
+5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with the new quest.
