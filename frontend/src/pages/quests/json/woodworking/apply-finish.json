@@ -1,0 +1,34 @@
+{
+    "id": "woodworking/apply-finish",
+    "title": "Apply a Wood Finish",
+    "description": "Cedar shows you how to brush on a protective finish to seal your project.",
+    "image": "/assets/door.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your project is sanded smooth. Ready to seal it with a thin coat of finish?",
+            "options": [{ "type": "goto", "goto": "apply", "text": "I'm ready" }]
+        },
+        {
+            "id": "apply",
+            "text": "Stir the finish and brush along the grain with even strokes, wiping away any excess.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Coat applied",
+                    "requiresItems": [{ "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Once it dries your project will resist wear and moisture.",
+            "options": [{ "type": "finish", "text": "Looks great!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/finish-sanding"]
+}
