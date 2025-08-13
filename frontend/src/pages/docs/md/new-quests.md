@@ -20,6 +20,7 @@ New quests in this release: 174
 - 3dprinting/cable-clip
 - 3dprinting/calibration-cube
 - 3dprinting/filament-change
+- 3dprinting/nozzle-cleaning
 - 3dprinting/phone-stand
 - 3dprinting/retraction-test
 - 3dprinting/temperature-tower
