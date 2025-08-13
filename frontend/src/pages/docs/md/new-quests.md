@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 189
-New quests in this release: 167
+Current quest count: 195
+New quests in this release: 173
 
 ### 3dprinting
 
@@ -31,10 +31,12 @@ New quests in this release: 167
 - aquaria/filter-rinse
 - aquaria/floating-plants
 - aquaria/guppy
+- aquaria/heater-install
 - aquaria/ph-strip-test
 - aquaria/position-tank
 - aquaria/shrimp
 - aquaria/sponge-filter
+- aquaria/thermometer
 - aquaria/walstad
 - aquaria/water-change
 - aquaria/water-testing
@@ -62,6 +64,7 @@ New quests in this release: 167
 
 - chemistry/acid-dilution
 - chemistry/acid-neutralization
+- chemistry/buffer-solution
 - chemistry/ph-adjustment
 - chemistry/ph-test
 - chemistry/safe-reaction
@@ -108,6 +111,7 @@ New quests in this release: 167
 - electronics/desolder-component
 - electronics/led-polarity
 - electronics/light-sensor
+- electronics/measure-led-current
 - electronics/measure-resistance
 - electronics/potentiometer-dimmer
 - electronics/resistor-color-check
@@ -146,6 +150,7 @@ New quests in this release: 167
 
 - geothermal/calibrate-ground-sensor
 - geothermal/check-loop-inlet-temp
+- geothermal/check-loop-outlet-temp
 - geothermal/compare-depth-ground-temps
 - geothermal/compare-seasonal-ground-temps
 - geothermal/install-backup-thermistor
@@ -208,6 +213,7 @@ New quests in this release: 167
 - rocketry/preflight-check
 - rocketry/recovery-run
 - rocketry/static-test
+- rocketry/wind-check
 
 ### sysadmin
 

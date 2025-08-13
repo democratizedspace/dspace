@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 import update from '../scripts/update-new-quests.js';
+import { globSync } from 'glob';
 
 type Group = { tree: string; quests: string[] };
 type Section = {
@@ -56,5 +57,18 @@ describe('new quests list', () => {
       after,
       'Run `npm run new-quests:update` and commit the changes.'
     ).toBe(before);
+  });
+
+  it('lists total quest count accurately', () => {
+    const questDir = path.join(
+      __dirname,
+      '../frontend/src/pages/quests/json'
+    );
+    const questFiles = globSync('**/*.json', { cwd: questDir });
+    const doc = fs.readFileSync(listPath, 'utf8');
+    const match = doc.match(/Current quest count: (\d+)/);
+    expect(match).not.toBeNull();
+    const docCount = Number(match[1]);
+    expect(docCount).toBe(questFiles.length);
   });
 });
