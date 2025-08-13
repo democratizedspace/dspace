@@ -10,7 +10,7 @@ describe('approximateIrlPrice', () => {
     expect(approximateIrlPrice('3D-Printer')).toBe(350)
   })
 
-  it('trims surrounding whitespace', () => {
+  it('trims leading and trailing whitespace', () => {
     expect(approximateIrlPrice(' 3d printer ')).toBe(350)
   })
 

@@ -44,7 +44,8 @@ The `dev:safe` command prevents common Playwright artifact errors that can occur
 ### Utility Functions
 
 The backend exposes `approximateIrlPrice(id)` to estimate real-world item costs. The lookup
-trims surrounding whitespace and normalizes case, spaces, and hyphens for resilient calls.
+normalizes case, trims extra whitespace, and converts spaces or hyphens into underscores for
+resilient calls.
 
 ## Testing
 
@@ -219,9 +220,14 @@ To validate that quests use a canonical structure with clear start and finish
 steps, run the dedicated test:
 
 ```bash
-[Quest Development Guidelines](docs/quest-guidelines), the [Quest Template Example](docs/quest-template), and the [Quest Submission Guide](docs/quest-submission) to streamline content creation and sharing.
-Use `npm run generate-quest [--template <name>]` to scaffold a new quest with placeholder dialogue.
+npm test -- questValidation
 ```
+
+See [Quest Development Guidelines](docs/quest-guidelines), the
+[Quest Template Example](docs/quest-template), and the
+[Quest Submission Guide](docs/quest-submission) to streamline content creation
+and sharing. Use `npm run generate-quest [--template <name>]` to scaffold a new
+quest with placeholder dialogue.
 
 Custom quests often rely on new items or processes. Use [`scripts/create-content-bundle.js`](./scripts/create-content-bundle.js) to package these together. See the [Custom Content Bundles](docs/custom-bundles) guide for details.
 
