@@ -29,6 +29,6 @@ const priceTable: Record<string, number> = {
  * so callers can pass identifiers like `3D-Printer` or `3d printer`.
  */
 export function approximateIrlPrice(id: string): number | null {
-  const normalized = id.toLowerCase().replace(/[\s-]+/g, '_');
+  const normalized = id.trim().toLowerCase().replace(/[\s-]+/g, '_');
   return priceTable[normalized] ?? null;
 }
