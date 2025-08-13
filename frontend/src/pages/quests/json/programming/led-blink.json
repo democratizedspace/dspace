@@ -1,0 +1,66 @@
+{
+    "id": "programming/led-blink",
+    "title": "Blink an LED",
+    "description": "Use the Arduino IDE to blink an LED on an Arduino Uno.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "dChat helps you flash the Blink sketch onto an Arduino Uno.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-ide-install",
+                    "text": "IDE installed",
+                    "goto": "wire"
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Connect the LED indicator module to pin 13 and GND on the board.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "upload",
+                    "text": "Module wired",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "upload",
+            "text": "Open the Blink example and upload it to your board.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "LED blinking"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! A blinking LED means your development setup is ready.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sweet!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/hello-sensor"]
+}
