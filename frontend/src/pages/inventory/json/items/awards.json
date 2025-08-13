@@ -10,7 +10,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
             ]
         }
     },
@@ -25,16 +29,32 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-10", "date": "2025-08-10", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 65
+                }
             ]
         }
     },
     {
         "id": "946b07b7-2b2c-4507-a725-edb270d8e910",
         "name": "Rocket Award",
-        "description": "A trophy granted for printing your first model rocket.",
+        "description": "15 cm tall brushed aluminum rocket trophy awarded for printing your first model rocket.",
         "image": "/assets/rocket_award.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
