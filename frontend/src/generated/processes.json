@@ -3637,7 +3637,7 @@
     },
     {
         "id": "desolder-through-hole",
-        "title": "Remove solder from a joint using a desoldering pump",
+        "title": "Heat a through-hole joint and clear it with a spring-loaded pump while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -3655,6 +3655,18 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "3m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]
