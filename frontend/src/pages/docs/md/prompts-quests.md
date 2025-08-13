@@ -76,8 +76,9 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm test -- questCanonical questQuality` and fix any failures.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-8. Update docs or dialogue as needed.
+7. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
+8. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+9. Update docs or dialogue as needed.
 
 OUTPUT
 A pull request with the completed quest and passing checks.
@@ -102,8 +103,9 @@ committing.
 USER:
 1. Follow the steps above.
 2. Run the commands listed in the system prompt before committing.
-3. Summarize the new or updated quest in the PR description.
-4. Use an emoji-prefixed commit message.
+3. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
+4. Summarize the new or updated quest in the PR description.
+5. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request implementing the quest with all tests green.
@@ -125,8 +127,9 @@ USER:
 2. Reference at least one inventory item or process.
 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm test -- questCanonical questQuality`. Fix any failures.
-4. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
-5. Use an emoji-prefixed commit message.
+4. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
+5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with the new quest.
