@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 195
-New quests in this release: 173
+Current quest count: 196
+New quests in this release: 174
 
 ### 3dprinting
 
@@ -166,6 +166,7 @@ New quests in this release: 173
 - hydroponics/filter-clean
 - hydroponics/grow-light
 - hydroponics/lettuce
+- hydroponics/mint-cutting
 - hydroponics/netcup-clean
 - hydroponics/nutrient-check
 - hydroponics/ph-check
