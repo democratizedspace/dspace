@@ -153,8 +153,14 @@
         "id": "level-3d-printer-bed",
         "title": "Level a 3D printer bed with a sheet of paper",
         "requireItems": [
-            { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-            { "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0", "count": 1 }
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -315,8 +321,8 @@
     },
     {
         "id": "refresh-hydroponic-tub",
-        "title": "Refresh a hydroponic tub's nutrient solution",
-        "image": "/assets/hydroponics_tub.jpg",
+        "title": "Drain and refill a hydroponics tub with fresh nutrient solution",
+        "image": "/assets/hydroponics_nutrients.jpg",
         "requireItems": [
             {
                 "id": "71655665-4a59-41f4-9084-dad4d976df91",
@@ -329,8 +335,12 @@
                 "count": 1
             },
             {
-                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                 "count": 1
+            },
+            {
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                "count": 0.1
             }
         ],
         "createItems": [
@@ -339,7 +349,19 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "grow-basil",
@@ -2207,10 +2229,21 @@
         "id": "swap-green-pla-filament",
         "title": "Swap to green PLA filament on an entry-level FDM 3D printer",
         "requireItems": [
-            { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            }
         ],
-        "consumeItems": [{ "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 10 }],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 10
+            }
+        ],
         "createItems": [],
         "duration": "10m"
     },
