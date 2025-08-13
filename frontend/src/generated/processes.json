@@ -910,6 +910,31 @@
         "duration": "8h 3m 13s"
     },
     {
+        "id": "mask-rocket-body-tube",
+        "title": "Mask a rocket body tube with masking tape for painting",
+        "image": "/assets/modelrocket.jpg",
+        "requireItems": [
+            {
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
+                "count": 0.1
+            }
+        ],
+        "createItems": [],
+        "duration": "3m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "assemble-rocket",
         "title": "Assemble your rocket",
         "requireItems": [],
