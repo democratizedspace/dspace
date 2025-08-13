@@ -1,0 +1,50 @@
+{
+    "id": "chemistry/precipitation-reaction",
+    "title": "Form a Precipitate",
+    "description": "Mix two solutions until a solid appears.",
+    "image": "/assets/pH_strip.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Grab beakers, safety gear, and two clear salt solutions.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Solutions are ready."
+                }
+            ]
+        },
+        {
+            "id": "mix",
+            "text": "Combine the solutions slowly while stirring. Watch for a cloud forming.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Rinse off any splashes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "A solid precipitate settles.",
+                    "requiresItems": [{ "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Filter and label the precipitate for later study.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sample collected."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["chemistry/ph-test"]
+}

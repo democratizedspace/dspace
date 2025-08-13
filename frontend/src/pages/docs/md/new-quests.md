@@ -67,6 +67,7 @@ New quests in this release: 174
 - chemistry/buffer-solution
 - chemistry/ph-adjustment
 - chemistry/ph-test
+- chemistry/precipitation-reaction
 - chemistry/safe-reaction
 - chemistry/stevia-crystals
 - chemistry/stevia-extraction
