@@ -1309,6 +1309,20 @@
         }
     },
     {
+        "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c",
+        "name": "soldered jumper wire",
+        "description": "10 cm jumper wire with heat-shrunk solder joint for prototyping.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "0.20 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
         "name": "mission log entry",
         "description": "One handwritten entry recording a mission event in the logbook.",
