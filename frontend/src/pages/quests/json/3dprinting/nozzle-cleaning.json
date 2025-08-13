@@ -1,0 +1,43 @@
+{
+    "id": "3dprinting/nozzle-cleaning",
+    "title": "Clear a Clogged Nozzle",
+    "description": "Heat and clean the nozzle to restore smooth extrusion.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Filament won't flow? The nozzle might be clogged. Let's clear it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Show me how."
+                }
+            ]
+        },
+        {
+            "id": "clean",
+            "text": "Preheat to 200 °C, put on safety goggles, then gently push cleaning filament or a nozzle needle until the blockage is gone.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Flow restored.",
+                    "requiresItems": [
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Smooth extrusion again! Keep the hotend clean for reliable prints.",
+            "options": [{ "type": "finish", "text": "Back to printing." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinter/start"]
+}
