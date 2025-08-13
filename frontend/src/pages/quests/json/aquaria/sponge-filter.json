@@ -34,7 +34,11 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Filter bubbling nicely!"
+                    "text": "Filter bubbling nicely!",
+                    "requiresItems": [
+                        { "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56", "count": 1 },
+                        { "id": "cc163f73-8575-4cbb-99db-c56f3ceff32d", "count": 1 }
+                    ]
                 }
             ]
         }

@@ -267,6 +267,19 @@
         "price": "6 dUSD"
     },
     {
+        "id": "cc163f73-8575-4cbb-99db-c56f3ceff32d",
+        "name": "aquarium air pump",
+        "description": "5 W air pump drives sponge filters in tanks up to 150 L; includes check valve and 2 m silicone tube.",
+        "image": "/assets/aquarium_filter.jpg",
+        "price": "12 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
         "name": "Aquarium liquid test kit",
         "description": "Liquid reagent kit for aquariums. Four 15 mL bottles and test tubes provide ~130 tests for ammonia, nitrite and nitrate.",
