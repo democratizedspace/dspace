@@ -1,0 +1,50 @@
+{
+    "id": "astronomy/aurora-watch",
+    "title": "Watch the Aurora",
+    "description": "Check the aurora forecast and step outside with a red flashlight to log the lights.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Solar winds may trigger auroras tonight. Check the forecast and head to a dark, open view.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Forecast looks promising."
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Bring a red flashlight to protect night vision and watch the northern horizon for shimmering curtains.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I logged dancing lights!",
+                    "requiresItems": [
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice catch! Your notes help track geomagnetic storms. Stay warm and reuse dark sites.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll watch again soon."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/light-pollution"]
+}

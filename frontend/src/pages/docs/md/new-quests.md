@@ -45,6 +45,7 @@ New quests in this release: 174
 ### astronomy
 
 - astronomy/andromeda
+- astronomy/aurora-watch
 - astronomy/basic-telescope
 - astronomy/comet-tracking
 - astronomy/constellations
