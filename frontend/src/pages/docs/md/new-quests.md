@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 195
-New quests in this release: 173
+Current quest count: 196
+New quests in this release: 174
 
 ### 3dprinting
 
@@ -44,6 +44,7 @@ New quests in this release: 173
 ### astronomy
 
 - astronomy/andromeda
+- astronomy/aurora-watch
 - astronomy/basic-telescope
 - astronomy/comet-tracking
 - astronomy/constellations
