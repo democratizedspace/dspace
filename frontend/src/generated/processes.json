@@ -3136,6 +3136,40 @@
         }
     },
     {
+        "id": "log-aquarium-test-results",
+        "title": "Record aquarium water parameters in a logbook using a liquid test kit",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            {
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "count": 1
+            },
+            {
+                "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                "count": 1
+            },
+            {
+                "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-17",
+                    "date": "2025-08-17",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "stop-nosebleed",
         "title": "Use gloves, gauze, and antiseptic from a first aid kit to control a minor nosebleed",
         "image": "/assets/rescue.jpg",
