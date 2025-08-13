@@ -44,7 +44,8 @@ The `dev:safe` command prevents common Playwright artifact errors that can occur
 ### Utility Functions
 
 The backend exposes `approximateIrlPrice(id)` to estimate real-world item costs. The lookup
-normalizes case, spaces, and hyphens for resilient calls.
+normalizes case, trims extra whitespace, and converts spaces or hyphens into underscores for
+resilient calls.
 
 ## Testing
 
