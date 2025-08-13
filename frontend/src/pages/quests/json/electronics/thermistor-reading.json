@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's expand your sensor skills. A 10 kΩ NTC thermistor with a matching resistor forms a simple voltage divider for an Arduino Uno. Work on a non-conductive surface and keep power disconnected while wiring.",
+            "text": "Let's expand your sensor skills. Pair a 10 kΩ NTC thermistor with a 10 kΩ resistor for an Arduino Uno voltage divider. Work on a non-conductive surface and unplug the USB cable before wiring.",
             "options": [
                 {
                     "type": "process",
@@ -24,7 +24,7 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB cable before wiring. On the breadboard, place the thermistor and 10 kΩ resistor in series between 5 V and GND to form a voltage divider. Use jumper wires to link their junction to A0 on the Arduino Uno. Keep leads separated, verify resistor values and double-check connections before reconnecting power.",
+            "text": "With the USB cable still unplugged, place the thermistor and 10 kΩ resistor in series on the breadboard between 5 V and GND to form a voltage divider. Use jumper wires to link their junction to A0 on the Arduino Uno. Keep leads separated, verify resistor values and double-check connections before restoring power.",
             "options": [
                 {
                     "type": "goto",
@@ -65,7 +65,7 @@
         },
         {
             "id": "monitor",
-            "text": "Reconnect the USB cable to your Laptop Computer and upload the sketch from the arduino-thermistor-read process to sample the analog voltage and convert it to temperature. Open the Arduino IDE's Serial Monitor to watch the readings and keep liquids and loose metal away from the powered board.",
+            "text": "Reconnect the USB cable to your Laptop Computer and upload the sketch from the arduino-thermistor-read process to sample the voltage divider. Open the Arduino IDE's Serial Monitor to watch temperature readings and keep liquids and loose metal away from the powered board.",
             "options": [
                 {
                     "type": "goto",
@@ -89,8 +89,8 @@
     "rewards": [],
     "requiresQuests": ["electronics/potentiometer-dimmer"],
     "hardening": {
-        "passes": 4,
-        "score": 95,
+        "passes": 5,
+        "score": 97,
         "emoji": "💯",
         "history": [
             {
@@ -112,6 +112,11 @@
                 "task": "codex-quest-refinement-2025-08-11",
                 "date": "2025-08-11",
                 "score": 95
+            },
+            {
+                "task": "codex-quest-polish-2025-08-13",
+                "date": "2025-08-13",
+                "score": 97
             }
         ]
     }
