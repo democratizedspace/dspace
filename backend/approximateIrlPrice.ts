@@ -25,10 +25,11 @@ const priceTable: Record<string, number> = {
 /**
  * Look up a real‑world price for a game item.
  *
- * The lookup is case‑insensitive and normalizes spaces or hyphens to underscores
- * so callers can pass identifiers like `3D-Printer` or `3d printer`.
+ * The lookup trims surrounding whitespace, is case‑insensitive, and normalizes
+ * spaces or hyphens to underscores so callers can pass identifiers like
+ * `3D-Printer`, `3d printer`, or ` 3d_printer `.
  */
 export function approximateIrlPrice(id: string): number | null {
-  const normalized = id.toLowerCase().replace(/[\s-]+/g, '_');
+  const normalized = id.trim().toLowerCase().replace(/[\s-]+/g, '_');
   return priceTable[normalized] ?? null;
 }
