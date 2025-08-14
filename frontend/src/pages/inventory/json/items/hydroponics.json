@@ -331,5 +331,18 @@
                 }
             ]
         }
+    },
+    {
+        "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+        "name": "pH down solution",
+        "description": "500 ml phosphoric acid bottle to lower nutrient reservoir pH; includes dropper cap.",
+        "image": "/assets/hydroponics_nutrients.jpg",
+        "price": "7 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
