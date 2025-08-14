@@ -1,14 +1,14 @@
 {
     "id": "aquaria/thermometer",
     "title": "Attach Aquarium Thermometer",
-    "description": "Stick a strip thermometer on the outside glass to monitor water temperature.",
+    "description": "Stick a strip thermometer on the outside glass below the waterline to monitor temperature. Keep the strip dry and away from heaters.",
     "image": "/assets/aquarium_thermometer.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your heater's running, but let's keep an eye on the temperature. Use a paper towel to dry a 5 cm patch on the outside glass just below the waterline.",
+            "text": "Your heater's running, but let's keep an eye on the temperature. Dry a 5 cm patch of outside glass just below the waterline with a paper towel. Keep hands dry and electrical cords clear.",
             "options": [
                 {
                     "type": "goto",
@@ -19,13 +19,18 @@
         },
         {
             "id": "attach",
-            "text": "Peel the backing without touching the adhesive. Align the strip at eye level and press it to the glass from top to bottom for 30 seconds. Keep the strip outside the tank and away from heaters.",
+            "text": "Peel the backing without touching the adhesive. Align the strip at eye level and press it to the glass from top to bottom for 30 seconds. Keep the strip outside the tank, above the waterline and away from heaters or direct sunlight.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Thermometer attached",
-                    "requiresItems": [{ "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }]
+                    "process": "attach-aquarium-thermometer",
+                    "requiresItems": [
+                        { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
+                        { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
+                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+                    ]
                 }
             ]
         },
@@ -38,11 +43,12 @@
     "rewards": [],
     "requiresQuests": ["aquaria/position-tank"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 78,
+        "emoji": "✅",
         "history": [
-            { "task": "codex-quest-hardening-2025-08-13", "date": "2025-08-13", "score": 60 }
+            { "task": "codex-quest-hardening-2025-08-13", "date": "2025-08-13", "score": 60 },
+            { "task": "codex-quest-polish-2025-08-14", "date": "2025-08-14", "score": 78 }
         ]
     }
 }
