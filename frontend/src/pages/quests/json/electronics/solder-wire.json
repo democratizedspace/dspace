@@ -13,7 +13,7 @@
         },
         {
             "id": "prep",
-            "text": "Gather the soldering iron kit, wire stripper, two jumper wires, 5 cm of heat-shrink tubing, and safety goggles. Strip the wire ends with the wire stripper, slide the tubing over one lead, heat the iron on its stand, keep cords tidy, and avoid fumes.",
+            "text": "Gather the soldering iron kit, flux pen, wire stripper, two jumper wires, 5 cm of heat-shrink tubing, and safety goggles. Strip the wire ends with the wire stripper, slide the tubing over one lead, heat the iron on its stand, keep cords tidy, and avoid fumes.",
             "options": [
                 {
                     "type": "process",
@@ -34,7 +34,8 @@
                         { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
                         { "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f", "count": 1 },
                         { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 },
-                        { "id": "96083990-f333-4e42-ab04-7eb2a234570e", "count": 5 }
+                        { "id": "96083990-f333-4e42-ab04-7eb2a234570e", "count": 5 },
+                        { "id": "dad7f853-ccc9-40be-b226-89272708db84", "count": 1 }
                     ]
                 }
             ]

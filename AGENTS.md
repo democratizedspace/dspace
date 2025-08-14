@@ -76,5 +76,6 @@ All checks must pass before an agent-created PR is merged.
 - [UI Lifecycle Overview](frontend/src/pages/docs/md/ui-lifecycle.md)
 - [Codex Implementation Prompt](frontend/src/pages/docs/md/prompts-codex.md#implementation-prompt)
 - [Codex Upgrade Prompt](frontend/src/pages/docs/md/prompts-codex.md#upgrade-prompt)
+- [Codex Prompt Upgrader](frontend/src/pages/docs/md/prompts-codex-upgrader.md)
 - [AGENTS.md Spec](https://gist.github.com/dpaluy/cc42d59243b0999c1b3f9cf60dfd3be6)
 - [Agents.md Guide](https://agentsmd.net/)
