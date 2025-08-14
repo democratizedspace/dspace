@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey! Orion here. Ready to blink an LED with a microcontroller? Set up on a dry, non-conductive surface, wear safety goggles, and keep power disconnected until every wire is double-checked.",
+            "text": "Hey! Orion here. Ready to blink an LED with a microcontroller? Work on a dry, non-conductive surface, wear safety goggles, and keep the USB cable unplugged until every wire is double-checked.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 Ω Resistor, a 5 mm LED, a USB Type-A to Type-B cable and a Laptop Computer with the Arduino IDE installed. Use the 'Install the Arduino IDE' process if needed. Confirm the resistor shows red-red-brown bands and the LED's longer leg (anode) goes to pin 13 through the resistor; connect the short leg to GND with power still unplugged.",
+            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 Ω Resistor, a 5 mm LED, a USB Type-A to Type-B cable and a Laptop Computer with the Arduino IDE installed. If the IDE isn't installed, run the 'Install the Arduino IDE' process. Check that the resistor shows red-red-brown bands. Place the LED's long leg (anode) to pin 13 through the resistor and the short leg to GND. Make all connections with power still unplugged.",
             "options": [
                 {
                     "type": "process",
@@ -76,7 +76,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work—you just programmed a microcontroller. Always unplug the USB Type-A to Type-B cable before adjusting wiring. For a detailed walkthrough, open the 'Blink an LED with Arduino' process. Experiment with new patterns and sensors to build skills for bigger projects.",
+            "text": "Nice work—you just programmed a microcontroller. Always unplug the USB Type-A to Type-B cable before adjusting wiring and avoid staring directly into the LED. For a detailed walkthrough, open the 'Blink an LED with Arduino' process. Experiment with new patterns and sensors to build skills for bigger projects.",
             "options": [
                 {
                     "type": "process",
@@ -98,8 +98,8 @@
         }
     ],
     "hardening": {
-        "passes": 6,
-        "score": 99,
+        "passes": 7,
+        "score": 100,
         "emoji": "💯",
         "history": [
             {
@@ -131,6 +131,11 @@
                 "task": "codex-quest-update-2025-09-16",
                 "date": "2025-09-16",
                 "score": 99
+            },
+            {
+                "task": "codex-quest-refine-2025-09-17",
+                "date": "2025-09-17",
+                "score": 100
             }
         ]
     }
