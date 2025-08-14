@@ -43,6 +43,11 @@
         "sync": "node scripts/sync-package.js",
         "postinstall": "node scripts/postinstall.js"
     },
+    "jest": {
+        "testMatch": [
+            "**/__tests__/**/*.test.js"
+        ]
+    },
     "devDependencies": {
         "@astrojs/svelte": "^2.1.0",
         "@babel/core": "^7.26.9",
