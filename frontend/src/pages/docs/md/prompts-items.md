@@ -9,7 +9,8 @@ Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready-made PR—but only if you give it a
 clear, file-scoped prompt. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex) when working on items. To keep the prompt
-docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). For
+docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). To refresh
+the templates, use the [Prompt Upgrader](/docs/prompts-codex-upgrader). For
 general content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 > **TL;DR**

@@ -10,7 +10,7 @@ Use this drop-in snippet whenever a GitHub Actions run for
 return a pull request that keeps the main branch green. To evolve the prompt
 docs, see the [Codex meta prompt](/docs/prompts-codex-meta).
 
-If this prompt ever drifts, consult the [Prompt Upgrader](/docs/prompts-codex#prompt-upgrader)
+If this prompt ever drifts, consult the [Prompt Upgrader](/docs/prompts-codex-upgrader)
 to refresh it before use.
 
 > **Human setup**

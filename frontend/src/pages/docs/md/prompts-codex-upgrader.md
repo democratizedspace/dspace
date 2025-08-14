@@ -12,13 +12,13 @@ instructions current—the machine that builds the machine.
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and
 `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
-all pass before committing.
+all pass before committing. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 
 USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing cross-links.
 2. Update prompt templates, including `prompts-codex.md`, to reflect current practices.
 3. Propagate related changes across docs.
-4. Run the checks above.
+4. Use an emoji-prefixed commit message and run the checks above.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.

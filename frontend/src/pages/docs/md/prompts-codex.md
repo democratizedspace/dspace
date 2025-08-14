@@ -60,6 +60,8 @@ REQUIREMENTS
 1. …
 2. …
 3. …
+4. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+5. Use an emoji-prefixed commit message like `📝 : – brief summary`.
 
 OUTPUT
 A pull request with the required changes and tests.
@@ -89,7 +91,8 @@ from `frontend/src/pages/docs/md/changelog/20250901.md` that is either `[ ]` or
 `[x]` without 💯 (including those marked with ✅). Implement it fully, completing
 any sub-tasks. Provide all code, tests and documentation required. Follow
 `AGENTS.md` and ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` all pass before committing. If Playwright browsers are
+and `npm run test:ci` all pass before committing. Scan for secrets with
+`git diff --cached | ./scripts/scan-secrets.py`. If Playwright browsers are
 missing run `npx playwright install chromium` or use `SKIP_E2E=1 npm run test:ci`.
 
 USER:
@@ -98,7 +101,7 @@ USER:
    with `💯`, replacing any `✅` or other emoji.
 3. Replace any remaining `✅` entries in the changelog with `💯` once they meet
    the robustness standard.
-4. Document new functionality as needed.
+4. Use an emoji-prefixed commit message and document new functionality as needed.
 
 OUTPUT:
 A pull request implementing the chosen item with all tests green. Summarize the
@@ -115,14 +118,15 @@ dedicated to evolving the prompt guides themselves, see the
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
 and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` pass before committing.
+and `npm run test:ci` pass before committing. Scan for secrets with
+`git diff --cached | ./scripts/scan-secrets.py`.
 
 USER:
 1. Pick one or more prompt docs under `frontend/src/pages/docs/md/` (for example,
    `prompts-items.md`).
 2. Fix outdated instructions, links or formatting.
 3. If you add a new prompt, link it from `prompts-codex.md` and the docs index.
-4. Run the checks above.
+4. Use an emoji-prefixed commit message and run the checks above.
 
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.
@@ -138,14 +142,15 @@ copy lives at [`prompts-codex-upgrader.md`](/docs/prompts-codex-upgrader).
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
 and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` pass before committing.
+and `npm run test:ci` pass before committing. Scan for secrets with
+`git diff --cached | ./scripts/scan-secrets.py`.
 
 USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing
    cross-links.
 2. Update prompt templates, including this file, to reflect current practices.
 3. Propagate related changes across docs.
-4. Run the checks above.
+4. Use an emoji-prefixed commit message and run the checks above.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
