@@ -10,4 +10,11 @@ describe('docs index.astro', () => {
         const content = fs.readFileSync(docsIndexFile, 'utf8');
         expect(content).toMatch(/<a href="\/docs\/prompts-codex">Codex prompts<\/a>/);
     });
+
+    it('links to the Codex self-upgrade prompt', () => {
+        const content = fs.readFileSync(docsIndexFile, 'utf8');
+        expect(content).toMatch(
+            /<a href="\/docs\/prompts-codex#self-upgrade-prompt">Codex self-upgrade prompt<\/a>/
+        );
+    });
 });

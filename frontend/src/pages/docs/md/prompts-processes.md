@@ -8,8 +8,9 @@ slug: 'prompts-processes'
 Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR—but only if you give it a
 clear, file‑scoped prompt. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when working on processes. For
-fundamental design tips see the [Process Development Guidelines](/docs/process-guidelines).
+[Codex Prompts](/docs/prompts-codex) when working on processes. To evolve this
+guide automatically, see the [Codex self-upgrade prompt](/docs/prompts-codex#self-upgrade-prompt).
+For fundamental design tips see the [Process Development Guidelines](/docs/process-guidelines).
 
 > **TL;DR**
 >

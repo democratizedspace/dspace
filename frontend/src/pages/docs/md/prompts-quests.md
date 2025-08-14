@@ -8,8 +8,9 @@ slug: 'prompts-quests'
 Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR—but only if you give it a
 clear, file‑scoped prompt. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when working on quests. For the steps
-required to share quests with the community, see the
+[Codex Prompts](/docs/prompts-codex) when working on quests. To evolve this guide
+automatically, see the [Codex self-upgrade prompt](/docs/prompts-codex#self-upgrade-prompt). For
+the steps required to share quests with the community, see the
 [Quest Submission Guide](/docs/quest-submission). Comprehensive content
 guidelines live in our [Content Development Guide](/docs/content-development),
 which covers quests, items and processes in detail.

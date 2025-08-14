@@ -125,6 +125,28 @@ OUTPUT:
 A pull request with the improved prompt doc and passing checks.
 ```
 
+## Self-upgrade prompt
+
+Use this prompt to help Codex improve its own prompt docs and propagate those upgrades.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`. Ensure `npm run lint`, `npm run type-check` and `npm run build`
+pass before committing.
+
+USER:
+1. Choose a prompt doc under `frontend/src/pages/docs/md/` that could be clearer
+   or more powerful.
+2. Upgrade the instructions, links or formatting.
+3. When updating this self-upgrade prompt, preserve the goal of building the
+   machine that builds the machine.
+4. Run the checks above.
+
+OUTPUT:
+A pull request with the refined prompt doc and passing checks.
+```
+
 ## Outage Prompt
 
 Use this snippet when fixing an incident so knowledge lands in the outage catalog.
