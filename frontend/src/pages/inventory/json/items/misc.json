@@ -318,9 +318,21 @@
     {
         "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
         "name": "3D printed fincan",
-        "description": "A fincan for a modular model rocket.",
+        "description": "80 mm PLA fincan for 35 mm rockets; four fins, ~12 g; fits 18 mm motors.",
         "image": "/assets/3dprinted_rocket_fincan.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "4 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "05c339ee-f50b-419a-804a-341f850b85e9",
@@ -685,9 +697,22 @@
     {
         "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
         "name": "USB Type-A to Type-B cable",
-        "description": "Standard USB 2.0 cable for connecting an Arduino Uno to a computer.",
+        "description": "1 m USB 2.0 cable for connecting an Arduino Uno to a computer.",
         "image": "/assets/quests/basic_circuit.svg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "3 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",

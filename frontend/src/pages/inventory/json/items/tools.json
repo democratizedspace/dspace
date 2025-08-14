@@ -110,7 +110,7 @@
         "image": "/assets/quests/basic_circuit.svg",
         "price": "3 dUSD",
         "type": "tool",
-        "unit": "m",
+        "unit": "1.5 m spool",
         "hardening": {
             "passes": 1,
             "score": 65,
