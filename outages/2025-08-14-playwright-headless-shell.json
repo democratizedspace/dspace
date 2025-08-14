@@ -1,0 +1,10 @@
+{
+  "id": "playwright-headless-shell",
+  "date": "2025-08-14",
+  "component": "playwright",
+  "rootCause": "Playwright launched with --headless=new, requiring an uninstalled chromium_headless_shell binary.",
+  "resolution": "Removed the flag so Playwright uses the bundled chromium.",
+  "references": [
+    "https://playwright.dev/docs/browsers#install-browsers"
+  ]
+}

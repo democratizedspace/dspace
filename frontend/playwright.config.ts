@@ -53,12 +53,7 @@ export default defineConfig({
             name: 'chromium',
             use: {
                 launchOptions: {
-                    args: [
-                        '--no-sandbox',
-                        '--disable-setuid-sandbox',
-                        '--disable-dev-shm-usage',
-                        '--headless=new',
-                    ],
+                    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
                 },
             },
             // Specify output directories for this project
