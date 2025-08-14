@@ -106,16 +106,22 @@
     {
         "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
         "name": "solder wick",
-        "description": "2 mm copper braid that wicks molten solder from pads; sold per meter.",
+        "description": "2 mm wide no-clean copper braid for removing solder from pads; sold in 1 m rolls.",
         "image": "/assets/quests/basic_circuit.svg",
-        "price": "2 dUSD",
+        "price": "3 dUSD",
         "type": "tool",
-        "unit": "m",
+        "unit": "1.5 m spool",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
         }
     },
     {
@@ -249,6 +255,20 @@
         }
     },
     {
+        "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+        "name": "helping hands",
+        "description": "Adjustable third-hand tool with alligator clips and magnifier to hold small parts while soldering.",
+        "image": "/assets/benchy.jpg",
+        "price": "10 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
         "name": "tape measure",
         "description": "3 m (10 ft) retractable steel tape measure with metric and imperial markings.",
@@ -363,6 +383,20 @@
                     "score": 65
                 }
             ]
+        }
+    },
+    {
+        "id": "dad7f853-ccc9-40be-b226-89272708db84",
+        "name": "solder flux pen",
+        "description": "2 mL no-clean flux pen for improving solder wetting on PCB pads.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "4 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
         }
     }
 ]

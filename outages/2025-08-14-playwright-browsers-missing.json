@@ -1,0 +1,10 @@
+{
+  "id": "2025-08-14-playwright-browsers-missing",
+  "date": "2025-08-14",
+  "component": "tests",
+  "rootCause": "Playwright browsers were absent, causing grouped E2E tests to fail",
+  "resolution": "Install Playwright browsers with system dependencies before running tests",
+  "references": [
+    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md#lessons-learned"
+  ]
+}

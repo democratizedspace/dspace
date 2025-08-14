@@ -19,7 +19,7 @@
         },
         {
             "id": "measure",
-            "text": "Use a pH strip or digital meter. Add acid or base slowly until the reading hits 6.5.",
+            "text": "Use a pH strip or digital meter. Add pH down solution or base slowly until the reading hits 6.5.",
             "options": [
                 {
                     "type": "process",
@@ -33,6 +33,10 @@
                     "requiresItems": [
                         {
                             "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
+                            "count": 1
+                        },
+                        {
+                            "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
                             "count": 1
                         }
                     ]
@@ -53,14 +57,19 @@
     "rewards": [],
     "requiresQuests": ["hydroponics/nutrient-check"],
     "hardening": {
-        "passes": 1,
-        "score": 65,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 70,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-14",
                 "date": "2025-08-14",
                 "score": 65
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-18",
+                "date": "2025-08-18",
+                "score": 70
             }
         ]
     }

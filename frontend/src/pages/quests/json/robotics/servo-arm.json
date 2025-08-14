@@ -22,6 +22,11 @@
             "text": "Bolt the servo to a sturdy base with a precision screwdriver set, attach a short arm segment, and program it to move smoothly between positions. Test with light loads before trying anything heavier.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "assemble-servo-arm",
+                    "text": "Bolt servo and arm"
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Arm works well",
