@@ -3668,5 +3668,29 @@
                 }
             ]
         }
+    },
+    {
+        "id": "clean-paintbrush",
+        "title": "Rinse a paintbrush in a bucket of water to remove paint",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            {
+                "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
