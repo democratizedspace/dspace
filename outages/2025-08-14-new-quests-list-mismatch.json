@@ -1,0 +1,10 @@
+{
+  "id": "2025-08-14-new-quests-list-mismatch",
+  "date": "2025-08-14",
+  "component": "docs",
+  "rootCause": "new quests were added but new-quests.md counts stayed stale",
+  "resolution": "ran npm run new-quests:update and committed the refreshed file",
+  "references": [
+    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md#lessons-learned"
+  ]
+}
