@@ -1523,8 +1523,14 @@
     },
     {
         "id": "flash-sd-card",
-        "title": "Flash Raspberry Pi OS to microSD",
-        "requireItems": [],
+        "title": "Use a laptop to flash Raspberry Pi OS onto a 64 GB microSD card",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "36042a2b-861a-4192-a991-98778898963a",
@@ -1537,7 +1543,19 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "clone-os-to-ssd",
