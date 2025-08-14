@@ -1,14 +1,14 @@
 {
     "id": "3dprinting/bed-leveling",
     "title": "Level the Print Bed",
-    "description": "Ensure the first layer sticks by safely leveling your build plate.",
+    "description": "Use a sheet of printer paper to level your 3D printer's bed after it cools.",
     "image": "/assets/quests/benchy_25.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Uneven prints? Let's get that bed level safely for a perfect first layer.",
+            "text": "Uneven prints? Cool the entry-level FDM printer and grab a sheet of printer paper to level the bed safely.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "level",
-            "text": "Let the bed cool, then slide a sheet of printer paper between the nozzle and bed. Adjust each corner until you feel slight drag and keep fingers clear of hot surfaces.",
+            "text": "Power off and cool the printer. At each corner, slide a sheet of printer paper between the nozzle and bed and turn the knobs until the paper drags slightly. Keep hands clear of hot parts.",
             "options": [
                 {
                     "type": "process",
@@ -51,14 +51,19 @@
     "rewards": [],
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
-        "passes": 1,
-        "score": 65,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-12",
                 "date": "2025-08-12",
                 "score": 65
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-14",
+                "date": "2025-08-14",
+                "score": 80
             }
         ]
     }
