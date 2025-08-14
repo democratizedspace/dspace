@@ -1,0 +1,50 @@
+{
+    "id": "sysadmin/log-rotation",
+    "title": "Automate Log Rotation",
+    "description": "Configure logrotate on Ubuntu 24.04 LTS Minimal to keep logs tidy.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Logs grow fast. Let's keep them under control with logrotate.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "configure",
+                    "text": "Show me how",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "configure",
+            "text": "Add a custom rule under /etc/logrotate.d and test with logrotate -d.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Rotation configured"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great. Cron will handle log cleanup from now on.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Done"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["sysadmin/resource-monitoring"]
+}
