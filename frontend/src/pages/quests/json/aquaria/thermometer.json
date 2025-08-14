@@ -1,25 +1,26 @@
 {
     "id": "aquaria/thermometer",
     "title": "Attach Aquarium Thermometer",
-    "description": "Stick a strip thermometer on the outside glass below the waterline to monitor temperature. Keep the strip dry and away from heaters.",
+    "description": "Attach a strip thermometer outside the glass to monitor water temperature without opening the tank.",
     "image": "/assets/aquarium_thermometer.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your heater's running, but let's keep an eye on the temperature. Dry a 5 cm patch of outside glass just below the waterline with a paper towel. Keep hands dry and electrical cords clear.",
+            "text": "Wash your hands, unplug the heater to avoid burns, then use a paper towel to dry a 5 cm patch on the outside glass just below the waterline.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "attach",
-                    "text": "Ready to stick it on."
+                    "text": "Area is clean and dry.",
+                    "requiresItems": [{ "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 }]
                 }
             ]
         },
         {
             "id": "attach",
-            "text": "Peel the backing without touching the adhesive. Align the strip at eye level and press it to the glass from top to bottom for 30 seconds. Keep the strip outside the tank, above the waterline and away from heaters or direct sunlight.",
+            "text": "Peel the backing without touching the adhesive. Align the strip at eye level on the dried spot and press it to the glass from top to bottom for 30 seconds. Keep the strip outside the tank and at least 5 cm from heaters.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +37,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Wait a few minutes for the numbers to stabilize, then monitor the water temperature at a glance.",
+            "text": "Great! Wait a few minutes for the numbers to stabilize, plug the heater back in, then monitor the water temperature at a glance.",
             "options": [{ "type": "finish", "text": "All set!" }]
         }
     ],
@@ -44,11 +45,11 @@
     "requiresQuests": ["aquaria/position-tank"],
     "hardening": {
         "passes": 2,
-        "score": 78,
+        "score": 80,
         "emoji": "✅",
         "history": [
             { "task": "codex-quest-hardening-2025-08-13", "date": "2025-08-13", "score": 60 },
-            { "task": "codex-quest-polish-2025-08-14", "date": "2025-08-14", "score": 78 }
+            { "task": "codex-quest-hardening-2025-08-14", "date": "2025-08-14", "score": 80 }
         ]
     }
 }

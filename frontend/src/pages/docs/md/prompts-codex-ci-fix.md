@@ -102,3 +102,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     ignore `data:` and `//` URLs so coverage checks only test local assets.
 -   2025-08-14 – `new-quests.md` fell behind after new quests were added; run `npm run new-quests:update`
     and commit the refreshed file.
+-   2025-08-14 – missing Jest `testMatch` in `frontend/package.json` let a coverage check fail; add a
+    pattern so E2E tests detect all Jest files.
