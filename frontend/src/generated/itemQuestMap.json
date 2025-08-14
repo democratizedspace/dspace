@@ -105,12 +105,15 @@
     ]
   },
   "5247a603-294a-4a34-a884-1ae20969b2a1": {
-    "requires": [],
+    "requires": [
+      "ubi/savings-goal"
+    ],
     "rewards": [
       "welcome/howtodoquests",
       "ubi/basicincome",
       "astronomy/planetary-alignment",
       "3dprinter/start",
+      "3dprinting/spool-holder",
       "3dprinting/cable-clip"
     ]
   },
@@ -286,13 +289,15 @@
   },
   "71fafa9a-3998-4763-a63a-279acc4ca603": {
     "requires": [
-      "robotics/wheel-encoders"
+      "robotics/wheel-encoders",
+      "robotics/odometry-basics"
     ],
     "rewards": []
   },
   "72b4448e-27d9-4746-bd3a-967ff13f501b": {
     "requires": [
       "robotics/wheel-encoders",
+      "robotics/odometry-basics",
       "programming/graph-temp-data",
       "geothermal/replace-faulty-thermistor",
       "geothermal/log-ground-temperature",
@@ -305,6 +310,7 @@
       "electronics/thermistor-reading",
       "electronics/servo-sweep",
       "electronics/potentiometer-dimmer",
+      "electronics/measure-arduino-5v",
       "electronics/light-sensor",
       "electronics/data-logger",
       "electronics/arduino-blink"
@@ -343,6 +349,7 @@
       "electronics/servo-sweep"
     ],
     "rewards": [
+      "electronics/measure-arduino-5v",
       "electronics/arduino-blink"
     ]
   },
@@ -385,6 +392,7 @@
   "ffe0b74a-f111-4d66-b4c3-d82965a976ac": {
     "requires": [
       "programming/thermistor-calibration",
+      "electronics/voltage-divider",
       "electronics/thermistor-reading",
       "electronics/light-sensor",
       "electronics/data-logger"
@@ -398,6 +406,7 @@
       "programming/temp-email",
       "programming/temp-alert",
       "programming/graph-temp",
+      "hydroponics/temp-check",
       "geothermal/survey-ground-temperature",
       "electronics/thermometer-calibration",
       "aquaria/thermometer",
@@ -417,6 +426,15 @@
       "hydroponics/basil",
       "hydroponics/air-stone-soak",
       "aquaria/filter-rinse"
+    ],
+    "rewards": []
+  },
+  "ca7c1069-4ba3-4339-9a10-0b690a690e60": {
+    "requires": [
+      "hydroponics/temp-check",
+      "aquaria/thermometer",
+      "aquaria/ph-strip-test",
+      "aquaria/goldfish"
     ],
     "rewards": []
   },
@@ -498,6 +516,12 @@
       "chemistry/ph-test",
       "chemistry/acid-dilution",
       "aquaria/water-testing"
+    ],
+    "rewards": []
+  },
+  "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62": {
+    "requires": [
+      "hydroponics/nutrient-check"
     ],
     "rewards": []
   },
@@ -748,7 +772,8 @@
   },
   "82577af7-6724-4cb2-8922-f7140e550145": {
     "requires": [
-      "energy/offgrid-charger"
+      "energy/offgrid-charger",
+      "astronomy/iss-flyover"
     ],
     "rewards": []
   },
@@ -772,6 +797,7 @@
   },
   "d1105b87-8185-4a30-ba55-406384be169f": {
     "requires": [
+      "electronics/voltage-divider",
       "electronics/thermistor-reading",
       "electronics/potentiometer-dimmer",
       "electronics/measure-led-current",
@@ -781,8 +807,21 @@
     ],
     "rewards": []
   },
+  "037e6065-68a7-4ad1-9b0b-7778ecfe0662": {
+    "requires": [
+      "electronics/voltage-divider",
+      "electronics/resistor-color-check",
+      "electronics/potentiometer-dimmer",
+      "electronics/measure-resistance",
+      "electronics/measure-led-current",
+      "electronics/basic-circuit",
+      "electronics/arduino-blink"
+    ],
+    "rewards": []
+  },
   "3cd82744-d2aa-414e-9f03-80024b624066": {
     "requires": [
+      "electronics/voltage-divider",
       "electronics/thermistor-reading",
       "electronics/solder-wire",
       "electronics/servo-sweep",
@@ -794,10 +833,33 @@
     ],
     "rewards": []
   },
+  "828d6c3b-66a5-4064-b221-97630274502b": {
+    "requires": [
+      "electronics/voltage-divider",
+      "electronics/servo-sweep",
+      "electronics/measure-led-current",
+      "electronics/basic-circuit"
+    ],
+    "rewards": []
+  },
+  "5127e156-3009-4db4-85ac-e3ea070b68f2": {
+    "requires": [
+      "electronics/voltage-divider",
+      "electronics/measure-resistance",
+      "electronics/measure-led-current",
+      "electronics/measure-arduino-5v",
+      "electronics/light-sensor",
+      "electronics/led-polarity",
+      "electronics/continuity-test",
+      "electronics/check-battery-voltage"
+    ],
+    "rewards": []
+  },
   "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d": {
     "requires": [
       "electronics/thermistor-reading",
       "electronics/potentiometer-dimmer",
+      "electronics/measure-arduino-5v",
       "electronics/light-sensor",
       "electronics/arduino-blink"
     ],
@@ -808,6 +870,12 @@
       "electronics/tin-soldering-iron",
       "electronics/solder-wire",
       "electronics/desolder-component"
+    ],
+    "rewards": []
+  },
+  "87f670ce-3630-42bb-84c0-9243cf630d05": {
+    "requires": [
+      "electronics/tin-soldering-iron"
     ],
     "rewards": []
   },
@@ -829,22 +897,9 @@
     ],
     "rewards": []
   },
-  "828d6c3b-66a5-4064-b221-97630274502b": {
+  "dad7f853-ccc9-40be-b226-89272708db84": {
     "requires": [
-      "electronics/servo-sweep",
-      "electronics/measure-led-current",
-      "electronics/basic-circuit"
-    ],
-    "rewards": []
-  },
-  "037e6065-68a7-4ad1-9b0b-7778ecfe0662": {
-    "requires": [
-      "electronics/resistor-color-check",
-      "electronics/potentiometer-dimmer",
-      "electronics/measure-resistance",
-      "electronics/measure-led-current",
-      "electronics/basic-circuit",
-      "electronics/arduino-blink"
+      "electronics/solder-wire"
     ],
     "rewards": []
   },
@@ -871,27 +926,17 @@
     ],
     "rewards": []
   },
-  "5127e156-3009-4db4-85ac-e3ea070b68f2": {
+  "be3aaed8-13cc-4937-95d5-6e2c952c6612": {
     "requires": [
-      "electronics/measure-resistance",
-      "electronics/measure-led-current",
+      "electronics/measure-arduino-5v",
       "electronics/light-sensor",
-      "electronics/led-polarity",
-      "electronics/continuity-test",
-      "electronics/check-battery-voltage"
+      "electronics/arduino-blink"
     ],
     "rewards": []
   },
   "6301ff22-49c9-468b-88aa-cafedfd5dcd3": {
     "requires": [
       "electronics/light-sensor"
-    ],
-    "rewards": []
-  },
-  "be3aaed8-13cc-4937-95d5-6e2c952c6612": {
-    "requires": [
-      "electronics/light-sensor",
-      "electronics/arduino-blink"
     ],
     "rewards": []
   },
@@ -1008,13 +1053,25 @@
     ],
     "rewards": []
   },
+  "98f6252e-95c2-468a-b110-69d47604df2c": {
+    "requires": [
+      "astronomy/venus-phases",
+      "astronomy/saturn-rings",
+      "astronomy/orion-nebula",
+      "astronomy/light-pollution",
+      "astronomy/andromeda"
+    ],
+    "rewards": []
+  },
   "f439b57a-9df3-4bd9-9b6e-042476ceecf5": {
     "requires": [
+      "astronomy/venus-phases",
       "astronomy/star-trails",
       "astronomy/saturn-rings",
       "astronomy/satellite-pass",
       "astronomy/planetary-alignment",
       "astronomy/orion-nebula",
+      "astronomy/observe-moon",
       "astronomy/north-star",
       "astronomy/meteor-shower",
       "astronomy/lunar-eclipse",
@@ -1023,15 +1080,6 @@
       "astronomy/constellations",
       "astronomy/comet-tracking",
       "astronomy/basic-telescope",
-      "astronomy/andromeda"
-    ],
-    "rewards": []
-  },
-  "98f6252e-95c2-468a-b110-69d47604df2c": {
-    "requires": [
-      "astronomy/saturn-rings",
-      "astronomy/orion-nebula",
-      "astronomy/light-pollution",
       "astronomy/andromeda"
     ],
     "rewards": []
@@ -1047,7 +1095,9 @@
   },
   "70bb8d86-2c4e-4330-9705-371891934686": {
     "requires": [
-      "astronomy/light-pollution"
+      "astronomy/observe-moon",
+      "astronomy/light-pollution",
+      "astronomy/iss-flyover"
     ],
     "rewards": []
   },
@@ -1134,6 +1184,12 @@
       "aquaria/walstad"
     ]
   },
+  "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50": {
+    "requires": [
+      "aquaria/thermometer"
+    ],
+    "rewards": []
+  },
   "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56": {
     "requires": [],
     "rewards": [
@@ -1168,13 +1224,6 @@
     "requires": [
       "aquaria/position-tank",
       "aquaria/heater-install"
-    ],
-    "rewards": []
-  },
-  "ca7c1069-4ba3-4339-9a10-0b690a690e60": {
-    "requires": [
-      "aquaria/ph-strip-test",
-      "aquaria/goldfish"
     ],
     "rewards": []
   },
@@ -1220,6 +1269,27 @@
     ],
     "rewards": []
   },
+  "8aa6dc27-dc42-4622-ac88-cbd57f48625f": {
+    "requires": [
+      "3dprinting/x-belt-tension",
+      "3dprinter/start",
+      "3dprinting/spool-holder",
+      "3dprinting/phone-stand",
+      "3dprinting/nozzle-cleaning",
+      "3dprinting/filament-change",
+      "3dprinting/calibration-cube",
+      "3dprinting/cable-clip",
+      "3dprinting/bed-leveling"
+    ],
+    "rewards": []
+  },
+  "60409c3f-56cf-4b9e-9e60-ca480d4896d0": {
+    "requires": [
+      "3dprinting/x-belt-tension",
+      "3dprinting/bed-leveling"
+    ],
+    "rewards": []
+  },
   "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6": {
     "requires": [
       "3dprinting/temperature-tower",
@@ -1233,21 +1303,10 @@
       "3dprinter/start"
     ]
   },
-  "8aa6dc27-dc42-4622-ac88-cbd57f48625f": {
-    "requires": [
-      "3dprinter/start",
-      "3dprinting/phone-stand",
-      "3dprinting/nozzle-cleaning",
-      "3dprinting/filament-change",
-      "3dprinting/calibration-cube",
-      "3dprinting/cable-clip",
-      "3dprinting/bed-leveling"
-    ],
-    "rewards": []
-  },
   "d3590107-25ff-4de5-af3a-46e2497bfc52": {
     "requires": [
       "3dprinter/start",
+      "3dprinting/spool-holder",
       "3dprinting/filament-change",
       "3dprinting/calibration-cube",
       "3dprinting/cable-clip"
@@ -1285,12 +1344,6 @@
   "e37c86b0-caaf-485d-b5c1-c15f7029973c": {
     "requires": [
       "3dprinting/calibration-cube"
-    ],
-    "rewards": []
-  },
-  "60409c3f-56cf-4b9e-9e60-ca480d4896d0": {
-    "requires": [
-      "3dprinting/bed-leveling"
     ],
     "rewards": []
   }

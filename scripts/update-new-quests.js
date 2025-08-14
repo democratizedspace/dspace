@@ -2,7 +2,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const outputFile = path.join(
+const frontendOutput = path.join(
   __dirname,
   '..',
   'frontend',
@@ -12,6 +12,7 @@ const outputFile = path.join(
   'md',
   'new-quests.md'
 );
+const docsOutput = path.join(__dirname, '..', 'docs', 'new-quests.md');
 
 const PRE_V2_COMMIT = 'fc840def24c5140411d2892f468960acb8250681';
 const V2_COMMIT = '93a834691af174b3c8b9895e9a27ce72e10e8299';
@@ -127,7 +128,8 @@ function generateMarkdown(sections) {
 function main() {
   const sections = getReleaseSections();
   const content = generateMarkdown(sections);
-  fs.writeFileSync(outputFile, content);
+  fs.writeFileSync(frontendOutput, content);
+  fs.writeFileSync(docsOutput, content);
 }
 
 if (require.main === module) {

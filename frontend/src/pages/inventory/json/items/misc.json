@@ -1117,10 +1117,23 @@
     },
     {
         "id": "7c811503-d0ca-4254-825a-ebeb06a88231",
-        "name": "pH down solution (phosphoric acid)",
-        "description": "Dilute acid used to lower nutrient solution pH.",
-        "image": "/assets/quests/basic_circuit.svg",
-        "price": "8 dUSD"
+        "name": "pH down solution (500 mL)",
+        "description": "500 mL bottle of phosphoric acid to lower hydroponic nutrient pH; includes dropper.",
+        "image": "/assets/hydroponics_nutrients.jpg",
+        "price": "10 dUSD",
+        "unit": "bottle",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
@@ -1337,15 +1350,21 @@
     {
         "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c",
         "name": "soldered jumper wire",
-        "description": "10 cm jumper wire with heat-shrunk solder joint for prototyping.",
+        "description": "10 cm 22 AWG stranded jumper wire with a soldered splice and 2 mm heat-shrink insulation; ~2 g.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "0.20 dUSD",
         "unit": "each",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
         }
     },
     {
