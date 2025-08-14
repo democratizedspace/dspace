@@ -159,6 +159,7 @@ New quests in this release: 188
 - geothermal/calibrate-ground-sensor
 - geothermal/check-loop-inlet-temp
 - geothermal/check-loop-outlet-temp
+- geothermal/check-loop-temp-delta
 - geothermal/compare-depth-ground-temps
 - geothermal/compare-seasonal-ground-temps
 - geothermal/install-backup-thermistor

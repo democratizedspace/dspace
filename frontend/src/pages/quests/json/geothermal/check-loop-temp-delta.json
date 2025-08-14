@@ -1,0 +1,35 @@
+{
+    "id": "geothermal/check-loop-temp-delta",
+    "title": "Check Loop Temperature Delta",
+    "description": "Use two thermistors with an Arduino to compare loop inlet and outlet temps.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Curious if your loop is transferring heat efficiently? Let's measure both ends.",
+            "options": [{ "type": "goto", "goto": "measure", "text": "I'm ready." }]
+        },
+        {
+            "id": "measure",
+            "text": "Wire two sensors per arduino-thermistor-read, dip one in the inlet, one in the outlet and log.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Temps logged",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [{ "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Sweet! A big delta means your pump is moving heat like a champ.",
+            "options": [{ "type": "finish", "text": "I'll track it." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/check-loop-inlet-temp", "geothermal/check-loop-outlet-temp"]
+}
