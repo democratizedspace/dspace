@@ -107,7 +107,9 @@ completed task and test results in the PR body.
 
 ## Upgrade Prompt
 
-Use this prompt to refine DSPACE's own prompt documentation.
+Use this prompt to refine DSPACE's own prompt documentation. For a template
+dedicated to evolving the prompt guides themselves, see the
+[Codex meta prompt](/docs/prompts-codex-meta).
 
 ```text
 SYSTEM:
@@ -119,7 +121,8 @@ USER:
 1. Pick one or more prompt docs under `frontend/src/pages/docs/md/` (for example,
    `prompts-items.md`).
 2. Fix outdated instructions, links or formatting.
-3. Run the checks above.
+3. If you add a new prompt, link it from `prompts-codex.md` and the docs index.
+4. Run the checks above.
 
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.
