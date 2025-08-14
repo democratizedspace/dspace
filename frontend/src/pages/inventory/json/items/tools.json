@@ -251,6 +251,20 @@
         }
     },
     {
+        "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+        "name": "helping hands",
+        "description": "Adjustable third-hand tool with alligator clips and magnifier to hold small parts while soldering.",
+        "image": "/assets/benchy.jpg",
+        "price": "10 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
         "name": "tape measure",
         "description": "3 m (10 ft) retractable steel tape measure with metric and imperial markings.",
