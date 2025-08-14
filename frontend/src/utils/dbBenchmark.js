@@ -21,9 +21,19 @@ export async function runDbBenchmark({ count = DEFAULT_BENCHMARK_COUNT } = {}) {
     await openCustomContentDB();
     const startInsert = performance.now();
     for (let i = 0; i < count; i++) {
-        await saveItem({ id: `item-${i}`, name: `Item ${i}` });
-        await saveProcess({ id: `proc-${i}`, title: `Process ${i}` });
-        await saveQuest({ id: `quest-${i}`, title: `Quest ${i}` });
+        await saveItem({ id: `item-${i}`, name: `Item ${i}`, description: `Benchmark item ${i}` });
+        await saveProcess({
+            id: `proc-${i}`,
+            title: `Process ${i}`,
+            duration: '1h',
+            requireItems: [{ id: `item-${i}`, count: 1 }],
+        });
+        await saveQuest({
+            id: `quest-${i}`,
+            title: `Quest ${i}`,
+            description: `Benchmark quest ${i}`,
+            image: '/placeholder.png',
+        });
     }
     const insertMs = performance.now() - startInsert;
 

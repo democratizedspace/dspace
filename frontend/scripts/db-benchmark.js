@@ -9,7 +9,17 @@ async function main() {
     }
     global.window.indexedDB = indexedDB;
 
-    const result = await runDbBenchmark();
+    const args = process.argv.slice(2);
+    let count;
+    const countIndex = args.findIndex((a) => a === '--count' || a === '-c');
+    if (countIndex !== -1) {
+        const value = Number.parseInt(args[countIndex + 1], 10);
+        if (!Number.isNaN(value)) {
+            count = value;
+        }
+    }
+
+    const result = await runDbBenchmark(count ? { count } : undefined);
     console.log(JSON.stringify(result, null, 2));
 }
 
