@@ -1,0 +1,10 @@
+{
+  "id": "2025-08-14-new-quests-list-outdated",
+  "date": "2025-08-14",
+  "component": "docs",
+  "rootCause": "new quests were added but frontend/src/pages/docs/md/new-quests.md was not regenerated",
+  "resolution": "ran npm run new-quests:update and committed the updated new-quests.md",
+  "references": [
+    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md#lessons-learned"
+  ]
+}
