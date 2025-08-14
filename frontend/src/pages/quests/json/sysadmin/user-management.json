@@ -1,0 +1,50 @@
+{
+    "id": "sysadmin/user-management",
+    "title": "Manage System Users",
+    "description": "Add and modify user accounts on an Ubuntu 24.04 LTS Minimal server.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Time to set up proper user accounts. Ready to add and modify users?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "manage",
+                    "text": "Create new user"
+                }
+            ]
+        },
+        {
+            "id": "manage",
+            "text": "Use adduser, passwd, and usermod to create users and assign groups.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Users configured",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. Your server now has managed user accounts.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Done"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["sysadmin/resource-monitoring"]
+}
