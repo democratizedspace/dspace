@@ -12,8 +12,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 209
-New quests in this release: 187
+Current quest count: 210
+New quests in this release: 188
 
 ### 3dprinting
 
@@ -160,11 +160,13 @@ New quests in this release: 187
 - geothermal/calibrate-ground-sensor
 - geothermal/check-loop-inlet-temp
 - geothermal/check-loop-outlet-temp
+- geothermal/check-loop-temp-delta
 - geothermal/compare-depth-ground-temps
 - geothermal/compare-seasonal-ground-temps
 - geothermal/install-backup-thermistor
 - geothermal/log-ground-temperature
 - geothermal/monitor-heat-pump-energy
+- geothermal/purge-loop-air
 - geothermal/replace-faulty-thermistor
 - geothermal/survey-ground-temperature
 
@@ -208,6 +210,7 @@ New quests in this release: 187
 
 ### robotics
 
+- robotics/gyro-balance
 - robotics/line-follower
 - robotics/maze-navigation
 - robotics/obstacle-avoidance
@@ -217,6 +220,7 @@ New quests in this release: 187
 - robotics/servo-control
 - robotics/servo-gripper
 - robotics/servo-radar
+- robotics/ultrasonic-rangefinder
 - robotics/wheel-encoders
 
 ### rocketry

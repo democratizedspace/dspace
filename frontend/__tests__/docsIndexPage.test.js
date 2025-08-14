@@ -6,8 +6,9 @@ import { describe, it, expect } from 'vitest';
 const docsIndexFile = path.join(__dirname, '../src/pages/docs/index.astro');
 
 describe('docs index.astro', () => {
-    it('links to the Codex prompts docs page', () => {
+    it('links to Codex prompt docs', () => {
         const content = fs.readFileSync(docsIndexFile, 'utf8');
         expect(content).toMatch(/<a href="\/docs\/prompts-codex">Codex prompts<\/a>/);
+        expect(content).toMatch(/<a href="\/docs\/prompts-codex-meta">Codex meta prompt<\/a>/);
     });
 });
