@@ -286,20 +286,16 @@
     },
     {
         "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
-        "name": "sponge filter",
-        "description": "Air-driven sponge filter (10×4 cm) for 40–80 L tanks; connects to 4 mm airline; needs air pump.",
+        "name": "Sponge filter",
+        "description": "Air-driven sponge filter for ≤40 L (10 gal) tanks; 5 cm foam; needs 4 mm airline and air pump.",
         "image": "/assets/aquarium_filter.jpg",
         "price": "6 dUSD",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 65,
             "emoji": "🌀",
             "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-14",
-                    "date": "2025-08-14",
-                    "score": 60
-                }
+                { "task": "codex-item-hardening-2025-08-14", "date": "2025-08-14", "score": 65 }
             ]
         }
     },

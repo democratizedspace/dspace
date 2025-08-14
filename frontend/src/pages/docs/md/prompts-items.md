@@ -32,7 +32,9 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && npm run test:ci && npm run itemValidation && npm run test:ci -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && \
+        npm run test:ci && npm run itemValidation && \
+        npm run test:ci -- itemQuality"
         ```
 
 See the [Codex CLI repository][codex-cli] for more flags.
@@ -60,7 +62,7 @@ You are working in democratizedspace/dspace.
 GOAL: <one sentence item addition or edit>.
 
 FILES OF INTEREST
-- frontend/src/pages/inventory/json/items/*  ← item registry
+- frontend/src/pages/inventory/json/items/*.json   ← item registry
 - frontend/src/pages/inventory/jsonSchemas/item.json   ← schema
 
 REQUIREMENTS
