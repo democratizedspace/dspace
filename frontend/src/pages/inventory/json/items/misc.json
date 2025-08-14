@@ -466,9 +466,22 @@
     {
         "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
         "name": "pH strip",
-        "description": "A pH strip for measuring pH.",
+        "description": "4×0.7 cm cellulose strip with 0–14 pH range; dip 1 s then match colors to chart.",
         "image": "/assets/pH_strip.jpg",
-        "price": "0.15 dUSD"
+        "price": "0.05 dUSD",
+        "unit": "strip",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
