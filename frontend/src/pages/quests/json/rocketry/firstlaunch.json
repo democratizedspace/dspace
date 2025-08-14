@@ -199,7 +199,7 @@
         },
         {
             "id": "done",
-            "text": "That's ok, this is still a massive success! You're on your way to being a rocketeer! I'm so proud of you! Here, take this as a token of my appreciation. We'll improve on this design later and try to recover it for reuse. But for now, bask in the glory of your first rocket launch!",
+            "text": "Great job! You're a budding rocketeer. Here's the Rocketeer Award. Enjoy your first launch!",
             "options": [
                 {
                     "type": "finish",

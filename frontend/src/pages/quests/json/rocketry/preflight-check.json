@@ -52,7 +52,7 @@
         },
         {
             "id": "done",
-            "text": "Nice work! Preflight complete and rocket soaring.",
+            "text": "Nice work! Preflight complete and rocket ready. Nova hands you the Rocketeer Award.",
             "options": [
                 {
                     "type": "finish",

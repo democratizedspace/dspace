@@ -42,7 +42,7 @@
         },
         {
             "id": "done",
-            "text": "Nice work! This hobby-class mix should burn steady when we launch.",
+            "text": "Nice work! This mix should burn steady at launch. Nova awards you the Rocketeer Award.",
             "options": [
                 {
                     "type": "finish",
