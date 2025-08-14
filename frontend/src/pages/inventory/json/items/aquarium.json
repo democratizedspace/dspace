@@ -286,10 +286,22 @@
     },
     {
         "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
-        "name": "Sponge filter",
-        "description": "A gentle air-driven filter ideal for small aquariums.",
+        "name": "sponge filter",
+        "description": "Air-driven sponge filter (10×4 cm) for 40–80 L tanks; connects to 4 mm airline; needs air pump.",
         "image": "/assets/aquarium_filter.jpg",
-        "price": "6 dUSD"
+        "price": "6 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
