@@ -2512,8 +2512,13 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
-        "duration": "2m"
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
     },
     {
         "id": "write-mission-log-entry",
