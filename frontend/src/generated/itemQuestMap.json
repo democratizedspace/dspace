@@ -61,6 +61,12 @@
     ],
     "rewards": []
   },
+  "05dd84f7-b9bc-4eac-93c5-5838cab84b32": {
+    "requires": [
+      "woodworking/apply-finish"
+    ],
+    "rewards": []
+  },
   "7318a5ba-fac3-476e-a532-c813ed9b18e5": {
     "requires": [],
     "rewards": [
@@ -305,6 +311,25 @@
     ],
     "rewards": []
   },
+  "c9b51052-4594-42d7-a723-82b815ab8cc2": {
+    "requires": [
+      "robotics/wheel-encoders",
+      "hydroponics/nutrient-check",
+      "firstaid/dispose-expired",
+      "electronics/solder-wire",
+      "electronics/measure-resistance",
+      "electronics/light-sensor",
+      "electronics/led-polarity",
+      "electronics/desolder-component",
+      "electronics/data-logger",
+      "electronics/continuity-test",
+      "electronics/check-battery-voltage",
+      "chemistry/ph-test",
+      "chemistry/acid-dilution",
+      "aquaria/water-testing"
+    ],
+    "rewards": []
+  },
   "e976bae6-e33c-428a-a20d-0aa8fde13c6c": {
     "requires": [
       "robotics/servo-radar",
@@ -386,6 +411,7 @@
       "hydroponics/top-off",
       "hydroponics/root-rinse",
       "hydroponics/netcup-clean",
+      "hydroponics/mint-cutting",
       "hydroponics/filter-clean",
       "hydroponics/bucket_10",
       "hydroponics/basil",
@@ -426,6 +452,7 @@
   "545aeb15-7e8b-489d-be4a-af2a59f447e1": {
     "requires": [
       "hydroponics/plug-soak",
+      "hydroponics/mint-cutting",
       "hydroponics/basil"
     ],
     "rewards": []
@@ -439,6 +466,7 @@
   "13167d6a-5617-4931-8a6e-6f463c6b8835": {
     "requires": [
       "hydroponics/ph-check",
+      "chemistry/precipitation-reaction",
       "chemistry/ph-test",
       "chemistry/ph-adjustment",
       "chemistry/buffer-solution",
@@ -461,24 +489,6 @@
       "firstaid/stop-nosebleed",
       "firstaid/learn-cpr",
       "firstaid/dispose-expired",
-      "chemistry/ph-test",
-      "chemistry/acid-dilution",
-      "aquaria/water-testing"
-    ],
-    "rewards": []
-  },
-  "c9b51052-4594-42d7-a723-82b815ab8cc2": {
-    "requires": [
-      "hydroponics/nutrient-check",
-      "firstaid/dispose-expired",
-      "electronics/solder-wire",
-      "electronics/measure-resistance",
-      "electronics/light-sensor",
-      "electronics/led-polarity",
-      "electronics/desolder-component",
-      "electronics/data-logger",
-      "electronics/continuity-test",
-      "electronics/check-battery-voltage",
       "chemistry/ph-test",
       "chemistry/acid-dilution",
       "aquaria/water-testing"
@@ -795,6 +805,12 @@
     ],
     "rewards": []
   },
+  "f6bb2c1a-0001-46bd-998a-388a488b5b5c": {
+    "requires": [],
+    "rewards": [
+      "electronics/solder-wire"
+    ]
+  },
   "6a3772b6-2550-434f-89f9-2eb53d5b139f": {
     "requires": [
       "electronics/solder-wire"
@@ -1018,6 +1034,7 @@
     "requires": [
       "astronomy/orion-nebula",
       "astronomy/light-pollution",
+      "astronomy/aurora-watch",
       "astronomy/andromeda"
     ],
     "rewards": []
@@ -1214,6 +1231,7 @@
     "requires": [
       "3dprinter/start",
       "3dprinting/phone-stand",
+      "3dprinting/nozzle-cleaning",
       "3dprinting/filament-change",
       "3dprinting/calibration-cube",
       "3dprinting/cable-clip",
@@ -1246,6 +1264,7 @@
   },
   "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4": {
     "requires": [
+      "3dprinting/nozzle-cleaning",
       "3dprinting/filament-change",
       "3dprinting/calibration-cube"
     ],
