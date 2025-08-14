@@ -23,6 +23,7 @@ New quests in this release: 183
 - 3dprinting/nozzle-cleaning
 - 3dprinting/phone-stand
 - 3dprinting/retraction-test
+- 3dprinting/spool-holder
 - 3dprinting/temperature-tower
 
 ### aquaria
