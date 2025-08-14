@@ -1,0 +1,66 @@
+{
+    "id": "robotics/ultrasonic-rangefinder",
+    "title": "Measure distance with an ultrasonic sensor",
+    "description": "Use an HC-SR04 to measure distances with Arduino.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Orion here! Let's make your robot sense distance with an ultrasonic sensor.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "parts",
+                    "text": "What parts do I need?"
+                }
+            ]
+        },
+        {
+            "id": "parts",
+            "text": "Grab an HC-SR04 module, jumper wires, and plug it into pins 2 through 5 on your Arduino.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Parts ready. What's next?",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Use the NewPing library to trigger the sensor and print distances to the serial monitor.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Uploaded and reading distance!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Now your robot knows how far away things are. Add it to obstacle avoidance.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["electronics/arduino-blink"],
+    "rewards": [
+        {
+            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+            "count": 1
+        }
+    ]
+}
