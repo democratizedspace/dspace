@@ -401,7 +401,8 @@
     },
     {
         "id": "regrow-basil",
-        "title": "regrow basil after harvest",
+        "title": "Regrow 11 harvested basil plants in a ready hydroponics tub using 8,064 dWatts",
+        "image": "/assets/hydroponic_basil_adult.jpg",
         "requireItems": [],
         "consumeItems": [
             {
