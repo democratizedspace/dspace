@@ -8,8 +8,10 @@ slug: 'prompts-processes'
 Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR—but only if you give it a
 clear, file‑scoped prompt. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when working on processes. For
-fundamental design tips see the [Process Development Guidelines](/docs/process-guidelines).
+[Codex Prompts](/docs/prompts-codex) when working on processes. To keep the
+prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
+For fundamental design tips see the
+[Process Development Guidelines](/docs/process-guidelines).
 
 > **TL;DR**
 >
@@ -32,7 +34,8 @@ fundamental design tips see the [Process Development Guidelines](/docs/process-g
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && npm run test:ci -- processQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && \
+        npm run test:ci -- processQuality"
         ```
 
 See the [Codex CLI repository][codex-cli] for more flags.

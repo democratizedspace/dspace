@@ -133,9 +133,17 @@
     {
         "id": "5712947f-716c-4f71-b28d-fcb811631080",
         "name": "basil seedling",
-        "description": "A basil seedling that has been germinated in a rockwool cube.",
+        "description": "Two-week-old Genovese basil in a 3 cm rockwool plug, ~5 cm tall and ~5 g.",
         "image": "/assets/basil_seedlings.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "1 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-14", "date": "2025-08-14", "score": 60 }
+            ]
+        }
     },
     {
         "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
