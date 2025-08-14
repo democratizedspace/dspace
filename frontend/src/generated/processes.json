@@ -668,7 +668,8 @@
     },
     {
         "id": "grow-stevia",
-        "title": "grow stevia until it's ready to harvest",
+        "title": "Grow six stevia seedlings in a hydroponics tub under a 36 W lamp for four weeks",
+        "image": "/assets/hydroponic_basil_adult.jpg",
         "requireItems": [
             {
                 "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
@@ -678,7 +679,7 @@
         "consumeItems": [
             {
                 "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
-                "count": 11
+                "count": 6
             },
             {
                 "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
@@ -692,14 +693,26 @@
         "createItems": [
             {
                 "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
-                "count": 11
+                "count": 6
             },
             {
                 "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
                 "count": 1
             }
         ],
-        "duration": "28d"
+        "duration": "28d",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "regrow-stevia",
