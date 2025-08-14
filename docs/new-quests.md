@@ -184,6 +184,7 @@ New quests in this release: 192
 - hydroponics/ph-test
 - hydroponics/plug-soak
 - hydroponics/pump-install
+- hydroponics/pump-prime
 - hydroponics/regrow-stevia
 - hydroponics/reservoir-refresh
 - hydroponics/root-rinse
