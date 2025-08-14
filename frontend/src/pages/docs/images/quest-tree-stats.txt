@@ -1,4 +1,4 @@
-hydroponics: 21 quests, 1575 lines
+hydroponics: 22 quests, 1626 lines
 electronics: 20 quests, 1687 lines
 energy: 20 quests, 1392 lines
 astronomy: 18 quests, 1018 lines
@@ -15,5 +15,5 @@ rocketry: 8 quests, 737 lines
 completionist: 5 quests, 263 lines
 welcome: 5 quests, 375 lines
 ubi: 4 quests, 306 lines
-composting: 2 quests, 144 lines
+composting: 3 quests, 185 lines
 sysadmin: 2 quests, 102 lines
