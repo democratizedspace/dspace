@@ -126,6 +126,7 @@ New quests in this release: 180
 - electronics/temperature-plot
 - electronics/thermistor-reading
 - electronics/thermometer-calibration
+- electronics/voltage-divider
 
 ### energy
 
