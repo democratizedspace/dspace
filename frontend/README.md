@@ -98,6 +98,9 @@ frontend/
 └── public/             # Static assets
 ```
 
+> Utility note: `src/utils/strings.js`'s `getDurationString` now omits undefined
+> remaining time to avoid displaying `undefined` in the UI.
+
 ## Getting Started
 
 ### Prerequisites

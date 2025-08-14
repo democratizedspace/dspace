@@ -1,0 +1,11 @@
+{
+  "id": "run-tests-zero-tests-passed",
+  "date": "2025-08-14",
+  "component": "test harness",
+  "rootCause": "run-tests.js only warned when no root tests ran, allowing CI to pass with zero tests",
+  "resolution": "exit with an error when zero root tests are detected",
+  "references": [
+    "scripts/utils/detect-zero-tests.js",
+    "scripts/tests/run-tests.test.ts"
+  ]
+}
