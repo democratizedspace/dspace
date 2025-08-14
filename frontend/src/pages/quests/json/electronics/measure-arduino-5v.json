@@ -1,0 +1,62 @@
+{
+    "id": "electronics/measure-arduino-5v",
+    "title": "Measure Arduino 5 V output",
+    "description": "Verify the 5 V pin on an Arduino Uno with a multimeter.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Orion here. Let's verify your board's 5 V rail. Keep work areas dry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "What gear do we need?"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "Grab an Arduino Uno, laptop, USB Type-B cable, and a digital multimeter. Power the board only after everything is connected.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Gear ready. Let's measure.",
+                    "process": "measure-arduino-5v",
+                    "requiresItems": [
+                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 },
+                        { "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612", "count": 1 },
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Connect the board to the laptop and set the meter to 20 V DC. Touch red to 5 V and black to GND. A reading near 5 V means the regulator works.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It shows around 5 V."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Disconnect power before wiring new circuits to avoid shorts.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [{ "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c", "count": 1 }],
+    "requiresQuests": ["electronics/arduino-blink"]
+}
