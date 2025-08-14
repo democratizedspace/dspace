@@ -380,5 +380,19 @@
                 }
             ]
         }
+    },
+    {
+        "id": "dad7f853-ccc9-40be-b226-89272708db84",
+        "name": "solder flux pen",
+        "description": "2 mL no-clean flux pen for improving solder wetting on PCB pads.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "4 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
