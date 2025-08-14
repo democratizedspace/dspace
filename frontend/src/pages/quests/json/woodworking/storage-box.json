@@ -1,0 +1,69 @@
+{
+    "id": "woodworking/storage-box",
+    "title": "Build a storage box",
+    "description": "Assemble a simple wooden crate to keep your workspace tidy.",
+    "image": "/assets/door.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your coffee table turned out great! How about a box to stash small parts?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Sounds useful!"
+                }
+            ]
+        },
+        {
+            "id": "gather",
+            "text": "You'll need a pine board, wood glue, and your handsaw. I'll hand over what you're missing.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 4 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+                        { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 }
+                    ],
+                    "text": "Gather materials"
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "requiresItems": [
+                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 4 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+                        { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 }
+                    ],
+                    "text": "Materials ready"
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Cut the board into panels, glue the corners into a box, and clamp it until dry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Box assembled"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! This storage box will keep your gear organized for future builds.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All done!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/coffee-table"]
+}
