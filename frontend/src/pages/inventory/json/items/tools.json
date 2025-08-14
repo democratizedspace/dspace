@@ -106,16 +106,22 @@
     {
         "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
         "name": "solder wick",
-        "description": "2 mm copper braid that wicks molten solder from pads; sold per meter.",
+        "description": "2 mm wide no-clean copper braid for removing solder from pads; sold in 1 m rolls.",
         "image": "/assets/quests/basic_circuit.svg",
-        "price": "2 dUSD",
+        "price": "3 dUSD",
         "type": "tool",
         "unit": "m",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
         }
     },
     {
