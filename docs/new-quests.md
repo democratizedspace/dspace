@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 196
-New quests in this release: 174
+Current quest count: 202
+New quests in this release: 180
 
 ### 3dprinting
 
@@ -20,6 +20,7 @@ New quests in this release: 174
 - 3dprinting/cable-clip
 - 3dprinting/calibration-cube
 - 3dprinting/filament-change
+- 3dprinting/nozzle-cleaning
 - 3dprinting/phone-stand
 - 3dprinting/retraction-test
 - 3dprinting/temperature-tower
@@ -44,6 +45,7 @@ New quests in this release: 174
 ### astronomy
 
 - astronomy/andromeda
+- astronomy/aurora-watch
 - astronomy/basic-telescope
 - astronomy/comet-tracking
 - astronomy/constellations
@@ -67,6 +69,7 @@ New quests in this release: 174
 - chemistry/buffer-solution
 - chemistry/ph-adjustment
 - chemistry/ph-test
+- chemistry/precipitation-reaction
 - chemistry/safe-reaction
 - chemistry/stevia-crystals
 - chemistry/stevia-extraction
@@ -111,6 +114,7 @@ New quests in this release: 174
 - electronics/desolder-component
 - electronics/led-polarity
 - electronics/light-sensor
+- electronics/measure-arduino-5v
 - electronics/measure-led-current
 - electronics/measure-resistance
 - electronics/potentiometer-dimmer
@@ -166,6 +170,7 @@ New quests in this release: 174
 - hydroponics/filter-clean
 - hydroponics/grow-light
 - hydroponics/lettuce
+- hydroponics/mint-cutting
 - hydroponics/netcup-clean
 - hydroponics/nutrient-check
 - hydroponics/ph-check
@@ -187,6 +192,7 @@ New quests in this release: 174
 - programming/hello-sensor
 - programming/json-api
 - programming/json-endpoint
+- programming/plot-temp-cli
 - programming/temp-alert
 - programming/temp-email
 - programming/temp-graph
