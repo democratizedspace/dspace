@@ -209,6 +209,7 @@ New quests in this release: 188
 
 ### robotics
 
+- robotics/gyro-balance
 - robotics/line-follower
 - robotics/maze-navigation
 - robotics/obstacle-avoidance

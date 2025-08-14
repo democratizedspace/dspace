@@ -1,0 +1,48 @@
+{
+    "id": "robotics/gyro-balance",
+    "title": "Balance with a gyroscope",
+    "description": "Use a gyroscope and servos to keep a platform upright.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ever seen a robot balance on two wheels? We'll use a gyro to keep a platform upright.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "parts",
+                    "text": "Let's gather parts."
+                }
+            ]
+        },
+        {
+            "id": "parts",
+            "text": "Grab an Arduino Uno, two continuous servos, and an MPU-6050 gyroscope breakout.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Parts ready.",
+                    "requiresItems": [
+                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
+                        { "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c", "count": 2 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Use the MPU6050 and Servo libraries. Read the gyro angle and adjust servo speeds with a simple\nPID loop.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "It's balancing!"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["robotics/servo-control"],
+    "rewards": []
+}
