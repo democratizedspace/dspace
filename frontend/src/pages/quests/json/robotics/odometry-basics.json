@@ -1,0 +1,48 @@
+{
+    "id": "robotics/odometry-basics",
+    "title": "Track distance with wheel encoders",
+    "description": "Use encoder pulses to compute how far your robot travels.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want to track how far your bot rolls? We'll turn encoder ticks into centimeters.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Let's wire it up."
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Power off, wear goggles, send VCC/GND to Arduino, and hook A/B leads to pins 2 & 3.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Wired and safe.",
+                    "requiresItems": [
+                        { "id": "71fafa9a-3998-4763-a63a-279acc4ca603", "count": 2 },
+                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Upload code to count pulses times wheel size. Roll one meter and check the log.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Distance recorded!"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["robotics/wheel-encoders"],
+    "rewards": []
+}

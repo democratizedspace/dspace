@@ -209,6 +209,7 @@ New quests in this release: 183
 - robotics/line-follower
 - robotics/maze-navigation
 - robotics/obstacle-avoidance
+- robotics/odometry-basics
 - robotics/pan-tilt
 - robotics/servo-arm
 - robotics/servo-control
