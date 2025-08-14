@@ -41,6 +41,7 @@
                 {
                     "type": "goto",
                     "goto": "temp",
+                    "process": "measure-compost-temperature",
                     "requiresItems": [
                         {
                             "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",

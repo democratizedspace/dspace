@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Good to see you progressing! Before soldering, let's tin that iron tip. Plug in your station and have a damp sponge ready.",
+            "text": "Good to see you progressing! Before soldering, secure your work in helping hands, plug in your station and have a damp sponge ready.",
             "options": [
                 {
                     "type": "goto",
@@ -17,6 +17,10 @@
                     "requiresItems": [
                         {
                             "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
                             "count": 1
                         }
                     ]
@@ -46,5 +50,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/basic-circuit"]
+    "requiresQuests": ["electronics/basic-circuit"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-14",
+                "date": "2025-08-14",
+                "score": 60
+            }
+        ]
+    }
 }

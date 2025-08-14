@@ -1,0 +1,37 @@
+{
+    "id": "astronomy/venus-phases",
+    "title": "Observe Venus's Phases",
+    "description": "Use a planisphere and basic telescope to track Venus through its lunar-like phases.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here. Venus is bright tonight; let's watch its phase change.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "view",
+                    "text": "Ready to aim.",
+                    "requiresItems": [
+                        { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 },
+                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "view",
+            "text": "Use the planisphere to find Venus near the horizon. Center it and note the illuminated portion.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Phase recorded." }]
+        },
+        {
+            "id": "finish",
+            "text": "Great observation! Tracking phases helps practice precision focusing.",
+            "options": [{ "type": "finish", "text": "Can't wait for the next phase." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/saturn-rings"]
+}

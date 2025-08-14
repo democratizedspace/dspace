@@ -154,9 +154,9 @@ npm test
 npm run coverage
 ```
 
-Running `npm test` emits a warning if it detects zero tests, helping catch missing or
-misconfigured suites early. The detector strips ANSI color codes so it works even when
-command output is colorized.
+Running `npm test` fails if it detects zero tests, preventing false positives when
+test suites are missing or misconfigured. The detector strips ANSI color codes so it
+works even when command output is colorized.
 
 ### End-to-End Tests
 

@@ -1,0 +1,51 @@
+{
+    "id": "electronics/voltage-divider",
+    "title": "Build a Voltage Divider",
+    "description": "Use two resistors to split 5 V into roughly 2.5 V.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Orion here. Let's make a simple voltage divider with a 220 \u03a9 and 10 k\u03a9 resistor. Keep the power supply unplugged while wiring.",
+            "options": [{ "type": "goto", "goto": "build", "text": "I'm ready" }]
+        },
+        {
+            "id": "build",
+            "text": "Place the 220 \u03a9 and 10 k\u03a9 resistors in series on the Breadboard. Connect 5 V across them and clip your multimeter to the junction.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-resistor-color-code",
+                    "text": "Check resistor colors"
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Resistors placed",
+                    "requiresItems": [
+                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
+                        { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+                        { "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac", "count": 1 },
+                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 },
+                        { "id": "828d6c3b-66a5-4064-b221-97630274502b", "count": 1 },
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Apply power and measure the junction voltage. It should read close to 2.5 V on your multimeter.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Measured ~2.5 V" }]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! That's how a voltage divider sets a lower reference voltage.",
+            "options": [{ "type": "finish", "text": "Cool!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/basic-circuit"]
+}

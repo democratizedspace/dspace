@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 201
-New quests in this release: 179
+Current quest count: 202
+New quests in this release: 180
 
 ### 3dprinting
 
@@ -61,6 +61,7 @@ New quests in this release: 179
 - astronomy/satellite-pass
 - astronomy/saturn-rings
 - astronomy/star-trails
+- astronomy/venus-phases
 
 ### chemistry
 
@@ -114,6 +115,7 @@ New quests in this release: 179
 - electronics/desolder-component
 - electronics/led-polarity
 - electronics/light-sensor
+- electronics/measure-arduino-5v
 - electronics/measure-led-current
 - electronics/measure-resistance
 - electronics/potentiometer-dimmer
@@ -124,6 +126,7 @@ New quests in this release: 179
 - electronics/temperature-plot
 - electronics/thermistor-reading
 - electronics/thermometer-calibration
+- electronics/voltage-divider
 
 ### energy
 

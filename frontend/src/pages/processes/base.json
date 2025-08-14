@@ -401,7 +401,8 @@
     },
     {
         "id": "regrow-basil",
-        "title": "regrow basil after harvest",
+        "title": "Regrow 11 harvested basil plants in a ready hydroponics tub using 8,064 dWatts",
+        "image": "/assets/hydroponic_basil_adult.jpg",
         "requireItems": [],
         "consumeItems": [
             {
@@ -568,7 +569,8 @@
     },
     {
         "id": "extract-stevia",
-        "title": "extract sweetener from stevia leaves",
+        "title": "Steep 11 stevia leaves in hot water for 1h to make stevia extract",
+        "image": "/assets/basil_harvested.jpg",
         "requireItems": [],
         "consumeItems": [
             {
@@ -582,7 +584,13 @@
                 "count": 1
             }
         ],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-hardening-2025-08-14", "date": "2025-08-14", "score": 60 }]
+        }
     },
     {
         "id": "purify-stevia",
@@ -2220,7 +2228,8 @@
     },
     {
         "id": "measure-calibration-cube",
-        "title": "Measure a 20 mm calibration cube with digital calipers and log results",
+        "title": "Measure 20 mm calibration cube with digital calipers; log dimensions in mission logbook using quill",
+        "image": "/assets/paperwork.jpg",
         "requireItems": [
             {
                 "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
@@ -2242,7 +2251,19 @@
                 "count": 1
             }
         ],
-        "duration": "2m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "swap-green-pla-filament",
@@ -2352,6 +2373,10 @@
             },
             {
                 "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "dad7f853-ccc9-40be-b226-89272708db84",
                 "count": 1
             },
             {
@@ -2519,18 +2544,25 @@
         "duration": "5m"
     },
     {
+        "id": "attach-aquarium-thermometer",
+        "title": "Attach a stick-on strip thermometer to aquarium glass",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
+            { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
+            { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "check-aquarium-temperature",
         "title": "Check aquarium water temperature with an attached strip thermometer",
         "image": "/assets/aquarium_thermometer.jpg",
         "requireItems": [
-            {
-                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
-                "count": 1
-            },
-            {
-                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-                "count": 1
-            }
+            { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
+            { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -2820,6 +2852,20 @@
         "duration": "2m"
     },
     {
+        "id": "measure-compost-temperature",
+        "title": "Check core temperature of a compost pile with a compost thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "tin-soldering-iron-tip",
         "title": "Heat the soldering iron and melt solder on the tip while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",
@@ -2891,5 +2937,18 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "3m"
+    },
+    {
+        "id": "assemble-servo-arm",
+        "title": "Bolt a servo motor to a base and attach a lightweight arm",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c", "count": 1 },
+            { "id": "8299ac3f-c232-46d4-a007-2ad86ec70361", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "15m",
+        "hardening": { "passes": 0, "score": 0, "emoji": "🛠️", "history": [] }
     }
 ]
