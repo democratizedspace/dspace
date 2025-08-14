@@ -1774,6 +1774,30 @@
         }
     },
     {
+        "id": "measure-solar-panel-voltage",
+        "title": "Measure a portable solar panel's open-circuit voltage in direct sun",
+        "image": "/assets/solar_setup_small.jpg",
+        "requireItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "measure-resistance",
         "title": "Measure a 220 Ω resistor with a digital multimeter",
         "image": "/assets/launch_controller.jpg",
