@@ -109,15 +109,16 @@
     {
         "id": "82577af7-6724-4cb2-8922-f7140e550145",
         "name": "smartphone",
-        "description": "150 g smartphone with 6 in (15 cm) screen and 128 GB storage; charges via 5 V USB-C.",
+        "description": "150 g smartphone, 6 in (15 cm) LCD, 128 GB flash, 4 GB RAM; 3000 mAh battery via USB-C (5 V, 15 W).",
         "image": "/assets/changelog/20230630/smartphone.jpg",
         "price": "200 dUSD",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
             "history": [
-                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 },
+                { "task": "codex-item-hardening-2025-08-14", "date": "2025-08-14", "score": 80 }
             ]
         }
     },
