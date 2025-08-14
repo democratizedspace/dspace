@@ -1,0 +1,4 @@
+# Generated quest docs; keep local version during merges
+# Run `npm run new-quests:update` after merging to refresh.
+docs/new-quests.md merge=ours
+frontend/src/pages/docs/md/new-quests.md merge=ours
