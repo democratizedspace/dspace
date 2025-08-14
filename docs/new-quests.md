@@ -183,6 +183,7 @@ New quests in this release: 183
 - hydroponics/reservoir-refresh
 - hydroponics/root-rinse
 - hydroponics/stevia
+- hydroponics/temp-check
 - hydroponics/top-off
 - hydroponics/tub-scrub
 
