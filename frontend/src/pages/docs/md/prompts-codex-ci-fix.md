@@ -104,3 +104,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     and commit the refreshed file.
 -   2025-08-14 – E2E tests failed when Playwright browsers were missing; ensure `npx --prefix frontend`
     `playwright install --with-deps` runs before grouped tests.
+-   2025-08-14 – missing Jest `testMatch` in `frontend/package.json` let a coverage check fail; add a
+    pattern so E2E tests detect all Jest files.
