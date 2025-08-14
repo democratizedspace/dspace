@@ -87,6 +87,7 @@ New quests in this release: 193
 
 ### composting
 
+- composting/check-temperature
 - composting/start
 - composting/turn-pile
 
@@ -183,6 +184,7 @@ New quests in this release: 193
 - hydroponics/ph-test
 - hydroponics/plug-soak
 - hydroponics/pump-install
+- hydroponics/pump-prime
 - hydroponics/regrow-stevia
 - hydroponics/reservoir-refresh
 - hydroponics/root-rinse
