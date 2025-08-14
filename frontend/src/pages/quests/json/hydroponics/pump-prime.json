@@ -1,0 +1,50 @@
+{
+    "id": "hydroponics/pump-prime",
+    "title": "Prime Water Pump",
+    "description": "Prep the pump so it doesn't run dry.",
+    "image": "/assets/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "New pumps need a bit of water before they work well.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prime",
+                    "text": "Show me."
+                }
+            ]
+        },
+        {
+            "id": "prime",
+            "text": "Fill the pump housing with nutrient solution and run it a moment to push out air bubbles.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "prime-pump",
+                    "text": "Prime the pump"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pump is primed",
+                    "requiresItems": [{ "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice. A primed pump circulates nutrients without cavitation.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to the grow bed."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/pump-install"]
+}

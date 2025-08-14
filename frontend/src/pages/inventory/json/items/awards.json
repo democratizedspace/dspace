@@ -59,9 +59,21 @@
     {
         "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
         "name": "Rocketeer Award",
-        "description": "Awarded for launching your first rocket!",
+        "description": "12 cm aluminum rocket trophy for your first model rocket launch.",
         "image": "/assets/rocketeer_award.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "1394c366-5078-49cf-b24e-c748e8428234",
