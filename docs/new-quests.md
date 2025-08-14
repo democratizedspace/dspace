@@ -218,6 +218,7 @@ New quests in this release: 188
 - robotics/servo-control
 - robotics/servo-gripper
 - robotics/servo-radar
+- robotics/ultrasonic-rangefinder
 - robotics/wheel-encoders
 
 ### rocketry
