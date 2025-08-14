@@ -61,7 +61,7 @@ You are working in democratizedspace/dspace.
 GOAL: <one sentence item addition or edit>.
 
 FILES OF INTEREST
-- frontend/src/pages/inventory/json/items/*  ← item registry
+- frontend/src/pages/inventory/json/items/*.json   ← item registry
 - frontend/src/pages/inventory/jsonSchemas/item.json   ← schema
 
 REQUIREMENTS
