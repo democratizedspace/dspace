@@ -568,7 +568,8 @@
     },
     {
         "id": "extract-stevia",
-        "title": "extract sweetener from stevia leaves",
+        "title": "Steep 11 stevia leaves in hot water for 1h to make stevia extract",
+        "image": "/assets/basil_harvested.jpg",
         "requireItems": [],
         "consumeItems": [
             {
@@ -582,7 +583,13 @@
                 "count": 1
             }
         ],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [{ "task": "codex-hardening-2025-08-14", "date": "2025-08-14", "score": 60 }]
+        }
     },
     {
         "id": "purify-stevia",
