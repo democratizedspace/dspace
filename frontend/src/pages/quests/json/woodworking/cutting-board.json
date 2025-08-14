@@ -1,0 +1,50 @@
+{
+    "id": "woodworking/cutting-board",
+    "title": "Make a Cutting Board",
+    "description": "Glue up a compact cutting board for kitchen prep.",
+    "image": "/assets/door.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to craft something useful? Let's build a simple cutting board.",
+            "options": [{ "type": "goto", "goto": "gather", "text": "I'm ready" }]
+        },
+        {
+            "id": "gather",
+            "text": "We'll laminate two hardwood boards with wood glue. Grab the materials.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 2 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 }
+                    ],
+                    "text": "Take boards and glue"
+                },
+                {
+                    "type": "goto",
+                    "goto": "glue",
+                    "requiresItems": [
+                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 2 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 }
+                    ],
+                    "text": "Materials ready"
+                }
+            ]
+        },
+        {
+            "id": "glue",
+            "text": "Spread glue, clamp the boards, and let the bond cure. Sand until smooth.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Board smoothed" }]
+        },
+        {
+            "id": "finish",
+            "text": "Great! You've got a fresh cutting board ready for chopping.",
+            "options": [{ "type": "finish", "text": "Time to prep veggies" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/picture-frame"]
+}
