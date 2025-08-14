@@ -9,6 +9,9 @@ Use this drop-in snippet whenever a GitHub Actions run for
 **democratizedspace/dspace** fails. It guides Codex to diagnose the failure and
 return a pull request that keeps the main branch green.
 
+If this prompt ever drifts, consult the [Prompt Upgrader](/docs/prompts-codex#prompt-upgrader)
+to refresh it before use.
+
 > **Human setup**
 >
 > 1. Optional: paste a failing job URL on the first line of a new ChatGPT
