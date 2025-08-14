@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 213
-New quests in this release: 191
+Current quest count: 214
+New quests in this release: 192
 
 ### 3dprinting
 
@@ -87,6 +87,7 @@ New quests in this release: 191
 
 ### composting
 
+- composting/check-temperature
 - composting/start
 - composting/turn-pile
 
@@ -183,6 +184,7 @@ New quests in this release: 191
 - hydroponics/ph-test
 - hydroponics/plug-soak
 - hydroponics/pump-install
+- hydroponics/pump-prime
 - hydroponics/regrow-stevia
 - hydroponics/reservoir-refresh
 - hydroponics/root-rinse
