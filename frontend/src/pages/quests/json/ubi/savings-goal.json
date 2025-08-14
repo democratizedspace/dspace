@@ -1,0 +1,55 @@
+{
+    "id": "ubi/savings-goal",
+    "title": "Start a Savings Jar",
+    "description": "Set aside some dUSD for future plans.",
+    "image": "/assets/quests/basicincome.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You're collecting dUSD regularly. Want to stash a bit away for a rainy day?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "decide",
+                    "text": "Sure, let's save."
+                }
+            ]
+        },
+        {
+            "id": "decide",
+            "text": "Saving helps you reach bigger goals. Set aside at least 10 dUSD now.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "deposit",
+                    "text": "Deposit 10 dUSD.",
+                    "requiresItems": [
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 10
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "basic-income",
+                    "text": "Need to claim more first."
+                }
+            ]
+        },
+        {
+            "id": "deposit",
+            "text": "Nice! Keep adding to that jar and watch it grow.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All saved up for now."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["ubi/first-payment"]
+}
