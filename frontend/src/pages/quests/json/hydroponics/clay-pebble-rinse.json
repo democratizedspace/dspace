@@ -1,0 +1,50 @@
+{
+    "id": "hydroponics/clay-pebble-rinse",
+    "title": "Rinse Clay Pebbles",
+    "description": "Flush dust from clay media before loading net cups.",
+    "image": "/assets/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "New clay pebbles are dusty. A rinse keeps roots clean.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "How do I rinse them?"
+                }
+            ]
+        },
+        {
+            "id": "rinse",
+            "text": "Pour the pebbles into a bucket of dechlorinated water and swirl until clear.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prepare rinse water"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pebbles are rinsed",
+                    "requiresItems": [{ "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice. Clean media keeps the system running smooth.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to planting."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/tub-scrub"]
+}
