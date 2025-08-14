@@ -1,14 +1,14 @@
 {
     "id": "electronics/continuity-test",
     "title": "Check USB cable continuity",
-    "description": "Check an unplugged USB cable with a digital multimeter's continuity mode. Wear safety goggles.",
+    "description": "Verify an unplugged USB cable with a digital multimeter in continuity mode while wearing safety goggles.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Unplug both ends and inspect the USB cable for cuts or frays. Put on safety goggles. Lay the cable on a dry, non-conductive surface and gather a digital multimeter and wire cutters.",
+            "text": "Disconnect both ends and inspect the USB cable for cuts or frays. Put on safety goggles, then place the cable on a dry, non-conductive surface alongside a digital multimeter and wire cutters.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "probe",
-            "text": "Set the multimeter to continuity. Touch a probe to matching pins at each end, keeping fingers behind the guards and avoiding other pins.",
+            "text": "Set the multimeter to continuity mode. Touch a probe to matching pins at each end, keeping fingers behind the guards and avoiding other contacts.",
             "options": [
                 {
                     "type": "process",
@@ -41,15 +41,15 @@
         },
         {
             "id": "finish",
-            "text": "Power off the meter, coil the cable loosely, and store it dry. If any conductor fails, cut the cable into short pieces with wire cutters before recycling. Remove your goggles.",
+            "text": "Switch off the meter, coil the cable loosely, and store it dry. If a conductor fails, snip the cable into short pieces with wire cutters before recycling. Remove your goggles.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [],
     "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
-        "passes": 3,
-        "score": 90,
+        "passes": 4,
+        "score": 95,
         "emoji": "💯",
         "history": [
             {
@@ -66,6 +66,11 @@
                 "task": "codex-hardening-2025-08-12",
                 "date": "2025-08-12",
                 "score": 90
+            },
+            {
+                "task": "codex-hardening-2025-08-14",
+                "date": "2025-08-14",
+                "score": 95
             }
         ]
     }
