@@ -17,7 +17,8 @@ function listMissingImages(
     imagePaths.forEach((img) => {
         // Strip query strings or hash fragments so existence checks aren't fooled
         const base = img.split(/[?#]/)[0];
-        if (/^data:/i.test(base) || /^(?:https?:)?\/\//i.test(base)) {
+        // Skip absolute URLs (http, https, data, file, etc.) and protocol-relative sources
+        if (/^[a-z][a-z+.-]*:/i.test(base) || base.startsWith('//')) {
             return;
         }
         const rel = base.startsWith('/') ? base.slice(1) : base;

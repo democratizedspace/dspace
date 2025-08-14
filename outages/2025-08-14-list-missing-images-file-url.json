@@ -1,0 +1,11 @@
+{
+  "id": "2025-08-14-list-missing-images-file-url",
+  "date": "2025-08-14",
+  "component": "scripts",
+  "rootCause": "listMissingImages flagged file:// URLs as missing files",
+  "resolution": "skip non-http(s) URL schemes when checking image paths",
+  "references": [
+    "scripts/utils/fs-checks.js",
+    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md#lessons-learned"
+  ]
+}

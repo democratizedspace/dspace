@@ -29,6 +29,12 @@ describe('listMissingImages', () => {
     expect(missing).toEqual([]);
   });
 
+  test('ignores file URLs', () => {
+    const images = ['file:///tmp/remote.png'];
+    const missing = listMissingImages(images);
+    expect(missing).toEqual([]);
+  });
+
   test('resolves percent-encoded paths', () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'images-'));
     try {
