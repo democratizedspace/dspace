@@ -89,8 +89,8 @@ from `frontend/src/pages/docs/md/changelog/20250901.md` that is either `[ ]` or
 `[x]` without 💯 (including those marked with ✅). Implement it fully, completing
 any sub-tasks. Provide all code, tests and documentation required. Follow
 `AGENTS.md` and ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm test` all pass before committing. If Playwright browsers are missing
-run `npx playwright install chromium` or use `SKIP_E2E=1 npm test`.
+and `npm run test:ci` all pass before committing. If Playwright browsers are
+missing run `npx playwright install chromium` or use `SKIP_E2E=1 npm run test:ci`.
 
 USER:
 1. Follow the steps above.
@@ -114,7 +114,7 @@ dedicated to evolving the prompt guides themselves, see the
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
-and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`
+and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
 and `npm run test:ci` pass before committing.
 
 USER:
@@ -126,6 +126,29 @@ USER:
 
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.
+```
+
+## Prompt Upgrader
+
+Use this meta prompt when the Codex templates themselves need refreshing. It
+keeps our guidance current—the machine that builds the machine. A standalone
+copy lives at [`prompts-codex-upgrader.md`](/docs/prompts-codex-upgrader).
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing
+   cross-links.
+2. Update prompt templates, including this file, to reflect current practices.
+3. Propagate related changes across docs.
+4. Run the checks above.
+
+OUTPUT:
+A pull request refreshing the Codex prompt docs with passing checks.
 ```
 
 ## Outage Prompt
