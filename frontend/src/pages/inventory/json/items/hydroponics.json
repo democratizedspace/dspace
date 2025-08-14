@@ -295,6 +295,20 @@
         }
     },
     {
+        "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+        "name": "50 mL measuring syringe",
+        "description": "Reusable 50 mL plastic syringe with clear markings for precise nutrient dosing.",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "price": "2 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "71655665-4a59-41f4-9084-dad4d976df91",
         "name": "EC meter",
         "description": "Handheld EC meter (0–2000 ppm) for monitoring hydroponic nutrient strength.",
