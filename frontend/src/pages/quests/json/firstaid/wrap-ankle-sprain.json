@@ -1,0 +1,77 @@
+{
+    "id": "firstaid/wrap-ankle-sprain",
+    "title": "Wrap a Sprained Ankle",
+    "description": "Stabilize a minor ankle sprain with an elastic bandage.",
+    "image": "/assets/rescue.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Twisted your ankle? Let's wrap it to reduce swelling. Sit and keep the foot elevated.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Okay, what do I need?"
+                }
+            ]
+        },
+        {
+            "id": "gather",
+            "text": "Wash your hands, then slip on nitrile gloves and unroll the elastic bandage.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Hands are clean",
+                    "goto": "wrap"
+                }
+            ]
+        },
+        {
+            "id": "wrap",
+            "text": "Starting at the ball of the foot, wrap the bandage around the arch, then figure-eight around the ankle. Maintain snug pressure without cutting circulation.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wrap-ankle-sprain",
+                    "text": "Wrap the ankle"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bandage snug and foot elevated",
+                    "requiresItems": [
+                        {
+                            "id": "31b521d2-d0d9-43bf-a7a1-f8d6195fe6d4",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Keep the ankle elevated and rest. Seek medical care if pain or swelling worsens.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/wound-care"],
+    "hardening": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

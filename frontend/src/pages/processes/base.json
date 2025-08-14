@@ -1863,6 +1863,18 @@
         "duration": "5m"
     },
     {
+        "id": "wrap-ankle-sprain",
+        "title": "Wrap a sprained ankle with an elastic bandage",
+        "image": "/assets/rescue.jpg",
+        "requireItems": [
+            { "id": "31b521d2-d0d9-43bf-a7a1-f8d6195fe6d4", "count": 1 },
+            { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m"
+    },
+    {
         "id": "practice-cpr",
         "title": "Practice 30:2 CPR on a training manikin",
         "requireItems": [

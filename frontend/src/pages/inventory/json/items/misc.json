@@ -1073,6 +1073,13 @@
         "price": "0.50 dUSD"
     },
     {
+        "id": "31b521d2-d0d9-43bf-a7a1-f8d6195fe6d4",
+        "name": "elastic bandage",
+        "description": "5 cm wide stretch wrap for stabilizing sprains.",
+        "image": "/assets/rescue.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
         "name": "biohazard waste bag",
         "description": "1 L red bag for used bandages and gloves; tie shut to contain contaminated waste.",
