@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 210
-New quests in this release: 188
+Current quest count: 214
+New quests in this release: 192
 
 ### 3dprinting
 
@@ -58,6 +58,7 @@ New quests in this release: 188
 - astronomy/meteor-shower
 - astronomy/north-star
 - astronomy/observe-moon
+- astronomy/open-cluster
 - astronomy/orion-nebula
 - astronomy/planetary-alignment
 - astronomy/satellite-pass

@@ -1,0 +1,54 @@
+{
+    "id": "astronomy/open-cluster",
+    "title": "Observe the Pleiades",
+    "description": "Find and log the Pleiades star cluster using your planisphere and red light.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to track the shimmering Pleiades tonight?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "locate",
+                    "text": "Show me where to look"
+                }
+            ]
+        },
+        {
+            "id": "locate",
+            "text": "Use your planisphere and red flashlight to spot the cluster near Taurus, then record it in your mission logbook.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Consult the star chart"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logged the Pleiades!",
+                    "requiresItems": [
+                        { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 },
+                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! The Pleiades sparkle, and your observation is in the log.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait for the next target"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/light-pollution"]
+}
