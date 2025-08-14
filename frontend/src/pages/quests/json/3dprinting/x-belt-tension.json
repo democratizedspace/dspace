@@ -1,0 +1,65 @@
+{
+    "id": "3dprinting/x-belt-tension",
+    "title": "Tighten the X-axis Belt",
+    "description": "Keep your prints sharp by safely tightening a loose X-axis belt.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Noticing layer shifts? Let's dial in that X-axis belt tension.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "tension",
+                    "text": "Show me how."
+                }
+            ]
+        },
+        {
+            "id": "tension",
+            "text": "Power off the printer, loosen the belt clamp, pull the belt snug, and retighten. Keep fingers clear of sharp edges.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "tighten-x-belt",
+                    "text": "Walk me through each step."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Belt tightened and moving smoothly.",
+                    "requiresItems": [
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Your printer should track cleanly along the X-axis now.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Time to print!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinter/start"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-10-15",
+                "date": "2025-10-15",
+                "score": 60
+            }
+        ]
+    }
+}
