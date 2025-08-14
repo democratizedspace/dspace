@@ -71,4 +71,13 @@ describe('new quests list', () => {
     const docCount = Number(match[1]);
     expect(docCount).toBe(questFiles.length);
   });
+
+  it('syncs root docs copy', () => {
+    const rootDoc = fs.readFileSync(
+      path.join(__dirname, '../docs/new-quests.md'),
+      'utf8'
+    );
+    const frontendDoc = fs.readFileSync(listPath, 'utf8');
+    expect(rootDoc).toBe(frontendDoc);
+  });
 });

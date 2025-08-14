@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-14-new-quests-doc-desync",
+  "date": "2025-08-14",
+  "component": "docs",
+  "rootCause": "New quest files were added but new-quests markdown wasn't regenerated, causing stale counts.",
+  "resolution": "Updated update-new-quests.js to refresh docs/new-quests.md and added a test to keep copies in sync.",
+  "references": ["tests/newQuestsList.test.ts"]
+}
