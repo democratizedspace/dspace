@@ -1,0 +1,71 @@
+{
+    "id": "geothermal/purge-loop-air",
+    "title": "Purge Air from Ground Loop",
+    "description": "Use a submersible pump to flush out trapped bubbles from your geothermal loop.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Air pockets hurt heat transfer. Want to push them out?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "What do I need?"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "A small submersible pump will circulate water and purge bubbles.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Take this pump."
+                },
+                {
+                    "type": "goto",
+                    "goto": "purge",
+                    "requiresItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I have a pump ready."
+                }
+            ]
+        },
+        {
+            "id": "purge",
+            "text": "Connect the pump between inlet and outlet and run water until no bubbles remain.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Loop runs clear."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your ground loop can move heat efficiently again.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to monitoring."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/survey-ground-temperature"]
+}
