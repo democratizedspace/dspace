@@ -32,16 +32,15 @@ content rules see the [Item Development Guidelines](/docs/item-guidelines).
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && \
-        npm run test:ci && npm run itemValidation && \
-        npm run test:ci -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && npm run test:ci && \
+        npm run itemValidation && npm run test:ci -- itemQuality"
         ```
 
 See the [Codex CLI repository][codex-cli] for more flags.
 
 ---
 
-## 2 Prompt ingredients
+## 2. Prompt ingredients
 
 -   **Goal sentence**: Gives the agent a north star (“Add price to `white PLA filament`”).
 -   **Files to touch**: Limits search space → faster & cheaper.
@@ -54,7 +53,7 @@ See the [Codex CLI repository][codex-cli] for more flags.
     -   `npm run itemValidation`
     -   `npm run test:ci -- itemQuality` pass
 
-## 3 Reusable template
+## 3. Reusable template
 
 ```text
 You are working in democratizedspace/dspace.

@@ -1,7 +1,7 @@
+electronics: 20 quests, 1671 lines
 energy: 20 quests, 1392 lines
 hydroponics: 20 quests, 1521 lines
-electronics: 18 quests, 1556 lines
-astronomy: 17 quests, 980 lines
+astronomy: 18 quests, 1018 lines
 aquaria: 15 quests, 991 lines
 devops: 14 quests, 877 lines
 programming: 13 quests, 631 lines
@@ -9,11 +9,11 @@ programming: 13 quests, 631 lines
 chemistry: 10 quests, 538 lines
 geothermal: 10 quests, 534 lines
 woodworking: 10 quests, 772 lines
-robotics: 9 quests, 509 lines
+robotics: 9 quests, 514 lines
 firstaid: 8 quests, 565 lines
 rocketry: 8 quests, 737 lines
 completionist: 5 quests, 263 lines
 welcome: 5 quests, 375 lines
 ubi: 3 quests, 250 lines
-composting: 2 quests, 143 lines
+composting: 2 quests, 144 lines
 sysadmin: 2 quests, 102 lines

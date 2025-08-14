@@ -1553,6 +1553,24 @@
         "duration": "5m"
     },
     {
+        "id": "measure-solar-panel-voltage",
+        "title": "Measure a portable solar panel's open-circuit voltage in direct sun",
+        "image": "/assets/solar_setup_small.jpg",
+        "requireItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
         "id": "measure-resistance",
         "title": "Measure a 220 Ω resistor with a digital multimeter",
         "image": "/assets/launch_controller.jpg",
@@ -2852,6 +2870,20 @@
         "duration": "2m"
     },
     {
+        "id": "measure-compost-temperature",
+        "title": "Check core temperature of a compost pile with a compost thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "tin-soldering-iron-tip",
         "title": "Heat the soldering iron and melt solder on the tip while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",
@@ -2911,5 +2943,18 @@
                 }
             ]
         }
+    },
+    {
+        "id": "assemble-servo-arm",
+        "title": "Bolt a servo motor to a base and attach a lightweight arm",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c", "count": 1 },
+            { "id": "8299ac3f-c232-46d4-a007-2ad86ec70361", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "15m",
+        "hardening": { "passes": 0, "score": 0, "emoji": "🛠️", "history": [] }
     }
 ]
