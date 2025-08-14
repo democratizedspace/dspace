@@ -2600,6 +2600,18 @@
         "duration": "10m"
     },
     {
+        "id": "measure-aquarium-ammonia",
+        "title": "Test aquarium water for ammonia using a liquid reagent kit",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
+            { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
         "id": "stop-nosebleed",
         "title": "Use gloves, gauze, and antiseptic from a first aid kit to control a minor nosebleed",
         "image": "/assets/rescue.jpg",
