@@ -61,6 +61,7 @@ New quests in this release: 180
 - astronomy/satellite-pass
 - astronomy/saturn-rings
 - astronomy/star-trails
+- astronomy/venus-phases
 
 ### chemistry
 
