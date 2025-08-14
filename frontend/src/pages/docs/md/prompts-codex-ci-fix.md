@@ -7,7 +7,8 @@ slug: 'prompts-codex-ci-fix'
 
 Use this drop-in snippet whenever a GitHub Actions run for
 **democratizedspace/dspace** fails. It guides Codex to diagnose the failure and
-return a pull request that keeps the main branch green.
+return a pull request that keeps the main branch green. To evolve the prompt
+docs, see the [Codex meta prompt](/docs/prompts-codex-meta).
 
 > **Human setup**
 >

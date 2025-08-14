@@ -107,19 +107,22 @@ completed task and test results in the PR body.
 
 ## Upgrade Prompt
 
-Use this prompt to refine DSPACE's own prompt documentation.
+Use this prompt to refine DSPACE's own prompt documentation. For a template
+dedicated to evolving the prompt guides themselves, see the
+[Codex meta prompt](/docs/prompts-codex-meta).
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
-and `README.md`. Ensure `npm run lint`, `npm run type-check` and `npm run build`
-pass before committing.
+and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`
+and `npm run test:ci` pass before committing.
 
 USER:
 1. Pick one or more prompt docs under `frontend/src/pages/docs/md/` (for example,
    `prompts-items.md`).
 2. Fix outdated instructions, links or formatting.
-3. Run the checks above.
+3. If you add a new prompt, link it from `prompts-codex.md` and the docs index.
+4. Run the checks above.
 
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.
