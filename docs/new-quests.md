@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 202
-New quests in this release: 180
+Current quest count: 205
+New quests in this release: 183
 
 ### 3dprinting
 
@@ -61,6 +61,7 @@ New quests in this release: 180
 - astronomy/satellite-pass
 - astronomy/saturn-rings
 - astronomy/star-trails
+- astronomy/summer-triangle
 - astronomy/venus-phases
 
 ### chemistry

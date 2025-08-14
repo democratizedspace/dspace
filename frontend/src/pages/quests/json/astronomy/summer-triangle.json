@@ -1,0 +1,50 @@
+{
+    "id": "astronomy/summer-triangle",
+    "title": "Find the Summer Triangle",
+    "description": "Use a star chart to spot Vega, Deneb, and Altair forming the Summer Triangle.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Summer nights show three stars forming a triangle overhead. Let's find them.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "locate",
+                    "text": "Show me where to look."
+                }
+            ]
+        },
+        {
+            "id": "locate",
+            "text": "Face east after dusk. Spot Vega, Deneb, Altair. Keep optics from the Sun.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Charting the trio."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Triangle spotted!",
+                    "requiresItems": [{ "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! The Summer Triangle guides constellations and aids star hopping.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll keep exploring."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/constellations"]
+}
