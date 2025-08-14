@@ -10,6 +10,12 @@ Run the benchmark with:
 npm run db:benchmark
 ```
 
+Use the `--count` option to customize how many records are inserted:
+
+```bash
+npm run db:benchmark -- --count 200
+```
+
 The script inserts and reads sample records, printing JSON metrics like:
 
 ```json

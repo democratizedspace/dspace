@@ -3,6 +3,20 @@
  */
 import 'fake-indexeddb/auto';
 import { runDbBenchmark, DEFAULT_BENCHMARK_COUNT } from '../src/utils/dbBenchmark.js';
+import { parseCountArg } from '../scripts/db-benchmark.js';
+
+function resetDB() {
+    return new Promise((resolve, reject) => {
+        const req = indexedDB.deleteDatabase('CustomContent');
+        req.onsuccess = () => resolve();
+        req.onerror = () => reject(req.error);
+        req.onblocked = () => resolve();
+    });
+}
+
+beforeEach(async () => {
+    await resetDB();
+});
 
 describe('runDbBenchmark', () => {
     test('returns timing metrics and counts', async () => {
@@ -25,5 +39,12 @@ describe('runDbBenchmark', () => {
 
     test('exports default count constant', () => {
         expect(DEFAULT_BENCHMARK_COUNT).toBe(50);
+    });
+
+    test('parseCountArg extracts numeric value', () => {
+        expect(parseCountArg(['--count', '5'])).toBe(5);
+        expect(parseCountArg(['-c', '3'])).toBe(3);
+        expect(parseCountArg(['--count=7'])).toBe(7);
+        expect(parseCountArg([])).toBeUndefined();
     });
 });

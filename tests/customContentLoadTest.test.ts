@@ -4,6 +4,7 @@ import {
   runCustomContentLoadTest,
   DEFAULT_LOAD_TEST_COUNT,
 } from '../frontend/src/utils/customContentLoadTest.js';
+import { parseCountArg } from '../frontend/scripts/custom-content-load-test.js';
 
 function resetDB() {
   return new Promise<void>((resolve, reject) => {
@@ -33,5 +34,12 @@ describe('runCustomContentLoadTest', () => {
     expect(result.itemCount).toBe(DEFAULT_LOAD_TEST_COUNT);
     expect(result.processCount).toBe(DEFAULT_LOAD_TEST_COUNT);
     expect(result.questCount).toBe(DEFAULT_LOAD_TEST_COUNT);
+  });
+
+  test('parseCountArg extracts numeric value', () => {
+    expect(parseCountArg(['--count', '7'])).toBe(7);
+    expect(parseCountArg(['-c', '9'])).toBe(9);
+    expect(parseCountArg(['--count=11'])).toBe(11);
+    expect(parseCountArg([])).toBeUndefined();
   });
 });

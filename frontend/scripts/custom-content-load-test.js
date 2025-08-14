@@ -3,18 +3,31 @@
 import 'fake-indexeddb/auto';
 import { runCustomContentLoadTest } from '../src/utils/customContentLoadTest.js';
 
-async function main() {
+export function parseCountArg(argv) {
+    for (let i = 0; i < argv.length; i++) {
+        if (argv[i] === '--count' || argv[i] === '-c') {
+            return Number.parseInt(argv[i + 1], 10);
+        }
+        if (argv[i].startsWith('--count=')) {
+            return Number.parseInt(argv[i].split('=')[1], 10);
+        }
+    }
+    return undefined;
+}
+
+async function main(argv = process.argv.slice(2)) {
     if (!global.window) {
         global.window = {};
     }
     global.window.indexedDB = indexedDB;
-    const result = await runCustomContentLoadTest();
+    const count = parseCountArg(argv);
+    const result = await runCustomContentLoadTest(count ? { count } : undefined);
     console.log(JSON.stringify(result, null, 2));
 }
 
 if (
     import.meta.url === `file://${process.argv[1]}` ||
-    process.argv[1].endsWith('custom-content-load-test.js')
+    process.argv[1]?.endsWith('custom-content-load-test.js')
 ) {
     main().catch((err) => {
         console.error(err);
