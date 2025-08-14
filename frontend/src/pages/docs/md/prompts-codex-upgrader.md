@@ -19,7 +19,11 @@ USER:
 2. Update prompt templates, including `prompts-codex.md`, to reflect current practices.
 3. Propagate related changes across docs.
 4. Run the checks above.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
+
+See also [Codex prompts](/docs/prompts-codex) and the [Codex meta prompt](/docs/prompts-codex-meta).

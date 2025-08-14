@@ -10,7 +10,7 @@ Use this drop-in snippet whenever a GitHub Actions run for
 return a pull request that keeps the main branch green. To evolve the prompt
 docs, see the [Codex meta prompt](/docs/prompts-codex-meta).
 
-If this prompt ever drifts, consult the [Prompt Upgrader](/docs/prompts-codex#prompt-upgrader)
+If this prompt ever drifts, consult the [Prompt Upgrader](/docs/prompts-codex-upgrader)
 to refresh it before use.
 
 > **Human setup**
@@ -43,12 +43,13 @@ CONTEXT:
   * Keep existing behaviour intact.
   * Follow `AGENTS.md` and project style.
   * Add or update tests proving the fix.
-  * Update documentation when necessary.
-  * After fixing, append a bullet to the "Lessons learned" section of
-    `frontend/src/pages/docs/md/prompts-codex-ci-fix.md` summarizing the cause
-    and remedy.
-  * Record the incident in `/outages/YYYY-MM-DD-<slug>.json` using
-    `outages/schema.json`.
+    * Update documentation when necessary.
+    * After fixing, append a bullet to the "Lessons learned" section of
+      `frontend/src/pages/docs/md/prompts-codex-ci-fix.md` summarizing the cause
+      and remedy.
+    * Record the incident in `/outages/YYYY-MM-DD-<slug>.json` using
+      `outages/schema.json`.
+    * Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 REQUEST:
 1. Explain in the pull-request body why the failure occurred (or would occur).
@@ -56,6 +57,7 @@ REQUEST:
 3. Create `outages/YYYY-MM-DD-<slug>.json` describing the incident.
 4. Push to a branch named `codex/ci-fix/<short-description>`.
 5. Open a pull request that leaves all CI checks green.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A GitHub pull request URL. Include a summary of the root cause and evidence that

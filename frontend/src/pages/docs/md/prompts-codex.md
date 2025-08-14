@@ -99,6 +99,8 @@ USER:
 3. Replace any remaining `✅` entries in the changelog with `💯` once they meet
    the robustness standard.
 4. Document new functionality as needed.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request implementing the chosen item with all tests green. Summarize the
@@ -123,6 +125,8 @@ USER:
 2. Fix outdated instructions, links or formatting.
 3. If you add a new prompt, link it from `prompts-codex.md` and the docs index.
 4. Run the checks above.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.
@@ -146,10 +150,21 @@ USER:
 2. Update prompt templates, including this file, to reflect current practices.
 3. Propagate related changes across docs.
 4. Run the checks above.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
+
+## Related prompt docs
+
+-   [Quest prompts](/docs/prompts-quests)
+-   [Item prompts](/docs/prompts-items)
+-   [Process prompts](/docs/prompts-processes)
+-   [CI-failure fix prompt](/docs/prompts-codex-ci-fix)
+-   [Codex meta prompt](/docs/prompts-codex-meta)
+-   [Prompt Upgrader](/docs/prompts-codex-upgrader)
 
 ## Outage Prompt
 
@@ -171,6 +186,8 @@ REQUEST:
 1. Apply the fix with appropriate tests.
 2. Commit the outage entry and related docs.
 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+4. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+5. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request referencing the new outage record and passing checks.
