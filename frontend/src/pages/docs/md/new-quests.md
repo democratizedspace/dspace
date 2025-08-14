@@ -25,6 +25,7 @@ New quests in this release: 183
 - 3dprinting/retraction-test
 - 3dprinting/spool-holder
 - 3dprinting/temperature-tower
+- 3dprinting/x-belt-tension
 
 ### aquaria
 
