@@ -2220,7 +2220,8 @@
     },
     {
         "id": "measure-calibration-cube",
-        "title": "Measure a 20 mm calibration cube with digital calipers and log results",
+        "title": "Measure 20 mm calibration cube with digital calipers; log dimensions in mission logbook using quill",
+        "image": "/assets/paperwork.jpg",
         "requireItems": [
             {
                 "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
@@ -2242,7 +2243,19 @@
                 "count": 1
             }
         ],
-        "duration": "2m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "swap-green-pla-filament",
