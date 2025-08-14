@@ -1,0 +1,53 @@
+{
+    "id": "hydroponics/temp-check",
+    "title": "Check Water Temperature",
+    "description": "Make sure the reservoir stays in the sweet spot.",
+    "image": "/assets/aquarium_thermometer.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Warm water stunts growth. Let's check the reservoir temp.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "On it."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Stick the strip thermometer to the tub and wait for a reading.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-aquarium-temperature",
+                    "text": "Measure temperature",
+                    "requiresItems": [
+                        { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
+                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading is 65–75°F"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Keep it in that range to avoid stressing the roots.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/nutrient-check"]
+}
