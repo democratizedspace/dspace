@@ -1,0 +1,12 @@
+{
+  "id": "spaced-item-price-lookup",
+  "date": "2025-08-15",
+  "component": "backend",
+  "rootCause": "approximateIrlPrice missed items when input used spaces or hyphens but ID lacked underscores",
+  "resolution": "added a fallback that removes underscores after normalizing input",
+  "references": [
+    "backend/approximateIrlPrice.ts",
+    "backend/approximateIrlPrice.test.ts",
+    "README.md"
+  ]
+}

@@ -18,7 +18,9 @@ describe('approximateIrlPrice', () => {
     expect(approximateIrlPrice('nonexistent')).toBeNull()
   })
 
-  it('ignores surrounding whitespace', () => {
-    expect(approximateIrlPrice(' 3d printer ')).toBe(350)
+  it('matches items whose canonical IDs lack underscores', () => {
+    expect(approximateIrlPrice('gold fish')).toBe(5)
+    expect(approximateIrlPrice('gold-fish')).toBe(5)
+    expect(approximateIrlPrice('gold_fish')).toBe(5)
   })
 })
