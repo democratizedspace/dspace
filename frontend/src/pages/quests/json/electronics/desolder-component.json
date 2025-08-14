@@ -35,8 +35,15 @@
         },
         {
             "id": "desolder",
-            "text": "Heat a joint, trigger the sucker, hit other lead, then wiggle the part free.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Component removed." }]
+            "text": "Heat a joint and use solder wick to absorb molten solder, then pull the lead free.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wick-solder-joint",
+                    "text": "Use solder wick to clear solder"
+                },
+                { "type": "goto", "goto": "finish", "text": "Component removed." }
+            ]
         },
         {
             "id": "finish",

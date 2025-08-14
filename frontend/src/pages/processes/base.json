@@ -2920,6 +2920,19 @@
         "duration": "2m"
     },
     {
+        "id": "wick-solder-joint",
+        "title": "Wick away solder from a PCB joint with a soldering iron",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+            { "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+        ],
+        "consumeItems": [{ "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03", "count": 0.05 }],
+        "createItems": [],
+        "duration": "3m"
+    },
+    {
         "id": "desolder-through-hole",
         "title": "Heat a through-hole joint and clear it with a spring-loaded pump while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",
