@@ -1,27 +1,49 @@
 {
     "id": "astronomy/observe-moon",
     "title": "Observe the Moon",
-    "description": "Nova encourages you to sketch lunar features as an introduction to observational astronomy.",
+    "description": "Use a basic telescope and mission logbook to safely sketch lunar features.",
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here! Before we engineer spacecraft, it's helpful to study the skies. Tonight let's observe the Moon together.",
+            "text": "Nova here! Grab telescope and logbook. Under dark skies we observe the Moon.",
             "options": [{ "type": "goto", "goto": "record", "text": "I'm ready" }]
         },
         {
             "id": "record",
-            "text": "Use a small telescope or binoculars and sketch the major craters you see. This design practice sharpens your eye for future missions.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Sketch completed" }]
+            "text": "Stabilize telescope and avoid the Sun. Sketch craters in your logbook.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Sketch completed",
+                    "requiresItems": [
+                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                    ]
+                }
+            ]
         },
         {
             "id": "finish",
-            "text": "Nice work! With regular observation you'll overcome many challenges when plotting real rocket trajectories.",
+            "text": "Nice work! Regular observation helps when plotting real rocket trajectories.",
             "options": [{ "type": "finish", "text": "Onward!" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": []
+    "requiresQuests": [],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-09-01",
+                "date": "2025-09-01",
+                "score": 60
+            }
+        ]
+    }
 }
