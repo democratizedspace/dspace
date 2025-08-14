@@ -1,0 +1,11 @@
+{
+  "id": "2025-08-14-new-quests-count-mismatch",
+  "date": "2025-08-14",
+  "component": "docs",
+  "rootCause": "new quests added but new-quests.md was outdated, so quest counts were wrong",
+  "resolution": "ran npm run new-quests:update and committed the updated new-quests.md",
+  "references": [
+    "frontend/src/pages/docs/md/new-quests.md",
+    "scripts/update-new-quests.js"
+  ]
+}
