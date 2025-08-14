@@ -1,0 +1,36 @@
+{
+    "id": "welcome/check-energy",
+    "title": "Check Your Energy",
+    "description": "Confirm your dWatt stash after running the smart plug.",
+    "image": "/assets/quests/howtodoquests.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Open the inventory and look at your energy items. Let's confirm the smart plug run paid off.",
+            "options": [{ "type": "goto", "goto": "verify", "text": "Checking energy" }]
+        },
+        {
+            "id": "verify",
+            "text": "Do you see at least 1000 dWatt? That spark will power future quests.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Energy confirmed",
+                    "requiresItems": [
+                        { "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 1000 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Keep stacking energy for upcoming projects.",
+            "options": [{ "type": "finish", "text": "Onward!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["welcome/smart-plug-test"]
+}
