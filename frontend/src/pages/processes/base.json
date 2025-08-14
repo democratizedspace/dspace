@@ -196,7 +196,7 @@
     },
     {
         "id": "bucket-water-dechlorinated",
-        "title": "Leave a 5 gal bucket of tap water uncovered for 48h so chlorine dissipates",
+        "title": "Leave a 5 gal bucket of chlorinated tap water uncovered for 48h so chlorine dissipates",
         "image": "/assets/bucket_water.jpg",
         "requireItems": [],
         "consumeItems": [
@@ -215,7 +215,7 @@
     },
     {
         "id": "condition-bucket-water",
-        "title": "Add 5 mL of water conditioner to a 5 gal bucket to neutralize chlorine",
+        "title": "Add 5 mL of water conditioner to a 5 gal bucket of chlorinated tap water",
         "image": "/assets/bucket_water.jpg",
         "requireItems": [
             {

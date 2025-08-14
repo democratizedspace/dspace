@@ -100,9 +100,21 @@
     {
         "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
         "name": "5 gallon bucket of tap water (chlorinated)",
-        "description": "A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics.",
+        "description": "19 L (5 gal) bucket filled with municipal tap water; contains chlorine so treat or let stand 48 h before hydroponic use.",
         "image": "/assets/bucket_water.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "8 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
