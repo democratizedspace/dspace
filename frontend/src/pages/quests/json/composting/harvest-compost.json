@@ -1,0 +1,47 @@
+{
+    "id": "composting/harvest-compost",
+    "title": "Harvest Finished Compost",
+    "description": "Sift mature compost to enrich your garden soil.",
+    "image": "/assets/bucket.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your bucket has been breaking down scraps for weeks. Let's see if it's ready to use.",
+            "options": [{ "type": "goto", "goto": "check", "text": "How do I tell?" }]
+        },
+        {
+            "id": "check",
+            "text": "Finished compost smells earthy and has cooled. Give it a stir and check the core before using it.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "turn-compost-bucket",
+                    "text": "Stir and check again."
+                },
+                {
+                    "type": "goto",
+                    "goto": "sift",
+                    "requiresItems": [
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
+                        { "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8", "count": 1 }
+                    ],
+                    "text": "It's cool and crumbly."
+                }
+            ]
+        },
+        {
+            "id": "sift",
+            "text": "Screen out larger bits so only fine compost remains for the garden.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "All sifted!" }]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Spread the rich compost and watch your plants thrive.",
+            "options": [{ "type": "finish", "text": "Time to plant." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["composting/turn-pile"]
+}
