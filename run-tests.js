@@ -21,37 +21,57 @@ const colors = {
     red: '\x1b[31m'
 };
 
-console.log(`${colors.bright}${colors.magenta}DSPACE Testing Suite${colors.reset}`);
-console.log(`${colors.cyan}Running comprehensive tests before PR submission...${colors.reset}\n`);
+function runTests(exec = execSync, platform = os.platform()) {
+    console.log(`${colors.bright}${colors.magenta}DSPACE Testing Suite${colors.reset}`);
+    console.log(
+        `${colors.cyan}Running comprehensive tests before PR submission...${colors.reset}\n`
+    );
 
-try {
-    console.log(`${colors.yellow}Running root unit tests...${colors.reset}`);
-    const rootOutput = execSync('npm run test:root', {
-        encoding: 'utf-8',
-        stdio: 'pipe'
-    });
-    process.stdout.write(rootOutput);
-    if (hasZeroTests(rootOutput)) {
-        console.warn(`${colors.yellow}Warning: no root tests were run.${colors.reset}`);
-    }
-
-    // Determine which script to run based on OS
-    if (os.platform() === 'win32') {
-        console.log(`${colors.yellow}Detected Windows OS, running PowerShell script...${colors.reset}`);
-        execSync('powershell -File .\\frontend\\scripts\\prepare-pr.ps1', {
-            stdio: 'inherit'
+    try {
+        console.log(`${colors.yellow}Running root unit tests...${colors.reset}`);
+        const rootOutput = exec('npm run test:root', {
+            encoding: 'utf-8',
+            stdio: 'pipe'
         });
-    } else {
-        console.log(`${colors.yellow}Detected Unix-like OS, running Bash script...${colors.reset}`);
-        execSync('bash ./frontend/scripts/prepare-pr.sh', {
-            stdio: 'inherit'
-        });
-    }
+        process.stdout.write(rootOutput);
+        if (hasZeroTests(rootOutput)) {
+            console.error(`${colors.red}Error: no root tests were run.${colors.reset}`);
+            return 1;
+        }
 
-    console.log(`\n${colors.bright}${colors.green}All tests completed successfully!${colors.reset}`);
-    process.exit(0);
-} catch (error) {
-    console.error(`\n${colors.bright}${colors.red}Tests failed with error:${colors.reset}`);
-    console.error(error.message);
-    process.exit(1);
-} 
+        // Determine which script to run based on OS
+        if (platform === 'win32') {
+            console.log(
+                `${colors.yellow}Detected Windows OS, running PowerShell script...${colors.reset}`
+            );
+            exec('powershell -File .\\frontend\\scripts\\prepare-pr.ps1', {
+                stdio: 'inherit'
+            });
+        } else {
+            console.log(
+                `${colors.yellow}Detected Unix-like OS, running Bash script...${colors.reset}`
+            );
+            exec('bash ./frontend/scripts/prepare-pr.sh', {
+                stdio: 'inherit'
+            });
+        }
+
+        console.log(
+            `\n${colors.bright}${colors.green}All tests completed successfully!${colors.reset}`
+        );
+        return 0;
+    } catch (error) {
+        console.error(
+            `\n${colors.bright}${colors.red}Tests failed with error:${colors.reset}`
+        );
+        console.error(error.message);
+        return 1;
+    }
+}
+
+if (require.main === module) {
+    const code = runTests();
+    process.exit(code);
+}
+
+module.exports = { runTests };
