@@ -102,6 +102,7 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     ignore `data:` and `//` URLs so coverage checks only test local assets.
 -   2025-08-14 – `new-quests.md` fell behind after new quests were added; run `npm run new-quests:update`
     and commit the refreshed file.
+-   2025-08-14 – `npm test` in `frontend` ran zero unit tests; add a minimal sanity test so CI verifies the frontend harness.
 -   2025-08-14 – E2E tests failed when Playwright browsers were missing; ensure `npx --prefix frontend`
     `playwright install --with-deps` runs before grouped tests.
 -   2025-08-14 – missing Jest `testMatch` in `frontend/package.json` let a coverage check fail; add a
