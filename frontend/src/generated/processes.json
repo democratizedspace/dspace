@@ -2793,7 +2793,8 @@
     },
     {
         "id": "swap-green-pla-filament",
-        "title": "Swap to green PLA filament on an entry-level FDM 3D printer",
+        "title": "Load 10 g of green PLA filament into an entry-level FDM printer while wearing safety goggles",
+        "image": "/assets/3dprinter.jpg",
         "requireItems": [
             {
                 "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -2811,7 +2812,19 @@
             }
         ],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "print-benchy",
