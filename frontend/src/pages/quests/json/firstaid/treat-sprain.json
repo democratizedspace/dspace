@@ -1,0 +1,79 @@
+{
+    "id": "firstaid/treat-sprain",
+    "title": "Treat a Sprained Ankle",
+    "description": "Rest, cool, compress, and elevate a sprained ankle to reduce swelling before seeking medical help.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ouch, that twist looked bad. Let's keep swelling down with RICE.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rest",
+                    "text": "What should I do first?"
+                }
+            ]
+        },
+        {
+            "id": "rest",
+            "text": "Sit and remove your shoe. Wash your hands before touching the injury.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Hands are clean",
+                    "goto": "ice"
+                }
+            ]
+        },
+        {
+            "id": "ice",
+            "text": "Wrap a cold pack in cloth and apply for 20 minutes to limit swelling.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "compress",
+                    "text": "Cold pack applied",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "compress",
+            "text": "Wrap with an elastic bandage, snug but not tight, to reduce swelling.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "elevate",
+                    "text": "Bandage in place"
+                }
+            ]
+        },
+        {
+            "id": "elevate",
+            "text": "Elevate the ankle above your heart. Rest and get medical care if pain persists.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll rest up"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": [],
+    "hardening": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "🛠️",
+        "history": []
+    }
+}
