@@ -107,7 +107,10 @@ completed task and test results in the PR body.
 
 ## Upgrade Prompt
 
-Use this prompt to refine DSPACE's own prompt documentation.
+Use this prompt to refine DSPACE's own prompt documentation. When the
+documentation itself needs broader improvements or new prompt types, pair this
+snippet with the [Meta-Upgrade Prompt](./prompts-codex-meta.md) so Codex can
+evolve the instructions further.
 
 ```text
 SYSTEM:
@@ -119,10 +122,36 @@ USER:
 1. Pick one or more prompt docs under `frontend/src/pages/docs/md/` (for example,
    `prompts-items.md`).
 2. Fix outdated instructions, links or formatting.
-3. Run the checks above.
+3. If the upgrade reveals gaps in our prompt catalog, add new docs using the
+   Meta-Upgrade Prompt.
+4. Run the checks above.
 
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.
+```
+
+## Meta-Upgrade Prompt
+
+Use this snippet when the upgrade prompt itself needs refinement or when new
+prompt categories should be introduced. It helps "build the machine that builds
+the machine" by guiding Codex to improve its own tooling.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`. Ensure `npm run lint`, `npm run type-check`, and `npm run build`
+pass before committing.
+
+USER:
+1. Locate prompt documentation in `frontend/src/pages/docs/md/` that requires a
+   new prompt type or structural overhaul.
+2. Add or revise files to clarify how future agents should upgrade DSPACE
+   prompts.
+3. Cross-link any new docs from `prompts-codex.md`.
+4. Run the checks above.
+
+OUTPUT:
+A pull request expanding the prompt toolkit with passing checks.
 ```
 
 ## Outage Prompt
