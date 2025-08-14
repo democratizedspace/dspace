@@ -1,15 +1,16 @@
 {
     "id": "astronomy/iss-flyover",
     "title": "Spot the ISS",
-    "description": "Use a tracker app on your smartphone and a basic telescope to watch the ISS pass overhead.",
+    "description": "Use a satellite-tracking app on your smartphone and a basic telescope to watch the International Space Station pass overhead and log the time in your mission logbook.",
     "hardening": {
-        "passes": 3,
-        "score": 90,
+        "passes": 4,
+        "score": 95,
         "emoji": "💯",
         "history": [
             { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
             { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 80 },
-            { "task": "codex-quest-refresh-2025-02-14", "date": "2025-02-14", "score": 90 }
+            { "task": "codex-quest-refresh-2025-02-14", "date": "2025-02-14", "score": 90 },
+            { "task": "codex-quest-upgrade-2025-08-14", "date": "2025-08-14", "score": 95 }
         ]
     },
     "image": "/assets/quests/solar.jpg",
@@ -18,7 +19,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The ISS crosses our sky a few times each week. Use your phone's tracker app to plan tonight's pass. Choose a clear spot away from traffic and keep the telescope capped until you're outside so it never points near the Sun.",
+            "text": "The ISS crosses the sky a few times each week. Use your smartphone's satellite-tracking app to plan tonight's pass, pick an open area away from traffic and bright lights, and keep the telescope capped indoors so it never points near the Sun.",
             "options": [
                 {
                     "type": "goto",
@@ -29,7 +30,7 @@
         },
         {
             "id": "observe",
-            "text": "Open a satellite-tracking app like Heavens-Above on your phone and allow location access to find tonight's pass. Mount your basic telescope on stable ground or a tripod, keep paths clear, and never aim it near the Sun or people.",
+            "text": "Open a satellite-tracking app such as Heavens-Above on your smartphone, allow location access, and note the predicted time in your mission logbook. Set your basic telescope on a stable tripod, keep paths clear, and never aim it near the Sun or at people.",
             "options": [
                 {
                     "type": "process",
@@ -41,10 +42,9 @@
                     "goto": "finish",
                     "text": "I saw it streak by!",
                     "requiresItems": [
-                        {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
-                            "count": 1
-                        }
+                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 },
+                        { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
                     ]
                 }
             ]
