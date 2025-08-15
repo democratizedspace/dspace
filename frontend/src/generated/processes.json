@@ -3762,6 +3762,30 @@
         }
     },
     {
+        "id": "assemble-servo-arm",
+        "title": "Bolt a servo motor to a base and attach a lightweight arm",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "check-flashlight-battery",
         "title": "Measure flashlight battery voltage with a digital multimeter",
         "image": "/assets/quests/basic_circuit.svg",
@@ -3826,22 +3850,26 @@
         }
     },
     {
-        "id": "assemble-servo-arm",
-        "title": "Bolt a servo motor to a base and attach a lightweight arm",
+        "id": "desolder-with-wick",
+        "title": "Remove solder from a PCB pad using solder wick",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
-                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
                 "count": 1
             },
             {
-                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
                 "count": 1
             }
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "15m",
+        "duration": "3m",
         "hardening": {
             "passes": 0,
             "score": 0,
