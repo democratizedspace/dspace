@@ -1,0 +1,50 @@
+{
+    "id": "programming/http-post",
+    "title": "Accept POST Data",
+    "description": "Update your server to handle POST requests and log JSON payloads.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your API serves data. Now let's accept data from clients.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "I'm ready"
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Modify your server to read JSON from POST requests to /submit and print it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "POST endpoint working!",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your service can now ingest data from clients.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Nice!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/json-api"]
+}
