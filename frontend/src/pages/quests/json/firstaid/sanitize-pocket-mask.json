@@ -1,0 +1,45 @@
+{
+    "id": "firstaid/sanitize-pocket-mask",
+    "title": "Sanitize Your CPR Pocket Mask",
+    "description": "Clean and disinfect your CPR mask so it's safe for the next emergency.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session.\nLet's sanitize it so it's ready for the next use.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "How do I clean it?"
+                }
+            ]
+        },
+        {
+            "id": "clean",
+            "text": "Wash the mask with warm soapy water, rinse and soak it in a 1:10 bleach solution for two minutes.\nLet it air dry completely before storing it in your first aid kit.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Mask is sanitized",
+                    "requiresItems": [{ "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "All clean! A sanitized mask protects both you and your patient during resuscitation.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Ready for emergencies"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/learn-cpr"]
+}
