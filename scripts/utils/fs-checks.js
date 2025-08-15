@@ -28,7 +28,13 @@ function listMissingImages(
             decoded = rel;
         }
         const full = path.join(publicDir, decoded);
-        if (!fs.existsSync(full)) {
+        const resolved = path.resolve(full);
+        const root = path.resolve(publicDir);
+        if (!resolved.startsWith(root + path.sep)) {
+            missing.push(img);
+            return;
+        }
+        if (!fs.existsSync(resolved)) {
             missing.push(img);
         }
     });

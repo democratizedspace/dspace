@@ -41,4 +41,11 @@ describe('listMissingImages', () => {
       fs.rmSync(tmp, { recursive: true, force: true });
     }
   });
+
+  test('treats path traversal outside public dir as missing', () => {
+    const publicDir = path.join(__dirname, '..', '..', 'frontend', 'public');
+    const images = ['..%2F..%2FREADME.md'];
+    const missing = listMissingImages(images, publicDir);
+    expect(missing).toEqual(images);
+  });
 });

@@ -1,0 +1,10 @@
+{
+  "id": "2025-08-15-list-missing-images-path-traversal",
+  "date": "2025-08-15",
+  "component": "scripts",
+  "rootCause": "listMissingImages accepted encoded '../' segments and treated files outside public dir as present",
+  "resolution": "resolve paths and ensure they stay within the public directory before existence checks",
+  "references": [
+    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md#lessons-learned"
+  ]
+}
