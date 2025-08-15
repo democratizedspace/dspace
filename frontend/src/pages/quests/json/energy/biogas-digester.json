@@ -1,0 +1,82 @@
+{
+    "id": "energy/biogas-digester",
+    "title": "Build a Biogas Digester",
+    "description": "Ferment kitchen scraps into methane for cooking.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Turn leftovers into fuel. Build a biogas digester. Wear gloves and vent air.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "I'm ready to build it"
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Use a sealed 20 L drum, fit pipes, and power the mixer with a 200 Wh pack.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I'll grab the battery pack"
+                },
+                {
+                    "type": "goto",
+                    "goto": "feed",
+                    "text": "Frame is assembled and wired",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "feed",
+            "text": "Add scraps and water, seal the drum, and keep flames away while it ferments.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "biogas-ferment-50Wh",
+                    "text": "Feed the digester and start fermentation"
+                },
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "Gas production started",
+                    "requiresItems": [
+                        {
+                            "id": "dc9c057e-2bd1-4bcc-b06c-2e18344ce3e5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "fin",
+            "text": "Nice work! Vent the gas safely and use it for a low flame on a rocket stove.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait to cook with it!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/solar-1kWh"]
+}
