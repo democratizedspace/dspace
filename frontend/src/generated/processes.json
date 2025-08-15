@@ -2260,18 +2260,27 @@
             {
                 "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
                 "count": 1
+            },
+            {
+                "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+                "count": 1
             }
         ],
         "createItems": [],
         "duration": "5m",
         "hardening": {
-            "passes": 1,
+            "passes": 2,
             "score": 65,
             "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
                     "date": "2025-08-06",
+                    "score": 65
+                },
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
                     "score": 65
                 }
             ]
