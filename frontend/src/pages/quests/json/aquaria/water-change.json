@@ -1,14 +1,14 @@
 {
     "id": "aquaria/water-change",
     "title": "Perform a partial water change",
-    "description": "Learn how to remove dirty water and refill your tank with conditioned water.",
+    "description": "Swap out dirty water for conditioned water to keep fish healthy.",
     "image": "/assets/quests/goldfish.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Regular water changes keep fish healthy. Gather a siphon, bucket, water conditioner, and a utility cart to haul the water, then remove about 25% of the water.",
+            "text": "Unplug gear. Grab gravel vacuum, 5 gal bucket, water conditioner and cart.",
             "options": [
                 {
                     "type": "goto",
@@ -25,7 +25,7 @@
         },
         {
             "id": "remove",
-            "text": "Use a siphon or gravel vacuum to gently drain water into a clean bucket while lifting debris. Keep the intake away from fish and stop after roughly a quarter of the volume is gone.",
+            "text": "Vacuum water into bucket. Keep intake clear of fish and cords. Stop at 25%.",
             "options": [
                 {
                     "type": "goto",
@@ -36,11 +36,11 @@
         },
         {
             "id": "refill",
-            "text": "Treat tap water with dechlorinator and match it to the tank's temperature before refilling. Pour slowly to avoid shocking fish.",
+            "text": "Fill bucket with tap water, add conditioner, warm within 2 °C. Pour slow.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Tank refilled and fish are happy!"
+                    "text": "Water's in, gear on, fish happy!"
                 }
             ]
         }
@@ -51,5 +51,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/guppy"]
+    "requiresQuests": ["aquaria/guppy"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-quest-refinement-2025-08-15", "date": "2025-08-15", "score": 60 }
+        ]
+    }
 }
