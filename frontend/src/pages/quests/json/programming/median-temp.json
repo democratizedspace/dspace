@@ -1,0 +1,50 @@
+{
+    "id": "programming/median-temp",
+    "title": "Compute Median Temperature",
+    "description": "Extend your script to report the median temperature from your log.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your average calculation is solid, but the median reveals outliers.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "I'll compute the median."
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Parse the temperature log and output the median value.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Median calculated!",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Your data analysis keeps getting sharper.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All done!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/avg-temp"]
+}
