@@ -10,12 +10,30 @@ run its own tests, and send you a ready‑made PR — but only if you give it a 
 file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
+For task‑specific templates see [Quest prompts](/docs/prompts-quests),
+[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
+[NPC prompts](/docs/prompts-npcs), and [Docs prompts](/docs/prompts-docs).
+
 > **TL;DR**
 >
 > 1. Scope the task to one or two files.
 > 2. Say **exactly** what output you expect (tests, docs, etc.).
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
+
+For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+
+---
+
+## Related prompt guides
+
+-   [Item Prompts](/docs/prompts-items)
+-   [Process Prompts](/docs/prompts-processes)
+-   [Quest Prompts](/docs/prompts-quests)
+-   [Docs Prompts](/docs/prompts-docs)
+-   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
+-   [Codex Meta Prompt](/docs/prompts-codex-meta)
+-   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
 
 ---
 
@@ -27,11 +45,11 @@ invoking Codex on DSPACE and should evolve alongside the project.
 | Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`    |
 | CI automation  | –                           | `codex exec --full-auto "run npm test"` |
 
-See the upstream CLI reference for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
-## 2 Prompt ingredients
+## 2. Prompt ingredients
 
 | Ingredient           | Why it matters                                                   |
 | -------------------- | ---------------------------------------------------------------- |
@@ -45,7 +63,7 @@ prompt‑level rules short and concrete.
 
 ---
 
-## 3 Reusable template
+## 3. Reusable template
 
 ```text
 You are working in democratizedspace/dspace.
@@ -60,6 +78,9 @@ REQUIREMENTS
 1. …
 2. …
 3. …
+4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+5. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT
 A pull request with the required changes and tests.
@@ -94,11 +115,13 @@ missing run `npx playwright install chromium` or use `SKIP_E2E=1 npm run test:ci
 
 USER:
 1. Follow the steps above.
-2. After verifying the implementation, mark the corresponding changelog line
+2. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+3. After verifying the implementation, mark the corresponding changelog line
    with `💯`, replacing any `✅` or other emoji.
-3. Replace any remaining `✅` entries in the changelog with `💯` once they meet
+4. Replace any remaining `✅` entries in the changelog with `💯` once they meet
    the robustness standard.
-4. Document new functionality as needed.
+5. Use an emoji-prefixed commit message.
+6. Document new functionality as needed.
 
 OUTPUT:
 A pull request implementing the chosen item with all tests green. Summarize the
@@ -130,9 +153,9 @@ A pull request with the improved prompt doc and passing checks.
 
 ## Prompt Upgrader
 
-Use this meta prompt when the Codex templates themselves need refreshing. It
-keeps our guidance current—the machine that builds the machine. A standalone
-copy lives at [`prompts-codex-upgrader.md`](/docs/prompts-codex-upgrader).
+Use this meta prompt when the Codex templates need refreshing. It keeps our
+guidance current—the machine that builds the machine. See the standalone
+[Codex Prompt Upgrader](/docs/prompts-codex-upgrader) for the full template.
 
 ```text
 SYSTEM:
@@ -144,34 +167,16 @@ USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing
    cross-links.
 2. Update prompt templates, including this file, to reflect current practices.
-3. Propagate related changes across docs.
-4. Run the checks above.
+3. Link new prompt files from `prompts-codex.md` and the docs index.
+4. Propagate related changes across docs.
+5. Run the checks above.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
 
-## Outage Prompt
+## Outage prompt
 
-Use this snippet when fixing an incident so knowledge lands in the outage catalog.
+See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.
 
-```text
-SYSTEM:
-You are an automated contributor for the DSPACE repository.
-
-PURPOSE:
-Diagnose an outage, implement a fix, and document it.
-
-CONTEXT:
-- Review existing records under `/outages` for similar failures.
-- After resolving, add `outages/YYYY-MM-DD-<slug>.json` matching `outages/schema.json`.
-- Keep behaviour intact, add tests, and update documentation.
-
-REQUEST:
-1. Apply the fix with appropriate tests.
-2. Commit the outage entry and related docs.
-3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-
-OUTPUT:
-A pull request referencing the new outage record and passing checks.
-```
+[openai-cli]: https://github.com/openai/openai-cli

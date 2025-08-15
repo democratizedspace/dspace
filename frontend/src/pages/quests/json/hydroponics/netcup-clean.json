@@ -19,7 +19,7 @@
         },
         {
             "id": "soak",
-            "text": "Fill a bucket with dechlorinated water and add a splash of peroxide.",
+            "text": "Fill a bucket with dechlorinated water and mix in 5 mL of 3% hydrogen peroxide.",
             "options": [
                 {
                     "type": "process",
@@ -30,7 +30,10 @@
                     "type": "goto",
                     "goto": "scrub",
                     "text": "Water is ready",
-                    "requiresItems": [{ "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }]
+                    "requiresItems": [
+                        { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 },
+                        { "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3", "count": 1 }
+                    ]
                 }
             ]
         },
@@ -62,5 +65,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/tub-scrub"]
+    "requiresQuests": ["hydroponics/tub-scrub"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-15",
+                "date": "2025-08-15",
+                "score": 60
+            }
+        ]
+    }
 }

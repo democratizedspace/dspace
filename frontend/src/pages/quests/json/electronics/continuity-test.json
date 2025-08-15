@@ -1,14 +1,14 @@
 {
     "id": "electronics/continuity-test",
     "title": "Check USB cable continuity",
-    "description": "Verify an unplugged USB cable with a digital multimeter in continuity mode while wearing safety goggles.",
+    "description": "Use a digital multimeter to verify an unplugged USB cable in continuity mode while wearing safety goggles.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Disconnect both ends and inspect the USB cable for cuts or frays. Put on safety goggles, then place the cable on a dry, non-conductive surface alongside a digital multimeter and wire cutters.",
+            "text": "Ensure the USB cable is unplugged from all devices. Inspect the insulation for cuts or frays. Put on safety goggles and lay the cable, a digital multimeter, and wire cutters on a dry, non-conductive surface.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "probe",
-            "text": "Set the multimeter to continuity mode. Touch a probe to matching pins at each end, keeping fingers behind the guards and avoiding other contacts.",
+            "text": "Turn the multimeter to continuity mode. Touch one probe to a pin on one end and the other probe to the matching pin on the other end. Keep your fingers behind the guards and avoid touching other contacts.",
             "options": [
                 {
                     "type": "process",
@@ -41,15 +41,15 @@
         },
         {
             "id": "finish",
-            "text": "Switch off the meter, coil the cable loosely, and store it dry. If a conductor fails, snip the cable into short pieces with wire cutters before recycling. Remove your goggles.",
+            "text": "Switch off the meter. If every conductor passes, coil the cable loosely and store it dry. If a conductor fails, use wire cutters to snip the cable into short pieces before recycling. Remove your goggles and take this GFCI outlet tester for future wiring checks.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
-    "rewards": [],
+    "rewards": [{ "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481", "count": 1 }],
     "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
-        "passes": 4,
-        "score": 95,
+        "passes": 6,
+        "score": 97,
         "emoji": "💯",
         "history": [
             {
@@ -71,6 +71,16 @@
                 "task": "codex-hardening-2025-08-14",
                 "date": "2025-08-14",
                 "score": 95
+            },
+            {
+                "task": "codex-quest-hardening-2025-09-16",
+                "date": "2025-09-16",
+                "score": 95
+            },
+            {
+                "task": "codex-quest-hardening-2025-10-15",
+                "date": "2025-10-15",
+                "score": 97
             }
         ]
     }

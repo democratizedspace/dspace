@@ -29,7 +29,10 @@ const priceTable: Record<string, number> = {
  * spaces or hyphens to underscores so callers can pass identifiers like
  * `3D-Printer`, `3d printer`, or even ` 3d_printer `.
 */
-export function approximateIrlPrice(id: string): number | null {
+export function approximateIrlPrice(id: string | null | undefined): number | null {
+  if (typeof id !== 'string') {
+    return null;
+  }
   const normalized = id.trim().toLowerCase().replace(/[\s-]+/g, '_');
   return priceTable[normalized] ?? null;
 }

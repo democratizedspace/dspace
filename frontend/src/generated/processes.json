@@ -607,6 +607,7 @@
     {
         "id": "harvest-basil",
         "title": "Harvest your hydroponic basil plants",
+        "image": "/assets/basil_harvested.jpg",
         "requireItems": [],
         "consumeItems": [
             {
@@ -624,7 +625,13 @@
                 "count": 11
             }
         ],
-        "duration": "1m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "germinate-stevia",
@@ -1069,6 +1076,35 @@
             }
         ],
         "duration": "30s"
+    },
+    {
+        "id": "repair-model-rocket",
+        "title": "Glue cracked fins on a damaged model rocket using superglue",
+        "image": "/assets/rocket_damaged.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "launch-rocket-parachute",
@@ -2477,19 +2513,30 @@
     {
         "id": "plot-temperature-data",
         "title": "Plot logged temperature data using Python and Matplotlib",
-        "requireItems": [],
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m",
+        "duration": "10m",
         "hardening": {
-            "passes": 1,
-            "score": 65,
+            "passes": 2,
+            "score": 70,
             "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-05",
                     "date": "2025-08-05",
                     "score": 65
+                },
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 70
                 }
             ]
         }
@@ -2843,6 +2890,35 @@
         ],
         "createItems": [],
         "duration": "10m"
+    },
+    {
+        "id": "swap-white-pla-filament",
+        "title": "Swap to white PLA filament on an entry-level FDM 3D printer",
+        "image": "/assets/pla_white.jpg",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 10
+            }
+        ],
+        "createItems": [],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "print-benchy",
@@ -3773,6 +3849,10 @@
             {
                 "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
                 "count": 1
+            },
+            {
+                "id": "80d30825-a42b-4add-b715-322e1713952c",
+                "count": 1
             }
         ],
         "consumeItems": [],
@@ -3827,7 +3907,7 @@
     },
     {
         "id": "assemble-servo-arm",
-        "title": "Bolt a servo motor to a base and attach a lightweight arm",
+        "title": "Bolt a micro servo to a base and attach its plastic horn as an arm with a precision screwdriver set",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -3841,12 +3921,18 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "15m",
+        "duration": "10m",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-assemble-servo-arm-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 65
+                }
+            ]
         }
     }
 ]

@@ -1,0 +1,49 @@
+{
+    "id": "aquaria/log-water-parameters",
+    "title": "Log Water Parameters",
+    "description": "Record your aquarium's test results in a logbook to spot trends.",
+    "image": "/assets/paperwork.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You just tested the water. Let's record today's numbers so we can track the tank's health over time.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Open the logbook."
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Write the date and readings for ammonia, nitrite, nitrate and pH in your water test logbook.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-test-results",
+                    "text": "Record the results."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All readings logged.",
+                    "requiresItems": [
+                        { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
+                        { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 },
+                        { "id": "b8602362-2035-4f00-9376-f48d8668cf38", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great recordkeeping! Regular logs help catch issues early.",
+            "options": [{ "type": "finish", "text": "I'll keep logging." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["aquaria/water-testing"]
+}

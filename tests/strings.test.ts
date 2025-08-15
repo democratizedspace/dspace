@@ -22,4 +22,10 @@ describe('getDuration', () => {
   test('formats to two decimals with percent', () => {
     expect(getDuration(3)).toBe('3.00%');
   });
+
+  test('defaults to 0% for invalid numbers', () => {
+    expect(getDuration(NaN)).toBe('0.00%');
+    // undefined should be treated as 0 at runtime
+    expect(getDuration(undefined)).toBe('0.00%');
+  });
 });

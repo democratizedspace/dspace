@@ -9,7 +9,8 @@ Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR—but only if you give it a
 clear, file‑scoped prompt. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex) when working on processes. To keep the
-prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
+prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). If these
+templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 For fundamental design tips see the
 [Process Development Guidelines](/docs/process-guidelines).
 
@@ -19,6 +20,7 @@ For fundamental design tips see the
 > 2. Say exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
+> 4. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 
 ---
 
@@ -29,34 +31,35 @@ For fundamental design tips see the
     -   CLI: `codex "add process 3dprinting/solar-mount"`
 -   **Ask about process data**
     -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/generated/processes.json"`
+    -   CLI: `codex exec "explain frontend/src/pages/processes/base.json"`
 -   **Run process tests**
     -   Web: not supported yet.
     -   CLI:
         ```bash
         codex exec "npm run lint && npm run type-check && npm run build && \
-        npm run test:ci -- processQuality"
+        npm run test:ci && npm run test:ci -- processQuality && \
+        git diff --cached | ./scripts/scan-secrets.py"
         ```
 
-See the [Codex CLI repository][codex-cli] for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
-## 2 Prompt ingredients
+## 2. Prompt ingredients
 
 | Ingredient           | Why it matters                                                          |
 | -------------------- | ----------------------------------------------------------------------- |
 | **Goal sentence**    | Gives the agent a north star (“Add lettuce seed input to hydroponics”). |
 | **Files to touch**   | Limits search space → faster & cheaper.                                 |
 | **Constraints**      | Coding style, a11y, process schema rules.                               |
-| **Acceptance check** | e.g. “`npm run test:ci -- processQuality` passes”.                      |
+| **Acceptance check** | e.g. “`npm run test:ci` and `npm run test:ci -- processQuality` pass”.  |
 
-Codex merges those instructions with any `AGENTS.md` files it finds, so keep
+Codex merges these instructions with any `AGENTS.md` files in scope, so keep
 prompt‑level rules short and concrete.
 
 ---
 
-## 3 Reusable template
+## 3. Reusable template
 
 ```text
 You are working in democratizedspace/dspace.
@@ -73,7 +76,7 @@ REQUIREMENTS
 3. Ensure the process is referenced by at least one quest or item; create
    missing items or quest hooks as needed.
 4. Use only existing image assets; do not add new image files.
-5. Run `npm run lint`, `npm run type-check`, and `npm run build`.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Run `npm run test:ci -- processQuality` and fix any failures.
 7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 8. Update docs or items if needed.
@@ -92,7 +95,8 @@ You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/base.json` with corresponding
 hardening files in `frontend/src/pages/processes/hardening`. Ensure realistic
 steps, durations, item references, and passing checks (`npm run lint`,
-`npm run type-check`, `npm run build`, and `npm run test:ci -- processQuality`).
+`npm run type-check`, `npm run build`, `npm run test:ci`, and
+`npm run test:ci -- processQuality`).
 Verify the process links to existing quests or items, add missing registry
 entries if needed, reuse existing image assets, and scan for secrets with
 `git diff --cached | ./scripts/scan-secrets.py` before committing.
@@ -139,10 +143,10 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
-   `npm run test:ci -- processQuality`. Update docs or items if needed.
-6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-7. Use an emoji-prefixed commit message like `📝 : – refine process details`.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+6. Run `npm run test:ci -- processQuality`. Update docs or items if needed.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+8. Use an emoji-prefixed commit message like `📝 : – refine process details`.
 
 OUTPUT:
 A pull request with the refined process, updated hardening block and passing tests.
@@ -158,4 +162,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[codex-cli]: https://github.com/microsoft/Codex-CLI
+[openai-cli]: https://github.com/openai/openai-cli

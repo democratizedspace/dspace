@@ -91,10 +91,10 @@
             {#each unpinned as item}
                 {#if item.hideIfOwned}
                     {#if mounted}
-                        <button class="active" href={''}>{item.name}f</button>
+                        <button class="active" type="button">{item.name}</button>
                     {/if}
                 {:else if item.comingSoon === true}
-                    <button class="disabled" href={''}>{item.name}</button>
+                    <button class="disabled" type="button">{item.name}</button>
                 {:else}
                     <a href={item.href}>{item.name}</a>
                 {/if}

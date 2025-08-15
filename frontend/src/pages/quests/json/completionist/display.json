@@ -1,7 +1,7 @@
 {
     "id": "completionist/display",
     "title": "Show Off Your Trophy",
-    "description": "Give your Completionist Award a dedicated spot on the shelf.",
+    "description": "Give your Completionist Award II a dedicated spot on the shelf.",
     "image": "/assets/quests/completionist.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
