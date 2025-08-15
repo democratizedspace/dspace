@@ -46,7 +46,11 @@ Every item requires the following basic properties:
 
 Currently, the `ItemForm.svelte` component supports creating and editing items with the properties listed above. It uploads images, persists data to IndexedDB, and focuses on the fundamental aspects of items, with more advanced features planned for future updates.
 
-As you fill out the form, an `ItemPreview` component displays a live preview so you can confirm the details before submitting. The layout automatically adjusts on small screens so form fields expand to the full width for easier touch input. You can safely experiment with different values before saving—no data is written until you click **Create Item**.
+As you fill out the form, an `ItemPreview` component displays a live preview so you can
+confirm the details before submitting. The layout automatically adjusts on small screens
+so form fields expand to the full width for easier touch input, and action buttons stack
+vertically on narrow displays. You can safely experiment with different values before
+saving—no data is written until you click **Create Item**.
 
 The form provides inline validation messages if you attempt to submit without a name, description, or image, helping ensure items meet basic requirements before saving. Automated Playwright tests verify that the preview appears when entering text and that uploaded images render correctly. This ensures cross-browser compatibility of the custom item workflow.
 
