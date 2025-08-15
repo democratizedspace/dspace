@@ -5,9 +5,11 @@ slug: 'prompts-outages'
 
 # Outage prompts for the _dspace_ repo
 
-Codex is a sandboxed engineering agent that can open this repository and run its own tests.
-Use this guide when diagnosing an incident so the fix and a record land in the outage catalog.
-See the [Outage Catalog](/docs/outages) for schema details and prior incidents.
+Codex is a sandboxed engineering agent that can open this repository and run its own tests. Use
+this guide when diagnosing an incident so the fix and a record land in the outage catalog. Use it
+alongside [Codex Prompts](/docs/prompts-codex). To keep the prompt docs evolving, see the
+[Codex meta prompt](/docs/prompts-codex-meta). If these templates drift, refresh them with the
+[Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 
 > **TL;DR**
 >
@@ -15,7 +17,7 @@ See the [Outage Catalog](/docs/outages) for schema details and prior incidents.
 > 2. Add [`outages/YYYY-MM-DD-<slug>.json`][outage-dir]
 >    matching [`outages/schema.json`][outage-schema].
 > 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 4. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 ```text
 SYSTEM:
@@ -34,7 +36,7 @@ REQUEST:
 1. Apply the fix with appropriate tests.
 2. Commit the outage entry and related docs.
 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-4. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+4. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 
 OUTPUT:
 A pull request referencing the new outage record and passing checks.
