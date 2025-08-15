@@ -43,15 +43,21 @@ vi.mock('../../utils/gameState/processes.js', () => ({
     resumeProcess,
 }));
 
-test('pauses and resumes a process', async () => {
+test('pauses and resumes a process while showing remaining time', async () => {
     const { getByText } = render(Process, { processId: 'p1' });
+
+    await tick();
+    expect(getByText(/remaining/)).toBeTruthy();
 
     // pause the process
     await fireEvent.click(getByText('Pause'));
     expect(pauseProcess).toHaveBeenCalledWith('p1');
     await tick();
+    expect(getByText(/remaining/)).toBeTruthy();
 
     // resume the process
     await fireEvent.click(getByText('Resume'));
     expect(resumeProcess).toHaveBeenCalledWith('p1');
+    await tick();
+    expect(getByText(/remaining/)).toBeTruthy();
 });
