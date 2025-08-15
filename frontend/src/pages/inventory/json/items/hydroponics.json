@@ -377,15 +377,21 @@
     {
         "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
         "name": "hydrogen peroxide (3%)",
-        "description": "250 mL bottle of 3% hydrogen peroxide for sanitizing hydroponic equipment.",
+        "description": "250 mL amber bottle of 3% hydrogen peroxide for sanitizing hydroponic equipment; child-resistant cap.",
         "image": "/assets/hydroponics_nutrients.jpg",
         "price": "1.50 dUSD",
         "unit": "250 mL bottle",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-20",
+                    "date": "2025-08-20",
+                    "score": 60
+                }
+            ]
         }
     }
 ]
