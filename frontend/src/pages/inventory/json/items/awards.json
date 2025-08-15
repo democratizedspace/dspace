@@ -85,9 +85,21 @@
     {
         "id": "96e11500-a2ce-4531-a1b5-3a92c44fcb9d",
         "name": "Tree Hugger Award",
-        "description": "Awarded for converting dCarbon to dOffset.",
+        "description": "12 cm bamboo trophy laser-engraved with a tree; awarded for converting dCarbon to dOffset.",
         "image": "/assets/tree_hugger_award.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
@@ -100,7 +112,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
             ]
         }
     },
@@ -115,7 +131,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-15", "date": "2025-08-15", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 65
+                }
             ]
         }
     }
