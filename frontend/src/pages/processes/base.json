@@ -2065,10 +2065,16 @@
     {
         "id": "plot-temperature-data",
         "title": "Plot logged temperature data using Python and Matplotlib",
-        "requireItems": [],
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "10m"
     },
     {
         "id": "arduino-led-blink",
