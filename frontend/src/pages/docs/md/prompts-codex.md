@@ -45,7 +45,7 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 | Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`    |
 | CI automation  | –                           | `codex exec --full-auto "run npm test"` |
 
-See the upstream CLI reference for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
@@ -178,3 +178,5 @@ A pull request refreshing the Codex prompt docs with passing checks.
 ## Outage prompt
 
 See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.
+
+[openai-cli]: https://github.com/openai/openai-cli
