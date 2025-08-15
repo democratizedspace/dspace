@@ -47,7 +47,7 @@
         },
         {
             "id": "finish",
-            "text": "Ahhh, you're the best, adventurer! Have I ever told you that? You're the best! I give you this shiny liquid award!",
+            "text": "Ahhh, you're the best, adventurer! You're the best! I give you this Hydro Award!",
             "options": [
                 {
                     "type": "finish",

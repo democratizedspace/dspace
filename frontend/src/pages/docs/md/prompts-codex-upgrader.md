@@ -7,7 +7,8 @@ slug: 'prompts-codex-upgrader'
 
 Use this meta prompt when the Codex templates themselves need refreshing. It keeps our
 instructions current—the machine that builds the machine. See
-[Codex Prompts](/docs/prompts-codex) for the baseline templates.
+[Codex Prompts](/docs/prompts-codex) for the baseline templates and the
+[Codex Meta Prompt](/docs/prompts-codex-meta) for routine maintenance.
 
 ```text
 SYSTEM:
@@ -18,7 +19,8 @@ all pass before committing.
 USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing cross-links.
 2. Update prompt templates, including `prompts-codex.md`, to reflect current practices.
-4. Link new prompt files from `prompts-codex.md` and the docs index.
+3. Link new prompt files from `prompts-codex.md` and the docs index.
+4. Propagate related changes across docs.
 5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 6. Run the checks above.
 

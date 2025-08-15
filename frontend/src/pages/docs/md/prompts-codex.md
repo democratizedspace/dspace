@@ -11,8 +11,8 @@ file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
-[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes), and
-[NPC prompts](/docs/prompts-npcs).
+[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
+[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages), and [Docs prompts](/docs/prompts-docs).
 
 > **TL;DR**
 >
@@ -21,7 +21,8 @@ For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
 
-For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+For failing GitHub Actions runs, use the dedicated
+[CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 ---
 
@@ -30,32 +31,36 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 -   [Item Prompts](/docs/prompts-items)
 -   [Process Prompts](/docs/prompts-processes)
 -   [Quest Prompts](/docs/prompts-quests)
+-   [NPC Prompts](/docs/prompts-npcs)
+-   [Outage Prompts](/docs/prompts-outages)
+-   [Docs Prompts](/docs/prompts-docs)
 -   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
+-   [Outage Prompts](/docs/prompts-outages)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
 -   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1. Quick start (Web vs CLI)
 
-| Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                               |
-| -------------- | --------------------------- | --------------------------------------- |
-| Ad‑hoc feature | “Code” button, attach repo  | `codex "add buy‑button to ProcessView"` |
-| Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`    |
-| CI automation  | –                           | `codex exec --full-auto "run npm test"` |
+| Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                                  |
+| -------------- | --------------------------- | ------------------------------------------ |
+| Ad‑hoc feature | “Code” button, attach repo  | `codex "add buy‑button to ProcessView"`    |
+| Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`       |
+| CI automation  | –                           | `codex exec --full-auto "npm run test:ci"` |
 
-See the upstream CLI reference for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
 ## 2. Prompt ingredients
 
-| Ingredient           | Why it matters                                                   |
-| -------------------- | ---------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”). |
-| **Files to touch**   | Limits search space → faster & cheaper.                          |
-| **Constraints**      | Coding style, a11y, perf, etc.                                   |
-| **Acceptance check** | e.g. “All `npm test` suites pass”.                               |
+| Ingredient           | Why it matters                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”).                    |
+| **Files to touch**   | Limits search space → faster & cheaper.                                             |
+| **Constraints**      | Coding style, a11y, perf, etc.                                                      |
+| **Acceptance check** | e.g. `npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci` pass. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
@@ -168,12 +173,15 @@ USER:
 2. Update prompt templates, including this file, to reflect current practices.
 3. Link new prompt files from `prompts-codex.md` and the docs index.
 4. Propagate related changes across docs.
-5. Run the checks above.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Run the checks above.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
 
-## Outage prompt
+## Outage prompts
 
 See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.
+
+[openai-cli]: https://github.com/openai/openai-cli
