@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 216
-New quests in this release: 194
+Current quest count: 222
+New quests in this release: 200
 
 ### 3dprinting
 
