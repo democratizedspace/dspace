@@ -7,7 +7,8 @@ slug: 'prompts-codex-ci-fix'
 
 Use this drop-in snippet whenever a GitHub Actions run for
 **democratizedspace/dspace** fails. It guides Codex to diagnose the failure and
-return a pull request that keeps the main branch green. To evolve the prompt
+return a pull request that keeps the main branch green. For general prompting
+tips, start with [Codex prompts](/docs/prompts-codex). To evolve the prompt
 docs, see the [Codex meta prompt](/docs/prompts-codex-meta).
 
 If this prompt ever drifts, consult the [Prompt Upgrader](/docs/prompts-codex#prompt-upgrader)
@@ -25,6 +26,7 @@ to refresh it before use.
 ```text
 SYSTEM:
 You are an automated contributor for the democratizedspace/dspace repository.
+Follow `AGENTS.md` and `README.md`.
 
 PURPOSE:
 Diagnose a failed CI run and make it pass.

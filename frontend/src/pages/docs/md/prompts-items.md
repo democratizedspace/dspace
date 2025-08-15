@@ -54,6 +54,9 @@ See the [Codex CLI repository][codex-cli] for more flags.
     -   `npm run itemValidation`
     -   `npm run test:ci -- itemQuality` pass
 
+Codex merges those instructions with any `AGENTS.md` files it finds and the
+repo's `README.md`, so keep prompt-level rules short and concrete.
+
 ## 3. Reusable template
 
 ```text
@@ -87,15 +90,16 @@ Use this when you want Codex to automatically create or upgrade an item.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository. Edit or
-create items under `frontend/src/pages/inventory/json/items`, choosing the
-appropriate category file. Ensure realistic details, required fields, and
-passing checks (`npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci`,
-`npm run itemValidation`, and `npm run test:ci -- itemQuality`).
-Verify the item appears in at least one quest or process, reuse existing image
-assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
-committing. If a quest's text changes, run `npm run test:ci -- questQuality` and update the quest's
-`hardening` block with a fresh evaluation score.
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`. Edit or create items under
+`frontend/src/pages/inventory/json/items`, choosing the appropriate category
+file. Ensure realistic details, required fields, and passing checks (`npm run
+lint`, `npm run type-check`, `npm run build`, `npm run test:ci`, `npm run
+itemValidation`, and `npm run test:ci -- itemQuality`). Verify the item appears
+in at least one quest or process, reuse existing image assets, and scan for
+secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
+If a quest's text changes, run `npm run test:ci -- questQuality` and update the
+quest's `hardening` block with a fresh evaluation score.
 
 USER:
 1. Follow the steps above.
@@ -114,7 +118,8 @@ Apply this prompt to refine items and track quality over time.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository.
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`.
 
 USER:
 1. Pick an item from `frontend/src/pages/inventory/json/items` that lacks a

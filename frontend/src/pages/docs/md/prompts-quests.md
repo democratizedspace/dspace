@@ -53,8 +53,8 @@ See the [Codex CLI repository][codex-cli] for more flags.
 | **Constraints**      | Coding style, a11y, quest schema rules.                             |
 | **Acceptance check** | e.g. “`npm run test:ci -- questCanonical questQuality` passes”.     |
 
-Codex merges those instructions with any `AGENTS.md` files it finds, so keep
-prompt‑level rules short and concrete.
+Codex merges those instructions with any `AGENTS.md` files it finds and the
+repo's `README.md`, so keep prompt‑level rules short and concrete.
 
 ---
 
@@ -91,15 +91,15 @@ Use this when you want Codex to automatically create or upgrade a quest.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository. Edit or create
-quests under `frontend/src/pages/quests/json`. Ensure start, middle and
-completion nodes, at least one item or process reference, and passing checks
-(`npm run lint`, `npm run type-check`, `npm run build`, and
-`npm run test:ci -- questCanonical questQuality`). Survey existing quests to
-pick a natural predecessor and update `requiresQuests` accordingly. Add missing
-items or processes to their registries, reuse existing image assets, and scan
-for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
-committing.
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`. Edit or create quests under
+`frontend/src/pages/quests/json`. Ensure start, middle and completion nodes, at
+least one item or process reference, and passing checks (`npm run lint`, `npm
+run type-check`, `npm run build`, and `npm run test:ci -- questCanonical
+questQuality`). Survey existing quests to pick a natural predecessor and update
+`requiresQuests` accordingly. Add missing items or processes to their
+registries, reuse existing image assets, and scan for secrets with
+`git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 USER:
 1. Follow the steps above.
@@ -119,9 +119,10 @@ hand‑crafted quests on `main` are good references for tone and structure.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository. List
-the folders under `frontend/src/pages/quests/json` and pick one at random. Use
-existing quests in that tree as examples for tone and structure.
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`. List the folders under `frontend/src/pages/quests/json` and
+pick one at random. Use existing quests in that tree as examples for tone and
+structure.
 
 USER:
 1. Create a new quest JSON in the chosen tree following the quest schema.
@@ -147,7 +148,8 @@ while the hardening loop tracks refinement passes over time.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository.
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`.
 
 USER:
 1. Pick a quest ID from `frontend/src/pages/quests/json` that also appears in

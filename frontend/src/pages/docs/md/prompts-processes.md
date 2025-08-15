@@ -51,8 +51,8 @@ See the [Codex CLI repository][codex-cli] for more flags.
 | **Constraints**      | Coding style, a11y, process schema rules.                               |
 | **Acceptance check** | e.g. “`npm run test:ci -- processQuality` passes”.                      |
 
-Codex merges those instructions with any `AGENTS.md` files it finds, so keep
-prompt‑level rules short and concrete.
+Codex merges those instructions with any `AGENTS.md` files it finds and the
+repo's `README.md`, so keep prompt‑level rules short and concrete.
 
 ---
 
@@ -88,13 +88,14 @@ Use this when you want Codex to automatically create or upgrade a process.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository. Edit or create
-processes under `frontend/src/pages/processes/base.json` with corresponding
-hardening files in `frontend/src/pages/processes/hardening`. Ensure realistic
-steps, durations, item references, and passing checks (`npm run lint`,
-`npm run type-check`, `npm run build`, and `npm run test:ci -- processQuality`).
-Verify the process links to existing quests or items, add missing registry
-entries if needed, reuse existing image assets, and scan for secrets with
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`. Edit or create processes under
+`frontend/src/pages/processes/base.json` with corresponding hardening files in
+`frontend/src/pages/processes/hardening`. Ensure realistic steps, durations,
+item references, and passing checks (`npm run lint`, `npm run type-check`,
+`npm run build`, and `npm run test:ci -- processQuality`). Verify the process
+links to existing quests or items, add missing registry entries if needed,
+reuse existing image assets, and scan for secrets with
 `git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 USER:
@@ -113,7 +114,8 @@ Use this prompt to refine processes and track quality as the game evolves.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository.
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
+and `README.md`.
 
 USER:
 1. Pick a process from `frontend/src/generated/processes.json` that lacks a
