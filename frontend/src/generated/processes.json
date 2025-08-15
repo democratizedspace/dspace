@@ -3071,7 +3071,7 @@
     },
     {
         "id": "solder-wire-connection",
-        "title": "Join two jumper wires with a soldering iron kit, flux pen and safety goggles",
+        "title": "Join two jumper wires using a soldering iron kit, flux pen, helping hands tool, and safety goggles",
         "requireItems": [
             {
                 "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
@@ -3083,6 +3083,10 @@
             },
             {
                 "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                "count": 1
+            },
+            {
+                "id": "7a5888c3-ce36-496f-a1b2-3ecdca66836a",
                 "count": 1
             },
             {

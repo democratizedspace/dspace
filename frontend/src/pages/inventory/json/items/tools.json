@@ -440,6 +440,20 @@
         }
     },
     {
+        "id": "7a5888c3-ce36-496f-a1b2-3ecdca66836a",
+        "name": "helping hands tool",
+        "description": "Adjustable dual-arm third-hand soldering aid with alligator clips and weighted base; 150 g.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "12 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
         "name": "lead-free solder spool",
         "description": "100 g spool of 0.8 mm Sn99.3 Cu0.7 solder wire for electronics work.",
