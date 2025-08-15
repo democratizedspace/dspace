@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 222
-New quests in this release: 200
+Current quest count: 223
+New quests in this release: 201
 
 ### 3dprinting
 
@@ -36,6 +36,7 @@ New quests in this release: 200
 - aquaria/guppy
 - aquaria/heater-install
 - aquaria/log-water-parameters
+- aquaria/net-fish
 - aquaria/ph-strip-test
 - aquaria/position-tank
 - aquaria/shrimp
