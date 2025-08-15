@@ -20,6 +20,7 @@ For fundamental design tips see the
 > 2. Say exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
+> 4. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 
 ---
 
@@ -36,7 +37,8 @@ For fundamental design tips see the
     -   CLI:
         ```bash
         codex exec "npm run lint && npm run type-check && npm run build && \
-        npm run test:ci && npm run test:ci -- processQuality"
+        npm run test:ci && npm run test:ci -- processQuality && \
+        git diff --cached | ./scripts/scan-secrets.py"
         ```
 
 See the [OpenAI CLI repository][openai-cli] for more flags.
