@@ -1878,6 +1878,36 @@
         }
     },
     {
+        "id": "measure-solar-panel-current",
+        "title": "Measure a portable solar panel's short-circuit current in direct sun",
+        "image": "/assets/solar_setup_small.jpg",
+        "requireItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-20",
+                    "date": "2025-08-20",
+                    "score": 70
+                }
+            ]
+        }
+    },
+    {
         "id": "measure-solar-panel-voltage",
         "title": "Measure a portable solar panel's open-circuit voltage in direct sun",
         "image": "/assets/solar_setup_small.jpg",
