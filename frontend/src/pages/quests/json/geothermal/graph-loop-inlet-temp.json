@@ -1,0 +1,35 @@
+{
+    "id": "geothermal/graph-loop-inlet-temp",
+    "title": "Graph Loop Inlet Temperature",
+    "description": "Log the loop inlet temperature for a week and graph the results.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Wonder how inlet temps change over a week? Let's graph it.",
+            "options": [{ "type": "goto", "goto": "log", "text": "I'm curious." }]
+        },
+        {
+            "id": "log",
+            "text": "Use an Arduino with arduino-thermistor-read to log inlet temps daily.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Week of data logged",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [{ "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Graphing reveals how stable your loop's heat source is.",
+            "options": [{ "type": "finish", "text": "Plot the line" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/check-loop-inlet-temp"]
+}

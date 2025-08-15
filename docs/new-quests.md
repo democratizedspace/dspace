@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 223
-New quests in this release: 201
+Current quest count: 224
+New quests in this release: 202
 
 ### 3dprinting
 
@@ -169,6 +169,7 @@ New quests in this release: 201
 - geothermal/check-loop-temp-delta
 - geothermal/compare-depth-ground-temps
 - geothermal/compare-seasonal-ground-temps
+- geothermal/graph-loop-inlet-temp
 - geothermal/install-backup-thermistor
 - geothermal/log-ground-temperature
 - geothermal/log-heat-pump-warmup
