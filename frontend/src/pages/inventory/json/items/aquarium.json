@@ -166,9 +166,16 @@
     {
         "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
         "name": "aquarium net",
-        "description": "A net for catching fish.",
+        "description": "10 cm nylon mesh net with 30 cm handle for moving fish during tank maintenance.",
         "image": "/assets/aquarium_net.jpg",
-        "price": "5 dUSD"
+        "price": "5 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "36a1168f-0109-4a8c-b70b-45f8ca582297",
