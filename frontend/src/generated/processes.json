@@ -223,7 +223,8 @@
     },
     {
         "id": "level-3d-printer-bed",
-        "title": "Level a 3D printer bed with a sheet of printer paper",
+        "title": "Use a sheet of printer paper to level an entry-level FDM 3D printer bed",
+        "image": "/assets/3dprinter.jpg",
         "requireItems": [
             {
                 "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -238,10 +239,16 @@
         "createItems": [],
         "duration": "10m",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
         }
     },
     {
