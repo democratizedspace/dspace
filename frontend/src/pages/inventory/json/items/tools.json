@@ -2,19 +2,24 @@
     {
         "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
         "name": "entry-level FDM 3D printer",
-        "description": "Entry-level FDM printer with 220 x 220 x 250 mm build volume and heated bed; open-source firmware.",
+        "description": "Entry-level FDM printer, 220×220×250 mm build, heated bed, 0.4 mm nozzle.",
         "image": "/assets/3dprinter.jpg",
-        "price": "200 dUSD",
+        "price": "220 dUSD",
         "type": "tool",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
                     "date": "2025-08-06",
                     "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 80
                 }
             ]
         }
