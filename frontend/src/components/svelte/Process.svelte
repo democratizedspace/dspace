@@ -1,5 +1,6 @@
 <script>
     import ProgressBar from './ProgressBar.svelte';
+    import RemainingTime from './RemainingTime.svelte';
     import { beforeUpdate, onMount } from 'svelte';
     import {
         startProcess,
@@ -23,6 +24,7 @@
     let processStartedAt;
     let intervalId;
     let mounted = false;
+    let totalDurationSeconds;
 
     const updateState = () => {
         const processState = getProcessState(processId);
@@ -71,6 +73,7 @@
 
     $: {
         process = processes.find((p) => p.id === processId);
+        totalDurationSeconds = durationInSeconds(process.duration);
         updateState();
         clearInterval(intervalId);
         intervalId = setInterval(updateState, 100);
@@ -104,16 +107,18 @@
             {:else if state === ProcessStates.IN_PROGRESS}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
                 <Chip text="Pause" onClick={onProcessPause} inverted={true} />
-                <ProgressBar
-                    startDate={processStartedAt}
-                    totalDurationSeconds={durationInSeconds(process.duration)}
+                <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
+                <RemainingTime
+                    endDate={processStartedAt + totalDurationSeconds * 1000}
+                    totalDurationInSeconds={totalDurationSeconds}
                 />
             {:else if state === ProcessStates.PAUSED}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
                 <Chip text="Resume" onClick={onProcessResume} inverted={true} />
-                <ProgressBar
-                    startDate={processStartedAt}
-                    totalDurationSeconds={durationInSeconds(process.duration)}
+                <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
+                <RemainingTime
+                    endDate={processStartedAt + totalDurationSeconds * 1000}
+                    totalDurationInSeconds={totalDurationSeconds}
                 />
             {:else}
                 <Chip text="Collect" onClick={onProcessComplete} inverted={true} />

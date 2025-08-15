@@ -169,12 +169,14 @@ Processes go through several states during their lifecycle:
 
 1. **NOT_STARTED**: Process is defined but hasn't been initiated
 2. **IN_PROGRESS**: Process is currently running, countdown is active
-3. **FINISHED**: Process has completed and is ready for collection
+3. **PAUSED**: Progress is halted but can be resumed
+4. **FINISHED**: Process has completed and is ready for collection
 
 The UI displays different controls depending on the state:
 
 -   NOT_STARTED: "Start" button
--   IN_PROGRESS: Progress bar, "Cancel" button
+-   IN_PROGRESS: Progress bar, remaining time, "Pause" and "Cancel" buttons
+-   PAUSED: Progress bar, remaining time, "Resume" and "Cancel" buttons
 -   FINISHED: "Collect" button
 
 ## Contribution Workflow
