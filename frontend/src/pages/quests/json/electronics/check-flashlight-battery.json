@@ -1,0 +1,54 @@
+{
+    "id": "electronics/check-flashlight-battery",
+    "title": "Check a flashlight battery",
+    "description": "Measure a 9 V battery in a flashlight with a multimeter.",
+    "image": "/assets/battery.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Remove the flashlight battery. Set it on a dry, non-conductive surface with multimeter and goggles.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Battery and tools ready."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Set the meter to 20 V DC. Touch red to positive and black to negative terminals. Keep probes steady.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-flashlight-battery",
+                    "text": "Run the voltage check."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It reads about 9.0 V.",
+                    "requiresItems": [
+                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 },
+                        { "id": "80d30825-a42b-4add-b715-322e1713952c", "count": 1 },
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Reinstall the battery or recycle it if voltage is low. Power off the meter and store your gear.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/continuity-test"]
+}

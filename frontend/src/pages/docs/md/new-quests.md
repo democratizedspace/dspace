@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 216
-New quests in this release: 194
+Current quest count: 223
+New quests in this release: 201
 
 ### 3dprinting
 
@@ -116,6 +116,7 @@ New quests in this release: 194
 - electronics/arduino-blink
 - electronics/basic-circuit
 - electronics/check-battery-voltage
+- electronics/check-flashlight-battery
 - electronics/continuity-test
 - electronics/data-logger
 - electronics/desolder-component
