@@ -2079,7 +2079,7 @@
     },
     {
         "id": "wear-anti-static-wrist-strap",
-        "title": "Attach an anti-static wrist strap before handling electronics",
+        "title": "Clip an anti-static wrist strap to ground before handling electronics",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -2089,7 +2089,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "30s"
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-wear-anti-static-wrist-strap-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "measure-ec-solution",
