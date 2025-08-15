@@ -109,14 +109,17 @@
     {
         "id": "80d30825-a42b-4add-b715-322e1713952c",
         "name": "9 V battery",
-        "description": "6F22 9 V alkaline battery for electronics projects and test equipment.",
+        "description": "6F22 9 V alkaline battery (~550 mAh) for electronics projects and test equipment.",
         "image": "/assets/battery.jpg",
         "price": "2 dUSD",
+        "unit": "battery",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }
+            ]
         }
     },
     {
