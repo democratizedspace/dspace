@@ -170,6 +170,7 @@ New quests in this release: 194
 - geothermal/compare-seasonal-ground-temps
 - geothermal/install-backup-thermistor
 - geothermal/log-ground-temperature
+- geothermal/log-heat-pump-warmup
 - geothermal/monitor-heat-pump-energy
 - geothermal/purge-loop-air
 - geothermal/replace-faulty-thermistor
