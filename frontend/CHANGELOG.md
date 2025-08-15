@@ -13,6 +13,7 @@
 
 ### Fixed
 
+-   Unpinned menu items no longer render an extraneous character
 -   ENOENT errors related to missing Playwright artifact files
 -   Structured documentation for image validation requirements
 -   Improved test reliability with proper directory structure
