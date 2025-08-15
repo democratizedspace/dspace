@@ -1,0 +1,65 @@
+{
+    "id": "astronomy/iss-photo",
+    "title": "Photograph the ISS",
+    "description": "Use a tracking app and tripod phone to capture the ISS streak and log it.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You spotted the ISS before. Ready to capture its trail with a long exposure?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Let's plan the shot."
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Mount your smartphone on a tripod and check an app for the next pass.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-iss-pass",
+                    "text": "Checking the pass time."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Pass time noted, gear set.",
+                    "requiresItems": [
+                        { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 },
+                        { "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Start a 10-second exposure as the ISS rises and jot the timestamp.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Photo saved and logged.",
+                    "requiresItems": [{ "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! You captured humanity's outpost in motion.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait for the next pass."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/iss-flyover"]
+}

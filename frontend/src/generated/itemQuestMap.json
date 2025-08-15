@@ -786,6 +786,7 @@
   "82577af7-6724-4cb2-8922-f7140e550145": {
     "requires": [
       "energy/offgrid-charger",
+      "astronomy/iss-photo",
       "astronomy/iss-flyover"
     ],
     "rewards": []
@@ -1111,7 +1112,15 @@
     "requires": [
       "astronomy/observe-moon",
       "astronomy/light-pollution",
+      "astronomy/iss-photo",
       "astronomy/iss-flyover"
+    ],
+    "rewards": []
+  },
+  "49fb255e-a4c3-48e4-bca7-4c3781fdb98b": {
+    "requires": [
+      "astronomy/iss-photo",
+      "astronomy/basic-telescope"
     ],
     "rewards": []
   },
@@ -1128,12 +1137,6 @@
     "rewards": []
   },
   "2794503d-fbe7-4031-a63e-deac531f9784": {
-    "requires": [
-      "astronomy/basic-telescope"
-    ],
-    "rewards": []
-  },
-  "49fb255e-a4c3-48e4-bca7-4c3781fdb98b": {
     "requires": [
       "astronomy/basic-telescope"
     ],

@@ -52,6 +52,7 @@ New quests in this release: 194
 - astronomy/comet-tracking
 - astronomy/constellations
 - astronomy/iss-flyover
+- astronomy/iss-photo
 - astronomy/jupiter-moons
 - astronomy/light-pollution
 - astronomy/lunar-eclipse
