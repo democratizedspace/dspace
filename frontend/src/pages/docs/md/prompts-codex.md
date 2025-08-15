@@ -17,6 +17,8 @@ invoking Codex on DSPACE and should evolve alongside the project.
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
 
+For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+
 ---
 
 ## 1 Quick start (Web vs CLI)
