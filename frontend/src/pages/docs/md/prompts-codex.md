@@ -172,13 +172,14 @@ USER:
 2. Update prompt templates, including this file, to reflect current practices.
 3. Link new prompt files from `prompts-codex.md` and the docs index.
 4. Propagate related changes across docs.
-5. Run the checks above.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Run the checks above.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
 
-## Outage prompt
+## Outage prompts
 
 See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.
 
