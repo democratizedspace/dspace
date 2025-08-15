@@ -2992,5 +2992,15 @@
         "createItems": [],
         "duration": "15m",
         "hardening": { "passes": 0, "score": 0, "emoji": "🛠️", "history": [] }
+    },
+    {
+        "id": "3dprint-spool-holder",
+        "title": "3D print a filament spool holder on an entry-level FDM printer using 50 g of green PLA",
+        "image": "/assets/quests/benchy_25.jpg",
+        "requireItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
+        "consumeItems": [{ "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 50 }],
+        "createItems": [],
+        "duration": "3h",
+        "hardening": { "passes": 0, "score": 0, "emoji": "🛠️", "history": [] }
     }
 ]
