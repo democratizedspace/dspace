@@ -8,7 +8,12 @@ slug: 'prompts-codex'
 Codex (Web + CLI) is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR — but only if you give it a clear,
 file‑scoped prompt. This document stores the baseline instructions used when
-invoking Codex on DSPACE and should evolve alongside the project.
+invoking Codex on DSPACE and should evolve alongside the project. Related guides:
+[Quest prompts](/docs/prompts-quests), [Item prompts](/docs/prompts-items),
+[Process prompts](/docs/prompts-processes), the
+[Codex meta prompt](/docs/prompts-codex-meta), the
+[Prompt Upgrader](/docs/prompts-codex-upgrader), and the
+[CI‑failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >
@@ -21,11 +26,11 @@ invoking Codex on DSPACE and should evolve alongside the project.
 
 ## 1 Quick start (Web vs CLI)
 
-| Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                               |
-| -------------- | --------------------------- | --------------------------------------- |
-| Ad‑hoc feature | “Code” button, attach repo  | `codex "add buy‑button to ProcessView"` |
-| Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`    |
-| CI automation  | –                           | `codex exec --full-auto "run npm test"` |
+| Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                                                                                         |
+| -------------- | --------------------------- | ------------------------------------------------------------------------------------------------- |
+| Ad‑hoc feature | “Code” button, attach repo  | `codex "add buy‑button to ProcessView"`                                                           |
+| Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`                                                              |
+| CI automation  | –                           | `codex exec --full-auto "npm run lint && npm run type-check && npm run build && npm run test:ci"` |
 
 See the upstream CLI reference for more flags.
 
@@ -33,12 +38,12 @@ See the upstream CLI reference for more flags.
 
 ## 2 Prompt ingredients
 
-| Ingredient           | Why it matters                                                   |
-| -------------------- | ---------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”). |
-| **Files to touch**   | Limits search space → faster & cheaper.                          |
-| **Constraints**      | Coding style, a11y, perf, etc.                                   |
-| **Acceptance check** | e.g. “All `npm test` suites pass”.                               |
+| Ingredient           | Why it matters                                                                            |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”).                          |
+| **Files to touch**   | Limits search space → faster & cheaper.                                                   |
+| **Constraints**      | Coding style, a11y, perf, etc.                                                            |
+| **Acceptance check** | e.g. “`npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass”. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
@@ -145,7 +150,8 @@ USER:
    cross-links.
 2. Update prompt templates, including this file, to reflect current practices.
 3. Propagate related changes across docs.
-4. Run the checks above.
+4. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+5. Run the checks above.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.

@@ -9,8 +9,9 @@ Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR—but only if you give it a
 clear, file‑scoped prompt. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex) when working on quests. To keep the prompt
-docs improving, see the [Codex meta prompt](/docs/prompts-codex-meta). For the
-steps required to share quests with the community, see the
+docs improving, see the [Codex meta prompt](/docs/prompts-codex-meta) and the
+[Prompt Upgrader](/docs/prompts-codex-upgrader). For the steps required to share
+quests with the community, see the
 [Quest Submission Guide](/docs/quest-submission). Comprehensive content
 guidelines live in our [Content Development Guide](/docs/content-development),
 which covers quests, items and processes in detail.
@@ -26,15 +27,15 @@ which covers quests, items and processes in detail.
 
 ## 1. Quick start (Web vs CLI)
 
-- **Add or update a quest**
-    - Web: use the “Code” button and attach the repo.
-    - CLI: `codex "add quest solar/led-basics"`
-- **Ask about quest files**
-    - Web: use the “Ask” button.
-    - CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
-- **Run quest tests**
-    - Web: not supported yet.
-    - CLI:
+-   **Add or update a quest**
+    -   Web: use the “Code” button and attach the repo.
+    -   CLI: `codex "add quest solar/led-basics"`
+-   **Ask about quest files**
+    -   Web: use the “Ask” button.
+    -   CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
+-   **Run quest tests**
+    -   Web: not supported yet.
+    -   CLI:
         ```bash
         codex exec "npm run lint && npm run type-check && npm run build && \
         npm run test:ci -- questCanonical questQuality"
@@ -188,10 +189,10 @@ A pull request with the refined quest, updated hardening block and passing tests
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
-- **Provide clear context** about DSPACE's educational mission and sustainability focus.
-- **Use system prompts** to guide tone and technical accuracy.
-- **Iterate on outputs** rather than expecting perfection on the first try.
-- **Fact-check technical information** since AI systems can generate plausible
-  but incorrect details.
+-   **Provide clear context** about DSPACE's educational mission and sustainability focus.
+-   **Use system prompts** to guide tone and technical accuracy.
+-   **Iterate on outputs** rather than expecting perfection on the first try.
+-   **Fact-check technical information** since AI systems can generate plausible
+    but incorrect details.
 
 [codex-cli]: https://github.com/microsoft/Codex-CLI
