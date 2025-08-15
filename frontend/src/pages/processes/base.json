@@ -2636,7 +2636,7 @@
     },
     {
         "id": "write-mission-log-entry",
-        "title": "Record a mission log entry with a quill pen and black ink",
+        "title": "Write a mission log entry with a feather quill and black ink",
         "image": "/assets/paperwork.jpg",
         "requireItems": [
             {
@@ -2646,20 +2646,33 @@
             {
                 "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
                 "count": 1
-            },
-            {
-                "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
-                "count": 1
             }
         ],
-        "consumeItems": [],
+        "consumeItems": [
+            {
+                "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
+                "count": 0.05
+            }
+        ],
         "createItems": [
             {
                 "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "measure-aquarium-ph",
