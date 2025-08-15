@@ -364,6 +364,30 @@
         }
     },
     {
+        "id": "clone-mint-cutting",
+        "title": "Clone a mint cutting in a soaked starter plug",
+        "image": "/assets/hydroponics_tub.jpg",
+        "requireItems": [
+            { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 },
+            { "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "grow-basil",
         "title": "Grow 11 basil seedlings under a hydroponic lamp for four weeks until harvest-ready",
         "image": "/assets/hydroponic_basil_adult.jpg",
@@ -2471,6 +2495,10 @@
                 "count": 1
             },
             {
+                "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
+                "count": 1
+            },
+            {
                 "id": "3cd82744-d2aa-414e-9f03-80024b624066",
                 "count": 2
             }
@@ -2973,6 +3001,10 @@
             {
                 "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
                 "count": 1
+            },
+            {
+                "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
+                "count": 1
             }
         ],
         "consumeItems": [],
@@ -2980,8 +3012,20 @@
         "duration": "2m"
     },
     {
+        "id": "clean-soldering-iron-tip",
+        "title": "Wipe the soldering iron tip on a damp sponge to remove oxidation",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "check-flashlight-battery",
-        "title": "Measure flashlight battery voltage with a digital multimeter",
+        "title": "Measure a red flashlight's 9 V battery with a digital multimeter",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -3021,6 +3065,32 @@
                 {
                     "task": "codex-process-hardening-2025-08-13",
                     "date": "2025-08-13",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "desolder-smd-with-wick",
+        "title": "Remove solder from a PCB pad with solder wick and a soldering iron",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+            { "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03", "count": 1 },
+            { "id": "dad7f853-ccc9-40be-b226-89272708db84", "count": 1 },
+            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
                     "score": 60
                 }
             ]

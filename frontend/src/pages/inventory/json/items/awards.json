@@ -107,8 +107,16 @@
     {
         "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
         "name": "Hydro Award",
-        "description": "An award for bringing dChat 10 buckets of dechlorinated water.",
+        "description": "10 cm aluminum droplet trophy engraved 'Hydration Hero'; reward for hauling ten buckets to dChat.",
         "image": "/assets/hydro_award.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-15", "date": "2025-08-15", "score": 65 }
+            ]
+        }
     }
 ]
