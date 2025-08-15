@@ -140,10 +140,10 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm run lint`, `npm run type-check`, `npm run build`,
-   `npm run test:ci`, and `npm run test:ci -- processQuality`. Update docs or items if needed.
-6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-7. Use an emoji-prefixed commit message like `📝 : – refine process details`.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+6. Run `npm run test:ci -- processQuality`. Update docs or items if needed.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+8. Use an emoji-prefixed commit message like `📝 : – refine process details`.
 
 OUTPUT:
 A pull request with the refined process, updated hardening block and passing tests.
