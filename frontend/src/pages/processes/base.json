@@ -2982,7 +2982,7 @@
     },
     {
         "id": "assemble-servo-arm",
-        "title": "Screw a micro servo to a base and attach a lightweight arm using a precision screwdriver set",
+        "title": "Bolt a micro servo to a base and attach its plastic horn as an arm with a precision screwdriver set",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             { "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c", "count": 1 },
@@ -2990,6 +2990,18 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 70
+                }
+            ]
+        }
     }
 ]
