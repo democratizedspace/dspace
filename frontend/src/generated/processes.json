@@ -607,6 +607,7 @@
     {
         "id": "harvest-basil",
         "title": "Harvest your hydroponic basil plants",
+        "image": "/assets/basil_harvested.jpg",
         "requireItems": [],
         "consumeItems": [
             {
@@ -624,7 +625,13 @@
                 "count": 11
             }
         ],
-        "duration": "1m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "germinate-stevia",
