@@ -1,14 +1,22 @@
 {
     "id": "welcome/smart-plug-test",
     "title": "Smart Plug Test",
-    "description": "Generate a quick burst of dWatt with your smart plug.",
-    "image": "/assets/quests/howtodoquests.jpg",
+    "description": "Use a smart plug to buy 1 kWh from a wall outlet and mint 1,000 dWatt tokens.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-quest-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }
+        ]
+    },
+    "image": "/assets/smart_plug.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's see what your new smart plug can do. Ready to make some energy?",
+            "text": "Plug a lamp into the smart plug. Under 15 A and dry. Ready to capture energy?",
             "options": [
                 {
                     "type": "goto",
@@ -19,12 +27,12 @@
         },
         {
             "id": "measure",
-            "text": "Start the outlet process and watch the dWatt roll in.",
+            "text": "Run outlet-dWatt-1e3 with the smart plug and watch 1,000 dWatt appear.",
             "options": [
                 {
                     "type": "process",
                     "process": "outlet-dWatt-1e3",
-                    "text": "Run the smart plug"
+                    "text": "Start outlet-dWatt-1e3"
                 },
                 {
                     "type": "goto",
@@ -41,7 +49,7 @@
         },
         {
             "id": "wrapup",
-            "text": "Nice surge! That smart plug will come in handy for bigger quests.",
+            "text": "Nice surge! Unplug the load—this smart plug will help with bigger quests.",
             "options": [
                 {
                     "type": "finish",
