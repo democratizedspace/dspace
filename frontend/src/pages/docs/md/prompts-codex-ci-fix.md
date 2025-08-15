@@ -7,8 +7,9 @@ slug: 'prompts-codex-ci-fix'
 
 Use this drop-in snippet whenever a GitHub Actions run for
 **democratizedspace/dspace** fails. It guides Codex to diagnose the failure and
-return a pull request that keeps the main branch green. To evolve the prompt
-docs, see the [Codex meta prompt](/docs/prompts-codex-meta).
+return a pull request that keeps the main branch green. For general guidance,
+see [Codex Prompts](/docs/prompts-codex). To evolve the prompt docs, see the
+[Codex meta prompt](/docs/prompts-codex-meta).
 
 If this prompt ever drifts, consult the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
 to refresh it before use. For guidance on logging incidents, see the
@@ -53,8 +54,9 @@ CONTEXT:
 
 REQUEST:
 1. Explain in the pull-request body why the failure occurred (or would occur).
-2. Commit the minimal changes needed to fix it. Before committing, run
-   `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+2. Commit the minimal changes needed to fix it using an emoji-prefixed commit
+   message. Before committing, run `git diff --cached | ./scripts/scan-secrets.py`
+   and ensure no secrets.
 3. Create `outages/YYYY-MM-DD-<slug>.json` describing the incident.
 4. Push to a branch named `codex/ci-fix/<short-description>`.
 5. Open a pull request that leaves all CI checks green.
