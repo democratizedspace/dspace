@@ -153,6 +153,7 @@ New quests in this release: 194
 - firstaid/dispose-expired
 - firstaid/learn-cpr
 - firstaid/restock-kit
+- firstaid/sanitize-pocket-mask
 - firstaid/splint-limb
 - firstaid/stop-nosebleed
 - firstaid/treat-burn
