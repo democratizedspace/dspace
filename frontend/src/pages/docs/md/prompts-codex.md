@@ -37,7 +37,7 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1. Quick start (Web vs CLI)
 
 | Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                               |
 | -------------- | --------------------------- | --------------------------------------- |
