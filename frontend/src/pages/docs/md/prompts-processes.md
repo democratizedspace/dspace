@@ -29,7 +29,7 @@ For fundamental design tips see the
     -   CLI: `codex "add process 3dprinting/solar-mount"`
 -   **Ask about process data**
     -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/generated/processes.json"`
+    -   CLI: `codex exec "explain frontend/src/pages/processes/base.json"`
 -   **Run process tests**
     -   Web: not supported yet.
     -   CLI:
@@ -42,7 +42,7 @@ See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
-## 2 Prompt ingredients
+## 2. Prompt ingredients
 
 | Ingredient           | Why it matters                                                          |
 | -------------------- | ----------------------------------------------------------------------- |
@@ -51,12 +51,12 @@ See the [OpenAI CLI repository][openai-cli] for more flags.
 | **Constraints**      | Coding style, a11y, process schema rules.                               |
 | **Acceptance check** | e.g. “`npm run test:ci` and `npm run test:ci -- processQuality` pass”.  |
 
-Codex merges those instructions with any `AGENTS.md` files it finds, so keep
+Codex merges these instructions with any `AGENTS.md` files in scope, so keep
 prompt‑level rules short and concrete.
 
 ---
 
-## 3 Reusable template
+## 3. Reusable template
 
 ```text
 You are working in democratizedspace/dspace.
