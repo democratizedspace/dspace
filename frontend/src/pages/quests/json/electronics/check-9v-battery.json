@@ -1,0 +1,51 @@
+{
+    "id": "electronics/check-9v-battery",
+    "title": "Check a 9 V battery's voltage",
+    "description": "Use a digital multimeter to check a loose 9 V battery on a dry, non-conductive surface while wearing safety goggles.",
+    "image": "/assets/battery.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Place the 9 V battery, digital multimeter, and safety goggles on a dry, non-conductive surface. Put on the goggles. Set the meter to the 20 V DC range with the black probe in COM and the red probe in V\u03a9mA.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Measure the battery."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Hold the battery by its sides. Touch the red probe to the positive terminal and the black probe to the negative terminal without letting the probes touch each other. A fresh 9 V battery should read around 9.6 V. Stop if it heats or leaks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It reads about 9.6 V.",
+                    "process": "measure-battery-voltage",
+                    "requiresItems": [
+                        { "id": "80d30825-a42b-4add-b715-322e1713952c", "count": 1 },
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Power down the meter, remove the probes, and store the battery in a cool, dry place. Remove your goggles.",
+            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+        }
+    ],
+    "rewards": [{ "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }],
+    "requiresQuests": ["electronics/continuity-test"],
+    "hardening": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "🛠️",
+        "history": []
+    }
+}
