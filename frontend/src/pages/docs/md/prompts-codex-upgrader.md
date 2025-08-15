@@ -6,8 +6,8 @@ slug: 'prompts-codex-upgrader'
 # Codex Prompt Upgrader
 
 Use this meta prompt when the Codex templates themselves need refreshing. It keeps our
-instructions current—the machine that builds the machine. When adding a new prompt,
-remember to link it from `prompts-codex.md` and the docs index.
+instructions current—the machine that builds the machine. See
+[Codex Prompts](/docs/prompts-codex) for the baseline templates.
 
 ```text
 SYSTEM:

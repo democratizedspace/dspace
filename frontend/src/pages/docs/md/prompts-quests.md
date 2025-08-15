@@ -9,11 +9,11 @@ Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR—but only if you give it a
 clear, file‑scoped prompt. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex) when working on quests. To keep the prompt
-docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). For the
-steps required to share quests with the community, see the
-[Quest Submission Guide](/docs/quest-submission). For quest design best
-practices, see the [Quest Guidelines](/docs/quest-guidelines). Comprehensive
-content guidelines live in our [Content Development Guide](/docs/content-development),
+docs improving, see the [Codex meta prompt](/docs/prompts-codex-meta). If these
+templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+For the steps required to share quests with the community, see the
+[Quest Submission Guide](/docs/quest-submission). Comprehensive content
+guidelines live in our [Content Development Guide](/docs/content-development),
 which covers quests, items and processes in detail.
 
 > **TL;DR**
