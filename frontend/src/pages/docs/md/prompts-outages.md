@@ -34,10 +34,11 @@ CONTEXT:
 - Keep behaviour intact, add tests, and update documentation.
 
 REQUEST:
- 1. Apply the fix with appropriate tests.
- 2. Commit the outage entry and related docs.
- 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
- 4. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+1. Apply the fix with appropriate tests.
+2. Commit the outage entry and related docs.
+3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+4. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+5. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request referencing the new outage record and passing checks.
