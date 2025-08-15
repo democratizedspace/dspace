@@ -9,8 +9,8 @@ programming: 14 quests, 682 lines
 geothermal: 12 quests, 642 lines
 robotics: 12 quests, 679 lines
 chemistry: 10 quests, 538 lines
+firstaid: 10 quests, 650 lines
 woodworking: 10 quests, 772 lines
-firstaid: 9 quests, 604 lines
 rocketry: 8 quests, 737 lines
 completionist: 5 quests, 263 lines
 welcome: 5 quests, 375 lines
