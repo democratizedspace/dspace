@@ -24,9 +24,12 @@ DSPACE is a free and open-source web-based space exploration idle game. The proj
 
 ### Prerequisites
 
-- Node.js 16.x or higher
+- Node.js 18.x or 20.x (LTS)
 - npm 7.x or higher
 - Git
+
+The repo includes a `.nvmrc` file targeting Node.js 20. Run `nvm use` after cloning
+to automatically switch to the correct version.
 
 ### Installation
 
@@ -410,7 +413,7 @@ DSPACE uses ES Modules for the codebase, which has important implications for de
 6. **Compatibility Warnings**:
    - You may see warnings about ES modules loading in CommonJS contexts
    - These warnings are generally safe to ignore as long as tests pass
-   - For full compatibility, Node.js v16+ is recommended
+   - For full compatibility, Node.js v18+ is recommended
 
 ### Prettier and ESLint Integration
 
