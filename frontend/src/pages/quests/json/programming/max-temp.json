@@ -1,0 +1,50 @@
+{
+    "id": "programming/max-temp",
+    "title": "Compute Maximum Temperature",
+    "description": "Write a small script that reads your log file and prints the highest temperature.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've nailed median calculations. Let's find that peak temperature.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Hunt for the max."
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Parse the temperature log and determine the highest value recorded.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Max found!",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Now you can spot heat spikes before they cause trouble.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All done"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/median-temp"]
+}

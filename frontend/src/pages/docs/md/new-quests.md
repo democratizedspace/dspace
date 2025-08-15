@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 216
-New quests in this release: 194
+Current quest count: 223
+New quests in this release: 201
 
 ### 3dprinting
 
@@ -207,6 +207,7 @@ New quests in this release: 194
 - programming/hello-sensor
 - programming/json-api
 - programming/json-endpoint
+- programming/max-temp
 - programming/median-temp
 - programming/plot-temp-cli
 - programming/temp-alert
