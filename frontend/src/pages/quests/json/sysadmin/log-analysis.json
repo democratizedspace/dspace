@@ -1,0 +1,50 @@
+{
+    "id": "sysadmin/log-analysis",
+    "title": "Inspect System Logs",
+    "description": "Use journalctl and tail to spot issues on Ubuntu 24.04 LTS Minimal.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Services leave breadcrumbs everywhere. Ready to sift through the log stream?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "scan",
+                    "text": "Show me the log"
+                }
+            ]
+        },
+        {
+            "id": "scan",
+            "text": "Use journalctl -xe and tail -n 100 /var/log/syslog to find recent errors.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logs reviewed",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Solid work. Keeping tabs on logs keeps incidents small.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Done"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["sysadmin/resource-monitoring"]
+}
