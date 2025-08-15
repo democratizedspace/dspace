@@ -2527,7 +2527,8 @@
     },
     {
         "id": "verify-resistor-color-code",
-        "title": "Check resistor value using color bands",
+        "title": "Confirm a 220 Ω resistor's value using a printed color code chart",
+        "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
                 "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
