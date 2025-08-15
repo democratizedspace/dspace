@@ -1078,6 +1078,35 @@
         "duration": "30s"
     },
     {
+        "id": "repair-model-rocket",
+        "title": "Glue cracked fins on a damaged model rocket using superglue",
+        "image": "/assets/rocket_damaged.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "launch-rocket-parachute",
         "title": "rocket with parachute",
         "requireItems": [
