@@ -1,7 +1,7 @@
 {
     "id": "completionist/polish",
     "title": "Polish Your Trophy",
-    "description": "Keep your Completionist Award shiny and proud.",
+    "description": "Keep your Completionist Award II shiny and proud.",
     "image": "/assets/quests/completionist.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",

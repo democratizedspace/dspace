@@ -107,6 +107,19 @@
         }
     },
     {
+        "id": "80d30825-a42b-4add-b715-322e1713952c",
+        "name": "9 V battery",
+        "description": "6F22 9 V alkaline battery for electronics projects and test equipment.",
+        "image": "/assets/battery.jpg",
+        "price": "2 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "82577af7-6724-4cb2-8922-f7140e550145",
         "name": "smartphone",
         "description": "150 g smartphone, 6 in (15 cm) LCD, 128 GB flash, 4 GB RAM; 3000 mAh battery via USB-C (5 V, 15 W).",
@@ -466,9 +479,18 @@
     {
         "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
         "name": "pH strip",
-        "description": "A pH strip for measuring pH.",
+        "description": "Disposable 0–14 pH test strip with 1-unit resolution; 0.3 g each.",
         "image": "/assets/pH_strip.jpg",
-        "price": "0.15 dUSD"
+        "price": "0.15 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }
+            ]
+        }
     },
     {
         "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",

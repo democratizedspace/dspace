@@ -19,7 +19,7 @@
         },
         {
             "id": "thanks",
-            "text": "Well, adventurer, because you've completed the first wave of quests!! There are certainly many more on the horizon, but you've reached a significant milestone. And for that, this Completionist Award is all yours!!",
+            "text": "Well, adventurer, because you've completed the first wave of quests!! There are certainly many more on the horizon, but you've reached a significant milestone. And for that, this Completionist Award II is all yours!!",
             "options": [
                 {
                     "type": "goto",

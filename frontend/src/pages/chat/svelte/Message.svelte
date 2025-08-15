@@ -6,6 +6,7 @@
     import { Remarkable } from 'remarkable';
     import { formatRelative, format } from 'date-fns';
     import { fade } from 'svelte/transition';
+    import { copyToClipboard } from '../../../utils/copyToClipboard.js';
 
     export let messageMarkdown;
     export let className;
@@ -42,11 +43,11 @@
 
     let toastVisible = false;
 
-    function copyToClipboard(event) {
+    function handleCopyButton(event) {
         if (event.target.classList.contains('copy-button')) {
             const pre = event.target.parentNode;
             const code = pre.querySelector('code').innerText;
-            navigator.clipboard.writeText(code);
+            copyToClipboard(code);
             toastVisible = true;
             setTimeout(() => {
                 toastVisible = false;
@@ -57,7 +58,7 @@
     onMount(() => {
         const copyButtons = document.querySelectorAll('.copy-button');
         copyButtons.forEach((button) => {
-            button.addEventListener('click', copyToClipboard);
+            button.addEventListener('click', handleCopyButton);
             button.addEventListener('mouseover', () => {
                 button.style.opacity = '1';
                 button.style.backgroundColor = '#68d46d';
@@ -72,7 +73,7 @@
 
         return () => {
             copyButtons.forEach((button) => {
-                button.removeEventListener('click', copyToClipboard);
+                button.removeEventListener('click', handleCopyButton);
             });
         };
     });
