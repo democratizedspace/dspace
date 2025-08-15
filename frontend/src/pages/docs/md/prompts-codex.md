@@ -12,7 +12,7 @@ invoking Codex on DSPACE and should evolve alongside the project.
 
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
-[NPC prompts](/docs/prompts-npcs), and [Outage prompts](/docs/prompts-outages).
+[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages), and [Docs prompts](/docs/prompts-docs.
 
 > **TL;DR**
 >
@@ -30,6 +30,7 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 -   [Item Prompts](/docs/prompts-items)
 -   [Process Prompts](/docs/prompts-processes)
 -   [Quest Prompts](/docs/prompts-quests)
+-   [Docs Prompts](/docs/prompts-docs)
 -   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
 -   [Outage Prompts](/docs/prompts-outages)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
@@ -37,7 +38,7 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1. Quick start (Web vs CLI)
 
 | Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                               |
 | -------------- | --------------------------- | --------------------------------------- |
@@ -45,7 +46,7 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 | Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`    |
 | CI automation  | –                           | `codex exec --full-auto "run npm test"` |
 
-See the upstream CLI reference for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
@@ -179,3 +180,5 @@ A pull request refreshing the Codex prompt docs with passing checks.
 ## Outage prompts
 
 See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.
+
+[openai-cli]: https://github.com/openai/openai-cli
