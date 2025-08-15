@@ -1,0 +1,58 @@
+{
+    "id": "aquaria/net-fish",
+    "title": "Catch a fish with a net",
+    "description": "Use an aquarium net to move a fish safely during cleaning.",
+    "image": "/assets/aquarium_net.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The tank needs a quick tidy. Let's move a fish to a bucket with the net first.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "catch",
+                    "text": "I'll grab the net."
+                }
+            ]
+        },
+        {
+            "id": "catch",
+            "text": "Gently scoop the fish with the net and settle it in a nearby bucket.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "release",
+                    "text": "Fish is secure in the bucket.",
+                    "process": "catch-fish",
+                    "requiresItems": [{ "id": "ee7d437d-7426-47cd-b691-386dd20f4e47", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "release",
+            "text": "With the tank clean, return the fish to its home.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "Back in you go!",
+                    "process": "return-fish"
+                }
+            ]
+        },
+        {
+            "id": "fin",
+            "text": "Great job keeping the fish safe during cleanup!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All done."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["aquaria/water-change"]
+}

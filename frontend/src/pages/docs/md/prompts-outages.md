@@ -14,7 +14,8 @@ fix and a record land in the outage catalog. To keep the prompt docs evolving, s
 > **TL;DR**
 >
 > 1. Investigate the failure and implement a fix.
-> 2. Add `outages/YYYY-MM-DD-<slug>.json` matching `outages/schema.json`.
+> 2. Add [`outages/YYYY-MM-DD-<slug>.json`][outage-dir]
+>    matching [`outages/schema.json`][outage-schema].
 > 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 4. Scan staged changes for secrets.
 
@@ -26,8 +27,9 @@ PURPOSE:
 Diagnose an outage, implement a fix, and document it.
 
 CONTEXT:
-- Review existing records under `/outages` for similar failures.
-- After resolving, add `outages/YYYY-MM-DD-<slug>.json` matching `outages/schema.json`.
+- Review existing records under [`outages`][outage-dir] for similar failures.
+- After resolving, add [`outages/YYYY-MM-DD-<slug>.json`][outage-dir]
+  matching [`outages/schema.json`][outage-schema].
 - Keep behaviour intact, add tests, and update documentation.
 
 REQUEST:
@@ -40,3 +42,6 @@ REQUEST:
 OUTPUT:
 A pull request referencing the new outage record and passing checks.
 ```
+
+[outage-dir]: https://github.com/democratizedspace/dspace/tree/main/outages
+[outage-schema]: https://github.com/democratizedspace/dspace/blob/main/outages/schema.json
