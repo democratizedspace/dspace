@@ -1,0 +1,50 @@
+{
+    "id": "programming/stddev-temp",
+    "title": "Compute Temperature Standard Deviation",
+    "description": "Extend your script to report the standard deviation of daily temperature readings.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've nailed the median. Let's measure how temperatures vary.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "I'll crunch the numbers."
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Parse the log and compute the standard deviation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Deviation computed!",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Deviation helps quantify variability.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Done!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/median-temp"]
+}
