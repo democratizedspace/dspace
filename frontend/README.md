@@ -101,6 +101,9 @@ frontend/
 > Utility note: `src/utils/strings.js`'s `getDurationString` now omits undefined
 > remaining time to avoid displaying `undefined` in the UI.
 
+> Utility note: `src/utils/strings.js`'s `getDuration` now falls back to
+> `0.00%` for non-numeric input to prevent showing `NaN%`.
+
 ## Getting Started
 
 ### Prerequisites

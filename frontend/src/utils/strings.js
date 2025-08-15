@@ -22,4 +22,7 @@ export const getDurationString = (duration, remainingTime) => {
  *   progress percentage.
  * @returns {string} The string representing the duration.
  */
-export const getDuration = (duration) => `${duration.toFixed(2)}%`;
+export const getDuration = (duration) => {
+    const num = Number(duration);
+    return Number.isFinite(num) ? `${num.toFixed(2)}%` : '0.00%';
+};
