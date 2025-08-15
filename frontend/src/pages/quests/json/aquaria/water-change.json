@@ -1,14 +1,20 @@
 {
     "id": "aquaria/water-change",
     "title": "Perform a partial water change",
-    "description": "Learn how to remove dirty water and refill your tank with conditioned water.",
+    "description": "Remove about a quarter of tank water and refill with dechlorinated, temperature-matched water.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [{ "task": "codex-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }]
+    },
     "image": "/assets/quests/goldfish.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Regular water changes keep fish healthy. Gather a siphon, bucket, water conditioner, and a utility cart to haul the water, then remove about 25% of the water.",
+            "text": "Regular water changes keep fish healthy. Unplug the filter and heater, then gather a gravel vacuum, 5 gallon bucket, water conditioner and utility cart. Remove about 25% of the water.",
             "options": [
                 {
                     "type": "goto",
@@ -25,7 +31,7 @@
         },
         {
             "id": "remove",
-            "text": "Use a siphon or gravel vacuum to gently drain water into a clean bucket while lifting debris. Keep the intake away from fish and stop after roughly a quarter of the volume is gone.",
+            "text": "Use the gravel vacuum to drain water into the bucket while lifting debris. Keep the intake clear of fish and stop once roughly a quarter of the water is gone.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +42,7 @@
         },
         {
             "id": "refill",
-            "text": "Treat tap water with dechlorinator and match it to the tank's temperature before refilling. Pour slowly to avoid shocking fish.",
+            "text": "Dose the bucket with water conditioner and match the temperature to the tank before refilling. Pour slowly to avoid shocking fish and wipe up any spills.",
             "options": [
                 {
                     "type": "finish",
