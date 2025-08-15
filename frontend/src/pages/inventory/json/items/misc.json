@@ -107,6 +107,19 @@
         }
     },
     {
+        "id": "80d30825-a42b-4add-b715-322e1713952c",
+        "name": "9 V battery",
+        "description": "6F22 9 V alkaline battery for electronics projects and test equipment.",
+        "image": "/assets/battery.jpg",
+        "price": "2 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "82577af7-6724-4cb2-8922-f7140e550145",
         "name": "smartphone",
         "description": "150 g smartphone, 6 in (15 cm) LCD, 128 GB flash, 4 GB RAM; 3000 mAh battery via USB-C (5 V, 15 W).",
