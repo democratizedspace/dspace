@@ -255,6 +255,13 @@
         margin-top: 10px;
     }
 
+    .form-submit {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
     .submit-button {
         font-size: 16px;
         padding: 10px 20px;
@@ -279,6 +286,15 @@
         textarea {
             width: 100%;
             font-size: 14px;
+        }
+
+        .form-submit {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .submit-button {
+            width: 100%;
         }
     }
 </style>
