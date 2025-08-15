@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Good to see you progressing! Before soldering, secure your work in helping hands, plug in your station and have a damp sponge ready.",
+            "text": "Good to see you progressing! Before soldering, lay out a silicone mat, secure your work in helping hands, plug in your station, and have a damp sponge ready.",
             "options": [
                 {
                     "type": "goto",
@@ -21,6 +21,10 @@
                         },
                         {
                             "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+                            "count": 1
+                        },
+                        {
+                            "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
                             "count": 1
                         }
                     ]
@@ -52,13 +56,18 @@
     "rewards": [],
     "requiresQuests": ["electronics/basic-circuit"],
     "hardening": {
-        "passes": 1,
+        "passes": 2,
         "score": 60,
         "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-14",
                 "date": "2025-08-14",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-15",
+                "date": "2025-08-15",
                 "score": 60
             }
         ]

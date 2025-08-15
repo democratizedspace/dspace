@@ -255,7 +255,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-11", "date": "2025-08-11", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-11",
+                    "date": "2025-08-11",
+                    "score": 65
+                }
             ]
         }
     },
@@ -366,7 +370,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-12", "date": "2025-08-12", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
             ]
         }
     },
@@ -437,6 +445,20 @@
         "description": "Plug-in tester with three LEDs and test button to verify wiring and GFCI outlets; 50 g.",
         "image": "/assets/outlet.jpg",
         "price": "12 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
+        "name": "silicone soldering mat",
+        "description": "300 mm × 200 mm silicone mat with compartments for screws and tools; heat-resistant to 500 °C.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "15 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 0,
