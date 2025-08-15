@@ -514,6 +514,36 @@
         }
     },
     {
+        "id": "clone-mint-cutting",
+        "title": "Clone a mint cutting in a soaked starter plug",
+        "image": "/assets/hydroponics_tub.jpg",
+        "requireItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "grow-basil",
         "title": "Grow 11 basil seedlings under a hydroponic lamp for four weeks until harvest-ready",
         "image": "/assets/hydroponic_basil_adult.jpg",
@@ -2513,19 +2543,30 @@
     {
         "id": "plot-temperature-data",
         "title": "Plot logged temperature data using Python and Matplotlib",
-        "requireItems": [],
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m",
+        "duration": "10m",
         "hardening": {
-            "passes": 1,
-            "score": 65,
+            "passes": 2,
+            "score": 70,
             "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-05",
                     "date": "2025-08-05",
                     "score": 65
+                },
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 70
                 }
             ]
         }
@@ -3913,13 +3954,13 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 70,
+            "score": 65,
             "emoji": "🌀",
             "history": [
                 {
-                    "task": "codex-process-hardening-2025-08-15",
+                    "task": "codex-assemble-servo-arm-2025-08-15",
                     "date": "2025-08-15",
-                    "score": 70
+                    "score": 65
                 }
             ]
         }
