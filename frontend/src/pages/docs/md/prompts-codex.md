@@ -11,8 +11,8 @@ file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
-[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes), and
-[NPC prompts](/docs/prompts-npcs).
+[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
+[NPC prompts](/docs/prompts-npcs), and [Outage prompts](/docs/prompts-outages).
 
 > **TL;DR**
 >
@@ -31,6 +31,7 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 -   [Process Prompts](/docs/prompts-processes)
 -   [Quest Prompts](/docs/prompts-quests)
 -   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
+-   [Outage Prompts](/docs/prompts-outages)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
 -   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
 
@@ -168,12 +169,13 @@ USER:
 2. Update prompt templates, including this file, to reflect current practices.
 3. Link new prompt files from `prompts-codex.md` and the docs index.
 4. Propagate related changes across docs.
-5. Run the checks above.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Run the checks above.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
 
-## Outage prompt
+## Outage prompts
 
 See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.

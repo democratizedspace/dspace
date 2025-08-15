@@ -5,7 +5,12 @@ slug: 'prompts-npcs'
 
 # Writing great NPC prompts for the _dspace_ repo
 
-Codex is a sandboxed engineering agent that can open this repository, run its own tests, and send you a ready-made PR—but only if you give it a clear, file-scoped prompt. Use this guide alongside [Codex Prompts](/docs/prompts-codex) when working on NPC bios or dialogue. Consult the [NPCs guide](/docs/npcs) for voice and lore details.
+Codex is a sandboxed engineering agent that can open this repository, run its own tests, and
+send you a ready-made PR—but only if you give it a clear, file-scoped prompt. Use this guide
+alongside [Codex Prompts](/docs/prompts-codex) when working on NPC bios or dialogue. Consult the
+[NPCs guide](/docs/npcs) for voice and lore details. To keep the prompt docs evolving, see the
+[Codex meta prompt](/docs/prompts-codex-meta). If these templates drift, refresh them with the
+[Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 
 > **TL;DR**
 >
