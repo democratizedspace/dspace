@@ -35,7 +35,6 @@ For failing GitHub Actions runs, use the dedicated
 -   [Outage Prompts](/docs/prompts-outages)
 -   [Docs Prompts](/docs/prompts-docs)
 -   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
--   [Outage Prompts](/docs/prompts-outages)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
 -   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
 
