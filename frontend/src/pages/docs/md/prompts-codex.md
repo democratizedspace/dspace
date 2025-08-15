@@ -21,7 +21,8 @@ For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
 
-For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+For failing GitHub Actions runs, use the dedicated
+[CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 ---
 
@@ -30,6 +31,8 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 -   [Item Prompts](/docs/prompts-items)
 -   [Process Prompts](/docs/prompts-processes)
 -   [Quest Prompts](/docs/prompts-quests)
+-   [NPC Prompts](/docs/prompts-npcs)
+-   [Outage Prompts](/docs/prompts-outages)
 -   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
 -   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
@@ -38,11 +41,11 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 
 ## 1 Quick start (Web vs CLI)
 
-| Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                               |
-| -------------- | --------------------------- | --------------------------------------- |
-| Ad‑hoc feature | “Code” button, attach repo  | `codex "add buy‑button to ProcessView"` |
-| Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`    |
-| CI automation  | –                           | `codex exec --full-auto "run npm test"` |
+| Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                                  |
+| -------------- | --------------------------- | ------------------------------------------ |
+| Ad‑hoc feature | “Code” button, attach repo  | `codex "add buy‑button to ProcessView"`    |
+| Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`       |
+| CI automation  | –                           | `codex exec --full-auto "npm run test:ci"` |
 
 See the upstream CLI reference for more flags.
 
@@ -55,7 +58,7 @@ See the upstream CLI reference for more flags.
 | **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”). |
 | **Files to touch**   | Limits search space → faster & cheaper.                          |
 | **Constraints**      | Coding style, a11y, perf, etc.                                   |
-| **Acceptance check** | e.g. “All `npm test` suites pass”.                               |
+| **Acceptance check** | e.g. “All `npm run test:ci` suites pass”.                        |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
