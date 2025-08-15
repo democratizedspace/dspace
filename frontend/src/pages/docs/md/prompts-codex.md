@@ -12,7 +12,7 @@ invoking Codex on DSPACE and should evolve alongside the project.
 
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
-[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages), and [Docs prompts](/docs/prompts-docs.
+[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages), and [Docs prompts](/docs/prompts-docs).
 
 > **TL;DR**
 >
