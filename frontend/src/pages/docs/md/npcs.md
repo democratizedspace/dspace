@@ -54,7 +54,7 @@ Hydro, a relaxed and affable team member, has a gift for hydroponics and sustain
 ### Sample Dialogue
 
 -   "Hey there! I'm Hydro, your local hydroponics expert!"
--   "Oh I could talk for hours but I'll give you the short version: hydroponics is a method of growing plants using mineral nutrient solutions."
+-   "Oh I could talk for hours, but the short version? Roots bathe in nutrient-rich water."
 -   "Excellent! First things first, I need you to accept this hydroponics tub."
 -   "Now that you've got your hydroponics tub, you'll need some dechlorinated water."
 -   "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems."
@@ -132,6 +132,23 @@ Cedar is a seasoned woodworker who loves guiding newcomers. Years of building fu
 -   "Keep your fingers clear of the blade and let the saw do the work."
 -   "Nice job on that birdhouse! Sand the edges so our feathered friends stay safe."
 -   "Ready for a bigger project? A sturdy step stool will test your skills."
+
+## Lyra
+
+<img src="/assets/npc/nova.jpg" />
+
+Lyra charts the stars and keeps the guild's telescopes in perfect alignment. Raised under dark
+rural skies, she turned her childhood fascination into a career mapping orbital trajectories.
+Lyra joined the metaguild to guide launches through debris fields and teach others the patience
+of stargazing.
+
+### Sample Dialogue
+
+-   "Hey, I'm Lyra. If you can find Polaris, I can get you anywhere in the system."
+-   "Bring the telescope outside; city lights kill the view."
+-   "Set your exposure to 15 seconds and you'll catch that comet's tail."
+-   "Gravity's predictable, but people? That's why I prefer stars."
+-   "Want to try some orbital mechanics? We'll start with a Hohmann transfer."
 
 <style>
     img {
