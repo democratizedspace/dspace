@@ -149,6 +149,7 @@ New quests in this release: 194
 ### firstaid
 
 - firstaid/assemble-kit
+- firstaid/change-bandage
 - firstaid/dispose-expired
 - firstaid/learn-cpr
 - firstaid/restock-kit
