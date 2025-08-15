@@ -1,0 +1,50 @@
+{
+    "id": "sysadmin/log-analysis",
+    "title": "Review System Logs",
+    "description": "Use journalctl and logrotate to inspect and maintain logs on Ubuntu 24.04 LTS Minimal.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Logs tell the tale of every service. Want to read today's story?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Check the journal"
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "Run journalctl --since today and note errors before rotating logs.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logs reviewed",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Clean logs, clear mind. Onward to the next challenge.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Done"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["sysadmin/resource-monitoring"]
+}
