@@ -405,5 +405,19 @@
                 }
             ]
         }
+    },
+    {
+        "id": "451d86d9-96e0-4829-af27-8a8b0be65ae4",
+        "name": "handheld anemometer",
+        "description": "Measures wind speed up to 30 m/s; includes wrist strap.",
+        "image": "/assets/turbine.jpg",
+        "price": "20 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
