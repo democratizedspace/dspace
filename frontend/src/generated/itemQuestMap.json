@@ -298,12 +298,14 @@
     "requires": [
       "robotics/wheel-encoders",
       "robotics/odometry-basics",
+      "robotics/gyro-balance",
       "programming/graph-temp-data",
       "geothermal/replace-faulty-thermistor",
       "geothermal/log-ground-temperature",
       "geothermal/install-backup-thermistor",
       "geothermal/compare-seasonal-ground-temps",
       "geothermal/compare-depth-ground-temps",
+      "geothermal/check-loop-temp-delta",
       "geothermal/check-loop-outlet-temp",
       "geothermal/check-loop-inlet-temp",
       "geothermal/calibrate-ground-sensor",
@@ -336,8 +338,19 @@
     ],
     "rewards": []
   },
+  "9018feac-7213-4eef-9654-b06dbd9404ea": {
+    "requires": [
+      "3dprinting/phone-stand"
+    ],
+    "rewards": [
+      "robotics/ultrasonic-rangefinder",
+      "robotics/servo-control",
+      "robotics/line-follower"
+    ]
+  },
   "e976bae6-e33c-428a-a20d-0aa8fde13c6c": {
     "requires": [
+      "robotics/ultrasonic-rangefinder",
       "robotics/servo-radar",
       "robotics/servo-gripper",
       "robotics/servo-control",
@@ -346,20 +359,12 @@
       "robotics/obstacle-avoidance",
       "robotics/maze-navigation",
       "robotics/line-follower",
+      "robotics/gyro-balance",
       "electronics/servo-sweep"
     ],
     "rewards": [
       "electronics/measure-arduino-5v",
       "electronics/arduino-blink"
-    ]
-  },
-  "9018feac-7213-4eef-9654-b06dbd9404ea": {
-    "requires": [
-      "3dprinting/phone-stand"
-    ],
-    "rewards": [
-      "robotics/servo-control",
-      "robotics/line-follower"
     ]
   },
   "8299ac3f-c232-46d4-a007-2ad86ec70361": {
@@ -462,8 +467,10 @@
   },
   "584ca717-4ce1-4ca1-bcd3-38272a52768a": {
     "requires": [
+      "hydroponics/pump-prime",
       "hydroponics/pump-install",
-      "hydroponics/nutrient-check"
+      "hydroponics/nutrient-check",
+      "geothermal/purge-loop-air"
     ],
     "rewards": []
   },
@@ -773,6 +780,7 @@
   "82577af7-6724-4cb2-8922-f7140e550145": {
     "requires": [
       "energy/offgrid-charger",
+      "astronomy/iss-photo",
       "astronomy/iss-flyover"
     ],
     "rewards": []
@@ -1019,7 +1027,8 @@
   },
   "4d21c498-9225-4d0b-9a1a-ed65e349f0a8": {
     "requires": [
-      "composting/turn-pile"
+      "composting/turn-pile",
+      "composting/check-temperature"
     ],
     "rewards": []
   },
@@ -1097,7 +1106,15 @@
     "requires": [
       "astronomy/observe-moon",
       "astronomy/light-pollution",
+      "astronomy/iss-photo",
       "astronomy/iss-flyover"
+    ],
+    "rewards": []
+  },
+  "49fb255e-a4c3-48e4-bca7-4c3781fdb98b": {
+    "requires": [
+      "astronomy/iss-photo",
+      "astronomy/basic-telescope"
     ],
     "rewards": []
   },
@@ -1114,12 +1131,6 @@
     "rewards": []
   },
   "2794503d-fbe7-4031-a63e-deac531f9784": {
-    "requires": [
-      "astronomy/basic-telescope"
-    ],
-    "rewards": []
-  },
-  "49fb255e-a4c3-48e4-bca7-4c3781fdb98b": {
     "requires": [
       "astronomy/basic-telescope"
     ],
