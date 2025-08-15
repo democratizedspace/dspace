@@ -3049,5 +3049,23 @@
                 }
             ]
         }
+    },
+    {
+        "id": "test-gfci-outlet",
+        "title": "Verify a GFCI outlet with a plug-in tester",
+        "image": "/assets/outlet.jpg",
+        "requireItems": [
+            {
+                "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
     }
 ]

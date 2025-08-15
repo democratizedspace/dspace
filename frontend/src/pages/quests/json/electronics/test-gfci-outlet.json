@@ -1,0 +1,48 @@
+{
+    "id": "electronics/test-gfci-outlet",
+    "title": "Test a GFCI Outlet",
+    "description": "Verify wiring on a GFCI outlet with a plug-in tester while wearing safety goggles.",
+    "image": "/assets/outlet.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Check the outlet for damage. Put on safety goggles and get your GFCI tester ready.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plug",
+                    "text": "Ready to test.",
+                    "requiresItems": [
+                        { "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481", "count": 1 },
+                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plug",
+            "text": "Insert the tester and note the LED pattern. Press the test button to trip the GFCI, then hit reset.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "test-gfci-outlet",
+                    "text": "Run the outlet test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Lights show correct wiring."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Unplug the tester and keep the outlet cover closed when not in use.",
+            "options": [{ "type": "finish", "text": "Safety first!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/continuity-test"]
+}
