@@ -41,14 +41,14 @@
         },
         {
             "id": "finish",
-            "text": "Switch off the meter, coil the cable loosely, and store it dry. If a conductor fails, snip the cable into short pieces with wire cutters before recycling. Remove your goggles.",
+            "text": "Switch off the meter, coil the cable loosely, and store it dry. If a conductor fails, snip the cable into short pieces with wire cutters before recycling. Remove your goggles and take this GFCI outlet tester for future wiring checks.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
-    "rewards": [],
+    "rewards": [{ "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481", "count": 1 }],
     "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
-        "passes": 4,
+        "passes": 5,
         "score": 95,
         "emoji": "💯",
         "history": [
@@ -70,6 +70,11 @@
             {
                 "task": "codex-hardening-2025-08-14",
                 "date": "2025-08-14",
+                "score": 95
+            },
+            {
+                "task": "codex-quest-hardening-2025-09-16",
+                "date": "2025-09-16",
                 "score": 95
             }
         ]
