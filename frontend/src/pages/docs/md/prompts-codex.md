@@ -40,7 +40,7 @@ For failing GitHub Actions runs, use the dedicated
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1. Quick start (Web vs CLI)
 
 | Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                                  |
 | -------------- | --------------------------- | ------------------------------------------ |
@@ -54,12 +54,12 @@ See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ## 2. Prompt ingredients
 
-| Ingredient           | Why it matters                                                   |
-| -------------------- | ---------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”). |
-| **Files to touch**   | Limits search space → faster & cheaper.                          |
-| **Constraints**      | Coding style, a11y, perf, etc.                                   |
-| **Acceptance check** | e.g. “All `npm run test:ci` suites pass”.                        |
+| Ingredient           | Why it matters                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”).                    |
+| **Files to touch**   | Limits search space → faster & cheaper.                                             |
+| **Constraints**      | Coding style, a11y, perf, etc.                                                      |
+| **Acceptance check** | e.g. `npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci` pass. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
