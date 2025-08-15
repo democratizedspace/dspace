@@ -6,13 +6,16 @@ slug: 'prompts-codex-meta'
 # Codex Meta Prompt
 
 Use this prompt when you want Codex to upgrade DSPACE's prompt documentation so the
-instructions improve themselves over time.
+instructions improve themselves over time. To overhaul the templates themselves,
+see the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). If CI fails, use
+the [Codex CI‑Failure Fix prompt](/docs/prompts-codex-ci-fix).
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
 and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` pass before committing.
+and `npm run test:ci` pass before committing. Scan staged changes with
+`git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 USER:
 1. Select one or more `prompts-*.md` files under `frontend/src/pages/docs/md/`.

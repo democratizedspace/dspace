@@ -43,12 +43,14 @@ CONTEXT:
   * Keep existing behaviour intact.
   * Follow `AGENTS.md` and project style.
   * Add or update tests proving the fix.
-  * Update documentation when necessary.
-  * After fixing, append a bullet to the "Lessons learned" section of
-    `frontend/src/pages/docs/md/prompts-codex-ci-fix.md` summarizing the cause
-    and remedy.
-  * Record the incident in `/outages/YYYY-MM-DD-<slug>.json` using
-    `outages/schema.json`.
+    * Update documentation when necessary.
+    * After fixing, append a bullet to the "Lessons learned" section of
+      `frontend/src/pages/docs/md/prompts-codex-ci-fix.md` summarizing the cause
+      and remedy.
+    * Record the incident in `/outages/YYYY-MM-DD-<slug>.json` using
+      `outages/schema.json`.
+    * Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
+      before committing.
 
 REQUEST:
 1. Explain in the pull-request body why the failure occurred (or would occur).

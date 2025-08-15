@@ -12,7 +12,8 @@ instructions current—the machine that builds the machine.
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and
 `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
-all pass before committing.
+all pass before committing. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
+before committing.
 
 USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing cross-links.

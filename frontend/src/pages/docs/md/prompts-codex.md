@@ -8,7 +8,9 @@ slug: 'prompts-codex'
 Codex (Web + CLI) is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR — but only if you give it a clear,
 file‑scoped prompt. This document stores the baseline instructions used when
-invoking Codex on DSPACE and should evolve alongside the project.
+invoking Codex on DSPACE and should evolve alongside the project. If CI fails,
+use the [Codex CI‑Failure Fix prompt](/docs/prompts-codex-ci-fix) to keep the
+main branch green.
 
 > **TL;DR**
 >
@@ -88,8 +90,9 @@ You are an automated contributor for the DSPACE repository. Choose one item
 from `frontend/src/pages/docs/md/changelog/20250901.md` that is either `[ ]` or
 `[x]` without 💯 (including those marked with ✅). Implement it fully, completing
 any sub-tasks. Provide all code, tests and documentation required. Follow
-`AGENTS.md` and ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` all pass before committing. If Playwright browsers are
+`AGENTS.md`, run `npm run lint`, `npm run type-check`, `npm run build`, and
+`npm run test:ci` before committing. Scan staged changes with
+`git diff --cached | ./scripts/scan-secrets.py`. If Playwright browsers are
 missing run `npx playwright install chromium` or use `SKIP_E2E=1 npm run test:ci`.
 
 USER:
@@ -115,7 +118,8 @@ dedicated to evolving the prompt guides themselves, see the
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
 and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` pass before committing.
+and `npm run test:ci` pass before committing. Scan staged changes with
+`git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 USER:
 1. Pick one or more prompt docs under `frontend/src/pages/docs/md/` (for example,
@@ -138,7 +142,8 @@ copy lives at [`prompts-codex-upgrader.md`](/docs/prompts-codex-upgrader).
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
 and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` pass before committing.
+and `npm run test:ci` pass before committing. Scan staged changes with
+`git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing
@@ -171,6 +176,8 @@ REQUEST:
 1. Apply the fix with appropriate tests.
 2. Commit the outage entry and related docs.
 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+4. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
+   committing.
 
 OUTPUT:
 A pull request referencing the new outage record and passing checks.
