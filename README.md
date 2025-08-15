@@ -44,19 +44,17 @@ The `dev:safe` command prevents common Playwright artifact errors that can occur
 ### Utility Functions
 
 The backend exposes `approximateIrlPrice(id)` to estimate real-world item costs. The lookup
-normalizes case, spaces, and hyphens for resilient calls.
-Prices are approximate USD values.
+normalizes case, trims extra whitespace, and converts spaces or hyphens into underscores for
+resilient calls. It returns `null` for unknown or non-string inputs. Prices are approximate USD
+values.
 
 ```ts
 import { approximateIrlPrice } from "./backend/approximateIrlPrice";
 
 console.log(approximateIrlPrice("3D-Printer")); // 350
 console.log(approximateIrlPrice("unknown")); // null
+console.log(approximateIrlPrice(undefined as any)); // null
 ```
-
-normalizes case, trims extra whitespace, and converts spaces or hyphens into underscores for
-resilient calls.
-
 ## Testing
 
 DSPACE uses a comprehensive testing suite to ensure code quality and prevent regressions.
@@ -281,7 +279,9 @@ everything consistent.
 For faster content development, consult our prompt guides for
 [quests](docs/prompts-quests), [items](docs/prompts-items), and
 [processes](docs/prompts-processes). Each includes ready-made templates for
-tools like GPT-4 or Claude. Combine these with the [Quest Development
+tools like GPT-4 or Claude. See [Codex prompts](docs/prompts-codex) for
+repository-wide automation and refresh templates with the
+[Codex Prompt Upgrader](docs/prompts-codex-upgrader). Combine these with the [Quest Development
 Guidelines](docs/quest-guidelines), the [Quest Template Example](docs/quest-template),
 the [Item Development Guidelines](docs/item-guidelines), the [Process Development
 Guidelines](docs/process-guidelines), and the [Quest Submission

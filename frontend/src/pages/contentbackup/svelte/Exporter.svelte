@@ -1,6 +1,7 @@
 <script>
     import Chip from '../../../components/svelte/Chip.svelte';
     import { exportCustomContentString } from '../../../utils/customcontent.js';
+    import { copyToClipboard } from '../../../utils/copyToClipboard.js';
 
     let backupString = '';
     exportCustomContentString().then((str) => (backupString = str));
@@ -12,11 +13,7 @@
         <div class="code-block">
             <code>{backupString}</code>
         </div>
-        <Chip
-            text="Copy"
-            on:click={() => navigator.clipboard.writeText(backupString)}
-            inverted={true}
-        />
+        <Chip text="Copy" on:click={() => copyToClipboard(backupString)} inverted={true} />
     </div>
 </Chip>
 

@@ -8,9 +8,9 @@ custom content you create.
 ## Game saves
 
 Visit the [Import/export gamesaves](/gamesaves) page to copy a snapshot of your
-entire progress. Click **Copy** to place the backup string on your clipboard or
-paste a previously saved string and click **Import** to restore it on another
-device.
+entire progress. Click **Copy** to place the backup string on your clipboard
+(works without the Clipboard API) or paste a previously saved string and click
+**Import** to restore it on another device.
 
 ## Custom content
 

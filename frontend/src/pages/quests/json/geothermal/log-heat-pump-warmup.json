@@ -1,0 +1,41 @@
+{
+    "id": "geothermal/log-heat-pump-warmup",
+    "title": "Log Heat Pump Warmup",
+    "description": "Track how quickly the loop temperature rises after startup.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Curious how your heat pump ramps up? Let's chart the warmup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "How do we record it?"
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Sample loop temp every minute for ten minutes with arduino-thermistor-read.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Warmup logged.",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [{ "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Compare that curve over seasons to spot efficiency changes.",
+            "options": [{ "type": "finish", "text": "Will do." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/log-ground-temperature"]
+}

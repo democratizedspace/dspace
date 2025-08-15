@@ -36,6 +36,7 @@ New quests in this release: 194
 - aquaria/guppy
 - aquaria/heater-install
 - aquaria/net-fish
+- aquaria/log-water-parameters
 - aquaria/ph-strip-test
 - aquaria/position-tank
 - aquaria/shrimp
@@ -53,6 +54,7 @@ New quests in this release: 194
 - astronomy/comet-tracking
 - astronomy/constellations
 - astronomy/iss-flyover
+- astronomy/iss-photo
 - astronomy/jupiter-moons
 - astronomy/light-pollution
 - astronomy/lunar-eclipse
@@ -99,6 +101,7 @@ New quests in this release: 194
 - devops/daily-backups
 - devops/docker-compose
 - devops/enable-https
+- devops/fail2ban
 - devops/firewall-rules
 - devops/k3s-deploy
 - devops/log-maintenance
@@ -148,9 +151,11 @@ New quests in this release: 194
 ### firstaid
 
 - firstaid/assemble-kit
+- firstaid/change-bandage
 - firstaid/dispose-expired
 - firstaid/learn-cpr
 - firstaid/restock-kit
+- firstaid/sanitize-pocket-mask
 - firstaid/splint-limb
 - firstaid/stop-nosebleed
 - firstaid/treat-burn
@@ -166,6 +171,7 @@ New quests in this release: 194
 - geothermal/compare-seasonal-ground-temps
 - geothermal/install-backup-thermistor
 - geothermal/log-ground-temperature
+- geothermal/log-heat-pump-warmup
 - geothermal/monitor-heat-pump-energy
 - geothermal/purge-loop-air
 - geothermal/replace-faulty-thermistor
@@ -202,6 +208,7 @@ New quests in this release: 194
 - programming/hello-sensor
 - programming/json-api
 - programming/json-endpoint
+- programming/median-temp
 - programming/plot-temp-cli
 - programming/temp-alert
 - programming/temp-email

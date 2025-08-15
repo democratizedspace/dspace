@@ -1,0 +1,8 @@
+{
+  "id": "menu-trailing-f",
+  "date": "2025-08-15",
+  "component": "frontend",
+  "rootCause": "A stray 'f' in Menu.svelte caused unpinned items to display with an extra character.",
+  "resolution": "Removed the typo and added tests to ensure menu items render correctly.",
+  "references": []
+}
