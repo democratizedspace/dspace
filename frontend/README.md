@@ -108,9 +108,12 @@ frontend/
 
 ### Prerequisites
 
--   Node.js 16.x or higher
+-   Node.js 18.x or 20.x (LTS)
 -   npm 7.x or higher
 -   Git
+
+The repo ships with a `.nvmrc` file targeting Node.js 20. Run `nvm use` to
+align your local environment.
 
 ### Local Development
 
