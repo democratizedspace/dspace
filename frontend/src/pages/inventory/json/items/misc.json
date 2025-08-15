@@ -1153,6 +1153,20 @@
         "unit": "cm"
     },
     {
+        "id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4",
+        "name": "electrical tape",
+        "description": "19 mm × 20 m PVC electrical tape for insulating wire splices.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "2 dUSD",
+        "unit": "roll",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "3455faac-8811-4991-b818-cecb98e8fff7",
         "name": "lab coat",
         "description": "Knee-length cotton lab coat with snap buttons and two pockets; one size fits most.",

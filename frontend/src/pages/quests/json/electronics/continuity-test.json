@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ensure the USB cable is unplugged from all devices. Inspect the insulation for cuts or frays. Put on safety goggles and lay the cable, a digital multimeter, and wire cutters on a dry, non-conductive surface.",
+            "text": "Ensure the USB cable is unplugged from all devices. Inspect the insulation for cuts or frays. Put on safety goggles and lay the cable, a digital multimeter, wire cutters, and electrical tape on a dry, non-conductive surface.",
             "options": [
                 {
                     "type": "goto",
@@ -34,21 +34,22 @@
                         { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
                         { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
                         { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 }
+                        { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 },
+                        { "id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Switch off the meter. If every conductor passes, coil the cable loosely and store it dry. If a conductor fails, use wire cutters to snip the cable into short pieces before recycling. Remove your goggles and take this GFCI outlet tester for future wiring checks.",
+            "text": "Switch off the meter. If every conductor passes, coil the cable loosely and store it dry. If a conductor fails, use wire cutters to snip the cable into short pieces before recycling, wrapping the cut ends with electrical tape. Remove your goggles and take this GFCI outlet tester for future wiring checks.",
             "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
     "rewards": [{ "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481", "count": 1 }],
     "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
-        "passes": 6,
+        "passes": 7,
         "score": 97,
         "emoji": "💯",
         "history": [
@@ -80,6 +81,11 @@
             {
                 "task": "codex-quest-hardening-2025-10-15",
                 "date": "2025-10-15",
+                "score": 97
+            },
+            {
+                "task": "codex-quest-hardening-2025-10-22",
+                "date": "2025-10-22",
                 "score": 97
             }
         ]
