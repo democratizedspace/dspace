@@ -1,0 +1,50 @@
+{
+    "id": "devops/fail2ban",
+    "title": "Block SSH Brute Force",
+    "description": "Install Fail2ban to ban repeated failed logins.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Now that your services are online, attackers may try brute-force SSH logins.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "How do I stop them?"
+                }
+            ]
+        },
+        {
+            "id": "install",
+            "text": "Install Fail2ban and configure a jail for the SSH service.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bans configured",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your node now blocks repeated SSH attempts automatically.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Stay secure"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/ssh-hardening"]
+}

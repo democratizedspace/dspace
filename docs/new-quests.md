@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 215
-New quests in this release: 193
+Current quest count: 216
+New quests in this release: 194
 
 ### 3dprinting
 
@@ -98,6 +98,7 @@ New quests in this release: 193
 - devops/daily-backups
 - devops/docker-compose
 - devops/enable-https
+- devops/fail2ban
 - devops/firewall-rules
 - devops/k3s-deploy
 - devops/log-maintenance
