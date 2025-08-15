@@ -125,6 +125,26 @@
         }
     },
     {
+        "id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26",
+        "name": "heat gun",
+        "description": "1200 W heat gun with 300 °C and 600 °C settings and a built-in stand for shrinking tubing.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "20 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
         "name": "digital multimeter",
         "description": "Handheld multimeter with manual 20 V DC range, measures up to 600 V, 10 A and 2 MΩ. Includes test probes and replaceable fuse.",
