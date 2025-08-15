@@ -44,19 +44,17 @@ The `dev:safe` command prevents common Playwright artifact errors that can occur
 ### Utility Functions
 
 The backend exposes `approximateIrlPrice(id)` to estimate real-world item costs. The lookup
-normalizes case, spaces, and hyphens for resilient calls.
-Prices are approximate USD values.
+normalizes case, trims extra whitespace, and converts spaces or hyphens into underscores for
+resilient calls. It returns `null` for unknown or non-string inputs. Prices are approximate USD
+values.
 
 ```ts
 import { approximateIrlPrice } from "./backend/approximateIrlPrice";
 
 console.log(approximateIrlPrice("3D-Printer")); // 350
 console.log(approximateIrlPrice("unknown")); // null
+console.log(approximateIrlPrice(undefined as any)); // null
 ```
-
-normalizes case, trims extra whitespace, and converts spaces or hyphens into underscores for
-resilient calls.
-
 ## Testing
 
 DSPACE uses a comprehensive testing suite to ensure code quality and prevent regressions.
