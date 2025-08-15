@@ -14,6 +14,7 @@ markdown or JSDoc so instructions stay current and consistent.
 > 1. Limit changes to the relevant docs.
 > 2. Fix outdated wording, links, or formatting.
 > 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 4. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 
 ```text
 SYSTEM:
@@ -24,7 +25,8 @@ committing.
 USER:
 1. Edit or add docs under `frontend/src/pages/docs/md`.
 2. Correct stale guidance, links, or formatting.
-3. If adding a new prompt doc, link it from `prompts-codex.md` and `/docs/index`.
+3. If adding a new prompt doc, link it from `prompts-codex.md` and the docs index
+   (`frontend/src/pages/docs/index.astro`).
 4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 OUTPUT:
