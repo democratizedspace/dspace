@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey! Orion here. Ready to blink an LED with a microcontroller? Set up on a dry, non-conductive surface. Put on safety goggles and keep the USB cable unplugged until every wire is double-checked.",
+            "text": "Hey! Orion here. Ready to blink an LED with a microcontroller? Work on a dry, non-conductive surface, discharge static on a grounded object, wear safety goggles, and keep the USB Type-A to Type-B cable unplugged until every wire is double-checked.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 Ω Resistor, a 5 mm LED, Safety Goggles, a USB Type-A to Type-B cable and a Laptop Computer with the Arduino IDE installed. If the IDE isn't installed, run the 'Install the Arduino IDE' process. Confirm the resistor bands read red-red-brown. Put the LED's long leg on pin 13 through the resistor and the short leg to GND. Keep power unplugged while wiring.",
+            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 Ω Resistor, a 5 mm LED, Safety Goggles, a USB Type-A to Type-B cable, and a Laptop Computer with the Arduino IDE installed. If the IDE isn't installed, run the 'Install the Arduino IDE' process. Confirm the resistor bands read red-red-brown (220 Ω). Place the LED's long leg (anode) into digital pin 13 through the resistor and its short leg (cathode) to GND. Keep power unplugged while wiring.",
             "options": [
                 {
                     "type": "process",
@@ -69,7 +69,7 @@
         },
         {
             "id": "upload",
-            "text": "Connect the board to the Laptop Computer with the USB Type-A to Type-B cable. In the Arduino IDE open File > Examples > 01.Basics > Blink. Under Tools choose Board: Arduino Uno and the correct Port, then click Upload. Wait for 'Done uploading'; the board resets and the LED blinks once per second. Keep fingers off the circuit while it's powered.",
+            "text": "Connect the board to the Laptop Computer with the USB Type-A to Type-B cable. In the Arduino IDE open File > Examples > 01.Basics > Blink. Under Tools choose Board: Arduino Uno and the correct Port, then click Upload. Wait for 'Done uploading'; the board resets and the LED blinks once per second. Avoid touching the circuit while it's powered.",
             "options": [
                 {
                     "type": "goto",
@@ -102,7 +102,7 @@
         }
     ],
     "hardening": {
-        "passes": 8,
+        "passes": 9,
         "score": 100,
         "emoji": "💯",
         "history": [
@@ -144,6 +144,11 @@
             {
                 "task": "codex-quest-refresh-2025-09-18",
                 "date": "2025-09-18",
+                "score": 100
+            },
+            {
+                "task": "codex-quest-polish-2025-09-19",
+                "date": "2025-09-19",
                 "score": 100
             }
         ]
