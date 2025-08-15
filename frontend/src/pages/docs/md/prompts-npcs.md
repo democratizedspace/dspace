@@ -5,7 +5,13 @@ slug: 'prompts-npcs'
 
 # Writing great NPC prompts for the _dspace_ repo
 
-Codex is a sandboxed engineering agent that can open this repository, run its own tests, and send you a ready-made PR—but only if you give it a clear, file-scoped prompt. Use this guide alongside [Codex Prompts](/docs/prompts-codex) when working on NPC bios or dialogue. Consult the [NPCs guide](/docs/npcs) for voice and lore details.
+Codex is a sandboxed engineering agent that can open this repository, run its own tests,
+and send you a ready-made PR—but only if you give it a clear, file-scoped prompt.
+Use this guide alongside [Codex Prompts](/docs/prompts-codex) when working on NPC bios
+or dialogue. To keep the prompt docs evolving, see the
+[Codex meta prompt](/docs/prompts-codex-meta). If these templates drift, refresh them
+with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). Consult the
+[NPCs guide](/docs/npcs) for voice and lore details.
 
 > **TL;DR**
 >
@@ -30,7 +36,7 @@ Codex is a sandboxed engineering agent that can open this repository, run its ow
         codex exec "npm run lint && npm run type-check && npm run build && npm run test:ci"
         ```
 
-See the [Codex CLI repository][codex-cli] for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
@@ -43,7 +49,8 @@ See the [Codex CLI repository][codex-cli] for more flags.
 | **Constraints**      | Coding style, lore rules, NPC schema.                          |
 | **Acceptance check** | e.g. “All tests pass”.                                         |
 
-Codex merges those instructions with any `AGENTS.md` files it finds, so keep prompt-level rules short and concrete.
+Codex merges those instructions with any `AGENTS.md` files it finds, so keep
+prompt-level rules short and concrete.
 
 ---
 
@@ -74,7 +81,12 @@ Use this when you want Codex to automatically create or upgrade an NPC entry.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository. Edit `frontend/src/pages/docs/md/npcs.md`, adding or refining NPC sections. Maintain each character’s voice, keep sample dialogue realistic, and ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
+You are an automated contributor for the DSPACE repository.
+Edit `frontend/src/pages/docs/md/npcs.md`, adding or refining NPC sections.
+Maintain each character’s voice, keep sample dialogue realistic, and ensure
+`npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
+pass. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
+before committing.
 
 USER:
 1. Follow the steps above.
@@ -92,6 +104,7 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Provide clear context** about DSPACE's educational mission and sustainability focus.
 -   **Use system prompts** to guide tone and technical accuracy.
 -   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible but incorrect details.
+-   **Fact-check technical information** since AI systems can generate
+    plausible but incorrect details.
 
-[codex-cli]: https://github.com/microsoft/Codex-CLI
+[openai-cli]: https://github.com/openai/openai-cli

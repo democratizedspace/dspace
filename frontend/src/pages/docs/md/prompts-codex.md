@@ -11,8 +11,8 @@ file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
-[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes), and
-[NPC prompts](/docs/prompts-npcs).
+[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
+[NPC prompts](/docs/prompts-npcs), and [Outage prompts](/docs/prompts-outages).
 
 > **TL;DR**
 >
@@ -21,7 +21,8 @@ For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
 
-For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+For failing GitHub Actions runs, use the dedicated
+[CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 ---
 
@@ -30,6 +31,8 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 -   [Item Prompts](/docs/prompts-items)
 -   [Process Prompts](/docs/prompts-processes)
 -   [Quest Prompts](/docs/prompts-quests)
+-   [NPC Prompts](/docs/prompts-npcs)
+-   [Outage Prompts](/docs/prompts-outages)
 -   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
 -   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)

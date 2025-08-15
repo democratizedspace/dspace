@@ -7,12 +7,17 @@ slug: 'prompts-outages'
 
 Codex is a sandboxed engineering agent that can open this repository and run its own tests.
 Use this guide when diagnosing an incident so the fix and a record land in the outage catalog.
+For general prompting guidelines see [Codex Prompts](/docs/prompts-codex).
+To keep the docs evolving, consult the [Codex meta prompt](/docs/prompts-codex-meta).
+If this template drifts, refresh it with the
+[Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 
 > **TL;DR**
 >
 > 1. Investigate the failure and implement a fix.
 > 2. Add `outages/YYYY-MM-DD-<slug>.json` matching `outages/schema.json`.
 > 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 4. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 
 ```text
 SYSTEM:
@@ -27,9 +32,10 @@ CONTEXT:
 - Keep behaviour intact, add tests, and update documentation.
 
 REQUEST:
-1. Apply the fix with appropriate tests.
-2. Commit the outage entry and related docs.
-3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+ 1. Apply the fix with appropriate tests.
+ 2. Commit the outage entry and related docs.
+ 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+ 4. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 
 OUTPUT:
 A pull request referencing the new outage record and passing checks.
