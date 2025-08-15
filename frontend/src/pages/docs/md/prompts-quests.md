@@ -11,8 +11,9 @@ clear, file‑scoped prompt. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex) when working on quests. To keep the prompt
 docs improving, see the [Codex meta prompt](/docs/prompts-codex-meta). For the
 steps required to share quests with the community, see the
-[Quest Submission Guide](/docs/quest-submission). Comprehensive content
-guidelines live in our [Content Development Guide](/docs/content-development),
+[Quest Submission Guide](/docs/quest-submission). For quest design best
+practices, see the [Quest Guidelines](/docs/quest-guidelines). Comprehensive
+content guidelines live in our [Content Development Guide](/docs/content-development),
 which covers quests, items and processes in detail.
 
 > **TL;DR**
@@ -44,7 +45,7 @@ See the [Codex CLI repository][codex-cli] for more flags.
 
 ---
 
-## 2 Prompt ingredients
+## 2. Prompt ingredients
 
 | Ingredient           | Why it matters                                                      |
 | -------------------- | ------------------------------------------------------------------- |
@@ -58,7 +59,7 @@ prompt‑level rules short and concrete.
 
 ---
 
-## 3 Reusable template
+## 3. Reusable template
 
 ```text
 You are working in democratizedspace/dspace.

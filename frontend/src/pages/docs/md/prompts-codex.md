@@ -19,7 +19,7 @@ invoking Codex on DSPACE and should evolve alongside the project.
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1. Quick start (Web vs CLI)
 
 | Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                               |
 | -------------- | --------------------------- | --------------------------------------- |
@@ -31,7 +31,7 @@ See the upstream CLI reference for more flags.
 
 ---
 
-## 2 Prompt ingredients
+## 2. Prompt ingredients
 
 | Ingredient           | Why it matters                                                   |
 | -------------------- | ---------------------------------------------------------------- |
@@ -45,7 +45,7 @@ prompt‑level rules short and concrete.
 
 ---
 
-## 3 Reusable template
+## 3. Reusable template
 
 ```text
 You are working in democratizedspace/dspace.
