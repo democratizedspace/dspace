@@ -405,5 +405,19 @@
                 }
             ]
         }
+    },
+    {
+        "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+        "name": "GFCI outlet tester",
+        "description": "Plug-in tester with three LEDs and test button to verify wiring and GFCI outlets; 50 g.",
+        "image": "/assets/outlet.jpg",
+        "price": "12 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

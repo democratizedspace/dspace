@@ -33,11 +33,11 @@ general content rules see the [Item Development Guidelines](/docs/item-guideline
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && npm run test:ci && \
-        npm run itemValidation && npm run test:ci -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && npm run audit:ci && \
+        npm run test:ci && npm run itemValidation && npm run test:ci -- itemQuality"
         ```
 
-See the [Codex CLI repository][codex-cli] for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
@@ -50,6 +50,7 @@ See the [Codex CLI repository][codex-cli] for more flags.
     -   `npm run lint`
     -   `npm run type-check`
     -   `npm run build`
+    -   `npm run audit:ci`
     -   `npm run test:ci`
     -   `npm run itemValidation`
     -   `npm run test:ci -- itemQuality` pass
@@ -74,7 +75,7 @@ REQUIREMENTS
 3. Ensure the item is referenced by at least one quest or process; update those
    files and create missing processes as needed.
 4. Use only existing image assets; do not add new image files.
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Run `npm run itemValidation` and `npm run test:ci -- itemQuality`, fixing any failures.
 7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 8. Use an emoji-prefixed commit message like `📝 : – add price field`.
@@ -146,8 +147,9 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci`,
-   `npm run itemValidation`, and `npm run test:ci -- itemQuality`. Update docs if needed.
+5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
+   `npm run test:ci`, `npm run itemValidation`, and `npm run test:ci -- itemQuality`.
+   Update docs if needed.
 6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 7. Use an emoji-prefixed commit message like `📝 : – refine item details`.
 
@@ -165,4 +167,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[codex-cli]: https://github.com/microsoft/Codex-CLI
+[openai-cli]: https://github.com/openai/openai-cli
