@@ -30,7 +30,7 @@ Codex is a sandboxed engineering agent that can open this repository, run its ow
         codex exec "npm run lint && npm run type-check && npm run build && npm run test:ci"
         ```
 
-See the [Codex CLI repository][codex-cli] for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
@@ -94,4 +94,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Iterate on outputs** rather than expecting perfection on the first try.
 -   **Fact-check technical information** since AI systems can generate plausible but incorrect details.
 
-[codex-cli]: https://github.com/microsoft/Codex-CLI
+[openai-cli]: https://github.com/openai/openai-cli
