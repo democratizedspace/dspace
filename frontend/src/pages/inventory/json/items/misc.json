@@ -440,14 +440,20 @@
     {
         "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
         "name": "rocket launch checklist",
-        "description": "Laminated preflight checklist covering pad setup, arming and countdown steps.",
+        "description": "A5 laminated card (148×210 mm, ~25 g) listing pad setup, arming and 10-sec countdown steps.",
         "image": "/assets/paperwork.jpg",
         "price": "2 dUSD",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 65
+                }
+            ]
         }
     },
     {
@@ -1034,9 +1040,22 @@
     {
         "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
         "name": "red flashlight",
-        "description": "A flashlight with a red filter to preserve night vision.",
-        "image": "/assets/quests/basic_circuit.svg",
-        "price": "5 dUSD"
+        "description": "50 lumen handheld light with red lens to preserve night vision; runs ~3 h on a 9 V battery.",
+        "image": "/assets/aquarium_light.jpg",
+        "price": "8 dUSD",
+        "unit": "flashlight",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",

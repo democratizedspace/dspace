@@ -36,6 +36,7 @@ New quests in this release: 201
 - aquaria/guppy
 - aquaria/heater-install
 - aquaria/log-water-parameters
+- aquaria/net-fish
 - aquaria/ph-strip-test
 - aquaria/position-tank
 - aquaria/shrimp
