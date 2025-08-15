@@ -40,7 +40,7 @@ which covers quests, items and processes in detail.
         npm run test:ci -- questCanonical questQuality"
         ```
 
-See the [Codex CLI repository][codex-cli] for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
@@ -194,4 +194,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 - **Fact-check technical information** since AI systems can generate plausible
   but incorrect details.
 
-[codex-cli]: https://github.com/microsoft/Codex-CLI
+[openai-cli]: https://github.com/openai/openai-cli

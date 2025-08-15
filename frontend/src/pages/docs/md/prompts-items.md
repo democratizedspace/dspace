@@ -37,7 +37,7 @@ general content rules see the [Item Development Guidelines](/docs/item-guideline
         npm run test:ci && npm run itemValidation && npm run test:ci -- itemQuality"
         ```
 
-See the [Codex CLI repository][codex-cli] for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
@@ -162,4 +162,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[codex-cli]: https://github.com/microsoft/Codex-CLI
+[openai-cli]: https://github.com/openai/openai-cli
