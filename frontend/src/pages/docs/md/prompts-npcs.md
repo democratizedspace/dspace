@@ -85,6 +85,27 @@ OUTPUT:
 A pull request with the updated NPC doc and passing tests.
 ```
 
+## Upgrade prompt for existing NPCs
+
+Use this prompt to refine NPC bios and dialogue over time.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository.
+
+USER:
+1. Pick an NPC from `frontend/src/pages/docs/md/npcs.md` that needs clearer voice or updated facts.
+2. Improve characterization and ensure dialogue stays concise and in-universe.
+3. Reuse existing image assets; do not add new images.
+4. Cross-reference related quests or processes and update them if needed.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+6. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+7. Use an emoji-prefixed commit message like `📝 : – refine NPC bio`.
+
+OUTPUT:
+A pull request with the refined NPC and passing checks.
+```
+
 ## Additional tips for AI assistance
 
 Modern assistants can be powerful collaborators. Keep in mind:

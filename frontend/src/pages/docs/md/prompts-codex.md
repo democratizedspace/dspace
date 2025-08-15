@@ -11,8 +11,8 @@ file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
-[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes), and
-[NPC prompts](/docs/prompts-npcs).
+[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
+[NPC prompts](/docs/prompts-npcs), and [Docs prompts](/docs/prompts-docs).
 
 > **TL;DR**
 >
@@ -32,6 +32,7 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 -   [Quest Prompts](/docs/prompts-quests)
 -   [NPC Prompts](/docs/prompts-npcs)
 -   [Outage Prompts](/docs/prompts-outages)
+-   [Docs Prompts](/docs/prompts-docs)
 -   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
 -   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)

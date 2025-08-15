@@ -49,16 +49,17 @@ Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs an
 
 <img src="/assets/npc/hydro.jpg" />
 
-Hydro, a relaxed and affable team member, has a gift for hydroponics and sustainable farming. They ensure the crew has a steady supply of food during lengthy space missions. Growing up on a small Earth farm, Hydro acquired a strong appreciation for sustainable agriculture. In college, they studied biology and became intrigued by hydroponics as a method for cultivating crops in harsh environments.
+Hydro, a relaxed and affable team member, has a gift for hydroponics and sustainable farming. They ensure the crew has a steady supply of food during lengthy space missions. Growing up on a small Earth farm, Hydro acquired a strong appreciation for sustainable agriculture. In college, they studied biology and became intrigued by hydroponics as a method for cultivating crops in harsh environments. They monitor nutrient levels and light cycles, turning complex science into friendly chatter that keeps novices engaged.
 
 ### Sample Dialogue
 
 -   "Hey there! I'm Hydro, your local hydroponics expert!"
--   "Oh I could talk for hours but I'll give you the short version: hydroponics is a method of growing plants using mineral nutrient solutions."
+-   "Oh I could talk for hours, but the short version? Roots bathe in nutrient-rich water."
 -   "Excellent! First things first, I need you to accept this hydroponics tub."
 -   "Now that you've got your hydroponics tub, you'll need some dechlorinated water."
 -   "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems."
 -   "Let's try stevia next. Its leaves are unbelievably sweet!"
+-   "If the pH drifts, a splash of lemon juice or baking soda can nudge it back on track."
 
 ## Orion
 
@@ -123,7 +124,7 @@ Atlas is a humanoid robot assistant designed to help with physical tasks that re
 
 <img src="/assets/npc/atlas.jpg" />
 
-Cedar is a seasoned woodworker who loves guiding newcomers. Years of building furniture have made them patient and detail-oriented. Cedar will help you master safe tool use and gradually tackle bigger projects.
+Cedar is a seasoned woodworker who loves guiding newcomers. Years of building furniture have made them patient and detail-oriented, with a knack for turning scrap into sturdy furniture. Cedar will help you master safe tool use, respect the grain, and gradually tackle bigger projects.
 
 ### Sample Dialogue
 
@@ -132,6 +133,39 @@ Cedar is a seasoned woodworker who loves guiding newcomers. Years of building fu
 -   "Keep your fingers clear of the blade and let the saw do the work."
 -   "Nice job on that birdhouse! Sand the edges so our feathered friends stay safe."
 -   "Ready for a bigger project? A sturdy step stool will test your skills."
+-   "Once it's assembled, a light coat of oil will make that grain pop."
+
+## Lyra
+
+<img src="/assets/npc/nova.jpg" />
+
+Lyra charts the stars and keeps the guild's telescopes in perfect alignment. Raised under dark
+rural skies, she turned her childhood fascination into a career mapping orbital trajectories.
+Lyra joined the metaguild to guide launches through debris fields and teach others the patience
+of stargazing.
+
+### Sample Dialogue
+
+-   "Hey, I'm Lyra. If you can find Polaris, I can get you anywhere in the system."
+-   "Bring the telescope outside; city lights kill the view."
+-   "Set your exposure to 15 seconds and you'll catch that comet's tail."
+-   "Gravity's predictable, but people? That's why I prefer stars."
+-   "Want to try some orbital mechanics? We'll start with a Hohmann transfer."
+
+## Helio
+
+<img src="/assets/npc/sydney.jpg" />
+
+Helio is a cheerful solar technician who can't resist chasing daylight.
+They design compact arrays that keep the metaguild's gear humming far from any outlet.
+
+### Sample Dialogue
+
+-   "Sun's up! I'm Helio. Let's put that star to work for you."
+-   "Start by unfolding the panel and angling it toward the brightest patch of sky."
+-   "See that meter? If it's in the green, you're charging at peak efficiency."
+-   "A cloud rolled in—no worries, the battery will bridge the gap."
+-   "Keep the cells clean and they'll power your adventures for years."
 
 <style>
     img {
