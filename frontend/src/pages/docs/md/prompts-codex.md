@@ -134,9 +134,9 @@ A pull request with the improved prompt doc and passing checks.
 
 ## Prompt Upgrader
 
-Use this meta prompt when the Codex templates themselves need refreshing. It
-keeps our guidance current—the machine that builds the machine. A standalone
-copy lives at [`prompts-codex-upgrader.md`](/docs/prompts-codex-upgrader).
+Use this meta prompt when the Codex templates need refreshing. It keeps our
+guidance current—the machine that builds the machine. See the standalone
+[Codex Prompt Upgrader](/docs/prompts-codex-upgrader) for the full template.
 
 ```text
 SYSTEM:
@@ -148,8 +148,9 @@ USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing
    cross-links.
 2. Update prompt templates, including this file, to reflect current practices.
-3. Propagate related changes across docs.
-4. Run the checks above.
+3. Link new prompt files from `prompts-codex.md` and the docs index.
+4. Propagate related changes across docs.
+5. Run the checks above.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
