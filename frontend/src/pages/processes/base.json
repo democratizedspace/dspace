@@ -2344,6 +2344,18 @@
         "duration": "10m"
     },
     {
+        "id": "swap-white-pla-filament",
+        "title": "Swap to white PLA filament on an entry-level FDM 3D printer",
+        "image": "/assets/pla_white.jpg",
+        "requireItems": [
+            { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+        ],
+        "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 10 }],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
         "id": "print-benchy",
         "title": "3D print a 60 mm Benchy calibration boat on an entry-level FDM printer with 15 g white PLA",
         "requireItems": [
