@@ -30,6 +30,8 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 -   [Item Prompts](/docs/prompts-items)
 -   [Process Prompts](/docs/prompts-processes)
 -   [Quest Prompts](/docs/prompts-quests)
+-   [NPC Prompts](/docs/prompts-npcs)
+-   [Outage Prompts](/docs/prompts-outages)
 -   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
 -   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
@@ -38,24 +40,24 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 
 ## 1 Quick start (Web vs CLI)
 
-| Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                               |
-| -------------- | --------------------------- | --------------------------------------- |
-| Ad‑hoc feature | “Code” button, attach repo  | `codex "add buy‑button to ProcessView"` |
-| Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`    |
-| CI automation  | –                           | `codex exec --full-auto "run npm test"` |
+| Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                                  |
+| -------------- | --------------------------- | ------------------------------------------ |
+| Ad‑hoc feature | “Code” button, attach repo  | `codex "add buy‑button to ProcessView"`    |
+| Ask a question | “Ask” button                | `codex exec "explain utils/time.ts"`       |
+| CI automation  | –                           | `codex exec --full-auto "npm run test:ci"` |
 
-See the upstream CLI reference for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
 ## 2. Prompt ingredients
 
-| Ingredient           | Why it matters                                                   |
-| -------------------- | ---------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”). |
-| **Files to touch**   | Limits search space → faster & cheaper.                          |
-| **Constraints**      | Coding style, a11y, perf, etc.                                   |
-| **Acceptance check** | e.g. “All `npm test` suites pass”.                               |
+| Ingredient           | Why it matters                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”).                    |
+| **Files to touch**   | Limits search space → faster & cheaper.                                             |
+| **Constraints**      | Coding style, a11y, perf, etc.                                                      |
+| **Acceptance check** | e.g. `npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci` pass. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
@@ -177,3 +179,5 @@ A pull request refreshing the Codex prompt docs with passing checks.
 ## Outage prompt
 
 See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.
+
+[openai-cli]: https://github.com/openai/openai-cli
