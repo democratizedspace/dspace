@@ -100,6 +100,7 @@ New quests in this release: 194
 - devops/daily-backups
 - devops/docker-compose
 - devops/enable-https
+- devops/fail2ban
 - devops/firewall-rules
 - devops/k3s-deploy
 - devops/log-maintenance
