@@ -38,7 +38,7 @@ For fundamental design tips see the
         npm run test:ci && npm run test:ci -- processQuality"
         ```
 
-See the [Codex CLI repository][codex-cli] for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
@@ -91,8 +91,9 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/base.json` with corresponding
 hardening files in `frontend/src/pages/processes/hardening`. Ensure realistic
-steps, durations, item references, and passing checks (`npm run lint`, `npm run type-check`,
-`npm run build`, `npm run test:ci`, and `npm run test:ci -- processQuality`).
+steps, durations, item references, and passing checks (`npm run lint`,
+`npm run type-check`, `npm run build`, `npm run test:ci`, and
+`npm run test:ci -- processQuality`).
 Verify the process links to existing quests or items, add missing registry
 entries if needed, reuse existing image assets, and scan for secrets with
 `git diff --cached | ./scripts/scan-secrets.py` before committing.
@@ -158,4 +159,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[codex-cli]: https://github.com/microsoft/Codex-CLI
+[openai-cli]: https://github.com/openai/openai-cli
