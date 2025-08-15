@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-16-frontend-new-quests-outdated",
+  "date": "2025-08-16",
+  "component": "docs",
+  "rootCause": "frontend/src/pages/docs/md/new-quests.md was not regenerated after quest updates, leading to stale counts and failing tests.",
+  "resolution": "ran scripts/update-new-quests.js to regenerate both docs/new-quests.md and frontend/src/pages/docs/md/new-quests.md",
+  "references": ["tests/newQuestsList.test.ts"]
+}
