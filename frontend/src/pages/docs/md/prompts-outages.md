@@ -6,11 +6,11 @@ slug: 'prompts-outages'
 # Outage prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository and run its own tests.
-Use this guide when diagnosing an incident so the fix and a record land in the outage catalog.
-For general prompting guidelines see [Codex Prompts](/docs/prompts-codex).
-To keep the docs evolving, consult the [Codex meta prompt](/docs/prompts-codex-meta).
-If this template drifts, refresh it with the
-[Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+Use this guide alongside [Codex Prompts](/docs/prompts-codex) when diagnosing an incident so the fix
+and a record land in the outage catalog.
+To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
+If these templates drift,
+refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 
 > **TL;DR**
 >
@@ -18,7 +18,7 @@ If this template drifts, refresh it with the
 > 2. Add [`outages/YYYY-MM-DD-<slug>.json`][outage-dir]
 >    matching [`outages/schema.json`][outage-schema].
 > 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 4. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+> 4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 
 ```text
 SYSTEM:
