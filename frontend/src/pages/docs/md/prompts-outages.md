@@ -6,7 +6,8 @@ slug: 'prompts-outages'
 # Outage prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository and run its own tests.
-Use this guide when diagnosing incidents to ensure the fix and a record land in the outage catalog.
+Use this guide when diagnosing an incident so the fix and a record land in the outage catalog.
+See the [Outage Catalog](/docs/outages) for schema details and prior incidents.
 
 > **TL;DR**
 >
