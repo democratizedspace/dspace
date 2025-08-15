@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 215
-New quests in this release: 193
+Current quest count: 223
+New quests in this release: 201
 
 ### 3dprinting
 
@@ -35,6 +35,8 @@ New quests in this release: 193
 - aquaria/floating-plants
 - aquaria/guppy
 - aquaria/heater-install
+- aquaria/log-water-parameters
+- aquaria/net-fish
 - aquaria/ph-strip-test
 - aquaria/position-tank
 - aquaria/shrimp
@@ -52,6 +54,7 @@ New quests in this release: 193
 - astronomy/comet-tracking
 - astronomy/constellations
 - astronomy/iss-flyover
+- astronomy/iss-photo
 - astronomy/jupiter-moons
 - astronomy/light-pollution
 - astronomy/lunar-eclipse
@@ -98,6 +101,7 @@ New quests in this release: 193
 - devops/daily-backups
 - devops/docker-compose
 - devops/enable-https
+- devops/fail2ban
 - devops/firewall-rules
 - devops/k3s-deploy
 - devops/log-maintenance
@@ -147,9 +151,11 @@ New quests in this release: 193
 ### firstaid
 
 - firstaid/assemble-kit
+- firstaid/change-bandage
 - firstaid/dispose-expired
 - firstaid/learn-cpr
 - firstaid/restock-kit
+- firstaid/sanitize-pocket-mask
 - firstaid/splint-limb
 - firstaid/stop-nosebleed
 - firstaid/treat-burn
@@ -165,6 +171,7 @@ New quests in this release: 193
 - geothermal/compare-seasonal-ground-temps
 - geothermal/install-backup-thermistor
 - geothermal/log-ground-temperature
+- geothermal/log-heat-pump-warmup
 - geothermal/monitor-heat-pump-energy
 - geothermal/purge-loop-air
 - geothermal/replace-faulty-thermistor
@@ -201,6 +208,7 @@ New quests in this release: 193
 - programming/hello-sensor
 - programming/json-api
 - programming/json-endpoint
+- programming/median-temp
 - programming/plot-temp-cli
 - programming/temp-alert
 - programming/temp-email
