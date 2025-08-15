@@ -2981,7 +2981,7 @@
     },
     {
         "id": "check-flashlight-battery",
-        "title": "Measure flashlight battery voltage with a digital multimeter",
+        "title": "Measure a red flashlight's 9 V battery with a digital multimeter",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
