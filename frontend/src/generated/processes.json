@@ -3773,6 +3773,10 @@
             {
                 "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
                 "count": 1
+            },
+            {
+                "id": "80d30825-a42b-4add-b715-322e1713952c",
+                "count": 1
             }
         ],
         "consumeItems": [],
@@ -3827,7 +3831,7 @@
     },
     {
         "id": "assemble-servo-arm",
-        "title": "Bolt a servo motor to a base and attach a lightweight arm",
+        "title": "Bolt a micro servo to a base and attach its plastic horn as an arm with a precision screwdriver set",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -3841,12 +3845,18 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "15m",
+        "duration": "10m",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 70
+                }
+            ]
         }
     }
 ]

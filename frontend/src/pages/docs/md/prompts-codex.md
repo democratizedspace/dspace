@@ -10,6 +10,10 @@ run its own tests, and send you a ready‑made PR — but only if you give it a 
 file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
+For task‑specific templates see [Quest prompts](/docs/prompts-quests),
+[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes), and
+[NPC prompts](/docs/prompts-npcs).
+
 > **TL;DR**
 >
 > 1. Scope the task to one or two files.
@@ -21,7 +25,7 @@ For failing GitHub Actions runs, use the dedicated [CI-failure fix prompt](/docs
 
 ---
 
-## 1 Quick start (Web vs CLI)
+## 1. Quick start (Web vs CLI)
 
 | Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                               |
 | -------------- | --------------------------- | --------------------------------------- |
@@ -33,7 +37,7 @@ See the upstream CLI reference for more flags.
 
 ---
 
-## 2 Prompt ingredients
+## 2. Prompt ingredients
 
 | Ingredient           | Why it matters                                                   |
 | -------------------- | ---------------------------------------------------------------- |
@@ -47,7 +51,7 @@ prompt‑level rules short and concrete.
 
 ---
 
-## 3 Reusable template
+## 3. Reusable template
 
 ```text
 You are working in democratizedspace/dspace.
@@ -132,9 +136,9 @@ A pull request with the improved prompt doc and passing checks.
 
 ## Prompt Upgrader
 
-Use this meta prompt when the Codex templates themselves need refreshing. It
-keeps our guidance current—the machine that builds the machine. A standalone
-copy lives at [`prompts-codex-upgrader.md`](/docs/prompts-codex-upgrader).
+Use this meta prompt when the Codex templates need refreshing. It keeps our
+guidance current—the machine that builds the machine. See the standalone
+[Codex Prompt Upgrader](/docs/prompts-codex-upgrader) for the full template.
 
 ```text
 SYSTEM:
@@ -146,34 +150,14 @@ USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing
    cross-links.
 2. Update prompt templates, including this file, to reflect current practices.
-3. Propagate related changes across docs.
-4. Run the checks above.
+3. Link new prompt files from `prompts-codex.md` and the docs index.
+4. Propagate related changes across docs.
+5. Run the checks above.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
 
-## Outage Prompt
+## Outage prompt
 
-Use this snippet when fixing an incident so knowledge lands in the outage catalog.
-
-```text
-SYSTEM:
-You are an automated contributor for the DSPACE repository.
-
-PURPOSE:
-Diagnose an outage, implement a fix, and document it.
-
-CONTEXT:
-- Review existing records under `/outages` for similar failures.
-- After resolving, add `outages/YYYY-MM-DD-<slug>.json` matching `outages/schema.json`.
-- Keep behaviour intact, add tests, and update documentation.
-
-REQUEST:
-1. Apply the fix with appropriate tests.
-2. Commit the outage entry and related docs.
-3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-
-OUTPUT:
-A pull request referencing the new outage record and passing checks.
-```
+See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.

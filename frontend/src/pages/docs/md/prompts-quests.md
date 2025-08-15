@@ -27,25 +27,25 @@ which covers quests, items and processes in detail.
 
 ## 1. Quick start (Web vs CLI)
 
-- **Add or update a quest**
-    - Web: use the “Code” button and attach the repo.
-    - CLI: `codex "add quest solar/led-basics"`
-- **Ask about quest files**
-    - Web: use the “Ask” button.
-    - CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
-- **Run quest tests**
-    - Web: not supported yet.
-    - CLI:
+-   **Add or update a quest**
+    -   Web: use the “Code” button and attach the repo.
+    -   CLI: `codex "add quest solar/led-basics"`
+-   **Ask about quest files**
+    -   Web: use the “Ask” button.
+    -   CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
+-   **Run quest tests**
+    -   Web: not supported yet.
+    -   CLI:
         ```bash
         codex exec "npm run lint && npm run type-check && npm run build && \
         npm run test:ci -- questCanonical questQuality"
         ```
 
-See the [Codex CLI repository][codex-cli] for more flags.
+See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ---
 
-## 2 Prompt ingredients
+## 2. Prompt ingredients
 
 | Ingredient           | Why it matters                                                      |
 | -------------------- | ------------------------------------------------------------------- |
@@ -59,7 +59,7 @@ prompt‑level rules short and concrete.
 
 ---
 
-## 3 Reusable template
+## 3. Reusable template
 
 ```text
 You are working in democratizedspace/dspace.
@@ -189,10 +189,10 @@ A pull request with the refined quest, updated hardening block and passing tests
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
-- **Provide clear context** about DSPACE's educational mission and sustainability focus.
-- **Use system prompts** to guide tone and technical accuracy.
-- **Iterate on outputs** rather than expecting perfection on the first try.
-- **Fact-check technical information** since AI systems can generate plausible
-  but incorrect details.
+-   **Provide clear context** about DSPACE's educational mission and sustainability focus.
+-   **Use system prompts** to guide tone and technical accuracy.
+-   **Iterate on outputs** rather than expecting perfection on the first try.
+-   **Fact-check technical information** since AI systems can generate plausible
+    but incorrect details.
 
-[codex-cli]: https://github.com/microsoft/Codex-CLI
+[openai-cli]: https://github.com/openai/openai-cli
