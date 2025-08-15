@@ -19,6 +19,7 @@ USER:
 2. Update prompt templates, including `prompts-codex.md`, to reflect current practices.
 3. Propagate related changes across docs.
 4. Run the checks above.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.

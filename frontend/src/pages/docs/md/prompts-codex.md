@@ -19,6 +19,17 @@ invoking Codex on DSPACE and should evolve alongside the project.
 
 ---
 
+## Related prompt guides
+
+-   [Item Prompts](/docs/prompts-items)
+-   [Process Prompts](/docs/prompts-processes)
+-   [Quest Prompts](/docs/prompts-quests)
+-   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
+-   [Codex Meta Prompt](/docs/prompts-codex-meta)
+-   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
+
+---
+
 ## 1 Quick start (Web vs CLI)
 
 | Use‑case       | Codex Web (ChatGPT sidebar) | Codex CLI                               |
@@ -60,6 +71,9 @@ REQUIREMENTS
 1. …
 2. …
 3. …
+4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+5. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT
 A pull request with the required changes and tests.
@@ -94,11 +108,13 @@ missing run `npx playwright install chromium` or use `SKIP_E2E=1 npm run test:ci
 
 USER:
 1. Follow the steps above.
-2. After verifying the implementation, mark the corresponding changelog line
+2. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+3. After verifying the implementation, mark the corresponding changelog line
    with `💯`, replacing any `✅` or other emoji.
-3. Replace any remaining `✅` entries in the changelog with `💯` once they meet
+4. Replace any remaining `✅` entries in the changelog with `💯` once they meet
    the robustness standard.
-4. Document new functionality as needed.
+5. Use an emoji-prefixed commit message.
+6. Document new functionality as needed.
 
 OUTPUT:
 A pull request implementing the chosen item with all tests green. Summarize the
