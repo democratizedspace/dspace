@@ -6,11 +6,10 @@ slug: 'prompts-outages'
 # Outage prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository and run its own tests.
-Use this guide alongside [Codex Prompts](/docs/prompts-codex) when diagnosing an incident so the fix
-and a record land in the outage catalog.
-To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
-If these templates drift,
-refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+Use this guide alongside [Codex Prompts](/docs/prompts-codex) so every fix ships with a matching
+record in the outage catalog.
+To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta);
+if templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 
 > **TL;DR**
 >
