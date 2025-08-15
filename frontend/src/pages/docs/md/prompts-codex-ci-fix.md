@@ -52,7 +52,8 @@ CONTEXT:
 
 REQUEST:
 1. Explain in the pull-request body why the failure occurred (or would occur).
-2. Commit the minimal changes needed to fix it.
+2. Commit the minimal changes needed to fix it. Before committing, run
+   `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 3. Create `outages/YYYY-MM-DD-<slug>.json` describing the incident.
 4. Push to a branch named `codex/ci-fix/<short-description>`.
 5. Open a pull request that leaves all CI checks green.
