@@ -152,6 +152,21 @@ of stargazing.
 -   "Gravity's predictable, but people? That's why I prefer stars."
 -   "Want to try some orbital mechanics? We'll start with a Hohmann transfer."
 
+## Helio
+
+<img src="/assets/npc/sydney.jpg" />
+
+Helio is a cheerful solar technician who can't resist chasing daylight.
+They design compact arrays that keep the metaguild's gear humming far from any outlet.
+
+### Sample Dialogue
+
+-   "Sun's up! I'm Helio. Let's put that star to work for you."
+-   "Start by unfolding the panel and angling it toward the brightest patch of sky."
+-   "See that meter? If it's in the green, you're charging at peak efficiency."
+-   "A cloud rolled in—no worries, the battery will bridge the gap."
+-   "Keep the cells clean and they'll power your adventures for years."
+
 <style>
     img {
         float: left;
