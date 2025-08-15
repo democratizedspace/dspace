@@ -35,6 +35,7 @@ New quests in this release: 194
 - aquaria/floating-plants
 - aquaria/guppy
 - aquaria/heater-install
+- aquaria/log-water-parameters
 - aquaria/ph-strip-test
 - aquaria/position-tank
 - aquaria/shrimp
