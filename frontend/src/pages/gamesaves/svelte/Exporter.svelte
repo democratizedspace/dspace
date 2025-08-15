@@ -1,6 +1,7 @@
 <script>
     import Chip from '../../../components/svelte/Chip.svelte';
     import { exportGameStateString } from '../../../utils/gameState/common.js';
+    import { copyToClipboard } from '../../../utils/copyToClipboard.js';
 
     const gameStateString = exportGameStateString();
 </script>
@@ -16,11 +17,7 @@
             </code>
         </div>
 
-        <Chip
-            text="Copy"
-            onClick={() => navigator.clipboard.writeText(gameStateString)}
-            inverted={true}
-        />
+        <Chip text="Copy" onClick={() => copyToClipboard(gameStateString)} inverted={true} />
     </div>
 </Chip>
 
