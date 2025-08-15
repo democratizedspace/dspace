@@ -223,7 +223,8 @@
     },
     {
         "id": "level-3d-printer-bed",
-        "title": "Level a 3D printer bed with a sheet of printer paper",
+        "title": "Level an entry-level FDM printer bed using a sheet of printer paper",
+        "image": "/assets/3dprinter.jpg",
         "requireItems": [
             {
                 "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -236,7 +237,7 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "10m",
+        "duration": "5m",
         "hardening": {
             "passes": 0,
             "score": 0,
@@ -2513,19 +2514,30 @@
     {
         "id": "plot-temperature-data",
         "title": "Plot logged temperature data using Python and Matplotlib",
-        "requireItems": [],
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m",
+        "duration": "10m",
         "hardening": {
-            "passes": 1,
-            "score": 65,
+            "passes": 2,
+            "score": 70,
             "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-05",
                     "date": "2025-08-05",
                     "score": 65
+                },
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 70
                 }
             ]
         }
@@ -3913,13 +3925,13 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 70,
+            "score": 65,
             "emoji": "🌀",
             "history": [
                 {
-                    "task": "codex-process-hardening-2025-08-15",
+                    "task": "codex-assemble-servo-arm-2025-08-15",
                     "date": "2025-08-15",
-                    "score": 70
+                    "score": 65
                 }
             ]
         }
