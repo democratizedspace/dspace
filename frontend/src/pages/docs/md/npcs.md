@@ -171,6 +171,21 @@ Helio can eyeball solar angles to within a degree and keeps meticulous charge lo
 -   "Shade from a single leaf can tank output, so keep the array clear."
 -   "Keep the cells clean and they'll power your adventures for years."
 
+## Quill
+
+<img src="/assets/npc/orion.jpg" />
+
+Quill is the metaguild's quiet historian, preserving mission logs and schematics.
+They rarely miss a detail and prefer to let records speak for themselves.
+
+### Sample Dialogue
+
+-   "Ah, another chapter begins. Mind if I document your quest?"
+-   "Facts first, feelings second—that's the archivist's creed."
+-   "A quick signature and your blueprint enters the annals."
+-   "Careful with that relic; it's older than the guild itself."
+-   "Need a refresher on past missions? I've indexed every triumph and blunder."
+
 <style>
     img {
         float: left;
