@@ -4009,14 +4009,19 @@
         "createItems": [],
         "duration": "2m",
         "hardening": {
-            "passes": 1,
-            "score": 60,
+            "passes": 2,
+            "score": 70,
             "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
                     "date": "2025-08-12",
                     "score": 60
+                },
+                {
+                    "task": "codex-process-hardening-2025-09-27",
+                    "date": "2025-09-27",
+                    "score": 70
                 }
             ]
         }
