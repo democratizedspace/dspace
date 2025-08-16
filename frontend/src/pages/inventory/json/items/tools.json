@@ -523,5 +523,19 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "4074c1be-f25d-48b5-bbc2-e50979f309b6",
+        "name": "ESD mat",
+        "description": "450 mm × 300 mm anti-static mat with ground cord and wrist strap snap for ESD-safe work.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "20 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
