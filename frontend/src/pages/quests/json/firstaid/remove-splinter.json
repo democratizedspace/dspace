@@ -1,0 +1,50 @@
+{
+    "id": "firstaid/remove-splinter",
+    "title": "Remove a Splinter",
+    "description": "Take out a small splinter to prevent infection.",
+    "image": "/assets/rescue.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Splinters can fester if ignored. Let's take it out carefully.",
+            "options": [{ "type": "goto", "goto": "prep", "text": "I'm ready" }]
+        },
+        {
+            "id": "prep",
+            "text": "Put on gloves and wash your hands before touching the area.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Hands are clean",
+                    "goto": "remove"
+                }
+            ]
+        },
+        {
+            "id": "remove",
+            "text": "Grip the splinter with tweezers, pull it out, then wipe with antiseptic.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Splinter removed",
+                    "requiresItems": [
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 1 },
+                        { "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Keep the area clean and watch for any redness or swelling.",
+            "options": [{ "type": "finish", "text": "Will do" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/wound-care"]
+}
