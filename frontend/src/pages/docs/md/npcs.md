@@ -141,6 +141,7 @@ Cedar is a seasoned woodworker who loves guiding newcomers. Years of building fu
 
 Lyra charts the stars and keeps the guild's telescopes in perfect alignment. Raised under dark
 rural skies, she turned her childhood fascination into a career mapping orbital trajectories.
+She can recite star catalog numbers from memory and loves midnight coffee under the Milky Way.
 Lyra joined the metaguild to guide launches through debris fields and teach others the patience
 of stargazing.
 
@@ -151,6 +152,7 @@ of stargazing.
 -   "Set your exposure to 15 seconds and you'll catch that comet's tail."
 -   "Gravity's predictable, but people? That's why I prefer stars."
 -   "Want to try some orbital mechanics? We'll start with a Hohmann transfer."
+-   "If the mount drifts, nudge the RA knob until the star holds steady."
 
 ## Helio
 
@@ -158,6 +160,7 @@ of stargazing.
 
 Helio is a cheerful solar technician who can't resist chasing daylight.
 They design compact arrays that keep the metaguild's gear humming far from any outlet.
+Helio can eyeball solar angles to within a degree and keeps meticulous charge logs.
 
 ### Sample Dialogue
 
@@ -165,6 +168,7 @@ They design compact arrays that keep the metaguild's gear humming far from any o
 -   "Start by unfolding the panel and angling it toward the brightest patch of sky."
 -   "See that meter? If it's in the green, you're charging at peak efficiency."
 -   "A cloud rolled in—no worries, the battery will bridge the gap."
+-   "Shade from a single leaf can tank output, so keep the array clear."
 -   "Keep the cells clean and they'll power your adventures for years."
 
 <style>
