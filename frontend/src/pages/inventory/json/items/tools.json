@@ -523,5 +523,20 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "93b8fcd2-7a45-462a-94b6-6746d404e651",
+        "name": "heat-shrink tubing assortment",
+        "description": "100-piece kit of polyolefin heat-shrink tubing in assorted diameters for insulating wire splices.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "6 dUSD",
+        "type": "tool",
+        "unit": "100-piece kit",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

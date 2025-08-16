@@ -42,15 +42,15 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Clean the tip, unplug the iron, let it cool, and recycle the scrap PCB.",
+            "text": "Nice work! Clean the tip, unplug the iron, let it cool, recycle the PCB, grab this heat-shrink kit.",
             "options": [{ "type": "finish", "text": "All cleaned up." }]
         }
     ],
-    "rewards": [],
+    "rewards": [{ "id": "93b8fcd2-7a45-462a-94b6-6746d404e651", "count": 1 }],
     "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
-        "passes": 2,
-        "score": 78,
+        "passes": 3,
+        "score": 85,
         "emoji": "✅",
         "history": [
             {
@@ -62,6 +62,11 @@
                 "task": "codex-upgrade-2025-08-15",
                 "date": "2025-08-15",
                 "score": 78
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-16",
+                "date": "2025-08-16",
+                "score": 85
             }
         ]
     }
