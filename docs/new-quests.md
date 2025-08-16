@@ -165,6 +165,7 @@ New quests in this release: 202
 
 ### geothermal
 
+- geothermal/backflush-loop-filter
 - geothermal/calibrate-ground-sensor
 - geothermal/check-loop-inlet-temp
 - geothermal/check-loop-outlet-temp
