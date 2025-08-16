@@ -1,30 +1,30 @@
 {
     "id": "aquaria/heater-install",
     "title": "Install an aquarium heater",
-    "description": "Mount and set a heater to keep tropical fish warm.",
+    "description": "Safely mount a submersible heater and verify it warms the tank to 26°C.",
     "image": "/assets/aquarium_heater.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Tropical species need stable warmth. Ready to add the heater?",
+            "text": "Tropical fish need 26°C water. Ready to install the heater and thermometer?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mount",
-                    "text": "Yes, let's mount it."
+                    "text": "Gear ready, let's mount it."
                 }
             ]
         },
         {
             "id": "mount",
-            "text": "Suction the heater near the filter outlet for even flow.",
+            "text": "Unplug gear and suction heater near filter outlet. Keep it unplugged 20 min.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "set",
-                    "text": "Mounted and secured.",
+                    "text": "Heater mounted, still unplugged.",
                     "requiresItems": [
                         { "id": "0b85f058-38f2-4e9a-93e9-d47441608619", "count": 1 },
                         { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
@@ -34,16 +34,28 @@
         },
         {
             "id": "set",
-            "text": "Dial the thermostat to 26°C and verify with the thermometer.",
+            "text": "After 20 min, plug in heater, set 26°C, and check the strip thermometer.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Temperature holding steady.",
+                    "text": "Water stable at 26°C.",
                     "process": "heat-walstad"
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/sponge-filter"]
+    "requiresQuests": ["aquaria/sponge-filter"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-16",
+                "date": "2025-08-16",
+                "score": 65
+            }
+        ]
+    }
 }
