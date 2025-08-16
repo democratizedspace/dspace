@@ -1,0 +1,55 @@
+{
+    "id": "electronics/gfci-outlet-test",
+    "title": "Test a GFCI Outlet",
+    "description": "Use a plug-in tester to confirm a GFCI outlet trips and resets correctly.",
+    "image": "/assets/outlet.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ground-fault circuit interrupters reduce shock risk. Let's verify one works properly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "test",
+                    "text": "Show me how."
+                }
+            ]
+        },
+        {
+            "id": "test",
+            "text": "Plug the tester into the outlet, press its button to trip the circuit, then reset the outlet.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "test-gfci-outlet",
+                    "text": "Running test"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Outlet trips and resets",
+                    "requiresItems": [
+                        {
+                            "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! The safety circuit responds as expected. Document the test date for future checks.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/check-battery-voltage"]
+}
