@@ -30,6 +30,7 @@ New quests in this release: 202
 ### aquaria
 
 - aquaria/aquarium-light
+- aquaria/balance-ph
 - aquaria/breeding
 - aquaria/filter-rinse
 - aquaria/floating-plants
