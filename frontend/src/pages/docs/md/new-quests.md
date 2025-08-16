@@ -250,6 +250,7 @@ New quests in this release: 202
 ### sysadmin
 
 - sysadmin/basic-commands
+- sysadmin/log-analysis
 - sysadmin/resource-monitoring
 
 ### ubi
