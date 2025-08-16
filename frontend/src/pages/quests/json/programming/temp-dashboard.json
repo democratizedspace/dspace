@@ -1,0 +1,34 @@
+{
+    "id": "programming/temp-dashboard",
+    "title": "Build Temperature Dashboard",
+    "description": "Show live readings on a web page that fetches your JSON endpoint.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your API serves raw numbers. Let's visualize them on a simple page.",
+            "options": [{ "type": "goto", "goto": "dashboard", "text": "Let's do it." }]
+        },
+        {
+            "id": "dashboard",
+            "text": "Create an HTML page that fetches `/temp` and updates the DOM with the latest value.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Page shows current temperature!",
+                    "requiresItems": [{ "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! You have a live dashboard for your sensor.",
+            "options": [{ "type": "finish", "text": "Cool!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/temp-json-api"]
+}
