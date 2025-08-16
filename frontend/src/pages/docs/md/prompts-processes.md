@@ -20,7 +20,9 @@ For fundamental design tips see the
 > 2. Say exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
-> 4. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+>    `npm run test:ci`; scan staged changes with
+>    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
 
 ---
 

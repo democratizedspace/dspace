@@ -18,6 +18,9 @@ If these templates drift, refresh them with the
 > 1. Scope changes to a single NPC.
 > 2. Specify the expected output (tests, docs).
 > 3. Stop when the spec is complete; remaining text becomes mandatory.
+> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+>    `npm run test:ci`; scan staged changes with
+>    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
 
 ---
 

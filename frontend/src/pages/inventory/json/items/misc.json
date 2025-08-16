@@ -518,9 +518,22 @@
     {
         "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
         "name": "parachute",
-        "description": "A parachute for model rockets.",
+        "description": "30 cm (12 in) nylon parachute with six shroud lines; ~15 g.",
         "image": "/assets/parachute.jpg",
-        "price": "30 dUSD"
+        "price": "7 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
