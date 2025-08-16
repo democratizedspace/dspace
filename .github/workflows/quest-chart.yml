@@ -29,5 +29,7 @@ jobs:
                   git config user.email "actions@users.noreply.github.com"
                   if [ -n "$(git status --porcelain frontend/src/pages/docs/images/quest-tree-stats.txt)" ]; then
                     git add frontend/src/pages/docs/images/quest-tree-stats.txt
-                    git commit -m "chore: update quest chart data" && git push
+                    git commit -m "chore: update quest chart data"
+                    git pull --rebase origin v3
+                    git push origin HEAD:v3
                   fi
