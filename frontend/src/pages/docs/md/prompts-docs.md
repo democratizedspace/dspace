@@ -7,9 +7,10 @@ slug: 'prompts-docs'
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and send a
 ready-made PR—but only if you give it a clear, file-scoped prompt. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when updating markdown or JSDoc so instructions stay current
-and consistent. To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
-If these templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+[Codex Prompts](/docs/prompts-codex) and [Test prompts](/docs/prompts-tests) when updating
+markdown or JSDoc so instructions stay current and consistent. To keep the prompt docs evolving,
+see the [Codex meta prompt](/docs/prompts-codex-meta). If these templates drift, refresh them with
+the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 
 > **TL;DR**
 >

@@ -12,7 +12,8 @@ invoking Codex on DSPACE and should evolve alongside the project.
 
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
-[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages), and [Docs prompts](/docs/prompts-docs).
+[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
+[Test prompts](/docs/prompts-tests), and [Docs prompts](/docs/prompts-docs).
 
 > **TL;DR**
 >
@@ -33,6 +34,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [Quest Prompts](/docs/prompts-quests)
 -   [NPC Prompts](/docs/prompts-npcs)
 -   [Outage Prompts](/docs/prompts-outages)
+-   [Test Prompts](/docs/prompts-tests)
 -   [Docs Prompts](/docs/prompts-docs)
 -   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
