@@ -1,0 +1,57 @@
+{
+    "id": "electronics/solder-led-harness",
+    "title": "Solder an LED Harness",
+    "description": "Join a 5 mm LED and 220 Ω resistor to two jumper wires using a soldering iron kit. Ventilate and wear safety goggles.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A loose indicator needs wiring. Ventilate the area, wear safety goggles, keep the iron on its stand, and clear flammables before heating.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "What parts do I need?"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Gather the soldering iron kit, flux pen, and wire stripper. Add a 5 mm LED, a 220 Ω resistor, two jumper wires, and safety goggles. Heat the iron, tin the tip, and slide heat-shrink over one wire before soldering.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solder-led-resistor",
+                    "text": "Review how to join the LED and resistor"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "LED harness soldered and cool",
+                    "requiresItems": [
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+                        { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
+                        { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Unplug the iron, let it cool on its stand, shrink the tubing, wipe the tip, and store the harness for later projects.",
+            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+        }
+    ],
+    "rewards": [{ "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c", "count": 1 }],
+    "requiresQuests": ["electronics/tin-soldering-iron"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "\uD83C\uDF00",
+        "history": [{ "task": "codex-quest-create-2025-11-29", "date": "2025-11-29", "score": 60 }]
+    }
+}
