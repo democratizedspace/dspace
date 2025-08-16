@@ -13,6 +13,8 @@ invoking Codex on DSPACE and should evolve alongside the project.
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
 [NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages), and [Docs prompts](/docs/prompts-docs).
+For specialized workflows use the [CI-failure fix prompt](/docs/prompts-codex-ci-fix),
+the [Codex meta prompt](/docs/prompts-codex-meta), and the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 
 > **TL;DR**
 >
@@ -20,6 +22,9 @@ For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 > 2. Say **exactly** what output you expect (tests, docs, etc.).
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
+> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+>    `npm run test:ci`; scan staged changes with
+>    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
 
 For failing GitHub Actions runs, use the dedicated
 [CI-failure fix prompt](/docs/prompts-codex-ci-fix).
