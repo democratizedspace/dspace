@@ -4146,5 +4146,33 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "clean-solar-panel",
+        "title": "Brush dust off a portable solar panel with a soft paintbrush",
+        "image": "/assets/solar_setup_small.jpg",
+        "requireItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
