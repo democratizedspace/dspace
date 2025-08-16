@@ -214,6 +214,7 @@ New quests in this release: 202
 - programming/temp-alert
 - programming/temp-email
 - programming/temp-graph
+- programming/temp-json-api
 - programming/temp-logger
 - programming/thermistor-calibration
 - programming/web-server
