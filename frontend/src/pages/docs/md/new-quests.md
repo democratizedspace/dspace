@@ -207,6 +207,7 @@ New quests in this release: 202
 - programming/graph-temp
 - programming/graph-temp-data
 - programming/hello-sensor
+- programming/http-post
 - programming/json-api
 - programming/json-endpoint
 - programming/median-temp
