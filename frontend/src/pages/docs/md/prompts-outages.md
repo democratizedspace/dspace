@@ -18,6 +18,7 @@ if templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-
 >    matching [`outages/schema.json`][outage-schema].
 > 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+> 5. Use an emoji-prefixed commit message.
 
 ```text
 SYSTEM:
