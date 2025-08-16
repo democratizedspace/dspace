@@ -44,6 +44,10 @@ commands. Use it from the repository root:
 
 These additional documents cover more complex deployments:
 
--   [Raspberry Pi k3s Deployment](https://github.com/democratizedspace/dspace/blob/v3/docs/deploy/raspi.md)
--   [Failover Procedures](https://github.com/democratizedspace/dspace/blob/v3/docs/failover_procedures.md)
--   [Monitoring Setup](https://github.com/democratizedspace/dspace/blob/v3/docs/monitoring_setup.md)
+-   [Raspberry Pi k3s Deployment][raspi-k3s]
+-   [Failover Procedures][failover]
+-   [Monitoring Setup][monitoring]
+
+[raspi-k3s]: https://github.com/democratizedspace/dspace/blob/main/docs/deploy/raspi.md
+[failover]: https://github.com/democratizedspace/dspace/blob/main/docs/failover_procedures.md
+[monitoring]: https://github.com/democratizedspace/dspace/blob/main/docs/monitoring_setup.md

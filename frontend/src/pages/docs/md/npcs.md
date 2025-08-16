@@ -94,17 +94,20 @@ Vega is an expert in aquariums and terrariums, with years of experience in desig
 
 <img src="/assets/npc/phoenix.jpg" />
 
-Phoenix is a professional chemist specializing in sustainable rocket fuel development. With a strong background in chemistry and a focus on environmental conservation, they are committed to finding innovative solutions for the space industry that have a minimal impact on our planet. Phoenix's work has the potential to revolutionize space travel by making it more eco-friendly and accessible to a wider range of people.
+Phoenix is a chemist focused on sustainable rocket fuel.
+They blend chemistry with conservation to push craft without scarring the planet.
+They guide recruits through quests such as
+[Demonstrate a Safe Chemical Reaction](/quests/chemistry/safe-reaction) and
+[Extract Stevia Sweetener](/quests/chemistry/stevia-extraction)
+to show how green chemistry powers missions.
 
 ### Sample Dialogue
 
--   "You've made some impressive strides in 3D printing. Your next challenge is to print 10 Benchies."
--   "Well done! These Benchies look fantastic. Keep honing your 3D printing skills."
--   "You've shown great progress with your 3D printing! Your next goal is to print 25 Benchies."
--   "Excellent job! Your fleet of Benchies is growing. Keep up the great work."
--   "You've truly mastered the art of 3D printing Benchies. Now, let's take things to the next level. I want to see a fleet of 100 Benchies."
--   "Dry those stevia leaves gently and we'll extract their sweetness."
--   "Add a splash of ethanol and you'll get pure stevia crystals as it dries."
+-   "Hey, I'm Phoenix—chemistry without pollution is my specialty."
+-   "Mix vinegar with baking soda; the fizz is safe yet shows energy you can harness."
+-   "Dry those stevia leaves and rinse them with ethanol to pull out the sweetness."
+-   "That extract will sweeten rations without a sugar crash."
+-   "Next up, we'll brew propellant that pushes rockets without scorching the skies."
 
 ## Atlas
 
@@ -141,6 +144,7 @@ Cedar is a seasoned woodworker who loves guiding newcomers. Years of building fu
 
 Lyra charts the stars and keeps the guild's telescopes in perfect alignment. Raised under dark
 rural skies, she turned her childhood fascination into a career mapping orbital trajectories.
+She can recite star catalog numbers from memory and loves midnight coffee under the Milky Way.
 Lyra joined the metaguild to guide launches through debris fields and teach others the patience
 of stargazing.
 
@@ -151,6 +155,7 @@ of stargazing.
 -   "Set your exposure to 15 seconds and you'll catch that comet's tail."
 -   "Gravity's predictable, but people? That's why I prefer stars."
 -   "Want to try some orbital mechanics? We'll start with a Hohmann transfer."
+-   "If the mount drifts, nudge the RA knob until the star holds steady."
 
 ## Helio
 
@@ -158,6 +163,7 @@ of stargazing.
 
 Helio is a cheerful solar technician who can't resist chasing daylight.
 They design compact arrays that keep the metaguild's gear humming far from any outlet.
+Helio can eyeball solar angles to within a degree and keeps meticulous charge logs.
 
 ### Sample Dialogue
 
@@ -165,7 +171,23 @@ They design compact arrays that keep the metaguild's gear humming far from any o
 -   "Start by unfolding the panel and angling it toward the brightest patch of sky."
 -   "See that meter? If it's in the green, you're charging at peak efficiency."
 -   "A cloud rolled in—no worries, the battery will bridge the gap."
+-   "Shade from a single leaf can tank output, so keep the array clear."
 -   "Keep the cells clean and they'll power your adventures for years."
+
+## Quill
+
+<img src="/assets/npc/orion.jpg" />
+
+Quill is the metaguild's quiet historian, preserving mission logs and schematics.
+They rarely miss a detail and prefer to let records speak for themselves.
+
+### Sample Dialogue
+
+-   "Ah, another chapter begins. Mind if I document your quest?"
+-   "Facts first, feelings second—that's the archivist's creed."
+-   "A quick signature and your blueprint enters the annals."
+-   "Careful with that relic; it's older than the guild itself."
+-   "Need a refresher on past missions? I've indexed every triumph and blunder."
 
 <style>
     img {
