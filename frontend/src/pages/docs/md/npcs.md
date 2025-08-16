@@ -94,17 +94,20 @@ Vega is an expert in aquariums and terrariums, with years of experience in desig
 
 <img src="/assets/npc/phoenix.jpg" />
 
-Phoenix is a professional chemist specializing in sustainable rocket fuel development. With a strong background in chemistry and a focus on environmental conservation, they are committed to finding innovative solutions for the space industry that have a minimal impact on our planet. Phoenix's work has the potential to revolutionize space travel by making it more eco-friendly and accessible to a wider range of people.
+Phoenix is a chemist obsessed with clean propellants. Raised on tales of smoky launch pads, they now
+brew fuels that spare the atmosphere. They joined the metaguild to test greener reactions in the
+field.
 
 ### Sample Dialogue
 
--   "You've made some impressive strides in 3D printing. Your next challenge is to print 10 Benchies."
--   "Well done! These Benchies look fantastic. Keep honing your 3D printing skills."
--   "You've shown great progress with your 3D printing! Your next goal is to print 25 Benchies."
--   "Excellent job! Your fleet of Benchies is growing. Keep up the great work."
--   "You've truly mastered the art of 3D printing Benchies. Now, let's take things to the next level. I want to see a fleet of 100 Benchies."
--   "Dry those stevia leaves gently and we'll extract their sweetness."
--   "Add a splash of ethanol and you'll get pure stevia crystals as it dries."
+-   "Hey, I'm Phoenix. Ready for a propellant demo you can try at home?"
+-   "Mix baking soda with vinegar; that fizz mimics clean thrust."
+-   "Got stevia leaves? We can steep them into a sweet extract."
+-   "Dry it with a splash of ethanol and crystals will appear."
+-   "Label your flasks—science gets messy when notes don't."
+
+**Related quests:** [Demonstrate a Safe Chemical Reaction](/quests/chemistry/safe-reaction),  
+[Extract Stevia Sweetener](/quests/chemistry/stevia-extraction)
 
 ## Atlas
 
