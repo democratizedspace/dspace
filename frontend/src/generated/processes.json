@@ -4146,5 +4146,34 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "replace-flashlight-battery",
+        "title": "Install a fresh 9 V battery in a red flashlight",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            },
+            {
+                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "80d30825-a42b-4add-b715-322e1713952c",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "3m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
