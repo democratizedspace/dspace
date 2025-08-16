@@ -8,17 +8,17 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here, your resident chemist. I'd like to show you how a simple reaction demonstrates eco-friendly fuel chemistry. Interested?",
+            "text": "Phoenix here. Want to see a simple reaction that proves how green propellants release energy?",
             "options": [{ "type": "goto", "goto": "mix", "text": "Absolutely!" }]
         },
         {
             "id": "mix",
-            "text": "Carefully mix baking soda with vinegar in this open bottle. The fizzing gas is harmless but shows how fuel chemistry releases energy.",
+            "text": "Mix baking soda with vinegar in an open bottle. The fizz is harmless yet shows fuel releasing energy.",
             "options": [{ "type": "goto", "goto": "finish", "text": "The reaction is bubbling!" }]
         },
         {
             "id": "finish",
-            "text": "Great job! We'll build on this sustainable experiment later to design clean rocket fuel.",
+            "text": "Great job! We'll build on this clean experiment to design sustainable rocket fuel later.",
             "options": [{ "type": "finish", "text": "Can't wait!" }]
         }
     ],

@@ -78,9 +78,17 @@
     {
         "id": "1394c366-5078-49cf-b24e-c748e8428234",
         "name": "Completionist Award",
-        "description": "Awarded for completing all of the quests available on January 1, 2023.",
+        "description": "15 cm aluminum trophy etched 'Completionist 2023'; reward for finishing every quest on 2023-01-01.",
         "image": "/assets/completionist_award.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-16", "date": "2025-08-16", "score": 65 }
+            ]
+        }
     },
     {
         "id": "96e11500-a2ce-4531-a1b5-3a92c44fcb9d",

@@ -4009,14 +4009,19 @@
         "createItems": [],
         "duration": "2m",
         "hardening": {
-            "passes": 1,
-            "score": 60,
+            "passes": 2,
+            "score": 70,
             "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
                     "date": "2025-08-12",
                     "score": 60
+                },
+                {
+                    "task": "codex-process-hardening-2025-09-27",
+                    "date": "2025-09-27",
+                    "score": 70
                 }
             ]
         }
@@ -4129,7 +4134,7 @@
     },
     {
         "id": "test-gfci-outlet",
-        "title": "Verify wiring on a GFCI outlet using a plug-in tester",
+        "title": "Test a GFCI outlet's wiring with a plug-in tester and its test/reset buttons",
         "image": "/assets/outlet.jpg",
         "requireItems": [
             {
@@ -4139,7 +4144,37 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m",
+        "duration": "3m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-test-gfci-outlet-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "use-soldering-mat",
+        "title": "Lay a silicone soldering mat on the bench before soldering",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
+                "count": 1
+            },
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m",
         "hardening": {
             "passes": 0,
             "score": 0,
