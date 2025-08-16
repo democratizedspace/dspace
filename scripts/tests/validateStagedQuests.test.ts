@@ -21,7 +21,11 @@ describe('validate-staged-quests', () => {
     const temp = path.join(__dirname, 'temp-invalid.json');
     fs.writeFileSync(temp, JSON.stringify({ title: 'invalid' }));
     const result = validateStagedQuests([temp]);
-    fs.unlinkSync(temp);
+    try {
+      fs.unlinkSync(temp);
+    } catch {
+      // File might already have been deleted by the validator
+    }
     expect(result).toBe(false);
   });
 
