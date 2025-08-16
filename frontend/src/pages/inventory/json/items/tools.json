@@ -523,5 +523,25 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+        "name": "compost moisture meter",
+        "description": "Analog probe with 20 cm stainless steel sensor that reads 0–100% moisture to gauge compost dampness.",
+        "image": "/assets/bucket_water.jpg",
+        "price": "18 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]
