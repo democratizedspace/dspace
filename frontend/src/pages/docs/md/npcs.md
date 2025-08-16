@@ -167,6 +167,21 @@ They design compact arrays that keep the metaguild's gear humming far from any o
 -   "A cloud rolled in—no worries, the battery will bridge the gap."
 -   "Keep the cells clean and they'll power your adventures for years."
 
+## Quill
+
+<img src="/assets/npc/orion.jpg" />
+
+Quill is the metaguild's quiet historian, preserving mission logs and schematics.
+They rarely miss a detail and prefer to let records speak for themselves.
+
+### Sample Dialogue
+
+-   "Ah, another chapter begins. Mind if I document your quest?"
+-   "Facts first, feelings second—that's the archivist's creed."
+-   "A quick signature and your blueprint enters the annals."
+-   "Careful with that relic; it's older than the guild itself."
+-   "Need a refresher on past missions? I've indexed every triumph and blunder."
+
 <style>
     img {
         float: left;
