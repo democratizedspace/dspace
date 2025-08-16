@@ -97,7 +97,8 @@
     },
     {
         "id": "bucket-water-chlorinated",
-        "title": "Use a sink to fill a 19 L (5 gal) bucket with tap water",
+        "title": "Fill a 19 L (5 gal) bucket with chlorinated tap water from a sink",
+        "image": "/assets/bucket_water.jpg",
         "requireItems": [
             {
                 "id": "799ace33-1336-46c0-904a-9f16778230f1",
@@ -116,7 +117,7 @@
                 "count": 1
             }
         ],
-        "duration": "30s"
+        "duration": "3m"
     },
     {
         "id": "3dprint-benchy",
