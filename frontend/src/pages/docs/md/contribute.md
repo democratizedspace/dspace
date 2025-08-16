@@ -19,11 +19,17 @@ There are several ways to contribute to the DSPACE project:
 
 DSPACE is designed as an extensible platform where community members can create and contribute various types of content:
 
--   **[Create Custom Quests](/docs/quest-guidelines)** - Design educational missions that teach space-related skills. When you're ready to share your work, follow the [Quest Contribution Guidelines](/docs/quest-contribution) to submit it for review.
+-   **[Create Custom Quests](/docs/quest-guidelines)** - Design educational missions that teach
+    space-related skills. When you're ready to share your work, follow the
+    [Quest Contribution Guidelines](/docs/quest-contribution) to submit it for review.
 -   **[Develop Custom Items](/docs/item-guidelines)** - Create virtual resources, tools, and components
 -   **[Design Custom Processes](/docs/process-guidelines)** - Build activities that transform or utilize items
 
-Our [Content Development Guide](/docs/content-development) provides a comprehensive overview of all content creation options, workflows, and best practices. We also offer [Quest Prompts](/docs/prompts-quests), [Item Prompts](/docs/prompts-items), and [Process Prompts](/docs/prompts-processes) for those looking to leverage AI tools in their content creation process.
+Our [Content Development Guide](/docs/content-development) provides a comprehensive overview of
+all content creation options, workflows, and best practices. We also offer
+[Quest Prompts](/docs/prompts-quests), [Item Prompts](/docs/prompts-items), and
+[Process Prompts](/docs/prompts-processes) for those looking to leverage AI tools in their content
+creation process.
 
 ## Code Contributions
 
@@ -31,8 +37,9 @@ Our [Content Development Guide](/docs/content-development) provides a comprehens
 -   Fix bugs or implement new features
 -   Improve documentation
 -   Enhance the user interface
-
-For technical contributions, please review our [Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md) first.
+    Install dependencies with `pnpm install` and use Node.js 20 LTS (`.nvmrc`) before running tests.
+    For technical contributions, please review our
+    [Developer Guide](https://github.com/democratizedspace/dspace/blob/main/DEVELOPER_GUIDE.md) first.
 
 ## Testing and Feedback
 
@@ -41,4 +48,5 @@ For technical contributions, please review our [Developer Guide](https://github.
 -   Suggest improvements to existing features
 -   Participate in user testing sessions
 
-By contributing to DSPACE, you're helping to democratize space exploration through practical, hands-on education. We welcome contributors of all skill levels and backgrounds!
+By contributing to DSPACE, you're helping to democratize space exploration through practical,
+hands-on education. We welcome contributors of all skill levels and backgrounds!
