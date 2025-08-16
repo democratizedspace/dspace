@@ -3,14 +3,19 @@
     "title": "Turn Your Compost Bucket",
     "description": "Aerate the compost by stirring the mix so microbes stay active.",
     "hardening": {
-        "passes": 1,
-        "score": 60,
+        "passes": 2,
+        "score": 65,
         "emoji": "🌀",
         "history": [
             {
                 "task": "codex-hardening-2025-08-12",
                 "date": "2025-08-12",
                 "score": 60
+            },
+            {
+                "task": "codex-quest-update-2025-08-16",
+                "date": "2025-08-16",
+                "score": 65
             }
         ]
     },
@@ -52,6 +57,17 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "moisture",
+                    "requiresItems": [
+                        {
+                            "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Measure moisture level"
+                },
+                {
+                    "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
                         {
@@ -71,6 +87,17 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Great, I'll keep turning"
+                }
+            ]
+        },
+        {
+            "id": "moisture",
+            "text": "The meter reads about 55% moisture—ideal for microbes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Moisture looks good"
                 }
             ]
         },
