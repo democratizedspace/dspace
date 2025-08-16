@@ -140,6 +140,7 @@ New quests in this release: 202
 
 - energy/battery-maintenance
 - energy/battery-upgrade
+- energy/biogas-digester
 - energy/charge-controller-setup
 - energy/dWatt-1e8
 - energy/hand-crank-generator
