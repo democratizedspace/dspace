@@ -12,7 +12,8 @@ invoking Codex on DSPACE and should evolve alongside the project.
 
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
-[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages), and [Docs prompts](/docs/prompts-docs).
+[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
+[Docs prompts](/docs/prompts-docs), and [Refactor prompts](/docs/prompts-refactors).
 For specialized workflows use the [CI-failure fix prompt](/docs/prompts-codex-ci-fix),
 the [Codex meta prompt](/docs/prompts-codex-meta), and the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 
@@ -39,6 +40,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [NPC Prompts](/docs/prompts-npcs)
 -   [Outage Prompts](/docs/prompts-outages)
 -   [Docs Prompts](/docs/prompts-docs)
+-   [Refactor Prompts](/docs/prompts-refactors)
 -   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
 -   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
