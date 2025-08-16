@@ -29,6 +29,12 @@ describe('tokenPlaceChat', () => {
         expect(fetch).toHaveBeenCalledWith('http://token.place/chat', expect.any(Object));
     });
 
+    test('trims trailing slash from configured url', async () => {
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place/' } });
+        await tokenPlaceChat([]);
+        expect(fetch).toHaveBeenCalledWith('http://token.place/chat', expect.any(Object));
+    });
+
     test('falls back to env url when game state missing', async () => {
         loadGameState.mockReturnValue({});
         process.env.VITE_TOKEN_PLACE_URL = 'http://env.token';

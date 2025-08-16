@@ -13,9 +13,12 @@ const getEnvUrl = () => {
     return null;
 };
 
+const stripTrailingSlash = (url) => url.replace(/\/+$/, '');
+
 export const tokenPlaceChat = async (messages) => {
     const envUrl = getEnvUrl();
-    const baseUrl = loadGameState().tokenPlace?.url || envUrl || DEFAULT_URL;
+    const rawBaseUrl = loadGameState().tokenPlace?.url || envUrl || DEFAULT_URL;
+    const baseUrl = stripTrailingSlash(rawBaseUrl);
 
     const systemMessage = {
         role: 'system',
