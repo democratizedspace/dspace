@@ -4187,5 +4187,29 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "measure-compost-moisture",
+        "title": "Check a compost pile's moisture level with a compost moisture meter",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [
+            {
+                "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

@@ -382,8 +382,14 @@
         "title": "Clone a mint cutting in a soaked starter plug",
         "image": "/assets/hydroponics_tub.jpg",
         "requireItems": [
-            { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 },
-            { "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1", "count": 1 }
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -641,7 +647,13 @@
             "passes": 1,
             "score": 60,
             "emoji": "🌀",
-            "history": [{ "task": "codex-hardening-2025-08-14", "date": "2025-08-14", "score": 60 }]
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
         }
     },
     {
@@ -2455,10 +2467,21 @@
         "title": "Swap to white PLA filament on an entry-level FDM 3D printer",
         "image": "/assets/pla_white.jpg",
         "requireItems": [
-            { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            }
         ],
-        "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 10 }],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 10
+            }
+        ],
         "createItems": [],
         "duration": "10m"
     },
@@ -2750,9 +2773,18 @@
         "title": "Attach a stick-on strip thermometer to aquarium glass",
         "image": "/assets/aquarium_thermometer.jpg",
         "requireItems": [
-            { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
-            { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
-            { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -2763,8 +2795,14 @@
         "title": "Check aquarium water temperature with an attached strip thermometer",
         "image": "/assets/aquarium_thermometer.jpg",
         "requireItems": [
-            { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
-            { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -2775,9 +2813,18 @@
         "title": "Record aquarium water parameters in a logbook using a liquid test kit",
         "image": "/assets/paperwork.jpg",
         "requireItems": [
-            { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
-            { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 },
-            { "id": "b8602362-2035-4f00-9376-f48d8668cf38", "count": 1 }
+            {
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "count": 1
+            },
+            {
+                "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                "count": 1
+            },
+            {
+                "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3094,8 +3141,14 @@
         "title": "Wipe the soldering iron tip on a damp sponge to remove oxidation",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3145,9 +3198,18 @@
         "title": "Heat a through-hole joint and clear it with a spring-loaded pump while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22", "count": 1 },
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3170,11 +3232,26 @@
         "title": "Remove solder from a PCB pad with solder wick and a soldering iron",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03", "count": 1 },
-            { "id": "dad7f853-ccc9-40be-b226-89272708db84", "count": 1 },
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
-            { "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00", "count": 1 }
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+                "count": 1
+            },
+            {
+                "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                "count": 1
+            },
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            },
+            {
+                "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3197,8 +3274,14 @@
         "title": "Bolt a micro servo to a base and attach its plastic horn as an arm with a precision screwdriver set",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c", "count": 1 },
-            { "id": "8299ac3f-c232-46d4-a007-2ad86ec70361", "count": 1 }
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3220,7 +3303,12 @@
         "id": "test-gfci-outlet",
         "title": "Test a GFCI outlet's wiring with a plug-in tester and its test/reset buttons",
         "image": "/assets/outlet.jpg",
-        "requireItems": [{ "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "3m",
@@ -3229,7 +3317,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-test-gfci-outlet-2025-08-16", "date": "2025-08-16", "score": 60 }
+                {
+                    "task": "codex-test-gfci-outlet-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 60
+                }
             ]
         }
     },
@@ -3238,8 +3330,38 @@
         "title": "Lay a silicone soldering mat on the bench before soldering",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7", "count": 1 },
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 }
+            {
+                "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
+                "count": 1
+            },
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "measure-compost-moisture",
+        "title": "Check a compost pile's moisture level with a compost moisture meter",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [
+            {
+                "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
