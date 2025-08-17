@@ -40,6 +40,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [NPC Prompts](/docs/prompts-npcs)
 -   [Outage Prompts](/docs/prompts-outages)
 -   [Docs Prompts](/docs/prompts-docs)
+-   [Playwright Test Prompts](/docs/prompts-playwright-tests)
 -   [Refactor Prompts](/docs/prompts-refactors)
 -   [Codex CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
