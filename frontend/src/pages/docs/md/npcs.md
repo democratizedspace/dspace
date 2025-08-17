@@ -57,12 +57,14 @@ Hydro guides recruits through quests like [Check Solution pH](/quests/hydroponic
 
 ### Sample Dialogue
 
--   "Hey there! I'm Hydro, your resident hydroponics guru."
--   "Roots bathe in nutrient-rich water—soil just slows us down."
--   "First up, accept this hydroponics tub."
--   "Top it with dechlorinated water and we'll be ready."
--   "Stevia's next; those leaves are candy without the crash."
--   "If pH drifts, a squeeze of lemon or pinch of baking soda sets it right."
+-   "Hey there! I'm Hydro, your local hydroponics expert!"
+-   "Oh I could talk for hours, but the short version? Roots bathe in nutrient-rich water."
+-   "Excellent! First things first, I need you to accept this hydroponics tub."
+-   "Now that you've got your hydroponics tub, you'll need some dechlorinated water."
+-   "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems."
+-   "Let's try stevia next. Its leaves are unbelievably sweet!"
+-   "If the pH drifts, a splash of lemon juice or baking soda can nudge it back on track."
+-   "Yellow leaves? Check nutrient levels; a pinch of minerals usually sets things right."
 
 ## Orion
 
@@ -195,6 +197,22 @@ They rarely miss a detail and prefer to let records speak for themselves.
 -   "A quick signature and your blueprint enters the annals."
 -   "Careful with that relic; it's older than the guild itself."
 -   "Need a refresher on past missions? I've indexed every triumph and blunder."
+
+## Echo
+
+<img src="/assets/npc/nova.jpg" />
+
+Echo coordinates the guild's sensor drones from a quiet orbital perch.
+They have a calm demeanor and a sharp ear for anomalies.
+Echo routes signals and keeps comms clear for every mission.
+
+### Sample Dialogue
+
+-   "This is Echo on comms; I read you loud and clear."
+-   "Ping the relay buoy—if it blinks green, the link's solid."
+-   "Getting static? Rotate your antenna toward the station."
+-   "We log every packet; lose one and I'll know."
+-   "Need eyes on the horizon? I'll swing a drone that way."
 
 <style>
     img {
