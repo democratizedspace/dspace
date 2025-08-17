@@ -10,6 +10,7 @@ Use this guide alongside [Codex Prompts](/docs/prompts-codex) so every fix ships
 record in the outage catalog.
 To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta);
 if templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >

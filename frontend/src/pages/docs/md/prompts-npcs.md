@@ -11,7 +11,8 @@ Use this guide alongside [Codex Prompts](/docs/prompts-codex) when working on NP
 Consult the [NPCs guide](/docs/npcs) for voice and lore details.
 To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
 If these templates drift, refresh them with the
-[Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+[Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs,
+use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >
