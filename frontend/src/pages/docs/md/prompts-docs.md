@@ -6,8 +6,8 @@ slug: 'prompts-docs'
 # Documentation prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit a
-ready-made PR—but only if given a clear, file-scoped prompt. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when updating markdown or JSDoc so instructions stay current
+ready-made PR—but only with a clear, file-scoped prompt. Use this guide alongside
+[Codex Prompts](/docs/prompts-codex) when updating markdown or JSDoc to keep instructions current
 and consistent. To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
 If these templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 
@@ -17,7 +17,7 @@ If these templates drift, refresh them with the [Codex Prompt Upgrader](/docs/pr
 > 2. Fix outdated wording, links, or formatting.
 > 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 4. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
->    and use an emoji-prefixed commit message.
+>    and commit with an emoji prefix (e.g., `📝 : – update docs`).
 
 ```text
 SYSTEM:
@@ -28,7 +28,7 @@ committing.
 USER:
 1. Edit or add docs under `frontend/src/pages/docs/md`.
 2. Correct stale guidance, links, or formatting.
-3. If adding a new prompt doc, link it from `prompts-codex.md`
+3. If you add a new prompt doc, also link it from `prompts-codex.md`
    and the docs index (`frontend/src/pages/docs/index.astro`).
 4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 5. Use an emoji-prefixed commit message.

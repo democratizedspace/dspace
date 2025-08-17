@@ -6,7 +6,7 @@ slug: 'prompts-processes'
 # Writing great process prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository,
-run its own tests, and send you a ready‑made PR—but only if you give it a
+run its own tests, and send a ready‑made PR—but only if you provide a
 clear, file‑scoped prompt. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex) when working on processes. To keep the
 prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). If these
@@ -17,12 +17,12 @@ For fundamental design tips see the
 > **TL;DR**
 >
 > 1. Scope changes to a single process entry.
-> 2. Say exactly what output you expect (tests, docs).
+> 2. Specify exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
->    `npm run test:ci`; scan staged changes with
->    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
+>    `npm run test:ci`. Scan staged changes with
+>    `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
 
 ---
 
@@ -57,7 +57,7 @@ See the [OpenAI CLI repository][openai-cli] for more flags.
 | **Acceptance check** | e.g. “`npm run test:ci` and `npm run test:ci -- processQuality` pass”.  |
 
 Codex merges these instructions with any `AGENTS.md` files in scope, so keep
-prompt‑level rules short and concrete.
+prompt‑level rules concise and concrete.
 
 ---
 
