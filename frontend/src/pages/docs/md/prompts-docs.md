@@ -10,6 +10,7 @@ ready-made PR—but only if given a clear, file-scoped prompt. Use this guide al
 [Codex Prompts](/docs/prompts-codex) when updating markdown or JSDoc so instructions stay current
 and consistent. To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
 If these templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >

@@ -71,19 +71,25 @@
     {
         "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
         "name": "soldering iron kit",
-        "description": "Pen-style 30 W iron with stand, cleaning sponge and 1 m of 0.8 mm lead-free solder for hobby electronics.",
+        "description": "30 W fixed-temp pen iron with metal stand, cellulose sponge, and 1 m of 0.8 mm lead-free solder.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "25 dUSD",
         "type": "tool",
+        "unit": "kit",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
                     "date": "2025-08-05",
                     "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 80
                 }
             ]
         }
@@ -542,6 +548,21 @@
                     "score": 60
                 }
             ]
+        }
+    },
+    {
+        "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+        "name": "needle-nose pliers",
+        "description": "125 mm steel pliers with 1 mm tips for gripping and bending leads in tight spaces.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "6 dUSD",
+        "type": "tool",
+        "unit": "pair",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
         }
     }
 ]

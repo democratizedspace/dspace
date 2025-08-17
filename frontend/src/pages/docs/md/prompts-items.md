@@ -11,6 +11,7 @@ clear, file-scoped prompt. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex) when working on items. To keep the prompt
 docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). If these
 templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 For general content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 > **TL;DR**
@@ -19,9 +20,11 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
 > 2. Say exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
->    `npm run test:ci`; scan staged changes with
->    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+>    `npm run build`, `npm run itemValidation`,
+>    `npm run test:ci`, and `npm run test:ci -- itemQuality`; scan
+>    staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
+>    commit with an emoji prefix.
 
 ---
 
@@ -37,8 +40,7 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && npm run audit:ci && \
-        npm run test:ci && npm run itemValidation && npm run test:ci -- itemQuality"
+        codex exec "npm run lint && npm run type-check && npm run build && npm run audit:ci && npm run itemValidation && npm run test:ci && npm run test:ci -- itemQuality"
         ```
 
 See the [OpenAI CLI docs][openai-cli] for more flags.
@@ -166,4 +168,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[openai-cli]: https://platform.openai.com/docs/guides/openai-cli
+[openai-cli]: https://github.com/openai/openai-cli

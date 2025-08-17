@@ -115,7 +115,7 @@ function generateMarkdown(sections) {
     section.groups.forEach(({ tree, quests }) => {
       lines.push(`### ${tree}`);
       lines.push('');
-      quests.forEach((q) => lines.push(`- ${q}`));
+      quests.forEach((q) => lines.push(`-   ${q}`));
       lines.push('');
     });
   });
