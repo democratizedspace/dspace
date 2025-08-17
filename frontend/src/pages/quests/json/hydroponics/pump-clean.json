@@ -1,0 +1,53 @@
+{
+    "id": "hydroponics/pump-clean",
+    "title": "Clean Water Pump",
+    "description": "Scrub mineral buildup to keep nutrients flowing.",
+    "image": "/assets/hydroponics_tub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The pump's output is weak. Mineral scale might be clogging the impeller.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "scrub",
+                    "text": "I'll disassemble it."
+                }
+            ]
+        },
+        {
+            "id": "scrub",
+            "text": "Unplug the pump, remove the housing, and scrub the impeller in a bucket of dechlorinated water.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Need clean water first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pump's spotless and reassembled!",
+                    "requiresItems": [
+                        { "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a", "count": 1 },
+                        { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. A clean pump keeps nutrients circulating.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to the plants."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/pump-prime"]
+}
