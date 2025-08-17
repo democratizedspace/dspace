@@ -134,12 +134,14 @@
   "df7e94e2-76b9-4865-b843-2ec21feb258e": {
     "requires": [
       "sysadmin/resource-monitoring",
+      "sysadmin/log-analysis",
       "sysadmin/basic-commands",
       "devops/ssh-hardening",
       "devops/ssd-boot",
       "devops/private-registry",
       "devops/k3s-deploy",
       "devops/firewall-rules",
+      "devops/fail2ban",
       "devops/enable-https",
       "devops/docker-compose",
       "devops/ci-pipeline",
@@ -301,6 +303,7 @@
       "robotics/gyro-balance",
       "programming/graph-temp-data",
       "geothermal/replace-faulty-thermistor",
+      "geothermal/log-heat-pump-warmup",
       "geothermal/log-ground-temperature",
       "geothermal/install-backup-thermistor",
       "geothermal/compare-seasonal-ground-temps",
@@ -328,7 +331,6 @@
       "electronics/measure-resistance",
       "electronics/light-sensor",
       "electronics/led-polarity",
-      "electronics/desolder-component",
       "electronics/data-logger",
       "electronics/continuity-test",
       "electronics/check-battery-voltage",
@@ -376,8 +378,11 @@
   "ce140453-c7ef-42c9-b9f9-38acfb4219cf": {
     "requires": [
       "programming/web-server",
+      "programming/stddev-temp",
+      "programming/median-temp",
       "programming/json-endpoint",
       "programming/json-api",
+      "programming/http-post",
       "programming/avg-temp",
       "electronics/temperature-plot",
       "electronics/data-logger",
@@ -407,6 +412,7 @@
   "8e81b5e5-4aee-402c-bd04-fed9188f8c07": {
     "requires": [
       "programming/temp-logger",
+      "programming/temp-json-api",
       "programming/temp-graph",
       "programming/temp-email",
       "programming/temp-alert",
@@ -470,7 +476,8 @@
       "hydroponics/pump-prime",
       "hydroponics/pump-install",
       "hydroponics/nutrient-check",
-      "geothermal/purge-loop-air"
+      "geothermal/purge-loop-air",
+      "geothermal/backflush-loop-filter"
     ],
     "rewards": []
   },
@@ -503,7 +510,8 @@
       "chemistry/buffer-solution",
       "chemistry/acid-neutralization",
       "chemistry/acid-dilution",
-      "aquaria/ph-strip-test"
+      "aquaria/ph-strip-test",
+      "aquaria/balance-ph"
     ],
     "rewards": []
   },
@@ -518,6 +526,7 @@
       "hydroponics/nutrient-check",
       "firstaid/wound-care",
       "firstaid/stop-nosebleed",
+      "firstaid/remove-splinter",
       "firstaid/learn-cpr",
       "firstaid/dispose-expired",
       "chemistry/ph-test",
@@ -642,14 +651,17 @@
       "firstaid/wound-care",
       "firstaid/stop-nosebleed",
       "firstaid/restock-kit",
-      "firstaid/learn-cpr"
+      "firstaid/remove-splinter",
+      "firstaid/learn-cpr",
+      "firstaid/change-bandage"
     ],
     "rewards": []
   },
   "1b1030bf-9767-4b16-9ff6-a8e7de28b689": {
     "requires": [
       "firstaid/wound-care",
-      "firstaid/restock-kit"
+      "firstaid/restock-kit",
+      "firstaid/change-bandage"
     ],
     "rewards": []
   },
@@ -679,7 +691,14 @@
   },
   "a1c7f153-5b2e-443d-936a-47f396a7d191": {
     "requires": [
+      "firstaid/sanitize-pocket-mask",
       "firstaid/learn-cpr"
+    ],
+    "rewards": []
+  },
+  "fc9301ec-674f-4b0d-b85e-c47140d5ae00": {
+    "requires": [
+      "firstaid/remove-splinter"
     ],
     "rewards": []
   },
@@ -721,6 +740,7 @@
       "energy/power-inverter",
       "energy/offgrid-charger",
       "energy/hand-crank-generator",
+      "energy/biogas-digester",
       "energy/battery-upgrade",
       "energy/battery-maintenance",
       "electronics/check-battery-voltage"
@@ -809,6 +829,12 @@
     ],
     "rewards": []
   },
+  "dc9c057e-2bd1-4bcc-b06c-2e18344ce3e5": {
+    "requires": [
+      "energy/biogas-digester"
+    ],
+    "rewards": []
+  },
   "d1105b87-8185-4a30-ba55-406384be169f": {
     "requires": [
       "electronics/voltage-divider",
@@ -893,6 +919,12 @@
     ],
     "rewards": []
   },
+  "cd0e1512-9b4e-4450-92ab-b298852ca5e7": {
+    "requires": [
+      "electronics/tin-soldering-iron"
+    ],
+    "rewards": []
+  },
   "f6bb2c1a-0001-46bd-998a-388a488b5b5c": {
     "requires": [],
     "rewards": [
@@ -912,6 +944,12 @@
     "rewards": []
   },
   "dad7f853-ccc9-40be-b226-89272708db84": {
+    "requires": [
+      "electronics/solder-wire"
+    ],
+    "rewards": []
+  },
+  "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26": {
     "requires": [
       "electronics/solder-wire"
     ],
@@ -961,13 +999,41 @@
     ],
     "rewards": []
   },
+  "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4": {
+    "requires": [
+      "electronics/desolder-component",
+      "electronics/arduino-blink",
+      "3dprinting/nozzle-cleaning",
+      "3dprinting/filament-change",
+      "3dprinting/calibration-cube"
+    ],
+    "rewards": []
+  },
+  "6f2bbb48-8620-4f22-b487-d1d7db34ab22": {
+    "requires": [
+      "electronics/desolder-component"
+    ],
+    "rewards": []
+  },
   "526817d2-996a-4d80-b5fc-4a0a5eb9ca03": {
     "requires": [
       "electronics/desolder-component"
     ],
     "rewards": []
   },
+  "5562d728-8e62-43b2-9b3d-77cebd2ab481": {
+    "requires": [],
+    "rewards": [
+      "electronics/continuity-test"
+    ]
+  },
   "ce92a1a9-c817-40f0-92b1-24aff053903d": {
+    "requires": [
+      "electronics/continuity-test"
+    ],
+    "rewards": []
+  },
+  "946bc4dd-32ee-434c-a8ed-d70cdce617f4": {
     "requires": [
       "electronics/continuity-test"
     ],
@@ -1035,6 +1101,12 @@
     "requires": [
       "composting/turn-pile",
       "composting/check-temperature"
+    ],
+    "rewards": []
+  },
+  "2b57a38d-0486-40e8-a50d-d893541b50e9": {
+    "requires": [
+      "composting/turn-pile"
     ],
     "rewards": []
   },
@@ -1158,13 +1230,15 @@
   "8d30133e-0fbb-4e0f-845b-44d721a1f6b2": {
     "requires": [
       "aquaria/water-testing",
-      "aquaria/shrimp"
+      "aquaria/shrimp",
+      "aquaria/log-water-parameters"
     ],
     "rewards": []
   },
   "b8602362-2035-4f00-9376-f48d8668cf38": {
     "requires": [
-      "aquaria/water-testing"
+      "aquaria/water-testing",
+      "aquaria/log-water-parameters"
     ],
     "rewards": []
   },
@@ -1207,6 +1281,14 @@
     ],
     "rewards": []
   },
+  "0b85f058-38f2-4e9a-93e9-d47441608619": {
+    "requires": [
+      "aquaria/thermometer",
+      "aquaria/position-tank",
+      "aquaria/heater-install"
+    ],
+    "rewards": []
+  },
   "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56": {
     "requires": [],
     "rewards": [
@@ -1227,7 +1309,8 @@
   },
   "ee7d437d-7426-47cd-b691-386dd20f4e47": {
     "requires": [
-      "aquaria/shrimp"
+      "aquaria/shrimp",
+      "aquaria/net-fish"
     ],
     "rewards": []
   },
@@ -1237,10 +1320,9 @@
     ],
     "rewards": []
   },
-  "0b85f058-38f2-4e9a-93e9-d47441608619": {
+  "83fe7eee-135e-4885-9ce0-9042b9fb860a": {
     "requires": [
-      "aquaria/position-tank",
-      "aquaria/heater-install"
+      "aquaria/log-water-parameters"
     ],
     "rewards": []
   },
@@ -1341,14 +1423,6 @@
       "3dprinting/benchy_25",
       "3dprinting/benchy_100",
       "3dprinting/benchy_10"
-    ],
-    "rewards": []
-  },
-  "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4": {
-    "requires": [
-      "3dprinting/nozzle-cleaning",
-      "3dprinting/filament-change",
-      "3dprinting/calibration-cube"
     ],
     "rewards": []
   },

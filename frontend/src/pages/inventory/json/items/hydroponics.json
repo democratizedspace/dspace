@@ -305,15 +305,21 @@
     {
         "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
         "name": "50 mL measuring syringe",
-        "description": "Reusable 50 mL plastic syringe with clear markings for precise nutrient dosing.",
-        "image": "/assets/aquarium_thermometer.jpg",
-        "price": "2 dUSD",
+        "description": "Reusable 50 mL polypropylene syringe with Luer-lock tip and 1 mL marks; 18 cm long.",
+        "image": "/assets/hydroponics_nutrients.jpg",
+        "price": "2.50 dUSD",
         "unit": "each",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 65
+                }
+            ]
         }
     },
     {
