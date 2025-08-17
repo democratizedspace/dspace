@@ -11,6 +11,7 @@ clear, file‑scoped prompt. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex) when working on processes. To keep the
 prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). If these
 templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 For fundamental design tips see the
 [Process Development Guidelines](/docs/process-guidelines).
 

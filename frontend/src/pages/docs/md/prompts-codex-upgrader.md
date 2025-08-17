@@ -7,8 +7,10 @@ slug: 'prompts-codex-upgrader'
 
 Use this meta prompt when the Codex templates themselves need refreshing. It keeps our
 instructions current—the machine that builds the machine. See
-[Codex Prompts](/docs/prompts-codex) for the baseline templates and the
-[Codex Meta Prompt](/docs/prompts-codex-meta) for routine maintenance.
+[Codex Prompts](/docs/prompts-codex) for the baseline templates, the
+[Codex Meta Prompt](/docs/prompts-codex-meta) for routine maintenance, and the
+[Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix) for troubleshooting failing
+workflows.
 
 ```text
 SYSTEM:
