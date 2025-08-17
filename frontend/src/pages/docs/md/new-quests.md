@@ -11,14 +11,15 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 231
-New quests in this release: 209
+Current quest count: 232
+New quests in this release: 210
 
 ### 3dprinting
 
 - 3dprinting/bed-leveling
 - 3dprinting/cable-clip
 - 3dprinting/calibration-cube
+- 3dprinting/extruder-calibration
 - 3dprinting/filament-change
 - 3dprinting/nozzle-cleaning
 - 3dprinting/phone-stand

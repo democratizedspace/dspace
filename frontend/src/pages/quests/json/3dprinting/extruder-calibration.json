@@ -1,0 +1,55 @@
+{
+    "id": "3dprinting/extruder-calibration",
+    "title": "Calibrate Extruder Steps",
+    "description": "Fine-tune your extruder steps per millimeter for accurate filament flow.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Inconsistent extrusion? Let's mark and measure filament to dial in the e-steps.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "I'm ready to calibrate."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Preheat the printer, mark 120 mm of filament, then command a 100 mm extrusion and measure the gap.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-extruder-steps",
+                    "text": "Walk me through the steps."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Measurements done and firmware updated.",
+                    "requiresItems": [
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 5 },
+                        { "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 },
+                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! Your extruder now delivers filament precisely—enjoy cleaner prints.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All dialed in."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinter/start"]
+}
