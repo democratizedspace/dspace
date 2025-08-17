@@ -14,7 +14,7 @@ For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
 [NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
 [Docs prompts](/docs/prompts-docs), and [Refactor prompts](/docs/prompts-refactors).
-For specialized workflows use the [CI-failure fix prompt](/docs/prompts-codex-ci-fix),
+For specialized workflows use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix),
 the [Codex meta prompt](/docs/prompts-codex-meta), and the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 
 > **TL;DR**
@@ -28,7 +28,7 @@ the [Codex meta prompt](/docs/prompts-codex-meta), and the [Codex Prompt Upgrade
 >    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
 
 For failing GitHub Actions runs, use the dedicated
-[CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+[Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 ---
 
@@ -41,7 +41,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [Outage Prompts](/docs/prompts-outages)
 -   [Docs Prompts](/docs/prompts-docs)
 -   [Refactor Prompts](/docs/prompts-refactors)
--   [CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
+-   [Codex CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)
 -   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
 

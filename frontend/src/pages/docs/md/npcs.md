@@ -49,7 +49,11 @@ Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs an
 
 <img src="/assets/npc/hydro.jpg" />
 
-Hydro, a relaxed and affable team member, has a gift for hydroponics and sustainable farming. They ensure the crew has a steady supply of food during lengthy space missions. Growing up on a small Earth farm, Hydro acquired a strong appreciation for sustainable agriculture. In college, they studied biology and became intrigued by hydroponics as a method for cultivating crops in harsh environments. They monitor nutrient levels and light cycles, turning complex science into friendly chatter that keeps novices engaged.
+Hydro keeps the guild's hydroponic bays stocked with fresh greens.
+Raised on an Earth farm, they traded soil for nutrient baths after studying biology.
+Their easygoing chatter about PPM and pH turns lab science into shipboard routine.
+Hydro guides recruits through quests like [Check Solution pH](/quests/hydroponics/ph-check) and
+[Grow Stevia Hydroponically](/quests/hydroponics/stevia).
 
 ### Sample Dialogue
 
@@ -128,16 +132,20 @@ Atlas is a humanoid robot assistant designed to help with physical tasks that re
 
 <img src="/assets/npc/atlas.jpg" />
 
-Cedar is a seasoned woodworker who loves guiding newcomers. Years of building furniture have made them patient and detail-oriented, with a knack for turning scrap into sturdy furniture. Cedar will help you master safe tool use, respect the grain, and gradually tackle bigger projects.
+Cedar is the metaguild's patient carpenter, happiest when turning scavenged planks into sturdy kit.
+Years in the woodshop taught them to respect the grain and coach novices without condescension.
+Cedar leads quests like [Build a Birdhouse](/quests/woodworking/birdhouse) and
+[Assemble a Step Stool](/quests/woodworking/step-stool), making safety and craftsmanship
+second nature.
 
 ### Sample Dialogue
 
--   "Hey there! I'm Cedar. Let's make sure you've got a solid bench before we start cutting."
--   "Measure twice, cut once! That's a rule you'll hear often in my shop."
--   "Keep your fingers clear of the blade and let the saw do the work."
--   "Nice job on that birdhouse! Sand the edges so our feathered friends stay safe."
--   "Ready for a bigger project? A sturdy step stool will test your skills."
--   "Once it's assembled, a light coat of oil will make that grain pop."
+-   "Guild carpenter Cedar here. Bench secured? Good—now we can cut."
+-   "Measure twice, cut once; the tape never lies."
+-   "Let the saw chew while your fingers stay clear."
+-   "Sand that birdhouse so the wrens leave with all their feathers."
+-   "Step stool's next; every rung teaches balance and patience."
+-   "A wipe of oil and the grain tells its story."
 
 ## Lyra
 

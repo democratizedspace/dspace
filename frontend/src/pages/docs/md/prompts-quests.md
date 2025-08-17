@@ -11,6 +11,7 @@ clear, file‑scoped prompt. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex) when working on quests. To keep the prompt
 docs improving, see the [Codex meta prompt](/docs/prompts-codex-meta). If these
 templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 For the steps required to share quests with the community, see the
 [Quest Submission Guide](/docs/quest-submission). Comprehensive content
 guidelines live in our [Content Development Guide](/docs/content-development),
