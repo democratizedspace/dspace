@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to swap colors? We'll unload the old spool and load the new one.",
+            "text": "Ready to swap colors? We'll unload the old spool and load green PLA on your entry-level FDM 3D printer.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "swap",
-            "text": "Put on safety goggles, preheat the nozzle to 200 °C, retract the old filament, and feed the green PLA until the color runs clean.",
+            "text": "Put on safety goggles and heat the hotend to 200 °C. Retract the old filament, keep fingers clear of gears, then feed in green PLA until only green extrudes. Avoid touching the hot nozzle.",
             "options": [
                 {
                     "type": "process",
@@ -52,11 +52,12 @@
     "rewards": [],
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
-            { "task": "codex-quest-hardening-2025-08-12", "date": "2025-08-12", "score": 60 }
+            { "task": "codex-quest-hardening-2025-08-12", "date": "2025-08-12", "score": 60 },
+            { "task": "codex-quest-refinement-2025-08-17", "date": "2025-08-17", "score": 80 }
         ]
     }
 }
