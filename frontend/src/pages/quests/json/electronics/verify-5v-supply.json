@@ -1,0 +1,43 @@
+{
+    "id": "electronics/verify-5v-supply",
+    "title": "Verify a 5 V power supply with a multimeter",
+    "description": "Use a digital multimeter to check the output of a USB power supply.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Orion here! Let's make sure your 5 V power supply actually outputs 5 volts. Work on a clean bench and wear safety goggles.",
+            "options": [{ "type": "goto", "goto": "setup", "text": "Sounds good, what do I need?" }]
+        },
+        {
+            "id": "setup",
+            "text": "Grab a digital multimeter and the 5 V power supply. Set the multimeter to the 20 V DC range. Plug the supply into the wall but leave the output plug free.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Ready to measure.",
+                    "requiresItems": [
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "828d6c3b-66a5-4064-b221-97630274502b", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Touch the black probe to the supply's ground and the red probe to the positive output. Check the display; it should read about 5.0 V. If it's far off, the supply might be faulty.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Got a stable 5 V reading." }]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Label the supply if the voltage is correct and always unplug it before making adjustments. Now you're ready to power microcontroller projects safely.",
+            "options": [{ "type": "finish", "text": "Thanks Orion!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/check-battery-voltage"],
+    "hardening": { "passes": 0, "score": 0, "emoji": "🛠️", "history": [] }
+}
