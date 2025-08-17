@@ -13,7 +13,7 @@ const getEnvUrl = () => {
     return null;
 };
 
-export const tokenPlaceChat = async (messages) => {
+export const tokenPlaceChat = async (messages, { signal } = {}) => {
     const envUrl = getEnvUrl();
     const baseUrl = loadGameState().tokenPlace?.url || envUrl || DEFAULT_URL;
 
@@ -39,10 +39,22 @@ export const tokenPlaceChat = async (messages) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: combinedMessages }),
+        signal,
     });
 
     if (!response.ok) {
-        throw new Error('token.place API request failed');
+        let details;
+        try {
+            const err = await response.json();
+            details = err.error || err.message || response.statusText;
+        } catch {
+            try {
+                details = await response.text();
+            } catch {
+                details = response.statusText;
+            }
+        }
+        throw new Error(`token.place API request failed: ${details}`);
     }
 
     const data = await response.json();
