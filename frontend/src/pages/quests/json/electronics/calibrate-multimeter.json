@@ -1,0 +1,39 @@
+{
+    "id": "electronics/calibrate-multimeter",
+    "title": "Calibrate Your Multimeter",
+    "description": "Zero your digital multimeter against a 220 Ω reference resistor before measurements.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Accuracy matters. Ready to check your meter against a known resistor?",
+            "options": [{ "type": "goto", "goto": "calibrate", "text": "Show me the steps." }]
+        },
+        {
+            "id": "calibrate",
+            "text": "Clip the probes to a 220 Ω resistor and adjust the meter until it reads within tolerance.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading matches the reference",
+                    "process": "calibrate-multimeter",
+                    "requiresItems": [
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your readings will be more reliable now. Store the meter and resistor safely.",
+            "options": [{ "type": "finish", "text": "All set." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/measure-resistance"]
+}
