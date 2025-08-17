@@ -1,0 +1,43 @@
+{
+    "id": "rocketry/mission-log",
+    "title": "Log the Mission",
+    "description": "Record launch details so improvements are trackable.",
+    "image": "/assets/paperwork.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Great recovery! Let's jot down what happened so we can refine our next launch.",
+            "options": [{ "type": "goto", "goto": "middle", "text": "Ready to write." }]
+        },
+        {
+            "id": "middle",
+            "text": "Use your mission logbook and quill to record the flight details.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Writing the entry",
+                    "requiresItems": [
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 },
+                        { "id": "aa82b02f-2617-4474-a91b-29647e4a9780", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Entry finished",
+                    "requiresItems": [{ "id": "280ed361-ac70-4ab9-bcd9-aee481790faf", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "Nice work! Consistent logs make each mission better than the last.",
+            "options": [{ "type": "finish", "text": "Mission logged" }]
+        }
+    ],
+    "rewards": [{ "id": "99c0472d-0d95-4030-a529-df3e8e8349f4", "count": 1 }],
+    "requiresQuests": ["rocketry/recovery-run"]
+}
