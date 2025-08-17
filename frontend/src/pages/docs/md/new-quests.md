@@ -16,193 +16,194 @@ New quests in this release: 210
 
 ### 3dprinting
 
-- 3dprinting/bed-leveling
-- 3dprinting/cable-clip
-- 3dprinting/calibration-cube
-- 3dprinting/filament-change
-- 3dprinting/nozzle-cleaning
-- 3dprinting/phone-stand
-- 3dprinting/retraction-test
-- 3dprinting/spool-holder
-- 3dprinting/temperature-tower
-- 3dprinting/x-belt-tension
+-   3dprinting/bed-leveling
+-   3dprinting/cable-clip
+-   3dprinting/calibration-cube
+-   3dprinting/filament-change
+-   3dprinting/nozzle-cleaning
+-   3dprinting/phone-stand
+-   3dprinting/retraction-test
+-   3dprinting/spool-holder
+-   3dprinting/temperature-tower
+-   3dprinting/x-belt-tension
 
 ### aquaria
 
-- aquaria/aquarium-light
-- aquaria/balance-ph
-- aquaria/breeding
-- aquaria/filter-rinse
-- aquaria/floating-plants
-- aquaria/guppy
-- aquaria/heater-install
-- aquaria/log-water-parameters
-- aquaria/net-fish
-- aquaria/ph-strip-test
-- aquaria/position-tank
-- aquaria/shrimp
-- aquaria/sponge-filter
-- aquaria/thermometer
-- aquaria/walstad
-- aquaria/water-change
-- aquaria/water-testing
+-   aquaria/aquarium-light
+-   aquaria/balance-ph
+-   aquaria/breeding
+-   aquaria/filter-rinse
+-   aquaria/floating-plants
+-   aquaria/guppy
+-   aquaria/heater-install
+-   aquaria/log-water-parameters
+-   aquaria/net-fish
+-   aquaria/ph-strip-test
+-   aquaria/position-tank
+-   aquaria/shrimp
+-   aquaria/sponge-filter
+-   aquaria/thermometer
+-   aquaria/walstad
+-   aquaria/water-change
+-   aquaria/water-testing
 
 ### astronomy
 
-- astronomy/andromeda
-- astronomy/aurora-watch
-- astronomy/basic-telescope
-- astronomy/comet-tracking
-- astronomy/constellations
-- astronomy/iss-flyover
-- astronomy/iss-photo
-- astronomy/jupiter-moons
-- astronomy/light-pollution
-- astronomy/lunar-eclipse
-- astronomy/meteor-shower
-- astronomy/north-star
-- astronomy/observe-moon
-- astronomy/orion-nebula
-- astronomy/planetary-alignment
-- astronomy/satellite-pass
-- astronomy/saturn-rings
-- astronomy/star-trails
-- astronomy/venus-phases
+-   astronomy/andromeda
+-   astronomy/aurora-watch
+-   astronomy/basic-telescope
+-   astronomy/comet-tracking
+-   astronomy/constellations
+-   astronomy/iss-flyover
+-   astronomy/iss-photo
+-   astronomy/jupiter-moons
+-   astronomy/light-pollution
+-   astronomy/lunar-eclipse
+-   astronomy/meteor-shower
+-   astronomy/north-star
+-   astronomy/observe-moon
+-   astronomy/orion-nebula
+-   astronomy/planetary-alignment
+-   astronomy/satellite-pass
+-   astronomy/saturn-rings
+-   astronomy/star-trails
+-   astronomy/venus-phases
 
 ### chemistry
 
-- chemistry/acid-dilution
-- chemistry/acid-neutralization
-- chemistry/buffer-solution
-- chemistry/ph-adjustment
-- chemistry/ph-test
-- chemistry/precipitation-reaction
-- chemistry/safe-reaction
-- chemistry/stevia-crystals
-- chemistry/stevia-extraction
-- chemistry/stevia-tasting
+-   chemistry/acid-dilution
+-   chemistry/acid-neutralization
+-   chemistry/buffer-solution
+-   chemistry/ph-adjustment
+-   chemistry/ph-test
+-   chemistry/precipitation-reaction
+-   chemistry/safe-reaction
+-   chemistry/stevia-crystals
+-   chemistry/stevia-extraction
+-   chemistry/stevia-tasting
 
 ### completionist
 
-- completionist/catalog
-- completionist/display
-- completionist/polish
-- completionist/reminder
+-   completionist/catalog
+-   completionist/display
+-   completionist/polish
+-   completionist/reminder
 
 ### composting
 
-- composting/check-temperature
-- composting/start
-- composting/turn-pile
+-   composting/check-temperature
+-   composting/start
+-   composting/turn-pile
 
 ### devops
 
-- devops/auto-updates
-- devops/ci-pipeline
-- devops/daily-backups
-- devops/docker-compose
-- devops/enable-https
-- devops/fail2ban
-- devops/firewall-rules
-- devops/k3s-deploy
-- devops/log-maintenance
-- devops/monitoring
-- devops/pi-cluster-hardware
-- devops/prepare-first-node
-- devops/private-registry
-- devops/ssd-boot
-- devops/ssh-hardening
+-   devops/auto-updates
+-   devops/ci-pipeline
+-   devops/daily-backups
+-   devops/docker-compose
+-   devops/enable-https
+-   devops/fail2ban
+-   devops/firewall-rules
+-   devops/k3s-deploy
+-   devops/log-maintenance
+-   devops/monitoring
+-   devops/pi-cluster-hardware
+-   devops/prepare-first-node
+-   devops/private-registry
+-   devops/ssd-boot
+-   devops/ssh-hardening
 
 ### electronics
 
-- electronics/arduino-blink
-- electronics/basic-circuit
-- electronics/check-battery-voltage
-- electronics/continuity-test
-- electronics/data-logger
-- electronics/desolder-component
-- electronics/led-polarity
-- electronics/light-sensor
-- electronics/measure-arduino-5v
-- electronics/measure-led-current
-- electronics/measure-resistance
-- electronics/potentiometer-dimmer
-- electronics/resistor-color-check
-- electronics/servo-sweep
-- electronics/solder-wire
-- electronics/soldering-intro
-- electronics/temperature-plot
-- electronics/thermistor-reading
-- electronics/thermometer-calibration
-- electronics/voltage-divider
+-   electronics/arduino-blink
+-   electronics/basic-circuit
+-   electronics/check-battery-voltage
+-   electronics/continuity-test
+-   electronics/data-logger
+-   electronics/desolder-component
+-   electronics/led-polarity
+-   electronics/light-sensor
+-   electronics/measure-arduino-5v
+-   electronics/measure-led-current
+-   electronics/measure-resistance
+-   electronics/potentiometer-dimmer
+-   electronics/resistor-color-check
+-   electronics/servo-sweep
+-   electronics/solder-led-harness
+-   electronics/solder-wire
+-   electronics/soldering-intro
+-   electronics/temperature-plot
+-   electronics/thermistor-reading
+-   electronics/thermometer-calibration
+-   electronics/voltage-divider
 
 ### energy
 
-- energy/battery-maintenance
-- energy/battery-upgrade
-- energy/biogas-digester
-- energy/charge-controller-setup
-- energy/dWatt-1e8
-- energy/hand-crank-generator
-- energy/offgrid-charger
-- energy/portable-solar-panel
-- energy/power-inverter
-- energy/solar-tracker
-- energy/wind-turbine
+-   energy/battery-maintenance
+-   energy/battery-upgrade
+-   energy/biogas-digester
+-   energy/charge-controller-setup
+-   energy/dWatt-1e8
+-   energy/hand-crank-generator
+-   energy/offgrid-charger
+-   energy/portable-solar-panel
+-   energy/power-inverter
+-   energy/solar-tracker
+-   energy/wind-turbine
 
 ### firstaid
 
-- firstaid/assemble-kit
-- firstaid/change-bandage
-- firstaid/dispose-expired
-- firstaid/learn-cpr
-- firstaid/remove-splinter
-- firstaid/restock-kit
-- firstaid/sanitize-pocket-mask
-- firstaid/splint-limb
-- firstaid/stop-nosebleed
-- firstaid/treat-burn
-- firstaid/wound-care
+-   firstaid/assemble-kit
+-   firstaid/change-bandage
+-   firstaid/dispose-expired
+-   firstaid/learn-cpr
+-   firstaid/remove-splinter
+-   firstaid/restock-kit
+-   firstaid/sanitize-pocket-mask
+-   firstaid/splint-limb
+-   firstaid/stop-nosebleed
+-   firstaid/treat-burn
+-   firstaid/wound-care
 
 ### geothermal
 
-- geothermal/backflush-loop-filter
-- geothermal/calibrate-ground-sensor
-- geothermal/check-loop-inlet-temp
-- geothermal/check-loop-outlet-temp
-- geothermal/check-loop-temp-delta
-- geothermal/compare-depth-ground-temps
-- geothermal/compare-seasonal-ground-temps
-- geothermal/install-backup-thermistor
-- geothermal/log-ground-temperature
-- geothermal/log-heat-pump-warmup
-- geothermal/monitor-heat-pump-energy
-- geothermal/purge-loop-air
-- geothermal/replace-faulty-thermistor
-- geothermal/survey-ground-temperature
+-   geothermal/backflush-loop-filter
+-   geothermal/calibrate-ground-sensor
+-   geothermal/check-loop-inlet-temp
+-   geothermal/check-loop-outlet-temp
+-   geothermal/check-loop-temp-delta
+-   geothermal/compare-depth-ground-temps
+-   geothermal/compare-seasonal-ground-temps
+-   geothermal/install-backup-thermistor
+-   geothermal/log-ground-temperature
+-   geothermal/log-heat-pump-warmup
+-   geothermal/monitor-heat-pump-energy
+-   geothermal/purge-loop-air
+-   geothermal/replace-faulty-thermistor
+-   geothermal/survey-ground-temperature
 
 ### hydroponics
 
-- hydroponics/air-stone-soak
-- hydroponics/ec-check
-- hydroponics/filter-clean
-- hydroponics/grow-light
-- hydroponics/lettuce
-- hydroponics/mint-cutting
-- hydroponics/netcup-clean
-- hydroponics/nutrient-check
-- hydroponics/ph-check
-- hydroponics/ph-test
-- hydroponics/plug-soak
-- hydroponics/pump-install
-- hydroponics/pump-prime
-- hydroponics/regrow-stevia
-- hydroponics/reservoir-refresh
-- hydroponics/root-rinse
-- hydroponics/stevia
-- hydroponics/temp-check
-- hydroponics/top-off
-- hydroponics/tub-scrub
+-   hydroponics/air-stone-soak
+-   hydroponics/ec-check
+-   hydroponics/filter-clean
+-   hydroponics/grow-light
+-   hydroponics/lettuce
+-   hydroponics/mint-cutting
+-   hydroponics/netcup-clean
+-   hydroponics/nutrient-check
+-   hydroponics/ph-check
+-   hydroponics/ph-test
+-   hydroponics/plug-soak
+-   hydroponics/pump-install
+-   hydroponics/pump-prime
+-   hydroponics/regrow-stevia
+-   hydroponics/reservoir-refresh
+-   hydroponics/root-rinse
+-   hydroponics/stevia
+-   hydroponics/temp-check
+-   hydroponics/top-off
+-   hydroponics/tub-scrub
 
 ### programming
 
@@ -227,59 +228,59 @@ New quests in this release: 210
 
 ### robotics
 
-- robotics/gyro-balance
-- robotics/line-follower
-- robotics/maze-navigation
-- robotics/obstacle-avoidance
-- robotics/odometry-basics
-- robotics/pan-tilt
-- robotics/servo-arm
-- robotics/servo-control
-- robotics/servo-gripper
-- robotics/servo-radar
-- robotics/ultrasonic-rangefinder
-- robotics/wheel-encoders
+-   robotics/gyro-balance
+-   robotics/line-follower
+-   robotics/maze-navigation
+-   robotics/obstacle-avoidance
+-   robotics/odometry-basics
+-   robotics/pan-tilt
+-   robotics/servo-arm
+-   robotics/servo-control
+-   robotics/servo-gripper
+-   robotics/servo-radar
+-   robotics/ultrasonic-rangefinder
+-   robotics/wheel-encoders
 
 ### rocketry
 
-- rocketry/fuel-mixture
-- rocketry/night-launch
-- rocketry/preflight-check
-- rocketry/recovery-run
-- rocketry/static-test
-- rocketry/wind-check
+-   rocketry/fuel-mixture
+-   rocketry/night-launch
+-   rocketry/preflight-check
+-   rocketry/recovery-run
+-   rocketry/static-test
+-   rocketry/wind-check
 
 ### sysadmin
 
-- sysadmin/basic-commands
-- sysadmin/log-analysis
-- sysadmin/resource-monitoring
+-   sysadmin/basic-commands
+-   sysadmin/log-analysis
+-   sysadmin/resource-monitoring
 
 ### ubi
 
-- ubi/first-payment
-- ubi/reminder
-- ubi/savings-goal
+-   ubi/first-payment
+-   ubi/reminder
+-   ubi/savings-goal
 
 ### welcome
 
-- welcome/connect-github
-- welcome/intro-inventory
-- welcome/run-tests
-- welcome/smart-plug-test
+-   welcome/connect-github
+-   welcome/intro-inventory
+-   welcome/run-tests
+-   welcome/smart-plug-test
 
 ### woodworking
 
-- woodworking/apply-finish
-- woodworking/birdhouse
-- woodworking/bookshelf
-- woodworking/coffee-table
-- woodworking/finish-sanding
-- woodworking/picture-frame
-- woodworking/planter-box
-- woodworking/step-stool
-- woodworking/tool-rack
-- woodworking/workbench
+-   woodworking/apply-finish
+-   woodworking/birdhouse
+-   woodworking/bookshelf
+-   woodworking/coffee-table
+-   woodworking/finish-sanding
+-   woodworking/picture-frame
+-   woodworking/planter-box
+-   woodworking/step-stool
+-   woodworking/tool-rack
+-   woodworking/workbench
 
 ## Quests added in v2.1
 
@@ -289,24 +290,24 @@ New quests in this release: 12
 
 ### 3dprinting
 
-- 3dprinting/benchy_10
-- 3dprinting/benchy_100
-- 3dprinting/benchy_25
+-   3dprinting/benchy_10
+-   3dprinting/benchy_100
+-   3dprinting/benchy_25
 
 ### energy
 
-- energy/dSolar-100kW
-- energy/dSolar-10kW
-- energy/dSolar-1kW
-- energy/dWatt-1e3
-- energy/dWatt-1e4
-- energy/dWatt-1e5
-- energy/dWatt-1e6
-- energy/dWatt-1e7
+-   energy/dSolar-100kW
+-   energy/dSolar-10kW
+-   energy/dSolar-1kW
+-   energy/dWatt-1e3
+-   energy/dWatt-1e4
+-   energy/dWatt-1e5
+-   energy/dWatt-1e6
+-   energy/dWatt-1e7
 
 ### hydroponics
 
-- hydroponics/bucket_10
+-   hydroponics/bucket_10
 
 ## Quests added in v2
 
@@ -316,30 +317,30 @@ New quests in this release: 9
 
 ### aquaria
 
-- aquaria/goldfish
+-   aquaria/goldfish
 
 ### completionist
 
-- completionist/v2
+-   completionist/v2
 
 ### energy
 
-- energy/solar
-- energy/solar-1kWh
+-   energy/solar
+-   energy/solar-1kWh
 
 ### hydroponics
 
-- hydroponics/basil
+-   hydroponics/basil
 
 ### rocketry
 
-- rocketry/firstlaunch
-- rocketry/parachute
+-   rocketry/firstlaunch
+-   rocketry/parachute
 
 ### ubi
 
-- ubi/basicincome
+-   ubi/basicincome
 
 ### welcome
 
-- welcome/howtodoquests
+-   welcome/howtodoquests
