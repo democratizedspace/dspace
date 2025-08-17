@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Rinse your hands, unplug the heater and let it cool for 10 minutes, then dry a 5 cm patch on the outside glass just below the waterline with a clean paper towel.",
+            "text": "Wash and dry your hands. Unplug the heater for 10 min to cool, then dry a 5 cm patch on the outside glass just below the waterline with a clean paper towel, keeping the power cord away from water.",
             "options": [
                 {
                     "type": "goto",
@@ -23,7 +23,7 @@
         },
         {
             "id": "attach",
-            "text": "Peel the backing without touching the adhesive. Align the strip at eye level on the dry spot and press it to the glass from top to bottom for 30 seconds. Keep the strip outside the tank and at least 5 cm from heaters or direct sunlight.",
+            "text": "Peel the backing without touching adhesive. Align the strip at eye level on the dried spot and press from top to bottom for 30 s to avoid bubbles. Keep it outside the tank and at least 5 cm from heaters or direct sunlight.",
             "options": [
                 {
                     "type": "goto",
@@ -40,20 +40,21 @@
         },
         {
             "id": "finish",
-            "text": "Wait a few minutes for the numbers to stabilize. Plug the heater back in with dry hands and monitor the water temperature at a glance.",
+            "text": "Wait a few minutes for the numbers to steady. Plug the heater back in with dry hands and confirm the display shows a safe temperature.",
             "options": [{ "type": "finish", "text": "All set!" }]
         }
     ],
     "rewards": [],
     "requiresQuests": ["aquaria/position-tank"],
     "hardening": {
-        "passes": 3,
-        "score": 90,
+        "passes": 4,
+        "score": 95,
         "emoji": "💯",
         "history": [
             { "task": "codex-quest-hardening-2025-08-13", "date": "2025-08-13", "score": 60 },
             { "task": "codex-quest-hardening-2025-08-14", "date": "2025-08-14", "score": 80 },
-            { "task": "codex-quest-hardening-2025-08-16", "date": "2025-08-16", "score": 90 }
+            { "task": "codex-quest-hardening-2025-08-16", "date": "2025-08-16", "score": 90 },
+            { "task": "codex-quest-hardening-2025-08-16-2", "date": "2025-08-16", "score": 95 }
         ]
     }
 }
