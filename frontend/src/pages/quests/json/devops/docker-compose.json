@@ -1,16 +1,21 @@
 {
     "id": "devops/docker-compose",
     "title": "Launch DSPACE in Docker",
-    "description": "Launch the container and share it through a secure Cloudflare Tunnel.",
+    "description": "Start DSPACE in Docker and expose it with a private Cloudflare Tunnel.",
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-hardening-2025-08-12",
                 "date": "2025-08-12",
                 "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-16",
+                "date": "2025-08-16",
+                "score": 80
             }
         ]
     },
@@ -20,7 +25,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Run `docker compose up --build -d` in the project directory. Use `docker compose down` to stop.",
+            "text": "Run `docker compose up -d --build` on Pi. Stop with `docker compose down`.",
             "options": [
                 {
                     "type": "process",
@@ -42,7 +47,7 @@
         },
         {
             "id": "tunnel",
-            "text": "Expose the service with `cloudflared tunnel --url http://localhost:3002`. Keep the token private.",
+            "text": "PoE+ switch & Ethernet cable. Run `cloudflared tunnel --url localhost:3002`.",
             "options": [
                 {
                     "type": "process",
@@ -68,7 +73,7 @@
         },
         {
             "id": "finish",
-            "text": "Everything is up and running! For a multi-node setup you can follow Orion's k3s guide later.",
+            "text": "Everything is running! Keep token safe. For multi see Orion's k3s guide.",
             "options": [
                 {
                     "type": "finish",

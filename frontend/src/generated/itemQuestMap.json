@@ -955,6 +955,12 @@
     ],
     "rewards": []
   },
+  "5029f7cb-3359-4153-b7ca-4b53988ac086": {
+    "requires": [
+      "electronics/solder-wire"
+    ],
+    "rewards": []
+  },
   "bf3d2784-d48d-4b12-b12a-75f563b5dc88": {
     "requires": [
       "electronics/resistor-color-check",
