@@ -1,0 +1,35 @@
+{
+    "id": "geothermal/log-heat-pump-cooldown",
+    "title": "Log Heat Pump Cooldown",
+    "description": "Record loop temperature as the heat pump cools after shutoff.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Curious how fast the loop drops after shutdown? Let's log the cooldown.",
+            "options": [{ "type": "goto", "goto": "setup", "text": "Ready." }]
+        },
+        {
+            "id": "setup",
+            "text": "Use an Arduino Uno, run arduino-thermistor-read, clip sensor to loop when the pump stops.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cooldown data logged",
+                    "process": "arduino-thermistor-read",
+                    "requiresItems": [{ "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Tracking cooldown rates helps spot efficiency issues.",
+            "options": [{ "type": "finish", "text": "I'll analyze it." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/log-heat-pump-warmup"]
+}
