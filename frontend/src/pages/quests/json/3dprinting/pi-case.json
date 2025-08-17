@@ -1,0 +1,45 @@
+{
+    "id": "3dprinting/pi-case",
+    "title": "Print a Raspberry Pi Case",
+    "description": "Protect your Raspberry Pi with a custom 3D printed case.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Got a bare Raspberry Pi? Let's print a snap-fit case to shield it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Sure, tell me what to do."
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Grab a Pi case STL, slice with cooling on, print in PLA, keep ports clear.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Case printed and Pi secured.",
+                    "requiresItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Your Pi is protected and ready for projects.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "On to the next build."
+                }
+            ]
+        }
+    ],
+    "rewards": [{ "id": "5247a603-294a-4a34-a884-1ae20969b2a1", "count": 5 }],
+    "requiresQuests": ["3dprinter/start"]
+}
