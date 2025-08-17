@@ -551,6 +551,15 @@
         "image": "/assets/quests/basic_circuit.svg",
         "price": "20 dUSD",
         "type": "tool",
+    },
+    {
+        "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+        "name": "needle-nose pliers",
+        "description": "125 mm steel pliers with 1 mm tips for gripping and bending leads in tight spaces.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "6 dUSD",
+        "type": "tool",
+        "unit": "pair",
         "hardening": {
             "passes": 0,
             "score": 0,
