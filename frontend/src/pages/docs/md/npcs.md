@@ -49,17 +49,20 @@ Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs an
 
 <img src="/assets/npc/hydro.jpg" />
 
-Hydro, a relaxed and affable team member, has a gift for hydroponics and sustainable farming. They ensure the crew has a steady supply of food during lengthy space missions. Growing up on a small Earth farm, Hydro acquired a strong appreciation for sustainable agriculture. In college, they studied biology and became intrigued by hydroponics as a method for cultivating crops in harsh environments. They monitor nutrient levels and light cycles, turning complex science into friendly chatter that keeps novices engaged.
+Hydro keeps the guild's hydroponic bays stocked with fresh greens.
+Raised on an Earth farm, they traded soil for nutrient baths after studying biology.
+Their easygoing chatter about PPM and pH turns lab science into shipboard routine.
+Hydro guides recruits through quests like [Check Solution pH](/quests/hydroponics/ph-check) and
+[Grow Stevia Hydroponically](/quests/hydroponics/stevia).
 
 ### Sample Dialogue
 
--   "Hey there! I'm Hydro, your local hydroponics expert!"
--   "Oh I could talk for hours, but the short version? Roots bathe in nutrient-rich water."
--   "Excellent! First things first, I need you to accept this hydroponics tub."
--   "Now that you've got your hydroponics tub, you'll need some dechlorinated water."
--   "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems."
--   "Let's try stevia next. Its leaves are unbelievably sweet!"
--   "If the pH drifts, a splash of lemon juice or baking soda can nudge it back on track."
+-   "Hey there! I'm Hydro, your resident hydroponics guru."
+-   "Roots bathe in nutrient-rich water—soil just slows us down."
+-   "First up, accept this hydroponics tub."
+-   "Top it with dechlorinated water and we'll be ready."
+-   "Stevia's next; those leaves are candy without the crash."
+-   "If pH drifts, a squeeze of lemon or pinch of baking soda sets it right."
 
 ## Orion
 
