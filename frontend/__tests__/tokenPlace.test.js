@@ -49,4 +49,22 @@ describe('tokenPlaceChat', () => {
         expect(body.messages[0].role).toBe('system');
         expect(result).toBe('mocked reply');
     });
+
+    test('passes abort signal to fetch', async () => {
+        loadGameState.mockReturnValue({});
+        const controller = new AbortController();
+        await tokenPlaceChat([], { signal: controller.signal });
+        expect(fetch.mock.calls[0][1].signal).toBe(controller.signal);
+    });
+
+    test('throws helpful error when request fails', async () => {
+        loadGameState.mockReturnValue({});
+        fetch.mockResolvedValueOnce({
+            ok: false,
+            json: () => Promise.resolve({ error: 'bad request' }),
+        });
+        await expect(tokenPlaceChat([])).rejects.toThrow(
+            'token.place API request failed: bad request'
+        );
+    });
 });

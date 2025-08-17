@@ -16,3 +16,6 @@ VITE_TOKEN_PLACE_URL=https://my-token-place/api npm run dev
 ```
 
 You can clear the saved URL by resetting your game state.
+
+`tokenPlaceChat` accepts an optional `AbortSignal` and throws a descriptive error when the
+service returns one, making failures easier to diagnose.
