@@ -60,19 +60,24 @@
     {
         "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
         "name": "hydroponic starter plug",
-        "description": "One 1-inch rockwool cube for germinating seeds in hydroponic systems.",
+        "description": "2.5 cm (1 in) rockwool cube with seed hole for starting plants in hydro systems.",
         "image": "/assets/rockwool.jpg",
-        "price": "0.35 dUSD",
+        "price": "0.30 dUSD",
         "unit": "each",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-04",
                     "date": "2025-08-04",
                     "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-05-07",
+                    "date": "2025-05-07",
+                    "score": 80
                 }
             ]
         }
