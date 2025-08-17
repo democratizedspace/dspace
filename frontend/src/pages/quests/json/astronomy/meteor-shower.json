@@ -1,14 +1,26 @@
 {
     "id": "astronomy/meteor-shower",
     "title": "Document a Meteor Shower",
-    "description": "Track and record meteors during a peak shower.",
+    "description": "Track meteors during a peak shower using a basic telescope, planisphere, red flashlight and mission logbook.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-17",
+                "date": "2025-08-17",
+                "score": 60
+            }
+        ]
+    },
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The Perseids are active tonight. Let's log as many meteors as we can.",
+            "text": "The Perseids are active tonight. Grab a planisphere star chart to locate the radiant and use a red flashlight so you don't lose night vision. Let's log as many meteors as we can.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +31,7 @@
         },
         {
             "id": "observe",
-            "text": "Use your telescope or just your eyes in a dark area. Record each meteor's direction and brightness.",
+            "text": "Find a clear, dark spot away from traffic. Set up your basic telescope or lie back with your eyes, orient with the planisphere, and jot each meteor's direction and brightness in your mission logbook. Keep paths clear and avoid white lights.",
             "options": [
                 {
                     "type": "process",
@@ -33,6 +45,18 @@
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
                         }
                     ],
                     "text": "Observation complete."
@@ -41,7 +65,7 @@
         },
         {
             "id": "finish",
-            "text": "Great work! Comparing notes with others helps confirm the shower's peak.",
+            "text": "Great work! Comparing notes with others helps confirm the shower's peak. Pack up your gear and watch your footing in the dark.",
             "options": [
                 {
                     "type": "finish",
