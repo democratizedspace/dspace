@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 231
-New quests in this release: 209
+Current quest count: 233
+New quests in this release: 211
 
 ### 3dprinting
 
@@ -129,6 +129,7 @@ New quests in this release: 209
 - electronics/potentiometer-dimmer
 - electronics/resistor-color-check
 - electronics/servo-sweep
+- electronics/solder-led-harness
 - electronics/solder-wire
 - electronics/soldering-intro
 - electronics/temperature-plot
@@ -194,6 +195,7 @@ New quests in this release: 209
 - hydroponics/ph-check
 - hydroponics/ph-test
 - hydroponics/plug-soak
+- hydroponics/pump-clean
 - hydroponics/pump-install
 - hydroponics/pump-prime
 - hydroponics/regrow-stevia
