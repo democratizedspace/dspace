@@ -1,14 +1,14 @@
 {
     "id": "aquaria/water-change",
     "title": "Perform a partial water change",
-    "description": "Swap out dirty water for conditioned water to keep fish healthy.",
+    "description": "Swap out 25% of tank water for treated water to keep fish healthy.",
     "image": "/assets/quests/goldfish.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Unplug gear. Grab gravel vacuum, 5 gal bucket, water conditioner and cart.",
+            "text": "Unplug heater, filter. Grab vacuum, bucket, conditioner, thermometer, cart.",
             "options": [
                 {
                     "type": "goto",
@@ -18,15 +18,21 @@
                         { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
                         { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
                         { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 },
-                        { "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0", "count": 1 }
+                        { "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0", "count": 1 },
+                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "remove",
-            "text": "Vacuum water into bucket. Keep intake clear of fish and cords. Stop at 25%.",
+            "text": "Siphon water to bucket. Keep intake clear of fish and cords. Stop at 25%.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change-25",
+                    "text": "Siphoning 25%..."
+                },
                 {
                     "type": "goto",
                     "goto": "refill",
@@ -36,7 +42,7 @@
         },
         {
             "id": "refill",
-            "text": "Fill bucket with tap water, add conditioner, warm within 2 °C. Pour slow.",
+            "text": "Fill bucket with tap water, dose conditioner, match temperature within 2 °C and pour back slowly.",
             "options": [
                 {
                     "type": "finish",
@@ -53,11 +59,12 @@
     ],
     "requiresQuests": ["aquaria/guppy"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
-            { "task": "codex-quest-refinement-2025-08-15", "date": "2025-08-15", "score": 60 }
+            { "task": "codex-quest-refinement-2025-08-15", "date": "2025-08-15", "score": 60 },
+            { "task": "codex-quest-refinement-2025-08-16", "date": "2025-08-16", "score": 80 }
         ]
     }
 }
