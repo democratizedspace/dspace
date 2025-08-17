@@ -1,0 +1,34 @@
+{
+    "id": "programming/temp-sqlite",
+    "title": "Store Temperature in SQLite",
+    "description": "Log sensor readings to a SQLite database for easy querying.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've logged temperatures to a file. Let's store them in a database for better analysis.",
+            "options": [{ "type": "goto", "goto": "db", "text": "Sounds good." }]
+        },
+        {
+            "id": "db",
+            "text": "Create a SQLite table and insert each hourly reading into it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Data persists!",
+                    "requiresItems": [{ "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Now you can run SQL queries to explore your readings.",
+            "options": [{ "type": "finish", "text": "Nice!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/temp-logger"]
+}
