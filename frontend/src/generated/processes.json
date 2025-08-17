@@ -4166,7 +4166,7 @@
     },
     {
         "id": "use-soldering-mat",
-        "title": "Lay a silicone soldering mat on the bench before soldering",
+        "title": "Lay the 300 mm × 200 mm silicone mat on the bench and park the 30 W iron kit on its stand",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -4182,10 +4182,16 @@
         "createItems": [],
         "duration": "1m",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-use-soldering-mat-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 60
+                }
+            ]
         }
     }
 ]

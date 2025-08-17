@@ -1,6 +1,12 @@
 {
-    "passes": 0,
-    "score": 0,
-    "emoji": "🛠️",
-    "history": []
+    "passes": 1,
+    "score": 60,
+    "emoji": "🌀",
+    "history": [
+        {
+            "task": "codex-use-soldering-mat-2025-08-16",
+            "date": "2025-08-16",
+            "score": 60
+        }
+    ]
 }
