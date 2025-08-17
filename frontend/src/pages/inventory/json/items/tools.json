@@ -543,5 +543,25 @@
                 }
             ]
         }
+    },
+    {
+        "id": "3b6a44a1-86e9-46e5-a2b7-db4f9661c31c",
+        "name": "USB solder fume extractor",
+        "description": "80 mm USB fan with activated charcoal filter that draws solder smoke away from small electronics work.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "20 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🛠️",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 60
+                }
+            ]
+        }
     }
 ]
