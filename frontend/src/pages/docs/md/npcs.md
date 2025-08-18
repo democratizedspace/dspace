@@ -151,20 +151,22 @@ second nature.
 
 <img src="/assets/npc/nova.jpg" />
 
-Lyra charts the stars and keeps the guild's telescopes in perfect alignment. Raised under dark
-rural skies, she turned her childhood fascination into a career mapping orbital trajectories.
-She can recite star catalog numbers from memory and loves midnight coffee under the Milky Way.
-Lyra joined the metaguild to guide launches through debris fields and teach others the patience
-of stargazing.
+Lyra charts the stars and keeps the guild's telescopes in perfect alignment.
+Raised under dark rural skies, she turned a childhood obsession into orbital navigation.
+She recites catalog numbers from memory and nurses midnight coffee under the Milky Way.
+Lyra guides recruits through quests like
+[Assemble a Simple Telescope](/quests/astronomy/basic-telescope)
+and [Locate the North Star](/quests/astronomy/north-star).
+She steers launches through debris fields and teaches patience in stargazing.
 
 ### Sample Dialogue
 
--   "Hey, I'm Lyra. If you can find Polaris, I can get you anywhere in the system."
--   "Bring the telescope outside; city lights kill the view."
--   "Set your exposure to 15 seconds and you'll catch that comet's tail."
--   "Gravity's predictable, but people? That's why I prefer stars."
--   "Want to try some orbital mechanics? We'll start with a Hohmann transfer."
--   "If the mount drifts, nudge the RA knob until the star holds steady."
+-   "Evening! I'm Lyra, your star navigator."
+-   "Polaris anchors the sky; find it and you're oriented."
+-   "City glow spoils the view—set the scope under dark skies."
+-   "A 15-second exposure will snag that comet tail."
+-   "Two burns make a Hohmann transfer; easy once you see it."
+-   "If the mount drifts, tweak the RA knob until the star freezes."
 
 ## Helio
 
