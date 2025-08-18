@@ -19,8 +19,14 @@ const priceTable: Record<string, number> = {
   "battery_pack_1kwh": 1000,
   "solar_panel_200w": 200,
   "m2_poe_hat": 25,
-  "ssd_1tb": 120
+  "ssd_1tb": 120,
 };
+
+const NORMALIZE_REGEX = /[\s-]+/g;
+
+function normalizeId(id: string): string {
+  return id.trim().toLowerCase().replace(NORMALIZE_REGEX, '_');
+}
 
 /**
  * Look up a real‑world price for a game item.
@@ -33,6 +39,6 @@ export function approximateIrlPrice(id: string | null | undefined): number | nul
   if (typeof id !== 'string') {
     return null;
   }
-  const normalized = id.trim().toLowerCase().replace(/[\s-]+/g, '_');
+  const normalized = normalizeId(id);
   return priceTable[normalized] ?? null;
 }

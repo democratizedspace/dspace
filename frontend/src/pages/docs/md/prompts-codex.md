@@ -159,6 +159,8 @@ USER:
 2. Fix outdated instructions, links or formatting.
 3. If you add a new prompt, link it from `prompts-codex.md` and the docs index.
 4. Run the checks above.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.
