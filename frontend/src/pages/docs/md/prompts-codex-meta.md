@@ -6,9 +6,10 @@ slug: 'prompts-codex-meta'
 # Codex Meta Prompt
 
 Use this prompt when you want Codex to upgrade DSPACE's prompt documentation so the
-instructions improve themselves over time. If the templates themselves drift, refresh
-them using the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing
-workflows, see the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+instructions improve themselves over time. Start from the baseline
+[Codex Prompts](/docs/prompts-codex). If the templates themselves drift, refresh them
+using the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing workflows,
+see the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 ```text
 SYSTEM:
@@ -22,6 +23,7 @@ USER:
 3. If you introduce a new prompt, link it from `prompts-codex.md` and the docs index.
 4. Run the checks above.
 5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with upgraded prompt docs and passing checks.
