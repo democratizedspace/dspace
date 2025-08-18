@@ -504,15 +504,18 @@
     {
         "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
         "name": "silicone soldering mat",
-        "description": "300 mm × 200 mm silicone mat with compartments for screws and tools; heat-resistant to 500 °C.",
+        "description": "300 × 200 × 3 mm silicone work mat with screw trays; heat‑resistant to 500 °C (932 °F); ~180 g.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "15 dUSD",
         "type": "tool",
+        "unit": "mat",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-18", "date": "2025-08-18", "score": 60 }
+            ]
         }
     },
     {
