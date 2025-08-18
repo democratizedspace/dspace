@@ -18,7 +18,8 @@ runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 1. Change internals without altering behavior.
 > 2. Keep commits small and reversible.
 > 3. Include before/after benchmarks if performance might change.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+>    `npm run build`, and `npm run test:ci`.
 > 5. Run `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
 
 ```text
