@@ -10,29 +10,29 @@ const path = require('path');
  * @returns {string[]}
  */
 function listMissingImages(
-    imagePaths,
-    publicDir = path.join(__dirname, '..', '..', 'frontend', 'public'),
+  imagePaths,
+  publicDir = path.join(__dirname, '..', '..', 'frontend', 'public'),
 ) {
-    const missing = [];
-    imagePaths.forEach((img) => {
-        // Strip query strings or hash fragments so existence checks aren't fooled
-        const base = img.split(/[?#]/)[0];
-        if (/^data:/i.test(base) || /^(?:https?:)?\/\//i.test(base)) {
-            return;
-        }
-        const rel = base.startsWith('/') ? base.slice(1) : base;
-        let decoded;
-        try {
-            decoded = decodeURIComponent(rel);
-        } catch {
-            decoded = rel;
-        }
-        const full = path.join(publicDir, decoded);
-        if (!fs.existsSync(full)) {
-            missing.push(img);
-        }
-    });
-    return missing;
+  const missing = [];
+  for (const img of imagePaths) {
+    // Strip query strings or hash fragments so existence checks aren't fooled
+    const base = img.split(/[?#]/)[0];
+    if (/^data:/i.test(base) || /^(?:https?:)?\/\//i.test(base)) {
+      continue;
+    }
+    const rel = base.startsWith('/') ? base.slice(1) : base;
+    let decoded;
+    try {
+      decoded = decodeURIComponent(rel);
+    } catch {
+      decoded = rel;
+    }
+    const full = path.join(publicDir, decoded);
+    if (!fs.existsSync(full)) {
+      missing.push(img);
+    }
+  }
+  return missing;
 }
 
 module.exports = { listMissingImages };
