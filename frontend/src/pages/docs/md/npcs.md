@@ -118,15 +118,17 @@ to show how green chemistry powers missions.
 
 <img src="/assets/npc/atlas.jpg" />
 
-Atlas is a humanoid robot assistant designed to help with physical tasks that require strength and precision. With advanced AI capabilities, Atlas can perform a variety of tasks, from heavy lifting to delicate assembly work, making it an invaluable asset to the team. As our trusty robotic companion, Atlas ensures that we can accomplish our goals more efficiently and safely than ever before.
+Atlas is the guild's heavy-lift robot. Shock-absorbing armor and balanced servos let Atlas haul
+crates and steady delicate assemblies. They often help with aquarium setups like
+[Move the Walstad tank](/quests/aquaria/position-tank).
 
 ### Sample Dialogue
 
--   "Hello! I'm Atlas, your robotic assistant. Let me handle the heavy lifting."
--   "On three ... one, two, three! Easy does it."
--   "I'll keep the load steady while you guide it into place."
--   "Great work! The tank is secure on the stand."
--   "Anytime you need more muscle, just give me a shout."
+-   "Need a hand? I'm Atlas—built for muscle and finesse."
+-   "Clear the path and keep your back straight; I'll take the weight."
+-   "Lift on my count: one, two, three."
+-   "Set it down gently; glass likes patience."
+-   "Call anytime you need more torque."
 
 ## Cedar
 
