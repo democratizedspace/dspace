@@ -1,19 +1,19 @@
 {
     "id": "electronics/voltage-divider",
     "title": "Build a Voltage Divider",
-    "description": "Use two resistors to split 5 V into roughly 2.5 V.",
+    "description": "Split 5 V to about 2.5 V using 220 \u03a9 and 10 k\u03a9 resistors on a Breadboard.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion here. Let's make a simple voltage divider with a 220 \u03a9 and 10 k\u03a9 resistor. Keep the power supply unplugged while wiring.",
+            "text": "Orion here. Gather a Breadboard, 220 \u03a9 resistor, 10 k\u03a9 resistor, two Jumper Wires, a 5 V Power Supply and a digital multimeter. Keep the supply unplugged while wiring.",
             "options": [{ "type": "goto", "goto": "build", "text": "I'm ready" }]
         },
         {
             "id": "build",
-            "text": "Place the 220 \u03a9 and 10 k\u03a9 resistors in series on the Breadboard. Connect 5 V across them and clip your multimeter to the junction.",
+            "text": "Place the 220 \u03a9 and 10 k\u03a9 resistors in series on the Breadboard. Use two Jumper Wires to connect the 5 V Power Supply across them and clip the multimeter probes to the junction. Double-check resistor color bands before powering.",
             "options": [
                 {
                     "type": "process",
@@ -37,7 +37,7 @@
         },
         {
             "id": "measure",
-            "text": "Apply power and measure the junction voltage. It should read close to 2.5 V on your multimeter.",
+            "text": "Plug in the 5 V Power Supply and measure the junction. It should read about 2.5 V on the multimeter; stop if the reading jumps or parts heat up.",
             "options": [{ "type": "goto", "goto": "finish", "text": "Measured ~2.5 V" }]
         },
         {
@@ -47,5 +47,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/basic-circuit"]
+    "requiresQuests": ["electronics/basic-circuit"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-18",
+                "date": "2025-08-18",
+                "score": 60
+            }
+        ]
+    }
 }
