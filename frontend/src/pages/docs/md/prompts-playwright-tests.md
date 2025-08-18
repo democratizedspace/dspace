@@ -18,7 +18,8 @@ GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-c
 > **TL;DR**
 >
 > 1. Review `user-journeys.md`, correcting errors or outdated steps.
-> 2. Pick a journey marked "No" or add new journeys as needed.
+> 2. Pick a journey marked "No" or add new journeys; keep the table alphabetical
+>    and create a placeholder spec in `frontend/e2e/backlog` for uncovered paths.
 > 3. If a placeholder exists under `frontend/e2e/backlog`, promote it to
 >    `frontend/e2e` with `git mv`; otherwise add a new Playwright test.
 > 4. Update `user-journeys.md` to reflect coverage and fixes.

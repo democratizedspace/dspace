@@ -12,7 +12,7 @@ Tests under `frontend/e2e/backlog` are planned but not yet automated.
 | -------------------------- | ------------------- | ------------------------------------------------- |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
-| Built-in quest detail      | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
+| Built-in quest details     | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
 | Quest list navigation      | Yes                 | `frontend/e2e/quests.spec.ts`                     |
 | Tutorial quest run         | Yes                 | `frontend/e2e/tutorial-quest.spec.ts`             |
 | Constellations quest       | Yes                 | `frontend/e2e/constellations-quest.spec.ts`       |
@@ -24,7 +24,8 @@ Tests under `frontend/e2e/backlog` are planned but not yet automated.
 | Svelte component hydration | Yes                 | `frontend/e2e/svelte-component-hydration.spec.ts` |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
-| Cloud sync                 | No                  | --                                                |
+| Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
+| Cookie consent flow        | No                  | --                                                |
 | Manage items               | No                  | --                                                |
 | Manage processes           | No                  | --                                                |
 | Manage quests              | No                  | --                                                |
