@@ -13,7 +13,8 @@ invoking Codex on DSPACE and should evolve alongside the project.
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
 [NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
-[Docs prompts](/docs/prompts-docs), [Backend prompts](/docs/prompts-backend), and
+[Docs prompts](/docs/prompts-docs), [Backend prompts](/docs/prompts-backend),
+[Playwright Test prompts](/docs/prompts-playwright-tests), and
 [Refactor prompts](/docs/prompts-refactors).
 For specialized workflows use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix),
 the [Codex meta prompt](/docs/prompts-codex-meta), and the
@@ -92,7 +93,8 @@ REQUIREMENTS
 1. …
 2. …
 3. …
-4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+   `npm run build`, and `npm run test:ci`.
 5. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 6. Use an emoji-prefixed commit message.
 

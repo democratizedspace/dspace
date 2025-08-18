@@ -17,13 +17,15 @@ only if you give it a clear, file-scoped prompt. Use this guide alongside
 > 1. Change internals without altering behaviour.
 > 2. Keep commits small and reversible.
 > 3. Include before/after benchmarks if performance might change.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+>    `npm run build`, and `npm run test:ci`.
 > 5. Run `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
 
 USER:
 1. Refactor code in the specified files without changing behaviour.

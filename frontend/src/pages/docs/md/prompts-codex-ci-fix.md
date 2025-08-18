@@ -27,6 +27,8 @@ to refresh it before use. For guidance on logging incidents, see the
 ```text
 SYSTEM:
 You are an automated contributor for the democratizedspace/dspace repository.
+Follow `AGENTS.md` and `README.md`. Ensure `npm run audit:ci`, `npm run lint`,
+`npm run type-check`, `npm run build`, and `npm run test:ci` pass before committing.
 
 PURPOSE:
 Diagnose a failed CI run and make it pass.
@@ -36,8 +38,8 @@ CONTEXT:
   error.
 - If no URL is given, inspect the codebase to reproduce the failure:
   * Examine `.github/workflows/` to learn which checks run in CI.
-  * Run `npm run lint`, `npm run type-check`, `npm run build`, and
-    `npm run test:ci` locally.
+  * Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+    `npm run build`, and `npm run test:ci` locally.
   * Study project docs to understand how to run the test suite and emulate the
     GitHub Actions environment.
 - Consult existing outage entries in `/outages` for similar symptoms.
