@@ -7,6 +7,8 @@ slug: 'user-journeys'
 
 This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
 Tests under `frontend/e2e/backlog` are planned but not yet automated.
+When adding coverage, move the placeholder spec from `frontend/e2e/backlog` to
+`frontend/e2e`, update this table, and keep journey steps accurate.
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
@@ -24,7 +26,7 @@ Tests under `frontend/e2e/backlog` are planned but not yet automated.
 | Svelte component hydration | Yes                 | `frontend/e2e/svelte-component-hydration.spec.ts` |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
-| Cloud sync                 | No                  | --                                                |
+| Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
 | Manage items               | No                  | --                                                |
 | Manage processes           | No                  | --                                                |
 | Manage quests              | No                  | --                                                |
