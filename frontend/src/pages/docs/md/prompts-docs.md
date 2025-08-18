@@ -33,8 +33,10 @@ USER:
 2. Correct stale guidance, links, or formatting.
 3. If adding a new prompt doc, link it from `prompts-codex.md`
    and the docs index (`frontend/src/pages/docs/index.astro`).
-4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-5. Use an emoji-prefixed commit message.
+4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+   `npm run build`, and `npm run test:ci`.
+5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with refreshed documentation and passing checks.
