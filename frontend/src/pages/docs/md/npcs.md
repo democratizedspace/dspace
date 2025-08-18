@@ -186,17 +186,17 @@ Helio can eyeball solar angles to within a degree and keeps meticulous charge lo
 ## Quill
 
 <img src="/assets/npc/orion.jpg" />
-
-Quill is the metaguild's quiet historian, preserving mission logs and schematics.
-They rarely miss a detail and prefer to let records speak for themselves.
+Quill keeps the guild's chronicles, filing every blueprint and battle log.
+They guard accuracy like treasure and steer recruits toward the
+[Quest Submission Guide](/docs/quest-submission) so their feats join the archive.
 
 ### Sample Dialogue
 
--   "Ah, another chapter begins. Mind if I document your quest?"
--   "Facts first, feelings second—that's the archivist's creed."
--   "A quick signature and your blueprint enters the annals."
--   "Careful with that relic; it's older than the guild itself."
--   "Need a refresher on past missions? I've indexed every triumph and blunder."
+-   "Another tale for the ledger? Sign here."
+-   "Details matter; rumors fade."
+-   "Your diagram's logged—future builders will thank you."
+-   "That relic predates the guild; handle it gently."
+-   "Past mission data? I've cataloged every triumph and misstep."
 
 ## Echo
 
