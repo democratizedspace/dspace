@@ -14,6 +14,10 @@ describe('approximateIrlPrice', () => {
     expect(approximateIrlPrice(' 3d printer ')).toBe(350)
   })
 
+  it('resolves known alias', () => {
+    expect(approximateIrlPrice('rpi5')).toBe(80)
+  })
+
   it('returns null for unknown item', () => {
     expect(approximateIrlPrice('nonexistent')).toBeNull()
   })

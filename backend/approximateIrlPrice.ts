@@ -22,6 +22,10 @@ const priceTable: Record<string, number> = {
   "ssd_1tb": 120,
 };
 
+const aliasTable: Record<string, string> = {
+  rpi5: "raspberry_pi_5",
+};
+
 const NORMALIZE_REGEX = /[\s-]+/g;
 
 function normalizeId(id: string): string {
@@ -34,11 +38,17 @@ function normalizeId(id: string): string {
  * The lookup is case‑insensitive, trims surrounding whitespace, and normalizes
  * spaces or hyphens to underscores so callers can pass identifiers like
  * `3D-Printer`, `3d printer`, or even ` 3d_printer `.
+ *
+ * Common aliases are supported. For example, `rpi5` resolves to `raspberry_pi_5`.
 */
 export function approximateIrlPrice(id: string | null | undefined): number | null {
   if (typeof id !== 'string') {
     return null;
   }
-  const normalized = normalizeId(id);
+  let normalized = normalizeId(id);
+  const alias = aliasTable[normalized];
+  if (alias) {
+    normalized = alias;
+  }
   return priceTable[normalized] ?? null;
 }
