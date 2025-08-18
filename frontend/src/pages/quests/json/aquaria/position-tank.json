@@ -1,14 +1,14 @@
 {
     "id": "aquaria/position-tank",
     "title": "Move the Walstad tank",
-    "description": "With Atlas's help, lift the empty 80 L Walstad aquarium onto a sturdy stand. Clear the path, lift with your legs and keep the glass supported.",
+    "description": "Atlas helps you lift the empty 80 L Walstad aquarium onto a sturdy stand. Clear the path, lift with your legs and keep the glass supported.",
     "image": "/assets/quests/walstad.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hello! I'm Atlas. Vega said you needed help moving that empty 80 liter tank onto the stand. Make sure the path is clear and lift with your legs, not your back.",
+            "text": "Atlas here. Vega said you need this empty 80 liter tank on the stand. Clear the path and lift with your legs.",
             "options": [
                 {
                     "type": "goto",
@@ -23,7 +23,7 @@
         },
         {
             "id": "lift",
-            "text": "I'll take most of the weight. On three—one, two, three! Keep the tank level and your back straight.",
+            "text": "I'll take most of the weight. On three—one, two, three. Keep the tank level and your back straight.",
             "options": [
                 {
                     "type": "goto",
@@ -34,7 +34,7 @@
         },
         {
             "id": "place",
-            "text": "Great job. Set it down gently, then check the stand is level and the corners are supported before letting go.",
+            "text": "Set it down gently; check the stand is level before letting go.",
             "options": [
                 {
                     "type": "goto",
@@ -45,7 +45,7 @@
         },
         {
             "id": "heat",
-            "text": "Let's warm up the tank with the heater before adding livestock. Ensure the heater is submerged before plugging it into a GFCI outlet.",
+            "text": "Warm the tank with the heater before adding livestock. Make sure it's submerged before plugging into a GFCI outlet.",
             "options": [
                 {
                     "type": "process",
