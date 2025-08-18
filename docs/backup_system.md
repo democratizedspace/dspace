@@ -19,6 +19,12 @@ To back up specific paths pass them as arguments:
 node scripts/backup.mjs package.json docs
 ```
 
+To change the output directory, use `--out`:
+
+```bash
+node scripts/backup.mjs --out my-backups package.json docs
+```
+
 ## Restore
 
 Extract the desired archive and replace the existing directories:
