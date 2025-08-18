@@ -490,6 +490,10 @@
             {
                 "id": "71655665-4a59-41f4-9084-dad4d976df91",
                 "count": 1
+            },
+            {
+                "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                "count": 1
             }
         ],
         "consumeItems": [
@@ -2965,7 +2969,8 @@
     },
     {
         "id": "swap-green-pla-filament",
-        "title": "Swap to green PLA filament on an entry-level FDM 3D printer",
+        "title": "Install green PLA filament on an entry-level FDM printer and purge 10 g",
+        "image": "/assets/pla_green.jpg",
         "requireItems": [
             {
                 "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -2983,7 +2988,19 @@
             }
         ],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "swap-white-pla-filament",
@@ -3398,8 +3415,8 @@
     },
     {
         "id": "measure-aquarium-ph",
-        "title": "Test the pH of a 150 L freshwater aquarium using a disposable strip",
-        "image": "/assets/pH_strip.jpg",
+        "title": "Dip a pH strip into a 150 L freshwater aquarium and match the color to the chart",
+        "image": "/assets/aquarium_filled.jpg",
         "requireItems": [
             {
                 "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
@@ -3413,16 +3430,21 @@
             }
         ],
         "createItems": [],
-        "duration": "5m",
+        "duration": "2m",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
+            "passes": 2,
+            "score": 75,
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
                     "date": "2025-08-06",
                     "score": 60
+                },
+                {
+                    "task": "codex-measure-aquarium-ph-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 75
                 }
             ]
         }
@@ -3930,6 +3952,32 @@
         }
     },
     {
+        "id": "measure-compost-moisture",
+        "title": "Gauge compost moisture with a probe meter",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [
+            {
+                "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "tin-soldering-iron-tip",
         "title": "Heat the soldering iron and melt solder on the tip while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",
@@ -4211,7 +4259,7 @@
     },
     {
         "id": "use-soldering-mat",
-        "title": "Lay a silicone soldering mat on the bench before soldering",
+        "title": "Place a heat-resistant silicone mat on the workbench before powering the soldering iron",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -4227,10 +4275,16 @@
         "createItems": [],
         "duration": "1m",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-use-soldering-mat-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
         }
     },
     {
@@ -4279,8 +4333,8 @@
     },
     {
         "id": "measure-filament-diameter",
-        "title": "Measure 1.75 mm filament diameter with digital calipers",
-        "image": "/assets/quests/basic_circuit.svg",
+        "title": "Measure 1.75 mm PLA filament at three points with digital calipers",
+        "image": "/assets/pla_white.jpg",
         "requireItems": [
             {
                 "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
@@ -4295,10 +4349,16 @@
         "createItems": [],
         "duration": "2m",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
         }
     }
 ]

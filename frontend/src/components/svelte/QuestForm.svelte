@@ -6,6 +6,7 @@
         validateQuestData,
         validateQuestDependencies,
     } from '../../utils/customQuestValidation.js';
+    import { isQuestTitleUnique } from '../../utils/questHelpers.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -95,6 +96,8 @@
             errors.title = 'Title is required';
         } else if (trimmedTitle.length < MIN_TITLE_LENGTH) {
             errors.title = `Title must be at least ${MIN_TITLE_LENGTH} characters`;
+        } else if (!isQuestTitleUnique(trimmedTitle, allQuests, isEdit ? questId : null)) {
+            errors.title = 'Title must be unique';
         }
 
         const trimmedDesc = description.trim();

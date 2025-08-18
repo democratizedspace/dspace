@@ -538,9 +538,18 @@
     {
         "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
         "name": "parachute harness kit",
-        "description": "Nylon harness with swivel clips that secures a model rocket's body to its parachute.",
+        "description": "30 cm Kevlar shock cord with nylon harness and steel swivel clips for attaching a model rocket body to its parachute; ~10 g.",
         "image": "/assets/rocket_parachute.jpg",
-        "price": "5 dUSD"
+        "price": "5 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-18", "date": "2025-08-18", "score": 60 }
+            ]
+        }
     },
     {
         "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
@@ -1160,10 +1169,22 @@
     {
         "id": "96083990-f333-4e42-ab04-7eb2a234570e",
         "name": "heat-shrink tubing",
-        "description": "Polyolefin tube that shrinks when heated to insulate exposed wire joints; sold per centimeter.",
+        "description": "3 mm 2:1 polyolefin heat-shrink tube insulates solder joints; sold per cm.",
         "image": "/assets/quests/basic_circuit.svg",
-        "price": "0.05 dUSD",
-        "unit": "cm"
+        "price": "0.01 dUSD",
+        "unit": "cm",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4",

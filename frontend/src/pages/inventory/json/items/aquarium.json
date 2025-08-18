@@ -94,18 +94,23 @@
     {
         "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
         "name": "aquarium heater (150 W)",
-        "description": "Submersible 150 W heater with adjustable thermostat (20–30°C) for 150 L tanks; operates on 120 V.",
+        "description": "Submersible 150 W heater with 20–30°C thermostat, auto shutoff and 1.5 m 120 V cord; warms 150 L.",
         "image": "/assets/aquarium_heater.jpg",
-        "price": "25 dUSD",
+        "price": "22 dUSD",
         "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
                     "date": "2025-08-07",
                     "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 80
                 }
             ]
         }
