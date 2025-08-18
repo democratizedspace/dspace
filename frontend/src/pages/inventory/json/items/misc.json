@@ -1169,10 +1169,22 @@
     {
         "id": "96083990-f333-4e42-ab04-7eb2a234570e",
         "name": "heat-shrink tubing",
-        "description": "Polyolefin tube that shrinks when heated to insulate exposed wire joints; sold per centimeter.",
+        "description": "3 mm 2:1 polyolefin heat-shrink tube insulates solder joints; sold per cm.",
         "image": "/assets/quests/basic_circuit.svg",
-        "price": "0.05 dUSD",
-        "unit": "cm"
+        "price": "0.01 dUSD",
+        "unit": "cm",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4",
