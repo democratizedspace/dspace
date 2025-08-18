@@ -564,5 +564,20 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "57c3884a-c449-4f61-9e94-217a7c75eb3b",
+        "name": "ESD wrist strap",
+        "description": "Adjustable antistatic wrist strap with 2 m grounding cord and alligator clip; 20 g.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "7 dUSD",
+        "type": "tool",
+        "unit": "strap",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
