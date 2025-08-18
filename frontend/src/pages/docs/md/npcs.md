@@ -85,15 +85,18 @@ Orion is an electrical engineer whose enthusiasm for robotics and microprocessor
 
 <img src="/assets/npc/vega.jpg" />
 
-Vega is an expert in aquariums and terrariums, with years of experience in designing and maintaining these unique ecosystems. Their passion for aquatic and terrestrial life has led them to develop innovative techniques and solutions for creating balanced, thriving environments for a wide variety of species. Vega is dedicated to sharing their knowledge with others and helping people create beautiful, healthy habitats for their own pets and plants.
+Vega tends micro-ecologies, coaxing balance from water and soil with patient hands.
+Years of tuning pumps and lights made them the guild's go-to aquarist.
+They guide recruits through quests like [Set up a Walstad tank](/quests/aquaria/walstad) and
+processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-results).
 
 ### Sample Dialogue
 
--   "Hi there! I'm Vega. Ready to try the Walstad method? It's a simple way to grow plants with minimal equipment."
--   "You'll want a 40 liter tank, some organic soil capped with gravel, and a bunch of easy plants."
--   "Your Walstad tank should be cycled now. A small colony of dwarf shrimp will keep algae in check."
--   "Those shrimp are thriving! Ready for a couple guppies? They prefer 24-28°C water."
--   "Guppies multiply quickly. Dense plants like hornwort give the fry shelter until they're bigger."
+-   "Vega here—Walstad tanks give plants what they need, nothing more."
+-   "Start with a 40 L tank, organic soil capped in gravel, and hardy stems."
+-   "Once cycled, a handful of dwarf shrimp keeps algae down."
+-   "Guppies breed fast; thick hornwort hides the fry."
+-   "Log pH weekly so you spot swings before the fish do."
 
 ## Phoenix
 
@@ -118,15 +121,17 @@ to show how green chemistry powers missions.
 
 <img src="/assets/npc/atlas.jpg" />
 
-Atlas is a humanoid robot assistant designed to help with physical tasks that require strength and precision. With advanced AI capabilities, Atlas can perform a variety of tasks, from heavy lifting to delicate assembly work, making it an invaluable asset to the team. As our trusty robotic companion, Atlas ensures that we can accomplish our goals more efficiently and safely than ever before.
+Atlas is the guild's heavy-lift robot. Shock-absorbing armor and balanced servos let Atlas haul
+crates and steady delicate assemblies. They often help with aquarium setups like
+[Move the Walstad tank](/quests/aquaria/position-tank).
 
 ### Sample Dialogue
 
--   "Hello! I'm Atlas, your robotic assistant. Let me handle the heavy lifting."
--   "On three ... one, two, three! Easy does it."
--   "I'll keep the load steady while you guide it into place."
--   "Great work! The tank is secure on the stand."
--   "Anytime you need more muscle, just give me a shout."
+-   "Need a hand? I'm Atlas—built for muscle and finesse."
+-   "Clear the path and keep your back straight; I'll take the weight."
+-   "Lift on my count: one, two, three."
+-   "Set it down gently; glass likes patience."
+-   "Call anytime you need more torque."
 
 ## Cedar
 
@@ -151,20 +156,22 @@ second nature.
 
 <img src="/assets/npc/nova.jpg" />
 
-Lyra charts the stars and keeps the guild's telescopes in perfect alignment. Raised under dark
-rural skies, she turned her childhood fascination into a career mapping orbital trajectories.
-She can recite star catalog numbers from memory and loves midnight coffee under the Milky Way.
-Lyra joined the metaguild to guide launches through debris fields and teach others the patience
-of stargazing.
+Lyra charts the stars and keeps the guild's telescopes in perfect alignment.
+Raised under dark rural skies, she turned a childhood obsession into orbital navigation.
+She recites catalog numbers from memory and nurses midnight coffee under the Milky Way.
+Lyra guides recruits through quests like
+[Assemble a Simple Telescope](/quests/astronomy/basic-telescope)
+and [Locate the North Star](/quests/astronomy/north-star).
+She steers launches through debris fields and teaches patience in stargazing.
 
 ### Sample Dialogue
 
--   "Hey, I'm Lyra. If you can find Polaris, I can get you anywhere in the system."
--   "Bring the telescope outside; city lights kill the view."
--   "Set your exposure to 15 seconds and you'll catch that comet's tail."
--   "Gravity's predictable, but people? That's why I prefer stars."
--   "Want to try some orbital mechanics? We'll start with a Hohmann transfer."
--   "If the mount drifts, nudge the RA knob until the star holds steady."
+-   "Evening! I'm Lyra, your star navigator."
+-   "Polaris anchors the sky; find it and you're oriented."
+-   "City glow spoils the view—set the scope under dark skies."
+-   "A 15-second exposure will snag that comet tail."
+-   "Two burns make a Hohmann transfer; easy once you see it."
+-   "If the mount drifts, tweak the RA knob until the star freezes."
 
 ## Helio
 
@@ -186,17 +193,17 @@ Helio can eyeball solar angles to within a degree and keeps meticulous charge lo
 ## Quill
 
 <img src="/assets/npc/orion.jpg" />
-
-Quill is the metaguild's quiet historian, preserving mission logs and schematics.
-They rarely miss a detail and prefer to let records speak for themselves.
+Quill keeps the guild's chronicles, filing every blueprint and battle log.
+They guard accuracy like treasure and steer recruits toward the
+[Quest Submission Guide](/docs/quest-submission) so their feats join the archive.
 
 ### Sample Dialogue
 
--   "Ah, another chapter begins. Mind if I document your quest?"
--   "Facts first, feelings second—that's the archivist's creed."
--   "A quick signature and your blueprint enters the annals."
--   "Careful with that relic; it's older than the guild itself."
--   "Need a refresher on past missions? I've indexed every triumph and blunder."
+-   "Another tale for the ledger? Sign here."
+-   "Details matter; rumors fade."
+-   "Your diagram's logged—future builders will thank you."
+-   "That relic predates the guild; handle it gently."
+-   "Past mission data? I've cataloged every triumph and misstep."
 
 ## Echo
 
