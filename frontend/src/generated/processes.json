@@ -2965,7 +2965,8 @@
     },
     {
         "id": "swap-green-pla-filament",
-        "title": "Swap to green PLA filament on an entry-level FDM 3D printer",
+        "title": "Install green PLA filament on an entry-level FDM printer and purge 10 g",
+        "image": "/assets/pla_green.jpg",
         "requireItems": [
             {
                 "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -2983,7 +2984,19 @@
             }
         ],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "swap-white-pla-filament",
