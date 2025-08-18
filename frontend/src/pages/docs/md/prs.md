@@ -3,7 +3,7 @@ title: 'Pull Requests'
 slug: 'prs'
 ---
 
-Pull requests are welcome! See our [Contribution Guide](/CONTRIBUTORS.md) for details on how to get started.
+Pull requests are welcome! See our [Contribution Guide](/CONTRIBUTING.md) for details on how to get started.
 
 Before opening a pull request:
 

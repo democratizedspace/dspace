@@ -23,20 +23,20 @@ When creating quests, focus on these primary categories:
 
 ### Core Categories
 
-- **Hydroponics**: Growing plants without soil, crucial for space habitation
-- **Aquaria**: Managing aquatic ecosystems, modeling closed-loop life support
-- **Aquaponics**: Combining fish and plant cultivation in symbiotic systems
-- **Electronics**: Basic circuitry, sensing, and control systems
-- **Energy Systems**: Solar, wind, batteries and sustainable power generation
-- **3D Printing**: Fabrication techniques for creating components and tools
+-   **Hydroponics**: Growing plants without soil, crucial for space habitation
+-   **Aquaria**: Managing aquatic ecosystems, modeling closed-loop life support
+-   **Aquaponics**: Combining fish and plant cultivation in symbiotic systems
+-   **Electronics**: Basic circuitry, sensing, and control systems
+-   **Energy Systems**: Solar, wind, batteries and sustainable power generation
+-   **3D Printing**: Fabrication techniques for creating components and tools
 
 ### Secondary Categories
 
-- **Chemistry**: Safe experiments demonstrating principles relevant to space
-- **Biology**: Experiments studying life in controlled environments
-- **Physics**: Demonstrations of physical principles in space exploration
-- **Astronomy**: Observational techniques and understanding celestial objects
-- **Materials Science**: Testing and comparing materials for various applications
+-   **Chemistry**: Safe experiments demonstrating principles relevant to space
+-   **Biology**: Experiments studying life in controlled environments
+-   **Physics**: Demonstrations of physical principles in space exploration
+-   **Astronomy**: Observational techniques and understanding celestial objects
+-   **Materials Science**: Testing and comparing materials for various applications
 
 ## Quest Structure Guidelines
 
@@ -51,9 +51,9 @@ Organize quests in a **clear progression** from beginner to advanced:
 
 ### Quest Dependencies
 
-- Make dependencies clear and logical
-- Each category should have a clear entry point
-- Advanced quests should require completion of relevant prerequisites
+-   Make dependencies clear and logical
+-   Each category should have a clear entry point
+-   Advanced quests should require completion of relevant prerequisites
 
 ## Content Guidelines
 
@@ -67,9 +67,9 @@ Organize quests in a **clear progression** from beginner to advanced:
 
 ### Safety First
 
-- Always include appropriate safety warnings
-- Recommend proper protective equipment when needed
-- Never encourage dangerous activities or improper handling of materials
+-   Always include appropriate safety warnings
+-   Recommend proper protective equipment when needed
+-   Never encourage dangerous activities or improper handling of materials
 
 ## Examples of Well-Structured Quest Sequences
 
@@ -103,30 +103,31 @@ Organize quests in a **clear progression** from beginner to advanced:
 
 Every quest JSON file must include:
 
-- `id`: Unique identifier following the pattern `category/name`
-- `title`: Display title of the quest
-- `description`: Brief description explaining the quest purpose
-- `image`: Path to quest image
-- `npc`: Path to NPC avatar image
-- `start`: ID of the starting dialogue node
-- `dialogue`: Array of dialogue nodes, each containing:
-    - `id`: Node identifier
-    - `text`: NPC's dialogue text
-    - `options`: Array of player response options, including:
-        - `type`: Action type (goto, finish, process, grantsItems)
-        - `text`: Player's response text
-        - `goto`: For type:goto, target node ID
-        - `process`: For type:process, process ID
-        - `requiresItems`: Optional items needed to select option
-        - `grantsItems`: Optional items given when selecting option
-        - `requiresGitHub`: Set to `true` to disable the option until a GitHub token is saved
-- `rewards`: Items given upon quest completion
-- `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest form under **Quest Requirements**).
-Automated tests ensure these dependencies reference existing quests and avoid cycles.
+-   `id`: Unique identifier following the pattern `category/name`
+-   `title`: Display title of the quest
+-   `description`: Brief description explaining the quest purpose
+-   `image`: Path to quest image
+-   `npc`: Path to NPC avatar image
+-   `start`: ID of the starting dialogue node
+-   `dialogue`: Array of dialogue nodes, each containing:
+    -   `id`: Node identifier
+    -   `text`: NPC's dialogue text
+    -   `options`: Array of player response options, including:
+        -   `type`: Action type (goto, finish, process, grantsItems)
+        -   `text`: Player's response text
+        -   `goto`: For type:goto, target node ID
+        -   `process`: For type:process, process ID
+        -   `requiresItems`: Optional items needed to select option
+        -   `grantsItems`: Optional items given when selecting option
+        -   `requiresGitHub`: Set to `true` to disable the option until a GitHub token is saved
+-   `rewards`: Items given upon quest completion
+-   `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest form under **Quest Requirements**).
+    Automated tests ensure these dependencies reference existing quests and avoid cycles.
 
 Quest data is validated against a JSON schema. Titles and descriptions reject
 `<` and `>` characters, and `image` must be a data URL, an absolute HTTP(S)
-link, or a root-relative path.
+link, or a root-relative path. Quest titles must be unique across all existing
+quests.
 
 ### Current Implementation State
 
@@ -138,20 +139,20 @@ link, or a root-relative path.
 While the user interface for editing complex dialogue trees is being developed, quests are currently created using JSON files or through the custom content API. The future implementation will include:
 You can run `npm run generate-quest --template basic` (or `branching`) to scaffold a template JSON file with placeholder dialogue.
 
-- Dialogue node creation and editing
-- Process and item requirement selection
-- Quest dependency management
-- Preview functionality to test dialogue flow
+-   Dialogue node creation and editing
+-   Process and item requirement selection
+-   Quest dependency management
+-   Preview functionality to test dialogue flow
 
 ### Testing Your Quest
 
 Before submitting a quest, verify:
 
-- All dialogue paths lead to completion
-- Item grants and requirements function correctly
-- Process integrations work as expected
-- Educational content is accurate and clear
-- Safety warnings are included where appropriate
+-   All dialogue paths lead to completion
+-   Item grants and requirements function correctly
+-   Process integrations work as expected
+-   Educational content is accurate and clear
+-   Safety warnings are included where appropriate
 
 ## Contribution Workflow
 
@@ -173,12 +174,12 @@ Once the in-game editor is complete, the workflow will be simplified to:
 
 We're particularly interested in new quests that cover:
 
-- Sustainable energy systems
-- Small-scale biology experiments
-- Chemistry demonstrations relevant to space exploration
-- Sensor systems and data collection
-- Resource recycling and waste management
-- Low-cost astronomy projects
-- Materials testing experiments
+-   Sustainable energy systems
+-   Small-scale biology experiments
+-   Chemistry demonstrations relevant to space exploration
+-   Sensor systems and data collection
+-   Resource recycling and waste management
+-   Low-cost astronomy projects
+-   Materials testing experiments
 
 By following these guidelines, you'll create quests that engage players while advancing DSPACE's mission of democratizing space exploration through practical, hands-on education.

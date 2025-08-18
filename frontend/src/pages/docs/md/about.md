@@ -25,7 +25,7 @@ Use in-situ resource utilization. Mine the moon for water and oxygen. Use the wa
 
 DSPACE is designed as an extensible platform where you can create and contribute:
 
--   **[Custom Quests](/docs/quest-guidelines)** - Design educational missions that teach space-related skills
+-   **[Custom Quests](/docs/custom-quest-system)** - Create and submit missions with the in-game editor
 -   **[Custom Items](/docs/item-guidelines)** - Create virtual resources, tools, and components
 -   **[Custom Processes](/docs/process-guidelines)** - Build activities that transform or utilize items
 

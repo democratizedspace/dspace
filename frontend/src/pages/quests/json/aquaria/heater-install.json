@@ -1,14 +1,14 @@
 {
     "id": "aquaria/heater-install",
     "title": "Install an aquarium heater",
-    "description": "Safely mount a submersible heater and verify it warms the tank to 26°C.",
+    "description": "Install a heater in a Walstad tank and verify 26°C with a strip thermometer.",
     "image": "/assets/aquarium_heater.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Tropical fish need 26°C water. Ready to install the heater and thermometer?",
+            "text": "Tropical fish need 26°C. Mount heater and strip thermometer in tank?",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "mount",
-            "text": "Unplug gear and suction heater near filter outlet. Keep it unplugged 20 min.",
+            "text": "Unplug gear, dry hands. Clip heater near outlet; leave unplugged 20 min.",
             "options": [
                 {
                     "type": "goto",
@@ -34,7 +34,7 @@
         },
         {
             "id": "set",
-            "text": "After 20 min, plug in heater, set 26°C, and check the strip thermometer.",
+            "text": "After 20 min check submersion, plug heater in, set 26°C, read thermometer.",
             "options": [
                 {
                     "type": "finish",
@@ -47,14 +47,19 @@
     "rewards": [],
     "requiresQuests": ["aquaria/sponge-filter"],
     "hardening": {
-        "passes": 1,
-        "score": 65,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-16",
                 "date": "2025-08-16",
                 "score": 65
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-18",
+                "date": "2025-08-18",
+                "score": 80
             }
         ]
     }
