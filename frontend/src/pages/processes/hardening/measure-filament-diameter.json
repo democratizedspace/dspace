@@ -1,6 +1,12 @@
 {
-    "passes": 0,
-    "score": 0,
-    "emoji": "🛠️",
-    "history": []
+    "passes": 1,
+    "score": 60,
+    "emoji": "🌀",
+    "history": [
+        {
+            "task": "codex-process-hardening-2025-08-18",
+            "date": "2025-08-18",
+            "score": 60
+        }
+    ]
 }
