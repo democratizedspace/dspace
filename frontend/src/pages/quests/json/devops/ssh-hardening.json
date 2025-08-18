@@ -2,13 +2,25 @@
     "id": "devops/ssh-hardening",
     "title": "Harden SSH Access",
     "description": "Use key-based authentication and disable password logins.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-18",
+                "date": "2025-08-18",
+                "score": 60
+            }
+        ]
+    },
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's secure your node's SSH service.",
+            "text": "Let's secure your Pi cluster node's SSH service. Keep a laptop handy.",
             "options": [
                 {
                     "type": "goto",
@@ -19,8 +31,13 @@
         },
         {
             "id": "keys",
-            "text": "Generate an SSH key pair and copy the public key into ~/.ssh/authorized_keys on the node.",
+            "text": "On your laptop, run `ssh-keygen -t ed25519` to create a key pair. Use `ssh-copy-id` to add the public key to `~/.ssh/authorized_keys` on the Pi cluster node. Protect the private key with a strong passphrase.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "generate-ssh-key",
+                    "text": "Generate and copy key."
+                },
                 {
                     "type": "goto",
                     "goto": "config",
@@ -29,6 +46,10 @@
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
                             "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
                         }
                     ]
                 }
@@ -36,12 +57,23 @@
         },
         {
             "id": "config",
-            "text": "Edit /etc/ssh/sshd_config to disable password authentication and root login, then restart the service.",
+            "text": "Back up `/etc/ssh/sshd_config`. Set `PasswordAuthentication no` and `PermitRootLogin no`, then run `sudo systemctl restart ssh`. Confirm your key works before logging out.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "harden-sshd-config",
+                    "text": "Update sshd_config."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Service restarted."
+                    "text": "Service restarted.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },

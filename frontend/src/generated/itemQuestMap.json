@@ -328,6 +328,7 @@
       "hydroponics/nutrient-check",
       "firstaid/dispose-expired",
       "electronics/solder-wire",
+      "electronics/solder-led-harness",
       "electronics/measure-resistance",
       "electronics/light-sensor",
       "electronics/led-polarity",
@@ -850,6 +851,7 @@
   "037e6065-68a7-4ad1-9b0b-7778ecfe0662": {
     "requires": [
       "electronics/voltage-divider",
+      "electronics/solder-led-harness",
       "electronics/resistor-color-check",
       "electronics/potentiometer-dimmer",
       "electronics/measure-resistance",
@@ -864,6 +866,7 @@
       "electronics/voltage-divider",
       "electronics/thermistor-reading",
       "electronics/solder-wire",
+      "electronics/solder-led-harness",
       "electronics/servo-sweep",
       "electronics/potentiometer-dimmer",
       "electronics/measure-led-current",
@@ -901,7 +904,8 @@
       "electronics/potentiometer-dimmer",
       "electronics/measure-arduino-5v",
       "electronics/light-sensor",
-      "electronics/arduino-blink"
+      "electronics/arduino-blink",
+      "devops/ssh-hardening"
     ],
     "rewards": []
   },
@@ -909,6 +913,7 @@
     "requires": [
       "electronics/tin-soldering-iron",
       "electronics/solder-wire",
+      "electronics/solder-led-harness",
       "electronics/desolder-component"
     ],
     "rewards": []
@@ -928,7 +933,8 @@
   "f6bb2c1a-0001-46bd-998a-388a488b5b5c": {
     "requires": [],
     "rewards": [
-      "electronics/solder-wire"
+      "electronics/solder-wire",
+      "electronics/solder-led-harness"
     ]
   },
   "6a3772b6-2550-434f-89f9-2eb53d5b139f": {
@@ -961,20 +967,21 @@
     ],
     "rewards": []
   },
-  "bf3d2784-d48d-4b12-b12a-75f563b5dc88": {
-    "requires": [
-      "electronics/resistor-color-check",
-      "electronics/basic-circuit"
-    ],
-    "rewards": []
-  },
   "48cf736e-184c-4bd1-b9b0-15b7e9721646": {
     "requires": [
+      "electronics/solder-led-harness",
       "electronics/potentiometer-dimmer",
       "electronics/measure-led-current",
       "electronics/led-polarity",
       "electronics/basic-circuit",
       "electronics/arduino-blink"
+    ],
+    "rewards": []
+  },
+  "bf3d2784-d48d-4b12-b12a-75f563b5dc88": {
+    "requires": [
+      "electronics/resistor-color-check",
+      "electronics/basic-circuit"
     ],
     "rewards": []
   },
@@ -1151,6 +1158,7 @@
       "astronomy/venus-phases",
       "astronomy/saturn-rings",
       "astronomy/orion-nebula",
+      "astronomy/meteor-shower",
       "astronomy/light-pollution",
       "astronomy/andromeda"
     ],
@@ -1180,6 +1188,8 @@
   "9a72fb16-fc69-45c5-beca-f25c27028977": {
     "requires": [
       "astronomy/orion-nebula",
+      "astronomy/observe-moon",
+      "astronomy/meteor-shower",
       "astronomy/light-pollution",
       "astronomy/aurora-watch",
       "astronomy/andromeda"
@@ -1189,9 +1199,22 @@
   "70bb8d86-2c4e-4330-9705-371891934686": {
     "requires": [
       "astronomy/observe-moon",
+      "astronomy/meteor-shower",
       "astronomy/light-pollution",
       "astronomy/iss-photo",
       "astronomy/iss-flyover"
+    ],
+    "rewards": []
+  },
+  "aa82b02f-2617-4474-a91b-29647e4a9780": {
+    "requires": [
+      "astronomy/observe-moon"
+    ],
+    "rewards": []
+  },
+  "4729b96d-5057-40d8-83a4-25a4fa122d98": {
+    "requires": [
+      "astronomy/observe-moon"
     ],
     "rewards": []
   },
