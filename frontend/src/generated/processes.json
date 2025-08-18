@@ -4211,7 +4211,7 @@
     },
     {
         "id": "use-soldering-mat",
-        "title": "Lay a silicone soldering mat on the bench before soldering",
+        "title": "Place silicone soldering mat on bench before powering the soldering iron kit",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -4225,12 +4225,18 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m",
+        "duration": "30s",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-use-soldering-mat-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 65
+                }
+            ]
         }
     },
     {
