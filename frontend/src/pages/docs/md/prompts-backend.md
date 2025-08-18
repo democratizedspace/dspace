@@ -9,7 +9,12 @@ DSPACE is mostly frontend code, but some backend pieces support self-hosting via
 [Sugarkube's RasPi cluster](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md).
 Use this guide when editing `backend/` modules. Contributions must deliver clear user value and
 honor end-user privacy, dignity, and agency as outlined in
-[Gabriel](https://github.com/futuroptimist/gabriel).
+[Gabriel](https://github.com/futuroptimist/gabriel). Use this guide alongside
+[Codex Prompts](/docs/prompts-codex) so instructions stay consistent. To keep the
+prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). If
+these templates drift, refresh them with the
+[Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub
+Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >
@@ -18,15 +23,16 @@ honor end-user privacy, dignity, and agency as outlined in
 > 2. Minimize data collection and obtain explicit user consent before storing or
 >    transmitting information.
 > 3. Add or update tests in `backend/__tests__` when behavior changes.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+>    `npm run build`, and `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 > 6. Commit with an emoji prefix.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
-and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` pass before committing.
+and `README.md`. Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+`npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
 1. Update backend files under `backend/`.
