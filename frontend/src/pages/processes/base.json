@@ -3068,6 +3068,20 @@
         "duration": "1m"
     },
     {
+        "id": "measure-compost-moisture",
+        "title": "Gauge compost moisture with a probe meter",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [
+            {
+                "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "tin-soldering-iron-tip",
         "title": "Heat the soldering iron and melt solder on the tip while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",
