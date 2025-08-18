@@ -221,6 +221,20 @@ Echo routes signals and keeps comms clear for every mission.
 -   "We log every packet; lose one and I'll know."
 -   "Need eyes on the horizon? I'll swing a drone that way."
 
+## Lumen
+
+<img src="/assets/npc/vega.jpg" />
+
+Lumen serves as the guild's calm field medic. Years in remote clinics taught them to treat injuries with limited supplies, and their gentle humor keeps crews relaxed even during tense missions.
+
+### Sample Dialogue
+
+-   "Hey, I'm Lumen. Let's get that scrape cleaned up."
+-   "Pressure and a bandage—most bleeding stops right there."
+-   "Hydration is your friend; drink before you feel thirsty."
+-   "Stitches? No worries, I've got a steady hand."
+-   "Ping me if anything aches later; I log every symptom."
+
 <style>
     img {
         float: left;
