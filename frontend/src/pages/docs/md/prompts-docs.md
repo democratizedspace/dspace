@@ -16,15 +16,16 @@ For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/pro
 >
 > 1. Limit changes to the relevant docs.
 > 2. Fix outdated wording, links, or formatting.
-> 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+>    `npm run build`, and `npm run test:ci`.
 > 4. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
 >    and use an emoji-prefixed commit message.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before
-committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+`npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
 1. Edit or add docs under `frontend/src/pages/docs/md`.
