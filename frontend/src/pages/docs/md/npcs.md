@@ -214,6 +214,18 @@ Echo routes signals and keeps comms clear for every mission.
 -   "We log every packet; lose one and I'll know."
 -   "Need eyes on the horizon? I'll swing a drone that way."
 
+## Patch
+
+<img src="/assets/npc/orion.jpg" />
+
+Patch keeps the guild's codebase tidy, hunting bugs before missions break.
+
+### Sample Dialogue
+
+-   "Hey, I'm Patch—let's squash that bug together."
+-   "Commit early, commit often; we can always fix forward."
+-   "Tests red? Let's read the stack trace and get them green."
+
 <style>
     img {
         float: left;
