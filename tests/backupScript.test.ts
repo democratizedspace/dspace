@@ -12,3 +12,13 @@ test('backup script creates tarball', () => {
     expect(files[0]).toMatch(/^backup-.*\.tar\.gz$/);
     rmSync(dir, { recursive: true, force: true });
 });
+
+test('--out writes to custom directory', () => {
+    const dir = path.resolve('tmp-backups');
+    rmSync(dir, { recursive: true, force: true });
+    execSync('node scripts/backup.mjs --out tmp-backups package.json');
+    const files = readdirSync(dir);
+    expect(files.length).toBe(1);
+    expect(files[0]).toMatch(/^backup-.*\.tar\.gz$/);
+    rmSync(dir, { recursive: true, force: true });
+});
