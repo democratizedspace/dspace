@@ -127,8 +127,8 @@ You are an automated contributor for the DSPACE repository. Choose one item
 from `frontend/src/pages/docs/md/changelog/20250901.md` that is either `[ ]` or
 `[x]` without 💯 (including those marked with ✅). Implement it fully, completing
 any sub-tasks. Provide all code, tests and documentation required. Follow
-`AGENTS.md` and ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` all pass before committing. If Playwright browsers are
+`AGENTS.md` and ensure `npm run lint`, `npm run type-check`, `npm run build`, and
+`npm run test:ci` all pass before committing. If Playwright browsers are
 missing run `npx playwright install chromium` or use `SKIP_E2E=1 npm run test:ci`.
 
 USER:
