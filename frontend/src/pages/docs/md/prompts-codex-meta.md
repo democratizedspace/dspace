@@ -6,7 +6,7 @@ slug: 'prompts-codex-meta'
 # Codex Meta Prompt
 
 Use this prompt when you want Codex to upgrade DSPACE's prompt documentation so the
-instructions improve themselves over time. For baseline conventions, see
+instructions improve themselves over time. Start from the baseline
 [Codex Prompts](/docs/prompts-codex). If the templates themselves drift, refresh them
 using the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing workflows,
 see the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).

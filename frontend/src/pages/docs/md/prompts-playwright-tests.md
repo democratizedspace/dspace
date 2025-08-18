@@ -6,14 +6,14 @@ slug: 'prompts-playwright-tests'
 # Playwright test prompts for the _dspace_ repo
 
 Use this template to add end-to-end coverage for journeys listed in
-[User journeys](/docs/user-journeys). Pair it with the baseline
-[Codex Prompts](/docs/prompts-codex) and keep the docs evolving via the
-[Codex meta prompt](/docs/prompts-codex-meta). If these templates drift, refresh
-them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing
-GitHub Actions runs, see the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
-While working, review the existing journeys for inaccuracies or misunderstandings
-and expand the list as new features land. Treat this prompt as living documentation—
-periodically refine it using other `prompts-*.md` files for inspiration.
+[User journeys](/docs/user-journeys). While working, review the existing
+journeys for inaccuracies or misunderstandings and expand the list as new
+features land. Treat this prompt as living documentation—periodically refine
+it using other `prompts-*.md` files for inspiration. Use this guide alongside
+[Codex Prompts](/docs/prompts-codex). To keep the prompt docs evolving, see the
+[Codex meta prompt](/docs/prompts-codex-meta); if templates drift, refresh them
+with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing
+GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >
