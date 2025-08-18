@@ -85,15 +85,18 @@ Orion is an electrical engineer whose enthusiasm for robotics and microprocessor
 
 <img src="/assets/npc/vega.jpg" />
 
-Vega is an expert in aquariums and terrariums, with years of experience in designing and maintaining these unique ecosystems. Their passion for aquatic and terrestrial life has led them to develop innovative techniques and solutions for creating balanced, thriving environments for a wide variety of species. Vega is dedicated to sharing their knowledge with others and helping people create beautiful, healthy habitats for their own pets and plants.
+Vega tends micro-ecologies, coaxing balance from water and soil with patient hands.
+Years of tuning pumps and lights made them the guild's go-to aquarist.
+They guide recruits through quests like [Set up a Walstad tank](/quests/aquaria/walstad) and
+processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-results).
 
 ### Sample Dialogue
 
--   "Hi there! I'm Vega. Ready to try the Walstad method? It's a simple way to grow plants with minimal equipment."
--   "You'll want a 40 liter tank, some organic soil capped with gravel, and a bunch of easy plants."
--   "Your Walstad tank should be cycled now. A small colony of dwarf shrimp will keep algae in check."
--   "Those shrimp are thriving! Ready for a couple guppies? They prefer 24-28°C water."
--   "Guppies multiply quickly. Dense plants like hornwort give the fry shelter until they're bigger."
+-   "Vega here—Walstad tanks give plants what they need, nothing more."
+-   "Start with a 40 L tank, organic soil capped in gravel, and hardy stems."
+-   "Once cycled, a handful of dwarf shrimp keeps algae down."
+-   "Guppies breed fast; thick hornwort hides the fry."
+-   "Log pH weekly so you spot swings before the fish do."
 
 ## Phoenix
 
