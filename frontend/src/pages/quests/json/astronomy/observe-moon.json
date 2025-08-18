@@ -1,48 +1,61 @@
 {
     "id": "astronomy/observe-moon",
     "title": "Observe the Moon",
-    "description": "Use a basic telescope and mission logbook to safely sketch lunar features.",
+    "description": "Set up a basic telescope and mission logbook to sketch lunar craters safely.",
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here! Grab telescope and logbook. Under dark skies we observe the Moon.",
+            "text": "Nova here! Grab scope, logbook, drawing kit. Use red light; avoid Sun.",
             "options": [{ "type": "goto", "goto": "record", "text": "I'm ready" }]
         },
         {
             "id": "record",
-            "text": "Stabilize telescope and avoid the Sun. Sketch craters in your logbook.",
+            "text": "Aim at the Moon, not the Sun. Sketch with quill and ink under red light.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log the observation"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Sketch completed",
                     "requiresItems": [
                         { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 },
-                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 },
+                        { "id": "aa82b02f-2617-4474-a91b-29647e4a9780", "count": 1 },
+                        { "id": "4729b96d-5057-40d8-83a4-25a4fa122d98", "count": 1 },
+                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Regular observation helps when plotting real rocket trajectories.",
+            "text": "Nice work! Observing aids rockets. Cap ink, close logbook, store scope dry.",
             "options": [{ "type": "finish", "text": "Onward!" }]
         }
     ],
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-09-01",
                 "date": "2025-09-01",
                 "score": 60
+            },
+            {
+                "task": "codex-quest-hardening-2025-09-17",
+                "date": "2025-09-17",
+                "score": 80
             }
         ]
     }
