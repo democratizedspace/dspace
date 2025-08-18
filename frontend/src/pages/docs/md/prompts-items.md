@@ -40,8 +40,14 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && npm run audit:ci && \
-        npm run itemValidation && npm run test:ci && npm run test:ci -- itemQuality"
+        codex exec "\
+        npm run lint && \
+        npm run type-check && \
+        npm run build && \
+        npm run audit:ci && \
+        npm run itemValidation && \
+        npm run test:ci && \
+        npm run test:ci -- itemQuality"
         ```
 
 See the [OpenAI CLI docs][openai-cli] for more flags.
