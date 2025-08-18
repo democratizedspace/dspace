@@ -118,7 +118,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
             ]
         }
     },
@@ -133,8 +137,16 @@
             "score": 80,
             "emoji": "✅",
             "history": [
-                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 },
-                { "task": "codex-item-hardening-2025-08-14", "date": "2025-08-14", "score": 80 }
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 80
+                }
             ]
         }
     },
@@ -189,7 +201,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
             ]
         }
     },
@@ -205,7 +221,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
             ]
         }
     },
@@ -294,7 +314,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-12", "date": "2025-08-12", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
             ]
         }
     },
@@ -497,7 +521,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
             ]
         }
     },
@@ -538,9 +566,22 @@
     {
         "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
         "name": "parachute harness kit",
-        "description": "Nylon harness with swivel clips that secures a model rocket's body to its parachute.",
+        "description": "30 cm Kevlar shock cord with swivel clips that secures a model rocket body to its parachute; 15 g.",
         "image": "/assets/rocket_parachute.jpg",
-        "price": "5 dUSD"
+        "price": "5 dUSD",
+        "unit": "kit",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
@@ -1376,7 +1417,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-12", "date": "2025-08-12", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
             ]
         }
     },
