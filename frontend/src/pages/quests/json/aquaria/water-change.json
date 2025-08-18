@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Unplug gear. Grab gravel vacuum, 5 gal bucket, water conditioner and cart.",
+            "text": "Unplug heater and filter to avoid shocks. Grab gravel vacuum, 5-gal bucket, water conditioner, cart.",
             "options": [
                 {
                     "type": "goto",
@@ -25,7 +25,7 @@
         },
         {
             "id": "remove",
-            "text": "Vacuum water into bucket. Keep intake clear of fish and cords. Stop at 25%.",
+            "text": "Use gravel vacuum to siphon water into bucket. Keep intake clear of fish and cords; stop at 25%.",
             "options": [
                 {
                     "type": "goto",
@@ -36,8 +36,13 @@
         },
         {
             "id": "refill",
-            "text": "Fill bucket with tap water, add conditioner, warm within 2 °C. Pour slow.",
+            "text": "Fill bucket with tap water, add conditioner, match temp within 2 °C, then refill slowly.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Treat the tap water"
+                },
                 {
                     "type": "finish",
                     "text": "Water's in, gear on, fish happy!"
@@ -53,11 +58,12 @@
     ],
     "requiresQuests": ["aquaria/guppy"],
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
-            { "task": "codex-quest-refinement-2025-08-15", "date": "2025-08-15", "score": 60 }
+            { "task": "codex-quest-refinement-2025-08-15", "date": "2025-08-15", "score": 60 },
+            { "task": "codex-quest-hardening-2025-08-18", "date": "2025-08-18", "score": 80 }
         ]
     }
 }
