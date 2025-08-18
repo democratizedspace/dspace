@@ -9,7 +9,7 @@ This document tracks major journeys in DSPACE and whether a Playwright test cove
 
 | Journey                    | Playwright coverage | Test file                                            |
 | -------------------------- | ------------------- | ---------------------------------------------------- |
-| Home page loads            | No                  | `frontend/e2e/backlog/home-page-basic.spec.ts`       |
+| Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`               |
 | Docs navigation            | No                  | `frontend/e2e/backlog/docs-navigation.spec.ts`       |
 | Built-in quest detail      | Yes                 | `frontend/e2e/builtin-quests.spec.ts`                |
 | Quest list navigation      | Yes                 | `frontend/e2e/quests.spec.ts`                        |
