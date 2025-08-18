@@ -15,9 +15,10 @@ it using other `prompts-*.md` files for inspiration.
 >
 > 1. Review `user-journeys.md`, correcting errors or outdated steps.
 > 2. Pick a journey marked "No" or add new journeys as needed.
-> 3. Add a Playwright test under `frontend/e2e`.
+> 3. If a placeholder exists under `frontend/e2e/backlog`, promote it to
+>    `frontend/e2e` with `git mv`; otherwise add a new Playwright test.
 > 4. Update `user-journeys.md` to reflect coverage and fixes.
-> 5. Iterate on this prompt when improvements surface.
+> 5. Run `npx playwright install chromium` if browsers are missing.
 > 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 7. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
 >    and commit with an emoji.
@@ -32,7 +33,8 @@ USER:
 1. Audit `frontend/src/pages/docs/md/user-journeys.md` for mistakes and
    propose fixes or additional journeys.
 2. Select an uncovered or newly added journey and implement a Playwright test
-   in `frontend/e2e/`.
+   in `frontend/e2e/`. If a matching placeholder exists in
+   `frontend/e2e/backlog`, move it with `git mv` before editing.
 3. Update the coverage table and any corrected steps in `user-journeys.md`.
 4. Improve this prompt if clearer guidance emerges.
 5. Run `git diff --cached | ./scripts/scan-secrets.py`.
