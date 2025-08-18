@@ -44,6 +44,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [NPC Prompts](/docs/prompts-npcs)
 -   [Outage Prompts](/docs/prompts-outages)
 -   [Docs Prompts](/docs/prompts-docs)
+-   [Docs cross-link prompt](/docs/prompts-docs#cross-link-check-prompt)
 -   [Backend Prompts](/docs/prompts-backend)
 -   [Frontend Prompts](/docs/prompts-frontend)
 -   [Playwright Test Prompts](/docs/prompts-playwright-tests)
