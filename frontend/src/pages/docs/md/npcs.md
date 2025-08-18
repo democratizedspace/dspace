@@ -220,6 +220,7 @@ Echo routes signals and keeps comms clear for every mission.
 -   "Getting static? Rotate your antenna toward the station."
 -   "We log every packet; lose one and I'll know."
 -   "Need eyes on the horizon? I'll swing a drone that way."
+-   "Storm rolling in; hop to channel two if comms crackle."
 
 ## Lumen
 
