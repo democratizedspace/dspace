@@ -521,16 +521,22 @@
     {
         "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
         "name": "precision tweezers",
-        "description": "Fine-tip antistatic tweezers for placing small SMD components; 115 mm, 15 g stainless steel.",
+        "description": "ESD-safe stainless steel tweezers with 0.1 mm fine tips for placing tiny SMD parts; 120 mm long and 15 g.",
         "image": "/assets/quests/basic_circuit.svg",
-        "price": "4 dUSD",
+        "price": "5 dUSD",
         "type": "tool",
         "unit": "pair",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 65
+                }
+            ]
         }
     },
     {
