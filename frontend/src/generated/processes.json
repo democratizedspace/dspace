@@ -3930,6 +3930,35 @@
         }
     },
     {
+        "id": "measure-compost-moisture",
+        "title": "Probe compost moisture with a compost moisture meter and record it in mission logbook",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [
+            {
+                "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "tin-soldering-iron-tip",
         "title": "Heat the soldering iron and melt solder on the tip while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",

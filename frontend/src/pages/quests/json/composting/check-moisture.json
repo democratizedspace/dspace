@@ -1,0 +1,40 @@
+{
+    "id": "composting/check-moisture",
+    "title": "Check Compost Moisture",
+    "description": "Gauge moisture level to keep microbes happy.",
+    "image": "/assets/bucket.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Not sure if your compost is too dry or soggy? Let's check the moisture.",
+            "options": [{ "type": "goto", "goto": "probe", "text": "How do I check?" }]
+        },
+        {
+            "id": "probe",
+            "text": "Insert the compost moisture meter and note the reading.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "reading",
+                    "process": "measure-compost-moisture",
+                    "requiresItems": [{ "id": "2b57a38d-0486-40e8-a50d-d893541b50e9", "count": 1 }],
+                    "text": "Take the reading"
+                }
+            ]
+        },
+        {
+            "id": "reading",
+            "text": "The needle settles at 50%—perfectly damp.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Nice!" }]
+        },
+        {
+            "id": "finish",
+            "text": "Keep checking moisture weekly for balanced decomposition.",
+            "options": [{ "type": "finish", "text": "Will do!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["composting/start"]
+}

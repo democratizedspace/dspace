@@ -1119,7 +1119,8 @@
   },
   "2b57a38d-0486-40e8-a50d-d893541b50e9": {
     "requires": [
-      "composting/turn-pile"
+      "composting/turn-pile",
+      "composting/check-moisture"
     ],
     "rewards": []
   },
