@@ -118,7 +118,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
             ]
         }
     },
@@ -133,8 +137,16 @@
             "score": 80,
             "emoji": "✅",
             "history": [
-                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 },
-                { "task": "codex-item-hardening-2025-08-14", "date": "2025-08-14", "score": 80 }
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 80
+                }
             ]
         }
     },
@@ -189,7 +201,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
             ]
         }
     },
@@ -205,7 +221,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-06", "date": "2025-08-06", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
             ]
         }
     },
@@ -294,7 +314,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-12", "date": "2025-08-12", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
             ]
         }
     },
@@ -497,7 +521,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
             ]
         }
     },
@@ -1397,7 +1425,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-12", "date": "2025-08-12", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
             ]
         }
     },
