@@ -14,6 +14,7 @@ For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
 [NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
 [Docs prompts](/docs/prompts-docs), [Backend prompts](/docs/prompts-backend),
+[Frontend prompts](/docs/prompts-frontend),
 [Playwright test prompts](/docs/prompts-playwright-tests), and
 [Refactor prompts](/docs/prompts-refactors).
 For specialized workflows use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix),
@@ -44,6 +45,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [Outage Prompts](/docs/prompts-outages)
 -   [Docs Prompts](/docs/prompts-docs)
 -   [Backend Prompts](/docs/prompts-backend)
+-   [Frontend Prompts](/docs/prompts-frontend)
 -   [Playwright Test Prompts](/docs/prompts-playwright-tests)
 -   [Refactor Prompts](/docs/prompts-refactors)
 -   [Codex CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
