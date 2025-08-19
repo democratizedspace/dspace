@@ -1325,9 +1325,7 @@
     "rewards": []
   },
   "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56": {
-    "requires": [
-      "aquaria/sponge-filter"
-    ],
+    "requires": ["aquaria/sponge-filter", "aquaria/filter-rinse"],
     "rewards": [
       "aquaria/sponge-filter"
     ]
@@ -1395,9 +1393,7 @@
     "rewards": []
   },
   "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1": {
-    "requires": [
-      "aquaria/filter-rinse"
-    ],
+    "requires": [],
     "rewards": []
   },
   "3f1cc002-1f7a-4301-a1c6-343f65e7f21a": {

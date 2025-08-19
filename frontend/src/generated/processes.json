@@ -1409,7 +1409,7 @@
                 "count": 1
             },
             {
-                "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
+                "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
                 "count": 1
             },
             {
@@ -2841,10 +2841,10 @@
     },
     {
         "id": "rinse-aquarium-filter",
-        "title": "Rinse aquarium filter media in a bucket of dechlorinated water to preserve beneficial bacteria",
+        "title": "Rinse sponge filter in a bucket of dechlorinated water to preserve beneficial bacteria",
         "requireItems": [
             {
-                "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
+                "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
                 "count": 1
             }
         ],
