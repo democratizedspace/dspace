@@ -144,7 +144,6 @@
       "devops/fail2ban",
       "devops/enable-https",
       "devops/docker-compose",
-      "devops/ci-pipeline",
       "devops/auto-updates"
     ],
     "rewards": []
@@ -1116,6 +1115,12 @@
     ],
     "rewards": []
   },
+  "306793ac-e420-4859-9742-9076fff6ab57": {
+    "requires": [
+      "devops/ci-pipeline"
+    ],
+    "rewards": []
+  },
   "4d21c498-9225-4d0b-9a1a-ed65e349f0a8": {
     "requires": [
       "composting/turn-pile",
@@ -1325,7 +1330,10 @@
     "rewards": []
   },
   "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56": {
-    "requires": ["aquaria/sponge-filter", "aquaria/filter-rinse"],
+    "requires": [
+      "aquaria/sponge-filter",
+      "aquaria/filter-rinse"
+    ],
     "rewards": [
       "aquaria/sponge-filter"
     ]
@@ -1390,10 +1398,6 @@
     "requires": [
       "aquaria/floating-plants"
     ],
-    "rewards": []
-  },
-  "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1": {
-    "requires": [],
     "rewards": []
   },
   "3f1cc002-1f7a-4301-a1c6-343f65e7f21a": {
