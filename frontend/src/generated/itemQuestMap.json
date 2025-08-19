@@ -1319,22 +1319,31 @@
     "rewards": []
   },
   "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56": {
-    "requires": [],
+    "requires": [
+      "aquaria/sponge-filter"
+    ],
     "rewards": [
       "aquaria/sponge-filter"
     ]
+  },
+  "60e517b4-5807-4983-afb8-e2aad1566587": {
+    "requires": [
+      "aquaria/sponge-filter",
+      "aquaria/shrimp"
+    ],
+    "rewards": []
+  },
+  "5d5e4e29-94b7-4a03-b73d-7420841ae686": {
+    "requires": [
+      "aquaria/sponge-filter"
+    ],
+    "rewards": []
   },
   "b494f643-a77a-4edf-be7e-5f7ff2dfba6a": {
     "requires": [],
     "rewards": [
       "aquaria/shrimp"
     ]
-  },
-  "60e517b4-5807-4983-afb8-e2aad1566587": {
-    "requires": [
-      "aquaria/shrimp"
-    ],
-    "rewards": []
   },
   "ee7d437d-7426-47cd-b691-386dd20f4e47": {
     "requires": [
