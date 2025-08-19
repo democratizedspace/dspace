@@ -18,8 +18,9 @@ alphabetically by journey name.
 | Custom backup              | Yes                 | `frontend/e2e/custom-backup.spec.ts`              |
 | Custom content integration | Yes                 | `frontend/e2e/custom-content.spec.ts`             |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
+| Docs search                | No                  | --                                                |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
-| Failover status page       | No                  | --                                                |
+| Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Item/process preview       | No                  | --                                                |
 | Legacy data import         | No                  | --                                                |
