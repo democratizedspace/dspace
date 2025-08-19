@@ -26,10 +26,11 @@ Sydney, a tall and commanding woman, exudes an air of no-nonsense professionalis
 ### Sample Dialogue
 
 -   "Hello, friend! I'm Sydney, a 3D printing expert with the metaguild."
--   "Fantastic! A 3D printer is an invaluable tool!"
+-   "Fantastic! A 3D printer is an invaluable tool, but it needs a level bed to perform."
+-   "Take a minute to level the bed so your prints stick."
 -   "First things first, I need you to accept the 3D printer."
--   "Hey there, it's Sydney again! Ready for a quick project? Let's make a simple phone stand."
--   "Great job! This stand will keep your phone propped up while you work on more projects."
+-   "Hey there, it's Sydney again! Ready for a quick project? Let's print a simple phone stand."
+-   "Great job! This stand will prop up your phone while you tackle more builds."
 
 ## Nova
 
@@ -43,6 +44,7 @@ Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs an
 -   "Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect conditions."
 -   "Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no more than 1500 grams."
 -   "Well first you've gotta print the rocket!"
+-   "Before launch, check the wind; even a breeze can skew the trajectory."
 -   "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you."
 
 ## Hydro
@@ -235,6 +237,20 @@ Lumen serves as the guild's calm field medic. Years in remote clinics taught the
 -   "Hydration is your friend; drink before you feel thirsty."
 -   "Stitches? No worries, I've got a steady hand."
 -   "Ping me if anything aches later; I log every symptom."
+
+## Patch
+
+<img src="/assets/npc/orion.jpg" />
+
+Patch is the metaguild's cheerful repair drone, always hovering with a toolkit. Built from spare
+parts, Patch keeps machinery humming and loves swapping stories about improvised fixes.
+
+### Sample Dialogue
+
+-   "Hiya! Patch here—spot a loose bolt?"
+-   "Hold still; this micro-welder won't sting."
+-   "I scavenged this gasket from an airlock door; works like new."
+-   "Call me when the gears start grinding; tinkering's my idea of fun."
 
 <style>
     img {
