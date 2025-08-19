@@ -987,7 +987,8 @@
   "bf3d2784-d48d-4b12-b12a-75f563b5dc88": {
     "requires": [
       "electronics/resistor-color-check",
-      "electronics/basic-circuit"
+      "electronics/basic-circuit",
+      "electronics/arduino-blink"
     ],
     "rewards": []
   },
@@ -1325,7 +1326,10 @@
     "rewards": []
   },
   "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56": {
-    "requires": ["aquaria/sponge-filter", "aquaria/filter-rinse"],
+    "requires": [
+      "aquaria/sponge-filter",
+      "aquaria/filter-rinse"
+    ],
     "rewards": [
       "aquaria/sponge-filter"
     ]
@@ -1390,10 +1394,6 @@
     "requires": [
       "aquaria/floating-plants"
     ],
-    "rewards": []
-  },
-  "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1": {
-    "requires": [],
     "rewards": []
   },
   "3f1cc002-1f7a-4301-a1c6-343f65e7f21a": {

@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey! Orion here. Ready to blink an LED with a microcontroller? Work on a dry, non-conductive surface, discharge static on a grounded object, wear safety goggles, and keep the USB Type-A to Type-B cable unplugged until every wire is double-checked.",
+            "text": "Hey! Orion here. Ready to blink an LED with a microcontroller? Work on a dry, non-conductive surface, discharge static by touching a grounded object, keep liquids away, wear safety goggles, and leave the USB Type-A to Type-B cable unplugged until every wire is double-checked.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 Ω Resistor, a 5 mm LED, Safety Goggles, a USB Type-A to Type-B cable, and a Laptop Computer with the Arduino IDE installed. If the IDE isn't installed, run the 'Install the Arduino IDE' process. Confirm the resistor bands read red-red-brown (220 Ω). Place the LED's long leg (anode) into digital pin 13 through the resistor and its short leg (cathode) to GND. Keep power unplugged while wiring.",
+            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 Ω Resistor, a 5 mm LED, Safety Goggles, a USB Type-A to Type-B cable, a Laptop Computer with the Arduino IDE installed, and a Resistor Color Chart. If the IDE isn't installed, run the 'Install the Arduino IDE' process. Use the chart to confirm the resistor bands read red-red-brown (220 Ω). Place the LED's long leg (anode) into digital pin 13 through the resistor and its short leg (cathode) to GND. Keep power unplugged while wiring.",
             "options": [
                 {
                     "type": "process",
@@ -49,6 +49,10 @@
                         },
                         {
                             "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
                             "count": 1
                         },
                         {
@@ -102,7 +106,7 @@
         }
     ],
     "hardening": {
-        "passes": 9,
+        "passes": 10,
         "score": 100,
         "emoji": "💯",
         "history": [
@@ -149,6 +153,11 @@
             {
                 "task": "codex-quest-polish-2025-09-19",
                 "date": "2025-09-19",
+                "score": 100
+            },
+            {
+                "task": "codex-quest-update-2025-09-20",
+                "date": "2025-09-20",
                 "score": 100
             }
         ]
