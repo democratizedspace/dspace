@@ -1,14 +1,14 @@
 {
     "id": "aquaria/filter-rinse",
     "title": "Rinse Sponge Filter",
-    "description": "Give your sponge filter a quick rinse in dechlorinated water.",
+    "description": "Unplug air pump. Rinse sponge filter in dechlorinated water to restore flow and protect bacteria.",
     "image": "/assets/aquarium_filter.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The sponge filter is clogging up. A rinse will keep flow gentle for shrimp.",
+            "text": "The sponge filter is clogging. Unplug the air pump so you can rinse it and keep flow gentle.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "rinse",
-            "text": "Remove the sponge and squeeze it in a bucket of dechlorinated water until the gunk is gone.",
+            "text": "Squeeze the sponge in a bucket of dechlorinated water until clear. Skip tap water to save bacteria.",
             "options": [
                 {
                     "type": "goto",
@@ -27,8 +27,14 @@
                     "text": "Filter's clean again!",
                     "process": "rinse-aquarium-filter",
                     "requiresItems": [
-                        { "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1", "count": 1 },
-                        { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -45,5 +51,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/sponge-filter"]
+    "requiresQuests": ["aquaria/sponge-filter"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-19",
+                "date": "2025-08-19",
+                "score": 65
+            }
+        ]
+    }
 }
