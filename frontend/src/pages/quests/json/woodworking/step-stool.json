@@ -1,14 +1,14 @@
 {
     "id": "woodworking/step-stool",
     "title": "Build a step stool",
-    "description": "Create a sturdy stool to reach higher places safely.",
+    "description": "Build a sturdy pine step stool and practice safe cutting and gluing.",
     "image": "/assets/door.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You've mastered small projects. Let's tackle something bigger: a step stool sturdy enough to stand on.",
+            "text": "You've mastered small projects. Ready to build a sturdy step stool?",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "We'll use several pine boards along with wood glue and your handsaw. Take these materials and lay them out on your bench.",
+            "text": "Gather boards, glue, handsaw, and tape measure. Goggles on, lay out gear.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -34,6 +34,14 @@
                         },
                         {
                             "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
                             "count": 1
                         }
                     ],
@@ -54,6 +62,14 @@
                         {
                             "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
                             "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                            "count": 1
                         }
                     ],
                     "text": "Parts ready"
@@ -62,7 +78,7 @@
         },
         {
             "id": "assemble",
-            "text": "Cut the boards to length, glue the frame, and add cross supports. Once dry, test the stool carefully before trusting your weight on it.",
+            "text": "Measure boards, cut with handsaw, glue frame and supports, cure, then test.",
             "options": [
                 {
                     "type": "goto",
@@ -73,7 +89,7 @@
         },
         {
             "id": "finish",
-            "text": "Nicely done! This step stool will serve you well and shows you've learned solid joinery basics.",
+            "text": "Nicely done! The step stool is ready—check for wobble before use.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -93,5 +109,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/birdhouse"]
+    "requiresQuests": ["woodworking/birdhouse"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-refine-step-stool-2025-08-19",
+                "date": "2025-08-19",
+                "score": 65
+            }
+        ]
+    }
 }

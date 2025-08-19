@@ -39,6 +39,7 @@ sorted alphabetically by journey name.
 | Quest PR form              | No                  | --                                                |
 | Quest PR validation        | No                  | --                                                |
 | Quest success message      | No                  | --                                                |
+| Settings page loads        | No                  | --                                                |
 | Shop workflow              | Yes                 | `frontend/e2e/shop-functionality.spec.ts`         |
 | Svelte component hydration | Yes                 | `frontend/e2e/svelte-component-hydration.spec.ts` |
 | Touch item selector        | No                  | --                                                |
