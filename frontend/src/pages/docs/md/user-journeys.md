@@ -19,7 +19,7 @@ alphabetically by journey name.
 | Custom content integration | Yes                 | `frontend/e2e/custom-content.spec.ts`             |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
-| Failover status page       | No                  | --                                                |
+| Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Item/process preview       | No                  | --                                                |
 | Legacy data import         | No                  | --                                                |
@@ -38,6 +38,7 @@ alphabetically by journey name.
 | Quest PR form              | No                  | --                                                |
 | Quest PR validation        | No                  | --                                                |
 | Quest success message      | No                  | --                                                |
+| Settings page loads        | No                  | --                                                |
 | Shop workflow              | Yes                 | `frontend/e2e/shop-functionality.spec.ts`         |
 | Svelte component hydration | Yes                 | `frontend/e2e/svelte-component-hydration.spec.ts` |
 | Touch item selector        | No                  | --                                                |
