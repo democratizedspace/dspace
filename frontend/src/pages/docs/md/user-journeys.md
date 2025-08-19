@@ -24,7 +24,9 @@ Tests under `frontend/e2e/backlog` are planned but not yet automated.
 | Svelte component hydration | Yes                 | `frontend/e2e/svelte-component-hydration.spec.ts` |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
+| Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Cloud sync                 | No                  | --                                                |
+| Docs search                | No                  | --                                                |
 | Manage items               | No                  | --                                                |
 | Manage processes           | No                  | --                                                |
 | Manage quests              | No                  | --                                                |
@@ -40,4 +42,3 @@ Tests under `frontend/e2e/backlog` are planned but not yet automated.
 | Touch item selector        | No                  | --                                                |
 | Touch menu navigation      | No                  | --                                                |
 | UI responsiveness          | No                  | --                                                |
-| Failover status page       | No                  | --                                                |

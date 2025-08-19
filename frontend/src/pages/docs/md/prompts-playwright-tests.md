@@ -17,11 +17,11 @@ GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-c
 
 > **TL;DR**
 >
-> 1. Review `user-journeys.md`, correcting errors or outdated steps.
-> 2. Pick a journey marked "No" or add new journeys as needed.
-> 3. If a placeholder exists under `frontend/e2e/backlog`, promote it to
->    `frontend/e2e` with `git mv`; otherwise add a new Playwright test.
-> 4. Update `user-journeys.md` to reflect coverage and fixes.
+> 1. Review `user-journeys.md`, correcting errors and adding missing journeys.
+> 2. Choose an uncovered journey or add a new one, then implement a Playwright test.
+> 3. If a matching file lives in `frontend/e2e/backlog`, move it to `frontend/e2e`
+>    with `git mv` before editing.
+> 4. Update `user-journeys.md` with the test path and any fixed steps.
 > 5. Run `npx playwright install chromium` if browsers are missing.
 > 6. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
 >    `npm run build`, and `npm run test:ci`.
