@@ -6,11 +6,12 @@ slug: 'user-journeys'
 # User journeys
 
 This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
-Tests under `frontend/e2e/backlog` are planned but not yet automated. Entries are sorted
-alphabetically by journey name.
+Tests under `frontend/e2e/backlog` are placeholders for journeys without automation. Entries are
+sorted alphabetically by journey name.
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
+| Authentication flow        | No                  | --                                                |
 | Built-in quest details     | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
 | Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
 | Constellations quest       | Yes                 | `frontend/e2e/constellations-quest.spec.ts`       |
@@ -39,6 +40,7 @@ alphabetically by journey name.
 | Quest PR form              | No                  | --                                                |
 | Quest PR validation        | No                  | --                                                |
 | Quest success message      | No                  | --                                                |
+| Settings page loads        | No                  | --                                                |
 | Shop workflow              | Yes                 | `frontend/e2e/shop-functionality.spec.ts`         |
 | Svelte component hydration | Yes                 | `frontend/e2e/svelte-component-hydration.spec.ts` |
 | Touch item selector        | No                  | --                                                |

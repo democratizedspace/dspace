@@ -1076,6 +1076,20 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+        "name": "GitHub repository",
+        "description": "A remote Git repository hosted on GitHub.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "306793ac-e420-4859-9742-9076fff6ab57",
+        "name": "CI workflow file",
+        "description": "A `.github/workflows/ci.yml` that runs tests on push.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
@@ -1195,6 +1209,20 @@
         }
     },
     {
+        "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+        "name": "250 mL glass beaker",
+        "description": "Borosilicate beaker with 50 mL marks and a spout; handles hot liquids without shattering.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "3 dUSD"
+    },
+    {
+        "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+        "name": "glass stir rod",
+        "description": "25 cm solid glass rod for mixing solutions without introducing contaminants.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "1 dUSD"
+    },
+    {
         "id": "96083990-f333-4e42-ab04-7eb2a234570e",
         "name": "heat-shrink tubing",
         "description": "3 mm 2:1 polyolefin heat-shrink tube insulates solder joints; sold per cm.",
@@ -1234,6 +1262,14 @@
         "description": "Knee-length cotton lab coat with snap buttons and two pockets; one size fits most.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "15 dUSD"
+    },
+    {
+        "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+        "name": "hydrochloric acid (37%, 500 mL)",
+        "description": "Lab-grade 37% HCl in a vented plastic bottle; always add acid to water when diluting.",
+        "image": "/assets/hydroponics_nutrients.jpg",
+        "price": "12 dUSD",
+        "unit": "bottle"
     },
     {
         "id": "7c811503-d0ca-4254-825a-ebeb06a88231",
