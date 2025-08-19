@@ -6,11 +6,12 @@ slug: 'user-journeys'
 # User journeys
 
 This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
-Tests under `frontend/e2e/backlog` are planned but not yet automated. Entries are sorted
-alphabetically by journey name.
+Tests under `frontend/e2e/backlog` are placeholders for journeys without automation. Entries are
+sorted alphabetically by journey name.
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
+| Authentication flow        | No                  | --                                                |
 | Built-in quest details     | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
 | Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
 | Constellations quest       | Yes                 | `frontend/e2e/constellations-quest.spec.ts`       |
@@ -19,7 +20,7 @@ alphabetically by journey name.
 | Custom content integration | Yes                 | `frontend/e2e/custom-content.spec.ts`             |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
-| Failover status page       | No                  | --                                                |
+| Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Item/process preview       | No                  | --                                                |
 | Legacy data import         | No                  | --                                                |
