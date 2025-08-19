@@ -1,14 +1,14 @@
 {
     "id": "aquaria/heater-install",
     "title": "Install an aquarium heater",
-    "description": "Install a heater in a Walstad tank and verify 26°C with a strip thermometer.",
+    "description": "Install a 150 W heater in a Walstad tank and verify 26°C with a stick-on thermometer.",
     "image": "/assets/aquarium_heater.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Tropical fish need 26°C. Mount heater and strip thermometer in tank?",
+            "text": "Tropical fish need 26°C. Mount the 150 W heater and strip thermometer?",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "mount",
-            "text": "Unplug gear, dry hands. Clip heater near outlet; leave unplugged 20 min.",
+            "text": "Unplug, dry hands. Clip heater, press thermometer. Wait unplugged 20 min.",
             "options": [
                 {
                     "type": "goto",
@@ -34,7 +34,7 @@
         },
         {
             "id": "set",
-            "text": "After 20 min check submersion, plug heater in, set 26°C, read thermometer.",
+            "text": "After 20 min and heater submerged, plug in, set 26°C, watch thermometer settle.",
             "options": [
                 {
                     "type": "finish",
@@ -47,9 +47,9 @@
     "rewards": [],
     "requiresQuests": ["aquaria/sponge-filter"],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-16",
@@ -60,6 +60,11 @@
                 "task": "codex-quest-hardening-2025-08-18",
                 "date": "2025-08-18",
                 "score": 80
+            },
+            {
+                "task": "codex-quest-update-2025-05-24",
+                "date": "2025-05-24",
+                "score": 92
             }
         ]
     }
