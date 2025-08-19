@@ -1076,6 +1076,20 @@
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
+        "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+        "name": "GitHub repository",
+        "description": "A remote Git repository hosted on GitHub.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "306793ac-e420-4859-9742-9076fff6ab57",
+        "name": "CI workflow file",
+        "description": "A `.github/workflows/ci.yml` that runs tests on push.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",

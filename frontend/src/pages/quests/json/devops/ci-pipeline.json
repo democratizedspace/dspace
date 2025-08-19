@@ -2,6 +2,18 @@
     "id": "devops/ci-pipeline",
     "title": "Set Up a CI Pipeline",
     "description": "Configure GitHub Actions to run tests whenever you push.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-19",
+                "date": "2025-08-19",
+                "score": 60
+            }
+        ]
+    },
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -19,15 +31,20 @@
         },
         {
             "id": "edit",
-            "text": "Create a `.github/workflows/ci.yml` file that installs dependencies and runs `npm run test:pr`.",
+            "text": "Create a `.github/workflows/ci.yml` that installs dependencies and runs `npm run test:pr`. Keep tokens secret and grant minimal permissions.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "create-ci-workflow",
+                    "text": "Write the workflow file."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Workflow added.",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
                             "count": 1
                         }
                     ]

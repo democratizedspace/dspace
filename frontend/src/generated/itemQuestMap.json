@@ -156,7 +156,6 @@
       "devops/fail2ban",
       "devops/enable-https",
       "devops/docker-compose",
-      "devops/ci-pipeline",
       "devops/auto-updates"
     ],
     "rewards": []
@@ -1116,6 +1115,12 @@
       "devops/monitoring",
       "devops/log-maintenance",
       "devops/daily-backups"
+    ],
+    "rewards": []
+  },
+  "306793ac-e420-4859-9742-9076fff6ab57": {
+    "requires": [
+      "devops/ci-pipeline"
     ],
     "rewards": []
   },

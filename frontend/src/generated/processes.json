@@ -1719,6 +1719,24 @@
         "duration": "5m"
     },
     {
+        "id": "create-ci-workflow",
+        "title": "Add a GitHub Actions CI workflow",
+        "requireItems": [
+            {
+                "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
         "id": "run-docker-compose",
         "title": "Launch DSPACE with Docker Compose",
         "requireItems": [
