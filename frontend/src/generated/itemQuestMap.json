@@ -49,15 +49,27 @@
     ],
     "rewards": []
   },
-  "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913": {
+  "2dfe683c-56f6-4026-b9e9-2d01a03b1878": {
     "requires": [
-      "woodworking/planter-box"
+      "woodworking/step-stool",
+      "woodworking/birdhouse"
     ],
     "rewards": []
   },
-  "2dfe683c-56f6-4026-b9e9-2d01a03b1878": {
+  "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4": {
     "requires": [
-      "woodworking/birdhouse"
+      "woodworking/step-stool",
+      "electronics/desolder-component",
+      "electronics/arduino-blink",
+      "3dprinting/nozzle-cleaning",
+      "3dprinting/filament-change",
+      "3dprinting/calibration-cube"
+    ],
+    "rewards": []
+  },
+  "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913": {
+    "requires": [
+      "woodworking/planter-box"
     ],
     "rewards": []
   },
@@ -1015,16 +1027,6 @@
     "requires": [
       "electronics/light-sensor",
       "electronics/data-logger"
-    ],
-    "rewards": []
-  },
-  "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4": {
-    "requires": [
-      "electronics/desolder-component",
-      "electronics/arduino-blink",
-      "3dprinting/nozzle-cleaning",
-      "3dprinting/filament-change",
-      "3dprinting/calibration-cube"
     ],
     "rewards": []
   },
