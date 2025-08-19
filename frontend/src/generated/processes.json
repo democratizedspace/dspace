@@ -770,7 +770,8 @@
     },
     {
         "id": "regrow-stevia",
-        "title": "regrow stevia after harvest",
+        "title": "Regrow harvested stevia plants in a hydroponic tub",
+        "image": "/assets/hydroponic_basil_adult.jpg",
         "requireItems": [],
         "consumeItems": [
             {
@@ -796,7 +797,19 @@
                 "count": 1
             }
         ],
-        "duration": "14d"
+        "duration": "14d",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "harvest-stevia",
