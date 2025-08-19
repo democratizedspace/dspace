@@ -22,29 +22,23 @@ const outFile = path.join(
   'itemQuestMap.json'
 );
 
+function addDeps(items, questId, map, key) {
+  for (const item of items) {
+    const entry = map[item.id] || (map[item.id] = { requires: [], rewards: [] });
+    const list = entry[key];
+    if (!list.includes(questId)) list.push(questId);
+  }
+}
+
 function collectItemDeps(obj, questId, map) {
   if (Array.isArray(obj)) {
-    obj.forEach((v) => collectItemDeps(v, questId, map));
+    for (const v of obj) collectItemDeps(v, questId, map);
     return;
   }
   if (obj && typeof obj === 'object') {
-    if (obj.requiresItems) {
-      obj.requiresItems.forEach((item) => {
-        map[item.id] = map[item.id] || { requires: [], rewards: [] };
-        if (!map[item.id].requires.includes(questId)) {
-          map[item.id].requires.push(questId);
-        }
-      });
-    }
-    if (obj.rewards) {
-      obj.rewards.forEach((item) => {
-        map[item.id] = map[item.id] || { requires: [], rewards: [] };
-        if (!map[item.id].rewards.includes(questId)) {
-          map[item.id].rewards.push(questId);
-        }
-      });
-    }
-    Object.values(obj).forEach((v) => collectItemDeps(v, questId, map));
+    if (obj.requiresItems) addDeps(obj.requiresItems, questId, map, 'requires');
+    if (obj.rewards) addDeps(obj.rewards, questId, map, 'rewards');
+    for (const v of Object.values(obj)) collectItemDeps(v, questId, map);
   }
 }
 
