@@ -1155,7 +1155,26 @@
   },
   "3455faac-8811-4991-b818-cecb98e8fff7": {
     "requires": [
-      "chemistry/ph-test"
+      "chemistry/ph-test",
+      "chemistry/acid-dilution"
+    ],
+    "rewards": []
+  },
+  "10fab5e7-036b-4f8f-9f35-84117bc8ef09": {
+    "requires": [
+      "chemistry/acid-dilution"
+    ],
+    "rewards": []
+  },
+  "c46e98b4-0c1a-478b-988c-8c9260dce434": {
+    "requires": [
+      "chemistry/acid-dilution"
+    ],
+    "rewards": []
+  },
+  "7311a2ab-59b2-49cb-93cd-d59aab9dc68a": {
+    "requires": [
+      "chemistry/acid-dilution"
     ],
     "rewards": []
   },

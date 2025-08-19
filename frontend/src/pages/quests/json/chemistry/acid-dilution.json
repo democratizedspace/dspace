@@ -1,14 +1,26 @@
 {
     "id": "chemistry/acid-dilution",
     "title": "Dilute Concentrated Acid",
-    "description": "Add acid to water slowly for a safer solution.",
+    "description": "Add acid to water slowly while fully suited up and stirring.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-19",
+                "date": "2025-08-19",
+                "score": 60
+            }
+        ]
+    },
     "image": "/assets/pH_strip.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Concentrated acids demand respect. Gather a beaker, stir rod, gloves, goggles, and a lab coat before we begin.",
+            "text": "Concentrated acids demand respect. Gather a 250 mL glass beaker, glass stir rod, nitrile gloves, safety goggles, a lab coat, and a pH strip. Always add acid to water, never the reverse.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +31,7 @@
         },
         {
             "id": "dilute",
-            "text": "Slowly pour acid into water while stirring. Keep your face back and movements steady.",
+            "text": "Pour a small amount of hydrochloric acid into the beaker of water while stirring steadily. Keep your face back, go slow, and check the mix with a pH strip.",
             "options": [
                 {
                     "type": "process",
@@ -31,16 +43,20 @@
                     "goto": "finish",
                     "text": "Solution mixed safely.",
                     "requiresItems": [
-                        { "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 },
+                        { "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09", "count": 1 },
+                        { "id": "c46e98b4-0c1a-478b-988c-8c9260dce434", "count": 1 },
                         { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "3455faac-8811-4991-b818-cecb98e8fff7", "count": 1 },
+                        { "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 },
+                        { "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Label the diluted acid and store it with the cap tight.",
+            "text": "Label the diluted acid with concentration and date, then store it with the cap tight.",
             "options": [
                 {
                     "type": "finish",
