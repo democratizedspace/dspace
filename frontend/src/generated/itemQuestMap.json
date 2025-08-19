@@ -930,6 +930,12 @@
     ],
     "rewards": []
   },
+  "3dbf1701-5cc0-4443-b9bf-4275b33513d0": {
+    "requires": [
+      "electronics/tin-soldering-iron"
+    ],
+    "rewards": []
+  },
   "f6bb2c1a-0001-46bd-998a-388a488b5b5c": {
     "requires": [],
     "rewards": [
