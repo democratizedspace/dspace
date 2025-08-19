@@ -20,10 +20,11 @@ GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-c
 > 1. Review `user-journeys.md`, correcting mistakes and keeping the coverage
 >    table sorted alphabetically.
 > 2. For journeys lacking tests, ensure a placeholder spec exists under
->    `frontend/e2e/backlog`; create one when adding a new journey.
+>    `frontend/e2e/backlog`; create one if missing.
 > 3. If a placeholder exists, move it to `frontend/e2e` with `git mv` and
 >    implement the Playwright test; otherwise add a new test file.
-> 4. Update `user-journeys.md` with coverage status and any fixes.
+> 4. Update `user-journeys.md` with coverage status, test file path, and any fixes,
+>    keeping the table alphabetized.
 > 5. Run `npx playwright install chromium` if browsers are missing.
 > 6. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
 >    `npm run build`, and `npm run test:ci`.
@@ -41,10 +42,10 @@ USER:
    propose fixes or additional journeys.
 2. Select an uncovered or newly added journey and implement a Playwright test
    in `frontend/e2e/`. If a matching placeholder exists in
-   `frontend/e2e/backlog`, move it with `git mv` before editing. When adding a
-   new journey, create a placeholder spec in `frontend/e2e/backlog`.
-3. Update the coverage table and any corrected steps in `user-journeys.md`,
-   keeping it alphabetized.
+   `frontend/e2e/backlog`, move it with `git mv` before editing; otherwise
+   create the test file.
+3. Update the coverage table in `user-journeys.md` with the new test path and
+   any corrected steps, keeping it alphabetized.
 4. Improve this prompt if clearer guidance emerges.
 5. Run `git diff --cached | ./scripts/scan-secrets.py`.
 6. Use an emoji-prefixed commit message.
