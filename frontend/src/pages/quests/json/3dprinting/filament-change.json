@@ -1,14 +1,14 @@
 {
     "id": "3dprinting/filament-change",
     "title": "Swap Filament",
-    "description": "Change your entry-level FDM 3D printer to a new filament color safely.",
+    "description": "Safely swap your entry-level FDM printer to green PLA by unloading the old spool and purging 10 g.",
     "image": "/assets/quests/benchy_25.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to swap colors? We'll unload the old spool and load green PLA on your entry-level FDM 3D printer.",
+            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and load green PLA on your entry-level FDM printer.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "swap",
-            "text": "Put on safety goggles and heat the hotend to 200 °C. Retract the old filament, keep fingers clear of gears, then feed in green PLA until only green extrudes. Avoid touching the hot nozzle.",
+            "text": "Put on safety goggles and preheat the hotend to 200 °C. Release the extruder lever to retract the old filament while keeping fingers clear of gears. Cut the tip of the green PLA at an angle, feed it until only green extrudes, and avoid touching the hot nozzle or molten plastic.",
             "options": [
                 {
                     "type": "process",
@@ -52,12 +52,13 @@
     "rewards": [],
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
             { "task": "codex-quest-hardening-2025-08-12", "date": "2025-08-12", "score": 60 },
-            { "task": "codex-quest-refinement-2025-08-17", "date": "2025-08-17", "score": 80 }
+            { "task": "codex-quest-refinement-2025-08-17", "date": "2025-08-17", "score": 80 },
+            { "task": "codex-quest-clarity-2025-08-19", "date": "2025-08-19", "score": 90 }
         ]
     }
 }
