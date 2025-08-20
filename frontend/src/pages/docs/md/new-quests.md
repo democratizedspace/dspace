@@ -157,6 +157,7 @@ New quests in this release: 211
 
 -   firstaid/assemble-kit
 -   firstaid/change-bandage
+-   firstaid/dispose-bandages
 -   firstaid/dispose-expired
 -   firstaid/learn-cpr
 -   firstaid/remove-splinter
