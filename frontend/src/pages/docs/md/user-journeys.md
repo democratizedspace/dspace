@@ -22,7 +22,7 @@ sorted alphabetically by journey name.
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
 | Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
-| Item/process preview       | No                  | --                                                |
+| Item/process preview       | Yes                 | `frontend/e2e/item-process-preview.spec.ts`       |
 | Legacy data import         | No                  | --                                                |
 | Manage items               | No                  | --                                                |
 | Manage processes           | No                  | --                                                |
@@ -33,6 +33,7 @@ sorted alphabetically by journey name.
 | Mobile quest form          | No                  | --                                                |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Process creation           | Yes                 | `frontend/e2e/process-creation.spec.ts`           |
+| Profile page loads         | No                  | --                                                |
 | Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |
 | Quest form validation      | No                  | --                                                |
 | Quest list navigation      | Yes                 | `frontend/e2e/quests.spec.ts`                     |
