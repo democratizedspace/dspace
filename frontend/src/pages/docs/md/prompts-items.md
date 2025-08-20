@@ -3,7 +3,7 @@ title: 'Item Prompts'
 slug: 'prompts-items'
 ---
 
-# Writing great item prompts for the _dspace_ repo
+# Writing great item prompts for the DSPACE repository
 
 Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready-made PR—but only if you give it a
@@ -171,4 +171,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[openai-cli]: https://github.com/openai/openai-cli
+[openai-cli]: https://platform.openai.com/docs/guides/openai-cli
