@@ -67,6 +67,12 @@ export function __resetPriceTableCacheForTests(): void {
   mergedTable = null;
 }
 
+export function __setMergedTableForTests(
+  table: Record<string, number> | null
+): void {
+  mergedTable = table;
+}
+
 /**
  * Look up a real‑world price for a game item.
  *

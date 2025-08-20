@@ -3,6 +3,7 @@ import {
   approximateIrlPrice,
   approximateIrlTotalPrice,
   __resetPriceTableCacheForTests,
+  __setMergedTableForTests,
 } from './approximateIrlPrice';
 import { writeFileSync, mkdtempSync } from 'fs';
 import { join } from 'path';
@@ -46,6 +47,19 @@ describe('approximateIrlPrice', () => {
 
     it('loads prices from a custom file', () => {
       writeFileSync(tmpFile, JSON.stringify({ custom_item: 42 }));
+      expect(approximateIrlPrice('custom_item')).toBe(42);
+    });
+
+    it('ignores invalid JSON file', () => {
+      writeFileSync(tmpFile, '{');
+      expect(approximateIrlPrice('custom_item')).toBeNull();
+    });
+
+    it('caches loaded prices', () => {
+      writeFileSync(tmpFile, JSON.stringify({ custom_item: 42 }));
+      expect(approximateIrlPrice('custom_item')).toBe(42);
+      __setMergedTableForTests(null);
+      writeFileSync(tmpFile, JSON.stringify({ custom_item: 43 }));
       expect(approximateIrlPrice('custom_item')).toBe(42);
     });
   });
