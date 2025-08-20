@@ -24,9 +24,8 @@ const priceTable: Record<string, number> = {
 
 const NORMALIZE_REGEX = /[\s-]+/g;
 
-function normalizeId(id: string): string {
-  return id.trim().toLowerCase().replace(NORMALIZE_REGEX, '_');
-}
+const normalizeId = (id: string): string =>
+  id.trim().toLowerCase().replace(NORMALIZE_REGEX, '_');
 
 /**
  * Look up a real‑world price for a game item.
@@ -35,14 +34,11 @@ function normalizeId(id: string): string {
  * spaces or hyphens to underscores so callers can pass identifiers like
  * `3D-Printer`, `3d printer`, or even ` 3d_printer `.
  */
-export function approximateIrlPrice(
-  id: string | null | undefined
-): number | null {
+export function approximateIrlPrice(id: string | null | undefined): number | null {
   if (typeof id !== 'string') {
     return null;
   }
-  const normalized = normalizeId(id);
-  return priceTable[normalized] ?? null;
+  return priceTable[normalizeId(id)] ?? null;
 }
 
 /**
@@ -63,10 +59,11 @@ export function approximateIrlTotalPrice(
 
   for (const id of ids) {
     const price = approximateIrlPrice(id);
-    if (typeof price === 'number') {
-      total += price;
-      found = true;
+    if (price === null) {
+      continue;
     }
+    total += price;
+    found = true;
   }
 
   return found ? total : null;
