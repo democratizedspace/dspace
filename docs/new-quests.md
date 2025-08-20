@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 232
-New quests in this release: 210
+Current quest count: 233
+New quests in this release: 211
 
 ### 3dprinting
 
@@ -155,6 +155,7 @@ New quests in this release: 210
 
 -   firstaid/assemble-kit
 -   firstaid/change-bandage
+-   firstaid/dispose-bandages
 -   firstaid/dispose-expired
 -   firstaid/learn-cpr
 -   firstaid/remove-splinter
