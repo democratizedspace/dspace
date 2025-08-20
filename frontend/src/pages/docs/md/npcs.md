@@ -36,16 +36,20 @@ Sydney, a tall and commanding woman, exudes an air of no-nonsense professionalis
 
 <img src="/assets/npc/nova.jpg" />
 
-Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs and constructs the spacecraft used by the metaguild to explore the solar system. After studying aerospace engineering in college, she rapidly gained expertise in the field. Known for her perfectionism and ability to overcome obstacles, Nova embraced the metaguild as a means to employ her skills in groundbreaking ways.
+Nova is the guild's perfectionist rocketeer, tuning craft that slip cleanly through thin air.
+After acing aerospace engineering, she joined the metaguild to push launches with minimal waste.
+Nova guides recruits through quests like
+[Fuel Mixture Calibration](/quests/rocketry/fuel-mixture) and
+[Preflight Checklist](/quests/rocketry/preflight-check).
 
 ### Sample Dialogue
 
--   "Hey friend! I'm Nova! I'm sure you've met some of my colleagues!"
--   "Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect conditions."
--   "Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no more than 1500 grams."
--   "Well first you've gotta print the rocket!"
--   "Before launch, check the wind; even a breeze can skew the trajectory."
--   "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you."
+-   "Nova here—guild rocketeer at your service."
+-   "Calibrate the mix; too much oxidizer melts the nozzle."
+-   "Training flights cap mass at 1500 grams—guild rules keep it safe."
+-   "Print the airframe on Sydney's rig and sand the fins smooth."
+-   "Check wind speed; a gust can walk the rocket off the pad."
+-   "Ready for countdown? I'll watch telemetry while you light the fuse."
 
 ## Hydro
 
