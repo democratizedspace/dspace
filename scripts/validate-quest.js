@@ -1,14 +1,14 @@
 #!/usr/bin/env node
-const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const schema = require('../frontend/src/pages/quests/jsonSchemas/quest.json');
+const readJson = require('./utils/read-json');
 
 const ajv = new Ajv();
 const validate = ajv.compile(schema);
 
 function validateQuest(filePath) {
-  const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const data = readJson(filePath);
   const valid = validate(data);
   if (!valid) {
     console.error(`Validation failed for ${filePath}`);

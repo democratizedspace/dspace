@@ -1,23 +1,22 @@
 #!/usr/bin/env node
-const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const schema = require('../frontend/src/pages/inventory/jsonSchemas/item.json');
+const readJson = require('./utils/read-json');
 
 const ajv = new Ajv();
 const validate = ajv.compile(schema);
 
 function validateItem(filePath) {
-  const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const data = readJson(filePath);
   const items = Array.isArray(data) ? data : [data];
   let valid = true;
   for (const item of items) {
-    const ok = validate(item);
-    if (!ok) {
+    if (!validate(item)) {
       console.error(`Validation failed for ${filePath}`);
       console.error(validate.errors);
+      valid = false;
     }
-    valid = valid && ok;
   }
   return valid;
 }
