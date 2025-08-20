@@ -6,7 +6,8 @@ slug: 'user-journeys'
 # User journeys
 
 This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
-Tests under `frontend/e2e/backlog` are placeholders for journeys without automation. Entries are
+Tests under `frontend/e2e/backlog` are placeholders for journeys without automation. When adding
+coverage, move any placeholder with `git mv` into `frontend/e2e` and update this table. Entries are
 sorted alphabetically by journey name.
 
 | Journey                    | Playwright coverage | Test file                                         |
@@ -22,7 +23,7 @@ sorted alphabetically by journey name.
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
 | Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
-| Item/process preview       | No                  | --                                                |
+| Item or process preview    | No                  | --                                                |
 | Legacy data import         | No                  | --                                                |
 | Manage items               | No                  | --                                                |
 | Manage processes           | No                  | --                                                |
@@ -33,6 +34,7 @@ sorted alphabetically by journey name.
 | Mobile quest form          | No                  | --                                                |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Process creation           | Yes                 | `frontend/e2e/process-creation.spec.ts`           |
+| Profile page loads         | Yes                 | `frontend/e2e/profile-page.spec.ts`               |
 | Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |
 | Quest form validation      | No                  | --                                                |
 | Quest list navigation      | Yes                 | `frontend/e2e/quests.spec.ts`                     |
