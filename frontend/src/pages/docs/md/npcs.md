@@ -252,6 +252,23 @@ parts, Patch keeps machinery humming and loves swapping stories about improvised
 -   "I scavenged this gasket from an airlock door; works like new."
 -   "Call me when the gears start grinding; tinkering's my idea of fun."
 
+-   "Got a stripped screw? I'll machine a new head on the fly."
+
+## Byte
+
+<img src="/assets/npc/orion.jpg" />
+
+Byte monitors the guild's networks, hunting bugs and patching holes before enemies find them.
+Raised on open-source firmware, they safeguard mission data and teach recruits secure coding.
+
+### Sample Dialogue
+
+-   "Call me Byte—if it's on the network, I can trace it."
+-   "Run linters before you push; sloppy code invites gremlins."
+-   "Encrypted channels only; plain text is for pirates."
+-   "Found a breach? Pull the plug and I'll seal the hole."
+-   "Logs tell the story; let's read them before the attackers do."
+
 <style>
     img {
         float: left;
