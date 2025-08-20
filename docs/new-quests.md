@@ -216,6 +216,7 @@ New quests in this release: 211
 -   programming/json-api
 -   programming/json-endpoint
 -   programming/median-temp
+-   programming/moving-avg-temp
 -   programming/plot-temp-cli
 -   programming/stddev-temp
 -   programming/temp-alert
