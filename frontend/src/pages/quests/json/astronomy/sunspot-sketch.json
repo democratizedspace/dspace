@@ -1,0 +1,43 @@
+{
+    "id": "astronomy/sunspot-sketch",
+    "title": "Sketch Sunspots",
+    "description": "Project the Sun onto paper with a basic telescope and sketch sunspots in your mission logbook without looking through the eyepiece.",
+    "image": "/assets/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Sunspots show the Sun's activity. We'll use projection for safety.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "project",
+                    "text": "Set up the projection."
+                }
+            ]
+        },
+        {
+            "id": "project",
+            "text": "Aim your basic telescope at the Sun and project the image onto a white card. Never look through the eyepiece.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                    ],
+                    "text": "Sunspots sketched in my logbook."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Sunspot sketches help track solar cycles. Store your telescope and logbook safely.",
+            "options": [{ "type": "finish", "text": "Solar sketch complete." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/basic-telescope"]
+}
