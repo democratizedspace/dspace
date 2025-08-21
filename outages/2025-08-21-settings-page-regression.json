@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-21-settings-page-regression",
+  "date": "2025-08-21",
+  "component": "frontend",
+  "rootCause": "A regression removed the Settings UI, causing /settings to return 404.",
+  "resolution": "Restored the Settings page and added an automated test to ensure it renders.",
+  "references": ["frontend/e2e/settings-page.spec.ts"]
+}

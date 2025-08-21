@@ -1257,6 +1257,20 @@
         }
     },
     {
+        "id": "d6adc5d7-5296-4546-b567-3ce9acdbf887",
+        "name": "zip tie pack",
+        "description": "100-piece pack of 150 mm nylon zip ties for bundling cables and organizing gear.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "3 dUSD",
+        "unit": "pack",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "3455faac-8811-4991-b818-cecb98e8fff7",
         "name": "lab coat",
         "description": "Knee-length cotton lab coat with snap buttons and two pockets; one size fits most.",

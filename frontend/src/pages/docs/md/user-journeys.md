@@ -33,13 +33,14 @@ sorted alphabetically by journey name.
 | Mobile quest form          | No                  | --                                                |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Process creation           | Yes                 | `frontend/e2e/process-creation.spec.ts`           |
+| Profile page loads         | No                  | --                                                |
 | Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |
 | Quest form validation      | No                  | --                                                |
 | Quest list navigation      | Yes                 | `frontend/e2e/quests.spec.ts`                     |
 | Quest PR form              | No                  | --                                                |
 | Quest PR validation        | No                  | --                                                |
 | Quest success message      | No                  | --                                                |
-| Settings page loads        | No                  | --                                                |
+| Settings page loads        | Yes                 | `frontend/e2e/settings-page.spec.ts`              |
 | Shop workflow              | Yes                 | `frontend/e2e/shop-functionality.spec.ts`         |
 | Svelte component hydration | Yes                 | `frontend/e2e/svelte-component-hydration.spec.ts` |
 | Touch item selector        | No                  | --                                                |

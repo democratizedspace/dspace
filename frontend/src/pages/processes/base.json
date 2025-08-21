@@ -3373,5 +3373,17 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "2m"
+    },
+    {
+        "id": "bundle-cable-zip-tie",
+        "title": "Secure a coiled cable with a zip tie",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "d6adc5d7-5296-4546-b567-3ce9acdbf887", "count": 1 },
+            { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 }
+        ],
+        "consumeItems": [{ "id": "d6adc5d7-5296-4546-b567-3ce9acdbf887", "count": 1 }],
+        "createItems": [],
+        "duration": "1m"
     }
 ]

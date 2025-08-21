@@ -34,9 +34,13 @@ describe('repository sanity ‑ no merge-conflict markers', () => {
 
     files.forEach((relativePath) => {
       const fullPath = join(REPO_ROOT, relativePath);
-      const content = readFileSync(fullPath, 'utf8');
-      if (/^<<<<<<< |^>>>>>>> |^======= $/m.test(content)) {
-        offenders.push(relativePath);
+      try {
+        const content = readFileSync(fullPath, 'utf8');
+        if (/^<<<<<<< |^>>>>>>> |^======= $/m.test(content)) {
+          offenders.push(relativePath);
+        }
+      } catch {
+        // ignore files that no longer exist
       }
     });
 

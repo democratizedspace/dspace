@@ -24,7 +24,8 @@ GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-c
 > 3. If a placeholder exists, move it to `frontend/e2e` with `git mv` and
 >    implement the Playwright test; otherwise add a new test file.
 > 4. Update `user-journeys.md` with coverage status, test file path, and any fixes,
->    keeping the table alphabetized.
+>    keeping the table alphabetized. Verify apparent 404s aren't missing routes;
+>    if a page should exist, add a stub instead of asserting a 404.
 > 5. Run `npx playwright install chromium` if browsers are missing.
 > 6. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
 >    `npm run build`, and `npm run test:ci`.
