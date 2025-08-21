@@ -1,8 +1,12 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import {
   approximateIrlPrice,
   approximateIrlTotalPrice,
+  __resetPriceTableCacheForTests,
 } from './approximateIrlPrice';
+import { writeFileSync, mkdtempSync } from 'fs';
+import { join } from 'path';
+import { tmpdir } from 'os';
 
 describe('approximateIrlPrice', () => {
   it('returns price for known item', () => {
@@ -24,6 +28,26 @@ describe('approximateIrlPrice', () => {
   it('returns null for non-string input', () => {
     expect(approximateIrlPrice(null as any)).toBeNull();
     expect(approximateIrlPrice(undefined as any)).toBeNull();
+  });
+
+  describe('custom price table', () => {
+    let tmpFile: string;
+
+    beforeEach(() => {
+      tmpFile = join(mkdtempSync(join(tmpdir(), 'prices-')), 'prices.json');
+      process.env.DSPACE_PRICE_TABLE_FILE = tmpFile;
+      __resetPriceTableCacheForTests();
+    });
+
+    afterEach(() => {
+      delete process.env.DSPACE_PRICE_TABLE_FILE;
+      __resetPriceTableCacheForTests();
+    });
+
+    it('loads prices from a custom file', () => {
+      writeFileSync(tmpFile, JSON.stringify({ custom_item: 42 }));
+      expect(approximateIrlPrice('custom_item')).toBe(42);
+    });
   });
 
   describe('approximateIrlTotalPrice', () => {

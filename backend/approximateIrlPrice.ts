@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs';
+
 const priceTable: Record<string, number> = {
   '3d_printer': 350,
   arduino_nano: 22,
@@ -28,6 +30,43 @@ function normalizeId(id: string): string {
   return id.trim().toLowerCase().replace(NORMALIZE_REGEX, '_');
 }
 
+let customTable: Record<string, number> | null = null;
+let mergedTable: Record<string, number> | null = null;
+
+function loadCustomTable(): Record<string, number> {
+  if (customTable) {
+    return customTable;
+  }
+  customTable = {};
+  const file = process.env.DSPACE_PRICE_TABLE_FILE;
+  if (!file) {
+    return customTable;
+  }
+  try {
+    const data = JSON.parse(readFileSync(file, 'utf8')) as Record<string, unknown>;
+    for (const [key, value] of Object.entries(data)) {
+      if (typeof value === 'number') {
+        customTable[normalizeId(key)] = value;
+      }
+    }
+  } catch {
+    // ignore invalid file
+  }
+  return customTable;
+}
+
+function getPriceTable(): Record<string, number> {
+  if (!mergedTable) {
+    mergedTable = { ...priceTable, ...loadCustomTable() };
+  }
+  return mergedTable;
+}
+
+export function __resetPriceTableCacheForTests(): void {
+  customTable = null;
+  mergedTable = null;
+}
+
 /**
  * Look up a real‑world price for a game item.
  *
@@ -42,7 +81,7 @@ export function approximateIrlPrice(
     return null;
   }
   const normalized = normalizeId(id);
-  return priceTable[normalized] ?? null;
+  return getPriceTable()[normalized] ?? null;
 }
 
 /**
