@@ -1,0 +1,56 @@
+{
+    "id": "firstaid/dispose-bandages",
+    "title": "Bag Used Bandages",
+    "description": "Use a biohazard bag to discard used bandages and wash up.",
+    "image": "/assets/rescue.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Used bandages can spread germs. Let's bag them properly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "bag",
+                    "text": "Show me how."
+                }
+            ]
+        },
+        {
+            "id": "bag",
+            "text": "Place the used bandage and wipes in a biohazard bag, seal it, then wash your hands.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Wash hands",
+                    "goto": "bag"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Supplies bagged",
+                    "requiresItems": [
+                        {
+                            "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. Dispose of the sealed bag with your regular trash.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All clean!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/change-bandage"]
+}
