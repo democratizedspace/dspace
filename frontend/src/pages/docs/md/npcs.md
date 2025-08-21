@@ -38,9 +38,9 @@ Sydney, a tall and commanding woman, exudes an air of no-nonsense professionalis
 
 Nova is the guild's perfectionist rocketeer, tuning craft that slip cleanly through thin air.
 After acing aerospace engineering, she joined the metaguild to push launches with minimal waste.
-Nova guides recruits through quests like
+Nova mentors recruits through the
 [Fuel Mixture Calibration](/quests/rocketry/fuel-mixture) and
-[Preflight Checklist](/quests/rocketry/preflight-check).
+[Preflight Checklist](/quests/rocketry/preflight-check) quests.
 
 ### Sample Dialogue
 
