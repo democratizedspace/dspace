@@ -62,8 +62,12 @@ function getPriceTable(): Record<string, number> {
   return mergedTable;
 }
 
-export function __resetPriceTableCacheForTests(): void {
-  customTable = null;
+export function __resetPriceTableCacheForTests(options?: {
+  keepCustom?: boolean;
+}): void {
+  if (!options?.keepCustom) {
+    customTable = null;
+  }
   mergedTable = null;
 }
 
