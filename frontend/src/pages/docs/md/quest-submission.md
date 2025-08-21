@@ -11,6 +11,8 @@ This guide describes how to submit your custom quests to become part of the offi
 
 -   Familiarity with the [Quest Development Guidelines](/docs/quest-guidelines)
 -   A local copy of this repository with all dependencies installed
+-   Optional: start from the [Quest Template Example](/docs/quest-template) for a minimal JSON
+    structure
 
 ## Steps
 
@@ -44,6 +46,8 @@ Maintainers can review submitted quests at `/quests/review`, approving or reject
 If something goes wrong, the submission form will display an error message so you can adjust and try again.
 
 Once merged, your quest will be included in the next game update!
+
+For the full workflow, see the [Quest Contribution Guidelines](/docs/quest-contribution).
 
 ### GitHub Token Setup
 
