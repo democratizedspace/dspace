@@ -27,16 +27,16 @@ GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-c
 >    keeping the table alphabetized. Verify apparent 404s aren't missing routes;
 >    if a page should exist, add a stub instead of asserting a 404.
 > 5. Run `npx playwright install chromium` if browsers are missing.
-> 6. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
->    `npm run build`, and `npm run test:ci`.
+> 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+>    `npm run test:ci`.
 > 7. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
 >    and commit with an emoji.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
-`npm run build`, and `npm run test:ci` pass before committing.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`, and
+`npm run test:ci` pass before committing.
 
 USER:
 1. Audit `frontend/src/pages/docs/md/user-journeys.md` for mistakes and

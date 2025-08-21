@@ -23,8 +23,8 @@ which covers quests, items and processes in detail.
 > 2. Say exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
-> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
->    `npm run build`, and `npm run test:ci`; scan staged changes with
+> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+>    `npm run test:ci`; scan staged changes with
 >    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
 
 ---
@@ -42,7 +42,7 @@ which covers quests, items and processes in detail.
     -   CLI:
         ```bash
         codex exec "npm run lint && npm run type-check && npm run build && \
-        npm run audit:ci && npm run test:ci -- questCanonical questQuality"
+        npm run test:ci -- questCanonical questQuality"
         ```
 
 See the [OpenAI CLI repository][openai-cli] for more flags.
@@ -80,8 +80,7 @@ REQUIREMENTS
 3. Find the most natural predecessor quest and update the `requiresQuests`
    chain so progression flows logically.
 4. Use only existing image assets; do not add new image files.
-5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check` and
-   `npm run build`.
+5. Run `npm run lint`, `npm run type-check` and `npm run build`.
 6. Run `npm run test:ci -- questCanonical questQuality` and fix any failures.
 7. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
 8. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
@@ -100,7 +99,7 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
 quests under `frontend/src/pages/quests/json`. Ensure start, middle and
 completion nodes, at least one item or process reference, and passing checks
-(`npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
+(`npm run lint`, `npm run type-check`, `npm run build`, and
 `npm run test:ci -- questCanonical questQuality`). Survey existing quests to
 pick a natural predecessor and update `requiresQuests` accordingly. Add missing
 items or processes to their registries, reuse existing image assets, and scan
@@ -132,9 +131,8 @@ existing quests in that tree as examples for tone and structure.
 USER:
 1. Create a new quest JSON in the chosen tree following the quest schema.
 2. Reference at least one inventory item or process.
-3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
-   `npm run build`, and `npm run test:ci -- questCanonical questQuality`.
-   Fix any failures.
+3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+   `npm run test:ci -- questCanonical questQuality`. Fix any failures.
 4. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
 5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
 6. Use an emoji-prefixed commit message.
@@ -182,7 +180,7 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-    6. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
+    6. Run `npm run lint`, `npm run type-check`, `npm run build`, and
     `npm run test:ci -- questCanonical questQuality`. Update docs if needed.
    7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
    8. Use an emoji-prefixed commit message.
