@@ -12,6 +12,20 @@ The production instance is now self-hosted; see
 
 Check out the [docs](https://democratized.space/docs)!
 
+## Table of Contents
+
+- [Local Development](#local-development)
+- [Testing](#testing)
+- [Built-in Items](#built-in-items)
+- [Built-in Processes](#built-in-processes)
+- [Authentication](#authentication)
+- [Staying Updated](#staying-updated)
+- [Want to contribute?](#want-to-contribute)
+- [Asset Guidelines](#asset-guidelines)
+- [Archiving Built-in Content](#archiving-built-in-content)
+- [FAQ](#faq)
+- [License](#license)
+
 ## Local Development
 
 Clone and set up the project:
@@ -319,6 +333,21 @@ If a quest, item, or process needs to be retired, move its JSON file to the
 `frontend/src/pages/quests/archive` directory instead of deleting it. The
 `contentIntegrity` test tracks the total count of built-in assets, so archived
 files help prevent accidental removals.
+
+## FAQ
+
+### Which Node.js versions are supported?
+We test against active Node.js LTS releases (currently 18 and 20). Run
+`node --version` to confirm your environment, and let us know if newer LTS
+versions behave unexpectedly.
+
+### Do I need to use pnpm to install dependencies?
+Yes. Run `pnpm install` in the repository root. The `pnpmfile.cjs` pre-approves
+native builds so no interactive prompts appear.
+
+### How do I install Playwright browsers for end-to-end tests?
+Use `npx playwright install chromium` to download the required browser before
+running `npm test`.
 
 ## License
 
