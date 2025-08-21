@@ -5,7 +5,10 @@ slug: 'quest-schema'
 
 # Quest Schema Requirements
 
-Every quest JSON file must conform to the [quest schema](../quests/jsonSchemas/quest.json) to be loaded by DSPACE. This page summarizes the required structure.
+Every quest JSON file must conform to the [quest schema](../quests/jsonSchemas/quest.json) to be
+loaded by DSPACE. Review the [Quest Development Guidelines](/docs/quest-guidelines) for design tips
+and the [Quest Submission Guide](/docs/quest-submission) when you're ready to publish. This page
+summarizes the required structure.
 
 ## Top-level properties
 

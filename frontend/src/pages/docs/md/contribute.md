@@ -21,7 +21,8 @@ DSPACE is designed as an extensible platform where community members can create 
 
 -   **[Create Custom Quests](/docs/quest-guidelines)** - Design educational missions that teach
     space-related skills. When you're ready to share your work, follow the
-    [Quest Contribution Guidelines](/docs/quest-contribution) to submit it for review.
+    [Quest Contribution Guidelines](/docs/quest-contribution) and the
+    [Quest Submission Guide](/docs/quest-submission) to submit it for review.
 -   **[Develop Custom Items](/docs/item-guidelines)** - Create virtual resources, tools, and components
 -   **[Design Custom Processes](/docs/process-guidelines)** - Build activities that transform or utilize items
 

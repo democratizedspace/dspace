@@ -11,6 +11,7 @@ These guidelines outline the process for contributing your custom quests to the 
 
 -   [Quest Development Guidelines](/docs/quest-guidelines)
 -   Node.js environment with this repository cloned
+-   Review the [Quest Template Example](/docs/quest-template)
 
 ## Workflow
 
@@ -31,7 +32,8 @@ These guidelines outline the process for contributing your custom quests to the 
     node scripts/create-content-bundle.js
     ```
     This creates a JSON bundle in `submissions/bundles`.
-5. **Submit via the in-game form** at `/quests/submit`.
+5. **Submit via the in-game form** at `/quests/submit` (see the
+   [Quest Submission Guide](/docs/quest-submission)).
 6. **Authorize GitHub** with a personal access token and create a pull request.
 7. **Respond to feedback** until the quest meets project standards.
 

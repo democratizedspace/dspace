@@ -5,7 +5,13 @@ slug: 'quest-guidelines'
 
 # Quest Development Guidelines
 
-This guide provides structured instructions for creating engaging, educational quests that align with DSPACE's mission to democratize space exploration through practical, hands-on learning experiences.
+This guide provides structured instructions for creating engaging, educational quests that align
+with DSPACE's mission to democratize space exploration through practical, hands-on learning
+experiences. Start with the
+[Quest Template Example](/docs/quest-template) and consult the
+[Quest Schema Requirements](/docs/quest-schema) for field definitions. When your quest is ready,
+follow the [Quest Contribution Guidelines](/docs/quest-contribution) and the
+[Quest Submission Guide](/docs/quest-submission) to share it with the community.
 
 ## Quest Philosophy
 

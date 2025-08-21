@@ -96,7 +96,7 @@
             {#if sellChipActive && taxAmount > 0}
                 <p class="tax-notice">
                     Note: There's a {taxAmount}% tax applied. Reduce the amount of
-                    <a href="/docs/dCarbon">dCarbon</a> in your inventory:
+                    <a href="/docs/dcarbon">dCarbon</a> in your inventory:
                 </p>
 
                 <CompactItemList itemList={[{ id: dCarbonId }]} inverted={true} />
