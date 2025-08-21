@@ -40,6 +40,10 @@ Comprehensive instructions for creating engaging, educational quests that guide 
 -   Dialogue structure and NPC interactions
 -   Technical requirements and JSON structure
 -   Submission and review process
+-   Example JSON in the [Quest Template](/docs/quest-template)
+-   Field definitions in the [Quest Schema Requirements](/docs/quest-schema)
+-   Step-by-step [Quest Submission Guide](/docs/quest-submission)
+-   Full workflow in the [Quest Contribution Guidelines](/docs/quest-contribution)
 
 ### [Item Development Guidelines](/docs/item-guidelines)
 
