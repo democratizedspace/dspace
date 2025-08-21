@@ -108,15 +108,15 @@ Phoenix is a chemist focused on sustainable rocket fuel.
 They blend chemistry with conservation to push craft without scarring the planet.
 They guide recruits through quests such as
 [Demonstrate a Safe Chemical Reaction](/quests/chemistry/safe-reaction) and
-[Extract Stevia Sweetener](/quests/chemistry/stevia-extraction)
+[Mix an Efficient Rocket Fuel](/quests/rocketry/fuel-mixture)
 to show how green chemistry powers missions.
 
 ### Sample Dialogue
 
 -   "Hey, I'm Phoenix—chemistry without pollution is my specialty."
--   "Mix vinegar with baking soda; the fizz is safe yet shows energy you can harness."
--   "Dry those stevia leaves and rinse them with ethanol to pull out the sweetness."
--   "That extract will sweeten rations without a sugar crash."
+-   "Safety goggles on; propellant fumes bite harder than dragons."
+-   "We test in micro batches so a bad mix only scorches a spoon."
+-   "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
 -   "Next up, we'll brew propellant that pushes rockets without scorching the skies."
 
 ## Atlas
@@ -153,6 +153,7 @@ second nature.
 -   "Sand that birdhouse so the wrens leave with all their feathers."
 -   "Step stool's next; every rung teaches balance and patience."
 -   "A wipe of oil and the grain tells its story."
+-   "Clamp the board; wandering wood wrecks cuts."
 
 ## Lyra
 
@@ -251,6 +252,23 @@ parts, Patch keeps machinery humming and loves swapping stories about improvised
 -   "Hold still; this micro-welder won't sting."
 -   "I scavenged this gasket from an airlock door; works like new."
 -   "Call me when the gears start grinding; tinkering's my idea of fun."
+
+-   "Got a stripped screw? I'll machine a new head on the fly."
+
+## Byte
+
+<img src="/assets/npc/orion.jpg" />
+
+Byte monitors the guild's networks, hunting bugs and patching holes before enemies find them.
+Raised on open-source firmware, they safeguard mission data and teach recruits secure coding.
+
+### Sample Dialogue
+
+-   "Call me Byte—if it's on the network, I can trace it."
+-   "Run linters before you push; sloppy code invites gremlins."
+-   "Encrypted channels only; plain text is for pirates."
+-   "Found a breach? Pull the plug and I'll seal the hole."
+-   "Logs tell the story; let's read them before the attackers do."
 
 <style>
     img {
