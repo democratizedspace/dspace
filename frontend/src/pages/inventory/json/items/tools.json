@@ -587,5 +587,19 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "f4959aa4-60d0-4240-ad7b-10058665ac89",
+        "name": "fume extractor",
+        "description": "Bench-top fan with activated-carbon filter to pull solder smoke away from work.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "40 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
