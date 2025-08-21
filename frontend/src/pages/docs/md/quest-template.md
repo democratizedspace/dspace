@@ -5,7 +5,12 @@ slug: 'quest-template'
 
 # Quest Template Example
 
-This page provides a minimal quest JSON structure that you can use as a starting point for your own quests. Quests created with this format are compatible with the [token.place](https://token.place) project and can be shared across repos. Feel free to copy this snippet into your editor to speed up the process.
+This page provides a minimal quest JSON structure that you can use as a starting point for your
+own quests. Quests created with this format are compatible with the
+[token.place](https://token.place) project and can be shared across repos. For field details see
+the [Quest Schema Requirements](/docs/quest-schema), and when you're ready to publish, follow the
+[Quest Submission Guide](/docs/quest-submission). Feel free to copy this snippet into your editor
+to speed up the process.
 
 Ready-to-use JSON templates live in `frontend/src/pages/quests/templates`. Copy `basic.json` for a linear quest or `branching.json` to experiment with multiple paths. You can also run `npm run generate-quest --template basic` (or `branching`) to copy one automatically.
 

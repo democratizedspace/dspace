@@ -1,6 +1,6 @@
 ---
 title: 'dCarbon'
-slug: 'dcarbon'
+slug: 'dCarbon'
 ---
 
 dCarbon represents the amount of carbon dioxide produced by a player in the game. 1 dCarbon = 1 kg of carbon dioxide. This virtual measurement helps track environmental impact and encourages players to seek cleaner energy solutions.

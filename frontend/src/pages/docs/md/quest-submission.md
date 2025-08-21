@@ -11,6 +11,8 @@ This guide describes how to submit your custom quests to become part of the offi
 
 -   Familiarity with the [Quest Development Guidelines](/docs/quest-guidelines)
 -   A local copy of this repository with all dependencies installed
+-   Optional: start from the [Quest Template Example](/docs/quest-template) for a minimal JSON
+    structure
 
 ## Steps
 
@@ -36,12 +38,16 @@ This guide describes how to submit your custom quests to become part of the offi
 7. **Authorize GitHub** by entering a personal access token with `repo` scope. The token is only used client-side to push your quest and is stored locally so you won't need to re-enter it (see [Authentication Flow](/docs/authentication)).
 8. **Create the pull request** directly from the form. This uploads your quest to a new branch and opens a draft PR.
 9. **Respond to feedback** from reviewers until your quest meets project standards.
+10. **Regenerate the new quests list** by running `npm run new-quests:update` and
+    committing the updated `/docs/new-quests.md` to keep quest counts accurate.
 
 Maintainers can review submitted quests at `/quests/review`, approving or rejecting them before merge.
 
 If something goes wrong, the submission form will display an error message so you can adjust and try again.
 
 Once merged, your quest will be included in the next game update!
+
+For the full workflow, see the [Quest Contribution Guidelines](/docs/quest-contribution).
 
 ### GitHub Token Setup
 
