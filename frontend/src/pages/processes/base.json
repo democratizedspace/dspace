@@ -3331,8 +3331,8 @@
     },
     {
         "id": "generate-ssh-key",
-        "title": "Generate an SSH key pair and copy it to a node",
-        "image": "/assets/quests/basic_circuit.svg",
+        "title": "Generate an RSA SSH key on a laptop and copy the public key to a Pi node",
+        "image": "/assets/settings.jpg",
         "requireItems": [
             { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 },
             { "id": "df7e94e2-76b9-4865-b843-2ec21feb258e", "count": 1 }
@@ -3341,10 +3341,16 @@
         "createItems": [],
         "duration": "5m",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-generate-ssh-key-2025-08-20",
+                    "date": "2025-08-20",
+                    "score": 60
+                }
+            ]
         }
     },
     {
