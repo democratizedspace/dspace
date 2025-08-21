@@ -299,14 +299,20 @@
     {
         "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
         "name": "aquarium air pump",
-        "description": "5 W diaphragm air pump moves 3 L/min for tanks up to 40 L; includes 1 m power cord.",
+        "description": "5 W diaphragm pump delivers 3 L/min of air for tanks up to 40 L; 120 V AC with 1 m cord; use with 4 mm tubing.",
         "image": "/assets/aquarium_filter.jpg",
         "price": "15 dUSD",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-20",
+                    "date": "2025-08-20",
+                    "score": 65
+                }
+            ]
         }
     },
     {
