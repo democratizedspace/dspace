@@ -1,0 +1,50 @@
+{
+    "id": "programming/moving-avg-temp",
+    "title": "Compute Moving Average Temperature",
+    "description": "Add a moving average to your temperature analysis script.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your average gives a big picture. Let's watch trends with a moving window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Let's smooth it out."
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Calculate a moving average over the last N readings in your log.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Moving average computed!",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! The moving average reveals trends in real time.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Data looks smoother."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/avg-temp"]
+}
