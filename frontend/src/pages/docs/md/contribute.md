@@ -17,13 +17,16 @@ There are several ways to contribute to the DSPACE project:
 
 ## Content Creation
 
-DSPACE is designed as an extensible platform where community members can create and contribute various types of content:
+DSPACE is designed as an extensible platform where community members can create and
+contribute various types of content:
 
 -   **[Create Custom Quests](/docs/quest-guidelines)** - Design educational missions that teach
     space-related skills. When you're ready to share your work, follow the
     [Quest Contribution Guidelines](/docs/quest-contribution) to submit it for review.
--   **[Develop Custom Items](/docs/item-guidelines)** - Create virtual resources, tools, and components
--   **[Design Custom Processes](/docs/process-guidelines)** - Build activities that transform or utilize items
+-   **[Develop Custom Items](/docs/item-guidelines)** - Create virtual resources, tools,
+    and components
+-   **[Design Custom Processes](/docs/process-guidelines)** - Build activities that
+    transform or utilize items
 
 Our [Content Development Guide](/docs/content-development) provides a comprehensive overview of
 all content creation options, workflows, and best practices. We also offer
@@ -37,9 +40,12 @@ creation process.
 -   Fix bugs or implement new features
 -   Improve documentation
 -   Enhance the user interface
-    Install dependencies with `pnpm install` and use Node.js 20 LTS (`.nvmrc`) before running tests.
-    For technical contributions, please review our
-    [Developer Guide](https://github.com/democratizedspace/dspace/blob/main/DEVELOPER_GUIDE.md) first.
+-   Install dependencies with `pnpm install` and use Node.js 20 LTS (`.nvmrc`) before running tests
+-   Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+    `npm run build`, and `npm run test:ci`
+-   Review our
+    [Developer Guide](https://github.com/democratizedspace/dspace/blob/main/DEVELOPER_GUIDE.md)
+    before contributing
 
 ## Testing and Feedback
 
