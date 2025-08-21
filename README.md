@@ -69,6 +69,10 @@ console.log(approximateIrlPrice("3D-Printer")); // 350
 console.log(approximateIrlPrice("unknown")); // null
 console.log(approximateIrlPrice(undefined as any)); // null
 ```
+
+To override default prices, set `DSPACE_PRICE_TABLE_FILE` to a JSON file mapping
+item identifiers to numbers. Tests can reset cached tables with
+`__resetPriceTableCacheForTests({ keepCustom: true })` to preserve custom entries.
 ## Testing
 
 DSPACE uses a comprehensive testing suite to ensure code quality and prevent regressions.

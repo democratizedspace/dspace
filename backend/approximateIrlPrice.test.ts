@@ -48,6 +48,19 @@ describe('approximateIrlPrice', () => {
       writeFileSync(tmpFile, JSON.stringify({ custom_item: 42 }));
       expect(approximateIrlPrice('custom_item')).toBe(42);
     });
+
+    it('ignores invalid JSON files', () => {
+      writeFileSync(tmpFile, '{');
+      expect(approximateIrlPrice('custom_item')).toBeNull();
+    });
+
+    it('caches prices without rereading file', () => {
+      writeFileSync(tmpFile, JSON.stringify({ custom_item: 42 }));
+      expect(approximateIrlPrice('custom_item')).toBe(42);
+      writeFileSync(tmpFile, JSON.stringify({ custom_item: 99 }));
+      __resetPriceTableCacheForTests({ keepCustom: true });
+      expect(approximateIrlPrice('custom_item')).toBe(42);
+    });
   });
 
   describe('approximateIrlTotalPrice', () => {
