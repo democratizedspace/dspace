@@ -14,7 +14,8 @@ For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
 [NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
 [Docs prompts](/docs/prompts-docs), [Playwright test prompts](/docs/prompts-playwright-tests),
-[Backend prompts](/docs/prompts-backend), and [Refactor prompts](/docs/prompts-refactors).
+[Accessibility prompts](/docs/prompts-accessibility), [Backend prompts](/docs/prompts-backend),
+and [Refactor prompts](/docs/prompts-refactors).
 For specialized workflows use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix),
 the [Codex meta prompt](/docs/prompts-codex-meta), and the
 [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
@@ -45,6 +46,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [Docs cross-link prompt](/docs/prompts-docs#cross-link-check-prompt)
 -   [Backend Prompts](/docs/prompts-backend)
 -   [Frontend Prompts](/docs/prompts-frontend)
+-   [Accessibility Prompts](/docs/prompts-accessibility)
 -   [Playwright Test Prompts](/docs/prompts-playwright-tests)
 -   [Refactor Prompts](/docs/prompts-refactors)
 -   [Codex CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)

@@ -7,7 +7,8 @@ slug: 'prompts-frontend'
 
 DSPACE's UI is built with Svelte and Astro. Use this guide when working on files inside
 `frontend/`, including Svelte components, pages, and styles. Changes should improve clarity,
-accessibility, or performance while keeping tests green.
+accessibility, or performance while keeping tests green. For deeper a11y guidance see
+[Accessibility prompts](/docs/prompts-accessibility).
 
 > **TL;DR**
 >
