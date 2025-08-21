@@ -67,6 +67,7 @@ New quests in this release: 214
 -   astronomy/satellite-pass
 -   astronomy/saturn-rings
 -   astronomy/star-trails
+-   astronomy/sunspot-sketch
 -   astronomy/venus-phases
 
 ### chemistry
@@ -133,6 +134,7 @@ New quests in this release: 214
 -   electronics/solder-wire
 -   electronics/soldering-intro
 -   electronics/temperature-plot
+-   electronics/test-gfci-outlet
 -   electronics/thermistor-reading
 -   electronics/thermometer-calibration
 -   electronics/voltage-divider
@@ -155,6 +157,7 @@ New quests in this release: 214
 
 -   firstaid/assemble-kit
 -   firstaid/change-bandage
+-   firstaid/dispose-bandages
 -   firstaid/dispose-expired
 -   firstaid/learn-cpr
 -   firstaid/remove-splinter
@@ -215,6 +218,7 @@ New quests in this release: 214
 -   programming/json-api
 -   programming/json-endpoint
 -   programming/median-temp
+-   programming/moving-avg-temp
 -   programming/plot-temp-cli
 -   programming/stddev-temp
 -   programming/temp-alert
