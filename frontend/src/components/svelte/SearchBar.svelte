@@ -43,6 +43,7 @@
             type="text"
             bind:value={searchQuery}
             placeholder="Search..."
+            aria-label="Search items"
             on:input={handleInput}
         />
     {:else}
@@ -52,24 +53,22 @@
 
 <style>
     input {
-        width: 80%;
+        width: 100%;
+        max-width: 400px;
         padding: 10px;
         font-size: 16px;
         border: 1px solid #ccc;
-        margin-bottom: 10px;
+        margin: 0 auto 10px;
         display: block;
-        margin-left: auto;
-        margin-right: auto;
         border-radius: 20px;
     }
 
     .search-placeholder {
-        width: 80%;
+        width: 100%;
+        max-width: 400px;
         padding: 10px;
-        margin-bottom: 10px;
+        margin: 0 auto 10px;
         display: block;
-        margin-left: auto;
-        margin-right: auto;
         text-align: center;
         font-style: italic;
         color: #d0ffd0;
