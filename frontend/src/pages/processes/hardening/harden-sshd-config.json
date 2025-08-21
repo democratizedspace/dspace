@@ -1,6 +1,12 @@
 {
-    "passes": 0,
-    "score": 0,
-    "emoji": "🛠️",
-    "history": []
+    "passes": 1,
+    "score": 60,
+    "emoji": "🌀",
+    "history": [
+        {
+            "task": "codex-harden-sshd-config-2025-08-20",
+            "date": "2025-08-20",
+            "score": 60
+        }
+    ]
 }
