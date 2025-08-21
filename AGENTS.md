@@ -47,6 +47,8 @@ SKIP_E2E=1 npm test
 - Consult `frontend/src/pages/docs/md/npcs.md` for character voice and keep it updated.
 - Use `npm run generate-quest [--template <name>]` to scaffold dialogue quickly; templates live in `frontend/src/pages/quests/templates`.
 - Archive deprecated quests under `frontend/src/pages/quests/archive`.
+- After adding or removing quests, run `npm run new-quests:update` and commit the
+  generated `docs/new-quests.md` and its frontend copy to keep quest counts in sync.
 
 ## UI Guidelines
 
