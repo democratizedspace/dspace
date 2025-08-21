@@ -14,9 +14,10 @@ type Section = {
   newCount: number;
 };
 
-const { getReleaseSections, generateMarkdown } = update as {
+const { getReleaseSections, generateMarkdown, listQuestFiles } = update as {
   getReleaseSections: () => Section[];
   generateMarkdown: (sections: Section[]) => string;
+  listQuestFiles: (ref?: string) => string[];
 };
 
 const listPath = path.join(
@@ -60,16 +61,17 @@ describe('new quests list', () => {
   });
 
   it('lists total quest count accurately', () => {
-    const questDir = path.join(
-      __dirname,
-      '../frontend/src/pages/quests/json'
-    );
-    const questFiles = globSync('**/*.json', { cwd: questDir });
+    let quests: string[];
+    try {
+      quests = listQuestFiles('origin/v3');
+    } catch {
+      quests = listQuestFiles();
+    }
     const doc = fs.readFileSync(listPath, 'utf8');
     const match = doc.match(/Current quest count: (\d+)/);
     expect(match).not.toBeNull();
-    const docCount = Number(match[1]);
-    expect(docCount).toBe(questFiles.length);
+    const docCount = Number(match![1]);
+    expect(docCount).toBe(quests.length);
   });
 
   it('syncs root docs copy', () => {
