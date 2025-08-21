@@ -146,5 +146,18 @@
                 }
             ]
         }
+    },
+    {
+        "id": "545b4692-a306-4e84-bc09-f40a30d295c1",
+        "name": "Charging Champ Award",
+        "description": "Enameled badge depicting a lightning bolt, given for powering a phone off-grid.",
+        "image": "/assets/ev_charger.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

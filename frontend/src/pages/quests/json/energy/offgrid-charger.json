@@ -59,7 +59,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Disconnect in reverse order, coil the USB cable, and store the panel and battery out of direct sun.",
+            "text": "Nice work! Disconnect in reverse order, coil the USB cable, and store the panel and battery out of direct sun. You earn the Charging Champ Award.",
             "options": [
                 {
                     "type": "finish",
@@ -68,16 +68,12 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [{ "id": "545b4692-a306-4e84-bc09-f40a30d295c1", "count": 1 }],
     "requiresQuests": ["energy/solar"],
     "hardening": {
-        "passes": 3,
-        "score": 90,
-        "emoji": "💯",
-        "history": [
-            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 78 },
-            { "task": "codex-offgrid-charger-2025-08-06", "date": "2025-08-06", "score": 90 }
-        ]
+        "passes": 0,
+        "score": 0,
+        "emoji": "🛠️",
+        "history": []
     }
 }
