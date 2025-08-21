@@ -27,9 +27,10 @@
     {
         "id": "7892ffc6-c651-445f-946b-7edc998cf389",
         "name": "Benchy",
-        "description": "60 mm-long calibration tugboat 3D-printed in PLA, weighs ~15 g and uses ~5 m of filament.",
+        "description": "60 mm long calibration tugboat 3D printed in PLA; weighs about 15 g and uses about 5 m of filament.",
         "image": "/assets/benchy.jpg",
-        "price": "0.40 dUSD",
+        "price": "0.30 dUSD",
+        "type": "tool",
         "hardening": {
             "passes": 2,
             "score": 80,
@@ -41,8 +42,8 @@
                     "score": 65
                 },
                 {
-                    "task": "codex-item-hardening-2025-08-20",
-                    "date": "2025-08-20",
+                    "task": "codex-item-hardening-2025-08-21",
+                    "date": "2025-08-21",
                     "score": 80
                 }
             ]
