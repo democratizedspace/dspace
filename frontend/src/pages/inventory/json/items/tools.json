@@ -587,5 +587,20 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "dafe85a7-11c0-4dc6-99e5-cc991fa96310",
+        "name": "soldering sponge",
+        "description": "40 × 40 × 5 mm cellulose sponge for cleaning hot soldering tips; soak before use.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "1 dUSD",
+        "type": "tool",
+        "unit": "sponge",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
