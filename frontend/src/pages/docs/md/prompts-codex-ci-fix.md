@@ -36,8 +36,8 @@ CONTEXT:
   error.
 - If no URL is given, inspect the codebase to reproduce the failure:
   * Examine `.github/workflows/` to learn which checks run in CI.
-  * Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
-    `npm run build`, and `npm run test:ci` locally.
+  * Run `npm run lint`, `npm run type-check`, `npm run build`, and
+    `npm run test:ci` locally.
   * Study project docs to understand how to run the test suite and emulate the
     GitHub Actions environment.
 - Consult existing outage entries in `/outages` for similar symptoms.
@@ -98,8 +98,8 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     query and hash parts before checking so coverage tests don't flag valid assets.
 -   2025-08-10 – `checkPatchCoverage.cjs` assumed `origin/main`; detect the origin's HEAD branch
     so patch coverage checks work on repositories where the default branch is `v3`.
--   2025-08-11 – `openai` v3 pulled a vulnerable `axios`; upgrade to v5 to satisfy
-    `npm run audit:ci`.
+-   2025-08-11 – `openai` v3 pulled a vulnerable `axios`; upgrade to v5 to fix the
+    dependency audit.
 -   2025-08-11 – Introduced a structured outage catalog under `/outages` so agents
     can recall past incidents.
 -   2025-08-12 – `listMissingImages` flagged remote URLs as missing assets; skip `http` and
