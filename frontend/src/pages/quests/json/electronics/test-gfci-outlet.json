@@ -1,0 +1,45 @@
+{
+    "id": "electronics/test-gfci-outlet",
+    "title": "Test a GFCI Outlet",
+    "description": "Verify a ground-fault circuit interrupter outlet with a plug-in tester.",
+    "image": "/assets/outlet.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "GFCI outlets guard against shocks. Make sure your hands are dry and the wall plate is intact before we start.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plug",
+                    "text": "Tester ready."
+                }
+            ]
+        },
+        {
+            "id": "plug",
+            "text": "Insert the GFCI tester fully into the outlet. Check the light pattern against the chart. Press the test button; the outlet should trip. Use the reset button to restore power and confirm the lights return to normal.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "test-gfci-outlet",
+                    "text": "Run the GFCI test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Outlet passed.",
+                    "requiresItems": [{ "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! The GFCI is wired correctly and trips as expected. Test it monthly and replace damaged outlets.",
+            "options": [{ "type": "finish", "text": "Safety confirmed." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/continuity-test"]
+}
