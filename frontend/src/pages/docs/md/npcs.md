@@ -54,6 +54,7 @@ Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs an
 Hydro keeps the guild's hydroponic bays stocked with fresh greens.
 Raised on an Earth farm, they traded soil for nutrient baths after studying biology.
 Their easygoing chatter about PPM and pH turns lab science into shipboard routine.
+They can diagnose nutrient deficits by leaf color alone.
 Hydro guides recruits through quests like [Check Solution pH](/quests/hydroponics/ph-check) and
 [Grow Stevia Hydroponically](/quests/hydroponics/stevia).
 
@@ -118,6 +119,7 @@ to show how green chemistry powers missions.
 -   "We test in micro batches so a bad mix only scorches a spoon."
 -   "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
 -   "Next up, we'll brew propellant that pushes rockets without scorching the skies."
+-   "Spent fuel? We'll distill what's usable and neutralize the rest."
 
 ## Atlas
 
@@ -134,6 +136,7 @@ crates and steady delicate assemblies. They often help with aquarium setups like
 -   "Lift on my count: one, two, three."
 -   "Set it down gently; glass likes patience."
 -   "Call anytime you need more torque."
+-   "Need leverage? I always carry an extra fulcrum."
 
 ## Cedar
 
@@ -269,6 +272,7 @@ Raised on open-source firmware, they safeguard mission data and teach recruits s
 -   "Encrypted channels only; plain text is for pirates."
 -   "Found a breach? Pull the plug and I'll seal the hole."
 -   "Logs tell the story; let's read them before the attackers do."
+-   "Zero-trust isn't hype—it's how we sleep at night."
 
 <style>
     img {
