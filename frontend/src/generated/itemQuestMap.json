@@ -1050,6 +1050,7 @@
   },
   "ce92a1a9-c817-40f0-92b1-24aff053903d": {
     "requires": [
+      "3dprinting/filament-change",
       "electronics/continuity-test"
     ],
     "rewards": []
