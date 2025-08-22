@@ -1,0 +1,39 @@
+{
+    "id": "composting/check-moisture",
+    "title": "Check Compost Moisture",
+    "description": "Use a moisture meter to ensure your compost stays damp but not soggy.",
+    "image": "/assets/bucket.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Moisture fuels microbes. Let's see if your compost needs water.",
+            "options": [{ "type": "goto", "goto": "probe", "text": "Insert the moisture meter." }]
+        },
+        {
+            "id": "probe",
+            "text": "Push the probe into the center of the bucket and wait for a steady reading.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-compost-moisture",
+                    "text": "Reading the gauge."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [{ "id": "2b57a38d-0486-40e8-a50d-d893541b50e9", "count": 1 }],
+                    "text": "Moisture reads between 50-60%."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Keep the pile as damp as a wrung-out sponge and rinse the probe after use.",
+            "options": [{ "type": "finish", "text": "I'll monitor weekly." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["composting/turn-pile"]
+}
