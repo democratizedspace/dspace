@@ -14,8 +14,8 @@ For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
 [NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
 [Docs prompts](/docs/prompts-docs), [Playwright test prompts](/docs/prompts-playwright-tests),
-[Frontend prompts](/docs/prompts-frontend), [Backend prompts](/docs/prompts-backend), and
-[Refactor prompts](/docs/prompts-refactors), and [Accessibility prompts](/docs/prompts-accessibility)
+[Frontend prompts](/docs/prompts-frontend), [Backend prompts](/docs/prompts-backend),
+[Refactor prompts](/docs/prompts-refactors), and [Accessibility prompts](/docs/prompts-accessibility).
 For specialized workflows use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix),
 the [Codex meta prompt](/docs/prompts-codex-meta), and the
 [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
