@@ -1,0 +1,43 @@
+{
+    "id": "3dprinting/measure-filament-diameter",
+    "title": "Measure Filament Diameter",
+    "description": "Check your white PLA's diameter with digital calipers for accurate extrusion.",
+    "image": "/assets/pla_white.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've loaded a new spool. Let's verify its filament thickness before printing.",
+            "options": [{ "type": "goto", "goto": "measure", "text": "Grab the calipers." }]
+        },
+        {
+            "id": "measure",
+            "text": "Measure the white PLA at three points and average the readings to get the diameter.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-filament-diameter",
+                    "text": "Need measuring steps?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Diameter recorded.",
+                    "requiresItems": [
+                        { "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 },
+                        { "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Use that average to calibrate your slicer for consistent extrusion.",
+            "options": [{ "type": "finish", "text": "All set." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinting/filament-change"],
+    "hardening": { "passes": 0, "score": 0, "emoji": "🛠️", "history": [] }
+}
