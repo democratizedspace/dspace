@@ -26,6 +26,10 @@
                     "goto": "finish",
                     "requiresItems": [
                         {
+                            "id": "9f91173d-2609-4127-896d-7578078135db",
+                            "count": 1
+                        },
+                        {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                             "count": 1
                         }

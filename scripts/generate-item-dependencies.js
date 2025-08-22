@@ -23,9 +23,8 @@ const outFile = path.join(
 );
 
 function addDeps(items, questId, map, key) {
-  for (const item of items) {
-    const entry = map[item.id] || (map[item.id] = { requires: [], rewards: [] });
-    const list = entry[key];
+  for (const { id } of items) {
+    const list = (map[id] ??= { requires: [], rewards: [] })[key];
     if (!list.includes(questId)) list.push(questId);
   }
 }
@@ -35,21 +34,19 @@ function collectItemDeps(obj, questId, map) {
     for (const v of obj) collectItemDeps(v, questId, map);
     return;
   }
-  if (obj && typeof obj === 'object') {
-    if (obj.requiresItems) addDeps(obj.requiresItems, questId, map, 'requires');
-    if (obj.rewards) addDeps(obj.rewards, questId, map, 'rewards');
-    for (const v of Object.values(obj)) collectItemDeps(v, questId, map);
-  }
+  if (!obj || typeof obj !== 'object') return;
+
+  if (obj.requiresItems) addDeps(obj.requiresItems, questId, map, 'requires');
+  if (obj.rewards) addDeps(obj.rewards, questId, map, 'rewards');
+  for (const v of Object.values(obj)) collectItemDeps(v, questId, map);
 }
 
 function buildMap() {
-  const files = globSync(questsPattern);
   const map = {};
-  files.forEach((file) => {
+  for (const file of globSync(questsPattern)) {
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));
-    const questId = data.id;
-    collectItemDeps(data, questId, map);
-  });
+    collectItemDeps(data, data.id, map);
+  }
   return map;
 }
 

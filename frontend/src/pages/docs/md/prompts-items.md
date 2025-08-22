@@ -5,13 +5,13 @@ slug: 'prompts-items'
 
 # Writing great item prompts for the DSPACE repository
 
-Codex is a sandboxed engineering agent that can open this repository,
-run its own tests, and send you a ready-made PR—but only if you give it a
-clear, file-scoped prompt. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when working on items. To keep the prompt
-docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). If these
-templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
-For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+Codex is a sandboxed engineering agent that can open this repository, run its own
+tests, and send you a ready-made PR—but only if you give it a clear, file-scoped
+prompt. Use this guide alongside [Codex Prompts](/docs/prompts-codex) when
+working on items. To keep the prompt docs evolving, see the
+[Codex meta prompt](/docs/prompts-codex-meta). If these templates drift, refresh
+them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing
+GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 For general content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 > **TL;DR**
@@ -22,18 +22,19 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
 >    mandatory instructions.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`,
 >    `npm run itemValidation`, `npm run test:ci`, and
->    `npm run test:ci -- itemQuality`; scan staged changes with
->    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
+>    `npm run test:ci -- itemQuality`.
+> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
+>    commit with an emoji prefix.
 
 ---
 
 ## 1. Quick start (Web vs CLI)
 
 -   **Add or update an item**
-    -   Web: use the “Code” button and attach the repo.
+    -   Web: use the "Code" button and attach the repo.
     -   CLI: `codex "add item solar-cell-junction-box"`
 -   **Ask about item data**
-    -   Web: use the “Code” button (the “Ask” button also works).
+    -   Web: use the "Code" button (the "Ask" button also works).
     -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items/*.json"`
 -   **Run item tests**
     -   Web: not supported yet.
@@ -45,7 +46,8 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
         npm run build && \
         npm run itemValidation && \
         npm run test:ci && \
-        npm run test:ci -- itemQuality"
+        npm run test:ci -- itemQuality && \
+        git diff --cached | ./scripts/scan-secrets.py"
         ```
 
 See the [OpenAI CLI docs][openai-cli] for more flags.
@@ -171,4 +173,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[openai-cli]: https://platform.openai.com/docs/guides/openai-cli
+[openai-cli]: https://platform.openai.com/docs/guides/openai-cli/
