@@ -58,7 +58,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": ["electronics/use-soldering-mat"],
     "hardening": {
         "passes": 3,
         "score": 60,

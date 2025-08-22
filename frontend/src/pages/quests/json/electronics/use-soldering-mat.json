@@ -1,0 +1,38 @@
+{
+    "id": "electronics/use-soldering-mat",
+    "title": "Use a Soldering Mat",
+    "description": "Lay a heat-resistant silicone mat before powering the iron.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A safe workspace starts with the right surface. Ready to roll out the silicone mat?",
+            "options": [{ "type": "goto", "goto": "place", "text": "Yes, clear the bench." }]
+        },
+        {
+            "id": "place",
+            "text": "Unfold the mat and keep cords away from the edges before heating the iron.",
+            "options": [
+                { "type": "process", "process": "use-soldering-mat", "text": "Mat positioned" },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Mat down and iron ready",
+                    "requiresItems": [
+                        { "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7", "count": 1 },
+                        { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great. The mat protects the bench from heat and solder splashes.",
+            "options": [{ "type": "finish", "text": "All set." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/basic-circuit"]
+}
