@@ -404,5 +404,19 @@
                 }
             ]
         }
+    },
+    {
+        "id": "9f91173d-2609-4127-896d-7578078135db",
+        "name": "porous air stone",
+        "description": "Porous 5 cm ceramic air stone for dissolving oxygen in hydroponic reservoirs.",
+        "image": "/assets/hydroponics.jpg",
+        "price": "3 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

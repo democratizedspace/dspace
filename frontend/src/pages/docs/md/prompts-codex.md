@@ -46,6 +46,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [Monitoring Prompts](/docs/prompts-monitoring)
 -   [Docs Prompts](/docs/prompts-docs)
 -   [Docs cross-link prompt](/docs/prompts-docs#cross-link-check-prompt)
+-   [Docs proofreading prompt](/docs/prompts-docs#proofreading-prompt)
 -   [Backend Prompts](/docs/prompts-backend)
 -   [Frontend Prompts](/docs/prompts-frontend)
 -   [Accessibility Prompts](/docs/prompts-accessibility)
