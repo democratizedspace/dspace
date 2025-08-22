@@ -1258,6 +1258,7 @@
     {
         "id": "feed-goldfish",
         "title": "Feed your goldfish",
+        "image": "/assets/goldfish_food.jpg",
         "requireItems": [
             {
                 "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
@@ -1276,7 +1277,13 @@
                 "count": 1
             }
         ],
-        "duration": "8h"
+        "duration": "8h",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "heat-walstad",
