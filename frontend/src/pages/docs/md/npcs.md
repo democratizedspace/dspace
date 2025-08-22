@@ -21,16 +21,19 @@ dChat is a compact, spherical smart assistant powered by large language models. 
 
 <img src="/assets/npc/sydney.jpg" />
 
-Sydney, a tall and commanding woman, exudes an air of no-nonsense professionalism. As a 3D printing expert, she creates and repairs various tools and equipment for the metaguild. Raised among engineers and tinkerers, Sydney was captivated by the potential of 3D printing early on. After studying mechanical engineering in college, she quickly mastered the field. Sydney eagerly joined the metaguild to apply her skills to new challenges.
+Sydney runs the metaguild's print farm with crisp, no-nonsense focus.
+Raised among engineers, she fell for additive manufacturing early and now
+fabricates and repairs guild gear. She mentors recruits through quests like
+[Level the Print Bed](/quests/3dprinting/bed-leveling) and
+[Print a Phone Stand](/quests/3dprinting/phone-stand).
 
 ### Sample Dialogue
 
--   "Hello, friend! I'm Sydney, a 3D printing expert with the metaguild."
--   "Fantastic! A 3D printer is an invaluable tool, but it needs a level bed to perform."
--   "Take a minute to level the bed so your prints stick."
--   "First things first, I need you to accept the 3D printer."
--   "Hey there, it's Sydney again! Ready for a quick project? Let's print a simple phone stand."
--   "Great job! This stand will prop up your phone while you tackle more builds."
+-   "I'm Sydney—FDM rigs are my playground."
+-   "Bed off-kilter? Slide paper under the nozzle and level it."
+-   "Claim your printer and we'll tune it together."
+-   "Phone stand time: load PLA and hit print."
+-   "Nice work—hands free for the next build."
 
 ## Nova
 
