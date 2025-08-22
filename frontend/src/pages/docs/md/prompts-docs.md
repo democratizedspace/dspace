@@ -18,14 +18,14 @@ current and consistent. To keep these templates evolving, see the
 > 1. Limit changes to the relevant docs.
 > 2. Fix outdated wording, links, or formatting.
 > 3. Link new prompt docs from `prompts-codex.md` and the docs index.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
 >    and use an emoji-prefixed commit message.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
 `npm run test:ci` pass before committing.
 
 USER:
@@ -33,7 +33,7 @@ USER:
 2. Correct stale guidance, links, or formatting.
 3. If adding a new prompt doc, link it from `prompts-codex.md`
    and the docs index (`frontend/src/pages/docs/index.astro`).
-4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:ci`.
 5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
 6. Use an emoji-prefixed commit message.
@@ -49,8 +49,8 @@ Use this when adding or renaming docs to keep internal links current.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before
-committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
+pass before committing.
 
 USER:
 1. Audit the documentation for missing or broken cross-links.
