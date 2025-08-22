@@ -134,6 +134,7 @@ crates and steady delicate assemblies. They often help with aquarium setups like
 -   "Lift on my count: one, two, three."
 -   "Set it down gently; glass likes patience."
 -   "Call anytime you need more torque."
+-   "Need leverage? I always carry an extra fulcrum."
 
 ## Cedar
 
