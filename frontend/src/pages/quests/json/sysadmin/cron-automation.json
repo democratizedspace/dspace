@@ -1,0 +1,50 @@
+{
+    "id": "sysadmin/cron-automation",
+    "title": "Schedule Cron Jobs",
+    "description": "Use cron to automate tasks on an Ubuntu 24.04 LTS Minimal server.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Servers never sleep. Ready to make cron do the night shift?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cron",
+                    "text": "Let's schedule a task"
+                }
+            ]
+        },
+        {
+            "id": "cron",
+            "text": "Edit crontab to run your backup script at 02:00 every day.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cron job saved",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice. Your backups will run while you sleep.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Mission accomplished"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["sysadmin/basic-commands"]
+}
