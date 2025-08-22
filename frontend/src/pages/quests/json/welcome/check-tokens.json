@@ -1,0 +1,50 @@
+{
+    "id": "welcome/check-tokens",
+    "title": "Count Your Tokens",
+    "description": "Verify that your starter tokens are in your inventory.",
+    "image": "/assets/quests/howtodoquests.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's make sure your wallet shows the tokens you earned earlier.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inventory",
+                    "text": "Opening inventory"
+                }
+            ]
+        },
+        {
+            "id": "inventory",
+            "text": "Do you see at least one token listed?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yep, tokens are there",
+                    "requiresItems": [
+                        {
+                            "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! You're all set to spend them on future tasks.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Onward!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["welcome/howtodoquests"]
+}
