@@ -729,10 +729,18 @@
     },
     {
         "id": "d1105b87-8185-4a30-ba55-406384be169f",
-        "name": "Breadboard",
-        "description": "A reusable board for prototyping circuits without soldering.",
+        "name": "solderless breadboard",
+        "description": "400-point solderless breadboard with power rails for quick circuit prototyping.",
         "image": "/assets/quests/basic_circuit.svg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "10 dUSD",
+        "type": "tool",
+        "unit": "board",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3cd82744-d2aa-414e-9f03-80024b624066",
@@ -1172,6 +1180,26 @@
         "description": "Pre-moistened wipes that kill germs before bandaging.",
         "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "0dde854e-7fcb-40ac-88ea-9afd9196f856",
+        "name": "antibiotic ointment packet",
+        "description": "Single-use packet of triple antibiotic ointment for minor cuts.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "0.25 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-09-07",
+                    "date": "2025-09-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
