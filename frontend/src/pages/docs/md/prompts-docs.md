@@ -17,7 +17,8 @@ current and consistent. To keep these templates evolving, see the
 >
 > 1. Limit changes to the relevant docs.
 > 2. Fix outdated wording, links, or formatting.
-> 3. Link new prompt docs from `prompts-codex.md` and the docs index.
+> 3. Link new prompt docs from [`prompts-codex.md`](/docs/prompts-codex) and
+>    `frontend/src/pages/docs/index.astro`.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
 >    and use an emoji-prefixed commit message.
