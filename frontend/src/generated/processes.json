@@ -4428,5 +4428,25 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "zero-digital-calipers",
+        "title": "Zero digital calipers on a flat surface before taking measurements",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10s",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
