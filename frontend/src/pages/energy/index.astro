@@ -8,7 +8,7 @@ import Chip from '../../components/Chip.astro';
         <div class="item">
             <div class="horizontal list">
                 <p>Wall outlet</p>
-                <img src="/assets/outlet.jpg" />
+                <img src="/assets/outlet.jpg" alt="Wall outlet" />
                 <p>Energy source: Coal</p>
             </div>
             <p>generate <Chip text="1000 dWatt" href={`/processes/outlet-dWatt-1e3`} />, <Chip text="1E4 dWatt" href={`/processes/outlet-dWatt-1e4`} />, or <Chip text="1E5 dWatt" href={`/processes/outlet-dWatt-1e5`} /></p>
@@ -23,7 +23,7 @@ import Chip from '../../components/Chip.astro';
         <div class="item">
             <div class="horizontal list">
                 <p>Solar Panels</p>
-                <img src="/assets/solar.jpg" />
+                <img src="/assets/solar.jpg" alt="Solar panels" />
                 <p>Energy source: the Sun</p>
             </div>
             <p>generate <Chip text="200 dWatt" href={`/processes/solar-200Wh`} /> or <Chip text="1000 dWatt" href="/processes/solar-1000Wh" /> using solar panels</p> 
@@ -32,7 +32,7 @@ import Chip from '../../components/Chip.astro';
         <div class="item">
             <div class="horizontal list">
                 <p>Convert dCarbon to dOffset</p>
-                <img src="/assets/solar.jpg" />
+                <img src="/assets/solar.jpg" alt="Solar panels" />
             </div>
             <p>convert <Chip text="1 dCarbon" href={`/processes/dCarbon-dOffset-1`} /> or <Chip text="10 dCarbon" href={`/processes/dCarbon-dOffset-10`} /> to <Chip text="dOffset" href="/inventory/item/70" /></p>
             <p>Cost per dOffset: 10 <Chip text="dUSD" href="/wallet" /></p>
@@ -42,8 +42,9 @@ import Chip from '../../components/Chip.astro';
 
 <style>
     img {
-        width: 50px;
-        height: 50px;
+        width: 100%;
+        max-width: 50px;
+        height: auto;
         margin: 10px;
         border-radius: 20px;
     }
