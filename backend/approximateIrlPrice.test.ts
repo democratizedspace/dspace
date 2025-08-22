@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import {
   approximateIrlPrice,
   approximateIrlTotalPrice,
+  approximateIrlAveragePrice,
   __resetPriceTableCacheForTests,
 } from './approximateIrlPrice';
 import { writeFileSync, mkdtempSync } from 'fs';
@@ -78,6 +79,26 @@ describe('approximateIrlPrice', () => {
     it('returns null for non-array input', () => {
       expect(approximateIrlTotalPrice(null as any)).toBeNull();
       expect(approximateIrlTotalPrice(undefined as any)).toBeNull();
+    });
+  });
+
+  describe('approximateIrlAveragePrice', () => {
+    it('averages prices of known items', () => {
+      expect(
+        approximateIrlAveragePrice(['3d_printer', 'arduino_nano'])
+      ).toBe(186);
+    });
+
+    it('ignores unknown items and returns null when none are known', () => {
+      expect(
+        approximateIrlAveragePrice(['nonexistent', 'arduino_nano'])
+      ).toBe(22);
+      expect(approximateIrlAveragePrice(['foo'])).toBeNull();
+    });
+
+    it('returns null for non-array input', () => {
+      expect(approximateIrlAveragePrice(null as any)).toBeNull();
+      expect(approximateIrlAveragePrice(undefined as any)).toBeNull();
     });
   });
 });
