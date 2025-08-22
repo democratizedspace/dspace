@@ -113,3 +113,30 @@ export function approximateIrlTotalPrice(
 
   return found ? total : null;
 }
+
+/**
+ * Average the prices of multiple game items.
+ *
+ * Unknown or non-string identifiers are ignored. Returns `null` when no known
+ * items are provided.
+ */
+export function approximateIrlAveragePrice(
+  ids: Array<string | null | undefined> | null | undefined
+): number | null {
+  if (!Array.isArray(ids)) {
+    return null;
+  }
+
+  let total = 0;
+  let count = 0;
+
+  for (const id of ids) {
+    const price = approximateIrlPrice(id);
+    if (typeof price === 'number') {
+      total += price;
+      count++;
+    }
+  }
+
+  return count > 0 ? total / count : null;
+}
