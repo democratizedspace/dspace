@@ -4,6 +4,8 @@ const path = require('path');
 const DATA_URL_RE = /^data:/i;
 const REMOTE_URL_RE = /^(?:https?:)?\/\//i;
 
+const isLocalPath = (url) => !DATA_URL_RE.test(url) && !REMOTE_URL_RE.test(url);
+
 const decodeSafely = (str) => {
   try {
     return decodeURIComponent(str);
@@ -25,10 +27,10 @@ function listMissingImages(
   publicDir = path.join(__dirname, '..', '..', 'frontend', 'public'),
 ) {
   return imagePaths.filter((img) => {
-    const base = img.split(/[?#]/)[0];
-    if (DATA_URL_RE.test(base) || REMOTE_URL_RE.test(base)) return false;
+    const [base] = img.split(/[?#]/);
+    if (!isLocalPath(base)) return false;
 
-    const decoded = decodeSafely(base.startsWith('/') ? base.slice(1) : base);
+    const decoded = decodeSafely(base.replace(/^\//, ''));
     return !fs.existsSync(path.join(publicDir, decoded));
   });
 }
