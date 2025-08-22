@@ -7,7 +7,7 @@ slug: 'prompts-playwright-tests'
 
 Use this template to add end-to-end coverage for journeys listed in
 [User journeys](/docs/user-journeys). While working, review the existing
-journeys for inaccuracies or misunderstandings and expand the list as new
+journeys for inaccuracies or gaps and expand the list as new
 features land. Treat this prompt as living documentation—periodically refine
 it using other `prompts-*.md` files for inspiration. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex). To keep the prompt docs evolving, see the
@@ -17,8 +17,8 @@ GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-c
 
 > **TL;DR**
 >
-> 1. Review `user-journeys.md`, correcting mistakes and keeping the coverage
->    table sorted alphabetically.
+> 1. Review `frontend/src/pages/docs/md/user-journeys.md`, correcting mistakes
+>    and keeping the coverage table sorted alphabetically.
 > 2. For journeys lacking tests, ensure a placeholder spec exists under
 >    `frontend/e2e/backlog`; create one if missing.
 > 3. If a placeholder exists, move it to `frontend/e2e` with `git mv` and
@@ -45,8 +45,8 @@ USER:
    in `frontend/e2e/`. If a matching placeholder exists in
    `frontend/e2e/backlog`, move it with `git mv` before editing; otherwise
    create the test file.
-3. Update the coverage table in `user-journeys.md` with the new test path and
-   any corrected steps, keeping it alphabetized.
+3. Update the coverage table in `frontend/src/pages/docs/md/user-journeys.md`
+   with the new test path and any corrected steps, keeping it alphabetized.
 4. Improve this prompt if clearer guidance emerges.
 5. Run `git diff --cached | ./scripts/scan-secrets.py`.
 6. Use an emoji-prefixed commit message.
