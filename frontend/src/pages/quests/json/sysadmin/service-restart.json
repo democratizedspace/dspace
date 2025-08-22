@@ -1,0 +1,50 @@
+{
+    "id": "sysadmin/service-restart",
+    "title": "Restart a Service",
+    "description": "Use systemctl to restart a stuck service on Ubuntu 24.04 LTS Minimal.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "One node froze. Want to breathe life into its service?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "restart",
+                    "text": "Give it a restart"
+                }
+            ]
+        },
+        {
+            "id": "restart",
+            "text": "Run systemctl restart apache2 && systemctl status apache2 to confirm.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Service revived",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Back online. Uptime preserved and users none the wiser.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Onward"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": []
+}

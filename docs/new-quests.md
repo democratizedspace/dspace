@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 236
-New quests in this release: 214
+Current quest count: 237
+New quests in this release: 215
 
 ### 3dprinting
 
@@ -258,6 +258,7 @@ New quests in this release: 214
 -   sysadmin/basic-commands
 -   sysadmin/log-analysis
 -   sysadmin/resource-monitoring
+-   sysadmin/service-restart
 
 ### ubi
 
