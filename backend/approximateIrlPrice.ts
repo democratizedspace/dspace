@@ -34,23 +34,21 @@ let customTable: Record<string, number> | null = null;
 let mergedTable: Record<string, number> | null = null;
 
 function loadCustomTable(): Record<string, number> {
-  if (customTable) {
-    return customTable;
-  }
-  customTable = {};
-  const file = process.env.DSPACE_PRICE_TABLE_FILE;
-  if (!file) {
-    return customTable;
-  }
-  try {
-    const data = JSON.parse(readFileSync(file, 'utf8')) as Record<string, unknown>;
-    for (const [key, value] of Object.entries(data)) {
-      if (typeof value === 'number') {
-        customTable[normalizeId(key)] = value;
+  if (!customTable) {
+    customTable = {};
+    const file = process.env.DSPACE_PRICE_TABLE_FILE;
+    if (file) {
+      try {
+        const data = JSON.parse(readFileSync(file, 'utf8')) as Record<string, unknown>;
+        for (const [key, value] of Object.entries(data)) {
+          if (typeof value === 'number') {
+            customTable[normalizeId(key)] = value;
+          }
+        }
+      } catch {
+        // ignore invalid file
       }
     }
-  } catch {
-    // ignore invalid file
   }
   return customTable;
 }
@@ -106,10 +104,11 @@ export function approximateIrlTotalPrice(
 
   for (const id of ids) {
     const price = approximateIrlPrice(id);
-    if (typeof price === 'number') {
-      total += price;
-      found = true;
+    if (price == null) {
+      continue;
     }
+    total += price;
+    found = true;
   }
 
   return found ? total : null;

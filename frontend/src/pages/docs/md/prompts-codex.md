@@ -13,10 +13,11 @@ invoking Codex on DSPACE and should evolve alongside the project.
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
 [NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
-[Backup prompts](/docs/prompts-backups), [Docs prompts](/docs/prompts-docs),
-[Playwright test prompts](/docs/prompts-playwright-tests), [Frontend prompts](/docs/prompts-frontend),
+[Backup prompts](/docs/prompts-backups), [Monitoring prompts](/docs/prompts-monitoring),
+[Docs prompts](/docs/prompts-docs), [Playwright test prompts](/docs/prompts-playwright-tests),
+[Vitest test prompts](/docs/prompts-vitest), [Frontend prompts](/docs/prompts-frontend),
 [Backend prompts](/docs/prompts-backend), [Refactor prompts](/docs/prompts-refactors), and
-[Accessibility prompts](/docs/prompts-accessibility)
+[Accessibility prompts](/docs/prompts-accessibility).
 For specialized workflows use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix),
 the [Codex meta prompt](/docs/prompts-codex-meta), and the
 [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
@@ -44,12 +45,15 @@ For failing GitHub Actions runs, use the dedicated
 -   [NPC Prompts](/docs/prompts-npcs)
 -   [Outage Prompts](/docs/prompts-outages)
 -   [Backup Prompts](/docs/prompts-backups)
+-   [Monitoring Prompts](/docs/prompts-monitoring)
 -   [Docs Prompts](/docs/prompts-docs)
 -   [Docs cross-link prompt](/docs/prompts-docs#cross-link-check-prompt)
+-   [Docs proofreading prompt](/docs/prompts-docs#proofreading-prompt)
 -   [Backend Prompts](/docs/prompts-backend)
 -   [Frontend Prompts](/docs/prompts-frontend)
 -   [Accessibility Prompts](/docs/prompts-accessibility)
 -   [Playwright Test Prompts](/docs/prompts-playwright-tests)
+-   [Vitest Test Prompts](/docs/prompts-vitest)
 -   [Refactor Prompts](/docs/prompts-refactors)
 -   [Codex CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
 -   [Codex Meta Prompt](/docs/prompts-codex-meta)

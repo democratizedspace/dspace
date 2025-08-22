@@ -21,7 +21,7 @@ For fundamental design tips see the
 > 2. Say exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
 >    `npm run test:ci`; scan staged changes with
 >    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
 
@@ -39,7 +39,7 @@ For fundamental design tips see the
     -   Web: not supported yet.
     -   CLI:
         ```bash
-        codex exec "npm run lint && npm run type-check && npm run build && \
+        codex exec "npm run audit:ci && npm run lint && npm run type-check && npm run build && \
         npm run test:ci && \
         npm run test:ci -- processQuality && \
         git diff --cached | ./scripts/scan-secrets.py"
@@ -51,12 +51,12 @@ See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ## 2. Prompt ingredients
 
-| Ingredient           | Why it matters                                                          |
-| -------------------- | ----------------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add lettuce seed input to hydroponics”). |
-| **Files to touch**   | Limits search space → faster & cheaper.                                 |
-| **Constraints**      | Coding style, a11y, process schema rules.                               |
-| **Acceptance check** | e.g. “`npm run test:ci` and `npm run test:ci -- processQuality` pass”.  |
+| Ingredient           | Why it matters                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add lettuce seed input to hydroponics”).                     |
+| **Files to touch**   | Limits search space → faster & cheaper.                                                     |
+| **Constraints**      | Coding style, a11y, process schema rules.                                                   |
+| **Acceptance check** | e.g. “`npm run audit:ci`, `npm run test:ci`, and `npm run test:ci -- processQuality` pass”. |
 
 Codex merges these instructions with any `AGENTS.md` files in scope, so keep
 prompt‑level rules short and concrete.
@@ -80,7 +80,7 @@ REQUIREMENTS
 3. Ensure the process is referenced by at least one quest or item; create
    missing items or quest hooks as needed.
 4. Use only existing image assets; do not add new image files.
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:ci`.
 6. Run `npm run test:ci -- processQuality` and fix any failures.
 7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
@@ -99,8 +99,8 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/base.json` with corresponding
 hardening files in `frontend/src/pages/processes/hardening`. Ensure realistic
-steps, durations, item references, and passing checks (`npm run lint`,
-`npm run type-check`, `npm run build`, `npm run test:ci`, and
+steps, durations, item references, and passing checks (`npm run audit:ci`,
+`npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci`, and
 `npm run test:ci -- processQuality`).
 Verify the process links to existing quests or items, add missing registry
 entries if needed, reuse existing image assets, and scan for secrets with
@@ -148,7 +148,7 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:ci`.
 6. Run `npm run test:ci -- processQuality`. Update docs or items if needed.
 7. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
