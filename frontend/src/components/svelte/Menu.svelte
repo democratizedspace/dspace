@@ -87,7 +87,12 @@
             {/if}
         {/each}
 
-        {#if showUnpinned}
+        <div
+            id="unpinned-menu"
+            hidden={!showUnpinned}
+            style="display: contents"
+            aria-hidden={!showUnpinned}
+        >
             {#each unpinned as item}
                 {#if item.hideIfOwned}
                     {#if mounted}
@@ -99,9 +104,17 @@
                     <a href={item.href}>{item.name}</a>
                 {/if}
             {/each}
-        {/if}
+        </div>
 
-        <button id="unpinned-toggle" on:click={toggleShowUnpinned}>{LABEL_MORE}</button>
+        <button
+            id="unpinned-toggle"
+            on:click={toggleShowUnpinned}
+            aria-expanded={showUnpinned}
+            aria-controls="unpinned-menu"
+            aria-label="Toggle additional menu items"
+        >
+            {LABEL_MORE}
+        </button>
     </nav>
 </div>
 
