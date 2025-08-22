@@ -34,7 +34,8 @@ sorted alphabetically by journey name.
 | Mobile quest form          | No                  | --                                                |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Process creation           | Yes                 | `frontend/e2e/process-creation.spec.ts`           |
-| Profile page loads         | No                  | --                                                |
+| Profile avatar selection   | No                  | --                                                |
+| Profile page loads         | Yes                 | `frontend/e2e/profile-page.spec.ts`               |
 | Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |
 | Quest form validation      | No                  | --                                                |
 | Quest list navigation      | Yes                 | `frontend/e2e/quests.spec.ts`                     |

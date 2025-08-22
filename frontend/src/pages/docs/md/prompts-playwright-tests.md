@@ -44,9 +44,9 @@ USER:
 1. Audit `frontend/src/pages/docs/md/user-journeys.md` for mistakes and
    propose fixes or additional journeys.
 2. Select an uncovered or newly added journey and implement a Playwright test
-   in `frontend/e2e/`. If a matching placeholder exists in
-   `frontend/e2e/backlog`, move it with `git mv` before editing; otherwise
-   create the test file.
+   in `frontend/e2e/`, asserting visible UI content. If a matching placeholder
+   exists in `frontend/e2e/backlog`, move it with `git mv` before editing;
+   otherwise create the test file.
 3. Update the coverage table in `user-journeys.md` with the new test path and
    any corrected steps, keeping it alphabetized.
 4. Improve this prompt if clearer guidance emerges.
