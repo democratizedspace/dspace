@@ -10,9 +10,9 @@ tests. Use this guide when working on files inside `frontend/`, including Svelte
 pages, and styles. Changes should improve clarity, accessibility, or performance while keeping
 tests green. For deeper accessibility guidance, see
 [Accessibility prompts](/docs/prompts-accessibility). To keep the prompt docs evolving,
-see the [Codex meta prompt](/docs/prompts-codex-meta). If these templates drift, refresh them
-with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing workflows, use the
-[Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+see the [Codex meta prompt](/docs/prompts-codex-meta). If templates drift, refresh them
+with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions
+runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >
