@@ -10,7 +10,7 @@ run its own tests, and send you a ready‑made PR — but only if you give it a 
 file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
-For task‑specific templates see [Quest prompts](/docs/prompts-quests),
+For task-specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
 [NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
 [Backup prompts](/docs/prompts-backups), [Monitoring prompts](/docs/prompts-monitoring),
