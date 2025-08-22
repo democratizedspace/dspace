@@ -1630,16 +1630,34 @@
     },
     {
         "id": "measure-ph",
-        "title": "Measure solution pH",
+        "title": "Measure hydroponic nutrient solution pH with a test strip",
+        "image": "/assets/pH_strip.jpg",
         "requireItems": [
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
             {
                 "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                 "count": 1
             }
         ],
-        "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-22",
+                    "date": "2025-08-22",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "measure-ec",
