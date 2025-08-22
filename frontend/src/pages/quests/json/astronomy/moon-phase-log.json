@@ -1,0 +1,43 @@
+{
+    "id": "astronomy/moon-phase-log",
+    "title": "Log Moon Phases",
+    "description": "Track the Moon's phase each night for a week in your mission logbook.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here! After sunset, note today's lunar phase in your log.",
+            "options": [{ "type": "goto", "goto": "record", "text": "Moon's up" }]
+        },
+        {
+            "id": "record",
+            "text": "Sketch the Moon and label the date in your mission logbook.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log the phase"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Entry done",
+                    "requiresItems": [
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 },
+                        { "id": "aa82b02f-2617-4474-a91b-29647e4a9780", "count": 1 },
+                        { "id": "4729b96d-5057-40d8-83a4-25a4fa122d98", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Repeat nightly to map the full lunar cycle.",
+            "options": [{ "type": "finish", "text": "Onward" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/observe-moon"]
+}
