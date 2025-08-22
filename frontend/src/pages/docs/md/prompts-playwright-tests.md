@@ -22,7 +22,8 @@ GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-c
 > 2. For journeys lacking tests, ensure a placeholder spec exists under
 >    `frontend/e2e/backlog`; create one if missing.
 > 3. If a placeholder exists, move it to `frontend/e2e` with `git mv` and
->    implement the Playwright test; otherwise add a new test file.
+>    implement the Playwright test, asserting visible UI content rather than
+>    only checking status codes; otherwise add a new test file.
 > 4. Update `user-journeys.md` with coverage status, test file path, and any fixes,
 >    keeping the table alphabetized. Verify apparent 404s aren't missing routes;
 >    if a page should exist, add a stub instead of asserting a 404.
@@ -42,9 +43,9 @@ USER:
 1. Audit `frontend/src/pages/docs/md/user-journeys.md` for mistakes and
    propose fixes or additional journeys.
 2. Select an uncovered or newly added journey and implement a Playwright test
-   in `frontend/e2e/`. If a matching placeholder exists in
-   `frontend/e2e/backlog`, move it with `git mv` before editing; otherwise
-   create the test file.
+   in `frontend/e2e/`, asserting visible UI content. If a matching placeholder
+   exists in `frontend/e2e/backlog`, move it with `git mv` before editing;
+   otherwise create the test file.
 3. Update the coverage table in `user-journeys.md` with the new test path and
    any corrected steps, keeping it alphabetized.
 4. Improve this prompt if clearer guidance emerges.
