@@ -118,6 +118,7 @@ to show how green chemistry powers missions.
 -   "We test in micro batches so a bad mix only scorches a spoon."
 -   "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
 -   "Next up, we'll brew propellant that pushes rockets without scorching the skies."
+-   "Spent fuel? We'll distill what's usable and neutralize the rest."
 
 ## Atlas
 
