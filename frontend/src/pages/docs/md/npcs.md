@@ -54,6 +54,7 @@ Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs an
 Hydro keeps the guild's hydroponic bays stocked with fresh greens.
 Raised on an Earth farm, they traded soil for nutrient baths after studying biology.
 Their easygoing chatter about PPM and pH turns lab science into shipboard routine.
+They can diagnose nutrient deficits by leaf color alone.
 Hydro guides recruits through quests like [Check Solution pH](/quests/hydroponics/ph-check) and
 [Grow Stevia Hydroponically](/quests/hydroponics/stevia).
 
