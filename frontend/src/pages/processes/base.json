@@ -3404,5 +3404,20 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "wear-safety-goggles",
+        "title": "Put on safety goggles before operating power tools",
+        "image": "/assets/rescue.jpg",
+        "requireItems": [{ "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
