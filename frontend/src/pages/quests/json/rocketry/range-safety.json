@@ -1,0 +1,71 @@
+{
+    "id": "rocketry/range-safety",
+    "title": "Clear the Range",
+    "description": "Verify the launch area is clear and safe before countdown.",
+    "image": "/assets/rocket_launch.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey friend! It's Nova. We can't launch until the range is clear. Ready to sweep the area?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "scan",
+                    "text": "Let's make sure it's safe."
+                }
+            ]
+        },
+        {
+            "id": "scan",
+            "text": "Walk the perimeter and confirm no one is within the safety radius.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-range-clear",
+                    "text": "Conduct range check."
+                },
+                {
+                    "type": "goto",
+                    "goto": "ready",
+                    "requiresItems": [
+                        {
+                            "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Range is clear and pad is set."
+                }
+            ]
+        },
+        {
+            "id": "ready",
+            "text": "Excellent! Our launch pad is secure and the field is empty.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Count us down, Nova!"
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Range safety confirmed. We're go for launch!",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Ready for liftoff."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["rocketry/preflight-check"]
+}
