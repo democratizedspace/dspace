@@ -405,5 +405,18 @@
                 }
             ]
         }
+    },
+    {
+        "id": "4f511d5f-3394-4ab6-8e87-ef53b8a75719",
+        "name": "aquarium net",
+        "description": "15 cm nylon fish net with 25 cm handle for moving small fish or debris.",
+        "image": "/assets/aquarium_net.jpg",
+        "price": "3 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
