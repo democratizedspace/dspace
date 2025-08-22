@@ -729,10 +729,18 @@
     },
     {
         "id": "d1105b87-8185-4a30-ba55-406384be169f",
-        "name": "Breadboard",
-        "description": "A reusable board for prototyping circuits without soldering.",
+        "name": "solderless breadboard",
+        "description": "400-point solderless breadboard with power rails for quick circuit prototyping.",
         "image": "/assets/quests/basic_circuit.svg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "10 dUSD",
+        "type": "tool",
+        "unit": "board",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3cd82744-d2aa-414e-9f03-80024b624066",
