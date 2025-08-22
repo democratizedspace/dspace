@@ -269,6 +269,7 @@ Raised on open-source firmware, they safeguard mission data and teach recruits s
 -   "Encrypted channels only; plain text is for pirates."
 -   "Found a breach? Pull the plug and I'll seal the hole."
 -   "Logs tell the story; let's read them before the attackers do."
+-   "Zero-trust isn't hype—it's how we sleep at night."
 
 <style>
     img {
