@@ -22,8 +22,9 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
 >    mandatory instructions.
 > 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
 >    `npm run itemValidation`, `npm run test:ci`, and
->    `npm run test:ci -- itemQuality`; scan staged changes with
->    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
+>    `npm run test:ci -- itemQuality`.
+> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
+>    commit with an emoji prefix.
 
 ---
 
@@ -46,7 +47,8 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
         npm run build && \
         npm run itemValidation && \
         npm run test:ci && \
-        npm run test:ci -- itemQuality"
+        npm run test:ci -- itemQuality && \
+        git diff --cached | ./scripts/scan-secrets.py"
         ```
 
 See the [OpenAI CLI docs][openai-cli] for more flags.
