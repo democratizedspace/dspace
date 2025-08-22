@@ -17,3 +17,20 @@ ARIA attributes, keyboard navigation, and sufficient color contrast.
 >    `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 > 6. Commit with an emoji prefix.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Update files that affect user accessibility.
+2. Follow WCAG 2.1 AA with semantic HTML, visible focus states, and ARIA labels.
+3. Validate with linting and, when possible, screen-reader or keyboard checks.
+4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+5. Use an emoji-prefixed commit message.
+
+OUTPUT:
+A pull request improving accessibility with passing checks.
+```
