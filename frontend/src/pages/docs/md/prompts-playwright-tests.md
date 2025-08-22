@@ -23,13 +23,15 @@ GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-c
 >    `frontend/e2e/backlog`; create one if missing.
 > 3. If a placeholder exists, move it to `frontend/e2e` with `git mv` and
 >    implement the Playwright test; otherwise add a new test file.
-> 4. Update `user-journeys.md` with coverage status, test file path, and any fixes,
->    keeping the table alphabetized. Verify apparent 404s aren't missing routes;
->    if a page should exist, add a stub instead of asserting a 404.
-> 5. Run `npx playwright install chromium` if browsers are missing.
-> 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+> 4. For authentication flows, confirm tokens persist in `localStorage` and can
+>    be cleared without network access.
+> 5. Update `user-journeys.md` with coverage status, test file path, and any
+>    fixes, keeping the table alphabetized. Verify apparent 404s aren't missing
+>    routes; if a page should exist, add a stub instead of asserting a 404.
+> 6. Run `npx playwright install chromium` if browsers are missing.
+> 7. Run `npm run lint`, `npm run type-check`, `npm run build`, and
 >    `npm run test:ci`.
-> 7. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
+> 8. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
 >    and commit with an emoji.
 
 ```text

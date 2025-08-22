@@ -11,7 +11,8 @@ sorted alphabetically by journey name.
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
-| Authentication flow        | No                  | --                                                |
+| About page loads           | No                  | --                                                |
+| Authentication flow        | Yes                 | `frontend/e2e/authentication-flow.spec.ts`        |
 | Built-in quest details     | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
 | Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
 | Constellations quest       | Yes                 | `frontend/e2e/constellations-quest.spec.ts`       |
