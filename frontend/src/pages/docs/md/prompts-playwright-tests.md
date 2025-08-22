@@ -6,23 +6,25 @@ slug: 'prompts-playwright-tests'
 # Playwright test prompts for the _dspace_ repo
 
 Use this template to add end-to-end coverage for journeys listed in
-[User journeys](/docs/user-journeys). While working, review the existing
+[User journeys](/docs/user-journeys) using
+[Playwright](https://playwright.dev/). While working, review the existing
 journeys for inaccuracies or misunderstandings and expand the list as new
-features land. Treat this prompt as living documentation—periodically refine
-it using other `prompts-*.md` files for inspiration. Use this guide alongside
+features land. Treat this prompt as living documentation—periodically refine it
+using other `prompts-*.md` files for inspiration. Use this guide alongside
 [Codex Prompts](/docs/prompts-codex). To keep the prompt docs evolving, see the
 [Codex meta prompt](/docs/prompts-codex-meta); if templates drift, refresh them
-with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing
-GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub
+Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >
 > 1. Review `user-journeys.md`, correcting mistakes and keeping the coverage
 >    table sorted alphabetically.
 > 2. For journeys lacking tests, ensure a placeholder spec exists under
->    `frontend/e2e/backlog`; create one if missing.
-> 3. If a placeholder exists, move it to `frontend/e2e` with `git mv` and
->    implement the Playwright test; otherwise add a new test file.
+>    `frontend/e2e/backlog/`; create one if missing.
+> 3. If a placeholder exists, move it to `frontend/e2e/` with `git mv`, rename it
+>    to end with `.spec.ts`, then implement the Playwright test; otherwise add a
+>    new spec file.
 > 4. Update `user-journeys.md` with coverage status, test file path, and any fixes,
 >    keeping the table alphabetized. Verify apparent 404s aren't missing routes;
 >    if a page should exist, add a stub instead of asserting a 404.
