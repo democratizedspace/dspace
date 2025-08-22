@@ -19,13 +19,13 @@ runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 2. Avoid mixing refactors with new features or fixes.
 > 3. Keep commits small and reversible.
 > 4. Include before-and-after benchmarks if performance could change.
-> 5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 6. Run `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
+Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
 pass before committing.
 
 USER:
