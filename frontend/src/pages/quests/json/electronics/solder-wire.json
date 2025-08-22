@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A lead snapped. Ventilate, wear goggles, keep the hot iron on its stand, and clear flammables.",
+            "text": "A lead snapped. Ventilate, turn on the fume extractor, wear goggles, keep the hot iron on its stand, and clear flammables.",
             "options": [{ "type": "goto", "goto": "prep", "text": "What gear do I need?" }]
         },
         {
             "id": "prep",
-            "text": "Gather the soldering iron kit, flux pen, wire stripper, needle-nose pliers, and heat gun. Add two jumper wires, 5 cm of heat-shrink tubing, and safety goggles. Strip the wire ends with the wire stripper, grip them with the needle-nose pliers, and slide the tubing over one lead. Heat the iron on its stand, keep cords tidy, and avoid fumes. Use the heat gun to shrink the tubing after soldering.",
+            "text": "Gather the soldering iron kit, flux pen, wire stripper, needle-nose pliers, solder fume extractor, and heat gun. Add two jumper wires, 5 cm of heat-shrink tubing, and safety goggles. Strip the wire ends with the wire stripper, grip them with the needle-nose pliers, and slide the tubing over one lead. Heat the iron on its stand, keep cords tidy, and let the fume extractor pull smoke away. Use the heat gun to shrink the tubing after soldering.",
             "options": [
                 {
                     "type": "process",
@@ -37,6 +37,7 @@
                         { "id": "96083990-f333-4e42-ab04-7eb2a234570e", "count": 5 },
                         { "id": "dad7f853-ccc9-40be-b226-89272708db84", "count": 1 },
                         { "id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26", "count": 1 },
+                        { "id": "593fc442-f437-4449-94e5-17b7b4625c41", "count": 1 },
                         { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 }
                     ]
                 }
@@ -51,7 +52,7 @@
     "rewards": [{ "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c", "count": 1 }],
     "requiresQuests": [],
     "hardening": {
-        "passes": 5,
+        "passes": 6,
         "score": 94,
         "emoji": "💯",
         "history": [
@@ -59,7 +60,8 @@
             { "task": "codex-solder-wire-polish-2025-08-07", "date": "2025-08-07", "score": 78 },
             { "task": "codex-solder-wire-hardening-2025-08-12", "date": "2025-08-12", "score": 92 },
             { "task": "codex-solder-wire-hardening-2025-08-15", "date": "2025-08-15", "score": 94 },
-            { "task": "codex-solder-wire-hardening-2025-08-16", "date": "2025-08-16", "score": 94 }
+            { "task": "codex-solder-wire-hardening-2025-08-16", "date": "2025-08-16", "score": 94 },
+            { "task": "codex-solder-wire-hardening-2025-08-22", "date": "2025-08-22", "score": 94 }
         ]
     }
 }

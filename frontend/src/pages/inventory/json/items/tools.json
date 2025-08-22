@@ -593,5 +593,19 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "593fc442-f437-4449-94e5-17b7b4625c41",
+        "name": "solder fume extractor",
+        "description": "120 mm fan with activated carbon filter draws solder fumes away; USB powered; 200 g.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "30 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
