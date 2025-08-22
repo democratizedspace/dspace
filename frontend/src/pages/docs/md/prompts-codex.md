@@ -12,7 +12,7 @@ invoking Codex on DSPACE and should evolve alongside the project.
 
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
-[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
+[NPC prompts](/docs/prompts-npcs), [Outage prompts](./prompts-outages.md),
 [Docs prompts](/docs/prompts-docs), [Playwright test prompts](/docs/prompts-playwright-tests),
 [Frontend prompts](/docs/prompts-frontend), [Backend prompts](/docs/prompts-backend), and
 [Refactor prompts](/docs/prompts-refactors), and [Accessibility prompts](/docs/prompts-accessibility)
@@ -37,21 +37,21 @@ For failing GitHub Actions runs, use the dedicated
 
 ## Related prompt guides
 
--   [Item Prompts](/docs/prompts-items)
--   [Process Prompts](/docs/prompts-processes)
--   [Quest Prompts](/docs/prompts-quests)
--   [NPC Prompts](/docs/prompts-npcs)
--   [Outage Prompts](/docs/prompts-outages)
--   [Docs Prompts](/docs/prompts-docs)
--   [Docs cross-link prompt](/docs/prompts-docs#cross-link-check-prompt)
--   [Backend Prompts](/docs/prompts-backend)
--   [Frontend Prompts](/docs/prompts-frontend)
--   [Accessibility Prompts](/docs/prompts-accessibility)
--   [Playwright Test Prompts](/docs/prompts-playwright-tests)
--   [Refactor Prompts](/docs/prompts-refactors)
--   [Codex CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
--   [Codex Meta Prompt](/docs/prompts-codex-meta)
--   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
+- [Item Prompts](/docs/prompts-items)
+- [Process Prompts](/docs/prompts-processes)
+- [Quest Prompts](/docs/prompts-quests)
+- [NPC Prompts](/docs/prompts-npcs)
+- [Outage Prompts](./prompts-outages.md)
+- [Docs Prompts](/docs/prompts-docs)
+- [Docs cross-link prompt](/docs/prompts-docs#cross-link-check-prompt)
+- [Backend Prompts](/docs/prompts-backend)
+- [Frontend Prompts](/docs/prompts-frontend)
+- [Accessibility Prompts](/docs/prompts-accessibility)
+- [Playwright Test Prompts](/docs/prompts-playwright-tests)
+- [Refactor Prompts](/docs/prompts-refactors)
+- [Codex CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
+- [Codex Meta Prompt](/docs/prompts-codex-meta)
+- [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
 
 ---
 
@@ -110,10 +110,10 @@ Use this template when you want Codex to automatically clear items from the
 [September&nbsp;1,&nbsp;2025 changelog](/docs/changelog/20250901). Tasks are
 tracked with Markdown checkboxes and an emoji status:
 
--   `- [ ]` – work not started
--   `- [x]` or `- [x] <emoji>` – implemented but not fully vetted
--   `- [x] ✅` – implemented before robustness checks; replace with `💯` once verified
--   `- [x] 💯` – thoroughly tested and reviewed
+- `- [ ]` – work not started
+- `- [x]` or `- [x] <emoji>` – implemented but not fully vetted
+- `- [x] ✅` – implemented before robustness checks; replace with `💯` once verified
+- `- [x] 💯` – thoroughly tested and reviewed
 
 Codex should pick a single entry that is either unchecked or checked without a
 💯 (for example, entries marked with ✅) and implement it completely. After all
@@ -195,9 +195,5 @@ USER:
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
-
-## Outage prompts
-
-See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.
 
 [openai-cli]: https://github.com/openai/openai-cli
