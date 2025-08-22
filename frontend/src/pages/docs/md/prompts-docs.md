@@ -42,6 +42,26 @@ OUTPUT:
 A pull request with refreshed documentation and passing checks.
 ```
 
+## Proofreading prompt
+
+Use this to polish grammar and style without changing technical meaning.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before
+committing.
+
+USER:
+1. Proofread the selected docs for typos, grammar, and clarity.
+2. Preserve the original intent and technical accuracy.
+3. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+4. Use an emoji-prefixed commit message.
+
+OUTPUT:
+A pull request with polished documentation and passing checks.
+```
+
 ## Cross-link check prompt
 
 Use this when adding or renaming docs to keep internal links current.
