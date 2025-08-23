@@ -24,9 +24,14 @@
                 <img class="preview hidden" alt="" />
             {/if}
         </div>
-        <button class="item selectbutton" on:click={() => setSelectedAvatar(selectedIndex)}
-            >Select</button
+        <button
+            class="item selectbutton"
+            on:click={() => setSelectedAvatar(selectedIndex)}
+            disabled={selectedIndex < 0}
+            aria-disabled={selectedIndex < 0}
         >
+            Select
+        </button>
         Refresh the page to see more random avatars!
     </div>
     <div class="horizontal">
@@ -116,6 +121,11 @@
     button:hover {
         cursor: pointer;
         opacity: 1;
+    }
+
+    button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
     }
 
     .hidden {
