@@ -1,14 +1,14 @@
 {
     "id": "rocketry/parachute",
     "title": "Add a parachute",
-    "description": "The launch was a success, but let's improve the design for future launches. We'll add a parachute to ensure a safer landing and potential reuse.",
+    "description": "Upgrade your rocket with a nylon parachute for gentle landings and possible reuse.",
     "image": "/assets/quests/parachute.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there! I hope you're still feeling the excitement from your first rocket launch! We've learned a lot, and now it's time to make some improvements. To ensure a safer landing, and potentially reuse the rocket for future launches, let's incorporate a parachute in the rocket design.",
+            "text": "Your first launch went great. Let's add a parachute so the rocket returns in one piece and can fly again.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "parachute",
-            "text": "Adding a parachute will help slow down the descent of the rocket, ensuring a gentler landing. This will increase the chances of a successful recovery and potential reuse of the rocket. We'll need a few extra components for this task: a parachute, Kevlar shock cord, a parachute harness kit, and recovery wadding. The recovery wadding safeguards the parachute from the ejection charge of the rocket motor. Once we have those items, we can proceed with the modifications.",
+            "text": "A parachute slows descent so the rocket survives landing. Gather a launch-capable model rocket, parachute, kevlar shock cord, parachute harness kit and flame-resistant recovery wadding. The wadding shields the parachute from the motor's ejection charge. Wear eye protection and keep the motor removed while assembling.",
             "options": [
                 {
                     "type": "process",
@@ -48,7 +48,7 @@
         },
         {
             "id": "launch",
-            "text": "Indeed! With the parachute system installed, we're ready for another launch. As before, place the rocket on the launchpad, insert the igniter, and connect the igniter to your launch controller. Once you're ready, press the launch button and watch the rocket take flight!",
+            "text": "With the parachute fitted, set the rocket on a model rocket launchpad. Insert a rocket igniter, hook it to the launch controller and keep everyone at least 5 m away. Follow the rocket launch checklist, then press the button and watch it fly!",
             "options": [
                 {
                     "type": "process",
@@ -70,7 +70,7 @@
         },
         {
             "id": "success",
-            "text": "The addition of the parachute worked like a charm, ensuring a safer landing for the rocket! It is a notable advancement from our previous attempt, and we're making great strides in rocketry!",
+            "text": "The parachute deployed and the rocket touched down softly. Nice work upgrading the design!",
             "options": [
                 {
                     "type": "finish",
@@ -93,5 +93,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/firstlaunch"]
+    "requiresQuests": ["rocketry/firstlaunch"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            { "task": "codex-quest-hardening-2025-08-23", "date": "2025-08-23", "score": 60 }
+        ]
+    }
 }
