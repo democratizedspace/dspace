@@ -3160,6 +3160,20 @@
         "duration": "1m"
     },
     {
+        "id": "sift-compost",
+        "title": "Separate finished compost using a mesh sifter",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            {
+                "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
         "id": "tin-soldering-iron-tip",
         "title": "Heat the soldering iron and melt solder on the tip while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",

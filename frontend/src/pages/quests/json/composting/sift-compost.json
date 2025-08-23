@@ -1,0 +1,35 @@
+{
+    "id": "composting/sift-compost",
+    "title": "Sift Finished Compost",
+    "description": "Screen compost to remove large chunks for a fine finished mix.",
+    "image": "/assets/bucket.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to use your compost? Let's sift out the lumpy bits.",
+            "options": [{ "type": "goto", "goto": "sift", "text": "How do I do that?" }]
+        },
+        {
+            "id": "sift",
+            "text": "Place the sifter over a tub and shake compost through the mesh.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "process": "sift-compost",
+                    "requiresItems": [{ "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb", "count": 1 }],
+                    "text": "Sift the compost"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! The fine compost is ready for your garden.",
+            "options": [{ "type": "finish", "text": "Can't wait to use it!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["composting/turn-pile"]
+}
