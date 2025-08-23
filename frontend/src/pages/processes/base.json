@@ -2825,16 +2825,27 @@
     },
     {
         "id": "attach-aquarium-thermometer",
-        "title": "Attach a stick-on strip thermometer to aquarium glass",
+        "title": "Dry aquarium glass and attach a stick-on strip thermometer",
         "image": "/assets/aquarium_thermometer.jpg",
         "requireItems": [
             { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
-            { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
             { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
         ],
-        "consumeItems": [],
+        "consumeItems": [{ "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 }],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-attach-aquarium-thermometer-2025-08-23",
+                    "date": "2025-08-23",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "check-aquarium-temperature",
