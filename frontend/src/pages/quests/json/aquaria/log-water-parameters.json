@@ -1,36 +1,37 @@
 {
     "id": "aquaria/log-water-parameters",
     "title": "Log Water Parameters",
-    "description": "Record your aquarium's test results in a logbook to spot trends.",
+    "description": "Use a liquid test kit and logbook to track ammonia, nitrite, nitrate and pH. Wear nitrile gloves.",
     "image": "/assets/paperwork.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You just tested the water. Let's record today's numbers so we can track the tank's health over time.",
+            "text": "Water tests are done. Keep nitrile gloves on and log today's ammonia, nitrite, nitrate and pH.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "log",
-                    "text": "Open the logbook."
+                    "text": "Open the water test logbook."
                 }
             ]
         },
         {
             "id": "log",
-            "text": "Write the date and readings for ammonia, nitrite, nitrate and pH in your water test logbook.",
+            "text": "Rinse test tubes, avoid skin contact, then log the date plus ammonia, nitrite, nitrate and pH.",
             "options": [
                 {
                     "type": "process",
                     "process": "log-aquarium-test-results",
-                    "text": "Record the results."
+                    "text": "Record the results in the logbook."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "All readings logged.",
                     "requiresItems": [
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
                         { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
                         { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 },
                         { "id": "b8602362-2035-4f00-9376-f48d8668cf38", "count": 1 }
@@ -45,5 +46,17 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/water-testing"]
+    "requiresQuests": ["aquaria/water-testing"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-23",
+                "date": "2025-08-23",
+                "score": 65
+            }
+        ]
+    }
 }

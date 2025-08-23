@@ -582,9 +582,10 @@
     {
         "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
         "name": "launch-capable model rocket (parachute)",
-        "description": "A reusable rocket with a parachute",
+        "description": "35 cm rocket with B6-4 motor, recovery wadding, and 30 cm nylon parachute for safe landing.",
         "image": "/assets/rocket_field.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "25 dUSD",
+        "unit": "each"
     },
     {
         "id": "d660dc50-7afb-4a2f-9508-a42490aae5e4",
