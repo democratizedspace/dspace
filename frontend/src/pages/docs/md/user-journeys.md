@@ -11,7 +11,7 @@ sorted alphabetically by journey name.
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
-| About page loads           | No                  | --                                                |
+| About page loads           | Yes                 | `frontend/e2e/about-page.spec.ts`                 |
 | Authentication flow        | Yes                 | `frontend/e2e/authentication-flow.spec.ts`        |
 | Built-in quest details     | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
 | Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
@@ -19,6 +19,7 @@ sorted alphabetically by journey name.
 | Cookie consent flow        | Yes                 | `frontend/e2e/cookie-consent.spec.ts`             |
 | Custom backup              | Yes                 | `frontend/e2e/custom-backup.spec.ts`              |
 | Custom content integration | Yes                 | `frontend/e2e/custom-content.spec.ts`             |
+| Dark mode toggle           | No                  | --                                                |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
 | Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
