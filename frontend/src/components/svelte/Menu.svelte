@@ -70,7 +70,9 @@
 
 <div>
     {#if avatarUrl}
-        <a href="/profile"><img class="pfp" src={avatarUrl} alt="logo" /></a>
+        <a href="/profile" aria-label="Profile">
+            <img class="pfp" src={avatarUrl} alt="Profile avatar" />
+        </a>
     {/if}
     <nav>
         {#each pinned as item}
@@ -140,6 +142,12 @@
 
     nav a:hover {
         opacity: 1;
+    }
+
+    nav a:focus-visible,
+    nav button:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
     }
 
     nav button {
