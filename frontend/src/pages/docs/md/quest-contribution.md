@@ -10,6 +10,7 @@ These guidelines outline the process for contributing your custom quests to the 
 ## Prerequisites
 
 -   [Quest Development Guidelines](/docs/quest-guidelines)
+-   Familiarity with [Quest Trees](/docs/quest-trees)
 -   Node.js environment with this repository cloned
 -   Review the [Quest Template Example](/docs/quest-template)
 

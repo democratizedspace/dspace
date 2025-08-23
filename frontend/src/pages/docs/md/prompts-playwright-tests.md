@@ -20,26 +20,28 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 >
 > 1. Review `frontend/src/pages/docs/md/user-journeys.md`, correcting mistakes
 >    and keeping the coverage table sorted alphabetically.
-> 2. For journeys lacking tests, ensure a placeholder spec exists under
->    `frontend/e2e/backlog`; create one if missing.
-> 3. If a placeholder exists, move it to `frontend/e2e` with `git mv` and
+> 2. Check if an existing Playwright test already covers the journey to avoid
+>    duplicates.
+> 3. For journeys lacking tests, ensure a placeholder spec exists under
+>    `frontend/e2e/backlog`; create one if missing, and remove placeholders
+>    once real coverage lands.
+> 4. If a placeholder exists, move it to `frontend/e2e` with `git mv` and
 >    implement the Playwright test; otherwise add a new test file.
-> 4. For authentication flows, confirm tokens persist in `localStorage` and can
+> 5. For authentication flows, confirm tokens persist in `localStorage` and can
 >    be cleared without network access.
-> 5. Update `user-journeys.md` with coverage status, test file path, and any
+> 6. Update `user-journeys.md` with coverage status, test file path, and any
 >    fixes, keeping the table alphabetized. Verify apparent 404s aren't missing
 >    routes; if a page should exist, add a stub instead of asserting a 404.
-> 6. Run `npx playwright install chromium` if browsers are missing.
-> 7. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+> 7. Run `npx playwright install chromium` if browsers are missing.
+> 8. Run `npm run lint`, `npm run type-check`, `npm run build`, and
 >    `npm run test:ci`.
-> 8. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
+> 9. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
 >    and commit with an emoji.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
-`npm run test:ci` pass before committing.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
 1. Audit `frontend/src/pages/docs/md/user-journeys.md` for mistakes and
