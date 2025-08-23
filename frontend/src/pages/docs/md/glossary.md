@@ -13,7 +13,7 @@ A collection of players populating the solar system under the same banner. A gui
 
 ## Hyperstructure
 
-A [hyperstructure](/docs/hyperstructures) is a set of protocols that adhere to the criteria listed in the [jacob.energy](https://jacob.energy/hyperstructures.html) article.
+A [hyperstructure](https://jacob.energy/hyperstructures.html) is a set of protocols that adhere to the criteria listed in the [jacob.energy](https://jacob.energy/hyperstructures.html) article.
 
 ## Process
 
