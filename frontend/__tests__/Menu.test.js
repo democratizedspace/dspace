@@ -27,4 +27,10 @@ describe('Menu accessibility', () => {
         expect(toggle).toHaveAttribute('aria-expanded', 'true');
         expect(unpinned).not.toHaveAttribute('hidden');
     });
+
+    it('marks active link with aria-current', () => {
+        const { getByRole } = render(Menu, { pathname: '/' });
+        const homeLink = getByRole('link', { name: 'Home' });
+        expect(homeLink).toHaveAttribute('aria-current', 'page');
+    });
 });

@@ -14,6 +14,11 @@
                     "type": "goto",
                     "goto": "print",
                     "text": "Ready to print."
+                },
+                {
+                    "type": "process",
+                    "process": "measure-filament-diameter",
+                    "text": "How do I measure filament?"
                 }
             ]
         },
