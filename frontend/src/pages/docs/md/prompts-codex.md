@@ -202,8 +202,4 @@ OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
 
-## Outage prompts
-
-See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.
-
 [openai-cli]: https://github.com/openai/openai-cli
