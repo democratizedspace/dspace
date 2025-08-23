@@ -10,7 +10,7 @@ const os = require('os');
 const { hasZeroTests } = require('./scripts/utils/detect-zero-tests');
 
 // ANSI color codes for pretty output
-const colors = {
+const colors = Object.freeze({
     reset: '\x1b[0m',
     bright: '\x1b[1m',
     green: '\x1b[32m',
@@ -19,7 +19,7 @@ const colors = {
     magenta: '\x1b[35m',
     cyan: '\x1b[36m',
     red: '\x1b[31m'
-};
+});
 
 function runTests(exec = execSync, platform = os.platform()) {
     console.log(`${colors.bright}${colors.magenta}DSPACE Testing Suite${colors.reset}`);
@@ -39,22 +39,19 @@ function runTests(exec = execSync, platform = os.platform()) {
             return 1;
         }
 
-        // Determine which script to run based on OS
-        if (platform === 'win32') {
-            console.log(
-                `${colors.yellow}Detected Windows OS, running PowerShell script...${colors.reset}`
-            );
-            exec('powershell -File .\\frontend\\scripts\\prepare-pr.ps1', {
-                stdio: 'inherit'
-            });
-        } else {
-            console.log(
-                `${colors.yellow}Detected Unix-like OS, running Bash script...${colors.reset}`
-            );
-            exec('bash ./frontend/scripts/prepare-pr.sh', {
-                stdio: 'inherit'
-            });
-        }
+        const scripts = {
+            win32: {
+                message: `${colors.yellow}Detected Windows OS, running PowerShell script...${colors.reset}`,
+                command: 'powershell -File .\\frontend\\scripts\\prepare-pr.ps1'
+            },
+            default: {
+                message: `${colors.yellow}Detected Unix-like OS, running Bash script...${colors.reset}`,
+                command: 'bash ./frontend/scripts/prepare-pr.sh'
+            }
+        };
+        const { message, command } = scripts[platform] || scripts.default;
+        console.log(message);
+        exec(command, { stdio: 'inherit' });
 
         console.log(
             `\n${colors.bright}${colors.green}All tests completed successfully!${colors.reset}`
