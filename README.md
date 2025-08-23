@@ -57,15 +57,21 @@ The `dev:safe` command prevents common Playwright artifact errors that can occur
 
 ### Utility Functions
 
-The backend exposes `approximateIrlPrice(id)` to estimate real-world item costs. The lookup
-normalizes case, trims extra whitespace, and converts spaces or hyphens into underscores for
-resilient calls. It returns `null` for unknown or non-string inputs. Prices are approximate USD
-values.
+The backend exposes `approximateIrlPrice(id)` to estimate real-world item costs and
+`approximateIrlAveragePrice(ids)` to average the cost of multiple items. The lookup normalizes
+case, trims extra whitespace, and converts spaces or hyphens into underscores for resilient
+calls. It returns `null` for unknown or non-string inputs. Prices are approximate USD values.
 
 ```ts
-import { approximateIrlPrice } from "./backend/approximateIrlPrice";
+import {
+  approximateIrlPrice,
+  approximateIrlAveragePrice,
+} from "./backend/approximateIrlPrice";
 
 console.log(approximateIrlPrice("3D-Printer")); // 350
+console.log(
+  approximateIrlAveragePrice(["3d_printer", "arduino_nano"])
+); // 186
 console.log(approximateIrlPrice("unknown")); // null
 console.log(approximateIrlPrice(undefined as any)); // null
 ```

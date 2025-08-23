@@ -27,6 +27,11 @@ function listQuestFiles(commit) {
   return files;
 }
 
+module.exports = {
+  listQuestFiles,
+  BASE_COMMIT,
+};
+
 function main() {
   const v21Files = listQuestFiles(BASE_COMMIT);
   const headFiles = listQuestFiles();

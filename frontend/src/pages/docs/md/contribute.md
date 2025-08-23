@@ -38,9 +38,11 @@ creation process.
 -   Fix bugs or implement new features
 -   Improve documentation
 -   Enhance the user interface
-    Install dependencies with `pnpm install` and use Node.js 20 LTS (`.nvmrc`) before running tests.
-    For technical contributions, please review our
-    [Developer Guide](https://github.com/democratizedspace/dspace/blob/main/DEVELOPER_GUIDE.md) first.
+
+Install dependencies with `pnpm install` and use Node.js 20 LTS (`.nvmrc`) before running
+tests. For technical contributions, please review our
+[Developer Guide](https://github.com/democratizedspace/dspace/blob/main/DEVELOPER_GUIDE.md)
+first.
 
 ## Testing and Feedback
 
