@@ -14,9 +14,9 @@ entire progress. Click **Copy** to place the backup string on your clipboard
 
 ## Custom content
 
-If you only need to back up user‑created items, quests or processes, open the
+If you only need to back up user-created items, quests, or processes, open the
 [Custom Content Backup](/contentbackup) page. It provides the same copy and
-import controls but limited to custom creations.
+import controls, limited to custom creations.
 
 These backups are stored locally until you manually save them elsewhere. For
-automatic cloud backups see [Cloud Sync](/docs/cloud-sync).
+automatic cloud backups, see [Cloud Sync](/docs/cloud-sync).

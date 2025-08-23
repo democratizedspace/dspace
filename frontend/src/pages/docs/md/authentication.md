@@ -7,7 +7,7 @@ DSPACE uses GitHub authentication for features that interact with the official r
 
 ## Personal Access Tokens
 
-To authenticate, generate a GitHub personal access token with the `repo` and `gist` scopes. The token is used client-side only and never sent anywhere except directly to GitHub's API.
+To authenticate, generate a GitHub personal access token with the `repo` and `gist` scopes. The token is used only on the client and is never sent anywhere except directly to GitHub's API.
 
 1. Visit [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens).
 2. Create a token granting **repo** and **gist** permissions.
@@ -15,7 +15,7 @@ To authenticate, generate a GitHub personal access token with the `repo` and `gi
 
 ## Local Storage
 
-Your token is stored in `localStorage` under `gameState.github.token` so you don't need to re-enter it each time you open the game. You can clear the saved token using the **Clear** button next to the input field.
+Your token is stored in `localStorage` under `gameState.github.token`, so you don't need to re-enter it each time you open the game. You can clear the saved token with the **Clear** button next to the input field.
 
 ## Security Considerations
 
