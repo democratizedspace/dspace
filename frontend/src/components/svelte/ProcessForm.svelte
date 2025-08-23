@@ -192,8 +192,11 @@
                             <button
                                 type="button"
                                 class="remove-button"
-                                on:click={() => removeItemRequirement(index)}>Remove</button
+                                aria-label="Remove required item"
+                                on:click={() => removeItemRequirement(index)}
                             >
+                                Remove
+                            </button>
                         </div>
                     {/each}
                     <button type="button" class="add-button" on:click={addItemRequirement}
@@ -222,8 +225,11 @@
                             <button
                                 type="button"
                                 class="remove-button"
-                                on:click={() => removeItemConsumption(index)}>Remove</button
+                                aria-label="Remove consumed item"
+                                on:click={() => removeItemConsumption(index)}
                             >
+                                Remove
+                            </button>
                         </div>
                     {/each}
                     <button type="button" class="add-button" on:click={addItemConsumption}
@@ -252,8 +258,11 @@
                             <button
                                 type="button"
                                 class="remove-button"
-                                on:click={() => removeItemCreation(index)}>Remove</button
+                                aria-label="Remove created item"
+                                on:click={() => removeItemCreation(index)}
                             >
+                                Remove
+                            </button>
                         </div>
                     {/each}
                     <button type="button" class="add-button" on:click={addItemCreation}
@@ -440,6 +449,14 @@
 
     .preview-button:hover {
         background-color: #003d99;
+    }
+
+    .remove-button:focus-visible,
+    .add-button:focus-visible,
+    .submit-button:focus-visible,
+    .preview-button:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
     }
 
     .error-message {
