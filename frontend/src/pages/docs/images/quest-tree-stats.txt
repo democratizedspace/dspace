@@ -14,6 +14,6 @@ woodworking: 10 quests, 800 lines
 rocketry: 8 quests, 737 lines
 completionist: 5 quests, 263 lines
 welcome: 5 quests, 383 lines
+composting: 4 quests, 254 lines
 ubi: 4 quests, 306 lines
-composting: 3 quests, 218 lines
 sysadmin: 3 quests, 153 lines
