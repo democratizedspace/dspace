@@ -1,0 +1,45 @@
+{
+    "id": "firstaid/flashlight-battery",
+    "title": "Check Flashlight Battery",
+    "description": "Measure your emergency flashlight's 9 V battery with a digital multimeter.",
+    "image": "/assets/battery.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Power failures happen. Let's make sure your red flashlight still has juice.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Grab the multimeter."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Set the meter to 20 V DC and measure across the 9 V battery terminals.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Battery reads 9 V",
+                    "process": "check-flashlight-battery",
+                    "requiresItems": [
+                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 },
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "80d30825-a42b-4add-b715-322e1713952c", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Replace the battery if it drops below 7.5 V.",
+            "options": [{ "type": "finish", "text": "Will do." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/assemble-kit"]
+}
