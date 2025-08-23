@@ -17,15 +17,15 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 1. Limit changes to backup-related files or docs.
 > 2. Preserve existing backup formats and import/export paths.
 > 3. Update tests when behavior changes.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 > 6. Commit with an emoji prefix.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before
-committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
+pass before committing.
 
 USER:
 1. Modify backup-related code or docs (`frontend/src/pages/docs/md/backups.md` or backup modules).

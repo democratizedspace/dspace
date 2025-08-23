@@ -18,13 +18,13 @@ use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 1. Choose a module or component that lacks unit tests or needs better coverage.
 > 2. Add or update a Vitest spec under `frontend/__tests__/` or `tests/`.
 > 3. Keep tests deterministic and focused on behavior.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
 1. Identify an untested or under-tested module.
