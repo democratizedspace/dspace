@@ -11,8 +11,8 @@ Items in DSPACE fall into several categories:
 
 1. Resources
 
-    - Energy units (dWatt, dSolar)
-    - Currency (dUSD)
+    - Energy units ([dWatt](/docs/dwatt), [dSolar](/docs/solar))
+    - Currency ([dUSD](/docs/dusd))
     - Raw materials (PLA filament, water)
 
 2. Tools and Equipment
