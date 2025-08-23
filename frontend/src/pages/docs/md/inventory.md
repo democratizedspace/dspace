@@ -79,7 +79,7 @@ The inventory interface allows you to:
     the **Preview** button next to each entry
 -   Remove custom items you no longer need directly from this page
 
-All inventory data is now stored locally using IndexedDB. For cross-device backups you can use the new [Cloud Sync](/cloudsync) feature.
+All inventory data is now stored locally using IndexedDB. For cross-device backups you can use the new [Cloud Sync](/docs/cloud-sync) feature.
 
 ## Browser Support
 

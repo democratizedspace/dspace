@@ -954,7 +954,7 @@
     },
     {
         "id": "launch-rocket-parachute",
-        "title": "rocket with parachute",
+        "title": "Launch a model rocket with parachute recovery",
         "requireItems": [
             {
                 "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
@@ -993,21 +993,14 @@
     },
     {
         "id": "assemble-rocket-parachute",
-        "title": "Assemble a rocket with a parachute. A ",
+        "title": "Install a parachute system on a model rocket",
         "requireItems": [],
         "consumeItems": [
-            {
-                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
-                "count": 1
-            },
-            {
-                "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
-                "count": 1
-            },
-            {
-                "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
-                "count": 1
-            }
+            { "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d", "count": 1 },
+            { "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8", "count": 1 },
+            { "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6", "count": 1 },
+            { "id": "84324403-0bd8-411a-b575-a3c966c8a73e", "count": 1 },
+            { "id": "9477a618-591b-45e0-9d81-18d60b848490", "count": 1 }
         ],
         "createItems": [
             {
