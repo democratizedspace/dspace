@@ -10,7 +10,7 @@ export interface Props {
 }
 ---
 
-<a href="/">
+<a href="/" aria-label="Home">
 
 	<div class="vertical">
 		<Logo />
@@ -38,9 +38,9 @@ export interface Props {
 		background-position-y: 100%;
 		border-radius: 0.4rem;
 		animation: pulse 2s ease-in-out infinite;
-		display: table;
-		margin: 0 auto;
-		font-size: 2em;
+                display: table;
+                margin: 0 auto;
+                font-size: clamp(1.5rem, 5vw, 2em);
 	}
 
 	.default-size {
