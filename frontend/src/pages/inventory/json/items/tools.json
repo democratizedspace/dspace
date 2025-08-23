@@ -168,6 +168,7 @@
         "image": "/assets/launch_controller.jpg",
         "price": "20 dUSD",
         "type": "tool",
+        "unit": "meter",
         "hardening": {
             "passes": 1,
             "score": 65,
