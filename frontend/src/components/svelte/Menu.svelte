@@ -77,7 +77,7 @@
     <nav>
         {#each pinned as item}
             {#if isActive(item)}
-                <a class="active" href={item.href}>{item.name}</a>
+                <a class="active" href={item.href} aria-current="page">{item.name}</a>
             {:else if item.hideIfOwned}
                 {#if showMenuItem(item) && mounted}
                     <a href={item.href}>{item.name}</a>
