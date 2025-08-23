@@ -1,7 +1,7 @@
 {
     "id": "sysadmin/service-restart",
     "title": "Restart a Service",
-    "description": "Use systemctl to restart a stuck service on Ubuntu 24.04 LTS Minimal.",
+    "description": "Use systemctl to revive a stuck service on Ubuntu 24.04 LTS Minimal.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
