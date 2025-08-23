@@ -77,13 +77,12 @@ See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ## 2. Prompt ingredients
 
-| Ingredient           | Why it matters                                                   |
-| -------------------- | ---------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”). |
-| **Files to touch**   | Limits search space → faster & cheaper.                          |
-| **Constraints**      | Coding style, a11y, perf, etc.                                   |
-| **Acceptance check** | e.g. `npm run audit:ci`, `npm run lint`, `npm run type-check`,   |
-|                      | `npm run build`, `npm run test:ci` pass.                         |
+| Ingredient           | Why it matters                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”).                                        |
+| **Files to touch**   | Limits search space → faster & cheaper.                                                                 |
+| **Constraints**      | Coding style, a11y, perf, etc.                                                                          |
+| **Acceptance check** | e.g. `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci` pass. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
@@ -105,8 +104,7 @@ REQUIREMENTS
 1. …
 2. …
 3. …
-4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
-   `npm run build`, and `npm run test:ci`.
+4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 5. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 6. Use an emoji-prefixed commit message.
 

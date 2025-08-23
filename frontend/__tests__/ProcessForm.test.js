@@ -161,6 +161,28 @@ describe('ProcessForm Component', () => {
         });
     });
 
+    test('remove buttons have descriptive aria labels', () => {
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        component.$$set({
+            requireItems: [{ id: '', count: 1 }],
+            consumeItems: [{ id: '', count: 1 }],
+            createItems: [{ id: '', count: 1 }],
+        });
+
+        return new Promise((resolve) => {
+            requestAnimationFrame(() => {
+                const buttons = container.querySelectorAll('.remove-button');
+                expect(buttons[0].getAttribute('aria-label')).toBe('Remove required item');
+                expect(buttons[1].getAttribute('aria-label')).toBe('Remove consumed item');
+                expect(buttons[2].getAttribute('aria-label')).toBe('Remove created item');
+                resolve();
+            });
+        });
+    });
+
     test('should validate duration format including seconds and decimals', () => {
         const component = new ProcessForm({
             target: container,

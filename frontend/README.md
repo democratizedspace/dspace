@@ -344,6 +344,9 @@ Custom content integrates seamlessly with built-in game content.
 
 ## Accessibility
 
+-   Interactive form controls display visible focus outlines.
+-   Remove buttons include descriptive `aria-label` attributes.
+
 The Avatar Picker now disables its **Select** button until an avatar option is highlighted.
 This prevents accidental submissions and improves keyboard and screen reader navigation.
 

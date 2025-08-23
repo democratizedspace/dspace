@@ -12,10 +12,13 @@
         <a {href}>{text}</a>
     {:else}
         <button
+            type="button"
             class:disabled={disabled === true}
             class:inverted={inverted === true}
             class:red={red === true}
             on:click={onClick}
+            {disabled}
+            aria-disabled={disabled}
         >
             <div class="slot">
                 <slot />
@@ -57,6 +60,12 @@
     nav a:hover,
     nav button:hover {
         opacity: 1;
+    }
+
+    nav a:focus-visible,
+    nav button:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
     }
 
     nav button:hover {

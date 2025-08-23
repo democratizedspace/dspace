@@ -13,7 +13,7 @@ docs, see the [Codex meta prompt](/docs/prompts-codex-meta).
 
 If this prompt ever drifts, consult the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
 to refresh it before use. For guidance on logging incidents, see the
-[Outage prompts](./prompts-outages.md).
+[Outage prompts](/docs/prompts-outages).
 
 > **Human setup**
 >
