@@ -1,6 +1,6 @@
 # Raspberry Pi Deployment Guide
 
-This guide explains how to run DSPACE on a three-node Raspberry Pi 5 cluster. It builds upon our existing Docker setup so you can deploy the web server on your own hardware.
+This guide explains how to run DSPACE on a three-node Raspberry Pi 5 cluster. It builds on the existing Docker setup so you can deploy the web server on your own hardware.
 
 ## Bill of Materials
 
@@ -52,7 +52,7 @@ This guide explains how to run DSPACE on a three-node Raspberry Pi 5 cluster. It
 
 ## Running DSPACE with Docker Compose
 
-From any node you can start the container:
+From any node, start the container:
 
 ```bash
 docker compose up --build -d
@@ -81,11 +81,9 @@ Build the container images and load them into k3s:
 # DSPACE
 docker build -t dspace-app:latest -f frontend/Dockerfile ./frontend
 k3s ctr images import dspace-app:latest
-
-The Dockerfile installs dependencies with `--ignore-scripts` so build steps
-work even without dev dependencies.
-
 ```
+
+The Dockerfile installs dependencies with `--ignore-scripts` so build steps work even without dev dependencies.
 
 Apply the manifests:
 
@@ -104,7 +102,7 @@ This repository provides a GitHub Actions workflow (`.github/workflows/rpi-deplo
 - `RPI_USER` – the SSH username
 - `RPI_SSH_KEY` – the private key used for authentication
 
-Add these secrets under **Settings → Secrets and variables → Actions**. If any are missing, the GitHub job simply skips deployment instead of failing.
+Add these secrets under **Settings → Secrets and variables → Actions**. If any are missing, the GitHub job skips deployment instead of failing.
 
 ## Troubleshooting
 
@@ -112,4 +110,4 @@ Add these secrets under **Settings → Secrets and variables → Actions**. If a
 - **Booting issues**: ensure USB/M.2 boot is enabled and firmware is up to date.
 - **Insufficient power**: verify PoE+ is delivering enough current or use USB‑C power.
 
-With these steps your Pi cluster should run DSPACE reliably. Contributions describing other hardware or improvements are welcome!
+With these steps, your Pi cluster should run DSPACE reliably. Contributions describing other hardware or improvements are welcome!
