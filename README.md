@@ -7,8 +7,8 @@
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 You can find the game at [democratized.space](https://democratized.space).
-The production instance is now self-hosted; see
-[Netlify Migration](docs/netlify-migration.md) for background.
+The production instance is self-hosted; see [Netlify Migration](docs/netlify-migration.md)
+for background.
 
 Check out the [docs](https://democratized.space/docs)!
 
@@ -55,11 +55,11 @@ Start the development server:
 # Standard development server
 npm run dev
 
-# Development server with Playwright artifact error prevention
+# Development server that avoids Playwright artifact errors
 cd frontend && npm run dev:safe
 ```
 
-The `dev:safe` command prevents common Playwright artifact errors that can occur after running tests.
+The `dev:safe` command prevents common Playwright artifact errors that occur after running tests.
 
 ### Utility Functions
 
@@ -72,19 +72,18 @@ calls. It returns `null` for unknown or non-string inputs. Prices are approximat
 import {
   approximateIrlPrice,
   approximateIrlAveragePrice,
-} from "./backend/approximateIrlPrice";
+} from './backend/approximateIrlPrice';
 
-console.log(approximateIrlPrice("3D-Printer")); // 350
-console.log(
-  approximateIrlAveragePrice(["3d_printer", "arduino_nano"])
-); // 186
-console.log(approximateIrlPrice("unknown")); // null
+console.log(approximateIrlPrice('3D-Printer')); // 350
+console.log(approximateIrlAveragePrice(['3d_printer', 'arduino_nano'])); // 186
+console.log(approximateIrlPrice('unknown')); // null
 console.log(approximateIrlPrice(undefined as any)); // null
 ```
 
 To override default prices, set `DSPACE_PRICE_TABLE_FILE` to a JSON file mapping
 item identifiers to numbers. Tests can reset cached tables with
 `__resetPriceTableCacheForTests({ keepCustom: true })` to preserve custom entries.
+
 ## Testing
 
 DSPACE uses a comprehensive testing suite to ensure code quality and prevent regressions.
@@ -252,7 +251,7 @@ Looking for a concrete walkthrough? The Playwright test `constellations-quest.sp
 
 Aquarium quests progress through a gentle learning curve: set up a Walstad tank, test the water, install a sponge filter, ask Atlas to position the tank, add dwarf shrimp, introduce guppies, perform regular water changes, practice breeding, and finally keep a goldfish in a large tank.
 Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation. Each tree has been extended with follow-up tasks, such as tuning 3D printer retraction and refreshing hydroponic nutrients.
-The DevOps chain now covers deploying DSPACE on a Raspberry Pi cluster with Docker and k3s, setting up monitoring with Prometheus and Grafana, and scheduling nightly backups. Recent updates shortened several prerequisite chains so energy and DevOps milestones align more closely with other categories.
+The DevOps chain now covers deploying DSPACE on a Raspberry Pi cluster with Docker and k3s, setting up monitoring with Prometheus and Grafana, and scheduling nightly backups. Recent updates shortened several prerequisite chains, aligning energy and DevOps milestones more closely with other categories.
 
 To validate that quests use a canonical structure with clear start and finish
 steps, run the dedicated test:
@@ -353,15 +352,18 @@ files help prevent accidental removals.
 ## FAQ
 
 ### Which Node.js versions are supported?
+
 We test against active Node.js LTS releases (currently 18 and 20). Run
 `node --version` to confirm your environment, and let us know if newer LTS
 versions behave unexpectedly.
 
 ### Do I need to use pnpm to install dependencies?
+
 Yes. Run `pnpm install` in the repository root. The `pnpmfile.cjs` pre-approves
 native builds so no interactive prompts appear.
 
 ### How do I install Playwright browsers for end-to-end tests?
+
 Use `npx playwright install chromium` to download the required browser before
 running `npm test`.
 
