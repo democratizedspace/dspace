@@ -86,6 +86,26 @@ export function approximateIrlPrice(
   return getPriceTable()[normalized] ?? null;
 }
 
+function forEachKnownPrice(
+  ids: Array<string | null | undefined> | null | undefined,
+  callback: (price: number) => void
+): boolean {
+  if (!Array.isArray(ids)) {
+    return false;
+  }
+
+  let found = false;
+  for (const id of ids) {
+    const price = approximateIrlPrice(id);
+    if (typeof price === 'number') {
+      callback(price);
+      found = true;
+    }
+  }
+
+  return found;
+}
+
 /**
  * Sum the prices of multiple game items.
  *
@@ -95,22 +115,10 @@ export function approximateIrlPrice(
 export function approximateIrlTotalPrice(
   ids: Array<string | null | undefined> | null | undefined
 ): number | null {
-  if (!Array.isArray(ids)) {
-    return null;
-  }
-
   let total = 0;
-  let found = false;
-
-  for (const id of ids) {
-    const price = approximateIrlPrice(id);
-    if (price == null) {
-      continue;
-    }
+  const found = forEachKnownPrice(ids, (price) => {
     total += price;
-    found = true;
-  }
-
+  });
   return found ? total : null;
 }
 
@@ -123,20 +131,11 @@ export function approximateIrlTotalPrice(
 export function approximateIrlAveragePrice(
   ids: Array<string | null | undefined> | null | undefined
 ): number | null {
-  if (!Array.isArray(ids)) {
-    return null;
-  }
-
   let total = 0;
   let count = 0;
-
-  for (const id of ids) {
-    const price = approximateIrlPrice(id);
-    if (typeof price === 'number') {
-      total += price;
-      count++;
-    }
-  }
-
-  return count > 0 ? total / count : null;
+  const found = forEachKnownPrice(ids, (price) => {
+    total += price;
+    count++;
+  });
+  return found ? total / count : null;
 }
