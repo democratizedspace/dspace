@@ -28,8 +28,8 @@ the [Codex meta prompt](/docs/prompts-codex-meta), and the
 > 2. Say **exactly** what output you expect (tests, docs, etc.).
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
->    `npm run test:ci`; scan staged changes with
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
+>    and `npm run test:ci`; scan staged changes with
 >    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
 
 For failing GitHub Actions runs, use the dedicated

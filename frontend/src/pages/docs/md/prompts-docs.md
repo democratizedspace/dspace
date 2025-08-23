@@ -50,8 +50,8 @@ Use this to polish grammar and style without changing technical meaning.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before
-committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
+`npm run test:ci` pass before committing.
 
 USER:
 1. Proofread the selected docs for typos, grammar, and clarity.
