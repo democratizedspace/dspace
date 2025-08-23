@@ -107,10 +107,10 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 
 Phoenix is a chemist focused on sustainable rocket fuel.
 They blend chemistry with conservation to push craft without scarring the planet.
-They guide recruits through quests such as
+Phoenix guides recruits through quests like
 [Demonstrate a Safe Chemical Reaction](/quests/chemistry/safe-reaction) and
-[Mix an Efficient Rocket Fuel](/quests/rocketry/fuel-mixture)
-to show how green chemistry powers missions.
+[Mix an Efficient Rocket Fuel](/quests/rocketry/fuel-mixture),
+showing how green chemistry powers missions.
 
 ### Sample Dialogue
 
@@ -118,6 +118,7 @@ to show how green chemistry powers missions.
 -   "Safety goggles on; propellant fumes bite harder than dragons."
 -   "We test in micro batches so a bad mix only scorches a spoon."
 -   "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
+-   "When the exhaust runs clear, you know we've done it right."
 -   "Next up, we'll brew propellant that pushes rockets without scorching the skies."
 -   "Spent fuel? We'll distill what's usable and neutralize the rest."
 
@@ -165,6 +166,7 @@ second nature.
 Lyra charts the stars and keeps the guild's telescopes in perfect alignment.
 Raised under dark rural skies, she turned a childhood obsession into orbital navigation.
 She recites catalog numbers from memory and nurses midnight coffee under the Milky Way.
+Her calm tutoring turns orbital mechanics into bedtime stories.
 Lyra guides recruits through quests like
 [Assemble a Simple Telescope](/quests/astronomy/basic-telescope)
 and [Locate the North Star](/quests/astronomy/north-star).
@@ -175,6 +177,7 @@ She steers launches through debris fields and teaches patience in stargazing.
 -   "Evening! I'm Lyra, your star navigator."
 -   "Polaris anchors the sky; find it and you're oriented."
 -   "City glow spoils the view—set the scope under dark skies."
+-   "Need coordinates? I've charted them since I could hold a compass."
 -   "A 15-second exposure will snag that comet tail."
 -   "Two burns make a Hohmann transfer; easy once you see it."
 -   "If the mount drifts, tweak the RA knob until the star freezes."
