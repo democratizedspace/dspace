@@ -1,16 +1,21 @@
 {
     "id": "chemistry/acid-dilution",
-    "title": "Dilute Concentrated Acid",
-    "description": "Add acid to water slowly while fully suited up and stirring.",
+    "title": "Dilute Hydrochloric Acid Safely",
+    "description": "Slowly add acid to water while stirring in full PPE. Never pour water into acid.",
     "hardening": {
-        "passes": 1,
-        "score": 60,
-        "emoji": "🌀",
+        "passes": 2,
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-19",
                 "date": "2025-08-19",
                 "score": 60
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-23",
+                "date": "2025-08-23",
+                "score": 80
             }
         ]
     },
@@ -20,7 +25,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Concentrated acids demand respect. Gather a 250 mL glass beaker, glass stir rod, nitrile gloves, safety goggles, a lab coat, and a pH strip. Always add acid to water, never the reverse.",
+            "text": "Suit up with lab coat, nitrile gloves, and goggles. Put 100 mL water in a 250 mL beaker, add a glass stir rod, a pH strip, and the 37% HCl bottle. Always add acid to water.",
             "options": [
                 {
                     "type": "goto",
@@ -31,7 +36,7 @@
         },
         {
             "id": "dilute",
-            "text": "Pour a small amount of hydrochloric acid into the beaker of water while stirring steadily. Keep your face back, go slow, and check the mix with a pH strip.",
+            "text": "Trickle 10 mL of hydrochloric acid down the beaker wall while stirring. Keep your face back, go slow, and check with a pH strip.",
             "options": [
                 {
                     "type": "process",
@@ -56,7 +61,7 @@
         },
         {
             "id": "finish",
-            "text": "Label the diluted acid with concentration and date, then store it with the cap tight.",
+            "text": "Label the diluted acid with concentration and date, then cap and store in an acid-safe tray.",
             "options": [
                 {
                     "type": "finish",
