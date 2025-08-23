@@ -8,7 +8,7 @@ slug: 'prompts-monitoring'
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
 ready-made pull requests. Use this guide alongside [Codex Prompts](/docs/prompts-codex) when
 editing files in the [`monitoring/`](https://github.com/democratizedspace/dspace/tree/main/monitoring)
-stack so metrics, dashboards, and alerts stay consistent.
+directory so metrics, dashboards, and alerts remain consistent.
 To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta); if
 these templates drift, refresh them with the
 [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs, use the
