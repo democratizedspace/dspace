@@ -8,7 +8,7 @@ const { title, text, href, image } = Astro.props;
     <div class="item">
         <h3>{title}</h3>
         <div class="section horizontal">
-            <img src={image} />
+            <img src={image} alt={title} class="item-image" />
             <div class="section vertical">
                 <p class="nobackground">{text}</p>
                 <div class="section horizontal">
@@ -52,9 +52,10 @@ const { title, text, href, image } = Astro.props;
         text-align: center;
     }
     
-    img {
-        width: 100px;
-        height: 100px;
+    .item-image {
+        width: 100%;
+        max-width: 100px;
+        height: auto;
         border-radius: 20px;
         margin-right: 5px;
     }
@@ -73,7 +74,4 @@ const { title, text, href, image } = Astro.props;
         color: white;
     }
     
-    button {
-
-    }
 </style>

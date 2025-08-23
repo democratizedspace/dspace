@@ -12,7 +12,7 @@ disabled
 		<li class="link-card disabled">
 			<span>
 				<Editable  title="" href="" body="" editable={false} />
-				<img src={image} class="img" />
+                                <img src={image} alt={title} class="img" />
 				<h2>
 					{title}
 				</h2>
@@ -29,7 +29,7 @@ disabled
 		<li class="link-card">
 			<a href={href}>
 				<Editable  title="" href="" body="" editable={false} />
-				<img src={image} class="img" />
+                                <img src={image} alt={title} class="img" />
 				<h2>
 					{title}
 				</h2>
@@ -49,9 +49,10 @@ disabled
 		border-color: red;
 	}
 
-	.img {
-		width: 100%;
-	}
+        .img {
+                width: 100%;
+                height: auto;
+        }
 
 	.link-card {
 		list-style: none;
