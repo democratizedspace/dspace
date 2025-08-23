@@ -7,7 +7,8 @@ slug: 'prompts-outages'
 
 Codex is a sandboxed engineering agent that can open this repository and run its own tests.
 Use this guide alongside [Codex Prompts](/docs/prompts-codex) so every fix ships with a matching
-record in the outage catalog.
+record in the outage catalog. For an overview of the catalog itself, see
+[Outages](/docs/outages).
 To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta);
 if templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
