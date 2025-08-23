@@ -11,7 +11,7 @@ sorted alphabetically by journey name.
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
-| About page loads           | No                  | --                                                |
+| About page loads           | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Authentication flow        | Yes                 | `frontend/e2e/authentication-flow.spec.ts`        |
 | Built-in quest details     | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
 | Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
@@ -19,6 +19,7 @@ sorted alphabetically by journey name.
 | Cookie consent flow        | Yes                 | `frontend/e2e/cookie-consent.spec.ts`             |
 | Custom backup              | Yes                 | `frontend/e2e/custom-backup.spec.ts`              |
 | Custom content integration | Yes                 | `frontend/e2e/custom-content.spec.ts`             |
+| Docs landing page loads    | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
 | Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
@@ -34,7 +35,7 @@ sorted alphabetically by journey name.
 | Mobile quest form          | No                  | --                                                |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Process creation           | Yes                 | `frontend/e2e/process-creation.spec.ts`           |
-| Profile avatar selection   | No                  | --                                                |
+| Profile avatar selection   | Yes                 | `frontend/e2e/profile-avatar-selection.spec.ts`   |
 | Profile page loads         | Yes                 | `frontend/e2e/profile-page.spec.ts`               |
 | Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |
 | Quest form validation      | No                  | --                                                |
