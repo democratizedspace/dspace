@@ -623,5 +623,20 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "4de1e219-5323-4081-9d38-8663de41990f",
+        "name": "rosin flux pen",
+        "description": "5 mL no-clean rosin flux pen for prepping oxidized leads before soldering.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "7 dUSD",
+        "type": "tool",
+        "unit": "pen",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
