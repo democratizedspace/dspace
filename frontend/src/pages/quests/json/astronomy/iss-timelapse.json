@@ -1,0 +1,71 @@
+{
+    "id": "astronomy/iss-timelapse",
+    "title": "Capture an ISS Time-lapse",
+    "description": "Use a tripod-mounted smartphone to record a time-lapse of the ISS crossing and log the pass.",
+    "hardening": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "🛠️",
+        "history": []
+    },
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You captured ISS trails before. Ready to film its full sweep across the sky?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Let's give it a shot."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Mount your smartphone on the camera tripod, choose an open area away from traffic, and check a tracking app for tonight's pass.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-iss-pass",
+                    "text": "Checking the pass time."
+                },
+                {
+                    "type": "goto",
+                    "goto": "record",
+                    "text": "Pass time noted and gear set.",
+                    "requiresItems": [
+                        { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 },
+                        { "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "record",
+            "text": "Start a time-lapse as the ISS rises and note the timestamp in your mission logbook.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Time-lapse saved and logged.",
+                    "requiresItems": [{ "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great sequence! Share it and pack up your tripod.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait for the next pass."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/iss-photo"]
+}

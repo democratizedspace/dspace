@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 236
-New quests in this release: 214
+Current quest count: 238
+New quests in this release: 216
 
 ### 3dprinting
 
@@ -56,6 +56,7 @@ New quests in this release: 214
 -   astronomy/constellations
 -   astronomy/iss-flyover
 -   astronomy/iss-photo
+-   astronomy/iss-timelapse
 -   astronomy/jupiter-moons
 -   astronomy/light-pollution
 -   astronomy/lunar-eclipse
@@ -93,6 +94,7 @@ New quests in this release: 214
 ### composting
 
 -   composting/check-temperature
+-   composting/sift-compost
 -   composting/start
 -   composting/turn-pile
 
