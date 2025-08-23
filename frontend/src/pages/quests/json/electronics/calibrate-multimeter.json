@@ -1,0 +1,51 @@
+{
+    "id": "electronics/calibrate-multimeter",
+    "title": "Calibrate a Digital Multimeter",
+    "description": "Use a 220 Ω resistor to calibrate your digital multimeter.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Place your digital multimeter and a 220 Ω resistor on a dry, non-conductive surface and put on safety goggles.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Leads are connected.",
+                    "requiresItems": [
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Set the meter to resistance mode, touch the probes across the resistor without fingers on the leads, and adjust the meter so it reads 220 Ω ±1%.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading looks good.",
+                    "process": "calibrate-multimeter"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Label the multimeter with today's date, turn it off, and store the reference resistor safely.",
+            "options": [{ "type": "finish", "text": "Calibrated." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/measure-resistance"],
+    "hardening": {
+        "passes": 0,
+        "score": 0,
+        "emoji": "🛠️",
+        "history": []
+    }
+}
