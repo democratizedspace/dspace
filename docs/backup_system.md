@@ -1,9 +1,9 @@
 # Backup System
 
-DSPACE nodes perform nightly backups to preserve player progress and custom content.
-A host cron job creates timestamped `tar.gz` archives of the `backend` and `frontend`
-workspaces. The archives are stored in the `backups/` directory and can be copied
-off‑device for redundancy.
+DSPACE nodes perform nightly backups to preserve player progress and custom content.  
+A host cron job creates a timestamped `tar.gz` archive of the `backend` and `frontend`
+workspaces each night. Archives are stored in the `backups/` directory and can be
+copied off-device for redundancy.
 
 ## Usage
 
@@ -27,7 +27,7 @@ node scripts/backup.mjs --out my-backups package.json docs
 
 ## Restore
 
-Extract the desired archive and replace the existing directories:
+Extract the desired archive, then replace the existing directories:
 
 ```bash
 tar -xzf backups/backup-<timestamp>.tar.gz
