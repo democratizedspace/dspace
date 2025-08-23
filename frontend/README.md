@@ -347,6 +347,9 @@ Custom content integrates seamlessly with built-in game content.
 -   Interactive form controls display visible focus outlines.
 -   Remove buttons include descriptive `aria-label` attributes.
 
+The Avatar Picker now disables its **Select** button until an avatar option is highlighted.
+This prevents accidental submissions and improves keyboard and screen reader navigation.
+
 ## Contributing
 
 Please see the [Contribution Guide](../CONTRIBUTORS.md) and our [Developer Guide](../DEVELOPER_GUIDE.md) for detailed information on contributing to DSPACE.
