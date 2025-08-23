@@ -14,6 +14,7 @@ Check out the [docs](https://democratized.space/docs)!
 
 ## Table of Contents
 
+- [Accessibility](#accessibility)
 - [Local Development](#local-development)
 - [Testing](#testing)
 - [Built-in Items](#built-in-items)
@@ -25,6 +26,11 @@ Check out the [docs](https://democratized.space/docs)!
 - [Archiving Built-in Content](#archiving-built-in-content)
 - [FAQ](#faq)
 - [License](#license)
+
+## Accessibility
+
+The layout includes a "Skip to main content" link and uses a semantic `<main>` element for better
+keyboard and screen-reader navigation.
 
 ## Local Development
 

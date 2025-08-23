@@ -40,11 +40,14 @@ const sitewideTitle = `DSPACE (democratized.space)`;
 		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 	</head>
-	<body>
-		<div id="starry">
-			<slot />
-		</div>
-	</body>
+        <body>
+                <a class="skip-link" href="#main-content" aria-label="Skip to main content">Skip to main content</a>
+                <div id="starry">
+                        <main id="main-content">
+                                <slot />
+                        </main>
+                </div>
+        </body>
 </html>
 <style>
 	:root {
@@ -76,8 +79,28 @@ const sitewideTitle = `DSPACE (democratized.space)`;
 		font-size: var(--font-size-lg);
 	}
 
-	:global(code) {
-		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-			Bitstream Vera Sans Mono, Courier New, monospace;
-	}
+        :global(code) {
+                font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+                        Bitstream Vera Sans Mono, Courier New, monospace;
+        }
+
+        .skip-link {
+                position: absolute;
+                top: -40px;
+                left: 0;
+                background: #fff;
+                color: #000;
+                padding: 0.5rem 1rem;
+                z-index: 1000;
+        }
+
+        .skip-link:focus {
+                top: 0;
+        }
+
+        :global(a:focus-visible),
+        :global(button:focus-visible) {
+                outline: 2px solid var(--color-border);
+                outline-offset: 2px;
+        }
 </style>
