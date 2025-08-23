@@ -12,7 +12,7 @@ invoking Codex on DSPACE and should evolve alongside the project.
 
 For task‑specific templates see [Quest prompts](/docs/prompts-quests),
 [Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
-[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
+[NPC prompts](/docs/prompts-npcs), [Outage prompts](./prompts-outages.md),
 [Docs prompts](/docs/prompts-docs), [Playwright test prompts](/docs/prompts-playwright-tests),
 [Frontend prompts](/docs/prompts-frontend), [Backend prompts](/docs/prompts-backend), and
 [Refactor prompts](/docs/prompts-refactors), and [Accessibility prompts](/docs/prompts-accessibility)
@@ -41,7 +41,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [Process Prompts](/docs/prompts-processes)
 -   [Quest Prompts](/docs/prompts-quests)
 -   [NPC Prompts](/docs/prompts-npcs)
--   [Outage Prompts](/docs/prompts-outages)
+-   [Outage Prompts](./prompts-outages.md)
 -   [Docs Prompts](/docs/prompts-docs)
 -   [Docs cross-link prompt](/docs/prompts-docs#cross-link-check-prompt)
 -   [Backend Prompts](/docs/prompts-backend)
@@ -195,9 +195,5 @@ USER:
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
-
-## Outage prompts
-
-See [Outage prompts](/docs/prompts-outages) for guidance on logging incidents and fixes.
 
 [openai-cli]: https://github.com/openai/openai-cli
