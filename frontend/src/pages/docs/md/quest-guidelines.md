@@ -11,7 +11,8 @@ experiences. Start with the
 [Quest Template Example](/docs/quest-template) and consult the
 [Quest Schema Requirements](/docs/quest-schema) for field definitions. When your quest is ready,
 follow the [Quest Contribution Guidelines](/docs/quest-contribution) and the
-[Quest Submission Guide](/docs/quest-submission) to share it with the community.
+[Quest Submission Guide](/docs/quest-submission) to share it with the community. For an overview of
+existing quest categories, see [Quest Trees](/docs/quest-trees).
 
 ## Quest Philosophy
 
