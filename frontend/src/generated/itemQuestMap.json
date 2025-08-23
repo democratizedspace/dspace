@@ -996,6 +996,12 @@
     ],
     "rewards": []
   },
+  "593fc442-f437-4449-94e5-17b7b4625c41": {
+    "requires": [
+      "electronics/solder-wire"
+    ],
+    "rewards": []
+  },
   "5029f7cb-3359-4153-b7ca-4b53988ac086": {
     "requires": [
       "electronics/solder-wire"
