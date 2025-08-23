@@ -1,0 +1,48 @@
+{
+    "id": "electronics/clean-solder-tip",
+    "title": "Clean a Soldering Iron Tip",
+    "description": "Restore a shiny tip with a brass sponge to keep joints flowing.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Oxidation builds up fast. Keep a brass sponge handy and clean the tip often.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Iron is heated and ready."
+                }
+            ]
+        },
+        {
+            "id": "clean",
+            "text": "Swipe the hot tip on the brass sponge until it shines. Avoid fumes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "use-brass-tip-cleaner",
+                    "text": "Scrub the tip."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Looks shiny!",
+                    "requiresItems": [
+                        { "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0", "count": 1 },
+                        { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! A clean tip heats well and solders better. Unplug the iron.",
+            "options": [{ "type": "finish", "text": "All set." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/tin-soldering-iron"]
+}
