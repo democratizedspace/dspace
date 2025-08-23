@@ -93,7 +93,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "bucket-water-chlorinated",
@@ -3446,7 +3458,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "use-brass-tip-cleaner",
