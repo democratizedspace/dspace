@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 237
-New quests in this release: 215
+Current quest count: 238
+New quests in this release: 216
 
 ### 3dprinting
 
@@ -156,18 +156,19 @@ New quests in this release: 215
 
 ### firstaid
 
-- firstaid/assemble-kit
-- firstaid/change-bandage
-- firstaid/dispose-bandages
-- firstaid/dispose-expired
-- firstaid/learn-cpr
-- firstaid/remove-splinter
-- firstaid/restock-kit
-- firstaid/sanitize-pocket-mask
-- firstaid/splint-limb
-- firstaid/stop-nosebleed
-- firstaid/treat-burn
-- firstaid/wound-care
+-   firstaid/assemble-kit
+-   firstaid/change-bandage
+-   firstaid/dispose-bandages
+-   firstaid/dispose-expired
+-   firstaid/flashlight-battery
+-   firstaid/learn-cpr
+-   firstaid/remove-splinter
+-   firstaid/restock-kit
+-   firstaid/sanitize-pocket-mask
+-   firstaid/splint-limb
+-   firstaid/stop-nosebleed
+-   firstaid/treat-burn
+-   firstaid/wound-care
 
 ### geothermal
 
