@@ -348,7 +348,8 @@
       "electronics/check-battery-voltage",
       "chemistry/ph-test",
       "chemistry/acid-dilution",
-      "aquaria/water-testing"
+      "aquaria/water-testing",
+      "aquaria/water-change"
     ],
     "rewards": []
   },
@@ -391,6 +392,7 @@
     "requires": [
       "programming/web-server",
       "programming/stddev-temp",
+      "programming/moving-avg-temp",
       "programming/median-temp",
       "programming/json-endpoint",
       "programming/json-api",
@@ -543,7 +545,8 @@
       "firstaid/dispose-expired",
       "chemistry/ph-test",
       "chemistry/acid-dilution",
-      "aquaria/water-testing"
+      "aquaria/water-testing",
+      "aquaria/water-change"
     ],
     "rewards": []
   },
@@ -669,6 +672,12 @@
     ],
     "rewards": []
   },
+  "0dde854e-7fcb-40ac-88ea-9afd9196f856": {
+    "requires": [
+      "firstaid/wound-care"
+    ],
+    "rewards": []
+  },
   "1b1030bf-9767-4b16-9ff6-a8e7de28b689": {
     "requires": [
       "firstaid/wound-care",
@@ -679,7 +688,8 @@
   },
   "7a4b8892-365f-4a56-93ce-127aa989f50d": {
     "requires": [
-      "firstaid/wound-care"
+      "firstaid/wound-care",
+      "firstaid/dispose-bandages"
     ],
     "rewards": []
   },
@@ -920,6 +930,14 @@
     ],
     "rewards": []
   },
+  "5562d728-8e62-43b2-9b3d-77cebd2ab481": {
+    "requires": [
+      "electronics/test-gfci-outlet"
+    ],
+    "rewards": [
+      "electronics/continuity-test"
+    ]
+  },
   "4379a2f8-7cec-4bea-949b-ad50514d36ff": {
     "requires": [
       "electronics/tin-soldering-iron",
@@ -973,6 +991,12 @@
     "rewards": []
   },
   "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26": {
+    "requires": [
+      "electronics/solder-wire"
+    ],
+    "rewards": []
+  },
+  "593fc442-f437-4449-94e5-17b7b4625c41": {
     "requires": [
       "electronics/solder-wire"
     ],
@@ -1042,14 +1066,9 @@
     ],
     "rewards": []
   },
-  "5562d728-8e62-43b2-9b3d-77cebd2ab481": {
-    "requires": [],
-    "rewards": [
-      "electronics/continuity-test"
-    ]
-  },
   "ce92a1a9-c817-40f0-92b1-24aff053903d": {
     "requires": [
+      "3dprinting/filament-change",
       "electronics/continuity-test"
     ],
     "rewards": []
@@ -1200,6 +1219,7 @@
   "f439b57a-9df3-4bd9-9b6e-042476ceecf5": {
     "requires": [
       "astronomy/venus-phases",
+      "astronomy/sunspot-sketch",
       "astronomy/star-trails",
       "astronomy/saturn-rings",
       "astronomy/satellite-pass",
@@ -1218,6 +1238,17 @@
     ],
     "rewards": []
   },
+  "70bb8d86-2c4e-4330-9705-371891934686": {
+    "requires": [
+      "astronomy/sunspot-sketch",
+      "astronomy/observe-moon",
+      "astronomy/meteor-shower",
+      "astronomy/light-pollution",
+      "astronomy/iss-photo",
+      "astronomy/iss-flyover"
+    ],
+    "rewards": []
+  },
   "9a72fb16-fc69-45c5-beca-f25c27028977": {
     "requires": [
       "astronomy/orion-nebula",
@@ -1226,16 +1257,6 @@
       "astronomy/light-pollution",
       "astronomy/aurora-watch",
       "astronomy/andromeda"
-    ],
-    "rewards": []
-  },
-  "70bb8d86-2c4e-4330-9705-371891934686": {
-    "requires": [
-      "astronomy/observe-moon",
-      "astronomy/meteor-shower",
-      "astronomy/light-pollution",
-      "astronomy/iss-photo",
-      "astronomy/iss-flyover"
     ],
     "rewards": []
   },

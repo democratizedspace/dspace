@@ -1,19 +1,38 @@
 ---
-const { text, href } = Astro.props;
+interface Props {
+    text: string;
+    href: string;
+    ariaLabel?: string;
+}
+
+const { text, href, ariaLabel }: Props = Astro.props;
 ---
 
-<a href={href}>{text}</a>
+<a
+    href={href}
+    aria-label={ariaLabel ?? text}
+    class="button"
+>
+    {text}
+</a>
 
 <style>
-	a {
-        background-color: #2f5b2f;
-		color: white;
-		border-radius: 100px;
-		text-decoration: none;
-        white-space: nowrap;
-        padding: 10px;
-        margin: 50px;
-		display: flex;
-		justify-content: center;
-	}
+        .button {
+                background-color: #2f5b2f;
+                color: white;
+                border-radius: 100px;
+                text-decoration: none;
+                white-space: nowrap;
+                padding: 0.5rem 1rem;
+                margin: 0.5rem;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                width: fit-content;
+        }
+
+        .button:focus-visible {
+                outline: 2px solid #fff;
+                outline-offset: 2px;
+        }
 </style>

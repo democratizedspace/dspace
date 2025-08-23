@@ -1,7 +1,7 @@
 {
     "id": "firstaid/wound-care",
     "title": "Practice Basic Wound Care",
-    "description": "Practice cleaning a minor cut using liquid soap, nitrile gloves, an antiseptic wipe and an adhesive bandage.",
+    "description": "Practice cleaning a minor cut with soap, gloves, an antiseptic wipe, antibiotic ointment and a bandage.",
     "image": "/assets/rescue.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
@@ -19,7 +19,7 @@
         },
         {
             "id": "clean",
-            "text": "Scrub your hands with liquid soap under running water for 20 seconds, slip on nitrile gloves, rinse the cut with clean water, wipe around it with a fresh antiseptic wipe, let it air dry, then cover it with an adhesive bandage. Toss used supplies in the trash and stop if pain worsens or numbness appears.",
+            "text": "Scrub your hands with liquid soap under running water for 20 seconds, slip on nitrile gloves, rinse the cut with clean water, wipe around it with a fresh antiseptic wipe, let it air dry, apply a thin layer of antibiotic ointment, then cover it with an adhesive bandage. Toss used supplies in the trash and stop if pain worsens or numbness appears.",
             "options": [
                 {
                     "type": "process",
@@ -29,6 +29,7 @@
                         { "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72", "count": 1 },
                         { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
                         { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 1 },
+                        { "id": "0dde854e-7fcb-40ac-88ea-9afd9196f856", "count": 1 },
                         { "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689", "count": 1 },
                         { "id": "7a4b8892-365f-4a56-93ce-127aa989f50d", "count": 1 }
                     ]
@@ -60,8 +61,8 @@
     "rewards": [],
     "requiresQuests": ["firstaid/learn-cpr"],
     "hardening": {
-        "passes": 3,
-        "score": 90,
+        "passes": 4,
+        "score": 92,
         "emoji": "💯",
         "history": [
             {
@@ -78,6 +79,11 @@
                 "task": "codex-upgrade-2025-08-06",
                 "date": "2025-08-06",
                 "score": 90
+            },
+            {
+                "task": "codex-upgrade-2025-09-07",
+                "date": "2025-09-07",
+                "score": 92
             }
         ]
     }

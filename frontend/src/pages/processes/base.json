@@ -1258,6 +1258,7 @@
     {
         "id": "feed-goldfish",
         "title": "Feed your goldfish",
+        "image": "/assets/goldfish_food.jpg",
         "requireItems": [
             {
                 "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
@@ -1276,7 +1277,13 @@
                 "count": 1
             }
         ],
-        "duration": "8h"
+        "duration": "8h",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "heat-walstad",
@@ -1630,16 +1637,34 @@
     },
     {
         "id": "measure-ph",
-        "title": "Measure solution pH",
+        "title": "Measure hydroponic nutrient solution pH with a test strip",
+        "image": "/assets/pH_strip.jpg",
         "requireItems": [
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
             {
                 "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                 "count": 1
             }
         ],
-        "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-22",
+                    "date": "2025-08-22",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "measure-ec",
@@ -2475,6 +2500,10 @@
             },
             {
                 "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            },
+            {
+                "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
                 "count": 1
             }
         ],
@@ -3358,7 +3387,7 @@
     },
     {
         "id": "generate-ssh-key",
-        "title": "Generate an SSH key pair and copy it to a node",
+        "title": "Generate an ed25519 SSH key pair on a laptop and copy it to a Pi cluster node",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 },
@@ -3366,7 +3395,7 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m",
+        "duration": "2m",
         "hardening": {
             "passes": 0,
             "score": 0,
@@ -3382,6 +3411,24 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "3m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "configure-ufw-firewall",
+        "title": "Install UFW and allow only SSH and HTTPS on a Pi node",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 },
+            { "id": "df7e94e2-76b9-4865-b843-2ec21feb258e", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m",
         "hardening": {
             "passes": 0,
             "score": 0,
@@ -3418,5 +3465,17 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "trim-resistor-leads",
+        "title": "Trim excess leads from a soldered 220 Ω resistor using wire cutters",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 },
+            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
     }
 ]

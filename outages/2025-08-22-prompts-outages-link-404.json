@@ -1,0 +1,11 @@
+{
+  "id": "prompts-outages-link-404",
+  "date": "2025-08-22",
+  "component": "docs",
+  "rootCause": "Absolute link used '/docs/prompts-outages', which GitHub interpreted as an external path and returned 404.",
+  "resolution": "Updated cross references to use a relative path and removed redundant section.",
+  "references": [
+    "frontend/src/pages/docs/md/prompts-codex.md",
+    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md"
+  ]
+}

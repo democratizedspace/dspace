@@ -5,13 +5,13 @@ slug: 'prompts-items'
 
 # Writing great item prompts for the DSPACE repository
 
-Codex is a sandboxed engineering agent that can open this repository,
-run its own tests, and send you a ready-made PR—but only if you give it a
-clear, file-scoped prompt. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when working on items. To keep the prompt
-docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). If these
-templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
-For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+Codex is a sandboxed engineering agent that can open this repository, run its own
+tests, and send you a ready-made PR—but only if you give it a clear, file-scoped
+prompt. Use this guide alongside [Codex Prompts](/docs/prompts-codex) when
+working on items. To keep the prompt docs evolving, see the
+[Codex meta prompt](/docs/prompts-codex-meta). If these templates drift, refresh
+them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing
+GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 For general content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 > **TL;DR**
@@ -20,33 +20,34 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
 > 2. Say exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
-> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
+> 4. Run `npm run lint`, `npm run type-check`, `npm run build`,
 >    `npm run itemValidation`, `npm run test:ci`, and
->    `npm run test:ci -- itemQuality`; scan staged changes with
->    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
+>    `npm run test:ci -- itemQuality`.
+> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
+>    commit with an emoji prefix.
 
 ---
 
 ## 1. Quick start (Web vs CLI)
 
 -   **Add or update an item**
-    -   Web: use the “Code” button and attach the repo.
+    -   Web: use the "Code" button and attach the repo.
     -   CLI: `codex "add item solar-cell-junction-box"`
 -   **Ask about item data**
-    -   Web: use the “Code” button (the “Ask” button also works).
+    -   Web: use the "Code" button (the "Ask" button also works).
     -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items/*.json"`
 -   **Run item tests**
     -   Web: not supported yet.
     -   CLI:
         ```bash
         codex exec "\
-        npm run audit:ci && \
         npm run lint && \
         npm run type-check && \
         npm run build && \
         npm run itemValidation && \
         npm run test:ci && \
-        npm run test:ci -- itemQuality"
+        npm run test:ci -- itemQuality && \
+        git diff --cached | ./scripts/scan-secrets.py"
         ```
 
 See the [OpenAI CLI docs][openai-cli] for more flags.
@@ -59,7 +60,6 @@ See the [OpenAI CLI docs][openai-cli] for more flags.
 -   **Files to touch**: Limits search space → faster & cheaper.
 -   **Constraints**: Coding style, a11y, item schema rules.
 -   **Acceptance check**:
-    -   `npm run audit:ci`
     -   `npm run lint`
     -   `npm run type-check`
     -   `npm run build`
@@ -84,7 +84,7 @@ REQUIREMENTS
 3. Ensure the item is referenced by at least one quest or process; update those
    files and create missing processes as needed.
 4. Use only existing image assets; do not add new image files.
-5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Run `npm run itemValidation` and `npm run test:ci -- itemQuality`, fixing any failures.
 7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 8. Use an emoji-prefixed commit message like `📝 : – add price field`.
@@ -103,7 +103,7 @@ SYSTEM:
 You are an automated contributor for the DSPACE repository. Edit or
 create items under `frontend/src/pages/inventory/json/items`, choosing the
 appropriate category file. Ensure realistic details, required fields, and
-passing checks (`npm run audit:ci`, `npm run lint`, `npm run type-check`,
+passing checks (`npm run lint`, `npm run type-check`,
 `npm run build`, `npm run test:ci`, `npm run itemValidation`, and
 `npm run test:ci -- itemQuality`). Verify the item appears in at least one quest or process,
 reuse existing image assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
@@ -154,7 +154,7 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
+5. Run `npm run lint`, `npm run type-check`, `npm run build`,
    `npm run test:ci`, `npm run itemValidation`, and `npm run test:ci -- itemQuality`. Update docs if needed.
 6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 7. Use an emoji-prefixed commit message like `📝 : – refine item details`.
@@ -173,4 +173,4 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information** since AI systems can generate plausible
     but incorrect details.
 
-[openai-cli]: https://platform.openai.com/docs/guides/openai-cli
+[openai-cli]: https://platform.openai.com/docs/guides/openai-cli/
