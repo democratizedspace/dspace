@@ -13,7 +13,7 @@ docs, see the [Codex meta prompt](/docs/prompts-codex-meta).
 
 If this prompt ever drifts, consult the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
 to refresh it before use. For guidance on logging incidents, see the
-[Outage prompts](./prompts-outages.md).
+[Outage prompts](/docs/prompts-outages).
 
 > **Human setup**
 >
@@ -36,8 +36,7 @@ CONTEXT:
   error.
 - If no URL is given, inspect the codebase to reproduce the failure:
   * Examine `.github/workflows/` to learn which checks run in CI.
-  * Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
-    `npm run test:ci` locally.
+    * Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` locally.
   * Study project docs to understand how to run the test suite and emulate the
     GitHub Actions environment.
 - Consult existing outage entries in `/outages` for similar symptoms.

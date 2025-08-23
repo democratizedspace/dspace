@@ -52,5 +52,5 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## September 2022
 
--   [x] [Quest system](/docs/quests)
+-   [x] [Quest system](/docs/quest-trees)
 -   [x] [Docs page](/docs)
