@@ -12,8 +12,14 @@ The production instance is now self-hosted; see
 
 Check out the [docs](https://democratized.space/docs)!
 
+## Accessibility
+
+The frontend aims to meet WCAG 2.1 AA. Navigation links include `aria-current`
+and visible focus indicators to support keyboard users.
+
 ## Table of Contents
 
+- [Accessibility](#accessibility)
 - [Local Development](#local-development)
 - [Testing](#testing)
 - [Built-in Items](#built-in-items)
