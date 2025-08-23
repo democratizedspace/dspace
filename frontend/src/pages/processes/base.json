@@ -3450,7 +3450,7 @@
     },
     {
         "id": "use-brass-tip-cleaner",
-        "title": "Clean soldering iron tip using a brass wire sponge",
+        "title": "Wipe hot soldering iron tip on a brass wire sponge to remove residue",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
@@ -3458,12 +3458,18 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m",
+        "duration": "30s",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-use-brass-tip-cleaner-2025-08-23",
+                    "date": "2025-08-23",
+                    "score": 60
+                }
+            ]
         }
     },
     {
