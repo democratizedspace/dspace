@@ -239,10 +239,11 @@
     {
         "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
         "name": "wire stripper",
-        "description": "Self-adjusting tool for stripping 24-10 AWG insulation cleanly.",
+        "description": "Spring-loaded tool strips 24–10 AWG insulation; built-in cutter; 120 mm, 75 g.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "15 dUSD",
         "type": "tool",
+        "unit": "tool",
         "hardening": {
             "passes": 1,
             "score": 60,
