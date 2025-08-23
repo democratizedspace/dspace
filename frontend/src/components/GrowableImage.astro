@@ -1,14 +1,22 @@
 ---
-const { imageSrc, href } = Astro.props;
+interface Props {
+    imageSrc: string;
+    href: string;
+    alt?: string;
+}
+
+const { imageSrc, href, alt }: Props = Astro.props;
 ---
 
-<a href={href}><img class="icon" src={imageSrc} /></a>
+<a href={href}><img class="icon" src={imageSrc} alt={alt ?? ''} /></a>
 
 <style>
     .icon {
         margin-bottom: -8px;
         border-radius: 10px;
         width: 30px;
+        max-width: 100%;
+        height: auto;
         transition: 0.2s;
     }
 
