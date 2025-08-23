@@ -1,8 +1,8 @@
 # Backup System
 
-DSPACE nodes perform nightly backups to preserve player progress and custom content.
-Backups run as a cron job on the host and create a timestamped `tar.gz` archive of the
-`backend` and `frontend` workspaces. Archives are stored in the `backups/` directory and
+DSPACE nodes perform nightly backups to preserve player progress and custom content.  
+A cron job on the host creates a timestamped `tar.gz` archive of the `backend` and
+`frontend` workspaces each night. Archives are stored in the `backups/` directory and
 can be copied off-device for redundancy.
 
 ## Usage
