@@ -1,0 +1,60 @@
+{
+    "id": "energy/dOffset-1",
+    "title": "Offset 1 kg of carbon",
+    "description": "Convert 1 dCarbon into 1 dOffset to balance your emissions.",
+    "image": "/assets/dOffset.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your dCarbon is piling up. Want to offset 1 kg by converting it into a dOffset token?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "offset",
+                    "text": "Absolutely, let's do it."
+                }
+            ]
+        },
+        {
+            "id": "offset",
+            "text": "Run the conversion process to burn dCarbon with dUSD.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "dCarbon-dOffset-1",
+                    "text": "Convert 1 dCarbon to 1 dOffset"
+                },
+                {
+                    "type": "goto",
+                    "goto": "check",
+                    "text": "I already have my dOffset.",
+                    "requiresItems": [
+                        {
+                            "id": "b0ac46e6-6c60-48f0-b753-d9b6ad9935a6",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "check",
+            "text": "Nice work! You've offset some emissions.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Feels good to breathe easier."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["energy/dWatt-1e3"]
+}
