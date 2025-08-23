@@ -100,18 +100,17 @@ export function approximateIrlTotalPrice(
   }
 
   let total = 0;
-  let found = false;
+  let count = 0;
 
   for (const id of ids) {
     const price = approximateIrlPrice(id);
-    if (price == null) {
-      continue;
+    if (typeof price === 'number') {
+      total += price;
+      count++;
     }
-    total += price;
-    found = true;
   }
 
-  return found ? total : null;
+  return count > 0 ? total : null;
 }
 
 /**
