@@ -142,6 +142,21 @@
         }
     },
     {
+        "id": "06146006-5615-4c1a-98dd-ff1b107ec893",
+        "name": "flux pen",
+        "description": "10 mL no-clean flux pen with fine tip for aiding solder flow during rework; ~15 g.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "7 dUSD",
+        "type": "tool",
+        "unit": "pen",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26",
         "name": "heat gun",
         "description": "1200 W heat gun with 300 °C and 600 °C settings and a built-in stand for shrinking tubing.",
@@ -247,10 +262,11 @@
     {
         "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
         "name": "wire stripper",
-        "description": "Self-adjusting tool for stripping 24-10 AWG insulation cleanly.",
+        "description": "Spring-loaded tool strips 24–10 AWG insulation; built-in cutter; 120 mm, 75 g.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "15 dUSD",
         "type": "tool",
+        "unit": "tool",
         "hardening": {
             "passes": 1,
             "score": 60,

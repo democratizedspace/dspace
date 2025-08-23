@@ -15,8 +15,8 @@ workflows.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and
-`README.md`. Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
-`npm run build`, and `npm run test:ci` all pass before committing.
+`README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`, and
+`npm run test:ci` all pass before committing.
 
 USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing cross-links.

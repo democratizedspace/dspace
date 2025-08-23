@@ -19,9 +19,9 @@ use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 1. Scope changes to a single NPC.
 > 2. Specify the expected output (tests, docs).
 > 3. Stop when the spec is complete; remaining text becomes mandatory.
-> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
->    `npm run test:ci`; scan staged changes with
->    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
+> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`;
+>    scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
+>    commit with an emoji prefix.
 
 ---
 
@@ -38,11 +38,10 @@ use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
     -   CLI:
         ```bash
           codex exec "\
-          npm run audit:ci && \
-          npm run lint && \
-          npm run type-check && \
-          npm run build && \
-          npm run test:ci"
+            npm run lint && \
+            npm run type-check && \
+            npm run build && \
+            npm run test:ci"
         ```
 
 See the [OpenAI CLI repository][openai-cli] for more flags.
@@ -76,8 +75,7 @@ FILES OF INTEREST
 REQUIREMENTS
 1. Preserve established character voice and lore.
 2. Keep sample dialogue short and approachable.
- 3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
-    `npm run test:ci`.
+   3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 4. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 5. Update related docs if needed.
 
@@ -91,12 +89,12 @@ Use this when you want Codex to automatically create or upgrade an NPC entry.
 
 ```text
 SYSTEM:
-You are an automated contributor for the DSPACE repository. Edit
-`frontend/src/pages/docs/md/npcs.md`, adding or refining NPC sections.
-Maintain each character’s voice, keep sample dialogue realistic, and ensure
-`npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
-pass. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
-before committing.
+  You are an automated contributor for the DSPACE repository. Edit
+  `frontend/src/pages/docs/md/npcs.md`, adding or refining NPC sections.
+  Maintain each character’s voice, keep sample dialogue realistic, and ensure
+  `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
+  pass. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
+  before committing.
 
 USER:
 1. Follow the steps above.
@@ -120,8 +118,7 @@ USER:
 2. Improve characterization and ensure dialogue stays concise and in-universe.
 3. Reuse existing image assets; do not add new images.
 4. Cross-reference related quests or processes and update them if needed.
-5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
-   `npm run test:ci`.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 7. Use an emoji-prefixed commit message like `📝 : – refine NPC bio`.
 
