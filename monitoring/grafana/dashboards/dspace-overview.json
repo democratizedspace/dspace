@@ -1,0 +1,20 @@
+{
+  "id": null,
+  "title": "DSpace Overview",
+  "timezone": "browser",
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Service Up",
+      "targets": [
+        {
+          "expr": "up{job=\"dspace\"}",
+          "legendFormat": "dspace"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 36,
+  "version": 1,
+  "refresh": "5s"
+}
