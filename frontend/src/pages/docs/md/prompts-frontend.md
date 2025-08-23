@@ -5,10 +5,14 @@ slug: 'prompts-frontend'
 
 # Frontend prompts for the _dspace_ repo
 
-DSPACE's UI is built with Svelte and Astro. Use this guide when working on files inside
-`frontend/`, including Svelte components, pages, and styles. Changes should improve clarity,
-accessibility, or performance while keeping tests green. For deeper accessibility guidance, see
-[Accessibility prompts](/docs/prompts-accessibility).
+DSPACE's UI is built with Svelte and Astro. Codex can open this repository and run its own
+tests. Use this guide when working on files inside `frontend/`, including Svelte components,
+pages, and styles. Changes should improve clarity, accessibility, or performance while keeping
+tests green. For deeper accessibility guidance, see
+[Accessibility prompts](/docs/prompts-accessibility). To keep the prompt docs evolving,
+see the [Codex meta prompt](/docs/prompts-codex-meta). If templates drift, refresh them
+with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions
+runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >
@@ -22,8 +26,8 @@ accessibility, or performance while keeping tests green. For deeper accessibilit
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
-and `README.md`. Ensure `npm run lint`, `npm run type-check`,
-`npm run build`, and `npm run test:ci` pass before committing.
+and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
 
 USER:
 1. Update UI code under `frontend/`.

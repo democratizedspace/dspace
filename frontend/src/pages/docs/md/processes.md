@@ -3,7 +3,9 @@ title: 'Processes'
 slug: 'processes'
 ---
 
-Processes are the steps that machines take to convert ingredients, raw materials, or subcomponents into other machines or objects. Think of them as blueprints or recipes.
+Processes are the steps that machines take to convert ingredients, raw materials, or subcomponents
+into other machines or objects. Think of them as blueprints or recipes. For guidance on designing
+your own, see the [Process Development Guidelines](/docs/process-guidelines).
 
 <img src="/assets/docs/process.jpg">
 

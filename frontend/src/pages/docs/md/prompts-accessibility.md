@@ -5,8 +5,13 @@ slug: 'prompts-accessibility'
 
 # Accessibility prompts for the _dspace_ repo
 
-Use this guide when enhancing the project's accessibility. The focus is on semantic HTML,
-ARIA attributes, keyboard navigation, and sufficient color contrast.
+Codex can open this repository and run its own tests. Use this guide alongside
+[Codex Prompts](/docs/prompts-codex) when improving accessibility so instructions stay
+consistent. To keep the prompt docs evolving, see the
+[Codex meta prompt](/docs/prompts-codex-meta). If templates drift, refresh them with the
+[Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs, use
+the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix). The focus here is on semantic
+HTML, ARIA attributes, keyboard navigation, and sufficient color contrast.
 
 > **TL;DR**
 >

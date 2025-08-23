@@ -65,6 +65,10 @@ Instructions for creating processes that transform or utilize items. Topics incl
 -   Process states and lifecycle
 -   Creating process chains for progression
 
+### [Custom Content Bundles](/docs/custom-bundles)
+
+Bundle related quests, items, and processes into a single JSON file to keep submissions in sync.
+
 ## AI Assistance for Content Creation
 
 For contributors who want to leverage artificial intelligence in their content creation process, we provide [Quest Prompts](/docs/prompts-quests), [Item Prompts](/docs/prompts-items) and [Process Prompts](/docs/prompts-processes) that can be used with modern AI assistants. For automating backlog tasks, see the [Codex Implementation Prompt](/docs/prompts-codex#implementation-prompt); it walks Codex through selecting an unchecked item from the latest changelog and implementing it from start to finish. For general repository maintenance, the [Codex Upgrade Prompt](/docs/prompts-codex#upgrade-prompt) instructs Codex to scan the project for improvements and implement them automatically.
