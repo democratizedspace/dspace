@@ -14,8 +14,8 @@ see the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
-and `README.md`. Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
-`npm run build`, and `npm run test:ci` pass before committing.
+and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
 
 USER:
 1. Select one or more `prompts-*.md` files under `frontend/src/pages/docs/md/`.

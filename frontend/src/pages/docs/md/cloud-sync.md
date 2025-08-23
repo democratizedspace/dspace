@@ -11,3 +11,4 @@ You can now back up your game progress to a private GitHub gist. On the **Cloud 
 5. On another device, enter the same token and Gist ID and click **Download**.
 
 Your gist ID is stored locally along with your token so you don't have to re-enter it. Use the **Clear** buttons to remove the stored token or ID at any time.
+For manual backups without GitHub, see [Backups](/docs/backups).

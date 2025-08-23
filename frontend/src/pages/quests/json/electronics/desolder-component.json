@@ -1,7 +1,7 @@
 {
     "id": "electronics/desolder-component",
     "title": "Desolder a component",
-    "description": "Remove a through-hole resistor from a scrap PCB using a desoldering pump and solder wick. Work in a ventilated area and wear safety goggles.",
+    "description": "Remove a through-hole resistor from a scrap PCB using a desoldering pump, flux pen and solder wick. Work in a ventilated area and wear safety goggles.",
     "image": "/assets/quests/basic_circuit.svg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -19,12 +19,12 @@
         },
         {
             "id": "prep",
-            "text": "Gather the soldering iron kit, desoldering pump, solder wick, and safety goggles. Keep the iron on its stand and cords clear.",
+            "text": "Gather the soldering iron kit, desoldering pump, solder wick, flux pen and safety goggles. Keep the iron on its stand and cords clear.",
             "options": [{ "type": "goto", "goto": "desolder", "text": "Tools ready." }]
         },
         {
             "id": "desolder",
-            "text": "Heat one lead, trigger the desoldering pump to pull molten solder, repeat on the other lead, then use solder wick to clear residue and gently wiggle the resistor free.",
+            "text": "Apply a little flux, heat one lead, trigger the desoldering pump to pull molten solder, repeat on the other lead, then use solder wick to clear residue and gently wiggle the resistor free.",
             "options": [
                 {
                     "type": "goto",
@@ -35,7 +35,8 @@
                         { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
                         { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
                         { "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22", "count": 1 },
-                        { "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03", "count": 1 }
+                        { "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03", "count": 1 },
+                        { "id": "06146006-5615-4c1a-98dd-ff1b107ec893", "count": 1 }
                     ]
                 }
             ]
@@ -49,8 +50,8 @@
     "rewards": [],
     "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
-        "passes": 2,
-        "score": 78,
+        "passes": 3,
+        "score": 80,
         "emoji": "✅",
         "history": [
             {
@@ -62,6 +63,11 @@
                 "task": "codex-upgrade-2025-08-15",
                 "date": "2025-08-15",
                 "score": 78
+            },
+            {
+                "task": "codex-quest-hardening-2025-10-23",
+                "date": "2025-10-23",
+                "score": 80
             }
         ]
     }
