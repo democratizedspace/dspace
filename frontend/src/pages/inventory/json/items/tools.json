@@ -593,5 +593,20 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
+        "name": "compost sifter",
+        "description": "Wooden frame with 1 cm mesh to screen finished compost; 40×40 cm, 1 kg.",
+        "image": "/assets/bucket.jpg",
+        "price": "20 dUSD",
+        "type": "tool",
+        "unit": "sifter",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
