@@ -33,7 +33,7 @@ Extract the desired archive, then replace the existing directories:
 tar -xzf backups/backup-<timestamp>.tar.gz
 ```
 
-Verify the application starts normally after restoration.
+Verify that the application starts normally after restoration.
 
 See also:
 - [Cloudflare Load Balancing](./cloudflare_load_balancing.md)

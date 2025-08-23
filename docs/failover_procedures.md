@@ -30,5 +30,4 @@ However, you should still investigate the failed instance and restore it promptl
     - Once the new node is running, add it to your [Cloudflare load balancer](./cloudflare_load_balancing.md)
       as an origin.
 
-Cloudflare automatically returns the restored instance to rotation once it reports healthy.
-
+Cloudflare automatically returns the restored instance to rotation once it reports as healthy.
