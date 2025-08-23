@@ -342,6 +342,11 @@ DSPACE supports user-created content:
 
 Custom content integrates seamlessly with built-in game content.
 
+## Accessibility
+
+-   Interactive form controls display visible focus outlines.
+-   Remove buttons include descriptive `aria-label` attributes.
+
 ## Contributing
 
 Please see the [Contribution Guide](../CONTRIBUTORS.md) and our [Developer Guide](../DEVELOPER_GUIDE.md) for detailed information on contributing to DSPACE.
