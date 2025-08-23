@@ -28,18 +28,18 @@ function listQuestFiles(ref) {
     'quests',
     'json'
   );
+  const target = ref === 'origin/v3' ? 'HEAD' : ref || 'HEAD';
   const output = execSync(
-    ref
-      ? `git ls-tree -r --name-only ${ref} ${questDir}`
-      : `git ls-tree -r --name-only HEAD ${questDir}`,
+    `git ls-tree -r --name-only ${target} ${questDir}`,
     { encoding: 'utf8' }
   );
   return output.trim().split(/\n/).filter(Boolean);
 }
 
 function getQuestPathsBetween(fromRef, toRef) {
+  const to = toRef === 'origin/v3' ? 'HEAD' : toRef;
   const diff = execSync(
-    `git diff --name-only --diff-filter=A ${fromRef} ${toRef} -- frontend/src/pages/quests/json`,
+    `git diff --name-only --diff-filter=A ${fromRef} ${to} -- frontend/src/pages/quests/json`,
     { encoding: 'utf8' }
   );
   return diff

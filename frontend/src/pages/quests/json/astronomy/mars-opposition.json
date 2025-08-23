@@ -1,0 +1,37 @@
+{
+    "id": "astronomy/mars-opposition",
+    "title": "Mars Opposition",
+    "description": "Use your basic telescope to observe Mars at opposition and log surface details.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Mars is bright tonight. At opposition it's closest to Earth.",
+            "options": [{ "type": "goto", "goto": "observe", "text": "Setting up the telescope." }]
+        },
+        {
+            "id": "observe",
+            "text": "Focus your telescope on the red planet and sketch any dark markings in your mission logbook.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                    ],
+                    "text": "Sketch complete."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Tracking Mars helps refine your observing skills.",
+            "options": [{ "type": "finish", "text": "Until next opposition." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/jupiter-moons"]
+}
