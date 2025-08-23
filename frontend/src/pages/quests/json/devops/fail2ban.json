@@ -22,6 +22,11 @@
             "text": "Install Fail2ban and configure a jail for the SSH service.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "install-fail2ban",
+                    "text": "Install and enable Fail2ban"
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Bans configured",
