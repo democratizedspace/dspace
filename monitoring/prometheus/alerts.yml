@@ -1,0 +1,10 @@
+groups:
+  - name: dspace
+    rules:
+      - alert: DspaceDown
+        expr: up{job="dspace"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: DSpace service is down
