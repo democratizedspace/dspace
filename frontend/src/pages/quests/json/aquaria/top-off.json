@@ -1,0 +1,55 @@
+{
+    "id": "aquaria/top-off",
+    "title": "Top Off Evaporated Water",
+    "description": "Use a hand pump siphon and aged water to restore aquarium levels.",
+    "image": "/assets/walstad.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The waterline dropped. Raise two 5 gal buckets above the tank and prime the gravel vacuum.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "topoff",
+                    "text": "Setup done.",
+                    "requiresItems": [
+                        { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 2 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "topoff",
+            "text": "Hand-pump water from the buckets until the tank's level is restored.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "refill",
+                    "text": "Waterline topped off."
+                }
+            ]
+        },
+        {
+            "id": "refill",
+            "text": "Refill both buckets with a hose. Let them sit 24–48 h or condition before the next top-off.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Buckets refilled and aging.",
+                    "process": "bucket-water-dechlorinated"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! You've got water aging for the next evaporation top-off.",
+            "options": [{ "type": "finish", "text": "Job done." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["aquaria/water-change"]
+}
