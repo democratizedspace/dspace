@@ -8,6 +8,7 @@ test.describe('Docs Navigation', () => {
 
     test('docs pages should load and display headings', async ({ page }) => {
         const pages = [
+            { href: '/docs', heading: /Docs/i },
             { href: '/docs/about', heading: /About/i },
             { href: '/docs/mission', heading: /Mission/i },
             { href: '/docs/faq', heading: /FAQ|Frequently/i },
