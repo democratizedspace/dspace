@@ -22,14 +22,17 @@
             "text": "Connect the inverter to the battery using thick leads and a fuse.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "707364a4-b6e0-4d93-9733-a55abeab8a0b", "count": 1 }],
+                    "text": "Grab the inverter"
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Inverter humming!",
                     "requiresItems": [
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        }
+                        { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
+                        { "id": "707364a4-b6e0-4d93-9733-a55abeab8a0b", "count": 1 }
                     ]
                 }
             ]

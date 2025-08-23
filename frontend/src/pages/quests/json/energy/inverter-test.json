@@ -1,0 +1,53 @@
+{
+    "id": "energy/inverter-test",
+    "title": "Test Your Power Inverter",
+    "description": "Verify your 300 W inverter outputs 120 V AC using a digital multimeter.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your inverter is wired up. Grab a digital multimeter and make sure it's delivering about 120 volts AC.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Let's test it."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Connect the inverter to the 200 Wh battery and measure the AC socket while keeping fingers clear.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-inverter-output",
+                    "text": "Measuring now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reads about 120 volts!",
+                    "requiresItems": [
+                        { "id": "707364a4-b6e0-4d93-9733-a55abeab8a0b", "count": 1 },
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Solid output! You're ready to power AC gear off-grid.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Power secured."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/power-inverter"]
+}

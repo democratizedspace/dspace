@@ -183,6 +183,14 @@
         }
     },
     {
+        "id": "707364a4-b6e0-4d93-9733-a55abeab8a0b",
+        "name": "300 W power inverter",
+        "description": "Converts 12 V DC from a battery to 120 V AC, includes two outlets and USB port.",
+        "image": "/assets/quests/solar_200Wh.jpg",
+        "price": "35 dUSD",
+        "type": "tool"
+    },
+    {
         "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
         "name": "digital calipers",
         "description": "150 mm stainless steel digital calipers with 0.01 mm resolution and auto-off.",
