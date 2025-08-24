@@ -112,18 +112,16 @@ Phoenix is a chemist focused on sustainable rocket fuel.
 They blend chemistry with conservation to push craft without scarring the planet.
 Phoenix guides recruits through quests like
 [Demonstrate a Safe Chemical Reaction](/quests/chemistry/safe-reaction) and
-[Mix an Efficient Rocket Fuel](/quests/rocketry/fuel-mixture),
+[Extract Stevia Sweetener](/quests/chemistry/stevia-extraction),
 showing how green chemistry powers missions.
 
 ### Sample Dialogue
 
--   "Hey, I'm Phoenix—chemistry without pollution is my specialty."
+-   "Hey, I'm Phoenix—clean thrust starts in the lab."
 -   "Safety goggles on; propellant fumes bite harder than dragons."
 -   "We test in micro batches so a bad mix only scorches a spoon."
--   "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
--   "When the exhaust runs clear, you know we've done it right."
--   "Next up, we'll brew propellant that pushes rockets without scorching the skies."
 -   "Spent fuel? We'll distill what's usable and neutralize the rest."
+-   "Next launch rides on eco propellant; let's keep the skies clear."
 
 ## Atlas
 
