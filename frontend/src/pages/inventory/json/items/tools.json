@@ -600,7 +600,7 @@
     {
         "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
         "name": "brass tip cleaner",
-        "description": "Brass wire sponge in a weighted holder scrubs oxidation from hot soldering tips without water.",
+        "description": "50 mm brass wire sponge in a weighted steel holder; 40 g; cleans iron tips without water.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "5 dUSD",
         "type": "tool",
