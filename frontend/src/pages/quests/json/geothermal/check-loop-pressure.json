@@ -1,0 +1,34 @@
+{
+    "id": "geothermal/check-loop-pressure",
+    "title": "Check Loop Pressure",
+    "description": "Verify the ground loop is holding pressure with a quick gauge check.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Healthy pressure keeps flow steady. Want to check it?",
+            "options": [{ "type": "goto", "goto": "measure", "text": "Let's read the gauge." }]
+        },
+        {
+            "id": "measure",
+            "text": "Connect a pressure gauge and note the loop reading.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Gauge reads steady.",
+                    "process": "pressure-gauge-read"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Logging pressure helps spot leaks early.",
+            "options": [{ "type": "finish", "text": "I'll keep monitoring." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["geothermal/survey-ground-temperature"]
+}
