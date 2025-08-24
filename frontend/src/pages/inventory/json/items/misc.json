@@ -1262,6 +1262,20 @@
         "price": "3 dUSD"
     },
     {
+        "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+        "name": "100 mL graduated cylinder",
+        "description": "Glass cylinder with 1 mL graduations and a spout; stands 26 cm tall.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "4 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
         "name": "glass stir rod",
         "description": "25 cm solid glass rod for mixing solutions without introducing contaminants.",
