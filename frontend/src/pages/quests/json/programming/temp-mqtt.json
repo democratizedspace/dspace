@@ -1,0 +1,34 @@
+{
+    "id": "programming/temp-mqtt",
+    "title": "Publish Temperature via MQTT",
+    "description": "Send sensor readings to an MQTT broker with a simple script.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to share your data? Let's publish temperature readings to an MQTT topic.",
+            "options": [{ "type": "goto", "goto": "script", "text": "I'm ready." }]
+        },
+        {
+            "id": "script",
+            "text": "Write a short program that reads the thermistor and publishes the value to a topic like `sensors/temperature`.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Message sent!",
+                    "requiresItems": [{ "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Remote systems can now subscribe to your data stream.",
+            "options": [{ "type": "finish", "text": "Neat!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["programming/temp-logger"]
+}
