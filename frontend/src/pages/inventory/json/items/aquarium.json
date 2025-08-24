@@ -162,11 +162,23 @@
     },
     {
         "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
-        "name": "gravel",
-        "description": "Loose gravel suitable for use in an aquarium.",
+        "name": "aquarium gravel (1 kg)",
+        "description": "1 kg bag of washed 5–10 mm river gravel for aquarium substrate; rinse before use.",
         "image": "/assets/gravel.jpg",
         "price": "1 dUSD",
-        "unit": " kg"
+        "unit": "kg",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-24",
+                    "date": "2025-08-24",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",

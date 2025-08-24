@@ -10,18 +10,18 @@ run its own tests, and send you a ready‑made PR — but only if you give it a 
 file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
-For task-specific templates see [Quest prompts](/docs/prompts-quests),
-[Item prompts](/docs/prompts-items), [Process prompts](/docs/prompts-processes),
-[NPC prompts](/docs/prompts-npcs), [Outage prompts](/docs/prompts-outages),
-[Backup prompts](/docs/prompts-backups), [Monitoring prompts](/docs/prompts-monitoring),
-[Audit prompts](/docs/prompts-audit), [Docs prompts](/docs/prompts-docs),
-[Playwright test prompts](/docs/prompts-playwright-tests),
-[Vitest test prompts](/docs/prompts-vitest), [Frontend prompts](/docs/prompts-frontend),
-[Backend prompts](/docs/prompts-backend), [Refactor prompts](/docs/prompts-refactors), and
-[Accessibility prompts](/docs/prompts-accessibility).
-For specialized workflows use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix),
-the [Codex meta prompt](/docs/prompts-codex-meta), and the
-[Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+For task-specific templates see [Quest prompts](prompts-quests.md),
+[Item prompts](prompts-items.md), [Process prompts](prompts-processes.md),
+[NPC prompts](prompts-npcs.md), [Outage prompts](prompts-outages.md),
+[Backup prompts](prompts-backups.md), [Monitoring prompts](prompts-monitoring.md),
+[Audit prompts](prompts-audit.md), [Docs prompts](prompts-docs.md),
+[Playwright test prompts](prompts-playwright-tests.md),
+[Vitest test prompts](prompts-vitest.md), [Frontend prompts](prompts-frontend.md),
+[Backend prompts](prompts-backend.md), [Refactor prompts](prompts-refactors.md), and
+[Accessibility prompts](prompts-accessibility.md).
+For specialized workflows use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md),
+the [Codex meta prompt](prompts-codex-meta.md), and the
+[Codex Prompt Upgrader](prompts-codex-upgrader.md).
 
 > **TL;DR**
 >
@@ -34,32 +34,32 @@ the [Codex meta prompt](/docs/prompts-codex-meta), and the
 >    commit with an emoji prefix.
 
 For failing GitHub Actions runs, use the dedicated
-[Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+[Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 ---
 
 ## Related prompt guides
 
--   [Item Prompts](/docs/prompts-items)
--   [Process Prompts](/docs/prompts-processes)
--   [Quest Prompts](/docs/prompts-quests)
--   [NPC Prompts](/docs/prompts-npcs)
--   [Outage Prompts](/docs/prompts-outages)
--   [Backup Prompts](/docs/prompts-backups)
--   [Monitoring Prompts](/docs/prompts-monitoring)
--   [Audit Prompts](/docs/prompts-audit)
--   [Docs Prompts](/docs/prompts-docs)
--   [Docs cross-link prompt](/docs/prompts-docs#cross-link-check-prompt)
--   [Docs proofreading prompt](/docs/prompts-docs#proofreading-prompt)
--   [Backend Prompts](/docs/prompts-backend)
--   [Frontend Prompts](/docs/prompts-frontend)
--   [Accessibility Prompts](/docs/prompts-accessibility)
--   [Playwright Test Prompts](/docs/prompts-playwright-tests)
--   [Vitest Test Prompts](/docs/prompts-vitest)
--   [Refactor Prompts](/docs/prompts-refactors)
--   [Codex CI-Failure Fix Prompt](/docs/prompts-codex-ci-fix)
--   [Codex Meta Prompt](/docs/prompts-codex-meta)
--   [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
+-   [Item Prompts](prompts-items.md)
+-   [Process Prompts](prompts-processes.md)
+-   [Quest Prompts](prompts-quests.md)
+-   [NPC Prompts](prompts-npcs.md)
+-   [Outage Prompts](prompts-outages.md)
+-   [Backup Prompts](prompts-backups.md)
+-   [Monitoring Prompts](prompts-monitoring.md)
+-   [Audit Prompts](prompts-audit.md)
+-   [Docs Prompts](prompts-docs.md)
+-   [Docs cross-link prompt](prompts-docs.md#cross-link-check-prompt)
+-   [Docs proofreading prompt](prompts-docs.md#proofreading-prompt)
+-   [Backend Prompts](prompts-backend.md)
+-   [Frontend Prompts](prompts-frontend.md)
+-   [Accessibility Prompts](prompts-accessibility.md)
+-   [Playwright Test Prompts](prompts-playwright-tests.md)
+-   [Vitest Test Prompts](prompts-vitest.md)
+-   [Refactor Prompts](prompts-refactors.md)
+-   [Codex CI-Failure Fix Prompt](prompts-codex-ci-fix.md)
+-   [Codex Meta Prompt](prompts-codex-meta.md)
+-   [Codex Prompt Upgrader](prompts-codex-upgrader.md)
 
 ---
 
@@ -115,7 +115,7 @@ A pull request with the required changes and tests.
 ## Implementation Prompt
 
 Use this template when you want Codex to automatically clear items from the
-[September&nbsp;1,&nbsp;2025 changelog](/docs/changelog/20250901). Tasks are
+[September&nbsp;1,&nbsp;2025 changelog](changelog/20250901.md). Tasks are
 tracked with Markdown checkboxes and an emoji status:
 
 -   `- [ ]` – work not started
@@ -158,7 +158,7 @@ completed task and test results in the PR body.
 
 Use this prompt to refine DSPACE's own prompt documentation. For a template
 dedicated to evolving the prompt guides themselves, see the
-[Codex meta prompt](/docs/prompts-codex-meta).
+[Codex meta prompt](prompts-codex-meta.md).
 
 ```text
 SYSTEM:
@@ -183,7 +183,7 @@ A pull request with the improved prompt doc and passing checks.
 
 Use this meta prompt when the Codex templates need refreshing. It keeps our
 guidance current—the machine that builds the machine. See the standalone
-[Codex Prompt Upgrader](/docs/prompts-codex-upgrader) for the full template.
+[Codex Prompt Upgrader](prompts-codex-upgrader.md) for the full template.
 
 ```text
 SYSTEM:
