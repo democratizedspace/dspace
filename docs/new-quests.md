@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 238
-New quests in this release: 216
+Current quest count: 239
+New quests in this release: 217
 
 ### 3dprinting
 
@@ -43,6 +43,7 @@ New quests in this release: 216
 -   aquaria/shrimp
 -   aquaria/sponge-filter
 -   aquaria/thermometer
+-   aquaria/top-off
 -   aquaria/walstad
 -   aquaria/water-change
 -   aquaria/water-testing
