@@ -111,9 +111,8 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 Phoenix is a chemist focused on sustainable rocket fuel.
 They blend chemistry with conservation to push craft without scarring the planet.
 Phoenix guides recruits through quests like
-[Demonstrate a Safe Chemical Reaction](/quests/chemistry/safe-reaction) and
-[Extract Stevia Sweetener](/quests/chemistry/stevia-extraction),
-showing how green chemistry powers missions.
+[Mix a Green Igniter](/quests/chemistry/green-igniter) and
+[Refuel the Hybrid Engine](/quests/rocketry/hybrid-refuel).
 
 ### Sample Dialogue
 
@@ -168,13 +167,11 @@ second nature.
 
 <img src="/assets/npc/nova.jpg" />
 
-Lyra charts the stars and keeps the guild's telescopes in perfect alignment.
-Raised under dark rural skies, she turned a childhood obsession into orbital navigation.
-She recites catalog numbers from memory and nurses midnight coffee under the Milky Way.
-Her calm tutoring turns orbital mechanics into bedtime stories.
+Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision.
+Raised under planetarium domes, she reads constellations like street signs and keeps the guild oriented.
 Lyra guides recruits through quests like
-[Assemble a Simple Telescope](/quests/astronomy/basic-telescope)
-and [Locate the North Star](/quests/astronomy/north-star).
+[Assemble a Simple Telescope](/quests/astronomy/basic-telescope) and
+[Locate the North Star](/quests/astronomy/north-star).
 She steers launches through debris fields and teaches patience in stargazing.
 
 ### Sample Dialogue
@@ -192,9 +189,11 @@ She steers launches through debris fields and teaches patience in stargazing.
 
 <img src="/assets/npc/sydney.jpg" />
 
-Helio is a cheerful solar technician who can't resist chasing daylight.
-They design compact arrays that keep the metaguild's gear humming far from any outlet.
-Helio can eyeball solar angles to within a degree and keeps meticulous charge logs.
+Helio is a cheerful solar tech who chases daylight and rigs compact arrays that keep gear
+humming far from any outlet. They eyeball tilt to within a degree and log every amp-hour.
+Helio guides recruits through processes like [Measure a Portable Solar Panel's Short-Circuit
+Current](/processes/measure-solar-panel-current) and [Charge a 200 Wh Battery Pack in Direct
+Sun](/processes/charge-battery-pack-solar).
 
 ### Sample Dialogue
 
