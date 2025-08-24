@@ -111,8 +111,8 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 Phoenix is the guild's chemist, distilling eco-friendly propellants.
 They blend chemistry with conservation so rockets leave no scorch.
 Phoenix mentors recruits through quests like
-[Demonstrate a Safe Chemical Reaction](/quests/chemistry/safe-reaction) and
-[Extract Stevia Sweetener](/quests/chemistry/stevia-extraction).
+[Mix a Green Igniter](/quests/chemistry/green-igniter) and
+[Refuel the Hybrid Engine](/quests/rocketry/hybrid-refuel).
 
 ### Sample Dialogue
 
@@ -166,13 +166,11 @@ second nature.
 
 <img src="/assets/npc/nova.jpg" />
 
-Lyra charts the stars and keeps the guild's telescopes in perfect alignment.
-Raised under dark rural skies, she turned a childhood obsession into orbital navigation.
-She recites catalog numbers from memory and nurses midnight coffee under the Milky Way.
-Her calm tutoring turns orbital mechanics into bedtime stories.
+Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision.
+Raised under planetarium domes, she reads constellations like street signs and keeps the guild oriented.
 Lyra guides recruits through quests like
-[Assemble a Simple Telescope](/quests/astronomy/basic-telescope)
-and [Locate the North Star](/quests/astronomy/north-star).
+[Assemble a Simple Telescope](/quests/astronomy/basic-telescope) and
+[Locate the North Star](/quests/astronomy/north-star).
 She steers launches through debris fields and teaches patience in stargazing.
 
 ### Sample Dialogue
