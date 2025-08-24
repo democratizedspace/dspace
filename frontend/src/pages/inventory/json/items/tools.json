@@ -600,15 +600,18 @@
     {
         "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
         "name": "brass tip cleaner",
-        "description": "Brass wire sponge in a holder for cleaning soldering iron tips without water.",
+        "description": "50 mm brass wire sponge in a weighted steel holder; 40 g; cleans iron tips without water.",
         "image": "/assets/quests/basic_circuit.svg",
         "price": "5 dUSD",
         "type": "tool",
+        "unit": "each",
         "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-09-20", "date": "2025-09-20", "score": 65 }
+            ]
         }
     },
     {

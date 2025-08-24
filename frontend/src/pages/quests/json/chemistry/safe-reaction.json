@@ -1,25 +1,42 @@
 {
     "id": "chemistry/safe-reaction",
     "title": "Demonstrate a Safe Chemical Reaction",
-    "description": "Phoenix walks you through a harmless experiment that introduces basic eco-friendly propellant concepts.",
+    "description": "Phoenix walks you through a harmless experiment that introduces eco-friendly propellant basics.",
     "image": "/assets/quests/testprint.png",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. Want to see a simple reaction that proves how green propellants release energy?",
-            "options": [{ "type": "goto", "goto": "mix", "text": "Absolutely!" }]
+            "text": "Phoenix here. Up for a safe reaction that shows how green propellants release energy?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Absolutely!"
+                }
+            ]
         },
         {
             "id": "mix",
-            "text": "Mix baking soda with vinegar in an open bottle. The fizz is harmless yet shows fuel releasing energy.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "The reaction is bubbling!" }]
+            "text": "Combine baking soda and vinegar in an open bottle. Harmless fizz, real thrust potential.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It's bubbling!"
+                }
+            ]
         },
         {
             "id": "finish",
-            "text": "Great job! We'll build on this clean experiment to design sustainable rocket fuel later.",
-            "options": [{ "type": "finish", "text": "Can't wait!" }]
+            "text": "Nice work! We'll scale reactions like this into clean rocket fuel.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait!"
+                }
+            ]
         }
     ],
     "rewards": [],
