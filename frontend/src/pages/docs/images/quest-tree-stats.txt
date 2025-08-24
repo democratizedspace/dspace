@@ -9,7 +9,7 @@ devops: 15 quests, 990 lines
 geothermal: 14 quests, 756 lines
 firstaid: 13 quests, 810 lines
 robotics: 12 quests, 679 lines
-chemistry: 10 quests, 559 lines
+chemistry: 10 quests, 576 lines
 woodworking: 10 quests, 800 lines
 rocketry: 8 quests, 745 lines
 completionist: 5 quests, 263 lines
