@@ -188,9 +188,11 @@ She steers launches through debris fields and teaches patience in stargazing.
 
 <img src="/assets/npc/sydney.jpg" />
 
-Helio is a cheerful solar technician who can't resist chasing daylight.
-They design compact arrays that keep the metaguild's gear humming far from any outlet.
-Helio can eyeball solar angles to within a degree and keeps meticulous charge logs.
+Helio is a cheerful solar tech who chases daylight and rigs compact arrays that keep gear
+humming far from any outlet. They eyeball tilt to within a degree and log every amp-hour.
+Helio guides recruits through processes like [Measure a Portable Solar Panel's Short-Circuit
+Current](/processes/measure-solar-panel-current) and [Charge a 200 Wh Battery Pack in Direct
+Sun](/processes/charge-battery-pack-solar).
 
 ### Sample Dialogue
 
