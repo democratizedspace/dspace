@@ -4527,5 +4527,30 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "replace-launch-controller-battery",
+        "title": "Replace the 9 V battery in a model rocket launch controller",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "80d30825-a42b-4add-b715-322e1713952c",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
