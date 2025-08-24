@@ -2,7 +2,7 @@
     "id": "3dprinting/bed-leveling",
     "title": "Level the Print Bed",
     "description": "Use a sheet of printer paper to level an entry-level FDM 3D printer bed once it's powered off and cool.",
-    "image": "/assets/quests/benchy_25.jpg",
+    "image": "/assets/quests/3dprinter.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
@@ -19,7 +19,7 @@
         },
         {
             "id": "level",
-            "text": "Disconnect power and wait for the nozzle and bed to cool. At each corner, slide a sheet of printer paper between the nozzle and bed and turn the knob until the paper drags slightly. Keep hands away from hot parts.",
+            "text": "Disconnect power and wait for the nozzle and bed to cool. At each corner and center, slide a sheet of printer paper between the nozzle and bed and turn the knob until the paper drags slightly. Keep hands away from hot parts.",
             "options": [
                 {
                     "type": "process",
