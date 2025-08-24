@@ -108,22 +108,19 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 
 <img src="/assets/npc/phoenix.jpg" />
 
-Phoenix is a chemist focused on sustainable rocket fuel.
-They blend chemistry with conservation to push craft without scarring the planet.
-Phoenix guides recruits through quests like
-[Demonstrate a Safe Chemical Reaction](/quests/chemistry/safe-reaction) and
-[Mix an Efficient Rocket Fuel](/quests/rocketry/fuel-mixture),
-showing how green chemistry powers missions.
+Phoenix is the guild's eco-minded chemist, refining propellants without poisoning the cosmos.
+They mentor recruits through quests like
+[Dilute Hydrochloric Acid Safely](/quests/chemistry/acid-dilution) and
+[Extract Stevia Sweetener](/quests/chemistry/stevia-extraction), and
+remind everyone to [Wash Hands](/processes/wash-hands) before leaving the lab.
 
 ### Sample Dialogue
 
--   "Hey, I'm Phoenix—chemistry without pollution is my specialty."
--   "Safety goggles on; propellant fumes bite harder than dragons."
--   "We test in micro batches so a bad mix only scorches a spoon."
--   "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
--   "When the exhaust runs clear, you know we've done it right."
--   "Next up, we'll brew propellant that pushes rockets without scorching the skies."
--   "Spent fuel? We'll distill what's usable and neutralize the rest."
+-   "Phoenix here—lab coat on, let's keep it green."
+-   "Acid into water, slow and steady."
+-   "Sugar fuel beats perchlorates for clean thrust."
+-   "Label that beaker; mystery mixes belong in myths."
+-   "Spent solvent? We reclaim or neutralize—nothing down the drain."
 
 ## Atlas
 
