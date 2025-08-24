@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Unplug heater and filter to prevent shocks. Wear safety goggles and nitrile gloves. Load a utility cart with a gravel vacuum, 5-gal bucket and water conditioner.",
+            "text": "Unplug heater and filter to prevent shocks. Wear safety goggles and nitrile gloves. Load a utility cart with a gravel vacuum, 5-gal bucket, water conditioner and an aquarium thermometer.",
             "options": [
                 {
                     "type": "goto",
@@ -20,14 +20,15 @@
                         { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
                         { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
                         { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 },
-                        { "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0", "count": 1 }
+                        { "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0", "count": 1 },
+                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "remove",
-            "text": "Use the gravel vacuum to siphon water into the bucket. Keep the intake clear of fish and cords, and stop when about 25% is out.",
+            "text": "Use the gravel vacuum to siphon water into the bucket. Keep fish and cords clear, draping cables so outlets stay dry, and stop when about 25% is out.",
             "options": [
                 {
                     "type": "goto",
@@ -38,12 +39,12 @@
         },
         {
             "id": "refill",
-            "text": "Fill the bucket with tap water, add conditioner, match the temperature within 2 °C, then slowly refill the tank.",
+            "text": "Fill the bucket with tap water, add conditioner, match temperature within 2 °C using the thermometer, then slowly refill the tank.",
             "options": [
                 {
                     "type": "process",
                     "process": "condition-bucket-water",
-                    "text": "Treat the tap water"
+                    "text": "Condition the tap water"
                 },
                 {
                     "type": "finish",
@@ -60,13 +61,14 @@
     ],
     "requiresQuests": ["aquaria/guppy"],
     "hardening": {
-        "passes": 3,
-        "score": 90,
+        "passes": 4,
+        "score": 92,
         "emoji": "💯",
         "history": [
             { "task": "codex-quest-refinement-2025-08-15", "date": "2025-08-15", "score": 60 },
             { "task": "codex-quest-hardening-2025-08-18", "date": "2025-08-18", "score": 80 },
-            { "task": "codex-quest-hardening-2025-08-20", "date": "2025-08-20", "score": 90 }
+            { "task": "codex-quest-hardening-2025-08-20", "date": "2025-08-20", "score": 90 },
+            { "task": "codex-quest-hardening-2025-08-24", "date": "2025-08-24", "score": 92 }
         ]
     }
 }
