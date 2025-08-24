@@ -1,0 +1,11 @@
+{
+  "id": "prompts-codex-links-404",
+  "date": "2025-08-24",
+  "component": "docs",
+  "rootCause": "Absolute links in prompts-codex.md used /docs/ paths which GitHub treated as external, returning 404.",
+  "resolution": "Replaced absolute links with relative paths and added a regression test.",
+  "references": [
+    "frontend/src/pages/docs/md/prompts-codex.md",
+    "tests/promptsCodexLinks.test.ts"
+  ]
+}
