@@ -1,14 +1,14 @@
 {
     "id": "3dprinting/bed-leveling",
     "title": "Level the Print Bed",
-    "description": "Use a sheet of printer paper to level your 3D printer's bed after it cools.",
+    "description": "Use a sheet of printer paper to level an entry-level FDM 3D printer bed once it's powered off and cool.",
     "image": "/assets/quests/benchy_25.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Uneven prints? Cool the entry-level FDM printer and grab a sheet of printer paper to level the bed safely.",
+            "text": "Power off the entry-level FDM 3D printer and let it cool. Level the bed with a sheet of printer paper.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "level",
-            "text": "Power off and cool the printer. At each corner, slide a sheet of printer paper between the nozzle and bed and turn the knobs until the paper drags slightly. Keep hands clear of hot parts.",
+            "text": "Disconnect power and wait for the nozzle and bed to cool. At each corner, slide a sheet of printer paper between the nozzle and bed and turn the knob until the paper drags slightly. Keep hands away from hot parts.",
             "options": [
                 {
                     "type": "process",
@@ -51,9 +51,9 @@
     "rewards": [],
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-12",
@@ -64,6 +64,11 @@
                 "task": "codex-quest-refinement-2025-08-14",
                 "date": "2025-08-14",
                 "score": 80
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-24",
+                "date": "2025-08-24",
+                "score": 90
             }
         ]
     }
