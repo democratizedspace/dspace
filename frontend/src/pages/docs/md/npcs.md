@@ -108,8 +108,8 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 
 <img src="/assets/npc/phoenix.jpg" />
 
-Phoenix formulates sustainable propellants in a lab that smells of citrus and ozone.
-She balances thrust and ethics, pulling power from green chemistry to keep launches clean.
+Phoenix is the guild's chemist, distilling eco-friendly propellants.
+They blend chemistry with conservation so rockets leave no scorch.
 Phoenix mentors recruits through quests like
 [Mix a Green Igniter](/quests/chemistry/green-igniter) and
 [Refuel the Hybrid Engine](/quests/rocketry/hybrid-refuel).
