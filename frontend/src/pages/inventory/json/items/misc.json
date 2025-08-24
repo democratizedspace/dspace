@@ -582,10 +582,18 @@
     {
         "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
         "name": "launch-capable model rocket (parachute)",
-        "description": "35 cm rocket with B6-4 motor, recovery wadding, and 30 cm nylon parachute for safe landing.",
-        "image": "/assets/rocket_field.jpg",
+        "description": "35 cm tall, 25 mm body tube rocket with single-use B6-4 motor, flame-resistant wadding and a 30 cm nylon parachute pre-installed; ~70 g launch weight.",
+        "image": "/assets/rocket_parachute.jpg",
         "price": "25 dUSD",
-        "unit": "each"
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-24", "date": "2025-08-24", "score": 60 }
+            ]
+        }
     },
     {
         "id": "d660dc50-7afb-4a2f-9508-a42490aae5e4",
@@ -618,9 +626,18 @@
     {
         "id": "5258f098-6cae-4ee5-8888-435b08f1675a",
         "name": "EV charger",
-        "description": "A charger for electric vehicles.",
+        "description": "Level 2 wall-mounted charger (240 V, 32 A, 7.7 kW) with 7 m cable for electric vehicles.",
         "image": "/assets/ev_charger.jpg",
-        "price": "500 dUSD"
+        "price": "500 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                { "task": "codex-item-hardening-2025-08-24", "date": "2025-08-24", "score": 60 }
+            ]
+        }
     },
     {
         "id": "5e283c0b-fd3c-4884-ae32-9a237f02a40e",
