@@ -108,22 +108,19 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 
 <img src="/assets/npc/phoenix.jpg" />
 
-Phoenix is a chemist focused on sustainable rocket fuel.
-They blend chemistry with conservation to push craft without scarring the planet.
-Phoenix guides recruits through quests like
-[Demonstrate a Safe Chemical Reaction](/quests/chemistry/safe-reaction) and
-[Mix an Efficient Rocket Fuel](/quests/rocketry/fuel-mixture),
-showing how green chemistry powers missions.
+Phoenix formulates sustainable propellants in a lab that smells of citrus and ozone.
+She balances thrust and ethics, pulling power from green chemistry to keep launches clean.
+Phoenix mentors recruits through quests like
+[Mix a Green Igniter](/quests/chemistry/green-igniter) and
+[Refuel the Hybrid Engine](/quests/rocketry/hybrid-refuel).
 
 ### Sample Dialogue
 
--   "Hey, I'm Phoenix—chemistry without pollution is my specialty."
--   "Safety goggles on; propellant fumes bite harder than dragons."
--   "We test in micro batches so a bad mix only scorches a spoon."
--   "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
--   "When the exhaust runs clear, you know we've done it right."
--   "Next up, we'll brew propellant that pushes rockets without scorching the skies."
--   "Spent fuel? We'll distill what's usable and neutralize the rest."
+-   "Name's Phoenix. Rocket fuel shouldn't scorch the planet."
+-   "Peroxide and ethanol—gentle on ozone, fierce in the chamber."
+-   "Safety goggles on; we respect exothermic surprises around here."
+-   "That mix is neutral. Add the catalyst dropwise until it blushes amber."
+-   "Stored sunlight beats fossil fire every launch."
 
 ## Atlas
 
@@ -166,13 +163,11 @@ second nature.
 
 <img src="/assets/npc/nova.jpg" />
 
-Lyra charts the stars and keeps the guild's telescopes in perfect alignment.
-Raised under dark rural skies, she turned a childhood obsession into orbital navigation.
-She recites catalog numbers from memory and nurses midnight coffee under the Milky Way.
-Her calm tutoring turns orbital mechanics into bedtime stories.
+Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision.
+Raised under planetarium domes, she reads constellations like street signs and keeps the guild oriented.
 Lyra guides recruits through quests like
-[Assemble a Simple Telescope](/quests/astronomy/basic-telescope)
-and [Locate the North Star](/quests/astronomy/north-star).
+[Assemble a Simple Telescope](/quests/astronomy/basic-telescope) and
+[Locate the North Star](/quests/astronomy/north-star).
 She steers launches through debris fields and teaches patience in stargazing.
 
 ### Sample Dialogue
