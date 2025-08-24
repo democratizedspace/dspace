@@ -121,6 +121,7 @@ showing how green chemistry powers missions.
 -   "Safety goggles on; propellant fumes bite harder than dragons."
 -   "We test in micro batches so a bad mix only scorches a spoon."
 -   "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
+-   "Log every measurement; precision beats luck in the lab."
 -   "When the exhaust runs clear, you know we've done it right."
 -   "Next up, we'll brew propellant that pushes rockets without scorching the skies."
 -   "Spent fuel? We'll distill what's usable and neutralize the rest."
@@ -182,6 +183,7 @@ She steers launches through debris fields and teaches patience in stargazing.
 -   "City glow spoils the view—set the scope under dark skies."
 -   "Need coordinates? I've charted them since I could hold a compass."
 -   "A 15-second exposure will snag that comet tail."
+-   "Check the star chart—if a dot's missing, we might have found a new comet."
 -   "Two burns make a Hohmann transfer; easy once you see it."
 -   "If the mount drifts, tweak the RA knob until the star freezes."
 
@@ -198,6 +200,7 @@ Helio can eyeball solar angles to within a degree and keeps meticulous charge lo
 -   "Sun's up! I'm Helio. Let's put that star to work for you."
 -   "Start by unfolding the panel and angling it toward the brightest patch of sky."
 -   "See that meter? If it's in the green, you're charging at peak efficiency."
+-   "Track the sun with that dial—every degree boosts your charge."
 -   "A cloud rolled in—no worries, the battery will bridge the gap."
 -   "Shade from a single leaf can tank output, so keep the array clear."
 -   "Keep the cells clean and they'll power your adventures for years."
