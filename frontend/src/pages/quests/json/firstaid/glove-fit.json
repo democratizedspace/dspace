@@ -1,0 +1,57 @@
+{
+    "id": "firstaid/glove-fit",
+    "title": "Check Nitrile Glove Fit",
+    "description": "Ensure nitrile gloves fit snugly before treating injuries.",
+    "image": "/assets/rescue.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Proper glove fit protects both you and your patient.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Let's check"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Wash your hands, then inspect a pair of nitrile gloves for tears before putting them on.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Hands washed",
+                    "goto": "gloves"
+                }
+            ]
+        },
+        {
+            "id": "gloves",
+            "text": "Slip on the gloves and check the fit. They should be snug with no gaps or rips.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Gloves fit well",
+                    "requiresItems": [{ "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Properly fitted gloves keep treatments clean and safe.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Ready for first aid"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/assemble-kit"]
+}
