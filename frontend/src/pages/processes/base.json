@@ -1648,6 +1648,10 @@
             {
                 "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                 "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
             }
         ],
         "consumeItems": [
@@ -3403,6 +3407,24 @@
         }
     },
     {
+        "id": "use-solder-fume-extractor",
+        "title": "Place a solder fume extractor near the workspace and switch it on before soldering",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+            { "id": "593fc442-f437-4449-94e5-17b7b4625c41", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "generate-ssh-key",
         "title": "Generate an ed25519 SSH key pair on a laptop and copy it to a Pi cluster node",
         "image": "/assets/quests/basic_circuit.svg",
@@ -3512,5 +3534,20 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "2m"
+    },
+    {
+        "id": "replace-launch-controller-battery",
+        "title": "Replace the 9 V battery in a model rocket launch controller",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [{ "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b", "count": 1 }],
+        "consumeItems": [{ "id": "80d30825-a42b-4add-b715-322e1713952c", "count": 1 }],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

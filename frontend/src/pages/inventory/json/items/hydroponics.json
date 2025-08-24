@@ -424,5 +424,26 @@
                 }
             ]
         }
+    },
+    {
+        "id": "8f7c2e83-285a-4b29-9a3a-312f0dce2745",
+        "name": "mechanical outlet timer",
+        "description": "24 h analog timer with 15 min segments; rated 120 V AC, 15 A. Controls grow lights offline.",
+        "image": "/assets/aquarium_light.jpg",
+        "price": "10 dUSD",
+        "unit": "each",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-24",
+                    "date": "2025-08-24",
+                    "score": 65
+                }
+            ]
+        }
     }
 ]

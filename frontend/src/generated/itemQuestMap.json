@@ -546,7 +546,8 @@
       "chemistry/ph-test",
       "chemistry/acid-dilution",
       "aquaria/water-testing",
-      "aquaria/water-change"
+      "aquaria/water-change",
+      "aquaria/log-water-parameters"
     ],
     "rewards": []
   },
@@ -589,6 +590,12 @@
     ],
     "rewards": []
   },
+  "8f7c2e83-285a-4b29-9a3a-312f0dce2745": {
+    "requires": [
+      "hydroponics/grow-light"
+    ],
+    "rewards": []
+  },
   "978ce094-f4fa-4b55-9e1a-2ea76531989d": {
     "requires": [],
     "rewards": [
@@ -600,6 +607,7 @@
       "composting/turn-pile",
       "composting/start",
       "aquaria/water-change",
+      "aquaria/top-off",
       "aquaria/shrimp"
     ],
     "rewards": [
@@ -645,6 +653,12 @@
   "29190faf-8581-4769-b871-f0ee283840e1": {
     "requires": [
       "hydroponics/basil"
+    ],
+    "rewards": []
+  },
+  "9f91173d-2609-4127-896d-7578078135db": {
+    "requires": [
+      "hydroponics/air-stone-soak"
     ],
     "rewards": []
   },
@@ -727,6 +741,38 @@
   "b397aa70-3503-4e40-b84a-4d5609578d2b": {
     "requires": [
       "firstaid/learn-cpr"
+    ],
+    "rewards": []
+  },
+  "9a72fb16-fc69-45c5-beca-f25c27028977": {
+    "requires": [
+      "firstaid/flashlight-battery",
+      "astronomy/orion-nebula",
+      "astronomy/observe-moon",
+      "astronomy/meteor-shower",
+      "astronomy/light-pollution",
+      "astronomy/aurora-watch",
+      "astronomy/andromeda"
+    ],
+    "rewards": []
+  },
+  "5127e156-3009-4db4-85ac-e3ea070b68f2": {
+    "requires": [
+      "firstaid/flashlight-battery",
+      "electronics/voltage-divider",
+      "electronics/measure-resistance",
+      "electronics/measure-led-current",
+      "electronics/measure-arduino-5v",
+      "electronics/light-sensor",
+      "electronics/led-polarity",
+      "electronics/continuity-test",
+      "electronics/check-battery-voltage"
+    ],
+    "rewards": []
+  },
+  "80d30825-a42b-4add-b715-322e1713952c": {
+    "requires": [
+      "firstaid/flashlight-battery"
     ],
     "rewards": []
   },
@@ -906,19 +952,6 @@
     ],
     "rewards": []
   },
-  "5127e156-3009-4db4-85ac-e3ea070b68f2": {
-    "requires": [
-      "electronics/voltage-divider",
-      "electronics/measure-resistance",
-      "electronics/measure-led-current",
-      "electronics/measure-arduino-5v",
-      "electronics/light-sensor",
-      "electronics/led-polarity",
-      "electronics/continuity-test",
-      "electronics/check-battery-voltage"
-    ],
-    "rewards": []
-  },
   "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d": {
     "requires": [
       "electronics/thermistor-reading",
@@ -926,7 +959,8 @@
       "electronics/measure-arduino-5v",
       "electronics/light-sensor",
       "electronics/arduino-blink",
-      "devops/ssh-hardening"
+      "devops/ssh-hardening",
+      "devops/firewall-rules"
     ],
     "rewards": []
   },
@@ -1066,10 +1100,16 @@
     ],
     "rewards": []
   },
+  "06146006-5615-4c1a-98dd-ff1b107ec893": {
+    "requires": [
+      "electronics/desolder-component"
+    ],
+    "rewards": []
+  },
   "ce92a1a9-c817-40f0-92b1-24aff053903d": {
     "requires": [
-      "3dprinting/filament-change",
-      "electronics/continuity-test"
+      "electronics/continuity-test",
+      "3dprinting/filament-change"
     ],
     "rewards": []
   },
@@ -1153,6 +1193,12 @@
   "2b57a38d-0486-40e8-a50d-d893541b50e9": {
     "requires": [
       "composting/turn-pile"
+    ],
+    "rewards": []
+  },
+  "4796b4a9-0927-4b46-a41f-076ebaff01bb": {
+    "requires": [
+      "composting/sift-compost"
     ],
     "rewards": []
   },
@@ -1249,17 +1295,6 @@
     ],
     "rewards": []
   },
-  "9a72fb16-fc69-45c5-beca-f25c27028977": {
-    "requires": [
-      "astronomy/orion-nebula",
-      "astronomy/observe-moon",
-      "astronomy/meteor-shower",
-      "astronomy/light-pollution",
-      "astronomy/aurora-watch",
-      "astronomy/andromeda"
-    ],
-    "rewards": []
-  },
   "aa82b02f-2617-4474-a91b-29647e4a9780": {
     "requires": [
       "astronomy/observe-moon"
@@ -1334,7 +1369,8 @@
   },
   "97317bc3-507a-4e2c-912b-507d586cee87": {
     "requires": [
-      "aquaria/water-change"
+      "aquaria/water-change",
+      "aquaria/top-off"
     ],
     "rewards": []
   },
