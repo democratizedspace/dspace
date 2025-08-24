@@ -108,12 +108,15 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 
 <img src="/assets/npc/phoenix.jpg" />
 
-Phoenix is the guild's eco-minded chemist, refining propellants without poisoning the cosmos.
-They mentor recruits through quests like
-[Dilute Hydrochloric Acid Safely](/quests/chemistry/acid-dilution),
-[Extract Stevia Sweetener](/quests/chemistry/stevia-extraction),
-[Refine Stevia Crystals](/quests/chemistry/stevia-crystals), and
-remind everyone to [Wash Hands](/processes/wash-hands) before leaving the lab.
+Phoenix is the guild's eco-minded chemist, refining propellants without poisoning the cosmos.  
+They blend chemistry with conservation so rockets leave no scorch.  
+Phoenix mentors recruits through quests like  
+[Dilute Hydrochloric Acid Safely](/quests/chemistry/acid-dilution),  
+[Extract Stevia Sweetener](/quests/chemistry/stevia-extraction),  
+[Refine Stevia Crystals](/quests/chemistry/stevia-crystals),  
+[Mix a Green Igniter](/quests/chemistry/green-igniter), and  
+[Refuel the Hybrid Engine](/quests/rocketry/hybrid-refuel).  
+They also remind everyone to [Wash Hands](/processes/wash-hands) before leaving the lab.
 
 ### Sample Dialogue
 
@@ -122,6 +125,14 @@ remind everyone to [Wash Hands](/processes/wash-hands) before leaving the lab.
 -   "Sugar fuel beats perchlorates for clean thrust."
 -   "Label that beaker; mystery mixes belong in myths."
 -   "Spent solvent? We reclaim or neutralize—nothing down the drain."
+-   "Hey, I'm Phoenix—chemistry without pollution is my specialty."
+-   "Safety goggles on; propellant fumes bite harder than dragons."
+-   "We test in micro batches so a bad mix only scorches a spoon."
+-   "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
+-   "Log every measurement; precision beats luck in the lab."
+-   "When the exhaust runs clear, you know we've done it right."
+-   "Next up, we'll brew propellant that pushes rockets without scorching the skies."
+-   "Spent fuel? We'll distill what's usable and neutralize the rest."
 
 ## Atlas
 
@@ -164,13 +175,11 @@ second nature.
 
 <img src="/assets/npc/nova.jpg" />
 
-Lyra charts the stars and keeps the guild's telescopes in perfect alignment.
-Raised under dark rural skies, she turned a childhood obsession into orbital navigation.
-She recites catalog numbers from memory and nurses midnight coffee under the Milky Way.
-Her calm tutoring turns orbital mechanics into bedtime stories.
+Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision.
+Raised under planetarium domes, she reads constellations like street signs and keeps the guild oriented.
 Lyra guides recruits through quests like
-[Assemble a Simple Telescope](/quests/astronomy/basic-telescope)
-and [Locate the North Star](/quests/astronomy/north-star).
+[Assemble a Simple Telescope](/quests/astronomy/basic-telescope) and
+[Locate the North Star](/quests/astronomy/north-star).
 She steers launches through debris fields and teaches patience in stargazing.
 
 ### Sample Dialogue
@@ -180,6 +189,7 @@ She steers launches through debris fields and teaches patience in stargazing.
 -   "City glow spoils the view—set the scope under dark skies."
 -   "Need coordinates? I've charted them since I could hold a compass."
 -   "A 15-second exposure will snag that comet tail."
+-   "Check the star chart—if a dot's missing, we might have found a new comet."
 -   "Two burns make a Hohmann transfer; easy once you see it."
 -   "If the mount drifts, tweak the RA knob until the star freezes."
 
@@ -187,18 +197,41 @@ She steers launches through debris fields and teaches patience in stargazing.
 
 <img src="/assets/npc/sydney.jpg" />
 
-Helio is a cheerful solar technician who can't resist chasing daylight.
-They design compact arrays that keep the metaguild's gear humming far from any outlet.
-Helio can eyeball solar angles to within a degree and keeps meticulous charge logs.
+Helio is a cheerful solar tech who chases daylight and rigs compact arrays that keep gear
+humming far from any outlet. They eyeball tilt to within a degree and log every amp-hour.
+Helio guides recruits through processes like [Measure a Portable Solar Panel's Short-Circuit
+Current](/processes/measure-solar-panel-current) and [Charge a 200 Wh Battery Pack in Direct
+Sun](/processes/charge-battery-pack-solar).
 
 ### Sample Dialogue
 
 -   "Sun's up! I'm Helio. Let's put that star to work for you."
 -   "Start by unfolding the panel and angling it toward the brightest patch of sky."
 -   "See that meter? If it's in the green, you're charging at peak efficiency."
+-   "Track the sun with that dial—every degree boosts your charge."
 -   "A cloud rolled in—no worries, the battery will bridge the gap."
 -   "Shade from a single leaf can tank output, so keep the array clear."
 -   "Keep the cells clean and they'll power your adventures for years."
+-   "If the charge dips, track usage to hunt the phantom drain."
+
+## Nimbus
+
+<img src="/assets/npc/nova.jpg" />
+
+Nimbus forecasts weather for launch windows and orbital transfers.
+Raised beneath gusty plains, they read barometers like diaries.
+Those readings keep rocket crews from fighting headwinds.
+Nimbus guides recruits through quests like
+[Check the Launch Winds](/quests/rocketry/wind-check)
+and logs every gust for future flights.
+
+### Sample Dialogue
+
+-   "Call me Nimbus—skies are my spreadsheet."
+-   "An anemometer never lies; take a reading before you light the fuse."
+-   "Pressure falling? That squall will hit before your second stage."
+-   "We scrub launches if gusts top 20 knots; rockets prefer calm applause."
+-   "Log your data; today's breeze becomes tomorrow's forecast."
 
 ## Quill
 
