@@ -1,0 +1,55 @@
+{
+    "id": "completionist/journal",
+    "title": "Journal the Journey",
+    "description": "Record how you earned the Completionist Award II.",
+    "image": "/assets/quests/completionist.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want to capture your trophy tale in the mission log?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Definitely, let's document it"
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Write a brief entry and give the award a quick dust while you're at it.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Draft the mission log entry"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Entry saved and award dusted",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Your story is recorded, and the trophy looks sharp.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Another memory secured!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["completionist/v2"]
+}
