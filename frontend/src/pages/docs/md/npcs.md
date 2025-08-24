@@ -201,6 +201,26 @@ Helio can eyeball solar angles to within a degree and keeps meticulous charge lo
 -   "A cloud rolled in—no worries, the battery will bridge the gap."
 -   "Shade from a single leaf can tank output, so keep the array clear."
 -   "Keep the cells clean and they'll power your adventures for years."
+-   "If the charge dips, track usage to hunt the phantom drain."
+
+## Nimbus
+
+<img src="/assets/npc/nova.jpg" />
+
+Nimbus forecasts weather for launch windows and orbital transfers.
+Raised beneath gusty plains, they read barometers like diaries.
+Those readings keep rocket crews from fighting headwinds.
+Nimbus guides recruits through quests like
+[Check the Launch Winds](/quests/rocketry/wind-check)
+and logs every gust for future flights.
+
+### Sample Dialogue
+
+-   "Call me Nimbus—skies are my spreadsheet."
+-   "An anemometer never lies; take a reading before you light the fuse."
+-   "Pressure falling? That squall will hit before your second stage."
+-   "We scrub launches if gusts top 20 knots; rockets prefer calm applause."
+-   "Log your data; today's breeze becomes tomorrow's forecast."
 
 ## Quill
 
