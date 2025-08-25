@@ -3012,6 +3012,30 @@
         "duration": "2m"
     },
     {
+        "id": "install-wind-turbine",
+        "title": "Install a 500 W wind turbine on a pole and connect it to a charge controller",
+        "image": "/assets/turbine.jpg",
+        "requireItems": [
+            { "id": "743681a7-d2e7-465c-af07-43665079bf4d", "count": 1 },
+            { "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-25",
+                    "date": "2025-08-25",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
         "id": "charge-battery-pack-wind",
         "title": "Charge a 200 Wh battery pack with a 500 W wind turbine",
         "image": "/assets/turbine.jpg",

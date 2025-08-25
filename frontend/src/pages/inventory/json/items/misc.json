@@ -153,7 +153,7 @@
     {
         "id": "743681a7-d2e7-465c-af07-43665079bf4d",
         "name": "500 W wind turbine",
-        "description": "500 W three-blade horizontal-axis wind turbine kit with integrated charge controller providing 24 V DC output.",
+        "description": "500 W three-blade horizontal-axis wind turbine kit with a three-phase rectifier providing 24 V DC output.",
         "price": "700 dUSD",
         "image": "/assets/turbine.jpg",
         "hardening": {

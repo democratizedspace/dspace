@@ -2,13 +2,13 @@
     "id": "energy/wind-turbine",
     "title": "Install a Wind Turbine",
     "description": "Supplement your solar setup with power from the breeze.",
-    "image": "/assets/quests/solar_200Wh.jpg",
+    "image": "/assets/turbine.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your solar rig is humming. Let's capture wind energy too by mounting this 500 W turbine.",
+            "text": "Your solar rig is humming. Let's add wind power by mounting this 500 W turbine.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "setup",
-            "text": "Secure the turbine on a tall pole and wire it to your charge controller.",
+            "text": "Shut off power. Mount the turbine on a guyed pole. Connect leads to the charge controller. Wear PPE.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -32,15 +32,15 @@
                     "text": "Take the turbine"
                 },
                 {
+                    "type": "process",
+                    "process": "install-wind-turbine",
+                    "text": "Need installation steps?"
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "All wired up",
-                    "requiresItems": [
-                        {
-                            "id": "743681a7-d2e7-465c-af07-43665079bf4d",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "743681a7-d2e7-465c-af07-43665079bf4d", "count": 1 }]
                 }
             ]
         },
@@ -56,5 +56,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["energy/solar-1kWh"]
+    "requiresQuests": ["energy/solar-1kWh"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [{ "task": "codex-hardening-2025-08-25", "date": "2025-08-25", "score": 60 }]
+    }
 }
