@@ -1,6 +1,7 @@
 # DSPACE Developer Guide
 
-This guide provides comprehensive information for developers working on the DSPACE project, covering everything from setup to architecture, testing, and best practices.
+This guide provides comprehensive information for developers working on DSPACE,
+covering everything from setup and architecture to testing and best practices.
 
 ## Table of Contents
 

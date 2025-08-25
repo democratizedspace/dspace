@@ -20,18 +20,18 @@ This guide describes how to submit your custom quests to become part of the offi
 2. **Bundle related items and processes** using `scripts/create-content-bundle.js`. This script collects quests, items, and processes into a single JSON file under `submissions/bundles`.
 3. **Validate** the quest structure by running:
     ```bash
-    npm test -- questValidation
+    npm run test:ci -- questValidation
     ```
     Ensure your quest file passes all schema checks. See the [Quest Schema Requirements](/docs/quest-schema) for field definitions.
     Quest titles and descriptions must be plain text with no HTML tags.
 4. **Check quest quality** with:
     ```bash
-    npm test -- questQuality
+    npm run test:ci -- questQuality
     ```
     Fix any reported errors until the test passes.
 5. **Simulate your quest** to ensure it can be completed:
     ```bash
-    npm test -- questSimulation
+    npm run test:ci -- questSimulation
     ```
     This validates that at least one path leads to a `finish` option.
 6. **Open the Quest Submission form** at `/quests/submit`.
