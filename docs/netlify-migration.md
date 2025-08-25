@@ -1,12 +1,12 @@
 # Migration from Netlify
 
-DSPACE originally deployed the public site to Netlify. As the project grew and gained
-server-side features, the static hosting model no longer met our needs. Starting with v3,
+DSPACE originally deployed its public site to Netlify. As the project grew and gained
+server-side features, the static hosting model no longer fit our needs. Starting with v3,
 production runs on self-hosted infrastructure.
 
 ## Why migrate?
 
-- Full control over build and runtime environment
+- Full control over the build and runtime environments
 - Ability to run background jobs and schedule backups
 - Easier integration with monitoring and custom hardware
 
