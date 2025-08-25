@@ -12,6 +12,16 @@
           "legendFormat": "dspace"
         }
       ]
+    },
+    {
+      "type": "graph",
+      "title": "Error Rate",
+      "targets": [
+        {
+          "expr": "rate(http_requests_total{job=\"dspace\",status=~\"5..\"}[5m])/rate(http_requests_total{job=\"dspace\"}[5m])",
+          "legendFormat": "5xx rate"
+        }
+      ]
     }
   ],
   "schemaVersion": 36,
