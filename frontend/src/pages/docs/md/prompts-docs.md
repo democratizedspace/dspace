@@ -7,17 +7,17 @@ slug: 'prompts-docs'
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit a
 ready-made PR — but only if given a clear, file-scoped prompt. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when updating Markdown or JSDoc so instructions stay
+[Codex Prompts](prompts-codex.md) when updating Markdown or JSDoc so instructions stay
 current and consistent. To keep these templates evolving, see the
-[Codex meta prompt](/docs/prompts-codex-meta). If they drift, refresh them with the
-[Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs, use the
-[Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+[Codex meta prompt](prompts-codex-meta.md). If they drift, refresh them with the
+[Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use the
+[Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 > **TL;DR**
 >
 > 1. Limit changes to the relevant docs.
 > 2. Fix outdated wording, links, or formatting.
-> 3. Link new prompt docs from [`prompts-codex.md`](/docs/prompts-codex) and
+> 3. Link new prompt docs from [`prompts-codex.md`](prompts-codex.md) and
 >    `frontend/src/pages/docs/index.astro`.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
