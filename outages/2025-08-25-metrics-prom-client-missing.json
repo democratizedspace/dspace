@@ -1,0 +1,11 @@
+{
+  "id": "metrics-prom-client-missing",
+  "date": "2025-08-25",
+  "component": "metrics endpoint",
+  "rootCause": "metrics utility crashed when prom-client dependency was absent",
+  "resolution": "load prom-client dynamically with a fallback register",
+  "references": [
+    "frontend/src/utils/metrics.js",
+    "tests/metricsFallback.test.ts"
+  ]
+}
