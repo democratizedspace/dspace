@@ -61,6 +61,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [Vitest Test Prompts](prompts-vitest.md)
 -   [Refactor Prompts](prompts-refactors.md)
 -   [Codex CI-Failure Fix Prompt](prompts-codex-ci-fix.md)
+-   [Codex Merge Conflict Prompt](prompts-codex-merge-conflicts.md)
 -   [Codex Meta Prompt](prompts-codex-meta.md)
 -   [Codex Prompt Upgrader](prompts-codex-upgrader.md)
 
