@@ -1,14 +1,28 @@
 ---
 title: 'Cloud Sync'
+slug: 'cloud-sync'
 ---
 
-You can now back up your game progress to a private GitHub gist. On the **Cloud Sync** page you can upload your current save or download it to another device.
+DSPACE can back up your progress to a private GitHub gist.
 
-1. Generate a GitHub personal access token with the `gist` scope.
-2. Enter the token in the form and click **Save**.
-3. Click **Upload** to create/update the gist and store your save data.
-4. Copy the resulting Gist ID to use on other devices.
-5. On another device, enter the same token and Gist ID and click **Download**.
+## Enable Cloud Sync
 
-Your gist ID is stored locally along with your token so you don't have to re-enter it. Use the **Clear** buttons to remove the stored token or ID at any time.
-For manual backups without GitHub, see [Backups](/docs/backups).
+1. Create a new secret gist on GitHub.
+2. Copy the gist URL or ID.
+3. In DSPACE, open the **Settings** page and provide a GitHub token with gist scope.
+4. Enter your gist ID to start syncing.
+
+### Token storage
+
+The token and gist ID are stored in `localStorage`. Remove them at any time from the Settings page.
+
+## What gets synced?
+
+-   Game save data
+-   Custom quests, items, and processes
+
+Syncs happen in the background whenever changes occur.
+
+## Disable Cloud Sync
+
+Clear the token and gist ID from Settings. Local progress remains on your device.
