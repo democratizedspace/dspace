@@ -4,7 +4,7 @@ title: 'Cloud Sync'
 
 You can now back up your game progress to a private GitHub gist. On the **Cloud Sync** page you can upload your current save or download it to another device.
 
-1. Generate a GitHub personal access token with the `gist` scope.
+1. Generate a GitHub personal access token with the `gist` scope (see [GitHub's token guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)).
 2. Enter the token in the form and click **Save**.
 3. Click **Upload** to create/update the gist and store your save data.
 4. Copy the resulting Gist ID to use on other devices.
