@@ -1,0 +1,12 @@
+{
+  "id": "list-missing-images-whitespace",
+  "date": "2025-08-25",
+  "component": "scripts",
+  "rootCause": "listMissingImages treated paths with surrounding spaces as missing files",
+  "resolution": "trimmed image paths before checking existence",
+  "references": [
+    "scripts/utils/fs-checks.js",
+    "scripts/tests/fsChecks.test.ts",
+    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md"
+  ]
+}
