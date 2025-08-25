@@ -45,7 +45,7 @@
         {#if isExpanded}
             <div class="selector-expanded" id="item-select-control">
                 <SearchBar data={items} on:search={handleSearch} />
-                <div class="items-list">
+                <div class="items-list" role="listbox">
                     {#each $filteredItems as item (item.id)}
                         <div
                             class="item-row"
@@ -58,7 +58,8 @@
                                 }
                             }}
                             tabindex="0"
-                            role="button"
+                            role="option"
+                            aria-selected={selectedItemId === item.id}
                         >
                             <div class="item-content">
                                 {#if item.image}
@@ -204,6 +205,18 @@
         padding: 8px;
         border-radius: 4px;
         border: 2px solid #007006;
+    }
+
+    @media (max-width: 480px) {
+        .item-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .item-content img {
+            width: 100%;
+            height: auto;
+        }
     }
 
     .edit-button,
