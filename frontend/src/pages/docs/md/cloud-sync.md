@@ -5,6 +5,12 @@ slug: 'cloud-sync'
 
 DSPACE can back up your progress to a private GitHub gist.
 
+1. Generate a GitHub personal access token with the `gist` scope (see [GitHub's token guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)).
+2. Enter the token in the form and click **Save**.
+3. Click **Upload** to create/update the gist and store your save data.
+4. Copy the resulting Gist ID to use on other devices.
+5. On another device, enter the same token and Gist ID and click **Download**.
+
 ## Enable Cloud Sync
 
 1. Create a new secret gist on GitHub.
