@@ -29,7 +29,8 @@ the [Codex meta prompt](prompts-codex-meta.md), and the
 > 2. Say **exactly** what output you expect (tests, docs, etc.).
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+>    `npm run build`, and `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
 >    commit with an emoji prefix.
 
@@ -104,7 +105,8 @@ REQUIREMENTS
 1. …
 2. …
 3. …
-4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+   `npm run build`, and `npm run test:ci`.
 5. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 6. Use an emoji-prefixed commit message.
 

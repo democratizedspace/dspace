@@ -33,7 +33,7 @@ CONTEXT:
 - Review existing records under [`outages`][outage-dir] for similar failures.
 - After resolving, add [`outages/YYYY-MM-DD-<slug>.json`][outage-dir]
   matching [`outages/schema.json`][outage-schema].
-- Keep behaviour intact, add tests, and update documentation.
+- Keep behavior intact, add tests, and update documentation.
 
 REQUEST:
 1. Apply the fix with appropriate tests.

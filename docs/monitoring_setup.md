@@ -20,7 +20,7 @@ This guide explains how to run Prometheus and Grafana to monitor your self-hoste
 
 3. Add Prometheus as a data source in Grafana using the URL `http://prometheus:9090`.
 
-Prometheus is preconfigured to scrape the DSPACE metrics endpoint at
+By default, Prometheus is configured to scrape the DSPACE metrics endpoint at
 `http://host.docker.internal:3002/metrics`. If you run DSPACE on a different
 port or host, update `monitoring/prometheus/prometheus.yml` accordingly.
 
