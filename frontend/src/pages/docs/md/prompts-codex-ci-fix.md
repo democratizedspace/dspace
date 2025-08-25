@@ -117,3 +117,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     pattern so E2E tests detect all Jest files.
 -   2025-08-25 – `listMissingImages` treated paths with leading or trailing spaces as missing;
     trim entries before checking so coverage tests skip valid assets.
+-   2025-08-25 – shallow checkout hid `origin/v3`, making coverage tests fail; fetch with
+    `fetch-depth: 0` so scripts can compare against the default branch.
