@@ -14,7 +14,8 @@ For task-specific templates see [Quest prompts](prompts-quests.md),
 [Item prompts](prompts-items.md), [Process prompts](prompts-processes.md),
 [NPC prompts](prompts-npcs.md), [Outage prompts](prompts-outages.md),
 [Backup prompts](prompts-backups.md), [Monitoring prompts](prompts-monitoring.md),
-[Audit prompts](prompts-audit.md), [Docs prompts](prompts-docs.md),
+[Audit prompts](prompts-audit.md), [Secret scanning prompts](prompts-secrets.md),
+[Docs prompts](prompts-docs.md),
 [Playwright test prompts](prompts-playwright-tests.md),
 [Vitest test prompts](prompts-vitest.md), [Frontend prompts](prompts-frontend.md),
 [Backend prompts](prompts-backend.md), [Refactor prompts](prompts-refactors.md), and
@@ -49,6 +50,7 @@ For failing GitHub Actions runs, use the dedicated
 -   [Backup Prompts](prompts-backups.md)
 -   [Monitoring Prompts](prompts-monitoring.md)
 -   [Audit Prompts](prompts-audit.md)
+-   [Secret Scanning Prompts](prompts-secrets.md)
 -   [Docs Prompts](prompts-docs.md)
 -   [Docs cross-link prompt](prompts-docs.md#cross-link-check-prompt)
 -   [Docs proofreading prompt](prompts-docs.md#proofreading-prompt)
