@@ -117,5 +117,6 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     pattern so E2E tests detect all Jest files.
 -   2025-08-25 – E2E coverage flagged nine orphaned specs; add them to `run-test-groups.mjs` to keep
     grouped tests in sync.
+-   2025-08-25 – ESLint failed to load @typescript-eslint plugins when frontend dev dependencies were missing; install frontend packages before linting.
 -   2025-08-25 – shallow checkout hid `origin/v3`, making coverage tests fail; fetch with
     `fetch-depth: 0` so scripts can compare against the default branch.
