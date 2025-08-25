@@ -3,15 +3,18 @@ interface Props {
     text: string;
     href: string;
     ariaLabel?: string;
+    target?: string;
 }
 
-const { text, href, ariaLabel }: Props = Astro.props;
+const { text, href, ariaLabel, target }: Props = Astro.props;
 ---
 
 <a
     href={href}
     aria-label={ariaLabel ?? text}
     class="button"
+    target={target}
+    rel={target === "_blank" ? "noopener noreferrer" : undefined}
 >
     {text}
 </a>
