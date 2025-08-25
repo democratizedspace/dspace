@@ -1,6 +1,18 @@
-import { Registry, collectDefaultMetrics } from 'prom-client';
+let register;
 
-const register = new Registry();
-collectDefaultMetrics({ register });
+async function initMetrics(loader = () => import('prom-client')) {
+    try {
+        const { Registry, collectDefaultMetrics } = await loader();
+        register = new Registry();
+        collectDefaultMetrics({ register });
+    } catch {
+        register = {
+            contentType: 'text/plain',
+            metrics: async () => '# metrics unavailable\n',
+        };
+    }
+}
 
-export { register };
+await initMetrics();
+
+export { register, initMetrics };
