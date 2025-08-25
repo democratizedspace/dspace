@@ -434,6 +434,7 @@
       "hydroponics/temp-check",
       "geothermal/survey-ground-temperature",
       "electronics/thermometer-calibration",
+      "aquaria/water-change",
       "aquaria/thermometer",
       "aquaria/heater-install"
     ],
@@ -608,7 +609,8 @@
       "composting/start",
       "aquaria/water-change",
       "aquaria/top-off",
-      "aquaria/shrimp"
+      "aquaria/shrimp",
+      "aquaria/net-fish"
     ],
     "rewards": [
       "hydroponics/bucket_10"
@@ -995,7 +997,8 @@
   },
   "3dbf1701-5cc0-4443-b9bf-4275b33513d0": {
     "requires": [
-      "electronics/tin-soldering-iron"
+      "electronics/tin-soldering-iron",
+      "electronics/solder-wire"
     ],
     "rewards": []
   },

@@ -2980,6 +2980,40 @@
         }
     },
     {
+        "id": "catch-fish",
+        "title": "Use an aquarium net to transfer a fish into a 19 L bucket",
+        "requireItems": [
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "return-fish",
+        "title": "Use an aquarium net to return a fish from a holding bucket to its tank",
+        "requireItems": [
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
         "id": "print-calibration-cube",
         "title": "3D print a 20 mm calibration cube on an entry-level FDM 3D printer using 15 g of green PLA filament",
         "requireItems": [

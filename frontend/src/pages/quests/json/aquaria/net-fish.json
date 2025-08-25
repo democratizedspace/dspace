@@ -8,51 +8,69 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The tank needs a quick tidy. Let's move a fish to a bucket with the net first.",
+            "text": "Wash hands, fill a clean 19 L bucket with tank water, and wet the net to protect slime coat.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "catch",
-                    "text": "I'll grab the net."
+                    "text": "Bucket ready.",
+                    "requiresItems": [
+                        { "id": "ee7d437d-7426-47cd-b691-386dd20f4e47", "count": 1 },
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "catch",
-            "text": "Gently scoop the fish with the net and settle it in a nearby bucket.",
+            "text": "Guide the fish into the wet net and lift it into the bucket of tank water. Cover to stop jumps.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "release",
-                    "text": "Fish is secure in the bucket.",
+                    "text": "Fish resting in the bucket.",
                     "process": "catch-fish",
-                    "requiresItems": [{ "id": "ee7d437d-7426-47cd-b691-386dd20f4e47", "count": 1 }]
+                    "requiresItems": [
+                        { "id": "ee7d437d-7426-47cd-b691-386dd20f4e47", "count": 1 },
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "release",
-            "text": "With the tank clean, return the fish to its home.",
+            "text": "After cleaning, net the fish from the bucket and return it to the tank, avoiding bucket water.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "fin",
-                    "text": "Back in you go!",
-                    "process": "return-fish"
+                    "text": "Back in the tank.",
+                    "process": "return-fish",
+                    "requiresItems": [
+                        { "id": "ee7d437d-7426-47cd-b691-386dd20f4e47", "count": 1 },
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "fin",
             "text": "Great job keeping the fish safe during cleanup!",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "All done."
-                }
-            ]
+            "options": [{ "type": "finish", "text": "All done." }]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/water-change"]
+    "requiresQuests": ["aquaria/water-change"],
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-25",
+                "date": "2025-08-25",
+                "score": 60
+            }
+        ]
+    }
 }
