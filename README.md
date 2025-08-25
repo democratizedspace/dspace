@@ -8,7 +8,7 @@
 
 You can find the game at [democratized.space](https://democratized.space).
 The production instance is self-hosted; see [Netlify Migration](docs/netlify-migration.md)
-for background.
+for background details.
 
 Check out the [docs](https://democratized.space/docs)!
 
