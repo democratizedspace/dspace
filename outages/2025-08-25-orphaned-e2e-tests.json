@@ -1,0 +1,11 @@
+{
+  "id": "orphaned-e2e-tests",
+  "date": "2025-08-25",
+  "component": "e2e tests",
+  "rootCause": "run-test-groups.mjs omitted nine Playwright spec files, so test-coverage.spec.ts flagged them as orphaned",
+  "resolution": "include the missing specs in the Structure Tests group so coverage test passes",
+  "references": [
+    "frontend/scripts/run-test-groups.mjs",
+    "frontend/e2e/test-coverage.spec.ts"
+  ]
+}
