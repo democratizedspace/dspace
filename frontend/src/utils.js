@@ -128,7 +128,7 @@ export const durationInSeconds = (durationString) => {
         for (const component of durationComponents) {
             const number = parseFloat(component);
             if (isNaN(number)) continue;
-            const unit = component.replace(number, '');
+            const unit = component.replace(String(number), '').toLowerCase();
             let seconds = 0;
             switch (unit) {
                 case 'd':
