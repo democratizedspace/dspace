@@ -1324,6 +1324,14 @@
         "price": "15 dUSD"
     },
     {
+        "id": "8f8ce19b-ca38-47cc-bd09-2c69c7d6c0c9",
+        "name": "distilled water (1 L)",
+        "description": "Lab-grade distilled water in a 1 L bottle; use for solution prep and rinsing.",
+        "image": "/assets/bucket_water.jpg",
+        "price": "2 dUSD",
+        "unit": "bottle"
+    },
+    {
         "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
         "name": "hydrochloric acid (37%, 500 mL)",
         "description": "Lab-grade 37% HCl in a vented plastic bottle; always add acid to water when diluting.",

@@ -1,11 +1,11 @@
 {
     "id": "chemistry/acid-dilution",
     "title": "Dilute Hydrochloric Acid Safely",
-    "description": "Slowly add acid to water while stirring in full PPE. Never pour water into acid.",
+    "description": "Slowly add acid to distilled water while stirring. Wear lab coat, nitrile gloves, and splash goggles. Never pour water into acid.",
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-19",
@@ -16,6 +16,11 @@
                 "task": "codex-quest-hardening-2025-08-23",
                 "date": "2025-08-23",
                 "score": 80
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-25",
+                "date": "2025-08-25",
+                "score": 92
             }
         ]
     },
@@ -25,7 +30,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Suit up with lab coat, nitrile gloves, and goggles. Put 100 mL water in a 250 mL beaker, add a glass stir rod, a pH strip, and the 37% HCl bottle. Always add acid to water.",
+            "text": "Suit up with lab coat, nitrile gloves, and splash goggles. In a ventilated area, use a 100 mL graduated cylinder to pour 100 mL of distilled water into a 250 mL beaker. Place a glass stir rod, a pH strip, and the 37% HCl bottle nearby. Always add acid to water.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +41,7 @@
         },
         {
             "id": "dilute",
-            "text": "Trickle 10 mL of hydrochloric acid down the beaker wall while stirring. Keep your face back, go slow, and check with a pH strip.",
+            "text": "Trickle 10 mL of hydrochloric acid down the beaker wall while stirring. Keep your face back, go slow, and check the mixture with a pH strip.",
             "options": [
                 {
                     "type": "process",
@@ -49,6 +54,8 @@
                     "text": "Solution mixed safely.",
                     "requiresItems": [
                         { "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09", "count": 1 },
+                        { "id": "8f8ce19b-ca38-47cc-bd09-2c69c7d6c0c9", "count": 1 },
+                        { "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae", "count": 1 },
                         { "id": "c46e98b4-0c1a-478b-988c-8c9260dce434", "count": 1 },
                         { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
                         { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
@@ -61,7 +68,7 @@
         },
         {
             "id": "finish",
-            "text": "Label the diluted acid with concentration and date, then cap and store in an acid-safe tray.",
+            "text": "Label the diluted acid with concentration and date, then cap and store the container safely.",
             "options": [
                 {
                     "type": "finish",
