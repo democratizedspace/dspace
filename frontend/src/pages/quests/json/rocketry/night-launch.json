@@ -89,5 +89,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/recovery-run"]
+    "requiresQuests": ["rocketry/mask-rocket-body-tube"]
 }

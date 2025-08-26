@@ -1,0 +1,41 @@
+{
+    "id": "rocketry/mask-rocket-body-tube",
+    "title": "Mask Rocket Body Tube",
+    "description": "Apply masking tape to protect areas of the rocket body before painting.",
+    "image": "/assets/3dprinted_rocket_body_tube.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The body tube is ready for paint, but first we need to mask off the sections you want to keep clean.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mask",
+                    "text": "Grab the masking tape."
+                }
+            ]
+        },
+        {
+            "id": "mask",
+            "text": "Wrap tape around fins and other areas to shield them from overspray.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "process": "mask-rocket-body-tube",
+                    "requiresItems": [{ "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed", "count": 1 }],
+                    "text": "All surfaces covered."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. The rocket is masked and ready for a crisp coat of paint.",
+            "options": [{ "type": "finish", "text": "Ready to paint." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["rocketry/recovery-run"]
+}
