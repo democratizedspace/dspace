@@ -2,6 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/svelte';
+import userEvent from '@testing-library/user-event';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -27,6 +28,18 @@ describe('AvatarPicker component', () => {
         expect(selectButton).toBeDisabled();
         const options = getAllByRole('button', { name: /Select avatar/i });
         await fireEvent.click(options[0]);
+        expect(selectButton).not.toBeDisabled();
+    });
+
+    it('supports keyboard selection', async () => {
+        const defaultPFPs = ['a.png', 'b.png'];
+        const { getByRole, getAllByRole } = render(AvatarPicker, { defaultPFPs });
+        const user = userEvent.setup();
+        const selectButton = getByRole('button', { name: 'Select' });
+        expect(selectButton).toBeDisabled();
+        const options = getAllByRole('button', { name: /Select avatar/i });
+        options[0].focus();
+        await user.keyboard('{Enter}');
         expect(selectButton).not.toBeDisabled();
     });
 });

@@ -36,22 +36,16 @@
     </div>
     <div class="horizontal">
         {#each defaultPFPs as pfp, i}
-            <div
+            <button
+                type="button"
                 class="item-wrapper"
                 class:highlighted={selectedIndex === i}
                 id={`img-${i}`}
                 on:click={() => setHighlighted(i)}
-                on:keydown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        setHighlighted(i);
-                    }
-                }}
-                tabindex="0"
-                role="button"
                 aria-label={`Select avatar ${i + 1}`}
             >
                 <img class="item" src={pfp} alt={`Avatar option ${i + 1}`} />
-            </div>
+            </button>
         {/each}
     </div>
 </div>
@@ -102,12 +96,17 @@
         opacity: 1;
     }
 
+    .item-wrapper:focus-visible {
+        outline: 2px solid #68d46d;
+        outline-offset: 2px;
+    }
+
     .highlighted {
         /* add a green border radius */
         border: 2px solid #68d46d;
     }
 
-    button {
+    .selectbutton {
         width: 40%;
         margin: 10px;
         border-radius: 20px;
@@ -118,12 +117,12 @@
         color: black;
     }
 
-    button:hover {
+    .selectbutton:hover {
         cursor: pointer;
         opacity: 1;
     }
 
-    button:disabled {
+    .selectbutton:disabled {
         cursor: not-allowed;
         opacity: 0.5;
     }
