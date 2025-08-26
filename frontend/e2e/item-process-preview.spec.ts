@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { clearUserData, ItemSelectorHelper } from './test-helpers';
 
 test.describe('Custom content preview', () => {
     test.beforeEach(async ({ page }) => {
@@ -35,6 +35,11 @@ test.describe('Custom content preview', () => {
 
         await page.fill('#title', 'Preview Process');
         await page.fill('#duration', '1h');
+
+        await page.getByRole('button', { name: 'Add Required Item' }).click();
+        const row = page.locator('#required-items-section .item-row').first();
+        const selector = new ItemSelectorHelper(page, row);
+        await selector.selectItem();
 
         const btn = page.locator('button.preview-button');
         await btn.click();
