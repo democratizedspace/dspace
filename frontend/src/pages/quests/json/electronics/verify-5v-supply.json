@@ -1,0 +1,38 @@
+{
+    "id": "electronics/verify-5v-supply",
+    "title": "Verify a 5 V power supply",
+    "description": "Use a digital multimeter to confirm a USB power supply outputs around 5 V.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Inspect the supply for cracks or exposed wires. Keep it unplugged on a dry, non-conductive surface and put on safety goggles.",
+            "options": [{ "type": "goto", "goto": "measure", "text": "Supply looks fine." }]
+        },
+        {
+            "id": "measure",
+            "text": "Plug in the supply. Set the multimeter to 20 V DC, touch red to the positive output and black to ground without crossing leads. A good unit reads near 5 V.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It shows about 5.1 V.",
+                    "requiresItems": [
+                        { "id": "828d6c3b-66a5-4064-b221-97630274502b", "count": 1 },
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Disconnect the meter, unplug the supply, and store everything dry.",
+            "options": [{ "type": "finish", "text": "All done." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/measure-arduino-5v"]
+}
