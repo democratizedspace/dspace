@@ -4,88 +4,93 @@ import Chip from '../components/Chip.astro';
 import { ChipVariants, ChipSize } from '../components/Chip.astro';
 
 export interface Props {
-	title: string;
-	body: string;
-	href: string;
+    title: string;
+    body: string;
+    href: string;
 }
 ---
 
 <a href="/">
-
-	<div class="vertical">
-		<Logo />
-		<span class="text-gradient title">DSPACE</span>
-		<p class="domain">democratized.space</p>
-	</div>
-	
+    <div class="vertical">
+        <Logo />
+        <span class="text-gradient title">DSPACE</span>
+        <p class="domain">democratized.space</p>
+    </div>
 </a>
 
 <style>
-	:root {
-		--astro-gradient: linear-gradient(0deg, #80df98, #00ff22);
-	}
+    :root {
+        --astro-gradient: linear-gradient(0deg, #80df98, #00ff22);
+    }
 
-	a {
-		text-decoration: none;
-	}
+    a {
+        text-decoration: none;
+    }
 
-	.text-gradient {
-		font-weight: 900;
-		background: var(--astro-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 100% 200%;
-		background-position-y: 100%;
-		border-radius: 0.4rem;
-		animation: pulse 2s ease-in-out infinite;
-		display: table;
-		margin: 0 auto;
-		font-size: 2em;
-	}
+    .text-gradient {
+        font-weight: 900;
+        background: var(--astro-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 100% 200%;
+        background-position-y: 100%;
+        border-radius: 0.4rem;
+        animation: pulse 2s ease-in-out infinite;
+        display: table;
+        margin: 0 auto;
+        font-size: 2em;
+        max-width: 100%;
+    }
 
-	.default-size {
-		font-size: 1em;
-	}
+    @media (prefers-reduced-motion: reduce) {
+        .text-gradient {
+            animation: none;
+        }
+    }
 
-	@keyframes pulse {
-		0% {
-			background-position-y: 0%;
-		}
-		100% {
-			background-position-y: 200%;
-		}
-	}
+    .default-size {
+        font-size: 1em;
+    }
 
-	.horizontal {
-		display: flex;
-		flex-direction: row;
-	}
+    @keyframes pulse {
+        0% {
+            background-position-y: 0%;
+        }
+        100% {
+            background-position-y: 200%;
+        }
+    }
 
-	.vertical {
-		display: flex;
-		flex-direction: column;
-		/* center */
-		align-items: center;
-	}
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+    }
 
-	.item {
-		gap: 2px;
-	}
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        /* center */
+        align-items: center;
+    }
 
-	.right {
-		align-items: flex-end;
-	}
+    .item {
+        gap: 2px;
+    }
 
-	.container {
-		background: rgb(20, 20, 20);
-		padding: 10px;
-		border-radius: 10px;
-		margin-top: 20px;
-	}
+    .right {
+        align-items: flex-end;
+    }
 
-	.domain {
-		font-size: 0.8em;
-		color: #00ff22;
-		margin-top: 0px;
-	}
+    .container {
+        background: rgb(20, 20, 20);
+        padding: 10px;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    .domain {
+        font-size: 0.8em;
+        color: #00ff22;
+        margin-top: 0px;
+    }
 </style>

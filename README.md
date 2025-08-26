@@ -8,7 +8,7 @@
 
 You can find the game at [democratized.space](https://democratized.space).
 The production instance is self-hosted; see [Netlify Migration](docs/netlify-migration.md)
-for background.
+for background details.
 
 Check out the [docs](https://democratized.space/docs)!
 
@@ -195,7 +195,8 @@ The server exposes two monitoring endpoints:
 - `GET /health` returns `{ "status": "ok" }` for basic liveness checks.
 - `GET /metrics` serves Prometheus-formatted metrics using `prom-client`. Set a
   `METRICS_TOKEN` environment variable to require
-  `Authorization: Bearer <token>` for this endpoint.
+  `Authorization: Bearer <token>` for this endpoint. When `prom-client` isn't
+  available, the endpoint returns a plain text `metrics unavailable` message.
 
 For a full Raspberry Pi setup, including k3s instructions, see [docs/RPI_DEPLOYMENT_GUIDE.md](./docs/RPI_DEPLOYMENT_GUIDE.md).
 To add Prometheus and Grafana monitoring, follow the steps in [docs/monitoring_setup.md](./docs/monitoring_setup.md).

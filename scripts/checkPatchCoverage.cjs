@@ -1,12 +1,21 @@
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const cp = require('child_process');
 
 function getDefaultBranch() {
   try {
-    const info = execSync('git remote show origin', { stdio: ['pipe', 'pipe', 'ignore'] }).toString();
+    const info = cp.execSync('git remote show origin', {
+      stdio: ['pipe', 'pipe', 'ignore']
+    }).toString();
     const match = info.match(/HEAD branch: (.+)/);
     if (match) return match[1].trim();
+  } catch {}
+  try {
+    return cp.execSync('git symbolic-ref --short HEAD', {
+      stdio: ['pipe', 'pipe', 'ignore']
+    })
+      .toString()
+      .trim();
   } catch {}
   return 'main';
 }
@@ -14,19 +23,26 @@ function getDefaultBranch() {
 function getChangedFiles() {
   const branch = getDefaultBranch();
   let base = '';
-  try {
-    base = execSync(`git merge-base origin/${branch} HEAD`, {
-      stdio: ['pipe', 'pipe', 'ignore']
-    }).toString().trim();
-  } catch {
+  const hasOrigin = (() => {
     try {
-      base = execSync(`git merge-base ${branch} HEAD`, {
+      cp.execSync('git remote get-url origin', {
         stdio: ['pipe', 'pipe', 'ignore']
-      }).toString().trim();
-    } catch {}
-  }
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  })();
+  try {
+    const target = hasOrigin ? `origin/${branch}` : branch;
+    base = cp.execSync(`git merge-base ${target} HEAD`, {
+      stdio: ['pipe', 'pipe', 'ignore']
+    })
+      .toString()
+      .trim();
+  } catch {}
   if (!base) return [];
-  const diff = execSync(`git diff --name-only ${base}`).toString();
+  const diff = cp.execSync(`git diff --name-only ${base}`).toString();
   return diff.split('\n').filter(Boolean);
 }
 
@@ -66,4 +82,4 @@ if (require.main === module) {
   checkCoverage();
 }
 
-module.exports = { getDefaultBranch };
+module.exports = { getDefaultBranch, getChangedFiles };
