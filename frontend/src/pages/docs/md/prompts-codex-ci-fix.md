@@ -115,3 +115,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     `playwright install --with-deps` runs before grouped tests.
 -   2025-08-14 – missing Jest `testMatch` in `frontend/package.json` let a coverage check fail; add a
     pattern so E2E tests detect all Jest files.
+-   2025-08-25 – `prepare-pr` always installed Playwright browsers even when `SKIP_E2E` was set,
+    hanging `npm run test:ci`; guard the install behind the variable so CI skips the download.

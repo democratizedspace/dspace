@@ -1,0 +1,12 @@
+{
+  "id": "skip-playwright-install",
+  "date": "2025-08-25",
+  "component": "frontend/scripts/prepare-pr",
+  "rootCause": "prepare-pr scripts always installed Playwright browsers even when SKIP_E2E was set, causing npm run test:ci to hang in CI environments without browsers.",
+  "resolution": "Skip browser installation when SKIP_E2E is set.",
+  "references": [
+    "frontend/scripts/prepare-pr.sh",
+    "frontend/scripts/prepare-pr.ps1",
+    "scripts/tests/preparePrBrowserInstall.test.ts"
+  ]
+}
