@@ -1,0 +1,13 @@
+{
+  "id": "duration-uppercase-units",
+  "date": "2025-08-25",
+  "component": "frontend",
+  "rootCause": "duration parser rejected uppercase time units",
+  "resolution": "normalize unit identifiers to lowercase before converting",
+  "references": [
+    "frontend/src/utils.js",
+    "frontend/tests/duration.test.ts",
+    "frontend/src/pages/docs/md/processes.md",
+    "frontend/src/pages/docs/md/process-guidelines.md"
+  ]
+}

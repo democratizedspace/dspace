@@ -104,6 +104,9 @@ frontend/
 > Utility note: `src/utils/strings.js`'s `getDuration` now falls back to
 > `0.00%` for non-numeric input to prevent showing `NaN%`.
 
+> Utility note: `src/utils/strings.js` now clamps duration values to the 0-100% range
+> to avoid negative or overflowing percentages in the UI.
+
 ## Getting Started
 
 ### Prerequisites

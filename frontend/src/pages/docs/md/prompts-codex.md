@@ -14,7 +14,8 @@ For task-specific templates see [Quest prompts](prompts-quests.md),
 [Item prompts](prompts-items.md), [Process prompts](prompts-processes.md),
 [NPC prompts](prompts-npcs.md), [Outage prompts](prompts-outages.md),
 [Backup prompts](prompts-backups.md), [Monitoring prompts](prompts-monitoring.md),
-[Dependency audit prompts](prompts-audit.md), [Docs prompts](prompts-docs.md),
+[Dependency audit prompts](prompts-audit.md), [Audit prompts](prompts-audit.md), 
+[Secret scanning prompts](prompts-secrets.md), [Docs prompts](prompts-docs.md),
 [Playwright test prompts](prompts-playwright-tests.md),
 [Vitest test prompts](prompts-vitest.md), [Frontend prompts](prompts-frontend.md),
 [Backend prompts](prompts-backend.md), [Refactor prompts](prompts-refactors.md), and
@@ -29,8 +30,8 @@ the [Codex meta prompt](prompts-codex-meta.md), and the
 > 2. Say **exactly** what output you expect (tests, docs, etc.).
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
-> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
->    `npm run test:ci`.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, 
+>    `npm run build`, and `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
 >    commit with an emoji prefix.
 
@@ -49,6 +50,8 @@ For failing GitHub Actions runs, use the dedicated
 -   [Backup Prompts](prompts-backups.md)
 -   [Monitoring Prompts](prompts-monitoring.md)
 -   [Dependency Audit Prompts](prompts-audit.md)
+-   [Audit Prompts](prompts-audit.md)
+-   [Secret Scanning Prompts](prompts-secrets.md)
 -   [Docs Prompts](prompts-docs.md)
 -   [Docs cross-link prompt](prompts-docs.md#cross-link-check-prompt)
 -   [Docs proofreading prompt](prompts-docs.md#proofreading-prompt)
@@ -105,7 +108,8 @@ REQUIREMENTS
 1. …
 2. …
 3. …
-4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+   `npm run build`, and `npm run test:ci`.
 5. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 6. Use an emoji-prefixed commit message.
 

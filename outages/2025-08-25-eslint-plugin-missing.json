@@ -1,0 +1,11 @@
+{
+  "id": "eslint-plugin-missing",
+  "date": "2025-08-25",
+  "component": "frontend lint",
+  "rootCause": "ESLint failed to load @typescript-eslint plugins because frontend dev dependencies were not installed.",
+  "resolution": "Install frontend packages before running lint to provide @typescript-eslint plugins.",
+  "references": [
+    "frontend/package.json",
+    "tests/eslintPluginPresence.test.ts"
+  ]
+}
