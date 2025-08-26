@@ -45,7 +45,8 @@ Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:
 
 USER:
 1. Audit `frontend/src/pages/docs/md/user-journeys.md` for mistakes and
-   propose fixes or additional journeys.
+   propose fixes or additional journeys. Create a placeholder spec in
+   `frontend/e2e/backlog` for any newly added journey without coverage.
 2. Select an uncovered or newly added journey and implement a Playwright test
    in `frontend/e2e/`, asserting visible UI content. If a matching placeholder
    exists in `frontend/e2e/backlog`, move it with `git mv` before editing;

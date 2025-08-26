@@ -6,7 +6,8 @@ slug: 'user-journeys'
 # User journeys
 
 This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
-Tests under `frontend/e2e/backlog` are placeholders for journeys without automation. Entries are
+Tests under `frontend/e2e/backlog` are placeholders for journeys without automation. Add new
+placeholder specs under `frontend/e2e/backlog` when introducing uncovered journeys. Entries are
 sorted alphabetically by journey name.
 
 | Journey                    | Playwright coverage | Test file                                         |
@@ -21,6 +22,7 @@ sorted alphabetically by journey name.
 | Custom content integration | Yes                 | `frontend/e2e/custom-content.spec.ts`             |
 | Docs landing page loads    | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
+| Docs search                | No                  | --                                                |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
 | Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
@@ -42,7 +44,7 @@ sorted alphabetically by journey name.
 | Quest list navigation      | Yes                 | `frontend/e2e/quests.spec.ts`                     |
 | Quest PR form              | No                  | --                                                |
 | Quest PR validation        | No                  | --                                                |
-| Quest success message      | No                  | --                                                |
+| Quest success message      | Yes                 | `frontend/e2e/quest-success-message.spec.ts`      |
 | Settings page loads        | Yes                 | `frontend/e2e/settings-page.spec.ts`              |
 | Shop workflow              | Yes                 | `frontend/e2e/shop-functionality.spec.ts`         |
 | Svelte component hydration | Yes                 | `frontend/e2e/svelte-component-hydration.spec.ts` |
