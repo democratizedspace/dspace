@@ -24,7 +24,7 @@ DSPACE processes should:
 Every process requires the following properties:
 
 -   **title**: Clear, descriptive name for the process (required)
--   **duration**: Time required to complete the process in format `#h #m` (required)
+-   **duration**: Time required to complete the process in format `#h #m` (units are case-insensitive, required)
 -   **requireItems**: Items needed but not consumed (optional)
 -   **consumeItems**: Items removed from inventory when process starts (optional)
 -   **createItems**: Items added to inventory when process completes (optional)
@@ -44,7 +44,7 @@ Processes that fail validation will not be saved and the form displays helpful e
 
 ### Duration Format
 
-Duration must follow the pattern `(\d+h\s*)?(\d+m\s*)?(\d+s\s*)?`, for example:
+Duration must follow the pattern `(\d+h\s*)?(\d+m\s*)?(\d+s\s*)?` (units are case-insensitive), for example:
 
 -   "30m" (30 minutes)
 -   "2h" (2 hours)
