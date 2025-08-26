@@ -17,4 +17,14 @@ describe('Message component', () => {
         expect(img).not.toHaveAttribute('onerror');
         expect(window).not.toHaveProperty('hacked');
     });
+
+    it('renders copy button with accessible label', () => {
+        const { container } = render(Message, {
+            messageMarkdown: '```js\nconsole.log("hi")\n```',
+            className: 'assistant',
+            timestamp: Date.now(),
+        });
+        const button = container.querySelector('.copy-button');
+        expect(button).toHaveAttribute('aria-label', 'Copy code to clipboard');
+    });
 });
