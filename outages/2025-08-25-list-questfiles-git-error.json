@@ -1,0 +1,11 @@
+{
+  "id": "list-questfiles-git-error",
+  "date": "2025-08-25",
+  "component": "scripts/update-new-quests.js",
+  "rootCause": "listQuestFiles executed git without suppressing stderr; missing origin remote logged fatal error",
+  "resolution": "ignore git stderr so missing refs fail quietly and add a test",
+  "references": [
+    "scripts/update-new-quests.js",
+    "scripts/tests/listQuestFilesQuiet.test.ts"
+  ]
+}

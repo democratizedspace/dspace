@@ -32,7 +32,7 @@ function listQuestFiles(ref) {
     ref
       ? `git ls-tree -r --name-only ${ref} ${questDir}`
       : `git ls-tree -r --name-only HEAD ${questDir}`,
-    { encoding: 'utf8' }
+    { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
   );
   return output.trim().split(/\n/).filter(Boolean);
 }
