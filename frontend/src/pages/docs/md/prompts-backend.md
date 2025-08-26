@@ -5,15 +5,18 @@ slug: 'prompts-backend'
 
 # Backend prompts for the _dspace_ repo
 
-DSPACE is mostly frontend code, but a few backend pieces support self-hosting via
-[Sugarkube's Raspberry Pi cluster](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md).
-Use this guide alongside [Codex Prompts](/docs/prompts-codex) when editing
-`backend/` modules. Contributions must deliver clear user value and honor
-end-user privacy, dignity, and agency as outlined in
-[Gabriel](https://github.com/futuroptimist/gabriel). To keep the prompt docs
-evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). If these
-templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
-For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+DSPACE is primarily frontend code, yet a few backend services enable self-hosting through
+[Sugarkube's Raspberry Pi cluster](https://github.com/futuroptimist/sugarkube#raspberry-pi-cluster).
+Use this guide with [Codex Prompts](/docs/prompts-codex) when editing
+[`backend/`](https://github.com/democratizedspace/dspace/tree/main/backend) modules.
+For deployment details, see the [Self-hosting guide](/docs/self-hosting).
+Contributions must deliver clear user value and honor end-user privacy, dignity,
+and agency as outlined in the [Gabriel project](https://github.com/futuroptimist/gabriel).
+To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
+If these templates drift, refresh them with the
+[Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+For failing GitHub Actions runs, use the
+[Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >
