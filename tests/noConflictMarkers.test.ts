@@ -18,6 +18,8 @@ describe('repository sanity ‑ no merge-conflict markers', () => {
     '**/coverage/**',
     '**/dist/**',
     '**/.turbo/**',
+    '**/backups/**',
+    '**/tmp-backups/**',
   ];
 
   const patterns = ['**/*'];

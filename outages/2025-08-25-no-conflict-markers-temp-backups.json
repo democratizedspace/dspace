@@ -1,0 +1,11 @@
+{
+  "id": "no-conflict-markers-temp-backups",
+  "date": "2025-08-25",
+  "component": "tests/noConflictMarkers",
+  "rootCause": "noConflictMarkers test scanned temporary backup tarballs removed during test run, producing ENOENT",
+  "resolution": "Exclude backup directories from the conflict marker scan",
+  "references": [
+    "tests/noConflictMarkers.test.ts",
+    "tests/backupScript.test.ts"
+  ]
+}
