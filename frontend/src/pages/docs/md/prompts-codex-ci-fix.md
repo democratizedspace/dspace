@@ -117,3 +117,10 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     pattern so E2E tests detect all Jest files.
 -   2025-08-25 – `prepare-pr` always installed Playwright browsers even when `SKIP_E2E` was set,
     hanging `npm run test:ci`; guard the install behind the variable so CI skips the download.
+-   2025-08-25 – `listMissingImages` treated paths with leading or trailing spaces as missing;
+    trim entries before checking so coverage tests skip valid assets.
+-   2025-08-25 – `checkPatchCoverage.cjs` assumed an `origin` remote; detect the local HEAD and skip
+    `origin` when it is absent.
+-   2025-08-25 – ESLint failed to load @typescript-eslint plugins when frontend dev dependencies were missing; install frontend packages before linting.
+-   2025-08-25 – shallow checkout hid `origin/v3`, making coverage tests fail; fetch with
+    `fetch-depth: 0` so scripts can compare against the default branch.

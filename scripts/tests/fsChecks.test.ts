@@ -41,4 +41,17 @@ describe('listMissingImages', () => {
       fs.rmSync(tmp, { recursive: true, force: true });
     }
   });
+
+  test('trims whitespace around paths', () => {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'images-'));
+    try {
+      const filename = 'logo.png';
+      fs.writeFileSync(path.join(tmp, filename), '');
+      const images = [`  ${filename}  `];
+      const missing = listMissingImages(images, tmp);
+      expect(missing).toEqual([]);
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
 });
