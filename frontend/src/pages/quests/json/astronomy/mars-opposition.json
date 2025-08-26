@@ -1,0 +1,44 @@
+{
+    "id": "astronomy/mars-opposition",
+    "title": "Capture Mars at Opposition",
+    "description": "Photograph Mars during its close approach using a basic telescope and digital camera.",
+    "image": "/assets/quests/solar.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Mars is bright tonight. Set up your basic telescope and attach the digital camera to capture its details.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "I'm ready to focus."
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Center Mars in the eyepiece, fine‑tune the focus, and take a series of photos. Keep cables clear to avoid tripping in the dark.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 },
+                        { "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749", "count": 1 }
+                    ],
+                    "text": "Mars photo secured."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great shot! Share the image with the crew and note the date for future comparisons.",
+            "options": [{ "type": "finish", "text": "Can't wait to process it." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["astronomy/meteor-shower"],
+    "hardening": { "passes": 0, "score": 0, "emoji": "🛠️", "history": [] }
+}
