@@ -9,7 +9,7 @@ Thank you for your interest in helping the project! Below is a quick overview of
    ```bash
    pnpm install
    ```
-  Husky hooks install automatically. Use `npm run ci:install` in CI to skip them.
+   Husky hooks install automatically; use `npm run ci:install` in CI to skip them.
 
 3. Install additional Git hooks via [pre-commit](https://pre-commit.com/):
    ```bash

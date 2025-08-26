@@ -16,6 +16,11 @@ describe('getDurationString', () => {
   test('handles missing remaining time gracefully', () => {
     expect(getDurationString(50, undefined)).toBe('50.00%');
   });
+
+  test('clamps out-of-range durations', () => {
+    expect(getDurationString(-10, '3s')).toBe('0.00% - 3s');
+    expect(getDurationString(150, '3s')).toBe('100.00%');
+  });
 });
 
 describe('getDuration', () => {
@@ -27,5 +32,10 @@ describe('getDuration', () => {
     expect(getDuration(NaN)).toBe('0.00%');
     // undefined should be treated as 0 at runtime
     expect(getDuration(undefined)).toBe('0.00%');
+  });
+
+  test('clamps values to 0-100%', () => {
+    expect(getDuration(-5)).toBe('0.00%');
+    expect(getDuration(150)).toBe('100.00%');
   });
 });
