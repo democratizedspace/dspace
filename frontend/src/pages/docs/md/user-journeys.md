@@ -6,8 +6,8 @@ slug: 'user-journeys'
 # User journeys
 
 This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
-Tests under `frontend/e2e/backlog` are placeholders for journeys without automation. Entries are
-sorted alphabetically by journey name.
+Tests under `frontend/e2e/backlog` are placeholders for journeys without automation; move them to
+`frontend/e2e` once coverage lands. Entries are sorted alphabetically by journey name.
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
@@ -50,3 +50,4 @@ sorted alphabetically by journey name.
 | Touch menu navigation      | No                  | --                                                |
 | Tutorial quest run         | Yes                 | `frontend/e2e/tutorial-quest.spec.ts`             |
 | UI responsiveness          | No                  | --                                                |
+| User journeys doc loads    | Yes                 | `frontend/e2e/user-journeys-doc.spec.ts`          |
