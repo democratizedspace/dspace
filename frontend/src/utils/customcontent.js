@@ -229,6 +229,10 @@ export function deleteProcess(id) {
     return db.processes.delete(id);
 }
 
+/**
+ * Export custom content as a Base64-encoded JSON string.
+ * The schema {items, processes, quests} is public and must remain stable.
+ */
 export async function exportCustomContentString() {
     const [items, processes, quests] = await Promise.all([getItems(), getProcesses(), getQuests()]);
     return btoa(

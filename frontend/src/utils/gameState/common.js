@@ -49,6 +49,10 @@ let gameState = loadGameState();
 // Create the state store and set the initial value
 export const state = writable(gameState);
 
+/**
+ * Export the game state as a Base64-encoded JSON string.
+ * The schema {quests, inventory, processes} is public and must remain stable.
+ */
 export const exportGameStateString = () => {
     return btoa(JSON.stringify(gameState));
 };
