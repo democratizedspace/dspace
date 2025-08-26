@@ -21,6 +21,7 @@ HTML, ARIA attributes, keyboard navigation, and sufficient color contrast.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 > 6. Commit with an emoji prefix.
+> 7. Provide `aria-label` and `:focus-visible` styles for icon-only controls like copy buttons.
 
 ```text
 SYSTEM:

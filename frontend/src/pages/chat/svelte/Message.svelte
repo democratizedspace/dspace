@@ -31,9 +31,12 @@
         const code = token.content.trim();
         const languageLabel = language ? `<span class="language-label">${language}</span>` : '';
 
-        return `<div>${languageLabel}<pre title="${language}"><code class="hljs ${language}">${
-            hljs.highlightAuto(code).value
-        }</code><button class="copy-button">Copy</button></pre></div>`;
+        return (
+            `<div>${languageLabel}<pre title="${language}"><code class="hljs ${language}">` +
+            `${hljs.highlightAuto(code).value}</code>` +
+            `<button class="copy-button" type="button" aria-label="Copy code to clipboard">Copy</button>` +
+            `</pre></div>`
+        );
     };
 
     $: {
@@ -148,6 +151,14 @@
         background-color: #68d46d;
         color: black;
         cursor: pointer;
+    }
+
+    .copy-button:focus-visible {
+        opacity: 1;
+        background-color: #68d46d;
+        color: black;
+        outline: 2px solid black;
+        outline-offset: 2px;
     }
 
     .toast {
