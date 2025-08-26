@@ -47,18 +47,13 @@
                 <SearchBar data={items} on:search={handleSearch} />
                 <div class="items-list">
                     {#each $filteredItems as item (item.id)}
-                        <div
+                        <button
+                            type="button"
                             class="item-row"
                             class:selected={selectedItemId === item.id}
                             on:click={() => handleItemSelect(item.id)}
                             on:touchstart={() => handleItemSelect(item.id)}
-                            on:keydown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    handleItemSelect(item.id);
-                                }
-                            }}
-                            tabindex="0"
-                            role="button"
+                            aria-label={`Select ${item.name}`}
                         >
                             <div class="item-content">
                                 {#if item.image}
@@ -73,7 +68,7 @@
                                     {/if}
                                 </div>
                             </div>
-                        </div>
+                        </button>
                     {/each}
                 </div>
             </div>
@@ -150,12 +145,21 @@
     }
 
     .item-row {
+        display: block;
+        width: 100%;
         padding: 8px;
         cursor: pointer;
         border-radius: 4px;
         margin-bottom: 4px;
         background: #2f5b2f;
         transition: all 0.2s ease;
+        border: none;
+        text-align: left;
+    }
+
+    .item-row:focus-visible {
+        outline: 2px solid #68d46d;
+        outline-offset: 2px;
     }
 
     .item-row:hover {
