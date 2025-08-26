@@ -1,0 +1,58 @@
+{
+    "id": "composting/cover-bucket",
+    "title": "Cover Your Compost Bucket",
+    "description": "Snap on a lid to lock in moisture and keep pests away.",
+    "image": "/assets/bucket.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Flies love open compost. Let's seal the bucket.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [{ "id": "dbacd41f-f080-45fd-afdd-234fb6e7d097", "count": 1 }],
+                    "text": "Hand me a lid."
+                },
+                {
+                    "type": "goto",
+                    "goto": "seal",
+                    "requiresItems": [{ "id": "dbacd41f-f080-45fd-afdd-234fb6e7d097", "count": 1 }],
+                    "text": "Lid ready."
+                }
+            ]
+        },
+        {
+            "id": "seal",
+            "text": "Press the lid down until it snaps in place.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "cover-compost-bucket",
+                    "requiresItems": [
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
+                        { "id": "dbacd41f-f080-45fd-afdd-234fb6e7d097", "count": 1 }
+                    ],
+                    "text": "Snap it on."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
+                        { "id": "dbacd41f-f080-45fd-afdd-234fb6e7d097", "count": 1 }
+                    ],
+                    "text": "All sealed."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your bucket is secure; check it every few days.",
+            "options": [{ "type": "finish", "text": "Done." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["composting/start"]
+}

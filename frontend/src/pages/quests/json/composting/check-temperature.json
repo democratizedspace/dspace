@@ -36,5 +36,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["composting/start"]
+    "requiresQuests": ["composting/cover-bucket"]
 }

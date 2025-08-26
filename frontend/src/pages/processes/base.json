@@ -3109,6 +3109,18 @@
         "duration": "5m"
     },
     {
+        "id": "cover-compost-bucket",
+        "title": "Cover a 5 gallon compost bucket with a snap-on lid",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
+            { "id": "dbacd41f-f080-45fd-afdd-234fb6e7d097", "count": 1 }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
+    },
+    {
         "id": "measure-arduino-5v",
         "title": "Measure the 5 V pin on an Arduino Uno using a digital multimeter",
         "image": "/assets/launch_controller.jpg",

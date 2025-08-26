@@ -249,6 +249,14 @@
         }
     },
     {
+        "id": "dbacd41f-f080-45fd-afdd-234fb6e7d097",
+        "name": "5 gallon bucket lid",
+        "description": "Snap-on polyethylene lid for a standard 19 L (5 gal) bucket; keeps odors and pests in check.",
+        "image": "/assets/bucket.jpg",
+        "price": "2 dUSD",
+        "hardening": { "passes": 0, "score": 0, "emoji": "🛠️", "history": [] }
+    },
+    {
         "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
         "name": "dCarbon",
         "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
