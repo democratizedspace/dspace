@@ -7,9 +7,8 @@ slug: 'prompts-monitoring'
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
 ready-made pull requests. Use this guide alongside [Codex Prompts](/docs/prompts-codex)
-when editing files in the
-[`monitoring/`](https://github.com/democratizedspace/dspace/tree/main/monitoring)
-stack so metrics, dashboards, and alerts stay consistent.
+when editing files under [`monitoring/`](https://github.com/democratizedspace/dspace/tree/main/monitoring)
+to keep metrics, dashboards, and alerts consistent.
 To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta); if
 these templates drift, refresh them with the
 [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs, use the
@@ -18,7 +17,7 @@ these templates drift, refresh them with the
 > **TL;DR**
 >
 > 1. Scope changes to `monitoring/` configs or supporting scripts.
-> 2. Prefer lightweight, self-hosted tools; avoid collecting personal data.
+> 2. Prefer lightweight, self-hosted tools and avoid collecting personal data.
 > 3. Add sample dashboards or alert rules when relevant.
 > 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
 >    `npm run build`, and `npm run test:ci`.
