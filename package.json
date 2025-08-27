@@ -61,7 +61,7 @@
     "wait-on": "^7.0.1"
   },
   "dependencies": {
-    "openai": "^5.15.0"
+    "openai": "^5.16.0"
   },
   "license": "MIT"
 }
