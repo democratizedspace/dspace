@@ -115,3 +115,5 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     `playwright install --with-deps` runs before grouped tests.
 -   2025-08-14 – missing Jest `testMatch` in `frontend/package.json` let a coverage check fail; add a
     pattern so E2E tests detect all Jest files.
+-   2025-08-25 – `listQuestFiles` logged Git errors when `origin/v3` was missing; suppress stderr and
+    fall back to `HEAD` so tests run cleanly.

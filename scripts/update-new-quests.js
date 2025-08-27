@@ -28,12 +28,21 @@ function listQuestFiles(ref) {
     'quests',
     'json'
   );
-  const output = execSync(
-    ref
-      ? `git ls-tree -r --name-only ${ref} ${questDir}`
-      : `git ls-tree -r --name-only HEAD ${questDir}`,
-    { encoding: 'utf8' }
-  );
+  const cmd = ref
+    ? `git ls-tree -r --name-only ${ref} ${questDir}`
+    : `git ls-tree -r --name-only HEAD ${questDir}`;
+  let output;
+  try {
+    output = execSync(cmd, {
+      encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'ignore'],
+    });
+  } catch {
+    output = execSync(`git ls-tree -r --name-only HEAD ${questDir}`, {
+      encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'ignore'],
+    });
+  }
   return output.trim().split(/\n/).filter(Boolean);
 }
 

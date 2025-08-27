@@ -61,12 +61,7 @@ describe('new quests list', () => {
   });
 
   it('lists total quest count accurately', () => {
-    let quests: string[];
-    try {
-      quests = listQuestFiles('origin/v3');
-    } catch {
-      quests = listQuestFiles();
-    }
+    const quests = listQuestFiles('origin/v3');
     const doc = fs.readFileSync(listPath, 'utf8');
     const match = doc.match(/Current quest count: (\d+)/);
     expect(match).not.toBeNull();

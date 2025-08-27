@@ -1,0 +1,10 @@
+{
+  "id": "listquestfiles-git-error",
+  "date": "2025-08-25",
+  "component": "scripts/update-new-quests",
+  "rootCause": "listQuestFiles invoked git on origin/v3 without verifying the branch existed, emitting fatal errors on clones without that remote.",
+  "resolution": "listQuestFiles now suppresses git stderr and falls back to HEAD when the ref is missing.",
+  "references": [
+    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md"
+  ]
+}
