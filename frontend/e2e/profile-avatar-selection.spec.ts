@@ -8,10 +8,10 @@ test.describe('Profile avatar selection', () => {
 
     test('selects an avatar and shows it on the profile page', async ({ page }) => {
         await page.goto('/profile/avatar');
-        await page.getByRole('button', { name: /Select avatar 1/i }).click();
+        await page.getByRole('button', { name: 'Select avatar 1', exact: true }).click();
         await Promise.all([
             page.waitForURL(/\/profile$/),
-            page.getByRole('button', { name: /Select/i }).click(),
+            page.getByRole('button', { name: 'Select', exact: true }).click(),
         ]);
         await expect(page.getByAltText('your currently selected avatar')).toBeVisible();
     });
