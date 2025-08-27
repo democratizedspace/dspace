@@ -38,3 +38,26 @@ USER:
 OUTPUT:
 A pull request improving accessibility with passing checks.
 ```
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep accessibility guidance current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Confirm WCAG references and accessibility tooling are up to date.
+2. Link to new patterns or components that influence accessibility.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the accessibility prompt doc with passing checks.
+```
