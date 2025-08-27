@@ -1,19 +1,19 @@
 {
     "id": "astronomy/observe-moon",
     "title": "Observe the Moon",
-    "description": "Set up a basic telescope and mission logbook to sketch lunar craters safely.",
+    "description": "Use a basic telescope, mission logbook, quill, ink and red flashlight to sketch lunar craters safely.",
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here! Grab scope, logbook, drawing kit. Use red light; avoid Sun.",
+            "text": "Nova here! Stable telescope, logbook, quill, ink and red flashlight ready? Sun below horizon?",
             "options": [{ "type": "goto", "goto": "record", "text": "I'm ready" }]
         },
         {
             "id": "record",
-            "text": "Aim at the Moon, not the Sun. Sketch with quill and ink under red light.",
+            "text": "Aim at the Moon only. Keep red light dim, watch footing and sketch craters with quill and ink.",
             "options": [
                 {
                     "type": "process",
@@ -36,16 +36,16 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Observing aids rockets. Cap ink, close logbook, store scope dry.",
+            "text": "Nice work! Cap ink, wipe quill, close logbook and dry the telescope before packing up.",
             "options": [{ "type": "finish", "text": "Onward!" }]
         }
     ],
     "rewards": [],
     "requiresQuests": [],
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-09-01",
@@ -56,6 +56,11 @@
                 "task": "codex-quest-hardening-2025-09-17",
                 "date": "2025-09-17",
                 "score": 80
+            },
+            {
+                "task": "codex-quest-hardening-2025-09-25",
+                "date": "2025-09-25",
+                "score": 92
             }
         ]
     }
