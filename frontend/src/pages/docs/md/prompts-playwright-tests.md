@@ -30,15 +30,17 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 >    implement the Playwright test; otherwise add a new test file.
 > 5. Write assertions against visible page content to ensure the UI renders as
 >    expected.
-> 6. For authentication flows, confirm tokens persist in `localStorage` and can
+> 6. Use `waitForHydration(page)` after navigation so Svelte components are
+>    fully loaded before assertions.
+> 7. For authentication flows, confirm tokens persist in `localStorage` and can
 >    be cleared without network access.
-> 7. Update `user-journeys.md` with coverage status, test file path, and any
+> 8. Update `user-journeys.md` with coverage status, test file path, and any
 >    fixes, keeping the table alphabetized. Verify apparent 404s aren't missing
 >    routes; if a page should exist, add a stub instead of asserting a 404.
-> 8. Run `npx playwright install chromium` if browsers are missing.
-> 9. Run `npm run lint`, `npm run type-check`, `npm run build`, and
->    `npm run test:ci`.
-> 10. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
+> 9. Run `npx playwright install chromium` if browsers are missing.
+> 10. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+>     `npm run test:ci`.
+> 11. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
 >     and commit with an emoji.
 
 ```text

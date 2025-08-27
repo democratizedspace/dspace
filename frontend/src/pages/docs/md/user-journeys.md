@@ -19,6 +19,7 @@ Tests under `frontend/e2e/backlog` are placeholders for journeys without automat
 | Cookie consent flow        | Yes                 | `frontend/e2e/cookie-consent.spec.ts`             |
 | Custom backup              | Yes                 | `frontend/e2e/custom-backup.spec.ts`              |
 | Custom content integration | Yes                 | `frontend/e2e/custom-content.spec.ts`             |
+| Dark mode toggle           | No                  | --                                                |
 | Docs landing page loads    | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
@@ -26,7 +27,7 @@ Tests under `frontend/e2e/backlog` are placeholders for journeys without automat
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Item/process preview       | No                  | --                                                |
 | Legacy data import         | No                  | --                                                |
-| Manage items               | No                  | --                                                |
+| Manage items               | Yes                 | `frontend/e2e/manage-items.spec.ts`               |
 | Manage processes           | No                  | --                                                |
 | Manage quests              | No                  | --                                                |
 | Manage quests search       | No                  | --                                                |
