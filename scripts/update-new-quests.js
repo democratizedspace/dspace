@@ -72,13 +72,16 @@ function groupQuests(paths) {
 }
 
 function getReleaseSections() {
-  let v3Ref = 'origin/v3';
+  const envRef = process.env.NEW_QUESTS_REF;
+  let v3Ref = envRef || 'origin/v3';
   try {
-    execSync('git fetch origin main --depth=100000', { stdio: 'ignore' });
-    execSync('git fetch origin v3 --depth=100000', { stdio: 'ignore' });
+    if (!envRef) {
+      execSync('git fetch origin main --depth=100000', { stdio: 'ignore' });
+      execSync('git fetch origin v3 --depth=100000', { stdio: 'ignore' });
+    }
     execSync(`git rev-parse --verify ${v3Ref}`, { stdio: 'ignore' });
   } catch (err) {
-    // fallback to local HEAD if remote is unavailable
+    // fallback to local HEAD if remote or ref is unavailable
     v3Ref = 'HEAD';
   }
   const releases = [
