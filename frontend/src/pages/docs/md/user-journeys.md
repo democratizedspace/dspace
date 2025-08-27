@@ -3,7 +3,7 @@ title: 'User Journeys and Test Coverage'
 slug: 'user-journeys'
 ---
 
-# User journeys
+# User Journeys
 
 This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
 Tests under `frontend/e2e/backlog` are placeholders for journeys without automation; move them to
@@ -23,6 +23,7 @@ Tests under `frontend/e2e/backlog` are placeholders for journeys without automat
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
 | Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
+| Glossary page loads        | Yes                 | `frontend/e2e/glossary-doc.spec.ts`               |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Item/process preview       | No                  | --                                                |
 | Legacy data import         | No                  | --                                                |

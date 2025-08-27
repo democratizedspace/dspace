@@ -28,8 +28,8 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 >    once real coverage lands.
 > 4. If a placeholder exists, move it to `frontend/e2e` with `git mv` and
 >    implement the Playwright test; otherwise add a new test file.
-> 5. Write assertions against visible page content to ensure the UI renders as
->    expected.
+> 5. Write assertions against visible page content (use `getByRole` for headings
+>    when possible) to ensure the UI renders as expected.
 > 6. For authentication flows, confirm tokens persist in `localStorage` and can
 >    be cleared without network access.
 > 7. Update `user-journeys.md` with coverage status, test file path, and any
