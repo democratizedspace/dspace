@@ -20,6 +20,7 @@ journeys should include a placeholder spec in `frontend/e2e/backlog` until cover
 | Cookie consent flow        | Yes                 | `frontend/e2e/cookie-consent.spec.ts`             |
 | Custom backup              | Yes                 | `frontend/e2e/custom-backup.spec.ts`              |
 | Custom content integration | Yes                 | `frontend/e2e/custom-content.spec.ts`             |
+| Dark mode toggle           | No                  | --                                                |
 | Docs landing page loads    | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs search                | No                  | --                                                |
@@ -30,7 +31,7 @@ journeys should include a placeholder spec in `frontend/e2e/backlog` until cover
 | Item preview               | Yes                 | `frontend/e2e/item-preview.spec.ts`               |
 | Legacy data import         | No                  | --                                                |
 | Logout flow                | No                  | --                                                |
-| Manage items               | No                  | --                                                |
+| Manage items               | Yes                 | `frontend/e2e/manage-items.spec.ts`               |
 | Manage processes           | No                  | --                                                |
 | Manage quests              | No                  | --                                                |
 | Manage quests search       | No                  | --                                                |
