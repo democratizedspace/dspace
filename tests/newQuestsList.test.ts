@@ -5,6 +5,8 @@ import { execSync } from 'child_process';
 import update from '../scripts/update-new-quests.js';
 import { globSync } from 'glob';
 
+process.env.NEW_QUESTS_REF = process.env.NEW_QUESTS_REF || 'HEAD';
+
 type Group = { tree: string; quests: string[] };
 type Section = {
   version: string;
@@ -61,7 +63,7 @@ describe('new quests list', () => {
   });
 
   it('lists total quest count accurately', () => {
-    const quests = listQuestFiles('origin/v3');
+    const quests = listQuestFiles(process.env.NEW_QUESTS_REF);
     const doc = fs.readFileSync(listPath, 'utf8');
     const match = doc.match(/Current quest count: (\d+)/);
     expect(match).not.toBeNull();

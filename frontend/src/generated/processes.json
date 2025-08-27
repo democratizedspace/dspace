@@ -2243,6 +2243,35 @@
         "duration": "1m"
     },
     {
+        "id": "calibrate-ec-meter",
+        "title": "Calibrate EC meter with 1000 ppm solution",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "adjust-ph",
         "title": "Adjust solution pH",
         "requireItems": [
