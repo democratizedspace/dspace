@@ -63,6 +63,15 @@ describe('approximateIrlPrice', () => {
       __resetPriceTableCacheForTests({ keepCustom: true });
       expect(approximateIrlPrice('custom_item')).toBe(42);
     });
+
+    it('ignores non-numeric values in custom file', () => {
+      writeFileSync(
+        tmpFile,
+        JSON.stringify({ custom_item: 42, invalid_item: 'oops' })
+      );
+      expect(approximateIrlPrice('custom_item')).toBe(42);
+      expect(approximateIrlPrice('invalid_item')).toBeNull();
+    });
   });
 
   describe('approximateIrlTotalPrice', () => {
@@ -107,6 +116,12 @@ describe('approximateIrlPrice', () => {
     it('returns the lowest price among known items', () => {
       expect(
         approximateIrlMinPrice(['3d_printer', 'arduino_nano', 'resistor_220_ohm'])
+      ).toBe(0.02);
+    });
+
+    it('ignores higher prices once a lower price is found', () => {
+      expect(
+        approximateIrlMinPrice(['resistor_220_ohm', 'arduino_nano'])
       ).toBe(0.02);
     });
 
