@@ -207,3 +207,26 @@ A pull request refreshing the Codex prompt docs with passing checks.
 ```
 
 [openai-cli]: https://github.com/openai/openai-cli
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep baseline Codex prompt guidance current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Update references to new or renamed prompt docs.
+2. Confirm default template reflects current lint, test, and commit standards.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the baseline Codex prompt doc with passing checks.
+```

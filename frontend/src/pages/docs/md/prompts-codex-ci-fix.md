@@ -129,3 +129,26 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 -   2025-08-25 – ESLint failed to load @typescript-eslint plugins when frontend dev dependencies were missing; install frontend packages before linting.
 -   2025-08-25 – shallow checkout hid `origin/v3`, making coverage tests fail; fetch with
     `fetch-depth: 0` so scripts can compare against the default branch.
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep CI troubleshooting steps current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Sync instructions with current GitHub Actions job names and failure patterns.
+2. Clarify log retrieval or rerun steps for new CI features.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the CI-failure fix prompt doc with passing checks.
+```

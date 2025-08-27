@@ -1,22 +1,15 @@
 {
     "id": "chemistry/acid-dilution",
     "title": "Dilute Hydrochloric Acid Safely",
-    "description": "Slowly add acid to water while stirring in full PPE. Never pour water into acid.",
+    "description": "Slowly stir 37% hydrochloric acid into water in full PPE over a spill tray. Never add water to acid.",
     "hardening": {
-        "passes": 2,
-        "score": 80,
-        "emoji": "✅",
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
         "history": [
-            {
-                "task": "codex-quest-hardening-2025-08-19",
-                "date": "2025-08-19",
-                "score": 60
-            },
-            {
-                "task": "codex-quest-hardening-2025-08-23",
-                "date": "2025-08-23",
-                "score": 80
-            }
+            { "task": "codex-quest-hardening-2025-08-19", "date": "2025-08-19", "score": 60 },
+            { "task": "codex-quest-hardening-2025-08-23", "date": "2025-08-23", "score": 80 },
+            { "task": "codex-quest-hardening-2025-08-27", "date": "2025-08-27", "score": 90 }
         ]
     },
     "image": "/assets/pH_strip.jpg",
@@ -25,18 +18,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Suit up with lab coat, nitrile gloves, and goggles. Put 100 mL water in a 250 mL beaker, add a glass stir rod, a pH strip, and the 37% HCl bottle. Always add acid to water.",
+            "text": "Wear lab coat, nitrile gloves, and safety goggles. In a spill tray, set 100 mL water in a 250 mL beaker with a glass stir rod, a pH strip, and the 37% HCl bottle. Always add acid to water.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "dilute",
-                    "text": "Gear on and ready."
+                    "text": "PPE on and workstation ready."
                 }
             ]
         },
         {
             "id": "dilute",
-            "text": "Trickle 10 mL of hydrochloric acid down the beaker wall while stirring. Keep your face back, go slow, and check with a pH strip.",
+            "text": "Slowly trickle 10 mL of hydrochloric acid down the beaker wall while stirring. Keep your face back, go slow, and verify with a pH strip.",
             "options": [
                 {
                     "type": "process",
@@ -54,14 +47,15 @@
                         { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
                         { "id": "3455faac-8811-4991-b818-cecb98e8fff7", "count": 1 },
                         { "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 },
-                        { "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a", "count": 1 }
+                        { "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a", "count": 1 },
+                        { "id": "97b735d8-0d76-4fe5-908c-781178ff6308", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Label the diluted acid with concentration and date, then cap and store in an acid-safe tray.",
+            "text": "Label the diluted acid with concentration and date, cap it, and store the bottle in the spill tray.",
             "options": [
                 {
                     "type": "finish",

@@ -49,5 +49,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/ph-check"]
+    "requiresQuests": ["hydroponics/ec-calibrate"]
 }

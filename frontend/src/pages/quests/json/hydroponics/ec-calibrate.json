@@ -1,0 +1,48 @@
+{
+    "id": "hydroponics/ec-calibrate",
+    "title": "Calibrate EC Meter",
+    "description": "Use calibration solution so readings stay accurate.",
+    "image": "/assets/aquarium_thermometer.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "An accurate EC meter keeps nutrients on point. Let's calibrate it with solution.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Ready to calibrate"
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Rinse the probe, dip in 1000 ppm solution, and adjust until the meter matches.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-ec-meter",
+                    "text": "Meter aligned"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Calibration complete",
+                    "requiresItems": [
+                        { "id": "71655665-4a59-41f4-9084-dad4d976df91", "count": 1 },
+                        { "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice. A calibrated meter keeps your plants fed properly.",
+            "options": [{ "type": "finish", "text": "Back to the grow." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/ph-check"]
+}

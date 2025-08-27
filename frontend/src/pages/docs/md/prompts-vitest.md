@@ -35,3 +35,26 @@ USER:
 OUTPUT:
 A pull request adding the tests with all checks green.
 ```
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep unit test guidance current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Verify test file locations and naming conventions match current structure.
+2. Note new Vitest flags or coverage requirements.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the Vitest prompt doc with passing checks.
+```
