@@ -347,7 +347,6 @@
         color: black;
         font-size: 16px;
         border: 2px solid #007006;
-        outline: none;
         transition: border-color 0.2s, box-shadow 0.2s;
     }
 
@@ -359,7 +358,6 @@
         color: black;
         font-size: 16px;
         border: 2px solid #007006;
-        outline: none;
     }
 
     input.error,
@@ -379,6 +377,15 @@
     textarea:focus {
         border-color: #0f0;
         box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+        outline: 3px solid #0f0;
+        outline-offset: 2px;
+    }
+
+    select:focus {
+        border-color: #0f0;
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+        outline: 3px solid #0f0;
+        outline-offset: 2px;
     }
 
     textarea {
