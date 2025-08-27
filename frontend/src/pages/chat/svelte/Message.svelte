@@ -33,7 +33,7 @@
 
         return `<div>${languageLabel}<pre title="${language}"><code class="hljs ${language}">${
             hljs.highlightAuto(code).value
-        }</code><button class="copy-button">Copy</button></pre></div>`;
+        }</code><button class="copy-button" type="button" aria-label="Copy code to clipboard">Copy</button></pre></div>`;
     };
 
     $: {
@@ -85,7 +85,12 @@
     </div>
     {@html messageHtml}
     {#if toastVisible}
-        <div class="toast" transition:fade={{ delay: 2000, duration: 1000 }}>
+        <div
+            class="toast"
+            role="status"
+            aria-live="polite"
+            transition:fade={{ delay: 2000, duration: 1000 }}
+        >
             Copied to clipboard
         </div>
     {/if}
@@ -148,6 +153,11 @@
         background-color: #68d46d;
         color: black;
         cursor: pointer;
+    }
+
+    .copy-button:focus-visible {
+        outline: 2px solid #000;
+        outline-offset: 2px;
     }
 
     .toast {

@@ -17,4 +17,27 @@ describe('Message component', () => {
         expect(img).not.toHaveAttribute('onerror');
         expect(window).not.toHaveProperty('hacked');
     });
+
+    it('renders copy button with accessible label', () => {
+        const { container } = render(Message, {
+            messageMarkdown: '```js\nconsole.log("hi")\n```',
+            className: 'assistant',
+            timestamp: Date.now(),
+        });
+        const button = container.querySelector('.copy-button');
+        expect(button).toHaveAttribute('aria-label', 'Copy code to clipboard');
+    });
+
+    it('announces copy success with a status toast', async () => {
+        const { container } = render(Message, {
+            messageMarkdown: '```js\nconsole.log("hi")\n```',
+            className: 'assistant',
+            timestamp: Date.now(),
+        });
+        const button = container.querySelector('.copy-button');
+        await button.click();
+        const toast = container.querySelector('.toast');
+        expect(toast).toHaveAttribute('role', 'status');
+        expect(toast).toHaveAttribute('aria-live', 'polite');
+    });
 });
