@@ -35,9 +35,6 @@ the [Codex meta prompt](prompts-codex-meta.md), and the
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
 >    commit with an emoji prefix.
 
-For failing GitHub Actions runs, use the dedicated
-[Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
-
 ---
 
 ## Related prompt guides
