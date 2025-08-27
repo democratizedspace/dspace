@@ -63,7 +63,7 @@
         </button>
     {/if}
     {#if toastVisible}
-        <div class="toast">{toastMessage}</div>
+        <div class="toast" role="status" aria-live="polite">{toastMessage}</div>
     {/if}
 </div>
 
@@ -76,6 +76,10 @@
         padding: 8px 16px;
         margin-top: 10px;
         cursor: pointer;
+    }
+    .primary:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
     }
     .primary[disabled] {
         opacity: 0.6;
