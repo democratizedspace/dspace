@@ -21,20 +21,29 @@ describe('repository sanity ‑ no merge-conflict markers', () => {
   ];
 
   const patterns = ['**/*'];
-  const files = patterns.flatMap((pattern) =>
-    globSync(pattern, {
-      cwd: REPO_ROOT,
-      nodir: true,
-      ignore,
-    }),
-  );
 
   it('contains no <<<<<<< or >>>>>>> markers', () => {
+    const files = patterns.flatMap((pattern) =>
+      globSync(pattern, {
+        cwd: REPO_ROOT,
+        nodir: true,
+        ignore,
+      }),
+    );
+
     const offenders: string[] = [];
 
     files.forEach((relativePath) => {
       const fullPath = join(REPO_ROOT, relativePath);
-      const content = readFileSync(fullPath, 'utf8');
+      let content: string;
+      try {
+        content = readFileSync(fullPath, 'utf8');
+      } catch (err: any) {
+        if (err.code === 'ENOENT') {
+          return; // Skip files removed during the test run
+        }
+        throw err;
+      }
       if (/^<<<<<<< |^>>>>>>> |^======= $/m.test(content)) {
         offenders.push(relativePath);
       }
