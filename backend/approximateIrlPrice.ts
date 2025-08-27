@@ -106,6 +106,18 @@ function forEachKnownPrice(
   return found;
 }
 
+function reduceKnownPrices(
+  ids: Array<string | null | undefined> | null | undefined,
+  reducer: (acc: number, price: number) => number,
+  initial: number
+): { result: number; found: boolean } {
+  let acc = initial;
+  const found = forEachKnownPrice(ids, (price) => {
+    acc = reducer(acc, price);
+  });
+  return { result: acc, found };
+}
+
 /**
  * Sum the prices of multiple game items.
  *
@@ -115,11 +127,12 @@ function forEachKnownPrice(
 export function approximateIrlTotalPrice(
   ids: Array<string | null | undefined> | null | undefined
 ): number | null {
-  let total = 0;
-  const found = forEachKnownPrice(ids, (price) => {
-    total += price;
-  });
-  return found ? total : null;
+  const { result, found } = reduceKnownPrices(
+    ids,
+    (total, price) => total + price,
+    0
+  );
+  return found ? result : null;
 }
 
 /**
@@ -131,12 +144,15 @@ export function approximateIrlTotalPrice(
 export function approximateIrlAveragePrice(
   ids: Array<string | null | undefined> | null | undefined
 ): number | null {
-  let total = 0;
   let count = 0;
-  const found = forEachKnownPrice(ids, (price) => {
-    total += price;
-    count++;
-  });
+  const { result: total, found } = reduceKnownPrices(
+    ids,
+    (sum, price) => {
+      count++;
+      return sum + price;
+    },
+    0
+  );
   return found ? total / count : null;
 }
 
@@ -149,11 +165,10 @@ export function approximateIrlAveragePrice(
 export function approximateIrlMinPrice(
   ids: Array<string | null | undefined> | null | undefined
 ): number | null {
-  let min = Infinity;
-  const found = forEachKnownPrice(ids, (price) => {
-    if (price < min) {
-      min = price;
-    }
-  });
+  const { result: min, found } = reduceKnownPrices(
+    ids,
+    (current, price) => (price < current ? price : current),
+    Infinity
+  );
   return found ? min : null;
 }
