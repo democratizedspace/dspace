@@ -3,6 +3,7 @@ import {
   approximateIrlPrice,
   approximateIrlTotalPrice,
   approximateIrlAveragePrice,
+  approximateIrlMinPrice,
   __resetPriceTableCacheForTests,
 } from './approximateIrlPrice';
 import { writeFileSync, mkdtempSync } from 'fs';
@@ -99,6 +100,26 @@ describe('approximateIrlPrice', () => {
     it('returns null for non-array input', () => {
       expect(approximateIrlAveragePrice(null as any)).toBeNull();
       expect(approximateIrlAveragePrice(undefined as any)).toBeNull();
+    });
+  });
+
+  describe('approximateIrlMinPrice', () => {
+    it('returns the lowest price among known items', () => {
+      expect(
+        approximateIrlMinPrice(['3d_printer', 'arduino_nano', 'resistor_220_ohm'])
+      ).toBe(0.02);
+    });
+
+    it('ignores unknown items and returns null when none are known', () => {
+      expect(
+        approximateIrlMinPrice(['nonexistent', 'arduino_nano'])
+      ).toBe(22);
+      expect(approximateIrlMinPrice(['foo'])).toBeNull();
+    });
+
+    it('returns null for non-array input', () => {
+      expect(approximateIrlMinPrice(null as any)).toBeNull();
+      expect(approximateIrlMinPrice(undefined as any)).toBeNull();
     });
   });
 });

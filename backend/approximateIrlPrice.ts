@@ -139,3 +139,21 @@ export function approximateIrlAveragePrice(
   });
   return found ? total / count : null;
 }
+
+/**
+ * Find the cheapest known item price from a list of identifiers.
+ *
+ * Unknown or non-string identifiers are ignored. Returns `null` when no known
+ * items are provided.
+ */
+export function approximateIrlMinPrice(
+  ids: Array<string | null | undefined> | null | undefined
+): number | null {
+  let min = Infinity;
+  const found = forEachKnownPrice(ids, (price) => {
+    if (price < min) {
+      min = price;
+    }
+  });
+  return found ? min : null;
+}
