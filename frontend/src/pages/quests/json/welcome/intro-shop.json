@@ -1,0 +1,60 @@
+{
+    "id": "welcome/intro-shop",
+    "title": "Visit the Shop",
+    "description": "Learn how to browse and pick up tools.",
+    "image": "/assets/quests/basic_circuit.svg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've checked your inventory. Now let's visit the shop and grab something useful.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "browse",
+                    "text": "Head to shop"
+                }
+            ]
+        },
+        {
+            "id": "browse",
+            "text": "Pick up a small tool to prep your workbench.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Add precision tweezers"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Tweezers acquired",
+                    "requiresItems": [
+                        {
+                            "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice purchase! These tweezers will help with delicate repairs.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait to use them"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["welcome/intro-inventory"]
+}
