@@ -8,7 +8,7 @@ const { title, text, href, image } = Astro.props;
     <div class="item">
         <h3>{title}</h3>
         <div class="section horizontal">
-            <img src={image} />
+            <img src={image} alt={title} />
             <div class="section vertical">
                 <p class="nobackground">{text}</p>
                 <div class="section horizontal">
@@ -24,6 +24,11 @@ const { title, text, href, image } = Astro.props;
     a {
         text-decoration: none;
         color: white;
+    }
+
+    a:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 2px;
     }
 
     .section {

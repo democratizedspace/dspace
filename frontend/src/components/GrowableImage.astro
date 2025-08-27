@@ -1,8 +1,10 @@
 ---
-const { imageSrc, href } = Astro.props;
+const { imageSrc, href, altText = '', ariaLabel } = Astro.props;
 ---
 
-<a href={href}><img class="icon" src={imageSrc} /></a>
+<a href={href} aria-label={ariaLabel}>
+    <img class="icon" src={imageSrc} alt={altText} />
+</a>
 
 <style>
     .icon {
@@ -10,6 +12,11 @@ const { imageSrc, href } = Astro.props;
         border-radius: 10px;
         width: 30px;
         transition: 0.2s;
+    }
+
+    a:focus-visible .icon {
+        outline: 2px solid #ffffff;
+        outline-offset: 2px;
     }
 
     .icon:hover {
