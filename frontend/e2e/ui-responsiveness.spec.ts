@@ -8,8 +8,8 @@ test.describe('UI Responsiveness Metrics', () => {
 
     test('home page shows hydration metric', async ({ page }) => {
         await page.goto('/');
-        await page.waitForSelector('[data-testid="hydration-time"]');
-        const text = await page.textContent('[data-testid="hydration-time"]');
-        expect(text).toMatch(/Hydration time: \d+ ms/);
+        const metric = page.getByTestId('hydration-time');
+        await expect(metric).toBeVisible();
+        await expect(metric).toHaveText(/Hydration time: \d+ ms/);
     });
 });

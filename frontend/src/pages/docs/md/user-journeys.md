@@ -22,6 +22,7 @@ Tests under `frontend/e2e/backlog` are placeholders for journeys without automat
 | Dark mode toggle           | No                  | --                                                |
 | Docs landing page loads    | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
+| Docs search                | No                  | --                                                |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
 | Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
@@ -50,5 +51,5 @@ Tests under `frontend/e2e/backlog` are placeholders for journeys without automat
 | Touch item selector        | No                  | --                                                |
 | Touch menu navigation      | No                  | --                                                |
 | Tutorial quest run         | Yes                 | `frontend/e2e/tutorial-quest.spec.ts`             |
-| UI responsiveness          | No                  | --                                                |
+| UI responsiveness          | Yes                 | `frontend/e2e/ui-responsiveness.spec.ts`          |
 | User journeys doc loads    | Yes                 | `frontend/e2e/user-journeys-doc.spec.ts`          |

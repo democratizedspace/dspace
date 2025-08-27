@@ -29,3 +29,26 @@ USER:
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep prompt-upgrader instructions current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Ensure it covers newly added prompt types and required checks.
+2. Tighten language so upgrades stay precise and reversible.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the Codex Prompt Upgrader doc with passing checks.
+```

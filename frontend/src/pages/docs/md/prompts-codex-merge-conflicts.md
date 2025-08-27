@@ -47,3 +47,26 @@ USER:
 OUTPUT:
 A pull request improving the merge conflict prompt doc with passing checks.
 ```
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep merge-conflict resolution tips current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Verify steps match current GitHub merge UI and git CLI behavior.
+2. Add guidance for large files or binary conflicts when relevant.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the merge-conflict prompt doc with passing checks.
+```

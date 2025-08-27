@@ -136,3 +136,26 @@ Modern assistants can be powerful collaborators. Keep in mind:
 -   **Fact-check technical information**; AI systems can generate plausible but incorrect details.
 
 [openai-cli]: https://github.com/openai/openai-cli
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep NPC-writing guidance current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Confirm voice and lore notes match the latest NPC guide.
+2. Update instructions for adding IDs or linking items and processes.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the NPC prompt doc with passing checks.
+```

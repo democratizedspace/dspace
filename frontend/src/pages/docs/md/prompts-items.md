@@ -180,3 +180,26 @@ Modern assistants can be powerful collaborators. Keep in mind:
     but incorrect details.
 
 [openai-cli]: https://platform.openai.com/docs/guides/openai-cli/
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep item-writing rules current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Ensure item schema references and inventory paths are up to date.
+2. Fold in any new content guidelines from the item guide.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the item prompt doc with passing checks.
+```
