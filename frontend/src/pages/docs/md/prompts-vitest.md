@@ -19,7 +19,7 @@ use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 2. Add or update a Vitest spec under `frontend/__tests__/` or `tests/`.
 > 3. Keep tests deterministic and focused on behavior.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
+> 5. Scan staged changes with `git diff --cached | ripsecrets` and commit with an emoji prefix.
 
 ```text
 SYSTEM:
@@ -29,7 +29,7 @@ Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:
 USER:
 1. Identify an untested or under-tested module.
 2. Write or refine a Vitest unit test in `frontend/__tests__/` or `tests/`.
-3. Run the commands above and `git diff --cached | ./scripts/scan-secrets.py` before committing.
+3. Run the commands above and `git diff --cached | ripsecrets` before committing.
 4. Use an emoji-prefixed commit message.
 
 OUTPUT:

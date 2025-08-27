@@ -23,7 +23,7 @@ For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/pro
 >    obtain explicit user consent before storing or transmitting information.
 > 3. Add or update tests in `backend/__tests__` when behavior changes.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 5. Scan staged changes with `git diff --cached | ripsecrets`.
 > 6. Commit with an emoji prefix.
 
 ```text
@@ -37,7 +37,7 @@ USER:
 2. Prefer small, self-hosted services compatible with the Sugarkube cluster.
 3. Preserve end-user privacy and agency; avoid logging or transmitting personal data.
 4. Keep code idiomatic and covered by tests.
-5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+5. Run `git diff --cached | ripsecrets` before committing.
 6. Use an emoji-prefixed commit message.
 
 OUTPUT:

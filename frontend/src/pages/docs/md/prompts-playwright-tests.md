@@ -35,7 +35,7 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 7. Run `npx playwright install chromium` if browsers are missing.
 > 8. Run `npm run lint`, `npm run type-check`, `npm run build`, and
 >    `npm run test:ci`.
-> 9. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
+> 9. Scan staged changes with `git diff --cached | ripsecrets`
 >    and commit with an emoji.
 
 ```text
@@ -53,7 +53,7 @@ USER:
 3. Update the coverage table in `frontend/src/pages/docs/md/user-journeys.md`
    with the new test path and any corrected steps, keeping it alphabetized.
 4. Improve this prompt if clearer guidance emerges.
-5. Run `git diff --cached | ./scripts/scan-secrets.py`.
+5. Run `git diff --cached | ripsecrets`.
 6. Use an emoji-prefixed commit message.
 
 OUTPUT:

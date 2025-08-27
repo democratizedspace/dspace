@@ -22,7 +22,7 @@ For fundamental design tips see the
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`;
->    scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
+>    scan staged changes with `git diff --cached | ripsecrets`;
 >    commit with an emoji prefix.
 
 ---
@@ -42,7 +42,7 @@ For fundamental design tips see the
         codex exec "npm run lint && npm run type-check && npm run build && \
         npm run test:ci && \
         npm run test:ci -- processQuality && \
-        git diff --cached | ./scripts/scan-secrets.py"
+        git diff --cached | ripsecrets"
         ```
 
 See the [OpenAI CLI repository][openai-cli] for more flags.
@@ -82,7 +82,7 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Run `npm run test:ci -- processQuality` and fix any failures.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+7. Run `git diff --cached | ripsecrets` and ensure no secrets.
 8. Update docs or items if needed.
 
 OUTPUT
@@ -103,7 +103,7 @@ steps, durations, item references, and passing checks (`npm run lint`,
 `npm run test:ci -- processQuality`).
 Verify the process links to existing quests or items, add missing registry
 entries if needed, reuse existing image assets, and scan for secrets with
-`git diff --cached | ./scripts/scan-secrets.py` before committing.
+`git diff --cached | ripsecrets` before committing.
 
 USER:
 1. Follow the steps above.
@@ -149,7 +149,7 @@ USER:
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Run `npm run test:ci -- processQuality`. Update docs or items if needed.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+7. Run `git diff --cached | ripsecrets` before committing.
 8. Use an emoji-prefixed commit message like `📝 : – refine process details`.
 
 OUTPUT:

@@ -19,7 +19,7 @@ HTML, ARIA attributes, keyboard navigation, and sufficient color contrast.
 > 2. Follow WCAG 2.1 AA: provide focus states, semantic elements, and ARIA labels.
 > 3. Validate with tooling like `npm run lint` and screen‑reader checks when possible.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 5. Scan staged changes with `git diff --cached | ripsecrets`.
 > 6. Commit with an emoji prefix.
 
 ```text
@@ -32,7 +32,7 @@ USER:
 1. Update files that affect user accessibility.
 2. Follow WCAG 2.1 AA with semantic HTML, visible focus states, and ARIA labels.
 3. Validate with linting and, when possible, screen-reader or keyboard checks.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+4. Run `git diff --cached | ripsecrets` before committing.
 5. Use an emoji-prefixed commit message.
 
 OUTPUT:

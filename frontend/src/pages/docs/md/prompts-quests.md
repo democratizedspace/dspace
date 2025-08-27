@@ -24,7 +24,7 @@ which covers quests, items and processes in detail.
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`;
->    scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
+>    scan staged changes with `git diff --cached | ripsecrets`;
 >    commit with an emoji prefix.
 
 ---
@@ -83,7 +83,7 @@ REQUIREMENTS
 5. Run `npm run lint`, `npm run type-check`, and `npm run build`.
 6. Run `npm run test:ci -- questCanonical questQuality` and fix any failures.
 7. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
-8. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+8. Run `git diff --cached | ripsecrets` and ensure no secrets.
 9. Update docs or dialogue as needed.
 
 OUTPUT
@@ -103,7 +103,7 @@ completion nodes, at least one item or process reference, and passing checks
 `npm run test:ci -- questCanonical questQuality`). Survey existing quests to
 pick a natural predecessor and update `requiresQuests` accordingly. Add missing
 items or processes to their registries, reuse existing image assets, and scan
-for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
+for secrets with `git diff --cached | ripsecrets` before
 committing.
 
 USER:
@@ -134,7 +134,7 @@ USER:
    3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
       `npm run test:ci -- questCanonical questQuality`. Fix any failures.
 4. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
-5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
+5. Scan for secrets with `git diff --cached | ripsecrets` before committing.
 6. Use an emoji-prefixed commit message.
 
 OUTPUT:
@@ -182,7 +182,7 @@ USER:
    }
    6. Run `npm run lint`, `npm run type-check`, `npm run build`, and
       `npm run test:ci -- questCanonical questQuality`. Update docs if needed.
-   7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+   7. Run `git diff --cached | ripsecrets` and ensure no secrets.
    8. Use an emoji-prefixed commit message.
 
 OUTPUT:

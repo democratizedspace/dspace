@@ -22,7 +22,7 @@ USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing cross-links.
 2. Update prompt templates, including `prompts-codex.md`, to reflect current practices.
 3. Link new prompt files from `prompts-codex.md` and the docs index.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+4. Run `git diff --cached | ripsecrets` before committing.
 5. Run the checks above.
 6. Use an emoji-prefixed commit message.
 

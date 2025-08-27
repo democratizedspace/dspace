@@ -23,7 +23,7 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`,
 >    `npm run itemValidation`, `npm run test:ci`, and
 >    `npm run test:ci -- itemQuality`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
+> 5. Scan staged changes with `git diff --cached | ripsecrets`;
 >    commit with an emoji prefix.
 
 ---
@@ -47,7 +47,7 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
         npm run itemValidation && \
         npm run test:ci && \
         npm run test:ci -- itemQuality && \
-        git diff --cached | ./scripts/scan-secrets.py"
+        git diff --cached | ripsecrets"
         ```
 
 See the [OpenAI CLI docs][openai-cli] for more flags.
@@ -86,7 +86,7 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Run `npm run itemValidation` and `npm run test:ci -- itemQuality`, fixing any failures.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+7. Run `git diff --cached | ripsecrets` and ensure no secrets.
 8. Use an emoji-prefixed commit message like `📝 : – add price field`.
 9. Update docs or processes if needed.
 
@@ -106,7 +106,7 @@ appropriate category file. Ensure realistic details, required fields, and
 passing checks (`npm run lint`, `npm run type-check`,
 `npm run build`, `npm run test:ci`, `npm run itemValidation`, and
 `npm run test:ci -- itemQuality`). Verify the item appears in at least one quest or process,
-reuse existing image assets, and scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
+reuse existing image assets, and scan for secrets with `git diff --cached | ripsecrets`
 before committing. If a quest's text changes, run `npm run test:ci -- questQuality` and update the quest's
 `hardening` block with a fresh evaluation score.
 
@@ -156,7 +156,7 @@ USER:
    }
 5. Run `npm run lint`, `npm run type-check`, `npm run build`,
    `npm run test:ci`, `npm run itemValidation`, and `npm run test:ci -- itemQuality`. Update docs if needed.
-6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Run `git diff --cached | ripsecrets` before committing.
 7. Use an emoji-prefixed commit message like `📝 : – refine item details`.
 
 OUTPUT:

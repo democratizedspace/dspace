@@ -17,7 +17,7 @@ refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 > 2. Prefer minimal, well-maintained packages.
 > 3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
 >    `npm run build`, and `npm run test:ci`.
-> 4. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 4. Scan staged changes with `git diff --cached | ripsecrets`.
 > 5. Commit with an emoji prefix.
 
 ```text
@@ -30,7 +30,7 @@ USER:
 1. Resolve dependency vulnerabilities or update packages.
 2. Confirm no high-severity issues remain with `npm run audit:ci`.
 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-4. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
+4. Scan for secrets with `git diff --cached | ripsecrets` before committing.
 5. Use an emoji-prefixed commit message.
 
 OUTPUT:

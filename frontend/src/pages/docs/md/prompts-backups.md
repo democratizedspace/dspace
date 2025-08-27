@@ -18,7 +18,7 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 2. Preserve existing backup formats and import/export paths.
 > 3. Update tests when behavior changes.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 5. Scan staged changes with `git diff --cached | ripsecrets`.
 > 6. Commit with an emoji prefix.
 
 ```text
@@ -31,7 +31,7 @@ USER:
 1. Modify backup-related code or docs (`frontend/src/pages/docs/md/backups.md` or backup modules).
 2. Keep game save and custom content export formats stable.
 3. Add or update tests covering backup flows.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+4. Run `git diff --cached | ripsecrets` before committing.
 5. Use an emoji-prefixed commit message.
 
 OUTPUT:

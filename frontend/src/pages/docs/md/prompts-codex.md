@@ -29,8 +29,9 @@ the [Codex meta prompt](prompts-codex-meta.md), and the
 > 2. Say **exactly** what output you expect (tests, docs, etc.).
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+>    `npm run build`, and `npm run test:ci`.
+> 5. Scan staged changes with `git diff --cached | ripsecrets` and
 >    commit with an emoji prefix.
 
 For failing GitHub Actions runs, use the dedicated
@@ -105,7 +106,7 @@ REQUIREMENTS
 2. …
 3. …
 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-5. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Scan staged changes for secrets with `git diff --cached | ripsecrets`.
 6. Use an emoji-prefixed commit message.
 
 OUTPUT
@@ -141,7 +142,7 @@ missing run `npx playwright install chromium` or use `SKIP_E2E=1 npm run test:ci
 
 USER:
 1. Follow the steps above.
-2. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+2. Run `git diff --cached | ripsecrets` before committing.
 3. After verifying the implementation, mark the corresponding changelog line
    with `💯`, replacing any `✅` or other emoji.
 4. Replace any remaining `✅` entries in the changelog with `💯` once they meet
@@ -172,7 +173,7 @@ USER:
 2. Fix outdated instructions, links or formatting.
 3. If you add a new prompt, link it from `prompts-codex.md` and the docs index.
 4. Run the checks above.
-5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+5. Run `git diff --cached | ripsecrets` before committing.
 6. Use an emoji-prefixed commit message.
 
 OUTPUT:
@@ -197,7 +198,7 @@ USER:
 2. Update prompt templates, including this file, to reflect current practices.
 3. Link new prompt files from `prompts-codex.md` and the docs index.
 4. Propagate related changes across docs.
-5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+5. Run `git diff --cached | ripsecrets` before committing.
 6. Run the checks above.
 
 OUTPUT:

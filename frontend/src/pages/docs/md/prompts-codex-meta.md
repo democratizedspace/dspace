@@ -22,7 +22,7 @@ USER:
 2. Refine wording, fix links, or add new prompts when gaps appear.
 3. If you introduce a new prompt, link it from `prompts-codex.md` and the docs index.
 4. Run the checks above.
-5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+5. Run `git diff --cached | ripsecrets` before committing.
 6. Use an emoji-prefixed commit message.
 
 OUTPUT:

@@ -20,7 +20,7 @@ runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 2. Keep components accessible, responsive, and idiomatic.
 > 3. Update or add tests in `frontend/__tests__` when behavior changes.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 5. Scan staged changes with `git diff --cached | ripsecrets`.
 > 6. Commit with an emoji prefix.
 
 ```text
@@ -33,7 +33,7 @@ USER:
 1. Update UI code under `frontend/`.
 2. Maintain accessibility and responsive design.
 3. Add or adjust tests in `frontend/__tests__` when needed.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+4. Run `git diff --cached | ripsecrets` before committing.
 5. Use an emoji-prefixed commit message.
 
 OUTPUT:

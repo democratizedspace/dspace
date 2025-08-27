@@ -19,7 +19,7 @@ For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/pro
 > 2. Add [`outages/YYYY-MM-DD-<slug>.json`][outage-dir]
 >    matching [`outages/schema.json`][outage-schema].
 > 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+> 4. Scan staged changes for secrets with `git diff --cached | ripsecrets`.
 > 5. Use an emoji-prefixed commit message.
 
 ```text
@@ -39,7 +39,7 @@ REQUEST:
 1. Apply the fix with appropriate tests.
 2. Commit the outage entry and related docs.
 3. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+4. Run `git diff --cached | ripsecrets` and ensure no secrets.
 5. Use an emoji-prefixed commit message.
 
 OUTPUT:

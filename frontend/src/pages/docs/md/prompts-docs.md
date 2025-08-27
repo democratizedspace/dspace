@@ -19,24 +19,25 @@ current and consistent. To keep these templates evolving, see the
 > 2. Fix outdated wording, links, or formatting.
 > 3. Link new prompt docs from [`prompts-codex.md`](/docs/prompts-codex) and
 >    `frontend/src/pages/docs/index.astro`.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py`
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+>    `npm run build`, and `npm run test:ci`.
+> 5. Scan for secrets with `git diff --cached | ripsecrets`
 >    and use an emoji-prefixed commit message.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and
-`npm run test:ci` pass before committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+`npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
 1. Edit or add docs under `frontend/src/pages/docs/md`.
 2. Correct stale guidance, links, or formatting.
 3. If adding a new prompt doc, link it from `prompts-codex.md`
    and the docs index (`frontend/src/pages/docs/index.astro`).
-4. Run `npm run lint`, `npm run type-check`, `npm run build`, and
-   `npm run test:ci`.
-5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
+4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+   `npm run build`, and `npm run test:ci`.
+5. Scan for secrets with `git diff --cached | ripsecrets` before committing.
 6. Use an emoji-prefixed commit message.
 
 OUTPUT:
@@ -50,14 +51,16 @@ Use this to polish grammar and style without changing technical meaning.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before
-committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+`npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
 1. Proofread the selected docs for typos, grammar, and clarity.
 2. Preserve the original intent and technical accuracy.
-3. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-4. Use an emoji-prefixed commit message.
+3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+   `npm run build`, and `npm run test:ci`.
+4. Run `git diff --cached | ripsecrets` before committing.
+5. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with polished documentation and passing checks.
@@ -70,14 +73,16 @@ Use this when adding or renaming docs to keep internal links current.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
-pass before committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+`npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
 1. Audit the documentation for missing or broken cross-links.
 2. Update `frontend/src/pages/docs/index.astro` and related guides to reference the new pages.
-3. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-4. Use an emoji-prefixed commit message.
+3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+   `npm run build`, and `npm run test:ci`.
+4. Run `git diff --cached | ripsecrets` before committing.
+5. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with updated links and passing checks.
