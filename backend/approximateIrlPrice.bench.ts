@@ -2,6 +2,7 @@ import { bench, describe } from 'vitest';
 import {
   approximateIrlPrice,
   approximateIrlTotalPrice,
+  approximateIrlMinPrice,
 } from './approximateIrlPrice';
 
 describe('approximateIrlPrice benchmark', () => {
@@ -15,5 +16,9 @@ describe('approximateIrlPrice benchmark', () => {
 
   bench('total price for cart', () => {
     approximateIrlTotalPrice(['3d_printer', 'arduino_nano']);
+  });
+
+  bench('min price for cart', () => {
+    approximateIrlMinPrice(['3d_printer', 'arduino_nano']);
   });
 });

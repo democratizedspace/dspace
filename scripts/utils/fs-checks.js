@@ -25,7 +25,7 @@ const decodeSafely = (str) => {
  */
 function listMissingImages(imagePaths, publicDir = DEFAULT_PUBLIC_DIR) {
   return imagePaths.filter((img) => {
-    const base = img.replace(/[?#].*$/, '');
+    const base = img.trim().replace(/[?#].*$/, '');
     if (!isLocalPath(base)) {
       return false;
     }

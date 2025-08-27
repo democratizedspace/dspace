@@ -1,0 +1,12 @@
+{
+  "id": "check-patch-coverage-no-remote",
+  "date": "2025-08-25",
+  "component": "scripts/checkPatchCoverage.cjs",
+  "rootCause": "checkPatchCoverage attempted to diff against origin/v3 when no origin remote existed, causing coverage checks to fail.",
+  "resolution": "Fall back to the local HEAD branch and skip origin lookups when origin remote is missing.",
+  "references": [
+    "scripts/checkPatchCoverage.cjs",
+    "scripts/tests/checkPatchCoverageBranch.test.ts",
+    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md"
+  ]
+}
