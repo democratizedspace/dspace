@@ -8,9 +8,18 @@
  *   If the duration is less than 100% and remaining time is provided, it will
  *   be included in the returned string.
  */
+const sanitizeDuration = (duration) => {
+    const num = Number(duration);
+    if (!Number.isFinite(num)) {
+        return 0;
+    }
+    return Math.min(Math.max(num, 0), 100);
+};
+
 export const getDurationString = (duration, remainingTime) => {
-    const durationStr = getDuration(duration);
-    if (duration < 100 && remainingTime) {
+    const value = sanitizeDuration(duration);
+    const durationStr = `${value.toFixed(2)}%`;
+    if (value < 100 && remainingTime) {
         return `${durationStr} - ${remainingTime}`;
     }
     return durationStr;
@@ -23,6 +32,6 @@ export const getDurationString = (duration, remainingTime) => {
  * @returns {string} The string representing the duration.
  */
 export const getDuration = (duration) => {
-    const num = Number(duration);
-    return Number.isFinite(num) ? `${num.toFixed(2)}%` : '0.00%';
+    const value = sanitizeDuration(duration);
+    return `${value.toFixed(2)}%`;
 };

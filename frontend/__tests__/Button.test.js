@@ -16,4 +16,10 @@ describe('Button.astro', () => {
         expect(content).toMatch(/padding: 0\.5rem 1rem;/);
         expect(content).toMatch(/margin: 0\.5rem;/);
     });
+
+    it('supports target blank with security rel', () => {
+        const content = fs.readFileSync(buttonFile, 'utf8');
+        expect(content).toMatch(/target={target}/);
+        expect(content).toMatch(/rel={target === "_blank" \? "noopener noreferrer" : undefined}/);
+    });
 });
