@@ -6,10 +6,11 @@ slug: 'prompts-audit'
 # Dependency audit prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
-ready-made pull requests. Use this guide when updating dependencies or addressing
-security vulnerabilities. To keep the prompt docs evolving, see the
-[Codex meta prompt](/docs/prompts-codex-meta); if these templates drift,
-refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
+ready-made pull requests. Use this guide alongside [Codex Prompts](prompts-codex.md) when
+updating dependencies or addressing security vulnerabilities. To keep the prompt docs
+evolving, see the [Codex meta prompt](prompts-codex-meta.md); if these templates drift,
+refresh them with the [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub
+Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 > **TL;DR**
 >
