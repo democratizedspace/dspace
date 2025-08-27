@@ -8,3 +8,16 @@ groups:
           severity: critical
         annotations:
           summary: DSpace service is down
+          description: No metrics have been scraped from the dspace job for over a minute
+          runbook: https://github.com/democratizedspace/dspace/blob/main/monitoring/README.md#dspacedown
+      - alert: DspaceHighErrorRate
+        expr: |
+          rate(http_requests_total{job="dspace",status=~"5.."}[5m]) /
+          rate(http_requests_total{job="dspace"}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High error rate on DSpace
+          description: More than 5% of HTTP requests returned 5xx status codes
+          runbook: https://github.com/democratizedspace/dspace/blob/main/monitoring/README.md#dspacehigherrorrate

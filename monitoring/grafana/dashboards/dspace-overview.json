@@ -12,6 +12,26 @@
           "legendFormat": "dspace"
         }
       ]
+    },
+    {
+      "type": "graph",
+      "title": "Error Rate",
+      "targets": [
+        {
+          "expr": "rate(http_requests_total{job=\"dspace\",status=~\"5..\"}[5m])/rate(http_requests_total{job=\"dspace\"}[5m])",
+          "legendFormat": "5xx rate"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "yaxes": [
+        {"format": "percentunit", "min": 0, "max": 1},
+        {"format": "short"}
+      ]
     }
   ],
   "schemaVersion": 36,
