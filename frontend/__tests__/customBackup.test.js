@@ -49,4 +49,10 @@ describe('custom content backup', () => {
         expect(typeof str).toBe('string');
         expect(() => atob(str)).not.toThrow();
     });
+
+    test('exportCustomContentString uses stable schema', async () => {
+        const encoded = await exportCustomContentString();
+        const decoded = JSON.parse(atob(encoded));
+        expect(Object.keys(decoded).sort()).toEqual(['items', 'processes', 'quests']);
+    });
 });
