@@ -10,7 +10,7 @@ export interface Props {
 }
 ---
 
-<a href="/">
+<a href="/" aria-label="Go to homepage">
     <div class="vertical">
         <Logo />
         <span class="text-gradient title">DSPACE</span>
@@ -25,6 +25,11 @@ export interface Props {
 
     a {
         text-decoration: none;
+    }
+
+    a:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
     }
 
     .text-gradient {
