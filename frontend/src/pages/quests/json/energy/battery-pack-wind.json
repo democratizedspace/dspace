@@ -1,0 +1,82 @@
+{
+    "id": "energy/battery-pack-wind",
+    "title": "Charge a Battery Pack with Wind",
+    "description": "Use your 500 W turbine to fill a 200 Wh battery pack.",
+    "image": "/assets/quests/solar_200Wh.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your wind turbine is spinning. Ready to store that energy?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Let's charge a battery!"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Connect this 200 Wh battery pack to your turbine's charge controller.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Take battery pack"
+                },
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Pack connected",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "charge",
+            "text": "Let the blades spin until the pack is full.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "charge-battery-pack-wind",
+                    "text": "Spin up the turbine"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Battery full",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Wind energy now tops up your battery pack.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Renewable power!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["energy/wind-turbine"]
+}

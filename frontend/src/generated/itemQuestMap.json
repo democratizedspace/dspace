@@ -434,6 +434,7 @@
       "hydroponics/temp-check",
       "geothermal/survey-ground-temperature",
       "electronics/thermometer-calibration",
+      "aquaria/water-change",
       "aquaria/thermometer",
       "aquaria/heater-install"
     ],
@@ -810,6 +811,7 @@
       "energy/hand-crank-generator",
       "energy/biogas-digester",
       "energy/battery-upgrade",
+      "energy/battery-pack-wind",
       "energy/battery-maintenance",
       "electronics/check-battery-voltage"
     ],
@@ -995,7 +997,8 @@
   },
   "3dbf1701-5cc0-4443-b9bf-4275b33513d0": {
     "requires": [
-      "electronics/tin-soldering-iron"
+      "electronics/tin-soldering-iron",
+      "electronics/solder-wire"
     ],
     "rewards": []
   },
@@ -1258,6 +1261,7 @@
       "astronomy/orion-nebula",
       "astronomy/meteor-shower",
       "astronomy/light-pollution",
+      "astronomy/binary-star",
       "astronomy/andromeda"
     ],
     "rewards": []
@@ -1279,6 +1283,7 @@
       "astronomy/iss-flyover",
       "astronomy/constellations",
       "astronomy/comet-tracking",
+      "astronomy/binary-star",
       "astronomy/basic-telescope",
       "astronomy/andromeda"
     ],

@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 241
-New quests in this release: 219
+Current quest count: 242
+New quests in this release: 220
 
 ### 3dprinting
 
@@ -145,6 +145,7 @@ New quests in this release: 219
 ### energy
 
 -   energy/battery-maintenance
+-   energy/battery-pack-wind
 -   energy/battery-upgrade
 -   energy/biogas-digester
 -   energy/charge-controller-setup
