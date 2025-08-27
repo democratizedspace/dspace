@@ -352,7 +352,6 @@
         color: black;
         font-size: 16px;
         border: 2px solid #007006;
-        outline: none;
         transition: border-color 0.2s, box-shadow 0.2s;
     }
 
@@ -373,6 +372,8 @@
     input:focus {
         border-color: #0f0;
         box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+        outline: 3px solid #0f0;
+        outline-offset: 2px;
     }
 
     .item-row {
