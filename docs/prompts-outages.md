@@ -49,3 +49,26 @@ A pull request referencing the new outage record and passing checks.
 
 [outage-dir]: https://github.com/democratizedspace/dspace/tree/main/outages
 [outage-schema]: https://github.com/democratizedspace/dspace/blob/main/outages/schema.json
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep outage-handling guidance current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Confirm outage schema links and filename patterns are still correct.
+2. Add guidance for new outage categories or follow-up steps.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the outage prompt doc with passing checks.
+```
