@@ -19,8 +19,8 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
 > **TL;DR**
 >
-> 1. Review `frontend/src/pages/docs/md/user-journeys.md`, correcting mistakes
->    and keeping the coverage table sorted alphabetically.
+> 1. Review `frontend/src/pages/docs/md/user-journeys.md`, correcting mistakes,
+>    adding missing journeys, and keeping the coverage table sorted alphabetically.
 > 2. Check if an existing Playwright test already covers the journey to avoid
 >    duplicates.
 > 3. For journeys lacking tests, ensure a placeholder spec exists under
@@ -33,8 +33,9 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 6. For authentication flows, confirm tokens persist in `localStorage` and can
 >    be cleared without network access.
 > 7. Update `user-journeys.md` with coverage status, test file path, and any
->    fixes, keeping the table alphabetized. Verify apparent 404s aren't missing
->    routes; if a page should exist, add a stub instead of asserting a 404.
+>    fixes, keeping the table alphabetized. Mark new journeys with `No` coverage
+>    until a test lands, and verify apparent 404s aren't missing routes; if a
+>    page should exist, add a stub instead of asserting a 404.
 > 8. Run `npx playwright install chromium` if browsers are missing.
 > 9. Run `npm run lint`, `npm run type-check`, `npm run build`, and
 >    `npm run test:ci`.

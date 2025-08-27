@@ -7,7 +7,8 @@ slug: 'user-journeys'
 
 This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
 Tests under `frontend/e2e/backlog` are placeholders for journeys without automation; move them to
-`frontend/e2e` once coverage lands. Entries are sorted alphabetically by journey name.
+`frontend/e2e` once coverage lands. Entries are sorted alphabetically by journey name, and new
+journeys should include a placeholder spec in `frontend/e2e/backlog` until coverage exists.
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
@@ -24,8 +25,9 @@ Tests under `frontend/e2e/backlog` are placeholders for journeys without automat
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
 | Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
-| Item/process preview       | No                  | --                                                |
+| Item preview               | Yes                 | `frontend/e2e/item-preview.spec.ts`               |
 | Legacy data import         | No                  | --                                                |
+| Logout flow                | No                  | --                                                |
 | Manage items               | No                  | --                                                |
 | Manage processes           | No                  | --                                                |
 | Manage quests              | No                  | --                                                |
@@ -35,6 +37,7 @@ Tests under `frontend/e2e/backlog` are placeholders for journeys without automat
 | Mobile quest form          | No                  | --                                                |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Process creation           | Yes                 | `frontend/e2e/process-creation.spec.ts`           |
+| Process preview            | No                  | --                                                |
 | Profile avatar selection   | Yes                 | `frontend/e2e/profile-avatar-selection.spec.ts`   |
 | Profile page loads         | Yes                 | `frontend/e2e/profile-page.spec.ts`               |
 | Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |
