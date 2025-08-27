@@ -40,6 +40,12 @@ describe('gameState - common utilities', () => {
         expect(() => Buffer.from(exported, 'base64').toString('utf8')).not.toThrow();
     });
 
+    test('exportGameStateString uses stable schema', () => {
+        const exported = exportGameStateString();
+        const decoded = JSON.parse(Buffer.from(exported, 'base64').toString('utf8'));
+        expect(Object.keys(decoded).sort()).toEqual(['inventory', 'processes', 'quests']);
+    });
+
     test('importGameStateString should replace current state', () => {
         const newState = { quests: { foo: true }, inventory: { 2: 3 }, processes: {} };
         const encoded = Buffer.from(JSON.stringify(newState)).toString('base64');
