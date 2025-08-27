@@ -56,7 +56,7 @@ See the [OpenAI CLI repository][openai-cli] for more flags.
 | **Goal sentence**    | Gives the agent a north star (“Add safety step to `energy/solar`”). |
 | **Files to touch**   | Limits search space → faster & cheaper.                             |
 | **Constraints**      | Coding style, a11y, quest schema rules.                             |
-| **Acceptance check** | e.g. “`npm run test:ci -- questCanonical questQuality` passes”. |
+| **Acceptance check** | e.g. “`npm run test:ci -- questCanonical questQuality` passes”.     |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
@@ -200,3 +200,26 @@ Modern assistants can be powerful collaborators. Keep in mind:
     but incorrect details.
 
 [openai-cli]: https://github.com/openai/openai-cli
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep quest-writing guidance current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Ensure quest schema links, hardening steps, and submission docs are current.
+2. Update examples when item or process registries change.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the quest prompt doc with passing checks.
+```

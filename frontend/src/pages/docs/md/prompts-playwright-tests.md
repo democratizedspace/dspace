@@ -65,3 +65,26 @@ OUTPUT:
 A pull request adding the test, doc updates, and any prompt refinements with all
 checks green.
 ```
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep Playwright test guidance current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Ensure user-journey links and Playwright version notes are current.
+2. Document new flags or helpers for running tests headlessly in CI.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the Playwright test prompt doc with passing checks.
+```

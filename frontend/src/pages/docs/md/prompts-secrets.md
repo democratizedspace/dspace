@@ -29,3 +29,26 @@ USER:
 OUTPUT:
 A pull request with no exposed secrets and all checks passing.
 ```
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep secret-scanning guidance current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Keep scanner command examples current and mention alternative tools if adopted.
+2. Clarify handling of false positives or credential rotation.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the secret scanning prompt doc with passing checks.
+```

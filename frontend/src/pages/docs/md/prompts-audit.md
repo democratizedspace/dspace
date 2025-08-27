@@ -37,3 +37,26 @@ USER:
 OUTPUT:
 A pull request that upgrades dependencies with passing checks.
 ```
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep dependency audit instructions current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Ensure audit commands and vulnerability policies match current tooling.
+2. Note recent high-risk packages or lockfile locations if paths changed.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the dependency audit prompt doc with passing checks.
+```

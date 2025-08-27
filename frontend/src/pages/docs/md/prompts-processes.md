@@ -167,3 +167,26 @@ Modern assistants can be powerful collaborators. Keep in mind:
     but incorrect details.
 
 [openai-cli]: https://github.com/openai/openai-cli
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep process-writing guidance current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Verify process schema and `generated/processes.json` references remain accurate.
+2. Incorporate new process development guidelines or registry paths.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the process prompt doc with passing checks.
+```
