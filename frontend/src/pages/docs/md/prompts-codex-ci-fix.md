@@ -115,6 +115,11 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     `playwright install --with-deps` runs before grouped tests.
 -   2025-08-14 – missing Jest `testMatch` in `frontend/package.json` let a coverage check fail; add a
     pattern so E2E tests detect all Jest files.
+-   2025-08-25 – E2E coverage flagged nine orphaned specs; add them to `run-test-groups.mjs` to keep
+    grouped tests in sync.
+-   2025-08-25 – Broad Playwright selectors hit multiple elements; tighten locators with `exact`
+    to avoid strict mode violations.
+-   2025-08-26 – New quests added without regenerating docs skewed quest counts; run `npm run new-quests:update` and commit both copies whenever quests change.
 -   2025-08-25 – `listMissingImages` treated paths with leading or trailing spaces as missing;
     trim entries before checking so coverage tests skip valid assets.
 -   2025-08-25 – `checkPatchCoverage.cjs` assumed an `origin` remote; detect the local HEAD and skip
