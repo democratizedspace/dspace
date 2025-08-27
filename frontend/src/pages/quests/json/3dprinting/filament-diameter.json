@@ -1,0 +1,48 @@
+{
+    "id": "3dprinting/filament-diameter",
+    "title": "Measure Filament Diameter",
+    "description": "Check your PLA with calipers so the slicer knows the real width before printing.",
+    "image": "/assets/pla_white.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "As an engineer I always check filament first; accurate diameter keeps builds reliable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Show me how to check it"
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Use digital calipers to sample 1.75 mm PLA at three points and average the numbers for consistent builds.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-filament-diameter",
+                    "text": "Give me step-by-step"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Average noted.",
+                    "requiresItems": [
+                        { "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 },
+                        { "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! With the diameter logged your printer can build parts with better precision.",
+            "options": [{ "type": "finish", "text": "Ready for calibration" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinting/filament-change"]
+}

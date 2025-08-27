@@ -68,7 +68,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": ["3dprinting/filament-diameter"],
     "hardening": {
         "passes": 3,
         "score": 82,
