@@ -1332,6 +1332,13 @@
         "unit": "bottle"
     },
     {
+        "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+        "name": "spill tray",
+        "description": "Polypropylene tray with 2 cm lip to contain acid drips; 300 × 200 mm; ~150 g.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "5 dUSD"
+    },
+    {
         "id": "7c811503-d0ca-4254-825a-ebeb06a88231",
         "name": "pH down solution (500 mL)",
         "description": "500 mL bottle of phosphoric acid to lower hydroponic nutrient pH; includes dropper.",
