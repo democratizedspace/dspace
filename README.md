@@ -36,12 +36,12 @@ and visible focus indicators to support keyboard users.
 
 Clone and set up the project:
 
-Make sure you have **Node.js 18 or 20 LTS** installed. The CI runs on Node.js 20.
+Make sure you have **Node.js 20 LTS** installed (Node.js 18 is also supported). The CI runs on Node.js 20.
 
 ```bash
 git clone https://github.com/democratizedspace/dspace.git
 cd dspace
-node --version # ensure Node.js 18 or 20 is in use
+node --version # ensure Node.js 20 LTS is in use (18 also supported)
 # pnpm 9.0.0 is configured via packageManager
 pnpm install
 ```
