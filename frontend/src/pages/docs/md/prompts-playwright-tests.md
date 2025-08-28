@@ -42,7 +42,9 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 >    page should exist, add a stub instead of asserting a 404.
 > 10. Run `npx playwright install chromium` if browsers are missing.
 > 11. Run `npm run lint`, `npm run type-check`, `npm run build`, and
->     `npm run test:ci`.
+>     `npm run test:ci`. When touching Playwright specs, also run
+>     `npm run test:e2e` or `npx playwright test e2e/<file>.spec.ts`
+>     to execute browser tests locally.
 > 12. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
 >     and commit with an emoji.
 
