@@ -17,12 +17,18 @@ Once the containers start:
 
 ## Features
 
-- Prometheus scrapes the DSpace metrics endpoint and evaluates alert rules.
-- Grafana provisions a Prometheus data source and a sample dashboard.
-- The dashboard shows service availability and HTTP 5xx error rate over time.
-- Metrics follow standard Prometheus naming such as `up` and `http_requests_total`.
+- Prometheus scrapes the DSpace metrics endpoint as configured in
+  [`prometheus/prometheus.yml`](prometheus/prometheus.yml) and evaluates alert rules from
+  [`prometheus/alerts.yml`](prometheus/alerts.yml).
+- Grafana provisions a Prometheus data source and the
+  [DSpace Overview dashboard](http://localhost:3000/d/dspace-overview/dspace-overview).
+- The dashboard shows service availability (`up`) and HTTP 5xx error rate derived from
+  `http_requests_total` metrics.
 
 ## Alerts
+
+Alert rules live in [`prometheus/alerts.yml`](prometheus/alerts.yml) and use the `Dspace*`
+naming convention.
 
 ### DspaceDown
 
