@@ -14,12 +14,15 @@ Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 > **TL;DR**
 >
-> 1. Address high or critical vulnerabilities in `package.json` or `pnpm-lock.yaml`.
-> 2. Prefer minimal, well-maintained packages.
-> 3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+> 1. Address high or critical vulnerabilities in `package.json`, `package-lock.json`,
+>    and `pnpm-lock.yaml`.
+>    Frontend audits generate a temporary `frontend/package-lock.json` to scan workspace deps.
+> 2. Watch for recent high-risk packages like `openai` (<5) bundling a vulnerable `axios`.
+> 3. Prefer minimal, well-maintained packages.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
 >    `npm run build`, and `npm run test:ci`.
-> 4. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
-> 5. Commit with an emoji prefix.
+> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 6. Commit with an emoji prefix.
 
 ```text
 SYSTEM:
@@ -47,12 +50,14 @@ Use this prompt to keep dependency audit instructions current.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` pass before committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+`npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
 1. Ensure audit commands and vulnerability policies match current tooling.
-2. Note recent high-risk packages or lockfile locations if paths changed.
+2. Note recent high-risk packages (e.g., `openai` bundling vulnerable `axios`)
+   and document lockfile paths (`package-lock.json`, `pnpm-lock.yaml`,
+   temporary `frontend/package-lock.json`).
 3. Run the checks above.
 4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 5. Commit with an emoji-prefixed message.
