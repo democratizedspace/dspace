@@ -17,6 +17,17 @@ these templates drift, refresh them with the
 [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use the
 [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
+## Current alerts and metrics
+
+-   **DspaceDown** – fires when Prometheus stops receiving `up{job="dspace"}` for one minute.
+-   **DspaceHighErrorRate** – warns if more than 5% of requests return 5xx for five minutes.
+-   Grafana ships a sample dashboard
+    [`dspace-overview.json`][dspace-dashboard]
+    visualizing service availability and HTTP 5xx error rate. Metrics follow Prometheus conventions
+    such as `http_requests_total` and `up`.
+
+[dspace-dashboard]: ../../../../../monitoring/grafana/dashboards/dspace-overview.json
+
 > **TL;DR**
 >
 > 1. Scope changes to `monitoring/` configs or supporting scripts.
@@ -32,16 +43,15 @@ these templates drift, refresh them with the
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
-`npm run build`, and `npm run test:ci` pass before committing.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before
+committing.
 
 USER:
 1. Update monitoring configs or code under `monitoring/`.
 2. Use open-source, self-hosted tools (e.g., [Prometheus](https://prometheus.io/),
    [Grafana](https://grafana.com/)) that respect user privacy.
 3. Include or update sample dashboards and alerting rules when adding metrics.
-4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
-   `npm run build`, and `npm run test:ci`.
+4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
 6. Use an emoji-prefixed commit message.
 
