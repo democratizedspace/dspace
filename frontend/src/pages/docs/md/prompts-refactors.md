@@ -18,9 +18,10 @@ runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 1. Change internal structure without altering behavior.
 > 2. Avoid mixing refactors with new features or fixes.
 > 3. Keep commits small and reversible.
-> 4. Include before-and-after benchmarks if performance could change.
-> 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 6. Run `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
+> 4. Follow repository code style: run Prettier, honor ESLint rules, and keep lines ≤100 chars.
+> 5. Include before-and-after benchmarks if performance could change.
+> 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 7. Run `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
 
 ```text
 SYSTEM:
@@ -37,6 +38,13 @@ USER:
 OUTPUT:
 A pull request with the refactor and all checks passing.
 ```
+
+## Code style and commit granularity
+
+-   Use Prettier and `npm run lint` to enforce the repository's 100-character line limit and
+    ESLint rules.
+-   Keep commits focused and reversible; avoid bundling unrelated changes.
+-   When touching performance-sensitive code, capture before-and-after benchmarks.
 
 ## Upgrader Prompt
 
