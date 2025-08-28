@@ -119,6 +119,12 @@ This cross-platform script will:
 
 The `npm test` command (alias `npm run test:pr`) handles everything automatically, including starting and stopping the development server for end-to-end tests.
 
+Before committing, scan staged changes for secrets:
+
+```bash
+git diff --cached | ./scripts/scan-secrets.py
+```
+
 ### Testing Information
 
 For detailed information about our testing approach, please refer to:
