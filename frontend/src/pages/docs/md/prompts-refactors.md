@@ -45,6 +45,13 @@ OUTPUT:
 A pull request with the refactor and all checks passing.
 ```
 
+## Code style and commit granularity
+
+-   Use Prettier and `npm run lint` to enforce the repository's 100-character line limit and
+    ESLint rules.
+-   Keep commits focused and reversible; avoid bundling unrelated changes.
+-   When touching performance-sensitive code, capture before-and-after benchmarks.
+
 ## Upgrader Prompt
 
 Type: evergreen
