@@ -13,18 +13,17 @@ function listQuestFiles(commit) {
     );
     return output.trim().split(/\n/).filter(Boolean);
   }
-  // HEAD
-  const files = [];
-  function walk(dir) {
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
+  return readJsonFiles(QUEST_DIR);
+}
+
+function readJsonFiles(dir) {
+  return fs
+    .readdirSync(dir, { withFileTypes: true })
+    .flatMap((entry) => {
       const full = path.join(dir, entry.name);
-      if (entry.isDirectory()) walk(full);
-      else if (entry.name.endsWith('.json')) files.push(full);
-    }
-  }
-  walk(QUEST_DIR);
-  return files;
+      if (entry.isDirectory()) return readJsonFiles(full);
+      return entry.name.endsWith('.json') ? [full] : [];
+    });
 }
 
 module.exports = {

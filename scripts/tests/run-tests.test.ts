@@ -20,6 +20,13 @@ describe('runTests', () => {
       .mockReturnValueOnce('');
     const code = runTests(exec, 'linux');
     expect(code).toBe(0);
-    expect(exec).toHaveBeenNthCalledWith(2, 'bash ./frontend/scripts/prepare-pr.sh', { stdio: 'inherit' });
+    expect(exec).toHaveBeenNthCalledWith(
+      2,
+      'bash ./frontend/scripts/prepare-pr.sh',
+      expect.objectContaining({
+        stdio: 'inherit',
+        env: expect.objectContaining({ SKIP_UNIT_TESTS: '1' })
+      })
+    );
   });
 });
