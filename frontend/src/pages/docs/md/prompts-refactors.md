@@ -17,10 +17,14 @@ runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 >
 > 1. Change internal structure without altering behavior.
 > 2. Avoid mixing refactors with new features or fixes.
-> 3. Keep commits small and reversible.
-> 4. Include before-and-after benchmarks if performance could change.
-> 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 6. Run `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
+> 3. Follow existing code style and formatting rules.
+> 4. Keep commits small and reversible; one logical change per commit.
+> 5. Include before-and-after benchmarks if performance could change.
+> 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 7. Run `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
+
+Respect project formatting tools (Prettier, ESLint) so diffs stay focused on behavior. Commit
+small, logical slices that reviewers can revert cleanly.
 
 ```text
 SYSTEM:
@@ -30,9 +34,10 @@ Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:
 USER:
 1. Refactor code in the specified files without changing behavior.
 2. Avoid mixing refactors with feature additions or bug fixes.
-3. Add benchmarks if performance could regress.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-5. Use an emoji-prefixed commit message.
+3. Follow existing code style and keep commits small and reversible.
+4. Add before-and-after benchmarks when performance might change.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with the refactor and all checks passing.
