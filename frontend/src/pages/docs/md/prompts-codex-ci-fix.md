@@ -129,6 +129,7 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 -   2025-08-25 – ESLint failed to load @typescript-eslint plugins when frontend dev dependencies were missing; install frontend packages before linting.
 -   2025-08-25 – shallow checkout hid `origin/v3`, making coverage tests fail; fetch with
     `fetch-depth: 0` so scripts can compare against the default branch.
+-   2025-08-28 – tutorial quest E2E test clicked disabled elements; ensure buttons and options are enabled before interacting.
 
 ## Upgrader Prompt
 

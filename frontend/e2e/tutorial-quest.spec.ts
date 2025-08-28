@@ -44,8 +44,8 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
         // Look for clickable elements and interact with them
         while (clickCount < maxClicks) {
             // Check for claim buttons that might appear
-            const claimButton = page.locator('text=Claim');
-            if ((await claimButton.count()) > 0) {
+            const claimButton = page.getByRole('button', { name: 'Claim', exact: true });
+            if ((await claimButton.count()) > 0 && (await claimButton.isEnabled())) {
                 console.log('Clicking claim button');
                 await claimButton.click();
                 await page.waitForTimeout(500);
@@ -57,8 +57,8 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
             }
 
             // Check for process options
-            const processButton = page.locator('text=Process');
-            if ((await processButton.count()) > 0) {
+            const processButton = page.getByRole('button', { name: 'Process', exact: true });
+            if ((await processButton.count()) > 0 && (await processButton.isEnabled())) {
                 console.log('Clicking process button');
                 await processButton.click();
                 await page.waitForTimeout(500);
@@ -80,11 +80,10 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
             }
 
             // Try to find clickable options - first try with 'a' elements
-            const options = optionsContainer.locator('a');
+            const options = optionsContainer.locator('a:enabled');
             const optionsCount = await options.count();
 
             if (optionsCount > 0) {
-                // Click the first option
                 console.log(`Clicking option ${clickCount + 1} of ${optionsCount} available`);
                 await options.first().click();
                 await page.waitForTimeout(500);
