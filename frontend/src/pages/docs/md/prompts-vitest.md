@@ -13,22 +13,30 @@ refresh it using other `prompts-*.md` files for inspiration. Use this guide alon
 the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs,
 use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 
+Vitest looks for `*.test.ts` files in `tests/`, `backend/`, and `scripts/tests/`. The
+`frontend/__tests__` directory is handled by Jest and excluded from Vitest runs. Coverage
+uses the V8 provider with reports in `frontend/coverage`, and the root script sets
+`--testTimeout 20000` to accommodate slower tests.
+
 > **TL;DR**
 >
 > 1. Choose a module or component that lacks unit tests or needs better coverage.
-> 2. Add or update a Vitest spec under `frontend/__tests__/` or `tests/`.
+> 2. Add a Vitest spec in `tests/`, `backend/`, or `scripts/tests/` using the `.test.ts` suffix.
 > 3. Keep tests deterministic and focused on behavior.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
+> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
+>    commit with an emoji prefix.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before committing.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`
+pass before committing.
 
 USER:
 1. Identify an untested or under-tested module.
-2. Write or refine a Vitest unit test in `frontend/__tests__/` or `tests/`.
+2. Write or refine a Vitest unit test in `tests/`, `backend/`, or `scripts/tests/`
+   with a `.test.ts` name.
 3. Run the commands above and `git diff --cached | ./scripts/scan-secrets.py` before committing.
 4. Use an emoji-prefixed commit message.
 
