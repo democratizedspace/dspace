@@ -36,11 +36,12 @@ and visible focus indicators to support keyboard users.
 
 Clone and set up the project:
 
-Make sure you have **Node.js 18 or 20 LTS** installed. The CI runs on Node.js 20.
+Make sure you have **Node.js 20 LTS** installed (Node.js 18 is also supported). The CI runs on Node.js 20.
 
 ```bash
 git clone https://github.com/democratizedspace/dspace.git
 cd dspace
+nvm use # sync Node.js version from .nvmrc if you use nvm
 node --version # ensure Node.js 18 or 20 is in use
 # pnpm 9.0.0 is configured via packageManager
 pnpm install
@@ -102,6 +103,10 @@ If Playwright browsers aren't installed, you may skip E2E tests:
 SKIP_E2E=1 npm test
 ```
 
+The pre-PR script runs root unit tests via `npm run test:root`. If those have
+already been executed, set `SKIP_UNIT_TESTS=1` to skip them when invoking the
+script directly.
+
 GitHub Actions runs the E2E tests and fails pull requests when they do not pass.
 If you encounter an error like `browserType.launch: Executable doesn't exist`,
 download the browsers with:
@@ -118,6 +123,15 @@ This cross-platform script will:
 - Provide helpful error messages if any tests fail
 
 The `npm test` command (alias `npm run test:pr`) handles everything automatically, including starting and stopping the development server for end-to-end tests.
+
+To mirror the CI pipeline's checks individually:
+
+```bash
+npm run lint
+npm run type-check
+npm run build
+npm run test:ci
+```
 
 ### Testing Information
 

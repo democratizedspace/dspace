@@ -10,8 +10,11 @@
  */
 const sanitizeDuration = (duration) => {
     const num = Number(duration);
-    if (!Number.isFinite(num)) {
+    if (Number.isNaN(num)) {
         return 0;
+    }
+    if (!Number.isFinite(num)) {
+        return num > 0 ? 100 : 0;
     }
     return Math.min(Math.max(num, 0), 100);
 };

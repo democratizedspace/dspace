@@ -34,10 +34,17 @@ Diagnose a failed CI run and make it pass.
 
 CONTEXT:
 - If a failed job URL is provided, fetch the logs and identify the first real
-  error.
+  error. Download the full log or run `gh run view <run-id> --log`, then rerun
+  fixes with **Re-run failed jobs** or `gh run rerun --failed`.
 - If no URL is given, inspect the codebase to reproduce the failure:
   * Examine `.github/workflows/` to learn which checks run in CI.
-    * Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` locally.
+    * Workflows include `ci.yml` (job `build`) which runs coverage, and
+      `tests.yml` (job `test`) which runs unit, E2E, and patch coverage.
+    * Failures often surface in steps like `Run test suite`, `Generate coverage report`,
+      `Check patch coverage`, `Show preview server logs on failure`, or
+      from missing Playwright browsers, patch coverage gaps, or dev server timeouts.
+    * Run `npm run lint`, `npm run type-check`, `npm run build`, and
+      `npm run test:ci` locally.
   * Study project docs to understand how to run the test suite and emulate the
     GitHub Actions environment.
 - Consult existing outage entries in `/outages` for similar symptoms.
@@ -121,7 +128,6 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
     grouped tests in sync.
 -   2025-08-25 – Broad Playwright selectors hit multiple elements; tighten locators with `exact`
     to avoid strict mode violations.
--   2025-08-26 – New quests added without regenerating docs skewed quest counts; run `npm run new-quests:update` and commit both copies whenever quests change.
 -   2025-08-25 – `listMissingImages` treated paths with leading or trailing spaces as missing;
     trim entries before checking so coverage tests skip valid assets.
 -   2025-08-25 – `checkPatchCoverage.cjs` assumed an `origin` remote; detect the local HEAD and skip
@@ -129,7 +135,12 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 -   2025-08-25 – ESLint failed to load @typescript-eslint plugins when frontend dev dependencies were missing; install frontend packages before linting.
 -   2025-08-25 – shallow checkout hid `origin/v3`, making coverage tests fail; fetch with
     `fetch-depth: 0` so scripts can compare against the default branch.
+-   2025-08-26 – New quests added without regenerating docs skewed quest counts; run `npm run new-quests:update` and commit both copies whenever quests change.
+-   2025-08-28 – duplicate `@astrojs/node` entries in `frontend/package.json` triggered test
+    failures; ensure each dependency key appears only once.
 -   2025-08-28 – tutorial quest E2E test clicked disabled elements; ensure buttons and options are enabled before interacting.
+-   2025-08-28 – Documented current GitHub Actions job names and added steps to download logs or
+    rerun failed jobs.
 
 ## Upgrader Prompt
 
