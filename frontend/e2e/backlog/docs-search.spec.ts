@@ -1,13 +1,13 @@
 import { test } from '@playwright/test';
 import { clearUserData } from './test-helpers';
 
-test.describe('Logout flow', () => {
+test.describe('Docs search', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
     });
 
-    test('placeholder for logout flow', async ({ page }) => {
-        await page.goto('/');
-        // TODO: implement logout steps once available
+    test('placeholder for docs search', async ({ page }) => {
+        await page.goto('/docs');
+        // TODO: implement docs search steps
     });
 });

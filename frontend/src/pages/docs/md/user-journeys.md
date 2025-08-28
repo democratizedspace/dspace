@@ -6,9 +6,9 @@ slug: 'user-journeys'
 # User Journeys
 
 This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
-Tests under `frontend/e2e/backlog` are placeholders for journeys without automation; move them to
-`frontend/e2e` once coverage lands. Entries are sorted alphabetically by journey name, and new
-journeys should include a placeholder spec in `frontend/e2e/backlog` until coverage exists.
+Uncovered journeys require a placeholder spec under `frontend/e2e/backlog`. When automation lands,
+use `git mv` to promote the spec into `frontend/e2e` and update this table. Entries are sorted
+alphabetically by journey name.
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
@@ -30,7 +30,7 @@ journeys should include a placeholder spec in `frontend/e2e/backlog` until cover
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Item preview               | Yes                 | `frontend/e2e/item-preview.spec.ts`               |
 | Legacy data import         | No                  | --                                                |
-| Logout flow                | No                  | --                                                |
+| Logout flow                | Yes                 | `frontend/e2e/logout-flow.spec.ts`                |
 | Manage items               | Yes                 | `frontend/e2e/manage-items.spec.ts`               |
 | Manage processes           | No                  | --                                                |
 | Manage quests              | No                  | --                                                |
