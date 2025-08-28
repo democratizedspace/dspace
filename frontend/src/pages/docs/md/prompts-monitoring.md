@@ -7,9 +7,9 @@ slug: 'prompts-monitoring'
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
 ready-made pull requests. Use this guide alongside [Codex Prompts](prompts-codex.md)
-when editing files under [`monitoring/`](../../../../monitoring)
+when editing files under [`monitoring/`](https://github.com/democratizedspace/dspace/tree/main/monitoring)
 to keep metrics, dashboards, and alerts consistent. For configuration details, see
-[`monitoring/README.md`](../../../../monitoring/README.md).
+[`monitoring/README.md`](https://github.com/democratizedspace/dspace/blob/main/monitoring/README.md).
 To keep the prompt docs evolving, see the [Codex meta prompt](prompts-codex-meta.md); if
 these templates drift, refresh them with the
 [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use the
@@ -18,9 +18,8 @@ these templates drift, refresh them with the
 > **TL;DR**
 >
 > 1. Scope changes to `monitoring/` configs or supporting scripts.
-> 2. Prefer open-source tools on self-managed infrastructure
->    (e.g., [Prometheus](https://prometheus.io/), [Grafana](https://grafana.com/)) and avoid
->    sending personal data to third-party services.
+> 2. Prefer open-source, self-hosted tools (e.g., [Prometheus](https://prometheus.io/), [Grafana](https://grafana.com/));
+>    avoid sending personal data to third-party services.
 > 3. Add sample dashboards or alert rules when relevant.
 > 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
 >    `npm run build`, and `npm run test:ci`.
