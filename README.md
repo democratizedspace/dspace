@@ -119,6 +119,15 @@ This cross-platform script will:
 
 The `npm test` command (alias `npm run test:pr`) handles everything automatically, including starting and stopping the development server for end-to-end tests.
 
+To mirror the CI pipeline's checks individually:
+
+```bash
+npm run lint
+npm run type-check
+npm run build
+npm run test:ci
+```
+
 ### Testing Information
 
 For detailed information about our testing approach, please refer to:
