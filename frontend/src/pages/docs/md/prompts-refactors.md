@@ -17,10 +17,11 @@ runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 >
 > 1. Change internal structure without altering behavior.
 > 2. Avoid mixing refactors with new features or fixes.
-> 3. Keep commits small and reversible.
-> 4. Include before-and-after benchmarks if performance could change.
-> 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 6. Run `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
+> 3. Follow repository code style (Prettier, ESLint, 100-char lines).
+> 4. Keep commits small, focused, and reversible.
+> 5. Include before-and-after benchmarks for performance-sensitive changes.
+> 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 7. Run `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
 
 ```text
 SYSTEM:
@@ -51,7 +52,7 @@ Ensure `npm run lint`, `npm run type-check`, `npm run build`,
 and `npm run test:ci` pass before committing.
 
 USER:
-1. Reaffirm code style rules and commit granularity tips.
+1. Reaffirm repository code style rules (Prettier, ESLint, 100-char lines) and commit granularity tips.
 2. Mention when to include benchmarks for performance-sensitive changes.
 3. Run the checks above.
 4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
