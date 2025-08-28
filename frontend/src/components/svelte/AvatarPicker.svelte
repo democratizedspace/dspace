@@ -34,7 +34,7 @@
         </button>
         Refresh the page to see more random avatars!
     </div>
-    <div class="horizontal">
+    <div class="horizontal" role="listbox">
         {#each defaultPFPs as pfp, i}
             <div
                 class="item-wrapper"
@@ -47,8 +47,9 @@
                     }
                 }}
                 tabindex="0"
-                role="button"
+                role="option"
                 aria-label={`Select avatar ${i + 1}`}
+                aria-selected={selectedIndex === i}
             >
                 <img class="item" src={pfp} alt={`Avatar option ${i + 1}`} />
             </div>
@@ -79,6 +80,11 @@
         opacity: 0.8;
         border: 2px solid transparent;
         cursor: pointer;
+    }
+
+    .item-wrapper:focus-visible {
+        border-color: #68d46d;
+        outline: none;
     }
 
     .item {

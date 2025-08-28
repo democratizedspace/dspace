@@ -25,8 +25,18 @@ describe('AvatarPicker component', () => {
         const { getByRole, getAllByRole } = render(AvatarPicker, { defaultPFPs });
         const selectButton = getByRole('button', { name: 'Select' });
         expect(selectButton).toBeDisabled();
-        const options = getAllByRole('button', { name: /Select avatar/i });
+        const options = getAllByRole('option', { name: /Select avatar/i });
         await fireEvent.click(options[0]);
         expect(selectButton).not.toBeDisabled();
+    });
+
+    it('updates aria-selected when an avatar is chosen', async () => {
+        const defaultPFPs = ['a.png', 'b.png'];
+        const { getAllByRole } = render(AvatarPicker, { defaultPFPs });
+        const options = getAllByRole('option', { name: /Select avatar/i });
+        expect(options[0]).toHaveAttribute('aria-selected', 'false');
+        await fireEvent.click(options[0]);
+        expect(options[0]).toHaveAttribute('aria-selected', 'true');
+        expect(options[1]).toHaveAttribute('aria-selected', 'false');
     });
 });

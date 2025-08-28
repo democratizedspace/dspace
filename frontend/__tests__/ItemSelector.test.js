@@ -78,6 +78,22 @@ describe('ItemSelector Component', () => {
         expect(selectedId).toBe('item-1');
     });
 
+    test('should set aria-selected on items', () => {
+        const component = new ItemSelector({
+            target: container,
+            props: {
+                items: mockItems,
+                selectedItemId: '',
+                label: 'Select Item',
+            },
+        });
+
+        const firstItem = container.querySelector('.item-row');
+        expect(firstItem.getAttribute('aria-selected')).toBe('false');
+        firstItem.click();
+        expect(firstItem.getAttribute('aria-selected')).toBe('true');
+    });
+
     test('should emit select event on touch', () => {
         let selectedId = null;
         const component = new ItemSelector({

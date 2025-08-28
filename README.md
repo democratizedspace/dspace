@@ -16,6 +16,8 @@ Check out the [docs](https://democratized.space/docs)!
 
 The frontend aims to meet WCAG 2.1 AA. Navigation links include `aria-current`
 and visible focus indicators to support keyboard users.
+Interactive selectors expose `aria-selected` states and keyboard-focus outlines so
+screen readers and keyboard users can track selection.
 
 ## Table of Contents
 

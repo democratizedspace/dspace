@@ -45,7 +45,7 @@
         {#if isExpanded}
             <div class="selector-expanded" id="item-select-control">
                 <SearchBar data={items} on:search={handleSearch} />
-                <div class="items-list">
+                <div class="items-list" role="listbox">
                     {#each $filteredItems as item (item.id)}
                         <div
                             class="item-row"
@@ -58,7 +58,8 @@
                                 }
                             }}
                             tabindex="0"
-                            role="button"
+                            role="option"
+                            aria-selected={selectedItemId === item.id}
                         >
                             <div class="item-content">
                                 {#if item.image}
@@ -156,6 +157,11 @@
         margin-bottom: 4px;
         background: #2f5b2f;
         transition: all 0.2s ease;
+    }
+
+    .item-row:focus-visible {
+        outline: 2px solid #68d46d;
+        outline-offset: 2px;
     }
 
     .item-row:hover {
