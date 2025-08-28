@@ -9,11 +9,19 @@ locally to collect and visualize metrics without sending data to third parties.
 docker-compose up
 ```
 
+### Access
+
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3000 (default `admin`/`admin`)
+- DSpace Overview dashboard: http://localhost:3000/d/dspace-overview/dspace-overview
+
 ## Features
 
 - Prometheus scrapes the DSpace metrics endpoint and evaluates alert rules.
 - Grafana provisions a Prometheus data source and a sample dashboard.
 - The dashboard shows service availability and HTTP 5xx error rate over time.
+- Metrics follow Prometheus conventions: `up{job="dspace"}` reports service health and
+  `http_requests_total{job="dspace",status=...}` tracks request outcomes.
 
 ## Alerts
 

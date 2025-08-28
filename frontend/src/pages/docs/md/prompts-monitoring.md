@@ -10,6 +10,8 @@ ready-made pull requests. Use this guide alongside [Codex Prompts](/docs/prompts
 when editing files under [`monitoring/`](https://github.com/democratizedspace/dspace/tree/main/monitoring)
 to keep metrics, dashboards, and alerts consistent. For configuration details, see
 [`monitoring/README.md`](https://github.com/democratizedspace/dspace/blob/main/monitoring/README.md).
+The provisioned Grafana dashboard (UID `dspace-overview`) links to `up` and
+`http_requests_total` metrics and is referenced in that README.
 To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta); if
 these templates drift, refresh them with the
 [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs, use the
@@ -20,7 +22,8 @@ these templates drift, refresh them with the
 > 1. Scope changes to `monitoring/` configs or supporting scripts.
 > 2. Prefer open-source tools on self-managed infrastructure (e.g., Prometheus, Grafana) and
 >    avoid sending personal data to third-party services.
-> 3. Add sample dashboards or alert rules when relevant.
+> 3. Add sample dashboards or alert rules when relevant, keeping runbook links and metric names
+>    (`up`, `http_requests_total`) current.
 > 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
 >    `npm run build`, and `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
