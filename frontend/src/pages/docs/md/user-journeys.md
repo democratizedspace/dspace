@@ -34,7 +34,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Legacy data import         | Yes                 | `frontend/e2e/legacy-import.spec.ts`              |
 | Logout flow                | No                  | --                                                |
 | Manage items               | Yes                 | `frontend/e2e/manage-items.spec.ts`               |
-| Manage processes           | No                  | --                                                |
+| Manage processes           | Yes                 | `frontend/e2e/manage-processes.spec.ts`           |
 | Manage quests              | No                  | --                                                |
 | Manage quests search       | Yes                 | `frontend/e2e/manage-quests-search.spec.ts`       |
 | Mobile item form           | No                  | --                                                |
@@ -42,7 +42,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Mobile quest form          | No                  | --                                                |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Process creation           | Yes                 | `frontend/e2e/process-creation.spec.ts`           |
-| Process preview            | No                  | --                                                |
+| Process preview            | Yes                 | `frontend/e2e/manage-processes.spec.ts`           |
 | Profile avatar selection   | Yes                 | `frontend/e2e/profile-avatar-selection.spec.ts`   |
 | Profile page loads         | Yes                 | `frontend/e2e/profile-page.spec.ts`               |
 | Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |
