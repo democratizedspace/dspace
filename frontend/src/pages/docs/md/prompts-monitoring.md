@@ -6,14 +6,14 @@ slug: 'prompts-monitoring'
 # Monitoring prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
-ready-made pull requests. Use this guide alongside [Codex Prompts](/docs/prompts-codex)
-when editing files under [`monitoring/`](https://github.com/democratizedspace/dspace/tree/main/monitoring)
+ready-made pull requests. Use this guide alongside [Codex Prompts](prompts-codex.md)
+when editing files under [`monitoring/`](../../../../monitoring)
 to keep metrics, dashboards, and alerts consistent. For configuration details, see
-[`monitoring/README.md`](https://github.com/democratizedspace/dspace/blob/main/monitoring/README.md).
-To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta); if
+[`monitoring/README.md`](../../../../monitoring/README.md).
+To keep the prompt docs evolving, see the [Codex meta prompt](prompts-codex-meta.md); if
 these templates drift, refresh them with the
-[Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs, use the
-[Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+[Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use the
+[Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 > **TL;DR**
 >
