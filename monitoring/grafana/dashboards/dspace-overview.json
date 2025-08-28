@@ -1,6 +1,7 @@
 {
   "uid": "dspace-overview",
   "id": null,
+  "uid": "dspace-overview",
   "title": "DSpace Overview",
   "timezone": "browser",
   "panels": [
