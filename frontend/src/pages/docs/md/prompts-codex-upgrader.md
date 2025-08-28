@@ -5,8 +5,9 @@ slug: 'prompts-codex-upgrader'
 
 # Codex Prompt Upgrader
 
-Use this meta prompt when the Codex templates themselves need refreshing. It keeps our
-instructions current—the machine that builds the machine. See
+Use this meta prompt whenever the Codex templates need refreshing. It tracks new prompt
+types and required checks so the machine that builds the machine stays current. Keep
+each change scoped and easy to revert. See
 [Codex Prompts](/docs/prompts-codex) for the baseline templates, the
 [Codex Meta Prompt](/docs/prompts-codex-meta) for routine maintenance, the
 [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix) for troubleshooting failing
@@ -37,7 +38,10 @@ A pull request refreshing the Codex prompt docs with passing checks.
 
 Type: evergreen
 
-Use this prompt to keep prompt-upgrader instructions current.
+Use this prompt to keep upgrader instructions current with all prompt types and checks.
+It summarizes the standard checks (`npm run lint`, `npm run type-check`,
+`npm run build`, `npm run test:ci`, and secret scanning) so upgrades always include
+them.
 
 ```text
 SYSTEM:
