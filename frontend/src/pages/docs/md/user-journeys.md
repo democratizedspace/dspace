@@ -16,6 +16,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | About page loads           | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Authentication flow        | Yes                 | `frontend/e2e/authentication-flow.spec.ts`        |
 | Built-in quest details     | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
+| Changelog page loads       | No                  | --                                                |
 | Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
 | Constellations quest       | Yes                 | `frontend/e2e/constellations-quest.spec.ts`       |
 | Cookie consent flow        | Yes                 | `frontend/e2e/cookie-consent.spec.ts`             |
@@ -30,7 +31,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Glossary page loads        | Yes                 | `frontend/e2e/glossary-doc.spec.ts`               |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Item preview               | Yes                 | `frontend/e2e/item-preview.spec.ts`               |
-| Legacy data import         | No                  | --                                                |
+| Legacy data import         | Yes                 | `frontend/e2e/legacy-import.spec.ts`              |
 | Logout flow                | No                  | --                                                |
 | Manage items               | Yes                 | `frontend/e2e/manage-items.spec.ts`               |
 | Manage processes           | No                  | --                                                |
