@@ -6,4 +6,9 @@ describe('durationInSeconds', () => {
         expect(durationInSeconds('1H 30M')).toBe(5400);
         expect(durationInSeconds('45S')).toBe(45);
     });
+
+    it('parses concatenated units without spaces', () => {
+        expect(durationInSeconds('1h30m')).toBe(5400);
+        expect(durationInSeconds('2m10s')).toBe(130);
+    });
 });

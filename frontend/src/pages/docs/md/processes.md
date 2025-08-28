@@ -41,7 +41,7 @@ These are the items produced by the process, which are added to your inventory u
 
 <img src="/assets/docs/process_duration.jpg">
 
-Duration indicates the amount of time required for the process to complete. It's expressed in the form 1d 2h 3m 4s, meaning 1 day, 2 hours, 3 minutes, and 4 seconds. Process durations can range from mere seconds to several months or even years. The form normalizes input like `0.5h 30s` to `30m 30s` for consistency. Units are case-insensitive, so `1H 30M` works as well.
+Duration indicates the amount of time required for the process to complete. It's expressed in the form 1d 2h 3m 4s, meaning 1 day, 2 hours, 3 minutes, and 4 seconds. Process durations can range from mere seconds to several months or even years. The form normalizes input like `0.5h 30s` to `30m 30s` for consistency. Units are case-insensitive, so `1H 30M` works as well. Spaces between units are optional—`1h30m` is treated the same as `1h 30m`.
 
 #### Duration Examples
 

@@ -1,0 +1,12 @@
+{
+  "id": "duration-no-space",
+  "date": "2025-08-28",
+  "component": "frontend",
+  "rootCause": "durationInSeconds split on spaces, failing to parse durations like '1h30m'",
+  "resolution": "match number+unit groups with regex to support concatenated durations and added tests and docs",
+  "references": [
+    "frontend/src/utils.js",
+    "frontend/tests/duration.test.ts",
+    "frontend/src/pages/docs/md/processes.md"
+  ]
+}
