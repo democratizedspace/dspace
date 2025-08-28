@@ -14,10 +14,12 @@ Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 > **TL;DR**
 >
-> 1. Address high or critical vulnerabilities in `package.json` or `pnpm-lock.yaml`.
-> 2. Prefer minimal, well-maintained packages.
-> 3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
->    `npm run build`, and `npm run test:ci`.
+> 1. Address high or critical vulnerabilities in `package.json`, the root `pnpm-lock.yaml`,
+>    and the temporary `frontend/package-lock.json` used during audits.
+> 2. Prefer minimal, well-maintained packages. `openai` versions <5 pulled a vulnerable
+>    `axios`; use v5+.
+> 3. Run `npm run audit:ci` (runs `npm audit --omit=dev --audit-level=high` for root and
+>    frontend), `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 4. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 > 5. Commit with an emoji prefix.
 
