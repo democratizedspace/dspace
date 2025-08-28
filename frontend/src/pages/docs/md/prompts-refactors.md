@@ -18,18 +18,20 @@ runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 1. Change internal structure without altering behavior.
 > 2. Avoid mixing refactors with new features or fixes.
 > 3. Follow existing code style and formatting rules.
-> 4. Keep commits small and reversible; one logical change per commit.
-> 5. Include before-and-after benchmarks if performance could change.
+> 4. Keep commits small, focused, and reversible; one logical change per commit.
+> 5. Include before-and-after benchmarks when changes might affect performance.
 > 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 7. Run `git diff --cached | ./scripts/scan-secrets.py` and commit with an emoji prefix.
+> 7. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`
+>    and commit with an emoji prefix.
 
-Respect project formatting tools (Prettier, ESLint) so diffs stay focused on behavior. Commit
-small, logical slices that reviewers can revert cleanly.
+Respect project formatting tools (Prettier, ESLint, 100-char line limit) so diffs stay focused
+on behavior. Commit small, logical slices that reviewers can revert cleanly.
 
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` pass before committing.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`, and
+`npm run test:ci` pass before committing.
 
 USER:
 1. Refactor code in the specified files without changing behavior.
