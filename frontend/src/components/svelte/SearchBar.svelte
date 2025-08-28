@@ -37,7 +37,7 @@
     }
 </script>
 
-<div data-hydrated={isClientSide ? 'true' : 'false'}>
+<div role="search" data-hydrated={isClientSide ? 'true' : 'false'}>
     {#if isClientSide}
         <input
             type="text"
@@ -61,6 +61,11 @@
         margin: 0 auto 10px;
         display: block;
         border-radius: 20px;
+    }
+
+    input:focus {
+        outline: 2px solid #005a9c;
+        outline-offset: 2px;
     }
 
     .search-placeholder {

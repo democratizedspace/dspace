@@ -9,8 +9,9 @@ test('filters items and exposes an accessible label', async () => {
         { id: '2', name: 'Beta' },
     ];
 
-    const { getByLabelText, component } = render(SearchBar, { data });
+    const { getByLabelText, getByRole, component } = render(SearchBar, { data });
     await tick();
+    expect(getByRole('search')).toBeInTheDocument();
     const input = getByLabelText('Search items');
 
     const handler = vi.fn();
