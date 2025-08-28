@@ -27,6 +27,13 @@ uses the V8 provider with reports in `frontend/coverage`, and the root script se
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
 >    commit with an emoji prefix.
 
+Root Vitest specs live in `tests/**/*.test.ts`, `scripts/tests/**/*.test.ts`, and
+`backend/**/*.test.ts`. Frontend component tests sit in `frontend/__tests__` and usually
+end with `.test.js`. Align any new test files with these locations and naming conventions.
+
+For coverage, run `npm run coverage`. This invokes `vitest run --coverage` using the V8
+provider and writes reports to `frontend/coverage`.
+
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
@@ -57,8 +64,10 @@ Ensure `npm run lint`, `npm run type-check`, `npm run build`,
 and `npm run test:ci` pass before committing.
 
 USER:
-1. Verify test file locations and naming conventions match current structure.
-2. Note new Vitest flags or coverage requirements.
+1. Confirm root specs stay in `tests/**/*.test.ts`, `scripts/tests/**/*.test.ts`, and
+   `backend/**/*.test.ts`, while frontend specs use `frontend/__tests__/*.test.js`.
+2. Note any new Vitest flags (e.g. `--testTimeout 20000`) or coverage expectations
+   (`npm run coverage` writes reports to `frontend/coverage`).
 3. Run the checks above.
 4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 5. Commit with an emoji-prefixed message.
