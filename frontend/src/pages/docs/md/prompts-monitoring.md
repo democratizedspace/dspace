@@ -3,24 +3,24 @@ title: 'Monitoring Prompts'
 slug: 'prompts-monitoring'
 ---
 
-# Monitoring prompts for the _dspace_ repo
+# Monitoring prompts for the DSPACE repository
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
-ready-made pull requests. Use this guide alongside [Codex Prompts](/docs/prompts-codex)
+ready-made pull requests. Use this guide alongside [Codex Prompts](prompts-codex.md)
 when editing files under [`monitoring/`](https://github.com/democratizedspace/dspace/tree/main/monitoring)
 to keep metrics, dashboards, and alerts consistent. For configuration details, see
 [`monitoring/README.md`](https://github.com/democratizedspace/dspace/blob/main/monitoring/README.md).
 The provisioned Grafana dashboard (UID `dspace-overview`) links to `up` and
 `http_requests_total` metrics and is referenced in that README.
-To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta); if
+To keep the prompt docs evolving, see the [Codex meta prompt](prompts-codex-meta.md); if
 these templates drift, refresh them with the
-[Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs, use the
-[Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+[Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use the
+[Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 > **TL;DR**
 >
 > 1. Scope changes to `monitoring/` configs or supporting scripts.
-> 2. Prefer open-source tools on self-managed infrastructure (e.g., Prometheus, Grafana) and
+> 2. Prefer open-source, self-hosted tools (e.g., [Prometheus](https://prometheus.io/), [Grafana](https://grafana.com/));
 >    avoid sending personal data to third-party services.
 > 3. Add sample dashboards or alert rules when relevant, keeping runbook links and metric names
 >    (`up`, `http_requests_total`) current.
@@ -37,7 +37,8 @@ Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
 
 USER:
 1. Update monitoring configs or code under `monitoring/`.
-2. Use open-source, self-hosted tools (e.g., Prometheus, Grafana) that respect user privacy.
+2. Use open-source, self-hosted tools (e.g., [Prometheus](https://prometheus.io/),
+   [Grafana](https://grafana.com/)) that respect user privacy.
 3. Include or update sample dashboards and alerting rules when adding metrics.
 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
    `npm run build`, and `npm run test:ci`.

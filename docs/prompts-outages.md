@@ -7,7 +7,9 @@ slug: 'prompts-outages'
 
 Codex is a sandboxed engineering agent that can open this repository and run tests.
 Use this guide alongside [Codex Prompts](/docs/prompts-codex) so every fix ships with a matching
-record in the outage catalog.
+record in the outage catalog. A short player-facing overview lives in
+`frontend/src/pages/docs/md/prompts-outages.md` and links back here to keep these details in one
+place.
 To keep these prompt docs evolving, consult the [Codex meta prompt](/docs/prompts-codex-meta);
 if templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
 For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
@@ -17,10 +19,13 @@ For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/pro
 > 1. Investigate the failure and implement a fix.
 > 2. Add [`outages/YYYY-MM-DD-<slug>.json`][outage-dir]
 >    matching [`outages/schema.json`][outage-schema].
+>    Ensure these links and the filename pattern stay current.
 > 3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
 >    `npm run test:ci`.
 > 4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 > 5. Use an emoji-prefixed commit message.
+> 6. Record follow-up tasks (e.g., issues, monitoring) in the `references` array.
+>    If the outage introduces a new category, update `outages/schema.json` accordingly.
 
 ```text
 SYSTEM:
