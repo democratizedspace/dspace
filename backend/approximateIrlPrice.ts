@@ -86,35 +86,25 @@ export function approximateIrlPrice(
   return getPriceTable()[normalized] ?? null;
 }
 
-function forEachKnownPrice(
-  ids: Array<string | null | undefined> | null | undefined,
-  callback: (price: number) => void
-): boolean {
-  if (!Array.isArray(ids)) {
-    return false;
-  }
-
-  let found = false;
-  for (const id of ids) {
-    const price = approximateIrlPrice(id);
-    if (typeof price === 'number') {
-      callback(price);
-      found = true;
-    }
-  }
-
-  return found;
-}
-
 function reduceKnownPrices(
   ids: Array<string | null | undefined> | null | undefined,
   reducer: (acc: number, price: number) => number,
   initial: number
 ): { result: number; found: boolean } {
+  if (!Array.isArray(ids)) {
+    return { result: initial, found: false };
+  }
+
   let acc = initial;
-  const found = forEachKnownPrice(ids, (price) => {
-    acc = reducer(acc, price);
-  });
+  let found = false;
+  for (const id of ids) {
+    const price = approximateIrlPrice(id);
+    if (typeof price === 'number') {
+      acc = reducer(acc, price);
+      found = true;
+    }
+  }
+
   return { result: acc, found };
 }
 

@@ -26,19 +26,23 @@ try {
     }
     Write-Host "✅ Code formatting and linting passed!" -ForegroundColor Green
 
-    # Step 2: Run unit tests
-    Write-Host "`nStep 2/3: Running unit tests..."
-    $testOutput = npm test 2>&1
-    Write-Host $testOutput
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "❌ Unit tests failed. Please fix them before submitting your PR." -ForegroundColor Red
-        Set-Location -Path $originalDir
-        exit 1
+    # Step 2: Run unit tests unless skipped
+    if (-not $env:SKIP_UNIT_TESTS) {
+        Write-Host "`nStep 2/3: Running unit tests..."
+        $testOutput = npm run test:root 2>&1
+        Write-Host $testOutput
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "❌ Unit tests failed. Please fix them before submitting your PR." -ForegroundColor Red
+            Set-Location -Path $originalDir
+            exit 1
+        }
+        if ($testOutput -match 'Test Files\s+0' -or $testOutput -match 'Tests\s+0' -or $testOutput -match 'No test files? found') {
+            Write-Warning "No unit tests were run."
+        }
+        Write-Host "✅ Unit tests passed!" -ForegroundColor Green
+    } else {
+        Write-Host "`nStep 2/3: Skipping unit tests..."
     }
-    if ($testOutput -match 'Test Files\s+0' -or $testOutput -match 'Tests\s+0' -or $testOutput -match 'No test files? found') {
-        Write-Warning "No unit tests were run."
-    }
-    Write-Host "✅ Unit tests passed!" -ForegroundColor Green
 
     # Step 3: Run grouped E2E tests
     Write-Host "`nStep 3/3: Running end-to-end tests (grouped)..."

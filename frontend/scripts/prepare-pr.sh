@@ -26,20 +26,24 @@ if [ $? -ne 0 ]; then
 fi
 echo "✅ Code formatting and linting passed!"
 
-# Step 2: Run unit tests
-echo -e "\nStep 2/3: Running unit tests..."
-TEST_OUTPUT=$(npm test 2>&1)
-TEST_EXIT=$?
-echo "$TEST_OUTPUT"
-if [ $TEST_EXIT -ne 0 ]; then
-  echo "❌ Unit tests failed. Please fix them before submitting your PR."
-  cd "$ORIGINAL_DIR" || exit 1
-  exit 1
+# Step 2: Run unit tests unless skipped
+if [ -z "$SKIP_UNIT_TESTS" ]; then
+  echo -e "\nStep 2/3: Running unit tests..."
+  TEST_OUTPUT=$(npm run test:root 2>&1)
+  TEST_EXIT=$?
+  echo "$TEST_OUTPUT"
+  if [ $TEST_EXIT -ne 0 ]; then
+    echo "❌ Unit tests failed. Please fix them before submitting your PR."
+    cd "$ORIGINAL_DIR" || exit 1
+    exit 1
+  fi
+  if echo "$TEST_OUTPUT" | grep -Eq "Test Files\\s+0|Tests\\s+0|No test files? found"; then
+    echo "⚠️  Warning: no unit tests were run."
+  fi
+  echo "✅ Unit tests passed!"
+else
+  echo -e "\nStep 2/3: Skipping unit tests..."
 fi
-if echo "$TEST_OUTPUT" | grep -Eq "Test Files\\s+0|Tests\\s+0|No test files? found"; then
-  echo "⚠️  Warning: no unit tests were run."
-fi
-echo "✅ Unit tests passed!"
 
 # Step 3: Run grouped E2E tests (unless disabled)
 if [ -z "$SKIP_E2E" ]; then

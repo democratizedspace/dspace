@@ -10,16 +10,14 @@ const validate = ajv.compile(schema);
 function validateItem(filePath) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const items = Array.isArray(data) ? data : [data];
-  let valid = true;
-  for (const item of items) {
+  return items.every((item) => {
     const ok = validate(item);
     if (!ok) {
       console.error(`Validation failed for ${filePath}`);
       console.error(validate.errors);
     }
-    valid = valid && ok;
-  }
-  return valid;
+    return ok;
+  });
 }
 
 if (require.main === module) {
