@@ -120,34 +120,29 @@ export const datetimeAfterDuration = (durationSeconds) => {
 
 export const durationInSeconds = (durationString) => {
     try {
-        const durationComponents = durationString.split(' ').filter(Boolean);
-
-        // for each item in durationComponents, get the number and the unit
-        // then convert the number to seconds
+        const regex = /(\d*\.?\d+)([dhms])/gi;
         let durationSeconds = 0;
-        for (const component of durationComponents) {
-            const number = parseFloat(component);
-            if (isNaN(number)) continue;
-            const unit = component.replace(String(number), '').toLowerCase();
-            let seconds = 0;
+        let match;
+        while ((match = regex.exec(durationString)) !== null) {
+            const number = parseFloat(match[1]);
+            const unit = match[2].toLowerCase();
             switch (unit) {
                 case 'd':
-                    seconds = number * 86400;
+                    durationSeconds += number * 86400;
                     break;
                 case 'h':
-                    seconds = number * 3600;
+                    durationSeconds += number * 3600;
                     break;
                 case 'm':
-                    seconds = number * 60;
+                    durationSeconds += number * 60;
                     break;
                 case 's':
-                    seconds = number;
+                    durationSeconds += number;
                     break;
                 /* istanbul ignore next */
                 default:
                     break;
             }
-            durationSeconds += seconds;
         }
 
         return durationSeconds;
