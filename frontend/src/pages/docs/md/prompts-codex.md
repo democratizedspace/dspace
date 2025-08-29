@@ -34,8 +34,9 @@ When adding a new prompt doc, link it here and in
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
 > 4. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
-> 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 6. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
+> 5. Link new prompt guides from this page and `frontend/src/pages/docs/index.astro`.
+> 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 7. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
 >    commit with an emoji prefix.
 
 ---

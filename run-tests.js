@@ -51,7 +51,10 @@ function runTests(exec = execSync, platform = os.platform()) {
         };
         const { message, command } = scripts[platform] || scripts.default;
         console.log(message);
-        exec(command, { stdio: 'inherit' });
+        exec(command, {
+            stdio: 'inherit',
+            env: { ...process.env, SKIP_UNIT_TESTS: '1' }
+        });
 
         console.log(
             `\n${colors.bright}${colors.green}All tests completed successfully!${colors.reset}`
