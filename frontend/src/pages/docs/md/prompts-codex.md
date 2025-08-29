@@ -34,6 +34,9 @@ the [Codex merge conflict prompt](prompts-codex-merge-conflicts.md), the
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
 >    commit with an emoji prefix.
+> 6. For CI failures or merge conflicts, see the
+>    [Codex CI-failure fix prompt](prompts-codex-ci-fix.md) and
+>    [Codex merge conflict prompt](prompts-codex-merge-conflicts.md).
 
 ---
 

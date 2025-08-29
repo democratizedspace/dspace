@@ -11,7 +11,8 @@ ready-made PR — but only if given a clear, file-scoped prompt. Use this guide 
 current and consistent. To keep these templates evolving, see the
 [Codex meta prompt](prompts-codex-meta.md). If they drift, refresh them with the
 [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use the
-[Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
+[Codex CI-failure fix prompt](prompts-codex-ci-fix.md). When merge conflicts arise, resolve them with the
+[Codex merge conflict prompt](prompts-codex-merge-conflicts.md).
 
 > **TL;DR**
 >
