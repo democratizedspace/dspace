@@ -44,8 +44,8 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
         // Look for clickable elements and interact with them
         while (clickCount < maxClicks) {
             // Check for claim buttons that might appear
-            const claimButton = page.locator('text=Claim');
-            if ((await claimButton.count()) > 0) {
+            const claimButton = page.getByRole('button', { name: 'Claim', exact: true });
+            if ((await claimButton.count()) > 0 && (await claimButton.isEnabled())) {
                 console.log('Clicking claim button');
                 await claimButton.click();
                 await page.waitForTimeout(500);
@@ -57,8 +57,8 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
             }
 
             // Check for process options
-            const processButton = page.locator('text=Process');
-            if ((await processButton.count()) > 0) {
+            const processButton = page.getByRole('button', { name: 'Process', exact: true });
+            if ((await processButton.count()) > 0 && (await processButton.isEnabled())) {
                 console.log('Clicking process button');
                 await processButton.click();
                 await page.waitForTimeout(500);
@@ -79,14 +79,13 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
                 break;
             }
 
-            // Try to find clickable options - first try with 'a' elements
-            const options = optionsContainer.locator('a');
-            const optionsCount = await options.count();
+            // Try to find clickable options - start with enabled buttons
+            const buttonOptions = optionsContainer.locator('button:enabled');
+            const buttonCount = await buttonOptions.count();
 
-            if (optionsCount > 0) {
-                // Click the first option
-                console.log(`Clicking option ${clickCount + 1} of ${optionsCount} available`);
-                await options.first().click();
+            if (buttonCount > 0) {
+                console.log(`Clicking option ${clickCount + 1} of ${buttonCount} available`);
+                await buttonOptions.first().click();
                 await page.waitForTimeout(500);
                 await page.screenshot({
                     path: `./test-artifacts/screenshots/tutorial-quest-step${clickCount + 1}.png`,
@@ -95,7 +94,33 @@ async function interactWithQuestTutorial(page: Page): Promise<void> {
                 continue;
             }
 
-            // If no 'a' elements, try with the first div in the options container
+            // If no buttons, look for anchors that are not disabled
+            const anchorOptions = optionsContainer.locator('a');
+            const anchorCount = await anchorOptions.count();
+            let clickedAnchor = false;
+            for (let i = 0; i < anchorCount; i++) {
+                const option = anchorOptions.nth(i);
+                const ariaDisabled = await option.getAttribute('aria-disabled');
+                const classes = await option.getAttribute('class');
+                if (ariaDisabled !== 'true' && !classes?.includes('disabled')) {
+                    console.log(`Clicking option ${clickCount + 1} of ${anchorCount} available`);
+                    await option.click();
+                    await page.waitForTimeout(500);
+                    await page.screenshot({
+                        path: `./test-artifacts/screenshots/tutorial-quest-step${
+                            clickCount + 1
+                        }.png`,
+                    });
+                    clickCount++;
+                    clickedAnchor = true;
+                    break;
+                }
+            }
+            if (clickedAnchor) {
+                continue;
+            }
+
+            // If no clickable anchors, try with the first div in the options container
             const anyElement = optionsContainer.locator('div').first();
             if ((await anyElement.count()) > 0) {
                 console.log('Clicking first div in options container');

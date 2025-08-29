@@ -1,0 +1,8 @@
+{
+  "id": "tutorial-quest-disabled-buttons",
+  "date": "2025-08-28",
+  "component": "e2e tests",
+  "rootCause": "tutorial quest spec attempted to click disabled buttons and links, timing out",
+  "resolution": "check button enablement and skip anchors with aria-disabled or disabled classes before clicking",
+  "references": ["frontend/e2e/tutorial-quest.spec.ts"]
+}
