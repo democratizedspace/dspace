@@ -20,11 +20,13 @@ performance while keeping tests green. For deeper accessibility guidance, see
 
 ## Current setup
 
--   Components live in `frontend/src/components` (Astro) and `frontend/src/components/svelte`.
--   Pages reside in `frontend/src/pages`; tests live in `frontend/__tests__`.
--   Astro and Vite power the build, invoked with `npm run build`.
--   Hydrate Svelte islands with Astro `client:*` directives and mark roots with
-    `data-hydrated="true"`; wrap browser-only logic in `onMount`.
+-   **Component paths** – Astro wrappers live in `frontend/src/components`, Svelte UI in
+    `frontend/src/components/svelte`, and shared widgets under `frontend/src/lib/components`.
+-   **Build tooling** – Astro uses Vite under the hood. Run `npm run dev` for local work and
+    `npm run build` to emit the production bundle.
+-   **Hydration** – Astro server-renders pages and hydrates Svelte components in the browser. Put
+    interactive code in `onMount`, mark hydrated roots with `data-hydrated="true"`, and prefer
+    `client:visible` or `client:idle` to defer work.
 
 ### Accessibility and performance patterns
 
