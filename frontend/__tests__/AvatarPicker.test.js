@@ -29,4 +29,13 @@ describe('AvatarPicker component', () => {
         await fireEvent.click(options[0]);
         expect(selectButton).not.toBeDisabled();
     });
+
+    it('indicates selected avatar with aria-pressed', async () => {
+        const defaultPFPs = ['a.png', 'b.png'];
+        const { getAllByRole } = render(AvatarPicker, { defaultPFPs });
+        const options = getAllByRole('button', { name: /Select avatar/i });
+        expect(options[0]).toHaveAttribute('aria-pressed', 'false');
+        await fireEvent.click(options[0]);
+        expect(options[0]).toHaveAttribute('aria-pressed', 'true');
+    });
 });
