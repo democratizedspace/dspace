@@ -136,11 +136,10 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
 -   2025-08-25 – shallow checkout hid `origin/v3`, making coverage tests fail; fetch with
     `fetch-depth: 0` so scripts can compare against the default branch.
 -   2025-08-26 – New quests added without regenerating docs skewed quest counts; run `npm run new-quests:update` and commit both copies whenever quests change.
+-   2025-08-28 – duplicate `@astrojs/node` entries in `frontend/package.json` triggered test
+    failures; ensure each dependency key appears only once.
 -   2025-08-28 – Documented current GitHub Actions job names and added steps to download logs or
     rerun failed jobs.
-
--   2025-08-28 – Document lists current `build` and `test` jobs and shows how to
-    download logs or rerun failed GitHub Actions jobs with `gh run`.
 
 ## Upgrader Prompt
 
