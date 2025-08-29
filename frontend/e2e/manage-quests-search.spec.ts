@@ -7,7 +7,8 @@ test.describe('Manage Quests Search', () => {
     });
 
     test('filters quests by search term', async ({ page }) => {
-        const titles = ['Search Quest A', 'Search Quest B'];
+        const unique = Date.now();
+        const titles = [`Search Quest A ${unique}`, `Search Quest B ${unique}`];
         for (const title of titles) {
             await page.goto('/quests/create');
             await page.fill('#title', title);
@@ -21,7 +22,9 @@ test.describe('Manage Quests Search', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const search = page.locator('input[placeholder="Search quests..."]');
+        await expect(page.getByRole('heading', { name: 'Manage Quests' })).toBeVisible();
+
+        const search = page.getByPlaceholder('Search quests...');
         await search.fill('Quest B');
 
         const quests = page.locator('.quest-item');
