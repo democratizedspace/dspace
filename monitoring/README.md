@@ -13,7 +13,8 @@ docker-compose up
 
 - Prometheus scrapes the DSpace metrics endpoint and evaluates alert rules.
 - Grafana provisions a Prometheus data source and a sample dashboard.
-- The dashboard shows service availability and HTTP 5xx error rate over time.
+- The dashboard shows service availability, HTTP 5xx error rate, and 99th percentile request
+  latency.
 
 ## Alerts
 
@@ -35,5 +36,14 @@ minutes.
 
 1. Inspect recent server logs for stack traces or failed requests.
 2. Investigate upstream dependencies that might be causing errors.
+
+### DspaceHighLatency
+
+Triggers when the 99th percentile request latency exceeds 500ms for five minutes.
+
+**Runbook**
+
+1. Examine recent deployments or configuration changes.
+2. Check database and external service performance.
 
 All services are self-hosted to respect user privacy.
