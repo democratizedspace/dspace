@@ -26,13 +26,18 @@ demonstrate built-in labels and keyboard support you can reuse. ESLint's accessi
 >
 > 1. Limit changes to files that impact user accessibility.
 > 2. Follow [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/): provide focus states, semantic elements,
->    ARIA labels, and ensure minimum target sizes.
-> 3. Validate with tooling like `npm run lint`, Testing Library's
->    [`getByRole`](https://testing-library.com/docs/queries/byrole/), and screen-reader checks when
->    possible.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
-> 6. Commit with an emoji prefix.
+>    ARIA labels, adequate target sizes, and respect user preferences.
+> 3. Reference accessible components like [Button][button-component] and [Menu][menu-component]
+>    for ARIA and focus patterns.
+> 4. Validate with tooling like `npm run lint`, Testing Library's
+>    [`getByRole`](https://testing-library.com/docs/queries/byrole/), `@testing-library/svelte`,
+>    or `axe-core`, and perform screen-reader and keyboard checks when possible.
+> 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 6. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 7. Commit with an emoji prefix.
+
+[button-component]: https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/Button.astro
+[menu-component]: https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/Menu.svelte
 
 ```text
 SYSTEM:
@@ -43,7 +48,7 @@ and `npm run test:ci` pass before committing.
 USER:
 1. Update files that affect user accessibility.
 2. Follow [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) with semantic HTML, visible focus states,
-   ARIA labels, and minimum target sizes.
+   ARIA labels, and adequate target sizes.
 3. Validate with linting and, when possible, Testing Library's `getByRole`, screen-reader, or
    keyboard checks.
 4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
@@ -53,12 +58,16 @@ OUTPUT:
 A pull request improving accessibility with passing checks.
 ```
 
-## Accessibility Patterns
+## Components and patterns
 
+-   [`Button`](../../../components/Button.astro) – includes `aria-label` support and a
+    `:focus-visible` ring.
+-   [`Menu`](../../../components/svelte/Menu.svelte) – handles keyboard navigation for site
+    sections.
+-   [`SkipProcessButton`](../../../components/svelte/SkipProcessButton.svelte) – lets users bypass
+    a step with a semantic button.
 -   [Chip](https://github.com/dspace/dspace/blob/main/frontend/src/components/svelte/Chip.svelte)
     provides button and link variants with disabled states.
--   [Menu](https://github.com/dspace/dspace/blob/main/frontend/src/components/svelte/Menu.svelte)
-    supports keyboard navigation and ARIA roles.
 
 ## Upgrader Prompt
 
