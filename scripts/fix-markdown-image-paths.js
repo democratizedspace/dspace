@@ -1,7 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 
-const dir = path.join(__dirname, '..', 'frontend', 'src', 'pages', 'docs', 'md', 'changelog');
+const dir = path.join(
+  __dirname,
+  '..',
+  'frontend',
+  'src',
+  'pages',
+  'docs',
+  'md',
+  'changelog',
+);
 const changed = [];
 
 function walk(folder) {
@@ -31,10 +40,18 @@ function fixFile(file) {
   }
 }
 
-walk(dir);
-if (changed.length) {
-  console.log('Updated files:');
-  for (const f of changed) console.log(' - ' + f);
-} else {
-  console.log('No changes found.');
+function run(targetDir = dir) {
+  walk(targetDir);
+  if (changed.length) {
+    console.log('Updated files:');
+    for (const f of changed) console.log(' - ' + f);
+  } else {
+    console.log('No changes found.');
+  }
+}
+
+module.exports = { walk, fixFile, run };
+
+if (require.main === module) {
+  run();
 }
