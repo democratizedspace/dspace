@@ -35,6 +35,12 @@ OUTPUT:
 A pull request with upgraded prompt docs and passing checks.
 ```
 
+## Maintenance cadence
+
+-   Review all `prompts-*.md` guides monthly and after major feature launches.
+-   Include `prompts-codex.md` and the docs index in each audit to keep cross-links current.
+-   Remove or archive prompt docs that no longer apply.
+
 ## Upgrader Prompt
 
 Type: evergreen
