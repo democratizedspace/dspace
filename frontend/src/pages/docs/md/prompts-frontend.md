@@ -14,6 +14,23 @@ accessibility, or performance while keeping tests green. For deeper accessibilit
 [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use the
 [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
+## Component paths and build tooling
+
+-   Components live in `frontend/src/components/`, pages in `frontend/src/pages/`, and layouts in
+    `frontend/src/layouts/`. Tests belong in `frontend/__tests__/`.
+-   Astro uses Vite for bundling. Run `npm run dev` for local work and `npm run build` for
+    production bundles.
+
+### Hydration, accessibility, and performance
+
+-   Astro server-renders pages and hydrates Svelte islands. Wrap browser-only logic in `onMount`
+    and gate with an `isClientSide` flag.
+-   Mark ready components with `data-hydrated="true"` so tests can wait before interacting.
+-   Provide visible focus outlines and descriptive `aria-label` values on interactive controls.
+-   Disable actions until a selection is made to avoid accidental submissions.
+-   Use `loading="lazy"` for offscreen images and keep components lightweight to speed up
+    hydration.
+
 > **TL;DR**
 >
 > 1. Touch only the necessary files under `frontend/`.
