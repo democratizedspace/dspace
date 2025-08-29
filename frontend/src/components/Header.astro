@@ -10,6 +10,8 @@ export interface Props {
 }
 ---
 
+<a href="#main" class="skip-link">Skip to main content</a>
+
 <a href="/" aria-label="Go to homepage">
     <div class="vertical">
         <Logo />
@@ -97,5 +99,19 @@ export interface Props {
         font-size: 0.8em;
         color: #00ff22;
         margin-top: 0px;
+    }
+
+    .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #000;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        z-index: 1000;
+    }
+
+    .skip-link:focus {
+        top: 0;
     }
 </style>

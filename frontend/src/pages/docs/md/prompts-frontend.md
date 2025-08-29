@@ -18,22 +18,22 @@ performance while keeping tests green. For deeper accessibility guidance, see
 [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use the
 [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
-## Component paths and build tooling
+## Current setup
 
--   Components live in `frontend/src/components/`, pages in `frontend/src/pages/`, and layouts in
-    `frontend/src/layouts/`. Tests belong in `frontend/__tests__/`.
--   Astro uses Vite for bundling. Run `npm run dev` for local work and `npm run build` for
-    production bundles.
+-   Components live in `frontend/src/components` (Astro) and `frontend/src/components/svelte`.
+-   Pages reside in `frontend/src/pages`; tests live in `frontend/__tests__`.
+-   Astro and Vite power the build, invoked with `npm run build`.
+-   Hydrate Svelte islands with Astro `client:*` directives and mark roots with
+    `data-hydrated="true"`; wrap browser-only logic in `onMount`.
 
-### Hydration, accessibility, and performance
+### Accessibility and performance patterns
 
--   Astro server-renders pages and hydrates Svelte islands. Wrap browser-only logic in `onMount`
-    and gate with an `isClientSide` flag.
+-   Prefer semantic HTML with `aria-*` attributes and visible `:focus-visible` states.
+-   Defer work with `client:idle` or `client:visible` and `loading="lazy"` images to trim JS.
+-   Use dynamic `import()` for heavy modules and lean on CSS for animations.
 -   Mark ready components with `data-hydrated="true"` so tests can wait before interacting.
 -   Provide visible focus outlines and descriptive `aria-label` values on interactive controls.
 -   Disable actions until a selection is made to avoid accidental submissions.
--   Use `loading="lazy"` for offscreen images and keep components lightweight to speed up
-    hydration.
 -   Favor semantic HTML, visible focus states, and `prefers-reduced-motion` media queries for
     accessibility.
 -   For performance, defer heavy components with `client:idle` or `client:visible` and lazily

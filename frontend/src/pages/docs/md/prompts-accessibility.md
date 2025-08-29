@@ -35,9 +35,9 @@ demonstrate built-in labels and keyboard support you can reuse. ESLint's accessi
 > 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 6. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 > 7. Commit with an emoji prefix.
-
-[button-component]: https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/Button.astro
-[menu-component]: https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/Menu.svelte
+>
+> [button-component]: https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/Button.astro  
+> [menu-component]: https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/Menu.svelte
 
 ```text
 SYSTEM:
@@ -49,10 +49,12 @@ USER:
 1. Update files that affect user accessibility.
 2. Follow [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) with semantic HTML, visible focus states,
    ARIA labels, and adequate target sizes.
-3. Validate with linting and, when possible, Testing Library's `getByRole`, screen-reader, or
+3. Reference accessible components like [Button][button-component] and [Menu][menu-component]
+   for examples.
+4. Validate with linting and, when possible, Testing Library's `getByRole`, screen-reader, or
    keyboard checks.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-5. Use an emoji-prefixed commit message.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request improving accessibility with passing checks.
@@ -91,3 +93,6 @@ USER:
 OUTPUT:
 A pull request refining the accessibility prompt doc with passing checks.
 ```
+
+[button-component]: ../../../components/Button.astro
+[menu-component]: ../../../components/svelte/Menu.svelte
