@@ -37,7 +37,8 @@ CONTEXT:
   error.
 - If no URL is given, inspect the codebase to reproduce the failure:
   * Examine `.github/workflows/` to learn which checks run in CI.
-    * Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci` locally.
+    * Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
+      `npm run test:ci` locally.
   * Study project docs to understand how to run the test suite and emulate the
     GitHub Actions environment.
 - Consult existing outage entries in `/outages` for similar symptoms.
@@ -139,7 +140,7 @@ Use this prompt to keep CI troubleshooting steps current.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
 and `npm run test:ci` pass before committing.
 
 USER:

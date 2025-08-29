@@ -17,7 +17,8 @@ extra formatting.
 > 1. Copy the conflict block from the GitHub merge UI.
 > 2. Paste it into a ChatGPT message.
 > 3. The agent replies with the same text but conflicts resolved—ready to paste back.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
+>    `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and commit
 >    with an emoji prefix.
 
@@ -33,8 +34,8 @@ follow the same approach for each.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
-and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` pass before committing.
+and `README.md`. Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+`npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
 1. Refine `frontend/src/pages/docs/md/prompts-codex-merge-conflicts.md` for
@@ -57,7 +58,7 @@ Use this prompt to keep merge-conflict resolution tips current.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
 and `npm run test:ci` pass before committing.
 
 USER:
