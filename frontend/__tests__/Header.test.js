@@ -17,4 +17,9 @@ describe('Header.astro', () => {
         const content = fs.readFileSync(headerFile, 'utf8');
         expect(content).toMatch(/max-width: 100%;/);
     });
+
+    it('provides a skip link for accessibility', () => {
+        const content = fs.readFileSync(headerFile, 'utf8');
+        expect(content).toMatch(/<a href="#main" class="skip-link">Skip to main content<\/a>/);
+    });
 });

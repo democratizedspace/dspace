@@ -22,8 +22,8 @@ Once the containers start:
   [`prometheus/alerts.yml`](prometheus/alerts.yml).
 - Grafana provisions a Prometheus data source and the
   [DSpace Overview dashboard](http://localhost:3000/d/dspace-overview/dspace-overview).
-- The dashboard shows service availability (`up`) and HTTP 5xx error rate derived from
-  `http_requests_total` metrics.
+- The dashboard shows service availability, HTTP 5xx error rate, and 99th percentile request
+  latency.
 
 ## Alerts
 
@@ -60,5 +60,14 @@ Triggers when more than 5% of HTTP requests return 5xx status codes for five min
 
 1. Inspect recent server logs for stack traces or failed requests.
 2. Investigate upstream dependencies that might be causing errors.
+
+### DspaceHighLatency
+
+Triggers when the 99th percentile request latency exceeds 500ms for five minutes.
+
+**Runbook**
+
+1. Examine recent deployments or configuration changes.
+2. Check database and external service performance.
 
 All services are self-hosted to respect user privacy.
