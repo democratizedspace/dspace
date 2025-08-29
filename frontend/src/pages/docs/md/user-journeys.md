@@ -6,15 +6,17 @@ slug: 'user-journeys'
 # User Journeys
 
 This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
-Tests under `frontend/e2e/backlog` are placeholders for journeys without automation; move them to
-`frontend/e2e` once coverage lands. Entries are sorted alphabetically by journey name, and new
-journeys should include a placeholder spec in `frontend/e2e/backlog` until coverage exists.
+Tests under `frontend/e2e/backlog` are placeholders for journeys without automation; when a
+journey gains coverage, move its spec into `frontend/e2e` with `git mv` to preserve history.
+Entries are sorted alphabetically by journey name, and new journeys should include a placeholder
+spec in `frontend/e2e/backlog` until coverage exists.
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
 | About page loads           | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Authentication flow        | Yes                 | `frontend/e2e/authentication-flow.spec.ts`        |
 | Built-in quest details     | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
+| Changelog page loads       | No                  | --                                                |
 | Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
 | Constellations quest       | Yes                 | `frontend/e2e/constellations-quest.spec.ts`       |
 | Cookie consent flow        | Yes                 | `frontend/e2e/cookie-consent.spec.ts`             |
@@ -29,18 +31,18 @@ journeys should include a placeholder spec in `frontend/e2e/backlog` until cover
 | Glossary page loads        | Yes                 | `frontend/e2e/glossary-doc.spec.ts`               |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Item preview               | Yes                 | `frontend/e2e/item-preview.spec.ts`               |
-| Legacy data import         | No                  | --                                                |
+| Legacy data import         | Yes                 | `frontend/e2e/legacy-import.spec.ts`              |
 | Logout flow                | No                  | --                                                |
 | Manage items               | Yes                 | `frontend/e2e/manage-items.spec.ts`               |
-| Manage processes           | No                  | --                                                |
+| Manage processes           | Yes                 | `frontend/e2e/manage-processes.spec.ts`           |
 | Manage quests              | No                  | --                                                |
-| Manage quests search       | No                  | --                                                |
+| Manage quests search       | Yes                 | `frontend/e2e/manage-quests-search.spec.ts`       |
 | Mobile item form           | No                  | --                                                |
 | Mobile process form        | No                  | --                                                |
 | Mobile quest form          | No                  | --                                                |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Process creation           | Yes                 | `frontend/e2e/process-creation.spec.ts`           |
-| Process preview            | No                  | --                                                |
+| Process preview            | Yes                 | `frontend/e2e/manage-processes.spec.ts`           |
 | Profile avatar selection   | Yes                 | `frontend/e2e/profile-avatar-selection.spec.ts`   |
 | Profile page loads         | Yes                 | `frontend/e2e/profile-page.spec.ts`               |
 | Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |

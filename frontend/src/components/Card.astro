@@ -1,46 +1,66 @@
 ---
 import Editable from './Editable.astro';
 
-const { href, title, body, textbox, disabled, image, duration } = Astro.props;
+interface Props {
+        href?: string;
+        title: string;
+        body?: string;
+        textbox?: boolean;
+        disabled?: boolean;
+        image?: string;
+        imageAlt?: string;
+        duration?: string;
+}
+
+const {
+        href,
+        title,
+        body,
+        textbox,
+        disabled,
+        image,
+        imageAlt,
+        duration,
+} = Astro.props as Props;
 ---
 
 {
 // TODO: make this a Disableable and do a ternary on hazard instead
 disabled
-	?
-		<div>
-		<li class="link-card disabled">
-			<span>
-				<Editable  title="" href="" body="" editable={false} />
-                                <img src={image} class="img" alt={title} />
-				<h2>
-					{title}
-				</h2>
-				<p>
-					{body}
-				</p>
-				{duration && <p class="duration">Duration: {duration}</p>}
-				<slot />
-			</span>
-		</li>
-		</div>
-	:
-		<div>
-		<li class="link-card">
-			<a href={href}>
-				<Editable  title="" href="" body="" editable={false} />
-                                <img src={image} class="img" alt={title} />
-				<h2>
-					{title}
-				</h2>
-				<p>
-					{body}
-				</p>
-				{duration && <p class="duration">Duration: {duration}</p>}
-				<slot />
-			</a>
-		</li>
-		</div>
+        ?
+                <div>
+                <li class="link-card disabled" aria-disabled="true">
+                        <span>
+                                <Editable title="" href="" body="" editable={false} />
+                                <img src={image} alt={imageAlt ?? ''} class="img" />
+                                <h2>
+                                        {title}
+                                </h2>
+                                <p>
+                                        {body}
+                                </p>
+                                {duration && <p class="duration">Duration: {duration}</p>}
+                                <slot />
+                        </span>
+                </li>
+                </div>
+        :
+                <div>
+                <li class="link-card">
+                        <a href={href}>
+                                <Editable title="" href="" body="" editable={false} />
+                                <img src={image} alt={imageAlt ?? ''} class="img" />
+                                <h2>
+                                        {title}
+                                </h2>
+                                <p>
+                                        {body}
+                                </p>
+                                {duration && <p class="duration">Duration: {duration}</p>}
+                                <slot />
+                        </a>
+                </li>
+                </div>
 }
 
 <style>
@@ -66,17 +86,22 @@ disabled
 		border-color: red;
 	}
 
-	.link-card > a {
-		width: 100%;
-		text-decoration: none;
-		line-height: 1.4;
-		padding: 1em 1.3em;
-		border-radius: 0.35rem;
-		color: var(--text-color);
-		background-color: #003a03;
-		opacity: 0.8;
-		border-color: red;
-	}
+        .link-card > a {
+                width: 100%;
+                text-decoration: none;
+                line-height: 1.4;
+                padding: 1em 1.3em;
+                border-radius: 0.35rem;
+                color: var(--text-color);
+                background-color: #003a03;
+                opacity: 0.8;
+                border-color: red;
+        }
+
+        .link-card > a:focus-visible {
+                outline: 2px solid #fff;
+                outline-offset: 2px;
+        }
 
 	h2 {
 		margin: 0;
