@@ -8,8 +8,8 @@ slug: 'prompts-codex-meta'
 Use this prompt when you want Codex to upgrade DSPACE's prompt documentation so the
 instructions improve themselves over time. Start from the baseline
 [Codex Prompts](/docs/prompts-codex). If the templates themselves drift, refresh them
-using the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing workflows,
-see the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+using the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). When merge conflicts
+appear, consult the [Codex merge conflict prompt](/docs/prompts-codex-merge-conflicts).
 
 ```text
 SYSTEM:
@@ -28,6 +28,12 @@ USER:
 OUTPUT:
 A pull request with upgraded prompt docs and passing checks.
 ```
+
+## Maintenance cadence
+
+-   Review all `prompts-*.md` guides monthly and after major feature launches.
+-   Include `prompts-codex.md` and the docs index in each audit to keep cross-links current.
+-   Remove or archive prompt docs that no longer apply.
 
 ## Upgrader Prompt
 
