@@ -24,7 +24,7 @@ DSPACE processes should:
 Every process requires the following properties:
 
 -   **title**: Clear, descriptive name for the process (required)
--   **duration**: Time required to complete the process in format `#h #m` (units are case-insensitive, required)
+-   **duration**: Time required to complete the process in format `#h #m` (space optional, e.g., `1h30m`; units are case-insensitive, required)
 -   **requireItems**: Items needed but not consumed (optional)
 -   **consumeItems**: Items removed from inventory when process starts (optional)
 -   **createItems**: Items added to inventory when process completes (optional)

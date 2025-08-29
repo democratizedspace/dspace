@@ -21,6 +21,11 @@ describe('getDurationString', () => {
     expect(getDurationString(-10, '3s')).toBe('0.00% - 3s');
     expect(getDurationString(150, '3s')).toBe('100.00%');
   });
+
+  test('handles infinite durations', () => {
+    expect(getDurationString(Infinity, '3s')).toBe('100.00%');
+    expect(getDurationString(-Infinity, '3s')).toBe('0.00% - 3s');
+  });
 });
 
 describe('getDuration', () => {
@@ -37,5 +42,10 @@ describe('getDuration', () => {
   test('clamps values to 0-100%', () => {
     expect(getDuration(-5)).toBe('0.00%');
     expect(getDuration(150)).toBe('100.00%');
+  });
+
+  test('handles infinite durations', () => {
+    expect(getDuration(Infinity)).toBe('100.00%');
+    expect(getDuration(-Infinity)).toBe('0.00%');
   });
 });

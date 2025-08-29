@@ -15,6 +15,9 @@ const decodeSafely = (str) => {
   }
 };
 
+const cleanPath = (img) => img.trim().replace(/[?#].*$/, '');
+const resolveLocalPath = (base) => decodeSafely(base.replace(/^\//, ''));
+
 /**
  * Returns image paths that are missing from the public directory.
  * Handles query strings, hash fragments, and percent-encoded segments.
@@ -25,13 +28,13 @@ const decodeSafely = (str) => {
  */
 function listMissingImages(imagePaths, publicDir = DEFAULT_PUBLIC_DIR) {
   return imagePaths.filter((img) => {
-    const base = img.trim().replace(/[?#].*$/, '');
+    const base = cleanPath(img);
     if (!isLocalPath(base)) {
       return false;
     }
 
-    const decoded = decodeSafely(base.replace(/^\//, ''));
-    return !fs.existsSync(path.join(publicDir, decoded));
+    const resolved = resolveLocalPath(base);
+    return !fs.existsSync(path.join(publicDir, resolved));
   });
 }
 
