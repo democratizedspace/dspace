@@ -7,10 +7,10 @@ slug: 'prompts-backups'
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit a
 ready-made PR — but only if given a clear, file-scoped prompt. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when working on [Backups](/docs/backups) features or docs. To
-keep these templates evolving, see the [Codex meta prompt](/docs/prompts-codex-meta). If they drift,
-refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub
-Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+[Codex Prompts](prompts-codex.md) when working on [Backups](backups.md) features or docs. To keep
+these templates evolving, see the [Codex meta prompt](prompts-codex-meta.md). If they drift,
+refresh them with the [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub
+Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 > **TL;DR**
 >
@@ -19,7 +19,7 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 > 3. Update tests when behavior changes.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
-> 6. Commit with an emoji prefix.
+> 6. Use an emoji-prefixed commit message.
 
 ```text
 SYSTEM:
