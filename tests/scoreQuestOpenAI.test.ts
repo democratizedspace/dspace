@@ -28,4 +28,19 @@ describe('scoreQuest', () => {
       process.env.OPENAI_API_KEY = originalKey;
     }
   });
+
+  test('uses heuristic when API key is missing', async () => {
+    const originalKey = process.env.OPENAI_API_KEY;
+    delete process.env.OPENAI_API_KEY;
+    const { scoreQuest } = await import('../scripts/utils/llm.js');
+    const shortScore = await scoreQuest('short');
+    const longScore = await scoreQuest('x'.repeat(101));
+    expect(shortScore).toBe(0.5);
+    expect(longScore).toBe(0.8);
+    if (originalKey === undefined) {
+      delete process.env.OPENAI_API_KEY;
+    } else {
+      process.env.OPENAI_API_KEY = originalKey;
+    }
+  });
 });
