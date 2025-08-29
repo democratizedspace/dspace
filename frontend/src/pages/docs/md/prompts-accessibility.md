@@ -5,21 +5,26 @@ slug: 'prompts-accessibility'
 
 # Accessibility prompts for the _dspace_ repo
 
-Codex can open this repository and run its own tests. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when improving accessibility so instructions stay
+Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
+ready-made pull requests. Use this guide alongside
+[Codex Prompts](prompts-codex.md) when improving accessibility so instructions remain
 consistent. To keep the prompt docs evolving, see the
-[Codex meta prompt](/docs/prompts-codex-meta). If templates drift, refresh them with the
-[Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs, use
-the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix). The focus here is on semantic
-HTML, ARIA attributes, keyboard navigation, and sufficient color contrast.
+[Codex meta prompt](prompts-codex-meta.md). If templates drift, refresh them with the
+[Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use
+the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md). This doc focuses on semantic
+HTML, ARIA attributes, keyboard navigation, sufficient color contrast, and minimum target sizes.
+As of 2024, [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) is the baseline standard.
 
 > **TL;DR**
 >
 > 1. Limit changes to files that impact user accessibility.
-> 2. Follow WCAG 2.2 AA: provide focus states, semantic elements, and ARIA labels.
-> 3. Reference accessible components like [Button][button-component]
->    and [Menu][menu-component] for ARIA and focus patterns.
-> 4. Validate with tooling like `npm run lint` and screen‑reader checks when possible.
+> 2. Follow [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/): provide focus states, semantic elements,
+>    ARIA labels, adequate target sizes, and respect user preferences.
+> 3. Reference accessible components like [Button][button-component] and [Menu][menu-component]
+>    for ARIA and focus patterns.
+> 4. Validate with tooling like `npm run lint`, Testing Library's
+>    [`getByRole`](https://testing-library.com/docs/queries/byrole/), `@testing-library/svelte`,
+>    or `axe-core`, and perform screen-reader and keyboard checks when possible.
 > 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 6. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 > 7. Commit with an emoji prefix.
@@ -32,16 +37,29 @@ and `npm run test:ci` pass before committing.
 
 USER:
 1. Update files that affect user accessibility.
-2. Follow WCAG 2.2 AA with semantic HTML, visible focus states, and ARIA labels.
-3. Reference accessible components like [Button][button-component]
-   and [Menu][menu-component] for examples.
-4. Validate with linting and, when possible, screen-reader or keyboard checks.
+2. Follow [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) with semantic HTML, visible focus states,
+   ARIA labels, and adequate target sizes.
+3. Reference accessible components like [Button][button-component] and [Menu][menu-component]
+   for examples.
+4. Validate with linting and, when possible, Testing Library's `getByRole`, screen-reader, or
+   keyboard checks.
 5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request improving accessibility with passing checks.
 ```
+
+## Components and patterns
+
+-   [`Button`](../../../components/Button.astro) – includes `aria-label` support and a
+    `:focus-visible` ring.
+-   [`Menu`](../../../components/svelte/Menu.svelte) – handles keyboard navigation for site
+    sections.
+-   [`SkipProcessButton`](../../../components/svelte/SkipProcessButton.svelte) – lets users bypass
+    a step with a semantic button.
+-   [Chip](https://github.com/dspace/dspace/blob/main/frontend/src/components/svelte/Chip.svelte)
+    provides button and link variants with disabled states.
 
 ## Upgrader Prompt
 
