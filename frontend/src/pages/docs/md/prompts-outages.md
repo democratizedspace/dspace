@@ -3,72 +3,9 @@ title: 'Outage Prompts'
 slug: 'prompts-outages'
 ---
 
-# Outage prompts for the _dspace_ repo
+# Outage Prompts
 
-Codex is a sandboxed engineering agent that can open this repository and run its own tests.
-Use this guide alongside [Codex Prompts](/docs/prompts-codex) to ensure every fix ships with a matching
-record in the outage catalog. For an overview of the catalog itself, see
-[Outages](/docs/outages).
-To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta);
-if templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
-For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
-
-> **TL;DR**
->
-> 1. Investigate the failure, identify the root cause, document it in the outage entry, and
->    implement a fix.
-> 2. Add [`outages/YYYY-MM-DD-<slug>.json`][outage-dir]
->    matching [`outages/schema.json`][outage-schema].
-> 3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
-> 5. Use an emoji-prefixed commit message.
-
-```text
-SYSTEM:
-You are an automated contributor for the DSPACE repository.
-
-PURPOSE:
-Diagnose an outage, implement a fix, and document it.
-
-CONTEXT:
-- Review existing records under [`outages`][outage-dir] for similar failures.
-- After resolving, add [`outages/YYYY-MM-DD-<slug>.json`][outage-dir]
-  matching [`outages/schema.json`][outage-schema].
-- Keep behaviour intact, add tests, and update documentation.
-
-REQUEST:
-1. Apply the fix with appropriate tests.
-2. Commit the outage entry noting the root cause and related docs.
-3. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-5. Use an emoji-prefixed commit message.
-
-OUTPUT:
-A pull request referencing the new outage record and passing checks.
-```
-
-[outage-dir]: https://github.com/democratizedspace/dspace/tree/main/outages
-[outage-schema]: https://github.com/democratizedspace/dspace/blob/main/outages/schema.json
-
-## Upgrader Prompt
-
-Type: evergreen
-
-Use this prompt to keep outage-handling guidance current.
-
-```text
-SYSTEM:
-You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` pass before committing.
-
-USER:
-1. Confirm outage schema links and filename patterns are still correct.
-2. Add guidance for new outage categories or follow-up steps.
-3. Run the checks above.
-4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
-5. Commit with an emoji-prefixed message.
-
-OUTPUT:
-A pull request refining the outage prompt doc with passing checks.
-```
+Outage prompts help contributors diagnose failures and track fixes so DSPACE stays stable.
+This page gives players a brief overview; the full workflow lives in the
+[Outage Prompts guide](https://github.com/democratizedspace/dspace/blob/main/docs/prompts-outages.md).
+See [Developer Resources](/docs/developer-resources) for more contributor guides.

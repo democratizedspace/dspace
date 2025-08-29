@@ -107,6 +107,9 @@ frontend/
 > Utility note: `src/utils/strings.js` now clamps duration values to the 0-100% range
 > to avoid negative or overflowing percentages in the UI.
 
+> Utility note: `src/utils/strings.js` now treats infinite durations as `100%`
+> to prevent unexpected `0%` output.
+
 ## Getting Started
 
 ### Prerequisites
