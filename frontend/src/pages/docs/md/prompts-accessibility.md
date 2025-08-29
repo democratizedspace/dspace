@@ -20,12 +20,14 @@ As of 2024, [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) is the baseline standar
 > 1. Limit changes to files that impact user accessibility.
 > 2. Follow [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/): provide focus states, semantic elements,
 >    ARIA labels, adequate target sizes, and respect user preferences.
-> 3. Validate with tooling like `npm run lint`, Testing Library's
+> 3. Reference accessible components like [Button][button-component] and [Menu][menu-component]
+>    for ARIA and focus patterns.
+> 4. Validate with tooling like `npm run lint`, Testing Library's
 >    [`getByRole`](https://testing-library.com/docs/queries/byrole/), `@testing-library/svelte`,
 >    or `axe-core`, and perform screen-reader and keyboard checks when possible.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
-> 6. Commit with an emoji prefix.
+> 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 6. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 7. Commit with an emoji prefix.
 
 ```text
 SYSTEM:
@@ -37,10 +39,12 @@ USER:
 1. Update files that affect user accessibility.
 2. Follow [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) with semantic HTML, visible focus states,
    ARIA labels, and adequate target sizes.
-3. Validate with linting and, when possible, Testing Library's `getByRole`, screen-reader, or
+3. Reference accessible components like [Button][button-component] and [Menu][menu-component]
+   for examples.
+4. Validate with linting and, when possible, Testing Library's `getByRole`, screen-reader, or
    keyboard checks.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-5. Use an emoji-prefixed commit message.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request improving accessibility with passing checks.
@@ -79,3 +83,6 @@ USER:
 OUTPUT:
 A pull request refining the accessibility prompt doc with passing checks.
 ```
+
+[button-component]: ../../../components/Button.astro
+[menu-component]: ../../../components/svelte/Menu.svelte
