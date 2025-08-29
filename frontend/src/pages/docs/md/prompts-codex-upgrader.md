@@ -20,11 +20,12 @@ You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` a
 
 USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing cross-links.
-2. Update prompt templates, including `prompts-codex.md`, to reflect current practices.
-3. Link new prompt files from `prompts-codex.md` and the docs index.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-5. Run the checks above.
-6. Use an emoji-prefixed commit message.
+2. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
+3. Update prompt templates, including `prompts-codex.md`, to reflect current practices.
+4. Link new prompt files from `prompts-codex.md` and the docs index.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Run the checks above.
+7. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
@@ -44,10 +45,11 @@ and `npm run test:ci` pass before committing.
 
 USER:
 1. Ensure it covers newly added prompt types and required checks.
-2. Tighten language so upgrades stay precise and reversible.
-3. Run the checks above.
-4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
-5. Commit with an emoji-prefixed message.
+2. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
+3. Tighten language so upgrades stay precise and reversible.
+4. Run the checks above.
+5. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+6. Commit with an emoji-prefixed message.
 
 OUTPUT:
 A pull request refining the Codex Prompt Upgrader doc with passing checks.
