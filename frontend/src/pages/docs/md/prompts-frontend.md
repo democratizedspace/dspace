@@ -31,6 +31,9 @@ performance while keeping tests green. For deeper accessibility guidance, see
 -   Prefer semantic HTML with `aria-*` attributes and visible `:focus-visible` states.
 -   Defer work with `client:idle` or `client:visible` and `loading="lazy"` images to trim JS.
 -   Use dynamic `import()` for heavy modules and lean on CSS for animations.
+-   Mark ready components with `data-hydrated="true"` so tests can wait before interacting.
+-   Provide visible focus outlines and descriptive `aria-label` values on interactive controls.
+-   Disable actions until a selection is made to avoid accidental submissions.
 -   Favor semantic HTML, visible focus states, and `prefers-reduced-motion` media queries for
     accessibility.
 -   For performance, defer heavy components with `client:idle` or `client:visible` and lazily
