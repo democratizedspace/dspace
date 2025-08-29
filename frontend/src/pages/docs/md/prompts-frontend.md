@@ -22,14 +22,17 @@ performance while keeping tests green. For deeper accessibility guidance, see
 
 -   **Component paths** – Astro wrappers live in `frontend/src/components`, Svelte UI in
     `frontend/src/components/svelte`, and shared widgets under `frontend/src/lib/components`.
--   **Build tooling** – Astro uses Vite under the hood. Run `npm run build` to emit the production
-    bundle.
+-   **Build tooling** – Astro uses Vite under the hood. Run `npm run dev` for local work and
+    `npm run build` to emit the production bundle.
 -   **Hydration** – Astro server-renders pages and hydrates Svelte components in the browser. Put
     interactive code in `onMount`, mark hydrated roots with `data-hydrated="true"`, and prefer
     `client:visible` or `client:idle` to defer work.
 -   **Accessibility & performance** – Use semantic HTML with `aria-*` hints and visible focus
     styles. Apply `loading="lazy"` to media, avoid unnecessary reactivity, and delay hydration to
     keep the UI fast.
+-   Mark ready components with `data-hydrated="true"` so tests can wait before interacting.
+-   Provide visible focus outlines and descriptive `aria-label` values on interactive controls.
+-   Disable actions until a selection is made to avoid accidental submissions.
 -   Favor semantic HTML, visible focus states, and `prefers-reduced-motion` media queries for
     accessibility.
 -   For performance, defer heavy components with `client:idle` or `client:visible` and lazily
