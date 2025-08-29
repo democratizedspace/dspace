@@ -14,6 +14,20 @@ accessibility, or performance while keeping tests green. For deeper accessibilit
 [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use the
 [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
+## Current setup
+
+-   Components live in `frontend/src/components` (Astro) and `frontend/src/components/svelte`.
+-   Pages reside in `frontend/src/pages`; tests live in `frontend/__tests__`.
+-   Astro and Vite power the build, invoked with `npm run build`.
+-   Hydrate Svelte islands with Astro `client:*` directives and mark roots with
+    `data-hydrated="true"`; wrap browser-only logic in `onMount`.
+
+### Accessibility and performance patterns
+
+-   Prefer semantic HTML with `aria-*` attributes and visible `:focus-visible` states.
+-   Defer work with `client:idle` or `client:visible` and `loading="lazy"` images to trim JS.
+-   Use dynamic `import()` for heavy modules and lean on CSS for animations.
+
 > **TL;DR**
 >
 > 1. Touch only the necessary files under `frontend/`.
