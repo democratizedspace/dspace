@@ -24,6 +24,8 @@ For specialized workflows use the [Codex CI-failure fix prompt](prompts-codex-ci
 the [Codex merge conflict prompt](prompts-codex-merge-conflicts.md), the
 [Codex meta prompt](prompts-codex-meta.md), and the
 [Codex Prompt Upgrader](prompts-codex-upgrader.md).
+When adding a new prompt doc, link it here and in
+[the docs index](../index.astro).
 
 > **TL;DR**
 >
@@ -31,9 +33,10 @@ the [Codex merge conflict prompt](prompts-codex-merge-conflicts.md), the
 > 2. Say **exactly** what output you expect (tests, docs, etc.).
 > 3. Stop talking when the spec is complete. Codex treats _all_ remaining text as
 >    mandatory instructions.
-> 4. Link new prompt guides from this page and `frontend/src/pages/docs/index.astro`.
-> 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 6. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
+> 4. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
+> 5. Link new prompt guides from this page and `frontend/src/pages/docs/index.astro`.
+> 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 7. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
 >    commit with an emoji prefix.
 
 ---
@@ -106,9 +109,10 @@ REQUIREMENTS
 1. …
 2. …
 3. …
-4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-5. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
-6. Use an emoji-prefixed commit message.
+4. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+6. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+7. Use an emoji-prefixed commit message.
 
 OUTPUT
 A pull request with the required changes and tests.
@@ -143,13 +147,14 @@ missing run `npx playwright install chromium` or use `SKIP_E2E=1 npm run test:ci
 
 USER:
 1. Follow the steps above.
-2. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-3. After verifying the implementation, mark the corresponding changelog line
+2. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
+3. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+4. After verifying the implementation, mark the corresponding changelog line
    with `💯`, replacing any `✅` or other emoji.
-4. Replace any remaining `✅` entries in the changelog with `💯` once they meet
+5. Replace any remaining `✅` entries in the changelog with `💯` once they meet
    the robustness standard.
-5. Use an emoji-prefixed commit message.
-6. Document new functionality as needed.
+6. Use an emoji-prefixed commit message.
+7. Document new functionality as needed.
 
 OUTPUT:
 A pull request implementing the chosen item with all tests green. Summarize the
@@ -171,11 +176,12 @@ and `README.md`. Ensure `npm run lint`, `npm run type-check`,
 USER:
 1. Pick one or more prompt docs under `frontend/src/pages/docs/md/` (for example,
    `prompts-items.md`).
-2. Fix outdated instructions, links or formatting.
-3. If you add a new prompt, link it from `prompts-codex.md` and the docs index.
-4. Run the checks above.
-5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-6. Use an emoji-prefixed commit message.
+2. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
+3. Fix outdated instructions, links or formatting.
+4. If you add a new prompt, link it from `prompts-codex.md` and the docs index.
+5. Run the checks above.
+6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+7. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.
@@ -196,11 +202,12 @@ and `README.md`. Ensure `npm run lint`, `npm run type-check`,
 USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing
    cross-links.
-2. Update prompt templates, including this file, to reflect current practices.
-3. Link new prompt files from `prompts-codex.md` and the docs index.
-4. Propagate related changes across docs.
-5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-6. Run the checks above.
+2. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
+3. Update prompt templates, including this file, to reflect current practices.
+4. Link new prompt files from `prompts-codex.md` and the docs index.
+5. Propagate related changes across docs.
+6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+7. Run the checks above.
 
 OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
@@ -222,10 +229,11 @@ and `npm run test:ci` pass before committing.
 
 USER:
 1. Update references to new or renamed prompt docs.
-2. Confirm default template reflects current lint, test, and commit standards.
-3. Run the checks above.
-4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
-5. Commit with an emoji-prefixed message.
+2. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
+3. Confirm default template reflects current lint, test, and commit standards.
+4. Run the checks above.
+5. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+6. Commit with an emoji-prefixed message.
 
 OUTPUT:
 A pull request refining the baseline Codex prompt doc with passing checks.
