@@ -11,9 +11,11 @@ docker-compose up
 
 ### Access
 
-- Prometheus: http://localhost:9090
-- Grafana: http://localhost:3000 (default `admin`/`admin`)
-- DSpace Overview dashboard: http://localhost:3000/d/dspace-overview/dspace-overview
+- Prometheus is available at [http://localhost:9090](http://localhost:9090).
+- Grafana runs at [http://localhost:3000](http://localhost:3000) (default `admin`/`admin`) with a preloaded
+  **DSpace Overview** dashboard.
+- You can also access the DSpace Overview dashboard directly at
+  [http://localhost:3000/d/dspace-overview/dspace-overview](http://localhost:3000/d/dspace-overview/dspace-overview).
 
 ## Features
 
@@ -33,6 +35,12 @@ naming convention.
 
 ### DspaceDown
 
+Alert expression:
+
+```promql
+up{job="dspace"} == 0
+```
+
 Fires when the `dspace` job stops reporting `up` for one minute.
 
 **Runbook**
@@ -42,8 +50,14 @@ Fires when the `dspace` job stops reporting `up` for one minute.
 
 ### DspaceHighErrorRate
 
-Triggers when more than 5% of HTTP requests return 5xx status codes for five
-minutes.
+Alert expression:
+
+```promql
+rate(http_requests_total{job="dspace",status=~"5.."}[5m]) /
+rate(http_requests_total{job="dspace"}[5m]) > 0.05
+```
+
+Triggers when more than 5% of HTTP requests return 5xx status codes for five minutes.
 
 **Runbook**
 
