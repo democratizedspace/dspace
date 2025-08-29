@@ -5,8 +5,6 @@ slug: 'prompts-accessibility'
 
 # Accessibility prompts for the _dspace_ repo
 
-# Accessibility prompts for the _dspace_ repo
-
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
 ready-made pull requests. Use this guide alongside
 [Codex Prompts](prompts-codex.md) when improving accessibility so instructions remain
@@ -15,14 +13,16 @@ consistent. To keep the prompt docs evolving, see the
 [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use
 the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md). This doc focuses on semantic
 HTML, ARIA attributes, keyboard navigation, sufficient color contrast, and minimum target sizes.
+As of 2024, [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) is the baseline standard.
 
 > **TL;DR**
 >
 > 1. Limit changes to files that impact user accessibility.
-> 2. Follow WCAG 2.2 AA: provide focus states, semantic elements, ARIA labels, and adequate
->    target sizes.
-> 3. Validate with tooling like `npm run lint`, `@testing-library/svelte`, or `axe-core`, and
->    perform screen‑reader checks when possible.
+> 2. Follow [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/): provide focus states, semantic elements,
+>    ARIA labels, adequate target sizes, and respect user preferences.
+> 3. Validate with tooling like `npm run lint`, Testing Library's
+>    [`getByRole`](https://testing-library.com/docs/queries/byrole/), `@testing-library/svelte`,
+>    or `axe-core`, and perform screen-reader and keyboard checks when possible.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 > 6. Commit with an emoji prefix.
@@ -35,9 +35,10 @@ and `npm run test:ci` pass before committing.
 
 USER:
 1. Update files that affect user accessibility.
-2. Follow WCAG 2.2 AA with semantic HTML, visible focus states, ARIA labels, and adequate target
-   sizes.
-3. Validate with linting and, when possible, screen-reader or keyboard checks.
+2. Follow [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) with semantic HTML, visible focus states,
+   ARIA labels, and adequate target sizes.
+3. Validate with linting and, when possible, Testing Library's `getByRole`, screen-reader, or
+   keyboard checks.
 4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 5. Use an emoji-prefixed commit message.
 
@@ -53,6 +54,8 @@ A pull request improving accessibility with passing checks.
     sections.
 -   [`SkipProcessButton`](../../../components/svelte/SkipProcessButton.svelte) – lets users bypass
     a step with a semantic button.
+-   [Chip](https://github.com/dspace/dspace/blob/main/frontend/src/components/svelte/Chip.svelte)
+    provides button and link variants with disabled states.
 
 ## Upgrader Prompt
 
