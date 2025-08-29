@@ -29,8 +29,38 @@
         "overrides": []
       },
       "yaxes": [
-        {"format": "percentunit", "min": 0, "max": 1},
-        {"format": "short"}
+        {
+          "format": "percentunit",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "format": "short"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "99th Percentile Latency",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99,sum by (le) (rate(http_request_duration_seconds_bucket{job=\"dspace\"}[5m])))",
+          "legendFormat": "p99 latency"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "yaxes": [
+        {
+          "format": "s"
+        },
+        {
+          "format": "short"
+        }
       ]
     }
   ],
