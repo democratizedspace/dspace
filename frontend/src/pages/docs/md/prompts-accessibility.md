@@ -16,11 +16,13 @@ HTML, ARIA attributes, keyboard navigation, and sufficient color contrast.
 > **TL;DR**
 >
 > 1. Limit changes to files that impact user accessibility.
-> 2. Follow WCAG 2.1 AA: provide focus states, semantic elements, and ARIA labels.
-> 3. Validate with tooling like `npm run lint` and screen‑reader checks when possible.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
-> 6. Commit with an emoji prefix.
+> 2. Follow WCAG 2.2 AA: provide focus states, semantic elements, and ARIA labels.
+> 3. Reference accessible components like [Button][button-component]
+>    and [Menu][menu-component] for ARIA and focus patterns.
+> 4. Validate with tooling like `npm run lint` and screen‑reader checks when possible.
+> 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 6. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
+> 7. Commit with an emoji prefix.
 
 ```text
 SYSTEM:
@@ -30,10 +32,12 @@ and `npm run test:ci` pass before committing.
 
 USER:
 1. Update files that affect user accessibility.
-2. Follow WCAG 2.1 AA with semantic HTML, visible focus states, and ARIA labels.
-3. Validate with linting and, when possible, screen-reader or keyboard checks.
-4. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-5. Use an emoji-prefixed commit message.
+2. Follow WCAG 2.2 AA with semantic HTML, visible focus states, and ARIA labels.
+3. Reference accessible components like [Button][button-component]
+   and [Menu][menu-component] for examples.
+4. Validate with linting and, when possible, screen-reader or keyboard checks.
+5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+6. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request improving accessibility with passing checks.
@@ -61,3 +65,6 @@ USER:
 OUTPUT:
 A pull request refining the accessibility prompt doc with passing checks.
 ```
+
+[button-component]: ../../../components/Button.astro
+[menu-component]: ../../../components/svelte/Menu.svelte

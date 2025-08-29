@@ -14,8 +14,10 @@ Check out the [docs](https://democratized.space/docs)!
 
 ## Accessibility
 
-The frontend aims to meet WCAG 2.1 AA. Navigation links include `aria-current`
-and visible focus indicators to support keyboard users.
+The frontend aims to meet WCAG 2.2 AA. Navigation links include `aria-current`
+and visible focus indicators to support keyboard users. Components like
+[Button][button-component] and [Menu][menu-component]
+demonstrate these accessibility patterns.
 
 ## Table of Contents
 
@@ -371,3 +373,5 @@ running `npm test`.
 ## License
 
 DSPACE is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+[button-component]: frontend/src/components/Button.astro
+[menu-component]: frontend/src/components/svelte/Menu.svelte
