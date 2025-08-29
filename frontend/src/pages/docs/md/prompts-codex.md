@@ -35,7 +35,8 @@ When adding a new prompt doc, link it here and in
 >    mandatory instructions.
 > 4. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
 > 5. Link new prompt guides from this page and `frontend/src/pages/docs/index.astro`.
-> 6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+> 6. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
+>    `npm run test:ci`.
 > 7. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
 >    commit with an emoji prefix.
 
@@ -82,12 +83,12 @@ See the [OpenAI CLI repository][openai-cli] for more flags.
 
 ## 2. Prompt ingredients
 
-| Ingredient           | Why it matters                                                                      |
-| -------------------- | ----------------------------------------------------------------------------------- |
-| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”).                    |
-| **Files to touch**   | Limits search space → faster & cheaper.                                             |
-| **Constraints**      | Coding style, a11y, perf, etc.                                                      |
-| **Acceptance check** | e.g. `npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci` pass. |
+| Ingredient           | Why it matters                                                                                            |
+| -------------------- | --------------------------------------------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add sort dropdown to Item page”).                                          |
+| **Files to touch**   | Limits search space → faster & cheaper.                                                                   |
+| **Constraints**      | Coding style, a11y, perf, etc.                                                                            |
+| **Acceptance check** | `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,<br>`npm run test:ci` all pass. |
 
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
@@ -106,11 +107,11 @@ FILES OF INTEREST
 - <path/to/File2>
 
 REQUIREMENTS
-1. …
-2. …
-3. …
+1. Scope the task to one or two files.
+2. Say exactly what output you expect (tests, docs, etc.).
+3. Stop talking when the spec is complete. Codex treats all remaining text as mandatory instructions.
 4. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 7. Use an emoji-prefixed commit message.
 
@@ -141,8 +142,9 @@ You are an automated contributor for the DSPACE repository. Choose one item
 from `frontend/src/pages/docs/md/changelog/20250901.md` that is either `[ ]` or
 `[x]` without 💯 (including those marked with ✅). Implement it fully, completing
 any sub-tasks. Provide all code, tests and documentation required. Follow
-`AGENTS.md` and ensure `npm run lint`, `npm run type-check`,
-`npm run build`, and `npm run test:ci` all pass before committing. If Playwright browsers are
+`AGENTS.md` and ensure `npm run audit:ci`, `npm run lint`,
+`npm run type-check`, `npm run build`, and `npm run test:ci`
+all pass before committing. If Playwright browsers are
 missing run `npx playwright install chromium` or use `SKIP_E2E=1 npm run test:ci`.
 
 USER:
@@ -170,8 +172,9 @@ dedicated to evolving the prompt guides themselves, see the
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
-and `README.md`. Ensure `npm run lint`, `npm run type-check`,
-`npm run build`, and `npm run test:ci` pass before committing.
+and `README.md`. Ensure `npm run audit:ci`, `npm run lint`,
+`npm run type-check`, `npm run build`, and `npm run test:ci`
+pass before committing.
 
 USER:
 1. Pick one or more prompt docs under `frontend/src/pages/docs/md/` (for example,
@@ -196,8 +199,9 @@ guidance current—the machine that builds the machine. See the standalone
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
-and `README.md`. Ensure `npm run lint`, `npm run type-check`,
-`npm run build`, and `npm run test:ci` pass before committing.
+and `README.md`. Ensure `npm run audit:ci`, `npm run lint`,
+`npm run type-check`, `npm run build`, and `npm run test:ci`
+pass before committing.
 
 USER:
 1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance or missing
@@ -224,8 +228,8 @@ Use this prompt to keep baseline Codex prompt guidance current.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`,
-and `npm run test:ci` pass before committing.
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+`npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
 1. Update references to new or renamed prompt docs.

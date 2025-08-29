@@ -43,8 +43,8 @@ CONTEXT:
     * Failures often surface in steps like `Run test suite`, `Generate coverage report`,
       `Check patch coverage`, `Show preview server logs on failure`, or
       from missing Playwright browsers, patch coverage gaps, or dev server timeouts.
-    * Run `npm run lint`, `npm run type-check`, `npm run build`, and
-      `npm run test:ci` locally.
+    * Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
+      and `npm run test:ci` locally.
   * Study project docs to understand how to run the test suite and emulate the
     GitHub Actions environment.
 - Consult existing outage entries in `/outages` for similar symptoms.
@@ -150,7 +150,7 @@ Use this prompt to keep CI troubleshooting steps current.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
 and `npm run test:ci` pass before committing.
 
 USER:

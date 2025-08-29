@@ -19,7 +19,7 @@ and entries on the docs index. Add new prompts and remove or update deprecated o
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md`
-and `README.md`. Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `README.md`. Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
 and `npm run test:ci` pass before committing.
 
 USER:
@@ -50,7 +50,7 @@ Use this prompt to keep meta-prompt guidance current.
 ```text
 SYSTEM:
 You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
-Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
 and `npm run test:ci` pass before committing.
 
 USER:
