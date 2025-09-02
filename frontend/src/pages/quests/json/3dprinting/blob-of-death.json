@@ -1,0 +1,33 @@
+{
+    "id": "3dprinting/blob-of-death",
+    "title": "Witness a Blob of Death",
+    "description": "Skipping a first-layer check lets a failed Z homing extrude in mid-air, engulfing the nozzle in molten plastic.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You start a print and walk away. Without verifying the first layer, the Z axis mis-homes and the printer extrudes in mid-air.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-blob-of-death",
+                    "text": "Watch the blob grow."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Kill power and note the damage."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "A molten glob encases the nozzle. Next time, watch the first layer to catch issues early.",
+            "options": [{ "type": "finish", "text": "Ugh." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinter/start"]
+}

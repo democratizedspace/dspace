@@ -25,6 +25,48 @@
         }
     },
     {
+        "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+        "name": "0.4 mm brass nozzle",
+        "description": "Replacement 0.4 mm brass nozzle compatible with entry-level FDM printers.",
+        "image": "/assets/3dprinter.jpg",
+        "price": "2 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "564a76de-925b-4457-a548-d015168abe0c",
+        "name": "entry-level FDM 3D printer (clogged nozzle)",
+        "description": "Printer with a nozzle clogged by a failed first layer; requires cleaning before use.",
+        "image": "/assets/3dprinter.jpg",
+        "price": "220 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+        "name": "entry-level FDM 3D printer (blob of death)",
+        "description": "Printer whose hotend is engulfed in melted plastic after a mid-air extrusion.",
+        "image": "/assets/3dprinter.jpg",
+        "price": "220 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "7892ffc6-c651-445f-946b-7edc998cf389",
         "name": "Benchy",
         "description": "60 mm long calibration tugboat 3D printed in PLA; weighs about 15 g and uses about 5 m of filament.",

@@ -228,6 +228,116 @@
         }
     },
     {
+        "id": "3dprint-nozzle-clog",
+        "title": "Start a print without checking the first layer that clogs the nozzle",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 5
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 50
+            }
+        ],
+        "createItems": [
+            {
+                "id": "564a76de-925b-4457-a548-d015168abe0c",
+                "count": 1
+            }
+        ],
+        "duration": "30m"
+    },
+    {
+        "id": "3dprint-blob-of-death",
+        "title": "Miss Z homing and engulf the extruder in a blob of plastic",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 10
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 100
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                "count": 1
+            }
+        ],
+        "duration": "45m"
+    },
+    {
+        "id": "repair-clogged-nozzle",
+        "title": "Disassemble and clear a clogged 3D printer nozzle",
+        "requireItems": [
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            },
+            {
+                "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "564a76de-925b-4457-a548-d015168abe0c",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "duration": "1h"
+    },
+    {
+        "id": "repair-blob-of-death",
+        "title": "Remove a blob of plastic and install a new nozzle",
+        "requireItems": [
+            {
+                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "count": 1
+            },
+            {
+                "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                "count": 1
+            },
+            {
+                "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "duration": "1h 30m"
+    },
+    {
         "id": "level-3d-printer-bed",
         "title": "Use a sheet of printer paper to level an entry-level FDM 3D printer bed",
         "image": "/assets/3dprinter.jpg",
