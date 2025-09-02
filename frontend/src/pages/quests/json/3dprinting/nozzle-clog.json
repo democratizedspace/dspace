@@ -1,0 +1,82 @@
+{
+    "id": "3dprinting/nozzle-clog",
+    "title": "Fix a Clogged Nozzle",
+    "description": "Disassemble your printer after a blob of death from skipping the first layer to unclog or replace the nozzle.",
+    "image": "/assets/quests/benchy_25.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Because the first layer wasn't checked, the Z axis mis-homes and filament piles around the hotend, clogging the nozzle.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-nozzle-clog",
+                    "text": "Review the failed print."
+                },
+                {
+                    "type": "goto",
+                    "goto": "repair",
+                    "text": "Power down and prepare to fix it."
+                }
+            ]
+        },
+        {
+            "id": "repair",
+            "text": "Let the hotend cool, remove the plastic blob, then loosen the nozzle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Unclog and reinstall the nozzle.",
+                    "requiresItems": [
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
+                        { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "replace",
+                    "text": "Swap in a new nozzle.",
+                    "requiresItems": [
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
+                        { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 },
+                        { "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "clean",
+            "text": "Heat the nozzle and push a cleaning needle through until clear, then tighten it while hot.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Extrusion restored."
+                }
+            ]
+        },
+        {
+            "id": "replace",
+            "text": "Thread in the replacement nozzle, snug it down while hot, and reassemble the printer.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "New nozzle installed."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "The printer is ready again. Watch the first layer on future prints to avoid blobs of death.",
+            "options": [{ "type": "finish", "text": "Back to printing." }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinter/start", "3dprinting/blob-of-death"]
+}
