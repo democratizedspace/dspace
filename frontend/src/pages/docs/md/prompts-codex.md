@@ -17,7 +17,7 @@ For task-specific templates see [Quest prompts](prompts-quests.md),
 [Audit prompts](prompts-audit.md), [Secret scanning prompts](prompts-secrets.md),
 [Docs prompts](prompts-docs.md),
 [Playwright test prompts](prompts-playwright-tests.md),
-[Vitest test prompts](prompts-vitest.md), [Frontend prompts](prompts-frontend.md),
+[Vitest test prompts](prompts-vitest.md), [Frontend prompts](prompts-frontend.md), [Chat UI prompts](prompts-chat-ui.md),
 [Backend prompts](prompts-backend.md), [Refactor prompts](prompts-refactors.md), and
 [Accessibility prompts](prompts-accessibility.md).
 For specialized workflows use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md),
