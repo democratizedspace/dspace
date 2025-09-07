@@ -161,6 +161,8 @@ export const gameStateReady = (async () => {
     }
 })();
 
+// Call this function at app startup to ensure migration is complete before accessing game state.
 export async function initGameState() {
-    await Promise.all([gameStateReady, ready]);
+    await gameStateReady;
+    await ready;
 }
