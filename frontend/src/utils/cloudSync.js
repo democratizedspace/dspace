@@ -1,30 +1,29 @@
-import { exportGameStateString, importGameStateString } from './gameState/common.js';
+import {
+    exportGameStateString,
+    importGameStateString,
+    loadGameState,
+    saveGameState,
+} from './gameState/common.js';
 import { loadGitHubToken } from './githubToken.js';
 
-const storageKey = 'gameState';
-
 function loadCloudGistId() {
-    try {
-        const state = JSON.parse(localStorage.getItem(storageKey) || '{}');
-        return state.cloudSync?.gistId || '';
-    } catch {
-        return '';
-    }
+    const state = loadGameState();
+    return state.cloudSync?.gistId || '';
 }
 
 function saveCloudGistId(id) {
-    const state = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const state = loadGameState();
     state.cloudSync = state.cloudSync || {};
     state.cloudSync.gistId = id;
-    localStorage.setItem(storageKey, JSON.stringify(state));
+    saveGameState(state);
 }
 
 function clearCloudGistId() {
-    const state = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const state = loadGameState();
     if (state.cloudSync) {
         state.cloudSync.gistId = '';
     }
-    localStorage.setItem(storageKey, JSON.stringify(state));
+    saveGameState(state);
 }
 
 async function uploadGameStateToGist(token) {

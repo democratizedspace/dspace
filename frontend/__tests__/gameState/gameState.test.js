@@ -120,9 +120,10 @@ describe('gameState top-level helpers', () => {
         expect(mockGameState.versionNumberString).toBe(VERSIONS.V2);
     });
 
-    test('importV2V3 updates version to V3', () => {
+    test('importV2V3 adds processes and updates version to V3', () => {
         mockGameState.versionNumberString = VERSIONS.V2;
         importV2V3();
         expect(mockGameState.versionNumberString).toBe(VERSIONS.V3);
+        expect(mockGameState.processes).toEqual({});
     });
 });

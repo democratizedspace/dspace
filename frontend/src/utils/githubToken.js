@@ -5,28 +5,24 @@ export function isValidGitHubToken(token) {
     return patterns.some((p) => p.test(trimmed));
 }
 
-const storageKey = 'gameState';
+import { loadGameState, saveGameState } from './gameState/common.js';
 
 export function loadGitHubToken() {
-    try {
-        const state = JSON.parse(localStorage.getItem(storageKey) || '{}');
-        return state.github?.token || '';
-    } catch {
-        return '';
-    }
+    const state = loadGameState();
+    return state.github?.token || '';
 }
 
 export function saveGitHubToken(token) {
-    const state = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const state = loadGameState();
     state.github = state.github || {};
     state.github.token = token;
-    localStorage.setItem(storageKey, JSON.stringify(state));
+    saveGameState(state);
 }
 
 export function clearGitHubToken() {
-    const state = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const state = loadGameState();
     if (state.github) {
         state.github.token = '';
     }
-    localStorage.setItem(storageKey, JSON.stringify(state));
+    saveGameState(state);
 }

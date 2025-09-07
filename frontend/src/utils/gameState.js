@@ -131,7 +131,6 @@ export const importV2V3 = () => {
     if (!gameState.processes) {
         gameState.processes = {};
     }
-
-    setVersionNumber(VERSIONS.V3);
+    gameState.versionNumberString = VERSIONS.V3;
     saveGameState(gameState);
 };

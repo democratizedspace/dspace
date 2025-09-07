@@ -1,21 +1,79 @@
 import { writable } from 'svelte/store';
 
-const gameStateKey = 'gameState';
-const gameStateBackupKey = 'gameStateBackup';
+const DB_NAME = 'dspaceGameState';
+const DB_VERSION = 1;
+const STATE_STORE = 'state';
+const BACKUP_STORE = 'backup';
+const ROOT_KEY = 'root';
+const LOCAL_STATE_KEY = 'gameState';
+const LOCAL_BACKUP_KEY = 'gameStateBackup';
+const V2 = '2';
+const V3 = '3';
 
-const initializeGameState = () => {
-    return {
-        quests: {},
-        inventory: {},
-        processes: {},
-    };
-};
+let dbPromise;
+
+function openDB() {
+    if (!dbPromise) {
+        dbPromise = new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains(STATE_STORE)) {
+                    db.createObjectStore(STATE_STORE);
+                }
+                if (!db.objectStoreNames.contains(BACKUP_STORE)) {
+                    db.createObjectStore(BACKUP_STORE);
+                }
+            };
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+    return dbPromise;
+}
+
+function read(store) {
+    return openDB().then(
+        (db) =>
+            new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readonly');
+                const req = tx.objectStore(store).get(ROOT_KEY);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = (e) => reject(e.target.error);
+            })
+    );
+}
+
+function write(store, value) {
+    return openDB().then(
+        (db) =>
+            new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readwrite');
+                tx.objectStore(store).put(value, ROOT_KEY);
+                tx.oncomplete = () => resolve();
+                tx.onerror = (e) => reject(e.target.error);
+            })
+    );
+}
+
+function clearStore(store) {
+    return openDB().then(
+        (db) =>
+            new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readwrite');
+                tx.objectStore(store).clear();
+                tx.oncomplete = () => resolve();
+                tx.onerror = (e) => reject(e.target.error);
+            })
+    );
+}
+
+const initializeGameState = () => ({ quests: {}, inventory: {}, processes: {} });
 
 export const validateGameState = (state) => {
     if (!state || typeof state !== 'object') {
         return initializeGameState();
     }
-
     if (typeof state.quests !== 'object' || state.quests === null) {
         state.quests = {};
     }
@@ -25,59 +83,76 @@ export const validateGameState = (state) => {
     if (typeof state.processes !== 'object' || state.processes === null) {
         state.processes = {};
     }
-
     return state;
 };
 
-export const loadGameState = () => {
-    const storedGameState = localStorage.getItem(gameStateKey);
-    if (storedGameState) {
-        return validateGameState(JSON.parse(storedGameState));
-    }
-    return initializeGameState();
-};
-
-export const saveGameState = (newState) => {
-    localStorage.setItem(gameStateBackupKey, JSON.stringify(gameState));
-    gameState = validateGameState(newState);
-    localStorage.setItem(gameStateKey, JSON.stringify(gameState));
-    state.set(gameState); // Update the state store directly
-};
-
-let gameState = loadGameState();
-
-// Create the state store and set the initial value
+let gameState = initializeGameState();
 export const state = writable(gameState);
 
-/**
- * Export the game state as a Base64-encoded JSON string.
- * The schema {quests, inventory, processes} is public and must remain stable.
- */
-export const exportGameStateString = () => {
-    return btoa(JSON.stringify(gameState));
+export const ready = (async () => {
+    try {
+        let stored = await read(STATE_STORE);
+        if (!stored) {
+            try {
+                const legacy = localStorage.getItem(LOCAL_STATE_KEY);
+                if (legacy) {
+                    stored = JSON.parse(legacy);
+                    const backup = localStorage.getItem(LOCAL_BACKUP_KEY);
+                    if (backup) {
+                        await write(BACKUP_STORE, JSON.parse(backup));
+                        localStorage.removeItem(LOCAL_BACKUP_KEY);
+                    }
+                    localStorage.removeItem(LOCAL_STATE_KEY);
+                }
+            } catch (e) {
+                console.error('Error migrating game state from localStorage:', e);
+            }
+        }
+        if (stored) {
+            gameState = validateGameState(stored);
+            if (gameState.versionNumberString === V2) {
+                gameState.processes = gameState.processes || {};
+                gameState.versionNumberString = V3;
+            }
+            state.set(gameState);
+            await write(STATE_STORE, gameState);
+        }
+    } catch (err) {
+        console.error('Error loading game state from IndexedDB:', err);
+    }
+})();
+
+export const loadGameState = () => gameState;
+
+export const saveGameState = (newState) => {
+    write(BACKUP_STORE, gameState).catch(() => undefined);
+    gameState = validateGameState(newState);
+    state.set(gameState);
+    write(STATE_STORE, gameState).catch(() => undefined);
 };
 
+export const exportGameStateString = () => btoa(JSON.stringify(gameState));
+
 export const importGameStateString = (gameStateString) => {
-    // Decode from Base64 and parse the JSON string
-    const importedGameState = JSON.parse(atob(gameStateString));
-
-    // Overwrite the game state with the imported game state
-    gameState = importedGameState;
-
-    // Save the updated game state to local storage and update the state store
-    saveGameState(gameState);
+    const imported = JSON.parse(atob(gameStateString));
+    saveGameState(imported);
 };
 
 export const resetGameState = () => {
-    const freshState = initializeGameState();
-    saveGameState(freshState);
+    gameState = initializeGameState();
+    state.set(gameState);
+    write(STATE_STORE, gameState).catch(() => undefined);
+    clearStore(BACKUP_STORE).catch(() => undefined);
 };
 
-export const rollbackGameState = () => {
-    const backup = localStorage.getItem(gameStateBackupKey);
-    if (!backup) return;
-    const previous = validateGameState(JSON.parse(backup));
-    gameState = previous;
-    localStorage.setItem(gameStateKey, JSON.stringify(gameState));
-    state.set(gameState);
+export const rollbackGameState = async () => {
+    try {
+        const backup = await read(BACKUP_STORE);
+        if (!backup) return;
+        gameState = validateGameState(backup);
+        state.set(gameState);
+        await write(STATE_STORE, gameState);
+    } catch (err) {
+        console.error('Error rolling back game state:', err);
+    }
 };
