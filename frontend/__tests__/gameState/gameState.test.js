@@ -4,6 +4,7 @@ vi.mock('../../src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(),
     saveGameState: vi.fn(),
     validateGameState: (s) => s,
+    ready: Promise.resolve(),
 }));
 
 vi.mock('../../src/utils/gameState/inventory.js', () => {
@@ -46,6 +47,7 @@ describe('gameState top-level helpers', () => {
         loadGameState.mockImplementation(() => mockGameState);
         saveGameState.mockImplementation((state) => {
             mockGameState = state;
+            return Promise.resolve();
         });
         addItems.mockClear();
         loadGameState.mockClear();
@@ -119,7 +121,7 @@ describe('gameState top-level helpers', () => {
         expect(mockGameState.versionNumberString).toBe(VERSIONS.V2);
     });
 
-    test('importV2V3 migrates localStorage data and clears legacy keys', () => {
+    test('importV2V3 migrates localStorage data and clears legacy keys', async () => {
         mockGameState.versionNumberString = VERSIONS.V2;
         const legacy = { quests: { q: { finished: true } }, inventory: { a: 1 } };
         const removeItem = vi.fn();
@@ -128,7 +130,7 @@ describe('gameState top-level helpers', () => {
             removeItem,
         };
 
-        importV2V3();
+        await importV2V3();
 
         expect(saveGameState).toHaveBeenCalledWith(
             expect.objectContaining({

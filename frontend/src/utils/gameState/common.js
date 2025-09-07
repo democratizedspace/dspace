@@ -64,11 +64,11 @@ function clearStore(store) {
     );
 }
 
-const initializeGameState = () => ({ quests: {}, inventory: {}, processes: {} });
+const createInitialState = () => ({ quests: {}, inventory: {}, processes: {} });
 
 export const validateGameState = (state) => {
     if (!state || typeof state !== 'object') {
-        return initializeGameState();
+        return createInitialState();
     }
     if (typeof state.quests !== 'object' || state.quests === null) {
         state.quests = {};
@@ -82,10 +82,10 @@ export const validateGameState = (state) => {
     return state;
 };
 
-let gameState = initializeGameState();
+let gameState = createInitialState();
 export const state = writable(gameState);
 
-export const ready = (async () => {
+async function initializeGameState() {
     try {
         const stored = await read(STATE_STORE);
         if (stored) {
@@ -95,7 +95,9 @@ export const ready = (async () => {
     } catch (err) {
         console.error('Error loading game state from IndexedDB:', err);
     }
-})();
+}
+
+export const ready = initializeGameState();
 
 export const loadGameState = () => structuredClone(gameState);
 
@@ -104,10 +106,10 @@ export const saveGameState = (newState) =>
         const snapshot = structuredClone(gameState);
         gameState = validateGameState(newState);
         state.set(gameState);
-        await Promise.all([
-            write(BACKUP_STORE, snapshot).catch(() => undefined),
-            write(STATE_STORE, gameState).catch(() => undefined),
-        ]);
+        await write(BACKUP_STORE, snapshot).catch((err) => {
+            console.error('Error writing backup game state:', err);
+        });
+        await write(STATE_STORE, gameState);
     });
 
 export const exportGameStateString = () => btoa(JSON.stringify(gameState));
@@ -118,10 +120,14 @@ export const importGameStateString = (gameStateString) => {
 };
 
 export const resetGameState = () => {
-    gameState = initializeGameState();
+    gameState = createInitialState();
     state.set(gameState);
-    write(STATE_STORE, gameState).catch(() => undefined);
-    clearStore(BACKUP_STORE).catch(() => undefined);
+    write(STATE_STORE, gameState).catch((err) => {
+        console.error('Error resetting game state:', err);
+    });
+    clearStore(BACKUP_STORE).catch((err) => {
+        console.error('Error clearing backup game state:', err);
+    });
 };
 
 export const rollbackGameState = async () => {

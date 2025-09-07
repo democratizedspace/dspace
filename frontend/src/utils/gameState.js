@@ -1,4 +1,4 @@
-import { loadGameState, saveGameState, validateGameState } from './gameState/common.js';
+import { loadGameState, saveGameState, validateGameState, ready } from './gameState/common.js';
 import { addItems } from './gameState/inventory.js';
 import items from '../pages/inventory/json/items';
 
@@ -124,7 +124,7 @@ export const importV1V2 = (itemList) => {
 };
 
 // v2 -> v3
-export const importV2V3 = () => {
+export const importV2V3 = async () => {
     let migrated;
     try {
         const legacy = localStorage.getItem('gameState');
@@ -140,7 +140,7 @@ export const importV2V3 = () => {
         gameState.processes = {};
     }
     gameState.versionNumberString = VERSIONS.V3;
-    saveGameState(gameState);
+    await saveGameState(gameState);
 
     try {
         localStorage.removeItem('gameState');
@@ -150,11 +150,17 @@ export const importV2V3 = () => {
     }
 };
 
-// Auto-migrate legacy v2 state on first v3 load when localStorage data is present.
-try {
-    if (typeof window !== 'undefined' && window.localStorage?.getItem('gameState')) {
-        importV2V3();
+// Explicit initialization for legacy state migration.
+export const gameStateReady = (async () => {
+    try {
+        if (typeof window !== 'undefined' && window.localStorage?.getItem('gameState')) {
+            await importV2V3();
+        }
+    } catch {
+        /* ignore */
     }
-} catch {
-    /* ignore */
+})();
+
+export async function initGameState() {
+    await Promise.all([gameStateReady, ready]);
 }
