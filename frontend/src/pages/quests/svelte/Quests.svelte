@@ -3,26 +3,30 @@
     import Chip from '../../../components/svelte/Chip.svelte';
     import { onMount } from 'svelte';
     import { questFinished, canStartQuest } from '../../../utils/gameState.js';
+    import { state, ready } from '../../../utils/gameState/common.js';
 
     export let quests = [];
-    let filteredQuests = [],
-        finishedQuests = [];
+    let filteredQuests = [];
+    let finishedQuests = [];
     let mounted = false;
 
     onMount(async () => {
+        await ready;
         mounted = true;
     });
 
-    quests.forEach((quest) => {
-        const finished = questFinished(quest.id);
-        if (finished) {
-            finishedQuests.push(quest);
-        } else {
-            if (canStartQuest(quest)) {
+    $: if (mounted && $state) {
+        filteredQuests = [];
+        finishedQuests = [];
+        quests.forEach((quest) => {
+            const finished = questFinished(quest.id);
+            if (finished) {
+                finishedQuests.push(quest);
+            } else if (canStartQuest(quest)) {
                 filteredQuests.push(quest);
             }
-        }
-    });
+        });
+    }
 
     // Define buttons for easy expansion
     const actionButtons = [

@@ -1,25 +1,37 @@
 <script>
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { exportGameStateString } from '../../../utils/gameState/common.js';
+    import { onMount } from 'svelte';
+    import { exportGameStateString, state, ready } from '../../../utils/gameState/common.js';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
 
-    const gameStateString = exportGameStateString();
+    let gameStateString = '';
+    let loaded = false;
+
+    onMount(async () => {
+        await ready;
+        gameStateString = exportGameStateString();
+        loaded = true;
+    });
+
+    $: if (loaded && $state) {
+        gameStateString = exportGameStateString();
+    }
 </script>
 
-<Chip text="">
-    <div class="vertical">
-        <p>Here is a string representation of your game state:</p>
+{#if loaded}
+    <Chip text="">
+        <div class="vertical">
+            <p>Here is a string representation of your game state:</p>
 
-        <!-- code block -->
-        <div class="code-block">
-            <code>
-                {gameStateString}
-            </code>
+            <!-- code block -->
+            <div class="code-block">
+                <code>{gameStateString}</code>
+            </div>
+
+            <Chip text="Copy" onClick={() => copyToClipboard(gameStateString)} inverted={true} />
         </div>
-
-        <Chip text="Copy" onClick={() => copyToClipboard(gameStateString)} inverted={true} />
-    </div>
-</Chip>
+    </Chip>
+{/if}
 
 <style>
     p {

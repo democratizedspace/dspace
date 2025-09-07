@@ -143,27 +143,21 @@ describe('Quests Component', () => {
     });
 
     it('should render action buttons', () => {
-        // Create a container for the component
         const container = document.createElement('div');
         document.body.appendChild(container);
 
-        // Mount the component
         new Quests({
             target: container,
             props: { quests },
         });
 
-        // Wait for component to mount and render
         return new Promise((resolve) => {
             setTimeout(() => {
                 try {
-                    // Check if action buttons are rendered
                     const buttons = container.querySelectorAll('.action-buttons a');
                     expect(buttons.length).toBe(2);
                     expect(buttons[0].textContent).toContain('Create a new quest');
                     expect(buttons[1].textContent).toContain('Managed quests');
-
-                    // Clean up
                     document.body.removeChild(container);
                     resolve();
                 } catch (e) {
@@ -175,52 +169,34 @@ describe('Quests Component', () => {
     });
 
     it('should filter quests based on completion status', () => {
-        // Skip test if not in browser environment
         if (typeof document === 'undefined') {
             return;
         }
 
-        // Create a container for the component
         const container = document.createElement('div');
         document.body.appendChild(container);
 
-        // Mock the onMount function to make it synchronous for testing
-        const originalOnMount = Quests.prototype.onMount;
-        Quests.prototype.onMount = function () {
-            // Call the original onMount implementation synchronously
-            this.mounted = true;
-            if (originalOnMount) originalOnMount.call(this);
-        };
-
-        // Mount the component
-        const questsComponent = new Quests({
+        new Quests({
             target: container,
             props: { quests },
         });
 
         try {
-            // Since we made onMount synchronous, the component should be rendered immediately
-            // Force reflow to ensure DOM updates
-            container.getBoundingClientRect();
+            // Wait for DOM updates after async mount
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    const availableQuestsSection = container.querySelector('.quests-grid');
+                    expect(availableQuestsSection).toBeTruthy();
 
-            // Check if available quests are rendered
-            const availableQuestsSection = container.querySelector('.quests-grid');
-            expect(availableQuestsSection).toBeTruthy();
-
-            // Check if completed quests are rendered
-            const completedQuestsHeading = Array.from(container.querySelectorAll('h2')).find((h) =>
-                h.textContent.includes('Completed Quests')
-            );
-            expect(completedQuestsHeading).toBeTruthy();
-
-            // Clean up
-            document.body.removeChild(container);
-
-            // Restore original onMount
-            Quests.prototype.onMount = originalOnMount;
+                    const completedQuestsHeading = Array.from(
+                        container.querySelectorAll('h2')
+                    ).find((h) => h.textContent.includes('Completed Quests'));
+                    expect(completedQuestsHeading).toBeTruthy();
+                    document.body.removeChild(container);
+                    resolve();
+                }, 100);
+            });
         } catch (e) {
-            // Restore original onMount on error
-            Quests.prototype.onMount = originalOnMount;
             document.body.removeChild(container);
             throw e;
         }

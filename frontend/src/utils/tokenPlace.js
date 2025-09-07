@@ -1,4 +1,4 @@
-import { loadGameState } from './gameState/common.js';
+import { loadGameState, ready } from './gameState/common.js';
 
 const DEFAULT_URL = 'https://token.place/api';
 
@@ -15,6 +15,7 @@ const getEnvUrl = () => {
 
 export const tokenPlaceChat = async (messages, { signal } = {}) => {
     const envUrl = getEnvUrl();
+    await ready;
     const baseUrl = loadGameState().tokenPlace?.url || envUrl || DEFAULT_URL;
 
     const systemMessage = {

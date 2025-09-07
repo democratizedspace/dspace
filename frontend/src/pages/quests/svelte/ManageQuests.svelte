@@ -2,31 +2,35 @@
     import { onMount } from 'svelte';
     import Quest from './Quest.svelte';
     import { questFinished } from '../../../utils/gameState.js';
+    import { state, ready } from '../../../utils/gameState/common.js';
     import { db } from '../../../utils/customcontent.js';
 
     export let quests = [];
+    let filteredQuests = [];
     let mounted = false;
     let searchTerm = '';
     let selectedStatus = 'all';
 
-    // Reactive filtered quests
-    $: filteredQuests = quests.filter((quest) => {
-        const matchesSearch =
-            quest.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            quest.description.toLowerCase().includes(searchTerm.toLowerCase());
-
-        const isFinished = questFinished(quest.id);
-
-        if (selectedStatus === 'all') return matchesSearch;
-        if (selectedStatus === 'active') return matchesSearch && !isFinished;
-        if (selectedStatus === 'completed') return matchesSearch && isFinished;
-
-        return false;
-    });
-
-    onMount(() => {
+    onMount(async () => {
+        await ready;
         mounted = true;
     });
+
+    $: if (mounted && $state) {
+        filteredQuests = quests.filter((quest) => {
+            const matchesSearch =
+                quest.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                quest.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+            const isFinished = questFinished(quest.id);
+
+            if (selectedStatus === 'all') return matchesSearch;
+            if (selectedStatus === 'active') return matchesSearch && !isFinished;
+            if (selectedStatus === 'completed') return matchesSearch && isFinished;
+
+            return false;
+        });
+    }
 
     function handleEdit(questId) {
         // Implement edit functionality
