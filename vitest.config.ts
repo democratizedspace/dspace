@@ -1,8 +1,14 @@
 import { defineConfig } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import path from 'path';
 
 export default defineConfig({
   plugins: [svelte()],
+  resolve: {
+    alias: {
+      'svelte/store': path.resolve(__dirname, 'tests/svelte-store.js'),
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,

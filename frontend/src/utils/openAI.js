@@ -1,9 +1,9 @@
-import { loadGameState } from './gameState/common.js';
+import { loadGameState, ready } from './gameState/common.js';
 import OpenAI from 'openai';
 
-const apiKey = (loadGameState().openAI && loadGameState().openAI.apiKey) || '';
-
 export const GPT35Turbo = async (messages) => {
+    await ready;
+    const apiKey = loadGameState().openAI?.apiKey || '';
     const openai = new OpenAI({ apiKey });
 
     const systemMessage = {

@@ -15,8 +15,8 @@
     } from '../../utils/githubToken.js';
     import { submitQuestPR } from '../../utils/submitQuestPR.js';
 
-    onMount(() => {
-        token = loadGitHubToken();
+    onMount(async () => {
+        token = await loadGitHubToken();
     });
 
     function validateForm() {
@@ -43,7 +43,7 @@
             prUrl = await submitQuestPR(token, branch, questJson);
             submitError = '';
             dispatch('success', { message: 'Pull request created', url: prUrl });
-            saveGitHubToken(token);
+            await saveGitHubToken(token);
         } catch (err) {
             console.error(err);
             submitError = 'Failed to submit quest';
@@ -51,9 +51,9 @@
         }
     }
 
-    function clearToken() {
+    async function clearToken() {
         token = '';
-        clearGitHubToken();
+        await clearGitHubToken();
     }
 
     export { handleSubmit, clearToken };
