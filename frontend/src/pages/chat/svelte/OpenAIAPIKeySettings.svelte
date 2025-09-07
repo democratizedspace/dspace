@@ -1,36 +1,43 @@
 <script>
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import { loadGameState, saveGameState } from '../../../utils/gameState/common.js';
+    import { loadGameState, saveGameState, ready } from '../../../utils/gameState/common.js';
 
-    export let apiKey = writable(loadGameState().openAI?.apiKey || '');
+    export let apiKey = writable('');
 
     const isMounted = writable(false);
-    let isEditing = writable(!$apiKey);
+    const isEditing = writable(true);
 
-    onMount(() => {
+    onMount(async () => {
+        await ready;
+        const state = loadGameState();
+        const current = state.openAI?.apiKey || '';
+        apiKey.set(current);
+        isEditing.set(!current);
         isMounted.set(true);
     });
 
-    function saveAPIKey() {
+    async function saveAPIKey() {
+        await ready;
         let gameState = loadGameState();
         gameState.openAI = gameState.openAI || {};
         gameState.openAI.apiKey = $apiKey;
-        saveGameState(gameState);
+        await saveGameState(gameState);
         isEditing.set(false);
     }
 
-    function deleteAPIKey() {
+    async function deleteAPIKey() {
+        await ready;
         let gameState = loadGameState();
         gameState.openAI = gameState.openAI || {};
         gameState.openAI.apiKey = '';
-        saveGameState(gameState);
+        await saveGameState(gameState);
         apiKey.set('');
         isEditing.set(true);
     }
 
-    function handleSubmit() {
-        saveAPIKey();
+    async function handleSubmit() {
+        await saveAPIKey();
         // reload the page
         window.location.reload();
     }

@@ -3,6 +3,7 @@
     import Quest from './Quest.svelte';
     import { questFinished } from '../../../utils/gameState.js';
     import { db } from '../../../utils/customcontent.js';
+    import { state as gameState, ready } from '../../../utils/gameState/common.js';
 
     export let quests = [];
     let mounted = false;
@@ -11,6 +12,8 @@
 
     // Reactive filtered quests
     $: filteredQuests = quests.filter((quest) => {
+        // react to game state updates
+        const _gs = $gameState;
         const matchesSearch =
             quest.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             quest.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -24,7 +27,8 @@
         return false;
     });
 
-    onMount(() => {
+    onMount(async () => {
+        await ready;
         mounted = true;
     });
 

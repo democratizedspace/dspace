@@ -174,7 +174,7 @@ describe('Quests Component', () => {
         });
     });
 
-    it('should filter quests based on completion status', () => {
+    it('should filter quests based on completion status', async () => {
         // Skip test if not in browser environment
         if (typeof document === 'undefined') {
             return;
@@ -184,22 +184,16 @@ describe('Quests Component', () => {
         const container = document.createElement('div');
         document.body.appendChild(container);
 
-        // Mock the onMount function to make it synchronous for testing
-        const originalOnMount = Quests.prototype.onMount;
-        Quests.prototype.onMount = function () {
-            // Call the original onMount implementation synchronously
-            this.mounted = true;
-            if (originalOnMount) originalOnMount.call(this);
-        };
-
         // Mount the component
-        const questsComponent = new Quests({
+        new Quests({
             target: container,
             props: { quests },
         });
 
+        // Wait for onMount and reactive updates
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
         try {
-            // Since we made onMount synchronous, the component should be rendered immediately
             // Force reflow to ensure DOM updates
             container.getBoundingClientRect();
 
@@ -212,17 +206,8 @@ describe('Quests Component', () => {
                 h.textContent.includes('Completed Quests')
             );
             expect(completedQuestsHeading).toBeTruthy();
-
-            // Clean up
+        } finally {
             document.body.removeChild(container);
-
-            // Restore original onMount
-            Quests.prototype.onMount = originalOnMount;
-        } catch (e) {
-            // Restore original onMount on error
-            Quests.prototype.onMount = originalOnMount;
-            document.body.removeChild(container);
-            throw e;
         }
     });
 });
