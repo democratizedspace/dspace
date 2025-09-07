@@ -1,11 +1,16 @@
 <script>
     import OpenAIAPIKeySettings from './OpenAIAPIKeySettings.svelte';
+    import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import { loadGameState } from '../../../utils/gameState/common.js';
+    import { loadGameState, ready } from '../../../utils/gameState/common.js';
     import OpenAIChat from './OpenAIChat.svelte';
     import TokenPlaceChat from './TokenPlaceChat.svelte';
 
-    const apiKey = writable(loadGameState().openAI?.apiKey || '');
+    const apiKey = writable('');
+    onMount(async () => {
+        await ready;
+        apiKey.set(loadGameState().openAI?.apiKey || '');
+    });
 </script>
 
 <div class="container">
