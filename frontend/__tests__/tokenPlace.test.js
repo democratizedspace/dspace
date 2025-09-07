@@ -3,6 +3,7 @@ const jest = vi;
 
 jest.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: jest.fn(),
+    ready: Promise.resolve(),
 }));
 
 const { tokenPlaceChat } = require('../src/utils/tokenPlace.js');

@@ -3,28 +3,33 @@
     import Quest from './Quest.svelte';
     import { questFinished } from '../../../utils/gameState.js';
     import { db } from '../../../utils/customcontent.js';
+    import { state, ready } from '../../../utils/gameState/common.js';
 
     export let quests = [];
     let mounted = false;
     let searchTerm = '';
     let selectedStatus = 'all';
+    let filteredQuests = [];
 
-    // Reactive filtered quests
-    $: filteredQuests = quests.filter((quest) => {
-        const matchesSearch =
-            quest.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            quest.description.toLowerCase().includes(searchTerm.toLowerCase());
+    $: if (mounted) {
+        const _gs = $state; // recompute when game state changes
+        filteredQuests = quests.filter((quest) => {
+            const matchesSearch =
+                quest.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                quest.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-        const isFinished = questFinished(quest.id);
+            const isFinished = questFinished(quest.id);
 
-        if (selectedStatus === 'all') return matchesSearch;
-        if (selectedStatus === 'active') return matchesSearch && !isFinished;
-        if (selectedStatus === 'completed') return matchesSearch && isFinished;
+            if (selectedStatus === 'all') return matchesSearch;
+            if (selectedStatus === 'active') return matchesSearch && !isFinished;
+            if (selectedStatus === 'completed') return matchesSearch && isFinished;
 
-        return false;
-    });
+            return false;
+        });
+    }
 
-    onMount(() => {
+    onMount(async () => {
+        await ready;
         mounted = true;
     });
 
