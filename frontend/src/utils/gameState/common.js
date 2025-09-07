@@ -183,15 +183,20 @@ export const ready = (async () => {
     }
 })();
 
+let writeQueue = Promise.resolve();
+
 export const loadGameState = () => structuredClone(gameState);
 
 export const saveGameState = async (newState) => {
     await ready;
     const snapshot = structuredClone(gameState);
-    await write(BACKUP_STORE, snapshot).catch(() => undefined);
     gameState = validateGameState(newState);
     state.set(gameState);
-    await write(STATE_STORE, gameState).catch(() => undefined);
+    writeQueue = writeQueue.then(async () => {
+        await write(BACKUP_STORE, snapshot).catch(() => undefined);
+        await write(STATE_STORE, gameState).catch(() => undefined);
+    });
+    return writeQueue;
 };
 
 export const exportGameStateString = () => btoa(JSON.stringify(gameState));
