@@ -1,21 +1,161 @@
 import { writable } from 'svelte/store';
 
-const gameStateKey = 'gameState';
-const gameStateBackupKey = 'gameStateBackup';
+const DB_NAME = 'dspaceGameState';
+const DB_VERSION = 1;
+const STATE_STORE = 'state';
+const BACKUP_STORE = 'backup';
+const ROOT_KEY = 'root';
+const LS_STATE_KEY = 'gameState';
+const LS_BACKUP_KEY = 'gameStateBackup';
 
-const initializeGameState = () => {
-    return {
-        quests: {},
-        inventory: {},
-        processes: {},
-    };
-};
+let dbPromise;
+let useLocalStorage = false;
+let warnedFallback = false;
+export const isUsingLocalStorage = () => useLocalStorage;
+
+function warnFallback() {
+    if (warnedFallback) return;
+    warnedFallback = true;
+    const message =
+        'IndexedDB is unavailable; falling back to localStorage. Storage may be limited.';
+    if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+        window.alert(message);
+    } else {
+        console.warn(message);
+    }
+}
+
+function openDB() {
+    if (!('indexedDB' in globalThis)) {
+        return Promise.reject(new Error('IndexedDB not supported'));
+    }
+    if (!dbPromise) {
+        dbPromise = new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains(STATE_STORE)) {
+                    db.createObjectStore(STATE_STORE);
+                }
+                if (!db.objectStoreNames.contains(BACKUP_STORE)) {
+                    db.createObjectStore(BACKUP_STORE);
+                }
+            };
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+    return dbPromise;
+}
+
+function idbRead(store) {
+    return openDB().then(
+        (db) =>
+            new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readonly');
+                const req = tx.objectStore(store).get(ROOT_KEY);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = (e) => reject(e.target.error);
+            })
+    );
+}
+
+function idbWrite(store, value) {
+    return openDB().then(
+        (db) =>
+            new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readwrite');
+                tx.objectStore(store).put(value, ROOT_KEY);
+                tx.oncomplete = () => resolve();
+                tx.onerror = (e) => reject(e.target.error);
+            })
+    );
+}
+
+function idbClear(store) {
+    return openDB().then(
+        (db) =>
+            new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readwrite');
+                tx.objectStore(store).clear();
+                tx.oncomplete = () => resolve();
+                tx.onerror = (e) => reject(e.target.error);
+            })
+    );
+}
+
+function lsKey(store) {
+    return store === STATE_STORE ? LS_STATE_KEY : LS_BACKUP_KEY;
+}
+
+function lsRead(store) {
+    try {
+        const raw = localStorage.getItem(lsKey(store));
+        return raw ? JSON.parse(raw) : undefined;
+    } catch (err) {
+        console.error('Error reading from localStorage:', err);
+        return undefined;
+    }
+}
+
+function lsWrite(store, value) {
+    try {
+        localStorage.setItem(lsKey(store), JSON.stringify(value));
+    } catch (err) {
+        console.error('Error writing to localStorage:', err);
+    }
+}
+
+function lsClear(store) {
+    try {
+        localStorage.removeItem(lsKey(store));
+    } catch (err) {
+        console.error('Error clearing localStorage:', err);
+    }
+}
+
+async function read(store) {
+    if (useLocalStorage) return lsRead(store);
+    try {
+        return await idbRead(store);
+    } catch (err) {
+        console.error('IndexedDB read failed:', err);
+        useLocalStorage = true;
+        warnFallback();
+        return lsRead(store);
+    }
+}
+
+async function write(store, value) {
+    if (useLocalStorage) return lsWrite(store, value);
+    try {
+        return await idbWrite(store, value);
+    } catch (err) {
+        console.error('IndexedDB write failed:', err);
+        useLocalStorage = true;
+        warnFallback();
+        return lsWrite(store, value);
+    }
+}
+
+async function clearStore(store) {
+    if (useLocalStorage) return lsClear(store);
+    try {
+        return await idbClear(store);
+    } catch (err) {
+        console.error('IndexedDB clear failed:', err);
+        useLocalStorage = true;
+        warnFallback();
+        return lsClear(store);
+    }
+}
+
+const initializeGameState = () => ({ quests: {}, inventory: {}, processes: {} });
 
 export const validateGameState = (state) => {
     if (!state || typeof state !== 'object') {
         return initializeGameState();
     }
-
     if (typeof state.quests !== 'object' || state.quests === null) {
         state.quests = {};
     }
@@ -25,59 +165,58 @@ export const validateGameState = (state) => {
     if (typeof state.processes !== 'object' || state.processes === null) {
         state.processes = {};
     }
-
     return state;
 };
 
-export const loadGameState = () => {
-    const storedGameState = localStorage.getItem(gameStateKey);
-    if (storedGameState) {
-        return validateGameState(JSON.parse(storedGameState));
-    }
-    return initializeGameState();
-};
-
-export const saveGameState = (newState) => {
-    localStorage.setItem(gameStateBackupKey, JSON.stringify(gameState));
-    gameState = validateGameState(newState);
-    localStorage.setItem(gameStateKey, JSON.stringify(gameState));
-    state.set(gameState); // Update the state store directly
-};
-
-let gameState = loadGameState();
-
-// Create the state store and set the initial value
+let gameState = initializeGameState();
 export const state = writable(gameState);
 
-/**
- * Export the game state as a Base64-encoded JSON string.
- * The schema {quests, inventory, processes} is public and must remain stable.
- */
-export const exportGameStateString = () => {
-    return btoa(JSON.stringify(gameState));
-};
+export const ready = (async () => {
+    try {
+        const stored = await read(STATE_STORE);
+        if (stored) {
+            gameState = validateGameState(stored);
+            state.set(gameState);
+        }
+    } catch (err) {
+        console.error('Error loading game state from IndexedDB:', err);
+    }
+})();
 
-export const importGameStateString = (gameStateString) => {
-    // Decode from Base64 and parse the JSON string
-    const importedGameState = JSON.parse(atob(gameStateString));
+export const loadGameState = () => structuredClone(gameState);
 
-    // Overwrite the game state with the imported game state
-    gameState = importedGameState;
-
-    // Save the updated game state to local storage and update the state store
-    saveGameState(gameState);
-};
-
-export const resetGameState = () => {
-    const freshState = initializeGameState();
-    saveGameState(freshState);
-};
-
-export const rollbackGameState = () => {
-    const backup = localStorage.getItem(gameStateBackupKey);
-    if (!backup) return;
-    const previous = validateGameState(JSON.parse(backup));
-    gameState = previous;
-    localStorage.setItem(gameStateKey, JSON.stringify(gameState));
+export const saveGameState = async (newState) => {
+    await ready;
+    const snapshot = structuredClone(gameState);
+    gameState = validateGameState(newState);
     state.set(gameState);
+    const backupWrite = write(BACKUP_STORE, snapshot).catch(() => undefined);
+    const stateWrite = write(STATE_STORE, gameState).catch(() => undefined);
+    await Promise.all([backupWrite, stateWrite]);
+};
+
+export const exportGameStateString = () => btoa(JSON.stringify(gameState));
+
+export const importGameStateString = async (gameStateString) => {
+    const imported = JSON.parse(atob(gameStateString));
+    await saveGameState(imported);
+};
+
+export const resetGameState = async () => {
+    gameState = initializeGameState();
+    state.set(gameState);
+    await write(STATE_STORE, gameState).catch(() => undefined);
+    await clearStore(BACKUP_STORE).catch(() => undefined);
+};
+
+export const rollbackGameState = async () => {
+    try {
+        const backup = await read(BACKUP_STORE);
+        if (!backup) return;
+        gameState = validateGameState(backup);
+        state.set(gameState);
+        await write(STATE_STORE, gameState);
+    } catch (err) {
+        console.error('Error rolling back game state:', err);
+    }
 };

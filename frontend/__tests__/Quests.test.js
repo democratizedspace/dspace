@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, describe, expect, it, jest, test } from 'vitest';
-import Quests from '../src/pages/quests/svelte/Quests.svelte';
 import * as gameState from '../src/utils/gameState.js';
 
 // Mock the gameState module
@@ -113,10 +112,14 @@ global.indexedDB = {
     },
 };
 
+let Quests;
+
 describe('Quests Component', () => {
     let quests;
 
-    beforeEach(() => {
+    beforeEach(async () => {
+        Quests = (await import('../src/pages/quests/svelte/Quests.svelte')).default;
+
         // Set up test data
         quests = [
             {
