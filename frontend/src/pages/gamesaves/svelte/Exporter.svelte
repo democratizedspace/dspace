@@ -1,9 +1,15 @@
 <script>
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { exportGameStateString } from '../../../utils/gameState/common.js';
+    import { onMount } from 'svelte';
+    import { exportGameStateString, ready } from '../../../utils/gameState/common.js';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
 
-    const gameStateString = exportGameStateString();
+    let gameStateString = '';
+
+    onMount(async () => {
+        await ready;
+        gameStateString = exportGameStateString();
+    });
 </script>
 
 <Chip text="">
