@@ -1,11 +1,11 @@
 import { vi } from 'vitest';
 
-vi.mock('../../src/utils/gameState/common.js', () => {
-    return {
-        loadGameState: vi.fn(),
-        saveGameState: vi.fn(),
-    };
-});
+vi.mock('../../src/utils/gameState/common.js', () => ({
+    loadGameState: vi.fn(),
+    saveGameState: vi.fn().mockResolvedValue(undefined),
+    validateGameState: (s) => s,
+    isUsingLocalStorage: vi.fn(() => false),
+}));
 
 vi.mock('../../src/utils/gameState/inventory.js', () => {
     return {
@@ -28,7 +28,11 @@ import {
     VERSIONS,
 } from '../../src/utils/gameState.js';
 
-import { loadGameState, saveGameState } from '../../src/utils/gameState/common.js';
+import {
+    loadGameState,
+    saveGameState,
+    isUsingLocalStorage,
+} from '../../src/utils/gameState/common.js';
 import { addItems } from '../../src/utils/gameState/inventory.js';
 import items from '../../src/pages/inventory/json/items';
 
@@ -120,9 +124,48 @@ describe('gameState top-level helpers', () => {
         expect(mockGameState.versionNumberString).toBe(VERSIONS.V2);
     });
 
-    test('importV2V3 updates version to V3', () => {
+    test('importV2V3 migrates localStorage data and clears legacy keys', async () => {
         mockGameState.versionNumberString = VERSIONS.V2;
-        importV2V3();
-        expect(mockGameState.versionNumberString).toBe(VERSIONS.V3);
+        const legacy = { quests: { q: { finished: true } }, inventory: { a: 1 } };
+        const removeItem = vi.fn();
+        global.localStorage = {
+            getItem: vi.fn((k) => (k === 'gameState' ? JSON.stringify(legacy) : null)),
+            removeItem,
+        };
+
+        await importV2V3();
+
+        expect(saveGameState).toHaveBeenCalledWith(
+            expect.objectContaining({
+                quests: legacy.quests,
+                inventory: legacy.inventory,
+                processes: {},
+                versionNumberString: VERSIONS.V3,
+            })
+        );
+        expect(removeItem).toHaveBeenCalledWith('gameState');
+        expect(removeItem).toHaveBeenCalledWith('gameStateBackup');
+        // cleanup
+        // @ts-expect-error - cleanup stub
+        delete global.localStorage;
+    });
+
+    test('importV2V3 keeps legacy keys when falling back to localStorage', async () => {
+        mockGameState.versionNumberString = VERSIONS.V2;
+        const legacy = { quests: { q: { finished: true } }, inventory: { a: 1 } };
+        const removeItem = vi.fn();
+        global.localStorage = {
+            getItem: vi.fn((k) => (k === 'gameState' ? JSON.stringify(legacy) : null)),
+            removeItem,
+        };
+        isUsingLocalStorage.mockReturnValue(true);
+
+        await importV2V3();
+
+        expect(removeItem).not.toHaveBeenCalled();
+        // cleanup
+        // @ts-expect-error - cleanup stub
+        delete global.localStorage;
+        isUsingLocalStorage.mockReturnValue(false);
     });
 });

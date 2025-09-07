@@ -8,9 +8,10 @@
     export let quest, option;
     let githubConnected = false;
 
-    const checkConnection = () => {
-        githubConnected = isValidGitHubToken(loadGitHubToken());
-    };
+    async function checkConnection() {
+        const token = await loadGitHubToken();
+        githubConnected = isValidGitHubToken(token);
+    }
 
     onMount(checkConnection);
 
