@@ -13,9 +13,11 @@ To authenticate, generate a GitHub personal access token with the `repo` and `gi
 2. Create a token granting **repo** and **gist** permissions.
 3. Paste the token into the relevant form in DSPACE and click **Save**.
 
-## Local Storage
+## Token Storage
 
-Your token is stored in `localStorage` under `gameState.github.token` so you don't need to re-enter it each time you open the game. You can clear the saved token using the **Clear** button next to the input field.
+Your token is stored in IndexedDB under `gameState.github.token` so you don't
+need to re-enter it each time you open the game. You can clear the saved token
+using the **Clear** button next to the input field.
 
 ## Security Considerations
 

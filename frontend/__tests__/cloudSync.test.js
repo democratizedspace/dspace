@@ -8,24 +8,24 @@ import {
     loadCloudGistId,
     clearCloudGistId,
 } from '../src/utils/cloudSync.js';
-import { saveGameState, loadGameState } from '../src/utils/gameState/common.js';
+import { saveGameState, loadGameState, resetGameState } from '../src/utils/gameState/common.js';
 import { saveGitHubToken } from '../src/utils/githubToken.js';
 
 describe('cloudSync', () => {
     beforeEach(() => {
-        localStorage.clear();
+        resetGameState();
         global.fetch = jest.fn();
     });
 
     test('uploadGameStateToGist creates gist when none exists', async () => {
-        saveGitHubToken('ghp_x');
+        await saveGitHubToken('ghp_x');
         global.fetch.mockResolvedValueOnce({
             ok: true,
             json: () => Promise.resolve({ id: '1' }),
         });
         const id = await uploadGameStateToGist();
         expect(id).toBe('1');
-        expect(loadCloudGistId()).toBe('1');
+        expect(await loadCloudGistId()).toBe('1');
         expect(global.fetch).toHaveBeenCalledWith(
             'https://api.github.com/gists',
             expect.any(Object)
@@ -33,8 +33,10 @@ describe('cloudSync', () => {
     });
 
     test('uploadGameStateToGist patches existing gist', async () => {
-        localStorage.setItem('gameState', JSON.stringify({ cloudSync: { gistId: 'a' } }));
-        saveGitHubToken('ghp_x');
+        const state = loadGameState();
+        state.cloudSync = { gistId: 'a' };
+        await saveGameState(state);
+        await saveGitHubToken('ghp_x');
         global.fetch.mockResolvedValueOnce({
             ok: true,
             json: () => Promise.resolve({ id: 'a' }),
@@ -47,7 +49,7 @@ describe('cloudSync', () => {
     });
 
     test('downloadGameStateFromGist updates state', async () => {
-        saveGitHubToken('ghp_x');
+        await saveGitHubToken('ghp_x');
         const encoded = btoa(JSON.stringify({ quests: { q: true }, inventory: {}, processes: {} }));
         global.fetch.mockResolvedValueOnce({
             ok: true,
@@ -55,14 +57,15 @@ describe('cloudSync', () => {
         });
         await downloadGameStateFromGist('ghp_x', '1');
         expect(loadGameState().quests.q).toBe(true);
-        expect(loadCloudGistId()).toBe('1');
+        expect(await loadCloudGistId()).toBe('1');
     });
 
-    test('clearCloudGistId resets stored id', () => {
-        localStorage.setItem('gameState', JSON.stringify({ cloudSync: { gistId: '42' } }));
-        clearCloudGistId();
-        expect(loadCloudGistId()).toBe('');
-        const state = JSON.parse(localStorage.getItem('gameState'));
-        expect(state.cloudSync.gistId).toBe('');
+    test('clearCloudGistId resets stored id', async () => {
+        const state = loadGameState();
+        state.cloudSync = { gistId: '42' };
+        await saveGameState(state);
+        await clearCloudGistId();
+        expect(await loadCloudGistId()).toBe('');
+        expect(loadGameState().cloudSync.gistId).toBe('');
     });
 });
