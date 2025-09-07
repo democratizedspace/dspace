@@ -6,6 +6,7 @@
         downloadGameStateFromGist,
         clearCloudGistId,
     } from '../../../utils/cloudSync.js';
+    import { onMount } from 'svelte';
     import {
         isValidGitHubToken,
         loadGitHubToken,
@@ -17,8 +18,10 @@
     let gistId = '';
     let message = '';
 
-    token = loadGitHubToken();
-    gistId = loadCloudGistId();
+    onMount(async () => {
+        token = await loadGitHubToken();
+        gistId = await loadCloudGistId();
+    });
 
     const saveToken = () => {
         saveGitHubToken(token);

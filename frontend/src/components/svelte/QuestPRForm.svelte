@@ -15,8 +15,8 @@
     } from '../../utils/githubToken.js';
     import { submitQuestPR } from '../../utils/submitQuestPR.js';
 
-    onMount(() => {
-        token = loadGitHubToken();
+    onMount(async () => {
+        token = await loadGitHubToken();
     });
 
     function validateForm() {

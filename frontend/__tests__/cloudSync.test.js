@@ -8,12 +8,12 @@ import {
     loadCloudGistId,
     clearCloudGistId,
 } from '../src/utils/cloudSync.js';
-import { saveGameState, loadGameState } from '../src/utils/gameState/common.js';
+import { saveGameState, loadGameState, resetGameState } from '../src/utils/gameState/common.js';
 import { saveGitHubToken } from '../src/utils/githubToken.js';
 
 describe('cloudSync', () => {
     beforeEach(() => {
-        localStorage.clear();
+        resetGameState();
         global.fetch = jest.fn();
     });
 
@@ -25,7 +25,7 @@ describe('cloudSync', () => {
         });
         const id = await uploadGameStateToGist();
         expect(id).toBe('1');
-        expect(loadCloudGistId()).toBe('1');
+        expect(await loadCloudGistId()).toBe('1');
         expect(global.fetch).toHaveBeenCalledWith(
             'https://api.github.com/gists',
             expect.any(Object)
@@ -33,7 +33,9 @@ describe('cloudSync', () => {
     });
 
     test('uploadGameStateToGist patches existing gist', async () => {
-        localStorage.setItem('gameState', JSON.stringify({ cloudSync: { gistId: 'a' } }));
+        const state = loadGameState();
+        state.cloudSync = { gistId: 'a' };
+        saveGameState(state);
         saveGitHubToken('ghp_x');
         global.fetch.mockResolvedValueOnce({
             ok: true,
@@ -55,14 +57,15 @@ describe('cloudSync', () => {
         });
         await downloadGameStateFromGist('ghp_x', '1');
         expect(loadGameState().quests.q).toBe(true);
-        expect(loadCloudGistId()).toBe('1');
+        expect(await loadCloudGistId()).toBe('1');
     });
 
-    test('clearCloudGistId resets stored id', () => {
-        localStorage.setItem('gameState', JSON.stringify({ cloudSync: { gistId: '42' } }));
+    test('clearCloudGistId resets stored id', async () => {
+        const state = loadGameState();
+        state.cloudSync = { gistId: '42' };
+        saveGameState(state);
         clearCloudGistId();
-        expect(loadCloudGistId()).toBe('');
-        const state = JSON.parse(localStorage.getItem('gameState'));
-        expect(state.cloudSync.gistId).toBe('');
+        expect(await loadCloudGistId()).toBe('');
+        expect(loadGameState().cloudSync.gistId).toBe('');
     });
 });
