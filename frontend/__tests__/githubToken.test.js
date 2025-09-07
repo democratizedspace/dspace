@@ -1,31 +1,32 @@
 /**
  * @jest-environment jsdom
  */
+import 'fake-indexeddb/auto';
 import {
     loadGitHubToken,
     saveGitHubToken,
     clearGitHubToken,
     isValidGitHubToken,
 } from '../src/utils/githubToken.js';
+import { loadGameState, resetGameState, ready } from '../src/utils/gameState/common.js';
 
 describe('githubToken utils', () => {
-    beforeEach(() => {
-        localStorage.clear();
+    beforeEach(async () => {
+        await ready;
+        resetGameState();
     });
 
-    test('saves and loads token', () => {
+    test('saves and loads token', async () => {
         saveGitHubToken('abc');
-        expect(loadGitHubToken()).toBe('abc');
-        const state = JSON.parse(localStorage.getItem('gameState'));
-        expect(state.github.token).toBe('abc');
+        expect(await loadGitHubToken()).toBe('abc');
+        expect(loadGameState().github.token).toBe('abc');
     });
 
-    test('clears token', () => {
+    test('clears token', async () => {
         saveGitHubToken('xyz');
         clearGitHubToken();
-        expect(loadGitHubToken()).toBe('');
-        const state = JSON.parse(localStorage.getItem('gameState'));
-        expect(state.github.token).toBe('');
+        expect(await loadGitHubToken()).toBe('');
+        expect(loadGameState().github.token).toBe('');
     });
 
     test('validates tokens correctly', () => {
