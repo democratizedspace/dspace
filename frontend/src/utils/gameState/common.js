@@ -97,10 +97,11 @@ export const ready = (async () => {
     }
 })();
 
-export const loadGameState = () => gameState;
+export const loadGameState = () => structuredClone(gameState);
 
 export const saveGameState = (newState) => {
-    write(BACKUP_STORE, gameState).catch(() => undefined);
+    const snapshot = structuredClone(gameState);
+    write(BACKUP_STORE, snapshot).catch(() => undefined);
     gameState = validateGameState(newState);
     state.set(gameState);
     write(STATE_STORE, gameState).catch(() => undefined);

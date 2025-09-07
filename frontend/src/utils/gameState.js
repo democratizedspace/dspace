@@ -150,6 +150,7 @@ export const importV2V3 = () => {
     }
 };
 
+// Auto-migrate legacy v2 state on first v3 load when localStorage data is present.
 try {
     if (typeof window !== 'undefined' && window.localStorage?.getItem('gameState')) {
         importV2V3();

@@ -64,10 +64,12 @@ describe('gameState - common utilities', () => {
         const state = loadGameState();
         state.inventory['1'] = 1;
         saveGameState(state);
+        await new Promise((resolve) => setTimeout(resolve));
 
         const updated = loadGameState();
         updated.inventory['1'] = 2;
         saveGameState(updated);
+        await new Promise((resolve) => setTimeout(resolve));
 
         await rollbackGameState();
         const rolled = loadGameState();
@@ -78,10 +80,12 @@ describe('gameState - common utilities', () => {
         const state = loadGameState();
         state.inventory['1'] = 3;
         saveGameState(state);
+        await new Promise((resolve) => setTimeout(resolve));
 
         const updated = loadGameState();
         updated.inventory['1'] = 4;
         saveGameState(updated);
+        await new Promise((resolve) => setTimeout(resolve));
 
         await new Promise((resolve, reject) => {
             const req = indexedDB.open('dspaceGameState', 1);
