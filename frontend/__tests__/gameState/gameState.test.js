@@ -1,11 +1,10 @@
 import { vi } from 'vitest';
 
-vi.mock('../../src/utils/gameState/common.js', () => {
-    return {
-        loadGameState: vi.fn(),
-        saveGameState: vi.fn(),
-    };
-});
+vi.mock('../../src/utils/gameState/common.js', () => ({
+    loadGameState: vi.fn(),
+    saveGameState: vi.fn().mockResolvedValue(true),
+    validateGameState: (s) => s,
+}));
 
 vi.mock('../../src/utils/gameState/inventory.js', () => {
     return {
@@ -47,6 +46,7 @@ describe('gameState top-level helpers', () => {
         loadGameState.mockImplementation(() => mockGameState);
         saveGameState.mockImplementation((state) => {
             mockGameState = state;
+            return Promise.resolve(true);
         });
         addItems.mockClear();
         loadGameState.mockClear();
@@ -120,9 +120,43 @@ describe('gameState top-level helpers', () => {
         expect(mockGameState.versionNumberString).toBe(VERSIONS.V2);
     });
 
-    test('importV2V3 updates version to V3', () => {
+    test('importV2V3 migrates localStorage data and clears legacy keys', async () => {
         mockGameState.versionNumberString = VERSIONS.V2;
-        importV2V3();
-        expect(mockGameState.versionNumberString).toBe(VERSIONS.V3);
+        const legacy = { quests: { q: { finished: true } }, inventory: { a: 1 } };
+        const removeItem = vi.fn();
+        global.localStorage = {
+            getItem: vi.fn((k) => (k === 'gameState' ? JSON.stringify(legacy) : null)),
+            removeItem,
+        };
+
+        await importV2V3();
+
+        expect(saveGameState).toHaveBeenCalledWith(
+            expect.objectContaining({
+                quests: legacy.quests,
+                inventory: legacy.inventory,
+                processes: {},
+                versionNumberString: VERSIONS.V3,
+            })
+        );
+        expect(removeItem).toHaveBeenCalledWith('gameState');
+        expect(removeItem).toHaveBeenCalledWith('gameStateBackup');
+        delete global.localStorage;
+    });
+
+    test('importV2V3 retains legacy data when save fails', async () => {
+        mockGameState.versionNumberString = VERSIONS.V2;
+        const legacy = { quests: {}, inventory: {} };
+        const removeItem = vi.fn();
+        global.localStorage = {
+            getItem: vi.fn((k) => (k === 'gameState' ? JSON.stringify(legacy) : null)),
+            removeItem,
+        };
+        saveGameState.mockResolvedValueOnce(false);
+
+        await importV2V3();
+
+        expect(removeItem).not.toHaveBeenCalled();
+        delete global.localStorage;
     });
 });
