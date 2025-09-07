@@ -20,7 +20,8 @@ DSPACE can back up your progress to a private GitHub gist.
 
 ### Token storage
 
-The token and gist ID are stored in `localStorage`. Remove them at any time from the Settings page.
+The token and gist ID are stored in IndexedDB and load after the game initialises.
+Remove them at any time from the Settings page.
 
 ## What gets synced?
 
