@@ -8,12 +8,12 @@ import {
     loadCloudGistId,
     clearCloudGistId,
 } from '../src/utils/cloudSync.js';
-import { saveGameState, loadGameState } from '../src/utils/gameState/common.js';
+import { saveGameState, loadGameState, resetGameState } from '../src/utils/gameState/common.js';
 import { saveGitHubToken } from '../src/utils/githubToken.js';
 
 describe('cloudSync', () => {
     beforeEach(() => {
-        localStorage.clear();
+        resetGameState();
         global.fetch = jest.fn();
     });
 
@@ -33,7 +33,9 @@ describe('cloudSync', () => {
     });
 
     test('uploadGameStateToGist patches existing gist', async () => {
-        localStorage.setItem('gameState', JSON.stringify({ cloudSync: { gistId: 'a' } }));
+        const state = loadGameState();
+        state.cloudSync = { gistId: 'a' };
+        saveGameState(state);
         saveGitHubToken('ghp_x');
         global.fetch.mockResolvedValueOnce({
             ok: true,
@@ -59,10 +61,11 @@ describe('cloudSync', () => {
     });
 
     test('clearCloudGistId resets stored id', () => {
-        localStorage.setItem('gameState', JSON.stringify({ cloudSync: { gistId: '42' } }));
+        const state = loadGameState();
+        state.cloudSync = { gistId: '42' };
+        saveGameState(state);
         clearCloudGistId();
         expect(loadCloudGistId()).toBe('');
-        const state = JSON.parse(localStorage.getItem('gameState'));
-        expect(state.cloudSync.gistId).toBe('');
+        expect(loadGameState().cloudSync.gistId).toBe('');
     });
 });

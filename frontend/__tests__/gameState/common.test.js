@@ -1,3 +1,4 @@
+import 'fake-indexeddb/auto';
 const {
     loadGameState,
     saveGameState,
@@ -10,7 +11,6 @@ const {
 
 describe('gameState - common utilities', () => {
     beforeEach(() => {
-        localStorage.clear();
         resetGameState();
     });
 
@@ -60,7 +60,7 @@ describe('gameState - common utilities', () => {
         expect(validated).toEqual({ quests: {}, inventory: {}, processes: {} });
     });
 
-    test('rollbackGameState should restore previous state', () => {
+    test('rollbackGameState should restore previous state', async () => {
         const state = loadGameState();
         state.inventory['1'] = 1;
         saveGameState(state);
@@ -69,12 +69,12 @@ describe('gameState - common utilities', () => {
         updated.inventory['1'] = 2;
         saveGameState(updated);
 
-        rollbackGameState();
+        await rollbackGameState();
         const rolled = loadGameState();
         expect(rolled.inventory['1']).toBe(1);
     });
 
-    test('rollbackGameState does nothing when no backup exists', () => {
+    test('rollbackGameState does nothing when no backup exists', async () => {
         const state = loadGameState();
         state.inventory['1'] = 3;
         saveGameState(state);
@@ -82,9 +82,20 @@ describe('gameState - common utilities', () => {
         const updated = loadGameState();
         updated.inventory['1'] = 4;
         saveGameState(updated);
-        localStorage.removeItem('gameStateBackup');
 
-        rollbackGameState();
+        await new Promise((resolve, reject) => {
+            const req = indexedDB.open('dspaceGameState', 1);
+            req.onsuccess = (e) => {
+                const db = e.target.result;
+                const tx = db.transaction('backup', 'readwrite');
+                tx.objectStore('backup').clear();
+                tx.oncomplete = resolve;
+                tx.onerror = (ev) => reject(ev.target.error);
+            };
+            req.onerror = (e) => reject(e.target.error);
+        });
+
+        await rollbackGameState();
         const rolled = loadGameState();
         expect(rolled.inventory['1']).toBe(4);
     });
