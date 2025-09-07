@@ -1,37 +1,38 @@
-import { exportGameStateString, importGameStateString } from './gameState/common.js';
+import {
+    exportGameStateString,
+    importGameStateString,
+    loadGameState,
+    saveGameState,
+    ready,
+} from './gameState/common.js';
 import { loadGitHubToken } from './githubToken.js';
 
-const storageKey = 'gameState';
-
-function loadCloudGistId() {
-    try {
-        const state = JSON.parse(localStorage.getItem(storageKey) || '{}');
-        return state.cloudSync?.gistId || '';
-    } catch {
-        return '';
-    }
+async function loadCloudGistId() {
+    await ready;
+    const state = loadGameState();
+    return state.cloudSync?.gistId || '';
 }
 
 function saveCloudGistId(id) {
-    const state = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const state = loadGameState();
     state.cloudSync = state.cloudSync || {};
     state.cloudSync.gistId = id;
-    localStorage.setItem(storageKey, JSON.stringify(state));
+    saveGameState(state);
 }
 
 function clearCloudGistId() {
-    const state = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const state = loadGameState();
     if (state.cloudSync) {
         state.cloudSync.gistId = '';
     }
-    localStorage.setItem(storageKey, JSON.stringify(state));
+    saveGameState(state);
 }
 
 async function uploadGameStateToGist(token) {
     if (!token) {
-        token = loadGitHubToken();
+        token = await loadGitHubToken();
     }
-    const gistId = loadCloudGistId();
+    const gistId = await loadCloudGistId();
     const headers = {
         Authorization: `token ${token}`,
         'Content-Type': 'application/json',
@@ -61,10 +62,13 @@ async function uploadGameStateToGist(token) {
     return data.id;
 }
 
-async function downloadGameStateFromGist(token, gistId = loadCloudGistId()) {
+async function downloadGameStateFromGist(token, gistId) {
+    if (!gistId) {
+        gistId = await loadCloudGistId();
+    }
     if (!gistId) throw new Error('No gist id specified');
     if (!token) {
-        token = loadGitHubToken();
+        token = await loadGitHubToken();
     }
     const headers = token ? { Authorization: `token ${token}` } : {};
     const res = await fetch(`https://api.github.com/gists/${gistId}`, { headers });
@@ -72,7 +76,7 @@ async function downloadGameStateFromGist(token, gistId = loadCloudGistId()) {
     const data = await res.json();
     const content = data.files['dspace-save.json']?.content;
     if (!content) throw new Error('Invalid gist content');
-    importGameStateString(content);
+    await importGameStateString(content);
     saveCloudGistId(gistId);
 }
 

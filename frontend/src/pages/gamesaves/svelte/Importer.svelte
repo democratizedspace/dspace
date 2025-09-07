@@ -4,9 +4,9 @@
 
     let importString = '';
 
-    const handleImport = () => {
+    const handleImport = async () => {
         try {
-            importGameStateString(importString);
+            await importGameStateString(importString);
         } catch (err) {
             console.error('Failed to import game state:', err);
         }

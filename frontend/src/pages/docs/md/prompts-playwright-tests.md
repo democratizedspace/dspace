@@ -37,7 +37,7 @@ Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
 >    fully loaded before assertions.
 > 8. For dynamic metrics (e.g., UI responsiveness), assert text patterns rather
 >    than hard-coded values.
-> 9. For authentication flows, confirm tokens persist in `localStorage` and can
+> 9. For authentication flows, confirm tokens persist in IndexedDB and can
 >    be cleared without network access.
 > 10. Update `user-journeys.md` with coverage status, test file path, and any
 >     fixes, keeping the table alphabetized. Mark new journeys with `No` coverage
