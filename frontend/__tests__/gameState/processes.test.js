@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 vi.mock('../../src/utils/gameState/common.js', () => {
     return {
         loadGameState: vi.fn(),
-        saveGameState: vi.fn(),
+        saveGameState: vi.fn().mockResolvedValue(undefined),
     };
 });
 
