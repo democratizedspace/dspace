@@ -54,4 +54,7 @@ For the full workflow, see the [Quest Contribution Guidelines](/docs/quest-contr
 1. Visit [github.com/settings/tokens](https://github.com/settings/tokens) and generate a new **classic** token with `repo` scope.
 2. Copy the token and keep it somewhere safe. You can revoke it at any time.
 3. When using the submission form, paste the token into the "GitHub Token" field. The token is used solely in your browser to create the pull request.
-4. The token is saved to your browser's `localStorage` under `gameState.github.token` for convenience. Use the **Clear Token** button when you're finished or revoke it on GitHub. See the [Authentication Flow](/docs/authentication) for more details.
+4. The token is saved in IndexedDB under `gameState.github.token` for
+   convenience. Use the **Clear Token** button when you're finished or revoke it
+   on GitHub. See the [Authentication Flow](/docs/authentication) for more
+   details.
