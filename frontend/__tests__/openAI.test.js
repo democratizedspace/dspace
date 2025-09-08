@@ -16,6 +16,7 @@ jest.mock('openai', () => {
 
 jest.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: jest.fn(() => ({ openAI: { apiKey: 'test-key' } })),
+    ready: Promise.resolve(),
 }));
 
 const { GPT35Turbo } = require('../src/utils/openAI.js');
