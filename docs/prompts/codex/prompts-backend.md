@@ -1,8 +1,3 @@
----
-title: 'Backend Prompts'
-slug: 'prompts-backend'
----
-
 # Backend prompts for the _dspace_ repo
 
 DSPACE is mostly frontend code, but a few backend pieces support self-hosting via

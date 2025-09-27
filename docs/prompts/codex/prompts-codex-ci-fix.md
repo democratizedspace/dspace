@@ -1,19 +1,14 @@
----
-title: 'Codex CI-Failure Fix Prompt'
-slug: 'prompts-codex-ci-fix'
----
-
 # OpenAI Codex CI-Failure Fix Prompt
 
 Use this drop-in snippet whenever a GitHub Actions run for
 **democratizedspace/dspace** fails. It guides Codex to diagnose the failure and
 return a pull request that keeps the main branch green. For baseline
-conventions, see [Codex Prompts](/docs/prompts-codex). To evolve the prompt
-docs, see the [Codex meta prompt](/docs/prompts-codex-meta).
+conventions, see [Codex Prompts](prompts-codex.md). To evolve the prompt
+docs, see the [Codex meta prompt](prompts-codex-meta.md).
 
-If this prompt ever drifts, consult the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader)
+If this prompt ever drifts, consult the [Codex Prompt Upgrader](prompts-codex-upgrader.md)
 to refresh it before use. For guidance on logging incidents, see the
-[Outage prompts](/docs/prompts-outages) and review the
+[Outage prompts](prompts-outages.md) and review the
 [Outages](/docs/outages) catalog to avoid repeats.
 
 > **Human setup**
@@ -53,9 +48,8 @@ CONTEXT:
   * Follow `AGENTS.md` and project style.
   * Add or update tests proving the fix.
   * Update documentation when necessary.
-  * After fixing, append a bullet to the "Lessons learned" section of
-    `frontend/src/pages/docs/md/prompts-codex-ci-fix.md` summarizing the cause
-    and remedy.
+  * After fixing, append a bullet to the "Lessons learned" section below summarizing
+    the cause and remedy.
   * Record the incident in `/outages/YYYY-MM-DD-<slug>.json` using
     `outages/schema.json`.
 

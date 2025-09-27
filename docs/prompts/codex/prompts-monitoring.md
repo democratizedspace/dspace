@@ -1,8 +1,3 @@
----
-title: 'Monitoring Prompts'
-slug: 'prompts-monitoring'
----
-
 # Monitoring prompts for the DSPACE repository
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit

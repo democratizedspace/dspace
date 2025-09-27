@@ -1,8 +1,3 @@
----
-title: 'Accessibility Prompts'
-slug: 'prompts-accessibility'
----
-
 # Accessibility prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit

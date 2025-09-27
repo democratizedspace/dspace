@@ -1,8 +1,3 @@
----
-title: 'Documentation Prompts'
-slug: 'prompts-docs'
----
-
 # Documentation prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit a

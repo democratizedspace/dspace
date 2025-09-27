@@ -1,18 +1,13 @@
----
-title: 'NPC Prompts'
-slug: 'prompts-npcs'
----
-
 # Writing great NPC prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository and run its own tests.
 It can send you a ready-made PR—but only if you give it a clear, file-scoped prompt.
-Use this guide alongside [Codex Prompts](/docs/prompts-codex) when working on NPC bios or dialogue.
+Use this guide alongside [Codex Prompts](prompts-codex.md) when working on NPC bios or dialogue.
 Consult the [NPCs guide](/docs/npcs) for voice and lore details.
-To keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
+To keep the prompt docs evolving, see the [Codex meta prompt](prompts-codex-meta.md).
 If these templates drift, refresh them with the
-[Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions runs,
-use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+[Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs,
+use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 > **TL;DR**
 >

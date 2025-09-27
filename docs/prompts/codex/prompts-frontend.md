@@ -1,8 +1,3 @@
----
-title: 'Frontend Prompts'
-slug: 'prompts-frontend'
----
-
 # Frontend prompts for the _dspace_ repo
 
 DSPACE's UI is built with Svelte and Astro. Codex can open this repository and run its own

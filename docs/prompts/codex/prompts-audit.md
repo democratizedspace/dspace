@@ -1,8 +1,3 @@
----
-title: 'Dependency Audit Prompts'
-slug: 'prompts-audit'
----
-
 # Dependency audit prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit

@@ -1,8 +1,3 @@
----
-title: 'Chat UI Prompts'
-slug: 'prompts-chat-ui'
----
-
 # Chat UI prompts for the _dspace_ repo
 
 DSPACE's chat experience is built with Astro pages and hydrated Svelte components. Use this

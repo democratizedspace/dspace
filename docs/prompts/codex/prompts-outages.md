@@ -1,18 +1,12 @@
----
-title: 'Outage Prompts'
-slug: 'prompts-outages'
----
-
 # Outage prompts for the DSPACE repo
 
 Codex is a sandboxed engineering agent that can open this repository and run tests.
-Use this guide alongside [Codex Prompts](/docs/prompts-codex) so every fix ships with a matching
-record in the outage catalog. A short player-facing overview lives in
-`frontend/src/pages/docs/md/prompts-outages.md` and links back here to keep these details in one
-place.
-To keep these prompt docs evolving, consult the [Codex meta prompt](/docs/prompts-codex-meta);
-if templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
-For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+Use this guide alongside [Codex Prompts](prompts-codex.md) so every fix ships with a matching
+record in the outage catalog. The in-game docs index (`frontend/src/pages/docs/md/prompts-codex.md`) links back here so
+these operational details stay canonical.
+To keep these prompt docs evolving, consult the [Codex meta prompt](prompts-codex-meta.md);
+if templates drift, refresh them with the [Codex Prompt Upgrader](prompts-codex-upgrader.md).
+For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 > **TL;DR**
 >

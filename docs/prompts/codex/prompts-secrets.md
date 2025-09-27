@@ -1,8 +1,3 @@
----
-title: 'Secret Scanning Prompts'
-slug: 'prompts-secrets'
----
-
 # Secret scanning prompts for the _dspace_ repo
 
 Use this template to prevent leaking credentials or other sensitive data. Combine it with
