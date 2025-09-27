@@ -1,8 +1,3 @@
----
-title: 'Codex Merge Conflict Prompt'
-slug: 'prompts-codex-merge-conflicts'
----
-
 # Codex merge conflict prompt
 
 Use this template when a pull request has merge conflicts and you want Codex to
@@ -38,7 +33,7 @@ and `README.md`. Ensure `npm run audit:ci`, `npm run lint`, `npm run type-check`
 `npm run build`, and `npm run test:ci` pass before committing.
 
 USER:
-1. Refine `frontend/src/pages/docs/md/prompts-codex-merge-conflicts.md` for
+1. Refine this doc (`docs/prompts/codex/prompts-codex-merge-conflicts.md`) for
    clarity and 2-click accuracy.
 2. Update related docs and links if needed.
 3. Run the checks above.

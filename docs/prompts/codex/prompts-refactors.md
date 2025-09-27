@@ -1,17 +1,12 @@
----
-title: 'Refactor Prompts'
-slug: 'prompts-refactors'
----
-
 # Refactor prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository and submit
 a ready-made PR—but only if you provide a clear, file-scoped prompt. Use this
-guide alongside [Codex Prompts](/docs/prompts-codex) when refactoring code. To
-keep the prompt docs evolving, see the [Codex meta prompt](/docs/prompts-codex-meta).
+guide alongside [Codex Prompts](prompts-codex.md) when refactoring code. To
+keep the prompt docs evolving, see the [Codex meta prompt](prompts-codex-meta.md).
 If these templates drift, refresh them with the
-[Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing GitHub Actions
-runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+[Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions
+runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 
 > **TL;DR**
 >
@@ -47,10 +42,10 @@ A pull request with the refactor and all checks passing.
 
 ## Code style and commit granularity
 
--   Use Prettier and `npm run lint` to enforce the repository's 100-character line limit and
-    ESLint rules.
--   Keep commits focused and reversible; avoid bundling unrelated changes.
--   When touching performance-sensitive code, capture before-and-after benchmarks.
+- Use Prettier and `npm run lint` to enforce the repository's 100-character line limit and
+  ESLint rules.
+- Keep commits focused and reversible; avoid bundling unrelated changes.
+- When touching performance-sensitive code, capture before-and-after benchmarks.
 
 ## Upgrader Prompt
 

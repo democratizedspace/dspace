@@ -1,8 +1,3 @@
----
-title: 'Chat UI Prompts'
-slug: 'prompts-chat-ui'
----
-
 # Chat UI prompts for the _dspace_ repo
 
 DSPACE's chat experience is built with Astro pages and hydrated Svelte components. Use this
@@ -12,17 +7,17 @@ Claude. Focus on `frontend/src/pages/index.astro` for the shell and related comp
 
 ## Goals
 
--   Present messages in tidy bubbles with clear separation between user and system output.
--   Keep the input field pinned to the bottom with a prominent send button and `Enter` binding.
--   Support light and dark themes with accessible color contrast and readable fonts.
--   Provide typing indicators or streamed responses to mimic real-time chat behavior.
+- Present messages in tidy bubbles with clear separation between user and system output.
+- Keep the input field pinned to the bottom with a prominent send button and `Enter` binding.
+- Support light and dark themes with accessible color contrast and readable fonts.
+- Provide typing indicators or streamed responses to mimic real-time chat behavior.
 
 ## Patterns
 
--   Prefer semantic HTML (`<main>`, `<form>`, `<section>`) and label chat logs with `aria-live`.
--   Hydrate Svelte pieces with `client:idle` and mark roots with `data-hydrated="true"`.
--   Defer heavy scripts and images, and respect `prefers-reduced-motion` for animations.
--   Use CSS variables or Tailwind utilities for theme tokens rather than hard-coded values.
+- Prefer semantic HTML (`<main>`, `<form>`, `<section>`) and label chat logs with `aria-live`.
+- Hydrate Svelte pieces with `client:idle` and mark roots with `data-hydrated="true"`.
+- Defer heavy scripts and images, and respect `prefers-reduced-motion` for animations.
+- Use CSS variables or Tailwind utilities for theme tokens rather than hard-coded values.
 
 > **TL;DR**
 >

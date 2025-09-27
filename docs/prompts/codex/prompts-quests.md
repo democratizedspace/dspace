@@ -1,17 +1,12 @@
----
-title: 'Quest Prompts'
-slug: 'prompts-quests'
----
-
 # Writing great quest prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository,
 run its own tests, and send you a ready‑made PR—but only if you give it a
 clear, file‑scoped prompt. Use this guide alongside
-[Codex Prompts](/docs/prompts-codex) when working on quests. To keep the prompt
-docs improving, see the [Codex meta prompt](/docs/prompts-codex-meta). If these
-templates drift, refresh them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader).
-For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+[Codex Prompts](prompts-codex.md) when working on quests. To keep the prompt
+docs improving, see the [Codex meta prompt](prompts-codex-meta.md). If these
+templates drift, refresh them with the [Codex Prompt Upgrader](prompts-codex-upgrader.md).
+For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 For the steps required to share quests with the community, see the
 [Quest Submission Guide](/docs/quest-submission). Comprehensive content
 guidelines live in our [Content Development Guide](/docs/content-development),
@@ -31,19 +26,19 @@ which covers quests, items and processes in detail.
 
 ## 1. Quick start (Web vs CLI)
 
--   **Add or update a quest**
-    -   Web: use the “Code” button and attach the repo.
-    -   CLI: `codex "add quest solar/led-basics"`
--   **Ask about quest files**
-    -   Web: use the “Ask” button.
-    -   CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
--   **Run quest tests**
-    -   Web: not supported yet.
-    -   CLI:
-        ```bash
-          codex exec "npm run lint && npm run type-check && npm run build && \
-            npm run test:ci -- questCanonical questQuality"
-        ```
+- **Add or update a quest**
+  - Web: use the “Code” button and attach the repo.
+  - CLI: `codex "add quest solar/led-basics"`
+- **Ask about quest files**
+  - Web: use the “Ask” button.
+  - CLI: `codex exec "explain frontend/src/pages/quests/json/*.json"`
+- **Run quest tests**
+  - Web: not supported yet.
+  - CLI:
+    ```bash
+      codex exec "npm run lint && npm run type-check && npm run build && \
+        npm run test:ci -- questCanonical questQuality"
+    ```
 
 See the [OpenAI CLI repository][openai-cli] for more flags.
 
@@ -193,11 +188,11 @@ A pull request with the refined quest, updated hardening block and passing tests
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus.
--   **Use system prompts** to guide tone and technical accuracy.
--   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible
-    but incorrect details.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible
+  but incorrect details.
 
 [openai-cli]: https://github.com/openai/openai-cli
 

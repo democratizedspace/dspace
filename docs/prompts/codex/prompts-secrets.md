@@ -1,8 +1,3 @@
----
-title: 'Secret Scanning Prompts'
-slug: 'prompts-secrets'
----
-
 # Secret scanning prompts for the _dspace_ repo
 
 Use this template to prevent leaking credentials or other sensitive data. Combine it with
@@ -22,8 +17,8 @@ example accordingly so contributors run the current scanner.
 
 ### Handling findings
 
--   False positives: add an allowlist entry or document the reasoning in the commit message.
--   Real secrets: remove them from history and rotate the credential immediately.
+- False positives: add an allowlist entry or document the reasoning in the commit message.
+- Real secrets: remove them from history and rotate the credential immediately.
 
 ```text
 SYSTEM:

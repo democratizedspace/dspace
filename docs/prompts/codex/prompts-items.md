@@ -1,17 +1,12 @@
----
-title: 'Item Prompts'
-slug: 'prompts-items'
----
-
 # Writing great item prompts for the DSPACE repository
 
 Codex is a sandboxed engineering agent that can open this repository, run its own
 tests, and send you a ready-made PR—but only if you give it a clear, file-scoped
-prompt. Use this guide alongside [Codex Prompts](/docs/prompts-codex) when
+prompt. Use this guide alongside [Codex Prompts](prompts-codex.md) when
 working on items. To keep the prompt docs evolving, see the
-[Codex meta prompt](/docs/prompts-codex-meta). If these templates drift, refresh
-them with the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing
-GitHub Actions runs, use the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix).
+[Codex meta prompt](prompts-codex-meta.md). If these templates drift, refresh
+them with the [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing
+GitHub Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
 For general content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 > **TL;DR**
@@ -30,26 +25,26 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
 
 ## 1. Quick start (Web vs CLI)
 
--   **Add or update an item**
-    -   Web: use the "Code" button and attach the repo.
-    -   CLI: `codex "add item solar-cell-junction-box"`
--   **Ask about item data**
-    -   Web: use the "Code" button (the "Ask" button also works).
-    -   CLI: `codex exec "explain frontend/src/pages/inventory/json/items/*.json"`
--   **Run item tests**
-    -   Web: not supported yet.
-    -   CLI:
-        ```bash
-        codex exec "\
-        npm run audit:ci && \
-        npm run lint && \
-        npm run type-check && \
-        npm run build && \
-        npm run itemValidation && \
-        npm run test:ci && \
-        npm run test:ci -- itemQuality && \
-        git diff --cached | ./scripts/scan-secrets.py"
-        ```
+- **Add or update an item**
+  - Web: use the "Code" button and attach the repo.
+  - CLI: `codex "add item solar-cell-junction-box"`
+- **Ask about item data**
+  - Web: use the "Code" button (the "Ask" button also works).
+  - CLI: `codex exec "explain frontend/src/pages/inventory/json/items/*.json"`
+- **Run item tests**
+  - Web: not supported yet.
+  - CLI:
+    ```bash
+    codex exec "\
+    npm run audit:ci && \
+    npm run lint && \
+    npm run type-check && \
+    npm run build && \
+    npm run itemValidation && \
+    npm run test:ci && \
+    npm run test:ci -- itemQuality && \
+    git diff --cached | ./scripts/scan-secrets.py"
+    ```
 
 See the [OpenAI CLI docs][openai-cli] for more flags.
 
@@ -57,17 +52,17 @@ See the [OpenAI CLI docs][openai-cli] for more flags.
 
 ## 2. Prompt ingredients
 
--   **Goal sentence**: Gives the agent a north star (“Add price to `white PLA filament`”).
--   **Files to touch**: Limits search space → faster & cheaper.
--   **Constraints**: Coding style, a11y, item schema rules.
--   **Acceptance check**:
-    -   `npm run audit:ci`
-    -   `npm run lint`
-    -   `npm run type-check`
-    -   `npm run build`
-    -   `npm run test:ci`
-    -   `npm run itemValidation`
-    -   `npm run test:ci -- itemQuality` pass
+- **Goal sentence**: Gives the agent a north star (“Add price to `white PLA filament`”).
+- **Files to touch**: Limits search space → faster & cheaper.
+- **Constraints**: Coding style, a11y, item schema rules.
+- **Acceptance check**:
+  - `npm run audit:ci`
+  - `npm run lint`
+  - `npm run type-check`
+  - `npm run build`
+  - `npm run test:ci`
+  - `npm run itemValidation`
+  - `npm run test:ci -- itemQuality` pass
 
 ## 3. Reusable template
 
@@ -173,11 +168,11 @@ A pull request with the refined item, updated hardening block and passing tests.
 
 Modern assistants can be powerful collaborators. Keep in mind:
 
--   **Provide clear context** about DSPACE's educational mission and sustainability focus.
--   **Use system prompts** to guide tone and technical accuracy.
--   **Iterate on outputs** rather than expecting perfection on the first try.
--   **Fact-check technical information** since AI systems can generate plausible
-    but incorrect details.
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible
+  but incorrect details.
 
 [openai-cli]: https://platform.openai.com/docs/guides/openai-cli/
 

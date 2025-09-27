@@ -1,8 +1,3 @@
----
-title: 'Accessibility Prompts'
-slug: 'prompts-accessibility'
----
-
 # Accessibility prompts for the _dspace_ repo
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
@@ -52,14 +47,14 @@ A pull request improving accessibility with passing checks.
 
 ## Components and patterns
 
--   [`Button`](../../../components/Button.astro) – includes `aria-label` support and a
-    `:focus-visible` ring.
--   [`Menu`](../../../components/svelte/Menu.svelte) – handles keyboard navigation for site
-    sections.
--   [`SkipProcessButton`](../../../components/svelte/SkipProcessButton.svelte) – lets users bypass
-    a step with a semantic button.
--   [Chip](https://github.com/dspace/dspace/blob/main/frontend/src/components/svelte/Chip.svelte)
-    provides button and link variants with disabled states.
+- [`Button`](../../../components/Button.astro) – includes `aria-label` support and a
+  `:focus-visible` ring.
+- [`Menu`](../../../components/svelte/Menu.svelte) – handles keyboard navigation for site
+  sections.
+- [`SkipProcessButton`](../../../components/svelte/SkipProcessButton.svelte) – lets users bypass
+  a step with a semantic button.
+- [Chip](https://github.com/dspace/dspace/blob/main/frontend/src/components/svelte/Chip.svelte)
+  provides button and link variants with disabled states.
 
 ## Upgrader Prompt
 
