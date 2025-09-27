@@ -7,6 +7,6 @@
   "references": [
     "scripts/utils/fs-checks.js",
     "scripts/tests/fsChecks.test.ts",
-    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md"
+    "docs/prompts/codex/prompts-codex-ci-fix.md"
   ]
 }

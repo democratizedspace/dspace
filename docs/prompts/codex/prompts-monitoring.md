@@ -1,8 +1,3 @@
----
-title: 'Monitoring Prompts'
-slug: 'prompts-monitoring'
----
-
 # Monitoring prompts for the DSPACE repository
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
@@ -17,12 +12,12 @@ these templates drift, refresh them with the
 
 ## Current alerts and metrics
 
--   **DspaceDown** – fires when Prometheus stops receiving `up{job="dspace"}` for one minute.
--   **DspaceHighErrorRate** – warns if more than 5% of requests return 5xx for five minutes.
--   Grafana ships a sample dashboard
-    [`dspace-overview.json`][dspace-dashboard]
-    visualizing service availability and HTTP 5xx error rate. Metrics follow Prometheus conventions
-    such as `http_requests_total` and `up`.
+- **DspaceDown** – fires when Prometheus stops receiving `up{job="dspace"}` for one minute.
+- **DspaceHighErrorRate** – warns if more than 5% of requests return 5xx for five minutes.
+- Grafana ships a sample dashboard
+  [`dspace-overview.json`][dspace-dashboard]
+  visualizing service availability and HTTP 5xx error rate. Metrics follow Prometheus conventions
+  such as `http_requests_total` and `up`.
 
 [dspace-dashboard]: ../../../../../monitoring/grafana/dashboards/dspace-overview.json
 

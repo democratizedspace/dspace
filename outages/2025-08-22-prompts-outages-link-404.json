@@ -6,6 +6,6 @@
   "resolution": "Updated cross references to use a relative path and removed redundant section.",
   "references": [
     "frontend/src/pages/docs/md/prompts-codex.md",
-    "frontend/src/pages/docs/md/prompts-codex-ci-fix.md"
+    "docs/prompts/codex/prompts-codex-ci-fix.md"
   ]
 }

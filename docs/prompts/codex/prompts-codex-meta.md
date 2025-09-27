@@ -1,16 +1,11 @@
----
-title: 'Codex Meta Prompt'
-slug: 'prompts-codex-meta'
----
-
 # Codex Meta Prompt
 
 Use this prompt when you want Codex to upgrade DSPACE's prompt documentation so the
 instructions improve themselves over time. Start from the baseline
-[Codex Prompts](/docs/prompts-codex). If the templates themselves drift, refresh them
-using the [Codex Prompt Upgrader](/docs/prompts-codex-upgrader). For failing workflows,
-see the [Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix); for merge conflicts,
-use the [Codex merge conflict prompt](/docs/prompts-codex-merge-conflicts).
+[Codex Prompts](prompts-codex.md). If the templates themselves drift, refresh them
+using the [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing workflows,
+see the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md); for merge conflicts,
+use the [Codex merge conflict prompt](prompts-codex-merge-conflicts.md).
 
 Audit prompt docs monthly and after major workflow changes. This review covers all
 `prompts-*.md` files under `frontend/src/pages/docs/md/`, links from `prompts-codex.md`,
@@ -37,9 +32,9 @@ A pull request with upgraded prompt docs and passing checks.
 
 ## Maintenance cadence
 
--   Review all `prompts-*.md` guides monthly and after major feature launches.
--   Include `prompts-codex.md` and the docs index in each audit to keep cross-links current.
--   Remove or archive prompt docs that no longer apply.
+- Review all `prompts-*.md` guides monthly and after major feature launches.
+- Include `prompts-codex.md` and the docs index in each audit to keep cross-links current.
+- Remove or archive prompt docs that no longer apply.
 
 ## Upgrader Prompt
 

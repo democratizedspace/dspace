@@ -1,17 +1,12 @@
----
-title: 'Codex Prompt Upgrader'
-slug: 'prompts-codex-upgrader'
----
-
 # Codex Prompt Upgrader
 
 Use this meta prompt whenever the Codex templates need refreshing. It tracks new prompt
 types and required checks so the machine that builds the machine stays current. Keep
 each change scoped and easy to revert. See
-[Codex Prompts](/docs/prompts-codex) for the baseline templates, the
-[Codex Meta Prompt](/docs/prompts-codex-meta) for routine maintenance, the
-[Codex CI-failure fix prompt](/docs/prompts-codex-ci-fix) for troubleshooting failing
-workflows, and the [Codex merge conflict prompt](/docs/prompts-codex-merge-conflicts)
+[Codex Prompts](prompts-codex.md) for the baseline templates, the
+[Codex Meta Prompt](prompts-codex-meta.md) for routine maintenance, the
+[Codex CI-failure fix prompt](prompts-codex-ci-fix.md) for troubleshooting failing
+workflows, and the [Codex merge conflict prompt](prompts-codex-merge-conflicts.md)
 for resolving conflicts.
 
 ```text
@@ -21,12 +16,13 @@ You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` a
 `npm run test:ci` all pass before committing.
 
 USER:
-1. Audit `frontend/src/pages/docs/md/prompts-*` for stale guidance, missing cross-links,
+1. Audit `docs/prompts/codex/*.md` for stale guidance, missing cross-links,
    or unlisted prompt types.
 2. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
 3. Make minimal, reversible edits that update templates and required checks
    (`npm run lint`, `npm run type-check`, `npm run build`, `npm run test:ci`).
-4. Link new prompt files from `prompts-codex.md` and the docs index.
+4. Link new prompt files from this folder and refresh
+   `frontend/src/pages/docs/md/prompts-codex.md`.
 5. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 6. Run the checks above.
 7. Use an emoji-prefixed commit message.
