@@ -13,7 +13,8 @@ For task-specific templates see [Quest prompts](prompts-quests.md),
 [Docs prompts](prompts-docs.md),
 [Playwright test prompts](prompts-playwright-tests.md),
 [Vitest test prompts](prompts-vitest.md), [Frontend prompts](prompts-frontend.md), [Chat UI prompts](prompts-chat-ui.md),
-[Backend prompts](prompts-backend.md), [Refactor prompts](prompts-refactors.md), and
+[Backend prompts](prompts-backend.md), [Refactor prompts](prompts-refactors.md),
+[Implementation prompt](implement.md), and
 [Accessibility prompts](prompts-accessibility.md).
 For specialized workflows use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md),
 the [Codex merge conflict prompt](prompts-codex-merge-conflicts.md), the
@@ -57,6 +58,7 @@ When adding a new prompt doc, link it here and in
 - [Playwright Test Prompts](prompts-playwright-tests.md)
 - [Vitest Test Prompts](prompts-vitest.md)
 - [Refactor Prompts](prompts-refactors.md)
+- [Implementation Prompt](implement.md)
 - [Codex CI-Failure Fix Prompt](prompts-codex-ci-fix.md)
 - [Codex Merge Conflict Prompt](prompts-codex-merge-conflicts.md)
 - [Codex Meta Prompt](prompts-codex-meta.md)
@@ -114,49 +116,12 @@ OUTPUT
 A pull request with the required changes and tests.
 ```
 
-## Implementation Prompt
+## Implementation prompt
 
-Use this template when you want Codex to automatically clear items from the
-[September&nbsp;1,&nbsp;2025 changelog](changelog/20250901.md). Tasks are
-tracked with Markdown checkboxes and an emoji status:
-
-- `- [ ]` – work not started
-- `- [x]` or `- [x] <emoji>` – implemented but not fully vetted
-- `- [x] ✅` – implemented before robustness checks; replace with `💯` once verified
-- `- [x] 💯` – thoroughly tested and reviewed
-
-Codex should pick a single entry that is either unchecked or checked without a
-💯 (for example, entries marked with ✅) and implement it completely. After all
-tests pass, update that row so the line ends with `💯`. When possible, also
-promote any previously completed rows lacking the 💯 emoji by swapping `✅` for
-`💯`.
-
-```text
-SYSTEM:
-You are an automated contributor for the DSPACE repository. Choose one item
-from `frontend/src/pages/docs/md/changelog/20250901.md` that is either `[ ]` or
-`[x]` without 💯 (including those marked with ✅). Implement it fully, completing
-any sub-tasks. Provide all code, tests and documentation required. Follow
-`AGENTS.md` and ensure `npm run audit:ci`, `npm run lint`,
-`npm run type-check`, `npm run build`, and `npm run test:ci`
-all pass before committing. If Playwright browsers are
-missing run `npx playwright install chromium` or use `SKIP_E2E=1 npm run test:ci`.
-
-USER:
-1. Follow the steps above.
-2. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
-3. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-4. After verifying the implementation, mark the corresponding changelog line
-   with `💯`, replacing any `✅` or other emoji.
-5. Replace any remaining `✅` entries in the changelog with `💯` once they meet
-   the robustness standard.
-6. Use an emoji-prefixed commit message.
-7. Document new functionality as needed.
-
-OUTPUT:
-A pull request implementing the chosen item with all tests green. Summarize the
-completed task and test results in the PR body.
-```
+Looking for an evergreen way to ship promised functionality? Use the dedicated
+[implement prompt guide](implement.md). It instructs Codex to gather eligible
+TODOs, unchecked checklists, and other promises, pick one at random, and ship it
+with full test coverage and documentation updates.
 
 ## Upgrade Prompt
 
