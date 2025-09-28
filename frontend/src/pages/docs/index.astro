@@ -2,6 +2,9 @@
 import Page from '../../components/Page.astro';
 
 // TODO: create page dynamically with JSON
+const implementPromptUrl =
+    'https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/' +
+    'implement.md';
 ---
 
 <Page title="Docs">
@@ -76,6 +79,9 @@ import Page from '../../components/Page.astro';
 
             <!-- Prompt library -->
             <a href="/docs/prompts-codex">Codex prompt library</a>
+            <a href={implementPromptUrl}>
+                Implement prompt guide
+            </a>
         </nav>
     </span>
 </Page>

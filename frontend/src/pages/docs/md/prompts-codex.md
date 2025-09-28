@@ -20,7 +20,7 @@ canonical Markdown files and keep them in sync.
 -   **Core workflow:** [Codex prompt playbook][codex-playbook]
 -   **Repository maintenance:** [Codex meta prompt][meta]
 -   **Prompt upgrader:** [Codex prompt upgrader][upgrader]
--   **Implementation prompt:** [Ship a changelog item][implementation]
+-   **Implementation prompt:** [Ship a promised feature][implementation]
 -   **Upgrade prompt:** [Repository sweep][upgrade]
 -   **CI failures:** [Codex CI-failure fix][ci-fix]
 -   **Merge conflicts:** [Codex merge conflict prompt][merge]
@@ -75,5 +75,5 @@ Have ideas for improving the prompts? Open a pull request that updates the Markd
 [items]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/prompts-items.md
 [quests]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/prompts-quests.md
 [npcs]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/prompts-npcs.md
-[implementation]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/prompts-codex.md#implementation-prompt
+[implementation]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/implement.md
 [upgrade]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/prompts-codex.md#upgrade-prompt
