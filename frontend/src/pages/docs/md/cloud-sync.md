@@ -32,4 +32,5 @@ Syncs happen in the background whenever changes occur.
 
 ## Disable Cloud Sync
 
-Clear the token and gist ID from Settings. Local progress remains on your device.
+Use the **Log out** button on the Settings page to clear the token and gist ID. Local progress
+remains on your device.
