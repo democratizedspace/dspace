@@ -15,6 +15,19 @@ if (doc) {
     html = fixMarkdownText(doc.compiledContent());
     title = doc.frontmatter.title;
 }
+
+const slugString = typeof slug === 'string' ? slug : '';
+const prettyDocName = slugString
+    ? slugString
+          .split('-')
+          .filter(Boolean)
+          .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+          .join(' ')
+    : 'Doc';
+const docCtaTitle = `Write the ${prettyDocName} doc`;
+const newDocUrl = slugString
+    ? `https://github.com/democratizedspace/dspace/new/main/frontend/src/pages/docs/md/${slugString}.md`
+    : 'https://github.com/democratizedspace/dspace/new/main/frontend/src/pages/docs/md';
 ---
 
 {
@@ -35,8 +48,9 @@ if (doc) {
         <Page title="Doc not found" columns="1">
             <Chip text="Docs" href="/docs" />
             <Card
+                title={docCtaTitle}
                 body={`Should something exist here? Add a file on Github and submit a pull request.`}
-                href="https://github.com/democratizedspace/dspace/new/main/frontend/pages/settings/json"
+                href={newDocUrl}
                 image="/assets/quill.jpg"
                 imageAlt="Quill pen on paper"
             />
