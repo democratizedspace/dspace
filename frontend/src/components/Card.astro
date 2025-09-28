@@ -1,178 +1,142 @@
 ---
 import Editable from './Editable.astro';
 
-interface Props {
-        href?: string;
-        title: string;
-        body?: string;
-        textbox?: boolean;
-        disabled?: boolean;
-        image?: string;
-        imageAlt?: string;
-        duration?: string;
+interface Disableable {
+    disabled?: boolean;
+}
+
+interface Props extends Disableable {
+    href?: string;
+    title: string;
+    body?: string;
+    textbox?: boolean;
+    image?: string;
+    imageAlt?: string;
+    duration?: string;
+    hazard?: boolean;
 }
 
 const {
-        href,
-        title,
-        body,
-        textbox,
-        disabled,
-        image,
-        imageAlt,
-        duration,
+    href,
+    title,
+    body,
+    textbox,
+    disabled = false,
+    image,
+    imageAlt,
+    duration,
+    hazard = false
 } = Astro.props as Props;
----
 
-{
-// TODO: make this a Disableable and do a ternary on hazard instead
-disabled
-        ?
-                <div>
-                <li class="link-card disabled" aria-disabled="true">
-                        <span>
-                                <Editable title="" href="" body="" editable={false} />
-                                <img src={image} alt={imageAlt ?? ''} class="img" />
-                                <h2>
-                                        {title}
-                                </h2>
-                                <p>
-                                        {body}
-                                </p>
-                                {duration && <p class="duration">Duration: {duration}</p>}
-                                <slot />
-                        </span>
-                </li>
-                </div>
-        :
-                <div>
-                <li class="link-card">
-                        <a href={href}>
-                                <Editable title="" href="" body="" editable={false} />
-                                <img src={image} alt={imageAlt ?? ''} class="img" />
-                                <h2>
-                                        {title}
-                                </h2>
-                                <p>
-                                        {body}
-                                </p>
-                                {duration && <p class="duration">Duration: {duration}</p>}
-                                <slot />
-                        </a>
-                </li>
-                </div>
-}
+const Wrapper = disabled ? 'div' : 'a';
+const wrapperAttributes = disabled
+    ? {
+          'aria-disabled': 'true',
+          role: 'link',
+          tabindex: -1
+      }
+    : href
+    ? { href }
+    : {};
+const contentClass = ['card-content', textbox ? 'textbox' : undefined]
+    .filter(Boolean)
+    .join(' ');
+---
+<li
+    class="link-card"
+    class:list={{ hazard, disabled }}
+    aria-disabled={disabled ? 'true' : undefined}
+>
+    <Wrapper {...wrapperAttributes} class={contentClass}>
+        <Editable title="" href="" body="" editable={false} />
+        {image && <img src={image} alt={imageAlt ?? ''} class="img" />}
+        <h2>{title}</h2>
+        {body && <p>{body}</p>}
+        {duration && <p class="duration">Duration: {duration}</p>}
+        <slot />
+    </Wrapper>
+</li>
 
 <style>
-	:root {
-		--link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
-		border-color: red;
-	}
+    :root {
+        --link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
+    }
 
-        .img {
-                width: 100%;
-                height: auto;
-        }
+    .img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
 
-	.link-card {
-		list-style: none;
-		display: flex;
-		padding: 0.15rem;
-		background-image: var(--link-gradient);
-		background-size: 400%;
-		border-radius: 0.5rem;
-		border:none;
-		background-position: 100%;
-		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-		border-color: red;
-	}
+    .link-card {
+        list-style: none;
+        display: flex;
+        padding: 0.15rem;
+        background-image: var(--link-gradient);
+        background-size: 400%;
+        border-radius: 0.5rem;
+        border: none;
+        background-position: 100%;
+        transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
 
-        .link-card > a {
-                width: 100%;
-                text-decoration: none;
-                line-height: 1.4;
-                padding: 1em 1.3em;
-                border-radius: 0.35rem;
-                color: var(--text-color);
-                background-color: #003a03;
-                opacity: 0.8;
-                border-color: red;
-        }
+    .link-card > .card-content {
+        width: 100%;
+        text-decoration: none;
+        line-height: 1.4;
+        padding: 1em 1.3em;
+        border-radius: 0.35rem;
+        color: var(--text-color);
+        background-color: #003a03;
+        opacity: 0.8;
+        display: block;
+    }
 
-        .link-card > a:focus-visible {
-                outline: 2px solid #fff;
-                outline-offset: 2px;
-        }
+    .link-card > .card-content:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
 
-	h2 {
-		margin: 0;
-		transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-		border-color: red;
-		font-size: 1rem;
-	}
+    .link-card.disabled > .card-content {
+        cursor: default;
+        pointer-events: none;
+    }
 
-	p {
-		margin-top: 0.75rem;
-		margin-bottom: 0;
-		border-color: red;
-	}
+    .link-card.hazard > .card-content {
+        background-color: #5f1111;
+    }
 
-	h2 span {
-		display: inline-block;
-		transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-		border-color: red;
-	}
+    h2 {
+        margin: 0;
+        transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        font-size: 1rem;
+    }
 
-	.link-card:is(:hover, :focus-within) {
-		background-position: 0;
-		border-color: red;
-	}
+    p {
+        margin-top: 0.75rem;
+        margin-bottom: 0;
+    }
 
-	.link-card:is(:hover, :focus-within) h2 {
-		color: #00ff22;
-		border-color: red;
-	}
+    .link-card:is(:hover, :focus-within) {
+        background-position: 0;
+    }
 
-	.link-card:is(:hover, :focus-within) h2 span {
-		will-change: transform;
-		transform: translateX(5);
-		border-color: red;
-	}
+    .link-card:is(:hover, :focus-within) h2 {
+        color: #00ff22;
+    }
 
-	span {
-		color: rgb(116, 161, 175);
-		font-family: ui-monospace;
-		font-size: large;
-		border-color: red;
-	}
+    .card-content {
+        color: rgb(116, 161, 175);
+        font-family: ui-monospace;
+        font-size: large;
+    }
 
-	.disabled {
-		border-color: red;
-	}
-
-	.textbox {
-		background-color: #7d9b7e;
-		border-color: #997529;
-                border-radius: 0.35rem;
-                padding: 0.1em 0.1em;
-                color: red;
-                opacity: 1;
-                border-color: red;
-        }
-
-	span {
-	    width: 100%;
-		text-decoration: none;
-		line-height: 1.4;
-		padding: 1em 1.3em;
-		border-radius: 0.35rem;
-		color: var(--text-color);
-		background-color: #003a03;
-		opacity: 0.8;
-		border-color: red;
-	}
-
-	.hazard {
-		background-color: red;
-	}
+    .textbox {
+        background-color: #7d9b7e;
+        border-color: #997529;
+        border-radius: 0.35rem;
+        padding: 0.1em 0.1em;
+        color: red;
+        opacity: 1;
+    }
 </style>
