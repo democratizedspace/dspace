@@ -35,6 +35,7 @@ const TEST_GROUPS = [
             'authentication-flow.spec.ts',
             'cloud-sync.spec.ts',
             'cookie-consent.spec.ts',
+            'changelog-doc.spec.ts',
             'docs-navigation.spec.ts',
             'failover-status.spec.ts',
             'home-page-basic.spec.ts',
