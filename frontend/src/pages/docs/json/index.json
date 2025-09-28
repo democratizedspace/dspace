@@ -1,0 +1,77 @@
+[
+    {
+        "title": "The basics",
+        "links": [
+            { "href": "/docs/about", "label": "About" },
+            { "href": "/docs/mission", "label": "Mission" },
+            { "href": "/docs/roadmap", "label": "Roadmap" },
+            { "href": "/docs/faq", "label": "FAQ" },
+            { "href": "/docs/glossary", "label": "Glossary" },
+            { "href": "/docs/contribute", "label": "Contribute" },
+            { "href": "/docs/team", "label": "Meet the team" }
+        ]
+    },
+    {
+        "title": "Skills",
+        "links": [
+            { "href": "/docs/3dprinting", "label": "3D printing" },
+            { "href": "/docs/solar", "label": "Solar power" },
+            { "href": "/docs/electricity", "label": "Electricity" },
+            { "href": "/docs/hydroponics", "label": "Hydroponics" },
+            { "href": "/docs/chemistry-lab", "label": "Chemistry Lab Basics" },
+            { "href": "/docs/rockets", "label": "Rockets" }
+        ]
+    },
+    {
+        "title": "Game systems",
+        "links": [
+            { "href": "/docs/npcs", "label": "NPCs" },
+            { "href": "/docs/realtime", "label": "Everything is real-time" },
+            { "href": "/docs/inventory", "label": "Inventory" },
+            { "href": "/docs/cloud-sync", "label": "Cloud Sync" },
+            { "href": "/docs/backups", "label": "Backups" },
+            { "href": "/docs/rollback", "label": "Game state rollback" },
+            { "href": "/docs/authentication", "label": "Authentication" },
+            { "href": "/docs/achievements", "label": "Achievements" },
+            { "href": "/docs/titles", "label": "Titles" },
+            { "href": "/docs/processes", "label": "Processes" },
+            { "href": "/docs/guilds", "label": "Guilds" },
+            { "href": "/docs/amazing", "label": "Amazing" },
+            { "href": "/docs/dwatt", "label": "dWatt" },
+            { "href": "/docs/dCarbon", "label": "dCarbon" }
+        ]
+    },
+    {
+        "title": "Quests",
+        "links": [
+            { "href": "/docs/quest-guidelines", "label": "Quest Development Guidelines" },
+            { "href": "/docs/quest-template", "label": "Quest Template Example" },
+            { "href": "/docs/quest-schema", "label": "Quest Schema Requirements" },
+            { "href": "/docs/quest-contribution", "label": "Quest Contribution Guidelines" },
+            { "href": "/docs/quest-submission", "label": "Quest Submission Guide" },
+            { "href": "/docs/custom-quest-system", "label": "Custom Quest System" },
+            { "href": "/docs/quest-trees", "label": "Quest trees" },
+            { "href": "/docs/new-quests", "label": "New quests list" }
+        ]
+    },
+    {
+        "title": "Dev",
+        "links": [
+            { "href": "/docs/prs", "label": "Pull Requests" },
+            { "href": "/docs/bounties", "label": "Bounties" },
+            { "href": "/docs/user-journeys", "label": "User journeys" },
+            { "href": "/docs/self-hosting", "label": "Self-hosting" },
+            { "href": "/docs/outages", "label": "Outages" },
+            { "href": "/docs/db-benchmark", "label": "Database benchmark" },
+            { "href": "/docs/token-place", "label": "token.place API" },
+            { "href": "/docs/schema-versioning", "label": "Schema versioning" },
+            { "href": "/docs/ui-lifecycle", "label": "UI lifecycle" },
+            { "href": "/docs/prompts-codex", "label": "Codex prompt library" },
+            {
+                "href": "https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/implement.md",
+                "label": "Implement prompt guide",
+                "external": true
+            }
+        ]
+    }
+]
