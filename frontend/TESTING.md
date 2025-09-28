@@ -129,6 +129,7 @@ When creating new test files:
 
     - Place `.spec.ts` files in the `frontend/e2e/` directory
     - Add them to a test group in `frontend/scripts/run-test-groups.mjs`
+    - Update the Vitest coverage in `tests/run-test-groups.test.ts` when changing how groups execute
 
 2. For Jest tests:
     - Place `.test.js` files in the `frontend/__tests__/` directory
