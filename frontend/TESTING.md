@@ -119,6 +119,10 @@ We have automated checks to ensure no test files are orphaned from the test work
 
 This test runs as part of the `npm test` (alias `test:pr`) and `test:e2e:groups` commands.
 
+The `process-preview.spec.ts` Playwright test exercises the Manage Processes preview
+toggle to confirm process details render and only a single preview remains open. It
+guards against regressions that previously slipped through manual QA.
+
 ## Writing New Tests
 
 ### Adding New Test Files

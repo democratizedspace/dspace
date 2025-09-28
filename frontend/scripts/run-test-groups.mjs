@@ -60,6 +60,12 @@ const TEST_GROUPS = [
         workers: 2,
     },
     {
+        name: 'Process Preview',
+        files: ['process-preview.spec.ts'],
+        parallel: true,
+        workers: 1,
+    },
+    {
         name: 'Quest Tests',
         files: [
             'test-quest-chat.spec.ts',
