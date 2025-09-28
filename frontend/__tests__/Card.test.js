@@ -15,4 +15,16 @@ describe('Card.astro', () => {
         const content = fs.readFileSync(cardFile, 'utf8');
         expect(content).toMatch(/height: auto;/);
     });
+
+    it('supports hazard styling via an explicit prop and class list', () => {
+        const content = fs.readFileSync(cardFile, 'utf8');
+        expect(content).toMatch(/hazard\?: boolean;/);
+        expect(content).toMatch(/class:list=\{\{[^}]*hazard/);
+    });
+
+    it('renders a non-interactive wrapper when disabled', () => {
+        const content = fs.readFileSync(cardFile, 'utf8');
+        expect(content).toMatch(/const Wrapper = disabled \? 'div' : 'a';/);
+        expect(content).toMatch(/aria-disabled/);
+    });
 });
