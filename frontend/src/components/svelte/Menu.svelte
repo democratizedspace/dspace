@@ -2,6 +2,7 @@
     import menu from '../../config/menu.json';
     import { getItemCount } from '../../utils/gameState/inventory.js';
     import { onMount } from 'svelte';
+    import { isMenuItemActive } from './menuActive.js';
 
     export let pathname;
 
@@ -17,14 +18,7 @@
         button.innerText = showUnpinned ? LABEL_FEWER : LABEL_MORE;
     };
 
-    const isActive = (item) => {
-        if (item.href === '/') {
-            return pathname === '/';
-        }
-
-        // TODO: support unpinned menu items
-        return pathname.startsWith(item.href);
-    };
+    const isActive = (item) => isMenuItemActive(pathname, item);
 
     const showMenuItem = (currentItem) => {
         if (currentItem && currentItem.hideIfOwned) {

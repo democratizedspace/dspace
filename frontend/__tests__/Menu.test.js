@@ -33,4 +33,12 @@ describe('Menu accessibility', () => {
         const homeLink = getByRole('link', { name: 'Home' });
         expect(homeLink).toHaveAttribute('aria-current', 'page');
     });
+
+    it('marks active unpinned link when its route is visited', () => {
+        const { getByRole } = render(Menu, { pathname: '/app/gamesaves' });
+        const gamesavesLink = getByRole('link', { name: 'Import/export gamesaves' });
+
+        expect(gamesavesLink).toHaveClass('active');
+        expect(gamesavesLink).toHaveAttribute('aria-current', 'page');
+    });
 });
