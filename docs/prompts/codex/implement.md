@@ -59,7 +59,11 @@ REQUEST:
    to make them pass. Extend coverage for edge cases when feasible.
 4. Update or remove the original promise (TODO comment, checklist entry, doc note) so the repo no
    longer advertises incomplete work.
-5. Refresh related documentation or changelog entries to reflect the shipped behavior.
+5. Refresh related documentation or changelog entries to reflect the shipped behavior. When
+   touching the changelog, do **not** create a new dated file—append your notes to the most
+   recent future-dated entry instead (for example,
+   [`frontend/src/pages/docs/md/changelog/20251101.md`](../../frontend/src/pages/docs/md/changelog/20251101.md)
+   on the `v3` branch).
 6. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:ci`. Install Playwright browsers with
    `npx playwright install chromium` if needed, or set `SKIP_E2E=1` only when browsers are
