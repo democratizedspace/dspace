@@ -27,3 +27,9 @@ using the **Clear** button next to the input field.
 -   User-generated markdown is sanitized with DOMPurify before rendering to prevent XSS.
 
 With a valid token saved, features like quest submission and Cloud Sync will work seamlessly.
+
+## Logging out
+
+If you're using a shared machine, open the **Settings** page and click **Log out** to clear the
+saved GitHub token and Cloud Sync gist ID from the device. This removes access to your synced data
+until you sign in again.

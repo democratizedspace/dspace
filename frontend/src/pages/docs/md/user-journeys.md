@@ -32,7 +32,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Item preview               | Yes                 | `frontend/e2e/item-preview.spec.ts`               |
 | Legacy data import         | Yes                 | `frontend/e2e/legacy-import.spec.ts`              |
-| Logout flow                | No                  | --                                                |
+| Logout flow                | Yes                 | `frontend/e2e/logout-flow.spec.ts`                |
 | Manage items               | Yes                 | `frontend/e2e/manage-items.spec.ts`               |
 | Manage processes           | Yes                 | `frontend/e2e/manage-processes.spec.ts`           |
 | Manage quests              | No                  | --                                                |
