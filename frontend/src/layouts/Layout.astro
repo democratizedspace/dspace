@@ -11,9 +11,9 @@ const sitewideTitle = `DSPACE (democratized.space)`;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<SEO
+<html lang="en" data-theme="dark">
+        <head>
+                <SEO
 			title={sitewideTitle}
 			description="A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."
 			canonical="https://democratized.space"
@@ -36,33 +36,60 @@ const sitewideTitle = `DSPACE (democratized.space)`;
 			}}
 		  />
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-	</head>
-	<body>
+                <meta name="viewport" content="width=device-width" />
+                <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+                <meta name="generator" content={Astro.generator} />
+                <script is:inline>
+                        try {
+                                const storedTheme = localStorage.getItem('theme');
+                                const theme = storedTheme === 'light' ? 'light' : 'dark';
+                                document.documentElement.dataset.theme = theme;
+                        } catch (error) {
+                                document.documentElement.dataset.theme = 'dark';
+                        }
+                </script>
+        </head>
+        <body>
 		<div id="starry">
 			<slot />
 		</div>
 	</body>
 </html>
 <style>
-	:root {
-		--font-size-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
-		--font-size-lg: clamp(1.2rem, 0.7vw + 1.2rem, 1.5rem);
-		--font-size-xl: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
+        :root {
+                --font-size-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
+                --font-size-lg: clamp(1.2rem, 0.7vw + 1.2rem, 1.5rem);
+                --font-size-xl: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
 
-		--color-text: #00ff22;
-		--color-bg: hsl(249, 9%, 15%);
-		--color-border: hsl(17, 24%, 90%);
-	}
+                --color-text: #00ff22;
+                --color-bg: hsl(249, 9%, 15%);
+                --color-border: hsl(17, 24%, 90%);
+                --color-heading: #ffffff;
+                --color-surface: #2f5b2f;
+                --color-pill: #007006;
+                --color-pill-active: #68d46d;
+                --color-pill-text: #ffffff;
+                --color-pill-active-text: #000000;
+        }
 
-	html {
-		font-family: system-ui, sans-serif;
-		font-size: var(--font-size-base);
-		color: var(--color-text);
-		background-color: var(--color-bg);
-	}
+        html[data-theme='light'] {
+                --color-text: #063906;
+                --color-bg: #f4fff6;
+                --color-border: #2f5b2f;
+                --color-heading: #063906;
+                --color-surface: #e1f4e4;
+                --color-pill: #3aa650;
+                --color-pill-active: #9be29f;
+                --color-pill-text: #f5fff6;
+                --color-pill-active-text: #063906;
+        }
+
+        html {
+                font-family: system-ui, sans-serif;
+                font-size: var(--font-size-base);
+                color: var(--color-text);
+                background-color: var(--color-bg);
+        }
 
 	body {
 		margin: 0;

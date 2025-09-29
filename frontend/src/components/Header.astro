@@ -1,7 +1,6 @@
 ---
 import Logo from '../components/Logo.astro';
-import Chip from '../components/Chip.astro';
-import { ChipVariants, ChipSize } from '../components/Chip.astro';
+import ThemeToggle from './svelte/ThemeToggle.svelte';
 
 export interface Props {
     title: string;
@@ -12,13 +11,16 @@ export interface Props {
 
 <a href="#main" class="skip-link">Skip to main content</a>
 
-<a href="/" aria-label="Go to homepage">
-    <div class="vertical">
-        <Logo />
-        <span class="text-gradient title">DSPACE</span>
-        <p class="domain">democratized.space</p>
-    </div>
-</a>
+<header class="header">
+    <a href="/" aria-label="Go to homepage" class="brand">
+        <div class="vertical">
+            <Logo />
+            <span class="text-gradient title">DSPACE</span>
+            <p class="domain">democratized.space</p>
+        </div>
+    </a>
+    <ThemeToggle client:load />
+</header>
 
 <style>
     :root {
@@ -32,6 +34,19 @@ export interface Props {
     a:focus-visible {
         outline: 2px solid #fff;
         outline-offset: 2px;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .brand {
+        flex: 1;
+        min-width: 0;
     }
 
     .text-gradient {

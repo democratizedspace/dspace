@@ -21,3 +21,56 @@ const docsSections = sections as DocsSection[];
 <Page title="Docs">
     <DocsIndex sections={docsSections} client:load />
 </Page>
+
+<style>
+    h2 {
+        color: var(--color-heading);
+    }
+
+    a:hover {
+        opacity: 1;
+    }
+
+    span {
+        background-color: var(--color-surface);
+        border-radius: 2rem;
+        text-align: justify;
+        text-justify: inter-word;
+        text-align: center;
+        padding: 1rem;
+    }
+    /* Navbar */
+
+    nav {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0px;
+    }
+
+    nav a {
+        opacity: 0.8;
+        background-color: var(--color-pill-active);
+        border-radius: 100px;
+        color: var(--color-pill-active-text);
+        text-decoration: none;
+        flex-direction: row;
+        padding-left: 5px;
+        padding-right: 5px;
+        text-align: center;
+        white-space: nowrap;
+        margin: 5px;
+        padding: 10px;
+    }
+
+    nav a:hover {
+        opacity: 1;
+    }
+
+    p {
+        background-color: var(--color-surface);
+        padding: 15px;
+        border-radius: 2rem;
+    }
+</style>
