@@ -51,6 +51,16 @@ function normalizeId(id) {
     return id;
 }
 
+function generateQuestId() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+
+    const timestamp = Date.now().toString(36);
+    const random = Math.random().toString(36).slice(2, 8);
+    return `quest-${timestamp}-${random}`;
+}
+
 function allocateFallbackId(entityType, providedId) {
     const counter = fallbackCounters.get(entityType) ?? 1;
 
@@ -262,7 +272,7 @@ export const db = {
         add: (quest) => {
             // Ensure minimal quest structure
             const preparedQuest = {
-                id: quest.id ?? Date.now(),
+                id: quest.id ?? generateQuestId(),
                 title: quest.title || 'Untitled Quest',
                 description: quest.description || '',
                 image: quest.image || '/assets/quests/howtodoquests.jpg',
@@ -331,7 +341,7 @@ export const db = {
 // Convenience functions for common operations
 
 export function createQuest(title, description, image = '/assets/quests/howtodoquests.jpg') {
-    const id = crypto.randomUUID();
+    const id = generateQuestId();
     return db.quests.add({ id, title, description, image }).then(() => id);
 }
 
