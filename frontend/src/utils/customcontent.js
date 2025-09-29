@@ -11,6 +11,113 @@ import {
     getStoreForEntityType,
 } from './indexeddb.js';
 
+const fallbackStores = new Map();
+const fallbackCounters = new Map();
+
+const ENTITY_KEYS = ['quest', 'item', 'process'];
+
+ENTITY_KEYS.forEach((type) => {
+    fallbackStores.set(type, new Map());
+    fallbackCounters.set(type, 1);
+});
+
+const PERSISTENCE_ERROR_MESSAGES = ['IndexedDB is not supported'];
+
+function isPersistenceUnavailable(error) {
+    if (!error) {
+        return false;
+    }
+
+    const message = error.message || String(error);
+    return PERSISTENCE_ERROR_MESSAGES.some((text) => message.includes(text));
+}
+
+function getFallbackStore(entityType) {
+    const store = fallbackStores.get(entityType);
+    if (!store) {
+        throw new Error(`Unknown entity type: ${entityType}`);
+    }
+    return store;
+}
+
+function normalizeId(id) {
+    if (typeof id === 'number') {
+        return id;
+    }
+    if (typeof id === 'string') {
+        const parsed = Number(id);
+        return Number.isNaN(parsed) ? id : parsed;
+    }
+    return id;
+}
+
+function allocateFallbackId(entityType, providedId) {
+    const counter = fallbackCounters.get(entityType) ?? 1;
+
+    if (providedId != null) {
+        const normalized = normalizeId(providedId);
+        if (typeof normalized === 'number') {
+            fallbackCounters.set(entityType, Math.max(counter, normalized + 1));
+        }
+        return normalized;
+    }
+
+    fallbackCounters.set(entityType, counter + 1);
+    return counter;
+}
+
+function addFallbackEntity(entityType, entity) {
+    const store = getFallbackStore(entityType);
+    const id = allocateFallbackId(entityType, entity.id);
+    const storedEntity = {
+        ...entity,
+        id,
+        createdAt: entity.createdAt ?? new Date().toISOString(),
+    };
+    store.set(id, storedEntity);
+    return storedEntity;
+}
+
+function getFallbackEntity(entityType, id) {
+    const store = getFallbackStore(entityType);
+    const key = normalizeId(id);
+    return store.get(key) ?? null;
+}
+
+function updateFallbackEntity(entityType, id, updates) {
+    const store = getFallbackStore(entityType);
+    const key = normalizeId(id);
+    const existing = store.get(key);
+
+    if (!existing) {
+        throw new Error(`${entityType} not found with id: ${id}`);
+    }
+
+    const updatedEntity = {
+        ...existing,
+        ...updates,
+        updatedAt: new Date().toISOString(),
+    };
+    store.set(key, updatedEntity);
+    return updatedEntity;
+}
+
+function deleteFallbackEntity(entityType, id) {
+    const store = getFallbackStore(entityType);
+    const key = normalizeId(id);
+
+    if (!store.has(key)) {
+        throw new Error(`${entityType} not found with id: ${id}`);
+    }
+
+    store.delete(key);
+}
+
+function listFallbackEntities(entityType) {
+    const store = getFallbackStore(entityType);
+    return Array.from(store.values());
+}
+
 /**
  * Entity types supported by the system
  */
@@ -33,54 +140,114 @@ export const db = {
             type: entityType,
             createdAt: new Date().toISOString(),
         };
-        return addEntity(preparedEntity);
+        return addEntity(preparedEntity).catch((error) => {
+            if (isPersistenceUnavailable(error)) {
+                const storedEntity = addFallbackEntity(entityType, preparedEntity);
+                return storedEntity.id;
+            }
+            throw error;
+        });
     },
 
     get: (entityType, id) => {
-        return getEntity(id, entityType).then((entity) => {
-            if (entity && entity.type === entityType) {
-                return entity;
-            }
-            throw new Error(`${entityType} not found with id: ${id}`);
-        });
+        return getEntity(id, entityType)
+            .then((entity) => {
+                if (entity && entity.type === entityType) {
+                    return entity;
+                }
+                throw new Error(`${entityType} not found with id: ${id}`);
+            })
+            .catch((error) => {
+                if (isPersistenceUnavailable(error)) {
+                    const fallbackEntity = getFallbackEntity(entityType, id);
+                    if (fallbackEntity) {
+                        return fallbackEntity;
+                    }
+                    throw new Error(`${entityType} not found with id: ${id}`);
+                }
+                throw error;
+            });
     },
 
     update: (entityType, id, updates) => {
-        return getEntity(id, entityType).then((entity) => {
-            if (!entity || entity.type !== entityType) {
-                throw new Error(`${entityType} not found with id: ${id}`);
-            }
+        return getEntity(id, entityType)
+            .then((entity) => {
+                if (!entity || entity.type !== entityType) {
+                    throw new Error(`${entityType} not found with id: ${id}`);
+                }
 
-            const updatedEntity = {
-                ...entity,
-                ...updates,
-                updatedAt: new Date().toISOString(),
-            };
+                const updatedEntity = {
+                    ...entity,
+                    ...updates,
+                    updatedAt: new Date().toISOString(),
+                };
 
-            return updateEntity(updatedEntity);
-        });
+                return updateEntity(updatedEntity).catch((error) => {
+                    if (isPersistenceUnavailable(error)) {
+                        const fallbackEntity = updateFallbackEntity(entityType, id, updates);
+                        return fallbackEntity.id;
+                    }
+                    throw error;
+                });
+            })
+            .catch((error) => {
+                if (isPersistenceUnavailable(error)) {
+                    const fallbackEntity = updateFallbackEntity(entityType, id, updates);
+                    return fallbackEntity.id;
+                }
+                throw error;
+            });
     },
 
     delete: (entityType, id) => {
-        return getEntity(id, entityType).then((entity) => {
-            if (!entity || entity.type !== entityType) {
-                throw new Error(`${entityType} not found with id: ${id}`);
-            }
-            return deleteEntity(id, entityType);
-        });
+        return getEntity(id, entityType)
+            .then((entity) => {
+                if (!entity || entity.type !== entityType) {
+                    throw new Error(`${entityType} not found with id: ${id}`);
+                }
+                return deleteEntity(id, entityType).catch((error) => {
+                    if (isPersistenceUnavailable(error)) {
+                        deleteFallbackEntity(entityType, id);
+                        return;
+                    }
+                    throw error;
+                });
+            })
+            .catch((error) => {
+                if (isPersistenceUnavailable(error)) {
+                    deleteFallbackEntity(entityType, id);
+                    return;
+                }
+                throw error;
+            });
     },
 
     // List operations
     list: async (entityType) => {
-        switch (entityType) {
-            case ENTITY_TYPES.QUEST:
-                return getQuests();
-            case ENTITY_TYPES.ITEM:
-                return getItems();
-            case ENTITY_TYPES.PROCESS:
-                return getProcesses();
-            default:
-                throw new Error(`Unknown entity type: ${entityType}`);
+        const fallbackEntities = listFallbackEntities(entityType);
+
+        try {
+            switch (entityType) {
+                case ENTITY_TYPES.QUEST: {
+                    const quests = await getQuests();
+                    return [...quests, ...fallbackEntities];
+                }
+                case ENTITY_TYPES.ITEM: {
+                    const items = await getItems();
+                    return [...items, ...fallbackEntities];
+                }
+                case ENTITY_TYPES.PROCESS: {
+                    const processes = await getProcesses();
+                    return [...processes, ...fallbackEntities];
+                }
+                default:
+                    throw new Error(`Unknown entity type: ${entityType}`);
+            }
+        } catch (error) {
+            if (isPersistenceUnavailable(error)) {
+                return fallbackEntities;
+            }
+            throw error;
         }
     },
 
@@ -95,6 +262,7 @@ export const db = {
         add: (quest) => {
             // Ensure minimal quest structure
             const preparedQuest = {
+                id: quest.id ?? Date.now(),
                 title: quest.title || 'Untitled Quest',
                 description: quest.description || '',
                 image: quest.image || '/assets/quests/howtodoquests.jpg',
