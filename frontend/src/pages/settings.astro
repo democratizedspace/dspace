@@ -1,5 +1,18 @@
 ---
 import Page from '../components/Page.astro';
+import LogoutPanel from '../components/svelte/LogoutPanel.svelte';
 ---
 
-<Page title="Settings" message="Coming soon" />
+<Page title="Settings" message="Manage your DSPACE session" columns="1">
+    <div class="settings-content">
+        <LogoutPanel client:idle />
+    </div>
+</Page>
+
+<style>
+    .settings-content {
+        display: flex;
+        justify-content: center;
+        padding: 1rem;
+    }
+</style>

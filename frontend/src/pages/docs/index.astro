@@ -1,75 +1,23 @@
 ---
 import Page from '../../components/Page.astro';
-import docsSections from './sections.json';
+import DocsIndex from '../../components/svelte/DocsIndex.svelte';
+import sections from './json/sections.json' assert { type: 'json' };
 
-const sections = docsSections as {
+type DocLink = {
     title: string;
-    links: { label: string; href: string }[];
-}[];
+    href: string;
+    keywords?: string[];
+    external?: boolean;
+};
+
+type DocsSection = {
+    title: string;
+    links: DocLink[];
+};
+
+const docsSections = sections as DocsSection[];
 ---
 
 <Page title="Docs">
-    {sections.map((section) => (
-        <span>
-            <h2>{section.title}</h2>
-            <nav>
-                {section.links.map((link) => (
-                    <a href={link.href}>{link.label}</a>
-                ))}
-            </nav>
-        </span>
-    ))}
+    <DocsIndex sections={docsSections} client:load />
 </Page>
-
-<style>
-    h2 {
-        color: white;
-    }
-
-    a:hover {
-        opacity: 1;
-    }
-
-    span {
-        background-color: #2f5b2f;
-        border-radius: 2rem;
-        text-align: justify;
-        text-justify: inter-word;
-        text-align: center;
-        padding: 1rem;
-    }
-    /* Navbar */
-
-    nav {
-        text-align: center;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 0px;
-    }
-
-    nav a {
-        opacity: 0.8;
-        background-color: #84d484;
-        border-radius: 100px;
-        color: black;
-        text-decoration: none;
-        flex-direction: row;
-        padding-left: 5px;
-        padding-right: 5px;
-        text-align: center;
-        white-space: nowrap;
-        margin: 5px;
-        padding: 10px;
-    }
-
-    nav a:hover {
-        opacity: 1;
-    }
-
-    p {
-        background-color: #2f5b2f;
-        padding: 15px;
-        border-radius: 2rem;
-    }
-</style>
