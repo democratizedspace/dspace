@@ -8,7 +8,7 @@
 </script>
 
 {#if successData}
-    <div class="success-message">
+    <div class="success-message" role="status" aria-live="polite">
         {successData.message}
         <a class="view-link" href={`/quests/${successData.id}`}>View quest</a>
     </div>
