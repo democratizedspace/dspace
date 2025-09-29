@@ -1,17 +1,31 @@
-import { readFileSync } from 'fs';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import { createTouchClickGuard } from '../frontend/src/utils/touchClickGuard.js';
 
-const source = readFileSync(
-  'frontend/src/components/svelte/ItemSelector.svelte',
-  'utf8'
-);
+describe('createTouchClickGuard', () => {
+    it('invokes action once for touchstart + click sequence', async () => {
+        const guard = createTouchClickGuard();
+        const action = vi.fn();
+        const touchEvent = {
+            type: 'touchstart',
+            preventDefault: vi.fn(),
+        } as unknown as Event;
+        const clickEvent = { type: 'click' } as Event;
 
-describe('ItemSelector touch interactions', () => {
-  it('includes touch handler on edit button', () => {
-    expect(source).toMatch(/on:touchstart={toggleExpanded}/);
-  });
+        guard(touchEvent, action);
+        guard(clickEvent, action);
 
-  it('emits select event on item touch', () => {
-    expect(source).toMatch(/on:touchstart=\{\(\) => handleItemSelect/);
-  });
+        expect(action).toHaveBeenCalledTimes(1);
+        expect(touchEvent.preventDefault).toHaveBeenCalled();
+    });
+
+    it('allows subsequent mouse clicks after touch cycle', async () => {
+        const guard = createTouchClickGuard();
+        const action = vi.fn();
+
+        guard({ type: 'touchstart', preventDefault: () => {} } as Event, action);
+        guard({ type: 'click' } as Event, action);
+        guard({ type: 'click' } as Event, action);
+
+        expect(action).toHaveBeenCalledTimes(2);
+    });
 });

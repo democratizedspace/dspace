@@ -2,6 +2,7 @@
     import { createEventDispatcher, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import SearchBar from './SearchBar.svelte';
+    import { createTouchClickGuard } from '../../utils/touchClickGuard.js';
 
     export let selectedItemId = '';
     export let label = 'Select Item';
@@ -16,18 +17,25 @@
         isClientSide = true;
     });
 
+    const toggleGuard = createTouchClickGuard();
+    const selectGuard = createTouchClickGuard();
+
     function handleSearch(event) {
         filteredItems.set(event.detail);
     }
 
-    function handleItemSelect(itemId) {
-        selectedItemId = itemId;
-        isExpanded = false;
-        dispatch('select', { itemId });
+    function handleItemSelect(itemId, event) {
+        selectGuard(event, () => {
+            selectedItemId = itemId;
+            isExpanded = false;
+            dispatch('select', { itemId });
+        });
     }
 
-    function toggleExpanded() {
-        isExpanded = !isExpanded;
+    function toggleExpanded(event) {
+        toggleGuard(event, () => {
+            isExpanded = !isExpanded;
+        });
     }
 
     // Update filtered items when items prop changes
@@ -51,8 +59,8 @@
                             type="button"
                             class="item-row"
                             class:selected={selectedItemId === item.id}
-                            on:click={() => handleItemSelect(item.id)}
-                            on:touchstart={() => handleItemSelect(item.id)}
+                            on:click={(event) => handleItemSelect(item.id, event)}
+                            on:touchstart={(event) => handleItemSelect(item.id, event)}
                             aria-pressed={selectedItemId === item.id}
                             aria-label={`Select ${item.name}`}
                         >
