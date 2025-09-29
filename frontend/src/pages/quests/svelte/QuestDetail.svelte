@@ -3,6 +3,7 @@
     import { getQuest } from '../../../utils/customcontent.js';
     import QuestChat from './QuestChat.svelte';
     import Chip from '../../../components/svelte/Chip.svelte';
+    import { getBuiltInQuest } from '../../../utils/builtInQuests.js';
 
     export let questId;
 
@@ -15,7 +16,14 @@
         try {
             // First try to load as a custom quest
             try {
-                const customQuest = await getQuest(parseInt(questId));
+                let customQuest = await getQuest(questId);
+                if (!customQuest) {
+                    const numericId = Number.parseInt(questId, 10);
+                    if (!Number.isNaN(numericId)) {
+                        customQuest = await getQuest(numericId);
+                    }
+                }
+
                 if (customQuest) {
                     quest = {
                         id: customQuest.id,
@@ -32,33 +40,15 @@
                 // Not a custom quest, continue to built-in quests
             }
 
-            // Try to load built-in quest
-            // In a real implementation, this would be an API call
-            // For now, just simulate with a timeout
-            await new Promise((resolve) => setTimeout(resolve, 500));
-
-            // This is a placeholder - in a real app, you'd fetch from an API
-            if (questId === 'welcome/howtodoquests') {
-                quest = {
-                    id: 'welcome/howtodoquests',
-                    title: 'How to do quests',
-                    description:
-                        'Learn how the quest mechanics work, including dialogue options, items, and processes.',
-                    image: '/assets/quests/howtodoquests.jpg',
-                };
-            } else if (questId === 'energy/solar') {
-                quest = {
-                    id: 'energy/solar',
-                    title: 'Set up a solar panel',
-                    description:
-                        "The wall outlet is convenient, but your utility uses fossil fuels for electricity generation! Let's take things in our own hands and start going off the grid.",
-                    image: '/assets/quests/solar_200Wh.jpg',
-                };
-            } else {
-                throw new Error('Quest not found');
+            const builtInQuest = getBuiltInQuest(questId);
+            if (builtInQuest) {
+                quest = builtInQuest;
+                isCustomQuest = false;
+                loading = false;
+                return;
             }
 
-            loading = false;
+            throw new Error(`Quest not found: ${questId}`);
         } catch (e) {
             console.error('Error loading quest:', e);
             error = e.message;
