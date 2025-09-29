@@ -22,7 +22,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Cookie consent flow        | Yes                 | `frontend/e2e/cookie-consent.spec.ts`             |
 | Custom backup              | Yes                 | `frontend/e2e/custom-backup.spec.ts`              |
 | Custom content integration | Yes                 | `frontend/e2e/custom-content.spec.ts`             |
-| Dark mode toggle           | No                  | --                                                |
+| Dark mode toggle           | Yes                 | `frontend/e2e/dark-mode-toggle.spec.ts`           |
 | Docs landing page loads    | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs search                | No                  | --                                                |

@@ -88,10 +88,10 @@ const pathname = Astro.url.pathname;
 	}
 
 	/* Navbar */
-	h2 {
-		color: white;
-		text-align: center;
-	}
+        h2 {
+                color: var(--color-heading);
+                text-align: center;
+        }
 
 	nav {
 		text-align: center;
@@ -100,14 +100,14 @@ const pathname = Astro.url.pathname;
 		justify-content: center;
 	}
 
-	nav a {
-		opacity: 0.8;
-		background-color: #007006;
-		border-radius: 0.4rem;
-		color: white;
-		text-decoration: none;
-		flex-direction: row;
-		margin: 1px;
+        nav a {
+                opacity: 0.8;
+                background-color: var(--color-pill);
+                border-radius: 0.4rem;
+                color: var(--color-pill-text);
+                text-decoration: none;
+                flex-direction: row;
+                margin: 1px;
 		padding: 5px;
 		text-align: center;
 	}

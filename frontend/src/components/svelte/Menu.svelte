@@ -124,9 +124,9 @@
 
     nav a {
         opacity: 0.8;
-        background-color: #007006;
+        background-color: var(--color-pill);
         border-radius: 0.4rem;
-        color: white;
+        color: var(--color-pill-text);
         text-decoration: none;
         flex-direction: row;
         margin: 1px;
@@ -145,9 +145,9 @@
     }
 
     nav button {
-        background-color: #007006;
+        background-color: var(--color-pill);
         border-radius: 0.4rem;
-        color: white;
+        color: var(--color-pill-text);
         text-decoration: none;
         flex-direction: row;
         margin: 1px;
@@ -170,9 +170,8 @@
     }
 
     .active {
-        /* background color slightly lighter than #007006 */
-        background-color: #68d46d;
-        color: black;
+        background-color: var(--color-pill-active);
+        color: var(--color-pill-active-text);
     }
 
     .disabled {
