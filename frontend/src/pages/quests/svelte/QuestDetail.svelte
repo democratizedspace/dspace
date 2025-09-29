@@ -15,28 +15,39 @@
     onMount(async () => {
         try {
             // First try to load as a custom quest
-            try {
-                let customQuest = await getQuest(questId);
+            const setCustomQuest = (customQuest) => {
                 if (!customQuest) {
-                    const numericId = Number.parseInt(questId, 10);
-                    if (!Number.isNaN(numericId)) {
-                        customQuest = await getQuest(numericId);
-                    }
+                    return false;
                 }
 
-                if (customQuest) {
-                    quest = {
-                        id: customQuest.id,
-                        title: customQuest.title,
-                        description: customQuest.description,
-                        image: customQuest.image || '/assets/quests/howtodoquests.jpg',
-                        isCustom: true,
-                    };
-                    isCustomQuest = true;
-                    loading = false;
+                quest = {
+                    id: customQuest.id,
+                    title: customQuest.title,
+                    description: customQuest.description,
+                    image: customQuest.image || '/assets/quests/howtodoquests.jpg',
+                    isCustom: true,
+                };
+                isCustomQuest = true;
+                loading = false;
+                return true;
+            };
+
+            try {
+                if (setCustomQuest(await getQuest(questId))) {
                     return;
                 }
+                throw new Error('Custom quest not found for string ID');
             } catch (e) {
+                const numericId = Number.parseInt(questId, 10);
+                if (!Number.isNaN(numericId)) {
+                    try {
+                        if (setCustomQuest(await getQuest(numericId))) {
+                            return;
+                        }
+                    } catch {
+                        // Not found under numeric ID either, continue to built-in quests
+                    }
+                }
                 // Not a custom quest, continue to built-in quests
             }
 
