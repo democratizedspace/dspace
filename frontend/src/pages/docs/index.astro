@@ -1,140 +1,23 @@
 ---
 import Page from '../../components/Page.astro';
+import DocsIndex from '../../components/svelte/DocsIndex.svelte';
+import sections from './json/sections.json' assert { type: 'json' };
 
-// TODO: create page dynamically with JSON
-const implementPromptUrl =
-    'https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/' +
-    'implement.md';
+type DocLink = {
+    title: string;
+    href: string;
+    keywords?: string[];
+    external?: boolean;
+};
+
+type DocsSection = {
+    title: string;
+    links: DocLink[];
+};
+
+const docsSections = sections as DocsSection[];
 ---
 
 <Page title="Docs">
-    <span>
-        <h2>The basics</h2>
-        <nav>
-            <a href="/docs/about">About</a>
-            <a href="/docs/mission">Mission</a>
-            <a href="/docs/roadmap">Roadmap</a>
-            <a href="/docs/faq">FAQ</a>
-            <a href="/docs/glossary">Glossary</a>
-            <a href="/docs/contribute">Contribute</a>
-            <a href="/docs/team">Meet the team</a>
-        </nav>
-    </span>
-
-    <span>
-        <h2>Skills</h2>
-        <nav>
-            <a href="/docs/3dprinting">3D printing</a>
-            <a href="/docs/solar">Solar power</a>
-            <a href="/docs/electricity">Electricity</a>
-            <a href="/docs/hydroponics">Hydroponics</a>
-            <a href="/docs/chemistry-lab">Chemistry Lab Basics</a>
-            <a href="/docs/rockets">Rockets</a>
-        </nav>
-    </span>
-    <span>
-        <h2>Game systems</h2>
-        <nav>
-            <a href="/docs/npcs">NPCs</a>
-            <a href="/docs/realtime">Everything is real-time</a>
-            <a href="/docs/inventory">Inventory</a>
-            <a href="/docs/cloud-sync">Cloud Sync</a>
-            <a href="/docs/backups">Backups</a>
-            <a href="/docs/rollback">Game state rollback</a>
-            <a href="/docs/authentication">Authentication</a>
-            <a href="/docs/achievements">Achievements</a>
-            <a href="/docs/titles">Titles</a>
-            <a href="/docs/processes">Processes</a>
-            <a href="/docs/guilds">Guilds</a>
-            <a href="/docs/amazing">Amazing</a>
-            <a href="/docs/dwatt">dWatt</a>
-            <a href="/docs/dCarbon">dCarbon</a>
-        </nav>
-    </span>
-    <span>
-        <h2>Quests</h2>
-        <nav>
-            <a href="/docs/quest-guidelines">Quest Development Guidelines</a>
-            <a href="/docs/quest-template">Quest Template Example</a>
-            <a href="/docs/quest-schema">Quest Schema Requirements</a>
-            <a href="/docs/quest-contribution">Quest Contribution Guidelines</a>
-            <a href="/docs/quest-submission">Quest Submission Guide</a>
-            <a href="/docs/custom-quest-system">Custom Quest System</a>
-            <a href="/docs/quest-trees">Quest trees</a>
-            <a href="/docs/new-quests">New quests list</a>
-        </nav>
-    </span>
-    <span>
-        <h2>Dev</h2>
-        <nav>
-            <a href="/docs/prs">Pull Requests</a>
-            <a href="/docs/bounties">Bounties</a>
-            <a href="/docs/user-journeys">User journeys</a>
-            <a href="/docs/self-hosting">Self-hosting</a>
-            <a href="/docs/outages">Outages</a>
-            <a href="/docs/db-benchmark">Database benchmark</a>
-            <a href="/docs/token-place">token.place API</a>
-            <a href="/docs/schema-versioning">Schema versioning</a>
-            <a href="/docs/ui-lifecycle">UI lifecycle</a>
-
-            <!-- Prompt library -->
-            <a href="/docs/prompts-codex">Codex prompt library</a>
-            <a href={implementPromptUrl}>
-                Implement prompt guide
-            </a>
-        </nav>
-    </span>
+    <DocsIndex sections={docsSections} client:load />
 </Page>
-
-<style>
-    h2 {
-        color: white;
-    }
-
-    a:hover {
-        opacity: 1;
-    }
-
-    span {
-        background-color: #2f5b2f;
-        border-radius: 2rem;
-        text-align: justify;
-        text-justify: inter-word;
-        text-align: center;
-        padding: 1rem;
-    }
-    /* Navbar */
-
-    nav {
-        text-align: center;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 0px;
-    }
-
-    nav a {
-        opacity: 0.8;
-        background-color: #84d484;
-        border-radius: 100px;
-        color: black;
-        text-decoration: none;
-        flex-direction: row;
-        padding-left: 5px;
-        padding-right: 5px;
-        text-align: center;
-        white-space: nowrap;
-        margin: 5px;
-        padding: 10px;
-    }
-
-    nav a:hover {
-        opacity: 1;
-    }
-
-    p {
-        background-color: #2f5b2f;
-        padding: 15px;
-        border-radius: 2rem;
-    }
-</style>

@@ -25,7 +25,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Dark mode toggle           | No                  | --                                                |
 | Docs landing page loads    | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
-| Docs search                | No                  | --                                                |
+| Docs search                | Yes                 | `frontend/e2e/docs-search.spec.ts`                |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
 | Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Glossary page loads        | Yes                 | `frontend/e2e/glossary-doc.spec.ts`               |
