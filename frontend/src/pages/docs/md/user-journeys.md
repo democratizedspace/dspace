@@ -25,14 +25,14 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Dark mode toggle           | Yes                 | `frontend/e2e/dark-mode-toggle.spec.ts`           |
 | Docs landing page loads    | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
-| Docs search                | No                  | --                                                |
+| Docs search                | Yes                 | `frontend/e2e/docs-search.spec.ts`                |
 | Error pages                | Yes                 | `frontend/e2e/error-pages.spec.ts`                |
 | Failover status page       | Yes                 | `frontend/e2e/failover-status.spec.ts`            |
 | Glossary page loads        | Yes                 | `frontend/e2e/glossary-doc.spec.ts`               |
 | Home page loads            | Yes                 | `frontend/e2e/home-page-basic.spec.ts`            |
 | Item preview               | Yes                 | `frontend/e2e/item-preview.spec.ts`               |
 | Legacy data import         | Yes                 | `frontend/e2e/legacy-import.spec.ts`              |
-| Logout flow                | No                  | --                                                |
+| Logout flow                | Yes                 | `frontend/e2e/logout-flow.spec.ts`                |
 | Manage items               | Yes                 | `frontend/e2e/manage-items.spec.ts`               |
 | Manage processes           | Yes                 | `frontend/e2e/manage-processes.spec.ts`           |
 | Manage quests              | No                  | --                                                |
