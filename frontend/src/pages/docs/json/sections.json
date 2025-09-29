@@ -1,0 +1,154 @@
+[
+    {
+        "title": "The basics",
+        "links": [
+            { "title": "About", "href": "/docs/about", "keywords": ["overview", "intro"] },
+            { "title": "Mission", "href": "/docs/mission", "keywords": ["vision", "values"] },
+            { "title": "Roadmap", "href": "/docs/roadmap", "keywords": ["plan", "future"] },
+            { "title": "FAQ", "href": "/docs/faq", "keywords": ["questions"] },
+            { "title": "Glossary", "href": "/docs/glossary", "keywords": ["definitions"] },
+            { "title": "Contribute", "href": "/docs/contribute", "keywords": ["get involved"] },
+            {
+                "title": "Meet the team",
+                "href": "/docs/team",
+                "keywords": ["people", "contributors"]
+            }
+        ]
+    },
+    {
+        "title": "Skills",
+        "links": [
+            { "title": "3D printing", "href": "/docs/3dprinting", "keywords": ["fabrication"] },
+            { "title": "Solar power", "href": "/docs/solar", "keywords": ["energy", "panels"] },
+            {
+                "title": "Electricity",
+                "href": "/docs/electricity",
+                "keywords": ["power", "generation"]
+            },
+            {
+                "title": "Hydroponics",
+                "href": "/docs/hydroponics",
+                "keywords": ["farming", "plants"]
+            },
+            {
+                "title": "Chemistry Lab Basics",
+                "href": "/docs/chemistry-lab",
+                "keywords": ["chemistry", "laboratory"]
+            },
+            { "title": "Rockets", "href": "/docs/rockets", "keywords": ["launch", "propulsion"] }
+        ]
+    },
+    {
+        "title": "Game systems",
+        "links": [
+            { "title": "NPCs", "href": "/docs/npcs", "keywords": ["characters"] },
+            {
+                "title": "Everything is real-time",
+                "href": "/docs/realtime",
+                "keywords": ["time", "simulation"]
+            },
+            { "title": "Inventory", "href": "/docs/inventory", "keywords": ["items", "storage"] },
+            { "title": "Cloud Sync", "href": "/docs/cloud-sync", "keywords": ["sync", "backup"] },
+            { "title": "Backups", "href": "/docs/backups", "keywords": ["saves", "safety"] },
+            { "title": "Game state rollback", "href": "/docs/rollback", "keywords": ["restore"] },
+            {
+                "title": "Authentication",
+                "href": "/docs/authentication",
+                "keywords": ["login", "security"]
+            },
+            {
+                "title": "Achievements",
+                "href": "/docs/achievements",
+                "keywords": ["milestones", "badges"]
+            },
+            { "title": "Titles", "href": "/docs/titles", "keywords": ["reputation"] },
+            {
+                "title": "Processes",
+                "href": "/docs/processes",
+                "keywords": ["automation", "crafting"]
+            },
+            { "title": "Guilds", "href": "/docs/guilds", "keywords": ["teams", "co-op"] },
+            { "title": "Amazing", "href": "/docs/amazing", "keywords": ["wonder", "delight"] },
+            { "title": "dWatt", "href": "/docs/dwatt", "keywords": ["energy", "token"] },
+            { "title": "dCarbon", "href": "/docs/dCarbon", "keywords": ["carbon", "token"] }
+        ]
+    },
+    {
+        "title": "Quests",
+        "links": [
+            {
+                "title": "Quest Development Guidelines",
+                "href": "/docs/quest-guidelines",
+                "keywords": ["quests", "design"]
+            },
+            {
+                "title": "Quest Template Example",
+                "href": "/docs/quest-template",
+                "keywords": ["template", "quests"]
+            },
+            {
+                "title": "Quest Schema Requirements",
+                "href": "/docs/quest-schema",
+                "keywords": ["schema", "quests"]
+            },
+            {
+                "title": "Quest Contribution Guidelines",
+                "href": "/docs/quest-contribution",
+                "keywords": ["quests", "contribute"]
+            },
+            {
+                "title": "Quest Submission Guide",
+                "href": "/docs/quest-submission",
+                "keywords": ["submit", "quests"]
+            },
+            {
+                "title": "Custom Quest System",
+                "href": "/docs/custom-quest-system",
+                "keywords": ["custom", "quests"]
+            },
+            {
+                "title": "Quest trees",
+                "href": "/docs/quest-trees",
+                "keywords": ["quests", "structure"]
+            },
+            {
+                "title": "New quests list",
+                "href": "/docs/new-quests",
+                "keywords": ["quests", "updates"]
+            }
+        ]
+    },
+    {
+        "title": "Dev",
+        "links": [
+            { "title": "Pull Requests", "href": "/docs/prs", "keywords": ["contribution"] },
+            { "title": "Bounties", "href": "/docs/bounties", "keywords": ["rewards"] },
+            { "title": "User journeys", "href": "/docs/user-journeys", "keywords": ["testing"] },
+            { "title": "Self-hosting", "href": "/docs/self-hosting", "keywords": ["setup"] },
+            { "title": "Outages", "href": "/docs/outages", "keywords": ["status"] },
+            {
+                "title": "Database benchmark",
+                "href": "/docs/db-benchmark",
+                "keywords": ["performance", "database"]
+            },
+            { "title": "token.place API", "href": "/docs/token-place", "keywords": ["api"] },
+            {
+                "title": "Schema versioning",
+                "href": "/docs/schema-versioning",
+                "keywords": ["migrations"]
+            },
+            { "title": "UI lifecycle", "href": "/docs/ui-lifecycle", "keywords": ["frontend"] },
+            {
+                "title": "Codex prompt library",
+                "href": "/docs/prompts-codex",
+                "keywords": ["prompts", "automation"]
+            },
+            {
+                "title": "Implement prompt guide",
+                "href": "https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/implement.md",
+                "keywords": ["prompts", "implementation"],
+                "external": true
+            }
+        ]
+    }
+]
