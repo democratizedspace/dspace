@@ -18,4 +18,9 @@ describe('buildDchatKnowledge', () => {
         expect(knowledge).toContain('Quests:');
         expect(knowledge).toContain('Processes:');
     });
+
+    test('includes essential tutorial quests', () => {
+        const knowledge = buildDchatKnowledge({});
+        expect(knowledge).toContain('How to do quests');
+    });
 });

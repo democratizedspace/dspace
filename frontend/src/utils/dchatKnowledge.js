@@ -4,6 +4,13 @@ import processes from '../generated/processes.json' assert { type: 'json' };
 const MAX_ITEMS = 25;
 const MAX_PROCESSES = 20;
 const MAX_QUESTS = 25;
+const PRIORITY_QUEST_IDS = [
+    'welcome/howtodoquests',
+    'welcome/intro-inventory',
+    'welcome/run-tests',
+    'welcome/smart-plug-test',
+    'welcome/connect-github',
+];
 const MAX_DESCRIPTION_LENGTH = 180;
 
 function truncate(text, maxLength = MAX_DESCRIPTION_LENGTH) {
@@ -43,6 +50,27 @@ function getQuestData() {
 
 const quests = getQuestData();
 
+function prioritizeQuests(allQuests) {
+    if (!Array.isArray(allQuests) || allQuests.length === 0) {
+        return [];
+    }
+
+    const questMap = new Map(allQuests.map((quest) => [quest.id, quest]));
+    const prioritized = [];
+
+    for (const questId of PRIORITY_QUEST_IDS) {
+        if (!questMap.has(questId)) {
+            continue;
+        }
+        prioritized.push(questMap.get(questId));
+        questMap.delete(questId);
+    }
+
+    const remaining = Array.from(questMap.values()).sort((a, b) => a.title.localeCompare(b.title));
+
+    return prioritized.concat(remaining);
+}
+
 function formatInventory(inventory = {}) {
     if (!inventory || typeof inventory !== 'object') {
         return [];
@@ -78,7 +106,7 @@ function summarizeProcesses() {
 }
 
 function summarizeQuests() {
-    return quests.slice(0, MAX_QUESTS).map((quest) => {
+    return prioritizeQuests(quests).slice(0, MAX_QUESTS).map((quest) => {
         const parts = [`${quest.title} [${quest.id}]`];
         if (quest.description) {
             parts.push(quest.description);
@@ -126,5 +154,6 @@ export function __testables() {
         summarizeItems,
         summarizeProcesses,
         summarizeQuests,
+        prioritizeQuests,
     };
 }
