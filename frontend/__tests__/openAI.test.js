@@ -26,22 +26,34 @@ describe('GPT35Turbo', () => {
         createChatCompletionMock.mockClear();
     });
 
-    test('uses opening message when no messages provided', async () => {
+    test('uses opening message and knowledge when no messages provided', async () => {
         await GPT35Turbo([]);
         expect(createChatCompletionMock).toHaveBeenCalledTimes(1);
         const call = createChatCompletionMock.mock.calls[0][0];
         expect(call.model).toBe('gpt-3.5-turbo');
         expect(call.messages[0].role).toBe('system');
-        expect(call.messages[1].role).toBe('assistant');
+        expect(call.messages[1]).toEqual(
+            expect.objectContaining({
+                role: 'system',
+                content: expect.stringContaining('DSPACE knowledge base:'),
+            })
+        );
+        expect(call.messages[1].content).toContain('white PLA filament');
+        expect(call.messages[1].content).toContain('How to do quests');
+        expect(call.messages[2].role).toBe('assistant');
     });
 
     test('prepends system message when messages supplied', async () => {
         await GPT35Turbo([{ role: 'user', content: 'hello' }]);
         const call = createChatCompletionMock.mock.calls[0][0];
-        expect(call.messages).toEqual([
-            expect.objectContaining({ role: 'system' }),
-            { role: 'user', content: 'hello' },
-        ]);
+        expect(call.messages[0]).toEqual(expect.objectContaining({ role: 'system' }));
+        expect(call.messages[1]).toEqual(
+            expect.objectContaining({
+                role: 'system',
+                content: expect.stringContaining('DSPACE knowledge base:'),
+            })
+        );
+        expect(call.messages[2]).toEqual({ role: 'user', content: 'hello' });
     });
 
     test('returns response content', async () => {

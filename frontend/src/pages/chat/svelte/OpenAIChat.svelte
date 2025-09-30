@@ -10,7 +10,9 @@
     const messageHistory = writable([]);
     let showSpinner = false;
     let welcomeMessage =
-        "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say. I'm still learning! I should have some shiny new upgrades soon!";
+        "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any " +
+        "other topic. I may accidentally generate incorrect information, so please double-check anything I say. " +
+        "I just received new knowledge about quests, items, and processes—ask away!";
 
     function addMessage(msg) {
         messageHistory.update((history) => [...history, msg]);

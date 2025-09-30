@@ -21,7 +21,7 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## September 2023
 
--   [ ] smarter dChat (knowledge of the game, the items, your inventory, etc.)
+-   [x] smarter dChat (knowledge of the game, the items, your inventory, etc.)
 
 ## August 2023
 
