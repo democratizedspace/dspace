@@ -46,7 +46,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Profile avatar selection   | Yes                 | `frontend/e2e/profile-avatar-selection.spec.ts`   |
 | Profile page loads         | Yes                 | `frontend/e2e/profile-page.spec.ts`               |
 | Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |
-| Quest form validation      | No                  | --                                                |
+| Quest form validation      | Yes                 | `frontend/e2e/quest-form-validation.spec.ts`      |
 | Quest list navigation      | Yes                 | `frontend/e2e/quests.spec.ts`                     |
 | Quest PR form              | No                  | --                                                |
 | Quest PR validation        | No                  | --                                                |

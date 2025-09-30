@@ -73,6 +73,7 @@ const TEST_GROUPS = [
             'quests.spec.ts',
             'constellations-quest.spec.ts',
             'custom-content.spec.ts',
+            'quest-form-validation.spec.ts',
         ],
         grep: 'create and view a custom quest|Quest Management',
         parallel: true,
