@@ -106,19 +106,21 @@ function summarizeProcesses() {
 }
 
 function summarizeQuests() {
-    return prioritizeQuests(quests).slice(0, MAX_QUESTS).map((quest) => {
-        const parts = [`${quest.title} [${quest.id}]`];
-        if (quest.description) {
-            parts.push(quest.description);
-        }
-        if (quest.requiresQuests.length > 0) {
-            parts.push(`Prereqs: ${quest.requiresQuests.join(', ')}`);
-        }
-        if (quest.rewards.length > 0) {
-            parts.push(`Rewards: ${quest.rewards.join(', ')}`);
-        }
-        return parts.join(' — ');
-    });
+    return prioritizeQuests(quests)
+        .slice(0, MAX_QUESTS)
+        .map((quest) => {
+            const parts = [`${quest.title} [${quest.id}]`];
+            if (quest.description) {
+                parts.push(quest.description);
+            }
+            if (quest.requiresQuests.length > 0) {
+                parts.push(`Prereqs: ${quest.requiresQuests.join(', ')}`);
+            }
+            if (quest.rewards.length > 0) {
+                parts.push(`Rewards: ${quest.rewards.join(', ')}`);
+            }
+            return parts.join(' — ');
+        });
 }
 
 export function buildDchatKnowledge(gameState = {}) {
