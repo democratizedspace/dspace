@@ -5,6 +5,11 @@
             { "title": "About", "href": "/docs/about", "keywords": ["overview", "intro"] },
             { "title": "Mission", "href": "/docs/mission", "keywords": ["vision", "values"] },
             { "title": "Roadmap", "href": "/docs/roadmap", "keywords": ["plan", "future"] },
+            {
+                "title": "Changelog",
+                "href": "/docs/changelog",
+                "keywords": ["release notes", "updates"]
+            },
             { "title": "FAQ", "href": "/docs/faq", "keywords": ["questions"] },
             { "title": "Glossary", "href": "/docs/glossary", "keywords": ["definitions"] },
             { "title": "Contribute", "href": "/docs/contribute", "keywords": ["get involved"] },

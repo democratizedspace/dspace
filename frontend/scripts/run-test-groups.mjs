@@ -36,6 +36,7 @@ const TEST_GROUPS = [
             'cloud-sync.spec.ts',
             'cookie-consent.spec.ts',
             'docs-navigation.spec.ts',
+            'docs-changelog.spec.ts',
             'failover-status.spec.ts',
             'home-page-basic.spec.ts',
             'profile-avatar-selection.spec.ts',

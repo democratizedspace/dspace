@@ -4,6 +4,45 @@ import Chip from '../../components/Chip.astro';
 import Card from '../../components/Card.astro';
 import { fixMarkdownText } from '../../utils';
 
+const escapeHtml = (value = '') =>
+    String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+const buildLatestChangelogHtml = (entries = []) => {
+    const normalized = entries
+        .map((entry) => ({
+            slug: entry?.frontmatter?.slug,
+            title: entry?.frontmatter?.title,
+            tagline: entry?.frontmatter?.tagline ?? '',
+            summary: entry?.frontmatter?.summary ?? '',
+        }))
+        .filter((entry) => entry.slug && entry.title)
+        .sort((a, b) => String(b.slug).localeCompare(String(a.slug)));
+
+    if (!normalized.length) {
+        return '<p>No release notes are available yet.</p>';
+    }
+
+    const latest = normalized[0];
+    const taglineSuffix = latest.tagline
+        ? `&nbsp;&mdash;&nbsp;${escapeHtml(latest.tagline)}`
+        : '';
+    const summaryText = typeof latest.summary === 'string'
+        ? latest.summary.replace(/\s+/g, ' ').trim()
+        : '';
+    const summaryHtml = summaryText
+        ? `\n        <p>${escapeHtml(summaryText)}</p>`
+        : '';
+
+    return `\n<ul aria-label="Release entries">\n    <li>\n        <a href="/docs/changelog/${encodeURIComponent(
+            latest.slug
+        )}">${escapeHtml(latest.title)}${taglineSuffix}</a>${summaryHtml}\n    </li>\n</ul>`;
+};
+
 const { slug } = Astro.params;
 let title, html;
 
@@ -12,7 +51,15 @@ const docs = await Astro.glob('./md/*.md');
 const doc = docs.find((doc) => doc.frontmatter.slug === slug);
 
 if (doc) {
-    html = fixMarkdownText(doc.compiledContent());
+    let compiled = doc.compiledContent();
+
+    if (slug === 'changelog') {
+        const changelogEntries = await Astro.glob('./md/changelog/*.md');
+        const latestHtml = buildLatestChangelogHtml(changelogEntries);
+        compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);
+    }
+
+    html = fixMarkdownText(compiled);
     title = doc.frontmatter.title;
 }
 
