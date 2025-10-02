@@ -41,6 +41,7 @@ const TEST_GROUPS = [
             'home-page-basic.spec.ts',
             'profile-avatar-selection.spec.ts',
             'profile-page.spec.ts',
+            'mobile-process-form.spec.ts',
             'settings-page.spec.ts',
         ],
         parallel: true,
