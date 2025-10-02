@@ -5,6 +5,7 @@
             { "label": "About", "href": "/docs/about" },
             { "label": "Mission", "href": "/docs/mission" },
             { "label": "Roadmap", "href": "/docs/roadmap" },
+            { "label": "Changelog", "href": "/docs/changelog" },
             { "label": "FAQ", "href": "/docs/faq" },
             { "label": "Glossary", "href": "/docs/glossary" },
             { "label": "Contribute", "href": "/docs/contribute" },
