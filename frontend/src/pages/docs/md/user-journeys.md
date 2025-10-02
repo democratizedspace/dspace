@@ -55,7 +55,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Shop workflow              | Yes                 | `frontend/e2e/shop-functionality.spec.ts`         |
 | Svelte component hydration | Yes                 | `frontend/e2e/svelte-component-hydration.spec.ts` |
 | Touch item selector        | No                  | --                                                |
-| Touch menu navigation      | No                  | --                                                |
+| Touch menu navigation      | Yes                 | `frontend/e2e/touch-menu.spec.ts`                 |
 | Tutorial quest run         | Yes                 | `frontend/e2e/tutorial-quest.spec.ts`             |
 | UI responsiveness          | Yes                 | `frontend/e2e/ui-responsiveness.spec.ts`          |
 | User journeys doc loads    | Yes                 | `frontend/e2e/user-journeys-doc.spec.ts`          |

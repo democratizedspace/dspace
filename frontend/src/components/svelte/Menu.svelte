@@ -12,10 +12,6 @@
 
     const toggleShowUnpinned = () => {
         showUnpinned = !showUnpinned;
-
-        // edit unpinned-toggle button text
-        const button = document.getElementById('unpinned-toggle');
-        button.innerText = showUnpinned ? LABEL_FEWER : LABEL_MORE;
     };
 
     const isActive = (item) => isMenuItemActive(pathname, item);
@@ -36,6 +32,9 @@
     const LABEL_FEWER = 'Less';
 
     let showUnpinned = false;
+    let toggleLabel = LABEL_MORE;
+
+    $: toggleLabel = showUnpinned ? LABEL_FEWER : LABEL_MORE;
 
     // filter menu to only pinned == true
     const { pinned, unpinned } = menu.reduce(
@@ -86,7 +85,7 @@
         <div
             id="unpinned-menu"
             hidden={!showUnpinned}
-            style="display: contents"
+            style={`display: ${showUnpinned ? 'contents' : 'none'}`}
             aria-hidden={!showUnpinned}
         >
             {#each unpinned as item}
@@ -109,7 +108,7 @@
             aria-controls="unpinned-menu"
             aria-label="Toggle additional menu items"
         >
-            {LABEL_MORE}
+            {toggleLabel}
         </button>
     </nav>
 </div>
