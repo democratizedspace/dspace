@@ -25,7 +25,7 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## August 2023
 
--   [ ] custom quests
+-   [x] [custom quests](/docs/custom-quest-system)
 
 ## July 2023
 
