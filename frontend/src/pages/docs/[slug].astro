@@ -38,9 +38,7 @@ const buildLatestChangelogHtml = (entries = []) => {
         ? `\n        <p>${escapeHtml(summaryText)}</p>`
         : '';
 
-    return `\n<ul aria-label="Release entries">\n    <li>\n        <a href="/docs/changelog/${encodeURIComponent(
-            latest.slug
-        )}">${escapeHtml(latest.title)}${taglineSuffix}</a>${summaryHtml}\n    </li>\n</ul>`;
+    return `\n<ul aria-label="Release entries">\n    <li>\n        <a href="/changelog">${escapeHtml(latest.title)}${taglineSuffix}</a>${summaryHtml}\n    </li>\n</ul>`;
 };
 
 const { slug } = Astro.params;
