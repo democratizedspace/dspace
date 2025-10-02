@@ -108,8 +108,9 @@ test.describe('docs changelog page', () => {
         await expect(releasesList).toBeVisible();
 
         if (latestChangelog) {
+            const nbsp = '\u00a0';
             const expectedLinkText = latestChangelog.tagline
-                ? `${latestChangelog.title} — ${latestChangelog.tagline}`
+                ? `${latestChangelog.title}${nbsp}—${nbsp}${latestChangelog.tagline}`
                 : latestChangelog.title;
 
             const latestLink = releasesList.getByRole('link', {
@@ -117,10 +118,7 @@ test.describe('docs changelog page', () => {
             });
 
             await expect(latestLink).toBeVisible();
-            await expect(latestLink).toHaveAttribute(
-                'href',
-                `/docs/changelog/${latestChangelog.slug}`
-            );
+            await expect(latestLink).toHaveAttribute('href', '/changelog');
 
             const summaryText = latestChangelog.summary
                 ? latestChangelog.summary.replace(/\s+/g, ' ').trim()

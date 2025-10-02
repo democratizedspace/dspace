@@ -24,10 +24,13 @@ test('Authentication flow saves and clears token', async ({ page }) => {
             }
 
             if ('indexedDB' in window) {
-                try {
-                    return await readIDB();
-                } catch {
-                    /* ignore */
+                const { indexedDB } = window;
+                if (indexedDB && typeof indexedDB.open === 'function') {
+                    try {
+                        return await readIDB();
+                    } catch {
+                        /* ignore */
+                    }
                 }
             }
 
