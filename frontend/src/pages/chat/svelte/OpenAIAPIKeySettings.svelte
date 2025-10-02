@@ -75,8 +75,9 @@
         </div>
 
         <p>
-            Currently, the game doesn't know anything about the lore, the items in the game, or your
-            inventory. This will be introduced in a future version, as an opt-in feature.
+            When you connect your API key, dChat includes a curated knowledge base covering quest
+            lore, items, and highlights from your local inventory so it can answer gameplay
+            questions right away.
         </p>
     </div>
 {/if}
