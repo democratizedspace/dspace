@@ -300,23 +300,23 @@ describe('gameState - inventory', () => {
         expect(getSalesTaxPercentage()).toBe(0);
     });
 
-    test('getSalesTaxPercentage should return 10% for 1000 dCarbon', () => {
+    test('getSalesTaxPercentage should return 1% for 1000 dCarbon', () => {
         mockGameState.inventory[dCarbonId] = 1000;
-        expect(getSalesTaxPercentage()).toBe(10);
+        expect(getSalesTaxPercentage()).toBe(1);
     });
 
-    test('getSalesTaxPercentage should return 20% for 2000 dCarbon', () => {
+    test('getSalesTaxPercentage should return 2% for 2000 dCarbon', () => {
         mockGameState.inventory[dCarbonId] = 2000;
-        expect(getSalesTaxPercentage()).toBe(20);
+        expect(getSalesTaxPercentage()).toBe(2);
     });
 
-    test('getSalesTaxPercentage should return 90% for 9000 dCarbon', () => {
+    test('getSalesTaxPercentage should return 9% for 9000 dCarbon', () => {
         mockGameState.inventory[dCarbonId] = 9000;
-        expect(getSalesTaxPercentage()).toBe(90);
+        expect(getSalesTaxPercentage()).toBe(9);
     });
 
-    test('getSalesTaxPercentage should cap at 90% for values greater than 9000 dCarbon', () => {
-        mockGameState.inventory[dCarbonId] = 9500;
+    test('getSalesTaxPercentage should cap at 90% for values greater than 90000 dCarbon', () => {
+        mockGameState.inventory[dCarbonId] = 95000;
         expect(getSalesTaxPercentage()).toBe(90);
     });
 });

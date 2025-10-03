@@ -47,7 +47,7 @@ export const getSalesTaxPercentage = () => {
 
     if (dCarbonId && getItemCount(dCarbonId) > 0) {
         const dCarbonCount = gameState.inventory[dCarbonId] || 0;
-        return Math.min(Math.floor(dCarbonCount / 1000) * 10, 90);
+        return Math.min(Math.floor(dCarbonCount / 1000), 90);
     }
     return 0; // No tax for other items
 };
