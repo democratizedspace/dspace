@@ -49,7 +49,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Quest form validation      | Yes                 | `frontend/e2e/quest-form-validation.spec.ts`      |
 | Quest list navigation      | Yes                 | `frontend/e2e/quests.spec.ts`                     |
 | Quest PR form              | No                  | --                                                |
-| Quest PR validation        | No                  | --                                                |
+| Quest PR validation        | Yes                 | `frontend/e2e/quest-pr-validation.spec.ts`        |
 | Quest success message      | Yes                 | `frontend/e2e/quest-success-message.spec.ts`      |
 | Settings page loads        | Yes                 | `frontend/e2e/settings-page.spec.ts`              |
 | Shop workflow              | Yes                 | `frontend/e2e/shop-functionality.spec.ts`         |
