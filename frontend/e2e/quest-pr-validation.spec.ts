@@ -14,6 +14,7 @@ test('invalid token shows validation message', async ({ page }) => {
 
     await page.click('button:has-text("Create Pull Request")');
 
-    const error = page.locator('.error-message');
-    await expect(error).toBeVisible();
+    const tokenError = page.locator('.error-message', { hasText: 'GitHub token looks invalid' });
+    await expect(tokenError).toBeVisible();
+    await expect(page.getByTestId('submit-error')).toHaveText('Please fix the errors above');
 });

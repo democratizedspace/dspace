@@ -82,6 +82,11 @@ const TEST_GROUPS = [
         workers: 2,
     },
     {
+        name: 'Quest PR Validation',
+        files: ['quest-pr-validation.spec.ts'],
+        parallel: false,
+    },
+    {
         name: 'Integration Tests',
         files: ['custom-content.spec.ts'],
         grep: 'integrate custom items, processes, and quests',
