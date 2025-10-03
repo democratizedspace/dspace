@@ -314,6 +314,11 @@
 {/if}
 
 <style>
+    .quest-form,
+    .quest-form * {
+        box-sizing: border-box;
+    }
+
     .quest-form {
         max-width: 600px;
         margin: 0 auto;
