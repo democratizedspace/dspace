@@ -18,6 +18,105 @@ const PRE_V2_COMMIT = 'fc840def24c5140411d2892f468960acb8250681';
 const V2_COMMIT = '93a834691af174b3c8b9895e9a27ce72e10e8299';
 const V21_COMMIT = 'd956e807d49114da2d0ff28aacef91341813bf82';
 
+function parseDocSections(content) {
+  const lines = content.split('\n');
+  const sections = [];
+  let currentSection = null;
+  let currentGroup = null;
+
+  const pushGroup = () => {
+    if (currentSection && currentGroup) {
+      currentSection.groups.push(currentGroup);
+      currentGroup = null;
+    }
+  };
+
+  const pushSection = () => {
+    if (currentSection) {
+      pushGroup();
+      if (!currentSection.newCount) {
+        currentSection.newCount = currentSection.groups.reduce(
+          (sum, group) => sum + group.quests.length,
+          0
+        );
+      }
+      sections.push(currentSection);
+      currentSection = null;
+    }
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+
+    const sectionMatch = line.match(/^#{1,2}\s+Quests added in\s+(.+)/i);
+    if (sectionMatch) {
+      pushSection();
+      currentSection = {
+        version: sectionMatch[1].trim(),
+        prevCount: 0,
+        currentCount: 0,
+        newCount: 0,
+        groups: [],
+      };
+      currentGroup = null;
+      continue;
+    }
+
+    if (!currentSection) continue;
+
+    if (!line) continue;
+
+    const prevMatch = line.match(/^Prev quest count:\s+(\d+)/i);
+    if (prevMatch) {
+      currentSection.prevCount = Number(prevMatch[1]);
+      continue;
+    }
+
+    const currentMatch = line.match(/^Current quest count:\s+(\d+)/i);
+    if (currentMatch) {
+      currentSection.currentCount = Number(currentMatch[1]);
+      continue;
+    }
+
+    const newMatch = line.match(/^New quests in this release:\s+(\d+)/i);
+    if (newMatch) {
+      currentSection.newCount = Number(newMatch[1]);
+      continue;
+    }
+
+    const groupMatch = line.match(/^###\s+(.+)/);
+    if (groupMatch) {
+      pushGroup();
+      currentGroup = { tree: groupMatch[1].trim(), quests: [] };
+      continue;
+    }
+
+    if (line.startsWith('-') && currentGroup) {
+      const quest = line.replace(/^-+\s*/, '').trim();
+      if (quest) {
+        currentGroup.quests.push(quest);
+      }
+    }
+  }
+
+  pushSection();
+  return sections;
+}
+
+function getDocFallbackSections() {
+  try {
+    const content = fs.readFileSync(frontendOutput, 'utf8');
+    return parseDocSections(content);
+  } catch (error) {
+    try {
+      const content = fs.readFileSync(docsOutput, 'utf8');
+      return parseDocSections(content);
+    } catch {
+      return [];
+    }
+  }
+}
+
 function listQuestFiles(ref) {
   const questDir = path.join(
     __dirname,
@@ -71,7 +170,7 @@ function groupQuests(paths) {
     .map((tree) => ({ tree, quests: groups[tree].sort() }));
 }
 
-function getReleaseSections() {
+function computeReleaseSections() {
   const envRef = process.env.NEW_QUESTS_REF;
   let v3Ref = envRef || 'origin/v3';
   try {
@@ -99,6 +198,14 @@ function getReleaseSections() {
       newCount: paths.length,
     };
   });
+}
+
+function getReleaseSections() {
+  try {
+    return computeReleaseSections();
+  } catch (error) {
+    return getDocFallbackSections();
+  }
 }
 
 function generateMarkdown(sections) {
