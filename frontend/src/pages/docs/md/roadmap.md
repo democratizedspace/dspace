@@ -29,7 +29,7 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## July 2023
 
--   [ ] content update
+-   [x] content update (suborbital launch checklist for rockets)
 
 ## June 2023
 
