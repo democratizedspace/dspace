@@ -10,6 +10,36 @@ export const customQuestSchema = {
             minLength: 1,
             pattern: '^(data:image/|https?://|/)',
         },
+        npc: { type: 'string', minLength: 1, pattern: '^[^<>]*$' },
+        start: { type: 'string', minLength: 1, pattern: '^[^<>]*$' },
+        dialogue: {
+            type: 'array',
+            minItems: 1,
+            items: {
+                type: 'object',
+                properties: {
+                    id: { type: 'string', minLength: 1, pattern: '^[^<>]*$' },
+                    text: { type: 'string', minLength: 1 },
+                    options: {
+                        type: 'array',
+                        minItems: 1,
+                        items: {
+                            type: 'object',
+                            properties: {
+                                type: { type: 'string', minLength: 1 },
+                                text: { type: 'string', minLength: 1 },
+                                goto: { type: 'string', minLength: 1 },
+                                process: { type: 'string', minLength: 1 },
+                            },
+                            required: ['type', 'text'],
+                            additionalProperties: true,
+                        },
+                    },
+                },
+                required: ['id', 'text', 'options'],
+                additionalProperties: true,
+            },
+        },
         requiresQuests: {
             type: 'array',
             items: { type: 'string' },

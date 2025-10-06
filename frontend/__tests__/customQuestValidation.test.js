@@ -17,6 +17,29 @@ describe('validateQuestData', () => {
         expect(result.valid).toBe(true);
     });
 
+    test('quest with dialogue passes', () => {
+        const result = validateQuestData({
+            title: 'Dialogue Quest',
+            description: 'Long enough description for validation.',
+            image: 'https://example.com/image.png',
+            npc: 'npc/dChat',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Welcome to the quest!',
+                    options: [
+                        {
+                            type: 'finish',
+                            text: 'Complete quest',
+                        },
+                    ],
+                },
+            ],
+        });
+        expect(result.valid).toBe(true);
+    });
+
     test('missing title fails', () => {
         const result = validateQuestData({
             description: 'B',
@@ -95,6 +118,29 @@ describe('validateQuestData', () => {
             image: 'https://example.com/img.png',
         });
         expect(result2.valid).toBe(false);
+    });
+
+    test('dialogue with empty option text fails', () => {
+        const result = validateQuestData({
+            title: 'Broken Quest',
+            description: 'Valid description for quest.',
+            image: 'https://example.com/img.png',
+            npc: 'npc/dChat',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Welcome!',
+                    options: [
+                        {
+                            type: 'finish',
+                            text: '',
+                        },
+                    ],
+                },
+            ],
+        });
+        expect(result.valid).toBe(false);
     });
 
     test('requiresQuests must be array of strings', () => {

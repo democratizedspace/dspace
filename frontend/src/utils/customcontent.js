@@ -16,6 +16,19 @@ const fallbackCounters = new Map();
 
 const ENTITY_KEYS = ['quest', 'item', 'process'];
 
+const DEFAULT_DIALOGUE = [
+    {
+        id: 'start',
+        text: 'This custom quest ends immediately.',
+        options: [
+            {
+                type: 'finish',
+                text: 'Finish quest',
+            },
+        ],
+    },
+];
+
 ENTITY_KEYS.forEach((type) => {
     fallbackStores.set(type, new Map());
     fallbackCounters.set(type, 1);
@@ -340,9 +353,29 @@ export const db = {
 
 // Convenience functions for common operations
 
-export function createQuest(title, description, image = '/assets/quests/howtodoquests.jpg') {
+export function createQuest(
+    title,
+    description,
+    image = '/assets/quests/howtodoquests.jpg',
+    npc = '/assets/npc/dChat.jpg',
+    dialogue = DEFAULT_DIALOGUE
+) {
     const id = generateQuestId();
-    return db.quests.add({ id, title, description, image }).then(() => id);
+    const preparedDialogue = dialogue.length > 0 ? dialogue : DEFAULT_DIALOGUE;
+    const start = preparedDialogue[0]?.id ?? 'start';
+
+    return db.quests
+        .add({
+            id,
+            title,
+            description,
+            image,
+            npc,
+            start,
+            dialogue: preparedDialogue,
+            requiresQuests: [],
+        })
+        .then(() => id);
 }
 
 export function getQuest(id) {
