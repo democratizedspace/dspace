@@ -345,6 +345,16 @@ export function createQuest(title, description, image = '/assets/quests/howtodoq
     return db.quests.add({ id, title, description, image }).then(() => id);
 }
 
+export async function listCustomQuests() {
+    try {
+        const quests = await db.list(ENTITY_TYPES.QUEST);
+        return quests.filter((quest) => quest.custom);
+    } catch (error) {
+        console.error('Error listing custom quests:', error);
+        return [];
+    }
+}
+
 export function getQuest(id) {
     return db.quests.get(id);
 }
