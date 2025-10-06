@@ -1,12 +1,29 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import QuestForm from '../svelte/QuestForm.svelte';
 
-test('submits text then clears field', async () => {
-    const { getByRole } = render(QuestForm);
-    const input = getByRole('textbox');
-    await fireEvent.input(input, { target: { value: 'Save the world' } });
-    await fireEvent.submit(getByRole('form'));
-    expect(input).toHaveValue('');
+test('allows adding dialogue nodes and options', async () => {
+    const { getByLabelText, getByText, getAllByLabelText, getAllByText } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/New node ID/i), { target: { value: 'start' } });
+    await fireEvent.input(getByLabelText(/Node text/i), { target: { value: 'Welcome, pilot!' } });
+    await fireEvent.click(getByText('Add Dialogue Node'));
+
+    await fireEvent.input(getByLabelText(/New node ID/i), { target: { value: 'end' } });
+    await fireEvent.input(getByLabelText(/Node text/i), {
+        target: { value: 'Quest complete.' },
+    });
+    await fireEvent.click(getByText('Add Dialogue Node'));
+
+    const optionDrafts = getAllByLabelText(/New option text/i);
+    await fireEvent.input(optionDrafts[0], { target: { value: 'Proceed to end' } });
+
+    const targetInputs = getAllByLabelText(/Target node/i);
+    await fireEvent.input(targetInputs[0], { target: { value: 'end' } });
+
+    await fireEvent.click(getAllByText('Add Option')[0]);
+
+    const optionTextInputs = getAllByLabelText(/^Text$/i);
+    expect(optionTextInputs[0]).toHaveValue('Proceed to end');
 });
 
 test('shows image preview after upload', async () => {
