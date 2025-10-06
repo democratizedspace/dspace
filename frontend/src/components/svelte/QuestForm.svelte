@@ -41,8 +41,40 @@
         { value: 'grantsItems', label: 'Grant items' },
     ];
 
+    function normalizeOption(option) {
+        const normalized = { ...option };
+
+        if (normalized.type === 'goto') {
+            normalized.goto = normalized.goto ?? '';
+        } else {
+            delete normalized.goto;
+        }
+
+        if (normalized.type === 'process') {
+            normalized.process = normalized.process ?? '';
+        } else {
+            delete normalized.process;
+        }
+
+        if (normalized.type === 'grantsItems') {
+            normalized.grantsItems = Array.isArray(normalized.grantsItems)
+                ? normalized.grantsItems
+                : [];
+        } else {
+            delete normalized.grantsItems;
+        }
+
+        return normalized;
+    }
+
     function createOptionDraft() {
-        return { type: 'goto', text: '', goto: '', process: '' };
+        return normalizeOption({
+            type: 'goto',
+            text: '',
+            goto: '',
+            process: '',
+            grantsItems: [],
+        });
     }
 
     // If in edit mode, load the quest data
@@ -58,7 +90,7 @@
                 dialogueNodes = (questData.dialogue || []).map((node) => ({
                     id: node.id,
                     text: node.text,
-                    options: (node.options || []).map((option) => ({ ...option })),
+                    options: (node.options || []).map((option) => normalizeOption(option)),
                     newOption: createOptionDraft(),
                     optionError: '',
                 }));
@@ -146,16 +178,7 @@
                     return option;
                 }
 
-                const updatedOption = { ...option, [field]: value };
-                if (field === 'type') {
-                    if (value !== 'goto') {
-                        delete updatedOption.goto;
-                    }
-                    if (value !== 'process') {
-                        delete updatedOption.process;
-                    }
-                }
-                return updatedOption;
+                return normalizeOption({ ...option, [field]: value });
             });
 
             return { ...node, options: updatedOptions };
@@ -169,19 +192,10 @@
                 return node;
             }
 
-            const draft = {
+            const draft = normalizeOption({
                 ...node.newOption,
                 [field]: value,
-            };
-
-            if (field === 'type') {
-                if (value !== 'goto') {
-                    delete draft.goto;
-                }
-                if (value !== 'process') {
-                    delete draft.process;
-                }
-            }
+            });
 
             return { ...node, newOption: draft };
         });
@@ -224,13 +238,13 @@
             }
         }
 
-        const newOption = { type: optionType, text: optionText };
-        if (optionType === 'goto') {
-            newOption.goto = draft.goto.trim();
-        }
-        if (optionType === 'process') {
-            newOption.process = draft.process.trim();
-        }
+        const newOption = normalizeOption({
+            type: optionType,
+            text: optionText,
+            goto: optionType === 'goto' ? (draft.goto || '').trim() : undefined,
+            process: optionType === 'process' ? (draft.process || '').trim() : undefined,
+            grantsItems: optionType === 'grantsItems' ? draft.grantsItems : undefined,
+        });
 
         dialogueNodes = dialogueNodes.map((n, idx) =>
             idx === nodeIndex
@@ -517,7 +531,7 @@
                     dialogue: dialogueNodes.map((node) => ({
                         id: node.id,
                         text: node.text,
-                        options: node.options.map((option) => ({ ...option })),
+                        options: node.options.map((option) => normalizeOption(option)),
                     })),
                     updatedAt: new Date().toISOString(),
                 });
@@ -535,7 +549,7 @@
                     dialogue: dialogueNodes.map((node) => ({
                         id: node.id,
                         text: node.text,
-                        options: node.options.map((option) => ({ ...option })),
+                        options: node.options.map((option) => normalizeOption(option)),
                     })),
                 });
 
