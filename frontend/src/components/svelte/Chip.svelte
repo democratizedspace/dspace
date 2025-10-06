@@ -4,7 +4,8 @@
         onClick,
         disabled = false,
         inverted = false,
-        red = false;
+        red = false,
+        pressed = undefined;
 </script>
 
 <nav>
@@ -19,6 +20,7 @@
             on:click={onClick}
             {disabled}
             aria-disabled={disabled}
+            aria-pressed={pressed}
         >
             <div class="slot">
                 <slot />
