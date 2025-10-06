@@ -170,7 +170,8 @@
 
 <style>
     .item-form {
-        max-width: 600px;
+        width: min(100%, 600px);
+        box-sizing: border-box;
         margin: 0 auto;
         padding: 20px;
         background: #2c5837;
@@ -196,7 +197,8 @@
 
     input,
     textarea {
-        width: 85%;
+        width: 100%;
+        box-sizing: border-box;
         padding: 10px;
         border-radius: 8px;
         background: #68d46d;
@@ -221,6 +223,7 @@
 
     input[type='file'] {
         width: 100%;
+        box-sizing: border-box;
         background: #fff;
         border: 2px solid #007006;
         padding: 8px;
