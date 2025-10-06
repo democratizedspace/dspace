@@ -18,6 +18,7 @@
 -   Structured documentation for image validation requirements
 -   Improved test reliability with proper directory structure
 -   Copy code button now has visible focus and an ARIA label for screen readers
+-   Manage quests page now lists and manages custom quests saved in IndexedDB
 
 ### Documentation
 

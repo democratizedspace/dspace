@@ -35,7 +35,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Logout flow                | Yes                 | `frontend/e2e/logout-flow.spec.ts`                |
 | Manage items               | Yes                 | `frontend/e2e/manage-items.spec.ts`               |
 | Manage processes           | Yes                 | `frontend/e2e/manage-processes.spec.ts`           |
-| Manage quests              | No                  | --                                                |
+| Manage quests              | Yes                 | `frontend/e2e/manage-quests.spec.ts`              |
 | Manage quests search       | Yes                 | `frontend/e2e/manage-quests-search.spec.ts`       |
 | Mobile item form           | No                  | --                                                |
 | Mobile process form        | Yes                 | `frontend/e2e/mobile-process-form.spec.ts`        |

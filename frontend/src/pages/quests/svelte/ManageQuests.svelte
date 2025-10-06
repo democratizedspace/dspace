@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import Quest from './Quest.svelte';
     import { questFinished } from '../../../utils/gameState.js';
-    import { db } from '../../../utils/customcontent.js';
+    import { db, listCustomQuests } from '../../../utils/customcontent.js';
     import { state, ready } from '../../../utils/gameState/common.js';
 
     export let quests = [];
@@ -10,10 +10,14 @@
     let searchTerm = '';
     let selectedStatus = 'all';
     let filteredQuests = [];
+    let customQuests = [];
+    let combinedQuests = [];
 
     $: if (mounted) {
         const _gs = $state; // recompute when game state changes
-        filteredQuests = quests.filter((quest) => {
+        combinedQuests = [...quests, ...customQuests];
+
+        filteredQuests = combinedQuests.filter((quest) => {
             const matchesSearch =
                 quest.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 quest.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -31,6 +35,11 @@
     onMount(async () => {
         await ready;
         mounted = true;
+        try {
+            customQuests = await listCustomQuests();
+        } catch (error) {
+            console.error('Unable to load custom quests:', error);
+        }
     });
 
     function handleEdit(questId) {
@@ -42,6 +51,7 @@
         if (confirm('Are you sure you want to delete this quest?')) {
             try {
                 await db.quests.delete(questId);
+                customQuests = customQuests.filter((q) => q.id !== questId);
                 quests = quests.filter((q) => q.id !== questId);
             } catch (error) {
                 console.error('Error deleting quest:', error);
