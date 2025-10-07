@@ -19,16 +19,14 @@ test('quest PR form submits and shows link', async ({ page }) => {
         }
     });
     await page.goto('/quests/submit');
-    await page.fill('#token', 't');
+    const validToken = `ghp_${'a'.repeat(36)}`;
+    await page.fill('#token', validToken);
     await page.fill('#quest', '{"title":"t","description":"d"}');
     await page.click('button:has-text("Create Pull Request")');
     await expect(page.getByTestId('pr-link')).toHaveAttribute('href', 'https://example.com/pr/1');
-    await expect(page.locator('#token')).toHaveValue('t');
-    const stored = await page.evaluate(() => {
-        const state = JSON.parse(localStorage.getItem('gameState') || '{}');
-        return state.github?.token || '';
-    });
-    expect(stored).toBe('t');
+    await expect(page.locator('#token')).toHaveValue(validToken);
+    await page.reload();
+    await expect(page.locator('#token')).toHaveValue(validToken);
     await page.click('[data-testid="clear-token"]');
     await expect(page.locator('#token')).toHaveValue('');
     const cleared = await page.evaluate(() => {
@@ -36,4 +34,6 @@ test('quest PR form submits and shows link', async ({ page }) => {
         return state.github?.token || '';
     });
     expect(cleared).toBe('');
+    await page.reload();
+    await expect(page.locator('#token')).toHaveValue('');
 });
