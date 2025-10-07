@@ -41,4 +41,14 @@ describe('Menu accessibility', () => {
         expect(gamesavesLink).toHaveClass('active');
         expect(gamesavesLink).toHaveAttribute('aria-current', 'page');
     });
+
+    it('renders Settings as a navigable link instead of a disabled chip', async () => {
+        const { getByRole, queryByRole } = render(Menu, { pathname: '/' });
+
+        const toggle = getByRole('button', { name: /More/ });
+        await fireEvent.click(toggle);
+
+        expect(queryByRole('button', { name: 'Settings' })).toBeNull();
+        expect(getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings');
+    });
 });

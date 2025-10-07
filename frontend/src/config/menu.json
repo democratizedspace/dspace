@@ -98,8 +98,7 @@
     },
     {
         "name": "Settings",
-        "href": "/settings",
-        "comingSoon": true
+        "href": "/settings"
     },
     {
         "name": "Discord",
