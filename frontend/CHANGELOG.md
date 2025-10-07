@@ -19,6 +19,7 @@
 -   Improved test reliability with proper directory structure
 -   Copy code button now has visible focus and an ARIA label for screen readers
 -   Manage quests page now lists and manages custom quests saved in IndexedDB
+-   Settings menu entry now appears as an active destination instead of a disabled placeholder
 
 ### Documentation
 
