@@ -78,7 +78,7 @@ const TEST_GROUPS = [
             'quest-form-validation.spec.ts',
             'quest-pr-form.spec.ts',
         ],
-        grep: 'create and view a custom quest|Quest Management',
+        grep: 'create and view a custom quest|Quest Management|quest PR form',
         parallel: true,
         workers: 2,
     },
