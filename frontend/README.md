@@ -138,6 +138,10 @@ cd frontend
 npm install
 ```
 
+> ℹ️ The frontend's `postinstall` hook runs `npm run sync`, which copies the
+> root package name, version, description, and license into
+> `frontend/package.json` so both manifests stay aligned.
+
 3. Start the development server:
 
 ```bash
