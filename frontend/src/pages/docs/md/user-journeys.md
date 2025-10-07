@@ -16,7 +16,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | About page loads           | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Authentication flow        | Yes                 | `frontend/e2e/authentication-flow.spec.ts`        |
 | Built-in quest details     | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
-| Changelog page loads       | No                  | --                                                |
+| Changelog page loads       | Yes                 | `frontend/e2e/changelog-page.spec.ts`             |
 | Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
 | Constellations quest       | Yes                 | `frontend/e2e/constellations-quest.spec.ts`       |
 | Cookie consent flow        | Yes                 | `frontend/e2e/cookie-consent.spec.ts`             |
