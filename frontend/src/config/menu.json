@@ -63,8 +63,7 @@
     },
     {
         "name": "Stats",
-        "href": "/stats",
-        "comingSoon": true
+        "href": "/stats"
     },
     {
         "name": "Achievements",
