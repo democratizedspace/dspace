@@ -10,7 +10,8 @@ JSON files. This page outlines the workflow and links to detailed guides.
 
 ## Features
 
--   **QuestForm editor** – Create nodes, options, and upload images through a friendly UI
+-   **QuestForm editor** – Create nodes, options, and upload images through a friendly UI that stores
+    pictures locally as data URLs
 -   **Schema validation** – Every quest is checked against the official JSON schema
 -   **Preview mode** – See how your quest plays before saving
 -   **Contribution workflow** – Submit quests for review and automatically open a pull request
