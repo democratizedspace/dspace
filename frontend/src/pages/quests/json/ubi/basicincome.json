@@ -88,7 +88,7 @@
         },
         {
             "id": "source",
-            "text": "The money comes from donations made by generous members of the metaguild. There's a leaderboard that gamifies donations (although it's still not quite ready to show you yet). Additionally, any ecosystem tax (for example, having too much dCarbon, a token that accrues whenever you release carbon dioxide into the atmosphere) contributes to the UBI pool.",
+            "text": "The money comes from donations made by generous members of the metaguild. There's a live leaderboard that gamifies donations so crews can celebrate the biggest supporters. Additionally, any ecosystem tax (for example, having too much dCarbon, a token that accrues whenever you release carbon dioxide into the atmosphere) contributes to the UBI pool.",
             "options": [
                 {
                     "type": "goto",

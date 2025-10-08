@@ -42,6 +42,7 @@ const TEST_GROUPS = [
             'profile-avatar-selection.spec.ts',
             'profile-page.spec.ts',
             'mobile-process-form.spec.ts',
+            'leaderboard.spec.ts',
             'settings-page.spec.ts',
         ],
         parallel: true,

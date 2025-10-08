@@ -41,6 +41,8 @@ Upvote
 Wakey
 Walstad
 ampm
+aster
+atlas
 bakey
 barebones
 basicincome
@@ -78,6 +80,7 @@ dwatt
 eeprom
 enabledelayedexpansion
 fincan
+flux
 findstr
 firstaid
 firstlaunch
@@ -92,6 +95,7 @@ hangofthis
 healthcheck
 heatsink
 hellip
+helios
 hostvars
 howtodoquests
 hypercar
@@ -123,6 +127,7 @@ permissionless
 pinting
 poweroff
 pousr
+pulse
 prebuild
 prerendered
 previewcontainer
@@ -156,3 +161,4 @@ wrappy
 xanmanning
 yourquest
 dChat
+zephyr
