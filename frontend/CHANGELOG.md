@@ -10,6 +10,7 @@
 -   Improved image reference tests with size and dimension validation
 -   Auto-creation of placeholder artifacts in Playwright trace directories
 -   Better .gitignore handling for test artifacts
+-   Live `/stats` page highlighting quest, inventory, and process totals
 
 ### Fixed
 
