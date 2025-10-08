@@ -68,7 +68,7 @@
     });
 </script>
 
-<div class="chat">
+<div class="chat" data-testid="chat-panel">
     <div class="vertical">
         <textarea
             class="message-textarea"

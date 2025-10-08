@@ -497,7 +497,7 @@ test('built-in quests should use the correct URL format', async ({ page }) => {
     expect(page.url()).toMatch(/\/quests\/[\w-]+\/[\w-]+$/);
 
     // Verify some element is visible on the quest page
-    await expect(page.locator('.quest-chat, .chat, .dialogue-container').first()).toBeVisible({
+    await expect(page.locator('[data-testid="chat-panel"]').first()).toBeVisible({
         timeout: 10000,
     });
 });
@@ -619,7 +619,7 @@ test.describe('Quest Completion', () => {
         await page.screenshot({ path: './test-screenshots/tutorial-quest-start.png' });
 
         // Verify the chat container is visible
-        await expect(page.locator('.chat, .dialogue-container')).toBeVisible({ timeout: 10000 });
+        await expect(page.locator('[data-testid="chat-panel"]')).toBeVisible({ timeout: 10000 });
 
         try {
             // Check that status is "In Progress"
@@ -1078,7 +1078,7 @@ test.describe('Quest Completion', () => {
             await page.waitForLoadState('networkidle');
 
             // Verify the chat container is visible
-            await expect(page.locator('.chat, .dialogue-container')).toBeVisible({
+            await expect(page.locator('[data-testid="chat-panel"]')).toBeVisible({
                 timeout: 10000,
             });
 

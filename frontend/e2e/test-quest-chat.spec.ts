@@ -24,7 +24,7 @@ test.describe('Quest Chat Navigation', () => {
         await page.screenshot({ path: './test-artifacts/screenshots/quest-detail-direct.png' });
 
         // Wait for the quest page to load and chat to appear
-        await expect(page.locator('.chat')).toBeVisible();
+        await expect(page.locator('[data-testid="chat-panel"]')).toBeVisible();
         console.log('Chat container is visible');
 
         // Get the current URL to compare later

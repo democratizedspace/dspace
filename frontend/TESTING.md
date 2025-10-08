@@ -624,13 +624,12 @@ When encountering test failures in the Game Systems group, follow these steps:
 1. **First, verify your changes**: Make sure your changes haven't broken the tests
 2. **Check the test artifacts**: Examine screenshots and videos in the `test-videos/` directory
 3. **Open a discussion**: If the failures appear to be in unchanged code, mention this in your PR
-4. **Consider skipping problematic tests**: In extreme cases, you may need to add `.skip()` to failing tests with a comment explaining why
+4. **Consider skipping problematic tests**: In extreme cases, use `.skip()` with a clear reference to the tracking issue and remove it as soon as the blocker is resolved
 
 ```javascript
 // Example of temporarily skipping a problematic test
 test.skip('should open the chat interface', async ({ page }) => {
-    // Test code
-    // FIXME: Skipped due to chat interface redesign in progress - Issue #123
+    // Reference the tracking ticket here and document why the skip is temporary.
 });
 ```
 
@@ -640,16 +639,12 @@ test.skip('should open the chat interface', async ({ page }) => {
 
 If chat tests are failing with "element not found" errors:
 
-1. Check if the chat interface has been redesigned
-2. Update the locators to match the new structure:
+1. Confirm the chat interface renders an element with `data-testid="chat-panel"`
+2. Update the locators to prioritize that stable attribute:
 
 ```typescript
-// Old selector
-const chatInterface = page.locator('.chat-interface');
-
-// More robust selector that may work with different designs
 const chatInterface = page
-    .locator('[data-testid="chat"], .chat-interface, .chat-window, .message-container')
+    .locator('[data-testid="chat-panel"], .chat-interface, .chat-window, .message-container')
     .first();
 ```
 
