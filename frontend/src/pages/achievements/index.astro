@@ -1,0 +1,14 @@
+---
+import Page from '../../components/Page.astro';
+import Achievements from './Achievements.svelte';
+---
+
+<Page title="Achievements" columns="1">
+    <Achievements client:load />
+</Page>
+
+<style>
+    :global(body) {
+        background: radial-gradient(circle at top, #1b2f1b, #101510 70%);
+    }
+</style>
