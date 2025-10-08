@@ -67,8 +67,7 @@
     },
     {
         "name": "Achievements",
-        "href": "/achievements",
-        "comingSoon": true
+        "href": "/achievements"
     },
     {
         "name": "Leaderboard",
