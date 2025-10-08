@@ -8,18 +8,13 @@
     let hydrated = false;
     let summaries = [];
 
-    const recompute = () => {
-        summaries = evaluateAchievements($state);
-    };
-
     onMount(async () => {
         await ready;
         hydrated = true;
-        recompute();
     });
 
     $: if (hydrated) {
-        recompute();
+        summaries = evaluateAchievements($state);
     }
 
     const statusLabel = (summary) => (summary.unlocked ? 'Unlocked' : 'Locked');
