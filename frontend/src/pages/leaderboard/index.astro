@@ -1,0 +1,14 @@
+---
+import Page from '../../components/Page.astro';
+import Leaderboard from './Leaderboard.svelte';
+---
+
+<Page title="Leaderboard" columns="1">
+    <Leaderboard client:load />
+</Page>
+
+<style>
+    :global(body) {
+        background: radial-gradient(circle at top, #061727, #030b14 70%);
+    }
+</style>

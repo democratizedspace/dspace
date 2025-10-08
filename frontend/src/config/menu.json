@@ -71,8 +71,7 @@
     },
     {
         "name": "Leaderboard",
-        "href": "/leaderboard",
-        "comingSoon": true
+        "href": "/leaderboard"
     },
     {
         "name": "Locations",
