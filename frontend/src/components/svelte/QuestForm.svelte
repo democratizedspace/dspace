@@ -470,31 +470,30 @@
         return Object.keys(errors).length === 0;
     }
 
-    async function uploadImage(file) {
-        if (!file) return previewUrl; // Return existing image URL if no new file
+    function readFileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => resolve(event?.target?.result ?? '');
+            reader.onerror = (error) => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
 
-        // For demo purposes, simulate an image upload
-        // In production, you would use a real upload service
-        // This is a placeholder for actual image upload logic
-        const formData = new FormData();
-        formData.append('image', file);
+    async function uploadImage(file) {
+        if (!file) {
+            return previewUrl; // Return existing image URL if no new file
+        }
+
+        if (previewUrl && previewUrl.startsWith('data:image')) {
+            return previewUrl;
+        }
 
         try {
-            // Simulate API call
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                return data.url;
-            } else {
-                throw new Error('Image upload failed');
-            }
+            const dataUrl = await readFileAsDataUrl(file);
+            previewUrl = dataUrl;
+            return dataUrl;
         } catch (error) {
-            console.error('Error uploading image:', error);
-            // Fall back to the data URL for demo/testing
+            console.error('Error preparing quest image:', error);
             return previewUrl;
         }
     }
