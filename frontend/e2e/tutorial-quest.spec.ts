@@ -13,7 +13,7 @@ test.describe('Tutorial Quest', () => {
         await page.screenshot({ path: './test-artifacts/screenshots/tutorial-quest-initial.png' });
 
         // Verify the chat container is visible
-        await expect(page.locator('.chat, .dialogue-container')).toBeVisible({ timeout: 15000 });
+        await expect(page.locator('[data-testid="chat-panel"]')).toBeVisible({ timeout: 15000 });
 
         // Interact with the tutorial quest
         await interactWithQuestTutorial(page);

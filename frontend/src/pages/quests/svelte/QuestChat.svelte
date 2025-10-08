@@ -72,7 +72,7 @@
         </div>
     </div>
     {#if $finished}
-        <div class="chat">
+        <div class="chat" data-testid="chat-panel">
             <div class="vertical">
                 <h4>Quest Complete!</h4>
                 <p>
@@ -82,7 +82,7 @@
             </div>
         </div>
     {:else}
-        <div class="chat">
+        <div class="chat" data-testid="chat-panel">
             <div>
                 {#if $clientSideRendered && quest && dialogueMap}
                     <div>
