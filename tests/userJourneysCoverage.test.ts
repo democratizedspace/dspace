@@ -13,11 +13,10 @@ const docPath = path.join(
 );
 
 describe('User journeys documentation', () => {
-  it('marks the quest PR form journey as covered by an e2e spec', () => {
-    const markdown = readFileSync(docPath, 'utf8');
+  const getRowCells = (markdown: string, label: string) => {
     const row = markdown
       .split('\n')
-      .find((line) => line.trim().startsWith('| Quest PR form'));
+      .find((line) => line.trim().startsWith(`| ${label}`));
 
     expect(row).toBeDefined();
 
@@ -29,14 +28,38 @@ describe('User journeys documentation', () => {
     expect(cells).toBeDefined();
     expect(cells?.length).toBeGreaterThanOrEqual(3);
 
-    const coverageCell = cells?.[1] ?? '';
+    return cells as string[];
+  };
+
+  it('marks the quest PR form journey as covered by an e2e spec', () => {
+    const markdown = readFileSync(docPath, 'utf8');
+    const cells = getRowCells(markdown, 'Quest PR form');
+
+    const coverageCell = cells[1] ?? '';
     expect(coverageCell).toBe('Yes');
 
-    const testFileCell = cells?.[2] ?? '';
+    const testFileCell = cells[2] ?? '';
     expect(testFileCell).not.toBe('--');
 
     const referencedPath = testFileCell.replace(/`/g, '').trim();
     expect(referencedPath).toBe('frontend/e2e/quest-pr-form.spec.ts');
+
+    const absolutePath = path.join(repoRoot, referencedPath);
+    expect(existsSync(absolutePath)).toBe(true);
+  });
+
+  it('marks the changelog journey as covered once the docs changelog spec exists', () => {
+    const markdown = readFileSync(docPath, 'utf8');
+    const cells = getRowCells(markdown, 'Changelog page loads');
+
+    const coverageCell = cells[1] ?? '';
+    expect(coverageCell).toBe('Yes');
+
+    const testFileCell = cells[2] ?? '';
+    expect(testFileCell).not.toBe('--');
+
+    const referencedPath = testFileCell.replace(/`/g, '').trim();
+    expect(referencedPath).toBe('frontend/e2e/docs-changelog.spec.ts');
 
     const absolutePath = path.join(repoRoot, referencedPath);
     expect(existsSync(absolutePath)).toBe(true);
