@@ -1,22 +1,41 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
     import { GPT35Turbo } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
-    import { messages, countTokens } from '../../../stores/chat.js';
+    import {
+        messages,
+        countTokens,
+        personaOptions,
+        activePersona,
+        activePersonaId,
+        setActivePersona,
+    } from '../../../stores/chat.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
     const message = writable('');
     const messageHistory = writable([]);
     let showSpinner = false;
-    let welcomeMessage =
-        "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any " +
-        'other topic. I may accidentally generate incorrect information, so please double-check anything I say. ' +
-        'I just received new knowledge about quests, items, and processes—ask away!';
+
+    $: currentPersona = $activePersona;
+    $: welcomeMessage = currentPersona?.welcomeMessage;
+    $: personaSummary = currentPersona?.summary;
 
     function addMessage(msg) {
         messageHistory.update((history) => [...history, msg]);
         messages.update((all) => [...all, msg]);
+    }
+
+    function addWelcomeMessage() {
+        if (!welcomeMessage) {
+            return;
+        }
+        const welcome = {
+            role: 'assistant',
+            content: welcomeMessage,
+            tokens: countTokens(welcomeMessage),
+        };
+        addMessage(welcome);
     }
 
     async function submitMessage() {
@@ -26,32 +45,31 @@
             tokens: countTokens($message),
         };
 
-        // Add the user message to the chat history immediately
         addMessage(userMessage);
         showSpinner = true;
 
         try {
-            const aiResponse = await GPT35Turbo([...$messageHistory, userMessage]);
+            const aiResponse = await GPT35Turbo([...$messageHistory, userMessage], {
+                persona: currentPersona,
+            });
             const aiMessage = {
                 role: 'assistant',
                 content: aiResponse,
                 tokens: countTokens(aiResponse),
             };
 
-            // Update the chat history with the assistant's message
             addMessage(aiMessage);
         } catch (error) {
             console.error(error);
+            const fallback = "Sorry, I'm having some trouble and can't generate a response.";
             addMessage({
                 role: 'assistant',
-                content: "Sorry, I'm having some trouble and can't generate a response.",
-                tokens: countTokens(
-                    "Sorry, I'm having some trouble and can't generate a response."
-                ),
+                content: fallback,
+                tokens: countTokens(fallback),
             });
         }
 
-        message.set(''); // clear text area
+        message.set('');
         showSpinner = false;
     }
 
@@ -62,19 +80,42 @@
         }
     }
 
+    async function handlePersonaChange(event) {
+        const selectedId = event.target.value;
+        if (selectedId === $activePersonaId) {
+            return;
+        }
+        setActivePersona(selectedId);
+        messageHistory.set([]);
+        showSpinner = false;
+        message.set('');
+        await tick();
+        addWelcomeMessage();
+    }
+
     onMount(async () => {
         if ($messageHistory.length === 0) {
-            const welcome = {
-                role: 'assistant',
-                content: welcomeMessage,
-                tokens: countTokens(welcomeMessage),
-            };
-            addMessage(welcome);
+            addWelcomeMessage();
         }
     });
 </script>
 
 <div class="chat" data-testid="chat-panel">
+    <div class="persona-selector">
+        <label for="chat-persona">Talk to</label>
+        <select id="chat-persona" bind:value={$activePersonaId} on:change={handlePersonaChange}>
+            {#each personaOptions as persona}
+                <option value={persona.id}>{persona.name}</option>
+            {/each}
+        </select>
+        {#if currentPersona?.avatar}
+            <img src={currentPersona.avatar} alt={`${currentPersona.name} portrait`} />
+        {/if}
+        {#if personaSummary}
+            <p class="persona-summary">{personaSummary}</p>
+        {/if}
+    </div>
+
     <div class="vertical">
         <textarea
             class="message-textarea"
@@ -108,6 +149,44 @@
         justify-content: center;
         align-items: center;
         width: 100%;
+        gap: 1.5rem;
+    }
+
+    .persona-selector {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .persona-selector label {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+    }
+
+    .persona-selector select {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: none;
+        font-size: 1rem;
+    }
+
+    .persona-selector img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 0.75rem;
+    }
+
+    .persona-summary {
+        margin: 0;
+        font-size: 0.9rem;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.8);
     }
 
     .chat-container {
@@ -123,7 +202,6 @@
         justify-content: center;
         align-items: center;
         width: 100%;
-        margin-top: 20px;
     }
 
     .spinner-container {

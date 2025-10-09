@@ -3,6 +3,15 @@ title: 'NPCs'
 slug: 'npcs'
 ---
 
+## AI-enabled NPC chat
+
+DSPACE's chat console now lets you pick an NPC persona before starting a
+conversation. Choose dChat for general knowledge, or switch to Sydney,
+Nova, or Hydro to receive guidance steeped in their specialties. Each
+persona keeps its existing lore and draws from the shared quest, item, and
+process knowledge base once you connect an OpenAI API key in the chat
+settings.
+
 ## dChat
 
 <img src="/assets/npc/dChat.jpg" />
