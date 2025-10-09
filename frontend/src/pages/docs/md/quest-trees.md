@@ -25,14 +25,7 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 -   **Woodworking** – build a sturdy workbench, sand projects smooth, then craft birdhouses, stools, shelves, and planter boxes
 -   **First Aid** – assemble a kit and practice CPR so accidents don't derail progress
 -   **Astronomy** – observe the Moon, build a telescope, track Jupiter's moons and map the constellations, document a meteor shower, and monitor passing satellites
-
-## Planned Quest Trees
-
-The following quest lines are being drafted to help achieve the "10x More Quests" goal announced for v3:
-
--   **Chemistry** – safe experiments that introduce sustainable rocket fuel principles, extract stevia into a sweetener, and purify it into crystals
--   **Programming** – simple scripts for automating sensors and data collection
-
-Check back as these new quests are fleshed out and integrated into the main progression.
+-   **Chemistry** – dilute acids safely, neutralize spills, adjust pH, run precipitation reactions, and extract stevia into crystals for sustainable sweeteners
+-   **Programming** – log thermistor readings, calibrate sensors, analyze temperature trends, publish JSON APIs, and deploy a web server to share data automations
 
 Run `node scripts/generate-quest-chart.js` from the repository root to produce a radar chart summarizing the quest tree sizes. The PNG output is ignored by Git, but CI artifacts attach the latest image.
