@@ -55,7 +55,7 @@
                     Enter your <a href="https://platform.openai.com/account/api-keys"
                         >OpenAI API Key</a
                     >
-                    to integrate GPT-3.5. Make sure you place
+                    to integrate GPT-5. Make sure you place
                     <a href="https://platform.openai.com/account/billing/limits">usage limits</a>.
                     You can monitor your usage
                     <a href="https://platform.openai.com/account/usage">here.</a>

@@ -1,15 +1,28 @@
 const { vi } = require('vitest');
 const jest = vi;
 
-const createChatCompletionMock = jest.fn().mockResolvedValue({
-    choices: [{ message: { content: 'mocked reply' } }],
+const createResponseMock = jest.fn().mockResolvedValue({
+    output: [
+        {
+            id: 'msg_1',
+            type: 'message',
+            role: 'assistant',
+            content: [
+                {
+                    type: 'output_text',
+                    text: 'mocked reply',
+                },
+            ],
+        },
+    ],
+    output_text: 'mocked reply',
 });
 
 jest.mock('openai', () => {
     return {
         __esModule: true,
         default: jest.fn().mockImplementation(function () {
-            this.chat = { completions: { create: createChatCompletionMock } };
+            this.responses = { create: createResponseMock };
         }),
     };
 });
@@ -21,39 +34,66 @@ jest.mock('../src/utils/gameState/common.js', () => ({
 
 const { GPT35Turbo } = require('../src/utils/openAI.js');
 
-describe('GPT35Turbo', () => {
+describe('gpt-5 chat responses utility', () => {
     beforeEach(() => {
-        createChatCompletionMock.mockClear();
+        createResponseMock.mockClear();
     });
 
     test('uses opening message and knowledge when no messages provided', async () => {
         await GPT35Turbo([]);
-        expect(createChatCompletionMock).toHaveBeenCalledTimes(1);
-        const call = createChatCompletionMock.mock.calls[0][0];
-        expect(call.model).toBe('gpt-3.5-turbo');
-        expect(call.messages[0].role).toBe('system');
-        expect(call.messages[1]).toEqual(
+        expect(createResponseMock).toHaveBeenCalledTimes(1);
+        const call = createResponseMock.mock.calls[0][0];
+        expect(call.model).toBe('gpt-5-chat-latest');
+        expect(call.input[0].role).toBe('system');
+        expect(call.input[0].content[0].text).toContain('GPT-5');
+        expect(call.input[1]).toEqual(
             expect.objectContaining({
                 role: 'system',
-                content: expect.stringContaining('DSPACE knowledge base:'),
+                content: [
+                    expect.objectContaining({
+                        type: 'text',
+                        text: expect.stringContaining('DSPACE knowledge base:'),
+                    }),
+                ],
             })
         );
-        expect(call.messages[1].content).toContain('white PLA filament');
-        expect(call.messages[1].content).toContain('How to do quests');
-        expect(call.messages[2].role).toBe('assistant');
+        expect(call.input[1].content[0].text).toContain('white PLA filament');
+        expect(call.input[1].content[0].text).toContain('How to do quests');
+        expect(call.input[2]).toEqual({
+            role: 'assistant',
+            content: [
+                {
+                    type: 'text',
+                    text: 'Welcome! How can I assist you today?',
+                },
+            ],
+        });
     });
 
     test('prepends system message when messages supplied', async () => {
         await GPT35Turbo([{ role: 'user', content: 'hello' }]);
-        const call = createChatCompletionMock.mock.calls[0][0];
-        expect(call.messages[0]).toEqual(expect.objectContaining({ role: 'system' }));
-        expect(call.messages[1]).toEqual(
+        const call = createResponseMock.mock.calls[0][0];
+        expect(call.input[0]).toEqual(expect.objectContaining({ role: 'system' }));
+        expect(call.input[1]).toEqual(
             expect.objectContaining({
                 role: 'system',
-                content: expect.stringContaining('DSPACE knowledge base:'),
+                content: [
+                    expect.objectContaining({
+                        type: 'text',
+                        text: expect.stringContaining('DSPACE knowledge base:'),
+                    }),
+                ],
             })
         );
-        expect(call.messages[2]).toEqual({ role: 'user', content: 'hello' });
+        expect(call.input[2]).toEqual({
+            role: 'user',
+            content: [
+                {
+                    type: 'text',
+                    text: 'hello',
+                },
+            ],
+        });
     });
 
     test('returns response content', async () => {
