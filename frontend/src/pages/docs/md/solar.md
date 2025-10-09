@@ -9,4 +9,6 @@ Solar power is a renewable energy source that has a number of benefits:
 -   Solar panels can be added incrementally
 -   Solar panels can be made with common materials
 
-For this reason, it's the first major energy source supported by the game. Wind will also be added in the future, in addition to all the other power sources you might expect.
+For this reason, it's the first major energy source supported by the game. Wind turbines are also
+available, giving you another renewable option that pairs well with solar arrays for round-the-clock
+power.

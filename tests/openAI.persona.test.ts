@@ -1,12 +1,13 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const responsesCreateMock = vi.fn().mockResolvedValue({ output_text: 'mocked reply' });
+const MockOpenAI = vi.fn().mockImplementation(() => ({
+    responses: { create: responsesCreateMock },
+}));
 
 vi.mock('openai', () => {
     return {
-        default: vi.fn().mockImplementation(() => ({
-            responses: { create: responsesCreateMock },
-        })),
+        default: MockOpenAI,
     };
 });
 
@@ -18,6 +19,11 @@ vi.mock('../frontend/src/utils/gameState/common.js', () => ({
 describe('GPT35Turbo persona integration', () => {
     beforeEach(() => {
         responsesCreateMock.mockClear();
+        globalThis.__DSpaceOpenAIClient = MockOpenAI;
+    });
+
+    afterEach(() => {
+        delete globalThis.__DSpaceOpenAIClient;
     });
 
     it('injects persona-specific prompt and welcome message', async () => {
