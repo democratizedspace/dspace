@@ -30,6 +30,28 @@ export const customQuestSchema = {
                                 text: { type: 'string', minLength: 1 },
                                 goto: { type: 'string', minLength: 1 },
                                 process: { type: 'string', minLength: 1 },
+                                requiresItems: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            id: { type: 'string', minLength: 1 },
+                                            count: { type: 'number', minimum: 1 },
+                                        },
+                                        required: ['id', 'count'],
+                                    },
+                                },
+                                grantsItems: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            id: { type: 'string', minLength: 1 },
+                                            count: { type: 'number', minimum: 1 },
+                                        },
+                                        required: ['id', 'count'],
+                                    },
+                                },
                             },
                             required: ['type', 'text'],
                             additionalProperties: true,

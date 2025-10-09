@@ -17,6 +17,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Authentication flow        | Yes                 | `frontend/e2e/authentication-flow.spec.ts`        |
 | Built-in quest details     | Yes                 | `frontend/e2e/builtin-quests.spec.ts`             |
 | Changelog page loads       | Yes                 | `frontend/e2e/docs-changelog.spec.ts`             |
+| Chat persona switching     | Yes                 | `frontend/e2e/chat-persona-switching.spec.ts`     |
 | Cloud sync                 | Yes                 | `frontend/e2e/cloud-sync.spec.ts`                 |
 | Constellations quest       | Yes                 | `frontend/e2e/constellations-quest.spec.ts`       |
 | Cookie consent flow        | Yes                 | `frontend/e2e/cookie-consent.spec.ts`             |

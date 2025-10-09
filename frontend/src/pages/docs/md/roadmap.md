@@ -17,7 +17,7 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 ## 2023
 
 -   [ ] in-game suborbital launch
--   [ ] AI-enabled NPCs
+-   [x] AI-enabled NPCs (chat now supports persona-powered conversations)
 
 ## September 2023
 

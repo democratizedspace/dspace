@@ -19,6 +19,7 @@
     let showPreview = false;
     let requiresQuests = [];
     let allQuests = [];
+    let allItems = [];
     let validationErrors = {};
     let isSubmitting = false;
     let npc = '';
@@ -42,7 +43,21 @@
     ];
 
     function normalizeOption(option) {
-        const normalized = { ...option };
+        const normalized = {
+            ...option,
+            requiresItems: Array.isArray(option.requiresItems)
+                ? option.requiresItems.map((entry) => ({
+                      id: entry?.id ?? '',
+                      count: entry?.count ?? 1,
+                  }))
+                : [],
+            grantsItems: Array.isArray(option.grantsItems)
+                ? option.grantsItems.map((entry) => ({
+                      id: entry?.id ?? '',
+                      count: entry?.count ?? 1,
+                  }))
+                : [],
+        };
 
         if (normalized.type === 'goto') {
             normalized.goto = normalized.goto ?? '';
@@ -56,12 +71,8 @@
             delete normalized.process;
         }
 
-        if (normalized.type === 'grantsItems') {
-            normalized.grantsItems = Array.isArray(normalized.grantsItems)
-                ? normalized.grantsItems
-                : [];
-        } else {
-            delete normalized.grantsItems;
+        if (normalized.type !== 'grantsItems') {
+            normalized.grantsItems = [];
         }
 
         return normalized;
@@ -73,6 +84,7 @@
             text: '',
             goto: '',
             process: '',
+            requiresItems: [],
             grantsItems: [],
         });
     }
@@ -114,6 +126,13 @@
             }
         } else {
             allQuests = existingQuests;
+        }
+
+        try {
+            allItems = await db.list(ENTITY_TYPES.ITEM);
+        } catch (error) {
+            console.error('Error loading items:', error);
+            allItems = [];
         }
     });
 
@@ -199,6 +218,71 @@
 
             return { ...node, newOption: draft };
         });
+    }
+
+    function updateOptionWithItems(nodeIndex, optionIndex, updater) {
+        dialogueNodes = dialogueNodes.map((node, idx) => {
+            if (idx !== nodeIndex) {
+                return node;
+            }
+
+            const updatedOptions = node.options.map((option, optIdx) => {
+                if (optIdx !== optionIndex) {
+                    return option;
+                }
+
+                return normalizeOption(updater(option));
+            });
+
+            return { ...node, options: updatedOptions };
+        });
+    }
+
+    function addOptionItem(nodeIndex, optionIndex, key) {
+        updateOptionWithItems(nodeIndex, optionIndex, (option) => {
+            const items = Array.isArray(option[key]) ? option[key] : [];
+            return {
+                ...option,
+                [key]: [...items, { id: '', count: 1 }],
+            };
+        });
+        validateForm();
+    }
+
+    function updateOptionItemField(nodeIndex, optionIndex, key, itemIndex, field, value) {
+        updateOptionWithItems(nodeIndex, optionIndex, (option) => {
+            const items = Array.isArray(option[key]) ? option[key] : [];
+            const updatedItems = items.map((item, idx) => {
+                if (idx !== itemIndex) {
+                    return item;
+                }
+
+                if (field === 'count') {
+                    const parsed = value === '' ? '' : Number(value);
+                    return { ...item, count: parsed };
+                }
+
+                return { ...item, [field]: value };
+            });
+
+            return {
+                ...option,
+                [key]: updatedItems,
+            };
+        });
+        validateForm();
+    }
+
+    function removeOptionItem(nodeIndex, optionIndex, key, itemIndex) {
+        updateOptionWithItems(nodeIndex, optionIndex, (option) => {
+            const items = Array.isArray(option[key]) ? option[key] : [];
+            const updatedItems = items.filter((_, idx) => idx !== itemIndex);
+            return {
+                ...option,
+                [key]: updatedItems,
+            };
+        });
+        validateForm();
     }
 
     function addOption(nodeIndex) {
@@ -316,6 +400,44 @@
         validateForm();
     }
 
+    function isPositiveNumber(value) {
+        const number = Number(value);
+        return Number.isFinite(number) && number > 0;
+    }
+
+    function sanitizeItems(items = []) {
+        return items
+            .map((item) => ({
+                id: (item?.id ?? '').trim(),
+                count: Number(item?.count ?? 0),
+            }))
+            .filter((item) => item.id && isPositiveNumber(item.count))
+            .map((item) => ({ id: item.id, count: Math.max(1, Math.round(item.count)) }));
+    }
+
+    function serializeOption(option) {
+        const normalized = normalizeOption(option);
+        const requiresItems = sanitizeItems(normalized.requiresItems);
+        if (requiresItems.length > 0) {
+            normalized.requiresItems = requiresItems;
+        } else {
+            delete normalized.requiresItems;
+        }
+
+        if (normalized.type === 'grantsItems') {
+            const grantsItems = sanitizeItems(normalized.grantsItems);
+            if (grantsItems.length > 0) {
+                normalized.grantsItems = grantsItems;
+            } else {
+                delete normalized.grantsItems;
+            }
+        } else {
+            delete normalized.grantsItems;
+        }
+
+        return normalized;
+    }
+
     async function validateForm() {
         const errors = {};
 
@@ -349,7 +471,7 @@
             dialogue: dialogueNodes.map((node) => ({
                 id: node.id,
                 text: node.text,
-                options: node.options,
+                options: node.options.map((option) => serializeOption(option)),
             })),
         });
         if (!valid && schemaErrors) {
@@ -456,6 +578,36 @@
             }
         }
 
+        if (!errors.dialogue) {
+            const invalidRequirement = dialogueNodes.some((node) =>
+                node.options.some((option) =>
+                    (option.requiresItems || []).some(
+                        (item) => !(item?.id || '').trim() || !isPositiveNumber(item?.count)
+                    )
+                )
+            );
+
+            if (invalidRequirement) {
+                errors.dialogue = 'Required items must include an item and positive count';
+            }
+        }
+
+        if (!errors.dialogue) {
+            const invalidGrant = dialogueNodes.some((node) =>
+                node.options.some(
+                    (option) =>
+                        option.type === 'grantsItems' &&
+                        (option.grantsItems || []).some(
+                            (item) => !(item?.id || '').trim() || !isPositiveNumber(item?.count)
+                        )
+                )
+            );
+
+            if (invalidGrant) {
+                errors.dialogue = 'Granted items require an item and positive count';
+            }
+        }
+
         if (
             requiresQuests.length > 0 &&
             !validateQuestDependencies(
@@ -530,7 +682,7 @@
                     dialogue: dialogueNodes.map((node) => ({
                         id: node.id,
                         text: node.text,
-                        options: node.options.map((option) => normalizeOption(option)),
+                        options: node.options.map((option) => serializeOption(option)),
                     })),
                     updatedAt: new Date().toISOString(),
                 });
@@ -548,7 +700,7 @@
                     dialogue: dialogueNodes.map((node) => ({
                         id: node.id,
                         text: node.text,
-                        options: node.options.map((option) => normalizeOption(option)),
+                        options: node.options.map((option) => serializeOption(option)),
                     })),
                 });
 
@@ -575,6 +727,11 @@
 </script>
 
 <form on:submit={handleSubmit} class="quest-form">
+    <datalist id="quest-option-item-suggestions">
+        {#each allItems as item (item.id)}
+            <option value={item.id}>{item.name}</option>
+        {/each}
+    </datalist>
     <div class="form-group">
         <label for="title">Title*</label>
         <input
@@ -779,6 +936,164 @@
                                 >
                                     Remove option
                                 </button>
+                            </div>
+                            <div class="option-items">
+                                <div class="item-group">
+                                    <h5>Required items</h5>
+                                    {#if option.requiresItems.length === 0}
+                                        <p class="item-hint">No item gate configured</p>
+                                    {/if}
+                                    {#each option.requiresItems as itemEntry, reqIndex (reqIndex)}
+                                        <div class="item-row">
+                                            <label
+                                                class="sr-only"
+                                                for={`option-${node.id}-${optionIndex}-requires-${reqIndex}-id`}
+                                                >Required item ID</label
+                                            >
+                                            <input
+                                                id={`option-${node.id}-${optionIndex}-requires-${reqIndex}-id`}
+                                                type="text"
+                                                class="item-id-input"
+                                                list="quest-option-item-suggestions"
+                                                value={itemEntry.id}
+                                                on:input={(event) =>
+                                                    updateOptionItemField(
+                                                        index,
+                                                        optionIndex,
+                                                        'requiresItems',
+                                                        reqIndex,
+                                                        'id',
+                                                        event.target.value
+                                                    )}
+                                                data-testid={`requires-item-id-${index}-${optionIndex}-${reqIndex}`}
+                                            />
+                                            <label
+                                                class="sr-only"
+                                                for={`option-${node.id}-${optionIndex}-requires-${reqIndex}-count`}
+                                                >Required item count</label
+                                            >
+                                            <input
+                                                id={`option-${node.id}-${optionIndex}-requires-${reqIndex}-count`}
+                                                type="number"
+                                                min="1"
+                                                value={itemEntry.count ?? 1}
+                                                on:input={(event) =>
+                                                    updateOptionItemField(
+                                                        index,
+                                                        optionIndex,
+                                                        'requiresItems',
+                                                        reqIndex,
+                                                        'count',
+                                                        event.target.value
+                                                    )}
+                                                data-testid={`requires-item-count-${index}-${optionIndex}-${reqIndex}`}
+                                            />
+
+                                            <button
+                                                type="button"
+                                                class="remove-button"
+                                                on:click={() =>
+                                                    removeOptionItem(
+                                                        index,
+                                                        optionIndex,
+                                                        'requiresItems',
+                                                        reqIndex
+                                                    )}
+                                                data-testid={`remove-required-item-${index}-${optionIndex}-${reqIndex}`}
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
+                                    {/each}
+                                    <button
+                                        type="button"
+                                        class="add-item-button"
+                                        on:click={() =>
+                                            addOptionItem(index, optionIndex, 'requiresItems')}
+                                        data-testid={`add-required-item-${index}-${optionIndex}`}
+                                    >
+                                        Add required item
+                                    </button>
+                                </div>
+
+                                {#if option.type === 'grantsItems'}
+                                    <div class="item-group">
+                                        <h5>Grant items</h5>
+                                        {#if option.grantsItems.length === 0}
+                                            <p class="item-hint">No items granted yet</p>
+                                        {/if}
+                                        {#each option.grantsItems as grantEntry, grantIndex (grantIndex)}
+                                            <div class="item-row">
+                                                <label
+                                                    class="sr-only"
+                                                    for={`option-${node.id}-${optionIndex}-grants-${grantIndex}-id`}
+                                                    >Granted item ID</label
+                                                >
+                                                <input
+                                                    id={`option-${node.id}-${optionIndex}-grants-${grantIndex}-id`}
+                                                    type="text"
+                                                    class="item-id-input"
+                                                    list="quest-option-item-suggestions"
+                                                    value={grantEntry.id}
+                                                    on:input={(event) =>
+                                                        updateOptionItemField(
+                                                            index,
+                                                            optionIndex,
+                                                            'grantsItems',
+                                                            grantIndex,
+                                                            'id',
+                                                            event.target.value
+                                                        )}
+                                                    data-testid={`grants-item-id-${index}-${optionIndex}-${grantIndex}`}
+                                                />
+                                                <label
+                                                    class="sr-only"
+                                                    for={`option-${node.id}-${optionIndex}-grants-${grantIndex}-count`}
+                                                    >Granted item count</label
+                                                >
+                                                <input
+                                                    id={`option-${node.id}-${optionIndex}-grants-${grantIndex}-count`}
+                                                    type="number"
+                                                    min="1"
+                                                    value={grantEntry.count ?? 1}
+                                                    on:input={(event) =>
+                                                        updateOptionItemField(
+                                                            index,
+                                                            optionIndex,
+                                                            'grantsItems',
+                                                            grantIndex,
+                                                            'count',
+                                                            event.target.value
+                                                        )}
+                                                    data-testid={`grants-item-count-${index}-${optionIndex}-${grantIndex}`}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    class="remove-button"
+                                                    on:click={() =>
+                                                        removeOptionItem(
+                                                            index,
+                                                            optionIndex,
+                                                            'grantsItems',
+                                                            grantIndex
+                                                        )}
+                                                    data-testid={`remove-grant-item-${index}-${optionIndex}-${grantIndex}`}
+                                                >
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        {/each}
+                                        <button
+                                            type="button"
+                                            class="add-item-button"
+                                            on:click={() =>
+                                                addOptionItem(index, optionIndex, 'grantsItems')}
+                                            data-testid={`add-grant-item-${index}-${optionIndex}`}
+                                        >
+                                            Add grant item
+                                        </button>
+                                    </div>
+                                {/if}
                             </div>
                         {/each}
 
@@ -1056,6 +1371,71 @@
     .option-row input,
     .option-row select {
         width: 100%;
+    }
+
+    .option-items {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 8px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+    }
+
+    .option-items .item-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .option-items h5 {
+        margin: 0;
+        font-size: 16px;
+        color: #b8ffd2;
+    }
+
+    .item-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 8px;
+        align-items: center;
+    }
+
+    .item-id-input {
+        width: 100%;
+    }
+
+    .item-hint {
+        font-size: 14px;
+        color: #c8e6c9;
+        margin: 0;
+    }
+
+    .add-item-button {
+        align-self: flex-start;
+        background-color: #004d99;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+    }
+
+    .add-item-button:hover {
+        background-color: #003366;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 
     .option-draft {
