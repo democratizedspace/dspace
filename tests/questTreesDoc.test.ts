@@ -1,25 +1,31 @@
 import { describe, it, expect } from 'vitest';
-import fs from 'fs';
-import path from 'path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-describe('Quest Trees documentation', () => {
-    const docPath = path.join(__dirname, '../frontend/src/pages/docs/md/quest-trees.md');
+describe('Quest trees documentation', () => {
+    const docPath = join(
+        process.cwd(),
+        'frontend',
+        'src',
+        'pages',
+        'docs',
+        'md',
+        'quest-trees.md'
+    );
+    const doc = readFileSync(docPath, 'utf8');
 
-    it('lists Chemistry and Programming as existing quest trees', () => {
-        const content = fs.readFileSync(docPath, 'utf8');
-        const [existingSection] = content.split('## Planned Quest Trees');
-
-        expect(existingSection).toContain('**Chemistry**');
-        expect(existingSection).toContain('**Programming**');
+    it('lists the Chemistry quest line as available today', () => {
+        expect(doc).toMatch(/\*\*Chemistry\*\*\s+\u2013/i);
+        expect(doc).not.toMatch(/Chemistry[^\n]+being drafted/i);
     });
 
-    it('does not mark Chemistry or Programming as planned work', () => {
-        const content = fs.readFileSync(docPath, 'utf8');
-        const plannedSection = content.includes('## Planned Quest Trees')
-            ? content.split('## Planned Quest Trees')[1]
-            : '';
+    it('lists the Programming quest line as available today', () => {
+        expect(doc).toMatch(/\*\*Programming\*\*\s+\u2013/i);
+        expect(doc).not.toMatch(/Programming[^\n]+being drafted/i);
+    });
 
-        expect(plannedSection).not.toMatch(/\*\*Chemistry\*\*/);
-        expect(plannedSection).not.toMatch(/\*\*Programming\*\*/);
+    it('does not ask readers to check back later for quest tree coverage', () => {
+        expect(doc).not.toMatch(/Planned Quest Trees/i);
+        expect(doc).not.toMatch(/Check back/i);
     });
 });

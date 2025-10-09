@@ -13,14 +13,14 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 -   **3D Printing** – receive a printer, tackle small projects, fine-tune settings, and work up to larger print runs
 -   **Aquaria** – set up a Walstad tank, test the water, install a sponge filter, position the tank, add shrimp, introduce floating plants, keep guppies, perform water changes, breed them, and graduate to goldfish
 -   **Hydroponics** – grow basil, expand to bucket systems, refresh nutrients, experiment with lettuce, cultivate stevia for homemade sweetener, and regrow it for repeat harvests
--   **Chemistry** – run safe lab experiments that demonstrate sustainable rocket fuel principles, extract stevia into a sweetener, and purify it into crystals
+-   **Chemistry** – dilute acids safely, neutralize spills, adjust pH, run precipitation reactions, and extract stevia into crystals for sustainable sweeteners
 -   **Electronics** – wire a basic circuit, program an Arduino, read sensors, and build a dimmer
 -   **Robotics** – assemble a line follower, build a servo gripper, and learn advanced control after completing electronics basics
 -   **Rocketry** – print and launch a model rocket with parachute recovery and perform a static engine test
 -   **Energy** – harvest solar power, expand battery capacity, harness wind with a turbine, and accumulate dWatts toward higher milestones
 -   **Geothermal** – survey ground temperature and install a ground-source heat pump for steady renewable energy
 -   **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s, then add monitoring, nightly backups and automatic updates
--   **Programming** – automate sensors and data collection with lightweight scripts
+-   **Programming** – log thermistor readings, calibrate sensors, analyze temperature trends, publish JSON APIs, and deploy a web server to share data automations
 -   **Sysadmin** – learn core Linux commands and monitor resources on Ubuntu 24.04 LTS Minimal
 -   **UBI** – an optional quest explaining the metaguild's basic income concept with daily payouts
 -   **Completionist** – track progress toward finishing all available quests
