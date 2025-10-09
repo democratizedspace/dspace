@@ -7,13 +7,21 @@ async function scoreQuest(dialogue) {
     const OpenAI = (await import('openai')).default;
     const openai = new OpenAI({ apiKey });
     const prompt = `Rate the following quest dialogue from 0 to 1 for quality only return the number:\n${dialogue}`;
-    const res = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [
-            { role: 'user', content: prompt },
+    const res = await openai.responses.create({
+        model: 'gpt-5-chat-latest',
+        input: [
+            {
+                role: 'user',
+                content: [
+                    {
+                        type: 'text',
+                        text: prompt,
+                    },
+                ],
+            },
         ],
     });
-    const text = res.choices[0].message.content.trim();
+    const text = (res.output_text || '').trim();
     const num = parseFloat(text);
     return isNaN(num) ? 0.5 : num;
 }

@@ -1,15 +1,15 @@
 // Test resilience of scoreQuest to invalid OpenAI responses.
 import { describe, expect, test, vi } from 'vitest';
 
+const createResponseMock = vi.fn().mockResolvedValue({
+  output_text: 'not-a-number',
+});
+
 vi.mock('openai', () => {
   return {
     default: class {
-      chat = {
-        completions: {
-          create: vi.fn().mockResolvedValue({
-            choices: [{ message: { content: 'not-a-number' } }],
-          }),
-        },
+      responses = {
+        create: createResponseMock,
       };
     },
   };
@@ -22,6 +22,11 @@ describe('scoreQuest', () => {
     const { scoreQuest } = await import('../scripts/utils/llm.js');
     const score = await scoreQuest('dialogue');
     expect(score).toBe(0.5);
+    expect(createResponseMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: 'gpt-5-chat-latest',
+      })
+    );
     if (originalKey === undefined) {
       delete process.env.OPENAI_API_KEY;
     } else {

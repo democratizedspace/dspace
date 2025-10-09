@@ -1,13 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const createChatCompletionMock = vi.fn().mockResolvedValue({
-    choices: [{ message: { content: 'mocked reply' } }],
-});
+const responsesCreateMock = vi.fn().mockResolvedValue({ output_text: 'mocked reply' });
 
 vi.mock('openai', () => {
     return {
         default: vi.fn().mockImplementation(() => ({
-            chat: { completions: { create: createChatCompletionMock } },
+            responses: { create: responsesCreateMock },
         })),
     };
 });
@@ -19,7 +17,7 @@ vi.mock('../frontend/src/utils/gameState/common.js', () => ({
 
 describe('GPT35Turbo persona integration', () => {
     beforeEach(() => {
-        createChatCompletionMock.mockClear();
+        responsesCreateMock.mockClear();
     });
 
     it('injects persona-specific prompt and welcome message', async () => {
@@ -30,9 +28,12 @@ describe('GPT35Turbo persona integration', () => {
 
         await GPT35Turbo([], { persona });
 
-        expect(createChatCompletionMock).toHaveBeenCalledTimes(1);
-        const call = createChatCompletionMock.mock.calls[0][0];
-        expect(call.messages[0].content).toContain('Sydney');
-        expect(call.messages[2].content).toContain(persona.welcomeMessage);
+        expect(responsesCreateMock).toHaveBeenCalledTimes(1);
+        const call = responsesCreateMock.mock.calls[0][0];
+        expect(call.model).toBe('gpt-5-chat-latest');
+        expect(call.input[0].content[0].text).toContain('Sydney');
+        const lastMessage = call.input.at(-1);
+        expect(lastMessage?.role).toBe('assistant');
+        expect(lastMessage?.content?.[0]?.text).toContain(persona.welcomeMessage);
     });
 });
