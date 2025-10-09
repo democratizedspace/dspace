@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { npcPersonas } from '../frontend/src/data/npcPersonas.js';
 
 const loadGameStateMock = vi.fn();
 const buildDchatKnowledgeMock = vi.fn();
@@ -28,6 +29,8 @@ vi.mock('../frontend/src/utils/gameState/common.js', () => ({
 vi.mock('../frontend/src/utils/dchatKnowledge.js', () => ({
   buildDchatKnowledge: buildDchatKnowledgeMock,
 }));
+
+const dchatPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 
 describe('gpt-5 chat responses integration', () => {
   const fetchMock = vi.fn();
@@ -104,7 +107,10 @@ describe('gpt-5 chat responses integration', () => {
     expect(payload.model).toBe('gpt-5-chat-latest');
     expect(payload.input).toHaveLength(3);
     expect(payload.input[0].role).toBe('system');
-    expect(payload.input[0].content[0].text).toContain('GPT-5');
+    if (!dchatPersona) {
+      throw new Error('Expected to find the default dChat persona');
+    }
+    expect(payload.input[0].content[0].text).toBe(dchatPersona.systemPrompt);
     expect(payload.input[1].role).toBe('system');
     expect(payload.input[1].content[0].text).toContain('Quest facts');
     expect(payload.input[2]).toEqual({
@@ -133,12 +139,15 @@ describe('gpt-5 chat responses integration', () => {
     const [, init] = fetchMock.mock.calls[0];
     const payload = JSON.parse(init?.body ?? '{}');
     expect(payload.input).toHaveLength(2);
+    if (!dchatPersona) {
+      throw new Error('Expected to find the default dChat persona');
+    }
     expect(payload.input[1]).toEqual({
       role: 'assistant',
       content: [
         {
           type: 'text',
-          text: 'Welcome! How can I assist you today?',
+          text: dchatPersona.welcomeMessage,
         },
       ],
     });
