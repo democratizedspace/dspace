@@ -36,4 +36,17 @@ describe("item quality", () => {
       }
     }
   });
+
+  it("prices the CPR pocket mask instead of using a beta placeholder", () => {
+    const cprMask = (items as Array<Record<string, any>>).find(
+      (item) => item.name === "CPR pocket mask"
+    );
+
+    expect(cprMask).toBeDefined();
+    expect(cprMask?.price).toBeDefined();
+    expect(cprMask?.price).toMatch(/[0-9]/);
+    expect(cprMask?.priceExemptionReason ?? null).not.toBe(
+      PriceExemptionReason.BETA_PLACEHOLDER
+    );
+  });
 });
