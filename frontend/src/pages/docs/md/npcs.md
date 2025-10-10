@@ -18,7 +18,7 @@ settings.
 
 dChat is a compact, spherical smart assistant powered by large language models. Equipped with reasoning
 and information retrieval capabilities, it can answer questions and engage in conversation effortlessly.
-dChat now has a curated knowledge base covering the game's quests, items, processes, and the player's
+dChat now has a curated knowledge base covering the game's quests, achievements, items, processes, and the player's
 current inventory snapshot. Connect your OpenAI API key in the chat settings and dChat will
 automatically include this context when answering questions. dChat is provided free of charge to all
 metaguild members, and it's fully open source and self-hosted.
