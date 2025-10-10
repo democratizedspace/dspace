@@ -1,0 +1,14 @@
+---
+import Page from '../../components/Page.astro';
+import Titles from './Titles.svelte';
+---
+
+<Page title="Titles" columns="1">
+    <Titles client:load />
+</Page>
+
+<style>
+    :global(body) {
+        background: radial-gradient(circle at top, #111628, #090c16 70%);
+    }
+</style>

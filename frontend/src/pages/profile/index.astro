@@ -1,42 +1,55 @@
 ---
-import { randomBytes } from 'node:crypto';
 import Layout from '../../layouts/Layout.astro';
-import { getCookieValue } from '../../utils';
 import Avatar from '../../components/svelte/Avatar.svelte';
+import ProfileTitles from './ProfileTitles.svelte';
 ---
 
 <Layout title="Profile">
-    <main>
-        <div class="horizontal">
+    <main class="profile">
+        <section class="avatar-card">
+            <h1>Choose a default avatar</h1>
             <Avatar client:load />
-            <div class="vertical">
-            </div>
-        </div>
-
-        <p>Choose a default avatar</p>
+            <p class="hint">Pick the avatar that represents you across quests, stats, and leaderboards.</p>
+        </section>
+        <ProfileTitles client:load />
     </main>
 </Layout>
 
-    <style>
-        .horizontal {
-            display: flex;
-            flex-direction: row;
-            /* center items in this div vertically */
-            align-items: center;
+<style>
+    .profile {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        align-items: start;
+        padding: 2rem 0;
+    }
+
+    .avatar-card {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        background: rgba(23, 33, 48, 0.65);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid rgba(105, 140, 220, 0.35);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 1.6rem;
+        color: #f0f6ff;
+    }
+
+    .hint {
+        margin: 0;
+        color: #c7d7ff;
+        line-height: 1.4;
+    }
+
+    @media (max-width: 720px) {
+        .profile {
+            grid-template-columns: 1fr;
         }
-
-        .item {
-            /* equal spacing between items, and centered */
-            justify-content: space-evenly;
-            margin-left: 2rem;
-        }
-
-        .vertical {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .hidden {
-            display: none;
-        }    </style>
-
+    }
+</style>
