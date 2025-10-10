@@ -23,4 +23,17 @@ describe('buildDchatKnowledge', () => {
         const knowledge = buildDchatKnowledge({});
         expect(knowledge).toContain('How to do quests');
     });
+
+    test('summarizes achievements progress', () => {
+        const gameState = {
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+            },
+        };
+
+        const knowledge = buildDchatKnowledge(gameState);
+
+        expect(knowledge).toContain('Achievements:');
+        expect(knowledge).toMatch(/First Steps/);
+    });
 });

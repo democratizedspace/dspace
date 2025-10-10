@@ -1,9 +1,11 @@
 import items from '../pages/inventory/json/items/index.js';
 import processes from '../generated/processes.json' assert { type: 'json' };
+import { evaluateAchievements } from './achievements.js';
 
 const MAX_ITEMS = 25;
 const MAX_PROCESSES = 20;
 const MAX_QUESTS = 25;
+const MAX_ACHIEVEMENT_ENTRIES = 6;
 const PRIORITY_QUEST_IDS = [
     'welcome/howtodoquests',
     'welcome/intro-inventory',
@@ -105,6 +107,46 @@ function summarizeProcesses() {
         });
 }
 
+function summarizeAchievements(gameState = {}) {
+    const achievements = evaluateAchievements(gameState);
+
+    if (!Array.isArray(achievements) || achievements.length === 0) {
+        return [];
+    }
+
+    const unlocked = achievements.filter((achievement) => achievement.unlocked);
+    const inProgress = achievements.filter(
+        (achievement) => !achievement.unlocked && achievement.progress?.percent > 0
+    );
+
+    const formatEntry = (achievement) => {
+        const display = achievement.progress?.displayValue;
+        return display ? `${achievement.title} (${display})` : achievement.title;
+    };
+
+    const unlockedEntries = unlocked
+        .slice(0, MAX_ACHIEVEMENT_ENTRIES)
+        .map((achievement) => achievement.title);
+    const remainingSlots = Math.max(0, MAX_ACHIEVEMENT_ENTRIES - unlockedEntries.length);
+    const progressEntries = inProgress.slice(0, remainingSlots).map(formatEntry);
+
+    const sections = [];
+
+    if (unlockedEntries.length > 0) {
+        sections.push(`Unlocked: ${unlockedEntries.join(', ')}`);
+    }
+
+    if (progressEntries.length > 0) {
+        sections.push(`In progress: ${progressEntries.join(', ')}`);
+    }
+
+    if (sections.length === 0) {
+        sections.push('No achievements unlocked yet.');
+    }
+
+    return sections;
+}
+
 function summarizeQuests() {
     return prioritizeQuests(quests)
         .slice(0, MAX_QUESTS)
@@ -141,6 +183,11 @@ export function buildDchatKnowledge(gameState = {}) {
         knowledgeSections.push(`Quests: ${questSummary.join(' || ')}`);
     }
 
+    const achievementSummary = summarizeAchievements(gameState);
+    if (achievementSummary.length > 0) {
+        knowledgeSections.push(`Achievements: ${achievementSummary.join(' | ')}`);
+    }
+
     const processSummary = summarizeProcesses();
     if (processSummary.length > 0) {
         knowledgeSections.push(`Processes: ${processSummary.join(' | ')}`);
@@ -157,5 +204,6 @@ export function __testables() {
         summarizeProcesses,
         summarizeQuests,
         prioritizeQuests,
+        summarizeAchievements,
     };
 }
