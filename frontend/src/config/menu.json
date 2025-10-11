@@ -80,8 +80,7 @@
     },
     {
         "name": "Titles",
-        "href": "/titles",
-        "comingSoon": true
+        "href": "/titles"
     },
     {
         "name": "Flywheel",
