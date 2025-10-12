@@ -15,6 +15,14 @@
 
     const dispatch = createEventDispatcher();
     let validationErrors = {};
+    let dependenciesInput = '';
+
+    function parseDependencies(value) {
+        return value
+            .split(/[\n,]/)
+            .map((entry) => entry.trim())
+            .filter(Boolean);
+    }
 
     function handleImageUpload(event) {
         const file = event.target.files[0];
@@ -65,6 +73,8 @@
             imageUrl = data.url;
         }
 
+        const parsedDependencies = parseDependencies(dependenciesInput);
+        const hasDependenciesInput = dependenciesInput.trim().length > 0;
         const payload = {
             name,
             description,
@@ -72,6 +82,9 @@
             ...(price && { price }),
             ...(unit && { unit }),
             ...(type && { type }),
+            ...((hasDependenciesInput || (isEdit && itemData?.dependencies?.length)) && {
+                dependencies: parsedDependencies,
+            }),
         };
 
         if (isEdit && itemData?.id) {
@@ -92,6 +105,7 @@
             unit = itemData.unit || '';
             type = itemData.type || '';
             previewUrl = itemData.image || null;
+            dependenciesInput = (itemData.dependencies || []).join('\n');
         }
     });
 </script>
@@ -158,6 +172,16 @@
         <input type="text" id="type" bind:value={type} placeholder="e.g. 3dprint" />
     </div>
 
+    <div class="form-group">
+        <label for="dependencies">Dependencies (optional)</label>
+        <textarea
+            id="dependencies"
+            bind:value={dependenciesInput}
+            placeholder="Enter item IDs separated by commas or new lines"
+        />
+        <p class="helper-text">Separate dependencies with commas or new lines.</p>
+    </div>
+
     <div class="form-submit">
         <button type="submit" class="submit-button">{isEdit ? 'Update Item' : 'Create Item'}</button
         >
@@ -165,7 +189,15 @@
 </form>
 
 {#if name || description || previewUrl}
-    <ItemPreview {name} {description} imageUrl={previewUrl} {price} {unit} {type} />
+    <ItemPreview
+        {name}
+        {description}
+        imageUrl={previewUrl}
+        {price}
+        {unit}
+        {type}
+        dependencies={parseDependencies(dependenciesInput)}
+    />
 {/if}
 
 <style>
@@ -243,6 +275,12 @@
         font-size: 14px;
         display: block;
         margin-top: 5px;
+    }
+
+    .helper-text {
+        font-size: 14px;
+        color: #c4f5c6;
+        margin-top: 6px;
     }
 
     .image-preview-container {

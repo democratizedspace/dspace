@@ -5,6 +5,7 @@
     export let price = '';
     export let unit = '';
     export let type = '';
+    export let dependencies = [];
 </script>
 
 <div class="item-preview">
@@ -21,6 +22,16 @@
     {/if}
     {#if type}
         <p class="detail">Type: {type}</p>
+    {/if}
+    {#if dependencies.length}
+        <div class="detail">
+            <span class="detail-label">Dependencies:</span>
+            <ul>
+                {#each dependencies as dependency}
+                    <li>{dependency}</li>
+                {/each}
+            </ul>
+        </div>
     {/if}
 </div>
 
@@ -41,5 +52,16 @@
     }
     .detail {
         margin: 0.25rem 0;
+    }
+
+    .detail-label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    ul {
+        margin: 0;
+        padding-left: 1.25rem;
     }
 </style>

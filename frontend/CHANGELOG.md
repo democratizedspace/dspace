@@ -11,6 +11,7 @@
 -   Auto-creation of placeholder artifacts in Playwright trace directories
 -   Better .gitignore handling for test artifacts
 -   Live `/stats` page highlighting quest, inventory, and process totals
+-   Item form now captures item dependencies with trimming and live previews
 
 ### Fixed
 

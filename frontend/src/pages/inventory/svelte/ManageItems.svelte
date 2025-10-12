@@ -82,6 +82,7 @@
                                 price={item.price}
                                 unit={item.unit}
                                 type={item.type}
+                                dependencies={item.dependencies || []}
                             />
                         {/if}
                     </div>
