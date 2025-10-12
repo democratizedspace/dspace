@@ -11,7 +11,7 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## 2024
 
--   [ ] guilds
+-   [x] guilds (Metaguild recruitment, donation board, and NPC wings live)
 -   [ ] top-down isometric base building
 
 ## 2023

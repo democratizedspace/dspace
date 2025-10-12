@@ -14,6 +14,7 @@ describe('ItemPreview component', () => {
                 price: '10',
                 unit: 'kg',
                 type: 'resource',
+                dependencies: ['resource/filament', 'tool/nozzle'],
             },
         });
 
@@ -22,6 +23,9 @@ describe('ItemPreview component', () => {
         getByText('Price: 10');
         getByText('Unit: kg');
         getByText('Type: resource');
+        getByText('Dependencies:');
+        getByText('resource/filament');
+        getByText('tool/nozzle');
         const img = getByAltText('Item preview');
         expect(img.getAttribute('src')).toBe('/item.png');
     });
