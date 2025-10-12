@@ -596,6 +596,132 @@
         }
     },
     {
+        "id": "26707a14-9826-4a61-8d5a-44f8fe4f28bc",
+        "name": "servo-ready fincan shell",
+        "description": "3D printed PLA fincan with molded servo pockets and control horn slots for 35 mm rockets.",
+        "image": "/assets/3dprinted_rocket_fincan.jpg",
+        "price": "6 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "de55b393-5a29-425d-879a-f1d5716ca8ee",
+        "name": "camera sled insert",
+        "description": "Lightweight PETG tray that locks into the payload bay and holds an action camera with foam padding.",
+        "image": "/assets/3dprinted_rocket_body_tube.jpg",
+        "price": "4 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "71d8c069-1a13-4135-bb36-2aad462a7b0c",
+        "name": "servo-actuated fincan",
+        "description": "Vectoring fin section with a micro servo and linkages installed for gentle thrust steering.",
+        "image": "/assets/3dprinted_rocket_fincan.jpg",
+        "price": "18 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "517ca0e7-a002-4b1f-890a-f895e1269d34",
+        "name": "action camera module",
+        "description": "Thumb-sized 1080p action camera board with lens and 5 V regulator for onboard footage.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "45 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "bd54a4c5-c252-4665-b97c-4c019952e889",
+        "name": "9-axis IMU breakout",
+        "description": "Bosch BNO055 breakout with integrated sensor fusion for orientation tracking and servo feedback.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "15 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "091236e1-ffcd-4a4e-9629-72128fb3bff0",
+        "name": "micro servo linkage kit",
+        "description": "Pair of pushrods, clevises, and mounting screws sized for 9 g servos steering small fins.",
+        "image": "/assets/3dprinted_rocket_fincan.jpg",
+        "price": "3 dUSD",
+        "unit": "kit",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "9fda1ebf-4ba1-4735-a7c5-a6d20f7be0c3",
+        "name": "guidance controller prototype",
+        "description": "Arduino-based flight board with calibrated IMU, servo output, and safety interlock firmware.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "35 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "c91de122-3eee-436c-a040-fad664e3aceb",
+        "name": "launch-capable model rocket (guided)",
+        "description": "35 cm guided model rocket with servo vectoring, B6-4 motor, and parachute-ready payload bay.",
+        "image": "/assets/rocket_field.jpg",
+        "price": "65 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "7fbb486a-86a4-4346-a1b3-b71080bebd64",
+        "name": "range safety clearance",
+        "description": "Signed checklist confirming pad setup, continuity checks, and wind limits for a guided launch.",
+        "image": "/assets/paperwork.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "019db64b-1be2-427c-8a9a-e13d930e8e19",
+        "name": "guided flight log",
+        "description": "Time-stamped servo angles, IMU data, and onboard video bookmark from a stabilized model rocket flight.",
+        "image": "/assets/rocket_min.gif",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
         "id": "d660dc50-7afb-4a2f-9508-a42490aae5e4",
         "name": "Rocket Descent (animated)",
         "description": "A rocket descending to the ground with a parachute.",

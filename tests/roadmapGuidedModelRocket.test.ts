@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-describe('roadmap custom quests entry', () => {
+describe('roadmap guided model rocket entry', () => {
   const roadmapPath = join(
     process.cwd(),
     'frontend',
@@ -13,10 +13,10 @@ describe('roadmap custom quests entry', () => {
     'roadmap.md'
   );
 
-  it('reflects that the custom quest system has shipped', () => {
+  it('marks the in-game guided model rocket upgrade as shipped', () => {
     const content = readFileSync(roadmapPath, 'utf8');
 
-    expect(content).not.toMatch(/-\s+\[ \]\s+\[?custom quests/i);
-    expect(content).toMatch(/-\s+\[x\]\s+\[custom quests\]\(\/docs\/custom-quest-system\)/i);
+    expect(content).not.toMatch(/-\s+\[ \]\s+in-game guided model rocket upgrade/i);
+    expect(content).toMatch(/-\s+\[x\]\s+in-game guided model rocket upgrade/i);
   });
 });

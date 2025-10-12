@@ -1329,6 +1329,283 @@
         "duration": "45s"
     },
     {
+        "id": "3dprint-servo-fincan-shell",
+        "title": "3D print a servo-ready fincan shell",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 58.4
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1185.6
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "26707a14-9826-4a61-8d5a-44f8fe4f28bc",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 58.4
+            }
+        ],
+        "duration": "8h 45m"
+    },
+    {
+        "id": "3dprint-camera-sled",
+        "title": "3D print a camera sled insert",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 22.1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 420.8
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "de55b393-5a29-425d-879a-f1d5716ca8ee",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 22.1
+            }
+        ],
+        "duration": "3h 15m"
+    },
+    {
+        "id": "assemble-servo-fincan",
+        "title": "Install a micro servo into the fincan for vectoring",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "26707a14-9826-4a61-8d5a-44f8fe4f28bc",
+                "count": 1
+            },
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "091236e1-ffcd-4a4e-9629-72128fb3bff0",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "71d8c069-1a13-4135-bb36-2aad462a7b0c",
+                "count": 1
+            }
+        ],
+        "duration": "25m"
+    },
+    {
+        "id": "assemble-guidance-controller",
+        "title": "Assemble and flash a guidance controller prototype",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "828d6c3b-66a5-4064-b221-97630274502b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "bd54a4c5-c252-4665-b97c-4c019952e889",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9fda1ebf-4ba1-4735-a7c5-a6d20f7be0c3",
+                "count": 1
+            }
+        ],
+        "duration": "40m"
+    },
+    {
+        "id": "assemble-guided-rocket",
+        "title": "Assemble a guided model rocket airframe",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
+                "count": 1
+            },
+            {
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+                "count": 1
+            },
+            {
+                "id": "05c339ee-f50b-419a-804a-341f850b85e9",
+                "count": 1
+            },
+            {
+                "id": "71d8c069-1a13-4135-bb36-2aad462a7b0c",
+                "count": 1
+            },
+            {
+                "id": "9fda1ebf-4ba1-4735-a7c5-a6d20f7be0c3",
+                "count": 1
+            },
+            {
+                "id": "de55b393-5a29-425d-879a-f1d5716ca8ee",
+                "count": 1
+            },
+            {
+                "id": "517ca0e7-a002-4b1f-890a-f895e1269d34",
+                "count": 1
+            },
+            {
+                "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
+                "count": 1
+            },
+            {
+                "id": "9477a618-591b-45e0-9d81-18d60b848490",
+                "count": 1
+            },
+            {
+                "id": "4d817f1c-d78d-4fac-a514-402bce330693",
+                "count": 1
+            },
+            {
+                "id": "36042a2b-861a-4192-a991-98778898963a",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.15
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c91de122-3eee-436c-a040-fad664e3aceb",
+                "count": 1
+            }
+        ],
+        "duration": "35m"
+    },
+    {
+        "id": "field-check-guided-rocket",
+        "title": "Run range checks for a guided model rocket launch",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "c91de122-3eee-436c-a040-fad664e3aceb",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c91de122-3eee-436c-a040-fad664e3aceb",
+                "count": 1
+            },
+            {
+                "id": "7fbb486a-86a4-4346-a1b3-b71080bebd64",
+                "count": 1
+            }
+        ],
+        "duration": "12m"
+    },
+    {
+        "id": "launch-rocket-guided",
+        "title": "Launch a guided model rocket with servo vectoring",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
+                "count": 1
+            },
+            {
+                "id": "7fbb486a-86a4-4346-a1b3-b71080bebd64",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "c91de122-3eee-436c-a040-fad664e3aceb",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "019db64b-1be2-427c-8a9a-e13d930e8e19",
+                "count": 1
+            },
+            {
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                "count": 1
+            }
+        ],
+        "duration": "45s"
+    },
+    {
         "id": "assemble-rocket-parachute",
         "title": "Install a parachute system on a model rocket",
         "requireItems": [],

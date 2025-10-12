@@ -1,0 +1,151 @@
+{
+    "id": "rocketry/guided-model-flight",
+    "title": "Guided Model Flight",
+    "description": "Vector-stabilize your printed rocket and capture flight footage.",
+    "image": "/assets/modelrocket.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here! Instead of chasing suborbital leaps, let's add servo guidance to our 3D-printed rocket. Ready to build something just one step beyond our parachute launch?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fabricate",
+                    "text": "Absolutely—what parts do we print first?"
+                }
+            ]
+        },
+        {
+            "id": "fabricate",
+            "text": "We'll 3D print a fincan with servo pockets and a camera sled for the payload bay. Get both runs queued so the hardware matches our checklists.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-servo-fincan-shell",
+                    "text": "Print the servo-ready fincan"
+                },
+                {
+                    "type": "process",
+                    "process": "3dprint-camera-sled",
+                    "text": "Print the camera sled insert"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble-fincan",
+                    "text": "Both prints cooled and cleaned up.",
+                    "requiresItems": [
+                        { "id": "26707a14-9826-4a61-8d5a-44f8fe4f28bc", "count": 1 },
+                        { "id": "de55b393-5a29-425d-879a-f1d5716ca8ee", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "assemble-fincan",
+            "text": "Mount the micro servo and linkages so the fins can nudge the thrust line. Keep the wiring tidy—we'll route it up to the guidance bay next.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-servo-fincan",
+                    "text": "Install the servo and linkage kit"
+                },
+                {
+                    "type": "goto",
+                    "goto": "electronics",
+                    "text": "Servo swings smoothly across the travel range.",
+                    "requiresItems": [{ "id": "71d8c069-1a13-4135-bb36-2aad462a7b0c", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "electronics",
+            "text": "Time to assemble the guidance controller: Arduino, IMU, and jumper harness, plus a quick sweep test so we know the firmware drives the servo correctly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-guidance-controller",
+                    "text": "Solder and flash the guidance controller"
+                },
+                {
+                    "type": "process",
+                    "process": "arduino-servo-sweep",
+                    "text": "Run the servo sweep test sketch"
+                },
+                {
+                    "type": "goto",
+                    "goto": "integration",
+                    "text": "Controller calibrated and logging orientation.",
+                    "requiresItems": [{ "id": "9fda1ebf-4ba1-4735-a7c5-a6d20f7be0c3", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "integration",
+            "text": "Let's stack everything: fincan, body tube, parachute, camera sled, motor, and controller harness. Route the servo lead so it clears the ejection charge.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-guided-rocket",
+                    "text": "Assemble the guided model rocket"
+                },
+                {
+                    "type": "goto",
+                    "goto": "field-prep",
+                    "text": "Airframe buttoned up with the payload secured.",
+                    "requiresItems": [{ "id": "c91de122-3eee-436c-a040-fad664e3aceb", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "field-prep",
+            "text": "On site we insert the igniter, continuity-check the controller, and work through the laminated launch checklist. Range safety wants a sign-off before we call the countdown.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "field-check-guided-rocket",
+                    "text": "Complete the guided launch pad checks"
+                },
+                {
+                    "type": "goto",
+                    "goto": "launch",
+                    "text": "Checklist signed, winds within limits, controller armed.",
+                    "requiresItems": [{ "id": "7fbb486a-86a4-4346-a1b3-b71080bebd64", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "launch",
+            "text": "Fire the motor and let the controller keep the rocket vertical while the camera records. Recovery crews will grab the capsule as soon as the parachute settles.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "launch-rocket-guided",
+                    "text": "Range is green—launch!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "celebrate",
+                    "text": "Telemetry packet and flight credit secured.",
+                    "requiresItems": [
+                        { "id": "019db64b-1be2-427c-8a9a-e13d930e8e19", "count": 1 },
+                        { "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "celebrate",
+            "text": "Beautiful work! That vectoring kept the boost phase tidy, and the camera footage will help us tune the next airframe.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Export the footage and log the mission."
+                }
+            ]
+        }
+    ],
+    "rewards": [{ "id": "71d8c069-1a13-4135-bb36-2aad462a7b0c", "count": 1 }],
+    "requiresQuests": ["rocketry/parachute", "rocketry/recovery-run", "rocketry/preflight-check"]
+}

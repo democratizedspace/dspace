@@ -12,40 +12,46 @@ You'll eventually be able to build a fully functioning virtual rocket and launch
 
 The ultimate goal is to make the creation of a functioning orbital rocket achievable in the real-world, too! There's no fundamental reason why this shouldn't be possible, but it will require a lot of work. It will also require complying with ITAR, which will be a challenge. This is a long-term goal, and it will take many years, if not decades.
 
-## Suborbital launch checklist
+## Guided model rocket upgrade plan
 
-Before we can aim for orbit, DSPACE now includes a structured playbook for the first
-suborbital campaign. Use it as an in-game guide when preparing your launch pad and
-simulator runs.
+We're still years away from orbit, but DSPACE now ships the tooling to build a
+servo-stabilized model rocket that improves on our parachute recoveries. Follow
+this plan to print the right parts, wire the guidance controller, and launch with
+confidence.
 
-### Pre-launch readiness
+### Fabrication
 
-1. **Assemble a flightworthy stack** – Verify your Nova-class booster, recovery
-   system, and telemetry payload are all marked as "flight ready" in your inventory.
-   Repair or refurbish any components that failed the last flight test before
-   proceeding.
-2. **Simulate the mission** – Run the "suborbital-hop" process to validate burn
-   timing and apogee projections. Ensure the simulation completes without warnings
-   before you start fueling.
-3. **Pad operations** – Assign a crew member (or guild helper) to the launch pad
-   process to confirm clamps, umbilicals, and range safety beacons are online.
-   Logging these checks in-game now grants a small dCarbon credit bonus for careful
-   operators.
+1. **Print the new fincan** – Use `3dprint-servo-fincan-shell` to produce a
+   fincan with servo pockets and control-horn slots. It consumes the same
+   entry-level printer and PLA you used for the baseline rocket.
+2. **Print a camera sled** – Run `3dprint-camera-sled` so the payload bay can
+   capture onboard footage without rattling around during boost.
 
-### Flight operations
+### Guidance electronics
 
--   **Countdown automation** – Enable the quest automation toggle so dChat can call
-    out events at T-10, T-1, and liftoff. This new cadence reduces mis-timed stage
-    separation during practice runs.
--   **Recovery prep** – Stage parachutes and the drone ship recovery process before
-    ignition. DSPACE now blocks launch if the recovery workflow is not queued,
-    keeping virtual debris out of the ocean.
+-   **Install the servo hardware** – `assemble-servo-fincan` adds the micro servo
+    and linkage kit to your printed fincan. Keep a spare tube of superglue handy
+    for the control horn screws.
+-   **Build the controller** – `assemble-guidance-controller` combines an Arduino
+    Uno, the 9-axis IMU breakout, and jumper harness into a single prototype. Run
+    `arduino-servo-sweep` afterward to confirm the firmware sweeps the servo cleanly.
 
-### Abort criteria
+### Airframe integration
 
--   Abort if telemetry reports a chamber pressure delta greater than 5% for longer
-    than three seconds. The quest log will now highlight this threshold in red during
-    hot-fire rehearsals.
--   Scrub the countdown if winds exceed the range safety envelope shown in the
-    weather widget. You'll retain your propellant and can rerun the quest without
-    penalty once conditions stabilize.
+1. **Stack the rocket** – `assemble-guided-rocket` walks through installing the
+   guided fincan, parachute harness kit, action camera, and B6-4 motor into a
+   single guided-airframe inventory item.
+2. **Pack data storage** – The recipe installs a 64 GB microSD card so your
+   footage and telemetry survive the landing.
+
+### Field operations
+
+-   **Pad checks** – Before arming, run `field-check-guided-rocket` to insert the
+    igniter, verify launch controller continuity, and capture the range safety
+    clearance item. The quest blocks launch without that clearance.
+-   **Launch** – `launch-rocket-guided` performs the countdown and awards a
+    `guided flight log` plus a `dLaunch` credit when everything returns safely.
+
+Collecting the log unlocks the "Guided Model Flight" quest finale and earns a
+replacement servo-actuated fincan so you can iterate on camera angles or servo
+tuning without rebuilding every component from scratch.

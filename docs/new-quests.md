@@ -11,7 +11,7 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 244
+Current quest count: 245
 New quests in this release: 222
 
 ### 3dprinting
@@ -324,7 +324,7 @@ New quests in this release: 12
 
 Prev quest count: 3
 Current quest count: 10
-New quests in this release: 9
+New quests in this release: 10
 
 ### aquaria
 
@@ -347,6 +347,7 @@ New quests in this release: 9
 
 -   rocketry/firstlaunch
 -   rocketry/parachute
+-   rocketry/guided-model-flight
 
 ### ubi
 

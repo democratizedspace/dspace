@@ -16,7 +16,7 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## 2023
 
--   [ ] in-game suborbital launch
+-   [x] in-game guided model rocket upgrade
 -   [x] AI-enabled NPCs (chat now supports persona-powered conversations)
 
 ## September 2023
@@ -29,7 +29,7 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## July 2023
 
--   [x] content update (suborbital launch checklist for rockets)
+-   [x] content update (guided model rocket upgrade plan for rockets)
 
 ## June 2023
 
