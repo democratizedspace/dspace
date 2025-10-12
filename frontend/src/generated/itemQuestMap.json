@@ -202,6 +202,50 @@
         "requires": ["rocketry/parachute"],
         "rewards": []
     },
+    "125eaa46-48f1-4cef-adaa-c200892af437": {
+        "requires": ["rocketry/guided-rocket-build"],
+        "rewards": []
+    },
+    "84a6f736-bff8-4aa5-a2ce-c913e795c9cf": {
+        "requires": ["rocketry/guided-rocket-build"],
+        "rewards": []
+    },
+    "dc5897f0-acec-4c3b-ad4d-535054e768f6": {
+        "requires": ["rocketry/guided-rocket-build"],
+        "rewards": []
+    },
+    "bdc905f5-c36f-4608-9c7f-da7b0988572f": {
+        "requires": ["rocketry/guided-rocket-build"],
+        "rewards": []
+    },
+    "5873d7b0-dd0f-436f-b942-286aedd253d0": {
+        "requires": ["rocketry/suborbital-hop"],
+        "rewards": []
+    },
+    "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4": {
+        "requires": ["rocketry/suborbital-hop"],
+        "rewards": ["rocketry/guided-rocket-build", "rocketry/suborbital-hop"]
+    },
+    "e37831d8-76d4-4ffc-9e75-7d5bc601cf64": {
+        "requires": ["rocketry/suborbital-hop"],
+        "rewards": ["rocketry/guided-rocket-build"]
+    },
+    "246a8dca-ed43-490d-8b28-5ab4ab47a792": {
+        "requires": ["rocketry/suborbital-hop"],
+        "rewards": ["rocketry/guided-rocket-build"]
+    },
+    "daf6573f-804c-46e6-aa70-d9a41c8c81da": {
+        "requires": ["rocketry/suborbital-hop"],
+        "rewards": ["rocketry/suborbital-hop"]
+    },
+    "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe": {
+        "requires": ["rocketry/suborbital-hop"],
+        "rewards": ["rocketry/suborbital-hop"]
+    },
+    "60a1e598-084e-4325-9c2c-fb5d95d19f41": {
+        "requires": ["rocketry/suborbital-hop"],
+        "rewards": ["rocketry/suborbital-hop"]
+    },
     "7ca9cad5-4bc2-420b-9733-24d1e38c2324": {
         "requires": ["rocketry/firstlaunch"],
         "rewards": []

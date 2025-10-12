@@ -1,0 +1,126 @@
+{
+    "id": "rocketry/suborbital-hop",
+    "title": "Guided Model Rocket Hop",
+    "description": "Run the guided hop simulator, prep the range, and fly a servo-stabilized model rocket with onboard video.",
+    "image": "/assets/rocket_parachute.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova again! With the guidance stack ready, let's rehearse the profile and take it to the field for a real hop.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "simulate",
+                    "text": "Kick off the simulator run."
+                }
+            ]
+        },
+        {
+            "id": "simulate",
+            "text": "We always rehearse before driving to the range. Load the stability firmware and run the hop sim until telemetry says we're green.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "suborbital-hop",
+                    "text": "Run the guided hop simulation"
+                },
+                {
+                    "type": "goto",
+                    "goto": "range",
+                    "text": "Simulator shows acceptable drift and apogee.",
+                    "requiresItems": [{ "id": "5873d7b0-dd0f-436f-b942-286aedd253d0", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "range",
+            "text": "Great! Pack the rocket, guidance stack, camera, and launch gear. We'll run the guided pad checklist before arming anything.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pad",
+                    "text": "Gear staged at the pad.",
+                    "requiresItems": [
+                        { "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec", "count": 1 },
+                        { "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d", "count": 1 },
+                        { "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b", "count": 1 },
+                        { "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac", "count": 1 },
+                        { "id": "9477a618-591b-45e0-9d81-18d60b848490", "count": 1 },
+                        { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
+                        { "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64", "count": 1 },
+                        { "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "pad",
+            "text": "Set the rod angle, thread the igniter, and perform the fin sweep. We'll log each step into the guided pad checklist.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "range-setup-guided-hop",
+                    "text": "Run the guided launch pad checklist"
+                },
+                {
+                    "type": "goto",
+                    "goto": "countdown",
+                    "text": "Checklist complete and servos passed the wiggle test.",
+                    "requiresItems": [{ "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "countdown",
+            "text": "Time for the callouts. You'll read from the countdown card while I watch the pad camera.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "countdown-guided-hop",
+                    "text": "Walk through the guided countdown"
+                },
+                {
+                    "type": "goto",
+                    "goto": "launch",
+                    "text": "Countdown finished at T-0 without holds.",
+                    "requiresItems": [{ "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "launch",
+            "text": "Range is green. Arm the guidance stack, key the controller, and let's send this hop skyward!",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "launch-guided-hop",
+                    "text": "Launch the guided hop"
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Rocket recovered with clean data capsule.",
+                    "requiresItems": [{ "id": "60a1e598-084e-4325-9c2c-fb5d95d19f41", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Telemetry looks fantastic and the onboard footage is going to be a hit. We'll archive the log and plan the next hop soon.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Log the flight and celebrate the hop!"
+                }
+            ]
+        }
+    ],
+    "rewards": [{ "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf", "count": 2 }],
+    "requiresQuests": [
+        "rocketry/recovery-run",
+        "rocketry/preflight-check",
+        "rocketry/guided-rocket-build"
+    ]
+}

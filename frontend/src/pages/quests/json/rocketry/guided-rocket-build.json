@@ -1,0 +1,127 @@
+{
+    "id": "rocketry/guided-rocket-build",
+    "title": "Build a Guided Model Rocket",
+    "description": "Print a servo-ready fincan, assemble the avionics, and program guidance for a camera-equipped hop.",
+    "image": "/assets/rocket_parachute.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here! Let's turn your parachute bird into a guided flier. We'll print fresh hardware and wire up the servos together.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-fincan",
+                    "text": "Ready to upgrade the airframe."
+                }
+            ]
+        },
+        {
+            "id": "print-fincan",
+            "text": "First up is a fincan with servo pockets. Slice the model, babysit the first layer, and let the printer chew through the infill.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-guided-fincan",
+                    "text": "Start the servo-ready fincan print"
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-sled",
+                    "text": "Fincan cooled and off the bed.",
+                    "requiresItems": [{ "id": "125eaa46-48f1-4cef-adaa-c200892af437", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "print-sled",
+            "text": "Nice. Now we need the avionics sled to hold the Arduino, IMU, and wiring bundle inside the fincan.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-guidance-sled",
+                    "text": "Print the avionics sled"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble-stack",
+                    "text": "Sled fits cleanly into the fincan.",
+                    "requiresItems": [
+                        { "id": "125eaa46-48f1-4cef-adaa-c200892af437", "count": 1 },
+                        { "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "assemble-stack",
+            "text": "Time to wire the servos, strap down the Arduino, and route the harness. Double-check throw directions before sealing it up.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-guided-flight-stack",
+                    "text": "Assemble the guidance stack"
+                },
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Servos move cleanly and wiring is tidy.",
+                    "requiresItems": [{ "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Let's flash the firmware and tune the servo endpoints so the rocket holds attitude instead of tumbling.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-guided-flight-stack",
+                    "text": "Upload and tune the stability firmware"
+                },
+                {
+                    "type": "goto",
+                    "goto": "camera",
+                    "text": "Firmware passes the bench tilt test.",
+                    "requiresItems": [
+                        { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
+                        { "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "camera",
+            "text": "One last upgrade: mount the keychain camera so we can replay the hop from onboard footage.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "install-rocket-camera",
+                    "text": "Install the nosecone camera"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wrap",
+                    "text": "Camera wiring is tucked and hatch secured.",
+                    "requiresItems": [{ "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "wrap",
+            "text": "Beautiful build! Stow that stack until you're at the pad and we'll plan the guided hop together.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Packed up and ready for launch day!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
+        { "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792", "count": 1 }
+    ],
+    "requiresQuests": ["rocketry/firstlaunch", "rocketry/parachute", "rocketry/preflight-check"]
+}

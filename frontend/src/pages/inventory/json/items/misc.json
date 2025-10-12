@@ -582,7 +582,7 @@
     {
         "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
         "name": "launch-capable model rocket (parachute)",
-        "description": "35 cm tall, 25 mm body tube rocket with single-use B6-4 motor, flame-resistant wadding and a 30 cm nylon parachute pre-installed; ~70 g launch weight.",
+        "description": "35 cm tall, 25 mm body tube rocket with single-use B6-4 motor, flame-resistant wadding and a 30 cm nylon parachute pre-installed; ~70 g launch weight. Baseline airframe for guidance upgrades.",
         "image": "/assets/rocket_parachute.jpg",
         "price": "25 dUSD",
         "unit": "each",
@@ -594,6 +594,84 @@
                 { "task": "codex-item-hardening-2025-08-24", "date": "2025-08-24", "score": 60 }
             ]
         }
+    },
+    {
+        "id": "5873d7b0-dd0f-436f-b942-286aedd253d0",
+        "name": "guided hop telemetry",
+        "description": "CSV export of apogee, attitude hold, and drift estimates from the guided model rocket hop simulator.",
+        "image": "/assets/rocket_min.gif",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "125eaa46-48f1-4cef-adaa-c200892af437",
+        "name": "servo-ready fincan",
+        "description": "3D printed PLA fincan with cutouts for 9 g servos and wiring channels sized for 35 mm rockets.",
+        "image": "/assets/3dprinted_rocket_fincan.jpg",
+        "price": "6 dUSD"
+    },
+    {
+        "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf",
+        "name": "avionics sled",
+        "description": "PETG sled that locks into the fincan and holds an Arduino, IMU breakout, and wiring harness.",
+        "image": "/assets/3dprinted_rocket_body_tube.jpg",
+        "price": "4 dUSD"
+    },
+    {
+        "id": "dc5897f0-acec-4c3b-ad4d-535054e768f6",
+        "name": "micro servo pair",
+        "description": "Matched 9 g servos with metal gears and servo horns for thrust-vectoring experiments.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "price": "18 dUSD",
+        "unit": "pair"
+    },
+    {
+        "id": "bdc905f5-c36f-4608-9c7f-da7b0988572f",
+        "name": "keychain camera kit",
+        "description": "20 g keychain HD camera, lithium cell, and mounting frame sized for 30–35 mm nosecones.",
+        "image": "/assets/rocket_min.gif",
+        "price": "22 dUSD"
+    },
+    {
+        "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+        "name": "guided flight stack",
+        "description": "Assembled fincan, avionics sled, servos, and Arduino wired for closed-loop fin steering.",
+        "image": "/assets/rocket_parachute.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+        "name": "stability firmware",
+        "description": "Verified Arduino sketch implementing fin hold routines and range safety tilts for guided hops.",
+        "image": "/assets/quests/basic_circuit.svg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+        "name": "nosecone camera module",
+        "description": "Keychain camera epoxied into a printed sled with removable hatch for battery swaps.",
+        "image": "/assets/rocket_min.gif",
+        "price": "24 dUSD"
+    },
+    {
+        "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da",
+        "name": "guided launch pad checklist",
+        "description": "Annotated field checklist covering fin sweep, servo wiggle test, arming plug, and range calls.",
+        "image": "/assets/rocket_min.gif",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe",
+        "name": "guided countdown card",
+        "description": "T-30 to liftoff script with servo arming callouts and pad clear confirmations.",
+        "image": "/assets/rocket_min.gif",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "60a1e598-084e-4325-9c2c-fb5d95d19f41",
+        "name": "guided flight log capsule",
+        "description": "Recovered SD card capsule containing post-flight gyro traces and onboard video index.",
+        "image": "/assets/rocket_min.gif",
+        "priceExemptionReason": "SOULBOUND"
     },
     {
         "id": "d660dc50-7afb-4a2f-9508-a42490aae5e4",
