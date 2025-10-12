@@ -10,9 +10,9 @@ slug: 'new-quests'
 These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
-Prev quest count: 23
-Current quest count: 245
-New quests in this release: 222
+Prev quest count: 22
+Current quest count: 246
+New quests in this release: 224
 
 ### 3dprinting
 
@@ -255,10 +255,12 @@ New quests in this release: 222
 ### rocketry
 
 -   rocketry/fuel-mixture
+-   rocketry/guided-rocket-build
 -   rocketry/night-launch
 -   rocketry/preflight-check
 -   rocketry/recovery-run
 -   rocketry/static-test
+-   rocketry/suborbital-hop
 -   rocketry/wind-check
 
 ### sysadmin
@@ -323,8 +325,8 @@ New quests in this release: 12
 ## Quests added in v2
 
 Prev quest count: 3
-Current quest count: 14
-New quests in this release: 11
+Current quest count: 10
+New quests in this release: 9
 
 ### aquaria
 
@@ -347,8 +349,6 @@ New quests in this release: 11
 
 -   rocketry/firstlaunch
 -   rocketry/parachute
--   rocketry/guided-rocket-build
--   rocketry/suborbital-hop
 
 ### ubi
 
