@@ -110,6 +110,10 @@ describe('ItemForm Component', () => {
                 target: { value: 'This is a test item description' },
             });
 
+            fireEvent.input(getByLabelText(/dependencies/i), {
+                target: { value: 'resource/filament, tool/nozzle' },
+            });
+
             // Simulate image upload
             const file = new File(['mock content'], 'test-image.jpg', { type: 'image/jpeg' });
             fireEvent.change(getByLabelText(/upload an image/i), {
@@ -129,6 +133,47 @@ describe('ItemForm Component', () => {
                     name: 'Test Item',
                     description: 'This is a test item description',
                     image: 'mocked-image-url',
+                    dependencies: ['resource/filament', 'tool/nozzle'],
+                })
+            );
+        });
+    });
+
+    it('trims dependency values and filters empty entries', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Dependency Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Has optional dependencies' },
+            });
+
+            fireEvent.input(getByLabelText(/dependencies/i), {
+                target: { value: '  item/one \n\n item/two  ,  ' },
+            });
+
+            const file = new File(['mock content'], 'dep-image.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(addEntity).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    dependencies: ['item/one', 'item/two'],
                 })
             );
         });
@@ -165,6 +210,7 @@ describe('ItemForm Component', () => {
             name: 'Existing Item',
             description: 'Existing item description',
             image: 'existing-image-url',
+            dependencies: ['resource/alloy'],
         };
 
         // No additional mocking needed - updateEntity is already mocked
@@ -181,6 +227,7 @@ describe('ItemForm Component', () => {
         await waitFor(() => {
             expect(getByLabelText(/name/i).value).toBe(existingItem.name);
             expect(getByLabelText(/description/i).value).toBe(existingItem.description);
+            expect(getByLabelText(/dependencies/i).value).toBe('resource/alloy');
         });
 
         // Submit form without changes
@@ -196,6 +243,7 @@ describe('ItemForm Component', () => {
                     name: existingItem.name,
                     description: existingItem.description,
                     image: existingItem.image,
+                    dependencies: existingItem.dependencies,
                 })
             );
         });
