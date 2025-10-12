@@ -12,40 +12,34 @@ You'll eventually be able to build a fully functioning virtual rocket and launch
 
 The ultimate goal is to make the creation of a functioning orbital rocket achievable in the real-world, too! There's no fundamental reason why this shouldn't be possible, but it will require a lot of work. It will also require complying with ITAR, which will be a challenge. This is a long-term goal, and it will take many years, if not decades.
 
-## Suborbital launch checklist
+## Guided model rocket hop playbook
 
-Before we can aim for orbit, DSPACE now includes a structured playbook for the first
-suborbital campaign. Use it as an in-game guide when preparing your launch pad and
-simulator runs.
+Before aiming for orbit, DSPACE now documents a realistic step beyond the
+parachute-only build. Follow these quests and processes to add servo steering
+and onboard video to your 3D printed rocket.
 
-### Pre-launch readiness
+### Fabrication and bench testing
 
-1. **Assemble a flightworthy stack** – Verify your Nova-class booster, recovery
-   system, and telemetry payload are all marked as "flight ready" in your inventory.
-   Repair or refurbish any components that failed the last flight test before
-   proceeding.
-2. **Simulate the mission** – Run the "suborbital-hop" process to validate burn
-   timing and apogee projections. Ensure the simulation completes without warnings
-   before you start fueling.
-3. **Pad operations** – Assign a crew member (or guild helper) to the launch pad
-   process to confirm clamps, umbilicals, and range safety beacons are online.
-   Logging these checks in-game now grants a small dCarbon credit bonus for careful
-   operators.
+1. **Print guidance hardware** – Run `3dprint-guided-fincan` for the servo-ready
+   fincan and `3dprint-guidance-sled` for the avionics tray so the servos and
+   Arduino seat cleanly inside the body tube.
+2. **Wire the avionics** – Use `assemble-guided-flight-stack` to mount the
+   Arduino, route servo leads, and secure connectors. Harden the build with a
+   dab of superglue before buttoning it up.
+3. **Tune stability firmware** – Flash the sketch and exercise the servos with
+   `calibrate-guided-flight-stack`. Stop when the fins hold attitude without
+   chattering through the tilt test.
+4. **Add a camera** – Install the keychain module with `install-rocket-camera`
+   so you can capture the hop from the nosecone.
 
-### Flight operations
+### Simulation and launch day
 
--   **Countdown automation** – Enable the quest automation toggle so dChat can call
-    out events at T-10, T-1, and liftoff. This new cadence reduces mis-timed stage
-    separation during practice runs.
--   **Recovery prep** – Stage parachutes and the drone ship recovery process before
-    ignition. DSPACE now blocks launch if the recovery workflow is not queued,
-    keeping virtual debris out of the ocean.
-
-### Abort criteria
-
--   Abort if telemetry reports a chamber pressure delta greater than 5% for longer
-    than three seconds. The quest log will now highlight this threshold in red during
-    hot-fire rehearsals.
--   Scrub the countdown if winds exceed the range safety envelope shown in the
-    weather widget. You'll retain your propellant and can rerun the quest without
-    penalty once conditions stabilize.
+1. **Rehearse the profile** – Run `suborbital-hop` to simulate the flight and
+   confirm guided hop telemetry stays within drift limits before leaving the
+   shop.
+2. **Set up the range** – At the field, execute `range-setup-guided-hop` to log
+   rod angle checks, igniter continuity, servo wiggle tests, and camera arming.
+3. **Call the countdown** – Follow `countdown-guided-hop` to keep everyone in
+   sync right up to key turn.
+4. **Launch and recover** – Trigger `launch-guided-hop` and bring home the
+   guided flight log capsule for replay.

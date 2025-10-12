@@ -1155,6 +1155,74 @@
         "duration": "8h 3m 13s"
     },
     {
+        "id": "3dprint-guided-fincan",
+        "title": "3D print a servo-ready fincan",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 58.4
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1125
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "125eaa46-48f1-4cef-adaa-c200892af437",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 58.4
+            }
+        ],
+        "duration": "8h 45m"
+    },
+    {
+        "id": "3dprint-guidance-sled",
+        "title": "3D print a guidance avionics sled",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 24.8
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 420
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 24.8
+            }
+        ],
+        "duration": "3h 20m"
+    },
+    {
         "id": "mask-rocket-body-tube",
         "title": "Mask a rocket body tube with masking tape for painting",
         "image": "/assets/modelrocket.jpg",
@@ -1327,6 +1395,239 @@
             }
         ],
         "duration": "45s"
+    },
+    {
+        "id": "suborbital-hop",
+        "title": "Simulate a guided model rocket hop",
+        "requireItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "5873d7b0-dd0f-436f-b942-286aedd253d0",
+                "count": 1
+            }
+        ],
+        "duration": "12m"
+    },
+    {
+        "id": "assemble-guided-flight-stack",
+        "title": "Assemble the guided flight stack",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "125eaa46-48f1-4cef-adaa-c200892af437",
+                "count": 1
+            },
+            {
+                "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf",
+                "count": 1
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "dc5897f0-acec-4c3b-ad4d-535054e768f6",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.2
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
+        "duration": "35m"
+    },
+    {
+        "id": "calibrate-guided-flight-stack",
+        "title": "Upload and tune stability firmware",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+                "count": 1
+            }
+        ],
+        "duration": "20m"
+    },
+    {
+        "id": "install-rocket-camera",
+        "title": "Install the nosecone camera module",
+        "requireItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "bdc905f5-c36f-4608-9c7f-da7b0988572f",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            }
+        ],
+        "duration": "25m"
+    },
+    {
+        "id": "range-setup-guided-hop",
+        "title": "Complete the guided launch pad checks",
+        "requireItems": [
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            },
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da",
+                "count": 1
+            }
+        ],
+        "duration": "8m"
+    },
+    {
+        "id": "countdown-guided-hop",
+        "title": "Walk through the guided countdown",
+        "requireItems": [
+            {
+                "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da",
+                "count": 1
+            },
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe",
+                "count": 1
+            }
+        ],
+        "duration": "2m"
+    },
+    {
+        "id": "launch-guided-hop",
+        "title": "Launch a guided model rocket hop",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+                "count": 1
+            },
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            },
+            {
+                "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            },
+            {
+                "id": "60a1e598-084e-4325-9c2c-fb5d95d19f41",
+                "count": 1
+            },
+            {
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
     },
     {
         "id": "assemble-rocket-parachute",

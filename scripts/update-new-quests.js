@@ -18,6 +18,15 @@ const PRE_V2_COMMIT = 'fc840def24c5140411d2892f468960acb8250681';
 const V2_COMMIT = '93a834691af174b3c8b9895e9a27ce72e10e8299';
 const V21_COMMIT = 'd956e807d49114da2d0ff28aacef91341813bf82';
 
+function commitExists(ref) {
+  try {
+    execSync(`git cat-file -e ${ref}^{commit}`, { stdio: 'ignore' });
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 function parseDocSections(content) {
   const lines = content.split('\n');
   const sections = [];
@@ -146,14 +155,18 @@ function listQuestFiles(ref) {
 }
 
 function getQuestPathsBetween(fromRef, toRef) {
-  const diff = execSync(
-    `git diff --name-only --diff-filter=A ${fromRef} ${toRef} -- frontend/src/pages/quests/json`,
-    { encoding: 'utf8' }
-  );
-  return diff
-    .split('\n')
-    .map((p) => p.trim())
-    .filter(Boolean);
+  try {
+    const diff = execSync(
+      `git diff --name-only --diff-filter=A ${fromRef} ${toRef} -- frontend/src/pages/quests/json`,
+      { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
+    );
+    return diff
+      .split('\n')
+      .map((p) => p.trim())
+      .filter(Boolean);
+  } catch (error) {
+    return [];
+  }
 }
 
 function groupQuests(paths) {
@@ -188,14 +201,21 @@ function computeReleaseSections() {
     { version: 'v2.1', from: V2_COMMIT, to: V21_COMMIT },
     { version: 'v2', from: PRE_V2_COMMIT, to: V2_COMMIT },
   ];
+  if (releases.some((r) => !commitExists(r.from) || !commitExists(r.to))) {
+    throw new Error('Missing git history for new quest generation');
+  }
+
   return releases.map((r) => {
     const paths = getQuestPathsBetween(r.from, r.to);
+    const groups = groupQuests(paths);
+    const toQuests = Array.from(new Set(listQuestFiles(r.to)));
+    const fromQuests = Array.from(new Set(listQuestFiles(r.from)));
     return {
       version: r.version,
-      prevCount: listQuestFiles(r.from).length,
-      currentCount: listQuestFiles(r.to).length,
-      groups: groupQuests(paths),
-      newCount: paths.length,
+      prevCount: fromQuests.length,
+      currentCount: toQuests.length,
+      groups,
+      newCount: groups.reduce((sum, group) => sum + group.quests.length, 0),
     };
   });
 }
@@ -263,6 +283,7 @@ module.exports = {
   listQuestFiles,
   getQuestPathsBetween,
   groupQuests,
+  getDocFallbackSections,
   getReleaseSections,
   generateMarkdown,
   main,
