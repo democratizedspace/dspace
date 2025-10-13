@@ -2,11 +2,11 @@
 
 Use this template to add unit tests with [Vitest](https://vitest.dev). Lean on it when
 new features or bug fixes need coverage. Treat the prompt as living documentation and
-refresh it using other `prompts-*.md` files for inspiration. Use this guide alongside
-[Codex Prompts](prompts-codex.md). To keep the prompt docs evolving, see the
-[Codex meta prompt](prompts-codex-meta.md); if templates drift, refresh them with
-the [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs,
-use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
+refresh it using other `docs/prompts/codex/*.md` files for inspiration. Use this guide alongside
+[Codex Prompts](baseline.md). To keep the prompt docs evolving, see the
+[Codex meta prompt](meta.md); if templates drift, refresh them with
+the [Codex Prompt Upgrader](upgrader.md). For failing GitHub Actions runs,
+use the [Codex CI-failure fix prompt](ci-fix.md).
 
 Vitest looks for `*.test.ts` files in `tests/`, `backend/`, and `scripts/tests/`. The
 `frontend/__tests__` directory is handled by Jest and excluded from Vitest runs. Coverage

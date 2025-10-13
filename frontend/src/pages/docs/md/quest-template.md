@@ -64,5 +64,5 @@ Ready-to-use JSON templates live in `frontend/src/pages/quests/templates`. Copy 
 
 Use this template as a baseline and expand it with additional dialogue nodes, processes, item requirements, and rewards. For more in-depth guidance, see the [Quest Development Guidelines](/docs/quest-guidelines).
 The optional `hardening` block tracks how many upgrade passes a quest has survived and stores a history of Codex tasks.
-Increment `passes`, update `score`, switch the status `emoji` (🛠️ → 🌀 → ✅ → 💯) and append an entry to `history` with the task ID, date and score each time you run the quest hardening loop described in the [quest prompt guide](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/prompts-quests.md).
+Increment `passes`, update `score`, switch the status `emoji` (🛠️ → 🌀 → ✅ → 💯) and append an entry to `history` with the task ID, date and score each time you run the quest hardening loop described in the [quest prompt guide](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/quests.md).
 An automated Playwright example (`constellations-quest.spec.ts`) walks through creating this quest step by step if you prefer a hands-on reference.

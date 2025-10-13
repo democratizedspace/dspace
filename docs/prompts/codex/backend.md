@@ -5,13 +5,13 @@ DSPACE is mostly frontend code, but a few backend pieces support self-hosting vi
 
 [sugarkube]: https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md
 
-Use this guide alongside [Codex Prompts](prompts-codex.md) when editing
+Use this guide alongside [Codex Prompts](baseline.md) when editing
 `backend/` modules. Contributions must deliver clear user value and honor
 end-user privacy, dignity, and agency as outlined in
 [Gabriel](https://github.com/futuroptimist/gabriel). To keep the prompt docs
-evolving, see the [Codex meta prompt](prompts-codex-meta.md). If these
-templates drift, refresh them with the [Codex Prompt Upgrader](prompts-codex-upgrader.md).
-For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
+evolving, see the [Codex meta prompt](meta.md). If these
+templates drift, refresh them with the [Codex Prompt Upgrader](upgrader.md).
+For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](ci-fix.md).
 
 > **TL;DR**
 >

@@ -1,12 +1,12 @@
 # Outage prompts for the DSPACE repo
 
 Codex is a sandboxed engineering agent that can open this repository and run tests.
-Use this guide alongside [Codex Prompts](prompts-codex.md) so every fix ships with a matching
+Use this guide alongside [Codex Prompts](baseline.md) so every fix ships with a matching
 record in the outage catalog. The in-game docs index (`frontend/src/pages/docs/md/prompts-codex.md`) links back here so
 these operational details stay canonical.
-To keep these prompt docs evolving, consult the [Codex meta prompt](prompts-codex-meta.md);
-if templates drift, refresh them with the [Codex Prompt Upgrader](prompts-codex-upgrader.md).
-For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
+To keep these prompt docs evolving, consult the [Codex meta prompt](meta.md);
+if templates drift, refresh them with the [Codex Prompt Upgrader](upgrader.md).
+For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](ci-fix.md).
 
 > **TL;DR**
 >
@@ -46,8 +46,8 @@ OUTPUT:
 A pull request referencing the new outage record and passing checks.
 ```
 
-[outage-dir]: https://github.com/democratizedspace/dspace/tree/main/outages
-[outage-schema]: https://github.com/democratizedspace/dspace/blob/main/outages/schema.json
+[outage-dir]: ../../../outages/
+[outage-schema]: ../../../outages/schema.json
 
 ## Upgrader Prompt
 

@@ -2,11 +2,11 @@
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
 ready-made pull requests. Use this guide alongside
-[Codex Prompts](prompts-codex.md) when improving accessibility so instructions remain
+[Codex Prompts](baseline.md) when improving accessibility so instructions remain
 consistent. To keep the prompt docs evolving, see the
-[Codex meta prompt](prompts-codex-meta.md). If templates drift, refresh them with the
-[Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use
-the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md). This doc focuses on semantic
+[Codex meta prompt](meta.md). If templates drift, refresh them with the
+[Codex Prompt Upgrader](upgrader.md). For failing GitHub Actions runs, use
+the [Codex CI-failure fix prompt](ci-fix.md). This doc focuses on semantic
 HTML, ARIA attributes, keyboard navigation, sufficient color contrast, and minimum target sizes.
 As of 2024, [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) is the baseline standard.
 
@@ -47,13 +47,13 @@ A pull request improving accessibility with passing checks.
 
 ## Components and patterns
 
-- [`Button`](../../../components/Button.astro) – includes `aria-label` support and a
+- [`Button`](../../../frontend/src/components/Button.astro) – includes `aria-label` support and a
   `:focus-visible` ring.
-- [`Menu`](../../../components/svelte/Menu.svelte) – handles keyboard navigation for site
+- [`Menu`](../../../frontend/src/components/svelte/Menu.svelte) – handles keyboard navigation for site
   sections.
-- [`SkipProcessButton`](../../../components/svelte/SkipProcessButton.svelte) – lets users bypass
+- [`SkipProcessButton`](../../../frontend/src/components/svelte/SkipProcessButton.svelte) – lets users bypass
   a step with a semantic button.
-- [Chip](https://github.com/dspace/dspace/blob/main/frontend/src/components/svelte/Chip.svelte)
+- [`Chip`](../../../frontend/src/components/svelte/Chip.svelte)
   provides button and link variants with disabled states.
 
 ## Upgrader Prompt
@@ -79,5 +79,5 @@ OUTPUT:
 A pull request refining the accessibility prompt doc with passing checks.
 ```
 
-[button-component]: ../../../components/Button.astro
-[menu-component]: ../../../components/svelte/Menu.svelte
+[button-component]: ../../../frontend/src/components/Button.astro
+[menu-component]: ../../../frontend/src/components/svelte/Menu.svelte

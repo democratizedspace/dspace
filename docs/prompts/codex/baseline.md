@@ -5,21 +5,22 @@ run its own tests, and send you a ready‑made PR — but only if you give it a 
 file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
-For task-specific templates see [Quest prompts](prompts-quests.md),
-[Item prompts](prompts-items.md), [Process prompts](prompts-processes.md),
-[NPC prompts](prompts-npcs.md), [Outage prompts](prompts-outages.md),
-[Backup prompts](prompts-backups.md), [Monitoring prompts](prompts-monitoring.md),
-[Audit prompts](prompts-audit.md), [Secret scanning prompts](prompts-secrets.md),
-[Docs prompts](prompts-docs.md),
-[Playwright test prompts](prompts-playwright-tests.md),
-[Vitest test prompts](prompts-vitest.md), [Frontend prompts](prompts-frontend.md), [Chat UI prompts](prompts-chat-ui.md),
-[Backend prompts](prompts-backend.md), [Refactor prompts](prompts-refactors.md),
-[Implementation prompt](implement.md), and
-[Accessibility prompts](prompts-accessibility.md).
-For specialized workflows use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md),
-the [Codex merge conflict prompt](prompts-codex-merge-conflicts.md), the
-[Codex meta prompt](prompts-codex-meta.md), and the
-[Codex Prompt Upgrader](prompts-codex-upgrader.md).
+For task-specific templates see [Quest prompts](quests.md),
+[Item prompts](items.md), [Process prompts](processes.md),
+[NPC prompts](npcs.md), [Outage prompts](outages.md),
+[Backup prompts](backups.md), [Monitoring prompts](monitoring.md),
+[Audit prompts](audit.md), [Secret scanning prompts](secrets.md),
+[Docs prompts](docs.md),
+[Playwright test prompts](playwright-tests.md),
+[Vitest test prompts](vitest.md), [Frontend prompts](frontend.md), [Chat UI prompts](chat-ui.md),
+[Backend prompts](backend.md), [Refactor prompts](refactors.md),
+[Implementation prompt](implement.md),
+[Accessibility prompts](accessibility.md), and the
+[Structural polish playbook](polish.md).
+For specialized workflows use the [Codex CI-failure fix prompt](ci-fix.md),
+the [Codex merge conflict prompt](merge-conflicts.md), the
+[Codex meta prompt](meta.md), and the
+[Codex Prompt Upgrader](upgrader.md).
 When adding a new prompt doc, link it here and in
 [the docs index](../index.astro).
 
@@ -40,29 +41,30 @@ When adding a new prompt doc, link it here and in
 
 ## Related prompt guides
 
-- [Item Prompts](prompts-items.md)
-- [Process Prompts](prompts-processes.md)
-- [Quest Prompts](prompts-quests.md)
-- [NPC Prompts](prompts-npcs.md)
-- [Outage Prompts](prompts-outages.md)
-- [Backup Prompts](prompts-backups.md)
-- [Monitoring Prompts](prompts-monitoring.md)
-- [Audit Prompts](prompts-audit.md)
-- [Secret Scanning Prompts](prompts-secrets.md)
-- [Docs Prompts](prompts-docs.md)
-- [Docs cross-link prompt](prompts-docs.md#cross-link-check-prompt)
-- [Docs proofreading prompt](prompts-docs.md#proofreading-prompt)
-- [Backend Prompts](prompts-backend.md)
-- [Frontend Prompts](prompts-frontend.md)
-- [Accessibility Prompts](prompts-accessibility.md)
-- [Playwright Test Prompts](prompts-playwright-tests.md)
-- [Vitest Test Prompts](prompts-vitest.md)
-- [Refactor Prompts](prompts-refactors.md)
+- [Item Prompts](items.md)
+- [Process Prompts](processes.md)
+- [Quest Prompts](quests.md)
+- [NPC Prompts](npcs.md)
+- [Outage Prompts](outages.md)
+- [Backup Prompts](backups.md)
+- [Monitoring Prompts](monitoring.md)
+- [Audit Prompts](audit.md)
+- [Secret Scanning Prompts](secrets.md)
+- [Docs Prompts](docs.md)
+- [Docs cross-link prompt](docs.md#cross-link-check-prompt)
+- [Docs proofreading prompt](docs.md#proofreading-prompt)
+- [Backend Prompts](backend.md)
+- [Frontend Prompts](frontend.md)
+- [Accessibility Prompts](accessibility.md)
+- [Playwright Test Prompts](playwright-tests.md)
+- [Vitest Test Prompts](vitest.md)
+- [Refactor Prompts](refactors.md)
 - [Implementation Prompt](implement.md)
-- [Codex CI-Failure Fix Prompt](prompts-codex-ci-fix.md)
-- [Codex Merge Conflict Prompt](prompts-codex-merge-conflicts.md)
-- [Codex Meta Prompt](prompts-codex-meta.md)
-- [Codex Prompt Upgrader](prompts-codex-upgrader.md)
+- [Structural polish playbook](polish.md)
+- [Codex CI-Failure Fix Prompt](ci-fix.md)
+- [Codex Merge Conflict Prompt](merge-conflicts.md)
+- [Codex Meta Prompt](meta.md)
+- [Codex Prompt Upgrader](upgrader.md)
 
 ---
 
@@ -127,7 +129,7 @@ with full test coverage and documentation updates.
 
 Use this prompt to refine DSPACE's own prompt documentation. For a template
 dedicated to evolving the prompt guides themselves, see the
-[Codex meta prompt](prompts-codex-meta.md).
+[Codex meta prompt](meta.md).
 
 ```text
 SYSTEM:
@@ -138,10 +140,10 @@ pass before committing.
 
 USER:
 1. Pick one or more prompt docs under `frontend/src/pages/docs/md/` (for example,
-   `prompts-items.md`).
+   `items.md`).
 2. Use `rg` for file searches; avoid `ls -R` or `grep -R`.
 3. Fix outdated instructions, links or formatting.
-4. If you add a new prompt, link it from `prompts-codex.md` and the docs index.
+4. If you add a new prompt, link it from `baseline.md` and the docs index.
 5. Run the checks above.
 6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 7. Use an emoji-prefixed commit message.
@@ -154,7 +156,7 @@ A pull request with the improved prompt doc and passing checks.
 
 Use this meta prompt when the Codex templates need refreshing. It keeps our
 guidance current—the machine that builds the machine. See the standalone
-[Codex Prompt Upgrader](prompts-codex-upgrader.md) for the full template.
+[Codex Prompt Upgrader](upgrader.md) for the full template.
 
 ```text
 SYSTEM:
@@ -177,7 +179,7 @@ OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
 
-[openai-cli]: https://github.com/openai/openai-cli
+[openai-cli]: https://platform.openai.com/docs/guides/openai-cli/
 
 ## Upgrader Prompt
 

@@ -5,6 +5,6 @@
   "rootCause": "actions/checkout fetched depth 1, leaving origin/v3 unavailable for tests",
   "resolution": "set fetch-depth: 0 in ci.yml so scripts can access origin/v3",
   "references": [
-    "docs/prompts/codex/prompts-codex-ci-fix.md#lessons-learned"
+    "docs/prompts/codex/ci-fix.md#lessons-learned"
   ]
 }

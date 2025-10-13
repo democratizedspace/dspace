@@ -7,6 +7,6 @@
   "references": [
     "scripts/checkPatchCoverage.cjs",
     "scripts/tests/checkPatchCoverageBranch.test.ts",
-    "docs/prompts/codex/prompts-codex-ci-fix.md"
+    "docs/prompts/codex/ci-fix.md"
   ]
 }
