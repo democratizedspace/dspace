@@ -15,7 +15,7 @@ Clone the repository and start the stack:
 docker compose up --build -d
 ```
 
-The application listens on port **3002**. Visit <http://localhost:3002> to confirm it is running.
+The application listens on port **3002**. Visit `http://localhost:3002` to confirm it is running.
 
 ## Environment Variables
 

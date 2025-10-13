@@ -47,13 +47,13 @@ A pull request improving accessibility with passing checks.
 
 ## Components and patterns
 
-- [`Button`](../../../components/Button.astro) – includes `aria-label` support and a
+- [`Button`](../../../frontend/src/components/Button.astro) – includes `aria-label` support and a
   `:focus-visible` ring.
-- [`Menu`](../../../components/svelte/Menu.svelte) – handles keyboard navigation for site
+- [`Menu`](../../../frontend/src/components/svelte/Menu.svelte) – handles keyboard navigation for site
   sections.
-- [`SkipProcessButton`](../../../components/svelte/SkipProcessButton.svelte) – lets users bypass
+- [`SkipProcessButton`](../../../frontend/src/components/svelte/SkipProcessButton.svelte) – lets users bypass
   a step with a semantic button.
-- [Chip](https://github.com/dspace/dspace/blob/main/frontend/src/components/svelte/Chip.svelte)
+- [`Chip`](../../../frontend/src/components/svelte/Chip.svelte)
   provides button and link variants with disabled states.
 
 ## Upgrader Prompt
@@ -79,5 +79,5 @@ OUTPUT:
 A pull request refining the accessibility prompt doc with passing checks.
 ```
 
-[button-component]: ../../../components/Button.astro
-[menu-component]: ../../../components/svelte/Menu.svelte
+[button-component]: ../../../frontend/src/components/Button.astro
+[menu-component]: ../../../frontend/src/components/svelte/Menu.svelte

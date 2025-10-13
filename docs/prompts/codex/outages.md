@@ -46,8 +46,8 @@ OUTPUT:
 A pull request referencing the new outage record and passing checks.
 ```
 
-[outage-dir]: https://github.com/democratizedspace/dspace/tree/main/outages
-[outage-schema]: https://github.com/democratizedspace/dspace/blob/main/outages/schema.json
+[outage-dir]: ../../../outages/
+[outage-schema]: ../../../outages/schema.json
 
 ## Upgrader Prompt
 

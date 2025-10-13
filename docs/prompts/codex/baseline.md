@@ -179,7 +179,7 @@ OUTPUT:
 A pull request refreshing the Codex prompt docs with passing checks.
 ```
 
-[openai-cli]: https://github.com/openai/openai-cli
+[openai-cli]: https://platform.openai.com/docs/guides/openai-cli/
 
 ## Upgrader Prompt
 

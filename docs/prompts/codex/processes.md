@@ -161,7 +161,7 @@ Modern assistants can be powerful collaborators. Keep in mind:
 - **Fact-check technical information** since AI systems can generate plausible
   but incorrect details.
 
-[openai-cli]: https://github.com/openai/openai-cli
+[openai-cli]: https://platform.openai.com/docs/guides/openai-cli/
 
 ## Upgrader Prompt
 

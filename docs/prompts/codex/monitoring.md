@@ -2,9 +2,9 @@
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
 ready-made pull requests. Use this guide alongside [Codex Prompts](baseline.md)
-when editing files under [`monitoring/`](https://github.com/democratizedspace/dspace/tree/main/monitoring)
+when editing files under [`monitoring/`](../../../monitoring/)
 to keep metrics, dashboards, and alerts consistent. For configuration details, see
-[`monitoring/README.md`](https://github.com/democratizedspace/dspace/blob/main/monitoring/README.md).
+[`monitoring/README.md`](../../../monitoring/README.md).
 To keep the prompt docs evolving, see the [Codex meta prompt](meta.md); if
 these templates drift, refresh them with the
 [Codex Prompt Upgrader](upgrader.md). For failing GitHub Actions runs, use the
@@ -19,7 +19,7 @@ these templates drift, refresh them with the
   visualizing service availability and HTTP 5xx error rate. Metrics follow Prometheus conventions
   such as `http_requests_total` and `up`.
 
-[dspace-dashboard]: ../../../../../monitoring/grafana/dashboards/dspace-overview.json
+[dspace-dashboard]: ../../../monitoring/grafana/dashboards/dspace-overview.json
 
 > **TL;DR**
 >

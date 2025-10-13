@@ -6,7 +6,7 @@ slug: 'outages'
 # Outage Catalog
 
 A structured history of dspace outages lives under `/outages`. Each incident is stored as a
-JSON file matching [`outages/schema.json`](../../../../outages/schema.json).
+JSON file matching [`outages/schema.json`](../../../../../outages/schema.json).
 
 ## Adding a record
 
