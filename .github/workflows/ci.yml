@@ -27,3 +27,17 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           files: frontend/coverage/lcov.info
+  docs-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v1.9.0
+        with:
+          args: >-
+            --accept 403,429
+            --no-progress --verbose
+            "docs/**/*.md" "frontend/src/pages/docs/**/*.md"
+          fail: true
+          format: markdown
+          output: lychee/out.md
+          jobSummary: true

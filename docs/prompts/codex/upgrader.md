@@ -3,10 +3,10 @@
 Use this meta prompt whenever the Codex templates need refreshing. It tracks new prompt
 types and required checks so the machine that builds the machine stays current. Keep
 each change scoped and easy to revert. See
-[Codex Prompts](prompts-codex.md) for the baseline templates, the
-[Codex Meta Prompt](prompts-codex-meta.md) for routine maintenance, the
-[Codex CI-failure fix prompt](prompts-codex-ci-fix.md) for troubleshooting failing
-workflows, and the [Codex merge conflict prompt](prompts-codex-merge-conflicts.md)
+[Codex Prompts](baseline.md) for the baseline templates, the
+[Codex Meta Prompt](meta.md) for routine maintenance, the
+[Codex CI-failure fix prompt](ci-fix.md) for troubleshooting failing
+workflows, and the [Codex merge conflict prompt](merge-conflicts.md)
 for resolving conflicts.
 
 ```text

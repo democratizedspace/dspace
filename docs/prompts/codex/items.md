@@ -2,11 +2,11 @@
 
 Codex is a sandboxed engineering agent that can open this repository, run its own
 tests, and send you a ready-made PR—but only if you give it a clear, file-scoped
-prompt. Use this guide alongside [Codex Prompts](prompts-codex.md) when
+prompt. Use this guide alongside [Codex Prompts](baseline.md) when
 working on items. To keep the prompt docs evolving, see the
-[Codex meta prompt](prompts-codex-meta.md). If these templates drift, refresh
-them with the [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing
-GitHub Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
+[Codex meta prompt](meta.md). If these templates drift, refresh
+them with the [Codex Prompt Upgrader](upgrader.md). For failing
+GitHub Actions runs, use the [Codex CI-failure fix prompt](ci-fix.md).
 For general content rules see the [Item Development Guidelines](/docs/item-guidelines).
 
 > **TL;DR**

@@ -7,11 +7,11 @@ the existing journeys for inaccuracies or gaps/misunderstandings and expand the
 list as new features land. Tests should assert visible UI content to verify that
 pages render
 correctly. Treat this prompt as living documentation—periodically refine it using
-other `prompts-*.md` files for inspiration. Use this guide alongside
-[Codex Prompts](prompts-codex.md). To keep the prompt docs evolving, see the
-[Codex meta prompt](prompts-codex-meta.md); if templates drift, refresh them
-with the [Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub
-Actions runs, use the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
+other `docs/prompts/codex/*.md` files for inspiration. Use this guide alongside
+[Codex Prompts](baseline.md). To keep the prompt docs evolving, see the
+[Codex meta prompt](meta.md); if templates drift, refresh them
+with the [Codex Prompt Upgrader](upgrader.md). For failing GitHub
+Actions runs, use the [Codex CI-failure fix prompt](ci-fix.md).
 
 > **TL;DR**
 >

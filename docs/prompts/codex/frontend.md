@@ -1,17 +1,17 @@
 # Frontend prompts for the _dspace_ repo
 
 DSPACE's UI is built with Svelte and Astro. Codex can open this repository and run its own
-tests. Use this guide alongside [Codex Prompts](prompts-codex.md) when working on files inside
+tests. Use this guide alongside [Codex Prompts](baseline.md) when working on files inside
 `frontend/`, including Svelte components, pages, and styles. Place UI pieces in
 `frontend/src/components` and shared utilities in `frontend/src/lib`. Astro pages live in
 `frontend/src/pages`. Hydrate Svelte components with Astro `client:` directives and run
 interactive code in `onMount`; when hydration completes, set `data-hydrated="true"` on the
 component root to avoid double rendering. Changes should improve clarity, accessibility, or
 performance while keeping tests green. For deeper accessibility guidance, see
-[Accessibility prompts](prompts-accessibility.md). To keep the prompt docs evolving, see the
-[Codex meta prompt](prompts-codex-meta.md). If templates drift, refresh them with the
-[Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use the
-[Codex CI-failure fix prompt](prompts-codex-ci-fix.md).
+[Accessibility prompts](accessibility.md). To keep the prompt docs evolving, see the
+[Codex meta prompt](meta.md). If templates drift, refresh them with the
+[Codex Prompt Upgrader](upgrader.md). For failing GitHub Actions runs, use the
+[Codex CI-failure fix prompt](ci-fix.md).
 
 ## Current setup
 

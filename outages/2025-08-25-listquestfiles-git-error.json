@@ -5,6 +5,6 @@
   "rootCause": "listQuestFiles invoked git on origin/v3 without verifying the branch existed, emitting fatal errors on clones without that remote.",
   "resolution": "listQuestFiles now suppresses git stderr and falls back to HEAD when the ref is missing.",
   "references": [
-    "docs/prompts/codex/prompts-codex-ci-fix.md"
+    "docs/prompts/codex/ci-fix.md"
   ]
 }

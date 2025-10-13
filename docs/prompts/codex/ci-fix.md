@@ -3,12 +3,12 @@
 Use this drop-in snippet whenever a GitHub Actions run for
 **democratizedspace/dspace** fails. It guides Codex to diagnose the failure and
 return a pull request that keeps the main branch green. For baseline
-conventions, see [Codex Prompts](prompts-codex.md). To evolve the prompt
-docs, see the [Codex meta prompt](prompts-codex-meta.md).
+conventions, see [Codex Prompts](baseline.md). To evolve the prompt
+docs, see the [Codex meta prompt](meta.md).
 
-If this prompt ever drifts, consult the [Codex Prompt Upgrader](prompts-codex-upgrader.md)
+If this prompt ever drifts, consult the [Codex Prompt Upgrader](upgrader.md)
 to refresh it before use. For guidance on logging incidents, see the
-[Outage prompts](prompts-outages.md) and review the
+[Outage prompts](outages.md) and review the
 [Outages](/docs/outages) catalog to avoid repeats.
 
 > **Human setup**

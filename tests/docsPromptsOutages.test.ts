@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-describe('docs/prompts/codex/prompts-outages.md', () => {
-  const docPath = join(process.cwd(), 'docs', 'prompts', 'codex', 'prompts-outages.md');
+describe('docs/prompts/codex/outages.md', () => {
+  const docPath = join(process.cwd(), 'docs', 'prompts', 'codex', 'outages.md');
 
   it('exists', () => {
     expect(existsSync(docPath)).toBe(true);

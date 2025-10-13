@@ -77,8 +77,9 @@ All checks must pass before an agent-created PR is merged.
 
 - [Quest Submission Guide](frontend/src/pages/docs/md/quest-submission.md)
 - [UI Lifecycle Overview](frontend/src/pages/docs/md/ui-lifecycle.md)
-- [Codex Implementation Prompt](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/prompts-codex.md#implementation-prompt)
-- [Codex Upgrade Prompt](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/prompts-codex.md#upgrade-prompt)
-- [Codex Prompt Upgrader](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/prompts-codex-upgrader.md)
+- [Codex Implementation Prompt](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/baseline.md#implementation-prompt)
+- [Codex Upgrade Prompt](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/baseline.md#upgrade-prompt)
+- [Codex Structural Polish Playbook](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/polish.md)
+- [Codex Prompt Upgrader](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/upgrader.md)
 - [AGENTS.md Spec](https://gist.github.com/dpaluy/cc42d59243b0999c1b3f9cf60dfd3be6)
 - [Agents.md Guide](https://agentsmd.net/)

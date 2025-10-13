@@ -5,6 +5,6 @@
   "rootCause": "new quests were added but docs/new-quests.md and its frontend copy weren't regenerated",
   "resolution": "ran npm run new-quests:update and committed the refreshed docs",
   "references": [
-    "docs/prompts/codex/prompts-codex-ci-fix.md#lessons-learned"
+    "docs/prompts/codex/ci-fix.md#lessons-learned"
   ]
 }

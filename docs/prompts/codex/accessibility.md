@@ -2,11 +2,11 @@
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
 ready-made pull requests. Use this guide alongside
-[Codex Prompts](prompts-codex.md) when improving accessibility so instructions remain
+[Codex Prompts](baseline.md) when improving accessibility so instructions remain
 consistent. To keep the prompt docs evolving, see the
-[Codex meta prompt](prompts-codex-meta.md). If templates drift, refresh them with the
-[Codex Prompt Upgrader](prompts-codex-upgrader.md). For failing GitHub Actions runs, use
-the [Codex CI-failure fix prompt](prompts-codex-ci-fix.md). This doc focuses on semantic
+[Codex meta prompt](meta.md). If templates drift, refresh them with the
+[Codex Prompt Upgrader](upgrader.md). For failing GitHub Actions runs, use
+the [Codex CI-failure fix prompt](ci-fix.md). This doc focuses on semantic
 HTML, ARIA attributes, keyboard navigation, sufficient color contrast, and minimum target sizes.
 As of 2024, [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) is the baseline standard.
 
