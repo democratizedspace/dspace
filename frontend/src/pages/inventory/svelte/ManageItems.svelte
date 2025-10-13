@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import ItemCard from '../../../components/svelte/ItemCard.svelte';
     import ItemPreview from '../../../components/svelte/ItemPreview.svelte';
+    import Chip from '../../../components/svelte/Chip.svelte';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
     import { togglePreviewId } from '../../../utils/preview.js';
 
@@ -9,6 +10,8 @@
     let customItems = [];
     let mounted = false;
     let searchTerm = '';
+    const ALL_CATEGORIES_LABEL = 'All categories';
+    let selectedCategory = ALL_CATEGORIES_LABEL;
     let previewItemId = null;
 
     onMount(async () => {
@@ -16,12 +19,43 @@
         mounted = true;
     });
 
+    const getCategoryLabel = (item) => {
+        if (item?.category) {
+            return item.category;
+        }
+
+        if (item?.custom) {
+            return 'Custom';
+        }
+
+        return 'Misc';
+    };
+
     $: allItems = [...items, ...customItems];
-    $: filteredItems = allItems.filter((item) => {
-        const term = searchTerm.toLowerCase();
-        return (
-            item.name.toLowerCase().includes(term) || item.description.toLowerCase().includes(term)
-        );
+    $: normalizedItems = allItems.map((item) => ({
+        ...item,
+        categoryLabel: getCategoryLabel(item),
+    }));
+    $: categories = Array.from(new Set(normalizedItems.map((item) => item.categoryLabel))).sort(
+        (a, b) => a.localeCompare(b)
+    );
+    $: filteredItems = normalizedItems.filter((item) => {
+        const term = searchTerm.toLowerCase().trim();
+        const matchesCategory =
+            selectedCategory === ALL_CATEGORIES_LABEL || item.categoryLabel === selectedCategory;
+
+        if (!matchesCategory) {
+            return false;
+        }
+
+        if (!term) {
+            return true;
+        }
+
+        const name = item.name?.toLowerCase() ?? '';
+        const description = item.description?.toLowerCase() ?? '';
+
+        return name.includes(term) || description.includes(term);
     });
 
     function handleEdit(id) {
@@ -43,12 +77,48 @@
     function togglePreview(id) {
         previewItemId = togglePreviewId(previewItemId, id);
     }
+
+    function selectCategory(category) {
+        if (category === ALL_CATEGORIES_LABEL) {
+            selectedCategory = ALL_CATEGORIES_LABEL;
+            return;
+        }
+
+        selectedCategory = selectedCategory === category ? ALL_CATEGORIES_LABEL : category;
+    }
 </script>
 
 <div class="manage-items">
     {#if mounted}
         <div class="controls">
-            <input type="text" bind:value={searchTerm} placeholder="Search items..." />
+            <input
+                type="text"
+                bind:value={searchTerm}
+                placeholder="Search items..."
+                aria-label="Search items"
+            />
+
+            {#if categories.length > 0}
+                <div class="filters" aria-label="Filter inventory by category">
+                    <span class="filters-label">Filter by category</span>
+                    <div class="filters-chips">
+                        <Chip
+                            text={ALL_CATEGORIES_LABEL}
+                            onClick={() => selectCategory(ALL_CATEGORIES_LABEL)}
+                            inverted={selectedCategory === ALL_CATEGORIES_LABEL}
+                            pressed={selectedCategory === ALL_CATEGORIES_LABEL}
+                        />
+                        {#each categories as category}
+                            <Chip
+                                text={category}
+                                onClick={() => selectCategory(category)}
+                                inverted={selectedCategory === category}
+                                pressed={selectedCategory === category}
+                            />
+                        {/each}
+                    </div>
+                </div>
+            {/if}
         </div>
 
         <div class="items-list">
@@ -101,6 +171,9 @@
 
     .controls {
         margin-bottom: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
 
     .controls input {
@@ -110,7 +183,24 @@
         color: black;
         border: 2px solid #007006;
         font-size: 16px;
-        width: 200px;
+        width: min(320px, 100%);
+    }
+
+    .filters {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .filters-label {
+        font-size: 0.9rem;
+        color: #d0ffd0;
+    }
+
+    .filters-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
     }
 
     .item-row {
