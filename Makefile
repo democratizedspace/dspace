@@ -7,4 +7,4 @@ image:
 	docker buildx build --platform linux/amd64,linux/arm64 -t $(IMAGE) --push frontend
 
 deploy:
-	ansible-playbook -i ansible/inventory.yml ansible/cluster.yml
+	ansible-playbook -i infra/ansible/inventory.yml infra/ansible/cluster.yml

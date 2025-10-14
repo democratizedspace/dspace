@@ -7,10 +7,17 @@
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 You can find the game at [democratized.space](https://democratized.space).
-The production instance is self-hosted; see [Netlify Migration](docs/netlify-migration.md)
+The production instance is self-hosted; see [Netlify Migration](docs/ops/netlify-migration.md)
 for background details.
 
 Check out the [docs](https://democratized.space/docs)!
+
+## Quick Links
+
+- **Play**: [democratized.space/play](https://democratized.space/play)
+- **Develop**: [Developer Guide](./DEVELOPER_GUIDE.md)
+- **Test**: [Testing Guide](./frontend/TESTING.md)
+- **Deploy**: [Operations runbooks](./docs/ops/README.md)
 
 ## Accessibility
 
@@ -214,11 +221,11 @@ The server exposes two monitoring endpoints:
   `Authorization: Bearer <token>` for this endpoint. When `prom-client` isn't
   available, the endpoint returns a plain text `metrics unavailable` message.
 
-For a full Raspberry Pi setup, including k3s instructions, see [docs/RPI_DEPLOYMENT_GUIDE.md](./docs/RPI_DEPLOYMENT_GUIDE.md).
-To add Prometheus and Grafana monitoring, follow the steps in [docs/monitoring_setup.md](./docs/monitoring_setup.md).
-For high availability, configure Cloudflare Load Balancing as described in [docs/cloudflare_load_balancing.md](./docs/cloudflare_load_balancing.md).
-See [docs/failover_procedures.md](./docs/failover_procedures.md) for handling outages and restoring nodes.
-Nightly backups use the script documented in [docs/backup_system.md](./docs/backup_system.md).
+For a full Raspberry Pi setup, including k3s instructions, see [docs/ops/RPI_DEPLOYMENT_GUIDE.md](./docs/ops/RPI_DEPLOYMENT_GUIDE.md).
+To add Prometheus and Grafana monitoring, follow the steps in [docs/ops/monitoring_setup.md](./docs/ops/monitoring_setup.md).
+For high availability, configure Cloudflare Load Balancing as described in [docs/ops/cloudflare_load_balancing.md](./docs/ops/cloudflare_load_balancing.md).
+See [docs/ops/failover_procedures.md](./docs/ops/failover_procedures.md) for handling outages and restoring nodes.
+Nightly backups use the script documented in [docs/ops/backup_system.md](./docs/ops/backup_system.md).
 
 ### Automated Raspberry Pi Deployment
 
@@ -260,7 +267,7 @@ so older quests from the v2 era remain valid. Keep the NPC file updated when
 adding new characters.
 Quest files are organized by category in subfolders, so feel free to expand any
 area—electronics, hydroponics, rocketry and more—with additional quests.
-See [Quest Trees](docs/quest-trees) for an overview of the different categories and their progression.
+See [Quest Trees](https://democratized.space/docs/quest-trees) for an overview of the different categories and their progression.
 The repository includes a script that summarizes how many quests and lines of dialogue exist in each tree. Categories are sorted by quest count for readability.
 Run `node scripts/generate-quest-chart.js` to recreate `quest-tree-stats.txt` and a PNG image saved locally. The PNG is ignored in Git. Check the "Quest Chart" workflow artifacts for the latest generated image. You can see how the quest catalog has grown by comparing the current count against v2.1 with `npm run quest:count`. Generate a map of which quests require or reward each item with `npm run generate:item-map`.
 
@@ -277,13 +284,13 @@ steps, run the dedicated test:
 npm test -- questValidation
 ```
 
-See [Quest Development Guidelines](docs/quest-guidelines), the
-[Quest Template Example](docs/quest-template), and the
-[Quest Submission Guide](docs/quest-submission) to streamline content creation
+See [Quest Development Guidelines](https://democratized.space/docs/quest-guidelines), the
+[Quest Template Example](https://democratized.space/docs/quest-template), and the
+[Quest Submission Guide](https://democratized.space/docs/quest-submission) to streamline content creation
 and sharing. Use `npm run generate-quest [--template <name>]` to scaffold a new
 quest with placeholder dialogue.
 
-Custom quests often rely on new items or processes. Use [`scripts/create-content-bundle.js`](./scripts/create-content-bundle.js) to package these together. See the [Custom Content Bundles](docs/custom-bundles) guide for details.
+Custom quests often rely on new items or processes. Use [`scripts/create-content-bundle.js`](./scripts/create-content-bundle.js) to package these together. See the [Custom Content Bundles](https://democratized.space/docs/custom-bundles) guide for details.
 
 Additional quality checks are available:
 
@@ -328,14 +335,14 @@ For faster content development, consult our prompt guides for
 tools like GPT-4 or Claude. See [Codex prompts](docs/prompts/codex/baseline.md) for
 repository-wide automation and refresh templates with the
 [Codex Prompt Upgrader](docs/prompts/codex/upgrader.md). Combine these with the [Quest Development
-Guidelines](docs/quest-guidelines), the [Quest Template Example](docs/quest-template),
-the [Item Development Guidelines](docs/item-guidelines), the [Process Development
-Guidelines](docs/process-guidelines), and the [Quest Submission
-Guide](docs/quest-submission) to streamline content creation and sharing.
+Guidelines](https://democratized.space/docs/quest-guidelines), the [Quest Template Example](https://democratized.space/docs/quest-template),
+the [Item Development Guidelines](https://democratized.space/docs/item-guidelines), the [Process Development
+Guidelines](https://democratized.space/docs/process-guidelines), and the [Quest Submission
+Guide](https://democratized.space/docs/quest-submission) to streamline content creation and sharing.
 
 ## Authentication
 
-Quest submissions require a GitHub personal access token. The token is stored locally so you don't need to re-enter it. See [Authentication Flow](docs/AUTHENTICATION.md) for details and how to revoke the token when you're done.
+Quest submissions require a GitHub personal access token. The token is stored locally so you don't need to re-enter it. See [Authentication Flow](docs/contrib/authentication.md) for details and how to revoke the token when you're done.
 
 ### Staying Updated
 

@@ -9,7 +9,7 @@ These manifests deploy the `dspace-app` container built from `frontend/Dockerfil
    ```
 2. Apply the manifests:
    ```bash
-   kubectl apply -f k8s/
+    kubectl apply -f infra/k8s/
    ```
 
-Edit `dspace-deployment.yaml` if your image is stored in a registry.
+Edit `infra/k8s/dspace-deployment.yaml` if your image is stored in a registry.

@@ -88,10 +88,10 @@ The Dockerfile installs dependencies with `--ignore-scripts` so build steps work
 Apply the manifests:
 
 ```bash
-kubectl apply -f k8s/
+kubectl apply -f infra/k8s/
 ```
 
-`k8s/dspace-deployment.yaml` and `k8s/dspace-service.yaml` describe the DSPACE Deployment and Service.
+`infra/k8s/dspace-deployment.yaml` and `infra/k8s/dspace-service.yaml` describe the DSPACE Deployment and Service.
 
 ## GitHub Deployment Workflow
 

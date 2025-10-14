@@ -1,7 +1,7 @@
 # Playwright test prompts for the _dspace_ repo
 
 Use this template to add end-to-end coverage for journeys listed in
-[User journeys](user-journeys.md) using
+[User journeys](../../../frontend/src/pages/docs/md/user-journeys.md) using
 [Playwright](https://playwright.dev/) (currently v1.51.0). While working, review
 the existing journeys for inaccuracies or gaps/misunderstandings and expand the
 list as new features land. Tests should assert visible UI content to verify that

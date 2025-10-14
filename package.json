@@ -28,6 +28,7 @@
     "format": "cd frontend && npm run format",
     "type-check": "tsc --noEmit",
     "build": "cd frontend && npm run build",
+    "link-check": "node scripts/link-check.mjs",
     "quest:count": "node scripts/compareQuestCount.js",
     "generate:item-map": "node scripts/generate-item-dependencies.js",
     "new-quests:update": "node scripts/update-new-quests.js",

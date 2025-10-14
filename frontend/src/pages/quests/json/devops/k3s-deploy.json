@@ -52,7 +52,7 @@
         },
         {
             "id": "load",
-            "text": "Build the DSPACE image and import it: `docker build -t dspace-app:latest -f frontend/Dockerfile ./frontend && k3s ctr images import dspace-app:latest`. Apply the manifests from `k8s/` to deploy.",
+            "text": "Build the DSPACE image and import it: `docker build -t dspace-app:latest -f frontend/Dockerfile ./frontend && k3s ctr images import dspace-app:latest`. Apply the manifests from `infra/k8s/` to deploy.",
             "options": [
                 {
                     "type": "goto",
