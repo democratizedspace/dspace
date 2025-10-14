@@ -1,78 +1,96 @@
-# Structural polish prompt
+# DSPACE structural polish prompt
 
-Use these prompts when DSPACE needs repo-wide hardening without removing any features. Copy the blocks into Codex as-is.
+Use this when the repo needs structural hardening without dropping features or CI coverage.
 
-## Prompt
+## Copy-ready prompt
 ```markdown
-# Structural polish playbook for the DSPACE repo
+# DSPACE structural polish playbook
 
-You are Codex working in the democratizedspace/dspace repository. Follow every instruction in this prompt exactly and stop after producing the requested artifacts.
+You are Codex working in the democratizedspace/dspace repository. Follow every instruction exactly and
+stop after delivering the requested artifacts.
 
 ## Mission
-Strengthen repository structure, offline resilience, accessibility, testing, and documentation while keeping every existing game feature and CI job intact.
+Rework structure, resilience, and documentation so the game ships smoother while every existing
+feature, quest, and CI job stays intact.
 
-## Repository snapshot
-- **Workspace**: pnpm monorepo with `frontend/` (Svelte + Vite) and `backend/` (service helpers), plus `ansible/`, `k8s/`, `monitoring/`, `scripts/`, and `docs/`.
-- **Node target**: Node 18 remains compatible; CI runs Node 20 (see `.nvmrc`, Jest, Vitest configs).
-- **Accessibility posture**: WCAG 2.2 AA intent with keyboard-first navigation and consistent focus management.
+## Snapshot
+- **Workspace**: pnpm monorepo with `frontend/` (Svelte + Vite) and `backend/` (service helpers), plus
+  `ansible/`, `k8s/`, `monitoring/`, `scripts/`, and `docs/`.
+- **Node target**: Author for Node 18+, ensure Node 20 CI (`.nvmrc`, Jest, Vitest) keeps passing.
+- **Accessibility posture**: WCAG 2.2 AA intent with consistent navigation, visible focus, and
+  keyboard-first flows.
 
-## High-ROI polish tracks
+## High-ROI refactors
 1. **Monorepo shape**
-   - Move toward `apps/frontend`, `apps/backend`, and `packages/*` for shared contracts (auth, types, content schemas).
-   - Relocate deployment assets under `infra/` (e.g., `infra/k8s`, `infra/ansible`) with per-environment overlays.
-   - Preserve developer affordances: migrate import paths, update workspace manifests, wire aliases across Vite, Vitest, Jest, and TS configs, and document the transition.
+   - Gradually shift to `apps/frontend`, `apps/backend`, and `packages/*` (shared types, auth,
+     content schemas).
+   - Pull `k8s/` and `ansible/` under `infra/` with env-specific overlays; keep deploy docs synced.
+   - Update pnpm workspaces, TypeScript paths, Jest/Vitest aliases, importers, and scripts as moves
+     land.
 2. **Offline-first rigor**
-   - Formalize the service worker: precache the shell (`/`, `/play`, `/quests/*`), version cache keys, and define runtime caching for quest JSON and static assets.
-   - Lock in save-state migrations via versioned schemas, fixtures for legacy saves, and rollback documentation.
-   - Extend CI with regression tests that simulate offline flows and ensure quests still launch when the network is unavailable.
+   - Specify a service-worker strategy: precache `/`, `/play`, `/quests/*`; runtime-cache assets and
+     quest JSON; version cache keys for busting.
+   - Keep local save data migratable with versioned schemas, fixtures for historic saves, and
+     documented rollback steps.
+   - Add regression tests for offline quest start and persistence of cached assets.
 3. **Accessibility & UX**
-   - Enforce linting for `aria-*` coverage, focus visibility, and contrast (ESLint, Stylelint, and Svelte-specific rules); fail CI on violations.
-   - Maintain a manual keyboard-only walkthrough covering global nav, quest selection, quest runtime, and settings; store it under `docs/ops/a11y-checklist.md`.
-   - Capture accessibility regressions with Playwright snapshots (e.g., `page.accessibility.snapshot()` to confirm landmarks).
+   - Enforce lint rules for `aria-*`, focus visibility, and contrast; break CI on violations.
+   - Maintain a manual keyboard-only walkthrough (global nav → quest select → quest run → settings)
+     in `docs/ops/a11y-checklist.md`.
+   - Capture accessibility baselines via Playwright snapshots or accessibility tree exports.
 4. **Testing & observability**
-   - Add contract tests validating the JSON schema the frontend expects from the backend via a shared `packages/content-schema` module.
-   - Snapshot quests and NPC bios so content mutations surface immediately.
-   - Thread opt-in telemetry hooks guarded by a privacy toggle; cover opt-out paths with tests and document the behavior.
-   - Keep docs link checking running in CI (see the `link-check` job) whenever restructuring documentation.
+   - Establish contract tests between frontend and backend using shared JSON schema packages.
+   - Snapshot quests/NPC bios so unintended edits surface immediately.
+   - Thread opt-in telemetry hooks guarded by privacy toggles; test opt-out paths and document the
+     behavior.
+   - Keep docs link checking in CI; fix broken references during reorganizations.
 
 ## Directory hygiene
-- Keep the repository root lean: `README.md`, `pnpm-workspace.yaml`, lockfiles, configs, and entry scripts.
-- Move deployment and monitoring code under `infra/` with environment overlays.
-- Partition docs into `docs/` (player guides), `docs/ops/` (production runbooks), and `docs/contrib/` (contributor onboarding).
-- Ensure the README entry map spotlights "play", "develop", "test", and "deploy" quick-start links.
+- Keep the root lean: `README.md`, workspace manifests, lockfiles, configs, entry scripts.
+- Collect deploy/ops code under `infra/` (`infra/k8s`, `infra/ansible`, monitoring overlays).
+- Split documentation: player guides under `docs/`, runbooks under `docs/ops/`, contributor material
+  under `docs/contrib/`.
+- Maintain a concise README entry map with "play", "develop", "test", and "deploy" quick links.
 
 ## Prompt migration guardrails
-- Store prompt docs in `docs/prompts/codex/` with concise filenames (no "prompt" or "codex").
-- Update internal links, regenerate link-check snapshots, and refresh `frontend/src/pages/docs/md/prompts-codex.md` when prompts move.
+- Store Codex prompt docs in `docs/prompts/codex/` with concise filenames (drop "prompt"/"codex").
+- Update internal/external links plus any generated prompt indexes after moves.
+- Re-run docs link checkers whenever prompts relocate.
 
 ## Orthogonality & saturation rule
-Switch from `implement.md` to this polish prompt when feature PRs collide:
-1. Two consecutive implementation prompts land within a week and both require manual rebases due to overlapping files.
-2. Pause new feature prompts for one sprint and focus on polish (directory moves, shared packages, caching, accessibility linting, schema contracts).
-3. Resume `implement.md` once polish tasks complete with CI green and docs updated.
+Switch from `implement.md` to this polish playbook when:
+1. Two implementation PRs within a week collide and require manual rebases on overlapping files.
+2. The queue shows repeated directory/import churn that blocks new features.
+3. A sprint of polish lands with CI green and docs updated; then resume `implement.md`.
 
 ## Execution checklist
-1. Confirm scope with stakeholders: no features removed, CI jobs stay intact.
-2. Draft migration diagrams plus TODOs in `docs/contrib/architecture-notes.md` before touching code.
-3. Use feature flags or staged rollouts for directory reshapes; keep local dev, CI, and deploy scripts aligned.
-4. Run `pnpm install`, `pnpm run lint`, `pnpm run type-check`, `pnpm run build`, and `pnpm run test:ci`; rerun `pnpm run coverage` if schemas change.
-5. Execute `pnpm run link-check` (or inspect the `link-check` action) to validate documentation.
-6. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji-prefixed message.
-7. Update `docs/prompts/codex/baseline.md` and in-game docs indexes with any new guides.
+1. Align scope with stakeholders: no feature removals, all CI jobs stay.
+2. Draft migration notes in `docs/contrib/architecture-notes.md` before touching code.
+3. Roll out directory moves with feature flags or staged aliases so dev, CI, and deploy scripts stay
+   aligned.
+4. Run `pnpm install`, `pnpm run lint`, `pnpm run type-check`, `pnpm run build`, `pnpm run test:ci`,
+   and re-run coverage if schemas shift.
+5. Execute docs link checking (`pnpm run link-check` or equivalent) after reorganizing files.
+6. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`; commit with an
+   emoji-prefixed message.
+7. Update indexes (`docs/prompts/codex/baseline.md`, player docs) after adding or moving guides.
 
-Deliver a succinct PR summary, list of tests, and any migration follow-ups.
+Deliver a concise PR summary, the tests you ran, and any follow-up tickets.
 ```
 
 ## Upgrade prompt
 ```markdown
 # Upgrade the structural polish playbook
 
-You are Codex reviewing `docs/prompts/codex/polish.md`. Improve the primary prompt block so it stays evergreen, precise, and copy-paste ready.
+You are Codex reviewing `docs/prompts/codex/polish.md`. Improve the primary prompt so it stays
+copy-paste ready, evergreen, and precise.
 
 ## Instructions
-- Audit every section for clarity, duplication, missing safeguards, or outdated repository realities; rewrite or reorder content to optimize signal.
-- Preserve all core requirements: monorepo reshaping guidance, offline-first rigor, accessibility posture, testing/observability upgrades, directory hygiene, prompt migration guardrails, saturation rule, and execution checklist.
-- Tighten language, group related actions, and add any missing high-impact guardrails discovered since the last revision.
-- Validate external references (`docs/ops/`, `docs/contrib/`, CI jobs, scripts) so they stay accurate.
-- Output the revised prompt block in a single fenced code block ready to replace the existing one.
+- Audit each section for clarity, duplication, and alignment with current repository realities.
+- Preserve mission, snapshot, high-ROI tracks, directory hygiene, prompt migration guardrails,
+  saturation rules, and execution checklist.
+- Tighten language, merge redundant steps, and add any newly required guardrails discovered during
+  recent work.
+- Verify all referenced paths (`docs/ops/`, `docs/contrib/`, CI jobs, scripts) remain accurate.
+- Output a single fenced code block replacing the existing prompt when done.
 ```
