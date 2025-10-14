@@ -7,6 +7,8 @@ major navigation changes land.
    - Load the home screen (`/`).
    - Press `Tab` until the first nav item receives a visible focus ring.
    - Confirm the skip link, nav items, and "Play" CTA are reachable without mouse interaction.
+   - Verify focus indicators meet contrast requirements (WCAG 2.2.1) by visually checking against the
+     background or using the design token contrast matrix.
 2. **Quest selection**
    - From the nav, activate "Play" using `Enter` or `Space`.
    - Tab through quest cards; each must expose a focus outline and accessible name.
@@ -15,6 +17,8 @@ major navigation changes land.
    - Step through quest options with arrow keys or `Tab`/`Shift+Tab`.
    - Verify choices announce state changes via `aria-live` or inline status text.
    - Ensure the "Finish quest" action is reachable without hidden traps.
+   - Capture an accessibility tree snapshot (Playwright or browser devtools) after the first decision
+     point and attach it to the release notes archive.
 4. **Settings panel**
    - Open Settings with the keyboard shortcut or via the nav menu.
    - Check that toggles and sliders expose focus, labels, and instructions.
@@ -22,5 +26,6 @@ major navigation changes land.
 5. **Regression capture**
    - File observations in `docs/ops/a11y-regressions.md` (create on first issue).
    - Attach Playwright accessibility snapshots when possible.
+   - Record color-contrast exceptions and temporary mitigations with owner + expiry date.
 
 Record the run date, tester, and findings in the release checklist.
