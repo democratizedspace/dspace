@@ -13,5 +13,6 @@ incidents, or performing maintenance.
 - [Monitoring setup](./monitoring_setup.md)
 - [Netlify migration history](./netlify-migration.md)
 - [Raspberry Pi deployment guide](./RPI_DEPLOYMENT_GUIDE.md)
+- [Offline-first strategy](./offline-first.md)
 
 Add new runbooks in this directory and update the list above.

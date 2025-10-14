@@ -26,6 +26,18 @@ moves so contributors can stage their work accordingly.
 6. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
    JSON schemas, snapshot quest/NPC bios, and gate telemetry via explicit opt-in toggles.
 
+### Current Iteration Focus (2025-09)
+
+- **Apps scaffolding**: Add an `apps/` directory with a placeholder README that maps existing
+  application roots and captures the migration contract (e.g., `frontend` remains the source of
+  truth until parity is confirmed). Update `pnpm-workspace.yaml` to recognise `apps/*` so early
+  adopters can experiment without breaking the legacy workspace.
+- **Offline playbook**: Document the service-worker cache strategy, save-data versioning, and
+  rollback flow in `docs/ops/offline-first.md`. Clarify that the first implementation will ship as a
+  no-op worker behind a feature flag to avoid surprising deployments.
+- **Accessibility baseline**: Extend the keyboard walkthrough with focus-state verification and
+  ensure Playwright accessibility captures are attached to the ops checklist.
+
 ## Sequencing Strategy
 
 - Draft documentation and update README navigation before moving code so contributors know where
