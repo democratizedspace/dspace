@@ -12,6 +12,16 @@ for background details.
 
 Check out the [docs](https://democratized.space/docs)!
 
+## Quick links
+
+- **Play**: [Launch DSPACE](https://democratized.space/play) or run `npm run dev` for a local build.
+- **Develop**: Follow the [local development guide](#local-development) and review the
+  [structural roadmap](docs/contrib/architecture-notes.md).
+- **Test**: Run the [core checks](#testing) individually (`npm run lint`, `npm run type-check`,
+  `npm run build`, `npm run test:ci`).
+- **Deploy**: Review the [Netlify migration notes](docs/netlify-migration.md) while we stage the
+  new `infra/` layout.
+
 ## Accessibility
 
 The frontend aims to meet WCAG 2.2 AA. Navigation links include `aria-current`
