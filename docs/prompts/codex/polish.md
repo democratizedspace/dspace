@@ -15,7 +15,7 @@ feature, quest, and CI job stays intact.
 
 ## Snapshot
 - **Workspace**: pnpm monorepo with `frontend/` (Svelte + Vite) and `backend/` (service helpers), plus
-  `ansible/`, `k8s/`, `monitoring/`, `scripts/`, and `docs/`.
+  `infra/ansible`, `infra/k8s`, `infra/monitoring`, `scripts/`, and `docs/`.
 - **Node target**: Author for Node 18+, ensure Node 20 CI (`.nvmrc`, Jest, Vitest) keeps passing.
 - **Accessibility posture**: WCAG 2.2 AA intent with consistent navigation, visible focus, and
   keyboard-first flows.
@@ -24,7 +24,8 @@ feature, quest, and CI job stays intact.
 1. **Monorepo shape**
    - Gradually shift to `apps/frontend`, `apps/backend`, and `packages/*` (shared types, auth,
      content schemas).
-   - Pull `k8s/` and `ansible/` under `infra/` with env-specific overlays; keep deploy docs synced.
+   - Keep `infra/k8s`, `infra/ansible`, and `infra/monitoring` in sync with env-specific overlays and
+     updated deploy docs.
    - Update pnpm workspaces, TypeScript paths, Jest/Vitest aliases, importers, and scripts as moves
      land.
 2. **Offline-first rigor**

@@ -22,7 +22,7 @@ the [Codex merge conflict prompt](merge-conflicts.md), the
 [Codex meta prompt](meta.md), and the
 [Codex Prompt Upgrader](upgrader.md).
 When adding a new prompt doc, link it here and in
-[the docs index](../index.astro).
+[the docs index](../../../frontend/src/pages/docs/index.astro).
 
 > **TL;DR**
 >

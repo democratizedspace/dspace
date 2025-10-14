@@ -2,9 +2,9 @@
 
 Codex is a sandboxed engineering agent that can open this repository, run tests, and submit
 ready-made pull requests. Use this guide alongside [Codex Prompts](baseline.md)
-when editing files under [`monitoring/`](../../../monitoring/)
+when editing files under [`infra/monitoring/`](../../../infra/monitoring/)
 to keep metrics, dashboards, and alerts consistent. For configuration details, see
-[`monitoring/README.md`](../../../monitoring/README.md).
+[`infra/monitoring/README.md`](../../../infra/monitoring/README.md).
 To keep the prompt docs evolving, see the [Codex meta prompt](meta.md); if
 these templates drift, refresh them with the
 [Codex Prompt Upgrader](upgrader.md). For failing GitHub Actions runs, use the
@@ -19,11 +19,11 @@ these templates drift, refresh them with the
   visualizing service availability and HTTP 5xx error rate. Metrics follow Prometheus conventions
   such as `http_requests_total` and `up`.
 
-[dspace-dashboard]: ../../../monitoring/grafana/dashboards/dspace-overview.json
+[dspace-dashboard]: ../../../infra/monitoring/grafana/dashboards/dspace-overview.json
 
 > **TL;DR**
 >
-> 1. Scope changes to `monitoring/` configs or supporting scripts.
+> 1. Scope changes to `infra/monitoring/` configs or supporting scripts.
 > 2. Prefer open-source, self-hosted tools (e.g., [Prometheus](https://prometheus.io/), [Grafana](https://grafana.com/));
 >    avoid sending personal data to third-party services.
 > 3. Add sample dashboards or alert rules when relevant.
@@ -38,7 +38,7 @@ Ensure `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:
 committing.
 
 USER:
-1. Update monitoring configs or code under `monitoring/`.
+1. Update monitoring configs or code under `infra/monitoring/`.
 2. Use open-source, self-hosted tools (e.g., [Prometheus](https://prometheus.io/),
    [Grafana](https://grafana.com/)) that respect user privacy.
 3. Include or update sample dashboards and alerting rules when adding metrics.
@@ -64,7 +64,7 @@ and `npm run test:ci` pass before committing.
 
 USER:
 1. Verify Grafana/Prometheus configs and dashboard links are current.
-2. Note new alerts or metric conventions described in `monitoring/README.md`.
+2. Note new alerts or metric conventions described in `infra/monitoring/README.md`.
 3. Run the checks above.
 4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 5. Commit with an emoji-prefixed message.

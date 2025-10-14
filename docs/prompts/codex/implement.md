@@ -38,13 +38,13 @@ USAGE NOTES:
 - Each run must choose a random eligible task so the backlog drains evenly over time.
 
 CONTEXT:
-- Follow [README.md](../../README.md), [CONTRIBUTING.md](../../CONTRIBUTING.md), and the
-  root [AGENTS.md](../../AGENTS.md) for semantics.
-- Review [.github/workflows/](../../.github/workflows/) before coding so local checks mirror CI.
-- Reference [`llms.txt`](../../llms.txt),
-  [`docs/prompt-docs-summary.md`](../../docs/prompt-docs-summary.md),
+- Follow [README.md](../../../README.md), [CONTRIBUTING.md](../../../CONTRIBUTING.md), and the
+  root [AGENTS.md](../../../AGENTS.md) for semantics.
+- Review [.github/workflows/](../../../.github/workflows/) before coding so local checks mirror CI.
+- Reference [`llms.txt`](../../../llms.txt),
+  [`docs prompt guide`](docs.md),
   and neighboring source files to understand feature intent before changing behavior.
-- Tests live under [`tests/`](../../tests/) and `frontend/__tests__/`; UI coverage uses
+- Tests live under [`tests/`](../../../tests/) and `frontend/__tests__/`; UI coverage uses
   Vitest and Playwright. Match existing patterns when adding new assertions.
 - Install dependencies with `npm ci` (or `pnpm install`) before running repo scripts.
 - Move fast but keep trunk green: ship small, composable changes that pass CI on the first push.
@@ -62,7 +62,7 @@ REQUEST:
 5. Refresh related documentation or changelog entries to reflect the shipped behavior. When
    touching the changelog, do **not** create a new dated file—append your notes to the most
    recent future-dated entry instead (for example,
-   [`frontend/src/pages/docs/md/changelog/20251101.md`](../../frontend/src/pages/docs/md/changelog/20251101.md)
+   [`frontend/src/pages/docs/md/changelog/20251101.md`](../../../frontend/src/pages/docs/md/changelog/20251101.md)
    on the `v3` branch).
 6. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:ci`. Install Playwright browsers with
@@ -84,16 +84,16 @@ You are an automated contributor for the democratizedspace/dspace repository.
 
 PURPOSE:
 Keep `docs/prompts/codex/implement.md` accurate, actionable, and aligned with the
-[prompt-docs summary](../../docs/prompt-docs-summary.md).
+[docs prompt guide](docs.md).
 
 USAGE NOTES:
 - Use this block when refining or expanding the DSPACE implement prompt.
 - Ensure cross-references to other prompt docs and indexes stay in sync.
 
 CONTEXT:
-- Follow [README.md](../../README.md), [CONTRIBUTING.md](../../CONTRIBUTING.md), and the root
-  [AGENTS.md](../../AGENTS.md) for instruction semantics.
-- Review [.github/workflows/](../../.github/workflows/) to anticipate CI checks.
+- Follow [README.md](../../../README.md), [CONTRIBUTING.md](../../../CONTRIBUTING.md), and the root
+  [AGENTS.md](../../../AGENTS.md) for instruction semantics.
+- Review [.github/workflows/](../../../.github/workflows/) to anticipate CI checks.
 - Run the command suite from the main prompt (`npm run audit:ci`, `npm run lint`,
   `npm run type-check`, `npm run build`, `npm run test:ci`) plus the secret scan
   `git diff --cached | ./scripts/scan-secrets.py`.
