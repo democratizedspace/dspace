@@ -16,6 +16,7 @@
     const message = writable('');
     const messageHistory = writable([]);
     let showSpinner = false;
+    let hydrated = false;
 
     $: currentPersona = $activePersona;
     $: welcomeMessage = currentPersona?.welcomeMessage;
@@ -94,13 +95,14 @@
     }
 
     onMount(async () => {
+        hydrated = true;
         if ($messageHistory.length === 0) {
             addWelcomeMessage();
         }
     });
 </script>
 
-<div class="chat" data-testid="chat-panel">
+<div class="chat" data-testid="chat-panel" data-hydrated={hydrated ? 'true' : 'false'}>
     <div class="persona-selector">
         <label for="chat-persona">Talk to</label>
         <select id="chat-persona" bind:value={$activePersonaId} on:change={handlePersonaChange}>

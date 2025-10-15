@@ -17,6 +17,7 @@ test('item selector can be used with touch events', async ({ page }) => {
     await page.locator('button:has-text("Add Created Item")').click();
 
     const selector = page.locator('.form-group:has-text("Created Items") .item-selector');
+    await expect(selector).toHaveAttribute('data-hydrated', 'true');
     const openBtn = selector.locator('button').first();
     const openBox = await openBtn.boundingBox();
     if (openBox) {

@@ -34,6 +34,7 @@ test.describe('Chat NPC persona switching', () => {
 
         const openAIChatPanel = page.locator('[data-testid="chat-panel"]').nth(1);
         await expect(openAIChatPanel).toBeVisible();
+        await expect(openAIChatPanel).toHaveAttribute('data-hydrated', 'true');
 
         const personaSelect = openAIChatPanel.locator('#chat-persona');
         const personaSummary = openAIChatPanel.locator('.persona-summary');
