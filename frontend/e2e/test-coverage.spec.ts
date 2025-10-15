@@ -12,15 +12,9 @@ const testsDir = path.resolve(__dirname, '../__tests__');
 test('verify no e2e test files are orphaned from test:pr workflow', async () => {
     // Read the run-test-groups.mjs file content
     const groupsFilePath = path.resolve(__dirname, '../scripts/run-test-groups.mjs');
+    const groupsFileExists = fs.existsSync(groupsFilePath);
 
-    // Check if file exists before reading
-    if (!fs.existsSync(groupsFilePath)) {
-        console.error(`File not found: ${groupsFilePath}`);
-        console.log('Current directory:', process.cwd());
-        console.log('__dirname:', __dirname);
-        test.skip(true, `Could not find file: ${groupsFilePath}`);
-        return;
-    }
+    expect(groupsFileExists, `Expected file to exist: ${groupsFilePath}`).toBeTruthy();
 
     const groupsFileContent = fs.readFileSync(groupsFilePath, 'utf8');
 

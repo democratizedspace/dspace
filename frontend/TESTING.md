@@ -133,6 +133,8 @@ When creating new test files:
 
     - Place `.spec.ts` files in the `frontend/e2e/` directory
     - Add them to a test group in `frontend/scripts/run-test-groups.mjs`
+    - Use the `Docs Experience`, `Management Dashboards`, or `UI Interaction` groups for docs,
+      management, and responsive UI specs so coverage checks stay aligned
     - Update the Vitest coverage in `tests/run-test-groups.test.ts` when changing how groups execute
 
 2. For Jest tests:
