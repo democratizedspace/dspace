@@ -29,6 +29,7 @@ export async function createTestItems(page: Page, count = 2): Promise<string[]> 
         // Navigate to the item creation page
         await page.goto('/inventory/create');
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
         // Generate a unique name
         const uniqueItemName = `Test Item ${i + 1}-${Date.now()}`;

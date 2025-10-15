@@ -1,4 +1,6 @@
 <script>
+    import { onMount } from 'svelte';
+
     export let name = '';
     export let description = '';
     export let imageUrl = '';
@@ -6,9 +8,15 @@
     export let unit = '';
     export let type = '';
     export let dependencies = [];
+
+    let hydrated = false;
+
+    onMount(() => {
+        hydrated = true;
+    });
 </script>
 
-<div class="item-preview">
+<div class="item-preview" data-hydrated={hydrated ? 'true' : 'false'}>
     {#if imageUrl}
         <img src={imageUrl} alt="Item preview" class="item-image" />
     {/if}

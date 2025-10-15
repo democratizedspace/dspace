@@ -9,11 +9,13 @@
     let clearing = false;
     let statusMessage = '';
     let errorMessage = '';
+    let hydrated = false;
 
     onMount(async () => {
         token = await loadGitHubToken();
         gistId = await loadCloudGistId();
         loading = false;
+        hydrated = true;
     });
 
     async function handleLogout() {
@@ -40,7 +42,7 @@
     }
 </script>
 
-<div class="logout-panel">
+<div class="logout-panel" data-hydrated={hydrated ? 'true' : 'false'}>
     <h3>Log out</h3>
     <p>
         Remove saved GitHub Cloud Sync credentials from this device. Use this if you're on a shared

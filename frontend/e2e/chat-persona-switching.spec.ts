@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { waitForHydration } from './test-helpers';
 
 const personaExpectations = [
     {
@@ -31,6 +32,7 @@ test.describe('Chat NPC persona switching', () => {
     test('shows persona-specific summaries and welcome prompts', async ({ page }) => {
         await page.goto('/chat');
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
         const openAIChatPanel = page.locator('[data-testid="chat-panel"]').nth(1);
         await expect(openAIChatPanel).toBeVisible();
@@ -51,9 +53,7 @@ test.describe('Chat NPC persona switching', () => {
             await expect(personaAvatar).toHaveAttribute('alt', `${persona.name} portrait`);
 
             const latestAssistantMessage = openAIChatPanel.locator('.assistant').first();
-            await expect(latestAssistantMessage).toContainText(persona.welcomeSnippet, {
-                timeout: 15000,
-            });
+            await expect(latestAssistantMessage).toContainText(persona.welcomeSnippet);
         }
     });
 });

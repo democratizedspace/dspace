@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createTestItems } from './test-helpers';
+import { createTestItems, waitForHydration } from './test-helpers';
 
 // Ensure touch events are enabled
 test.use({ hasTouch: true });
@@ -9,6 +9,7 @@ test('item selector can be used with touch events', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/processes/create');
     await page.waitForLoadState('networkidle');
+    await waitForHydration(page);
 
     await page.fill('#title', `Touch Process ${Date.now()}`);
     await page.fill('#duration', '1h');
@@ -32,5 +33,5 @@ test('item selector can be used with touch events', async ({ page }) => {
     }
     await page.waitForTimeout(500);
 
-    await expect(selector.locator('.selected-item')).toBeVisible({ timeout: 15000 });
+    await expect(selector.locator('.selected-item')).toBeVisible();
 });

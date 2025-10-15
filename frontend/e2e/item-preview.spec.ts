@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { clearUserData, waitForHydration } from './test-helpers';
 
 test.describe('Custom content preview', () => {
     test.beforeEach(async ({ page }) => {
@@ -9,11 +9,13 @@ test.describe('Custom content preview', () => {
     test('shows item preview while filling form', async ({ page }) => {
         await page.goto('/inventory/create');
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
         await page.fill('#name', 'Preview Item');
         await page.fill('#description', 'Preview item description');
 
         const preview = page.locator('.item-preview');
+        await expect(preview).toHaveAttribute('data-hydrated', 'true');
         await expect(preview).toBeVisible();
         await expect(preview).toContainText('Preview Item');
         await expect(preview).toContainText('Preview item description');
