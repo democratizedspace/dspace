@@ -69,8 +69,8 @@ const TEST_GROUPS = [
             'mobile-item-form.spec.ts',
             'mobile-quest-form.spec.ts',
         ],
-        parallel: true,
-        workers: Math.min(MAX_WORKERS, 3),
+        parallel: false,
+        workers: 1,
     },
     {
         name: 'UI Interaction',
@@ -84,8 +84,8 @@ const TEST_GROUPS = [
             'touch-menu.spec.ts',
             'ui-responsiveness.spec.ts',
         ],
-        parallel: true,
-        workers: MAX_WORKERS,
+        parallel: false,
+        workers: 1,
     },
     {
         name: 'Item Tests',
