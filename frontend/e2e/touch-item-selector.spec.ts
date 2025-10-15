@@ -31,5 +31,5 @@ test('item selector can be used with touch events', async ({ page }) => {
     }
     await page.waitForTimeout(500);
 
-    await expect(selector.locator('.selected-item')).toBeVisible({ timeout: 15_000 });
+    await expect(selector.locator('.selected-item')).toBeVisible({ timeout: 15000 });
 });

@@ -51,7 +51,7 @@ test.describe('Chat NPC persona switching', () => {
 
             const latestAssistantMessage = openAIChatPanel.locator('.assistant').first();
             await expect(latestAssistantMessage).toContainText(persona.welcomeSnippet, {
-                timeout: 15_000,
+                timeout: 15000,
             });
         }
     });
