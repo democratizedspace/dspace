@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
+const manageQuestsHydrationSelector = '.manage-quests[data-hydrated="true"]';
+
 test.describe('Manage Quests', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
@@ -9,8 +11,8 @@ test.describe('Manage Quests', () => {
     test('should list quests on manage page', async ({ page }) => {
         await page.goto('/quests/manage');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
-        const quests = page.locator('.quest-item');
+        await waitForHydration(page, manageQuestsHydrationSelector);
+        const quests = page.getByTestId('quest-row');
         await expect(quests.first()).toBeVisible();
     });
 
@@ -28,22 +30,27 @@ test.describe('Manage Quests', () => {
         // go to manage page
         await page.goto('/quests/manage');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
+        await waitForHydration(page, manageQuestsHydrationSelector);
 
-        const questRow = page.locator('.quest-item', { hasText: questTitle }).first();
+        const searchInput = page.getByPlaceholder('Search quests...');
+        await searchInput.fill(questTitle);
+
+        const questRow = page.getByTestId('quest-row').filter({ hasText: questTitle }).first();
+        await questRow.scrollIntoViewIfNeeded();
         await expect(questRow).toBeVisible();
 
         // accept confirmation dialog
         page.on('dialog', (d) => d.accept());
         await questRow.locator('.delete-button').click();
         await page.waitForTimeout(500);
-        await expect(page.locator(`text="${questTitle}"`)).toHaveCount(0);
+        await expect(page.getByTestId('quest-row').filter({ hasText: questTitle })).toHaveCount(0);
 
         // reload and verify still gone
         await page.reload();
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
-        await expect(page.locator(`text="${questTitle}"`)).toHaveCount(0);
+        await waitForHydration(page, manageQuestsHydrationSelector);
+        await searchInput.fill(questTitle);
+        await expect(page.getByTestId('quest-row').filter({ hasText: questTitle })).toHaveCount(0);
 
         // check indexeddb
         const exists = await page.evaluate(async (title) => {
@@ -79,10 +86,18 @@ test.describe('Manage Quests', () => {
 
         await page.goto('/quests/manage');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
+        await waitForHydration(page, manageQuestsHydrationSelector);
 
-        const questRow = page.locator('.quest-item', { hasText: questTitle }).first();
-        await questRow.locator('.edit-button').click();
+        const searchInput = page.getByPlaceholder('Search quests...');
+        await searchInput.fill(questTitle);
+
+        const questRow = page.getByTestId('quest-row').filter({ hasText: questTitle }).first();
+        await questRow.scrollIntoViewIfNeeded();
+        await questRow.hover();
+        const editButton = questRow.getByTestId('quest-edit-button');
+        await expect(editButton).toBeVisible({ timeout: 15000 });
+        await expect(editButton).toBeEnabled();
+        await editButton.click();
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
@@ -92,7 +107,10 @@ test.describe('Manage Quests', () => {
 
         await page.goto('/quests/manage');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
-        await expect(page.locator('.quest-item', { hasText: updatedTitle })).toBeVisible();
+        await waitForHydration(page, manageQuestsHydrationSelector);
+        await searchInput.fill(updatedTitle);
+        const updatedRow = page.getByTestId('quest-row').filter({ hasText: updatedTitle }).first();
+        await updatedRow.scrollIntoViewIfNeeded();
+        await expect(updatedRow).toBeVisible();
     });
 });
