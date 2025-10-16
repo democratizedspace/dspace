@@ -99,9 +99,7 @@ jobs:
         run: pnpm --filter ./frontend run setup-test-env
 
       - name: Install Playwright browsers
-        uses: microsoft/playwright-github-action@v1
-        with:
-          working-directory: frontend
+        run: pnpm --filter ./frontend exec playwright install --with-deps
 
       - name: Run Playwright tests (${{ matrix.shard }})
         working-directory: frontend
