@@ -15,6 +15,7 @@ vi.mock('child_process', () => ({
 }));
 vi.mock('fs', () => ({
   existsSync: existsSyncMock,
+  default: { existsSync: existsSyncMock },
 }));
 
 beforeAll(async () => {
