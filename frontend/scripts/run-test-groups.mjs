@@ -157,19 +157,26 @@ const colors = {
 
 // Get the root directory
 const rootDir = path.resolve(__dirname, '..');
-const playwrightCli = path.join(rootDir, 'node_modules', '@playwright', 'test', 'cli.js');
 
-if (!fs.existsSync(playwrightCli)) {
-    console.error(`Playwright CLI was not found at ${playwrightCli}.`);
-    console.error('Make sure dependencies are installed (npm install or pnpm install).');
+const PLAYWRIGHT_CLI = path.join(rootDir, 'node_modules', '@playwright', 'test', 'cli.js');
+
+if (!fs.existsSync(PLAYWRIGHT_CLI)) {
+    console.error(
+        `${colors.red}Playwright CLI not found at ${PLAYWRIGHT_CLI}. Did you run npm install in frontend?${colors.reset}`
+    );
+    console.error(
+        `${colors.yellow}Make sure dependencies are installed (e.g., npm install or pnpm install).${colors.reset}`
+    );
     process.exit(1);
 }
+
+const PLAYWRIGHT_COMMAND = `node ${JSON.stringify(PLAYWRIGHT_CLI)} test`;
 
 // Function to run a test group
 function runTestGroup(group) {
     console.log(`${colors.bright}${colors.blue}Running ${group.name}${colors.reset}`);
 
-    let command = `node ${JSON.stringify(playwrightCli)} test`;
+    let command = PLAYWRIGHT_COMMAND;
 
     // Add files
     if (group.files && group.files.length > 0) {
@@ -194,9 +201,7 @@ function runTestGroup(group) {
     try {
         console.log(`${colors.cyan}Command: ${command}${colors.reset}`);
         console.log(
-            `${colors.cyan}Using ${group.parallel ? group.workers || MAX_WORKERS : 1} worker(s)${
-                colors.reset
-            }`
+            `${colors.cyan}Using ${group.parallel ? group.workers || MAX_WORKERS : 1} worker(s)${colors.reset}`
         );
         execSync(command, { stdio: 'inherit', cwd: rootDir });
         console.log(`${colors.green}✓ ${group.name} completed successfully${colors.reset}`);
