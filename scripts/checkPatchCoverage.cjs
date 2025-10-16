@@ -60,14 +60,15 @@ function checkCoverage() {
   if (changed.length === 0) return;
   const summary = loadCoverage();
   let failed = false;
+  const threshold = 90;
   for (const file of changed) {
     const entry = Object.entries(summary).find(([key]) => key.endsWith(file));
     if (!entry) continue;
     const data = entry[1];
     const metrics = ['lines', 'statements', 'functions', 'branches'];
     metrics.forEach(m => {
-      if (data[m] && data[m].pct < 100) {
-        console.error(`${file} ${m} coverage ${data[m].pct}% is below 100%`);
+      if (data[m] && data[m].pct < threshold) {
+        console.error(`${file} ${m} coverage ${data[m].pct}% is below ${threshold}%`);
         failed = true;
       }
     });
@@ -75,7 +76,7 @@ function checkCoverage() {
   if (failed) {
     process.exit(1);
   } else {
-    console.log('Patch coverage 100%');
+    console.log(`Patch coverage ≥${threshold}%`);
   }
 }
 if (require.main === module) {

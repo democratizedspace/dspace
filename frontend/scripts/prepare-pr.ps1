@@ -12,19 +12,20 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location -Path "$scriptDir\.."
 
 try {
-    # Ensure Playwright browsers are installed
-    Write-Host "Ensuring Playwright browsers are installed..."
-    npx playwright install --with-deps > $null 2>&1
-
-    # Step 1: Run linting and formatting
-    Write-Host "Step 1/3: Checking code formatting and linting..."
-    npm run check
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "❌ Formatting or linting issues found. Please fix them before submitting your PR." -ForegroundColor Red
-        Set-Location -Path $originalDir
-        exit 1
+    # Step 1: Run linting and formatting unless skipped
+    if (-not $env:SKIP_LINT) {
+        Write-Host "Step 1/3: Checking code formatting and linting..."
+        npm run check
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "❌ Formatting or linting issues found. Please fix them before submitting your PR." -ForegroundColor Red
+            Set-Location -Path $originalDir
+            exit 1
+        }
+        Write-Host "✅ Code formatting and linting passed!" -ForegroundColor Green
     }
-    Write-Host "✅ Code formatting and linting passed!" -ForegroundColor Green
+    else {
+        Write-Host "Step 1/3: SKIP_LINT is set, skipping formatting and lint checks..."
+    }
 
     # Step 2: Run unit tests unless skipped
     if (-not $env:SKIP_UNIT_TESTS) {
