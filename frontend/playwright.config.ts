@@ -90,7 +90,7 @@ export default defineConfig({
     // Configure webServer to start the app server before running tests
     webServer: {
         // Use production preview server so grouped E2E tests don't restart the dev server
-        command: 'pnpm --filter ./frontend run preview',
+        command: 'pnpm run preview',
         url: baseURL,
         reuseExistingServer: true,
         timeout: 60000,
