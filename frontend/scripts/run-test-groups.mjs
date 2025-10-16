@@ -4,6 +4,7 @@
  * and running them in a specific order.
  */
 import { execSync } from 'child_process';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
@@ -156,12 +157,19 @@ const colors = {
 
 // Get the root directory
 const rootDir = path.resolve(__dirname, '..');
+const playwrightCli = path.join(rootDir, 'node_modules', '@playwright', 'test', 'cli.js');
+
+if (!fs.existsSync(playwrightCli)) {
+    console.error(`Playwright CLI was not found at ${playwrightCli}.`);
+    console.error('Make sure dependencies are installed (npm install or pnpm install).');
+    process.exit(1);
+}
 
 // Function to run a test group
 function runTestGroup(group) {
     console.log(`${colors.bright}${colors.blue}Running ${group.name}${colors.reset}`);
 
-    let command = 'npx playwright test';
+    let command = `node ${JSON.stringify(playwrightCli)} test`;
 
     // Add files
     if (group.files && group.files.length > 0) {
