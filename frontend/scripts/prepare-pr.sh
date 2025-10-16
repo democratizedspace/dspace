@@ -15,7 +15,14 @@ cd "$SCRIPT_DIR/.." || exit 1
 
 # Ensure Playwright browsers are installed before running tests
 echo "Ensuring Playwright browsers are installed..."
-npx playwright install > /dev/null 2>&1
+PLAYWRIGHT_CLI="node_modules/@playwright/test/cli.js"
+if [ -f "$PLAYWRIGHT_CLI" ]; then
+  node "$PLAYWRIGHT_CLI" install > /dev/null 2>&1
+else
+  echo "Playwright CLI not found at $PLAYWRIGHT_CLI. Please run npm install." >&2
+  cd "$ORIGINAL_DIR" || exit 1
+  exit 1
+fi
 
 # Step 1: Run linting and formatting (unless skipped)
 if [ -z "$SKIP_LINT" ]; then
