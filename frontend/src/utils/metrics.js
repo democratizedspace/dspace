@@ -1,6 +1,6 @@
 let register;
 
-async function initMetrics(loader = () => import('prom-client')) {
+async function initMetrics(loader = () => import(/* @vite-ignore */ 'prom-client')) {
     try {
         const { Registry, collectDefaultMetrics } = await loader();
         register = new Registry();
