@@ -6,11 +6,16 @@ import path from 'path';
 import { pathToFileURL } from 'url';
 
 const execSyncMock = vi.fn();
+const existsSyncMock = vi.fn(() => true);
 const frontendRoot = path.resolve(__dirname, '../frontend');
 
 vi.mock('child_process', () => ({
   execSync: execSyncMock,
   default: { execSync: execSyncMock },
+}));
+vi.mock('fs', () => ({
+  existsSync: existsSyncMock,
+  default: { existsSync: existsSyncMock },
 }));
 
 beforeAll(async () => {
@@ -22,6 +27,7 @@ beforeAll(async () => {
 
 afterEach(() => {
   execSyncMock.mockReset();
+  existsSyncMock.mockClear();
 });
 
 // Basic sanity check that TEST_GROUPS is populated
