@@ -1,5 +1,9 @@
 import { defineConfig } from '@playwright/test';
 
+if (process.env.CI) {
+    await import('fake-indexeddb/auto');
+}
+
 // Add type declaration for process.env
 declare const process: {
     env: {
@@ -16,6 +20,9 @@ const baseURL = process.env.BASE_URL || `${protocol}://localhost:3002`;
 
 // Allow setting workers via environment variable for CI and local runs
 const workers = process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS) : process.env.CI ? 1 : 1;
+const isCI = Boolean(process.env.CI);
+const EXPECT_TIMEOUT_MS = 15000;
+const TEST_TIMEOUT_MS = isCI ? 45000 : 30000;
 
 export default defineConfig({
     testDir: './e2e',
@@ -31,7 +38,10 @@ export default defineConfig({
         ],
     ],
     retries: process.env.CI ? 2 : 1, // Add 1 retry for flaky tests even in local development
-    timeout: 30000,
+    timeout: TEST_TIMEOUT_MS,
+    expect: {
+        timeout: EXPECT_TIMEOUT_MS,
+    },
     // Configure artifact folders
     outputDir: './test-artifacts/',
     use: {

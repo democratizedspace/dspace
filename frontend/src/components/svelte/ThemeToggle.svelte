@@ -52,6 +52,7 @@
     aria-pressed={theme === 'dark'}
     on:click={toggleTheme}
     disabled={!isReady}
+    data-hydrated={isReady ? 'true' : 'false'}
 >
     <span class="theme-toggle__icon" aria-hidden="true">
         {theme === 'dark' ? '🌙' : '☀️'}

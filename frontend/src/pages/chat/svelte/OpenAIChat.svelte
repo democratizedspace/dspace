@@ -16,9 +16,11 @@
     const message = writable('');
     const messageHistory = writable([]);
     let showSpinner = false;
+    let hydrated = false;
 
     $: currentPersona = $activePersona;
-    $: welcomeMessage = currentPersona?.welcomeMessage;
+    $: welcomeMessage =
+        currentPersona?.welcomeMessage ?? currentPersona?.welcomeSnippet ?? '';
     $: personaSummary = currentPersona?.summary;
 
     function addMessage(msg) {
@@ -87,6 +89,7 @@
         }
         setActivePersona(selectedId);
         messageHistory.set([]);
+        messages.set([]);
         showSpinner = false;
         message.set('');
         await tick();
@@ -94,13 +97,19 @@
     }
 
     onMount(async () => {
+        hydrated = true;
         if ($messageHistory.length === 0) {
             addWelcomeMessage();
         }
     });
 </script>
 
-<div class="chat" data-testid="chat-panel">
+<div
+    class="chat"
+    data-testid="chat-panel"
+    data-provider="openai"
+    data-hydrated={hydrated ? 'true' : 'false'}
+>
     <div class="persona-selector">
         <label for="chat-persona">Talk to</label>
         <select id="chat-persona" bind:value={$activePersonaId} on:change={handlePersonaChange}>

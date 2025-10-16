@@ -6,6 +6,7 @@
     let prUrl = '';
     let validationErrors = {};
     let submitError = '';
+    let hydrated = false;
     const dispatch = createEventDispatcher();
     import {
         isValidGitHubToken,
@@ -16,7 +17,11 @@
     import { submitQuestPR } from '../../utils/submitQuestPR.js';
 
     onMount(async () => {
-        token = await loadGitHubToken();
+        try {
+            token = await loadGitHubToken();
+        } finally {
+            hydrated = true;
+        }
     });
 
     function validateForm() {
@@ -59,7 +64,7 @@
     export { handleSubmit, clearToken };
 </script>
 
-<form on:submit={handleSubmit} class="pr-form">
+<form on:submit={handleSubmit} class="pr-form" data-hydrated={hydrated ? 'true' : 'false'}>
     <div class="form-group token-group">
         <label for="token">GitHub Token*</label>
         <div class="token-input">

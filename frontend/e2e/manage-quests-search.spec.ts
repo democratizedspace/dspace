@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
+const manageQuestsHydrationSelector = '.manage-quests[data-hydrated="true"]';
+
 test.describe('Manage Quests Search', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
@@ -20,14 +22,14 @@ test.describe('Manage Quests Search', () => {
 
         await page.goto('/quests/manage');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
+        await waitForHydration(page, manageQuestsHydrationSelector);
 
         await expect(page.getByRole('heading', { name: 'Manage Quests' })).toBeVisible();
 
         const search = page.getByPlaceholder('Search quests...');
         await search.fill('Quest B');
 
-        const quests = page.locator('.quest-item');
+        const quests = page.getByTestId('quest-row');
         await expect(quests).toHaveCount(1);
         await expect(quests.first()).toContainText('Quest B');
 

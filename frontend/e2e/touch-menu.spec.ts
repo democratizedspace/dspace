@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { waitForHydration } from './test-helpers';
 
 test.describe('touch navigation menu', () => {
     test.use({ hasTouch: true });
@@ -7,9 +8,12 @@ test.describe('touch navigation menu', () => {
         await page.setViewportSize({ width: 375, height: 667 });
         await page.goto('/');
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
         const toggle = page.locator('#unpinned-toggle');
         const unpinnedItem = page.locator('nav a[href="/gamesaves"]');
+
+        await expect(toggle).toHaveAttribute('data-hydrated', 'true');
 
         await expect(toggle).toBeVisible();
         await expect(toggle).toHaveAttribute('aria-expanded', 'false');

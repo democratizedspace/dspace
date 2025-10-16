@@ -1,14 +1,15 @@
 import { test, expect } from '@playwright/test';
-import { createTestItems } from './test-helpers';
+import { createTestItems, waitForHydration } from './test-helpers';
 
-// Ensure touch events are enabled
-test.use({ hasTouch: true });
+// Ensure touch events are enabled and simulate a mobile viewport
+test.use({ hasTouch: true, isMobile: true });
 
 test('item selector can be used with touch events', async ({ page }) => {
     await createTestItems(page, 1);
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/processes/create');
     await page.waitForLoadState('networkidle');
+    await waitForHydration(page);
 
     await page.fill('#title', `Touch Process ${Date.now()}`);
     await page.fill('#duration', '1h');
@@ -17,19 +18,21 @@ test('item selector can be used with touch events', async ({ page }) => {
     await page.locator('button:has-text("Add Created Item")').click();
 
     const selector = page.locator('.form-group:has-text("Created Items") .item-selector');
-    const openBtn = selector.locator('button').first();
-    const openBox = await openBtn.boundingBox();
-    if (openBox) {
-        await page.touchscreen.tap(openBox.x + openBox.width / 2, openBox.y + openBox.height / 2);
-    }
-    await page.waitForTimeout(500);
+    await expect(selector).toHaveAttribute('data-hydrated', 'true');
+    const triggerButton = selector.locator('button').first();
+    await triggerButton.tap();
 
-    const itemRow = selector.locator('.item-row').first();
-    const rowBox = await itemRow.boundingBox();
-    if (rowBox) {
-        await page.touchscreen.tap(rowBox.x + rowBox.width / 2, rowBox.y + rowBox.height / 2);
-    }
-    await page.waitForTimeout(500);
+    const listbox = selector.locator('[role="listbox"]');
+    await expect(listbox).toBeVisible();
 
-    await expect(selector.locator('.selected-item')).toBeVisible();
+    const firstOption = listbox.locator('[role="option"]').first();
+    let optionLabel = (await firstOption.locator('h3').first().innerText()).trim();
+    if (!optionLabel) {
+        optionLabel = (await firstOption.innerText()).trim();
+    }
+    await firstOption.tap();
+
+    const selectedItem = selector.locator('.selected-item');
+    await expect(selectedItem).toBeVisible({ timeout: 15000 });
+    await expect(selectedItem).toContainText(optionLabel);
 });

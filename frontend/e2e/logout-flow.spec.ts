@@ -1,8 +1,11 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { clearUserData, waitForHydration } from './test-helpers';
 
 async function setCloudGistId(page, gistId) {
     await page.evaluate(async (value) => {
+        if (typeof indexedDB === 'undefined') {
+            return;
+        }
         await new Promise((resolve, reject) => {
             const request = indexedDB.open('dspaceGameState');
             request.onerror = () => reject(request.error || new Error('Failed to open IndexedDB'));
@@ -36,19 +39,25 @@ test.describe('Logout flow', () => {
         const gistId = 'gist1234567890';
 
         await page.goto('/cloudsync');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
         await page.fill('#token', token);
         await page.getByRole('button', { name: 'Save' }).click();
 
         await page.reload();
         await page.waitForSelector('#token');
+        await waitForHydration(page);
         await expect(page.locator('#token')).toHaveValue(token);
 
         await setCloudGistId(page, gistId);
         await page.reload();
         await page.waitForSelector('#gist');
+        await waitForHydration(page);
         await expect(page.locator('#gist')).toHaveValue(gistId);
 
         await page.goto('/settings');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
         const logoutButton = page.getByRole('button', { name: 'Log out' });
         await expect(logoutButton).toBeVisible();
         await logoutButton.click();
@@ -56,6 +65,7 @@ test.describe('Logout flow', () => {
 
         await page.goto('/cloudsync');
         await page.waitForSelector('#token');
+        await waitForHydration(page);
         await expect(page.locator('#token')).toHaveValue('');
         await expect(page.locator('#gist')).toHaveValue('');
     });

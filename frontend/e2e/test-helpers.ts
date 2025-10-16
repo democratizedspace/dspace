@@ -29,6 +29,7 @@ export async function createTestItems(page: Page, count = 2): Promise<string[]> 
         // Navigate to the item creation page
         await page.goto('/inventory/create');
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
         // Generate a unique name
         const uniqueItemName = `Test Item ${i + 1}-${Date.now()}`;
@@ -374,19 +375,23 @@ async function trySelectItem(page: Page): Promise<boolean> {
  * @param page The Playwright page object
  * @param componentName Optional component name to look for in data-hydrated attributes
  */
-export async function waitForHydration(page: Page, componentName?: string): Promise<void> {
+export async function waitForHydration(page: Page, target?: string): Promise<void> {
+    const selector = target
+        ? target.startsWith('.') ||
+          target.startsWith('#') ||
+          target.startsWith('[') ||
+          target.startsWith(':') ||
+          target.startsWith('data-')
+            ? target
+            : `[data-hydrated="${target}"]`
+        : '[data-hydrated="true"]';
+
     // Try waiting for an element that indicates hydration is complete
     try {
-        if (componentName) {
-            // Look for a specific component that's hydrated
-            await page.waitForSelector(`[data-hydrated="${componentName}"]`, { timeout: 5000 });
-        } else {
-            // Look for any hydrated component
-            await page.waitForSelector('[data-hydrated="true"]', { timeout: 5000 });
-        }
+        await page.waitForSelector(selector, { timeout: 5000 });
     } catch (e) {
         // If we can't find a specific element, wait a bit to ensure hydration completes
-        console.log('Could not find hydration marker, waiting for timeout');
+        console.log(`Could not find hydration marker (${selector}), waiting for timeout`);
         await page.waitForTimeout(2000);
     }
 }
