@@ -19,7 +19,8 @@
     let hydrated = false;
 
     $: currentPersona = $activePersona;
-    $: welcomeMessage = currentPersona?.welcomeMessage;
+    $: welcomeMessage =
+        currentPersona?.welcomeMessage ?? currentPersona?.welcomeSnippet ?? '';
     $: personaSummary = currentPersona?.summary;
 
     function addMessage(msg) {
@@ -88,6 +89,7 @@
         }
         setActivePersona(selectedId);
         messageHistory.set([]);
+        messages.set([]);
         showSpinner = false;
         message.set('');
         await tick();
@@ -102,7 +104,12 @@
     });
 </script>
 
-<div class="chat" data-testid="chat-panel" data-hydrated={hydrated ? 'true' : 'false'}>
+<div
+    class="chat"
+    data-testid="chat-panel"
+    data-provider="openai"
+    data-hydrated={hydrated ? 'true' : 'false'}
+>
     <div class="persona-selector">
         <label for="chat-persona">Talk to</label>
         <select id="chat-persona" bind:value={$activePersonaId} on:change={handlePersonaChange}>

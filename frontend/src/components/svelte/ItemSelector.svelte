@@ -45,12 +45,13 @@
         {#if isExpanded}
             <div class="selector-expanded" id="item-select-control">
                 <SearchBar data={items} on:search={handleSearch} />
-                <div class="items-list">
+                <div class="items-list" role="listbox">
                     {#each $filteredItems as item (item.id)}
                         <button
                             type="button"
                             class="item-row"
                             class:selected={selectedItemId === item.id}
+                            role="option"
                             on:click={() => handleItemSelect(item.id)}
                             on:touchstart={() => handleItemSelect(item.id)}
                             aria-pressed={selectedItemId === item.id}

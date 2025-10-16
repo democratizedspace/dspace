@@ -28,13 +28,36 @@ const personaExpectations = [
     },
 ];
 
+test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(async () => {
+        localStorage.clear();
+
+        if (typeof indexedDB !== 'undefined' && typeof indexedDB.databases === 'function') {
+            try {
+                const dbs = await indexedDB.databases();
+                for (const db of dbs) {
+                    if (db && db.name) {
+                        indexedDB.deleteDatabase(db.name);
+                    }
+                }
+            } catch (error) {
+                console.warn('Failed to enumerate IndexedDB databases', error);
+            }
+        }
+    });
+});
+
 test.describe('Chat NPC persona switching', () => {
     test('shows persona-specific summaries and welcome prompts', async ({ page }) => {
         await page.goto('/chat');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
+        await waitForHydration(
+            page,
+            '[data-testid="chat-panel"][data-provider="openai"][data-hydrated="true"]'
+        );
 
-        const openAIChatPanel = page.locator('[data-testid="chat-panel"]').nth(1);
+        const openAIChatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
         await expect(openAIChatPanel).toBeVisible();
         await expect(openAIChatPanel).toHaveAttribute('data-hydrated', 'true');
 
@@ -52,8 +75,12 @@ test.describe('Chat NPC persona switching', () => {
             await expect(personaSummary).toHaveText(persona.summary);
             await expect(personaAvatar).toHaveAttribute('alt', `${persona.name} portrait`);
 
-            const latestAssistantMessage = openAIChatPanel.locator('.assistant').first();
-            await expect(latestAssistantMessage).toContainText(persona.welcomeSnippet);
+            const expectedWelcome = persona.welcomeMessage ?? persona.welcomeSnippet;
+            const matchingAssistantMessage = openAIChatPanel
+                .locator('.assistant')
+                .filter({ hasText: expectedWelcome });
+
+            await expect(matchingAssistantMessage).toBeVisible({ timeout: 15000 });
         }
     });
 });

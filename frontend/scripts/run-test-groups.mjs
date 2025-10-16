@@ -84,8 +84,8 @@ const TEST_GROUPS = [
             'touch-menu.spec.ts',
             'ui-responsiveness.spec.ts',
         ],
-        parallel: true,
-        workers: Math.min(MAX_WORKERS, 2),
+        parallel: false,
+        workers: 1,
     },
     {
         name: 'Item Tests',
