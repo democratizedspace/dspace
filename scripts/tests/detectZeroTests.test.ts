@@ -20,6 +20,11 @@ describe('hasZeroTests', () => {
     expect(hasZeroTests(output)).toBe(false);
   });
 
+  test('ignores interim vitest progress updates', () => {
+    const output = `Test Files  0 passed (97)\nTests  0 passed (0)\nTest Files 97 passed (97)\nTests 643 passed (643)`;
+    expect(hasZeroTests(output)).toBe(false);
+  });
+
   test('detects when vitest reports no test files found', () => {
     const output = 'No test files found, exiting with code 0';
     expect(hasZeroTests(output)).toBe(true);
