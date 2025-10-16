@@ -14,7 +14,7 @@ Set-Location -Path "$scriptDir\.."
 try {
     # Ensure Playwright browsers are installed
     Write-Host "Ensuring Playwright browsers are installed..."
-    npx playwright install --with-deps > $null 2>&1
+    npx playwright install > $null 2>&1
 
     # Step 1: Run linting and formatting
     Write-Host "Step 1/3: Checking code formatting and linting..."

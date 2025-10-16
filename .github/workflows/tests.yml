@@ -99,7 +99,7 @@ jobs:
         run: pnpm --filter ./frontend run setup-test-env
 
       - name: Install Playwright browsers
-        run: pnpm --filter ./frontend exec playwright install --with-deps
+        run: pnpm --filter ./frontend exec playwright install
 
       - name: Run Playwright tests (${{ matrix.shard }})
         working-directory: frontend

@@ -15,7 +15,7 @@ cd "$SCRIPT_DIR/.." || exit 1
 
 # Ensure Playwright browsers are installed before running tests
 echo "Ensuring Playwright browsers are installed..."
-npx playwright install --with-deps > /dev/null 2>&1
+npx playwright install > /dev/null 2>&1
 
 # Step 1: Run linting and formatting (unless skipped)
 if [ -z "$SKIP_LINT" ]; then
