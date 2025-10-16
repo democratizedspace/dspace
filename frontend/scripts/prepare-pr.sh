@@ -13,18 +13,19 @@ ORIGINAL_DIR=$(pwd)
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 cd "$SCRIPT_DIR/.." || exit 1
 
-# Ensure Playwright browsers are installed
-npx playwright install --with-deps >/dev/null 2>&1
-
-# Step 1: Run linting and formatting
-echo "Step 1/3: Checking code formatting and linting..."
-npm run check
-if [ $? -ne 0 ]; then
-  echo "❌ Formatting or linting issues found. Please fix them before submitting your PR."
-  cd "$ORIGINAL_DIR" || exit 1
-  exit 1
+# Step 1: Run linting and formatting (unless skipped)
+if [ -z "$SKIP_LINT" ]; then
+  echo "Step 1/3: Checking code formatting and linting..."
+  npm run check
+  if [ $? -ne 0 ]; then
+    echo "❌ Formatting or linting issues found. Please fix them before submitting your PR."
+    cd "$ORIGINAL_DIR" || exit 1
+    exit 1
+  fi
+  echo "✅ Code formatting and linting passed!"
+else
+  echo "Step 1/3: SKIP_LINT is set, skipping lint and format checks..."
 fi
-echo "✅ Code formatting and linting passed!"
 
 # Step 2: Run unit tests unless skipped
 if [ -z "$SKIP_UNIT_TESTS" ]; then

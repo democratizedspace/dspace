@@ -28,15 +28,22 @@ function runTests(exec = execSync, platform = os.platform()) {
     );
 
     try {
-        console.log(`${colors.yellow}Running root unit tests...${colors.reset}`);
-        const rootOutput = exec('npm run test:root', {
-            encoding: 'utf-8',
-            stdio: 'pipe'
-        });
-        process.stdout.write(rootOutput);
-        if (hasZeroTests(rootOutput)) {
-            console.error(`${colors.red}Error: no root tests were run.${colors.reset}`);
-            return 1;
+        const coverageDone = process.env.CI_COVERAGE_DONE === '1';
+        if (coverageDone) {
+            console.log(
+                `${colors.yellow}Skipping root unit tests (CI_COVERAGE_DONE=1).${colors.reset}`
+            );
+        } else {
+            console.log(`${colors.yellow}Running root unit tests...${colors.reset}`);
+            const rootOutput = exec('npm run test:root', {
+                encoding: 'utf-8',
+                stdio: 'pipe'
+            });
+            process.stdout.write(rootOutput);
+            if (hasZeroTests(rootOutput)) {
+                console.error(`${colors.red}Error: no root tests were run.${colors.reset}`);
+                return 1;
+            }
         }
 
         const scripts = {

@@ -1,52 +1,61 @@
 name: tests
+
 on:
   push:
     branches: [v3]
   pull_request:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - uses: pnpm/action-setup@v2
         with:
           version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
+          cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --reporter=append-only
+      - name: Run lint and format checks
+        run: pnpm --filter ./frontend run check
 
-      - name: Install Playwright browsers
-        run: npx --prefix frontend playwright install --with-deps
-
-      - name: Build frontend
-        run: pnpm --filter ./frontend run build
-
-      - name: Start frontend preview server
-        run: |
-          nohup pnpm --filter ./frontend run preview >/tmp/preview.log 2>&1 &
-          npx wait-on http://localhost:3002/ --timeout 60000
-
-      - name: Run test suite
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --reporter=append-only
+      - name: Run unit tests with coverage
         env:
           NODE_OPTIONS: --experimental-vm-modules
-        run: npm run test:pr
-
-      - name: Generate coverage report
+        run: pnpm coverage
+      - name: Run aggregated test harness (sans lint/e2e)
         env:
           NODE_OPTIONS: --experimental-vm-modules
-        run: npm run coverage
-
+          CI_COVERAGE_DONE: '1'
+          SKIP_LINT: '1'
+          SKIP_E2E: '1'
+        run: pnpm test:pr
       - name: Check patch coverage
         run: node scripts/checkPatchCoverage.cjs
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
@@ -54,6 +63,32 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Show preview server logs on failure
-        if: failure()
-        run: cat /tmp/preview.log
+  e2e:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ['1/2', '2/2']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --reporter=append-only
+      - name: Build frontend
+        run: pnpm --filter ./frontend run build
+      - name: Prepare Playwright environment
+        run: pnpm --filter ./frontend run setup-test-env
+      - name: Install Playwright browsers
+        uses: microsoft/playwright-github-action@v1
+        with:
+          working-directory: frontend
+      - name: Run Playwright tests (${{ matrix.shard }})
+        working-directory: frontend
+        run: npx playwright test --shard=${{ matrix.shard }} --reporter=dot
