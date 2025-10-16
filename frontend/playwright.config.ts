@@ -1,4 +1,5 @@
 import { defineConfig } from '@playwright/test';
+import { fileURLToPath } from 'node:url';
 
 if (process.env.CI) {
     await import('fake-indexeddb/auto');
@@ -13,6 +14,9 @@ declare const process: {
         PW_WORKERS?: string;
     };
 };
+
+// Determine important paths for running tests regardless of the current working directory
+const frontendDir = fileURLToPath(new URL('.', import.meta.url));
 
 // Determine the base URL from environment variables or use default
 const protocol = process.env.PROTOCOL || 'http';
@@ -91,6 +95,7 @@ export default defineConfig({
     webServer: {
         // Use production preview server so grouped E2E tests don't restart the dev server
         command: 'pnpm run preview',
+        cwd: frontendDir,
         url: baseURL,
         reuseExistingServer: true,
         timeout: 60000,
