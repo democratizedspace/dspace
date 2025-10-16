@@ -17,6 +17,7 @@ declare const process: {
         PW_PROJECTS?: string;
         PW_PROJECT?: string;
     };
+    argv: string[];
 };
 
 // Determine important paths for running tests regardless of the current working directory
