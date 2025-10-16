@@ -14,7 +14,15 @@ Set-Location -Path "$scriptDir\.."
 try {
     # Ensure Playwright browsers are installed
     Write-Host "Ensuring Playwright browsers are installed..."
-    npx playwright install > $null 2>&1
+    $playwrightCli = Join-Path $PSScriptRoot "..\node_modules\@playwright\test\cli.js"
+    if (Test-Path $playwrightCli) {
+        node $playwrightCli install > $null 2>&1
+    }
+    else {
+        Write-Error "Playwright CLI not found at $playwrightCli. Please run npm install."
+        Set-Location -Path $originalDir
+        exit 1
+    }
 
     # Step 1: Run linting and formatting
     Write-Host "Step 1/3: Checking code formatting and linting..."
