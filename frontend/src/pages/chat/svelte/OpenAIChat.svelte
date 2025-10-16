@@ -19,8 +19,7 @@
     let hydrated = false;
 
     $: currentPersona = $activePersona;
-    $: welcomeMessage =
-        currentPersona?.welcomeMessage ?? currentPersona?.welcomeSnippet ?? '';
+    $: welcomeMessage = currentPersona?.welcomeMessage ?? currentPersona?.welcomeSnippet ?? '';
     $: personaSummary = currentPersona?.summary;
 
     function addMessage(msg) {
