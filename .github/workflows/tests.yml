@@ -1,10 +1,16 @@
 name: tests
+
 on:
   push:
     branches: [v3]
   pull_request:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,6 +20,7 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 9
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -23,23 +30,30 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --reporter=append-only
 
-      - name: Install Playwright browsers
-        run: npx --prefix frontend playwright install --with-deps
+      - name: Run lint and format checks
+        run: pnpm --filter ./frontend run check
 
-      - name: Build frontend
-        run: pnpm --filter ./frontend run build
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Start frontend preview server
-        run: |
-          nohup pnpm --filter ./frontend run preview >/tmp/preview.log 2>&1 &
-          npx wait-on http://localhost:3002/ --timeout 60000
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
 
-      - name: Run test suite
-        env:
-          NODE_OPTIONS: --experimental-vm-modules
-        run: npm run test:pr
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
-      - name: Generate coverage report
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --reporter=append-only
+
+      - name: Run unit tests with coverage
         env:
           NODE_OPTIONS: --experimental-vm-modules
         run: npm run coverage
@@ -54,6 +68,41 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Show preview server logs on failure
-        if: failure()
-        run: cat /tmp/preview.log
+  e2e:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ['1/2', '2/2']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --reporter=append-only
+
+      - name: Build frontend
+        run: pnpm --filter ./frontend run build
+
+      - name: Setup Playwright environment
+        run: pnpm --filter ./frontend run setup-test-env
+
+      - name: Install Playwright browsers
+        uses: microsoft/playwright-github-action@v1
+        with:
+          working-directory: frontend
+
+      - name: Run Playwright tests (${{ matrix.shard }})
+        working-directory: frontend
+        run: npx playwright test --shard=${{ matrix.shard }} --reporter=dot

@@ -19,14 +19,15 @@ const protocol = process.env.PROTOCOL || 'http';
 const baseURL = process.env.BASE_URL || `${protocol}://localhost:3002`;
 
 // Allow setting workers via environment variable for CI and local runs
-const workers = process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS) : process.env.CI ? 1 : 1;
 const isCI = Boolean(process.env.CI);
-const EXPECT_TIMEOUT_MS = 15000;
+const workers = process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS, 10) : undefined;
+const RETRIES = isCI ? 1 : 0;
+const EXPECT_TIMEOUT_MS = isCI ? 10000 : 5000;
 const TEST_TIMEOUT_MS = isCI ? 45000 : 30000;
 
 export default defineConfig({
     testDir: './e2e',
-    workers: workers,
+    workers,
     reporter: [
         ['list'],
         [
@@ -37,7 +38,7 @@ export default defineConfig({
             },
         ],
     ],
-    retries: process.env.CI ? 2 : 1, // Add 1 retry for flaky tests even in local development
+    retries: RETRIES,
     timeout: TEST_TIMEOUT_MS,
     expect: {
         timeout: EXPECT_TIMEOUT_MS,
@@ -89,7 +90,7 @@ export default defineConfig({
     // Configure webServer to start the app server before running tests
     webServer: {
         // Use production preview server so grouped E2E tests don't restart the dev server
-        command: 'npm run preview',
+        command: 'pnpm --filter ./frontend run preview',
         url: baseURL,
         reuseExistingServer: true,
         timeout: 60000,
