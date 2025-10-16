@@ -98,6 +98,10 @@ jobs:
       - name: Setup Playwright environment
         run: pnpm --filter ./frontend run setup-test-env
 
+      - name: Install Playwright system dependencies
+        working-directory: frontend
+        run: sudo npx playwright install-deps
+
       - name: Install Playwright browsers
         run: pnpm --filter ./frontend exec playwright install
 
