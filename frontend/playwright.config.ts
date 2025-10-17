@@ -1,4 +1,7 @@
 import { defineConfig } from '@playwright/test';
+import { execSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 if (process.env.CI) {
@@ -22,6 +25,22 @@ declare const process: {
 
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
+
+function ensureAstroBuild(): void {
+    const serverEntrypoint = join(frontendDir, 'dist', 'server', 'entry.mjs');
+
+    if (existsSync(serverEntrypoint)) {
+        return;
+    }
+
+    console.log('Astro build artifacts not found. Building before Playwright preview.');
+    try {
+        execSync('npm run build', { cwd: frontendDir, stdio: 'inherit' });
+    } catch (error) {
+        console.error('Failed to build Astro project required for Playwright preview.');
+        throw error;
+    }
+}
 
 // Determine the base URL from environment variables or use default
 const protocol = process.env.PROTOCOL || 'http';
@@ -112,8 +131,9 @@ function resolveProjects(): PlaywrightProjectConfig[] {
     const wantsAll = Array.from(requestedValues).some((value) => value === 'all' || value === '*');
 
     const requestedProjects = new Set<ProjectName>(
-        Array.from(requestedValues).filter((value): value is ProjectName =>
-            value === 'chromium' || value === 'firefox' || value === 'webkit'
+        Array.from(requestedValues).filter(
+            (value): value is ProjectName =>
+                value === 'chromium' || value === 'firefox' || value === 'webkit'
         )
     );
 
@@ -129,7 +149,9 @@ function resolveProjects(): PlaywrightProjectConfig[] {
 
     if (matched.length === 0) {
         console.warn(
-            `No known Playwright projects matched "${Array.from(requestedValues).join(', ')}". Falling back to chromium.`
+            `No known Playwright projects matched "${Array.from(requestedValues).join(
+                ', '
+            )}". Falling back to chromium.`
         );
         return AVAILABLE_PROJECTS.filter((project) => project.name === 'chromium');
     }
@@ -138,6 +160,8 @@ function resolveProjects(): PlaywrightProjectConfig[] {
 }
 
 const projects = resolveProjects();
+
+ensureAstroBuild();
 
 export default defineConfig({
     testDir: './e2e',
