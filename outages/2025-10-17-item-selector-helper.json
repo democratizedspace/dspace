@@ -1,0 +1,12 @@
+{
+  "id": "item-selector-helper-regression",
+  "date": "2025-10-17",
+  "component": "playwright e2e",
+  "rootCause": "ItemSelector.svelte now renders .item-row buttons, yet trySelectItem still queried legacy .item selectors so Playwright never found a selectable option.",
+  "resolution": "Retune trySelectItem to match the current classes and add a regression test that keeps the helper aligned with ItemSelector.",
+  "references": [
+    "frontend/e2e/test-helpers.ts",
+    "frontend/src/components/svelte/ItemSelector.svelte",
+    "tests/itemSelectorHelperSelectors.test.ts"
+  ]
+}

@@ -524,36 +524,51 @@ export async function fillProcessForm(
  */
 async function trySelectItem(page: Page): Promise<boolean> {
     try {
-        // Look for select elements or dropdown buttons that appeared
-        const selectors = [
-            page.locator('select').first(),
-            page.locator('button:has-text("Select")').first(),
-            page.locator('.item-selector').first(),
-        ];
+        // If the selector is already expanded, try to click the first visible option directly
+        const inlineOption = page
+            .locator('.item-selector .item-row, .item-selector [role="option"]')
+            .first();
 
-        for (const selector of selectors) {
-            if ((await selector.count()) > 0 && (await selector.isVisible())) {
-                // For select elements
-                if ((await page.locator('select').count()) > 0) {
-                    // Choose the second option (index 1) to avoid selecting placeholder
-                    await page.locator('select').first().selectOption({ index: 1 });
-                    return true;
-                }
+        if ((await inlineOption.count()) > 0 && (await inlineOption.isVisible())) {
+            await inlineOption.click();
+            return true;
+        }
 
-                // For buttons that open a dropdown
-                await selector.click();
+        const selectLocator = page.locator('select').first();
+        if ((await selectLocator.count()) > 0 && (await selectLocator.isVisible())) {
+            await selectLocator.selectOption({ index: 1 });
+            return true;
+        }
 
-                // Try to click the first item in any dropdown that appears
-                const dropdownItem = page
-                    .locator(
-                        '.dropdown-menu .item, .item-list .item, .selector-expanded .item, [role="listbox"] [role="option"]'
-                    )
-                    .first();
+        const selectButton = page.locator('button:has-text("Select")').first();
+        if ((await selectButton.count()) > 0 && (await selectButton.isVisible())) {
+            await selectButton.click();
+        }
 
-                await expect(dropdownItem).toBeVisible();
-                await dropdownItem.click();
-                return true;
+        const container = page.locator('.item-selector').first();
+        if ((await container.count()) > 0 && (await container.isVisible())) {
+            await container.click();
+
+            const dropdownItemSelectors = [
+                '.dropdown-menu .item',
+                '.item-list .item',
+                '.items-list .item-row',
+                '.selector-expanded .item',
+                '.selector-expanded .item-row',
+                '[role="listbox"] [role="option"]',
+            ];
+
+            const dropdownItem = page
+                .locator(dropdownItemSelectors.join(', '))
+                .first();
+
+            if ((await dropdownItem.count()) === 0) {
+                return false;
             }
+
+            await expect(dropdownItem).toBeVisible();
+            await dropdownItem.click();
+            return true;
         }
     } catch (e) {
         console.log('Error trying to select item:', e);
