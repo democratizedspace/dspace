@@ -31,7 +31,7 @@ jobs:
         run: pnpm install --frozen-lockfile --reporter=append-only
 
       - name: Run lint and format checks
-        run: pnpm --filter ./frontend run check
+        run: pnpm --dir frontend run check
 
   unit:
     runs-on: ubuntu-latest
@@ -93,17 +93,17 @@ jobs:
         run: pnpm install --frozen-lockfile --reporter=append-only
 
       - name: Build frontend
-        run: pnpm --filter ./frontend run build
+        run: pnpm --dir frontend run build
 
       - name: Setup Playwright environment
-        run: pnpm --filter ./frontend run setup-test-env
+        run: pnpm --dir frontend run setup-test-env
 
       - name: Install Playwright system dependencies
         working-directory: frontend
         run: sudo env "PATH=$PATH" npx playwright install-deps
 
       - name: Install Playwright browsers
-        run: pnpm --filter ./frontend exec playwright install
+        run: pnpm --dir frontend exec playwright install
 
       - name: Run Playwright tests (${{ matrix.shard }})
         working-directory: frontend
