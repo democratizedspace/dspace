@@ -1,32 +1,13 @@
 import { test, expect } from '@playwright/test';
+import { npcPersonas } from '../src/data/npcPersonas.js';
 import { waitForHydration } from './test-helpers';
 
-const personaExpectations = [
-    {
-        id: 'dchat',
-        name: 'dChat',
-        summary: 'Generalist assistant with a full game knowledge base.',
-        welcomeSnippet: "I'm dChat!",
-    },
-    {
-        id: 'sydney',
-        name: 'Sydney',
-        summary: 'Print farm lead and 3D printing mentor.',
-        welcomeSnippet: 'Sydney here—FDM rigs are my playground.',
-    },
-    {
-        id: 'nova',
-        name: 'Nova',
-        summary: 'Rocketeer with launch-ready checklists.',
-        welcomeSnippet: "I'm Nova—ready to prep another launch?",
-    },
-    {
-        id: 'hydro',
-        name: 'Hydro',
-        summary: 'Hydroponics caretaker focused on nutrient balance.',
-        welcomeSnippet: "I'm Hydro—let's keep those nutrient baths dialed in.",
-    },
-];
+const personaExpectations = npcPersonas.map((persona) => ({
+    id: persona.id,
+    name: persona.name,
+    summary: persona.summary,
+    welcomeText: persona.welcomeMessage ?? persona.welcomeSnippet ?? '',
+}));
 
 test.beforeEach(async ({ page }) => {
     await page.goto('/');
@@ -75,12 +56,9 @@ test.describe('Chat NPC persona switching', () => {
             await expect(personaSummary).toHaveText(persona.summary);
             await expect(personaAvatar).toHaveAttribute('alt', `${persona.name} portrait`);
 
-            const expectedWelcome = persona.welcomeMessage ?? persona.welcomeSnippet;
-            const matchingAssistantMessage = openAIChatPanel
-                .locator('.assistant')
-                .filter({ hasText: expectedWelcome });
-
-            await expect(matchingAssistantMessage).toBeVisible({ timeout: 15000 });
+            const assistantMessages = openAIChatPanel.locator('.assistant');
+            await expect(assistantMessages).toHaveCount(1);
+            await expect(assistantMessages.first()).toContainText(persona.welcomeText);
         }
     });
 });
