@@ -1,30 +1,28 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { purgeClientState, waitForHydration } from './test-helpers';
 
 test('quest creation shows accessible success message with quest link', async ({ page }) => {
-    await clearUserData(page);
+    await purgeClientState(page);
     await page.goto('/quests/create');
-    await page.waitForLoadState('networkidle');
+    await waitForHydration(page);
 
-    await page.fill('#title', 'Success Quest');
-    await page.fill('#description', 'Check success message');
+    await page.getByLabel('Title*').fill('Success Quest');
+    await page.getByLabel('Description*').fill('Check success message');
 
-    const fileInput = page.locator('input[type="file"]');
+    const fileInput = page.getByLabel('Upload an Image*');
     await fileInput.setInputFiles({
         name: 'success-image.png',
         mimeType: 'image/png',
-        buffer: Buffer.from('fake image content'),
+        buffer: Buffer.from('89504e470d0a1a0a', 'hex'),
     });
 
-    const imagePreview = page.locator('.image-preview');
-    await expect(imagePreview).toBeVisible();
+    await expect(page.getByAltText('Quest preview')).toBeVisible();
 
-    await page.locator('button.submit-button').click();
+    await page.getByRole('button', { name: /^Create Quest$/ }).click();
 
-    const successMessage = page.locator('.success-message');
+    const successMessage = page.getByRole('status');
     await expect(successMessage).toBeVisible();
     await expect(successMessage).toContainText('Quest created successfully');
-    await expect(successMessage).toHaveAttribute('role', 'status');
 
     const questLink = successMessage.getByRole('link', { name: 'View quest' });
     await expect(questLink).toBeVisible();

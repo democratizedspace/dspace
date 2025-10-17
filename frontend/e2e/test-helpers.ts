@@ -1,5 +1,18 @@
 import { Page, Locator, expect } from '@playwright/test';
 
+function resolveHydrationSelector(target?: string): string {
+    if (!target) {
+        return '[data-hydrated="true"]';
+    }
+
+    const cssPrefixes = ['.', '#', '[', ':'];
+    if (cssPrefixes.some((prefix) => target.startsWith(prefix)) || target.startsWith('data-')) {
+        return target;
+    }
+
+    return `[data-hydrated="${target}"]`;
+}
+
 /**
  * Utility functions to help with testing the DSpace application
  */
@@ -75,13 +88,16 @@ export async function waitForQuestRecordByTitle(
 
                 const quests = await new Promise<Array<{ id?: unknown; title?: string }>>(
                     (resolve, reject) => {
-                        request.onsuccess = () => resolve(request.result as Array<{ id?: unknown; title?: string }>);
+                        request.onsuccess = () =>
+                            resolve(request.result as Array<{ id?: unknown; title?: string }>);
                         request.onerror = () => reject(request.error);
                     }
                 );
 
                 const normalizedTitle = questTitle.trim().toLowerCase();
-                const match = quests.find((quest) => (quest?.title ?? '').trim().toLowerCase() === normalizedTitle);
+                const match = quests.find(
+                    (quest) => (quest?.title ?? '').trim().toLowerCase() === normalizedTitle
+                );
                 if (!match) {
                     return null;
                 }
@@ -464,24 +480,45 @@ async function trySelectItem(page: Page): Promise<boolean> {
  * @param componentName Optional component name to look for in data-hydrated attributes
  */
 export async function waitForHydration(page: Page, target?: string): Promise<void> {
-    const selector = target
-        ? target.startsWith('.') ||
-          target.startsWith('#') ||
-          target.startsWith('[') ||
-          target.startsWith(':') ||
-          target.startsWith('data-')
-            ? target
-            : `[data-hydrated="${target}"]`
-        : '[data-hydrated="true"]';
+    await page.waitForLoadState('domcontentloaded');
 
-    // Try waiting for an element that indicates hydration is complete
-    try {
-        await page.waitForSelector(selector, { timeout: 5000 });
-    } catch (e) {
-        // If we can't find a specific element, wait a bit to ensure hydration completes
-        console.log(`Could not find hydration marker (${selector}), waiting for timeout`);
-        await page.waitForTimeout(2000);
+    const rootCandidates: Locator[] = [
+        page.getByRole('main'),
+        page.locator('[data-testid="app-root"]'),
+        page.locator('#app'),
+    ];
+
+    let rootReady = false;
+    for (const candidate of rootCandidates) {
+        try {
+            await expect(candidate).toBeVisible({ timeout: 5_000 });
+            rootReady = true;
+            break;
+        } catch (error) {
+            // continue searching other candidates
+        }
     }
+
+    if (!rootReady) {
+        await expect(page.locator('body')).toBeVisible({ timeout: 5_000 });
+    }
+
+    const hydrationSelector = resolveHydrationSelector(target);
+    const hydrationLocator = page.locator(hydrationSelector).first();
+
+    await expect(hydrationLocator).toBeVisible({ timeout: 15_000 });
+
+    await page.waitForFunction(
+        (selector) => {
+            const elements = document.querySelectorAll(selector);
+            return Array.from(elements).some((element) => {
+                const value = element.getAttribute('data-hydrated');
+                return value === 'true' || value === 'hydrated';
+            });
+        },
+        hydrationSelector,
+        { timeout: 15_000 }
+    );
 }
 
 /**
