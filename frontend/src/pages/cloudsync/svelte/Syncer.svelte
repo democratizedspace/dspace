@@ -17,6 +17,12 @@
     let token = '';
     let gistId = '';
     let message = '';
+    $: messageVariant =
+        message === 'Upload successful' || message === 'Download successful'
+            ? 'success'
+            : message
+            ? 'error'
+            : null;
 
     onMount(async () => {
         token = await loadGitHubToken();
@@ -93,7 +99,12 @@
             <Chip text="Download" on:click={handleDownload} inverted={true} />
         </div>
         {#if message}
-            <p class="message">{message}</p>
+            <p
+                class="message"
+                data-testid={messageVariant === 'success' ? 'sync-success' : 'sync-error'}
+            >
+                {message}
+            </p>
         {/if}
     </div>
 </div>

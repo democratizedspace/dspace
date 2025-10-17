@@ -555,6 +555,14 @@ export async function waitForHydration(page: Page, target?: string): Promise<voi
     }
 }
 
+export async function expectLocalStorageCleared(page: Page, key: string): Promise<void> {
+    await expect
+        .poll(async () => {
+            return page.evaluate((storageKey) => localStorage.getItem(storageKey), key);
+        })
+        .toBeNull();
+}
+
 /**
  * Adds test items to the inventory for testing purposes
  * Uses localStorage to directly inject items without using the UI

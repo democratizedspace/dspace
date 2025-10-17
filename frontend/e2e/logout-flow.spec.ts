@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, expectLocalStorageCleared, waitForHydration } from './test-helpers';
 
 async function setCloudGistId(page, gistId) {
     await page.evaluate(async (value) => {
@@ -29,6 +29,20 @@ async function setCloudGistId(page, gistId) {
     }, gistId);
 }
 
+async function loadGitHubToken(page) {
+    return page.evaluate(async () => {
+        const module = await import('/src/utils/githubToken.js');
+        return module.loadGitHubToken();
+    });
+}
+
+async function loadCloudGistId(page) {
+    return page.evaluate(async () => {
+        const module = await import('/src/utils/cloudSync.js');
+        return module.loadCloudGistId();
+    });
+}
+
 test.describe('Logout flow', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
@@ -39,34 +53,41 @@ test.describe('Logout flow', () => {
         const gistId = 'gist1234567890';
 
         await page.goto('/cloudsync');
-        await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        await page.fill('#token', token);
-        await page.getByRole('button', { name: 'Save' }).click();
+        await page.getByLabel('GitHub Token*').fill(token);
+        await page.getByRole('button', { name: /^save$/i }).click();
+
+        await expect.poll(async () => loadGitHubToken(page)).toBe(token);
 
         await page.reload();
-        await page.waitForSelector('#token');
         await waitForHydration(page);
-        await expect(page.locator('#token')).toHaveValue(token);
+        await expect(page.getByLabel('GitHub Token*')).toHaveValue(token);
 
         await setCloudGistId(page, gistId);
         await page.reload();
-        await page.waitForSelector('#gist');
         await waitForHydration(page);
-        await expect(page.locator('#gist')).toHaveValue(gistId);
+        await expect(page.getByLabel('Gist ID')).toHaveValue(gistId);
+        await expect.poll(async () => loadCloudGistId(page)).toBe(gistId);
+
+        await page.evaluate(() => {
+            localStorage.setItem('avatarUrl', '/assets/pfp/avatar-test.png');
+        });
 
         await page.goto('/settings');
-        await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        const logoutButton = page.getByRole('button', { name: 'Log out' });
+        const logoutButton = page.getByRole('button', { name: /log\s*out/i });
         await expect(logoutButton).toBeVisible();
         await logoutButton.click();
         await expect(page.getByRole('status')).toHaveText('Credentials cleared from this device.');
+        await expect(page.getByTestId('logout-state')).toHaveText('No saved credentials detected.');
+
+        await expect.poll(async () => loadGitHubToken(page)).toBe('');
+        await expect.poll(async () => loadCloudGistId(page)).toBe('');
+        await expectLocalStorageCleared(page, 'avatarUrl');
 
         await page.goto('/cloudsync');
-        await page.waitForSelector('#token');
         await waitForHydration(page);
-        await expect(page.locator('#token')).toHaveValue('');
-        await expect(page.locator('#gist')).toHaveValue('');
+        await expect(page.getByLabel('GitHub Token*')).toHaveValue('');
+        await expect(page.getByLabel('Gist ID')).toHaveValue('');
     });
 });

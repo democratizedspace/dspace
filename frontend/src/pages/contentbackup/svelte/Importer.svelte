@@ -15,7 +15,9 @@
 <Chip text="">
     <div class="vertical">
         <p>Paste your custom content backup here:</p>
-        <div class="input-block"><textarea bind:value={importString} /></div>
+        <div class="input-block">
+            <textarea bind:value={importString} data-testid="custom-backup-input" />
+        </div>
         <Chip text="Import" on:click={handleImport} inverted={true} />
     </div>
 </Chip>

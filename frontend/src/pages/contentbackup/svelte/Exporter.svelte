@@ -11,7 +11,7 @@
     <div class="vertical">
         <p>Custom content backup string:</p>
         <div class="code-block">
-            <code>{backupString}</code>
+            <code data-testid="custom-backup-export">{backupString}</code>
         </div>
         <Chip text="Copy" on:click={() => copyToClipboard(backupString)} inverted={true} />
     </div>
