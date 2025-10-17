@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { clearUserData, waitForHydration } from './test-helpers';
 
 test.describe('Docs Navigation', () => {
     test.beforeEach(async ({ page }) => {
@@ -18,6 +18,7 @@ test.describe('Docs Navigation', () => {
         for (const p of pages) {
             await page.goto(p.href);
             await page.waitForLoadState('networkidle');
+            await waitForHydration(page);
             await expect(page.getByRole('heading', { name: p.heading }).first()).toBeVisible();
         }
     });
