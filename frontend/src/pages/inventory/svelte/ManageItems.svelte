@@ -88,7 +88,7 @@
     }
 </script>
 
-<div class="manage-items">
+<div class="manage-items" data-testid="manage-items-root">
     {#if mounted}
         <div class="controls">
             <input
@@ -126,7 +126,7 @@
                 <div class="no-items">No items found</div>
             {:else}
                 {#each filteredItems as item (item.id)}
-                    <div class="item-row">
+                    <div class="item-row" data-testid="manage-item-row">
                         <ItemCard itemId={item.id} />
                         <div class="item-actions">
                             <button class="preview-button" on:click={() => togglePreview(item.id)}>

@@ -5,19 +5,20 @@ import { Page, Locator, expect } from '@playwright/test';
  */
 
 export async function purgeClientState(page: Page): Promise<void> {
+    const indexedDbTargets = ['CustomContent', 'dspaceGameState'];
+
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    await page.evaluate(async () => {
-        localStorage.clear();
-        sessionStorage.clear();
+    await page.evaluate(async (targets) => {
+        window.localStorage.clear();
+        window.sessionStorage.clear();
 
-        const targets = ['CustomContent'];
         await Promise.all(
             targets.map(
                 (name) =>
                     new Promise<void>((resolve) => {
                         try {
-                            const request = indexedDB.deleteDatabase(name);
+                            const request = window.indexedDB.deleteDatabase(name);
                             request.onsuccess = () => resolve();
                             request.onerror = () => resolve();
                             request.onblocked = () => resolve();
@@ -28,20 +29,28 @@ export async function purgeClientState(page: Page): Promise<void> {
                     })
             )
         );
-    });
+    }, indexedDbTargets);
 
-    await page.waitForFunction(async () => {
-        const anyIndexedDB = indexedDB as unknown as {
-            databases?: () => Promise<Array<{ name?: string | null }>>;
-        };
+    await expect
+        .poll(
+            async () =>
+                page.evaluate(async (targets) => {
+                    const anyIndexedDB = window.indexedDB as unknown as {
+                        databases?: () => Promise<Array<{ name?: string | null }>>;
+                    };
 
-        if (!anyIndexedDB || typeof anyIndexedDB.databases !== 'function') {
-            return true;
-        }
+                    if (!anyIndexedDB || typeof anyIndexedDB.databases !== 'function') {
+                        return [] as string[];
+                    }
 
-        const databases = await anyIndexedDB.databases();
-        return !databases.some((db) => db?.name === 'CustomContent');
-    });
+                    const databases = await anyIndexedDB.databases();
+                    return databases
+                        .map((db) => db?.name ?? null)
+                        .filter((name): name is string => Boolean(name && targets.includes(name)));
+                }, indexedDbTargets),
+            { timeout: 5_000 }
+        )
+        .toEqual([]);
 }
 
 /**
@@ -56,9 +65,68 @@ export async function waitForQuestRecordByTitle(
     title: string,
     { timeoutMs = 15_000 }: { timeoutMs?: number } = {}
 ): Promise<number> {
-    const resultHandle = await page.waitForFunction(
+    let lastResolvedId: unknown = null;
+
+    await expect
+        .poll(
+            async () =>
+                page.evaluate(
+                    async ({ questTitle }) => {
+                        const openRequest = window.indexedDB.open('CustomContent');
+                        const db: IDBDatabase = await new Promise((resolve, reject) => {
+                            openRequest.onsuccess = () => resolve(openRequest.result);
+                            openRequest.onerror = () => reject(openRequest.error);
+                            openRequest.onupgradeneeded = () => resolve(openRequest.result);
+                        });
+
+                        try {
+                            if (!db.objectStoreNames.contains('quests')) {
+                                return null;
+                            }
+                            const tx = db.transaction('quests', 'readonly');
+                            const store = tx.objectStore('quests');
+                            const request = store.getAll();
+
+                            const quests = await new Promise<
+                                Array<{ id?: unknown; title?: string }>
+                            >((resolve, reject) => {
+                                request.onsuccess = () =>
+                                    resolve(
+                                        request.result as Array<{ id?: unknown; title?: string }>
+                                    );
+                                request.onerror = () => reject(request.error);
+                            });
+
+                            const normalizedTitle = questTitle.trim().toLowerCase();
+                            const match = quests.find(
+                                (quest) =>
+                                    (quest?.title ?? '').trim().toLowerCase() === normalizedTitle
+                            );
+                            if (!match) {
+                                return null;
+                            }
+
+                            const idCandidate =
+                                (match as Record<string, unknown>).id ??
+                                (match as Record<string, unknown>).questId ??
+                                (match as Record<string, unknown>).questID ??
+                                (match as Record<string, unknown>).key ??
+                                (match as Record<string, unknown>).primaryKey;
+
+                            return idCandidate ?? null;
+                        } finally {
+                            db.close();
+                        }
+                    },
+                    { questTitle: title }
+                ),
+            { timeout: timeoutMs }
+        )
+        .not.toBeNull();
+
+    lastResolvedId = await page.evaluate(
         async ({ questTitle }) => {
-            const openRequest = indexedDB.open('CustomContent');
+            const openRequest = window.indexedDB.open('CustomContent');
             const db: IDBDatabase = await new Promise((resolve, reject) => {
                 openRequest.onsuccess = () => resolve(openRequest.result);
                 openRequest.onerror = () => reject(openRequest.error);
@@ -101,12 +169,14 @@ export async function waitForQuestRecordByTitle(
                 db.close();
             }
         },
-        { questTitle: title },
-        { timeout: timeoutMs }
+        { questTitle: title }
     );
 
-    const rawId = await resultHandle.jsonValue<unknown>();
-    return Number(rawId);
+    if (lastResolvedId == null) {
+        throw new Error(`Quest record "${title}" not found`);
+    }
+
+    return Number(lastResolvedId);
 }
 
 /**

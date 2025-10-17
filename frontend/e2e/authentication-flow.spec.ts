@@ -1,54 +1,81 @@
 import { test, expect } from '@playwright/test';
+import { purgeClientState, waitForHydration } from './test-helpers';
 
-test('Authentication flow saves and clears token', async ({ page }) => {
-    const token = 'ghp_' + 'a'.repeat(36);
-    await page.goto('/cloudsync');
+test.describe('Authentication flow', () => {
+    test.beforeEach(async ({ page }) => {
+        await purgeClientState(page);
+    });
 
-    const tokenInput = page.locator('#token');
-    await tokenInput.fill(token);
-    await page.getByRole('button', { name: 'Save' }).click();
+    test.afterEach(async ({ page }) => {
+        await purgeClientState(page);
+    });
 
-    const getStoredToken = async () =>
-        await page.evaluate(async () => {
-            async function readIDB() {
-                return await new Promise((resolve) => {
-                    const req = indexedDB.open('dspaceGameState');
-                    req.onerror = () => resolve('');
-                    req.onsuccess = () => {
-                        const tx = req.result.transaction('state', 'readonly');
-                        const getReq = tx.objectStore('state').get('root');
-                        getReq.onerror = () => resolve('');
-                        getReq.onsuccess = () => resolve(getReq.result?.github?.token || '');
-                    };
-                });
-            }
+    test('saves and clears the token reliably', async ({ page }) => {
+        const token = 'ghp_' + 'a'.repeat(36);
 
-            if ('indexedDB' in window) {
-                const { indexedDB } = window;
-                if (indexedDB && typeof indexedDB.open === 'function') {
-                    try {
-                        return await readIDB();
-                    } catch {
-                        /* ignore */
-                    }
+        await page.goto('/cloudsync');
+        await waitForHydration(page);
+
+        const tokenInput = page.getByLabel(/GitHub Token/);
+        await expect(tokenInput).toBeVisible();
+        await tokenInput.fill(token);
+        await page.getByRole('button', { name: 'Save' }).click();
+
+        const readStoredToken = async () =>
+            page.evaluate(async () => {
+                async function readFromIndexedDb() {
+                    return await new Promise<string>((resolve) => {
+                        try {
+                            const request = window.indexedDB.open('dspaceGameState');
+                            request.onerror = () => resolve('');
+                            request.onsuccess = () => {
+                                const db = request.result;
+                                if (!db.objectStoreNames.contains('state')) {
+                                    resolve('');
+                                    return;
+                                }
+                                const tx = db.transaction('state', 'readonly');
+                                const store = tx.objectStore('state');
+                                const getReq = store.get('root');
+                                getReq.onerror = () => resolve('');
+                                getReq.onsuccess = () => {
+                                    const state = getReq.result as
+                                        | { github?: { token?: string } }
+                                        | undefined;
+                                    resolve(state?.github?.token ?? '');
+                                };
+                            };
+                        } catch {
+                            resolve('');
+                        }
+                    });
                 }
-            }
 
-            try {
-                return JSON.parse(localStorage.getItem('gameState') || '{}').github?.token || '';
-            } catch {
-                return '';
-            }
-        });
+                const tokenFromIndexedDb = await readFromIndexedDb();
+                if (tokenFromIndexedDb) {
+                    return tokenFromIndexedDb;
+                }
 
-    expect(await getStoredToken()).toBe(token);
+                try {
+                    const persisted = JSON.parse(
+                        window.localStorage.getItem('gameState') ?? '{}'
+                    ) as { github?: { token?: string } };
+                    return persisted.github?.token ?? '';
+                } catch {
+                    return '';
+                }
+            });
 
-    await page.reload();
-    await page.waitForFunction((t) => document.getElementById('token')?.value === t, token);
-    await expect(page.locator('#token')).toHaveValue(token);
+        await expect.poll(readStoredToken, { timeout: 5_000 }).toBe(token);
 
-    // clear token and verify removal
-    await page.getByTestId('clear-sync-token').click();
-    await page.waitForFunction(() => document.getElementById('token')?.value === '');
-    expect(await getStoredToken()).toBe('');
+        await page.reload();
+        await waitForHydration(page);
+
+        await expect(page.getByLabel(/GitHub Token/)).toHaveValue(token);
+
+        await page.getByTestId('clear-sync-token').click();
+
+        await expect.poll(readStoredToken, { timeout: 5_000 }).toBe('');
+        await expect(page.getByLabel(/GitHub Token/)).toHaveValue('');
+    });
 });
