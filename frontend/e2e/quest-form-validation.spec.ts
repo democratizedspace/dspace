@@ -1,14 +1,13 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { purgeClientState } from './test-helpers';
 
 test.describe('Quest Form Live Validation', () => {
     test.beforeEach(async ({ page }) => {
-        await clearUserData(page);
+        await purgeClientState(page);
     });
 
     test('shows inline errors and clears them when inputs become valid', async ({ page }) => {
-        await page.goto('/quests/create');
-        await page.waitForLoadState('networkidle');
+        await page.goto('/quests/create', { waitUntil: 'domcontentloaded' });
 
         const titleInput = page.locator('#title');
         const descriptionInput = page.locator('#description');

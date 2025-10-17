@@ -1,5 +1,123 @@
 import { Page, Locator, expect } from '@playwright/test';
 
+export async function purgeClientState(page: Page): Promise<void> {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    await page.evaluate(async () => {
+        const deleteDatabase = async (name: string): Promise<void> => {
+            if (!('indexedDB' in window)) {
+                return;
+            }
+
+            await new Promise<void>((resolve) => {
+                let resolved = false;
+                const request = indexedDB.deleteDatabase(name);
+                const finish = () => {
+                    if (!resolved) {
+                        resolved = true;
+                        resolve();
+                    }
+                };
+
+                request.onsuccess = finish;
+                request.onerror = finish;
+                request.onblocked = finish;
+            });
+        };
+
+        try {
+            await deleteDatabase('CustomContent');
+        } catch (error) {
+            console.warn('Failed to purge CustomContent IndexedDB', error);
+        }
+
+        try {
+            localStorage.clear();
+        } catch (error) {
+            console.warn('Failed to clear localStorage', error);
+        }
+
+        try {
+            sessionStorage.clear();
+        } catch (error) {
+            console.warn('Failed to clear sessionStorage', error);
+        }
+    });
+}
+
+export async function waitForQuestRecordByTitle(
+    page: Page,
+    title: string,
+    options: { timeoutMs?: number } = {}
+): Promise<number> {
+    const { timeoutMs = 15000 } = options;
+    const handle = await page.waitForFunction(
+        async ({ questTitle }) => {
+            if (!('indexedDB' in window)) {
+                return null;
+            }
+
+            const normalize = (value: unknown) =>
+                (value ?? '').toString().trim().toLowerCase();
+
+            const openDatabase = async (): Promise<IDBDatabase | null> =>
+                new Promise((resolve) => {
+                    const request = indexedDB.open('CustomContent');
+                    request.onerror = () => resolve(null);
+                    request.onblocked = () => resolve(null);
+                    request.onupgradeneeded = () => resolve(request.result);
+                    request.onsuccess = () => resolve(request.result);
+                });
+
+            const db = await openDatabase();
+            if (!db) {
+                return null;
+            }
+
+            try {
+                if (!db.objectStoreNames.contains('quests')) {
+                    return null;
+                }
+
+                const transaction = db.transaction('quests', 'readonly');
+                const store = transaction.objectStore('quests');
+                const entries: unknown[] = await new Promise((resolve, reject) => {
+                    const request = store.getAll();
+                    request.onsuccess = () => resolve(request.result ?? []);
+                    request.onerror = () => reject(request.error);
+                });
+
+                const match = entries.find((entry: any) =>
+                    normalize(entry?.title) === normalize(questTitle)
+                );
+
+                if (!match) {
+                    return null;
+                }
+
+                const idValue = match?.id ?? match?.questId ?? match?.key ?? null;
+                const numericId = Number(idValue);
+                return Number.isFinite(numericId) ? numericId : null;
+            } catch (error) {
+                console.warn('Failed to read quest record', error);
+                return null;
+            } finally {
+                setTimeout(() => db.close(), 0);
+            }
+        },
+        { questTitle: title },
+        { timeout: timeoutMs, polling: 250 }
+    );
+
+    const questId = await handle.jsonValue();
+
+    if (typeof questId !== 'number' || Number.isNaN(questId)) {
+        throw new Error(`Quest titled "${title}" was not persisted in IndexedDB`);
+    }
+
+    return questId;
+}
+
 /**
  * Utility functions to help with testing the DSpace application
  */
@@ -9,13 +127,7 @@ import { Page, Locator, expect } from '@playwright/test';
  * (IndexedDB access is restricted in Playwright)
  */
 export async function clearUserData(page: Page): Promise<void> {
-    // Navigate to the site root first to ensure we're on the correct domain
-    await page.goto('/');
-    // Clear localStorage
-    await page.evaluate(() => {
-        localStorage.clear();
-        console.log('User data cleared via localStorage');
-    });
+    await purgeClientState(page);
 }
 
 /**

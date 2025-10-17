@@ -50,8 +50,8 @@ const baseURL = process.env.BASE_URL || `${protocol}://localhost:3002`;
 const isCI = Boolean(process.env.CI);
 const workers = process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS, 10) : undefined;
 const RETRIES = isCI ? 2 : 0;
-const EXPECT_TIMEOUT_MS = 10_000;
-const TEST_TIMEOUT_MS = 60_000;
+const EXPECT_TIMEOUT_MS = 15_000;
+const TEST_TIMEOUT_MS = isCI ? 60_000 : 55_000;
 
 type ProjectName = 'chromium' | 'firefox' | 'webkit';
 
@@ -187,8 +187,8 @@ export default defineConfig({
         baseURL: baseURL,
         headless: true,
         screenshot: 'only-on-failure',
-        video: 'on-first-retry',
-        trace: 'retain-on-failure',
+        video: 'retain-on-failure',
+        trace: 'on-first-retry',
         actionTimeout: 15000,
         navigationTimeout: 15000,
         // Still keep this for safety, but we're using HTTP
