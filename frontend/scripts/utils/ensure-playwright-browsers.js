@@ -10,20 +10,41 @@ export function resolveHeadlessShellPath(executablePath) {
         return '';
     }
 
-    const chromeDir = path.dirname(executablePath);
-    const revisionDir = path.dirname(chromeDir);
-    const revisionBasename = path.basename(revisionDir);
+    let revisionDir = path.dirname(executablePath);
+    let previousDir = '';
 
-    if (!revisionBasename.startsWith('chromium-')) {
-        return '';
+    while (revisionDir !== previousDir) {
+        const revisionBasename = path.basename(revisionDir);
+
+        if (revisionBasename.startsWith('chromium-')) {
+            const parentDir = path.dirname(revisionDir);
+            const relativeExecutablePath = path.relative(revisionDir, executablePath);
+
+            if (relativeExecutablePath.startsWith('..')) {
+                return '';
+            }
+
+            const executableExtension = path.extname(executablePath);
+            const headlessExecutable = `headless_shell${executableExtension}`;
+            const relativeDirectory = path.dirname(relativeExecutablePath);
+            const headlessRelativePath =
+                !relativeDirectory || relativeDirectory === '.'
+                    ? headlessExecutable
+                    : path.join(relativeDirectory, headlessExecutable);
+
+            const headlessRevisionDir = path.join(
+                parentDir,
+                revisionBasename.replace('chromium-', 'chromium-headless-shell-')
+            );
+
+            return path.join(headlessRevisionDir, headlessRelativePath);
+        }
+
+        previousDir = revisionDir;
+        revisionDir = path.dirname(revisionDir);
     }
 
-    const headlessRevisionDir = path.join(
-        path.dirname(revisionDir),
-        revisionBasename.replace('chromium-', 'chromium_headless_shell-')
-    );
-
-    return path.join(headlessRevisionDir, 'chrome-linux', 'headless_shell');
+    return '';
 }
 
 export function hasChromiumExecutable(browser) {

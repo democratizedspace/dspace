@@ -28,7 +28,7 @@ describe('ensurePlaywrightBrowsers', () => {
     const chromeExecutable =
       '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
     const headlessExecutable =
-      '/root/.cache/ms-playwright/chromium_headless_shell-1181/chrome-linux/headless_shell';
+      '/root/.cache/ms-playwright/chromium-headless-shell-1181/chrome-linux/headless_shell';
     let chromeExists = false;
     let headlessExists = false;
     const execSync = vi.fn(() => {
@@ -90,7 +90,7 @@ describe('ensurePlaywrightBrowsers', () => {
     const chromeExecutable =
       '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
     const headlessExecutable =
-      '/root/.cache/ms-playwright/chromium_headless_shell-1181/chrome-linux/headless_shell';
+      '/root/.cache/ms-playwright/chromium-headless-shell-1181/chrome-linux/headless_shell';
     let chromeExists = true;
     let headlessExists = false;
     const execSync = vi.fn(() => {
@@ -143,7 +143,7 @@ describe('ensurePlaywrightBrowsers', () => {
     const chromeExecutable =
       '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
     const headlessExecutable =
-      '/root/.cache/ms-playwright/chromium_headless_shell-1181/chrome-linux/headless_shell';
+      '/root/.cache/ms-playwright/chromium-headless-shell-1181/chrome-linux/headless_shell';
     const execSync = vi.fn();
     const existsSync = vi.fn((candidate: string) =>
       candidate === chromeExecutable || candidate === headlessExecutable
@@ -180,5 +180,25 @@ describe('ensurePlaywrightBrowsers', () => {
         ([candidate]) => candidate === chromeExecutable || candidate === headlessExecutable
       )
     ).toHaveLength(2);
+  });
+
+  it('derives headless shell path for macOS layouts', async () => {
+    const macExecutablePath =
+      '/Users/dev/Library/Caches/ms-playwright/chromium-1181/chrome-mac/Chromium.app/Contents/MacOS/Chromium';
+    const { resolveHeadlessShellPath } = await import(MODULE_PATH);
+
+    expect(resolveHeadlessShellPath(macExecutablePath)).toBe(
+      '/Users/dev/Library/Caches/ms-playwright/chromium-headless-shell-1181/chrome-mac/Chromium.app/Contents/MacOS/headless_shell'
+    );
+  });
+
+  it('includes executable extensions when deriving headless shell path', async () => {
+    const windowsExecutable =
+      'C:/Users/runner/AppData/Local/ms-playwright/chromium-1181/chrome-win/chrome.exe';
+    const { resolveHeadlessShellPath } = await import(MODULE_PATH);
+
+    expect(resolveHeadlessShellPath(windowsExecutable)).toBe(
+      'C:/Users/runner/AppData/Local/ms-playwright/chromium-headless-shell-1181/chrome-win/headless_shell.exe'
+    );
   });
 });
