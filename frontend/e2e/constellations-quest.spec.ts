@@ -16,8 +16,8 @@ const QUEST_STORE_NAME = 'quests';
 async function findQuestIdByTitle(page: Page, title: string): Promise<number> {
     return page.evaluate(
         async ({ title, dbName, dbVersion, storeName }) => {
-            const openDB = () =>
-                new Promise<any>((resolve, reject) => {
+            const openDB = (): Promise<IDBDatabase> =>
+                new Promise<IDBDatabase>((resolve, reject) => {
                     const request = indexedDB.open(dbName, dbVersion);
 
                     request.onupgradeneeded = () => {
@@ -36,7 +36,8 @@ async function findQuestIdByTitle(page: Page, title: string): Promise<number> {
                         }
                     };
 
-                    request.onerror = () => reject(request.error ?? new Error('Failed to open IndexedDB'));
+                    request.onerror = () =>
+                        reject(request.error ?? new Error('Failed to open IndexedDB'));
                     request.onsuccess = () => resolve(request.result);
                 });
 
@@ -49,11 +50,14 @@ async function findQuestIdByTitle(page: Page, title: string): Promise<number> {
 
                     request.onsuccess = () => {
                         const quests = Array.isArray(request.result) ? request.result : [];
-                        const match = quests.find((quest: { title?: string }) => quest?.title === title);
+                        const match = quests.find(
+                            (quest: { title?: string }) => quest?.title === title
+                        );
                         resolve(match ? Number(match.id) : -1);
                     };
 
-                    request.onerror = () => reject(request.error ?? new Error('Failed to list quests'));
+                    request.onerror = () =>
+                        reject(request.error ?? new Error('Failed to list quests'));
                 });
             } finally {
                 db.close();
@@ -83,8 +87,8 @@ async function updateQuestInIndexedDB(page: Page, id: number, questPatch: unknow
             dbVersion: number;
             storeName: string;
         }) => {
-            const openDB = () =>
-                new Promise<any>((resolve, reject) => {
+            const openDB = (): Promise<IDBDatabase> =>
+                new Promise<IDBDatabase>((resolve, reject) => {
                     const request = indexedDB.open(dbName, dbVersion);
 
                     request.onupgradeneeded = () => {
@@ -103,7 +107,8 @@ async function updateQuestInIndexedDB(page: Page, id: number, questPatch: unknow
                         }
                     };
 
-                    request.onerror = () => reject(request.error ?? new Error('Failed to open IndexedDB'));
+                    request.onerror = () =>
+                        reject(request.error ?? new Error('Failed to open IndexedDB'));
                     request.onsuccess = () => resolve(request.result);
                 });
 
@@ -114,7 +119,8 @@ async function updateQuestInIndexedDB(page: Page, id: number, questPatch: unknow
                     const store = transaction.objectStore(storeName);
                     const getRequest = store.get(id);
 
-                    getRequest.onerror = () => reject(getRequest.error ?? new Error('Failed to load quest'));
+                    getRequest.onerror = () =>
+                        reject(getRequest.error ?? new Error('Failed to load quest'));
                     getRequest.onsuccess = () => {
                         const existingQuest = getRequest.result;
                         if (!existingQuest) {
@@ -132,7 +138,8 @@ async function updateQuestInIndexedDB(page: Page, id: number, questPatch: unknow
                         };
 
                         const putRequest = store.put(updatedQuest);
-                        putRequest.onerror = () => reject(putRequest.error ?? new Error('Failed to update quest'));
+                        putRequest.onerror = () =>
+                            reject(putRequest.error ?? new Error('Failed to update quest'));
                         putRequest.onsuccess = () => resolve();
                     };
                 });
@@ -153,8 +160,8 @@ async function updateQuestInIndexedDB(page: Page, id: number, questPatch: unknow
 async function getQuestFromIndexedDB<T>(page: Page, id: number): Promise<T | null> {
     return page.evaluate(
         async ({ id, dbName, dbVersion, storeName }) => {
-            const openDB = () =>
-                new Promise<any>((resolve, reject) => {
+            const openDB = (): Promise<IDBDatabase> =>
+                new Promise<IDBDatabase>((resolve, reject) => {
                     const request = indexedDB.open(dbName, dbVersion);
 
                     request.onupgradeneeded = () => {
@@ -173,7 +180,8 @@ async function getQuestFromIndexedDB<T>(page: Page, id: number): Promise<T | nul
                         }
                     };
 
-                    request.onerror = () => reject(request.error ?? new Error('Failed to open IndexedDB'));
+                    request.onerror = () =>
+                        reject(request.error ?? new Error('Failed to open IndexedDB'));
                     request.onsuccess = () => resolve(request.result);
                 });
 
@@ -185,7 +193,8 @@ async function getQuestFromIndexedDB<T>(page: Page, id: number): Promise<T | nul
                     const request = store.get(id);
 
                     request.onsuccess = () => resolve(request.result ?? null);
-                    request.onerror = () => reject(request.error ?? new Error('Failed to load quest'));
+                    request.onerror = () =>
+                        reject(request.error ?? new Error('Failed to load quest'));
                 });
             } finally {
                 db.close();
