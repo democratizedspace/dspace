@@ -2,6 +2,8 @@
     import Chip from '../../../components/svelte/Chip.svelte';
     import { importCustomContentString } from '../../../utils/customcontent.js';
 
+    const IMPORT_LABEL = 'Paste your custom content backup here';
+    const IMPORT_TEXTAREA_ID = 'custom-content-import-textarea';
     let importString = '';
     const handleImport = async () => {
         try {
@@ -12,17 +14,38 @@
     };
 </script>
 
-<Chip text="">
+<section class="importer-card">
     <div class="vertical">
-        <p>Paste your custom content backup here:</p>
-        <div class="input-block"><textarea bind:value={importString} /></div>
-        <Chip text="Import" on:click={handleImport} inverted={true} />
+        <label class="input-label" for={IMPORT_TEXTAREA_ID}>
+            {IMPORT_LABEL}<span aria-hidden="true">:</span>
+        </label>
+        <div class="input-block">
+            <textarea
+                id={IMPORT_TEXTAREA_ID}
+                aria-label={IMPORT_LABEL}
+                bind:value={importString}
+            />
+        </div>
+        <Chip text="Import" onClick={handleImport} inverted={true} />
     </div>
-</Chip>
+</section>
 
 <style>
-    p {
+    .importer-card {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: stretch;
+        background-color: #007006;
+        border-radius: 0.4rem;
+        color: white;
+        margin: 1px;
+        padding: 6px 5px;
+        gap: 4px;
+    }
+
+    .input-label {
         font-weight: normal;
+        margin: 0 10px;
     }
     textarea {
         width: 100%;

@@ -1,0 +1,11 @@
+{
+  "id": "OUT-2025-10-17-custom-backup-label",
+  "date": "2025-10-17",
+  "component": "frontend:custom-content-backup",
+  "rootCause": "Importer.svelte rendered the backup textarea without an associated <label>, so the field lacked an accessible name and Playwright could not find it by label during custom-backup e2e tests.",
+  "resolution": "Added a programmatic label and id pairing for the custom backup textarea and introduced a component test to assert the accessible label remains available.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18586257662/job/52990714065",
+    "https://github.com/democratizedspace/dspace/actions/runs/18586257662/job/52990714057"
+  ]
+}
