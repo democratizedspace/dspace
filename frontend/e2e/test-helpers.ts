@@ -75,13 +75,16 @@ export async function waitForQuestRecordByTitle(
 
                 const quests = await new Promise<Array<{ id?: unknown; title?: string }>>(
                     (resolve, reject) => {
-                        request.onsuccess = () => resolve(request.result as Array<{ id?: unknown; title?: string }>);
+                        request.onsuccess = () =>
+                            resolve(request.result as Array<{ id?: unknown; title?: string }>);
                         request.onerror = () => reject(request.error);
                     }
                 );
 
                 const normalizedTitle = questTitle.trim().toLowerCase();
-                const match = quests.find((quest) => (quest?.title ?? '').trim().toLowerCase() === normalizedTitle);
+                const match = quests.find(
+                    (quest) => (quest?.title ?? '').trim().toLowerCase() === normalizedTitle
+                );
                 if (!match) {
                     return null;
                 }
@@ -463,24 +466,45 @@ async function trySelectItem(page: Page): Promise<boolean> {
  * @param page The Playwright page object
  * @param componentName Optional component name to look for in data-hydrated attributes
  */
-export async function waitForHydration(page: Page, target?: string): Promise<void> {
-    const selector = target
-        ? target.startsWith('.') ||
-          target.startsWith('#') ||
-          target.startsWith('[') ||
-          target.startsWith(':') ||
-          target.startsWith('data-')
-            ? target
-            : `[data-hydrated="${target}"]`
-        : '[data-hydrated="true"]';
+export async function waitForHydration(page: Page, target?: string | Locator): Promise<void> {
+    await page.waitForLoadState('domcontentloaded');
 
-    // Try waiting for an element that indicates hydration is complete
-    try {
-        await page.waitForSelector(selector, { timeout: 5000 });
-    } catch (e) {
-        // If we can't find a specific element, wait a bit to ensure hydration completes
-        console.log(`Could not find hydration marker (${selector}), waiting for timeout`);
-        await page.waitForTimeout(2000);
+    const mainRegion = page.getByRole('main');
+    if ((await mainRegion.count()) > 0) {
+        await expect(mainRegion).toBeVisible({ timeout: 15_000 });
+    }
+
+    let targetLocator: Locator | null = null;
+    if (target) {
+        if (typeof target === 'string') {
+            const selector =
+                target.startsWith('.') ||
+                target.startsWith('#') ||
+                target.startsWith('[') ||
+                target.startsWith(':') ||
+                target.startsWith('data-')
+                    ? target
+                    : `[data-hydrated="${target}"]`;
+            targetLocator = page.locator(selector);
+        } else {
+            targetLocator = target;
+        }
+    }
+
+    const candidates: Locator[] = [];
+    if (targetLocator) {
+        candidates.push(targetLocator);
+    }
+    candidates.push(page.locator('[data-hydrated="true"]'));
+    candidates.push(page.locator('[data-hydrated]'));
+
+    for (const locator of candidates) {
+        if ((await locator.count()) === 0) {
+            continue;
+        }
+
+        await expect(locator.first()).toBeVisible({ timeout: 15_000 });
+        return;
     }
 }
 

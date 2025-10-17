@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { clearUserData, waitForHydration } from './test-helpers';
 
 test.describe('Quest Form Live Validation', () => {
     test.beforeEach(async ({ page }) => {
@@ -8,12 +8,17 @@ test.describe('Quest Form Live Validation', () => {
 
     test('shows inline errors and clears them when inputs become valid', async ({ page }) => {
         await page.goto('/quests/create');
-        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
-        const titleInput = page.locator('#title');
-        const descriptionInput = page.locator('#description');
-        const titleError = page.locator('.form-group:has(#title) .error-message');
-        const descriptionError = page.locator('.form-group:has(#description) .error-message');
+        const titleField = page.locator('.form-group').filter({ has: page.getByLabel('Title*') });
+        const descriptionField = page
+            .locator('.form-group')
+            .filter({ has: page.getByLabel('Description*') });
+
+        const titleInput = titleField.getByLabel('Title*');
+        const descriptionInput = descriptionField.getByLabel('Description*');
+        const titleError = titleField.locator('.error-message');
+        const descriptionError = descriptionField.locator('.error-message');
 
         // Typing too short of a title should surface the length validation copy
         await titleInput.fill('ab');

@@ -66,7 +66,8 @@ async function runQuestDatabaseOperation<T>(
                         reject(new Error(`Opening IndexedDB "${dbName}" was blocked`));
                     request.onerror = () =>
                         reject(
-                            request.error ?? new Error(`Failed to open IndexedDB database "${dbName}"`)
+                            request.error ??
+                                new Error(`Failed to open IndexedDB database "${dbName}"`)
                         );
                     request.onsuccess = () => resolve(request.result);
                 });
@@ -94,7 +95,9 @@ async function runQuestDatabaseOperation<T>(
                             transaction.onabort = () =>
                                 reject(
                                     transaction.error ??
-                                        new Error('Quest lookup transaction was aborted unexpectedly')
+                                        new Error(
+                                            'Quest lookup transaction was aborted unexpectedly'
+                                        )
                                 );
                             transaction.onerror = () =>
                                 reject(
@@ -109,10 +112,12 @@ async function runQuestDatabaseOperation<T>(
                             request.onsuccess = () => {
                                 const quests = Array.isArray(request.result) ? request.result : [];
                                 const match = quests.find(
-                                    (quest: { title?: string | null; id?: unknown }) => quest?.title === title
+                                    (quest: { title?: string | null; id?: unknown }) =>
+                                        quest?.title === title
                                 );
                                 resolve(
-                                    match && typeof (match as Record<string, unknown>).id !== 'undefined'
+                                    match &&
+                                        typeof (match as Record<string, unknown>).id !== 'undefined'
                                         ? Number((match as Record<string, unknown>).id)
                                         : -1
                                 );
@@ -147,7 +152,10 @@ async function runQuestDatabaseOperation<T>(
                     });
                 }
                 case 'updateById': {
-                    const { id, questPatch } = payload as { id: number; questPatch: Record<string, unknown> };
+                    const { id, questPatch } = payload as {
+                        id: number;
+                        questPatch: Record<string, unknown>;
+                    };
                     await withTransaction('readwrite', async (transaction) => {
                         const store = transaction.objectStore(storeName);
                         const getRequest = store.get(id);
@@ -156,7 +164,9 @@ async function runQuestDatabaseOperation<T>(
                             transaction.onabort = () =>
                                 reject(
                                     transaction.error ??
-                                        new Error('Quest update transaction was aborted unexpectedly')
+                                        new Error(
+                                            'Quest update transaction was aborted unexpectedly'
+                                        )
                                 );
                             transaction.onerror = () =>
                                 reject(
@@ -166,7 +176,10 @@ async function runQuestDatabaseOperation<T>(
                             transaction.oncomplete = () => resolve();
 
                             getRequest.onerror = () =>
-                                reject(getRequest.error ?? new Error('Failed to load quest from IndexedDB'));
+                                reject(
+                                    getRequest.error ??
+                                        new Error('Failed to load quest from IndexedDB')
+                                );
                             getRequest.onsuccess = () => {
                                 const existingQuest = getRequest.result as QuestRecord | undefined;
 
@@ -187,7 +200,10 @@ async function runQuestDatabaseOperation<T>(
                                 const putRequest = store.put(updatedQuest);
                                 putRequest.onerror = () =>
                                     reject(
-                                        putRequest.error ?? new Error('Failed to persist quest updates to IndexedDB')
+                                        putRequest.error ??
+                                            new Error(
+                                                'Failed to persist quest updates to IndexedDB'
+                                            )
                                     );
                             };
                         });
@@ -259,10 +275,13 @@ test.describe('Constellations Quest Creation', () => {
         // Step 2: find the created quest id in IndexedDB with a short poll
         let questId = -1;
         await expect
-            .poll(async () => {
-                questId = await findQuestIdByTitle(page, questTemplate.title);
-                return questId;
-            }, { timeout: 10_000, intervals: [500, 750, 1000] })
+            .poll(
+                async () => {
+                    questId = await findQuestIdByTitle(page, questTemplate.title);
+                    return questId;
+                },
+                { timeout: 10_000, intervals: [500, 750, 1000] }
+            )
             .toBeGreaterThan(0);
 
         expect(questId).toBeGreaterThan(0);
