@@ -22,62 +22,60 @@ const CUSTOM_CONTENT_DB_VERSION = 3;
 const QUEST_STORE_NAME = 'quests';
 
 async function findQuestIdByTitle(page: Page, title: string): Promise<number> {
-    return page.evaluate(
-        async ({ title, dbName, dbVersion, storeName }) => {
-            const openDB = () =>
-                new Promise<IDBDatabase>((resolve, reject) => {
-                    const request = indexedDB.open(dbName, dbVersion);
+  return page.evaluate(
+    async ({ title, dbName, dbVersion, storeName }) => {
+      const openDB = () =>
+        new Promise<IDBDatabase>((resolve, reject) => {
+          const request = indexedDB.open(dbName, dbVersion);
 
-                    request.onupgradeneeded = () => {
-                        const db = request.result;
-                        if (!db.objectStoreNames.contains('meta')) {
-                            db.createObjectStore('meta');
-                        }
-                        if (!db.objectStoreNames.contains('items')) {
-                            db.createObjectStore('items', { keyPath: 'id' });
-                        }
-                        if (!db.objectStoreNames.contains('processes')) {
-                            db.createObjectStore('processes', { keyPath: 'id' });
-                        }
-                        if (!db.objectStoreNames.contains(storeName)) {
-                            db.createObjectStore(storeName, { keyPath: 'id' });
-                        }
-                    };
-
-                    request.onerror = () =>
-                        reject(request.error ?? new Error('Failed to open IndexedDB'));
-                    request.onsuccess = () => resolve(request.result);
-                });
-
-            const db = await openDB();
-            try {
-                return await new Promise<number>((resolve, reject) => {
-                    const transaction = db.transaction(storeName, 'readonly');
-                    const store = transaction.objectStore(storeName);
-                    const request = store.getAll();
-
-                    request.onsuccess = () => {
-                        const quests = Array.isArray(request.result)
-                            ? (request.result as QuestRecord[])
-                            : [];
-                        const match = quests.find((quest) => quest?.title === title);
-                        resolve(match ? Number(match.id) : -1);
-                    };
-
-                    request.onerror = () =>
-                        reject(request.error ?? new Error('Failed to list quests'));
-                });
-            } finally {
-                db.close();
+          request.onupgradeneeded = () => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains('meta')) {
+              db.createObjectStore('meta');
             }
-        },
-        {
-            title,
-            dbName: CUSTOM_CONTENT_DB_NAME,
-            dbVersion: CUSTOM_CONTENT_DB_VERSION,
-            storeName: QUEST_STORE_NAME,
-        }
-    );
+            if (!db.objectStoreNames.contains('items')) {
+              db.createObjectStore('items', { keyPath: 'id' });
+            }
+            if (!db.objectStoreNames.contains('processes')) {
+              db.createObjectStore('processes', { keyPath: 'id' });
+            }
+            if (!db.objectStoreNames.contains(storeName)) {
+              db.createObjectStore(storeName, { keyPath: 'id' });
+            }
+          };
+
+          request.onerror = () =>
+            reject(request.error ?? new Error('Failed to open IndexedDB'));
+          request.onsuccess = () => resolve(request.result);
+        });
+
+      const db = await openDB();
+      try {
+        return await new Promise<number>((resolve, reject) => {
+          const transaction = db.transaction(storeName, 'readonly');
+          const store = transaction.objectStore(storeName);
+          const request = store.getAll();
+
+          request.onsuccess = () => {
+            const quests = Array.isArray(request.result) ? request.result : [];
+            const match = quests.find((quest: { title?: string; id?: unknown }) => quest?.title === title);
+            resolve(match && typeof (match as any).id !== 'undefined' ? Number((match as any).id) : -1);
+          };
+
+          request.onerror = () =>
+            reject(request.error ?? new Error('Failed to list quests'));
+        });
+      } finally {
+        db.close();
+      }
+    },
+    {
+      title,
+      dbName: CUSTOM_CONTENT_DB_NAME,
+      dbVersion: CUSTOM_CONTENT_DB_VERSION,
+      storeName: QUEST_STORE_NAME,
+    }
+  );
 }
 
 async function updateQuestInIndexedDB(page: Page, id: number, questPatch: unknown): Promise<void> {
