@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { purgeClientState, waitForHydration, waitForQuestRecordByTitle } from './test-helpers';
 
-const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\]/g, '\$&');
+const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 test.describe('Quest creation flow', () => {
     test.beforeEach(async ({ page }) => {
@@ -13,7 +13,6 @@ test.describe('Quest creation flow', () => {
         const questDescription = 'Automated quest used to verify custom quest persistence.';
 
         await page.goto('/quests/create');
-        await page.waitForLoadState('domcontentloaded');
         await waitForHydration(page);
 
         await page.getByLabel('Title*').fill(questTitle);

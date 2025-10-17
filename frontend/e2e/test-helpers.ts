@@ -75,13 +75,16 @@ export async function waitForQuestRecordByTitle(
 
                 const quests = await new Promise<Array<{ id?: unknown; title?: string }>>(
                     (resolve, reject) => {
-                        request.onsuccess = () => resolve(request.result as Array<{ id?: unknown; title?: string }>);
+                        request.onsuccess = () =>
+                            resolve(request.result as Array<{ id?: unknown; title?: string }>);
                         request.onerror = () => reject(request.error);
                     }
                 );
 
                 const normalizedTitle = questTitle.trim().toLowerCase();
-                const match = quests.find((quest) => (quest?.title ?? '').trim().toLowerCase() === normalizedTitle);
+                const match = quests.find(
+                    (quest) => (quest?.title ?? '').trim().toLowerCase() === normalizedTitle
+                );
                 if (!match) {
                     return null;
                 }
@@ -464,23 +467,21 @@ async function trySelectItem(page: Page): Promise<boolean> {
  * @param componentName Optional component name to look for in data-hydrated attributes
  */
 export async function waitForHydration(page: Page, target?: string): Promise<void> {
-    const selector = target
-        ? target.startsWith('.') ||
-          target.startsWith('#') ||
-          target.startsWith('[') ||
-          target.startsWith(':') ||
-          target.startsWith('data-')
-            ? target
-            : `[data-hydrated="${target}"]`
-        : '[data-hydrated="true"]';
+    await page.waitForLoadState('domcontentloaded');
 
-    // Try waiting for an element that indicates hydration is complete
-    try {
-        await page.waitForSelector(selector, { timeout: 5000 });
-    } catch (e) {
-        // If we can't find a specific element, wait a bit to ensure hydration completes
-        console.log(`Could not find hydration marker (${selector}), waiting for timeout`);
-        await page.waitForTimeout(2000);
+    await expect(page.getByRole('main')).toBeVisible();
+
+    if (target) {
+        const locator = target.startsWith('data-testid=')
+            ? page.getByTestId(target.replace('data-testid=', '').trim())
+            : page.locator(target);
+        await expect(locator).toBeVisible();
+        return;
+    }
+
+    const hydratedMarker = page.locator('[data-hydrated="true"]');
+    if ((await hydratedMarker.count()) > 0) {
+        await expect(hydratedMarker.first()).toBeVisible();
     }
 }
 
