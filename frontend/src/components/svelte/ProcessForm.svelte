@@ -4,6 +4,7 @@
     import ProcessPreview from './ProcessPreview.svelte';
     import items from '../../pages/inventory/json/items';
     import { durationInSeconds, prettyPrintDuration } from '../../utils.js';
+    import { createProcess } from '../../utils/customcontent.js';
     import { validateProcessData } from '../../utils/customProcessValidation.js';
 
     export let title = '';
@@ -15,6 +16,10 @@
     let isClientSide = false;
     let showPreview = false;
     let validationErrors = {};
+    let successMessage = '';
+    let errorMessage = '';
+    let lastCreatedProcessId = null;
+    let isSubmitting = false;
 
     const dispatch = createEventDispatcher();
 
@@ -119,28 +124,95 @@
         return Object.keys(errors).length === 0;
     }
 
-    function handleSubmit(event) {
+    function sanitizeItemList(itemsToSanitize) {
+        return itemsToSanitize
+            .map((item) => ({
+                id: item?.id ?? '',
+                count: Number(item?.count ?? 0),
+            }))
+            .filter((item) => item.id && item.count > 0);
+    }
+
+    async function handleSubmit(event) {
         event.preventDefault();
 
         if (!validateForm()) {
             return;
         }
 
-        const normalizedDuration = prettyPrintDuration(durationInSeconds(duration));
+        if (isSubmitting) {
+            return;
+        }
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('duration', normalizedDuration);
-        formData.append('requireItems', JSON.stringify(requireItems));
-        formData.append('consumeItems', JSON.stringify(consumeItems));
-        formData.append('createItems', JSON.stringify(createItems));
-        duration = normalizedDuration;
-        dispatch('submit', formData);
+        successMessage = '';
+        errorMessage = '';
+        isSubmitting = true;
+
+        const normalizedDuration = prettyPrintDuration(durationInSeconds(duration));
+        const preparedProcess = {
+            title: title.trim(),
+            duration: normalizedDuration,
+            requireItems: sanitizeItemList(requireItems),
+            consumeItems: sanitizeItemList(consumeItems),
+            createItems: sanitizeItemList(createItems),
+        };
+
+        try {
+            const createdId = await createProcess(
+                preparedProcess.title,
+                preparedProcess.duration,
+                preparedProcess.requireItems,
+                preparedProcess.consumeItems,
+                preparedProcess.createItems
+            );
+
+            duration = normalizedDuration;
+            requireItems = preparedProcess.requireItems;
+            consumeItems = preparedProcess.consumeItems;
+            createItems = preparedProcess.createItems;
+
+            const formData = new FormData();
+            formData.append('title', preparedProcess.title);
+            formData.append('duration', preparedProcess.duration);
+            formData.append('requireItems', JSON.stringify(preparedProcess.requireItems));
+            formData.append('consumeItems', JSON.stringify(preparedProcess.consumeItems));
+            formData.append('createItems', JSON.stringify(preparedProcess.createItems));
+
+            if (createdId != null) {
+                formData.append('id', String(createdId));
+                lastCreatedProcessId = createdId;
+            } else {
+                lastCreatedProcessId = null;
+            }
+
+            successMessage = 'Process created successfully!';
+            dispatch('submit', formData);
+        } catch (error) {
+            console.error('Failed to create process:', error);
+            errorMessage = 'Failed to save process. Please try again.';
+        } finally {
+            isSubmitting = false;
+        }
     }
 </script>
 
 <div data-hydrated={isClientSide ? 'true' : 'false'}>
     {#if isClientSide}
+        {#if successMessage}
+            <div class="success-message" role="status" aria-live="polite">
+                {successMessage}
+                {#if lastCreatedProcessId}
+                    <a class="success-link" href={`/processes/${lastCreatedProcessId}`}>
+                        View process
+                    </a>
+                {/if}
+            </div>
+        {/if}
+
+        {#if errorMessage}
+            <div class="form-error" role="alert">{errorMessage}</div>
+        {/if}
+
         <form on:submit={handleSubmit} class="process-form">
             <div class="form-group">
                 <label for="title">Title*</label>
@@ -276,7 +348,9 @@
             {/if}
 
             <div class="form-submit">
-                <button type="submit" class="submit-button">Create Process</button>
+                <button type="submit" class="submit-button" disabled={isSubmitting}>
+                    {isSubmitting ? 'Saving…' : 'Create Process'}
+                </button>
                 <button
                     type="button"
                     class="preview-button"
@@ -311,6 +385,42 @@
         border: 2px solid #007006;
         color: #fff;
         font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .success-message {
+        margin: 0 auto 20px auto;
+        max-width: 600px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        background: #1f7a1f;
+        border: 2px solid #00cc00;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .success-link {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    .success-link:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+
+    .form-error {
+        margin: 0 auto 20px auto;
+        max-width: 600px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        background: #441414;
+        border: 2px solid #ff3e3e;
+        color: #ffb3b3;
         text-align: center;
     }
 

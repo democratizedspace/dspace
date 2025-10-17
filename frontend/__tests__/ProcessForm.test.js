@@ -7,12 +7,25 @@ jest.mock('../src/pages/inventory/json/items', () => [
     { id: 'item-3', name: 'Test Item 3', description: 'Description 3' },
 ]);
 
+const mockDb = {
+    processes: {
+        add: jest.fn().mockResolvedValue('process-123'),
+    },
+};
+
+jest.mock('../src/utils/customcontent.js', () => ({
+    db: mockDb,
+}));
+
+const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
+
 describe('ProcessForm Component', () => {
     let container;
 
     beforeEach(() => {
         container = document.createElement('div');
         document.body.appendChild(container);
+        mockDb.processes.add.mockClear();
     });
 
     afterEach(() => {
@@ -31,7 +44,7 @@ describe('ProcessForm Component', () => {
         expect(container.querySelector('input[type="text"]')).toBeTruthy();
     });
 
-    test('should handle form submission with all fields', () => {
+    test('should handle form submission with all fields', async () => {
         const component = new ProcessForm({
             target: container,
         });
@@ -63,6 +76,8 @@ describe('ProcessForm Component', () => {
         // Submit form
         form.dispatchEvent(new Event('submit', { cancelable: true }));
 
+        await flushPromises();
+
         // Verify submission
         expect(submittedData).toBeTruthy();
         const formData = submittedData;
@@ -71,9 +86,16 @@ describe('ProcessForm Component', () => {
         expect(JSON.parse(formData.get('requireItems'))).toEqual([{ id: 'item-1', count: 2 }]);
         expect(JSON.parse(formData.get('consumeItems'))).toEqual([{ id: 'item-2', count: 1 }]);
         expect(JSON.parse(formData.get('createItems'))).toEqual([{ id: 'item-3', count: 3 }]);
+        expect(mockDb.processes.add).toHaveBeenCalledWith({
+            title: 'Test Process',
+            duration: '1h 30m',
+            requireItems: [{ id: 'item-1', count: 2 }],
+            consumeItems: [{ id: 'item-2', count: 1 }],
+            createItems: [{ id: 'item-3', count: 3 }],
+        });
     });
 
-    test('should handle form submission with minimal fields', () => {
+    test('should handle form submission with minimal fields', async () => {
         const component = new ProcessForm({
             target: container,
         });
@@ -101,6 +123,8 @@ describe('ProcessForm Component', () => {
         // Submit form
         form.dispatchEvent(new Event('submit', { cancelable: true }));
 
+        await flushPromises();
+
         // Verify submission
         expect(submittedData).toBeTruthy();
         const formData = submittedData;
@@ -109,9 +133,16 @@ describe('ProcessForm Component', () => {
         expect(JSON.parse(formData.get('requireItems'))).toEqual([{ id: 'item-1', count: 1 }]);
         expect(JSON.parse(formData.get('consumeItems'))).toEqual([]);
         expect(JSON.parse(formData.get('createItems'))).toEqual([]);
+        expect(mockDb.processes.add).toHaveBeenCalledWith({
+            title: 'Test Process',
+            duration: '1h',
+            requireItems: [{ id: 'item-1', count: 1 }],
+            consumeItems: [],
+            createItems: [],
+        });
     });
 
-    test('should reject submission without item relationships', () => {
+    test('should reject submission without item relationships', async () => {
         const component = new ProcessForm({
             target: container,
         });
@@ -132,7 +163,10 @@ describe('ProcessForm Component', () => {
 
         form.dispatchEvent(new Event('submit', { cancelable: true }));
 
+        await flushPromises();
+
         expect(submittedData).toBeFalsy();
+        expect(mockDb.processes.add).not.toHaveBeenCalled();
     });
 
     test('should handle adding and removing items', () => {
@@ -183,7 +217,7 @@ describe('ProcessForm Component', () => {
         });
     });
 
-    test('should validate duration format including seconds and decimals', () => {
+    test('should validate duration format including seconds and decimals', async () => {
         const component = new ProcessForm({
             target: container,
         });
@@ -206,7 +240,9 @@ describe('ProcessForm Component', () => {
         durationInput.dispatchEvent(new Event('input'));
 
         form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
         expect(submittedData).toBeFalsy();
+        expect(mockDb.processes.add).not.toHaveBeenCalled();
 
         // Test valid duration formats
         const validDurations = ['1h 30m 10s', '0.5h'];
@@ -214,12 +250,13 @@ describe('ProcessForm Component', () => {
             durationInput.value = val;
             durationInput.dispatchEvent(new Event('input'));
             form.dispatchEvent(new Event('submit', { cancelable: true }));
+            await flushPromises();
             expect(submittedData).toBeTruthy();
             submittedData = null;
         }
     });
 
-    test('normalizes duration before submission', () => {
+    test('normalizes duration before submission', async () => {
         const component = new ProcessForm({
             target: container,
             props: { requireItems: [{ id: 'item-1', count: 1 }] },
@@ -242,11 +279,13 @@ describe('ProcessForm Component', () => {
 
         form.dispatchEvent(new Event('submit', { cancelable: true }));
 
+        await flushPromises();
+
         expect(submittedData).toBeTruthy();
         expect(submittedData.get('duration')).toBe('30m 30s');
     });
 
-    test('should validate item counts', () => {
+    test('should validate item counts', async () => {
         const component = new ProcessForm({
             target: container,
         });
@@ -274,7 +313,9 @@ describe('ProcessForm Component', () => {
         });
 
         form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
         expect(submittedData).toBeFalsy();
+        expect(mockDb.processes.add).not.toHaveBeenCalled();
 
         // Set valid count
         component.$$set({
@@ -282,10 +323,11 @@ describe('ProcessForm Component', () => {
         });
 
         form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
         expect(submittedData).toBeTruthy();
     });
 
-    test('should handle empty required fields', () => {
+    test('should handle empty required fields', async () => {
         const component = new ProcessForm({
             target: container,
         });
@@ -300,7 +342,9 @@ describe('ProcessForm Component', () => {
 
         // Submit with empty fields
         form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
         expect(submittedData).toBeFalsy();
+        expect(mockDb.processes.add).not.toHaveBeenCalled();
     });
 
     test('shows preview when preview button clicked with valid data', () => {
@@ -324,6 +368,32 @@ describe('ProcessForm Component', () => {
 
         // Verify preview rendered
         expect(container.querySelector('.process-preview')).toBeTruthy();
+    });
+
+    test('renders success message after saving process', async () => {
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        component.$$set({ requireItems: [{ id: 'item-1', count: 2 }] });
+
+        titleInput.value = 'Saved Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        const message = container.querySelector('.success-message');
+        expect(message).toBeTruthy();
+        expect(message.textContent).toContain('Process created successfully');
+        expect(mockDb.processes.add).toHaveBeenCalledTimes(1);
     });
 
     test('item count inputs enforce minimum of 1', () => {
