@@ -1,133 +1,86 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, addTestItems } from './test-helpers';
+import { clearUserData, waitForHydration } from './test-helpers';
+import items from '../src/pages/inventory/json/items/index.js';
+
+type ShopItem = { id: string; name: string };
+const itemsList = items as ShopItem[];
+const [firstShopItem] = itemsList;
+if (!firstShopItem) {
+    throw new Error('Expected at least one shop item for tests');
+}
 
 test.describe('Shop Functionality', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
-        // Add some test items to inventory for testing
-        await addTestItems(page);
     });
 
     test('shop page should load with buy/sell options', async ({ page }) => {
         await page.goto('/shop');
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
-        // Verify the page has loaded with navigation options
-        // Use a more general selector for the title or header
-        const shopTitle = page.locator('.title, h1, h2, header h2').first();
-        await expect(shopTitle).toBeVisible();
-
-        // Check for Buy and Sell links
-        await expect(
-            page.locator('a:has-text("Buy"), button:has-text("Buy")').first()
-        ).toBeVisible();
-        await expect(
-            page.locator('a:has-text("Sell"), button:has-text("Sell")').first()
-        ).toBeVisible();
+        await expect(page.getByRole('heading', { level: 2, name: 'Shop' })).toBeVisible();
+        await expect(page.getByRole('link', { name: 'Buy' })).toBeVisible();
+        await expect(page.getByRole('link', { name: 'Sell' })).toBeVisible();
     });
 
     test('should navigate to buy page and display items for purchase', async ({ page }) => {
-        await page.goto('/shop/buy');
+        await page.goto(`/shop/buy/${firstShopItem.id}`);
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
-        // Just check that the page content loaded
-        const mainContent = page.locator('main, body, .content, #app, #root').first();
-        await expect(mainContent).toBeVisible();
-
-        // Take a screenshot to verify page loaded correctly
-        await page.screenshot({ path: 'test-artifacts/shop-buy-page.png' });
+        await expect(page.getByRole('heading', { level: 2, name: 'Buy' })).toBeVisible();
+        await expect(page.getByRole('spinbutton', { name: 'Quantity' })).toBeVisible();
     });
 
-    test('should allow purchasing items with sufficient resources', async ({ page }) => {
-        // First add enough currency
-        await page.goto('/');
-        await page.evaluate(() => {
-            // Add currency to localStorage inventory
-            const inventory = JSON.parse(localStorage.getItem('inventory') || '{}');
-            if (!inventory.currency) {
-                inventory.currency = 0;
-            }
-            inventory.currency += 1000; // Add enough currency for purchases
-            localStorage.setItem('inventory', JSON.stringify(inventory));
-        });
-
-        // Go to buy page
-        await page.goto('/shop/buy');
+    test('should generate a buy link for the requested quantity', async ({ page }) => {
+        await page.goto(`/shop/buy/${firstShopItem.id}`);
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
-        // Find a buyable item
-        const buyButtons = page.locator('button:has-text("Buy")');
-        const buyButtonCount = await buyButtons.count();
+        const quantityInput = page.getByRole('spinbutton', { name: 'Quantity' });
+        await quantityInput.fill('3');
+        await page.getByRole('button', { name: /Generate buy link/i }).click();
 
-        if (buyButtonCount > 0) {
-            // Get initial inventory count
-            const initialInventory = await page.evaluate(() => {
-                return JSON.parse(localStorage.getItem('inventory') || '{}');
-            });
+        const generatedLink = page
+            .getByTestId('shop-link-output')
+            .getByRole('link', { name: /Buy 3/ });
+        await expect(generatedLink).toHaveAttribute('href', `/shop/buy/${firstShopItem.id}/3`);
+        await expect(generatedLink).toContainText('Buy 3');
 
-            // Click the first buy button
-            await buyButtons.first().click();
-
-            // Wait for purchase to complete
-            await page.waitForTimeout(500);
-
-            // Check that inventory has changed
-            const updatedInventory = await page.evaluate(() => {
-                return JSON.parse(localStorage.getItem('inventory') || '{}');
-            });
-
-            // Verify the purchase reduced currency
-            expect(updatedInventory.currency).toBeLessThan(initialInventory.currency);
-        }
+        await Promise.all([page.waitForLoadState('networkidle'), generatedLink.click()]);
+        await expect(
+            page.getByRole('heading', { level: 2, name: 'Purchase successful!' })
+        ).toBeVisible();
     });
 
     test('should navigate to sell page and list inventory items', async ({ page }) => {
-        // Ensure we have items to sell
-        await addTestItems(page);
-
-        await page.goto('/shop/sell');
+        await page.goto(`/shop/sell/${firstShopItem.id}`);
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
-        // Just check that the page content loaded
-        const mainContent = page.locator('main, body, .content, #app, #root').first();
-        await expect(mainContent).toBeVisible();
-
-        // Take a screenshot to verify page loaded correctly
-        await page.screenshot({ path: 'test-artifacts/shop-sell-page.png' });
+        await expect(page.getByRole('heading', { level: 2, name: 'Sell' })).toBeVisible();
+        await expect(page.getByRole('spinbutton', { name: 'Quantity' })).toBeVisible();
     });
 
-    test('should allow selling items from inventory', async ({ page }) => {
-        // Ensure we have items to sell
-        await addTestItems(page);
-
-        // Go to sell page
-        await page.goto('/shop/sell');
+    test('should generate a sell link for the requested quantity', async ({ page }) => {
+        await page.goto(`/shop/sell/${firstShopItem.id}`);
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
 
-        // Find a sellable item and its initial count
-        const sellButtons = page.locator('button:has-text("Sell")');
-        const sellButtonCount = await sellButtons.count();
+        const quantityInput = page.getByRole('spinbutton', { name: 'Quantity' });
+        await quantityInput.fill('2');
+        await page.getByRole('button', { name: /Generate sell link/i }).click();
 
-        if (sellButtonCount > 0) {
-            // Get initial inventory and currency
-            const initialInventory = await page.evaluate(() => {
-                return JSON.parse(localStorage.getItem('inventory') || '{}');
-            });
-            const initialCurrency = initialInventory.currency || 0;
+        const generatedLink = page
+            .getByTestId('shop-link-output')
+            .getByRole('link', { name: /Sell 2/ });
+        await expect(generatedLink).toHaveAttribute('href', `/shop/sell/${firstShopItem.id}/2`);
+        await expect(generatedLink).toContainText('Sell 2');
 
-            // Click the first sell button
-            await sellButtons.first().click();
-
-            // Wait for sale to complete
-            await page.waitForTimeout(500);
-
-            // Check that inventory currency has increased
-            const updatedInventory = await page.evaluate(() => {
-                return JSON.parse(localStorage.getItem('inventory') || '{}');
-            });
-
-            // Verify the sale increased currency
-            expect(updatedInventory.currency).toBeGreaterThan(initialCurrency);
-        }
+        await Promise.all([page.waitForLoadState('networkidle'), generatedLink.click()]);
+        await expect(
+            page.getByRole('heading', { level: 2, name: 'Sale successful!' })
+        ).toBeVisible();
     });
 });

@@ -179,6 +179,49 @@ export async function waitForQuestRecordByTitle(
     return Number(rawId);
 }
 
+async function customQuestExists(page: Page, questTitle: string): Promise<boolean> {
+    return page.evaluate(async (title) => {
+        const openRequest = indexedDB.open('CustomContent');
+        const db: IDBDatabase = await new Promise((resolve, reject) => {
+            openRequest.onsuccess = () => resolve(openRequest.result);
+            openRequest.onerror = () => reject(openRequest.error);
+            openRequest.onupgradeneeded = () => resolve(openRequest.result);
+        });
+
+        try {
+            if (!db.objectStoreNames.contains('quests')) {
+                return false;
+            }
+
+            const tx = db.transaction('quests', 'readonly');
+            const store = tx.objectStore('quests');
+            const request = store.getAll();
+
+            const quests = await new Promise<Array<{ title?: string }>>((resolve, reject) => {
+                request.onsuccess = () => resolve(request.result as Array<{ title?: string }>);
+                request.onerror = () => reject(request.error);
+            });
+
+            const normalizedTitle = title.trim().toLowerCase();
+            return quests.some(
+                (quest) => (quest.title ?? '').trim().toLowerCase() === normalizedTitle
+            );
+        } finally {
+            db.close();
+        }
+    }, questTitle);
+}
+
+export async function expectQuestIndexedDbState(
+    page: Page,
+    questTitle: string,
+    { present, timeoutMs = 10_000 }: { present: boolean; timeoutMs?: number }
+): Promise<void> {
+    await expect
+        .poll(async () => await customQuestExists(page, questTitle), { timeout: timeoutMs })
+        .toBe(present);
+}
+
 /**
  * Creates test items for use in other tests
  * @returns The IDs of the created items (if available)
@@ -299,10 +342,12 @@ export class ItemSelectorHelper {
         // First check if it's already expanded
         const expandedView = container.locator('.selector-expanded');
         const itemsList = container.locator('.items-list');
+        const expansionLocator = container.locator('.selector-expanded, .items-list');
 
         // If either is visible, consider it expanded
         if ((await expandedView.count()) > 0 || (await itemsList.count()) > 0) {
             console.log('Item selector already expanded');
+            await expect(expansionLocator.first()).toBeVisible();
             return true;
         }
 
@@ -319,16 +364,8 @@ export class ItemSelectorHelper {
             await selectButton.first().click();
             console.log('Clicked Select Item button');
 
-            // Wait for dropdown to appear
-            await this.page.waitForTimeout(500);
-
-            // Verify it expanded - check for either selector-expanded or items-list
-            if (
-                (await container.locator('.selector-expanded').count()) > 0 ||
-                (await container.locator('.items-list').count()) > 0
-            ) {
-                return true;
-            }
+            await expect(expansionLocator.first()).toBeVisible();
+            return true;
         }
 
         console.log('Could not open item selector');
@@ -361,13 +398,13 @@ export class ItemSelectorHelper {
             await itemRows.nth(index).click();
             console.log(`Clicked item at index ${index}`);
 
-            // Wait for selection to take effect
-            await this.page.waitForTimeout(500);
-
-            // Verify selection happened (selector should collapse)
-            if ((await container.locator('.selector-expanded').count()) === 0) {
-                return true;
-            }
+            // Wait for selection to take effect (selector should collapse)
+            await expect
+                .poll(
+                    async () => await container.locator('.selector-expanded, .items-list').count()
+                )
+                .toBe(0);
+            return true;
         }
 
         console.log(`Could not select item at index ${index}`);
@@ -450,11 +487,10 @@ export async function fillProcessForm(
                 if ((await buttonSelector.count()) > 0) {
                     for (let i = 0; i < count; i++) {
                         await buttonSelector.click();
-                        await page.waitForTimeout(300);
                         console.log(`Added ${type} item ${i + 1}`);
 
                         // Try to select an item from the dropdown or selector if one appears
-                        await trySelectItem(page);
+                        await expect.poll(async () => await trySelectItem(page)).toBe(true);
                     }
                     foundButton = true;
                     break;
@@ -506,22 +542,17 @@ async function trySelectItem(page: Page): Promise<boolean> {
 
                 // For buttons that open a dropdown
                 await selector.click();
-                await page.waitForTimeout(300);
 
                 // Try to click the first item in any dropdown that appears
-                const dropdownItems = [
-                    page.locator('.dropdown-menu .item').first(),
-                    page.locator('.item-list .item').first(),
-                    page.locator('.selector-expanded .item').first(),
-                    page.locator('[role="listbox"] [role="option"]').first(),
-                ];
+                const dropdownItem = page
+                    .locator(
+                        '.dropdown-menu .item, .item-list .item, .selector-expanded .item, [role="listbox"] [role="option"]'
+                    )
+                    .first();
 
-                for (const item of dropdownItems) {
-                    if ((await item.count()) > 0 && (await item.isVisible())) {
-                        await item.click();
-                        return true;
-                    }
-                }
+                await expect(dropdownItem).toBeVisible();
+                await dropdownItem.click();
+                return true;
             }
         }
     } catch (e) {
