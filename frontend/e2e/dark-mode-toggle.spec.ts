@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, expectLocalStorageValue, waitForHydration } from './test-helpers';
 
 test.describe('Dark mode toggle', () => {
     test.beforeEach(async ({ page }) => {
@@ -22,8 +22,10 @@ test.describe('Dark mode toggle', () => {
 
         await expect(html).toHaveAttribute('data-theme', 'light');
         await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+        await expectLocalStorageValue(page, 'theme', 'light');
 
         await page.reload();
+        await waitForHydration(page);
 
         await expect(html).toHaveAttribute('data-theme', 'light');
         await expect(page.getByRole('button', { name: /toggle dark mode/i })).toHaveAttribute(

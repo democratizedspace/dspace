@@ -561,6 +561,16 @@ export async function expectLocalStorageCleared(page: Page, key: string): Promis
         .toBeNull();
 }
 
+export async function expectLocalStorageValue(
+    page: Page,
+    key: string,
+    value: string | null
+): Promise<void> {
+    await expect
+        .poll(async () => page.evaluate((candidate) => localStorage.getItem(candidate), key))
+        .toBe(value);
+}
+
 /**
  * Adds test items to the inventory for testing purposes
  * Uses localStorage to directly inject items without using the UI

@@ -10,25 +10,30 @@ test.describe('touch navigation menu', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const toggle = page.locator('#unpinned-toggle');
-        const unpinnedItem = page.locator('nav a[href="/gamesaves"]');
+        const toggle = page.getByRole('button', { name: 'Toggle additional menu items' });
+        const unpinnedMenu = page.getByRole('region', { name: 'Additional menu items' });
+        const unpinnedItem = unpinnedMenu.getByRole('link', {
+            name: 'Import/export gamesaves',
+            exact: true,
+        });
 
         await expect(toggle).toHaveAttribute('data-hydrated', 'true');
 
         await expect(toggle).toBeVisible();
         await expect(toggle).toHaveAttribute('aria-expanded', 'false');
         await expect(toggle).toHaveText('More');
-        await expect(unpinnedItem).toBeHidden();
+        await expect(unpinnedMenu).toBeHidden();
 
         await toggle.tap();
 
         await expect(toggle).toHaveAttribute('aria-expanded', 'true');
         await expect(toggle).toHaveText('Less');
+        await expect(unpinnedMenu).toBeVisible();
         await expect(unpinnedItem).toBeVisible();
 
         await toggle.tap();
 
         await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-        await expect(unpinnedItem).toBeHidden();
+        await expect(unpinnedMenu).toBeHidden();
     });
 });

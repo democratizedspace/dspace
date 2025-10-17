@@ -87,6 +87,8 @@
             hidden={!showUnpinned}
             style={`display: ${showUnpinned ? 'contents' : 'none'}`}
             aria-hidden={!showUnpinned}
+            role="region"
+            aria-label="Additional menu items"
         >
             {#each unpinned as item}
                 {#if item.hideIfOwned}
