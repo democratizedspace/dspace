@@ -100,7 +100,7 @@ jobs:
 
       - name: Install Playwright system dependencies
         working-directory: frontend
-        run: sudo npx playwright install-deps
+        run: sudo env "PATH=$PATH" npx playwright install-deps
 
       - name: Install Playwright browsers
         run: pnpm --filter ./frontend exec playwright install

@@ -161,6 +161,21 @@ test('verify Jest test files are included in package.json test configuration', a
     expect(jestConfigCapturesAllFiles).toBeTruthy();
 });
 
+test('verify Playwright install-deps step preserves PATH in CI workflow', async () => {
+    const workflowPath = path.resolve(__dirname, '../../.github/workflows/tests.yml');
+
+    expect(fs.existsSync(workflowPath), `Expected workflow at ${workflowPath}`).toBeTruthy();
+
+    const workflowContent = fs.readFileSync(workflowPath, 'utf8');
+    const expectedCommand = 'sudo env "PATH=$PATH" npx playwright install-deps';
+
+    if (!workflowContent.includes(expectedCommand)) {
+        console.error('tests.yml content:', workflowContent);
+    }
+
+    expect(workflowContent.includes(expectedCommand)).toBeTruthy();
+});
+
 test('verify playwright web server is properly configured', async ({ page }, testInfo) => {
     // Try to load the home page
     await page.goto('/');
@@ -209,7 +224,7 @@ test('verify playwright web server is properly configured', async ({ page }, tes
 
     // Check that the webServer config exists and is properly configured
     expect(configContent).toContain('webServer:');
-    expect(configContent).toContain("command: 'npm run preview'");
+    expect(configContent).toMatch(/command:\s*`npm run preview -- --port \$\{port}/);
     expect(configContent).toContain('url: baseURL');
 
     console.log('Playwright webServer is properly configured and running');
