@@ -66,6 +66,9 @@ export async function waitForQuestRecordByTitle(
             });
 
             try {
+                if (!db.objectStoreNames.contains('quests')) {
+                    return null;
+                }
                 const tx = db.transaction('quests', 'readonly');
                 const store = tx.objectStore('quests');
                 const request = store.getAll();
