@@ -25,12 +25,26 @@ describe('ensurePlaywrightBrowsers', () => {
   });
 
   it('installs browsers when chromium executable is missing', async () => {
-    let hasBinary = false;
+    const chromeExecutable =
+      '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
+    const headlessExecutable =
+      '/root/.cache/ms-playwright/chromium-headless-shell-1181/chrome-linux/headless_shell';
+    let chromeExists = false;
+    let headlessExists = false;
     const execSync = vi.fn(() => {
-      hasBinary = true;
+      chromeExists = true;
+      headlessExists = true;
     });
-    const existsSync = vi.fn(() => hasBinary);
-    const executablePath = vi.fn(() => '/fake/chromium');
+    const existsSync = vi.fn((candidate: string) => {
+      if (candidate === chromeExecutable) {
+        return chromeExists;
+      }
+      if (candidate === headlessExecutable) {
+        return headlessExists;
+      }
+      return false;
+    });
+    const executablePath = vi.fn(() => chromeExecutable);
     const browser = { executablePath };
 
     vi.doMock('node:child_process', async () => {
@@ -65,13 +79,76 @@ describe('ensurePlaywrightBrowsers', () => {
       })
     );
     expect(executablePath).toHaveBeenCalledTimes(2);
-    expect(existsSync).toHaveBeenCalledTimes(2);
+    expect(
+      existsSync.mock.calls.filter(
+        ([candidate]) => candidate === chromeExecutable || candidate === headlessExecutable
+      )
+    ).toHaveLength(3);
   });
 
-  it('skips install when chromium executable already exists', async () => {
+  it('installs browsers when headless shell is missing', async () => {
+    const chromeExecutable =
+      '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
+    const headlessExecutable =
+      '/root/.cache/ms-playwright/chromium-headless-shell-1181/chrome-linux/headless_shell';
+    let chromeExists = true;
+    let headlessExists = false;
+    const execSync = vi.fn(() => {
+      headlessExists = true;
+    });
+    const existsSync = vi.fn((candidate: string) => {
+      if (candidate === chromeExecutable) {
+        return chromeExists;
+      }
+      if (candidate === headlessExecutable) {
+        return headlessExists;
+      }
+      return false;
+    });
+    const executablePath = vi.fn(() => chromeExecutable);
+    const browser = { executablePath };
+
+    vi.doMock('node:child_process', async () => {
+      const actual = await vi.importActual<typeof import('node:child_process')>(
+        'node:child_process'
+      );
+      return {
+        ...actual,
+        execSync,
+        default: { ...actual, execSync },
+      };
+    });
+    vi.doMock('node:fs', async () => {
+      const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
+      return {
+        ...actual,
+        existsSync,
+        default: { ...actual, existsSync },
+      };
+    });
+    const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
+
+    ensurePlaywrightBrowsers({ cwd: '/workspace/dspace/frontend', browser });
+
+    expect(execSync).toHaveBeenCalledTimes(1);
+    expect(executablePath).toHaveBeenCalledTimes(2);
+    expect(
+      existsSync.mock.calls.filter(
+        ([candidate]) => candidate === chromeExecutable || candidate === headlessExecutable
+      )
+    ).toHaveLength(4);
+  });
+
+  it('skips install when chromium and headless shell already exist', async () => {
+    const chromeExecutable =
+      '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
+    const headlessExecutable =
+      '/root/.cache/ms-playwright/chromium-headless-shell-1181/chrome-linux/headless_shell';
     const execSync = vi.fn();
-    const existsSync = vi.fn(() => true);
-    const executablePath = vi.fn(() => '/fake/chromium');
+    const existsSync = vi.fn((candidate: string) =>
+      candidate === chromeExecutable || candidate === headlessExecutable
+    );
+    const executablePath = vi.fn(() => chromeExecutable);
     const browser = { executablePath };
 
     vi.doMock('node:child_process', async () => {
@@ -98,6 +175,30 @@ describe('ensurePlaywrightBrowsers', () => {
 
     expect(execSync).not.toHaveBeenCalled();
     expect(executablePath).toHaveBeenCalledTimes(1);
-    expect(existsSync).toHaveBeenCalledTimes(1);
+    expect(
+      existsSync.mock.calls.filter(
+        ([candidate]) => candidate === chromeExecutable || candidate === headlessExecutable
+      )
+    ).toHaveLength(2);
+  });
+
+  it('derives headless shell path for macOS layouts', async () => {
+    const macExecutablePath =
+      '/Users/dev/Library/Caches/ms-playwright/chromium-1181/chrome-mac/Chromium.app/Contents/MacOS/Chromium';
+    const { resolveHeadlessShellPath } = await import(MODULE_PATH);
+
+    expect(resolveHeadlessShellPath(macExecutablePath)).toBe(
+      '/Users/dev/Library/Caches/ms-playwright/chromium-headless-shell-1181/chrome-mac/Chromium.app/Contents/MacOS/headless_shell'
+    );
+  });
+
+  it('includes executable extensions when deriving headless shell path', async () => {
+    const windowsExecutable =
+      'C:/Users/runner/AppData/Local/ms-playwright/chromium-1181/chrome-win/chrome.exe';
+    const { resolveHeadlessShellPath } = await import(MODULE_PATH);
+
+    expect(resolveHeadlessShellPath(windowsExecutable)).toBe(
+      'C:/Users/runner/AppData/Local/ms-playwright/chromium-headless-shell-1181/chrome-win/headless_shell.exe'
+    );
   });
 });
