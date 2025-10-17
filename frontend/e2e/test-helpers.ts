@@ -4,18 +4,106 @@ import { Page, Locator, expect } from '@playwright/test';
  * Utility functions to help with testing the DSpace application
  */
 
+export async function purgeClientState(page: Page): Promise<void> {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    await page.evaluate(async () => {
+        localStorage.clear();
+        sessionStorage.clear();
+
+        const targets = ['CustomContent'];
+        await Promise.all(
+            targets.map(
+                (name) =>
+                    new Promise<void>((resolve) => {
+                        try {
+                            const request = indexedDB.deleteDatabase(name);
+                            request.onsuccess = () => resolve();
+                            request.onerror = () => resolve();
+                            request.onblocked = () => resolve();
+                        } catch (error) {
+                            console.warn('Failed to delete database', name, error);
+                            resolve();
+                        }
+                    })
+            )
+        );
+    });
+
+    await page.waitForFunction(async () => {
+        const anyIndexedDB = indexedDB as unknown as {
+            databases?: () => Promise<Array<{ name?: string | null }>>;
+        };
+
+        if (!anyIndexedDB || typeof anyIndexedDB.databases !== 'function') {
+            return true;
+        }
+
+        const databases = await anyIndexedDB.databases();
+        return !databases.some((db) => db?.name === 'CustomContent');
+    });
+}
+
 /**
- * Clears user data by clearing localStorage
- * (IndexedDB access is restricted in Playwright)
+ * Clears persisted user data for backwards compatibility with older helpers.
  */
 export async function clearUserData(page: Page): Promise<void> {
-    // Navigate to the site root first to ensure we're on the correct domain
-    await page.goto('/');
-    // Clear localStorage
-    await page.evaluate(() => {
-        localStorage.clear();
-        console.log('User data cleared via localStorage');
-    });
+    await purgeClientState(page);
+}
+
+export async function waitForQuestRecordByTitle(
+    page: Page,
+    title: string,
+    { timeoutMs = 15_000 }: { timeoutMs?: number } = {}
+): Promise<number> {
+    const resultHandle = await page.waitForFunction(
+        async ({ questTitle }) => {
+            const openRequest = indexedDB.open('CustomContent');
+            const db: IDBDatabase = await new Promise((resolve, reject) => {
+                openRequest.onsuccess = () => resolve(openRequest.result);
+                openRequest.onerror = () => reject(openRequest.error);
+                openRequest.onupgradeneeded = () => resolve(openRequest.result);
+            });
+
+            try {
+                if (!db.objectStoreNames.contains('quests')) {
+                    return null;
+                }
+                const tx = db.transaction('quests', 'readonly');
+                const store = tx.objectStore('quests');
+                const request = store.getAll();
+
+                const quests = await new Promise<Array<{ id?: unknown; title?: string }>>(
+                    (resolve, reject) => {
+                        request.onsuccess = () => resolve(request.result as Array<{ id?: unknown; title?: string }>);
+                        request.onerror = () => reject(request.error);
+                    }
+                );
+
+                const normalizedTitle = questTitle.trim().toLowerCase();
+                const match = quests.find((quest) => (quest?.title ?? '').trim().toLowerCase() === normalizedTitle);
+                if (!match) {
+                    return null;
+                }
+
+                const idCandidate =
+                    (match as Record<string, unknown>).id ??
+                    (match as Record<string, unknown>).questId ??
+                    (match as Record<string, unknown>).questID ??
+                    (match as Record<string, unknown>).key ??
+                    (match as Record<string, unknown>).primaryKey;
+
+                return idCandidate ?? null;
+            } finally {
+                db.close();
+            }
+        },
+        { questTitle: title },
+        { timeout: timeoutMs }
+    );
+
+    const rawId = await resultHandle.jsonValue<unknown>();
+    return Number(rawId);
 }
 
 /**
