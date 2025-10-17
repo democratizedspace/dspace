@@ -4,7 +4,7 @@
     import ProcessPreview from './ProcessPreview.svelte';
     import items from '../../pages/inventory/json/items';
     import { durationInSeconds, prettyPrintDuration } from '../../utils.js';
-    import { db } from '../../utils/customcontent.js';
+    import { createProcess } from '../../utils/customcontent.js';
     import { validateProcessData } from '../../utils/customProcessValidation.js';
 
     export let title = '';
@@ -158,7 +158,13 @@
         };
 
         try {
-            const createdId = await db.processes.add(preparedProcess);
+            const createdId = await createProcess(
+                preparedProcess.title,
+                preparedProcess.duration,
+                preparedProcess.requireItems,
+                preparedProcess.consumeItems,
+                preparedProcess.createItems
+            );
 
             duration = normalizedDuration;
             requireItems = preparedProcess.requireItems;
