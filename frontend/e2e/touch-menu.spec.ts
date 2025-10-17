@@ -14,6 +14,7 @@ test.describe('touch navigation menu', () => {
         const toggle = navigation.getByRole('button', {
             name: 'Toggle additional menu items'
         });
+        const unpinnedMenu = page.getByRole('region', { name: 'Additional menu items' });
         const unpinnedItem = navigation.getByRole('link', {
             name: /import\/export gamesaves/i
         });
@@ -23,17 +24,18 @@ test.describe('touch navigation menu', () => {
         await expect(toggle).toBeVisible();
         await expect(toggle).toHaveAttribute('aria-expanded', 'false');
         await expect(toggle).toHaveText('More');
-        await expect(unpinnedItem).toBeHidden();
+        await expect(unpinnedMenu).toBeHidden();
 
         await toggle.tap();
 
         await expect(toggle).toHaveAttribute('aria-expanded', 'true');
         await expect(toggle).toHaveText('Less');
+        await expect(unpinnedMenu).toBeVisible();
         await expect(unpinnedItem).toBeVisible();
 
         await toggle.tap();
 
         await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-        await expect(unpinnedItem).toBeHidden();
+        await expect(unpinnedMenu).toBeHidden();
     });
 });
