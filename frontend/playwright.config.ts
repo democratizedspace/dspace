@@ -1,4 +1,7 @@
 import { defineConfig } from '@playwright/test';
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 if (process.env.CI) {
@@ -22,6 +25,25 @@ declare const process: {
 
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
+
+function ensureAstroBuildArtifacts(): void {
+    const serverEntrypoint = path.join(frontendDir, 'dist', 'server', 'entry.mjs');
+
+    if (fs.existsSync(serverEntrypoint)) {
+        console.log('Astro build artifacts detected. Skipping rebuild.');
+        return;
+    }
+
+    console.log('Astro build artifacts not found. Building the app for Playwright preview...');
+    try {
+        execSync('npm run build', { cwd: frontendDir, stdio: 'inherit' });
+    } catch (error) {
+        console.error('Failed to build Astro project required for Playwright preview.');
+        throw error;
+    }
+}
+
+ensureAstroBuildArtifacts();
 
 // Determine the base URL from environment variables or use default
 const protocol = process.env.PROTOCOL || 'http';
@@ -112,8 +134,9 @@ function resolveProjects(): PlaywrightProjectConfig[] {
     const wantsAll = Array.from(requestedValues).some((value) => value === 'all' || value === '*');
 
     const requestedProjects = new Set<ProjectName>(
-        Array.from(requestedValues).filter((value): value is ProjectName =>
-            value === 'chromium' || value === 'firefox' || value === 'webkit'
+        Array.from(requestedValues).filter(
+            (value): value is ProjectName =>
+                value === 'chromium' || value === 'firefox' || value === 'webkit'
         )
     );
 
@@ -129,7 +152,9 @@ function resolveProjects(): PlaywrightProjectConfig[] {
 
     if (matched.length === 0) {
         console.warn(
-            `No known Playwright projects matched "${Array.from(requestedValues).join(', ')}". Falling back to chromium.`
+            `No known Playwright projects matched "${Array.from(requestedValues).join(
+                ', '
+            )}". Falling back to chromium.`
         );
         return AVAILABLE_PROJECTS.filter((project) => project.name === 'chromium');
     }

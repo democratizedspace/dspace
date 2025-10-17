@@ -13,13 +13,16 @@ vi.mock('child_process', () => ({
   execSync: execSyncMock,
   default: { execSync: execSyncMock },
 }));
+// Provide both named and default exports so ESM consumers can access fs mocks consistently
 vi.mock('fs', () => ({
   existsSync: existsSyncMock,
   default: { existsSync: existsSyncMock },
 }));
 
 beforeAll(async () => {
-  const fileUrl = pathToFileURL(path.resolve(__dirname, '../frontend/scripts/run-test-groups.mjs'));
+  const fileUrl = pathToFileURL(
+    path.resolve(__dirname, '../frontend/scripts/run-test-groups.mjs')
+  );
   const mod = await import(fileUrl.toString());
   runTestGroup = mod.runTestGroup;
   TEST_GROUPS = mod.TEST_GROUPS;
@@ -38,8 +41,12 @@ describe('run-test-groups', () => {
   });
 
   it('returns true when exec succeeds', () => {
-    execSyncMock.mockImplementation(() => ({} as any));
-    const result = runTestGroup({ name: 'Demo', files: ['demo.spec.ts'], parallel: false });
+    execSyncMock.mockImplementation(() => ({}) as any);
+    const result = runTestGroup({
+      name: 'Demo',
+      files: ['demo.spec.ts'],
+      parallel: false,
+    });
     expect(execSyncMock).toHaveBeenCalledWith(
       expect.stringContaining('demo.spec.ts --workers=1 --reporter=dot'),
       expect.objectContaining({ cwd: frontendRoot })
@@ -51,7 +58,12 @@ describe('run-test-groups', () => {
     execSyncMock.mockImplementation(() => {
       throw new Error('fail');
     });
-    const result = runTestGroup({ name: 'Fail', files: ['fail.spec.ts'], parallel: true, workers: 2 });
+    const result = runTestGroup({
+      name: 'Fail',
+      files: ['fail.spec.ts'],
+      parallel: true,
+      workers: 2,
+    });
     expect(execSyncMock).toHaveBeenCalledWith(
       expect.stringContaining('fail.spec.ts --workers=2 --reporter=dot'),
       expect.objectContaining({ cwd: frontendRoot })
@@ -60,7 +72,7 @@ describe('run-test-groups', () => {
   });
 
   it('applies grep patterns when provided', () => {
-    execSyncMock.mockImplementation(() => ({} as any));
+    execSyncMock.mockImplementation(() => ({}) as any);
     runTestGroup({
       name: 'Grep',
       files: ['alpha.spec.ts'],
@@ -69,7 +81,9 @@ describe('run-test-groups', () => {
       grep: 'foo|bar',
     });
     expect(execSyncMock).toHaveBeenCalledWith(
-      expect.stringContaining('alpha.spec.ts -g "foo|bar" --workers=3 --reporter=dot'),
+      expect.stringContaining(
+        'alpha.spec.ts -g "foo|bar" --workers=3 --reporter=dot'
+      ),
       expect.objectContaining({ cwd: frontendRoot })
     );
   });
