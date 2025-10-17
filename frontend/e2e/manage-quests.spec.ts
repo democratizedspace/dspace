@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, waitForHydration, expectQuestIndexedDbState } from './test-helpers';
 
 const manageQuestsHydrationSelector = '.manage-quests[data-hydrated="true"]';
 
@@ -21,11 +21,17 @@ test.describe('Manage Quests', () => {
 
         // create quest
         await page.goto('/quests/create');
-        await page.fill('#title', questTitle);
-        await page.fill('#description', 'Quest created for deletion test');
-        const submit = page.locator('button.submit-button, input[type="submit"]');
-        await submit.click();
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await page.getByLabel(/Title/).fill(questTitle);
+        await page.getByLabel(/Description/).fill('Quest created for deletion test');
+        const createQuestButton = page.getByRole('button', { name: 'Create Quest' });
+        await expect(createQuestButton).toBeEnabled();
+        await Promise.all([page.waitForLoadState('networkidle'), createQuestButton.click()]);
+        const creationStatus = page.getByRole('status');
+        await expect(creationStatus).toContainText('Quest created successfully');
+        await expect(page.getByRole('link', { name: 'View quest' })).toBeVisible();
+        await expectQuestIndexedDbState(page, questTitle, { present: true });
 
         // go to manage page
         await page.goto('/quests/manage');
@@ -35,15 +41,19 @@ test.describe('Manage Quests', () => {
         const searchInput = page.getByPlaceholder('Search quests...');
         await searchInput.fill(questTitle);
 
-        const questRow = page.getByTestId('quest-row').filter({ hasText: questTitle }).first();
-        await questRow.scrollIntoViewIfNeeded();
-        await expect(questRow).toBeVisible();
+        const questRows = page.getByTestId('quest-row').filter({ hasText: questTitle });
+        await expect(questRows).toHaveCount(1);
+        const deleteButton = questRows.getByRole('button', { name: 'Delete' }).first();
+        await expect(deleteButton).toBeVisible();
 
         // accept confirmation dialog
-        page.on('dialog', (d) => d.accept());
-        await questRow.locator('.delete-button').click();
-        await page.waitForTimeout(500);
-        await expect(page.getByTestId('quest-row').filter({ hasText: questTitle })).toHaveCount(0);
+        page.once('dialog', async (dialog) => {
+            expect(dialog.type()).toBe('confirm');
+            await dialog.accept();
+        });
+        await deleteButton.click();
+        await expect(questRows).toHaveCount(0);
+        await expectQuestIndexedDbState(page, questTitle, { present: false });
 
         // reload and verify still gone
         await page.reload();
@@ -51,27 +61,6 @@ test.describe('Manage Quests', () => {
         await waitForHydration(page, manageQuestsHydrationSelector);
         await searchInput.fill(questTitle);
         await expect(page.getByTestId('quest-row').filter({ hasText: questTitle })).toHaveCount(0);
-
-        // check indexeddb
-        const exists = await page.evaluate(async (title) => {
-            const open = indexedDB.open('CustomContent');
-            const db = await new Promise<IDBDatabase>((resolve, reject) => {
-                open.onsuccess = () => resolve(open.result);
-                open.onerror = () => reject(open.error);
-                open.onupgradeneeded = () => resolve(open.result);
-            });
-            const tx = db.transaction('quests', 'readonly');
-            const store = tx.objectStore('quests');
-            const req = store.getAll();
-            const quests = await new Promise<Array<{ title: string }>>((resolve, reject) => {
-                req.onsuccess = () => resolve(req.result as Array<{ title: string }>);
-                req.onerror = () => reject(req.error);
-            });
-            db.close();
-            return quests.some((q) => q.title === title);
-        }, questTitle);
-
-        expect(exists).toBe(false);
     });
 
     test('should edit a custom quest title', async ({ page }) => {
@@ -79,10 +68,16 @@ test.describe('Manage Quests', () => {
         const updatedTitle = questTitle + ' Updated';
 
         await page.goto('/quests/create');
-        await page.fill('#title', questTitle);
-        await page.fill('#description', 'Quest to edit');
-        await page.click('button.submit-button');
         await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await page.getByLabel(/Title/).fill(questTitle);
+        await page.getByLabel(/Description/).fill('Quest to edit');
+        await Promise.all([
+            page.waitForLoadState('networkidle'),
+            page.getByRole('button', { name: 'Create Quest' }).click(),
+        ]);
+        await expect(page.getByRole('status')).toContainText('Quest created successfully');
+        await expectQuestIndexedDbState(page, questTitle, { present: true });
 
         await page.goto('/quests/manage');
         await page.waitForLoadState('networkidle');
@@ -101,9 +96,13 @@ test.describe('Manage Quests', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        await page.fill('#title', updatedTitle);
-        await page.click('button.submit-button');
-        await page.waitForLoadState('networkidle');
+        const titleInput = page.getByLabel(/Title/);
+        await titleInput.fill(updatedTitle);
+        const updateButton = page.getByRole('button', { name: 'Update Quest' });
+        await expect(updateButton).toBeEnabled();
+        await Promise.all([page.waitForLoadState('networkidle'), updateButton.click()]);
+        await expect(page.getByRole('status')).toContainText('Quest updated successfully');
+        await expectQuestIndexedDbState(page, updatedTitle, { present: true });
 
         await page.goto('/quests/manage');
         await page.waitForLoadState('networkidle');

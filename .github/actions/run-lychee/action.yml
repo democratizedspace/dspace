@@ -1,0 +1,62 @@
+name: Run Lychee link checker
+inputs:
+  version:
+    description: Lychee release version to install
+    default: "0.14.0"
+    required: false
+  args:
+    description: Arguments to pass to Lychee
+    required: true
+  format:
+    description: Output format passed to --format
+    default: markdown
+    required: false
+  output:
+    description: Path to write Lychee output
+    default: lychee/out.md
+    required: false
+outputs:
+  exit_code:
+    description: Exit code returned from Lychee
+    value: ${{ steps.run-lychee.outputs.exit_code }}
+runs:
+  using: composite
+  steps:
+    - name: Install Lychee
+      shell: bash
+      env:
+        LYCHEE_VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        tmp_dir="$(mktemp -d)"
+        url="https://github.com/lycheeverse/lychee/releases/download/v${LYCHEE_VERSION}/lychee-v${LYCHEE_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+        echo "Downloading Lychee ${LYCHEE_VERSION} from ${url}" >&2
+        curl --fail --location --silent --show-error --retry 5 --retry-delay 5 "${url}" --output "${tmp_dir}/lychee.tar.gz"
+        tar -xzf "${tmp_dir}/lychee.tar.gz" -C "${tmp_dir}"
+        install -m 0755 -D "${tmp_dir}/lychee" "$HOME/.local/bin/lychee"
+        rm -rf "${tmp_dir}"
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+    - name: Run Lychee
+      id: run-lychee
+      shell: bash
+      env:
+        LYCHEE_ARGS: ${{ inputs.args }}
+        LYCHEE_FORMAT: ${{ inputs.format }}
+        LYCHEE_OUTPUT: ${{ inputs.output }}
+      run: |
+        set -euo pipefail
+        mkdir -p "$(dirname -- "$LYCHEE_OUTPUT")"
+        set +e
+        eval lychee --format "$LYCHEE_FORMAT" --output "$LYCHEE_OUTPUT" $LYCHEE_ARGS
+        status=$?
+        set -e
+        if [[ -f "$LYCHEE_OUTPUT" ]]; then
+          cat "$LYCHEE_OUTPUT"
+          if [[ "$LYCHEE_FORMAT" == "markdown" && -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+            cat "$LYCHEE_OUTPUT" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        else
+          echo "Lychee produced no output" | tee "$LYCHEE_OUTPUT"
+        fi
+        echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+        exit "$status"

@@ -9,14 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: lycheeverse/lychee-action@v1.9.0
+      - name: Check links
+        uses: ./.github/actions/run-lychee
         with:
           args: >-
             --accept 403,429
             --no-progress --verbose
             "**/*.md"
-          fail: true
           format: markdown
           output: lychee/out.md
-          jobSummary: true
 

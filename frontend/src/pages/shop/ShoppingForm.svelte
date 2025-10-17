@@ -56,7 +56,14 @@
 
 <div>
     <!-- A text input field that will be used to enter the number of items to purchase -->
-    <input bind:value={count} class="num" type="number" id="quantity" min="1" />
+    <input
+        bind:value={count}
+        class="num"
+        type="number"
+        id="quantity"
+        min="1"
+        aria-label="Quantity"
+    />
 
     <p class="x">x</p>
 
@@ -76,7 +83,7 @@
 
     <br /><br />
 
-    <div id="buylink" />
+    <div id="buylink" data-testid="shop-link-output" aria-live="polite" />
 </div>
 
 <style>
