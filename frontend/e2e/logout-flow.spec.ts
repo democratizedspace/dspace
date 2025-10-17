@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, expectLocalStorageCleared, waitForHydration } from './test-helpers';
 
 async function setCloudGistId(page, gistId) {
     await page.evaluate(async (value) => {
@@ -39,34 +39,35 @@ test.describe('Logout flow', () => {
         const gistId = 'gist1234567890';
 
         await page.goto('/cloudsync');
-        await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        await page.fill('#token', token);
-        await page.getByRole('button', { name: 'Save' }).click();
+
+        const tokenField = page.getByLabel(/GitHub Token/i);
+        await tokenField.fill(token);
+        await page.getByRole('button', { name: /save/i }).click();
 
         await page.reload();
-        await page.waitForSelector('#token');
         await waitForHydration(page);
-        await expect(page.locator('#token')).toHaveValue(token);
+        await expect(tokenField).toHaveValue(token);
 
         await setCloudGistId(page, gistId);
         await page.reload();
-        await page.waitForSelector('#gist');
         await waitForHydration(page);
-        await expect(page.locator('#gist')).toHaveValue(gistId);
+        await expect(page.getByLabel(/Gist ID/i)).toHaveValue(gistId);
 
         await page.goto('/settings');
-        await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        const logoutButton = page.getByRole('button', { name: 'Log out' });
+        const logoutButton = page.getByRole('button', { name: /log\s*out/i });
         await expect(logoutButton).toBeVisible();
         await logoutButton.click();
+
         await expect(page.getByRole('status')).toHaveText('Credentials cleared from this device.');
+        await expect(page).toHaveURL(/\/settings\/?$/);
+        await expect(page.getByTestId('logout-state')).toHaveText('No saved credentials detected.');
+        await expectLocalStorageCleared(page, 'avatarUrl');
 
         await page.goto('/cloudsync');
-        await page.waitForSelector('#token');
         await waitForHydration(page);
-        await expect(page.locator('#token')).toHaveValue('');
-        await expect(page.locator('#gist')).toHaveValue('');
+        await expect(page.getByLabel(/GitHub Token/i)).toHaveValue('');
+        await expect(page.getByLabel(/Gist ID/i)).toHaveValue('');
     });
 });
