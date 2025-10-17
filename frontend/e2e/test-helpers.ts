@@ -536,15 +536,19 @@ async function trySelectItem(page: Page): Promise<boolean> {
  * @param page The Playwright page object
  * @param componentName Optional component name to look for in data-hydrated attributes
  */
-export async function waitForHydration(page: Page, target?: string): Promise<void> {
+export async function waitForHydration(page: Page, target?: string | Locator): Promise<void> {
     await page.waitForLoadState('domcontentloaded');
 
-    await expect(page.getByRole('main')).toBeVisible();
+    const mainRegion = page.getByRole('main');
+    await expect(mainRegion).toBeVisible();
 
     if (target) {
-        const locator = target.startsWith('data-testid=')
-            ? page.getByTestId(target.replace('data-testid=', '').trim())
-            : page.locator(target);
+        const locator =
+            typeof target === 'string'
+                ? target.startsWith('data-testid=')
+                    ? page.getByTestId(target.replace('data-testid=', '').trim())
+                    : page.locator(target)
+                : target;
         await expect(locator).toBeVisible();
         return;
     }
@@ -555,10 +559,35 @@ export async function waitForHydration(page: Page, target?: string): Promise<voi
     }
 }
 
+type WaitUntilState = 'load' | 'domcontentloaded' | 'networkidle' | 'commit';
+
+export async function gotoAndWaitForHydration(
+    page: Page,
+    path: string,
+    {
+        hydrationTarget,
+        waitUntil = 'domcontentloaded',
+    }: { hydrationTarget?: string | Locator; waitUntil?: WaitUntilState } = {}
+): Promise<void> {
+    await page.goto(path, { waitUntil });
+    await page.waitForLoadState('networkidle');
+    await waitForHydration(page, hydrationTarget);
+}
+
 export async function expectLocalStorageCleared(page: Page, key: string): Promise<void> {
     await expect
         .poll(async () => page.evaluate((candidate) => localStorage.getItem(candidate), key))
         .toBeNull();
+}
+
+export async function expectLocalStorageValue(
+    page: Page,
+    key: string,
+    expectedValue: string | null
+): Promise<void> {
+    await expect
+        .poll(async () => page.evaluate((candidate) => localStorage.getItem(candidate), key))
+        .toBe(expectedValue);
 }
 
 /**

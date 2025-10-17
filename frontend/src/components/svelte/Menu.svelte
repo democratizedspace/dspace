@@ -67,7 +67,7 @@
             <img class="pfp" src={avatarUrl} alt="Profile avatar" />
         </a>
     {/if}
-    <nav>
+    <nav aria-label="Primary navigation">
         {#each pinned as item}
             {#if isActive(item)}
                 <a class="active" href={item.href} aria-current="page">{item.name}</a>

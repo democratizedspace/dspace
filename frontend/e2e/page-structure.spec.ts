@@ -1,121 +1,95 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { clearUserData, gotoAndWaitForHydration } from './test-helpers';
+
+const pinnedNavLinks = ['Home', 'Quests', 'Inventory', 'Docs'];
 
 test.describe('Page Layout Structure', () => {
     test.beforeEach(async ({ page }) => {
-        // Clear user data before each test
         await clearUserData(page);
     });
 
-    test('home page should have correct structure with header, logo and navigation', async ({
-        page,
-    }) => {
-        // Go to the home page
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
+    test('home page surfaces brand header and primary navigation', async ({ page }) => {
+        const navToggle = page.getByRole('button', { name: 'Toggle additional menu items' });
+        await gotoAndWaitForHydration(page, '/', { hydrationTarget: navToggle });
 
-        // Verify logo exists
-        const logo = page.locator('img.logo');
-        await expect(logo).toBeVisible();
-        // Use regex for alt text since it might change
-        await expect(logo).toHaveAttribute('alt', /rocket|DSPACE|logo/i);
-        await expect(logo).toHaveAttribute('src', /.*logo\.png$/);
+        const main = page.getByRole('main');
+        await expect(main).toBeVisible();
 
-        // Verify title
-        const title = page.locator('.text-gradient.title');
-        await expect(title).toBeVisible();
-        await expect(title).toHaveText('DSPACE');
+        await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeVisible();
 
-        // Verify navigation menu - the test expects 3 links but there appear to be more now
-        // Let's match just the main navigation items instead of counting
-        const navLinks = page.locator('nav a');
-        // Remove the count check or update it to match the current number
-        // await expect(navLinks).toHaveCount(3);
+        const brandLink = page.getByRole('link', { name: 'Go to homepage' });
+        await expect(brandLink).toBeVisible();
+        await expect(
+            brandLink.getByRole('img', { name: 'Minimal rocket launching from Mars' })
+        ).toBeVisible();
 
-        // Verify Home, Quests, and Inventory links exist
-        await expect(page.getByRole('link', { name: 'Home', exact: true })).toBeVisible();
-        await expect(page.getByRole('link', { name: 'Quests', exact: true })).toBeVisible();
-        await expect(page.getByRole('link', { name: 'Inventory', exact: true })).toBeVisible();
+        const navigation = page.getByRole('navigation', { name: 'Primary navigation' });
+        await expect(navigation).toBeVisible();
 
-        // Verify the home link is active
-        await expect(page.getByRole('link', { name: 'Home', exact: true })).toHaveClass(/active/);
+        for (const label of pinnedNavLinks) {
+            await expect(navigation.getByRole('link', { name: label, exact: true })).toBeVisible();
+        }
+
+        await expect(navigation.getByRole('link', { name: 'Home', exact: true })).toHaveAttribute(
+            'aria-current',
+            'page'
+        );
+
+        await expect(page.getByRole('button', { name: 'Toggle dark mode' })).toBeVisible();
     });
 
-    test('quests page should have correct structure with action buttons', async ({ page }) => {
-        // Go to the quests page
-        await page.goto('/quests');
-        await page.waitForLoadState('networkidle');
+    test('quests page exposes action shortcuts and quest cards', async ({ page }) => {
+        const navToggle = page.getByRole('button', { name: 'Toggle additional menu items' });
+        await gotoAndWaitForHydration(page, '/quests', { hydrationTarget: navToggle });
 
-        // Verify navigation is showing Quests as active
-        // Use a more specific selector for the Quests link
-        const questsLink = page.getByRole('link', { name: 'Quests', exact: true });
-        await expect(questsLink).toHaveClass(/active/);
+        const navigation = page.getByRole('navigation', { name: 'Primary navigation' });
+        await expect(navigation.getByRole('link', { name: 'Quests', exact: true })).toHaveAttribute(
+            'aria-current',
+            'page'
+        );
 
-        // Verify action buttons are present - adjust selectors as needed
-        const createQuestButton = page.getByRole('link', { name: 'Create a new quest' });
-        const managedQuestsButton = page.getByRole('link', { name: 'Managed quests' });
+        await expect(page.getByRole('heading', { level: 2, name: 'Quests' })).toBeVisible();
+        await expect(
+            page.getByRole('link', { name: 'Create a new quest', exact: true })
+        ).toBeVisible();
+        await expect(page.getByRole('link', { name: 'Managed quests', exact: true })).toBeVisible();
 
-        await expect(createQuestButton).toBeVisible();
-        await expect(managedQuestsButton).toBeVisible();
-
-        // Verify quest grid exists - adjust selector if needed
-        const questsGrid = page.locator('.quests-grid, .quest-cards');
-        await expect(questsGrid).toBeVisible();
-
-        // Verify at least one quest card exists - adjust selector if needed
-        const questCards = page.locator('.quests-grid a, .quest-card');
-        await expect(questCards.first()).toBeVisible();
-
-        // Verify quest card has an image and text content
-        const firstQuestCard = questCards.first();
-        await expect(firstQuestCard.locator('img')).toBeVisible();
-        await expect(firstQuestCard.locator('h3, .quest-title')).toBeVisible();
+        await expect(page.getByRole('heading', { level: 3 }).first()).toBeVisible();
     });
 
-    test('inventory page should have correct structure with item list', async ({ page }) => {
-        // Go to the inventory page
-        await page.goto('/inventory');
-        await page.waitForLoadState('networkidle');
+    test('inventory page surfaces search tools and items', async ({ page }) => {
+        const navToggle = page.getByRole('button', { name: 'Toggle additional menu items' });
+        await gotoAndWaitForHydration(page, '/inventory', { hydrationTarget: navToggle });
 
-        // Take a screenshot to see what's actually on the page
-        await page.screenshot({ path: './test-artifacts/inventory-page.png' });
+        const navigation = page.getByRole('navigation', { name: 'Primary navigation' });
+        await expect(
+            navigation.getByRole('link', { name: 'Inventory', exact: true })
+        ).toHaveAttribute('aria-current', 'page');
 
-        // Verify navigation is showing Inventory as active
-        const inventoryLink = page.getByRole('link', { name: 'Inventory', exact: true });
-        await expect(inventoryLink).toHaveClass(/active/);
+        await expect(page.getByRole('heading', { level: 2, name: 'Inventory' })).toBeVisible();
+        await expect(page.getByRole('checkbox', { name: 'Show all items' })).toBeVisible();
+        await expect(page.getByRole('textbox', { name: 'Search items' })).toBeVisible();
 
-        // Verify page has content
-        const pageContent = page.locator('main');
-        await expect(pageContent).toBeVisible();
-
-        // Verify page title or heading exists (more flexible)
-        const titleOrHeading = page.locator('h1, h2, h3, .title, header').first();
-        await expect(titleOrHeading).toBeVisible();
+        await expect(page.getByRole('link', { name: /Count:/ }).first()).toBeVisible();
     });
 
-    test('page should be responsive across different screen sizes', async ({ page }) => {
-        // Test mobile view
-        await page.setViewportSize({ width: 375, height: 667 });
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
+    test('primary navigation remains visible across breakpoints', async ({ page }) => {
+        const viewports = [
+            { width: 375, height: 667 },
+            { width: 768, height: 1024 },
+            { width: 1366, height: 768 },
+        ];
 
-        // Take a screenshot for visual verification
-        await page.screenshot({ path: './test-artifacts/mobile-view.png' });
+        for (const viewport of viewports) {
+            await page.setViewportSize(viewport);
+            const navToggle = page.getByRole('button', { name: 'Toggle additional menu items' });
+            await gotoAndWaitForHydration(page, '/', { hydrationTarget: navToggle });
 
-        // Test tablet view
-        await page.setViewportSize({ width: 768, height: 1024 });
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
-
-        // Take a screenshot for visual verification
-        await page.screenshot({ path: './test-artifacts/tablet-view.png' });
-
-        // Test desktop view
-        await page.setViewportSize({ width: 1366, height: 768 });
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
-
-        // Take a screenshot for visual verification
-        await page.screenshot({ path: './test-artifacts/desktop-view.png' });
+            const navigation = page.getByRole('navigation', { name: 'Primary navigation' });
+            await expect(navigation).toBeVisible();
+            await expect(
+                navigation.getByRole('link', { name: 'Home', exact: true })
+            ).toHaveAttribute('aria-current', 'page');
+        }
     });
 });
