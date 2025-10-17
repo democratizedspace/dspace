@@ -2,12 +2,18 @@ import { test, expect, Page } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'node:url';
-import { clearUserData } from './test-helpers';
+import { resetClientStorage } from './utils/idb';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const questPath = path.resolve(__dirname, '../test-data/constellations-quest.json');
 const questTemplate = JSON.parse(fs.readFileSync(questPath, 'utf8'));
+
+const REGEX_SPECIAL_CHARACTERS = new RegExp(String.raw`[.*+?^${}()|[\]\\]`, 'g');
+
+function escapeRegExp(input: string): string {
+    return input.replace(REGEX_SPECIAL_CHARACTERS, '\\$&');
+}
 
 type QuestRecord = {
     id: number;
@@ -21,198 +27,300 @@ const CUSTOM_CONTENT_DB_NAME = 'CustomContent';
 const CUSTOM_CONTENT_DB_VERSION = 3;
 const QUEST_STORE_NAME = 'quests';
 
-async function findQuestIdByTitle(page: Page, title: string): Promise<number> {
-  return page.evaluate(
-    async ({ title, dbName, dbVersion, storeName }) => {
-      const openDB = () =>
+const QUEST_DB_CONFIG = {
+    dbName: CUSTOM_CONTENT_DB_NAME,
+    dbVersion: CUSTOM_CONTENT_DB_VERSION,
+    storeName: QUEST_STORE_NAME,
+    auxStores: [
+        { name: 'meta' },
+        { name: 'items', options: { keyPath: 'id' as const } },
+        { name: 'processes', options: { keyPath: 'id' as const } },
+    ],
+};
+
+type QuestDbOperation =
+    | { type: 'findByTitle'; title: string }
+    | { type: 'get'; id: number }
+    | { type: 'update'; id: number; questPatch: Record<string, unknown> };
+
+const questDbEvaluator = async ({
+    config,
+    operation,
+}: {
+    config: typeof QUEST_DB_CONFIG;
+    operation: QuestDbOperation;
+}): Promise<unknown> => {
+    const openDatabase = () =>
         new Promise<IDBDatabase>((resolve, reject) => {
-          const request = indexedDB.open(dbName, dbVersion);
+            const request = indexedDB.open(config.dbName, config.dbVersion);
 
-          request.onupgradeneeded = () => {
-            const db = request.result;
-            if (!db.objectStoreNames.contains('meta')) {
-              db.createObjectStore('meta');
-            }
-            if (!db.objectStoreNames.contains('items')) {
-              db.createObjectStore('items', { keyPath: 'id' });
-            }
-            if (!db.objectStoreNames.contains('processes')) {
-              db.createObjectStore('processes', { keyPath: 'id' });
-            }
-            if (!db.objectStoreNames.contains(storeName)) {
-              db.createObjectStore(storeName, { keyPath: 'id' });
-            }
-          };
+            request.onupgradeneeded = () => {
+                const db = request.result;
+                const ensureStore = (name: string, options?: IDBObjectStoreParameters) => {
+                    if (!db.objectStoreNames.contains(name)) {
+                        db.createObjectStore(name, options);
+                    }
+                };
 
-          request.onerror = () =>
-            reject(request.error ?? new Error('Failed to open IndexedDB'));
-          request.onsuccess = () => resolve(request.result);
+                for (const store of config.auxStores) {
+                    ensureStore(store.name, store.options);
+                }
+
+                ensureStore(config.storeName, { keyPath: 'id' });
+            };
+
+            request.onerror = () =>
+                reject(
+                    request.error ??
+                        new Error(`Failed to open IndexedDB database "${config.dbName}"`)
+                );
+            request.onsuccess = () => resolve(request.result);
         });
 
-      const db = await openDB();
-      try {
-        return await new Promise<number>((resolve, reject) => {
-          const transaction = db.transaction(storeName, 'readonly');
-          const store = transaction.objectStore(storeName);
-          const request = store.getAll();
+    const db = await openDatabase();
 
-          request.onsuccess = () => {
-            const quests = Array.isArray(request.result) ? request.result : [];
-            const match = quests.find((quest: { title?: string; id?: unknown }) => quest?.title === title);
-            resolve(match && typeof (match as any).id !== 'undefined' ? Number((match as any).id) : -1);
-          };
+    try {
+        if (operation.type === 'findByTitle') {
+            return await new Promise<number>((resolve, reject) => {
+                const transaction = db.transaction(config.storeName, 'readonly');
+                transaction.onabort = () =>
+                    reject(
+                        transaction.error ??
+                            new Error('Quest lookup transaction aborted unexpectedly')
+                    );
+                transaction.onerror = () =>
+                    reject(
+                        transaction.error ??
+                            new Error('Quest lookup transaction failed unexpectedly')
+                    );
 
-          request.onerror = () =>
-            reject(request.error ?? new Error('Failed to list quests'));
-        });
-      } finally {
+                const store = transaction.objectStore(config.storeName);
+                const request = store.getAll();
+                request.onerror = () =>
+                    reject(
+                        request.error ?? new Error('Failed to read quests from IndexedDB store')
+                    );
+                request.onsuccess = () => {
+                    const quests = Array.isArray(request.result) ? request.result : [];
+                    const match = quests.find(
+                        (quest: { title?: string | null; id?: unknown }) =>
+                            quest?.title === operation.title
+                    );
+
+                    if (!match || typeof match !== 'object') {
+                        resolve(-1);
+                        return;
+                    }
+
+                    const questId = Number((match as { id?: unknown }).id);
+                    resolve(Number.isFinite(questId) ? questId : -1);
+                };
+            });
+        }
+
+        if (operation.type === 'get') {
+            return await new Promise<QuestRecord | null>((resolve, reject) => {
+                const transaction = db.transaction(config.storeName, 'readonly');
+                transaction.onabort = () =>
+                    reject(
+                        transaction.error ??
+                            new Error('Quest read transaction aborted unexpectedly')
+                    );
+                transaction.onerror = () =>
+                    reject(
+                        transaction.error ??
+                            new Error('Quest read transaction failed unexpectedly')
+                    );
+
+                const store = transaction.objectStore(config.storeName);
+                const request = store.get(operation.id);
+                request.onerror = () =>
+                    reject(
+                        request.error ??
+                            new Error(`Failed to load quest ${operation.id} from IndexedDB`)
+                    );
+                request.onsuccess = () => {
+                    resolve((request.result as QuestRecord | null | undefined) ?? null);
+                };
+            });
+        }
+
+        if (operation.type === 'update') {
+            await new Promise<void>((resolve, reject) => {
+                const transaction = db.transaction(config.storeName, 'readwrite');
+                transaction.oncomplete = () => resolve();
+                transaction.onabort = () =>
+                    reject(
+                        transaction.error ??
+                            new Error(
+                                `Quest update transaction aborted for id ${operation.id}`
+                            )
+                    );
+                transaction.onerror = () =>
+                    reject(
+                        transaction.error ??
+                            new Error(`Quest update transaction failed for id ${operation.id}`)
+                    );
+
+                const store = transaction.objectStore(config.storeName);
+                const getRequest = store.get(operation.id);
+
+                getRequest.onerror = () =>
+                    reject(
+                        getRequest.error ??
+                            new Error(`Failed to load quest ${operation.id} before update`)
+                    );
+
+                getRequest.onsuccess = () => {
+                    const existingQuest = getRequest.result as QuestRecord | undefined;
+                    if (!existingQuest) {
+                        reject(new Error(`Quest not found with id ${operation.id}`));
+                        return;
+                    }
+
+                    const updatedQuest = {
+                        ...existingQuest,
+                        ...(operation.questPatch ?? {}),
+                        id: existingQuest.id,
+                        type: existingQuest.type ?? 'quest',
+                        createdAt: existingQuest.createdAt ?? new Date().toISOString(),
+                        updatedAt: new Date().toISOString(),
+                    } satisfies QuestRecord;
+
+                    const putRequest = store.put(updatedQuest);
+                    putRequest.onerror = () =>
+                        reject(
+                            putRequest.error ??
+                                new Error(`Failed to persist quest ${operation.id} to IndexedDB`)
+                        );
+                };
+            });
+
+            return true;
+        }
+
+        throw new Error(
+            `Unsupported quest DB operation: ${String((operation as { type?: unknown }).type)}`
+        );
+    } finally {
         db.close();
-      }
-    },
-    {
-      title,
-      dbName: CUSTOM_CONTENT_DB_NAME,
-      dbVersion: CUSTOM_CONTENT_DB_VERSION,
-      storeName: QUEST_STORE_NAME,
     }
-  );
+};
+
+async function runQuestDbOperation<T>(page: Page, operation: QuestDbOperation): Promise<T> {
+    return page.evaluate(questDbEvaluator, {
+        config: QUEST_DB_CONFIG,
+        operation,
+    }) as Promise<T>;
+}
+
+async function findQuestIdByTitle(page: Page, title: string): Promise<number> {
+    return runQuestDbOperation<number>(page, { type: 'findByTitle', title });
 }
 
 async function updateQuestInIndexedDB(page: Page, id: number, questPatch: unknown): Promise<void> {
-    await page.evaluate(
-        async ({
-            id,
-            questPatch,
-            dbName,
-            dbVersion,
-            storeName,
-        }: {
-            id: number;
-            questPatch: unknown;
-            dbName: string;
-            dbVersion: number;
-            storeName: string;
-        }) => {
-            const openDB = () =>
-                new Promise<IDBDatabase>((resolve, reject) => {
-                    const request = indexedDB.open(dbName, dbVersion);
-
-                    request.onupgradeneeded = () => {
-                        const db = request.result;
-                        if (!db.objectStoreNames.contains('meta')) {
-                            db.createObjectStore('meta');
-                        }
-                        if (!db.objectStoreNames.contains('items')) {
-                            db.createObjectStore('items', { keyPath: 'id' });
-                        }
-                        if (!db.objectStoreNames.contains('processes')) {
-                            db.createObjectStore('processes', { keyPath: 'id' });
-                        }
-                        if (!db.objectStoreNames.contains(storeName)) {
-                            db.createObjectStore(storeName, { keyPath: 'id' });
-                        }
-                    };
-
-                    request.onerror = () =>
-                        reject(request.error ?? new Error('Failed to open IndexedDB'));
-                    request.onsuccess = () => resolve(request.result);
-                });
-
-            const db = await openDB();
-            try {
-                await new Promise<void>((resolve, reject) => {
-                    const transaction = db.transaction(storeName, 'readwrite');
-                    const store = transaction.objectStore(storeName);
-                    const getRequest = store.get(id);
-
-                    getRequest.onerror = () =>
-                        reject(getRequest.error ?? new Error('Failed to load quest'));
-                    getRequest.onsuccess = () => {
-                        const existingQuest = getRequest.result as QuestRecord | undefined;
-                        if (!existingQuest) {
-                            reject(new Error(`Quest not found with id ${id}`));
-                            return;
-                        }
-
-                        const updatedQuest: QuestRecord = {
-                            ...existingQuest,
-                            ...(questPatch as Record<string, unknown>),
-                            id: existingQuest.id,
-                            type: existingQuest.type ?? 'quest',
-                            createdAt: existingQuest.createdAt,
-                            updatedAt: new Date().toISOString(),
-                        };
-
-                        const putRequest = store.put(updatedQuest);
-                        putRequest.onerror = () =>
-                            reject(putRequest.error ?? new Error('Failed to update quest'));
-                        putRequest.onsuccess = () => resolve();
-                    };
-                });
-            } finally {
-                db.close();
-            }
-        },
-        {
-            id,
-            questPatch,
-            dbName: CUSTOM_CONTENT_DB_NAME,
-            dbVersion: CUSTOM_CONTENT_DB_VERSION,
-            storeName: QUEST_STORE_NAME,
-        }
-    );
+    await runQuestDbOperation<boolean>(page, {
+        type: 'update',
+        id,
+        questPatch: (questPatch ?? {}) as Record<string, unknown>,
+    });
 }
 
 async function getQuestFromIndexedDB<T>(page: Page, id: number): Promise<T | null> {
-    return page.evaluate(
-        async ({ id, dbName, dbVersion, storeName }) => {
-            const openDB = () =>
+    return runQuestDbOperation<T | null>(page, { type: 'get', id });
+}
+
+async function waitForQuestIdByTitle(
+    page: Page,
+    title: string,
+    timeout = 10_000
+): Promise<number> {
+    const questIdHandle = await page.waitForFunction(
+        async ({ config, questTitle }) => {
+            const openDatabase = () =>
                 new Promise<IDBDatabase>((resolve, reject) => {
-                    const request = indexedDB.open(dbName, dbVersion);
+                    const request = indexedDB.open(config.dbName, config.dbVersion);
 
                     request.onupgradeneeded = () => {
                         const db = request.result;
-                        if (!db.objectStoreNames.contains('meta')) {
-                            db.createObjectStore('meta');
+                        const ensureStore = (name: string, options?: IDBObjectStoreParameters) => {
+                            if (!db.objectStoreNames.contains(name)) {
+                                db.createObjectStore(name, options);
+                            }
+                        };
+
+                        for (const store of config.auxStores) {
+                            ensureStore(store.name, store.options);
                         }
-                        if (!db.objectStoreNames.contains('items')) {
-                            db.createObjectStore('items', { keyPath: 'id' });
-                        }
-                        if (!db.objectStoreNames.contains('processes')) {
-                            db.createObjectStore('processes', { keyPath: 'id' });
-                        }
-                        if (!db.objectStoreNames.contains(storeName)) {
-                            db.createObjectStore(storeName, { keyPath: 'id' });
-                        }
+
+                        ensureStore(config.storeName, { keyPath: 'id' });
                     };
 
                     request.onerror = () =>
-                        reject(request.error ?? new Error('Failed to open IndexedDB'));
+                        reject(
+                            request.error ??
+                                new Error(`Failed to open IndexedDB database "${config.dbName}"`)
+                        );
                     request.onsuccess = () => resolve(request.result);
                 });
 
-            const db = await openDB();
+            let db: IDBDatabase | undefined;
             try {
-                return await new Promise((resolve, reject) => {
-                    const transaction = db.transaction(storeName, 'readonly');
-                    const store = transaction.objectStore(storeName);
-                    const request = store.get(id);
+                db = await openDatabase();
+                return await new Promise<number | null>((resolve, reject) => {
+                    const transaction = db!.transaction(config.storeName, 'readonly');
+                    transaction.onabort = () =>
+                        reject(
+                            transaction.error ??
+                                new Error('Quest lookup transaction aborted while waiting for quest')
+                        );
+                    transaction.onerror = () =>
+                        reject(
+                            transaction.error ??
+                                new Error('Quest lookup transaction failed while waiting for quest')
+                        );
 
-                    request.onsuccess = () => resolve(request.result ?? null);
+                    const store = transaction.objectStore(config.storeName);
+                    const request = store.getAll();
                     request.onerror = () =>
-                        reject(request.error ?? new Error('Failed to load quest'));
+                        reject(
+                            request.error ?? new Error('Failed to read quests while waiting for quest')
+                        );
+                    request.onsuccess = () => {
+                        const quests = Array.isArray(request.result) ? request.result : [];
+                        const match = quests.find(
+                            (quest: { title?: string | null; id?: unknown }) =>
+                                quest?.title === questTitle
+                        );
+
+                        if (!match || typeof match !== 'object') {
+                            resolve(null);
+                            return;
+                        }
+
+                        const questId = Number((match as { id?: unknown }).id);
+                        resolve(Number.isFinite(questId) && questId > 0 ? questId : null);
+                    };
                 });
+            } catch (error) {
+                console.warn('Quest lookup failed while waiting for quest:', error);
+                return null;
             } finally {
-                db.close();
+                if (db) {
+                    db.close();
+                }
             }
         },
-        {
-            id,
-            dbName: CUSTOM_CONTENT_DB_NAME,
-            dbVersion: CUSTOM_CONTENT_DB_VERSION,
-            storeName: QUEST_STORE_NAME,
-        }
+        { config: QUEST_DB_CONFIG, questTitle: title },
+        { timeout, polling: 200 }
     );
+
+    const questId = await questIdHandle.jsonValue();
+    if (typeof questId !== 'number' || questId <= 0) {
+        throw new Error(`Quest "${title}" was not found in IndexedDB within ${timeout}ms.`);
+    }
+
+    return questId;
 }
 
 /**
@@ -223,29 +331,44 @@ async function getQuestFromIndexedDB<T>(page: Page, id: number): Promise<T | nul
 
 test.describe('Constellations Quest Creation', () => {
     test.beforeEach(async ({ page }) => {
-        await clearUserData(page);
+        await resetClientStorage(page);
     });
 
     test('create and validate constellations quest', async ({ page }) => {
         // Step 1: create the quest via the UI
         await page.goto('/quests/create');
-        await page.waitForLoadState('networkidle');
+        await expect(page).toHaveURL(/\/quests\/create$/);
+        await expect(page.getByRole('heading', { level: 2, name: 'Create a New Quest' })).toBeVisible();
 
-        await page.fill('#title', questTemplate.title);
-        await page.fill('#description', questTemplate.description);
+        const titleInput = page.getByLabel(/Title/i);
+        await expect(titleInput).toBeVisible();
+        await titleInput.fill(questTemplate.title);
 
-        const imageInput = page.locator('input[type="file"]');
+        const descriptionInput = page.getByLabel(/Description/i);
+        await expect(descriptionInput).toBeVisible();
+        await descriptionInput.fill(questTemplate.description);
+
+        const imageInput = page.getByLabel(/Upload an Image/i);
         if ((await imageInput.count()) > 0) {
             await imageInput.setInputFiles(path.resolve(__dirname, '../test-data/test-image.jpg'));
         }
 
-        await page.click('button.submit-button');
-        await page.waitForLoadState('networkidle');
+        const submitButton = page.getByRole('button', { name: /Create Quest/i });
+        await expect(submitButton).toBeEnabled();
+        await submitButton.click();
+
+        const successMessage = page.getByRole('status', {
+            name: /Quest created successfully/i,
+        });
+        await expect(successMessage).toBeVisible();
 
         // Step 2: find the created quest id in IndexedDB
-        const questId = await findQuestIdByTitle(page, questTemplate.title);
-
+        const questId = await waitForQuestIdByTitle(page, questTemplate.title);
         expect(questId).toBeGreaterThan(0);
+
+        const viewQuestLink = successMessage.getByRole('link', { name: /View quest/i });
+        await expect(viewQuestLink).toBeVisible();
+        await expect(viewQuestLink).toHaveAttribute('href', new RegExp(`/quests/${questId}`));
 
         // Step 3: patch quest with full JSON
         const questPatch = JSON.parse(JSON.stringify(questTemplate));
@@ -260,7 +383,8 @@ test.describe('Constellations Quest Creation', () => {
 
         // Verify it appears in quests list
         await page.goto('/quests');
-        await page.waitForLoadState('networkidle');
-        await expect(page.locator(`text="${questTemplate.title}"`)).toBeVisible();
+        await expect(page).toHaveURL(/\/quests$/);
+        const questTitlePattern = new RegExp(`^${escapeRegExp(questTemplate.title)}$`, 'i');
+        await expect(page.getByRole('link', { name: questTitlePattern })).toBeVisible();
     });
 });
