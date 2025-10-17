@@ -17,6 +17,12 @@
     let token = '';
     let gistId = '';
     let message = '';
+    let messageType = '';
+
+    const announce = (text, type = '') => {
+        message = text;
+        messageType = type;
+    };
 
     onMount(async () => {
         token = await loadGitHubToken();
@@ -35,15 +41,15 @@
     const handleUpload = async () => {
         try {
             if (!isValidGitHubToken(token)) {
-                message = 'GitHub token looks invalid';
+                announce('GitHub token looks invalid', 'error');
                 return;
             }
             const id = await uploadGameStateToGist(token);
             gistId = id;
-            message = 'Upload successful';
+            announce('Upload successful', 'success');
         } catch (err) {
             console.error(err);
-            message = 'Upload failed';
+            announce('Upload failed', 'error');
         }
     };
 
@@ -55,14 +61,14 @@
     const handleDownload = async () => {
         try {
             if (!gistId) {
-                message = 'Gist ID required';
+                announce('Gist ID required', 'error');
                 return;
             }
             await downloadGameStateFromGist(token, gistId);
-            message = 'Download successful';
+            announce('Download successful', 'success');
         } catch (err) {
             console.error(err);
-            message = 'Download failed';
+            announce('Download failed', 'error');
         }
     };
 </script>
@@ -93,7 +99,17 @@
             <Chip text="Download" on:click={handleDownload} inverted={true} />
         </div>
         {#if message}
-            <p class="message">{message}</p>
+            <p
+                class={`message ${messageType}`}
+                role={messageType === 'error' ? 'alert' : 'status'}
+                data-testid={messageType === 'error'
+                    ? 'sync-error'
+                    : messageType === 'success'
+                    ? 'sync-success'
+                    : undefined}
+            >
+                {message}
+            </p>
         {/if}
     </div>
 </div>
@@ -119,6 +135,10 @@
     }
     .message {
         color: #90ee90;
+    }
+
+    .message.error {
+        color: #ff9f9f;
     }
     input {
         flex: 1;

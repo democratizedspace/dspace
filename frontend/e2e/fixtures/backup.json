@@ -1,0 +1,13 @@
+{
+    "items": [
+        {
+            "id": "ci-item-e2e",
+            "name": "CI Test Item",
+            "description": "Fixture item for end-to-end custom backup coverage",
+            "type": "custom",
+            "createdAt": "2024-01-01T00:00:00.000Z"
+        }
+    ],
+    "processes": [],
+    "quests": []
+}
