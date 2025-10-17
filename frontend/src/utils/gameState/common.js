@@ -9,6 +9,7 @@ const LS_STATE_KEY = 'gameState';
 const LS_BACKUP_KEY = 'gameStateBackup';
 
 let dbPromise;
+let dbInstance;
 let useLocalStorage = false;
 let warnedFallback = false;
 export const isUsingLocalStorage = () => useLocalStorage;
@@ -41,7 +42,24 @@ function openDB() {
                     db.createObjectStore(BACKUP_STORE);
                 }
             };
-            request.onsuccess = () => resolve(request.result);
+            request.onsuccess = () => {
+                const db = request.result;
+                dbInstance = db;
+                db.onclose = () => {
+                    if (dbInstance === db) {
+                        dbInstance = undefined;
+                        dbPromise = undefined;
+                    }
+                };
+                db.onversionchange = () => {
+                    try {
+                        db.close();
+                    } catch (err) {
+                        console.warn('Error closing game state database on version change:', err);
+                    }
+                };
+                resolve(db);
+            };
             request.onerror = () => reject(request.error);
         });
     }
@@ -197,6 +215,30 @@ export const saveGameState = async (newState) => {
         await write(STATE_STORE, gameState).catch(() => undefined);
     });
     return writeQueue;
+};
+
+export const closeGameStateDatabaseForTesting = async () => {
+    try {
+        await writeQueue.catch(() => undefined);
+    } catch (err) {
+        console.warn('Error awaiting pending game state writes before closing:', err);
+    }
+
+    if (!dbPromise && !dbInstance) {
+        return;
+    }
+
+    try {
+        const db = dbInstance ?? (await dbPromise.catch(() => undefined));
+        if (db) {
+            db.close();
+        }
+    } catch (err) {
+        console.warn('Failed to close game state database for testing:', err);
+    } finally {
+        dbInstance = undefined;
+        dbPromise = undefined;
+    }
 };
 
 export const exportGameStateString = () => btoa(JSON.stringify(gameState));
