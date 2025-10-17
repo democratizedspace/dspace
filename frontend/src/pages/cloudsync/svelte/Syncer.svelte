@@ -93,7 +93,14 @@
             <Chip text="Download" on:click={handleDownload} inverted={true} />
         </div>
         {#if message}
-            <p class="message">{message}</p>
+            <p
+                class="message"
+                data-testid={message.toLowerCase().includes('success')
+                    ? 'sync-success'
+                    : 'sync-error'}
+            >
+                {message}
+            </p>
         {/if}
     </div>
 </div>

@@ -114,6 +114,12 @@ export async function purgeClientState(page: Page): Promise<void> {
     );
 }
 
+export async function expectLocalStorageCleared(page: Page, key: string): Promise<void> {
+    await expect
+        .poll(async () => page.evaluate((storageKey) => localStorage.getItem(storageKey), key))
+        .toBeNull();
+}
+
 /**
  * Clears persisted user data for backwards compatibility with older helpers.
  */
