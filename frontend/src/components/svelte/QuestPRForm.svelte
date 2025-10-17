@@ -80,7 +80,9 @@
             >
         </div>
         {#if validationErrors.token}
-            <span class="error-message">{validationErrors.token}</span>
+            <span class="error-message" data-testid="quest-token-error"
+                >{validationErrors.token}</span
+            >
         {/if}
     </div>
     <div class="form-group">
@@ -97,7 +99,9 @@
             required
         />
         {#if validationErrors.quest}
-            <span class="error-message">{validationErrors.quest}</span>
+            <span class="error-message" data-testid="quest-json-error"
+                >{validationErrors.quest}</span
+            >
         {/if}
     </div>
     <div class="form-submit">

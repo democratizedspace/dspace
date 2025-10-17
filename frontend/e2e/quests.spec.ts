@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { purgeClientState, waitForHydration, waitForQuestRecordByTitle } from './test-helpers';
 
-const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\]/g, '\$&');
+const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 test.describe('Quest creation flow', () => {
     test.beforeEach(async ({ page }) => {
