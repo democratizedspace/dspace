@@ -17,6 +17,7 @@
     let token = '';
     let gistId = '';
     let message = '';
+    let messageType = '';
 
     onMount(async () => {
         token = await loadGitHubToken();
@@ -36,14 +37,17 @@
         try {
             if (!isValidGitHubToken(token)) {
                 message = 'GitHub token looks invalid';
+                messageType = 'error';
                 return;
             }
             const id = await uploadGameStateToGist(token);
             gistId = id;
             message = 'Upload successful';
+            messageType = 'success';
         } catch (err) {
             console.error(err);
             message = 'Upload failed';
+            messageType = 'error';
         }
     };
 
@@ -56,13 +60,16 @@
         try {
             if (!gistId) {
                 message = 'Gist ID required';
+                messageType = 'error';
                 return;
             }
             await downloadGameStateFromGist(token, gistId);
             message = 'Download successful';
+            messageType = 'success';
         } catch (err) {
             console.error(err);
             message = 'Download failed';
+            messageType = 'error';
         }
     };
 </script>
@@ -93,7 +100,12 @@
             <Chip text="Download" on:click={handleDownload} inverted={true} />
         </div>
         {#if message}
-            <p class="message">{message}</p>
+            <p
+                class="message"
+                data-testid={messageType === 'success' ? 'sync-success' : 'sync-error'}
+            >
+                {message}
+            </p>
         {/if}
     </div>
 </div>

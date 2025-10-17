@@ -1,0 +1,13 @@
+{
+    "items": [
+        {
+            "id": "fixture-item",
+            "name": "Fixture importer",
+            "description": "E2E fixture item",
+            "custom": true,
+            "category": "custom"
+        }
+    ],
+    "processes": [],
+    "quests": []
+}
