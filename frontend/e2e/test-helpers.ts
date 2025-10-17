@@ -1,21 +1,155 @@
 import { Page, Locator, expect } from '@playwright/test';
 
+type WaitForQuestRecordOptions = {
+    timeoutMs?: number;
+};
+
+/**
+ * Clears all persisted client state for a deterministic test baseline.
+ */
+export async function purgeClientState(page: Page): Promise<void> {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    await page.evaluate(async () => {
+        localStorage.clear();
+        sessionStorage.clear();
+
+        const deleteDatabase = () =>
+            new Promise<void>((resolve, reject) => {
+                const request = indexedDB.deleteDatabase('CustomContent');
+
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error ?? new Error('Failed to delete DB'));
+                request.onblocked = () => {
+                    // eslint-disable-next-line no-console -- surface useful debug info during CI flakes
+                    console.warn('IndexedDB deletion blocked. Retrying on next run.');
+                    resolve();
+                };
+            });
+
+        try {
+            await deleteDatabase();
+        } catch (error) {
+            // eslint-disable-next-line no-console -- surfaced for CI debugging when persistence is unavailable
+            console.warn('Failed to delete CustomContent DB during purge:', error);
+        }
+    });
+}
+
+/**
+ * Waits for a quest with the provided title to exist in IndexedDB.
+ * Returns the quest identifier converted with Number() once present.
+ */
+export async function waitForQuestRecordByTitle(
+    page: Page,
+    title: string,
+    { timeoutMs = 15_000 }: WaitForQuestRecordOptions = {}
+): Promise<number> {
+    const handle = await page.waitForFunction(
+        async (questTitle) => {
+            const normalizeTitle = (input: unknown) =>
+                typeof input === 'string' ? input.trim().toLowerCase() : '';
+
+            const lookupQuestId = () =>
+                new Promise<unknown>((resolve, reject) => {
+                    const openRequest = indexedDB.open('CustomContent');
+
+                    openRequest.onerror = () => reject(openRequest.error);
+                    openRequest.onsuccess = () => {
+                        const db = openRequest.result;
+
+                        if (!db.objectStoreNames.contains('quests')) {
+                            db.close();
+                            resolve(null);
+                            return;
+                        }
+
+                        const transaction = db.transaction('quests', 'readonly');
+                        const store = transaction.objectStore('quests');
+                        const targetTitle = normalizeTitle(questTitle);
+
+                        const handleMatch = (value: Record<string, unknown> | undefined | null) => {
+                            if (!value) {
+                                return null;
+                            }
+
+                            const questTitleValue = normalizeTitle(value.title);
+                            if (questTitleValue !== targetTitle) {
+                                return null;
+                            }
+
+                            return value.id ?? null;
+                        };
+
+                        if (typeof store.getAll === 'function') {
+                            const getAllRequest = store.getAll();
+                            getAllRequest.onerror = () => {
+                                db.close();
+                                resolve(null);
+                            };
+                            getAllRequest.onsuccess = () => {
+                                const quests = Array.isArray(getAllRequest.result)
+                                    ? getAllRequest.result
+                                    : [];
+                                let matchedId: unknown = null;
+                                for (const quest of quests) {
+                                    const result = handleMatch(quest);
+                                    if (result != null) {
+                                        matchedId = result;
+                                        break;
+                                    }
+                                }
+                                db.close();
+                                resolve(matchedId);
+                            };
+                            return;
+                        }
+
+                        const cursorRequest = store.openCursor();
+                        cursorRequest.onerror = () => {
+                            db.close();
+                            resolve(null);
+                        };
+                        cursorRequest.onsuccess = () => {
+                            const cursor = cursorRequest.result;
+                            if (!cursor) {
+                                db.close();
+                                resolve(null);
+                                return;
+                            }
+
+                            const match = handleMatch(cursor.value as Record<string, unknown>);
+                            if (match != null) {
+                                db.close();
+                                resolve(match);
+                                return;
+                            }
+
+                            cursor.continue();
+                        };
+                    };
+                });
+
+            const questId = await lookupQuestId();
+            return questId ?? undefined;
+        },
+        title,
+        { timeout: timeoutMs }
+    );
+
+    const questId = await handle.jsonValue();
+    return Number(questId);
+}
+
 /**
  * Utility functions to help with testing the DSpace application
  */
 
 /**
- * Clears user data by clearing localStorage
- * (IndexedDB access is restricted in Playwright)
+ * Legacy helper retained for backwards compatibility.
  */
 export async function clearUserData(page: Page): Promise<void> {
-    // Navigate to the site root first to ensure we're on the correct domain
-    await page.goto('/');
-    // Clear localStorage
-    await page.evaluate(() => {
-        localStorage.clear();
-        console.log('User data cleared via localStorage');
-    });
+    await purgeClientState(page);
 }
 
 /**
