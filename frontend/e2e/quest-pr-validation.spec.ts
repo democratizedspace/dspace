@@ -1,20 +1,19 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { purgeClientState, waitForHydration } from './test-helpers';
 
 test.beforeEach(async ({ page }) => {
-    await clearUserData(page);
+    await purgeClientState(page);
 });
 
 test('invalid token shows validation message', async ({ page }) => {
     await page.goto('/quests/submit');
-    await page.waitForLoadState('networkidle');
+    await waitForHydration(page);
 
-    await page.fill('#token', 'bad');
-    await page.fill('#quest', '{}');
+    await page.getByLabel('GitHub Token*').fill('bad');
+    await page.getByLabel('Quest JSON*').fill('{}');
 
-    await page.click('button:has-text("Create Pull Request")');
+    await page.getByRole('button', { name: 'Create Pull Request' }).click();
 
-    const tokenError = page.locator('.error-message', { hasText: 'GitHub token looks invalid' });
-    await expect(tokenError).toBeVisible();
+    await expect(page.getByTestId('token-error')).toHaveText('GitHub token looks invalid');
     await expect(page.getByTestId('submit-error')).toHaveText('Please fix the errors above');
 });

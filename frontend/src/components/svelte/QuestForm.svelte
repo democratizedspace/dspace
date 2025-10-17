@@ -743,7 +743,9 @@
             on:input={handleTitleInput}
         />
         {#if validationErrors.title}
-            <span class="error-message">{validationErrors.title}</span>
+            <span class="error-message" data-testid="quest-title-error"
+                >{validationErrors.title}</span
+            >
         {/if}
     </div>
 
@@ -757,7 +759,9 @@
             on:input={handleDescriptionInput}
         />
         {#if validationErrors.description}
-            <span class="error-message">{validationErrors.description}</span>
+            <span class="error-message" data-testid="quest-description-error"
+                >{validationErrors.description}</span
+            >
         {/if}
     </div>
 
