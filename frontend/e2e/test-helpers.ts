@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { resetClientState } from './utils/idb';
 
 /**
  * Utility functions to help with testing the DSpace application
@@ -9,13 +10,7 @@ import { Page, Locator, expect } from '@playwright/test';
  * (IndexedDB access is restricted in Playwright)
  */
 export async function clearUserData(page: Page): Promise<void> {
-    // Navigate to the site root first to ensure we're on the correct domain
-    await page.goto('/');
-    // Clear localStorage
-    await page.evaluate(() => {
-        localStorage.clear();
-        console.log('User data cleared via localStorage');
-    });
+    await resetClientState(page);
 }
 
 /**

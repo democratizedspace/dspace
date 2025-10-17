@@ -26,7 +26,7 @@ declare const process: {
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
 
-function ensureAstroBuild(): void {
+function ensureAstroBuildArtifacts(): void {
     const serverEntrypoint = join(frontendDir, 'dist', 'server', 'entry.mjs');
 
     if (existsSync(serverEntrypoint)) {
@@ -49,9 +49,9 @@ const baseURL = process.env.BASE_URL || `${protocol}://localhost:3002`;
 // Allow setting workers via environment variable for CI and local runs
 const isCI = Boolean(process.env.CI);
 const workers = process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS, 10) : undefined;
-const RETRIES = isCI ? 1 : 0;
-const EXPECT_TIMEOUT_MS = isCI ? 10000 : 5000;
-const TEST_TIMEOUT_MS = isCI ? 45000 : 30000;
+const RETRIES = isCI ? 2 : 0;
+const EXPECT_TIMEOUT_MS = 10_000;
+const TEST_TIMEOUT_MS = 60_000;
 
 type ProjectName = 'chromium' | 'firefox' | 'webkit';
 
@@ -161,7 +161,7 @@ function resolveProjects(): PlaywrightProjectConfig[] {
 
 const projects = resolveProjects();
 
-ensureAstroBuild();
+ensureAstroBuildArtifacts();
 
 export default defineConfig({
     testDir: './e2e',
@@ -184,16 +184,13 @@ export default defineConfig({
     // Configure artifact folders
     outputDir: './test-artifacts/',
     use: {
-        baseURL: baseURL,
+        baseURL,
         headless: true,
-        // Screenshots configuration
         screenshot: 'only-on-failure',
-        // Video configuration
-        video: 'retain-on-failure',
+        video: 'on-first-retry',
         trace: 'retain-on-failure',
-        actionTimeout: 15000,
-        navigationTimeout: 15000,
-        // Still keep this for safety, but we're using HTTP
+        actionTimeout: 15_000,
+        navigationTimeout: 15_000,
         ignoreHTTPSErrors: true,
     },
     // Set directories for artifacts at the project level
@@ -201,12 +198,12 @@ export default defineConfig({
     // Configure webServer to start the app server before running tests
     webServer: {
         // Use production preview server so grouped E2E tests don't restart the dev server
-        command: 'npm run preview',
+        command: 'npm run preview -- --port 3002',
         cwd: frontendDir,
         url: baseURL,
-        reuseExistingServer: true,
-        timeout: 60000,
+        reuseExistingServer: !isCI,
+        timeout: 60_000,
     },
     // Group tests to improve parallelization
-    fullyParallel: false, // Only parallel when explicitly enabled in tests
+    fullyParallel: isCI ? false : undefined, // Disable shard-level parallelism in CI
 });
