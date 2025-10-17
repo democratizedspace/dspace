@@ -78,6 +78,7 @@ const TEST_GROUPS = [
         files: [
             'chat-persona-switching.spec.ts',
             'dark-mode-toggle.spec.ts',
+            'local-storage-helpers.spec.ts',
             'item-preview.spec.ts',
             'logout-flow.spec.ts',
             'stats-page.spec.ts',

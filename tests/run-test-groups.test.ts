@@ -2,21 +2,28 @@ import { describe, it, expect, vi, beforeAll, afterEach } from 'vitest';
 let runTestGroup: any;
 let TEST_GROUPS: any;
 
+import fs from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
 
-const execSyncMock = vi.fn();
-const existsSyncMock = vi.fn(() => true);
+const { execSyncMock, existsSyncMock } = vi.hoisted(() => ({
+  execSyncMock: vi.fn(),
+  existsSyncMock: vi.fn(() => true),
+}));
 const frontendRoot = path.resolve(__dirname, '../frontend');
 
 vi.mock('child_process', () => ({
   execSync: execSyncMock,
   default: { execSync: execSyncMock },
 }));
-vi.mock('fs', () => ({
-  existsSync: existsSyncMock,
-  default: { existsSync: existsSyncMock },
-}));
+vi.mock('fs', async () => {
+  const actualFs = await vi.importActual<typeof import('fs')>('fs');
+  return {
+    ...actualFs,
+    existsSync: existsSyncMock,
+    default: { ...actualFs, existsSync: existsSyncMock },
+  };
+});
 
 beforeAll(async () => {
   const fileUrl = pathToFileURL(path.resolve(__dirname, '../frontend/scripts/run-test-groups.mjs'));
@@ -72,5 +79,22 @@ describe('run-test-groups', () => {
       expect.stringContaining('alpha.spec.ts -g "foo|bar" --workers=3 --reporter=dot'),
       expect.objectContaining({ cwd: frontendRoot })
     );
+  });
+
+  it('includes every e2e spec in the configured groups', () => {
+    const e2eDir = path.resolve(__dirname, '../frontend/e2e');
+    const specFiles = fs
+      .readdirSync(e2eDir, { withFileTypes: true })
+      .filter((entry) => entry.isFile() && entry.name.endsWith('.spec.ts'))
+      .map((entry) => entry.name)
+      .sort();
+
+    const groupedFiles = new Set(
+      TEST_GROUPS.flatMap((group: any) => (group.files ? group.files : []))
+    );
+
+    const missingFiles = specFiles.filter((file) => !groupedFiles.has(file));
+
+    expect(missingFiles).toEqual([]);
   });
 });
