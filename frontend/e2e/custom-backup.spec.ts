@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { clearUserData, waitForHydration } from './test-helpers';
 
-const FIXTURE_PATH = path.join(__dirname, 'fixtures', 'backup.json');
+const FIXTURE_DIR = path.dirname(fileURLToPath(import.meta.url));
+const FIXTURE_PATH = path.join(FIXTURE_DIR, 'fixtures', 'backup.json');
 
 test.describe('Custom content backup', () => {
     test.beforeEach(async ({ page }) => {
