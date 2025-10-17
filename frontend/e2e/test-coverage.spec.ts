@@ -184,7 +184,10 @@ test('verify playwright web server is properly configured', async ({ page }, tes
         (typeof testInfo.config.use?.baseURL === 'string' && testInfo.config.use.baseURL) ||
         undefined;
 
-    expect(configuredBaseURL, 'Playwright baseURL should be configured for coverage test').toBeTruthy();
+    expect(
+        configuredBaseURL,
+        'Playwright baseURL should be configured for coverage test'
+    ).toBeTruthy();
 
     if (configuredBaseURL) {
         expect(url).toContain(configuredBaseURL.replace(/\/$/, ''));

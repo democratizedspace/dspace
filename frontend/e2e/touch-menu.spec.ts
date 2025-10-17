@@ -12,11 +12,11 @@ test.describe('touch navigation menu', () => {
 
         const navigation = page.getByRole('navigation');
         const toggle = navigation.getByRole('button', {
-            name: 'Toggle additional menu items'
+            name: 'Toggle additional menu items',
         });
         const unpinnedMenu = page.getByRole('region', { name: 'Additional menu items' });
         const unpinnedItem = navigation.getByRole('link', {
-            name: /import\/export gamesaves/i
+            name: /import\/export gamesaves/i,
         });
 
         await expect(toggle).toHaveAttribute('data-hydrated', 'true');
