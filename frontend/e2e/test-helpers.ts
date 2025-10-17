@@ -1,5 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 
+import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
+
 /**
  * Utility functions to help with testing the DSpace application
  */
@@ -525,35 +527,35 @@ export async function fillProcessForm(
 async function trySelectItem(page: Page): Promise<boolean> {
     try {
         // Look for select elements or dropdown buttons that appeared
-        const selectors = [
-            page.locator('select').first(),
-            page.locator('button:has-text("Select")').first(),
-            page.locator('.item-selector').first(),
-        ];
+        const selectElement = page.locator('select').first();
+        if ((await selectElement.count()) > 0 && (await selectElement.isVisible())) {
+            await selectElement.selectOption({ index: 1 });
+            return true;
+        }
 
-        for (const selector of selectors) {
-            if ((await selector.count()) > 0 && (await selector.isVisible())) {
-                // For select elements
-                if ((await page.locator('select').count()) > 0) {
-                    // Choose the second option (index 1) to avoid selecting placeholder
-                    await page.locator('select').first().selectOption({ index: 1 });
-                    return true;
-                }
+        const selectButton = page.locator('button:has-text("Select")').first();
+        if ((await selectButton.count()) > 0 && (await selectButton.isVisible())) {
+            await selectButton.click();
+            const dropdownItem = page.locator(ITEM_SELECTOR_OPTION_LOCATORS.join(', ')).first();
+            await expect(dropdownItem).toBeVisible();
+            await dropdownItem.click();
+            return true;
+        }
 
-                // For buttons that open a dropdown
-                await selector.click();
+        const itemSelectors = page.locator('.item-selector');
+        if ((await itemSelectors.count()) > 0) {
+            const target = itemSelectors.last();
+            await expect(target).toHaveAttribute('data-hydrated', 'true');
 
-                // Try to click the first item in any dropdown that appears
-                const dropdownItem = page
-                    .locator(
-                        '.dropdown-menu .item, .item-list .item, .selector-expanded .item, [role="listbox"] [role="option"]'
-                    )
-                    .first();
-
-                await expect(dropdownItem).toBeVisible();
-                await dropdownItem.click();
-                return true;
+            const toggle = target.locator('button.select-button, button.edit-button');
+            if ((await toggle.count()) > 0 && (await toggle.first().isVisible())) {
+                await toggle.first().click();
             }
+
+            const dropdownItem = target.locator(ITEM_SELECTOR_OPTION_LOCATORS.join(', ')).first();
+            await expect(dropdownItem).toBeVisible();
+            await dropdownItem.click();
+            return true;
         }
     } catch (e) {
         console.log('Error trying to select item:', e);
