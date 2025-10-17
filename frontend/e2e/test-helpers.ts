@@ -11,7 +11,7 @@ export async function purgeClientState(page: Page): Promise<void> {
         localStorage.clear();
         sessionStorage.clear();
 
-        const targets = ['CustomContent'];
+        const targets = ['CustomContent', 'dspaceGameState', 'dspaceDB', 'dspaceGameSaves'];
         await Promise.all(
             targets.map(
                 (name) =>
@@ -532,5 +532,20 @@ export async function addTestItems(page: Page): Promise<void> {
         // Save back to localStorage
         localStorage.setItem('inventory', JSON.stringify(inventory));
         console.log('Added test items to inventory');
+    });
+}
+
+type Hookable = {
+    beforeEach: (fn: ({ page }: { page: Page }) => Promise<void>) => void;
+    afterEach: (fn: ({ page }: { page: Page }) => Promise<void>) => void;
+};
+
+export function registerClientStateHooks(testApi: Hookable): void {
+    testApi.beforeEach(async ({ page }) => {
+        await purgeClientState(page);
+    });
+
+    testApi.afterEach(async ({ page }) => {
+        await purgeClientState(page);
     });
 }

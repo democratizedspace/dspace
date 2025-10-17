@@ -1,15 +1,19 @@
 import { test, expect } from '@playwright/test';
+import { registerClientStateHooks, waitForHydration } from './test-helpers';
+
+registerClientStateHooks(test);
 
 test('Authentication flow saves and clears token', async ({ page }) => {
     const token = 'ghp_' + 'a'.repeat(36);
     await page.goto('/cloudsync');
+    await waitForHydration(page);
 
-    const tokenInput = page.locator('#token');
+    const tokenInput = page.getByLabel(/GitHub Token/i);
     await tokenInput.fill(token);
     await page.getByRole('button', { name: 'Save' }).click();
 
     const getStoredToken = async () =>
-        await page.evaluate(async () => {
+        page.evaluate(async () => {
             async function readIDB() {
                 return await new Promise((resolve) => {
                     const req = indexedDB.open('dspaceGameState');
@@ -41,14 +45,14 @@ test('Authentication flow saves and clears token', async ({ page }) => {
             }
         });
 
-    expect(await getStoredToken()).toBe(token);
+    await expect.poll(getStoredToken).toBe(token);
 
     await page.reload();
-    await page.waitForFunction((t) => document.getElementById('token')?.value === t, token);
-    await expect(page.locator('#token')).toHaveValue(token);
+    await waitForHydration(page);
+    await expect(tokenInput).toHaveValue(token);
 
     // clear token and verify removal
     await page.getByTestId('clear-sync-token').click();
-    await page.waitForFunction(() => document.getElementById('token')?.value === '');
-    expect(await getStoredToken()).toBe('');
+    await expect(tokenInput).toHaveValue('');
+    await expect.poll(getStoredToken).toBe('');
 });
