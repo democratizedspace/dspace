@@ -1,17 +1,48 @@
 import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { chromium } from '@playwright/test';
 
 const INSTALL_COMMAND = 'npx playwright install --with-deps chromium';
 
-function hasChromiumExecutable(browser) {
+export function resolveHeadlessShellPath(executablePath) {
+    if (!executablePath) {
+        return '';
+    }
+
+    const chromeDir = path.dirname(executablePath);
+    const revisionDir = path.dirname(chromeDir);
+    const revisionBasename = path.basename(revisionDir);
+
+    if (!revisionBasename.startsWith('chromium-')) {
+        return '';
+    }
+
+    const headlessRevisionDir = path.join(
+        path.dirname(revisionDir),
+        revisionBasename.replace('chromium-', 'chromium_headless_shell-')
+    );
+
+    return path.join(headlessRevisionDir, 'chrome-linux', 'headless_shell');
+}
+
+export function hasChromiumExecutable(browser) {
     try {
         const executablePath = browser.executablePath();
         if (!executablePath) {
             return false;
         }
 
-        return existsSync(executablePath);
+        if (!existsSync(executablePath)) {
+            return false;
+        }
+
+        const headlessShellPath = resolveHeadlessShellPath(executablePath);
+        if (!headlessShellPath) {
+            return false;
+        }
+
+        return existsSync(headlessShellPath);
     } catch (error) {
         return false;
     }
