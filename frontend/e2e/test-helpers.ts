@@ -1,21 +1,136 @@
 import { Page, Locator, expect } from '@playwright/test';
 
+type WaitForQuestRecordOptions = {
+    timeoutMs?: number;
+};
+
+export async function purgeClientState(page: Page): Promise<void> {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    await page.evaluate(async () => {
+        const deleteDatabase = (name: string) =>
+            new Promise<void>((resolve) => {
+                try {
+                    const request = indexedDB.deleteDatabase(name);
+                    request.onerror = () => resolve();
+                    request.onblocked = () => resolve();
+                    request.onsuccess = () => resolve();
+                } catch (error) {
+                    console.warn('Failed to delete IndexedDB database', name, error);
+                    resolve();
+                }
+            });
+
+        try {
+            await deleteDatabase('CustomContent');
+        } catch (error) {
+            console.warn('Unable to purge CustomContent database', error);
+        }
+
+        try {
+            localStorage.clear();
+            sessionStorage.clear();
+        } catch (error) {
+            console.warn('Failed to clear web storage', error);
+        }
+    });
+}
+
+export async function waitForQuestRecordByTitle(
+    page: Page,
+    title: string,
+    { timeoutMs = 15_000 }: WaitForQuestRecordOptions = {}
+): Promise<number> {
+    const handle = await page.waitForFunction(
+        async (questTitle) => {
+            const lookupQuestId = () =>
+                new Promise<number | string | null>((resolve) => {
+                    try {
+                        const request = indexedDB.open('CustomContent');
+
+                        request.onerror = () => resolve(null);
+                        request.onupgradeneeded = () => resolve(null);
+                        request.onsuccess = () => {
+                            const db = request.result;
+
+                            if (!db.objectStoreNames.contains('quests')) {
+                                db.close();
+                                resolve(null);
+                                return;
+                            }
+
+                            const transaction = db.transaction('quests', 'readonly');
+                            const store = transaction.objectStore('quests');
+                            const getAll = store.getAll();
+
+                            getAll.onerror = () => {
+                                db.close();
+                                resolve(null);
+                            };
+
+                            getAll.onsuccess = () => {
+                                const quests = Array.isArray(getAll.result) ? getAll.result : [];
+                                const expectedTitle = questTitle.toString().trim().toLocaleLowerCase();
+                                const match = quests.find((quest: any) => {
+                                    const questTitleValue = (quest?.title ?? '').toString().trim();
+                                    if (!questTitleValue) {
+                                        return false;
+                                    }
+
+                                    return questTitleValue.toLocaleLowerCase() === expectedTitle;
+                                });
+
+                                db.close();
+
+                                if (!match) {
+                                    resolve(null);
+                                    return;
+                                }
+
+                                if (match?.id != null) {
+                                    resolve(match.id as number | string);
+                                    return;
+                                }
+
+                                if (match?.questId != null) {
+                                    resolve(match.questId as number | string);
+                                    return;
+                                }
+
+                                resolve(null);
+                            };
+                        };
+                    } catch (error) {
+                        console.warn('Failed to query quests store', error);
+                        resolve(null);
+                    }
+                });
+
+            return await lookupQuestId();
+        },
+        title,
+        { timeout: timeoutMs }
+    );
+
+    const questId = await handle.jsonValue();
+
+    if (questId == null || Number.isNaN(Number(questId))) {
+        throw new Error(`Quest titled "${title}" not found in IndexedDB within ${timeoutMs}ms`);
+    }
+
+    return Number(questId);
+}
+
 /**
  * Utility functions to help with testing the DSpace application
  */
 
 /**
- * Clears user data by clearing localStorage
- * (IndexedDB access is restricted in Playwright)
+ * Legacy alias maintained for existing specs.
+ * Prefer {@link purgeClientState} for new tests.
  */
 export async function clearUserData(page: Page): Promise<void> {
-    // Navigate to the site root first to ensure we're on the correct domain
-    await page.goto('/');
-    // Clear localStorage
-    await page.evaluate(() => {
-        localStorage.clear();
-        console.log('User data cleared via localStorage');
-    });
+    await purgeClientState(page);
 }
 
 /**

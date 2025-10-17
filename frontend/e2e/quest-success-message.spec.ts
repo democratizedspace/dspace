@@ -1,15 +1,19 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { purgeClientState } from './test-helpers';
 
 test('quest creation shows accessible success message with quest link', async ({ page }) => {
-    await clearUserData(page);
+    await purgeClientState(page);
     await page.goto('/quests/create');
-    await page.waitForLoadState('networkidle');
 
-    await page.fill('#title', 'Success Quest');
-    await page.fill('#description', 'Check success message');
+    const titleInput = page.getByLabel(/^Title/i);
+    const descriptionInput = page.getByLabel(/^Description/i);
+    await expect(titleInput).toBeVisible();
+    await expect(descriptionInput).toBeVisible();
 
-    const fileInput = page.locator('input[type="file"]');
+    await titleInput.fill('Success Quest');
+    await descriptionInput.fill('Check success message');
+
+    const fileInput = page.getByLabel(/^Upload an Image/i);
     await fileInput.setInputFiles({
         name: 'success-image.png',
         mimeType: 'image/png',
@@ -19,7 +23,7 @@ test('quest creation shows accessible success message with quest link', async ({
     const imagePreview = page.locator('.image-preview');
     await expect(imagePreview).toBeVisible();
 
-    await page.locator('button.submit-button').click();
+    await page.getByRole('button', { name: /create quest/i }).click();
 
     const successMessage = page.locator('.success-message');
     await expect(successMessage).toBeVisible();
