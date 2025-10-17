@@ -25,6 +25,7 @@ test.describe('Dark mode toggle', () => {
         await expectLocalStorageValue(page, 'theme', 'light');
 
         await page.reload();
+        await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
         await expect(html).toHaveAttribute('data-theme', 'light');
@@ -32,5 +33,6 @@ test.describe('Dark mode toggle', () => {
             'aria-pressed',
             'false'
         );
+        await expectLocalStorageValue(page, 'theme', 'light');
     });
 });

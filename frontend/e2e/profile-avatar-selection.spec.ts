@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, expectLocalStorageValue, waitForHydration } from './test-helpers';
 
 test.describe('Profile avatar selection', () => {
     test.beforeEach(async ({ page }) => {
@@ -16,7 +16,10 @@ test.describe('Profile avatar selection', () => {
             page.waitForURL(/\/profile$/),
             page.getByRole('button', { name: 'Select', exact: true }).click(),
         ]);
+
+        await page.waitForLoadState('networkidle');
         await waitForHydration(page);
+        await expectLocalStorageValue(page, 'avatarUrl', /\/assets\/pfp\//);
         await expect(page.getByAltText('your currently selected avatar')).toBeVisible();
     });
 });

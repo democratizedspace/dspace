@@ -564,11 +564,23 @@ export async function expectLocalStorageCleared(page: Page, key: string): Promis
 export async function expectLocalStorageValue(
     page: Page,
     key: string,
-    value: string | null
+    expected: string | RegExp | null
 ): Promise<void> {
-    await expect
+    const poller = expect
         .poll(async () => page.evaluate((candidate) => localStorage.getItem(candidate), key))
-        .toBe(value);
+        .setTimeout(5_000);
+
+    if (expected === null) {
+        await poller.toBeNull();
+        return;
+    }
+
+    if (expected instanceof RegExp) {
+        await poller.toMatch(expected);
+        return;
+    }
+
+    await poller.toBe(expected);
 }
 
 /**

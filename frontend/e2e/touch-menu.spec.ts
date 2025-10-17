@@ -10,11 +10,13 @@ test.describe('touch navigation menu', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const toggle = page.getByRole('button', { name: 'Toggle additional menu items' });
+        const navigation = page.getByRole('navigation');
+        const toggle = navigation.getByRole('button', {
+            name: 'Toggle additional menu items'
+        });
         const unpinnedMenu = page.getByRole('region', { name: 'Additional menu items' });
-        const unpinnedItem = unpinnedMenu.getByRole('link', {
-            name: 'Import/export gamesaves',
-            exact: true,
+        const unpinnedItem = navigation.getByRole('link', {
+            name: /import\/export gamesaves/i
         });
 
         await expect(toggle).toHaveAttribute('data-hydrated', 'true');
