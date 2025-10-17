@@ -19,22 +19,26 @@
     let hydrated = false;
 
     $: currentPersona = $activePersona;
-    $: welcomeMessage = currentPersona?.welcomeMessage ?? currentPersona?.welcomeSnippet ?? '';
     $: personaSummary = currentPersona?.summary;
+
+    function getWelcomeText(persona) {
+        return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
+    }
 
     function addMessage(msg) {
         messageHistory.update((history) => [...history, msg]);
         messages.update((all) => [...all, msg]);
     }
 
-    function addWelcomeMessage() {
-        if (!welcomeMessage) {
+    function addWelcomeMessage(persona = currentPersona) {
+        const welcomeText = getWelcomeText(persona);
+        if (!welcomeText) {
             return;
         }
         const welcome = {
             role: 'assistant',
-            content: welcomeMessage,
-            tokens: countTokens(welcomeMessage),
+            content: welcomeText,
+            tokens: countTokens(welcomeText),
         };
         addMessage(welcome);
     }
@@ -83,16 +87,16 @@
 
     async function handlePersonaChange(event) {
         const selectedId = event.target.value;
-        if (selectedId === $activePersonaId) {
-            return;
-        }
+        const nextPersona =
+            personaOptions.find((option) => option.id === selectedId) || currentPersona;
+
         setActivePersona(selectedId);
         messageHistory.set([]);
         messages.set([]);
         showSpinner = false;
         message.set('');
         await tick();
-        addWelcomeMessage();
+        addWelcomeMessage(nextPersona);
     }
 
     onMount(async () => {
