@@ -599,9 +599,10 @@ export async function expectLocalStorageValue(
     key: string,
     expected: string | RegExp | null
 ): Promise<void> {
-    const poller = expect
-        .poll(async () => page.evaluate((candidate) => localStorage.getItem(candidate), key))
-        .setTimeout(5_000);
+    const poller = expect.poll(
+        async () => page.evaluate((candidate) => localStorage.getItem(candidate), key),
+        { timeout: 5_000 }
+    );
 
     if (expected === null) {
         await poller.toBeNull();

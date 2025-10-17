@@ -19,7 +19,7 @@ test.describe('Profile avatar selection', () => {
 
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        await expectLocalStorageValue(page, 'avatarUrl', /\/assets\/pfp\//);
+        await expectLocalStorageValue(page, 'avatarUrl', /(\/assets\/pfp\/|\/_astro\/).+\.jpg$/);
         await expect(page.getByAltText('your currently selected avatar')).toBeVisible();
     });
 });

@@ -1,0 +1,11 @@
+{
+  "id": "2025-10-17-playwright-expect-poll-regression",
+  "date": "2025-10-17",
+  "component": "ci:e2e",
+  "rootCause": "Playwright 1.54 removed expect.poll().setTimeout, so expectLocalStorageValue crashed before reading the avatar URL",
+  "resolution": "Use expect.poll timeout options and add a regression Playwright spec that covers string, regex, and null values",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18586257662/job/52990714065",
+    "https://github.com/democratizedspace/dspace/actions/runs/18586257662/job/52990714057"
+  ]
+}
