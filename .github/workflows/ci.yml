@@ -31,13 +31,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: lycheeverse/lychee-action@v1.9.0
+      - name: Check documentation links
+        uses: ./.github/actions/run-lychee
         with:
           args: >-
             --accept 403,429
             --no-progress --verbose
             "docs/**/*.md" "frontend/src/pages/docs/**/*.md"
-          fail: true
           format: markdown
           output: lychee/out.md
-          jobSummary: true
