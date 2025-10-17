@@ -161,7 +161,7 @@ test('verify Jest test files are included in package.json test configuration', a
     expect(jestConfigCapturesAllFiles).toBeTruthy();
 });
 
-test('verify playwright web server is properly configured', async ({ page }) => {
+test('verify playwright web server is properly configured', async ({ page }, testInfo) => {
     // Try to load the home page
     await page.goto('/');
     await page.waitForLoadState('networkidle');
@@ -177,9 +177,19 @@ test('verify playwright web server is properly configured', async ({ page }) => 
     const mainContent = page.locator('main').first();
     await expect(mainContent).toBeVisible();
 
-    // Verify the URL is using localhost:3002 as configured in playwright.config.ts
+    // Verify the URL matches the configured Playwright base URL
     const url = page.url();
-    expect(url).toContain('localhost:3002');
+    const configuredBaseURL =
+        (typeof testInfo.project.use?.baseURL === 'string' && testInfo.project.use.baseURL) ||
+        (typeof testInfo.config.use?.baseURL === 'string' && testInfo.config.use.baseURL) ||
+        undefined;
+
+    expect(configuredBaseURL, 'Playwright baseURL should be configured for coverage test').toBeTruthy();
+
+    if (configuredBaseURL) {
+        expect(url).toContain(configuredBaseURL.replace(/\/$/, ''));
+    }
+
     console.log('Page URL:', url);
 
     // Get the playwright config to confirm the webServer settings
