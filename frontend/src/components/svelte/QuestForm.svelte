@@ -726,7 +726,7 @@
     }
 </script>
 
-<form on:submit={handleSubmit} class="quest-form">
+<form on:submit={handleSubmit} class="quest-form" data-testid="quest-form">
     <datalist id="quest-option-item-suggestions">
         {#each allItems as item (item.id)}
             <option value={item.id}>{item.name}</option>
@@ -741,6 +741,7 @@
             placeholder="Gather resources"
             class:error={validationErrors.title}
             on:input={handleTitleInput}
+            data-testid="quest-title-input"
         />
         {#if validationErrors.title}
             <span class="error-message">{validationErrors.title}</span>
@@ -755,6 +756,7 @@
             placeholder="Describe the quest in detail. What needs to be done?"
             class:error={validationErrors.description}
             on:input={handleDescriptionInput}
+            data-testid="quest-description-input"
         />
         {#if validationErrors.description}
             <span class="error-message">{validationErrors.description}</span>
@@ -769,6 +771,7 @@
             accept="image/*"
             on:change={handleImageUpload}
             class:error={validationErrors.image}
+            data-testid="quest-image-input"
         />
         {#if validationErrors.image}
             <span class="error-message">{validationErrors.image}</span>
@@ -1158,7 +1161,12 @@
     </section>
 
     <div class="form-submit">
-        <button type="submit" class="submit-button" disabled={isSubmitting}>
+        <button
+            type="submit"
+            class="submit-button"
+            disabled={isSubmitting}
+            data-testid="quest-submit-button"
+        >
             {#if isSubmitting}
                 Saving...
             {:else if isEdit}
