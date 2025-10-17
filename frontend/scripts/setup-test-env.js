@@ -10,11 +10,13 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { ensureAstroBuild } from './ensure-astro-build.mjs';
+import { ensurePlaywrightBrowsers } from './utils/ensure-playwright-browsers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
+ensurePlaywrightBrowsers({ cwd: rootDir });
 ensureAstroBuild();
 
 // Directories to ensure exist
