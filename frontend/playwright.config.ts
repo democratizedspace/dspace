@@ -112,8 +112,9 @@ function resolveProjects(): PlaywrightProjectConfig[] {
     const wantsAll = Array.from(requestedValues).some((value) => value === 'all' || value === '*');
 
     const requestedProjects = new Set<ProjectName>(
-        Array.from(requestedValues).filter((value): value is ProjectName =>
-            value === 'chromium' || value === 'firefox' || value === 'webkit'
+        Array.from(requestedValues).filter(
+            (value): value is ProjectName =>
+                value === 'chromium' || value === 'firefox' || value === 'webkit'
         )
     );
 
@@ -129,7 +130,9 @@ function resolveProjects(): PlaywrightProjectConfig[] {
 
     if (matched.length === 0) {
         console.warn(
-            `No known Playwright projects matched "${Array.from(requestedValues).join(', ')}". Falling back to chromium.`
+            `No known Playwright projects matched "${Array.from(requestedValues).join(
+                ', '
+            )}". Falling back to chromium.`
         );
         return AVAILABLE_PROJECTS.filter((project) => project.name === 'chromium');
     }
