@@ -11,7 +11,7 @@ test.describe('Docs search', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const searchInput = page.getByRole('textbox', { name: /search docs/i });
+        const searchInput = page.getByRole('searchbox', { name: /search docs/i });
         await expect(searchInput).toBeVisible();
 
         await searchInput.fill('quest');
