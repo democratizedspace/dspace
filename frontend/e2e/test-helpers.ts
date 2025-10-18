@@ -64,7 +64,7 @@ export async function purgeClientState(page: Page): Promise<void> {
     await navigateWithRetry(page, '/');
 
     await page.evaluate(
-        async ({ gameStateModule }: { gameStateModule: string }) => {
+        async (gameStateModule: string) => {
             localStorage.clear();
             sessionStorage.clear();
 
@@ -152,7 +152,7 @@ export async function purgeClientState(page: Page): Promise<void> {
                 )
             );
         },
-        { gameStateModule: GAME_STATE_MODULE }
+        GAME_STATE_MODULE
     );
 
     const waitTargets = ['CustomContent', 'dspaceGameState', 'dspaceDB', 'dspaceGameSaves'];
