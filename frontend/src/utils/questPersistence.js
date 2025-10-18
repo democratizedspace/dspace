@@ -23,9 +23,7 @@ function isConstraintError(error) {
 }
 
 export async function syncExistingQuestsToIndexedDB(quests = []) {
-    const normalizedQuests = quests
-        .map((quest) => normalizeExistingQuest(quest))
-        .filter(Boolean);
+    const normalizedQuests = quests.map((quest) => normalizeExistingQuest(quest)).filter(Boolean);
 
     if (normalizedQuests.length === 0) {
         return [];
