@@ -1,0 +1,11 @@
+{
+  "id": "2025-10-18-manage-quests-search-description",
+  "date": "2025-10-18",
+  "component": "frontend quest management",
+  "rootCause": "The Manage Quests search Playwright test created quests with the 4-character description \"desc\", which violates the quest builder's 10-character minimum. The form validation blocked saving, so no quests were stored and the search results were empty, causing the test to time out waiting for one row.",
+  "resolution": "Update the test to hydrate the quest form, provide a valid description length, require the \"Create Quest\" button to be enabled, and assert the success status banner so future runs fail immediately if quest creation is rejected.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18612605001/job/53072829421",
+    "https://github.com/democratizedspace/dspace/actions/runs/18612605001/job/53072829422"
+  ]
+}

@@ -11,13 +11,21 @@ test.describe('Manage Quests Search', () => {
     test('filters quests by search term', async ({ page }) => {
         const unique = Date.now();
         const titles = [`Search Quest A ${unique}`, `Search Quest B ${unique}`];
+        const questDescription =
+            'A descriptive quest summary that satisfies the minimum length requirements.';
+
         for (const title of titles) {
             await page.goto('/quests/create');
-            await page.fill('#title', title);
-            await page.fill('#description', 'desc');
-            const submit = page.locator('button.submit-button, input[type="submit"]').first();
-            await submit.click();
             await page.waitForLoadState('networkidle');
+            await waitForHydration(page);
+
+            await page.fill('#title', title);
+            await page.fill('#description', questDescription);
+
+            const submit = page.getByRole('button', { name: 'Create Quest' });
+            await expect(submit).toBeEnabled();
+            await Promise.all([page.waitForLoadState('networkidle'), submit.click()]);
+            await expect(page.getByRole('status')).toContainText('Quest created successfully');
         }
 
         await page.goto('/quests/manage');
@@ -27,11 +35,11 @@ test.describe('Manage Quests Search', () => {
         await expect(page.getByRole('heading', { name: 'Manage Quests' })).toBeVisible();
 
         const search = page.getByPlaceholder('Search quests...');
-        await search.fill('Quest B');
+        await search.fill(titles[1]);
 
         const quests = page.getByTestId('quest-row');
         await expect(quests).toHaveCount(1);
-        await expect(quests.first()).toContainText('Quest B');
+        await expect(quests.first()).toContainText(titles[1]);
 
         await search.fill('NoMatch');
         await expect(page.locator('.no-quests')).toBeVisible();
