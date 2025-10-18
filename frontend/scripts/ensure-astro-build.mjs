@@ -5,21 +5,44 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '..');
+const defaultRootDir = path.resolve(__dirname, '..');
 
-export function ensureAstroBuild() {
-    const serverEntrypoint = path.join(rootDir, 'dist', 'server', 'entry.mjs');
+function hasClientAssets(rootDir, logger) {
+    const clientAssetsDir = path.join(rootDir, 'dist', 'client', '_astro');
 
-    if (fs.existsSync(serverEntrypoint)) {
-        console.log('Astro build artifacts detected. Skipping rebuild.');
+    try {
+        const entries = fs.readdirSync(clientAssetsDir, { withFileTypes: true });
+        return entries.some((entry) => entry.isFile());
+    } catch (error) {
+        if (error.code !== 'ENOENT') {
+            logger.warn?.(`Failed to inspect client assets directory: ${error.message}`);
+        }
+        return false;
+    }
+}
+
+export function ensureAstroBuild(options = {}) {
+    const { root = defaultRootDir, exec = execSync, logger = console } = options;
+
+    const serverEntrypoint = path.join(root, 'dist', 'server', 'entry.mjs');
+    const serverBuilt = fs.existsSync(serverEntrypoint);
+    const clientBuilt = hasClientAssets(root, logger);
+
+    if (serverBuilt && clientBuilt) {
+        logger.log?.('Astro build artifacts detected. Skipping rebuild.');
         return;
     }
 
-    console.log('Astro build artifacts not found. Building the app for Playwright preview...');
+    logger.log?.(
+        'Astro build artifacts missing or incomplete. Building the app for Playwright preview...'
+    );
+
     try {
-        execSync('npm run build', { cwd: rootDir, stdio: 'inherit' });
+        exec('npm run build', { cwd: root, stdio: 'inherit' });
     } catch (error) {
-        console.error('Failed to build Astro project required for Playwright preview.');
+        (logger.error ?? console.error)(
+            'Failed to build Astro project required for Playwright preview.'
+        );
         throw error;
     }
 }

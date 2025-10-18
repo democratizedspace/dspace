@@ -1,11 +1,22 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
+
     export let href,
         text,
-        onClick,
+        onClick = undefined,
         disabled = false,
         inverted = false,
         red = false,
         pressed = undefined;
+
+    const dispatch = createEventDispatcher();
+
+    const handleClick = (event) => {
+        if (typeof onClick === 'function') {
+            onClick(event);
+        }
+        dispatch('click', event);
+    };
 </script>
 
 <nav>
@@ -17,7 +28,7 @@
             class:disabled={disabled === true}
             class:inverted={inverted === true}
             class:red={red === true}
-            on:click={onClick}
+            on:click={handleClick}
             {disabled}
             aria-disabled={disabled}
             aria-pressed={pressed}
