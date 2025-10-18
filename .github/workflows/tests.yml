@@ -98,6 +98,24 @@ jobs:
       - name: Setup Playwright environment
         run: pnpm --dir frontend run setup-test-env
 
+      - name: Install Ubuntu 24 Playwright runtime dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libatk1.0-0t64 \
+            libatk-bridge2.0-0t64 \
+            libatspi2.0-0t64 \
+            libcups2t64 \
+            libgbm1 \
+            libxkbcommon0 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxfixes3 \
+            libxrandr2 \
+            libasound2t64
+
       - name: Install Playwright system dependencies
         working-directory: frontend
         run: sudo env "PATH=$PATH" npx playwright install-deps
