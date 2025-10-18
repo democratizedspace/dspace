@@ -16,7 +16,7 @@ export function resolveHeadlessShellPath(executablePath) {
     while (revisionDir !== previousDir) {
         const revisionBasename = path.basename(revisionDir);
 
-        if (revisionBasename.startsWith('chromium-')) {
+        if (revisionBasename.startsWith('chromium-') || revisionBasename.startsWith('chromium_')) {
             const parentDir = path.dirname(revisionDir);
             const relativeExecutablePath = path.relative(revisionDir, executablePath);
 
@@ -32,12 +32,28 @@ export function resolveHeadlessShellPath(executablePath) {
                     ? headlessExecutable
                     : path.join(relativeDirectory, headlessExecutable);
 
-            const headlessRevisionDir = path.join(
-                parentDir,
-                revisionBasename.replace('chromium-', 'chromium-headless-shell-')
-            );
+            const revisionSuffix = revisionBasename.replace(/^chromium[-_]/, '');
+            const headlessBasenames = [
+                `chromium-headless-shell-${revisionSuffix}`,
+                `chromium_headless_shell-${revisionSuffix}`,
+                `chromium-headless_shell-${revisionSuffix}`,
+                `chromium_headless-shell-${revisionSuffix}`,
+            ];
 
-            return path.join(headlessRevisionDir, headlessRelativePath);
+            for (const headlessBasename of headlessBasenames) {
+                const headlessRevisionDir = path.join(parentDir, headlessBasename);
+                const candidatePath = path.join(headlessRevisionDir, headlessRelativePath);
+
+                if (existsSync(candidatePath)) {
+                    return candidatePath;
+                }
+            }
+
+            return path.join(
+                parentDir,
+                `chromium-headless-shell-${revisionSuffix}`,
+                headlessRelativePath
+            );
         }
 
         previousDir = revisionDir;
