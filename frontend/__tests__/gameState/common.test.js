@@ -54,6 +54,13 @@ describe('gameState - common utilities', () => {
         expect(loaded).toEqual(newState);
     });
 
+    test('importGameStateString accepts plain JSON payloads', async () => {
+        const newState = { quests: { bar: true }, inventory: { 5: 1 }, processes: {} };
+        await importGameStateString(JSON.stringify(newState));
+        const loaded = loadGameState();
+        expect(loaded).toEqual(newState);
+    });
+
     test('validateGameState should fill missing sections', () => {
         const corrupted = { quests: null };
         const validated = validateGameState(corrupted);

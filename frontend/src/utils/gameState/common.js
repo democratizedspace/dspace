@@ -243,8 +243,38 @@ export const closeGameStateDatabaseForTesting = async () => {
 
 export const exportGameStateString = () => btoa(JSON.stringify(gameState));
 
+const decodeBase64 = (value) => {
+    if (typeof atob === 'function') {
+        return atob(value);
+    }
+
+    if (typeof Buffer !== 'undefined') {
+        return Buffer.from(value, 'base64').toString('utf8');
+    }
+
+    throw new Error('Base64 decoding is not supported in this environment');
+};
+
 export const importGameStateString = async (gameStateString) => {
-    const imported = JSON.parse(atob(gameStateString));
+    if (typeof gameStateString !== 'string') {
+        throw new TypeError('Expected serialized game state to be a string');
+    }
+
+    const serialized = gameStateString.trim();
+    let imported;
+
+    try {
+        imported = JSON.parse(serialized);
+    } catch (directParseError) {
+        const decoded = decodeBase64(serialized);
+        try {
+            imported = JSON.parse(decoded);
+        } catch (decodedParseError) {
+            decodedParseError.cause = decodedParseError.cause ?? directParseError;
+            throw decodedParseError;
+        }
+    }
+
     await saveGameState(imported);
 };
 
