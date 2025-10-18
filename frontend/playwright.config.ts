@@ -48,7 +48,11 @@ function ensureAstroBuildArtifacts(): void {
 // Determine the base URL from environment variables or use default
 const protocol = process.env.PROTOCOL || 'http';
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
-const baseURL = process.env.BASE_URL || `${protocol}://localhost:${port}`;
+// Default to an explicit IPv4 loopback address so Chromium never attempts an
+// IPv6-only connection (which would manifest as intermittent
+// net::ERR_CONNECTION_REFUSED failures when the preview server binds only to
+// 0.0.0.0). CI can still override BASE_URL when running behind tunnels.
+const baseURL = process.env.BASE_URL || `${protocol}://127.0.0.1:${port}`;
 
 // Allow setting workers via environment variable for CI and local runs
 const isCI = Boolean(process.env.CI);

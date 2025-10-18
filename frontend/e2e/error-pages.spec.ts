@@ -41,7 +41,9 @@ test.describe('Error Pages', () => {
             await homeLink.click();
 
             // Verify we navigated to home page - use a pattern that will match the full URL
-            await expect(page).toHaveURL(/localhost.*\/?$/);
+            const currentUrl = new URL(page.url());
+            expect(['127.0.0.1', 'localhost']).toContain(currentUrl.hostname);
+            expect(currentUrl.pathname).toBe('/');
         }
     });
 
