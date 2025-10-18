@@ -1,7 +1,9 @@
 import { test, expect, Page } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
+import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { waitForHydration } from './test-helpers';
 import { purgeClientStorage } from './utils/idb';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -9,8 +11,10 @@ const __dirname = path.dirname(__filename);
 const questPath = path.resolve(__dirname, '../test-data/constellations-quest.json');
 const questTemplate = JSON.parse(fs.readFileSync(questPath, 'utf8'));
 
+type QuestIdentifier = number | string;
+
 type QuestRecord = {
-    id: number;
+    id: QuestIdentifier;
     title?: string | null;
     type?: string | null;
     createdAt?: string | null;
@@ -32,6 +36,11 @@ const QUEST_DB_PARAMS: QuestDbParams = {
     dbVersion: CUSTOM_CONTENT_DB_VERSION,
     storeName: QUEST_STORE_NAME,
 };
+
+function generateUniqueQuestTitle(baseTitle: string): string {
+    const suffix = randomUUID().slice(0, 8);
+    return `${baseTitle} (${suffix})`;
+}
 
 async function runQuestDatabaseOperation<T>(
     page: Page,
@@ -91,7 +100,7 @@ async function runQuestDatabaseOperation<T>(
                         const store = transaction.objectStore(storeName);
                         const request = store.getAll();
 
-                        return await new Promise<number>((resolve, reject) => {
+                        return await new Promise<QuestIdentifier | null>((resolve, reject) => {
                             transaction.onabort = () =>
                                 reject(
                                     transaction.error ??
@@ -115,18 +124,29 @@ async function runQuestDatabaseOperation<T>(
                                     (quest: { title?: string | null; id?: unknown }) =>
                                         quest?.title === title
                                 );
-                                resolve(
-                                    match &&
-                                        typeof (match as Record<string, unknown>).id !== 'undefined'
-                                        ? Number((match as Record<string, unknown>).id)
-                                        : -1
-                                );
+                                if (!match) {
+                                    resolve(null);
+                                    return;
+                                }
+
+                                const rawId = (match as Record<string, unknown>).id;
+                                if (typeof rawId === 'string') {
+                                    resolve(rawId);
+                                    return;
+                                }
+
+                                if (typeof rawId === 'number' && Number.isFinite(rawId)) {
+                                    resolve(rawId);
+                                    return;
+                                }
+
+                                resolve(null);
                             };
                         });
                     });
                 }
                 case 'getById': {
-                    const { id } = payload as { id: number };
+                    const { id } = payload as { id: QuestIdentifier };
                     return withTransaction('readonly', async (transaction) => {
                         const store = transaction.objectStore(storeName);
                         const request = store.get(id);
@@ -153,7 +173,7 @@ async function runQuestDatabaseOperation<T>(
                 }
                 case 'updateById': {
                     const { id, questPatch } = payload as {
-                        id: number;
+                        id: QuestIdentifier;
                         questPatch: Record<string, unknown>;
                     };
                     await withTransaction('readwrite', async (transaction) => {
@@ -222,18 +242,27 @@ async function runQuestDatabaseOperation<T>(
     );
 }
 
-async function findQuestIdByTitle(page: Page, title: string): Promise<number> {
-    return runQuestDatabaseOperation<number>(page, 'lookupByTitle', { title });
+async function findQuestIdByTitle(
+    page: Page,
+    title: string
+): Promise<QuestIdentifier | null> {
+    return runQuestDatabaseOperation<QuestIdentifier | null>(page, 'lookupByTitle', {
+        title,
+    });
 }
 
-async function updateQuestInIndexedDB(page: Page, id: number, questPatch: unknown): Promise<void> {
+async function updateQuestInIndexedDB(
+    page: Page,
+    id: QuestIdentifier,
+    questPatch: unknown
+): Promise<void> {
     await runQuestDatabaseOperation<undefined>(page, 'updateById', {
         id,
         questPatch: questPatch as Record<string, unknown>,
     });
 }
 
-async function getQuestFromIndexedDB<T>(page: Page, id: number): Promise<T | null> {
+async function getQuestFromIndexedDB<T>(page: Page, id: QuestIdentifier): Promise<T | null> {
     return runQuestDatabaseOperation<T | null>(page, 'getById', { id });
 }
 
@@ -249,13 +278,14 @@ test.describe('Constellations Quest Creation', () => {
     });
 
     test('create and validate constellations quest', async ({ page }) => {
+        const questTitle = generateUniqueQuestTitle(questTemplate.title);
         // Step 1: create the quest via the UI
         await page.goto('/quests/create');
         await expect(page).toHaveURL(/\/quests\/create/);
 
         const titleInput = page.locator('#title');
         await expect(titleInput).toBeVisible();
-        await titleInput.fill(questTemplate.title);
+        await titleInput.fill(questTitle);
 
         const descriptionInput = page.locator('#description');
         await expect(descriptionInput).toBeVisible();
@@ -273,33 +303,68 @@ test.describe('Constellations Quest Creation', () => {
         await page.waitForLoadState('networkidle');
 
         // Step 2: find the created quest id in IndexedDB with a short poll
-        let questId = -1;
+        let questId: QuestIdentifier | null = null;
         await expect
             .poll(
                 async () => {
-                    questId = await findQuestIdByTitle(page, questTemplate.title);
+                    questId = await findQuestIdByTitle(page, questTitle);
                     return questId;
                 },
                 { timeout: 10_000, intervals: [500, 750, 1000] }
             )
-            .toBeGreaterThan(0);
+            .not.toBeNull();
 
-        expect(questId).toBeGreaterThan(0);
+        expect(questId).not.toBeNull();
 
         // Step 3: patch quest with full JSON
         const questPatch = JSON.parse(JSON.stringify(questTemplate));
-        await updateQuestInIndexedDB(page, questId, questPatch);
+        questPatch.title = questTitle;
+        await updateQuestInIndexedDB(page, questId as QuestIdentifier, questPatch);
 
         // Retrieve quest back from IndexedDB
-        const storedQuest = await getQuestFromIndexedDB(page, questId);
+        const storedQuest = await getQuestFromIndexedDB(page, questId as QuestIdentifier);
 
         // Validate with questHasFinishPath helper
         const { questHasFinishPath } = await import('../src/utils/simulateQuest.js');
         expect(questHasFinishPath(storedQuest)).toBe(true);
 
         // Verify it appears in quests list
-        await page.goto('/quests');
+        await page.goto('/quests/manage');
         await page.waitForLoadState('networkidle');
-        await expect(page.getByRole('link', { name: questTemplate.title })).toBeVisible();
+        await waitForHydration(page);
+        const searchInput = page.getByPlaceholder('Search quests...');
+        await searchInput.fill(questTitle);
+        const questRow = page.getByTestId('quest-row').filter({ hasText: questTitle });
+        await expect(questRow).toHaveCount(1);
+    });
+
+    test('prevents creating a quest with a duplicate title', async ({ page }) => {
+        await page.goto('/quests/create');
+        await expect(page).toHaveURL(/\/quests\/create/);
+
+        const titleInput = page.locator('#title');
+        await expect(titleInput).toBeVisible();
+        await titleInput.fill(questTemplate.title);
+        await titleInput.blur();
+
+        const descriptionInput = page.locator('#description');
+        await expect(descriptionInput).toBeVisible();
+        await descriptionInput.fill(questTemplate.description);
+
+        const imageInput = page.locator('input[type="file"]');
+        if ((await imageInput.count()) > 0) {
+            await imageInput.setInputFiles(path.resolve(__dirname, '../test-data/test-image.jpg'));
+        }
+
+        await expect(page.getByText('Title must be unique', { exact: false })).toBeVisible();
+
+        const createButton = page.getByRole('button', { name: 'Create Quest' });
+        await expect(createButton).toBeVisible();
+        await createButton.click();
+        await page.waitForLoadState('networkidle');
+        await expect(page).toHaveURL(/\/quests\/create/);
+
+        const questId = await findQuestIdByTitle(page, questTemplate.title);
+        expect(questId).toBeNull();
     });
 });
