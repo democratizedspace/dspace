@@ -88,33 +88,33 @@ export async function purgeClientState(page: Page): Promise<void> {
                         const openRequest = indexedDB.open(name);
                         openRequest.onerror = () => resolve();
                         openRequest.onsuccess = () => {
-                        const db = openRequest.result;
-                        const stores = Array.from(db.objectStoreNames);
+                            const db = openRequest.result;
+                            const stores = Array.from(db.objectStoreNames);
 
-                        if (stores.length === 0) {
-                            db.close();
-                            resolve();
-                            return;
-                        }
+                            if (stores.length === 0) {
+                                db.close();
+                                resolve();
+                                return;
+                            }
 
-                        const tx = db.transaction(stores, 'readwrite');
-                        stores.forEach((store) => {
-                            tx.objectStore(store).clear();
-                        });
-                        tx.oncomplete = () => {
-                            db.close();
-                            resolve();
+                            const tx = db.transaction(stores, 'readwrite');
+                            stores.forEach((store) => {
+                                tx.objectStore(store).clear();
+                            });
+                            tx.oncomplete = () => {
+                                db.close();
+                                resolve();
+                            };
+                            tx.onerror = () => {
+                                db.close();
+                                resolve();
+                            };
                         };
-                        tx.onerror = () => {
-                            db.close();
-                            resolve();
-                        };
-                    };
-                });
-            } catch (error) {
-                console.warn('Failed to clear object stores for database', name, error);
-            }
-        };
+                    });
+                } catch (error) {
+                    console.warn('Failed to clear object stores for database', name, error);
+                }
+            };
 
             await Promise.all(
                 targets.map((name) =>
