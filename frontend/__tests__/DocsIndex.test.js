@@ -18,8 +18,16 @@ const SECTIONS_FIXTURE = [
     {
         title: 'Quests',
         links: [
-            { title: 'Quest Development Guidelines', href: '/docs/quest-guidelines', keywords: ['quest'] },
-            { title: 'Quest Schema Requirements', href: '/docs/quest-schema', keywords: ['schema', 'quest'] },
+            {
+                title: 'Quest Development Guidelines',
+                href: '/docs/quest-guidelines',
+                keywords: ['quest'],
+            },
+            {
+                title: 'Quest Schema Requirements',
+                href: '/docs/quest-schema',
+                keywords: ['schema', 'quest'],
+            },
         ],
     },
 ];
