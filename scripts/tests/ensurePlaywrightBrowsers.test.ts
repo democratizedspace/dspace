@@ -24,7 +24,7 @@ describe('ensurePlaywrightBrowsers', () => {
     }
   });
 
-  it('installs browsers when chromium executable is missing', async () => {
+  it('installs system deps and browsers when chromium executable is missing', async () => {
     const chromeExecutable =
       '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
     const headlessHyphen =
@@ -34,10 +34,19 @@ describe('ensurePlaywrightBrowsers', () => {
     const cliPath =
       '/workspace/dspace/frontend/node_modules/@playwright/test/cli.js';
     let chromeExists = false;
+    let depsSentinelExists = false;
     const existingHeadless = new Set<string>();
-    const execFileSync = vi.fn(() => {
-      chromeExists = true;
-      existingHeadless.add(headlessUnderscore);
+    const execFileSync = vi.fn((_command, args: string[]) => {
+      const action = args[1];
+      if (action === 'install-deps') {
+        depsSentinelExists = true;
+        return;
+      }
+
+      if (action === 'install') {
+        chromeExists = true;
+        existingHeadless.add(headlessUnderscore);
+      }
     });
     const existsSync = vi.fn((candidate: string) => {
       if (candidate === cliPath) {
@@ -46,7 +55,13 @@ describe('ensurePlaywrightBrowsers', () => {
       if (candidate === chromeExecutable) {
         return chromeExists;
       }
+      if (candidate === '/workspace/dspace/frontend/.playwright-deps-installed') {
+        return depsSentinelExists;
+      }
       return existingHeadless.has(candidate);
+    });
+    const writeFileSync = vi.fn(() => {
+      depsSentinelExists = true;
     });
     const executablePath = vi.fn(() => chromeExecutable);
     const browser = { executablePath };
@@ -66,6 +81,7 @@ describe('ensurePlaywrightBrowsers', () => {
       return {
         ...actual,
         existsSync,
+        writeFileSync,
         default: { ...actual, existsSync },
       };
     });
@@ -73,8 +89,20 @@ describe('ensurePlaywrightBrowsers', () => {
 
     ensurePlaywrightBrowsers({ cwd: '/workspace/dspace/frontend', browser });
 
-    expect(execFileSync).toHaveBeenCalledTimes(1);
-    expect(execFileSync).toHaveBeenCalledWith(
+    expect(execFileSync).toHaveBeenCalledTimes(2);
+    expect(execFileSync.mock.calls[0]).toEqual([
+      process.execPath,
+      expect.arrayContaining([
+        expect.stringContaining('node_modules/@playwright/test/cli.js'),
+        'install-deps',
+      ]),
+      expect.objectContaining({
+        cwd: '/workspace/dspace/frontend',
+        stdio: 'inherit',
+        env: process.env,
+      }),
+    ]);
+    expect(execFileSync.mock.calls[1]).toEqual([
       process.execPath,
       expect.arrayContaining([
         expect.stringContaining('node_modules/@playwright/test/cli.js'),
@@ -87,14 +115,14 @@ describe('ensurePlaywrightBrowsers', () => {
         cwd: '/workspace/dspace/frontend',
         stdio: 'inherit',
         env: process.env,
-      })
-    );
+      }),
+    ]);
     expect(executablePath).toHaveBeenCalledTimes(2);
     expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
     expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
   });
 
-  it('installs browsers when headless shell is missing', async () => {
+  it('installs system deps when headless shell is missing', async () => {
     const chromeExecutable =
       '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
     const headlessHyphen =
@@ -104,6 +132,7 @@ describe('ensurePlaywrightBrowsers', () => {
     const cliPath =
       '/workspace/dspace/frontend/node_modules/@playwright/test/cli.js';
     let headlessInstalled = false;
+    let depsSentinelExists = false;
     const existsSync = vi.fn((candidate: string) => {
       if (candidate === cliPath) {
         return true;
@@ -114,10 +143,24 @@ describe('ensurePlaywrightBrowsers', () => {
       if (candidate === headlessUnderscore) {
         return headlessInstalled;
       }
+      if (candidate === '/workspace/dspace/frontend/.playwright-deps-installed') {
+        return depsSentinelExists;
+      }
       return false;
     });
-    const execFileSync = vi.fn(() => {
-      headlessInstalled = true;
+    const execFileSync = vi.fn((_command, args: string[]) => {
+      const action = args[1];
+      if (action === 'install-deps') {
+        depsSentinelExists = true;
+        return;
+      }
+
+      if (action === 'install') {
+        headlessInstalled = true;
+      }
+    });
+    const writeFileSync = vi.fn(() => {
+      depsSentinelExists = true;
     });
     const executablePath = vi.fn(() => chromeExecutable);
     const browser = { executablePath };
@@ -137,6 +180,7 @@ describe('ensurePlaywrightBrowsers', () => {
       return {
         ...actual,
         existsSync,
+        writeFileSync,
         default: { ...actual, existsSync },
       };
     });
@@ -144,7 +188,22 @@ describe('ensurePlaywrightBrowsers', () => {
 
     ensurePlaywrightBrowsers({ cwd: '/workspace/dspace/frontend', browser });
 
-    expect(execFileSync).toHaveBeenCalledTimes(1);
+    expect(execFileSync).toHaveBeenCalledTimes(2);
+    expect(execFileSync.mock.calls[0][1]).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('node_modules/@playwright/test/cli.js'),
+        'install-deps',
+      ])
+    );
+    expect(execFileSync.mock.calls[1][1]).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('node_modules/@playwright/test/cli.js'),
+        'install',
+        '--with-deps',
+        'chromium',
+        'chromium-headless-shell',
+      ])
+    );
     expect(executablePath).toHaveBeenCalledTimes(2);
     expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
     expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);

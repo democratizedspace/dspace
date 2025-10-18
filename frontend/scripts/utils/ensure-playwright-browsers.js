@@ -1,10 +1,12 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from '@playwright/test';
 
 const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test', 'cli.js');
 const INSTALL_ARGS = ['install', '--with-deps', 'chromium', 'chromium-headless-shell'];
+const INSTALL_DEPS_ARGS = ['install-deps'];
+const INSTALL_DEPS_SENTINEL = '.playwright-deps-installed';
 
 export function resolvePlaywrightCLI(cwd) {
     const cliPath = path.join(cwd, PLAYWRIGHT_RELATIVE_CLI);
@@ -104,6 +106,8 @@ export function ensurePlaywrightBrowsers(options = {}) {
         installArgs = INSTALL_ARGS,
         env = process.env,
         browser = chromium,
+        platform = process.platform,
+        installSystemDeps = true,
     } = options;
 
     if (process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD === '1') {
@@ -121,6 +125,10 @@ export function ensurePlaywrightBrowsers(options = {}) {
 
     const cliPath = resolvePlaywrightCLI(cwd);
 
+    if (installSystemDeps) {
+        ensurePlaywrightSystemDeps({ cwd, env, cliPath, platform });
+    }
+
     execFileSync(process.execPath, [cliPath, ...installArgs], {
         stdio: 'inherit',
         cwd,
@@ -130,4 +138,58 @@ export function ensurePlaywrightBrowsers(options = {}) {
     if (!hasChromiumExecutable(browser)) {
         throw new Error('Playwright chromium executable is still missing after installation.');
     }
+}
+
+function getSystemDepsSentinelPath(cwd) {
+    return path.join(cwd, INSTALL_DEPS_SENTINEL);
+}
+
+export function ensurePlaywrightSystemDeps(options = {}) {
+    const {
+        cwd = process.cwd(),
+        env = process.env,
+        platform = process.platform,
+        cliPath = resolvePlaywrightCLI(cwd),
+        depsStampPath = getSystemDepsSentinelPath(cwd),
+    } = options;
+
+    if (platform !== 'linux') {
+        return false;
+    }
+
+    if (env.PLAYWRIGHT_SKIP_INSTALL_DEPS === '1') {
+        return false;
+    }
+
+    if (existsSync(depsStampPath)) {
+        return false;
+    }
+
+    try {
+        execFileSync(process.execPath, [cliPath, ...INSTALL_DEPS_ARGS], {
+            stdio: 'inherit',
+            cwd,
+            env,
+        });
+    } catch (error) {
+        if (env.CI === 'true') {
+            throw error;
+        }
+
+        const message =
+            'Failed to install Playwright system dependencies automatically. ' +
+            'Run "npx playwright install-deps" manually if browsers fail to launch.';
+        console.warn(message);
+        return false;
+    }
+
+    try {
+        writeFileSync(depsStampPath, `${new Date().toISOString()}\n`);
+    } catch (error) {
+        console.warn(
+            `Unable to create Playwright deps sentinel file at ${depsStampPath}: ${error.message}`
+        );
+    }
+
+    return true;
 }
