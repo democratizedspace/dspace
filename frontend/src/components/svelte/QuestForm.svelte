@@ -7,6 +7,14 @@
         validateQuestDependencies,
     } from '../../utils/customQuestValidation.js';
     import { isQuestTitleUnique } from '../../utils/questHelpers.js';
+    import {
+        applyQuestDefaults,
+        DEFAULT_DIALOGUE_NODE_ID,
+        DEFAULT_DIALOGUE_TEXT,
+        DEFAULT_NPC_NAME,
+        DEFAULT_QUEST_IMAGE,
+        createDefaultDialogueNode,
+    } from '../../utils/questDefaults.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -22,8 +30,8 @@
     let allItems = [];
     let validationErrors = {};
     let isSubmitting = false;
-    let npc = '';
-    let startNodeId = '';
+    let npc = DEFAULT_NPC_NAME;
+    let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
     let dialogueNodes = [];
     let newNodeId = '';
     let newNodeText = '';
@@ -89,6 +97,39 @@
         });
     }
 
+    function createOptionState(option = createOptionDraft()) {
+        const normalized = normalizeOption(option);
+        const requiresItems = Array.isArray(normalized.requiresItems)
+            ? normalized.requiresItems
+            : [];
+        const grantsItems =
+            normalized.type === 'grantsItems'
+                ? Array.isArray(normalized.grantsItems)
+                    ? normalized.grantsItems
+                    : []
+                : [];
+
+        return {
+            ...normalized,
+            requiresItems,
+            grantsItems,
+        };
+    }
+
+    function createDialogueNodeState(node = createDefaultDialogueNode()) {
+        return {
+            id: node.id,
+            text: node.text,
+            options: (node.options || []).map((option) => createOptionState(option)),
+            newOption: createOptionState(),
+            optionError: '',
+        };
+    }
+
+    if (dialogueNodes.length === 0) {
+        dialogueNodes = [createDialogueNodeState()];
+    }
+
     // If in edit mode, load the quest data
     onMount(async () => {
         if (isEdit && questId) {
@@ -97,15 +138,16 @@
                 title = questData.title;
                 description = questData.description;
                 requiresQuests = questData.requiresQuests || [];
-                npc = questData.npc || '';
-                startNodeId = questData.start || '';
-                dialogueNodes = (questData.dialogue || []).map((node) => ({
-                    id: node.id,
-                    text: node.text,
-                    options: (node.options || []).map((option) => normalizeOption(option)),
-                    newOption: createOptionDraft(),
-                    optionError: '',
-                }));
+                npc = questData.npc || DEFAULT_NPC_NAME;
+                startNodeId = questData.start || DEFAULT_DIALOGUE_NODE_ID;
+                const mappedNodes = (questData.dialogue || []).map((node) =>
+                    createDialogueNodeState({
+                        id: node.id,
+                        text: node.text,
+                        options: node.options,
+                    })
+                );
+                dialogueNodes = mappedNodes.length > 0 ? mappedNodes : [createDialogueNodeState()];
                 if (questData.image) {
                     previewUrl = questData.image;
                 }
@@ -114,8 +156,12 @@
             }
         }
 
-        if (dialogueNodes.length === 0 && startNodeId) {
-            startNodeId = '';
+        if (dialogueNodes.length === 0) {
+            dialogueNodes = [createDialogueNodeState()];
+        }
+
+        if (!startNodeId) {
+            startNodeId = dialogueNodes[0]?.id ?? DEFAULT_DIALOGUE_NODE_ID;
         }
 
         if (existingQuests.length === 0) {
@@ -373,7 +419,7 @@
             id,
             text,
             options: [],
-            newOption: createOptionDraft(),
+            newOption: createOptionState(),
             optionError: '',
         };
 
@@ -438,10 +484,44 @@
         return normalized;
     }
 
+    function getSerializedDialogueNodes() {
+        return dialogueNodes.map((node) => ({
+            id: (node.id || '').trim(),
+            text: (node.text || '').trim(),
+            options: node.options.map((option) => serializeOption(option)),
+        }));
+    }
+
+    function getQuestPayload() {
+        const serializedNodes = getSerializedDialogueNodes();
+        const payload = applyQuestDefaults({
+            title: title.trim(),
+            description: description.trim(),
+            image: previewUrl || '',
+            requiresQuests,
+            npc: npc.trim(),
+            start: startNodeId.trim(),
+            dialogue: serializedNodes.filter((node) => node.id),
+        });
+
+        if (payload.dialogue.length === 0) {
+            payload.dialogue = [createDefaultDialogueNode()];
+        }
+
+        if (!payload.start || !payload.dialogue.some((node) => node.id === payload.start)) {
+            payload.start = payload.dialogue[0]?.id ?? createDefaultDialogueNode().id;
+        }
+
+        return { payload, serializedNodes };
+    }
+
     async function validateForm() {
         const errors = {};
+        const { payload, serializedNodes } = getQuestPayload();
+        const usingAutogeneratedImage =
+            !isEdit && !image && !previewUrl && payload.image === DEFAULT_QUEST_IMAGE;
 
-        const trimmedTitle = title.trim();
+        const trimmedTitle = payload.title;
         if (!trimmedTitle) {
             errors.title = 'Title is required';
         } else if (trimmedTitle.length < MIN_TITLE_LENGTH) {
@@ -450,34 +530,34 @@
             errors.title = 'Title must be unique';
         }
 
-        const trimmedDesc = description.trim();
+        const trimmedDesc = payload.description;
         if (!trimmedDesc) {
             errors.description = 'Description is required';
         } else if (trimmedDesc.length < MIN_DESC_LENGTH) {
             errors.description = `Description must be at least ${MIN_DESC_LENGTH} characters`;
         }
 
-        if (!isEdit && !image && !previewUrl) {
-            errors.image = 'Image is required';
-        }
+        const { valid, errors: schemaErrors } = validateQuestData(payload);
+        const usingDefaultDialogue =
+            dialogueNodes.length === 1 &&
+            dialogueNodes[0]?.id === DEFAULT_DIALOGUE_NODE_ID &&
+            dialogueNodes[0]?.text === DEFAULT_DIALOGUE_TEXT &&
+            (dialogueNodes[0]?.options || []).length === 1 &&
+            dialogueNodes[0]?.options[0]?.type === 'finish';
 
-        const { valid, errors: schemaErrors } = validateQuestData({
-            title: title.trim(),
-            description: description.trim(),
-            image: previewUrl || '',
-            requiresQuests,
-            npc: npc.trim(),
-            start: startNodeId,
-            dialogue: dialogueNodes.map((node) => ({
-                id: node.id,
-                text: node.text,
-                options: node.options.map((option) => serializeOption(option)),
-            })),
-        });
         if (!valid && schemaErrors) {
             schemaErrors.forEach((err) => {
                 const field = err.instancePath.replace('/', '');
                 if (!field) return;
+
+                if (
+                    usingDefaultDialogue &&
+                    ['image', 'npc', 'dialogue', 'start', 'requiresQuests'].some((prefix) =>
+                        field.startsWith(prefix)
+                    )
+                ) {
+                    return;
+                }
                 if (field === 'image' && !errors.image) {
                     errors.image = 'Invalid image format';
                 } else if (field === 'requiresQuests' && !errors.requiresQuests) {
@@ -494,124 +574,116 @@
             });
         }
 
-        if (!npc.trim()) {
-            errors.npc = errors.npc || 'NPC is required';
+        if (usingAutogeneratedImage) {
+            delete errors.image;
         }
 
-        if (dialogueNodes.length === 0) {
-            errors.dialogue = errors.dialogue || 'Add at least one dialogue node';
-        }
+        if (dialogueNodes.length > 0) {
+            const nodeIds = new Set();
 
-        const nodeIds = new Set();
-        for (const node of dialogueNodes) {
-            const trimmedId = (node.id || '').trim();
-            const trimmedText = (node.text || '').trim();
+            for (const node of serializedNodes) {
+                if (!node.id) {
+                    errors.dialogue = 'Dialogue nodes require an ID';
+                    break;
+                }
 
-            if (!trimmedId) {
-                errors.dialogue = 'Dialogue nodes require an ID';
-                break;
+                if (nodeIds.has(node.id)) {
+                    errors.dialogue = 'Dialogue node IDs must be unique';
+                    break;
+                }
+
+                nodeIds.add(node.id);
+
+                if (!node.text) {
+                    errors.dialogue = 'Dialogue nodes require text';
+                    break;
+                }
+
+                if (!node.options || node.options.length === 0) {
+                    errors.dialogue = 'Each dialogue node needs at least one option';
+                    break;
+                }
+
+                const missingOptionText = node.options.find(
+                    (option) => !(option.text || '').trim()
+                );
+                if (missingOptionText) {
+                    errors.dialogue = 'Dialogue options require text';
+                    break;
+                }
+
+                const missingGotoTarget = node.options.find(
+                    (option) => option.type === 'goto' && !(option.goto || '').trim()
+                );
+                if (missingGotoTarget) {
+                    errors.dialogue = 'Goto options require a target node';
+                    break;
+                }
             }
 
-            if (nodeIds.has(trimmedId)) {
-                errors.dialogue = 'Dialogue node IDs must be unique';
-                break;
-            }
-
-            nodeIds.add(trimmedId);
-
-            if (!trimmedText) {
-                errors.dialogue = 'Dialogue nodes require text';
-                break;
-            }
-
-            if (!node.options || node.options.length === 0) {
-                errors.dialogue = 'Each dialogue node needs at least one option';
-                break;
-            }
-
-            const missingOptionText = node.options.find((option) => !(option.text || '').trim());
-            if (missingOptionText) {
-                errors.dialogue = 'Dialogue options require text';
-                break;
-            }
-
-            const missingGotoTarget = node.options.find(
-                (option) => option.type === 'goto' && !(option.goto || '').trim()
-            );
-            if (missingGotoTarget) {
-                errors.dialogue = 'Goto options require a target node';
-                break;
-            }
-        }
-
-        if (!startNodeId) {
-            errors.startNode = 'Select a start node';
-        } else if (!nodeIds.has(startNodeId)) {
-            errors.startNode = 'Start node must reference an existing dialogue node';
-        }
-
-        if (!errors.dialogue) {
-            const invalidTarget = dialogueNodes
-                .flatMap((node) =>
-                    node.options
-                        .filter((option) => option.type === 'goto')
-                        .map((option) => ({ from: node.id, target: option.goto }))
-                )
-                .find(({ target }) => target && !nodeIds.has(target));
-
-            if (invalidTarget) {
-                errors.dialogue = `Option target not found: ${invalidTarget.target}`;
-            }
-        }
-
-        if (!errors.dialogue) {
-            const missingProcess = dialogueNodes
-                .flatMap((node) =>
-                    node.options
-                        .filter((option) => option.type === 'process')
-                        .map((option) => option.process)
-                )
-                .find((processId) => processId != null && !(processId || '').trim());
-
-            if (missingProcess !== undefined) {
-                errors.dialogue = 'Process options require a process ID';
-            }
-        }
-
-        if (!errors.dialogue) {
-            const invalidRequirement = dialogueNodes.some((node) =>
-                node.options.some((option) =>
-                    (option.requiresItems || []).some(
-                        (item) => !(item?.id || '').trim() || !isPositiveNumber(item?.count)
+            if (!errors.dialogue) {
+                const invalidTarget = serializedNodes
+                    .flatMap((node) =>
+                        node.options
+                            .filter((option) => option.type === 'goto')
+                            .map((option) => ({ from: node.id, target: option.goto }))
                     )
-                )
-            );
+                    .find(({ target }) => target && !serializedNodes.some((n) => n.id === target));
 
-            if (invalidRequirement) {
-                errors.dialogue = 'Required items must include an item and positive count';
+                if (invalidTarget) {
+                    errors.dialogue = `Option target not found: ${invalidTarget.target}`;
+                }
             }
-        }
 
-        if (!errors.dialogue) {
-            const invalidGrant = dialogueNodes.some((node) =>
-                node.options.some(
-                    (option) =>
-                        option.type === 'grantsItems' &&
-                        (option.grantsItems || []).some(
+            if (!errors.dialogue) {
+                const missingProcess = serializedNodes
+                    .flatMap((node) =>
+                        node.options
+                            .filter((option) => option.type === 'process')
+                            .map((option) => option.process)
+                    )
+                    .find((processId) => processId != null && !(processId || '').trim());
+
+                if (missingProcess !== undefined) {
+                    errors.dialogue = 'Process options require a process ID';
+                }
+            }
+
+            if (!errors.dialogue) {
+                const invalidRequirement = serializedNodes.some((node) =>
+                    node.options.some((option) =>
+                        (option.requiresItems || []).some(
                             (item) => !(item?.id || '').trim() || !isPositiveNumber(item?.count)
                         )
-                )
-            );
+                    )
+                );
 
-            if (invalidGrant) {
-                errors.dialogue = 'Granted items require an item and positive count';
+                if (invalidRequirement) {
+                    errors.dialogue = 'Required items must include an item and positive count';
+                }
+            }
+
+            if (!errors.dialogue) {
+                const invalidGrant = serializedNodes.some((node) =>
+                    node.options.some(
+                        (option) =>
+                            option.type === 'grantsItems' &&
+                            (option.grantsItems || []).some(
+                                (item) => !(item?.id || '').trim() || !isPositiveNumber(item?.count)
+                            )
+                    )
+                );
+
+                if (invalidGrant) {
+                    errors.dialogue = 'Granted items require an item and positive count';
+                }
             }
         }
 
         if (
-            requiresQuests.length > 0 &&
+            payload.requiresQuests.length > 0 &&
             !validateQuestDependencies(
-                requiresQuests,
+                payload.requiresQuests,
                 allQuests.map((q) => q.id)
             )
         ) {
@@ -668,41 +740,22 @@
 
         try {
             // Upload image if there's a new one
+            const { payload } = getQuestPayload();
             const imageUrl = await uploadImage(image);
+            const questData = {
+                ...payload,
+                image: imageUrl || payload.image || DEFAULT_QUEST_IMAGE,
+            };
 
             if (isEdit) {
-                // Update existing quest
                 await db.quests.update(questId, {
-                    title,
-                    description,
-                    image: imageUrl,
-                    requiresQuests,
-                    npc: npc.trim(),
-                    start: startNodeId,
-                    dialogue: dialogueNodes.map((node) => ({
-                        id: node.id,
-                        text: node.text,
-                        options: node.options.map((option) => serializeOption(option)),
-                    })),
+                    ...questData,
                     updatedAt: new Date().toISOString(),
                 });
 
                 dispatch('success', { message: 'Quest updated successfully', id: questId });
             } else {
-                // Create new quest
-                const newQuestId = await db.quests.add({
-                    title,
-                    description,
-                    image: imageUrl,
-                    requiresQuests,
-                    npc: npc.trim(),
-                    start: startNodeId,
-                    dialogue: dialogueNodes.map((node) => ({
-                        id: node.id,
-                        text: node.text,
-                        options: node.options.map((option) => serializeOption(option)),
-                    })),
-                });
+                const newQuestId = await db.quests.add(questData);
 
                 dispatch('success', { message: 'Quest created successfully', id: newQuestId });
 
@@ -712,9 +765,9 @@
                 image = null;
                 previewUrl = null;
                 requiresQuests = [];
-                npc = '';
-                startNodeId = '';
-                dialogueNodes = [];
+                npc = DEFAULT_NPC_NAME;
+                startNodeId = DEFAULT_DIALOGUE_NODE_ID;
+                dialogueNodes = [createDialogueNodeState()];
                 nodeDraftError = '';
             }
         } catch (error) {

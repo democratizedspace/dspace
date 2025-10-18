@@ -1,6 +1,8 @@
 <script>
     import QuestForm from './QuestForm.svelte';
     export let existingQuests = [];
+    export let isEdit = false;
+    export let questId = null;
     let successData = null;
     function handleSuccess(event) {
         successData = event.detail;
@@ -13,7 +15,7 @@
         <a class="view-link" href={`/quests/${successData.id}`}>View quest</a>
     </div>
 {:else}
-    <QuestForm {existingQuests} on:success={handleSuccess} />
+    <QuestForm {existingQuests} {isEdit} {questId} on:success={handleSuccess} />
 {/if}
 
 <style>
