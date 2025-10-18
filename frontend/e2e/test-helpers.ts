@@ -63,97 +63,94 @@ import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 export async function purgeClientState(page: Page): Promise<void> {
     await navigateWithRetry(page, '/');
 
-    await page.evaluate(
-        async (gameStateModule: string) => {
-            localStorage.clear();
-            sessionStorage.clear();
+    await page.evaluate(async (gameStateModule: string) => {
+        localStorage.clear();
+        sessionStorage.clear();
 
-            const targets = ['CustomContent', 'dspaceGameState', 'dspaceDB', 'dspaceGameSaves'];
-            const anyIndexedDB = indexedDB as unknown as {
-                databases?: () => Promise<Array<{ name?: string | null }>>;
-            };
+        const targets = ['CustomContent', 'dspaceGameState', 'dspaceDB', 'dspaceGameSaves'];
+        const anyIndexedDB = indexedDB as unknown as {
+            databases?: () => Promise<Array<{ name?: string | null }>>;
+        };
 
+        try {
+            const module = await import(/* @vite-ignore */ gameStateModule);
+            await module.closeGameStateDatabaseForTesting?.();
+        } catch (error) {
+            console.warn('Failed to close game state database before purge:', error);
+        }
+
+        const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        const clearObjectStores = async (name: string) => {
             try {
-                const module = await import(/* @vite-ignore */ gameStateModule);
-                await module.closeGameStateDatabaseForTesting?.();
-            } catch (error) {
-                console.warn('Failed to close game state database before purge:', error);
-            }
+                await new Promise<void>((resolve) => {
+                    const openRequest = indexedDB.open(name);
+                    openRequest.onerror = () => resolve();
+                    openRequest.onsuccess = () => {
+                        const db = openRequest.result;
+                        const stores = Array.from(db.objectStoreNames);
 
-            const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-            const clearObjectStores = async (name: string) => {
-                try {
-                    await new Promise<void>((resolve) => {
-                        const openRequest = indexedDB.open(name);
-                        openRequest.onerror = () => resolve();
-                        openRequest.onsuccess = () => {
-                            const db = openRequest.result;
-                            const stores = Array.from(db.objectStoreNames);
-
-                            if (stores.length === 0) {
-                                db.close();
-                                resolve();
-                                return;
-                            }
-
-                            const tx = db.transaction(stores, 'readwrite');
-                            stores.forEach((store) => {
-                                tx.objectStore(store).clear();
-                            });
-                            tx.oncomplete = () => {
-                                db.close();
-                                resolve();
-                            };
-                            tx.onerror = () => {
-                                db.close();
-                                resolve();
-                            };
-                        };
-                    });
-                } catch (error) {
-                    console.warn('Failed to clear object stores for database', name, error);
-                }
-            };
-
-            await Promise.all(
-                targets.map((name) =>
-                    (async () => {
-                        let blocked = false;
-                        try {
-                            await new Promise<void>((resolve) => {
-                                const request = indexedDB.deleteDatabase(name);
-                                request.onsuccess = () => resolve();
-                                request.onerror = () => resolve();
-                                request.onblocked = () => {
-                                    blocked = true;
-                                    resolve();
-                                };
-                            });
-                        } catch (error) {
-                            console.warn('Failed to delete database', name, error);
-                        }
-
-                        if (!blocked || !anyIndexedDB?.databases) {
+                        if (stores.length === 0) {
+                            db.close();
+                            resolve();
                             return;
                         }
 
-                        const timeoutAt = Date.now() + 2_000;
-                        while (Date.now() < timeoutAt) {
-                            const databases = await anyIndexedDB.databases();
-                            if (!databases.some((db) => db?.name === name)) {
-                                return;
-                            }
-                            await sleep(50);
-                        }
+                        const tx = db.transaction(stores, 'readwrite');
+                        stores.forEach((store) => {
+                            tx.objectStore(store).clear();
+                        });
+                        tx.oncomplete = () => {
+                            db.close();
+                            resolve();
+                        };
+                        tx.onerror = () => {
+                            db.close();
+                            resolve();
+                        };
+                    };
+                });
+            } catch (error) {
+                console.warn('Failed to clear object stores for database', name, error);
+            }
+        };
 
-                        await clearObjectStores(name);
-                    })()
-                )
-            );
-        },
-        GAME_STATE_MODULE
-    );
+        await Promise.all(
+            targets.map((name) =>
+                (async () => {
+                    let blocked = false;
+                    try {
+                        await new Promise<void>((resolve) => {
+                            const request = indexedDB.deleteDatabase(name);
+                            request.onsuccess = () => resolve();
+                            request.onerror = () => resolve();
+                            request.onblocked = () => {
+                                blocked = true;
+                                resolve();
+                            };
+                        });
+                    } catch (error) {
+                        console.warn('Failed to delete database', name, error);
+                    }
+
+                    if (!blocked || !anyIndexedDB?.databases) {
+                        return;
+                    }
+
+                    const timeoutAt = Date.now() + 2_000;
+                    while (Date.now() < timeoutAt) {
+                        const databases = await anyIndexedDB.databases();
+                        if (!databases.some((db) => db?.name === name)) {
+                            return;
+                        }
+                        await sleep(50);
+                    }
+
+                    await clearObjectStores(name);
+                })()
+            )
+        );
+    }, GAME_STATE_MODULE);
 
     const waitTargets = ['CustomContent', 'dspaceGameState', 'dspaceDB', 'dspaceGameSaves'];
     await page.waitForFunction(
