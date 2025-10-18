@@ -300,10 +300,7 @@ async function runQuestDatabaseOperation<T>(
     );
 }
 
-async function findQuestIdByTitle(
-    page: Page,
-    title: string
-): Promise<QuestIdentifier | null> {
+async function findQuestIdByTitle(page: Page, title: string): Promise<QuestIdentifier | null> {
     return runQuestDatabaseOperation<QuestIdentifier | null>(page, 'lookupByTitle', {
         title,
     });
@@ -422,7 +419,9 @@ test.describe('Constellations Quest Creation', () => {
 
         await expect(page.getByText('Title must be unique', { exact: false })).toBeVisible();
 
-        const questIdsBeforeAttempt = await findQuestIdsByTitle(page, questTemplate.title);
+        const questIdsBeforeAttempt = normalizeQuestIdentifiers(
+            await findQuestIdsByTitle(page, questTemplate.title)
+        );
         expect(questIdsBeforeAttempt.length).toBeGreaterThan(0);
 
         const createButton = page.getByRole('button', { name: 'Create Quest' });
@@ -431,9 +430,9 @@ test.describe('Constellations Quest Creation', () => {
         await page.waitForLoadState('networkidle');
         await expect(page).toHaveURL(/\/quests\/create/);
 
-        const questIdsAfterAttempt = await findQuestIdsByTitle(page, questTemplate.title);
-        expect(normalizeQuestIdentifiers(questIdsAfterAttempt)).toEqual(
-            normalizeQuestIdentifiers(questIdsBeforeAttempt)
+        const questIdsAfterAttempt = normalizeQuestIdentifiers(
+            await findQuestIdsByTitle(page, questTemplate.title)
         );
+        expect(questIdsAfterAttempt).toEqual(questIdsBeforeAttempt);
     });
 });
