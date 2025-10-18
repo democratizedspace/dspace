@@ -11,7 +11,7 @@ describe('navigateWithRetry', () => {
       .fn(async () => undefined as Awaited<ReturnType<Page['goto']>>)
       .mockRejectedValueOnce(
         new Error(
-          'page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/'
+          'page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/'
         )
       )
       .mockResolvedValue(undefined as Awaited<ReturnType<Page['goto']>>);
