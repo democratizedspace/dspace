@@ -3,6 +3,8 @@
     import { importCustomContentString } from '../../../utils/customcontent.js';
 
     let importString = '';
+    const importTextareaId = 'custom-content-backup-input';
+    const importTextareaLabelId = 'custom-content-backup-label';
     const handleImport = async () => {
         try {
             await importCustomContentString(importString);
@@ -14,8 +16,14 @@
 
 <Chip text="">
     <div class="vertical">
-        <p>Paste your custom content backup here:</p>
-        <div class="input-block"><textarea bind:value={importString} /></div>
+        <p id={importTextareaLabelId}>Paste your custom content backup here:</p>
+        <div class="input-block">
+            <textarea
+                id={importTextareaId}
+                aria-labelledby={importTextareaLabelId}
+                bind:value={importString}
+            />
+        </div>
         <Chip text="Import" on:click={handleImport} inverted={true} />
     </div>
 </Chip>
