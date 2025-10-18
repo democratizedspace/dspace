@@ -1,0 +1,12 @@
+{
+  "id": "2025-10-19-playwright-headless-shell-underscore",
+  "date": "2025-10-19",
+  "component": "ci:e2e",
+  "rootCause": "Playwright 1.56 renamed the Chromium headless_shell download directory to use underscores, but ensurePlaywrightBrowsers still checked for the older hyphenated folder. The helper concluded Chromium was missing even after installation and aborted the shard before tests ran.",
+  "resolution": "Updated resolveHeadlessShellPath to detect both hyphenated and underscored headless directories and expanded the unit suite to cover the underscore layout.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18605256329/job/53053162559",
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts"
+  ]
+}
