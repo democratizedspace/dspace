@@ -15,6 +15,7 @@
         DEFAULT_QUEST_IMAGE,
         createDefaultDialogueNode,
     } from '../../utils/questDefaults.js';
+    import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -167,11 +168,19 @@
         if (existingQuests.length === 0) {
             try {
                 allQuests = await db.list(ENTITY_TYPES.QUEST);
+                await validateForm();
             } catch (error) {
                 console.error('Error loading quests:', error);
             }
         } else {
-            allQuests = existingQuests;
+            try {
+                allQuests = await syncExistingQuestsToIndexedDB(existingQuests);
+                await validateForm();
+            } catch (error) {
+                console.error('Error synchronizing existing quests:', error);
+                allQuests = existingQuests;
+                await validateForm();
+            }
         }
 
         try {
