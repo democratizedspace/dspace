@@ -3,6 +3,7 @@ import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ensurePlaywrightBrowsers } from './scripts/utils/ensure-playwright-browsers.js';
 
 if (process.env.CI) {
     await import('fake-indexeddb/auto');
@@ -25,6 +26,8 @@ declare const process: {
 
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
+
+ensurePlaywrightBrowsers({ cwd: frontendDir });
 
 function ensureAstroBuildArtifacts(): void {
     const serverEntrypoint = join(frontendDir, 'dist', 'server', 'entry.mjs');
