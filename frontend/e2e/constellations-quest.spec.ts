@@ -42,9 +42,13 @@ function generateUniqueQuestTitle(baseTitle: string): string {
     return `${baseTitle} (${suffix})`;
 }
 
+function normalizeQuestIdentifiers(ids: QuestIdentifier[]): string[] {
+    return [...ids.map((id) => String(id)).sort((a, b) => (a > b ? 1 : a < b ? -1 : 0))];
+}
+
 async function runQuestDatabaseOperation<T>(
     page: Page,
-    operation: 'lookupByTitle' | 'getById' | 'updateById',
+    operation: 'lookupByTitle' | 'listIdsByTitle' | 'getById' | 'updateById',
     payload: Record<string, unknown>
 ): Promise<T> {
     return page.evaluate(
@@ -141,6 +145,60 @@ async function runQuestDatabaseOperation<T>(
                                 }
 
                                 resolve(null);
+                            };
+                        });
+                    });
+                }
+                case 'listIdsByTitle': {
+                    const { title } = payload as { title: string };
+                    return withTransaction('readonly', async (transaction) => {
+                        const store = transaction.objectStore(storeName);
+                        const request = store.getAll();
+
+                        return await new Promise<QuestIdentifier[]>((resolve, reject) => {
+                            transaction.onabort = () =>
+                                reject(
+                                    transaction.error ??
+                                        new Error(
+                                            'Quest lookup transaction was aborted unexpectedly'
+                                        )
+                                );
+                            transaction.onerror = () =>
+                                reject(
+                                    transaction.error ??
+                                        new Error('Quest lookup transaction failed to complete')
+                                );
+                            request.onerror = () =>
+                                reject(
+                                    request.error ??
+                                        new Error('Failed to load quests from IndexedDB store')
+                                );
+                            request.onsuccess = () => {
+                                const quests = Array.isArray(request.result) ? request.result : [];
+
+                                const ids = quests.reduce<QuestIdentifier[]>((acc, quest) => {
+                                    const candidate = quest as { id?: unknown; title?: unknown };
+                                    if (candidate?.title !== title) {
+                                        return acc;
+                                    }
+
+                                    if (typeof candidate.id === 'string') {
+                                        acc.push(candidate.id);
+                                        return acc;
+                                    }
+
+                                    if (
+                                        typeof candidate.id === 'number' &&
+                                        Number.isFinite(candidate.id)
+                                    ) {
+                                        acc.push(candidate.id);
+                                        return acc;
+                                    }
+
+                                    return acc;
+                                }, []);
+
+                                resolve(ids);
                             };
                         });
                     });
@@ -247,6 +305,12 @@ async function findQuestIdByTitle(
     title: string
 ): Promise<QuestIdentifier | null> {
     return runQuestDatabaseOperation<QuestIdentifier | null>(page, 'lookupByTitle', {
+        title,
+    });
+}
+
+async function findQuestIdsByTitle(page: Page, title: string): Promise<QuestIdentifier[]> {
+    return runQuestDatabaseOperation<QuestIdentifier[]>(page, 'listIdsByTitle', {
         title,
     });
 }
@@ -358,13 +422,18 @@ test.describe('Constellations Quest Creation', () => {
 
         await expect(page.getByText('Title must be unique', { exact: false })).toBeVisible();
 
+        const questIdsBeforeAttempt = await findQuestIdsByTitle(page, questTemplate.title);
+        expect(questIdsBeforeAttempt.length).toBeGreaterThan(0);
+
         const createButton = page.getByRole('button', { name: 'Create Quest' });
         await expect(createButton).toBeVisible();
         await createButton.click();
         await page.waitForLoadState('networkidle');
         await expect(page).toHaveURL(/\/quests\/create/);
 
-        const questId = await findQuestIdByTitle(page, questTemplate.title);
-        expect(questId).toBeNull();
+        const questIdsAfterAttempt = await findQuestIdsByTitle(page, questTemplate.title);
+        expect(normalizeQuestIdentifiers(questIdsAfterAttempt)).toEqual(
+            normalizeQuestIdentifiers(questIdsBeforeAttempt)
+        );
     });
 });
