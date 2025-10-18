@@ -1,9 +1,22 @@
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from '@playwright/test';
 
-const INSTALL_COMMAND = 'npx playwright install --with-deps chromium';
+const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test', 'cli.js');
+const INSTALL_ARGS = ['install', '--with-deps', 'chromium', 'chromium-headless-shell'];
+
+export function resolvePlaywrightCLI(cwd) {
+    const cliPath = path.join(cwd, PLAYWRIGHT_RELATIVE_CLI);
+
+    if (!existsSync(cliPath)) {
+        throw new Error(
+            `Playwright CLI not found at ${cliPath}. Have you installed frontend dependencies?`
+        );
+    }
+
+    return cliPath;
+}
 
 export function resolveHeadlessShellPath(executablePath) {
     if (!executablePath) {
@@ -88,7 +101,7 @@ export function hasChromiumExecutable(browser) {
 export function ensurePlaywrightBrowsers(options = {}) {
     const {
         cwd = process.cwd(),
-        command = INSTALL_COMMAND,
+        installArgs = INSTALL_ARGS,
         env = process.env,
         browser = chromium,
     } = options;
@@ -106,15 +119,15 @@ export function ensurePlaywrightBrowsers(options = {}) {
         return;
     }
 
-    execSync(command, {
+    const cliPath = resolvePlaywrightCLI(cwd);
+
+    execFileSync(process.execPath, [cliPath, ...installArgs], {
         stdio: 'inherit',
         cwd,
         env,
     });
 
     if (!hasChromiumExecutable(browser)) {
-        throw new Error(
-            `Playwright chromium executable is still missing after running "${command}".`
-        );
+        throw new Error('Playwright chromium executable is still missing after installation.');
     }
 }
