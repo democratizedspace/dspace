@@ -1,5 +1,59 @@
 import { Page, Locator, expect } from '@playwright/test';
 
+const CONNECTION_REFUSED_PATTERNS = [
+    'ECONNREFUSED',
+    'ERR_CONNECTION_REFUSED',
+    'Connection refused',
+];
+
+const GAME_STATE_MODULE = '/src/utils/gameState/common.js';
+
+async function wait(page: Page, ms: number): Promise<void> {
+    if (typeof page.waitForTimeout === 'function') {
+        await page.waitForTimeout(ms);
+        return;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function navigateWithRetry(
+    page: Page,
+    url: string,
+    { attempts = 5, delayMs = 250 }: { attempts?: number; delayMs?: number } = {}
+): Promise<void> {
+    let lastError: unknown;
+
+    for (let attempt = 1; attempt <= attempts; attempt++) {
+        try {
+            await page.goto(url, { waitUntil: 'domcontentloaded' });
+            return;
+        } catch (error) {
+            lastError = error;
+
+            const message =
+                error instanceof Error ? error.message ?? String(error) : String(error ?? '');
+            const isRetryable = CONNECTION_REFUSED_PATTERNS.some((pattern) =>
+                message.includes(pattern)
+            );
+
+            if (!isRetryable || attempt === attempts) {
+                throw error;
+            }
+
+            const backoffDelay = delayMs * attempt;
+            console.warn(
+                `Retrying navigation to ${url} after connection refusal (attempt ${attempt} of ${attempts})`
+            );
+            await wait(page, backoffDelay);
+        }
+    }
+
+    throw lastError instanceof Error
+        ? lastError
+        : new Error(`Failed to navigate to ${url}: ${String(lastError)}`);
+}
+
 import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 
 /**
@@ -7,7 +61,7 @@ import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
  */
 
 export async function purgeClientState(page: Page): Promise<void> {
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await navigateWithRetry(page, '/');
 
     await page.evaluate(async () => {
         localStorage.clear();
@@ -19,7 +73,7 @@ export async function purgeClientState(page: Page): Promise<void> {
         };
 
         try {
-            const module = await import('/src/utils/gameState/common.js');
+            const module = await import(/* @vite-ignore */ GAME_STATE_MODULE);
             await module.closeGameStateDatabaseForTesting?.();
         } catch (error) {
             console.warn('Failed to close game state database before purge:', error);
