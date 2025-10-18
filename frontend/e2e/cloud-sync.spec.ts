@@ -20,11 +20,15 @@ test.describe('Cloud Sync', () => {
         await page.route('**/cloud-sync/**', (route) =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
         );
-        await page.route('**/gists**', async (route) => {
+        let uploadIntercepted = false;
+        let downloadIntercepted = false;
+
+        const handleGistRoute = async (route) => {
             const request = route.request();
             const method = request.method();
 
             if (method === 'POST' || method === 'PATCH') {
+                uploadIntercepted = true;
                 await route.fulfill({
                     status: 200,
                     contentType: 'application/json',
@@ -34,6 +38,7 @@ test.describe('Cloud Sync', () => {
             }
 
             if (method === 'GET') {
+                downloadIntercepted = true;
                 await route.fulfill({
                     status: 200,
                     contentType: 'application/json',
@@ -43,7 +48,10 @@ test.describe('Cloud Sync', () => {
             }
 
             await route.continue();
-        });
+        };
+
+        await page.route('**/gists', handleGistRoute);
+        await page.route('**/gists/*', handleGistRoute);
 
         await page.goto('/cloudsync');
         await waitForHydration(page);
@@ -61,5 +69,6 @@ test.describe('Cloud Sync', () => {
 
         await page.getByRole('button', { name: /download/i }).click();
         await expect(page.getByTestId('sync-success')).toHaveText('Download successful');
+        await expect.poll(() => uploadIntercepted && downloadIntercepted).toBe(true);
     });
 });
