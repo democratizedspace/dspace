@@ -176,6 +176,34 @@ test('verify Playwright install-deps step preserves PATH in CI workflow', async 
     expect(workflowContent.includes(expectedCommand)).toBeTruthy();
 });
 
+test('verify tests workflow installs Ubuntu 24 runtime libraries for Playwright', async () => {
+    const workflowPath = path.resolve(__dirname, '../../.github/workflows/tests.yml');
+
+    expect(fs.existsSync(workflowPath), `Expected workflow at ${workflowPath}`).toBeTruthy();
+
+    const workflowContent = fs.readFileSync(workflowPath, 'utf8');
+    const requiredPackages = [
+        'libatk1.0-0t64',
+        'libatk-bridge2.0-0t64',
+        'libatspi2.0-0t64',
+        'libcups2t64',
+        'libgbm1',
+        'libxkbcommon0',
+        'libxcomposite1',
+        'libxdamage1',
+        'libxfixes3',
+        'libxrandr2',
+        'libasound2t64',
+    ];
+
+    for (const pkg of requiredPackages) {
+        expect(
+            workflowContent.includes(pkg),
+            `Expected tests workflow to install ${pkg} for Ubuntu 24 Playwright runs`
+        ).toBeTruthy();
+    }
+});
+
 test('verify playwright web server is properly configured', async ({ page }, testInfo) => {
     // Try to load the home page
     await page.goto('/');
