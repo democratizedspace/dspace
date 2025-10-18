@@ -1,5 +1,4 @@
 <script>
-    import Chip from '../../../components/svelte/Chip.svelte';
     import {
         loadCloudGistId,
         uploadGameStateToGist,
@@ -14,6 +13,7 @@
         clearGitHubToken,
     } from '../../../utils/githubToken.js';
 
+    let root;
     let token = '';
     let gistId = '';
     let message = '';
@@ -27,6 +27,10 @@
     onMount(async () => {
         token = await loadGitHubToken();
         gistId = await loadCloudGistId();
+        root?.setAttribute('data-hydrated', 'true');
+        if (typeof window !== 'undefined') {
+            window.__cloudSyncReady = true;
+        }
     });
 
     const saveToken = async () => {
@@ -73,7 +77,7 @@
     };
 </script>
 
-<div class="chip-container">
+<div class="chip-container" bind:this={root} data-testid="cloud-sync-form">
     <div class="vertical">
         <div class="form-group">
             <label for="token">GitHub Token*</label>
@@ -95,8 +99,8 @@
             </div>
         </div>
         <div class="buttons">
-            <Chip text="Upload" on:click={handleUpload} inverted={true} />
-            <Chip text="Download" on:click={handleDownload} inverted={true} />
+            <button type="button" class="chip" on:click={handleUpload}> Upload </button>
+            <button type="button" class="chip" on:click={handleDownload}> Download </button>
         </div>
         {#if message}
             <p
@@ -132,6 +136,23 @@
     .buttons {
         display: flex;
         gap: 10px;
+    }
+    .chip {
+        opacity: 0.8;
+        background-color: #68d46d;
+        border-radius: 0.4rem;
+        color: black;
+        border: none;
+        padding: 6px 12px;
+        font-size: 1em;
+        font-weight: 600;
+    }
+    .chip:hover,
+    .chip:focus-visible {
+        opacity: 1;
+        cursor: pointer;
+        outline: 2px solid #fff;
+        outline-offset: 2px;
     }
     .message {
         color: #90ee90;

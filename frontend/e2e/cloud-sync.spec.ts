@@ -47,6 +47,7 @@ test.describe('Cloud Sync', () => {
 
         await page.goto('/cloudsync');
         await waitForHydration(page);
+        await expect.poll(() => page.evaluate(() => window.__cloudSyncReady === true)).toBeTruthy();
 
         const token = `ghp_${'a'.repeat(36)}`;
         const tokenField = page.getByLabel(/GitHub Token/i);
