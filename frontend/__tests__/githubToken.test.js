@@ -68,4 +68,39 @@ describe('githubToken utils', () => {
         expect(isValidGitHubToken('short')).toBe(false);
         expect(isValidGitHubToken('ghp_invalid')).toBe(false);
     });
+
+    test('loads token from latest local backup when IndexedDB is stale', async () => {
+        await saveGitHubToken('persisted-token');
+
+        await new Promise((resolve, reject) => {
+            const req = indexedDB.open('dspaceGameState', 1);
+            req.onupgradeneeded = () => {
+                const db = req.result;
+                if (!db.objectStoreNames.contains('state')) {
+                    db.createObjectStore('state');
+                }
+            };
+            req.onsuccess = () => {
+                const db = req.result;
+                const tx = db.transaction('state', 'readwrite');
+                const staleState = {
+                    quests: {},
+                    inventory: {},
+                    processes: {},
+                    _meta: { lastUpdated: 0 },
+                };
+                tx.objectStore('state').put(staleState, 'root');
+                tx.oncomplete = () => {
+                    db.close();
+                    resolve();
+                };
+                tx.onerror = (event) => reject(event.target.error);
+            };
+            req.onerror = (event) => reject(event.target.error);
+        });
+
+        jest.resetModules();
+        const { loadGitHubToken: loadTokenAfterReload } = require('../src/utils/githubToken.js');
+        expect(await loadTokenAfterReload()).toBe('persisted-token');
+    });
 });
