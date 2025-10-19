@@ -13,6 +13,7 @@ let dbPromise;
 let dbInstance;
 let useLocalStorage = false;
 let warnedFallback = false;
+let readyResolved = false;
 export const isUsingLocalStorage = () => useLocalStorage;
 
 function warnFallback() {
@@ -154,8 +155,12 @@ async function read(store) {
     }
 }
 
-async function write(store, value) {
-    lsWrite(store, value);
+async function write(store, value, options = {}) {
+    const { skipLocalStorage = false } = options;
+
+    if (!skipLocalStorage) {
+        lsWrite(store, value);
+    }
     if (useLocalStorage) return;
     try {
         await idbWrite(store, value);
@@ -226,6 +231,8 @@ export const ready = (async () => {
         }
     } catch (err) {
         console.error('Error loading game state from IndexedDB:', err);
+    } finally {
+        readyResolved = true;
     }
 })();
 
@@ -233,16 +240,28 @@ let writeQueue = Promise.resolve();
 
 export const loadGameState = () => structuredClone(gameState);
 
+export const isGameStateReady = () => readyResolved;
+
 export const saveGameState = async (newState) => {
-    await ready;
+    if (!readyResolved) {
+        await ready;
+    }
     const previousSnapshot = structuredClone(gameState);
     const nextState = validateGameState(structuredClone(newState));
     nextState[META_KEY].lastUpdated = Date.now();
     gameState = nextState;
     state.set(gameState);
+
+    // Persist the latest snapshots to localStorage immediately so data survives
+    // page refreshes even if the pending IndexedDB writes are interrupted.
+    lsWrite(BACKUP_STORE, previousSnapshot);
+    lsWrite(STATE_STORE, gameState);
+
     writeQueue = writeQueue.then(async () => {
-        await write(BACKUP_STORE, previousSnapshot).catch(() => undefined);
-        await write(STATE_STORE, gameState).catch(() => undefined);
+        await write(BACKUP_STORE, previousSnapshot, { skipLocalStorage: true }).catch(
+            () => undefined
+        );
+        await write(STATE_STORE, gameState, { skipLocalStorage: true }).catch(() => undefined);
     });
     return writeQueue;
 };
