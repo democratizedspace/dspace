@@ -13,6 +13,7 @@
         DEFAULT_DIALOGUE_TEXT,
         DEFAULT_NPC_NAME,
         DEFAULT_QUEST_IMAGE,
+        DEFAULT_DIALOGUE_OPTION,
         createDefaultDialogueNode,
     } from '../../utils/questDefaults.js';
     import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
@@ -115,6 +116,25 @@
             requiresItems,
             grantsItems,
         };
+    }
+
+    function isDefaultFinishOption(option) {
+        if (!option || option.type !== DEFAULT_DIALOGUE_OPTION.type) {
+            return false;
+        }
+
+        const optionText = (option.text || '').trim();
+        const defaultText = (DEFAULT_DIALOGUE_OPTION.text || '').trim();
+        const requiresItems = Array.isArray(option.requiresItems) ? option.requiresItems.length : 0;
+        const grantsItems = Array.isArray(option.grantsItems) ? option.grantsItems.length : 0;
+
+        return (
+            optionText === defaultText &&
+            requiresItems === 0 &&
+            grantsItems === 0 &&
+            !('goto' in option) &&
+            !('process' in option)
+        );
     }
 
     function createDialogueNodeState(node = createDefaultDialogueNode()) {
@@ -385,16 +405,37 @@
             grantsItems: optionType === 'grantsItems' ? draft.grantsItems : undefined,
         });
 
-        dialogueNodes = dialogueNodes.map((n, idx) =>
-            idx === nodeIndex
-                ? {
-                      ...n,
-                      options: [...n.options, newOption],
-                      newOption: createOptionDraft(),
-                      optionError: '',
-                  }
-                : n
-        );
+        dialogueNodes = dialogueNodes.map((n, idx) => {
+            if (idx !== nodeIndex) {
+                return n;
+            }
+
+            const existingOptions = n.options || [];
+            let updatedOptions = existingOptions;
+
+            if (optionType === 'finish') {
+                const placeholderIndex = existingOptions.findIndex((option) =>
+                    isDefaultFinishOption(option)
+                );
+
+                if (placeholderIndex !== -1) {
+                    updatedOptions = existingOptions.map((option, optIdx) =>
+                        optIdx === placeholderIndex ? newOption : option
+                    );
+                } else {
+                    updatedOptions = [...existingOptions, newOption];
+                }
+            } else {
+                updatedOptions = [...existingOptions, newOption];
+            }
+
+            return {
+                ...n,
+                options: updatedOptions,
+                newOption: createOptionDraft(),
+                optionError: '',
+            };
+        });
         validateForm();
     }
 
