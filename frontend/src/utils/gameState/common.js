@@ -7,6 +7,7 @@ const BACKUP_STORE = 'backup';
 const ROOT_KEY = 'root';
 const LS_STATE_KEY = 'gameState';
 const LS_BACKUP_KEY = 'gameStateBackup';
+const META_KEY = '_meta';
 
 let dbPromise;
 let dbInstance;
@@ -133,42 +134,68 @@ function lsClear(store) {
 }
 
 async function read(store) {
-    if (useLocalStorage) return lsRead(store);
+    const localValue = lsRead(store);
+    if (useLocalStorage) return localValue;
     try {
-        return await idbRead(store);
+        const idbValue = await idbRead(store);
+        if (store === STATE_STORE) {
+            const idbUpdated = idbValue?.[META_KEY]?.lastUpdated ?? 0;
+            const localUpdated = localValue?.[META_KEY]?.lastUpdated ?? 0;
+            if (localUpdated > idbUpdated) {
+                return localValue ?? idbValue;
+            }
+        }
+        return idbValue ?? localValue;
     } catch (err) {
         console.error('IndexedDB read failed:', err);
         useLocalStorage = true;
         warnFallback();
-        return lsRead(store);
+        return localValue;
     }
 }
 
 async function write(store, value) {
-    if (useLocalStorage) return lsWrite(store, value);
+    lsWrite(store, value);
+    if (useLocalStorage) return;
     try {
-        return await idbWrite(store, value);
+        await idbWrite(store, value);
     } catch (err) {
         console.error('IndexedDB write failed:', err);
         useLocalStorage = true;
         warnFallback();
-        return lsWrite(store, value);
     }
 }
 
 async function clearStore(store) {
-    if (useLocalStorage) return lsClear(store);
+    lsClear(store);
+    if (useLocalStorage) return;
     try {
-        return await idbClear(store);
+        await idbClear(store);
     } catch (err) {
         console.error('IndexedDB clear failed:', err);
         useLocalStorage = true;
         warnFallback();
-        return lsClear(store);
     }
 }
 
-const initializeGameState = () => ({ quests: {}, inventory: {}, processes: {} });
+const initializeGameState = () => ({
+    quests: {},
+    inventory: {},
+    processes: {},
+    [META_KEY]: { lastUpdated: Date.now() },
+});
+
+const ensureMeta = (state) => {
+    const meta = state[META_KEY];
+    if (!meta || typeof meta !== 'object') {
+        state[META_KEY] = { lastUpdated: Date.now() };
+        return;
+    }
+
+    if (typeof meta.lastUpdated !== 'number' || Number.isNaN(meta.lastUpdated)) {
+        meta.lastUpdated = Date.now();
+    }
+};
 
 export const validateGameState = (state) => {
     if (!state || typeof state !== 'object') {
@@ -183,6 +210,7 @@ export const validateGameState = (state) => {
     if (typeof state.processes !== 'object' || state.processes === null) {
         state.processes = {};
     }
+    ensureMeta(state);
     return state;
 };
 
@@ -207,11 +235,13 @@ export const loadGameState = () => structuredClone(gameState);
 
 export const saveGameState = async (newState) => {
     await ready;
-    const snapshot = structuredClone(gameState);
-    gameState = validateGameState(newState);
+    const previousSnapshot = structuredClone(gameState);
+    const nextState = validateGameState(structuredClone(newState));
+    nextState[META_KEY].lastUpdated = Date.now();
+    gameState = nextState;
     state.set(gameState);
     writeQueue = writeQueue.then(async () => {
-        await write(BACKUP_STORE, snapshot).catch(() => undefined);
+        await write(BACKUP_STORE, previousSnapshot).catch(() => undefined);
         await write(STATE_STORE, gameState).catch(() => undefined);
     });
     return writeQueue;

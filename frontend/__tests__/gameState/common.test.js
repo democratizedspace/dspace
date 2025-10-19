@@ -21,7 +21,8 @@ describe('gameState - common utilities', () => {
 
         await resetGameState();
         const fresh = loadGameState();
-        expect(fresh).toEqual({ quests: {}, inventory: {}, processes: {} });
+        expect(fresh).toMatchObject({ quests: {}, inventory: {}, processes: {} });
+        expect(typeof fresh._meta?.lastUpdated).toBe('number');
     });
 
     test('exportGameStateString should reflect latest saved state', async () => {
@@ -43,7 +44,7 @@ describe('gameState - common utilities', () => {
     test('exportGameStateString uses stable schema', () => {
         const exported = exportGameStateString();
         const decoded = JSON.parse(Buffer.from(exported, 'base64').toString('utf8'));
-        expect(Object.keys(decoded).sort()).toEqual(['inventory', 'processes', 'quests']);
+        expect(Object.keys(decoded).sort()).toEqual(['_meta', 'inventory', 'processes', 'quests']);
     });
 
     test('importGameStateString should replace current state', async () => {
@@ -51,20 +52,23 @@ describe('gameState - common utilities', () => {
         const encoded = Buffer.from(JSON.stringify(newState)).toString('base64');
         await importGameStateString(encoded);
         const loaded = loadGameState();
-        expect(loaded).toEqual(newState);
+        expect(loaded).toMatchObject(newState);
+        expect(typeof loaded._meta?.lastUpdated).toBe('number');
     });
 
     test('importGameStateString accepts plain JSON payloads', async () => {
         const newState = { quests: { bar: true }, inventory: { 5: 1 }, processes: {} };
         await importGameStateString(JSON.stringify(newState));
         const loaded = loadGameState();
-        expect(loaded).toEqual(newState);
+        expect(loaded).toMatchObject(newState);
+        expect(typeof loaded._meta?.lastUpdated).toBe('number');
     });
 
     test('validateGameState should fill missing sections', () => {
         const corrupted = { quests: null };
         const validated = validateGameState(corrupted);
-        expect(validated).toEqual({ quests: {}, inventory: {}, processes: {} });
+        expect(validated).toMatchObject({ quests: {}, inventory: {}, processes: {} });
+        expect(typeof validated._meta?.lastUpdated).toBe('number');
     });
 
     test('rollbackGameState should restore previous state', async () => {
