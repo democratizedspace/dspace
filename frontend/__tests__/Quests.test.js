@@ -1,10 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, jest, test } from 'vitest';
 import * as gameState from '../src/utils/gameState.js';
+import * as customContent from '../src/utils/customcontent.js';
 
 // Mock the gameState module
 jest.mock('../src/utils/gameState.js', () => ({
     questFinished: jest.fn(),
     canStartQuest: jest.fn(),
+}));
+
+jest.mock('../src/utils/customcontent.js', () => ({
+    listCustomQuests: jest.fn(),
 }));
 
 // Mock IndexedDB
@@ -139,6 +144,7 @@ describe('Quests Component', () => {
         // Set up mock responses
         gameState.questFinished.mockImplementation((id) => id === 'welcome/test2');
         gameState.canStartQuest.mockReturnValue(true);
+        customContent.listCustomQuests.mockResolvedValue([]);
     });
 
     afterEach(() => {
@@ -227,5 +233,40 @@ describe('Quests Component', () => {
             document.body.removeChild(container);
             throw e;
         }
+    });
+
+    it('merges stored custom quests into the active list', async () => {
+        if (typeof document === 'undefined') {
+            return;
+        }
+
+        const container = document.createElement('div');
+        document.body.appendChild(container);
+
+        const customQuest = {
+            id: 'custom/test-quest',
+            title: 'Custom Quest Example',
+            description: 'Quest created during automated testing',
+            image: '/custom-quest.png',
+            requiresQuests: [],
+        };
+
+        customContent.listCustomQuests.mockResolvedValueOnce([customQuest]);
+
+        new Quests({
+            target: container,
+            props: { quests },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        const questHeadings = Array.from(container.querySelectorAll('.quests-grid h3')).map(
+            (node) => node.textContent?.trim()
+        );
+
+        expect(questHeadings).toContain(customQuest.title);
+
+        document.body.removeChild(container);
     });
 });
