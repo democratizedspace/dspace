@@ -419,10 +419,19 @@ test.describe('Constellations Quest Creation', () => {
 
         await expect(page.getByText('Title must be unique', { exact: false })).toBeVisible();
 
-        const questIdsBeforeAttempt = normalizeQuestIdentifiers(
-            await findQuestIdsByTitle(page, questTemplate.title)
-        );
-        expect(questIdsBeforeAttempt.length).toBeGreaterThan(0);
+        let questIdsBeforeAttempt: string[] = [];
+
+        await expect
+            .poll(
+                async () => {
+                    questIdsBeforeAttempt = normalizeQuestIdentifiers(
+                        await findQuestIdsByTitle(page, questTemplate.title)
+                    );
+                    return questIdsBeforeAttempt.length;
+                },
+                { timeout: 10_000, intervals: [500, 750, 1000] }
+            )
+            .toBeGreaterThan(0);
 
         const createButton = page.getByRole('button', { name: 'Create Quest' });
         await expect(createButton).toBeVisible();
