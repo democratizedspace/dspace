@@ -61,3 +61,26 @@ test('rejects title with forbidden characters', async () => {
     await fireEvent.submit(getByRole('form'));
     await findByText('Invalid characters');
 });
+
+test('replaces the default finish option when adding a custom finish option', async () => {
+    const { getAllByLabelText, getByLabelText, getByText, queryByDisplayValue } = render(QuestForm);
+
+    const existingOptionInputs = getAllByLabelText(/^Text$/i);
+    expect(existingOptionInputs).toHaveLength(1);
+    expect(existingOptionInputs[0]).toHaveValue('Finish quest');
+
+    await fireEvent.input(getByLabelText(/New option text/i), {
+        target: { value: 'Complete mission' },
+    });
+
+    const typeSelects = getAllByLabelText(/^Type$/i);
+    const draftTypeSelect = typeSelects[typeSelects.length - 1];
+    await fireEvent.change(draftTypeSelect, { target: { value: 'finish' } });
+
+    await fireEvent.click(getByText('Add Option'));
+
+    const optionInputsAfter = getAllByLabelText(/^Text$/i);
+    expect(optionInputsAfter).toHaveLength(1);
+    expect(optionInputsAfter[0]).toHaveValue('Complete mission');
+    expect(queryByDisplayValue('Finish quest')).not.toBeInTheDocument();
+});
