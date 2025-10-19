@@ -117,7 +117,7 @@ jobs:
             libasound2t64
 
       - name: Install Playwright browsers and runtime dependencies
-        run: sudo env "PATH=$PATH" pnpm --dir frontend exec playwright install --with-deps chromium chromium-headless-shell
+        run: sudo env "PATH=$PATH" pnpm --dir frontend exec playwright install --with-deps chromium chromium-headless-shell firefox webkit
 
       - name: Run Playwright tests (${{ matrix.shard }})
         working-directory: frontend
