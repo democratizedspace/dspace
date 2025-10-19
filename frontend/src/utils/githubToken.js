@@ -5,16 +5,20 @@ export function isValidGitHubToken(token) {
     return patterns.some((p) => p.test(trimmed));
 }
 
-import { loadGameState, saveGameState, ready } from './gameState/common.js';
+import { isGameStateReady, loadGameState, saveGameState, ready } from './gameState/common.js';
 
 export async function loadGitHubToken() {
-    await ready;
+    if (!isGameStateReady()) {
+        await ready;
+    }
     const state = loadGameState();
     return state.github?.token || '';
 }
 
 export async function saveGitHubToken(token) {
-    await ready;
+    if (!isGameStateReady()) {
+        await ready;
+    }
     const state = loadGameState();
     state.github = state.github || {};
     state.github.token = token;
@@ -22,7 +26,9 @@ export async function saveGitHubToken(token) {
 }
 
 export async function clearGitHubToken() {
-    await ready;
+    if (!isGameStateReady()) {
+        await ready;
+    }
     const state = loadGameState();
     if (state.github) {
         state.github.token = '';

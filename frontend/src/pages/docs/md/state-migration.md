@@ -12,6 +12,11 @@ state into IndexedDB and clears the legacy keys. The migration runs automaticall
 needs no manual action. If IndexedDB is unavailable, the game falls back to
 `localStorage` and warns the player that storage space will be limited.
 
+> **Note:** New persistence features should favor IndexedDB end-to-end. Use
+> `localStorage` strictly as a resilience fallback when IndexedDB cannot be
+> opened, and migrate any remaining direct `localStorage` reads or writes into
+> IndexedDB-backed helpers.
+
 ```ts
 import { importV2V3 } from '../utils/gameState.js';
 
