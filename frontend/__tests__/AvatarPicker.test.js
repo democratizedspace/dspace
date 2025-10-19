@@ -2,6 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/svelte';
+import { tick } from 'svelte';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -37,5 +38,18 @@ describe('AvatarPicker component', () => {
         expect(options[0]).toHaveAttribute('aria-pressed', 'false');
         await fireEvent.click(options[0]);
         expect(options[0]).toHaveAttribute('aria-pressed', 'true');
+    });
+
+    it('exposes hydration state for tests', async () => {
+        const defaultPFPs = ['a.png'];
+        const { container } = render(AvatarPicker, { defaultPFPs });
+        const picker = container.querySelector('[data-testid="avatar-picker"]');
+
+        expect(picker).toBeInTheDocument();
+        expect(picker).toHaveAttribute('data-hydrated', 'false');
+
+        await tick();
+
+        expect(picker).toHaveAttribute('data-hydrated', 'true');
     });
 });

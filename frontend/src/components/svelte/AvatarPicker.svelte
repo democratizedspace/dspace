@@ -1,11 +1,18 @@
 <script>
+    import { onMount } from 'svelte';
+
     export let defaultPFPs;
 
     let selectedIndex = -1;
+    let isHydrated = false;
+
+    onMount(() => {
+        isHydrated = true;
+    });
 
     function setSelectedAvatar(index) {
         localStorage.setItem('avatarUrl', defaultPFPs[index]);
-        if (window) {
+        if (typeof window !== 'undefined') {
             window.location.href = '/profile';
         }
     }
@@ -15,7 +22,7 @@
     }
 </script>
 
-<div class="vertical">
+<div class="vertical" data-testid="avatar-picker" data-hydrated={isHydrated ? 'true' : 'false'}>
     <div class="horizontal selector">
         <div class="item horizontal previewcontainer" id="preview">
             {#if selectedIndex >= 0}
