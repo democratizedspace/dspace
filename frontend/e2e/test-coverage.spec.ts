@@ -167,13 +167,25 @@ test('verify Playwright install-deps step preserves PATH in CI workflow', async 
     expect(fs.existsSync(workflowPath), `Expected workflow at ${workflowPath}`).toBeTruthy();
 
     const workflowContent = fs.readFileSync(workflowPath, 'utf8');
-    const expectedCommand = 'sudo env "PATH=$PATH" npx playwright install-deps';
+    const expectedCommand =
+        'sudo env "PATH=$PATH" pnpm --dir frontend exec playwright install --with-deps chromium chromium-headless-shell';
 
     if (!workflowContent.includes(expectedCommand)) {
         console.error('tests.yml content:', workflowContent);
     }
 
     expect(workflowContent.includes(expectedCommand)).toBeTruthy();
+});
+
+test('verify Playwright install step requests chromium headless shell', async () => {
+    const workflowPath = path.resolve(__dirname, '../../.github/workflows/tests.yml');
+
+    expect(fs.existsSync(workflowPath), `Expected workflow at ${workflowPath}`).toBeTruthy();
+
+    const workflowContent = fs.readFileSync(workflowPath, 'utf8');
+
+    expect(workflowContent.includes('chromium-headless-shell')).toBeTruthy();
+    expect(workflowContent.includes('--with-deps')).toBeTruthy();
 });
 
 test('verify tests workflow installs Ubuntu 24 runtime libraries for Playwright', async () => {
