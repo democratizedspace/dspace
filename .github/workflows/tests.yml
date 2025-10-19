@@ -116,12 +116,8 @@ jobs:
             libxrandr2 \
             libasound2t64
 
-      - name: Install Playwright system dependencies
-        working-directory: frontend
-        run: sudo env "PATH=$PATH" npx playwright install-deps
-
-      - name: Install Playwright browsers
-        run: pnpm --dir frontend exec playwright install
+      - name: Install Playwright browsers and runtime dependencies
+        run: sudo env "PATH=$PATH" pnpm --dir frontend exec playwright install --with-deps chromium chromium-headless-shell firefox webkit
 
       - name: Run Playwright tests (${{ matrix.shard }})
         working-directory: frontend
