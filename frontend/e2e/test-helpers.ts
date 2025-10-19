@@ -625,13 +625,35 @@ async function trySelectItem(page: Page): Promise<boolean> {
  */
 export async function waitForHydration(page: Page, target?: string): Promise<void> {
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForLoadState('load');
 
     await expect(page.getByRole('main')).toBeVisible();
 
+    await page.evaluate(async () => {
+        await new Promise<void>((resolve) => {
+            if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+                window.requestIdleCallback(() => resolve());
+                return;
+            }
+
+            setTimeout(() => resolve(), 50);
+        });
+    });
+
     if (target) {
-        const locator = target.startsWith('data-testid=')
-            ? page.getByTestId(target.replace('data-testid=', '').trim())
-            : page.locator(target);
+        if (target.startsWith('data-testid=')) {
+            const testId = target.replace('data-testid=', '').trim();
+            await page.waitForFunction(
+                ({ id }) =>
+                    document
+                        .querySelector(`[data-testid="${id}"]`)
+                        ?.getAttribute('data-hydrated') === 'true',
+                { id: testId }
+            );
+            return;
+        }
+
+        const locator = page.locator(target);
         await expect(locator).toBeVisible();
         return;
     }

@@ -9,13 +9,16 @@ test.describe('Profile avatar selection', () => {
     test('selects an avatar and shows it on the profile page', async ({ page }) => {
         await page.goto('/profile/avatar');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
+        await waitForHydration(page, 'data-testid=avatar-picker');
 
-        await page.getByRole('button', { name: 'Select avatar 1', exact: true }).click();
-        await Promise.all([
-            page.waitForURL(/\/profile$/),
-            page.getByRole('button', { name: 'Select', exact: true }).click(),
-        ]);
+        const avatarOption = page.getByRole('button', { name: 'Select avatar 1', exact: true });
+        const selectButton = page.getByRole('button', { name: 'Select', exact: true });
+
+        await expect(selectButton).toBeDisabled();
+        await avatarOption.click();
+        await expect(selectButton).toBeEnabled();
+
+        await Promise.all([page.waitForURL(/\/profile$/), selectButton.click()]);
 
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
