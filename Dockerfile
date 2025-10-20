@@ -21,6 +21,7 @@ WORKDIR /workspace
 FROM base AS deps
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY frontend/package.json frontend/
+COPY frontend/scripts frontend/scripts
 RUN pnpm install --filter ./frontend... --frozen-lockfile
 
 FROM deps AS build
@@ -30,6 +31,7 @@ RUN pnpm --filter ./frontend... run build
 FROM base AS prod-deps
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY frontend/package.json frontend/
+COPY frontend/scripts frontend/scripts
 RUN pnpm install --filter ./frontend... --frozen-lockfile --prod
 
 FROM node:20-alpine AS runtime
