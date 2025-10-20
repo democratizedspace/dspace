@@ -1,0 +1,18 @@
+replicaCount: 2
+ingress:
+  hosts:
+    - host: int.dspace.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-int-tls
+      hosts:
+        - int.dspace.example.com
+env:
+  extra:
+    - name: DSPACE_FEATURE_FLAGS
+      value: beta-chat,balance-panel
+serviceMonitor:
+  enabled: true
+  namespace: monitoring

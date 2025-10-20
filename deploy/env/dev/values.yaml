@@ -1,0 +1,17 @@
+replicaCount: 1
+ingress:
+  hosts:
+    - host: dev.dspace.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-dev-tls
+      hosts:
+        - dev.dspace.example.com
+env:
+  extra:
+    - name: DSPACE_FEATURE_FLAGS
+      value: beta-chat
+serviceMonitor:
+  enabled: false

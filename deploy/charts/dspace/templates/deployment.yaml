@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dspace.fullname" . }}
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      {{- include "dspace.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dspace.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.imagePullSecrets }}
+        - name: {{ . }}
+        {{- end }}
+      {{- end }}
+      serviceAccountName: {{ if .Values.serviceAccount.create }}{{ include "dspace.fullname" . }}{{ else }}{{ default "default" .Values.serviceAccount.name }}{{ end }}
+      terminationGracePeriodSeconds: 30
+      {{- if and .Values.podSecurityContext.enabled (not (empty .Values.podSecurityContext)) }}
+      securityContext:
+        {{- $ctx := omit .Values.podSecurityContext "enabled" }}
+        {{- if $ctx }}
+        {{- toYaml $ctx | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ include "dspace.name" . }}
+          image: {{ printf "%s:%s" .Values.image.repository (default .Chart.AppVersion .Values.image.tag) }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+              name: http
+          env:
+            {{- range $key, $value := .Values.env.standard }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- range .Values.env.extra }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+            {{- range .Values.secretEnv }}
+            - name: {{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .secretKey }}
+            {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
+          {{- if and .Values.securityContext.enabled (not (empty .Values.securityContext)) }}
+          securityContext:
+            {{- $containerCtx := omit .Values.securityContext "enabled" }}
+            {{- if $containerCtx }}
+            {{- toYaml $containerCtx | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+          {{- end }}
+      {{- if .Values.persistence.enabled }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{ else }}{{ include "dspace.fullname" . }}{{ end }}
+      {{- end }}

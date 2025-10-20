@@ -1,0 +1,25 @@
+replicaCount: 3
+ingress:
+  hosts:
+    - host: dspace.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-prod-tls
+      hosts:
+        - dspace.example.com
+env:
+  extra:
+    - name: DSPACE_FEATURE_FLAGS
+      value: beta-chat,balance-panel,observability
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+resources:
+  requests:
+    cpu: 500m
+    memory: 768Mi
+  limits:
+    cpu: "1"
+    memory: 1536Mi

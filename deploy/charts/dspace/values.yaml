@@ -1,0 +1,111 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/democratizedspace/dspace
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  enabled: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-dns01
+  hosts:
+    - host: dspace.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-tls
+      hosts:
+        - dspace.local
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 750m
+    memory: 1Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 75
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+env:
+  standard:
+    NODE_ENV: production
+    HOST: 0.0.0.0
+    PORT: "8080"
+  extra: []
+
+secretEnv:
+  - name: METRICS_TOKEN
+    secretName: dspace-secrets
+    secretKey: metricsToken
+
+persistence:
+  enabled: false
+  existingClaim: ""
+  storageClass: longhorn
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+  mountPath: /app/data
+
+serviceMonitor:
+  enabled: false
+  namespace: monitoring
+  interval: 30s
+  scrapeTimeout: 10s
+  additionalLabels: {}
+  metricRelabelings: []
+  relabelings: []
+
+networkPolicy:
+  enabled: true
+  traefikNamespace: traefik
+  traefikSelector:
+    app.kubernetes.io/name: traefik
+  extraIngress: []
+  extraEgress: []
