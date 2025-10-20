@@ -6,6 +6,9 @@ const CONNECTION_REFUSED_PATTERNS = [
     'Connection refused',
 ];
 
+const DEFAULT_RETRY_ATTEMPTS = 12;
+const DEFAULT_RETRY_DELAY_MS = 300;
+
 const GAME_STATE_MODULE = '/src/utils/gameState/common.js';
 
 async function wait(page: Page, ms: number): Promise<void> {
@@ -20,7 +23,10 @@ async function wait(page: Page, ms: number): Promise<void> {
 export async function navigateWithRetry(
     page: Page,
     url: string,
-    { attempts = 5, delayMs = 250 }: { attempts?: number; delayMs?: number } = {}
+    {
+        attempts = DEFAULT_RETRY_ATTEMPTS,
+        delayMs = DEFAULT_RETRY_DELAY_MS,
+    }: { attempts?: number; delayMs?: number } = {}
 ): Promise<void> {
     let lastError: unknown;
 
