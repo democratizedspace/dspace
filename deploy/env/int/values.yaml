@@ -1,6 +1,6 @@
 replicaCount: 2
 image:
-  tag: sha-83d6ac7
+  digest: sha256:83d6ac783d6ac783d6ac783d6ac783d6ac783d6ac783d6ac783d6ac783d6ac78
 ingress:
   hosts:
     - host: int.dspace.example.com
@@ -13,8 +13,17 @@ ingress:
         - int.dspace.example.com
 env:
   extra:
+    - name: DSPACE_ENABLE_METRICS
+      value: "1"
     - name: DSPACE_FEATURE_FLAGS
       value: beta-chat,balance-panel
 serviceMonitor:
   enabled: true
-  namespace: monitoring
+  namespaceSelector:
+    matchNames:
+      - monitoring
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 60

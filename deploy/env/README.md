@@ -55,3 +55,11 @@ deploy/env/
 
 Override files tweak feature flags, ingress hosts, replica counts, and monitoring for each
 environment without duplicating manifests.
+
+## Metrics & Monitoring
+
+- Set `env.extra` with `DSPACE_ENABLE_METRICS=1` to expose the SSR `/metrics` endpoint on port
+  `9464`. Leave it unset or `0` to disable metrics entirely.
+- Toggle `.serviceMonitor.enabled` to let Prometheus scrape the application. When enabled, the chart
+  renders a `ServiceMonitor` that scrapes the HTTP service on `/metrics`; adjust
+  `.serviceMonitor.namespaceSelector` if your Prometheus runs in a separate namespace.
