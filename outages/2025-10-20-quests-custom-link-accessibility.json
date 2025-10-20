@@ -1,0 +1,10 @@
+{
+  "id": "quests-custom-link-accessibility",
+  "date": "2025-10-20",
+  "component": "frontend/quests",
+  "rootCause": "Custom quests rendered their thumbnail images with the data URL as the alt text and lacked an explicit aria-label on the list link. The link's accessible name therefore included the base64 data and description, so the quests page did not expose a link whose accessible name matched the quest title and the e2e quest creation test could not find it.",
+  "resolution": "Set quest list links to use an aria-label equal to the quest title and updated quest cards to describe thumbnails with human-readable alt text referencing the quest title. Added an e2e assertion to ensure the link keeps its aria-label and alt text aligned with the quest title.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18637540270"
+  ]
+}

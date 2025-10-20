@@ -62,5 +62,10 @@ test.describe('Quest creation flow', () => {
             name: new RegExp(`^${escapeRegExp(questTitle)}$`, 'i'),
         });
         await expect(questLink).toBeVisible();
+        await expect(questLink).toHaveAttribute('aria-label', questTitle);
+        await expect(questLink.locator('img').first()).toHaveAttribute(
+            'alt',
+            new RegExp(escapeRegExp(questTitle), 'i')
+        );
     });
 });

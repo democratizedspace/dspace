@@ -129,7 +129,7 @@
 
         <div class="quests-grid">
             {#each filteredQuests as quest}
-                <a href="/quests/{quest.id}">
+                <a href="/quests/{quest.id}" aria-label={quest.title}>
                     <Quest {quest} />
                 </a>
             {/each}
@@ -138,7 +138,7 @@
         {#if finishedQuests.length > 0}
             <h2>Completed Quests</h2>
             {#each finishedQuests as quest}
-                <a href="/quests/{quest.id}">
+                <a href="/quests/{quest.id}" aria-label={quest.title}>
                     <Quest {quest} compact={true} />
                 </a>
             {/each}
