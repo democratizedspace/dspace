@@ -23,8 +23,8 @@ RUN pnpm install --filter ./frontend... --frozen-lockfile --prod
 
 FROM node:20-alpine AS runtime
 RUN apk add --no-cache dumb-init curl \
-    && addgroup -g 1000 -S dspace \
-    && adduser -u 1000 -S -G dspace dspace
+    && mkdir -p /app \
+    && chown node:node /app
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8080
@@ -33,8 +33,9 @@ COPY --from=prod-deps /workspace/frontend/node_modules ./node_modules
 COPY --from=build /workspace/frontend/dist ./dist
 COPY frontend/package.json ./package.json
 COPY infra/docker/entrypoint.mjs ./entrypoint.mjs
-USER dspace
+RUN chown -R node:node /app
+USER node
 EXPOSE 8080
-HEALTHCHECK CMD wget -qO- http://127.0.0.1:${PORT:-8080}/healthz > /dev/null || exit 1
+HEALTHCHECK CMD curl -fsS http://127.0.0.1:${PORT:-8080}/healthz > /dev/null || exit 1
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["node", "entrypoint.mjs"]
