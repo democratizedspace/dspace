@@ -17,7 +17,7 @@ permissions:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  PUSH_IMAGE: ${{ github.event_name != 'pull_request' }}
+  PUSH_IMAGE: ${{ github.event_name != 'pull_request' && !contains(github.actor, 'codex') }}
 
 jobs:
   build:
