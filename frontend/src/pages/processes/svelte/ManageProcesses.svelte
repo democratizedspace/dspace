@@ -54,7 +54,7 @@
             {:else}
                 {#each filteredProcesses as process (process.id)}
                     <div class="process-row">
-                        <Process processId={process.id} />
+                        <Process processId={process.id} processData={process} />
                         <div class="process-actions">
                             <button
                                 class="preview-button"
