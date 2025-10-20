@@ -1,0 +1,33 @@
+replicaCount: 3
+
+ingress:
+  hosts:
+    - host: dspace.sugarkube.cloud
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-prod-tls
+      hosts:
+        - dspace.sugarkube.cloud
+
+env:
+  logLevel: warn
+  config:
+    VITE_TOKEN_PLACE_URL: https://token-place.sugarkube.cloud
+  secretRefs:
+    - name: dspace-prod-secrets
+  extra:
+    - name: FEATURE_FLAGS
+      value: stable-only
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 384Mi
+  limits:
+    cpu: 1
+    memory: 768Mi
+
+persistence:
+  enabled: false

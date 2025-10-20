@@ -1,0 +1,30 @@
+replicaCount: 2
+
+ingress:
+  hosts:
+    - host: dspace-int.sugarkube.cloud
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-int-tls
+      hosts:
+        - dspace-int.sugarkube.cloud
+
+env:
+  logLevel: info
+  config:
+    VITE_TOKEN_PLACE_URL: https://token-place.int.sugarkube.cloud
+  secretRefs:
+    - name: dspace-int-secrets
+  extra:
+    - name: FEATURE_FLAGS
+      value: integrate-marketplace
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 750m
+    memory: 512Mi

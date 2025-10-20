@@ -1,0 +1,6 @@
+apiVersion: v2
+name: dspace
+description: DSPACE v3 deployment for k3s clusters managed by sugarkube
+version: 0.1.0
+appVersion: "3.0.0"
+type: application

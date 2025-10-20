@@ -1,0 +1,136 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/democratizedspace/dspace
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  enabled: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-dns01
+  hosts:
+    - host: dspace.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-tls
+      hosts:
+        - dspace.local
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 512Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 75
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+priorityClassName: ""
+
+env:
+  logLevel: info
+  config:
+    VITE_TOKEN_PLACE_URL: ""
+  secretRefs:
+    - name: dspace-secrets
+  extra: []
+
+metrics:
+  enabled: true
+  port: 3000
+  path: /metrics
+
+livenessProbe:
+  enabled: true
+  path: /livez
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  path: /healthz
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+startupProbe:
+  enabled: false
+  path: /healthz
+  failureThreshold: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+
+persistence:
+  enabled: false
+  storageClass: ""
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+  mountPath: /var/lib/dspace
+
+networkPolicy:
+  enabled: true
+  ingress:
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: kube-system
+    podSelector:
+      matchLabels:
+        app.kubernetes.io/name: traefik
+  egress:
+    allowDNS: true
+    allowPublicWeb: true
+    extra: []
+
+extraVolumeMounts: []
+extraVolumes: []

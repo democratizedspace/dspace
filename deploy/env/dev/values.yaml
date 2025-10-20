@@ -1,0 +1,30 @@
+replicaCount: 1
+
+ingress:
+  hosts:
+    - host: dspace-dev.sugarkube.cloud
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-dev-tls
+      hosts:
+        - dspace-dev.sugarkube.cloud
+
+env:
+  logLevel: debug
+  config:
+    VITE_TOKEN_PLACE_URL: https://token-place.dev.sugarkube.cloud
+  secretRefs:
+    - name: dspace-dev-secrets
+  extra:
+    - name: FEATURE_FLAGS
+      value: enable-simulators
+
+resources:
+  requests:
+    cpu: 150m
+    memory: 192Mi
+  limits:
+    cpu: 500m
+    memory: 384Mi
