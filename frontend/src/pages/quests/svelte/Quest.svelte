@@ -7,14 +7,18 @@
     {#if quest}
         {#if compact}
             <div class="content">
-                <img class="quest-img quest-img-compact" src={quest.image} alt={quest.image} />
+                <img
+                    class="quest-img quest-img-compact"
+                    src={quest.image}
+                    alt={`Quest artwork for ${quest.title}`}
+                />
                 <div class="content-text">
                     <h3>{quest.title}</h3>
                 </div>
             </div>
         {:else}
             <div class="content">
-                <img class="quest-img" src={quest.image} alt={quest.image} />
+                <img class="quest-img" src={quest.image} alt={`Quest artwork for ${quest.title}`} />
                 <div class="content-text">
                     <h3>{quest.title}</h3>
                     <p>{quest.description}</p>
