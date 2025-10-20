@@ -1,7 +1,7 @@
 <script>
     import ProgressBar from './ProgressBar.svelte';
     import RemainingTime from './RemainingTime.svelte';
-    import { beforeUpdate, onMount } from 'svelte';
+    import { beforeUpdate, onDestroy, onMount } from 'svelte';
     import {
         startProcess,
         cancelProcess,
@@ -18,8 +18,10 @@
     import CompactItemList from './CompactItemList.svelte';
 
     export let processId;
+    export let processData = null;
 
     let process;
+    let isCustomProcess = false;
     let state = getProcessState(processId).state;
     let processStartedAt;
     let intervalId;
@@ -27,12 +29,22 @@
     let totalDurationSeconds;
 
     const updateState = () => {
+        if (isCustomProcess || !process) {
+            state = ProcessStates.NOT_STARTED;
+            processStartedAt = undefined;
+            return;
+        }
+
         const processState = getProcessState(processId);
         state = processState.state;
         processStartedAt = getProcessStartedAt(processId);
     };
 
     const onProcessStart = () => {
+        if (isCustomProcess) {
+            return;
+        }
+
         clearInterval(intervalId);
         startProcess(processId);
         intervalId = setInterval(updateState, 100);
@@ -40,24 +52,40 @@
     };
 
     const onProcessCancel = () => {
+        if (isCustomProcess) {
+            return;
+        }
+
         clearInterval(intervalId);
         cancelProcess(processId);
         updateState();
     };
 
     const onProcessComplete = () => {
+        if (isCustomProcess) {
+            return;
+        }
+
         clearInterval(intervalId);
         finishProcess(processId);
         updateState();
     };
 
     const onProcessPause = () => {
+        if (isCustomProcess) {
+            return;
+        }
+
         clearInterval(intervalId);
         pauseProcess(processId);
         updateState();
     };
 
     const onProcessResume = () => {
+        if (isCustomProcess) {
+            return;
+        }
+
         resumeProcess(processId);
         intervalId = setInterval(updateState, 100);
         updateState();
@@ -66,21 +94,54 @@
     onMount(() => {
         mounted = true;
         updateState();
-        intervalId = setInterval(updateState, 100);
+        if (!isCustomProcess) {
+            intervalId = setInterval(updateState, 100);
+        }
+    });
+
+    onDestroy(() => {
+        clearInterval(intervalId);
     });
 
     beforeUpdate(updateState);
 
     $: {
-        process = processes.find((p) => p.id === processId);
-        totalDurationSeconds = durationInSeconds(process.duration);
+        const builtInProcess = processes.find((p) => p.id === processId);
+
+        if (builtInProcess) {
+            process = builtInProcess;
+            isCustomProcess = Boolean(builtInProcess.custom);
+        } else if (processData) {
+            process = processData;
+            isCustomProcess = true;
+        } else {
+            process = null;
+            isCustomProcess = false;
+        }
+
+        if (process) {
+            try {
+                totalDurationSeconds = durationInSeconds(process.duration);
+            } catch (error) {
+                console.warn('Unable to calculate process duration:', error);
+                totalDurationSeconds = 0;
+            }
+        } else {
+            totalDurationSeconds = 0;
+        }
+
+        if (intervalId && isCustomProcess) {
+            clearInterval(intervalId);
+            intervalId = null;
+        } else if (!intervalId && mounted && !isCustomProcess) {
+            intervalId = setInterval(updateState, 100);
+        }
+
         updateState();
-        clearInterval(intervalId);
-        intervalId = setInterval(updateState, 100);
     }
 </script>
 
-{#if mounted}
+{#if mounted && process}
     <Chip text="">
         <div class="container">
             <h3>{process.title}</h3>
@@ -102,7 +163,11 @@
 
             <h4>Duration: {process.duration}</h4>
 
-            {#if state === ProcessStates.NOT_STARTED}
+            {#if isCustomProcess}
+                <p class="custom-process-note">
+                    Custom processes are displayed for reference and managed separately.
+                </p>
+            {:else if state === ProcessStates.NOT_STARTED}
                 <Chip text="Start" onClick={onProcessStart} inverted={true} />
             {:else if state === ProcessStates.IN_PROGRESS}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
@@ -125,6 +190,8 @@
             {/if}
         </div>
     </Chip>
+{:else if mounted}
+    <div class="process-error">Process details unavailable.</div>
 {/if}
 
 <style>
@@ -138,5 +205,20 @@
     h6 {
         color: white;
         margin: 0px;
+    }
+
+    .custom-process-note {
+        margin-top: 12px;
+        color: #d0f0d0;
+        font-size: 0.9rem;
+    }
+
+    .process-error {
+        padding: 1rem;
+        border-radius: 12px;
+        border: 2px solid #007006;
+        background: #2c5837;
+        color: white;
+        text-align: center;
     }
 </style>
