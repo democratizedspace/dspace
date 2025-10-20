@@ -14,8 +14,15 @@ spec:
     matchLabels:
       {{- include "dspace.selectorLabels" . | nindent 6 }}
   namespaceSelector:
+    {{- if .Values.serviceMonitor.namespaceSelector }}
+    {{- toYaml .Values.serviceMonitor.namespaceSelector | nindent 4 }}
+    {{- else if .Values.serviceMonitor.namespace }}
     matchNames:
-      - {{ .Values.serviceMonitor.namespace | default .Release.Namespace }}
+      - {{ .Values.serviceMonitor.namespace }}
+    {{- else }}
+    matchNames:
+      - {{ .Release.Namespace }}
+    {{- end }}
   endpoints:
     - port: http
       path: /metrics

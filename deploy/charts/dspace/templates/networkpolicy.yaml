@@ -41,14 +41,6 @@ spec:
           port: 53
         - protocol: TCP
           port: 53
-    - to:
-        - ipBlock:
-            cidr: 0.0.0.0/0
-      ports:
-        - protocol: TCP
-          port: 443
-        - protocol: TCP
-          port: 80
   {{- with .Values.networkPolicy.extraEgress }}
   {{ toYaml . | indent 4 }}
   {{- end }}

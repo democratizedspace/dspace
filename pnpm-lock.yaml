@@ -138,10 +138,10 @@ importers:
       remarkable:
         specifier: ^2.0.1
         version: 2.0.1
-    devDependencies:
       '@astrojs/node':
         specifier: ^5.1.1
         version: 5.3.6(astro@2.10.15(@types/node@18.19.121))
+    devDependencies:
       '@astrojs/svelte':
         specifier: ^2.1.0
         version: 2.2.0(astro@2.10.15(@types/node@18.19.121))(svelte@3.59.2)(typescript@5.1.6)(vite@4.5.14(@types/node@18.19.121))

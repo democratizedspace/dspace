@@ -4,8 +4,10 @@ on:
   push:
     branches:
       - main
+      - 'codex/**'
     tags:
       - 'v*'
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -23,6 +25,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Compute branch + SHA tag
+        id: vars
+        run: |
+          branch="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          branch="${branch//\//-}"
+          short_sha="$(git rev-parse --short HEAD)"
+          echo "branch_sha=${branch}-${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -46,6 +56,12 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=sha,format=short,prefix=sha-
+            type=ref,event=branch
+            type=raw,value=${{ steps.vars.outputs.branch_sha }},enable=${{ steps.vars.outputs.branch_sha != '' }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created={{timestamp}}
 
       - name: Build and push
         uses: docker/build-push-action@v5

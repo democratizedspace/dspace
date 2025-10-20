@@ -2,7 +2,9 @@
 
 Each directory under `deploy/env/` maps to a sugarkube-managed k3s cluster. The manifests are
 Flux-ready: `kustomization.yaml` turns the environment-specific `values.yaml` into a ConfigMap and
-attaches it to a `HelmRelease` that points back to this repository's in-tree chart.
+attaches it to a `HelmRelease` that points back to this repository's in-tree chart. All overlays
+deploy into the shared `dspace` namespace; the generated ConfigMaps remain unique via environment-
+specific names (e.g., `dspace-dev-values`).
 
 ## Structure
 

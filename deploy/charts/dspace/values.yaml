@@ -20,6 +20,9 @@ podLabels: {}
 
 podSecurityContext:
   enabled: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
   fsGroup: 1000
   seccompProfile:
     type: RuntimeDefault
@@ -30,6 +33,9 @@ securityContext:
   runAsUser: 1000
   runAsGroup: 1000
   allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  seccompProfile:
+    type: RuntimeDefault
   capabilities:
     drop:
       - ALL
@@ -56,17 +62,17 @@ ingress:
 
 resources:
   requests:
-    cpu: 250m
-    memory: 512Mi
+    cpu: 100m
+    memory: 128Mi
   limits:
-    cpu: 750m
-    memory: 1Gi
+    cpu: 300m
+    memory: 256Mi
 
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 3
-  targetCPUUtilizationPercentage: 75
+  targetCPUUtilizationPercentage: 60
 
 nodeSelector: {}
 tolerations: []
@@ -95,10 +101,12 @@ persistence:
 
 serviceMonitor:
   enabled: false
-  namespace: monitoring
+  namespace: ""
+  namespaceSelector: {}
   interval: 30s
   scrapeTimeout: 10s
-  additionalLabels: {}
+  additionalLabels:
+    release: prometheus
   metricRelabelings: []
   relabelings: []
 

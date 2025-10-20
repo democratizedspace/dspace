@@ -12,7 +12,8 @@ spec:
         kind: GitRepository
         name: dspace
         namespace: flux-system
-      version: 0.1.0
+      version: 0.1.1
+      reconcileStrategy: ChartVersion
   install:
     createNamespace: true
   upgrade:

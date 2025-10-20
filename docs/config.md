@@ -27,8 +27,24 @@ across `dev`, `int`, and `prod` clusters.
   `DSPACE_FEATURE_FLAGS` so operators can confirm feature toggles in-flight.
 - **Metrics**: `GET /metrics` exposes Prometheus counters/gauges via `prom-client`. Protect this
   endpoint with `METRICS_TOKEN`.
+- **Kubernetes probes**: The Helm chart issues HTTP GET probes against `/livez` and `/healthz` on
+  port `8080` with a `terminationGracePeriodSeconds` of 30 to ensure in-flight requests drain
+  cleanly during rollouts.
+- **Prometheus ServiceMonitor**: Disabled by default. Set `serviceMonitor.enabled=true` in
+  environment values to create a `ServiceMonitor` that scrapes the `http` port at `/metrics`, tags
+  the resource with `release: prometheus`, and allows overriding `namespace` or
+  `namespaceSelector` for kube-prometheus-stack compatibility.
 - **Logs**: The container emits structured JSON logs (fields: `time`, `level`, `msg`, etc.) and
   includes feature-flag metadata during startup and shutdown.
+
+## Scaling & Resources
+
+- Default container resources request `100m` CPU / `128Mi` memory with limits of `300m` CPU /
+  `256Mi` memory to suit Raspberry Pi 5-class nodes. Override `resources.requests` or
+  `resources.limits` per environment if additional capacity is required.
+- Horizontal Pod Autoscaling is optional. Enable it by setting `autoscaling.enabled=true` and tune
+  `minReplicas`, `maxReplicas`, and `targetCPUUtilizationPercentage` (default `60`) through the
+  values files.
 
 ## Storage
 
@@ -42,8 +58,12 @@ The Helm chart exposes `persistence.*` values for provisioning a Longhorn-backed
 The container listens on port `8080` internally. The Helm chart configures:
 
 - A `ClusterIP` service exposing port `8080`.
-- Traefik ingress with cert-manager TLS annotations.
-- A network policy allowing ingress from Traefik and egress only for DNS and HTTPS traffic.
+- Traefik ingress (`ingressClassName: traefik`) annotated for cert-manager using
+  `cert-manager.io/cluster-issuer: letsencrypt-dns01`. Each environment overlay defines the host
+  list and TLS secret name.
+- A default-deny `NetworkPolicy` that only allows ingress from Traefik and DNS egress to
+  `kube-dns`. Use `values.networkPolicy.extraIngress` or `values.networkPolicy.extraEgress` to
+  permit additional peers as needed.
 
 Cloudflared provides outbound access from the cluster; no extra configuration is required within the
 container beyond the defaults above.

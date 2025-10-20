@@ -1,4 +1,6 @@
 replicaCount: 2
+image:
+  tag: sha-83d6ac7
 ingress:
   hosts:
     - host: int.dspace.example.com
