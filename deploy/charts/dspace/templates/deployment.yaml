@@ -5,7 +5,9 @@ metadata:
   labels:
     {{- include "dspace.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: 5
   selector:
     matchLabels:
@@ -39,7 +41,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ include "dspace.name" . }}
-          image: {{ printf "%s:%s" .Values.image.repository (default .Chart.AppVersion .Values.image.tag) }}
+          image: {{ include "dspace.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.targetPort }}
@@ -66,15 +68,15 @@ spec:
               port: http
             initialDelaySeconds: 5
             periodSeconds: 10
-            timeoutSeconds: 3
-            failureThreshold: 3
+            timeoutSeconds: 2
+            failureThreshold: 6
           livenessProbe:
             httpGet:
               path: /livez
               port: http
-            initialDelaySeconds: 10
+            initialDelaySeconds: 20
             periodSeconds: 20
-            timeoutSeconds: 3
+            timeoutSeconds: 2
             failureThreshold: 3
           {{- if and .Values.securityContext.enabled (not (empty .Values.securityContext)) }}
           securityContext:
