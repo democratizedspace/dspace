@@ -38,12 +38,16 @@
     $: selectedItem = items.find((item) => item.id === selectedItemId);
 </script>
 
-<div class="item-selector" data-hydrated={isClientSide ? 'true' : 'false'}>
+<div
+    class="item-selector"
+    data-hydrated={isClientSide ? 'true' : 'false'}
+    data-expanded={isExpanded ? 'true' : 'false'}
+>
     <label for="item-select-control">{label}</label>
 
     {#if isClientSide}
         {#if isExpanded}
-            <div class="selector-expanded" id="item-select-control">
+            <div class="selector-expanded" id="item-select-control" role="group" aria-label={label}>
                 <SearchBar data={items} on:search={handleSearch} />
                 <div class="items-list" role="listbox">
                     {#each $filteredItems as item (item.id)}
@@ -87,6 +91,8 @@
                 <button
                     type="button"
                     class="edit-button"
+                    aria-haspopup="listbox"
+                    aria-expanded={isExpanded}
                     on:click={toggleExpanded}
                     on:touchstart={toggleExpanded}
                 >
@@ -98,6 +104,8 @@
                 type="button"
                 class="select-button"
                 id="item-select-control"
+                aria-haspopup="listbox"
+                aria-expanded={isExpanded}
                 on:click={toggleExpanded}
                 on:touchstart={toggleExpanded}
             >
