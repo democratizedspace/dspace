@@ -3,7 +3,17 @@
 FROM node:20-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN apk add --no-cache curl \
+RUN apk add --no-cache \
+        curl \
+        python3 \
+        build-base \
+        pkgconfig \
+        cairo-dev \
+        pango-dev \
+        libjpeg-turbo-dev \
+        giflib-dev \
+        freetype-dev \
+    && ln -sf python3 /usr/bin/python \
     && corepack enable
 WORKDIR /workspace
 
@@ -22,7 +32,14 @@ COPY frontend/package.json frontend/
 RUN pnpm install --filter ./frontend... --frozen-lockfile --prod
 
 FROM node:20-alpine AS runtime
-RUN apk add --no-cache dumb-init curl \
+RUN apk add --no-cache \
+        dumb-init \
+        curl \
+        cairo \
+        pango \
+        libjpeg-turbo \
+        giflib \
+        freetype \
     && mkdir -p /app \
     && chown node:node /app
 WORKDIR /app
