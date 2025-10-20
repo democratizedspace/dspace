@@ -3,6 +3,36 @@ import { clearUserData, expectLocalStorageCleared, waitForHydration } from './te
 
 async function setCloudGistId(page, gistId) {
     await page.evaluate(async (value) => {
+        const updateSnapshot = (snapshot) => {
+            const next = snapshot && typeof snapshot === 'object' ? { ...snapshot } : {};
+            next.quests = next.quests && typeof next.quests === 'object' ? next.quests : {};
+            next.inventory =
+                next.inventory && typeof next.inventory === 'object' ? next.inventory : {};
+            next.processes =
+                next.processes && typeof next.processes === 'object' ? next.processes : {};
+            const meta = next._meta && typeof next._meta === 'object' ? next._meta : {};
+            meta.lastUpdated = Date.now();
+            next._meta = meta;
+            next.cloudSync =
+                next.cloudSync && typeof next.cloudSync === 'object' ? next.cloudSync : {};
+            next.cloudSync.gistId = value;
+            return next;
+        };
+
+        if (typeof localStorage !== 'undefined') {
+            const currentStateRaw = localStorage.getItem('gameState');
+            const currentState = currentStateRaw ? JSON.parse(currentStateRaw) : undefined;
+            const updatedState = updateSnapshot(currentState);
+            localStorage.setItem('gameState', JSON.stringify(updatedState));
+
+            const backupRaw = localStorage.getItem('gameStateBackup');
+            if (backupRaw) {
+                const backupState = JSON.parse(backupRaw);
+                const updatedBackup = updateSnapshot(backupState);
+                localStorage.setItem('gameStateBackup', JSON.stringify(updatedBackup));
+            }
+        }
+
         if (typeof indexedDB === 'undefined') {
             return;
         }
@@ -17,9 +47,7 @@ async function setCloudGistId(page, gistId) {
                 getReq.onerror = () =>
                     reject(getReq.error || new Error('Failed to load game state'));
                 getReq.onsuccess = () => {
-                    const current = getReq.result || {};
-                    current.cloudSync = current.cloudSync || {};
-                    current.cloudSync.gistId = value;
+                    const current = updateSnapshot(getReq.result || {});
                     store.put(current, 'root');
                 };
                 tx.oncomplete = () => resolve(undefined);

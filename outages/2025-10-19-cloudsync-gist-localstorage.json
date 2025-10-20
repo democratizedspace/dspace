@@ -1,0 +1,11 @@
+{
+  "id": "2025-10-19-cloudsync-gist-localstorage",
+  "date": "2025-10-19",
+  "component": "frontend/cloud-sync",
+  "rootCause": "Logout E2E seeded the gist ID only in IndexedDB while the app read the localStorage fallback, leaving the field blank.",
+  "resolution": "Mirror the gist ID into localStorage snapshots and IndexedDB during test setup so it matches production persistence.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18637540270",
+    "frontend/e2e/logout-flow.spec.ts"
+  ]
+}
