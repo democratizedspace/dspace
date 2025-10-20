@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.serviceMonitor.namespace | default .Release.Namespace }}
   labels:
     {{- include "dspace.labels" . | nindent 4 }}
-    {{- with .Values.serviceMonitor.additionalLabels }}
+    {{- with .Values.serviceMonitor.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
@@ -16,18 +16,17 @@ spec:
   namespaceSelector:
     {{- if .Values.serviceMonitor.namespaceSelector }}
     {{- toYaml .Values.serviceMonitor.namespaceSelector | nindent 4 }}
-    {{- else if .Values.serviceMonitor.namespace }}
-    matchNames:
-      - {{ .Values.serviceMonitor.namespace }}
     {{- else }}
     matchNames:
       - {{ .Release.Namespace }}
     {{- end }}
   endpoints:
-    - port: http
-      path: /metrics
+    - port: {{ .Values.serviceMonitor.port }}
+      path: {{ .Values.serviceMonitor.path }}
       interval: {{ .Values.serviceMonitor.interval }}
+      {{- if .Values.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+      {{- end }}
       honorLabels: true
       scheme: http
       {{- with .Values.serviceMonitor.metricRelabelings }}

@@ -2,6 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/democratizedspace/dspace
+  digest: ""
   tag: ""
   pullPolicy: IfNotPresent
 
@@ -19,7 +20,6 @@ podAnnotations: {}
 podLabels: {}
 
 podSecurityContext:
-  enabled: true
   runAsNonRoot: true
   runAsUser: 1000
   runAsGroup: 1000
@@ -28,10 +28,7 @@ podSecurityContext:
     type: RuntimeDefault
 
 securityContext:
-  enabled: true
   runAsNonRoot: true
-  runAsUser: 1000
-  runAsGroup: 1000
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
   seccompProfile:
@@ -51,14 +48,14 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-dns01
   hosts:
-    - host: dspace.local
+    - host: dspace.example.com
       paths:
         - path: /
           pathType: Prefix
   tls:
     - secretName: dspace-tls
       hosts:
-        - dspace.local
+        - dspace.example.com
 
 resources:
   requests:
@@ -101,12 +98,14 @@ persistence:
 
 serviceMonitor:
   enabled: false
-  namespace: ""
-  namespaceSelector: {}
+  labels:
+    release: kube-prometheus-stack
   interval: 30s
   scrapeTimeout: 10s
-  additionalLabels:
-    release: prometheus
+  path: /metrics
+  port: http
+  namespace: ""
+  namespaceSelector: {}
   metricRelabelings: []
   relabelings: []
 

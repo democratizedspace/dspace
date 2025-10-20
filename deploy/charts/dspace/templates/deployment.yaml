@@ -30,16 +30,13 @@ spec:
       {{- end }}
       serviceAccountName: {{ if .Values.serviceAccount.create }}{{ include "dspace.fullname" . }}{{ else }}{{ default "default" .Values.serviceAccount.name }}{{ end }}
       terminationGracePeriodSeconds: 30
-      {{- if and .Values.podSecurityContext.enabled (not (empty .Values.podSecurityContext)) }}
+      {{- with .Values.podSecurityContext }}
       securityContext:
-        {{- $ctx := omit .Values.podSecurityContext "enabled" }}
-        {{- if $ctx }}
-        {{- toYaml $ctx | nindent 8 }}
-        {{- end }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ include "dspace.name" . }}
-          image: {{ printf "%s:%s" .Values.image.repository (default .Chart.AppVersion .Values.image.tag) }}
+          image: {{ include "dspace.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.targetPort }}
@@ -66,22 +63,19 @@ spec:
               port: http
             initialDelaySeconds: 5
             periodSeconds: 10
-            timeoutSeconds: 3
-            failureThreshold: 3
+            timeoutSeconds: 2
+            failureThreshold: 6
           livenessProbe:
             httpGet:
               path: /livez
               port: http
-            initialDelaySeconds: 10
+            initialDelaySeconds: 20
             periodSeconds: 20
-            timeoutSeconds: 3
+            timeoutSeconds: 2
             failureThreshold: 3
-          {{- if and .Values.securityContext.enabled (not (empty .Values.securityContext)) }}
+          {{- with .Values.securityContext }}
           securityContext:
-            {{- $containerCtx := omit .Values.securityContext "enabled" }}
-            {{- if $containerCtx }}
-            {{- toYaml $containerCtx | nindent 12 }}
-            {{- end }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
