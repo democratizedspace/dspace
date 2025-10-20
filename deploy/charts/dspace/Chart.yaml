@@ -1,0 +1,6 @@
+apiVersion: v2
+name: dspace
+description: Helm chart for deploying DSPACE v3 on k3s clusters.
+type: application
+version: 0.1.0
+appVersion: "3.0.0"

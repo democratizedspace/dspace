@@ -1,0 +1,40 @@
+replicaCount: 2
+
+image:
+  tag: latest
+
+ingress:
+  hosts:
+    - host: int.dspace.sugarkube.cloud
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-int-tls
+      hosts:
+        - int.dspace.sugarkube.cloud
+
+env:
+  secrets:
+    - name: METRICS_TOKEN
+      secretName: dspace-int-secrets
+      secretKey: metrics-token
+
+persistence:
+  enabled: true
+  size: 5Gi
+  storageClass: longhorn
+
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+
+networkPolicy:
+  egress:
+    additional:
+      - to:
+          - ipBlock:
+              cidr: 0.0.0.0/0
+        ports:
+          - protocol: TCP
+            port: 443

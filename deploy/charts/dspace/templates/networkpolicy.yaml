@@ -1,0 +1,50 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "dspace.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "dspace.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: Helm
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "dspace.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+        - namespaceSelector:
+{{ toYaml .Values.networkPolicy.ingress.traefik.namespaceSelector | indent 12 }}
+{{- with .Values.networkPolicy.ingress.traefik.podSelector }}
+          podSelector:
+{{ toYaml . | indent 12 }}
+{{- end }}
+{{- with .Values.networkPolicy.ingress.additional }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+  egress:
+{{- if .Values.networkPolicy.egress.allowDNS }}
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+{{- end }}
+{{- with .Values.networkPolicy.egress.additional }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- end }}
