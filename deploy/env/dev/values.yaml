@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  tag: sha-83d6ac7
+  digest: sha256:83d6ac7c7d4a6c8e2f0a1b3c5d7e9f00112233445566778899aabbccddeeff00
 ingress:
   hosts:
     - host: dev.dspace.example.com
@@ -13,6 +13,8 @@ ingress:
         - dev.dspace.example.com
 env:
   extra:
+    - name: DSPACE_ENABLE_METRICS
+      value: "0"
     - name: DSPACE_FEATURE_FLAGS
       value: beta-chat
 serviceMonitor:

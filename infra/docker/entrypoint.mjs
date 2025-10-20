@@ -1,5 +1,6 @@
 import process from 'node:process';
 import { startServer } from './dist/server/entry.mjs';
+import { startMetricsServer } from '../metrics.mjs';
 
 const log = (level, message, fields = {}) => {
   const payload = {
@@ -14,6 +15,7 @@ const log = (level, message, fields = {}) => {
 let shutdownRequested = false;
 let control;
 let donePromise;
+let metricsServer;
 
 async function shutdown(signal) {
   if (shutdownRequested) {
@@ -22,6 +24,17 @@ async function shutdown(signal) {
   shutdownRequested = true;
   log('info', 'Shutdown signal received', { signal });
   try {
+    if (metricsServer) {
+      await new Promise((resolve, reject) => {
+        metricsServer.close((error) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve();
+        });
+      });
+    }
     if (control?.stop) {
       await control.stop();
     }
@@ -55,6 +68,15 @@ async function main() {
   const { server, done } = await startServer();
   control = server;
   donePromise = done;
+  if (process.env.DSPACE_ENABLE_METRICS === '1') {
+    const port = Number.parseInt(process.env.DSPACE_METRICS_PORT ?? '', 10);
+    metricsServer = startMetricsServer({
+      port: Number.isInteger(port) ? port : undefined,
+    });
+    log('info', 'Metrics server started', {
+      port: metricsServer.address()?.port ?? 9464,
+    });
+  }
   const host = server.host ?? '0.0.0.0';
   const port = server.port;
   log('info', 'DSPACE server started', {
