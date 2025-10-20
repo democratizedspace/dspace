@@ -1,1 +1,2 @@
-export { GET, prerender } from './healthz.ts';
+export { GET } from './healthz.ts';
+export const prerender = false;
