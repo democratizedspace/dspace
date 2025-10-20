@@ -1,0 +1,34 @@
+replicaCount: 3
+ingress:
+  hosts:
+    - host: dspace.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-prod-tls
+      hosts:
+        - dspace.example.com
+env:
+  vars:
+    DSPACE_FEATURE_FLAGS: stable
+  secretRefs:
+    - name: dspace-prod-secrets
+      keys:
+        METRICS_TOKEN: metrics-token
+persistence:
+  enabled: true
+  size: 5Gi
+  storageClass: longhorn
+metrics:
+  serviceMonitor:
+    enabled: true
+    additionalLabels:
+      release: kube-prometheus-stack
+resources:
+  requests:
+    cpu: 300m
+    memory: 512Mi
+  limits:
+    cpu: 1
+    memory: 1Gi

@@ -1,0 +1,10 @@
+apiVersion: v2
+name: dspace
+version: 0.1.0
+appVersion: "3.0.0"
+description: Helm chart for deploying DSPACE v3 on k3s clusters
+home: https://github.com/democratizedspace/dspace
+maintainers:
+  - name: DSPACE Team
+    email: ops@democratizedspace.org
+type: application

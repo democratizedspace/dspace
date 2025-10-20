@@ -1,5 +1,6 @@
 # Development directories
 dev/
+!deploy/env/dev/
 .vscode/
 
 # Dependencies

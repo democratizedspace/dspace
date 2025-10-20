@@ -1,0 +1,27 @@
+replicaCount: 1
+image:
+  tag: dev
+ingress:
+  hosts:
+    - host: dev.dspace.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-dev-tls
+      hosts:
+        - dev.dspace.local
+env:
+  vars:
+    DSPACE_FEATURE_FLAGS: beta-chat,debug-panels
+  secretRefs:
+    - name: dspace-dev-secrets
+      keys:
+        METRICS_TOKEN: metrics-token
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
