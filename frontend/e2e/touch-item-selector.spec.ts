@@ -19,8 +19,12 @@ test('item selector can be used with touch events', async ({ page }) => {
 
     const selector = page.locator('.form-group:has-text("Created Items") .item-selector');
     await expect(selector).toHaveAttribute('data-hydrated', 'true');
-    const triggerButton = selector.locator('button').first();
-    await triggerButton.tap();
+    const listboxLocator = selector.locator('[role="listbox"]');
+
+    if ((await listboxLocator.count()) === 0) {
+        const toggleButton = selector.locator('.select-button, .edit-button').first();
+        await toggleButton.tap();
+    }
 
     const listbox = selector.locator('[role="listbox"]');
     await expect(listbox).toBeVisible();
@@ -35,4 +39,9 @@ test('item selector can be used with touch events', async ({ page }) => {
     const selectedItem = selector.locator('.selected-item');
     await expect(selectedItem).toBeVisible({ timeout: 15000 });
     await expect(selectedItem).toContainText(optionLabel);
+
+    const editButton = selector.locator('.edit-button');
+    await expect(editButton).toBeVisible({ timeout: 15000 });
+    await editButton.tap();
+    await expect(selector.locator('[role="listbox"]')).toBeVisible();
 });
