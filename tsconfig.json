@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "@playwright/test"],
     "skipLibCheck": true
   },
   "include": ["backend/**/*.ts", "common/**/*.ts", "src/**/*.ts", "tests/**/*.ts", "scripts/**/*.ts"]
