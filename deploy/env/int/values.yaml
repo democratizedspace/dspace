@@ -1,6 +1,9 @@
 replicaCount: 2
+env: int
 image:
+  # Integration pins a digest by default; swap to a tag when testing release candidates.
   digest: sha256:83d6ac7e2a6f8c3a21d9130b35f6a4d8c9b52f3e174d0a5c6b8e2f0a1c3d4e5f
+  tag: ""
 ingress:
   hosts:
     - host: int.dspace.example.com
@@ -11,7 +14,10 @@ ingress:
     - secretName: dspace-int-tls
       hosts:
         - int.dspace.example.com
-env:
+metrics:
+  enabled: true
+
+runtimeEnv:
   extra:
     - name: DSPACE_ENABLE_METRICS
       value: "1"

@@ -13,7 +13,7 @@ spec:
       name: http
 {{- $metricsPort := .Values.service.metricsPort }}
 {{- $metricsTargetPort := .Values.service.metricsTargetPort | default $metricsPort }}
-{{- if $metricsPort }}
+{{- if and .Values.metrics.enabled $metricsPort }}
     - port: {{ $metricsPort }}
       targetPort: {{ $metricsTargetPort }}
       protocol: TCP
