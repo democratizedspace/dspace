@@ -1,0 +1,37 @@
+{{- if .Values.alerts.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "dspace.fullname" . }}-alerts
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+spec:
+  groups:
+    - name: dspace-availability
+      rules:
+        - alert: DspaceTargetDown
+          expr: |-
+            max_over_time(
+              up{job=~".*{{ include "dspace.fullname" . }}.*"}[5m]
+            ) < 1
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "DSPACE scrape target down"
+        - alert: DspaceHigh5xx
+          expr: |-
+            sum(
+              rate(
+                http_server_requests_seconds_count{
+                  status=~"5..",
+                  job=~".*{{ include "dspace.fullname" . }}.*"
+                }[5m]
+              )
+            ) > 0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "DSPACE 5xx rate > 0 rps (5m)"
+{{- end }}
