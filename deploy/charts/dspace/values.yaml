@@ -45,6 +45,8 @@ service:
   type: ClusterIP
   port: 8080
   targetPort: 8080
+  metricsPort: 9464
+  metricsTargetPort: 9464
 
 ingress:
   enabled: true
@@ -106,7 +108,7 @@ serviceMonitor:
     release: kube-prometheus-stack
   interval: 30s
   path: /metrics
-  port: http
+  port: metrics
   namespaceSelector: {}
   scrapeTimeout: ""
   metricRelabelings: []

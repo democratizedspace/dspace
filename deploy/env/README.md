@@ -62,5 +62,6 @@ environment without duplicating manifests.
   endpoint from the SSR container. The endpoint stays disabled unless the flag is explicitly
   enabled.
 - Toggle `serviceMonitor.enabled` in the overlay when Prometheus should scrape the release. The
-  Helm chart defaults to scraping `/metrics` on the `http` Service port; configure
+  Helm chart exposes a dedicated `metrics` Service port (9464) and defaults to scraping `/metrics`
+  on that port; configure
   `serviceMonitor.namespaceSelector` or `labels` as needed for your monitoring stack.
