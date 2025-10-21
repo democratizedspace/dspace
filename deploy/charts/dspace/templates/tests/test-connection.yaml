@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "dspace.fullname" . }}-test-connection
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: curl
+      image: curlimages/curl:8.5.0
+      args:
+        - -fSs
+        - --retry
+        - "5"
+        - --retry-delay
+        - "2"
+        - --connect-timeout
+        - "5"
+        - http://{{ include "dspace.fullname" . }}:{{ .Values.service.port }}/healthz
+  restartPolicy: Never

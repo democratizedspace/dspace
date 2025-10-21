@@ -11,6 +11,8 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+env: dev
+
 serviceAccount:
   create: true
   annotations: {}
@@ -81,7 +83,10 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
-env:
+metrics:
+  enabled: true
+
+envVars:
   standard:
     NODE_ENV: production
     HOST: 0.0.0.0
@@ -113,6 +118,9 @@ serviceMonitor:
   scrapeTimeout: ""
   metricRelabelings: []
   relabelings: []
+
+alerts:
+  enabled: false
 
 networkPolicy:
   enabled: true

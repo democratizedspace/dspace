@@ -46,17 +46,19 @@ spec:
           ports:
             - containerPort: {{ .Values.service.targetPort }}
               name: http
+{{- $metricsEnabled := .Values.metrics.enabled | default false }}
 {{- $metricsTargetPort := .Values.service.metricsTargetPort | default .Values.service.metricsPort }}
-{{- if $metricsTargetPort }}
+{{- if and $metricsEnabled $metricsTargetPort }}
             - containerPort: {{ $metricsTargetPort }}
               name: metrics
 {{- end }}
           env:
-            {{- range $key, $value := .Values.env.standard }}
+{{- $envVars := .Values.envVars | default dict }}
+            {{- range $key, $value := ($envVars.standard | default dict) }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-            {{- range .Values.env.extra }}
+            {{- range ($envVars.extra | default list) }}
             - name: {{ .name }}
               value: {{ .value | quote }}
             {{- end }}
