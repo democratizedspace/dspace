@@ -63,7 +63,7 @@ jobs:
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=sha,format=short,prefix=sha-
+            type=sha,format=long,prefix=sha-
             type=ref,event=branch
             type=raw,value=${{ steps.vars.outputs.branch_sha }},enable=${{ steps.vars.outputs.branch_sha != '' }}
           labels: |

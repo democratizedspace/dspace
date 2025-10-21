@@ -4,6 +4,12 @@ DSPACE v3 runs as a single Node.js service built with Astro. All runtime configu
 is injected through environment variables so deployments stay immutable and predictable
 across `dev`, `int`, and `prod` clusters.
 
+## Container Images
+
+- The CI pipeline publishes multi-architecture images (`linux/amd64` and `linux/arm64`) to
+  [GHCR](https://ghcr.io/) and tags every push with an immutable `sha-<full commit>` identifier so
+  clusters can pin exact builds.
+
 ## Environment Variables
 
 | Name | Required | Description | Example | Source |

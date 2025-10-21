@@ -237,7 +237,7 @@ export async function waitForQuestRecordByTitle(
         { timeout: timeoutMs }
     );
 
-    const rawId = await resultHandle.jsonValue<unknown>();
+    const rawId: unknown = await resultHandle.jsonValue();
     return Number(rawId);
 }
 

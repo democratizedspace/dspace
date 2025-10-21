@@ -61,7 +61,7 @@ spec:
 ```
 
 ACCEPTANCE CHECKLIST
-- [ ] Image builds for **arm64+amd64** and publishes to GHCR with immutable SHA tag.
+- [x] Image builds for **arm64+amd64** and publishes to GHCR with immutable SHA tag.
 - [ ] Helm chart installs cleanly; probes pass; graceful shutdown verified.
 - [ ] TLS via cert-manager works; app reachable at env-specific hostnames through Traefik/cloudflared.
 - [ ] If PVCs are enabled, they bind with the platform default `StorageClass` (e.g., Longhorn).
