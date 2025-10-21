@@ -1,5 +1,7 @@
 replicaCount: 1
 
+env: dev
+
 image:
   repository: ghcr.io/democratizedspace/dspace
   digest: ""
@@ -48,6 +50,9 @@ service:
   metricsPort: 9464
   metricsTargetPort: 9464
 
+metrics:
+  enabled: false
+
 ingress:
   enabled: true
   className: traefik
@@ -81,7 +86,7 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
-env:
+envVars:
   standard:
     NODE_ENV: production
     HOST: 0.0.0.0
@@ -113,6 +118,13 @@ serviceMonitor:
   scrapeTimeout: ""
   metricRelabelings: []
   relabelings: []
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+alerts:
+  enabled: false
 
 networkPolicy:
   enabled: true

@@ -1,5 +1,7 @@
 replicaCount: 2
+env: int
 image:
+  # Digest pin keeps integration close to prod while still allowing tag overrides.
   digest: sha256:83d6ac7e2a6f8c3a21d9130b35f6a4d8c9b52f3e174d0a5c6b8e2f0a1c3d4e5f
 ingress:
   hosts:
@@ -11,7 +13,10 @@ ingress:
     - secretName: dspace-int-tls
       hosts:
         - int.dspace.example.com
-env:
+metrics:
+  enabled: true
+
+envVars:
   extra:
     - name: DSPACE_ENABLE_METRICS
       value: "1"
