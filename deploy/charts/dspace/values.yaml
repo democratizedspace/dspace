@@ -2,6 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/democratizedspace/dspace
+  digest: ""
   tag: ""
   pullPolicy: IfNotPresent
 
@@ -44,6 +45,8 @@ service:
   type: ClusterIP
   port: 8080
   targetPort: 8080
+  metricsPort: 9464
+  metricsTargetPort: 9464
 
 ingress:
   enabled: true
@@ -51,14 +54,14 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-dns01
   hosts:
-    - host: dspace.local
+    - host: dspace.example.com
       paths:
         - path: /
           pathType: Prefix
   tls:
     - secretName: dspace-tls
       hosts:
-        - dspace.local
+        - dspace.example.com
 
 resources:
   requests:
@@ -101,12 +104,13 @@ persistence:
 
 serviceMonitor:
   enabled: false
-  namespace: ""
-  namespaceSelector: {}
+  labels:
+    release: kube-prometheus-stack
   interval: 30s
-  scrapeTimeout: 10s
-  additionalLabels:
-    release: prometheus
+  path: /metrics
+  port: metrics
+  namespaceSelector: {}
+  scrapeTimeout: ""
   metricRelabelings: []
   relabelings: []
 

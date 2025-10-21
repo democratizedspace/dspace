@@ -1,4 +1,5 @@
 import process from 'node:process';
+import { startMetricsServer } from '../metrics.mjs';
 import { startServer } from './dist/server/entry.mjs';
 
 const log = (level, message, fields = {}) => {
@@ -14,6 +15,7 @@ const log = (level, message, fields = {}) => {
 let shutdownRequested = false;
 let control;
 let donePromise;
+let metricsServer;
 
 async function shutdown(signal) {
   if (shutdownRequested) {
@@ -22,6 +24,18 @@ async function shutdown(signal) {
   shutdownRequested = true;
   log('info', 'Shutdown signal received', { signal });
   try {
+    if (metricsServer) {
+      await new Promise((resolve, reject) => {
+        metricsServer.close((error) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve();
+        });
+      });
+      metricsServer = undefined;
+    }
     if (control?.stop) {
       await control.stop();
     }
@@ -52,6 +66,21 @@ async function shutdown(signal) {
 });
 
 async function main() {
+  if (process.env.DSPACE_ENABLE_METRICS === '1') {
+    const metricsPort = Number.parseInt(process.env.DSPACE_METRICS_PORT ?? '', 10);
+    const port = Number.isInteger(metricsPort) ? metricsPort : undefined;
+    try {
+      metricsServer = startMetricsServer({ port });
+      const address = metricsServer.address();
+      log('info', 'Metrics server enabled', {
+        port: typeof address === 'object' && address ? address.port : port ?? 9464,
+      });
+    } catch (error) {
+      log('error', 'Failed to start metrics server', {
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
   const { server, done } = await startServer();
   control = server;
   donePromise = done;
