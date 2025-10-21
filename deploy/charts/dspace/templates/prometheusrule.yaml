@@ -1,0 +1,34 @@
+{{- if and (.Values.metrics.enabled | default false) .Values.alerts.enabled }}
+{{- $fullname := include "dspace.fullname" . }}
+{{- $jobSelector := printf ".*%s.*" $fullname }}
+{{- $targetDownExpr := printf
+    "max_over_time(up{job=~\"%s\"}[5m]) < 1"
+    $jobSelector }}
+{{- $high5xxExpr := printf
+    "sum(rate(http_server_requests_seconds_count{status=~\"5..\",job=~\"%s\"}[5m])) > 0"
+    $jobSelector }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "dspace.fullname" . }}-alerts
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+spec:
+  groups:
+    - name: dspace-availability
+      rules:
+        - alert: DspaceTargetDown
+          expr: {{ $targetDownExpr }}
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "DSPACE scrape target down"
+        - alert: DspaceHigh5xx
+          expr: {{ $high5xxExpr }}
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "DSPACE 5xx rate > 0 rps (5m)"
+{{- end }}

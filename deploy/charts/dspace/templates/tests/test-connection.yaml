@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "dspace.fullname" . }}-test-healthz"
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curl
+      image: curlimages/curl:8.10.1
+      imagePullPolicy: IfNotPresent
+      args:
+        - --fail-with-body
+        - --retry
+        - "6"
+        - --retry-delay
+        - "5"
+        - --show-error
+        - --silent
+        - http://{{ include "dspace.fullname" . }}:{{ .Values.service.port }}/healthz
