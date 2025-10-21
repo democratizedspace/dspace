@@ -31,9 +31,10 @@ across `dev`, `int`, and `prod` clusters.
   port `8080` with a `terminationGracePeriodSeconds` of 30 to ensure in-flight requests drain
   cleanly during rollouts.
 - **Prometheus ServiceMonitor**: Disabled by default. Set `serviceMonitor.enabled=true` in
-  environment values to create a `ServiceMonitor` that scrapes the `http` port at `/metrics`, tags
-  the resource with `release: prometheus`, and allows overriding `namespace` or
-  `namespaceSelector` for kube-prometheus-stack compatibility.
+  environment values to create a `ServiceMonitor` that scrapes the dedicated `metrics` port (9464)
+  at `/metrics`, tags the resource with `release: kube-prometheus-stack`, and defaults discovery to
+  the Helm release namespace while still allowing `namespaceSelector` overrides when the target
+  Service lives elsewhere.
 - **Logs**: The container emits structured JSON logs (fields: `time`, `level`, `msg`, etc.) and
   includes feature-flag metadata during startup and shutdown.
 
