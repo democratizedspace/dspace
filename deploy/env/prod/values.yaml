@@ -21,7 +21,7 @@ serviceMonitor:
   enabled: true
   namespaceSelector:
     matchNames:
-      - monitoring
+      - dspace
 resources:
   requests:
     cpu: 500m
