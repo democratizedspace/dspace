@@ -53,6 +53,7 @@ COPY --from=prod-deps /workspace/frontend/node_modules ./node_modules
 COPY --from=build /workspace/frontend/dist ./dist
 COPY frontend/package.json ./package.json
 COPY infra/docker/entrypoint.mjs ./entrypoint.mjs
+COPY infra/metrics.mjs /metrics.mjs
 RUN chown -R node:node /app
 USER node
 EXPOSE 8080
