@@ -104,12 +104,11 @@ persistence:
 
 serviceMonitor:
   enabled: false
-  labels:
-    release: kube-prometheus-stack
+  labels: { release: kube-prometheus-stack }
+  namespaceSelector: {}
   interval: 30s
   path: /metrics
   port: metrics
-  namespaceSelector: {}
   scrapeTimeout: ""
   metricRelabelings: []
   relabelings: []

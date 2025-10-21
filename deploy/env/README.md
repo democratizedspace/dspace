@@ -58,10 +58,11 @@ environment without duplicating manifests.
 
 ## Metrics & Monitoring
 
-- Set `env.extra` entries for `DSPACE_ENABLE_METRICS` to `"1"` to expose the optional `/metrics`
-  endpoint from the SSR container. The endpoint stays disabled unless the flag is explicitly
-  enabled.
-- Toggle `serviceMonitor.enabled` in the overlay when Prometheus should scrape the release. The
-  Helm chart exposes a dedicated `metrics` Service port (9464) and defaults to scraping `/metrics`
-  on that port; configure
-  `serviceMonitor.namespaceSelector` or `labels` as needed for your monitoring stack.
+- Enable metrics collection by setting the overlay's `env.extra` entry for
+  `DSPACE_ENABLE_METRICS` to `"1"`; the SSR container skips exporting `/metrics` unless the flag is
+  flipped on.
+- Turn on Prometheus scraping with `serviceMonitor.enabled: true` and ensure the
+  `serviceMonitor.namespaceSelector` (or the release namespace) lines up with the namespace that
+  hosts your monitoring stack, such as `monitoring` for kube-prometheus-stack.
+- Keep production images pinned by digest (empty tag + populated `image.digest`) so Flux always
+  deploys the exact immutable build you validated, including its metrics instrumentation.
