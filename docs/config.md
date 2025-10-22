@@ -57,8 +57,10 @@ Flux consumption details:
 - **Metrics**: `GET /metrics` exposes Prometheus counters/gauges via `prom-client`. Protect this
   endpoint with `METRICS_TOKEN`.
 - **Kubernetes probes**: The Helm chart issues HTTP GET probes against `/livez` and `/healthz` on
-  port `8080` with a `terminationGracePeriodSeconds` of 30 to ensure in-flight requests drain
-  cleanly during rollouts.
+  port `8080`. A Helm test hook now curls both endpoints to verify readiness and liveness before a
+  release succeeds. Tune graceful shutdowns by adjusting
+  `values.terminationGracePeriodSeconds` (default `30`) so in-flight requests finish before pods
+  exit.
 - **Prometheus ServiceMonitor**: Disabled by default. Set `serviceMonitor.enabled=true` in
   environment values to create a `ServiceMonitor` that scrapes the dedicated `metrics` port (9464)
   at `/metrics`, tags the resource with `release: kube-prometheus-stack`, and defaults discovery to

@@ -30,6 +30,8 @@ podSecurityContext:
   seccompProfile:
     type: RuntimeDefault
 
+terminationGracePeriodSeconds: 30
+
 securityContext:
   enabled: true
   runAsNonRoot: true
