@@ -126,5 +126,10 @@ networkPolicy:
   traefikNamespace: traefik
   traefikSelector:
     app.kubernetes.io/name: traefik
+  metricsScraper:
+    enabled: true
+    namespace: monitoring
+    podSelector:
+      app.kubernetes.io/name: prometheus
   extraIngress: []
   extraEgress: []

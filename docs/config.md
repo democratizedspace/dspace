@@ -63,7 +63,9 @@ Flux consumption details:
   environment values to create a `ServiceMonitor` that scrapes the dedicated `metrics` port (9464)
   at `/metrics`, tags the resource with `release: kube-prometheus-stack`, and defaults discovery to
   the Helm release namespace while still allowing `namespaceSelector` overrides when the target
-  Service lives elsewhere.
+  Service lives elsewhere. When metrics are enabled, the Helm `NetworkPolicy` also admits traffic
+  from the namespace configured via `networkPolicy.metricsScraper` (default `monitoring`) so the
+  collector can reach the metrics port.
 - **Logs**: The container emits structured JSON logs (fields: `time`, `level`, `msg`, etc.) and
   includes feature-flag metadata during startup and shutdown.
 
@@ -91,9 +93,10 @@ The container listens on port `8080` internally. The Helm chart configures:
 - Traefik ingress (`ingressClassName: traefik`) annotated for cert-manager using
   `cert-manager.io/cluster-issuer: letsencrypt-dns01`. Each environment overlay defines the host
   list and TLS secret name.
-- A default-deny `NetworkPolicy` that only allows ingress from Traefik and DNS egress to
-  `kube-dns`. Use `values.networkPolicy.extraIngress` or `values.networkPolicy.extraEgress` to
-  permit additional peers as needed.
+- A default-deny `NetworkPolicy` that allows ingress from Traefik for web traffic and, when metrics
+  are enabled, from the Prometheus namespace specified by `values.networkPolicy.metricsScraper`.
+  DNS egress to `kube-dns` stays open; use `values.networkPolicy.extraIngress` or
+  `values.networkPolicy.extraEgress` to permit additional peers as needed.
 
 Cloudflared provides outbound access from the cluster; no extra configuration is required within the
 container beyond the defaults above.
