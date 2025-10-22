@@ -16,7 +16,9 @@ spec:
       command:
         - /bin/sh
         - -c
-        - >-
-          set -euo pipefail;
-          code=$(curl -s -o /dev/null -w '%{http_code}' http://{{ include "dspace.fullname" . }}:{{ .Values.service.port }}/healthz);
-          test "$code" -eq 200
+        - |-
+          set -euo pipefail
+          for path in healthz livez; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' http://{{ include "dspace.fullname" . }}:{{ .Values.service.port }}/${path})
+            test "$code" -eq 200
+          done

@@ -31,7 +31,7 @@ spec:
         {{- end }}
       {{- end }}
       serviceAccountName: {{ if .Values.serviceAccount.create }}{{ include "dspace.fullname" . }}{{ else }}{{ default "default" .Values.serviceAccount.name }}{{ end }}
-      terminationGracePeriodSeconds: 30
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if and .Values.podSecurityContext.enabled (not (empty .Values.podSecurityContext)) }}
       securityContext:
         {{- $ctx := omit .Values.podSecurityContext "enabled" }}

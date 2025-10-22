@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Page } from '@playwright/test';
 
-vi.mock('/src/utils/gameState/common.js', () => ({}), { virtual: true });
+vi.mock('/src/utils/gameState/common.js', () => ({}));
 
 import { navigateWithRetry } from '../frontend/e2e/test-helpers';
 
