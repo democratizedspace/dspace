@@ -56,6 +56,10 @@ deploy/env/
 Override files tweak feature flags, ingress hosts, replica counts, and monitoring for each
 environment without duplicating manifests.
 
+For a quick reference of the values baked into each overlay, see **Environment overlays** in
+[`docs/config.md`](../../docs/config.md); it captures the hostnames, image strategy, metrics, and
+feature flags surfaced by these `values.yaml` files.
+
 ## Metrics & Monitoring
 
 - Enable metrics collection by setting the overlay's `env.extra` entry for

@@ -26,6 +26,29 @@ across `dev`, `int`, and `prod` clusters.
 > secret named `dspace-secrets` (see Helm values below). Flux/SOPS will render them into the
 > cluster at deploy time.
 
+## Environment overlays
+
+Three Flux overlays live in `deploy/env/{dev,int,prod}`. Each overlay packages its `values.yaml`
+into a deterministic ConfigMap that the corresponding `HelmRelease` consumes. The table below
+summarises the runtime differences so operators can confirm hostnames, scaling choices, and
+feature toggles without opening each values file.
+
+| Environment | Hostname | Image strategy | Metrics | Feature flags | Notes |
+| --- | --- | --- | --- | --- | --- |
+| dev | `dev.dspace.example.com` | Follows tag `main` for rapid iteration | Disabled (`serviceMonitor.enabled=false`) | `beta-chat` | Single replica, metrics exporter left off to minimize noise. |
+| int | `int.dspace.example.com` | Pins an immutable digest for release verification | Enabled (`serviceMonitor` scrapes namespace `dspace`) | `beta-chat,balance-panel` | Autoscaling between two and four replicas with 60% CPU target. |
+| prod | `dspace.example.com` | Pins an immutable digest for production rollouts | Enabled (`serviceMonitor` scrapes namespace `dspace`) | `beta-chat,balance-panel,observability` | Alerts enabled and resources raised (500m/768Mi requests). |
+
+Flux consumption details:
+
+- `deploy/env/dev/kustomization.yaml` renders `dspace-dev-values` and `helmrelease.yaml` mounts it
+  via `valuesFrom`, so Flux keeps development hosts and feature flags in sync.
+- `deploy/env/int/kustomization.yaml` emits `dspace-int-values`; the integration release tracks a
+  pinned digest while allowing HPA to scale between two and four replicas.
+- `deploy/env/prod/kustomization.yaml` publishes `dspace-prod-values`, which keeps production on a
+  digest-only image, enables alerting, and shares the metrics namespace with the integration
+  overlay.
+
 ## Observability & Probes
 
 - **Liveness**: `GET /livez` returns `{ status: 'alive', uptimeSeconds, timestamp }`.
