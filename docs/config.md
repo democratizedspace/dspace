@@ -97,7 +97,8 @@ The container listens on port `8080` internally. The Helm chart configures:
 - A `ClusterIP` service exposing port `8080`.
 - Traefik ingress (`ingressClassName: traefik`) annotated for cert-manager using
   `cert-manager.io/cluster-issuer: letsencrypt-dns01`. Each environment overlay defines the host
-  list and TLS secret name.
+  list and TLS secret name, and `tests/helmChartTls.test.ts` ensures every declared hostname is
+  covered by a TLS secret.
 - A default-deny `NetworkPolicy` that allows ingress from Traefik for web traffic and, when metrics
   are enabled, from the Prometheus namespace specified by `values.networkPolicy.metricsScraper`.
   DNS egress to `kube-dns` stays open; use `values.networkPolicy.extraIngress` or
