@@ -64,7 +64,7 @@ ACCEPTANCE CHECKLIST
 - [x] Image builds for **arm64+amd64** and publishes to GHCR with immutable SHA tag.
 - [x] Helm chart installs cleanly; probes pass; graceful shutdown verified (Helm test curls
   `/healthz` and `/livez`; configurable termination grace period defaults to 30s).
-- [ ] TLS via cert-manager works; app reachable at env-specific hostnames through Traefik/cloudflared.
+- [x] TLS via cert-manager works; app reachable at env-specific hostnames through Traefik/cloudflared.
 - [x] If PVCs are enabled, they bind with the platform default `StorageClass` (e.g., Longhorn).
   Verified by `tests/helmChartPersistence.test.ts`, which asserts the PVC template quotes the
   configured storage class and that `values.yaml` defaults to the Longhorn driver.

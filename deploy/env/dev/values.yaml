@@ -5,6 +5,9 @@ image:
   tag: main
   digest: ""
 ingress:
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-dns01
   hosts:
     - host: dev.dspace.example.com
       paths:
