@@ -32,8 +32,8 @@ steps in release notes.
 
 ## Testing Matrix
 
-- Add Vitest suites that mock the service worker lifecycle and confirm quests can start offline using
-  cached payloads.
+- Vitest suites that simulate the service worker caching path and confirm quests can start offline
+  using cached payloads live in `tests/offlineQuestCache.test.ts`.
 - Run Playwright in offline mode to validate navigation between `/`, `/play`, and `/quests/*`.
 - Record coverage for cache-hit and cache-miss branches before promoting the worker to production.
 

@@ -33,7 +33,8 @@ feature, quest, and CI job stays intact.
      quest JSON; version cache keys for busting.
    - Keep local save data migratable with versioned schemas, fixtures for historic saves, and
      documented rollback steps.
-   - Add regression tests for offline quest start and persistence of cached assets.
+   - Regression tests for offline quest start and persistence of cached assets live in
+     `tests/offlineQuestCache.test.ts`.
 3. **Accessibility & UX**
    - Enforce lint rules for `aria-*`, focus visibility, and contrast; break CI on violations.
    - Maintain a manual keyboard-only walkthrough (global nav → quest select → quest run → settings)
