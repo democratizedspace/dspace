@@ -65,7 +65,9 @@ ACCEPTANCE CHECKLIST
 - [x] Helm chart installs cleanly; probes pass; graceful shutdown verified (Helm test curls
   `/healthz` and `/livez`; configurable termination grace period defaults to 30s).
 - [ ] TLS via cert-manager works; app reachable at env-specific hostnames through Traefik/cloudflared.
-- [ ] If PVCs are enabled, they bind with the platform default `StorageClass` (e.g., Longhorn).
+- [x] If PVCs are enabled, they bind with the platform default `StorageClass` (e.g., Longhorn).
+  Verified by `tests/helmChartPersistence.test.ts`, which asserts the PVC template quotes the
+  configured storage class and that `values.yaml` defaults to the Longhorn driver.
 - [x] NetworkPolicy present; logs/metrics visible to the platform stack (Prometheus/Loki).
 - [x] `deploy/env/{dev,int,prod}` values documented and ready for Flux consumption (see
   `docs/config.md#environment-overlays`).

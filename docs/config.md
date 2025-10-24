@@ -85,7 +85,10 @@ Flux consumption details:
 DSPACE runs entirely from its build artefacts and does not require persistent storage by default.
 If you enable persistence (for future worker state or exported assets), mount a PVC at `/app/data`.
 The Helm chart exposes `persistence.*` values for provisioning a Longhorn-backed volume with
-`ReadWriteOnce` by default. Switch to `ReadWriteMany` if multiple replicas must share the same data.
+`ReadWriteOnce` by default. The default values keep `persistence.storageClass` set to `longhorn` so
+clusters that ship Longhorn as their provisioner bind automatically. The PVC template also quotes the
+storage class you supply to avoid parsing surprises. Switch to `ReadWriteMany` if multiple replicas
+must share the same data.
 
 ## Networking & Ports
 
