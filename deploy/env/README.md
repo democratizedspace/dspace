@@ -56,6 +56,10 @@ deploy/env/
 Override files tweak feature flags, ingress hosts, replica counts, and monitoring for each
 environment without duplicating manifests.
 
+Each `values.yaml` also maps its TLS secret to the ingress hostname so Traefik and cert-manager can
+issue the appropriate certificate per environment. The automated test
+`tests/helmChartTls.test.ts` guards this wiring.
+
 For a quick reference of the values baked into each overlay, see **Environment overlays** in
 [`docs/config.md`](../../docs/config.md); it captures the hostnames, image strategy, metrics, and
 feature flags surfaced by these `values.yaml` files.
