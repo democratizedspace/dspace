@@ -64,7 +64,7 @@ ACCEPTANCE CHECKLIST
 - [x] Image builds for **arm64+amd64** and publishes to GHCR with immutable SHA tag.
 - [x] Helm chart installs cleanly; probes pass; graceful shutdown verified (Helm test curls
   `/healthz` and `/livez`; configurable termination grace period defaults to 30s).
-- [ ] TLS via cert-manager works; app reachable at env-specific hostnames through Traefik/cloudflared.
+- [x] TLS via cert-manager works; app reachable at env-specific hostnames through Traefik/cloudflared.
 - [ ] If PVCs are enabled, they bind with the platform default `StorageClass` (e.g., Longhorn).
 - [x] NetworkPolicy present; logs/metrics visible to the platform stack (Prometheus/Loki).
 - [x] `deploy/env/{dev,int,prod}` values documented and ready for Flux consumption (see
