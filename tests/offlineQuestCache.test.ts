@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const OFFLINE_ERROR_MESSAGE = 'IndexedDB is not supported';
 const offlineReject = () => Promise.reject(new Error(OFFLINE_ERROR_MESSAGE));
@@ -35,6 +35,16 @@ async function loadModules() {
 }
 
 describe('offline quest caching', () => {
+    let originalIndexedDB: typeof globalThis.indexedDB | undefined;
+    let hadIndexedDB = false;
+
+    beforeAll(() => {
+        if ('indexedDB' in globalThis) {
+            hadIndexedDB = true;
+            originalIndexedDB = globalThis.indexedDB;
+        }
+    });
+
     beforeEach(() => {
         vi.resetModules();
 
@@ -56,6 +66,14 @@ describe('offline quest caching', () => {
 
         // Ensure the environment mimics browsers without IndexedDB support.
         delete (globalThis as typeof globalThis & { indexedDB?: unknown }).indexedDB;
+    });
+
+    afterEach(() => {
+        if (hadIndexedDB) {
+            globalThis.indexedDB = originalIndexedDB!;
+        } else {
+            delete (globalThis as typeof globalThis & { indexedDB?: unknown }).indexedDB;
+        }
     });
 
     it('falls back to in-memory quest storage when IndexedDB is unavailable', async () => {
