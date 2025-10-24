@@ -103,5 +103,8 @@ The container listens on port `8080` internally. The Helm chart configures:
   DNS egress to `kube-dns` stays open; use `values.networkPolicy.extraIngress` or
   `values.networkPolicy.extraEgress` to permit additional peers as needed.
 
+The Helm values schema requires each ingress to declare TLS secrets whose host lists match the
+exposed hostnames, and `tests/helmChartTls.test.ts` prevents the overlays from drifting.
+
 Cloudflared provides outbound access from the cluster; no extra configuration is required within the
 container beyond the defaults above.
