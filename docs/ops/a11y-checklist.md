@@ -1,7 +1,9 @@
 # Keyboard-Only Walkthrough
 
 This checklist validates the WCAG 2.2 AA keyboard flow. Run it before each release and whenever
-major navigation changes land.
+major navigation changes land. Automated linting (`npm run lint:a11y`) blocks missing ARIA
+attributes, focus outline regressions, and glaring contrast issues before you get to the manual
+walkthrough.
 
 1. **Global navigation**
    - Load the home screen (`/`).

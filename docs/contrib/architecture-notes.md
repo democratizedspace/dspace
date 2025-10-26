@@ -21,9 +21,7 @@ moves so contributors can stage their work accordingly.
    `/quests/*`), runtime caches quest JSON and media, and versions cache keys via a `CACHE_VERSION`
    constant exported from a shared package. Add fixtures for legacy save data so migrations are
    reversible.
-5. **Accessibility workflows**: Expand linting to enforce `aria-*`, focus visibility, and contrast
-   rules. Maintain a manual keyboard walkthrough checklist in `docs/ops/a11y-checklist.md`.
-6. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
+5. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
    JSON schemas, snapshot quest/NPC bios, and gate telemetry via explicit opt-in toggles.
 
 ### Current Iteration Focus (2025-09)
@@ -55,4 +53,7 @@ moves so contributors can stage their work accordingly.
 
 - Consolidated infrastructure into `infra/` (`infra/ansible`, `infra/k8s`, `infra/monitoring`) and
   refreshed references in docs, quests, and guides.
+- Added a dedicated accessibility lint (`npm run lint:a11y`) that fails on missing ARIA semantics,
+  focus outline removal, and low-contrast colour combinations. The keyboard walkthrough lives in
+  `docs/ops/a11y-checklist.md`.
 
