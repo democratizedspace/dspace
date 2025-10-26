@@ -33,6 +33,7 @@
         </div>
         <button
             class="item selectbutton"
+            type="button"
             on:click={() => setSelectedAvatar(selectedIndex)}
             disabled={selectedIndex < 0}
             aria-disabled={selectedIndex < 0}

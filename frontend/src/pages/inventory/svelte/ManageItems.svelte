@@ -129,15 +129,24 @@
                     <div class="item-row">
                         <ItemCard itemId={item.id} />
                         <div class="item-actions">
-                            <button class="preview-button" on:click={() => togglePreview(item.id)}>
+                            <button
+                                class="preview-button"
+                                type="button"
+                                on:click={() => togglePreview(item.id)}
+                            >
                                 Preview
                             </button>
                             {#if item.custom}
-                                <button class="edit-button" on:click={() => handleEdit(item.id)}>
+                                <button
+                                    class="edit-button"
+                                    type="button"
+                                    on:click={() => handleEdit(item.id)}
+                                >
                                     Edit
                                 </button>
                                 <button
                                     class="delete-button"
+                                    type="button"
                                     on:click={() => handleDelete(item.id)}
                                 >
                                     Delete

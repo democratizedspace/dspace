@@ -58,16 +58,22 @@
                         <div class="process-actions">
                             <button
                                 class="preview-button"
+                                type="button"
                                 on:click={() => togglePreview(process.id)}
                             >
                                 Preview
                             </button>
                             {#if process.custom}
-                                <button class="edit-button" on:click={() => handleEdit(process.id)}>
+                                <button
+                                    class="edit-button"
+                                    type="button"
+                                    on:click={() => handleEdit(process.id)}
+                                >
                                     Edit
                                 </button>
                                 <button
                                     class="delete-button"
+                                    type="button"
                                     on:click={() => handleDelete(process.id)}
                                 >
                                     Delete

@@ -55,6 +55,7 @@
     {#if process && process.requireItems && process.requireItems.length > 0}
         <button
             class="primary"
+            type="button"
             on:click={buyRequired}
             aria-disabled={disableBuy}
             disabled={disableBuy}
