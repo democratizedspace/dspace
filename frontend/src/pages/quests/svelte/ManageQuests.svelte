@@ -91,11 +91,16 @@
                             <button
                                 class="edit-button"
                                 data-testid="quest-edit-button"
+                                type="button"
                                 on:click={() => handleEdit(quest.id)}
                             >
                                 Edit
                             </button>
-                            <button class="delete-button" on:click={() => handleDelete(quest.id)}>
+                            <button
+                                class="delete-button"
+                                type="button"
+                                on:click={() => handleDelete(quest.id)}
+                            >
                                 Delete
                             </button>
                         </div>

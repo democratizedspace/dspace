@@ -21,8 +21,12 @@
                 <h3>{quest.title}</h3>
                 <p>{quest.description}</p>
                 <div class="actions">
-                    <button class="approve" on:click={() => approve(quest.id)}>Approve</button>
-                    <button class="reject" on:click={() => reject(quest.id)}>Reject</button>
+                    <button class="approve" type="button" on:click={() => approve(quest.id)}
+                        >Approve</button
+                    >
+                    <button class="reject" type="button" on:click={() => reject(quest.id)}
+                        >Reject</button
+                    >
                 </div>
             </div>
         {/each}
