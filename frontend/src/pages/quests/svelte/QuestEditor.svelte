@@ -43,8 +43,10 @@
                             {#each steps as step, index (index)}
                                 <li class="horizontal">
                                     <span>{step}</span>
-                                    <button class="delete-button" on:click={() => removeStep(index)}
-                                        >Delete</button
+                                    <button
+                                        class="delete-button"
+                                        type="button"
+                                        on:click={() => removeStep(index)}>Delete</button
                                     >
                                 </li>
                             {/each}

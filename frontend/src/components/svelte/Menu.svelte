@@ -109,6 +109,7 @@
             aria-expanded={showUnpinned}
             aria-controls="unpinned-menu"
             aria-label="Toggle additional menu items"
+            type="button"
             data-hydrated={mounted ? 'true' : 'false'}
         >
             {toggleLabel}
