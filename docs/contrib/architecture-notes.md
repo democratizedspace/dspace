@@ -57,3 +57,6 @@ moves so contributors can stage their work accordingly.
 
 - Consolidated infrastructure into `infra/` (`infra/ansible`, `infra/k8s`, `infra/monitoring`) and
   refreshed references in docs, quests, and guides.
+- Added a dedicated accessibility lint (`npm run lint:a11y`) that fails on missing ARIA semantics,
+  focus outline removal, and low-contrast colour combinations. The keyboard walkthrough lives in
+  `docs/ops/a11y-checklist.md`.

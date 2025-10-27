@@ -13,6 +13,8 @@
 -   Live `/stats` page highlighting quest, inventory, and process totals
 -   Item form now captures item dependencies with trimming and live previews
 -   Manage Items page now offers category filter chips for one-click filtering
+-   Accessibility lint now runs before ESLint to block missing ARIA, focus outline removals, and
+    low-contrast colour pairings
 
 ### Fixed
 

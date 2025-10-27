@@ -93,7 +93,8 @@
 
     .input-style:focus {
         border-color: #007bff;
-        outline: none;
+        outline: 2px solid rgba(0, 123, 255, 0.6);
+        outline-offset: 2px;
     }
 
     .vertical {
