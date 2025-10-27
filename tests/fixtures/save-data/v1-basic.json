@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "schemaVersion": 1,
+    "notes": "Legacy save data before createdAt/updatedAt migrations."
+  },
+  "items": [
+    {
+      "id": "legacy-item",
+      "type": "item",
+      "name": "Offline maintenance kit",
+      "description": "Tools bundled with early custom content saves."
+    }
+  ],
+  "processes": [
+    {
+      "id": "legacy-process",
+      "type": "process",
+      "title": "Condition backup battery",
+      "duration": "1h",
+      "requireItems": [
+        { "id": "legacy-item", "count": 1 }
+      ]
+    }
+  ],
+  "quests": [
+    {
+      "id": "legacy/offline-orientation",
+      "type": "quest",
+      "title": "Legacy offline orientation",
+      "description": "Teach returning players how offline caching worked in v1.",
+      "image": "/assets/quests/howtodoquests.jpg",
+      "requiresQuests": ["welcome/howtodoquests"],
+      "dialogue": [
+        {
+          "id": "start",
+          "text": "This archived quest came from the pre-migration schema.",
+          "options": [
+            { "type": "finish", "text": "Finish quest" }
+          ]
+        }
+      ]
+    }
+  ]
+}

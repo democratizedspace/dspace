@@ -18,8 +18,8 @@ refreshing.
 ## Save Data Migration
 
 - Persist quest progress in IndexedDB with a schema version number.
-- Maintain fixtures for historic save formats under `tests/fixtures/save-data/` and keep conversion
-scripts idempotent.
+- Fixtures for historic save formats live under `tests/fixtures/save-data/` (see
+  `v1-basic.json` for the legacy schema); keep conversion scripts idempotent.
 - Downgrades use the latest backward-compatible fixture. Document incompatible changes and recovery
 steps in release notes.
 
