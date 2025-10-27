@@ -37,8 +37,6 @@ moves so contributors can stage their work accordingly.
 - **Offline playbook**: Document the service-worker cache strategy, save-data versioning, and
   rollback flow in `docs/ops/offline-first.md`. Clarify that the first implementation will ship as a
   no-op worker behind a feature flag to avoid surprising deployments.
-- **Accessibility baseline**: Extend the keyboard walkthrough with focus-state verification and
-  ensure Playwright accessibility captures are attached to the ops checklist.
 
 ## Sequencing Strategy
 
@@ -60,3 +58,6 @@ moves so contributors can stage their work accordingly.
 - Added a dedicated accessibility lint (`npm run lint:a11y`) that fails on missing ARIA semantics,
   focus outline removal, and low-contrast colour combinations. The keyboard walkthrough lives in
   `docs/ops/a11y-checklist.md`.
+- Promoted the keyboard-only walkthrough to a permanent release checklist in
+  `docs/ops/a11y-checklist.md`, including focus-state verification guidance and Playwright
+  accessibility snapshot capture instructions.
