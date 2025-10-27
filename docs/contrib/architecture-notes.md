@@ -19,8 +19,8 @@ moves so contributors can stage their work accordingly.
    stay out of the repo, but variable names and expected files belong in docs.
 4. **Offline-first rigor**: Define a service worker that precaches core routes (`/`, `/play`,
    `/quests/*`), runtime caches quest JSON and media, and versions cache keys via a `CACHE_VERSION`
-   constant exported from a shared package. Add fixtures for legacy save data so migrations are
-   reversible.
+   constant exported from a shared package. Fixtures for legacy save data now live under
+   `tests/fixtures/save-data/` so migrations stay reversible.
 5. **Accessibility workflows**: Expand linting to enforce `aria-*`, focus visibility, and contrast
    rules. Maintain a manual keyboard walkthrough checklist in `docs/ops/a11y-checklist.md`. Automated
    checks now guard against missing `type` attributes on interactive buttons so keyboard users do not
