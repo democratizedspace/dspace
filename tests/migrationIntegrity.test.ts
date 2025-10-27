@@ -122,19 +122,39 @@ async function seedLegacyDatabase(fixture) {
   await new Promise<void>((resolve, reject) => {
     const request = indexedDB.open('CustomContent', CUSTOM_CONTENT_DB_VERSION);
     let seeded = false;
+    let settled = false;
 
-    const fail = (event: Event) => {
-      const target = event.target as IDBOpenDBRequest | IDBTransaction | null;
-      reject(target?.error ?? event);
+    const settle = (value: 'resolve' | 'reject', reason?: unknown) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      if (value === 'resolve') {
+        resolve();
+      } else {
+        reject(reason);
+      }
     };
 
-    const seed = (db: IDBDatabase) => {
+    const fail = (event: Event | unknown) => {
+      const target =
+        event && typeof event === 'object'
+          ? (event as { target?: IDBOpenDBRequest | IDBTransaction | null }).target
+          : null;
+      const error =
+        target && typeof target === 'object' && 'error' in target
+          ? (target as { error?: unknown }).error
+          : undefined;
+      settle('reject', error ?? event);
+    };
+
+    const seed = (db: IDBDatabase, transaction?: IDBTransaction | null) => {
       if (seeded) {
         return;
       }
       seeded = true;
 
-      const tx = db.transaction(['meta', 'items', 'processes', 'quests'], 'readwrite');
+      const tx = transaction ?? db.transaction(['meta', 'items', 'processes', 'quests'], 'readwrite');
       const meta = tx.objectStore('meta');
       const items = tx.objectStore('items');
       const processes = tx.objectStore('processes');
@@ -157,15 +177,19 @@ async function seedLegacyDatabase(fixture) {
         quests.put(record);
       }
 
-      tx.oncomplete = () => {
-        db.close();
-        resolve();
-      };
-      tx.onerror = fail;
+      tx.addEventListener('complete', () => {
+        if (!transaction) {
+          db.close();
+        }
+        settle('resolve');
+      });
+      tx.addEventListener('error', fail);
+      tx.addEventListener('abort', fail);
     };
 
     request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
+      const req = event.target as IDBOpenDBRequest;
+      const db = req.result;
       if (!db.objectStoreNames.contains('meta')) {
         db.createObjectStore('meta');
       }
@@ -178,12 +202,17 @@ async function seedLegacyDatabase(fixture) {
       if (!db.objectStoreNames.contains('quests')) {
         db.createObjectStore('quests', { keyPath: 'id' });
       }
-      seed(db);
+      seed(db, req.transaction);
     };
 
     request.onsuccess = () => {
       const db = request.result;
-      seed(db);
+      if (!seeded) {
+        seed(db);
+        return;
+      }
+      db.close();
+      settle('resolve');
     };
 
     request.onerror = fail;
