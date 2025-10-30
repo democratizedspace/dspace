@@ -1,10 +1,9 @@
+import { parseFeatureFlags } from '../utils/featureFlags';
+
 export const prerender = false;
 
 export async function GET() {
-    const featureFlags = (process.env.DSPACE_FEATURE_FLAGS || '')
-        .split(',')
-        .map((flag) => flag.trim())
-        .filter(Boolean);
+    const { tokens: featureFlags } = parseFeatureFlags(process.env.DSPACE_FEATURE_FLAGS);
 
     return new Response(
         JSON.stringify({

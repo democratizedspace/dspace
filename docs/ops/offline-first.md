@@ -33,8 +33,8 @@ steps in release notes.
 
 ## Rollback Procedure
 
-1. Flip the feature flag `offlineWorker.enabled` to `false` in the config service to disable the
-   worker registration.
+1. Add `offlineWorker.enabled=false` to `DSPACE_FEATURE_FLAGS` (surfaced through
+   `/config.json`) to disable worker registration without redeploying the site.
 2. Invalidate CDN caches for `/service-worker.js` and the worker manifest.
 3. Ship a hotfix release that clears stale caches via `self.registration.unregister()` on startup.
 
