@@ -17,10 +17,11 @@ moves so contributors can stage their work accordingly.
 3. **Infrastructure overlays**: Layer environment-specific configuration inside `infra/` (e.g.,
    `infra/k8s/environments/production`) and document entry points under `docs/ops/deploy/`. Secrets
    stay out of the repo, but variable names and expected files belong in docs.
-4. **Offline-first rigor**: Define a service worker that precaches core routes (`/`, `/play`,
-   `/quests/*`), runtime caches quest JSON and media, and versions cache keys via a `CACHE_VERSION`
-   constant exported from a shared package. Fixtures for legacy save data now live under
-   `tests/fixtures/save-data/` so migrations stay reversible.
+4. **Offline-first rigor**: Iterate on the offline UX now that a service worker precaches core
+   routes (`/`, `/play`, `/quests/*`) and versioned cache keys come from the shared
+   `@dspace/cache-version` package. Focus upcoming work on expanding offline toasts and staged
+   asset cleanup while keeping fixtures for legacy save data under `tests/fixtures/save-data/` so
+   migrations stay reversible.
 5. **Accessibility workflows**: Expand linting to enforce `aria-*`, focus visibility, and contrast
    rules. Maintain a manual keyboard walkthrough checklist in `docs/ops/a11y-checklist.md`. Automated
    checks now guard against missing `type` attributes on interactive buttons so keyboard users do not
@@ -61,3 +62,7 @@ moves so contributors can stage their work accordingly.
 - Promoted the keyboard-only walkthrough to a permanent release checklist in
   `docs/ops/a11y-checklist.md`, including focus-state verification guidance and Playwright
   accessibility snapshot capture instructions.
+- Versioned the offline cache layer with a shared `CACHE_VERSION` constant, stored the resolved
+  value in `localStorage` (`dspace-cache-version`) for mismatch detection, and registered a service
+  worker that precaches navigation routes plus runtime assets so offline play matches the
+  architecture plan.
