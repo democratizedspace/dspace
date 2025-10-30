@@ -50,9 +50,77 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                 </script>
         </head>
         <body>
-		<div id="starry">
-			<slot />
-		</div>
+                <div id="starry">
+                        <slot />
+                </div>
+
+                <script is:inline>
+                        (function syncCacheVersion() {
+                                const cacheVersionKey = 'dspace-cache-version';
+
+                                function persist(version) {
+                                        try {
+                                                const previous = localStorage.getItem(cacheVersionKey);
+                                                localStorage.setItem(cacheVersionKey, version);
+
+                                                if (previous && previous !== version) {
+                                                        window.dispatchEvent(
+                                                                new CustomEvent(
+                                                                        'dspace-cache-version-change',
+                                                                        {
+                                                                                detail: {
+                                                                                        previous,
+                                                                                        current: version,
+                                                                                },
+                                                                        }
+                                                                )
+                                                        );
+                                                }
+                                        } catch (error) {
+                                                console.warn(
+                                                        'Failed to persist cache version to localStorage:',
+                                                        error
+                                                );
+                                        }
+                                }
+
+                                function applyVersion() {
+                                        if (typeof self !== 'undefined' && self.CACHE_VERSION) {
+                                                persist(self.CACHE_VERSION);
+                                        }
+                                }
+
+                                try {
+                                        if (typeof self !== 'undefined' && self.CACHE_VERSION) {
+                                                applyVersion();
+                                                return;
+                                        }
+
+                                        const script = document.createElement('script');
+                                        script.src = '/cache-version.js';
+                                        script.addEventListener('load', applyVersion, { once: true });
+                                        script.addEventListener('error', (error) => {
+                                                console.warn(
+                                                        'Failed to load cache version script:',
+                                                        error
+                                                );
+                                        });
+                                        document.head.appendChild(script);
+                                } catch (error) {
+                                        console.warn('Failed to sync cache version to localStorage:', error);
+                                }
+                        })();
+                </script>
+
+                <script is:inline>
+                        if ('serviceWorker' in navigator) {
+                                window.addEventListener('load', () => {
+                                        navigator.serviceWorker.register('/service-worker.js').catch((error) => {
+                                                console.warn('Service worker registration failed:', error);
+					});
+				});
+			}
+		</script>
 	</body>
 </html>
 <style>

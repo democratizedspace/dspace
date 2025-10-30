@@ -2,18 +2,26 @@
 
 The DSPACE frontend must keep core gameplay reachable without a network connection. This runbook
 summarises the caching model, data versioning guarantees, and recovery steps for the service worker
-stack.
+stack. The production worker ships from `frontend/public/service-worker.js`.
+It reads the shared `CACHE_VERSION` defined in `@dspace/cache-version`, ensuring
+both the app shell and worker invalidate caches in lockstep.
 
 ## Cache Responsibilities
 
-- **Precache routes**: `/`, `/play`, `/quests/*`, `/settings`, and the static assets required to boot
-the shell (compiled JS/CSS, fonts, favicons). Precaching runs during the `install` event using a
-versioned cache name, e.g. `dspace-precache-v${CACHE_VERSION}`.
+- **Precache routes**: `/`, `/play`, `/quests/*`, `/settings`, and the static assets
+  required to boot the shell (compiled JS/CSS, fonts, favicons).
+  Precaching runs during the `install` event using a versioned cache name,
+  e.g. `dspace-precache-v${CACHE_VERSION}`.
 - **Runtime cache**: Employ a stale-while-revalidate strategy for quest JSON, NPC bios, and media
 assets. Cache misses fall back to the network; failures surface a friendly offline toast.
-- **Versioning**: Store the current `CACHE_VERSION` inside `localStorage` to detect mismatches.
-Upgrade flows should delete outdated caches and trigger a silent reload after assets finish
-refreshing.
+- **Versioning**: Store the current `CACHE_VERSION` inside `localStorage` (key
+  `dspace-cache-version`) to detect mismatches. The global layout loads
+  `/cache-version.js` on boot, writes `self.CACHE_VERSION` to storage, and fires a
+  `dspace-cache-version-change` event when the value changes so listeners can
+  react. The `frontend/public/cache-version.js` helper is generated from
+  `@dspace/cache-version` so any bump propagates to the worker automatically.
+  Upgrade flows should delete outdated caches and trigger a silent reload after
+  assets finish refreshing.
 
 ## Save Data Migration
 
