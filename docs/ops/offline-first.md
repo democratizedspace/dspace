@@ -6,6 +6,11 @@ stack. The production worker ships from `frontend/public/service-worker.js`.
 It reads the shared `CACHE_VERSION` defined in `@dspace/cache-version`, ensuring
 both the app shell and worker invalidate caches in lockstep.
 
+Initial rollouts ship a no-op worker behind the `offlineWorker.enabled` feature
+flag. The flag lets us ship the registration shell early, gather telemetry, and
+then flip on precaching once the caches have been warmed and verified in lower
+environments.
+
 ## Cache Responsibilities
 
 - **Precache routes**: `/`, `/play`, `/quests/*`, `/settings`, and the static assets

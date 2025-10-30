@@ -35,9 +35,6 @@ moves so contributors can stage their work accordingly.
   application roots and captures the migration contract (e.g., `frontend` remains the source of
   truth until parity is confirmed). Update `pnpm-workspace.yaml` to recognise `apps/*` so early
   adopters can experiment without breaking the legacy workspace.
-- **Offline playbook**: Document the service-worker cache strategy, save-data versioning, and
-  rollback flow in `docs/ops/offline-first.md`. Clarify that the first implementation will ship as a
-  no-op worker behind a feature flag to avoid surprising deployments.
 
 ## Sequencing Strategy
 
@@ -66,3 +63,5 @@ moves so contributors can stage their work accordingly.
   value in `localStorage` (`dspace-cache-version`) for mismatch detection, and registered a service
   worker that precaches navigation routes plus runtime assets so offline play matches the
   architecture plan.
+- Documented the offline-first runbook with the feature-flagged no-op rollout so operations can
+  stage the worker safely before enabling precaching in production.
