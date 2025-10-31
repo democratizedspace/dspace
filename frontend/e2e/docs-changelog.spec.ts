@@ -137,4 +137,24 @@ test.describe('docs changelog page', () => {
             page.getByRole('link', { name: 'complete changelog archive' })
         ).toHaveAttribute('href', '/changelog');
     });
+
+    test('does not show the placeholder contribution CTA', async ({ page }) => {
+        await page.goto('/docs/changelog');
+        await page.waitForLoadState('domcontentloaded');
+
+        await expect(page.getByRole('heading', { name: 'Doc not found', exact: true })).toHaveCount(
+            0
+        );
+
+        await expect(
+            page.getByText(
+                'Should something exist here? Add a file on Github and submit a pull request.',
+                { exact: true }
+            )
+        ).toHaveCount(0);
+
+        await expect(
+            page.getByRole('link', { name: 'Write the Changelog doc', exact: true })
+        ).toHaveCount(0);
+    });
 });
