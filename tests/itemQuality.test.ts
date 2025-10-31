@@ -49,4 +49,17 @@ describe("item quality", () => {
       PriceExemptionReason.BETA_PLACEHOLDER
     );
   });
+
+  it("prices the harvested basil plant instead of using a beta placeholder", () => {
+    const basilPlant = (items as Array<Record<string, any>>).find(
+      (item) => item.name === "harvested basil plant"
+    );
+
+    expect(basilPlant).toBeDefined();
+    expect(basilPlant?.price).toBeDefined();
+    expect(basilPlant?.price).toMatch(/[0-9]/);
+    expect(basilPlant?.priceExemptionReason ?? null).not.toBe(
+      PriceExemptionReason.BETA_PLACEHOLDER
+    );
+  });
 });
