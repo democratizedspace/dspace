@@ -104,6 +104,8 @@ test.describe('docs changelog page', () => {
 
         await expect(page.getByRole('heading', { name: 'Changelog' })).toBeVisible();
 
+        await expect(page.getByRole('heading', { name: 'Doc not found' })).toHaveCount(0);
+
         const releasesList = page.getByRole('list', { name: 'Latest releases' });
         await expect(releasesList).toBeVisible();
 
@@ -136,5 +138,11 @@ test.describe('docs changelog page', () => {
         await expect(
             page.getByRole('link', { name: 'complete changelog archive' })
         ).toHaveAttribute('href', '/changelog');
+
+        await expect(
+            page.getByText(
+                'Should something exist here? Add a file on Github and submit a pull request.'
+            )
+        ).toHaveCount(0);
     });
 });
