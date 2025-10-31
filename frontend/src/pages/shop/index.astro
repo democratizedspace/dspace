@@ -1,12 +1,50 @@
 ---
 import Page from '../../components/Page.astro';
 import CompactCard from '../../components/CompactCard.astro';
-import { getWalletBalance } from '../../utils';
 import items from '../inventory/json/items';
 
-const item = items[0];
+const featuredItems = [];
+const seenCategories = new Set();
+
+for (const item of items) {
+    if (!item || typeof item !== 'object') continue;
+    const category = item.category ?? 'General';
+    if (seenCategories.has(category)) continue;
+    if (!item.id) continue;
+    featuredItems.push({ ...item, category });
+    seenCategories.add(category);
+}
+
+if (featuredItems.length === 0) {
+    const fallback = items.find(Boolean);
+    if (fallback?.id) {
+        featuredItems.push({ ...fallback, category: fallback.category ?? 'General' });
+    }
+}
 ---
 
-<Page title="Shop" columns="1">
-    <CompactCard title={item.name} image={item.image} text={item.description} />
+<Page title="Shop" message="Featured inventory ready for trade">
+    {featuredItems.map((item) => (
+        <li class="shop-card">
+            <CompactCard
+                title={item.name}
+                image={item.image}
+                text={item.description}
+                category={item.category}
+                price={item.price}
+                buyHref={`/shop/buy/${item.id}`}
+                sellHref={`/shop/sell/${item.id}`}
+            />
+        </li>
+    ))}
 </Page>
+
+<style>
+    .shop-card {
+        list-style: none;
+    }
+
+    .shop-card + .shop-card {
+        margin-top: 1rem;
+    }
+</style>

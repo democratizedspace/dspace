@@ -1,36 +1,27 @@
----
-import Chip from './Chip.astro'
+import Chip from './Chip.astro';
 
-const { title, text, href, image } = Astro.props;
----
+const { title, text, image, buyHref, sellHref, category, price } = Astro.props;
 
-<a href={href}>
-    <div class="item">
-        <h3>{title}</h3>
-        <div class="section horizontal">
-            <img src={image} alt={title} />
-            <div class="section vertical">
-                <p class="nobackground">{text}</p>
-                <div class="section horizontal">
-                    <Chip href="/shop/buy/1" text="Buy" />
-                     <Chip href="/shop/sell/1" text="Sell" />
-                </div>
+const safeBuyHref = buyHref ?? '#';
+const safeSellHref = sellHref ?? '#';
+
+<article class="item">
+    <h3>{title}</h3>
+    <div class="section horizontal">
+        <img src={image} alt={title} loading="lazy" />
+        <div class="section vertical">
+            {category && <p class="metadata">Category: {category}</p>}
+            {price && <p class="metadata">Price: {price}</p>}
+            <p class="nobackground">{text}</p>
+            <div class="section horizontal actions">
+                <Chip href={safeBuyHref} text="Buy" />
+                <Chip href={safeSellHref} text="Sell" />
             </div>
         </div>
     </div>
-</a>
+</article>
 
 <style>
-    a {
-        text-decoration: none;
-        color: white;
-    }
-
-    a:focus-visible {
-        outline: 2px solid #ffffff;
-        outline-offset: 2px;
-    }
-
     .section {
         align-items: center;
     }
@@ -50,6 +41,11 @@ const { title, text, href, image } = Astro.props;
         padding: 20px;
         border-radius: 20px;
         opacity: 0.8;
+    }
+
+    .item:focus-within {
+        outline: 2px solid #ffffff;
+        outline-offset: 4px;
     }
     
     .item h3 {
@@ -77,8 +73,16 @@ const { title, text, href, image } = Astro.props;
         background: none;
         color: white;
     }
-    
-    button {
 
+    .metadata {
+        background: none;
+        color: #9be89b;
+        font-size: 0.9em;
+        margin-bottom: 0;
+    }
+
+    .actions {
+        flex-wrap: wrap;
+        justify-content: flex-start;
     }
 </style>
