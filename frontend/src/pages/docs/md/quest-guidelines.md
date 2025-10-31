@@ -165,19 +165,22 @@ Before submitting a quest, verify:
 
 ## Contribution Workflow
 
-1. Develop your quest locally following these guidelines (start with `npm run generate-quest --template basic` for a ready-made template)
-2. Test thoroughly in your local environment
-3. Submit a [pull request](https://github.com/democratizedspace/dspace/pulls) with your quest JSON file
-4. Respond to feedback during code review
-5. Once approved, your quest will be merged into the official game
+### Preferred: In-game editor submission
 
-Once the in-game editor is complete, the workflow will be simplified to:
+1. Use the in-game editor from the **Play → Manage Quests** menu to create or edit your quest.
+2. Test using the built-in preview feature to confirm dialogue flow and reward logic.
+3. Click **Submit** to open an authenticated pull request directly from the game.
+4. Track review feedback in the linked GitHub pull request and iterate in the editor.
+5. Once approved, the quest deploys to all players automatically.
 
-1. Create quest through the in-game interface
-2. Test using the built-in preview feature
-3. Submit for review directly through the game
-4. Receive feedback through the platform
-5. Once approved, quest becomes available to all players
+### Manual JSON contribution
+
+1. Develop your quest locally following these guidelines. Start with
+   `npm run generate-quest --template basic` for a ready-made template.
+2. Test thoroughly in your local environment.
+3. Submit a [pull request](https://github.com/democratizedspace/dspace/pulls) with your quest JSON file.
+4. Respond to feedback during code review.
+5. Once approved, your quest will be merged into the official game.
 
 ## Areas Needing More Content
 
