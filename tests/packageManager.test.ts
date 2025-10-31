@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { describe, it, expect } from 'vitest';
 
@@ -27,5 +27,17 @@ describe('frontend/package.json', () => {
       .filter(([, c]) => c > 1)
       .map(([name]) => name);
     expect(duplicates).toEqual([]);
+  });
+});
+
+describe('.npmrc', () => {
+  it('pins pnpm via Corepack configuration', () => {
+    const npmrcPath = join(__dirname, '..', '.npmrc');
+    expect(existsSync(npmrcPath)).toBe(true);
+    const lines = readFileSync(npmrcPath, 'utf8')
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+    expect(lines).toContain('packageManager=pnpm@9.0.0');
   });
 });
