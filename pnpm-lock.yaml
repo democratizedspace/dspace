@@ -254,6 +254,8 @@ importers:
         specifier: ~5.1.6
         version: 5.1.6
 
+  packages/cache-version: {}
+
 packages:
 
   '@adobe/css-tools@4.4.3':

@@ -15,6 +15,9 @@ both the app shell and worker invalidate caches in lockstep.
   e.g. `dspace-precache-v${CACHE_VERSION}`.
 - **Runtime cache**: Employ a stale-while-revalidate strategy for quest JSON, NPC bios, and media
 assets. Cache misses fall back to the network; failures surface a friendly offline toast.
+- **Offline notification**: The global layout loads `installOfflineToast` from
+  `frontend/src/scripts/offlineToast.js`, wiring `window` online/offline events to an accessible
+  status toast so players get immediate feedback when the browser drops offline.
 - **Versioning**: Store the current `CACHE_VERSION` inside `localStorage` (key
   `dspace-cache-version`) to detect mismatches. The global layout loads
   `/cache-version.js` on boot, writes `self.CACHE_VERSION` to storage, and fires a
