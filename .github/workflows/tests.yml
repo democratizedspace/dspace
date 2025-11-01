@@ -98,6 +98,12 @@ jobs:
       - name: Setup Playwright environment
         run: pnpm --dir frontend run setup-test-env
 
+      - name: Start preview server
+        run: nohup pnpm --dir frontend run preview > preview.log 2>&1 &
+
+      - name: Wait for preview server
+        run: pnpm dlx wait-on http://127.0.0.1:3000
+
       - name: Install Ubuntu 24 Playwright runtime dependencies
         env:
           DEBIAN_FRONTEND: noninteractive
