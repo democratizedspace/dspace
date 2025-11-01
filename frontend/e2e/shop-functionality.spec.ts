@@ -24,6 +24,20 @@ test.describe('Shop Functionality', () => {
         await expect(page.getByRole('link', { name: 'Sell' })).toBeVisible();
     });
 
+    test('shop featured card links to real item ids', async ({ page }) => {
+        await page.goto('/shop');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const featuredActions = page.getByTestId('shop-featured-card-actions');
+
+        const featuredBuyLink = featuredActions.getByRole('link', { name: /^Buy$/ });
+        await expect(featuredBuyLink).toHaveAttribute('href', `/shop/buy/${firstShopItem.id}`);
+
+        const featuredSellLink = featuredActions.getByRole('link', { name: /^Sell$/ });
+        await expect(featuredSellLink).toHaveAttribute('href', `/shop/sell/${firstShopItem.id}`);
+    });
+
     test('should navigate to buy page and display items for purchase', async ({ page }) => {
         await page.goto(`/shop/buy/${firstShopItem.id}`);
         await page.waitForLoadState('networkidle');

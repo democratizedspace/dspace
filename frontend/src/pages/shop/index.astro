@@ -1,12 +1,31 @@
 ---
 import Page from '../../components/Page.astro';
 import CompactCard from '../../components/CompactCard.astro';
-import { getWalletBalance } from '../../utils';
 import items from '../inventory/json/items';
 
-const item = items[0];
+const allItems = Array.isArray(items) ? items : [];
+const featuredItem = allItems.find((candidate) => candidate?.id && candidate?.image);
+
+const featuredTitle = featuredItem?.name ?? 'Browse the catalog';
+const featuredDescription =
+    featuredItem?.description ?? 'Pick an item to start a buy or sell request.';
+const featuredImage = featuredItem?.image ?? '/assets/cart.jpg';
+const featuredHref = featuredItem ? `/shop/buy/${featuredItem.id}` : '/shop';
+const featuredChips = featuredItem
+    ? [
+          { text: 'Buy', href: `/shop/buy/${featuredItem.id}` },
+          { text: 'Sell', href: `/shop/sell/${featuredItem.id}` },
+      ]
+    : [];
 ---
 
 <Page title="Shop" columns="1">
-    <CompactCard title={item.name} image={item.image} text={item.description} />
+    <CompactCard
+        title={featuredTitle}
+        image={featuredImage}
+        text={featuredDescription}
+        href={featuredHref}
+        chips={featuredChips}
+        testId="shop-featured-card"
+    />
 </Page>
