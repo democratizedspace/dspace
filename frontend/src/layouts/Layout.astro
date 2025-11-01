@@ -53,6 +53,10 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                 <div id="starry">
                         <slot />
                 </div>
+                <script is:inline type="module">
+                        import { installOfflineToast } from '/src/scripts/offlineToast.js';
+                        installOfflineToast();
+                </script>
 
                 <script is:inline>
                         (function syncCacheVersion() {
