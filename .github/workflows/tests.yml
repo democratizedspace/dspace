@@ -120,13 +120,16 @@ jobs:
         run: sudo env "PATH=$PATH" pnpm --dir frontend exec playwright install --with-deps chromium chromium-headless-shell firefox webkit
 
       - name: Start preview server
-        run: nohup pnpm --dir frontend run preview -- --host 127.0.0.1 --port 3000 > preview.log 2>&1 &
+        run: nohup pnpm --dir frontend exec astro preview --host 127.0.0.1 --port 3000 > preview.log 2>&1 &
 
       - name: Wait for preview server
         run: pnpm dlx wait-on --timeout 180000 http-get://127.0.0.1:3000/
 
       - name: Run Playwright tests (${{ matrix.shard }})
         working-directory: frontend
+        env:
+          BASE_URL: http://127.0.0.1:3000
+          PORT: 3000
         run: npx playwright test --shard=${{ matrix.shard }} --reporter=dot
 
       - name: Print preview server log on failure
