@@ -22,10 +22,9 @@ moves so contributors can stage their work accordingly.
    `@dspace/cache-version` package. Focus upcoming work on expanding offline toasts and staged
    asset cleanup while keeping fixtures for legacy save data under `tests/fixtures/save-data/` so
    migrations stay reversible.
-5. **Accessibility workflows**: Expand linting to enforce `aria-*`, focus visibility, and contrast
-   rules. Maintain a manual keyboard walkthrough checklist in `docs/ops/a11y-checklist.md`. Automated
-   checks now guard against missing `type` attributes on interactive buttons so keyboard users do not
-   accidentally trigger form submissions.
+5. **Accessibility workflows**: Continue expanding lint coverage for `aria-*` semantics, focus
+   visibility, and contrast rules while keeping the manual keyboard walkthrough checklist in
+   `docs/ops/a11y-checklist.md` current.
 6. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
    JSON schemas, snapshot quest/NPC bios, and gate telemetry via explicit opt-in toggles.
 
@@ -59,6 +58,8 @@ moves so contributors can stage their work accordingly.
 - Added a dedicated accessibility lint (`npm run lint:a11y`) that fails on missing ARIA semantics,
   focus outline removal, and low-contrast colour combinations. The keyboard walkthrough lives in
   `docs/ops/a11y-checklist.md`.
+- Extended the accessibility lint script to fail when Svelte buttons omit an explicit `type`
+  attribute, preventing unintended form submissions for keyboard users.
 - Promoted the keyboard-only walkthrough to a permanent release checklist in
   `docs/ops/a11y-checklist.md`, including focus-state verification guidance and Playwright
   accessibility snapshot capture instructions.
