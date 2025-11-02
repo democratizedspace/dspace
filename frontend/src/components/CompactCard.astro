@@ -1,20 +1,27 @@
 ---
-import Chip from './Chip.astro'
+import Chip from './Chip.astro';
 
-const { title, text, href, image } = Astro.props;
+const { title, text, href = '#', image, chips = [], testId } = Astro.props;
 ---
 
-<a href={href}>
+<a href={href} data-testid={testId}>
     <div class="item">
         <h3>{title}</h3>
         <div class="section horizontal">
             <img src={image} alt={title} />
             <div class="section vertical">
                 <p class="nobackground">{text}</p>
-                <div class="section horizontal">
-                    <Chip href="/shop/buy/1" text="Buy" />
-                     <Chip href="/shop/sell/1" text="Sell" />
-                </div>
+                {
+                    chips.length > 0 && (
+                        <div class="section horizontal actions" data-testid={
+                            testId ? `${testId}-actions` : undefined
+                        }>
+                            {chips.map(({ text: chipText, href: chipHref, variant, size }) => (
+                                <Chip text={chipText} href={chipHref} variant={variant} size={size} />
+                            ))}
+                        </div>
+                    )
+                }
             </div>
         </div>
     </div>

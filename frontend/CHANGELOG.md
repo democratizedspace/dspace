@@ -25,6 +25,7 @@
 -   Copy code button now has visible focus and an ARIA label for screen readers
 -   Manage quests page now lists and manages custom quests saved in IndexedDB
 -   Settings menu entry now appears as an active destination instead of a disabled placeholder
+-   Shop index featured actions now use the correct item slug instead of the numeric placeholder
 
 ### Documentation
 
