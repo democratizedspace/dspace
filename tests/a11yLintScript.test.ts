@@ -45,4 +45,16 @@ describe('a11y lint script', () => {
         const issues = checkSourceForA11yWarnings(source, 'ContrastFixture.svelte');
         expect(issues.some((issue) => issue.type === 'css-contrast')).toBe(true);
     });
+
+    it('requires buttons to declare an explicit type', async () => {
+        const { checkSourceForA11yWarnings } = await a11yModulePromise;
+        const source = `<button class="cta">Launch</button>`;
+
+        const issues = checkSourceForA11yWarnings(source, 'ButtonFixture.svelte');
+        expect(
+            issues.some(
+                (issue) => issue.type === 'button-type' && /type attribute/i.test(issue.message)
+            )
+        ).toBe(true);
+    });
 });

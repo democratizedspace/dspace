@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { compile } from 'svelte/compiler';
+import { compile, walk } from 'svelte/compiler';
 import postcss from 'postcss';
 import postcssScss from 'postcss-scss';
 
@@ -128,11 +128,74 @@ function analyseCss(content, { filename, lang }) {
     return issues;
 }
 
+function getPositionFromIndex(source, index) {
+    if (typeof index !== 'number' || index < 0) {
+        return undefined;
+    }
+
+    let line = 1;
+    let column = 1;
+    for (let i = 0; i < index; i += 1) {
+        if (source[i] === '\n') {
+            line += 1;
+            column = 1;
+        } else {
+            column += 1;
+        }
+    }
+
+    return { line, column };
+}
+
+function collectButtonTypeIssues(source, ast, filename) {
+    if (!ast?.html) {
+        return [];
+    }
+
+    const issues = [];
+    walk(ast.html, {
+        enter(node) {
+            if (node.type !== 'Element' || node.name !== 'button') {
+                return;
+            }
+
+            const hasTypeAttribute = node.attributes.some((attribute) => {
+                if (attribute.type !== 'Attribute' || attribute.name !== 'type') {
+                    return false;
+                }
+
+                if (!Array.isArray(attribute.value) || attribute.value.length === 0) {
+                    return false;
+                }
+
+                return attribute.value.some((value) => {
+                    if (value.type === 'Text') {
+                        return value.data.trim().length > 0;
+                    }
+
+                    return true;
+                });
+            });
+
+            if (!hasTypeAttribute) {
+                issues.push({
+                    type: 'button-type',
+                    message: 'Button elements must declare a type attribute.',
+                    filename,
+                    position: getPositionFromIndex(source, node.start ?? -1),
+                });
+            }
+        },
+    });
+
+    return issues;
+}
+
 export function checkSourceForA11yWarnings(source, filename = 'inline.svelte') {
     const issues = [];
 
     try {
-        const { warnings } = compile(source, { filename });
+        const { warnings, ast } = compile(source, { filename });
         for (const warning of warnings) {
             if (warning.code && warning.code.startsWith('a11y-')) {
                 issues.push({
@@ -144,6 +207,9 @@ export function checkSourceForA11yWarnings(source, filename = 'inline.svelte') {
                 });
             }
         }
+
+        const buttonIssues = collectButtonTypeIssues(source, ast, filename);
+        issues.push(...buttonIssues);
     } catch (error) {
         issues.push({
             type: 'compile-error',
