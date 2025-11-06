@@ -1,0 +1,23 @@
+{
+    "20230105": [
+        {
+            "type": "whitespace",
+            "description": "Removed trailing whitespace after 'but there's now a solution:'",
+            "date": "2025-11-06"
+        }
+    ],
+    "20230131": [
+        {
+            "type": "whitespace",
+            "description": "Removed trailing whitespace after 'Electric vehicle charger' heading",
+            "date": "2025-11-06"
+        }
+    ],
+    "20230630": [
+        {
+            "type": "spelling",
+            "description": "Corrected 'sillhouette' to 'silhouette' in alt text",
+            "date": "2025-11-06"
+        }
+    ]
+}
