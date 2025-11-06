@@ -42,7 +42,7 @@ describe('Historical changelog guard', () => {
     );
 
     it('validates corrections metadata format', () => {
-        for (const [basename, entries] of Object.entries(corrections)) {
+        for (const entries of Object.values(corrections)) {
             expect(Array.isArray(entries)).toBe(true);
             for (const entry of entries) {
                 expect(['spelling', 'whitespace', 'link', 'formatting']).toContain(entry.type);

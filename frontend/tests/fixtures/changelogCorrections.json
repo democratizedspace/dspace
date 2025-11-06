@@ -1,4 +1,18 @@
 {
+    "20221005": [
+        {
+            "type": "link",
+            "description": "Updated items.json link from old location (frontend/src/config/items.json) to new location (frontend/src/pages/inventory/json/items/) as items are now categorized in subdirectories",
+            "date": "2025-11-06"
+        }
+    ],
+    "20221019": [
+        {
+            "type": "link",
+            "description": "Updated items.json link from old location to new location (frontend/src/pages/inventory/json/items/) as items are now categorized in subdirectories",
+            "date": "2025-11-06"
+        }
+    ],
     "20230105": [
         {
             "type": "whitespace",

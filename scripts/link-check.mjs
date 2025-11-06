@@ -22,6 +22,11 @@ const broken = [];
 function resolveInternalRoute(routePath) {
   const pagesDir = 'frontend/src/pages';
   
+  // Handle root path
+  if (routePath === '/') {
+    return existsSync(path.join(pagesDir, 'index.astro'));
+  }
+  
   // Remove leading slash
   const cleanPath = routePath.replace(/^\//, '');
   
@@ -38,7 +43,7 @@ function resolveInternalRoute(routePath) {
   
   // Check if it's a dynamic route
   const parts = normalizedPath.split('/');
-  if (parts.length > 0) {
+  if (normalizedPath.length > 0 && parts[0]) {
     const basePath = parts[0];
     
     // Check for [slug] pattern (e.g., /docs/about -> /docs/[slug].astro)
