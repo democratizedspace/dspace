@@ -18,10 +18,16 @@ function prepareHtml(html) {
 ---
 
 <Page columns="1">
-    {changelogsReversed.map(doc => (
-        <h3>{doc.frontmatter.title}</h3>
-        <span set:html={prepareHtml(doc.compiledContent())}></span>
-    ))}
+    {changelogsReversed.map(doc => {
+        const slug = typeof doc.frontmatter?.slug === 'string' ? doc.frontmatter.slug : undefined;
+
+        return (
+            <div class="changelog-entry">
+                <h3 id={slug}>{doc.frontmatter.title}</h3>
+                <span set:html={prepareHtml(doc.compiledContent())}></span>
+            </div>
+        );
+    })}
 </Page>
 
 <style>
@@ -30,9 +36,9 @@ function prepareHtml(html) {
         border-radius: 20px;
     }
 
-    span {
+    .changelog-entry > span {
         background-color: white;
-        color: black; 
+        color: black;
         padding: 10px;
         border-radius: 20px;
     }

@@ -14,9 +14,10 @@ describe('changelog 20230630 contributors guidance', () => {
     '20230630.md'
   );
 
-  it('links to the shipped contributors guide instead of promising it later', () => {
+  it('preserves the historical promise while pointing to the follow-up release', () => {
     const content = readFileSync(changelogPath, 'utf8');
-    expect(content).not.toMatch(/I'\ll be releasing a contributors guide soon\./i);
-    expect(content).toMatch(/\[Contribute guide\]\(\/docs\/contribute\)/i);
+    expect(content).toMatch(/I'll be releasing a contributors guide soon\./i);
+    expect(content).toMatch(/notes:\s*-\s*title:\s*'September 15, 2023/i);
+    expect(content).toMatch(/slug:\s*'20230915'/i);
   });
 });

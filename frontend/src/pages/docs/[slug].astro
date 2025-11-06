@@ -41,6 +41,61 @@ const buildLatestChangelogHtml = (entries = []) => {
     return `\n<ul aria-label="Latest releases">\n    <li>\n        <a href="/changelog">${escapeHtml(latest.title)}${taglineSuffix}</a>${summaryHtml}\n    </li>\n</ul>`;
 };
 
+const buildNotesHtml = (notes = [], currentSlug = '') => {
+    if (!Array.isArray(notes) || !notes.length) {
+        return '';
+    }
+
+    const normalizedSlug = typeof currentSlug === 'string' ? currentSlug : '';
+
+    const normalizedNotes = notes
+        .map((note) => {
+            if (!note || typeof note !== 'object') {
+                return null;
+            }
+
+            const rawTitle = note.title;
+            const rawDescription = note.description;
+            const rawSlug = typeof note.slug === 'string' ? note.slug : '';
+            const rawHref = typeof note.href === 'string' ? note.href : '';
+
+            const title = typeof rawTitle === 'string' ? rawTitle.trim() : '';
+            const description = typeof rawDescription === 'string' ? rawDescription.trim() : '';
+            const targetSlug = rawSlug.trim();
+            const href = rawHref.trim() || (targetSlug ? `/changelog#${targetSlug}` : '');
+
+            if (!title || !href) {
+                return null;
+            }
+
+            if (targetSlug && normalizedSlug && targetSlug <= normalizedSlug) {
+                return null;
+            }
+
+            return {
+                title,
+                description,
+                href,
+            };
+        })
+        .filter(Boolean);
+
+    if (!normalizedNotes.length) {
+        return '';
+    }
+
+    const listItemsHtml = normalizedNotes
+        .map((note) => {
+            const descriptionHtml = note.description
+                ? `\n                <p>${escapeHtml(note.description)}</p>`
+                : '';
+            return `\n            <li>\n                <a href="${escapeHtml(note.href)}">${escapeHtml(note.title)}</a>${descriptionHtml}\n            </li>`;
+        })
+        .join('');
+
+    return `\n<section class="doc-notes" aria-label="Additional notes">\n    <h2>Notes</h2>\n    <ul>${listItemsHtml}\n    </ul>\n</section>`;
+};
+
 const { slug } = Astro.params;
 let title, html;
 
@@ -58,6 +113,11 @@ if (doc) {
     }
 
     html = fixMarkdownText(compiled);
+
+    const notesHtml = buildNotesHtml(doc.frontmatter.notes, slug);
+    if (notesHtml) {
+        html = `${html}${notesHtml}`;
+    }
     title = doc.frontmatter.title;
 }
 
@@ -106,9 +166,36 @@ const newDocUrl = slugString
 <style>
     span {
         background-color: white;
-        color: black; 
+        color: black;
         padding: 10px;
         border-radius: 20px;
         overflow: auto;
+    }
+
+    .doc-notes {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        border-radius: 16px;
+        background-color: #f5f6fb;
+        border: 1px solid rgba(16, 24, 40, 0.08);
+    }
+
+    .doc-notes h2 {
+        margin-top: 0;
+        font-size: 1.2rem;
+    }
+
+    .doc-notes ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .doc-notes li + li {
+        margin-top: 0.75rem;
+    }
+
+    .doc-notes a {
+        font-weight: 600;
     }
 </style>

@@ -13,8 +13,13 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
-    include: ['tests/**/*.test.ts', 'scripts/tests/**/*.test.ts', 'backend/**/*.test.ts'],
-    exclude: ['frontend/e2e/**', 'frontend/__tests__/**'],
+    include: [
+      'tests/**/*.test.ts',
+      'scripts/tests/**/*.test.ts',
+      'backend/**/*.test.ts',
+      'frontend/__tests__/**/*.test.{js,ts}'
+    ],
+    exclude: ['frontend/e2e/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'json-summary'],
