@@ -1,26 +1,75 @@
 ---
 import Page from '../components/Page.astro';
+import { getChangelogNotes } from './docs/md/changelog/notes';
 
 const changelogs = await Astro.glob('./docs/md/changelog/*.md');
 
 const changelogsReversed = changelogs.reverse();
 
-function prepareHtml(html) {
-    return html + `
+const buildNotesHtml = (slug) => {
+    const notes = getChangelogNotes(typeof slug === 'string' ? slug : '');
+
+    if (!notes.length) {
+        return '';
+    }
+
+    const items = notes
+        .map((note) => `<li><strong>Note:</strong> ${note.html}</li>`)
+        .join('\n');
+
+    return `
+        <section class="changelog-notes" aria-label="Follow-up notes">
+            <h4>Notes</h4>
+            <ul>
+                ${items}
+            </ul>
+        </section>
+    `;
+};
+
+function prepareHtml(html, slug) {
+    const notesHtml = buildNotesHtml(slug);
+
+    return (
+        html +
+        notesHtml +
+        `
         <style>
             img {
                 width: 100%;
                 border-radius: 20px;
             }
+
+            .changelog-notes {
+                margin-top: 1.5rem;
+                padding: 1rem;
+                background-color: #f2f2f2;
+                border-radius: 12px;
+            }
+
+            .changelog-notes h4 {
+                margin: 0 0 0.5rem;
+                font-size: 1rem;
+            }
+
+            .changelog-notes ul {
+                margin: 0;
+                padding-left: 1.25rem;
+            }
+
+            .changelog-notes li + li {
+                margin-top: 0.5rem;
+            }
         </style>
-    `;
+    `
+    );
 }
 ---
 
 <Page columns="1">
     {changelogsReversed.map(doc => (
-        <h3>{doc.frontmatter.title}</h3>
-        <span set:html={prepareHtml(doc.compiledContent())}></span>
+        <h3 id={doc.frontmatter?.slug}>{doc.frontmatter.title}</h3>
+        <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter?.slug)}></span>
     ))}
 </Page>
 

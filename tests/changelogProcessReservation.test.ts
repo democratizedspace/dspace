@@ -1,21 +1,22 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { getChangelogNotes } from '../frontend/src/pages/docs/md/changelog/notes';
 
-const changelogPath = join(
-    process.cwd(),
-    'frontend',
-    'src',
-    'pages',
-    'docs',
-    'md',
-    'changelog',
-    '20230101.md'
-);
+describe('Process reservation follow-up', () => {
+    it('adds a note pointing readers to the v3 update that closes the loop', () => {
+        const notes = getChangelogNotes('20230101');
+        const mentionsProcessUpdate = notes.some(
+            (note) => /process material reservations/i.test(note.html) && note.html.includes('#20251101')
+        );
 
-describe('January 1, 2023 changelog', () => {
-    it('documents that processes reserve consumed materials immediately', () => {
-        const doc = readFileSync(changelogPath, 'utf8');
-        expect(doc).toMatch(/processes now consume required materials as soon as they start/i);
+        expect(mentionsProcessUpdate).toBe(true);
+    });
+
+    it('surfaces the same follow-up from the original October 19, 2022 notes', () => {
+        const notes = getChangelogNotes('20221019');
+        const mentionsProcessUpdate = notes.some(
+            (note) => /process material reservations/i.test(note.html) && note.html.includes('#20251101')
+        );
+
+        expect(mentionsProcessUpdate).toBe(true);
     });
 });
