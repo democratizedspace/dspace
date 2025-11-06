@@ -7,7 +7,33 @@
 - `frontend/` – Svelte components and quests
 - `backend/` – server code
 - `frontend/src/pages/quests/` – canonical quest JSON
+- `frontend/src/pages/` – Astro SSR routes (see [Routes Documentation](docs/ROUTES.md))
 - `scripts/` – utilities for data and tests
+
+## Astro Routes & Link Checking
+
+DSPACE uses Astro for SSR with file-based routing. All routes served by the application are documented in [docs/ROUTES.md](docs/ROUTES.md).
+
+**Key concepts:**
+- Routes are defined by `.astro` files in `frontend/src/pages/`
+- Dynamic routes use bracket syntax: `[slug].astro`, `[id].astro`, `[pathId]/[questId].astro`
+- Internal links (starting with `/`) are validated by `scripts/link-check.mjs`
+- External links are validated by lychee in CI
+- The link checker resolves dynamic routes without requiring server startup
+
+**Common route patterns:**
+- `/docs/[slug]` → documentation pages (e.g., `/docs/about`, `/docs/solar`)
+- `/inventory/item/[itemId]` → item details (e.g., `/inventory/item/37`)
+- `/processes/[processId]` → process pages (e.g., `/processes/launch-rocket`)
+- `/quests/[pathId]/[questId]` → quest pages (e.g., `/quests/play/2`)
+
+**Testing links:**
+```bash
+# Validate all internal links in markdown files
+node scripts/link-check.mjs
+```
+
+See [docs/ROUTES.md](docs/ROUTES.md) for the complete route catalog and resolution logic.
 
 ## Development Workflow
 
@@ -75,6 +101,7 @@ All checks must pass before an agent-created PR is merged.
 
 ## Additional Resources
 
+- [Routes Documentation](docs/ROUTES.md) - Complete catalog of Astro SSR routes
 - [Quest Submission Guide](frontend/src/pages/docs/md/quest-submission.md)
 - [UI Lifecycle Overview](frontend/src/pages/docs/md/ui-lifecycle.md)
 - [Codex Implementation Prompt](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/baseline.md#implementation-prompt)
