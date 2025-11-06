@@ -3,14 +3,7 @@ import Page from '../../components/Page.astro';
 import Chip from '../../components/Chip.astro';
 import Card from '../../components/Card.astro';
 import { fixMarkdownText } from '../../utils';
-
-const escapeHtml = (value = '') =>
-    String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+import { buildChangelogNotesHtml, escapeHtml } from '../../utils/changelogNotes.js';
 
 const buildLatestChangelogHtml = (entries = []) => {
     const normalized = entries
@@ -55,6 +48,12 @@ if (doc) {
         const changelogEntries = await Astro.glob('./md/changelog/*.md');
         const latestHtml = buildLatestChangelogHtml(changelogEntries);
         compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);
+    }
+
+    const notesHtml = buildChangelogNotesHtml(doc.frontmatter?.notes);
+
+    if (notesHtml) {
+        compiled += notesHtml;
     }
 
     html = fixMarkdownText(compiled);
@@ -106,9 +105,27 @@ const newDocUrl = slugString
 <style>
     span {
         background-color: white;
-        color: black; 
+        color: black;
         padding: 10px;
         border-radius: 20px;
         overflow: auto;
+    }
+
+    span .changelog-notes {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        border-left: 4px solid #1f2937;
+        border-radius: 12px;
+        background: #f3f4f6;
+    }
+
+    span .changelog-notes p {
+        margin: 0;
+        color: #111827;
+        line-height: 1.5;
+    }
+
+    span .changelog-notes a {
+        font-weight: 600;
     }
 </style>
