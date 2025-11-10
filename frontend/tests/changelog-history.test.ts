@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { createHash } from 'crypto';
 import { describe, it, expect } from 'vitest';
 
 interface AllowlistEntry {
@@ -16,6 +17,7 @@ const CHANGELOG_DIR = path.join(__dirname, '../src/pages/docs/md/changelog');
 const SNAPSHOT_PATH = path.join(__dirname, './fixtures/changelogSnapshots.json');
 const ALLOWLIST_PATH = path.join(__dirname, './fixtures/changelogAllowlist.json');
 const CORRECTIONS_PATH = path.join(__dirname, './fixtures/changelogCorrections.json');
+const SNAPSHOT_HASH_PATH = path.join(__dirname, './fixtures/changelogSnapshotHashes.json');
 const LATEST_FILE = '20251101';
 
 function readChangelogBody(filePath: string): string {
@@ -33,6 +35,10 @@ describe('Historical changelog guard', () => {
     const corrections = JSON.parse(fs.readFileSync(CORRECTIONS_PATH, 'utf8')) as Record<
         string,
         CorrectionEntry[]
+    >;
+    const snapshotHashes = JSON.parse(fs.readFileSync(SNAPSHOT_HASH_PATH, 'utf8')) as Record<
+        string,
+        string
     >;
     const allowedSlugs = new Set(
         String(process.env.ALLOW_CHANGELOG_BODY_CHANGES || '')
@@ -107,4 +113,17 @@ describe('Historical changelog guard', () => {
             throw new Error(guidance);
         });
     }
+    it('locks canonical snapshots to hashed baselines', () => {
+        for (const [slug, canonicalBody] of Object.entries(snapshots)) {
+            const expectedHash = snapshotHashes[slug];
+            expect(expectedHash).toBeDefined();
+
+            const actualHash = createHash('sha256').update(canonicalBody, 'utf8').digest('hex');
+            expect(actualHash).toBe(expectedHash);
+        }
+
+        for (const slug of Object.keys(snapshotHashes)) {
+            expect(snapshots).toHaveProperty(slug);
+        }
+    });
 });
