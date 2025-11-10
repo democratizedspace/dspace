@@ -8,9 +8,15 @@ DSPACE aims to make the creation and launches of rockets so easy that anyone can
 These quests focus on hobbyist-grade model rockets; commercial or
 high-powered launches are out of scope.
 
-You'll eventually be able to build a fully functioning virtual rocket and launch it into space. This will be a major milestone for the game, as everything leading up to that seems very loosely related. The first person to launch a rocket into orbit in DSPACE will be able to claim a unique title for their account.
+You can now build a fully functioning guided model rocket, complete with
+servo steering and onboard video, and launch it through the in-game questline.
+The playbook below covers everything from printing the hardware to rehearsing
+the countdown so the hop succeeds on the first real attempt.
 
-The ultimate goal is to make the creation of a functioning orbital rocket achievable in the real-world, too! There's no fundamental reason why this shouldn't be possible, but it will require a lot of work. It will also require complying with ITAR, which will be a challenge. This is a long-term goal, and it will take many years, if not decades.
+Orbit remains a long-term aspiration that will require significant iteration
+and regulatory diligence. For now, the guided hop serves as the shipped
+milestone while DSPACE researches what it would take to graduate to orbital
+launches in the future.
 
 ## Guided model rocket hop playbook
 
