@@ -16,9 +16,10 @@ describe('changelog 20230630 contributors guidance', () => {
     '20230630.md'
   );
 
-  it('keeps the original contributor roadmap text but points to the follow-up changelog', () => {
+  it('preserves the historical promise and points to the follow-up changelog', () => {
     const content = readFileSync(changelogPath, 'utf8');
     expect(content).toMatch(/I'\ll be releasing a contributors guide soon\./i);
+    expect(content).not.toMatch(/\[Contributors Guide]\(\/docs\/contribute\)/i);
 
     const notes = getChangelogNotes('20230630');
     expect(Array.isArray(notes)).toBe(true);
