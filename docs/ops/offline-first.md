@@ -14,10 +14,11 @@ both the app shell and worker invalidate caches in lockstep.
   Precaching runs during the `install` event using a versioned cache name,
   e.g. `dspace-precache-v${CACHE_VERSION}`.
 - **Runtime cache**: Employ a stale-while-revalidate strategy for quest JSON, NPC bios, and media
-assets. Cache misses fall back to the network; failures surface a friendly offline toast.
+  assets. Cache misses fall back to the network; failures surface a friendly offline toast.
 - **Offline notification**: The global layout loads `installOfflineToast` from
   `frontend/src/scripts/offlineToast.js`, wiring `window` online/offline events to an accessible
-  status toast so players get immediate feedback when the browser drops offline.
+  status toast. It now announces when connectivity returns before auto-hiding so players know their
+  data is syncing again.
 - **Versioning**: Store the current `CACHE_VERSION` inside `localStorage` (key
   `dspace-cache-version`) to detect mismatches. The global layout loads
   `/cache-version.js` on boot, writes `self.CACHE_VERSION` to storage, and fires a
@@ -33,7 +34,7 @@ assets. Cache misses fall back to the network; failures surface a friendly offli
 - Fixtures for historic save formats live under `tests/fixtures/save-data/` (see
   `v1-basic.json` for the legacy schema); keep conversion scripts idempotent.
 - Downgrades use the latest backward-compatible fixture. Document incompatible changes and recovery
-steps in release notes.
+  steps in release notes.
 
 ## Rollback Procedure
 

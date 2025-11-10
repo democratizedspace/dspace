@@ -11,6 +11,8 @@
 -   Auto-creation of placeholder artifacts in Playwright trace directories
 -   Better .gitignore handling for test artifacts
 -   Live `/stats` page highlighting quest, inventory, and process totals
+-   Offline toast now announces when connectivity returns before auto-hiding, confirming sync has
+    resumed
 -   Item form now captures item dependencies with trimming and live previews
 -   Manage Items page now offers category filter chips for one-click filtering
 -   Accessibility lint now runs before ESLint to block missing ARIA, focus outline removals, and

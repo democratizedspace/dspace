@@ -1,6 +1,7 @@
 const STYLE_ID = 'dspace-offline-toast-style';
 const TOAST_ID = 'dspace-offline-toast';
-const DEFAULT_MESSAGE = "You're offline. Changes will sync when you're back online.";
+const DEFAULT_OFFLINE_MESSAGE = "You're offline. Changes will sync when you're back online.";
+const DEFAULT_ONLINE_MESSAGE = "You're back online. Changes are syncing now.";
 
 function ensureStyles(doc) {
     if (doc.getElementById(STYLE_ID)) {
@@ -39,8 +40,10 @@ export function installOfflineToast(options = {}) {
     const doc = options.document ?? (typeof document !== 'undefined' ? document : undefined);
     const win = options.window ?? (typeof window !== 'undefined' ? window : undefined);
     const nav = options.navigator ?? (typeof navigator !== 'undefined' ? navigator : undefined);
-    const message = options.message ?? DEFAULT_MESSAGE;
+    const offlineMessage = options.offlineMessage ?? options.message ?? DEFAULT_OFFLINE_MESSAGE;
+    const onlineMessage = options.onlineMessage ?? DEFAULT_ONLINE_MESSAGE;
     const hideDelayMs = options.hideDelayMs ?? 0;
+    const onlineHideDelayMs = options.onlineHideDelayMs ?? (hideDelayMs > 0 ? hideDelayMs : 2000);
 
     if (!doc || !win || !nav) {
         return { destroy() {} };
@@ -55,11 +58,12 @@ export function installOfflineToast(options = {}) {
         toast.className = 'offline-toast';
         toast.setAttribute('role', 'status');
         toast.setAttribute('aria-live', 'polite');
-        toast.textContent = message;
+        toast.textContent = offlineMessage;
         doc.body.appendChild(toast);
     }
 
     let hideTimer;
+    let offlineVisible = false;
 
     const show = () => {
         if (hideTimer) {
@@ -69,32 +73,46 @@ export function installOfflineToast(options = {}) {
         toast.style.display = 'block';
     };
 
-    const hide = () => {
+    const hide = (delayMs = hideDelayMs) => {
         if (hideTimer) {
             win.clearTimeout(hideTimer);
             hideTimer = undefined;
         }
-        if (hideDelayMs > 0) {
+        if (delayMs > 0) {
             hideTimer = win.setTimeout(() => {
                 toast.style.display = 'none';
                 hideTimer = undefined;
-            }, hideDelayMs);
+            }, delayMs);
         } else {
             toast.style.display = 'none';
         }
     };
 
     if (nav.onLine === false) {
+        offlineVisible = true;
         show();
     }
 
     const offlineHandler = () => {
-        toast.textContent = message;
+        toast.textContent = offlineMessage;
+        offlineVisible = true;
         show();
     };
 
     const onlineHandler = () => {
-        hide();
+        if (!offlineVisible) {
+            return;
+        }
+
+        if (typeof onlineMessage === 'string' && onlineMessage.length > 0) {
+            toast.textContent = onlineMessage;
+            show();
+            hide(onlineHideDelayMs);
+        } else {
+            hide();
+        }
+
+        offlineVisible = false;
     };
 
     win.addEventListener('offline', offlineHandler);
