@@ -101,7 +101,6 @@ export function installOfflineToast(options = {}) {
 
     const onlineHandler = () => {
         if (!offlineVisible) {
-            hide();
             return;
         }
 
