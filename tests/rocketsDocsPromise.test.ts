@@ -4,13 +4,8 @@ import { readFileSync } from 'node:fs';
 
 describe('Rockets documentation promises', () => {
     const rocketsDocPath = join(
-        process.cwd(),
-        'frontend',
-        'src',
-        'pages',
-        'docs',
-        'md',
-        'rockets.md'
+        __dirname,
+        '../frontend/src/pages/docs/md/rockets.md'
     );
 
     it('describes the rocket launch workflow as available today', () => {
