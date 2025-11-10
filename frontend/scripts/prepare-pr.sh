@@ -13,15 +13,19 @@ ORIGINAL_DIR=$(pwd)
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 cd "$SCRIPT_DIR/.." || exit 1
 
-# Ensure Playwright browsers are installed before running tests
-echo "Ensuring Playwright browsers are installed..."
-PLAYWRIGHT_CLI="node_modules/@playwright/test/cli.js"
-if [ -f "$PLAYWRIGHT_CLI" ]; then
-  node "$PLAYWRIGHT_CLI" install > /dev/null 2>&1
+# Ensure Playwright browsers are installed before running tests when needed
+if [ -z "$SKIP_E2E" ]; then
+  echo "Ensuring Playwright browsers are installed..."
+  PLAYWRIGHT_CLI="node_modules/@playwright/test/cli.js"
+  if [ -f "$PLAYWRIGHT_CLI" ]; then
+    node "$PLAYWRIGHT_CLI" install > /dev/null 2>&1
+  else
+    echo "Playwright CLI not found at $PLAYWRIGHT_CLI. Please run npm install." >&2
+    cd "$ORIGINAL_DIR" || exit 1
+    exit 1
+  fi
 else
-  echo "Playwright CLI not found at $PLAYWRIGHT_CLI. Please run npm install." >&2
-  cd "$ORIGINAL_DIR" || exit 1
-  exit 1
+  echo "SKIP_E2E is set, skipping Playwright browser installation..."
 fi
 
 # Step 1: Run linting and formatting (unless skipped)

@@ -18,7 +18,7 @@ describe('changelog 20230630 contributors guidance', () => {
 
   it('preserves the historical promise and points to the follow-up changelog', () => {
     const content = readFileSync(changelogPath, 'utf8');
-    expect(content).toMatch(/I'\ll be releasing a contributors guide soon\./i);
+    expect(content).toMatch(/I'll be releasing a contributors guide soon\./i);
     expect(content).not.toMatch(/\[Contributors Guide]\(\/docs\/contribute\)/i);
 
     const notes = getChangelogNotes('20230630');
