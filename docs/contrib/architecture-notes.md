@@ -19,9 +19,9 @@ moves so contributors can stage their work accordingly.
    stay out of the repo, but variable names and expected files belong in docs.
 4. **Offline-first rigor**: Iterate on the offline UX now that a service worker precaches core
    routes (`/`, `/play`, `/quests/*`) and versioned cache keys come from the shared
-   `@dspace/cache-version` package. Focus upcoming work on expanding offline toasts and staged
-   asset cleanup while keeping fixtures for legacy save data under `tests/fixtures/save-data/` so
-   migrations stay reversible.
+   `@dspace/cache-version` package. Offline toasts now announce when connectivity returns before
+   auto-hiding; keep fixtures for legacy save data under `tests/fixtures/save-data/` so migrations
+   stay reversible while upcoming work focuses on staged asset cleanup.
 5. **Accessibility workflows**: Continue expanding lint coverage for `aria-*` semantics, focus
    visibility, and contrast rules while keeping the manual keyboard walkthrough checklist in
    `docs/ops/a11y-checklist.md` current.
