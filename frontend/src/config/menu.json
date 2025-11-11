@@ -89,8 +89,7 @@
     },
     {
         "name": "Toolbox",
-        "href": "/toolbox",
-        "comingSoon": true
+        "href": "/toolbox"
     },
     {
         "name": "Settings",
