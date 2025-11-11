@@ -38,6 +38,8 @@ creation process.
 -   Fix bugs or implement new features
 -   Improve documentation
 -   Enhance the user interface
+-   Review the [Contributors Guide](/docs/contributors-guide) for workflow and
+    testing expectations
 
 Install dependencies with `pnpm install` and use Node.js 20 LTS (`.nvmrc`) before running
 tests. For technical contributions, please review our

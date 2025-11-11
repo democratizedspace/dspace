@@ -99,6 +99,16 @@ npm run build
 
 All checks must pass before an agent-created PR is merged.
 
+## Historical changelog policy
+
+- Treat published changelog markdown under `frontend/src/pages/docs/md/changelog/` as
+  immutable narrative history.
+- Only fix typos, spacing, or broken links in historical files — document those adjustments in
+  `frontend/tests/fixtures/changelogCorrections.json` and refresh the associated snapshots.
+- When you need to reference newer context from an older release, add an entry to
+  `frontend/src/utils/changelogNotes.ts` so the UI appends a note at render time instead of
+  editing the archived markdown body.
+
 ## Additional Resources
 
 - [Routes Documentation](docs/ROUTES.md) - Complete catalog of Astro SSR routes

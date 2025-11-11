@@ -5,7 +5,13 @@ const existsSyncMock = vi.fn();
 const writeFileSyncMock = vi.fn();
 const chromiumExecutablePathMock = vi.fn();
 
+const originalSkipInstallDeps = process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS;
+const originalSkipBrowserDownload = process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD;
+
 vi.mock('node:child_process', () => ({
+    default: {
+        execFileSync: execFileSyncMock,
+    },
     execFileSync: execFileSyncMock,
 }));
 
@@ -39,6 +45,7 @@ describe('ensurePlaywrightSystemDeps', () => {
         execFileSyncMock.mockReset();
         existsSyncMock.mockReset();
         writeFileSyncMock.mockReset();
+        process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS = '0';
     });
 
     it('invokes install-deps on linux when sentinel is missing', async () => {
@@ -130,6 +137,8 @@ describe('ensurePlaywrightBrowsers', () => {
         writeFileSyncMock.mockReset();
         chromiumExecutablePathMock.mockReset();
         chromiumExecutablePathMock.mockReturnValue(chromiumPath);
+        process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS = '0';
+        delete process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD;
     });
 
     it('installs system deps before browsers when chromium is missing', async () => {
@@ -204,4 +213,18 @@ describe('ensurePlaywrightBrowsers', () => {
 
         expect(execFileSyncMock).not.toHaveBeenCalled();
     });
+});
+
+afterAll(() => {
+    if (originalSkipInstallDeps === undefined) {
+        delete process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS;
+    } else {
+        process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS = originalSkipInstallDeps;
+    }
+
+    if (originalSkipBrowserDownload === undefined) {
+        delete process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD;
+    } else {
+        process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = originalSkipBrowserDownload;
+    }
 });

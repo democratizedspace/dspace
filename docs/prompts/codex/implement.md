@@ -63,7 +63,10 @@ REQUEST:
    touching the changelog, do **not** create a new dated file—append your notes to the most
    recent future-dated entry instead (for example,
    [`frontend/src/pages/docs/md/changelog/20251101.md`](../../../frontend/src/pages/docs/md/changelog/20251101.md)
-   on the `v3` branch).
+   on the `v3` branch). Never rewrite the body of published changelog markdown; use
+   `frontend/src/utils/changelogNotes.ts` to append clarifying notes and reserve direct edits for
+   spelling, whitespace, or broken link fixes recorded in
+   `frontend/tests/fixtures/changelogCorrections.json`.
 6. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:ci`. Install Playwright browsers with
    `npx playwright install chromium` if needed, or set `SKIP_E2E=1` only when browsers are
