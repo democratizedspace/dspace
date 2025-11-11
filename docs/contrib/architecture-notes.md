@@ -57,6 +57,8 @@ moves so contributors can stage their work accordingly.
   `docs/ops/a11y-checklist.md`.
 - Extended the accessibility lint script to fail when Svelte buttons omit an explicit `type`
   attribute, preventing unintended form submissions for keyboard users.
+- Extended the accessibility lint script to validate `aria-label` attributes, flagging elements with
+  empty or whitespace-only labels that provide no meaningful context for screen readers.
 - Promoted the keyboard-only walkthrough to a permanent release checklist in
   `docs/ops/a11y-checklist.md`, including focus-state verification guidance and Playwright
   accessibility snapshot capture instructions.
