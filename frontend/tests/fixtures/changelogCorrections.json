@@ -4,6 +4,11 @@
             "type": "link",
             "description": "Updated items.json link from old location (frontend/src/config/items.json) to new location (frontend/src/pages/inventory/json/items/) as items are now categorized in subdirectories",
             "date": "2025-11-06"
+        },
+        {
+            "type": "link",
+            "description": "Corrected Docs link to point at the /docs route after the static page moved",
+            "date": "2025-11-06"
         }
     ],
     "20221019": [
@@ -25,12 +30,22 @@
             "type": "whitespace",
             "description": "Removed trailing whitespace after 'Electric vehicle charger' heading",
             "date": "2025-11-06"
+        },
+        {
+            "type": "link",
+            "description": "Removed dead internal Wallet link because the route no longer exists",
+            "date": "2025-11-06"
         }
     ],
     "20230630": [
         {
             "type": "spelling",
             "description": "Corrected 'sillhouette' to 'silhouette' in alt text",
+            "date": "2025-11-06"
+        },
+        {
+            "type": "link",
+            "description": "Removed dead internal Wallet link because the route no longer exists",
             "date": "2025-11-06"
         }
     ]

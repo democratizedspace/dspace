@@ -44,6 +44,13 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
             href: '/docs/changelog/20251101',
             linkLabel: 'November 1, 2025 changelog',
         },
+        {
+            message:
+                'The long-promised Contributors Guide is now live with workflow and testing guidance ' +
+                'plus documentation checklists for new pull requests.',
+            href: '/docs/contributors-guide',
+            linkLabel: 'Contributors Guide',
+        },
     ],
     '20230915': [
         {
