@@ -130,7 +130,7 @@ To verify the link checker correctly resolves routes:
 node scripts/link-check.mjs
 
 # Test specific routes by creating a test markdown file
-echo '- [Test](/your/new/route)' > test.md
+echo '- [Test](/docs/about)' > test.md
 node scripts/link-check.mjs
 rm test.md
 ```
