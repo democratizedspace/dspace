@@ -19,6 +19,8 @@ RUN apk add --no-cache \
 WORKDIR /workspace
 
 FROM base AS deps
+ENV CI=true
+ENV HUSKY=0
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY frontend/package.json frontend/
 COPY frontend/scripts frontend/scripts
@@ -30,6 +32,8 @@ COPY frontend frontend
 RUN pnpm --filter ./frontend... run build
 
 FROM base AS prod-deps
+ENV CI=true
+ENV HUSKY=0
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY frontend/package.json frontend/
 COPY frontend/scripts frontend/scripts
