@@ -191,6 +191,52 @@ function collectButtonTypeIssues(source, ast, filename) {
     return issues;
 }
 
+function collectEmptyAriaLabelIssues(source, ast, filename) {
+    if (!ast?.html) {
+        return [];
+    }
+
+    const issues = [];
+    walk(ast.html, {
+        enter(node) {
+            if (node.type !== 'Element') {
+                return;
+            }
+
+            const ariaLabelAttr = node.attributes.find((attribute) => {
+                return attribute.type === 'Attribute' && attribute.name === 'aria-label';
+            });
+
+            if (!ariaLabelAttr) {
+                return;
+            }
+
+            // Check if the aria-label value is empty or whitespace-only
+            let hasContent = false;
+            if (Array.isArray(ariaLabelAttr.value) && ariaLabelAttr.value.length > 0) {
+                hasContent = ariaLabelAttr.value.some((value) => {
+                    if (value.type === 'Text') {
+                        return value.data.trim().length > 0;
+                    }
+                    // If it's an expression/mustache tag, assume it has content
+                    return true;
+                });
+            }
+
+            if (!hasContent) {
+                issues.push({
+                    type: 'empty-aria-label',
+                    message: 'Elements with aria-label must provide meaningful text, not empty or whitespace-only values.',
+                    filename,
+                    position: getPositionFromIndex(source, node.start ?? -1),
+                });
+            }
+        },
+    });
+
+    return issues;
+}
+
 export function checkSourceForA11yWarnings(source, filename = 'inline.svelte') {
     const issues = [];
 
@@ -210,6 +256,9 @@ export function checkSourceForA11yWarnings(source, filename = 'inline.svelte') {
 
         const buttonIssues = collectButtonTypeIssues(source, ast, filename);
         issues.push(...buttonIssues);
+
+        const ariaLabelIssues = collectEmptyAriaLabelIssues(source, ast, filename);
+        issues.push(...ariaLabelIssues);
     } catch (error) {
         issues.push({
             type: 'compile-error',

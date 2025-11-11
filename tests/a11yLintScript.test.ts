@@ -57,4 +57,36 @@ describe('a11y lint script', () => {
             )
         ).toBe(true);
     });
+
+    it('flags elements with empty aria-label attributes', async () => {
+        const { checkSourceForA11yWarnings } = await a11yModulePromise;
+        const source = `<div aria-label="">Content</div>`;
+
+        const issues = checkSourceForA11yWarnings(source, 'AriaLabelFixture.svelte');
+        expect(
+            issues.some(
+                (issue) => issue.type === 'empty-aria-label' && /aria-label/i.test(issue.message)
+            )
+        ).toBe(true);
+    });
+
+    it('flags elements with whitespace-only aria-label attributes', async () => {
+        const { checkSourceForA11yWarnings } = await a11yModulePromise;
+        const source = `<button type="button" aria-label="   ">Click</button>`;
+
+        const issues = checkSourceForA11yWarnings(source, 'AriaLabelWhitespaceFixture.svelte');
+        expect(
+            issues.some(
+                (issue) => issue.type === 'empty-aria-label' && /aria-label/i.test(issue.message)
+            )
+        ).toBe(true);
+    });
+
+    it('allows elements with meaningful aria-label attributes', async () => {
+        const { checkSourceForA11yWarnings } = await a11yModulePromise;
+        const source = `<button type="button" aria-label="Close dialog">X</button>`;
+
+        const issues = checkSourceForA11yWarnings(source, 'ValidAriaLabel.svelte');
+        expect(issues.some((issue) => issue.type === 'empty-aria-label')).toBe(false);
+    });
 });
