@@ -14,32 +14,46 @@ This guide describes how to submit your custom quests to become part of the offi
 -   Optional: start from the [Quest Template Example](/docs/quest-template) for a minimal JSON
     structure
 
-## Steps
+## Submission Options
 
-1. **Create your quest** using the in-game editor or by editing a JSON file under `frontend/src/pages/quests/json`. Copy one of the examples from `frontend/src/pages/quests/templates` or run `npm run generate-quest --template basic` (use `branching` for multiple paths) to scaffold a template.
-2. **Bundle related items and processes** using `scripts/create-content-bundle.js`. This script collects quests, items, and processes into a single JSON file under `submissions/bundles`.
-3. **Validate** the quest structure by running:
+You have two ways to submit your quest:
+
+### Option 1: Bundle Submission (Recommended)
+
+If your quest requires custom items or processes, use the bundle submission workflow:
+
+1. **Create your quest** using the in-game editor at `/quests/create`
+2. **Create related items** at `/items/create` if needed
+3. **Create related processes** at `/processes/create` if needed
+4. **Package everything into a bundle** following the [Custom Content Bundles](/docs/custom-bundles) format
+5. **Submit the bundle** at `/bundles/submit` with your GitHub token
+6. **Respond to feedback** on the generated pull request
+
+### Option 2: Quest-Only Submission
+
+If your quest uses only existing items and processes:
+
+1. **Create your quest** using the in-game editor at `/quests/create`
+2. **Validate** the quest structure by running:
     ```bash
     npm run test:ci -- questValidation
     ```
-    Ensure your quest file passes all schema checks. See the [Quest Schema Requirements](/docs/quest-schema) for field definitions.
-    Quest titles and descriptions must be plain text with no HTML tags.
-4. **Check quest quality** with:
+3. **Check quest quality** with:
     ```bash
     npm run test:ci -- questQuality
     ```
-    Fix any reported errors until the test passes.
-5. **Simulate your quest** to ensure it can be completed:
-    ```bash
-    npm run test:ci -- questSimulation
-    ```
-    This validates that at least one path leads to a `finish` option.
-6. **Open the Quest Submission form** at `/quests/submit`.
-7. **Authorize GitHub** by entering a personal access token with `repo` scope. The token is only used client-side to push your quest and is stored locally so you won't need to re-enter it (see [Authentication Flow](/docs/authentication)).
-8. **Create the pull request** directly from the form. This uploads your quest to a new branch and opens a draft PR.
-9. **Respond to feedback** from reviewers until your quest meets project standards.
-10. **Regenerate the new quests list** by running `npm run new-quests:update` and
-    committing the updated `/docs/new-quests.md` to keep quest counts accurate.
+4. **Submit at** `/quests/submit` with your GitHub token
+5. **Respond to feedback** on the generated pull request
+
+## Manual Submission (Advanced)
+
+For manual submissions via command-line:
+
+1. **Bundle related content** using `scripts/create-content-bundle.js`. This script collects quests, items, and processes into a single JSON file under `submissions/bundles`.
+2. **Validate** all content following the guidelines above
+3. **Create a pull request** manually with your bundle file
+4. **Regenerate the new quests list** by running `npm run new-quests:update` and
+   committing the updated `/docs/new-quests.md` to keep quest counts accurate.
 
 Maintainers can review submitted quests at `/quests/review`, approving or rejecting them before merge.
 

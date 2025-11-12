@@ -181,19 +181,28 @@ The UI displays different controls depending on the state:
 
 ## Contribution Workflow
 
+The recommended way to contribute processes is through the **custom content bundle workflow**, which keeps related quests, items, and processes together:
+
+1. Create process through the in-game interface at [/processes/create](/processes/create)
+2. Export your created process as JSON from the management page:
+    - After saving your process, navigate to [/processes/manage](/processes/manage)
+    - Locate your process in the list and use the export functionality to download the JSON
+    - Save the exported JSON file - this will be included in your content bundle
+3. Create any related items at [/items/create](/items/create) and export them similarly
+4. Create any related quests at [/quests/create](/quests/create) and export them similarly
+5. Package everything into a bundle JSON (see [Custom Content Bundles](/docs/custom-bundles))
+6. Submit the bundle for review at [/bundles/submit](/bundles/submit)
+7. Respond to feedback on the generated pull request
+8. Once approved, your content bundle becomes available to all players
+
+Alternatively, you can follow the traditional manual workflow:
+
 1. Develop your custom process(es) following these guidelines
 2. Test with appropriate items to ensure correct behavior
-3. Submit a pull request with your process JSON file
-4. Respond to feedback during code review
-5. Once approved, your process will be merged into the official game
-
-Once the full in-game editor is complete, the workflow will be simplified:
-
-1. Create process through the in-game interface
-2. Test with required items
-3. Submit for review directly through the game
-4. Receive feedback through the platform
-5. Once approved, process becomes available to all players
+3. Create a content bundle JSON with related quests and items
+4. Submit a pull request with your bundle file in `submissions/bundles/`
+5. Respond to feedback during code review
+6. Once approved, your content will be merged into the official game
 
 ## Process Chains and Progression
 
