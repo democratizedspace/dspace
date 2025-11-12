@@ -148,12 +148,16 @@ When creating custom items, consider how they might connect to:
 The recommended way to contribute items is through the **custom content bundle workflow**, which keeps related quests, items, and processes together:
 
 1. Create item through the in-game interface at [/items/create](/items/create)
-2. Create any related processes at [/processes/create](/processes/create)
-3. Create any related quests at [/quests/create](/quests/create)
-4. Package everything into a bundle JSON (see [Custom Content Bundles](/docs/custom-bundles))
-5. Submit the bundle for review at [/bundles/submit](/bundles/submit)
-6. Respond to feedback on the generated pull request
-7. Once approved, your content bundle becomes available to all players
+2. Export your created item as JSON from the management page:
+    - After saving your item, navigate to [/inventory/manage](/inventory/manage)
+    - Locate your newly created item in the list and use the export functionality to download the JSON
+    - Save the exported JSON file - this will be included in your content bundle
+3. Create any related processes at [/processes/create](/processes/create) and export them similarly
+4. Create any related quests at [/quests/create](/quests/create) and export them similarly
+5. Package everything into a bundle JSON (see [Custom Content Bundles](/docs/custom-bundles))
+6. Submit the bundle for review at [/bundles/submit](/bundles/submit)
+7. Respond to feedback on the generated pull request
+8. Once approved, your content bundle becomes available to all players
 
 Alternatively, you can follow the traditional manual workflow:
 

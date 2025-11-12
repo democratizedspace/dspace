@@ -167,7 +167,14 @@
         margin-bottom: 4px;
         color: white;
     }
-    input,
+    input {
+        width: 95%;
+        padding: 8px;
+        border-radius: 8px;
+        background: #68d46d;
+        color: black;
+        border: 2px solid #007006;
+    }
     textarea {
         width: 95%;
         padding: 8px;
@@ -176,8 +183,6 @@
         color: black;
         border: 2px solid #007006;
         font-family: monospace;
-    }
-    textarea {
         font-size: 13px;
     }
     .form-submit {

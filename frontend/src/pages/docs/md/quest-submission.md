@@ -33,7 +33,7 @@ If your quest requires custom items or processes, use the bundle submission work
 
 If your quest uses only existing items and processes:
 
-1. **Create your quest** using the in-game editor or by editing a JSON file under `frontend/src/pages/quests/json`
+1. **Create your quest** using the in-game editor at `/quests/create`
 2. **Validate** the quest structure by running:
     ```bash
     npm run test:ci -- questValidation
