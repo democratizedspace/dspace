@@ -1,0 +1,189 @@
+<script>
+    import { createEventDispatcher, onMount } from 'svelte';
+    export let token = '';
+    export let branch = '';
+    export let processJson = '';
+    let prUrl = '';
+    let validationErrors = {};
+    let submitError = '';
+    let hydrated = false;
+    const dispatch = createEventDispatcher();
+    import {
+        isValidGitHubToken,
+        loadGitHubToken,
+        saveGitHubToken,
+        clearGitHubToken,
+    } from '../../utils/githubToken.js';
+    import { submitProcessPR } from '../../utils/submitProcessPR.js';
+
+    onMount(async () => {
+        try {
+            token = await loadGitHubToken();
+        } finally {
+            hydrated = true;
+        }
+    });
+
+    function validateForm() {
+        const errors = {};
+        if (!isValidGitHubToken(token)) {
+            errors.token = 'GitHub token looks invalid';
+        }
+        if (!processJson.trim()) {
+            errors.process = 'Process JSON is required';
+        }
+        validationErrors = errors;
+        return Object.keys(errors).length === 0;
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        submitError = '';
+        if (!validateForm()) {
+            submitError = 'Please fix the errors above';
+            dispatch('error', { message: 'Validation failed' });
+            return;
+        }
+        try {
+            prUrl = await submitProcessPR(token, branch, processJson);
+            submitError = '';
+            dispatch('success', { message: 'Pull request created', url: prUrl });
+            await saveGitHubToken(token);
+        } catch (err) {
+            console.error(err);
+            submitError = 'Failed to submit process';
+            dispatch('error', { message: 'Failed to submit process' });
+        }
+    }
+
+    async function clearToken() {
+        token = '';
+        await clearGitHubToken();
+    }
+
+    export { handleSubmit, clearToken };
+</script>
+
+<form on:submit={handleSubmit} class="pr-form" data-hydrated={hydrated ? 'true' : 'false'}>
+    <div class="form-group token-group">
+        <label for="token">GitHub Token*</label>
+        <div class="token-input">
+            <input
+                id="token"
+                type="password"
+                bind:value={token}
+                class:error={validationErrors.token}
+                required
+            />
+            <button type="button" on:click={clearToken} data-testid="clear-token"
+                >Clear Token</button
+            >
+        </div>
+        {#if validationErrors.token}
+            <span class="error-message" data-testid="token-error">{validationErrors.token}</span>
+        {/if}
+    </div>
+    <div class="form-group">
+        <label for="branch">Branch Name</label>
+        <input id="branch" type="text" bind:value={branch} placeholder="process-my-feature" />
+    </div>
+    <div class="form-group">
+        <label for="process">Process JSON*</label>
+        <textarea
+            id="process"
+            bind:value={processJson}
+            rows="10"
+            class:error={validationErrors.process}
+            required
+        />
+        {#if validationErrors.process}
+            <span class="error-message" data-testid="process-json-error"
+                >{validationErrors.process}</span
+            >
+        {/if}
+    </div>
+    <div class="form-submit">
+        <button type="submit">Create Pull Request</button>
+    </div>
+</form>
+
+{#if prUrl}
+    <p class="success-message" data-testid="pr-success">
+        Pull request created:
+        <a href={prUrl} target="_blank" rel="noopener" data-testid="pr-link"> View PR </a>
+    </p>
+{/if}
+
+{#if submitError}
+    <p class="error-message" data-testid="submit-error">{submitError}</p>
+{/if}
+
+<style>
+    .pr-form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #2c5837;
+        border-radius: 12px;
+        border: 2px solid #007006;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 4px;
+        color: white;
+    }
+    input,
+    textarea {
+        width: 95%;
+        padding: 8px;
+        border-radius: 8px;
+        background: #68d46d;
+        color: black;
+        border: 2px solid #007006;
+    }
+    .form-submit {
+        text-align: center;
+    }
+    button {
+        padding: 10px 20px;
+        background: #007006;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .success-message {
+        margin-top: 10px;
+        color: #90ee90;
+    }
+
+    input.error,
+    textarea.error {
+        border-color: #ff3e3e;
+        background-color: #ffecec;
+    }
+
+    .error-message {
+        color: #ff3e3e;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .token-input {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .token-group button {
+        padding: 6px 10px;
+    }
+</style>

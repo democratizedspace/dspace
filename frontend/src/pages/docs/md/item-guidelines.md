@@ -145,19 +145,21 @@ When creating custom items, consider how they might connect to:
 
 ## Contribution Workflow
 
+You can contribute items using the in-game workflow:
+
+1. Create item through the in-game interface at [/items/create](/items/create)
+2. Test in custom processes
+3. Submit for review directly through the game at [/items/submit](/items/submit)
+4. Respond to feedback on the generated pull request
+5. Once approved, item becomes available to all players
+
+Alternatively, you can follow the traditional workflow:
+
 1. Develop your custom item(s) following these guidelines
 2. Test the item(s) in various processes to ensure they function as expected
 3. Submit a pull request with your item JSON file
 4. Respond to feedback during code review
 5. Once approved, your item will be merged into the official game
-
-Once the full in-game editor is complete, the workflow will be simplified:
-
-1. Create item through the in-game interface
-2. Test in custom processes
-3. Submit for review directly through the game
-4. Receive feedback through the platform
-5. Once approved, item becomes available to all players
 
 ## Areas Needing More Content
 

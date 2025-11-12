@@ -181,19 +181,21 @@ The UI displays different controls depending on the state:
 
 ## Contribution Workflow
 
+You can contribute processes using the in-game workflow:
+
+1. Create process through the in-game interface at [/processes/create](/processes/create)
+2. Test with required items
+3. Submit for review directly through the game at [/processes/submit](/processes/submit)
+4. Respond to feedback on the generated pull request
+5. Once approved, process becomes available to all players
+
+Alternatively, you can follow the traditional workflow:
+
 1. Develop your custom process(es) following these guidelines
 2. Test with appropriate items to ensure correct behavior
 3. Submit a pull request with your process JSON file
 4. Respond to feedback during code review
 5. Once approved, your process will be merged into the official game
-
-Once the full in-game editor is complete, the workflow will be simplified:
-
-1. Create process through the in-game interface
-2. Test with required items
-3. Submit for review directly through the game
-4. Receive feedback through the platform
-5. Once approved, process becomes available to all players
 
 ## Process Chains and Progression
 
