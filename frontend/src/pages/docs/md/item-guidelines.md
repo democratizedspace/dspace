@@ -145,21 +145,24 @@ When creating custom items, consider how they might connect to:
 
 ## Contribution Workflow
 
-You can contribute items using the in-game workflow:
+The recommended way to contribute items is through the **custom content bundle workflow**, which keeps related quests, items, and processes together:
 
 1. Create item through the in-game interface at [/items/create](/items/create)
-2. Test in custom processes
-3. Submit for review directly through the game at [/items/submit](/items/submit)
-4. Respond to feedback on the generated pull request
-5. Once approved, item becomes available to all players
+2. Create any related processes at [/processes/create](/processes/create)
+3. Create any related quests at [/quests/create](/quests/create)
+4. Package everything into a bundle JSON (see [Custom Content Bundles](/docs/custom-bundles))
+5. Submit the bundle for review at [/bundles/submit](/bundles/submit)
+6. Respond to feedback on the generated pull request
+7. Once approved, your content bundle becomes available to all players
 
-Alternatively, you can follow the traditional workflow:
+Alternatively, you can follow the traditional manual workflow:
 
 1. Develop your custom item(s) following these guidelines
 2. Test the item(s) in various processes to ensure they function as expected
-3. Submit a pull request with your item JSON file
-4. Respond to feedback during code review
-5. Once approved, your item will be merged into the official game
+3. Create a content bundle JSON with related quests and processes
+4. Submit a pull request with your bundle file in `submissions/bundles/`
+5. Respond to feedback during code review
+6. Once approved, your content will be merged into the official game
 
 ## Areas Needing More Content
 

@@ -1,17 +1,21 @@
-export async function submitItemPR(token, branch, itemJson) {
-    const branchName = branch || `item-${Date.now()}`;
+export async function submitBundlePR(token, branch, bundleJson) {
+    const branchName = branch || `bundle-${Date.now()}`;
     const headers = {
         Authorization: `token ${token}`,
         'Content-Type': 'application/json',
     };
-    const content = btoa(unescape(encodeURIComponent(itemJson)));
-    const filePath = `submissions/items/${branchName}.json`;
+    const content = btoa(unescape(encodeURIComponent(bundleJson)));
+    const filePath = `submissions/bundles/${branchName}.json`;
     const res = await fetch(
         `https://api.github.com/repos/democratizedspace/dspace/contents/${filePath}`,
         {
             method: 'PUT',
             headers,
-            body: JSON.stringify({ message: 'Add item submission', content, branch: branchName }),
+            body: JSON.stringify({
+                message: 'Add custom content bundle submission',
+                content,
+                branch: branchName,
+            }),
         }
     );
     if (!res.ok) throw new Error(await res.text());
@@ -19,10 +23,10 @@ export async function submitItemPR(token, branch, itemJson) {
         method: 'POST',
         headers,
         body: JSON.stringify({
-            title: `Item submission: ${branchName}`,
+            title: `Custom content bundle: ${branchName}`,
             head: branchName,
             base: 'v3',
-            body: 'Automated item submission.',
+            body: 'Automated custom content bundle submission containing quests, items, and/or processes.',
         }),
     });
     if (!prRes.ok) throw new Error(await prRes.text());

@@ -2,7 +2,7 @@
     import { createEventDispatcher, onMount } from 'svelte';
     export let token = '';
     export let branch = '';
-    export let itemJson = '';
+    export let bundleJson = '';
     let prUrl = '';
     let validationErrors = {};
     let submitError = '';
@@ -14,7 +14,7 @@
         saveGitHubToken,
         clearGitHubToken,
     } from '../../utils/githubToken.js';
-    import { submitItemPR } from '../../utils/submitItemPR.js';
+    import { submitBundlePR } from '../../utils/submitBundlePR.js';
 
     onMount(async () => {
         try {
@@ -29,8 +29,18 @@
         if (!isValidGitHubToken(token)) {
             errors.token = 'GitHub token looks invalid';
         }
-        if (!itemJson.trim()) {
-            errors.item = 'Item JSON is required';
+        if (!bundleJson.trim()) {
+            errors.bundle = 'Bundle JSON is required';
+        } else {
+            try {
+                const parsed = JSON.parse(bundleJson);
+                if (!parsed.quests && !parsed.items && !parsed.processes) {
+                    errors.bundle =
+                        'Bundle must contain at least one of: quests, items, or processes';
+                }
+            } catch (e) {
+                errors.bundle = 'Invalid JSON format';
+            }
         }
         validationErrors = errors;
         return Object.keys(errors).length === 0;
@@ -45,14 +55,14 @@
             return;
         }
         try {
-            prUrl = await submitItemPR(token, branch, itemJson);
+            prUrl = await submitBundlePR(token, branch, bundleJson);
             submitError = '';
             dispatch('success', { message: 'Pull request created', url: prUrl });
             await saveGitHubToken(token);
         } catch (err) {
             console.error(err);
-            submitError = 'Failed to submit item';
-            dispatch('error', { message: 'Failed to submit item' });
+            submitError = 'Failed to submit bundle';
+            dispatch('error', { message: 'Failed to submit bundle' });
         }
     }
 
@@ -65,6 +75,15 @@
 </script>
 
 <form on:submit={handleSubmit} class="pr-form" data-hydrated={hydrated ? 'true' : 'false'}>
+    <div class="form-description">
+        <p>
+            Submit a custom content bundle containing quests, items, and/or processes. Bundles keep
+            related content together and are easier to review.
+        </p>
+        <p>
+            See the <a href="/docs/custom-bundles">Custom Content Bundles guide</a> for the JSON format.
+        </p>
+    </div>
     <div class="form-group token-group">
         <label for="token">GitHub Token*</label>
         <div class="token-input">
@@ -85,19 +104,22 @@
     </div>
     <div class="form-group">
         <label for="branch">Branch Name</label>
-        <input id="branch" type="text" bind:value={branch} placeholder="item-my-feature" />
+        <input id="branch" type="text" bind:value={branch} placeholder="bundle-my-feature" />
     </div>
     <div class="form-group">
-        <label for="item">Item JSON*</label>
+        <label for="bundle">Bundle JSON*</label>
         <textarea
-            id="item"
-            bind:value={itemJson}
-            rows="10"
-            class:error={validationErrors.item}
+            id="bundle"
+            bind:value={bundleJson}
+            rows="15"
+            class:error={validationErrors.bundle}
+            placeholder={'{\n  "quests": [...],\n  "items": [...],\n  "processes": [...]\n}'}
             required
         />
-        {#if validationErrors.item}
-            <span class="error-message" data-testid="item-json-error">{validationErrors.item}</span>
+        {#if validationErrors.bundle}
+            <span class="error-message" data-testid="bundle-json-error"
+                >{validationErrors.bundle}</span
+            >
         {/if}
     </div>
     <div class="form-submit">
@@ -127,6 +149,14 @@
         color: #fff;
         font-family: Arial, sans-serif;
     }
+    .form-description {
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+    .form-description a {
+        color: #90ee90;
+        text-decoration: underline;
+    }
     .form-group {
         margin-bottom: 15px;
         text-align: left;
@@ -145,6 +175,10 @@
         background: #68d46d;
         color: black;
         border: 2px solid #007006;
+        font-family: monospace;
+    }
+    textarea {
+        font-size: 13px;
     }
     .form-submit {
         text-align: center;
