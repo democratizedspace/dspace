@@ -191,6 +191,26 @@ function collectButtonTypeIssues(source, ast, filename) {
     return issues;
 }
 
+function getAttribute(node, name) {
+    return node.attributes.find((attribute) => {
+        return attribute.type === 'Attribute' && attribute.name === name;
+    });
+}
+
+function attributeHasValue(attribute) {
+    if (!attribute || !Array.isArray(attribute.value) || attribute.value.length === 0) {
+        return false;
+    }
+
+    return attribute.value.some((value) => {
+        if (value.type === 'Text') {
+            return value.data.trim().length > 0;
+        }
+
+        return true;
+    });
+}
+
 function collectEmptyAriaLabelIssues(source, ast, filename) {
     if (!ast?.html) {
         return [];
@@ -203,30 +223,86 @@ function collectEmptyAriaLabelIssues(source, ast, filename) {
                 return;
             }
 
-            const ariaLabelAttr = node.attributes.find((attribute) => {
-                return attribute.type === 'Attribute' && attribute.name === 'aria-label';
-            });
+            const ariaLabelAttr = getAttribute(node, 'aria-label');
 
             if (!ariaLabelAttr) {
                 return;
             }
 
             // Check if the aria-label value is empty or whitespace-only
-            let hasContent = false;
-            if (Array.isArray(ariaLabelAttr.value) && ariaLabelAttr.value.length > 0) {
-                hasContent = ariaLabelAttr.value.some((value) => {
-                    if (value.type === 'Text') {
-                        return value.data.trim().length > 0;
-                    }
-                    // If it's an expression/mustache tag, assume it has content
-                    return true;
-                });
-            }
+            const hasContent = attributeHasValue(ariaLabelAttr);
 
             if (!hasContent) {
                 issues.push({
                     type: 'empty-aria-label',
                     message: 'Elements with aria-label must provide meaningful text, not empty or whitespace-only values.',
+                    filename,
+                    position: getPositionFromIndex(source, node.start ?? -1),
+                });
+            }
+        },
+    });
+
+    return issues;
+}
+
+function hasTitleChild(node) {
+    return (node.children ?? []).some((child) => {
+        if (child.type !== 'Element' || child.name !== 'title') {
+            return false;
+        }
+
+        if (!Array.isArray(child.children) || child.children.length === 0) {
+            return false;
+        }
+
+        return child.children.some((grandchild) => {
+            if (grandchild.type === 'Text') {
+                return grandchild.data.trim().length > 0;
+            }
+
+            return grandchild.type === 'MustacheTag';
+        });
+    });
+}
+
+function collectSvgAccessibilityIssues(source, ast, filename) {
+    if (!ast?.html) {
+        return [];
+    }
+
+    const issues = [];
+
+    walk(ast.html, {
+        enter(node) {
+            if (node.type !== 'Element' || node.name !== 'svg') {
+                return;
+            }
+
+            const ariaHiddenAttr = getAttribute(node, 'aria-hidden');
+            if (ariaHiddenAttr && attributeHasValue(ariaHiddenAttr)) {
+                const value = ariaHiddenAttr.value[0];
+                if (value.type === 'Text' && value.data.trim().toLowerCase() === 'true') {
+                    return;
+                }
+            }
+
+            const roleAttr = getAttribute(node, 'role');
+            const roleValue = roleAttr?.value?.find((value) => value.type === 'Text')?.data;
+            if (roleValue && ['presentation', 'none'].includes(roleValue.trim().toLowerCase())) {
+                return;
+            }
+
+            const hasAriaLabel = attributeHasValue(getAttribute(node, 'aria-label'));
+            const hasAriaLabelledby = attributeHasValue(getAttribute(node, 'aria-labelledby'));
+            const hasTitle = hasTitleChild(node);
+
+            if (!hasAriaLabel && !hasAriaLabelledby && !hasTitle) {
+                issues.push({
+                    type: 'svg-accessible-name',
+                    message:
+                        'Provide an accessible name for SVG icons (aria-label, aria-labelledby, or <title>) or ' +
+                        'mark them aria-hidden.',
                     filename,
                     position: getPositionFromIndex(source, node.start ?? -1),
                 });
@@ -259,6 +335,9 @@ export function checkSourceForA11yWarnings(source, filename = 'inline.svelte') {
 
         const ariaLabelIssues = collectEmptyAriaLabelIssues(source, ast, filename);
         issues.push(...ariaLabelIssues);
+
+        const svgIssues = collectSvgAccessibilityIssues(source, ast, filename);
+        issues.push(...svgIssues);
     } catch (error) {
         issues.push({
             type: 'compile-error',
