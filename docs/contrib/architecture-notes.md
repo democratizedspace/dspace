@@ -22,10 +22,7 @@ moves so contributors can stage their work accordingly.
    `@dspace/cache-version` package. Offline toasts now announce when connectivity returns before
    auto-hiding; keep fixtures for legacy save data under `tests/fixtures/save-data/` so migrations
    stay reversible while upcoming work focuses on staged asset cleanup.
-5. **Accessibility workflows**: Continue expanding lint coverage for `aria-*` semantics, focus
-   visibility, and contrast rules while keeping the manual keyboard walkthrough checklist in
-   `docs/ops/a11y-checklist.md` current.
-6. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
+5. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
    JSON schemas, snapshot quest/NPC bios, and gate telemetry via explicit opt-in toggles.
 
 ### Current Iteration Focus (2025-09)
@@ -59,6 +56,9 @@ moves so contributors can stage their work accordingly.
   attribute, preventing unintended form submissions for keyboard users.
 - Extended the accessibility lint script to validate `aria-label` attributes, flagging elements with
   empty or whitespace-only labels that provide no meaningful context for screen readers.
+- Expanded the accessibility lint to require SVG icons to expose an accessible name via
+  `aria-label`, `aria-labelledby`, or a `<title>` element, unless they are explicitly marked as
+  decorative. Updated the accompanying tests to lock the behaviour in place.
 - Promoted the keyboard-only walkthrough to a permanent release checklist in
   `docs/ops/a11y-checklist.md`, including focus-state verification guidance and Playwright
   accessibility snapshot capture instructions.

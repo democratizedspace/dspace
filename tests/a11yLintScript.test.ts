@@ -89,4 +89,34 @@ describe('a11y lint script', () => {
         const issues = checkSourceForA11yWarnings(source, 'ValidAriaLabel.svelte');
         expect(issues.some((issue) => issue.type === 'empty-aria-label')).toBe(false);
     });
+
+    it('requires SVG icons to expose an accessible name or be explicitly decorative', async () => {
+        const { checkSourceForA11yWarnings } = await a11yModulePromise;
+        const source = `
+            <svg width="16" height="16" viewBox="0 0 16 16">
+                <path d="M1 1 L15 15" />
+            </svg>
+        `;
+
+        const issues = checkSourceForA11yWarnings(source, 'SvgIconMissingLabel.svelte');
+        expect(
+            issues.some(
+                (issue) =>
+                    issue.type === 'svg-accessible-name' &&
+                    /accessible name for svg icons/i.test(issue.message)
+            )
+        ).toBe(true);
+    });
+
+    it('accepts decorative SVG icons that are explicitly hidden from assistive tech', async () => {
+        const { checkSourceForA11yWarnings } = await a11yModulePromise;
+        const source = `
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
+                <path d="M1 1 L15 15" />
+            </svg>
+        `;
+
+        const issues = checkSourceForA11yWarnings(source, 'DecorativeSvgIcon.svelte');
+        expect(issues.some((issue) => issue.type === 'svg-accessible-name')).toBe(false);
+    });
 });
