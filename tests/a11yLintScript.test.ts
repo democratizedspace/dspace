@@ -119,4 +119,20 @@ describe('a11y lint script', () => {
         const issues = checkSourceForA11yWarnings(source, 'DecorativeSvgIcon.svelte');
         expect(issues.some((issue) => issue.type === 'svg-accessible-name')).toBe(false);
     });
+
+    it('accepts SVG titles populated from variables', async () => {
+        const { checkSourceForA11yWarnings } = await a11yModulePromise;
+        const source = `
+            <svg width="16" height="16" viewBox="0 0 16 16">
+                <title>{label}</title>
+                <path d="M1 1 L15 15" />
+            </svg>
+            <script>
+                const label = 'Close';
+            </script>
+        `;
+
+        const issues = checkSourceForA11yWarnings(source, 'SvgTitleWithVariable.svelte');
+        expect(issues.some((issue) => issue.type === 'svg-accessible-name')).toBe(false);
+    });
 });

@@ -257,7 +257,11 @@ function hasTitleChild(node) {
         }
 
         return child.children.some((grandchild) => {
-            return grandchild.type === 'Text' && grandchild.data.trim().length > 0;
+            if (grandchild.type === 'Text') {
+                return grandchild.data.trim().length > 0;
+            }
+
+            return grandchild.type === 'MustacheTag';
         });
     });
 }
