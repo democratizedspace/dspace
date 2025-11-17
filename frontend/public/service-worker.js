@@ -14,19 +14,17 @@ const PRECACHE_URLS = ['/', '/play', '/quests', '/settings'];
 const RUNTIME_MATCHERS = [/^\/quests\//, /^\/assets\//, /^\/docs\//];
 
 function prewarmConfigCache() {
-    return caches
-        .open(RUNTIME_NAME)
-        .then((cache) =>
-            fetch(new Request(CONFIG_PATH, { cache: 'reload' }))
-                .then((response) => {
-                    if (response.ok) {
-                        cache.put(CONFIG_PATH, response.clone());
-                    }
-                })
-                .catch((error) => {
-                    console.warn('Service worker could not prewarm config cache:', error);
-                })
-        );
+    return caches.open(RUNTIME_NAME).then((cache) =>
+        fetch(new Request(CONFIG_PATH, { cache: 'reload' }))
+            .then((response) => {
+                if (response.ok) {
+                    cache.put(CONFIG_PATH, response.clone());
+                }
+            })
+            .catch((error) => {
+                console.warn('Service worker could not prewarm config cache:', error);
+            })
+    );
 }
 
 self.addEventListener('install', (event) => {
