@@ -8,11 +8,13 @@ both the app shell and worker invalidate caches in lockstep.
 
 ## Cache Responsibilities
 
-- **Precache routes**: `/`, `/play`, `/quests`, `/settings`, and the static assets
-  required to boot the shell (compiled JS/CSS, fonts, favicons). Quest detail pages (`/quests/*`)
-  are cached on demand after their first visit via the runtime cache.
-  Precaching runs during the `install` event using a versioned cache name,
-  e.g. `dspace-precache-v${CACHE_VERSION}`.
+- **Precache routes**: `/`, `/play`, `/quests`, `/settings`, and the static assets required to boot
+  the shell (compiled JS/CSS, fonts, favicons). Quest detail pages (`/quests/*`) are cached on
+  demand after their first visit via the runtime cache. Precaching runs during the `install` event
+  using a versioned cache name, e.g. `dspace-precache-v${CACHE_VERSION}`.
+- **Feature flag config**: Warm `/config.json` into the runtime cache during `install`, then serve it
+  with a network-first strategy so flag updates flow through while offline clients keep the last
+  successful response.
 - **Runtime cache**: Employ a stale-while-revalidate strategy for quest JSON, NPC bios, and media
   assets. Cache misses fall back to the network; failures surface a friendly offline toast.
 - **Offline notification**: The global layout loads `installOfflineToast` from
