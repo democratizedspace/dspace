@@ -19,6 +19,9 @@ describe('service worker caching contract', () => {
             .filter(Boolean);
 
         expect(entries).not.toContain('/config.json');
+        expect(content).toContain(
+            "const RUNTIME_MATCHERS = [/^\\/quests\\//, /^\\/assets\\//, /^\\/docs\\//];"
+        );
         expect(content).toContain("const CONFIG_PATH = '/config.json';");
         expect(content).toMatch(/function prewarmConfigCache\(\)/);
         expect(content).toMatch(/\.then\(\(\) => prewarmConfigCache\(\)\)/);

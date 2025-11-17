@@ -7,6 +7,8 @@ const RUNTIME_PREFIX = 'dspace-runtime-v';
 const PRECACHE_NAME = `${PRECACHE_PREFIX}${self.CACHE_VERSION}`;
 const RUNTIME_NAME = `${RUNTIME_PREFIX}${self.CACHE_VERSION}`;
 
+// Keep config flags on a runtime, network-first path so updates flow without waiting for a cache
+// version bump. The install handler warms the runtime cache to support offline boots.
 const CONFIG_PATH = '/config.json';
 const PRECACHE_URLS = ['/', '/play', '/quests', '/settings'];
 const RUNTIME_MATCHERS = [/^\/quests\//, /^\/assets\//, /^\/docs\//];
