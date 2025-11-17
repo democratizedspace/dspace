@@ -7,8 +7,8 @@ const RUNTIME_PREFIX = 'dspace-runtime-v';
 const PRECACHE_NAME = `${PRECACHE_PREFIX}${self.CACHE_VERSION}`;
 const RUNTIME_NAME = `${RUNTIME_PREFIX}${self.CACHE_VERSION}`;
 
-const PRECACHE_URLS = ['/', '/play', '/quests', '/settings'];
-const RUNTIME_MATCHERS = [/^\/quests\//, /^\/assets\//, /^\/docs\//];
+const PRECACHE_URLS = ['/', '/play', '/quests', '/settings', '/config.json'];
+const RUNTIME_MATCHERS = [/^\/quests\//, /^\/assets\//, /^\/docs\//, /^\/config\.json$/];
 
 self.addEventListener('install', (event) => {
     event.waitUntil(

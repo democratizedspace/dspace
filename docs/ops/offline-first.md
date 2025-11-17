@@ -8,9 +8,9 @@ both the app shell and worker invalidate caches in lockstep.
 
 ## Cache Responsibilities
 
-- **Precache routes**: `/`, `/play`, `/quests`, `/settings`, and the static assets
-  required to boot the shell (compiled JS/CSS, fonts, favicons). Quest detail pages (`/quests/*`)
-  are cached on demand after their first visit via the runtime cache.
+- **Precache routes**: `/`, `/play`, `/quests`, `/settings`, `/config.json`, and the static
+  assets required to boot the shell (compiled JS/CSS, fonts, favicons). Quest detail pages
+  (`/quests/*`) are cached on demand after their first visit via the runtime cache.
   Precaching runs during the `install` event using a versioned cache name,
   e.g. `dspace-precache-v${CACHE_VERSION}`.
 - **Runtime cache**: Employ a stale-while-revalidate strategy for quest JSON, NPC bios, and media
