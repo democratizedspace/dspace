@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 describe('service worker caching contract', () => {
-    it('precaches config.json so offline boots retain feature flags', () => {
+    it('keeps config.json available offline without pinning stale flags', () => {
         const serviceWorkerPath = path.resolve(
             __dirname,
             '../frontend/public/service-worker.js'
@@ -18,6 +18,13 @@ describe('service worker caching contract', () => {
             .map((entry) => entry.replace(/['"`]/g, '').trim())
             .filter(Boolean);
 
-        expect(entries).toContain('/config.json');
+        expect(entries).not.toContain('/config.json');
+        expect(content).toContain("const CONFIG_PATH = '/config.json';");
+        expect(content).toMatch(/function prewarmConfigCache\(\)/);
+        expect(content).toMatch(/\.then\(\(\) => prewarmConfigCache\(\)\)/);
+        expect(content).toMatch(/if \(url\.pathname === CONFIG_PATH\) {\s*return true;/);
+        expect(content).toMatch(
+            /if \(url\.pathname === CONFIG_PATH\) {\s*event\.respondWith\(handleConfigFetch\(request\)\)/
+        );
     });
 });
