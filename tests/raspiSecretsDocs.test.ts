@@ -1,9 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const raspiDocPath = join(process.cwd(), 'docs', 'ops', 'deploy', 'raspi.md');
-const raspiWorkflowPath = join(process.cwd(), '.github', 'workflows', 'deploy-to-raspi.yml');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const repoRoot = join(__dirname, '..');
+const raspiDocPath = join(repoRoot, 'docs', 'ops', 'deploy', 'raspi.md');
+const raspiWorkflowPath = join(repoRoot, '.github', 'workflows', 'deploy-to-raspi.yml');
 
 describe('raspberry pi deployment secrets guidance', () => {
     it('documents RPI_SSH_KEY as an existing secret instead of future work', () => {
