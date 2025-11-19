@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 describe('Roadmap documentation', () => {
     it('links the DSPACE v2 milestone to its release notes', () => {
