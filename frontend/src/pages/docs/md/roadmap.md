@@ -34,7 +34,7 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## June 2023
 
--   [x] [DSPACE v2]()
+-   [x] [DSPACE v2](/docs/changelog/20230630)
 
 ## January 2023
 
