@@ -26,7 +26,8 @@ ssh-keygen -t ed25519 -C "dspace" -f ~/.ssh/id_ed25519
 ssh-copy-id -i ~/.ssh/id_ed25519.pub $USER@<node>
 ```
 
-The private key will later be stored as `RPI_SSH_KEY` in GitHub secrets.
+Store the private key as `RPI_SSH_KEY` in your repository's GitHub Actions secrets so the
+deploy workflow can connect without prompting for credentials.
 
 ## Building a Multi-arch Image
 
