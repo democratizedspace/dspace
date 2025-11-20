@@ -37,7 +37,7 @@
     "db:benchmark": "node frontend/scripts/db-benchmark.js",
     "backup": "node scripts/backup.mjs",
     "helm:lint": "helm lint charts/dspace",
-    "helm:template": "helm template charts/dspace -f charts/dspace/values.dev.yaml"
+    "helm:template": "helm template dspace charts/dspace -f charts/dspace/values.dev.yaml"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",

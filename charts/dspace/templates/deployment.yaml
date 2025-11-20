@@ -14,6 +14,11 @@ spec:
       labels:
         {{- include "dspace.selectorLabels" . | nindent 8 }}
     spec:
+      serviceAccountName: {{ include "dspace.serviceAccountName" . }}
+      {{- if and .Values.podSecurityContext.enabled .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml (omit .Values.podSecurityContext "enabled") | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ include "dspace.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -26,7 +31,11 @@ spec:
             - name: PORT
               value: "{{ .Values.service.port }}"
           {{- if .Values.env }}
-            {{- toYaml .Values.env | nindent 10 }}
+            {{- toYaml .Values.env | nindent 12 }}
+          {{- end }}
+          {{- if and .Values.securityContext.enabled .Values.securityContext }}
+          securityContext:
+            {{- toYaml (omit .Values.securityContext "enabled") | nindent 12 }}
           {{- end }}
           {{- $hasConfig := and .Values.configMap.enabled (not (empty .Values.configMap.data)) }}
           {{- $hasSecret := and .Values.secret.enabled (not (empty .Values.secret.stringData)) }}
@@ -45,10 +54,16 @@ spec:
             httpGet:
               path: {{ .Values.probes.livenessPath }}
               port: http
+            {{- with .Values.probes.liveness }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           readinessProbe:
             httpGet:
               path: {{ .Values.probes.readinessPath }}
               port: http
+            {{- with .Values.probes.readiness }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

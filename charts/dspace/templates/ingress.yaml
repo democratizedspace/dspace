@@ -22,4 +22,10 @@ spec:
                 name: {{ include "dspace.fullname" . }}
                 port:
                   number: {{ .Values.service.port }}
+  {{- if .Values.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.tls.secretName }}
+  {{- end }}
 {{- end }}
