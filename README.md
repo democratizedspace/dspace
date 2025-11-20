@@ -18,6 +18,7 @@ Check out the [docs](https://democratized.space/docs)!
 - **Develop**: [Developer Guide](./DEVELOPER_GUIDE.md)
 - **Test**: [Testing Guide](./frontend/TESTING.md)
 - **Deploy**: [Operations runbooks](./docs/ops/README.md)
+- **Helm chart**: [Kubernetes install guide](./docs/charts.md)
 
 ## Accessibility
 

@@ -1,0 +1,88 @@
+replicaCount: 2
+
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: ghcr.io/democratizedspace/dspace
+  tag: v3-latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: traefik
+  host: ""
+  annotations: {}
+  tls:
+    enabled: false
+    secretName: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automountServiceAccountToken: false
+
+podSecurityContext:
+  enabled: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  enabled: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop:
+      - ALL
+
+configMap:
+  enabled: false
+  data: {}
+
+secret:
+  enabled: false
+  stringData: {}
+
+env: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+probes:
+  livenessPath: /livez
+  readinessPath: /healthz
+  liveness:
+    initialDelaySeconds: 20
+    periodSeconds: 20
+    timeoutSeconds: 2
+    failureThreshold: 3
+  readiness:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3

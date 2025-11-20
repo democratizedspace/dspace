@@ -1,0 +1,10 @@
+{{- if and .Values.configMap.enabled (not (empty .Values.configMap.data)) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dspace.fullname" . }}
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+data:
+  {{- toYaml .Values.configMap.data | nindent 2 }}
+{{- end }}
