@@ -1,0 +1,44 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/democratizedspace/dspace
+  tag: v3-latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: traefik
+  host: ""
+  annotations: {}
+
+configMap:
+  enabled: false
+  data: {}
+
+secret:
+  enabled: false
+  stringData: {}
+
+env: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+probes:
+  livenessPath: /healthz
+  readinessPath: /healthz

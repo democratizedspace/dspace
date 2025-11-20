@@ -1,0 +1,8 @@
+replicaCount: 1
+
+image:
+  pullPolicy: IfNotPresent
+
+ingress:
+  enabled: true
+  host: dspace-v3.example.dev # replace with your dev domain
