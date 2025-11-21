@@ -15,7 +15,7 @@ const roadmapPath = join(
 const currentYear = new Date().getFullYear();
 
 function sectionForYear(content: string, year: number) {
-  const pattern = new RegExp(`##\\s+${year}\\n([\\s\\S]*?)(?=\\n##\\s+\\d{4}|$)`);
+  const pattern = new RegExp(`##\\s+${year}\\n([\\s\\S]*?)(?=\\n##\\s|$)`);
   const match = content.match(pattern);
   return match ? match[1] : '';
 }
