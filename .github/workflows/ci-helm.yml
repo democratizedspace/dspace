@@ -1,0 +1,49 @@
+name: Publish Helm chart
+
+on:
+  push:
+    branches:
+      - v3
+  workflow_dispatch:
+
+permissions:
+  packages: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    outputs:
+      chart_ref: ${{ steps.chart-ref.outputs.chart_ref }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.12.3
+
+      - name: Build chart dependencies
+        run: helm dependency build charts/dspace
+
+      - name: Lint chart
+        run: helm lint charts/dspace
+
+      - name: Package chart
+        id: package
+        run: |
+          helm package charts/dspace
+          echo "chart_file=$(ls dspace-*.tgz)" >> "$GITHUB_OUTPUT"
+
+      - name: Authenticate to GHCR
+        run: helm registry login ghcr.io -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Push chart to GHCR
+        run: helm push ${{ steps.package.outputs.chart_file }} oci://ghcr.io/democratizedspace/charts
+
+      - name: Export chart reference
+        id: chart-ref
+        run: |
+          chart_version=$(grep '^version:' charts/dspace/Chart.yaml | awk '{print $2}')
+          echo "chart_ref=oci://ghcr.io/democratizedspace/charts/dspace:${chart_version}" >> "$GITHUB_OUTPUT"
