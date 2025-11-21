@@ -24,14 +24,16 @@ You can install the chart directly with Helm to verify connectivity before autom
 deployment with sugarkube. Replace `<your-domain>` with the DNS zone managed in Cloudflare:
 
 ```bash
-helm upgrade --install dspace-v3 oci://ghcr.io/democratizedspace/dspace-chart \
+helm upgrade --install dspace-v3 oci://ghcr.io/democratizedspace/charts/dspace \
   --namespace dspace --create-namespace \
+  --set ingress.enabled=true \
   --set ingress.host=dspace-v3.<your-domain> \
-  --set ingress.ingressClassName=traefik
+  --set ingress.className=traefik
 ```
 
-Traffic between cluster components uses Kubernetes service DNS names (for example,
-`backend.svc.cluster.local` and `frontend.svc.cluster.local`).
+Traffic between cluster components uses Kubernetes service DNS names. For the dspace deployment,
+the service DNS name will be `<release-name>.<namespace>.svc.cluster.local` (for example,
+`dspace-v3.dspace.svc.cluster.local`).
 
 ## Deploying with sugarkube
 
