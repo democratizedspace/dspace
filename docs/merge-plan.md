@@ -22,13 +22,9 @@ Use this list to confirm everything is ready before merging v3 into main.
       --reuse-values \
       --set image.tag=<PREVIOUS_TAG>
     ```
-- [ ] Confirm chart appVersion and deployed image tag match the v3 release being merged:
-  - [ ] Check chart metadata:
-    ```bash
-    yq '.appVersion' charts/dspace/Chart.yaml
-    ```
-  - [ ] Check the image tag in values for main:
-    ```bash
-    yq '.image.tag' charts/dspace/values.yaml
-    ```
-  - [ ] Ensure both values align with the image built for v3.
+- Chart appVersion and the default image tag are pinned to the current release (v3.0.0) and
+  enforced by automated tests. To verify any overridden deployment values, run:
+  ```bash
+  yq '.appVersion' charts/dspace/Chart.yaml
+  yq '.image.tag' charts/dspace/values.yaml
+  ```
