@@ -5,15 +5,22 @@ slug: 'roadmap'
 
 This is just a tentative roadmap showing what I'm hoping to work on next. Things are subject to change, timelines are subject to delays, and some things may be reprioritized.
 
+## 2027 and beyond
+
+-   [ ] multiplayer (targeting 2027 or later)
+
+## 2026
+
+-   [ ] top-down isometric base building (deferred from 2024 roadmap)
+
 ## 2025
 
--   [ ] multiplayer
+Focusing on maintenance and prep work for the larger features slated for 2026 and beyond.
 
 ## 2024
 
 -   [x] guilds (Metaguild recruitment, donation board, and NPC wings live)
 -   [x] 10x more quests (246 quests delivered, exceeding the 220-quest goal)
--   [ ] top-down isometric base building
 
 ## 2023
 
