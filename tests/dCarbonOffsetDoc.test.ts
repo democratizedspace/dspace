@@ -21,6 +21,13 @@ describe('dCarbon offset documentation', () => {
 
         expect(raw).toMatch(/In a future update, you'll be able to burn dCarbon/i);
 
+        const dcarbonDocPath = join(process.cwd(), 'frontend', 'src', 'pages', 'docs', 'md', 'dCarbon.md');
+        const dcarbonDoc = readFileSync(dcarbonDocPath, 'utf8');
+
+        expect(dcarbonDoc).toMatch(/burn down accumulated dCarbon/i);
+        expect(dcarbonDoc).toMatch(/dCarbon to dOffset[^\n]+process/i);
+        expect(dcarbonDoc).toMatch(/dUSD/i);
+
         const notes = getChangelogNotes('20221210');
 
         expect(Array.isArray(notes)).toBe(true);
@@ -29,6 +36,10 @@ describe('dCarbon offset documentation', () => {
                 expect.objectContaining({
                     href: '/docs/changelog/20251101',
                     linkLabel: 'November 1, 2025 changelog',
+                }),
+                expect.objectContaining({
+                    href: '/docs/dCarbon',
+                    linkLabel: 'dCarbon guide',
                 }),
             ])
         );

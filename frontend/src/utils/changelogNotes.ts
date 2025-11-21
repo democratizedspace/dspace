@@ -28,6 +28,12 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
             href: '/docs/changelog/20251101',
             linkLabel: 'November 1, 2025 changelog',
         },
+        {
+            message:
+                'You can now burn dCarbon by spending dUSD to mint dOffset via the dCarbon to dOffset process. See the updated guide for the exact steps.',
+            href: '/docs/dCarbon',
+            linkLabel: 'dCarbon guide',
+        },
     ],
     '20230101': [
         {
