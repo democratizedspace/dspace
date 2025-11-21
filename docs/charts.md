@@ -13,7 +13,7 @@ settings.
 - `replicaCount`: Pod replica count. Defaults to `2` for redundancy.
 - `nameOverride` / `fullnameOverride`: Optional overrides for release naming.
 - `image.repository`: Defaults to `ghcr.io/democratizedspace/dspace`.
-- `image.tag`: Image tag to deploy. Defaults to `v3-latest`.
+- `image.tag`: Image tag to deploy. Defaults to `v3.0.0`, matching the current package version.
 - `image.pullPolicy`: Defaults to `IfNotPresent`.
 - `service.type`: Kubernetes service type. Defaults to `ClusterIP`.
 - `service.port`: Container and service port. Defaults to `8080`.
@@ -56,7 +56,7 @@ Deploy the chart with a custom host and image tag:
 helm install dspace charts/dspace \
   -f charts/dspace/values.dev.yaml \
   --set ingress.host=dspace.example.com \
-  --set image.tag=v3-latest
+  --set image.tag=v3.0.0
 ```
 
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
@@ -72,7 +72,7 @@ helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
   --version <version> \
   --set ingress.enabled=true \
   --set ingress.host=dspace.example.com \
-  --set image.tag=v3-latest
+  --set image.tag=v3.0.0
 ```
 
 When installing from the OCI registry, you will not have access to
