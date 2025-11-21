@@ -31,13 +31,16 @@ jobs:
         run: helm lint charts/dspace
 
       - name: Package chart
-        run: helm package charts/dspace
+        id: package
+        run: |
+          helm package charts/dspace
+          echo "chart_file=$(ls dspace-*.tgz)" >> "$GITHUB_OUTPUT"
 
       - name: Authenticate to GHCR
         run: helm registry login ghcr.io -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Push chart to GHCR
-        run: helm push charts/dspace-*.tgz oci://ghcr.io/democratizedspace/charts
+        run: helm push ${{ steps.package.outputs.chart_file }} oci://ghcr.io/democratizedspace/charts
 
       - name: Export chart reference
         id: chart-ref
