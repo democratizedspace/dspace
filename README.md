@@ -19,6 +19,7 @@ Check out the [docs](https://democratized.space/docs)!
 - **Test**: [Testing Guide](./frontend/TESTING.md)
 - **Deploy**: [Operations runbooks](./docs/ops/README.md)
 - **Helm chart**: [Kubernetes install guide](./docs/charts.md)
+- **k3s + sugarkube**: [Deploy dspace v3 on the HA Raspberry Pi cluster](./docs/k3s-sugarkube-dev.md)
 
 ## Accessibility
 

@@ -5,6 +5,15 @@ on:
     branches:
       - v3
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to build the chart from"
+        required: true
+        type: choice
+        default: v3
+        options:
+          - v3
+          - main
 
 permissions:
   packages: write
@@ -18,6 +27,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Setup Helm
         uses: azure/setup-helm@v4
