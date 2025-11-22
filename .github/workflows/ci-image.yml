@@ -4,7 +4,17 @@ on:
   push:
     branches:
       - v3
+      - main
   workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to build and publish the image from
+        required: false
+        default: v3
+        type: choice
+        options:
+          - v3
+          - main
 
 permissions:
   contents: read
@@ -19,6 +29,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || '' }}
 
       - name: Read package version
         id: version
@@ -29,13 +41,17 @@ jobs:
       - name: Define image tags
         id: tags
         run: |
+          branch="${{ github.event.inputs.branch || github.ref_name }}"
           short_sha="$(git rev-parse --short HEAD)"
-          sha_tag="ghcr.io/democratizedspace/dspace:v3-${short_sha}"
-          latest_tag="ghcr.io/democratizedspace/dspace:v3-latest"
+          tag_prefix="${branch//\//-}"
+          sha_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-${short_sha}"
+          latest_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-latest"
           version_tag="ghcr.io/democratizedspace/dspace:v${{ steps.version.outputs.version }}"
+          cache_ref="ghcr.io/democratizedspace/dspace:${tag_prefix}-cache"
           echo "sha_tag=${sha_tag}" >> "$GITHUB_OUTPUT"
           echo "latest_tag=${latest_tag}" >> "$GITHUB_OUTPUT"
           echo "version_tag=${version_tag}" >> "$GITHUB_OUTPUT"
+          echo "cache_ref=${cache_ref}" >> "$GITHUB_OUTPUT"
 
       - name: Set image metadata
         id: metadata
@@ -76,5 +92,5 @@ jobs:
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
             org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
-          cache-from: type=registry,ref=ghcr.io/democratizedspace/dspace:v3-cache
-          cache-to: type=registry,ref=ghcr.io/democratizedspace/dspace:v3-cache,mode=max
+          cache-from: type=registry,ref=${{ steps.tags.outputs.cache_ref }}
+          cache-to: type=registry,ref=${{ steps.tags.outputs.cache_ref }},mode=max
