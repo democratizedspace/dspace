@@ -78,7 +78,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build and push image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
@@ -92,5 +92,5 @@ jobs:
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
             org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
-          cache-from: type=registry,ref=${{ steps.tags.outputs.cache_ref }}
-          cache-to: type=registry,ref=${{ steps.tags.outputs.cache_ref }},mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
