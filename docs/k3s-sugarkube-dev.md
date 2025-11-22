@@ -86,7 +86,7 @@ This prevents `main` builds from overwriting `v3-latest` and keeps environments 
 1. Container image: trigger the
    [Build and publish GHCR image workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
    and choose the branch (`v3` for ongoing work, `main` after following [merge-plan.md](./merge-plan.md)).
-   - The workflow generates `<branch>-<shortsha>` and `<branch>-latest` tags for multi-arch images.
+   - The workflow generates `<branch>-<shortsha>`, `<branch>-latest`, and `v{version}` tags for multi-arch images.
    - Images include both `linux/amd64` and `linux/arm64` platforms for Raspberry Pi compatibility.
 2. Helm chart: trigger the
    [Publish Helm chart workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
