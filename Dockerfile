@@ -30,15 +30,9 @@ RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --filter ./frontend
 
 FROM deps AS build
 # Copy source separately to avoid overlaying host node_modules (pnpm symlinks make this fail when
-# node_modules exists on the host). We exclude common build outputs to keep the context lean.
-COPY --link \
-    --exclude=node_modules \
-    --exclude=.turbo \
-    --exclude=.astro \
-    --exclude=.svelte-kit \
-    --exclude=dist \
-    --exclude=build \
-    frontend/ frontend/
+# node_modules exists on the host). Build artifacts are excluded via .dockerignore for compatibility
+# with builders that do not support COPY --exclude flags.
+COPY --link frontend/ frontend/
 COPY --link packages/cache-version/ packages/cache-version/
 RUN pnpm --filter ./frontend... run build
 
