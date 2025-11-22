@@ -1,0 +1,22 @@
+# Prevent host dependencies and build artifacts from inflating the Docker build context
+**/node_modules
+**/.pnpm-store
+**/.turbo
+**/.next
+**/.astro
+**/dist
+**/build
+**/coverage
+**/playwright-report
+**/.cache
+
+# Logs and temporary files
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+.DS_Store
+
+# Git metadata should stay outside the image
+.git
+

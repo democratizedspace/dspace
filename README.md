@@ -213,6 +213,13 @@ docker compose up --build -d
 The Dockerfile installs dependencies with `--ignore-scripts` so Husky and other
 npm hooks don't run during the build.
 
+If you have `node_modules` in the checkout (for example after running `pnpm install`), a
+local `docker build` may fail with `cannot copy to non-directory` when the host
+`frontend/node_modules` overlaps the in-image install directory. The root `.dockerignore`
+now excludes `**/node_modules` and other heavy build artifacts such as `.turbo`, `.next`,
+`.astro`, `dist`, `coverage`, and `playwright-report` to keep the build context clean and
+ensure dependencies are installed inside the container.
+
 The app will be available on port 3002. Point your Cloudflare Tunnel at `http://localhost:3002` to serve traffic.
 
 The server exposes two monitoring endpoints:
