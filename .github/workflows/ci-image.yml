@@ -5,6 +5,9 @@ on:
     branches:
       - v3
       - main
+  pull_request:
+    branches:
+      - v3
   workflow_dispatch:
     inputs:
       branch:
@@ -22,9 +25,45 @@ permissions:
   actions: write
 
 jobs:
+  local-build:
+    name: Validate Docker build with host node_modules
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Install dependencies (creates host node_modules)
+        run: pnpm install --frozen-lockfile --reporter=append-only
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image with local node_modules present
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          platforms: linux/amd64
+          provenance: false
+          cache-from: type=gha,scope=ci-image-local
+          cache-to: type=gha,mode=max,scope=ci-image-local
+
   image:
     name: Build and push image
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
     outputs:
       image-tag: ${{ steps.tags.outputs.sha_tag }}
     steps:
