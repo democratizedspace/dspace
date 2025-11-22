@@ -13,7 +13,7 @@ prerequisites.
   - Helm chart: [ci-helm.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
 - sugarkube deployment guide for this app: [docs/apps/dspace.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md)
 - OCI Helm helpers in the sugarkube justfile:
-  - [helm-oci-install](https://github.com/futuroptimist/sugarkube/blob/main/justfile#L345-L348)
+  - [helm-oci-install](https://github.com/futuroptimist/sugarkube/blob/main/justfile#L345-L347)
   - [helm-oci-upgrade](https://github.com/futuroptimist/sugarkube/blob/main/justfile#L348-L350)
 - sugarkube platform bring-up for the Raspberry Pi HA cluster:
   - [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
@@ -37,7 +37,7 @@ prerequisites.
 1. Container image: trigger the
    [Build and publish GHCR image workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
    and choose the branch (`v3` for ongoing work, `main` after following [merge-plan.md](./merge-plan.md)).
-   - The workflow generates `v3-<shortsha>` and `v3-latest` tags for multi-arch images.
+   - The workflow generates `<branch>-<shortsha>` and `<branch>-latest` tags for multi-arch images.
 2. Helm chart: trigger the
    [Publish Helm chart workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
    with the same branch selection. It packages `charts/dspace` and pushes to
@@ -98,10 +98,12 @@ Notes:
 - `version_file` pins the Helm chart version tested with sugarkube; override with `version=<semver>`
   if you need a specific chart release.
 - `default_tag` sets the fallback image tag. Provide `tag=<imageTag>` to target a specific image.
+- When deploying from `main`, align `default_tag` or `tag` with the `main-*` tags created by the
+  workflow.
 - Values file reference: `docs/examples/dspace.values.dev.yaml` in the sugarkube repo contains the
   ingress host and Cloudflare defaults for the dev environment.
 - If you prefer a direct Helm check before running sugarkube, run the quick test from the
-  [Helm install section](../charts.md#installing-from-oci) with the same ingress host.
+  [Helm install section](../charts.md#install-from-ghcr-oci) with the same ingress host.
 
 ## Step 4: Verify the rollout
 
