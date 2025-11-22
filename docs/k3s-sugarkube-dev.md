@@ -103,7 +103,7 @@ Notes:
 - Values file reference: `docs/examples/dspace.values.dev.yaml` in the sugarkube repo contains the
   ingress host and Cloudflare defaults for the dev environment.
 - If you prefer a direct Helm check before running sugarkube, run the quick test from the
-  [Helm install section](../charts.md#install-from-ghcr-oci) with the same ingress host.
+  [Helm install section](./charts.md#install-from-ghcr-oci) with the same ingress host.
 
 ## Step 4: Verify the rollout
 
