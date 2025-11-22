@@ -40,17 +40,16 @@ describe('Outages validation', () => {
     outageFiles.forEach(filename => {
       describe(filename, () => {
         const filePath = join(outagesDir, filename);
-        let data;
+        let data: any;
 
         it('is valid JSON', () => {
           expect(() => {
             data = JSON.parse(readFileSync(filePath, 'utf8'));
           }).not.toThrow();
-          data = JSON.parse(readFileSync(filePath, 'utf8'));
         });
 
         it('matches schema', () => {
-          data = JSON.parse(readFileSync(filePath, 'utf8'));
+          if (!data) data = JSON.parse(readFileSync(filePath, 'utf8'));
           const valid = validate(data);
           if (!valid) {
             console.error('Validation errors:', validate.errors);
@@ -64,13 +63,13 @@ describe('Outages validation', () => {
         });
 
         it('date field matches filename date', () => {
-          data = JSON.parse(readFileSync(filePath, 'utf8'));
+          if (!data) data = JSON.parse(readFileSync(filePath, 'utf8'));
           const filenameDate = filename.substring(0, 10);
           expect(data.date).toBe(filenameDate);
         });
 
         it('has all required fields', () => {
-          data = JSON.parse(readFileSync(filePath, 'utf8'));
+          if (!data) data = JSON.parse(readFileSync(filePath, 'utf8'));
           expect(data).toHaveProperty('id');
           expect(data).toHaveProperty('date');
           expect(data).toHaveProperty('component');
@@ -80,7 +79,7 @@ describe('Outages validation', () => {
         });
 
         it('references is a non-empty array', () => {
-          data = JSON.parse(readFileSync(filePath, 'utf8'));
+          if (!data) data = JSON.parse(readFileSync(filePath, 'utf8'));
           expect(Array.isArray(data.references)).toBe(true);
           expect(data.references.length).toBeGreaterThan(0);
         });
