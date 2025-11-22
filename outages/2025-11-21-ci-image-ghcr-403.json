@@ -1,0 +1,12 @@
+{
+  "id": "2025-11-21-ci-image-ghcr-403",
+  "date": "2025-11-21",
+  "component": "ci:ghcr-image-publish",
+  "rootCause": "The new ci-image workflow attempted to push images to ghcr.io/democratizedspace/dspace using the repository GITHUB_TOKEN with packages: write, but the dspace container package in GitHub Container Registry did not yet exist and had no Actions access configured for the democratizedspace/dspace repository. As a result, GHCR rejected docker/build-push-action uploads with HTTP 403 Forbidden even though the workflow YAML and token scopes looked correct.",
+  "resolution": "Seeded the ghcr.io/democratizedspace/dspace container package by pushing a temporary hello-world image using a short-lived personal access token with write:packages, then updated the GHCR package settings to add the democratizedspace/dspace repository under 'Manage Actions access' with Role=Write. After wiring package-level Actions access, the ci-image workflow on the v3 branch successfully built and pushed images to GHCR using only the default GITHUB_TOKEN, and subsequent runs no longer receive 403 responses.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/19592101381",
+    "https://github.com/democratizedspace/dspace/pkgs/container/dspace",
+    "https://hackmd.io/%40maelvls/fixing-403-forbidden-ghcr"
+  ]
+}
