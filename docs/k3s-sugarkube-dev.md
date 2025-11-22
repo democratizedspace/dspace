@@ -13,8 +13,8 @@ prerequisites.
   - Helm chart: [ci-helm.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
 - sugarkube deployment guide for this app: [docs/apps/dspace.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md)
 - OCI Helm helpers in the sugarkube justfile:
-  - [helm-oci-install](https://github.com/futuroptimist/sugarkube/blob/main/justfile#L345-L347)
-  - [helm-oci-upgrade](https://github.com/futuroptimist/sugarkube/blob/main/justfile#L348-L350)
+  - [helm-oci-install](https://github.com/futuroptimist/sugarkube/blob/main/justfile#L345-L346)
+  - [helm-oci-upgrade](https://github.com/futuroptimist/sugarkube/blob/main/justfile#L348-L349)
 - sugarkube platform bring-up for the Raspberry Pi HA cluster:
   - [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
   - [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
@@ -24,6 +24,20 @@ prerequisites.
 
 ## Assumptions and prerequisites
 
+### Hardware and cluster configuration
+
+This guide assumes you are deploying to sugarkube's **Raspberry Pi 5 three-server HA cluster**:
+
+- 3× Raspberry Pi 5 (or similar 64-bit ARM) nodes running the sugarkube image
+- k3s installed with the default Traefik ingress controller enabled
+- `env=dev` as the target environment for sugarkube commands
+- Cluster brought up following [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
+
+The GHCR workflows build **multi-arch container images** including `linux/arm64`, so the images are
+ready to run on the Raspberry Pi cluster without modification.
+
+### Required access and tooling
+
 - You have sugarkube's three-server HA cluster online following the Raspberry Pi setup guide
   (`just ha3 env=dev`), with Traefik enabled by default in k3s.
 - You can log in to GHCR with a token that can pull `ghcr.io/democratizedspace` images and charts.
@@ -32,12 +46,48 @@ prerequisites.
 - `kubectl` is pointed at the cluster and `just` is installed where you will run the sugarkube
   commands.
 
+## Quick start: happy path for Raspberry Pi HA cluster
+
+Once you have completed the [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
+and configured your Cloudflare Tunnel, deploying dspace from the `v3` branch requires:
+
+1. **Build artifacts**: Manually trigger both GHCR workflows from the Actions tab, selecting `v3`:
+   - [Build and publish GHCR image](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
+   - [Publish Helm chart](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
+
+2. **Deploy to cluster**: Run the sugarkube helm-oci-install command from your control node:
+
+```bash
+just helm-oci-install \
+  release=dspace namespace=dspace \
+  chart=oci://ghcr.io/democratizedspace/charts/dspace \
+  values=docs/examples/dspace.values.dev.yaml \
+  version_file=docs/apps/dspace.version \
+  host=dspace-v3.<your-domain> \
+  default_tag=v3-latest
+```
+
+3. **Verify**: Check the deployment and open the site at `https://dspace-v3.<your-domain>`.
+
+The sections below provide full context for each step, branch-specific tag conventions, and
+troubleshooting guidance.
+
 ## Step 1: Build and publish GHCR artifacts from the right branch
+
+Both workflows accept a branch selector (`v3` or `main`) and produce branch-specific tags:
+
+- **For `v3` builds**: tags are `v3-<shortsha>` and `v3-latest`
+- **For `main` builds**: tags are `main-<shortsha>` and `main-latest`
+
+This prevents `main` builds from overwriting `v3-latest` and keeps environments isolated.
+
+### Running the workflows
 
 1. Container image: trigger the
    [Build and publish GHCR image workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
    and choose the branch (`v3` for ongoing work, `main` after following [merge-plan.md](./merge-plan.md)).
-   - The workflow generates `<branch>-<shortsha>` and `<branch>-latest` tags for multi-arch images (for example, `v3-latest` or `main-latest`).
+   - The workflow generates `<branch>-<shortsha>`, `<branch>-latest`, and `v{version}` tags for multi-arch images.
+   - Images include both `linux/amd64` and `linux/arm64` platforms for Raspberry Pi compatibility.
 2. Helm chart: trigger the
    [Publish Helm chart workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
    with the same branch selection. It packages `charts/dspace` and pushes to

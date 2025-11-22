@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch || github.ref_name }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || '' }}
 
       - name: Read package version
         id: version
