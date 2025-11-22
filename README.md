@@ -19,6 +19,7 @@ Check out the [docs](https://democratized.space/docs)!
 - **Test**: [Testing Guide](./frontend/TESTING.md)
 - **Deploy**: [Operations runbooks](./docs/ops/README.md)
 - **Helm chart**: [Kubernetes install guide](./docs/charts.md)
+- **k3s on sugarkube**: [GHCR + HA cluster guide](./docs/k3s-sugarkube-dev.md)
 
 ## Accessibility
 

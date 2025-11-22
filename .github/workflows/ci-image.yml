@@ -4,7 +4,17 @@ on:
   push:
     branches:
       - v3
+      - main
   workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to build and publish the image from
+        required: false
+        default: v3
+        type: choice
+        options:
+          - v3
+          - main
 
 permissions:
   contents: read
@@ -19,6 +29,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref_name }}
 
       - name: Read package version
         id: version
