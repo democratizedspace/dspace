@@ -12,8 +12,8 @@ production runs on self-hosted infrastructure.
 
 ## Current setup
 
-The main instance at [democratized.space](https://democratized.space) is served from on-premises
-hardware. The stack uses Docker and k3s on small servers, replacing Netlify's static hosting.
+The main instance at democratized.space is served from on-premises hardware. The stack uses Docker
+and k3s on small servers, replacing Netlify's static hosting.
 
 For deployment details, see:
 
