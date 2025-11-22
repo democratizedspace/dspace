@@ -19,6 +19,7 @@ on:
 permissions:
   contents: read
   packages: write
+  actions: write
 
 jobs:
   image:
@@ -47,11 +48,9 @@ jobs:
           sha_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-${short_sha}"
           latest_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-latest"
           version_tag="ghcr.io/democratizedspace/dspace:v${{ steps.version.outputs.version }}"
-          cache_ref="ghcr.io/democratizedspace/dspace:${tag_prefix}-cache"
           echo "sha_tag=${sha_tag}" >> "$GITHUB_OUTPUT"
           echo "latest_tag=${latest_tag}" >> "$GITHUB_OUTPUT"
           echo "version_tag=${version_tag}" >> "$GITHUB_OUTPUT"
-          echo "cache_ref=${cache_ref}" >> "$GITHUB_OUTPUT"
 
       - name: Set image metadata
         id: metadata
@@ -78,7 +77,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build and push image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
@@ -92,5 +91,5 @@ jobs:
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
             org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
-          cache-from: type=registry,ref=${{ steps.tags.outputs.cache_ref }}
-          cache-to: type=registry,ref=${{ steps.tags.outputs.cache_ref }},mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
