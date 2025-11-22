@@ -6,402 +6,121 @@
 [![Docs](https://img.shields.io/github/actions/workflow/status/democratizedspace/dspace/quest-chart.yml?label=docs)](https://github.com/democratizedspace/dspace/actions/workflows/quest-chart.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-You can find the game at [democratized.space](https://democratized.space).
-The production instance is self-hosted; see [Netlify Migration](docs/ops/netlify-migration.md)
-for background details.
+A free and open-source web-based space exploration idle game combining resource management, exploration, and community interaction. Build things, complete quests, and reach for the cosmos.
 
-Check out the [docs](https://democratized.space/docs)!
+**Play now**: [democratized.space](https://democratized.space)
 
-## Quick Links
+## Quick Start
 
-- **Play**: [democratized.space/play](https://democratized.space/play)
-- **Develop**: [Developer Guide](./DEVELOPER_GUIDE.md)
-- **Test**: [Testing Guide](./frontend/TESTING.md)
-- **Deploy**: [Operations runbooks](./docs/ops/README.md)
-- **Helm chart**: [Kubernetes install guide](./docs/charts.md)
-- **k3s on sugarkube**: [GHCR + HA cluster guide](./docs/k3s-sugarkube-dev.md)
+- **Play the Game**: [democratized.space/play](https://democratized.space/play)
+- **Documentation**: [democratized.space/docs](https://democratized.space/docs)
+- **Join Community**: [Discord](https://discord.gg/A3UAfYvnxM)
 
-## Accessibility
+## For Developers
 
-The frontend aims to meet WCAG 2.2 AA. Navigation links include `aria-current`
-and visible focus indicators to support keyboard users. Components like
-[Button][button-component] and [Menu][menu-component]
-demonstrate these accessibility patterns.
+### Getting Started
 
-## Table of Contents
-
-- [Accessibility](#accessibility)
-- [Local Development](#local-development)
-- [Testing](#testing)
-- [Built-in Items](#built-in-items)
-- [Built-in Processes](#built-in-processes)
-- [Authentication](#authentication)
-- [Staying Updated](#staying-updated)
-- [Want to contribute?](#want-to-contribute)
-- [Asset Guidelines](#asset-guidelines)
-- [Archiving Built-in Content](#archiving-built-in-content)
-- [FAQ](#faq)
-- [License](#license)
-
-## Local Development
-
-Clone and set up the project:
-
-Make sure you have **Node.js 20 LTS** installed (Node.js 18 is also supported). The CI runs on Node.js 20.
+**Prerequisites**: Node.js 20 LTS (or Node.js 18)
 
 ```bash
 git clone https://github.com/democratizedspace/dspace.git
 cd dspace
-nvm use # sync Node.js version from .nvmrc if you use nvm
-node --version # ensure Node.js 18 or 20 is in use
-# pnpm 9.0.0 is configured via packageManager
+nvm use  # Optional: sync to .nvmrc version
 pnpm install
+npm run dev  # Start development server on http://localhost:3002
 ```
 
-The repo includes a `pnpmfile.cjs` that pre-approves native builds for `canvas`,
-`esbuild`, and `@swc/core`, so `pnpm install` runs without interactive prompts.
+For comprehensive setup instructions, see the [Developer Guide](./DEVELOPER_GUIDE.md).
 
-Start the development server:
+### Essential Commands
 
 ```bash
-# Standard development server
-npm run dev
-
-# Development server that avoids Playwright artifact errors
-cd frontend && npm run dev:safe
+npm run dev          # Start dev server
+npm test             # Run all tests (skip E2E with SKIP_E2E=1)
+npm run check        # Lint and format check
+npm run build        # Production build
 ```
 
-The `dev:safe` command prevents common Playwright artifact errors that occur after running tests.
+See [Testing Guide](./frontend/TESTING.md) for detailed testing information.
 
-### Utility Functions
+## Documentation Index
 
-The backend exposes `approximateIrlPrice(id)` to estimate real-world item costs and
-`approximateIrlAveragePrice(ids)` to average the cost of multiple items. The lookup normalizes
-case, trims extra whitespace, and converts spaces or hyphens into underscores for resilient
-calls. It returns `null` for unknown or non-string inputs. Prices are approximate USD values.
+All project documentation is organized below for easy discovery:
 
-```ts
-import {
-  approximateIrlPrice,
-  approximateIrlAveragePrice,
-} from './backend/approximateIrlPrice';
+### Developer Resources
 
-console.log(approximateIrlPrice('3D-Printer')); // 350
-console.log(approximateIrlAveragePrice(['3d_printer', 'arduino_nano'])); // 186
-console.log(approximateIrlPrice('unknown')); // null
-console.log(approximateIrlPrice(undefined as any)); // null
-```
+- [Developer Guide](./DEVELOPER_GUIDE.md) - Architecture, testing strategy, and development workflow
+- [Testing Guide](./frontend/TESTING.md) - Comprehensive testing documentation
+- [Contributing Guide](./CONTRIBUTING.md) - How to contribute to DSPACE
+- [Code of Conduct](./CODE_OF_CONDUCT.md) - Community guidelines
+- [Agents Guide](./AGENTS.md) - Guidelines for automated contributors
 
-To override default prices, set `DSPACE_PRICE_TABLE_FILE` to a JSON file mapping
-item identifiers to numbers. Tests can reset cached tables with
-`__resetPriceTableCacheForTests({ keepCustom: true })` to preserve custom entries.
+### Content Creation
 
-## Testing
+Create quests, items, and processes for the game:
 
-DSPACE uses a comprehensive testing suite to ensure code quality and prevent regressions.
+- [Content Development Guide](https://democratized.space/docs/content-development) - Hub for all content creation
+- [Quest Guidelines](https://democratized.space/docs/quest-guidelines) - Creating educational quests
+- [Item Guidelines](https://democratized.space/docs/item-guidelines) - Defining game items
+- [Process Guidelines](https://democratized.space/docs/process-guidelines) - Building game processes
+- [Quest Submission](https://democratized.space/docs/quest-submission) - How to submit your content
+- [Custom Content Bundles](https://democratized.space/docs/custom-bundles) - Packaging related content
 
-### Pre-PR Testing
+### Operations & Deployment
 
-Before submitting a pull request, run the comprehensive test suite:
+- [Operations Runbooks](./docs/ops/README.md) - Deployment and maintenance procedures
+  - [Raspberry Pi Deployment](./docs/ops/RPI_DEPLOYMENT_GUIDE.md) - Deploy on Raspberry Pi with k3s
+  - [Docker Deployment](./docs/ops/deploy/docker.md) - Container-based deployment
+  - [Monitoring Setup](./docs/ops/monitoring_setup.md) - Prometheus and Grafana
+  - [Backup System](./docs/ops/backup_system.md) - Automated backups
+  - [Cloudflare Load Balancing](./docs/ops/cloudflare_load_balancing.md) - High availability
+  - [Failover Procedures](./docs/ops/failover_procedures.md) - Handling outages
+  - [Netlify Migration](./docs/ops/netlify-migration.md) - Self-hosting background
+  - [Offline-First Strategy](./docs/ops/offline-first.md) - PWA capabilities
+- [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
+- [k3s + Sugarkube](./docs/k3s-sugarkube-dev.md) - HA cluster setup
 
-```bash
-npm test
-```
+### Architecture & Technical Design
 
-If Playwright browsers aren't installed, you may skip E2E tests:
+- [Contributor Guides](./docs/contrib/README.md) - Technical references for contributors
+  - [Architecture Notes](./docs/contrib/architecture-notes.md) - Migration and design decisions
+  - [Authentication Flow](./docs/contrib/authentication.md) - GitHub token authentication
+  - [ADR-0001](./docs/contrib/ADR-0001.md) - Architecture decision records
+- [Routes Documentation](./docs/ROUTES.md) - Astro SSR routing system
+- [UI Lifecycle](https://democratized.space/docs/ui-lifecycle) - Astro SSR and Svelte hydration
+- [Configuration](./docs/config.md) - Environment and configuration options
 
-```bash
-SKIP_E2E=1 npm test
-```
+### AI & Automation
 
-The pre-PR script runs root unit tests via `npm run test:root`. If those have
-already been executed, set `SKIP_UNIT_TESTS=1` to skip them when invoking the
-script directly.
+Prompts for AI-assisted development:
 
-GitHub Actions runs the E2E tests and fails pull requests when they do not pass.
-If you encounter an error like `browserType.launch: Executable doesn't exist`,
-download the browsers with:
+- [Codex Baseline Prompts](./docs/prompts/codex/baseline.md) - Implementation and upgrade prompts
+- [Quest Prompts](./docs/prompts/codex/quests.md) - AI-assisted quest creation
+- [Item Prompts](./docs/prompts/codex/items.md) - AI-assisted item creation
+- [Process Prompts](./docs/prompts/codex/processes.md) - AI-assisted process creation
+- [Other Codex Prompts](./docs/prompts/codex/) - Frontend, backend, testing, and more
 
-```bash
-npx playwright install chromium
-```
+### Game Documentation
 
-This cross-platform script will:
+- [Mission Statement](https://democratized.space/docs/mission) - Project goals and vision
+- [Quest Trees](https://democratized.space/docs/quest-trees) - Quest progression paths
+- [FAQ](https://democratized.space/docs/faq) - Frequently asked questions
+- [Glossary](https://democratized.space/docs/glossary) - Game terminology
+- [Changelog](https://democratized.space/docs/changelog) - Version history
 
-- Check code formatting and linting
-- Run all unit tests
-- Run all end-to-end tests in optimized groups
-- Provide helpful error messages if any tests fail
+## Contributing
 
-The `npm test` command (alias `npm run test:pr`) handles everything automatically, including starting and stopping the development server for end-to-end tests.
+We welcome contributions! See our [Contributing Guide](./CONTRIBUTING.md) to get started.
 
-To mirror the CI pipeline's checks individually:
+Key contribution areas:
 
-```bash
-npm run lint
-npm run type-check
-npm run build
-npm run test:ci
-```
+- Create quests, items, and processes
+- Improve documentation
+- Fix bugs and add features
+- Enhance accessibility
 
-### Testing Information
-
-For detailed information about our testing approach, please refer to:
-
-- [Testing Guide](./frontend/TESTING.md) - Comprehensive documentation on testing practices, common issues, and debugging techniques
-- [Developer Guide](./DEVELOPER_GUIDE.md#testing-strategy) - Higher-level overview of our testing strategy and approach
-
-For common test commands, see the section below.
-
-### Individual Test Commands
-
-```bash
-# Only linting
-npm run lint
-
-# Only formatting check
-npm run format:check
-
-# Only unit tests
-npm test
-
-# Only end-to-end tests (with optimized grouping)
-# Note: Server starts automatically!
-npm run test:e2e:groups
-
-# Collect Playwright coverage
-npm run test:e2e:coverage
-
-# Generate unit test coverage
-npm run coverage
-# Verify 100% coverage for changed files
-node scripts/checkPatchCoverage.cjs
-# View the HTML report at
-frontend/coverage/lcov-report/index.html
-
-# Run IndexedDB performance benchmark
-npm run benchmark:db
-
-# Run custom content load test
-npm run loadtest:custom-content
-```
-
-> **Important:** End-to-end (E2E) tests use Playwright, which automatically starts and stops the development server when needed. You should not manually start a server when running these tests, as this could lead to port conflicts or unexpected behavior.
-
-### Continuous Integration
-
-GitHub Actions automatically run `npm test` on every pull request and push to `v3`.
-If the `CODECOV_TOKEN` secret is configured, coverage reports upload to Codecov and update the badge at the top of this README.
-You'll find the CI results under the **Checks** tab of your pull request.
-
-## Code Quality
-
-Check code quality before committing:
-
-```bash
-npm run check
-```
-
-## Docker Deployment
-
-Run the game in Docker (works on Raspberry Pi) using:
-
-```bash
-docker compose up --build -d
-```
-
-The Dockerfile installs dependencies with `--ignore-scripts` so Husky and other
-npm hooks don't run during the build.
-
-If you have `node_modules` in the checkout (for example after running `pnpm install`), a
-local `docker build` may fail with `cannot copy to non-directory` when the host
-`frontend/node_modules` overlaps the in-image install directory. The root `.dockerignore`
-now excludes `**/node_modules` and other heavy build artifacts such as `.turbo`, `.next`,
-`.astro`, `dist`, `coverage`, and `playwright-report` to keep the build context clean and
-ensure dependencies are installed inside the container.
-
-The app will be available on port 3002. Point your Cloudflare Tunnel at `http://localhost:3002` to serve traffic.
-
-The server exposes two monitoring endpoints:
-
-- `GET /health` returns `{ "status": "ok" }` for basic liveness checks.
-- `GET /metrics` serves Prometheus-formatted metrics using `prom-client`. Set a
-  `METRICS_TOKEN` environment variable to require
-  `Authorization: Bearer <token>` for this endpoint. When `prom-client` isn't
-  available, the endpoint returns a plain text `metrics unavailable` message.
-
-For a full Raspberry Pi setup, including k3s instructions, see [docs/ops/RPI_DEPLOYMENT_GUIDE.md](./docs/ops/RPI_DEPLOYMENT_GUIDE.md).
-To add Prometheus and Grafana monitoring, follow the steps in [docs/ops/monitoring_setup.md](./docs/ops/monitoring_setup.md).
-For high availability, configure Cloudflare Load Balancing as described in [docs/ops/cloudflare_load_balancing.md](./docs/ops/cloudflare_load_balancing.md).
-See [docs/ops/failover_procedures.md](./docs/ops/failover_procedures.md) for handling outages and restoring nodes.
-Nightly backups use the script documented in [docs/ops/backup_system.md](./docs/ops/backup_system.md).
-
-### Automated Raspberry Pi Deployment
-
-The workflow `.github/workflows/rpi-deploy.yml` builds an ARM64 Docker image and optionally deploys it to a Raspberry Pi over SSH.
-Create a classic PAT with the [`write:packages` scope](https://github.com/settings/tokens/new?scopes=write:packages) (fine-grained tokens don’t work with Packages yet) and add it as the `GHCR_TOKEN` secret.
-Set `RPI_HOST`, `RPI_USER`, and `RPI_SSH_KEY` to enable SSH deployment. When these secrets aren't defined, the job is skipped instead of failing. Add the values under **Settings → Secrets and variables → Actions** when you're ready to deploy.
-Trigger the workflow manually or on pushes to `v3` to update the Pi and restart the `app` service.
-
-## Project Architecture
-
-DSPACE uses a modern JavaScript architecture:
-
-- **ES Modules**: Native JavaScript modules with import/export syntax
-- **Astro SSR**: Server-side rendering with hydration of Svelte components
-- **Progressive Enhancement**: Core functionality works without JavaScript
-- **Continuous Testing**: Unit and e2e tests ensure consistent quality
-
-For detailed information on the architecture, see our [Developer Guide](./DEVELOPER_GUIDE.md).
-
-## Developer Guide
-
-For comprehensive information about developing DSPACE, see our [Developer Guide](./DEVELOPER_GUIDE.md). This guide includes:
-
-- Detailed architecture overview
-- Component development guidelines
-- [UI Lifecycle Overview](./frontend/src/pages/docs/md/ui-lifecycle.md) for understanding Astro SSR and Svelte hydration
-- Testing strategies
-- Performance considerations
-- Troubleshooting tips
-
-## Built-in Quests
-
-Starter quest JSON files live in `frontend/src/pages/quests/json`. They follow the schema
-defined at `frontend/src/pages/quests/jsonSchemas/quest.json` and can reference NPC
-profiles in `frontend/src/pages/docs/md/npcs.md`. This file lists biography notes
-and sample dialogue for each character to help keep their voice consistent. The
-schema now supports advanced fields such as `start`, `rewards` and item requirements,
-so older quests from the v2 era remain valid. Keep the NPC file updated when
-adding new characters.
-Quest files are organized by category in subfolders, so feel free to expand any
-area—electronics, hydroponics, rocketry and more—with additional quests.
-See [Quest Trees](https://democratized.space/docs/quest-trees) for an overview of the different categories and their progression.
-The repository includes a script that summarizes how many quests and lines of dialogue exist in each tree. Categories are sorted by quest count for readability.
-Run `node scripts/generate-quest-chart.js` to recreate `quest-tree-stats.txt` and a PNG image saved locally. The PNG is ignored in Git. Check the "Quest Chart" workflow artifacts for the latest generated image. You can see how the quest catalog has grown by comparing the current count against v2.1 with `npm run quest:count`. Generate a map of which quests require or reward each item with `npm run generate:item-map`.
-
-Looking for a concrete walkthrough? The Playwright test `constellations-quest.spec.ts` demonstrates creating the "Map the Constellations" quest end to end and validating it using our quest checks.
-
-Aquarium quests progress through a gentle learning curve: set up a Walstad tank, test the water, install a sponge filter, ask Atlas to position the tank, add dwarf shrimp, introduce guppies, perform regular water changes, practice breeding, and finally keep a goldfish in a large tank.
-Electronics quests now begin with a simple LED circuit to teach basic wiring before moving on to sensors and automation. Each tree has been extended with follow-up tasks, such as tuning 3D printer retraction and refreshing hydroponic nutrients.
-The DevOps chain now covers deploying DSPACE on a Raspberry Pi cluster with Docker and k3s, setting up monitoring with Prometheus and Grafana, and scheduling nightly backups. Recent updates shortened several prerequisite chains, aligning energy and DevOps milestones more closely with other categories.
-
-To validate that quests use a canonical structure with clear start and finish
-steps, run the dedicated test:
-
-```bash
-npm test -- questValidation
-```
-
-See [Quest Development Guidelines](https://democratized.space/docs/quest-guidelines), the
-[Quest Template Example](https://democratized.space/docs/quest-template), and the
-[Quest Submission Guide](https://democratized.space/docs/quest-submission) to streamline content creation
-and sharing. Use `npm run generate-quest [--template <name>]` to scaffold a new
-quest with placeholder dialogue.
-
-Custom quests often rely on new items or processes. Use [`scripts/create-content-bundle.js`](./scripts/create-content-bundle.js) to package these together. See the [Custom Content Bundles](https://democratized.space/docs/custom-bundles) guide for details.
-
-Additional quality checks are available:
-
-```bash
-npm test -- questQuality        # heuristics for dialogue quality via token.place
-npm test -- itemQuality         # validates item registry for realism and completeness
-npm test -- processQuality      # validates generated process data for realistic durations
-npm test -- imageReferences     # verifies quest and NPC image files
-```
-
-## Built-in Items
-
-Item definitions live in `frontend/src/pages/inventory/json/items`. Assign new sequential `id` numbers and include an image path when adding items. See `frontend/src/pages/docs/md/item-guidelines.md` for detailed guidance.
-All item files must satisfy `frontend/src/pages/inventory/jsonSchemas/item.json`. Run `npm test -- itemValidation` to check the schema.
-
-## Built-in Processes
-
-Process definitions live in `frontend/src/pages/processes/base.json` with
-hardening metadata under `frontend/src/pages/processes/hardening`. These
-compile into `frontend/src/generated/processes.json`.
-Durations should mirror real-world expectations when possible. See
-`frontend/src/pages/docs/md/process-guidelines.md` for more tips on designing
-and balancing new processes.
-
-### Data Migration
-
-DSPACE stores custom content in IndexedDB. A migration system automatically
-updates old records when the database schema changes. On first run after an
-update, migrations add missing fields and bump the saved schema version to keep
-everything consistent.
-
-> **Tip:** We use the open-source LLM inference from
-> [`token.place`](https://github.com/futuroptimist/token.place) when generating quest
-> dialogue. Token.place itself doesn't host quests, but you can reuse the same
-> prompts to create content across your projects.
-
-### AI-Assisted Content Creation
-
-For faster content development, consult our prompt guides for
-[quests](docs/prompts/codex/quests.md), [items](docs/prompts/codex/items.md), and
-[processes](docs/prompts/codex/processes.md). Each includes ready-made templates for
-tools like GPT-4 or Claude. See [Codex prompts](docs/prompts/codex/baseline.md) for
-repository-wide automation and refresh templates with the
-[Codex Prompt Upgrader](docs/prompts/codex/upgrader.md). Combine these with the [Quest Development
-Guidelines](https://democratized.space/docs/quest-guidelines), the [Quest Template Example](https://democratized.space/docs/quest-template),
-the [Item Development Guidelines](https://democratized.space/docs/item-guidelines), the [Process Development
-Guidelines](https://democratized.space/docs/process-guidelines), and the [Quest Submission
-Guide](https://democratized.space/docs/quest-submission) to streamline content creation and sharing.
-
-## Authentication
-
-Quest submissions require a GitHub personal access token. The token is stored locally so you don't need to re-enter it. See [Authentication Flow](docs/contrib/authentication.md) for details and how to revoke the token when you're done.
-
-### Staying Updated
-
-We frequently merge improvements from the `v3` branch. Keep your fork current:
-
-```bash
-git fetch origin
-git merge origin/v3
-pnpm install
-```
-
-## Want to contribute?
-
-Check out the [Contributing Guide](./CONTRIBUTING.md) to get started. All community members are expected to follow our [Code of Conduct](./CODE_OF_CONDUCT.md).
-Automated contributors like the Codex agent follow the rules in [AGENTS.md](./AGENTS.md). Feel free to consult it when preparing your own pull requests.
-
-If you have any questions, feel free to join the [Discord](https://discord.gg/A3UAfYvnxM) and say hello!
-
-### Asset Guidelines
-
-Avoid committing large binary files such as Photoshop documents. Convert images
-to efficient formats (SVG, PNG, JPG) before adding them to the repository.
-
-### Archiving Built-in Content
-
-If a quest, item, or process needs to be retired, move its JSON file to the
-`frontend/src/pages/quests/archive` directory instead of deleting it. The
-`contentIntegrity` test tracks the total count of built-in assets, so archived
-files help prevent accidental removals.
-
-## FAQ
-
-### Which Node.js versions are supported?
-
-We test against active Node.js LTS releases (currently 18 and 20). Run
-`node --version` to confirm your environment, and let us know if newer LTS
-versions behave unexpectedly.
-
-### Do I need to use pnpm to install dependencies?
-
-Yes. Run `pnpm install` in the repository root. The `pnpmfile.cjs` pre-approves
-native builds so no interactive prompts appear.
-
-### How do I install Playwright browsers for end-to-end tests?
-
-Use `npx playwright install chromium` to download the required browser before
-running `npm test`.
+All contributors must follow our [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## License
 
-DSPACE is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-[button-component]: frontend/src/components/Button.astro
-[menu-component]: frontend/src/components/svelte/Menu.svelte
+MIT License - see [LICENSE](LICENSE) for details.
