@@ -1,0 +1,16 @@
+{
+  "id": "2025-11-22-ghcr-multiplatform-403-forbidden",
+  "date": "2025-11-22",
+  "component": "ci/cd",
+  "rootCause": "GitHub Container Registry (GHCR) exhibits intermittent 403 Forbidden errors during multi-platform buildx pushes of Docker images. This is a known transient infrastructure issue on GitHub's registry side, not caused by workflow configuration or permissions. The error occurs during HEAD requests to blob storage when pushing multi-architecture manifests (linux/amd64, linux/arm64), affecting buildx's additional authentication/session management complexity compared to standard docker push.",
+  "resolution": "This is a known transient GHCR infrastructure issue with no permanent fix available from workflow configuration changes. Attempted solutions included: (1) upgrading docker/build-push-action from v5 to v6, (2) switching from registry cache to GitHub Actions cache (type=gha), (3) adding actions:write permission, and (4) disabling provenance attestations (provenance: false). None of these changes resolved the underlying registry-side issue. The only effective mitigation is to retry failed workflow runs, as the error is intermittent and typically resolves on subsequent attempts. Alternative long-term solutions include: switching to single-platform builds, using different registry backends, or implementing automatic retry logic in CI workflows.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/19591242212",
+    "https://github.com/democratizedspace/dspace/pull/2125",
+    "https://github.com/democratizedspace/dspace/pull/2126",
+    "https://github.com/docker/build-push-action/issues/687",
+    "https://github.com/docker/build-push-action/issues/463",
+    "https://github.com/docker/build-push-action/issues/981",
+    "https://github.com/orgs/community/discussions/42889"
+  ]
+}
