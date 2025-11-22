@@ -79,6 +79,7 @@ jobs:
           file: Dockerfile
           push: ${{ env.PUSH_IMAGE == 'true' }}
           platforms: linux/amd64,linux/arm64
+          provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: ${{ env.PUSH_IMAGE == 'true' && format('type=registry,ref={0}/{1}:buildcache', env.REGISTRY, env.IMAGE_NAME) || '' }}
