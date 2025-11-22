@@ -1,0 +1,21 @@
+# Ignore dependency installs from the host to keep Docker builds reproducible
+**/node_modules
+
+# Ignore large build artifacts and caches
+**/.turbo
+**/.next
+**/.astro
+**/.svelte-kit
+**/dist
+**/build
+**/out
+**/coverage
+**/playwright-report
+**/.playwright
+**/.cache
+
+# Ignore local package manager debug logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*

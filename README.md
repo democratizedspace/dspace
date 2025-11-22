@@ -80,6 +80,16 @@ Create quests, items, and processes for the game:
 - [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
 - [k3s + Sugarkube](./docs/k3s-sugarkube-dev.md) - HA cluster setup
 
+#### Docker Deployment
+
+Local Docker builds can fail with `cannot copy to non-directory` when `node_modules` is
+present in the build context (for example, `frontend/node_modules` from a prior `pnpm
+install`). The multi-stage image installs dependencies internally, so copying host
+dependencies conflicts with the in-container `pnpm install`. The root `.dockerignore` now
+excludes `**/node_modules` and other heavy artifacts like `.turbo`, `.next`, `.astro`,
+`coverage`, `dist`, and `playwright-report` to keep builds reproducible and avoid that
+error.
+
 ### Architecture & Technical Design
 
 - [Contributor Guides](./docs/contrib/README.md) - Technical references for contributors
