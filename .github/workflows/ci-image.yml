@@ -19,6 +19,7 @@ on:
 permissions:
   contents: read
   packages: write
+  actions: write
 
 jobs:
   image:
@@ -47,11 +48,9 @@ jobs:
           sha_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-${short_sha}"
           latest_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-latest"
           version_tag="ghcr.io/democratizedspace/dspace:v${{ steps.version.outputs.version }}"
-          cache_ref="ghcr.io/democratizedspace/dspace:${tag_prefix}-cache"
           echo "sha_tag=${sha_tag}" >> "$GITHUB_OUTPUT"
           echo "latest_tag=${latest_tag}" >> "$GITHUB_OUTPUT"
           echo "version_tag=${version_tag}" >> "$GITHUB_OUTPUT"
-          echo "cache_ref=${cache_ref}" >> "$GITHUB_OUTPUT"
 
       - name: Set image metadata
         id: metadata
