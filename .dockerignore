@@ -9,13 +9,43 @@
 **/dist
 **/build
 **/out
+**/.output
 **/coverage
 **/playwright-report
 **/.playwright
 **/.cache
+
+# Ignore test outputs
+test-results/
+test-artifacts/
+test-screenshots/
+test-videos/
+e2e-results/
+blob-report/
 
 # Ignore local package manager debug logs
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Ignore VCS and editor artifacts
+.git
+.gitignore
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+*~
+
+# Ignore environment files
+.env*
+
+# Ignore OS metadata
+.DS_Store
+Thumbs.db
+
+# Ignore documentation (not needed in image)
+*.md
+docs/
