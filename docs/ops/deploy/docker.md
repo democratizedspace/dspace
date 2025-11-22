@@ -17,6 +17,13 @@ docker compose up --build -d
 
 The application listens on port **3002**. Visit `http://localhost:3002` to confirm it is running.
 
+### Troubleshooting
+
+- **Host `node_modules` conflicts**: Local `node_modules` directories in the build context can
+  cause Docker to fail with `cannot copy to non-directory` when the multi-stage image installs
+  dependencies internally. The root `.dockerignore` excludes `node_modules` and other build
+  artifacts (caches, output directories, and test reports) to keep builds reproducible.
+
 ## Environment Variables
 
 The container reads these environment variables:
