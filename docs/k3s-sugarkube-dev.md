@@ -37,7 +37,7 @@ prerequisites.
 1. Container image: trigger the
    [Build and publish GHCR image workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
    and choose the branch (`v3` for ongoing work, `main` after following [merge-plan.md](./merge-plan.md)).
-   - The workflow generates `<branch>-<shortsha>` and `<branch>-latest` tags for multi-arch images.
+   - The workflow generates `<branch>-<shortsha>` and `<branch>-latest` tags for multi-arch images (for example, `v3-latest` or `main-latest`).
 2. Helm chart: trigger the
    [Publish Helm chart workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
    with the same branch selection. It packages `charts/dspace` and pushes to
@@ -46,7 +46,7 @@ prerequisites.
 
 ```bash
 # List pushed images (requires GHCR login)
-crane ls ghcr.io/democratizedspace/dspace | grep v3-
+crane ls ghcr.io/democratizedspace/dspace | grep "^<branch>-"
 
 # Check available chart versions
 helm pull oci://ghcr.io/democratizedspace/charts/dspace --version <version> --untar
@@ -81,16 +81,16 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.dev.yaml \
   version_file=docs/apps/dspace.version \
-  host=dspace-v3.<your-domain> \
-  default_tag=v3-latest
+  host=dspace-<branch>.<your-domain> \
+  default_tag=<branch>-latest
 
-# Roll forward to a specific build (e.g., v3-<shortsha>)
+# Roll forward to a specific build (e.g., <branch>-<shortsha>)
 just helm-oci-upgrade \
   release=dspace namespace=dspace \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.dev.yaml \
   version_file=docs/apps/dspace.version \
-  tag=v3-<shortsha>
+  tag=<branch>-<shortsha>
 ```
 
 Notes:
@@ -114,11 +114,11 @@ kubectl -n dspace get pods,svc,ingress
 # Check sugarkube status helper
 just app-status namespace=dspace release=dspace
 
-# Open the site at https://dspace-v3.<your-domain>
+# Open the site at https://dspace-<branch>.<your-domain>
 ```
 
 If you use Cloudflare, ensure the tunnel route points to the Traefik service hostname and that the
-DNS record for `dspace-v3.<your-domain>` is proxied through the tunnel.
+DNS record for `dspace-<branch>.<your-domain>` is proxied through the tunnel.
 
 ## Troubleshooting
 
