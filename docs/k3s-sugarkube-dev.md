@@ -34,14 +34,27 @@ prerequisites.
 
 ## Assumptions and prerequisites
 
+Prerequisites:
+
+- Sugarkube ha3 cluster is running *and* you have completed the Traefik installation in the
+  sugarkube operations guide:
+  [Install and verify Traefik ingress](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md#install-and-verify-traefik-ingress).
+
 ### Hardware and cluster configuration
 
 This guide assumes you are deploying to sugarkube's **Raspberry Pi 5 three-server HA cluster**:
 
 - 3× Raspberry Pi 5 (or similar 64-bit ARM) nodes running the sugarkube image
-- k3s installed with the default Traefik ingress controller enabled
+- k3s installed on the cluster
 - `env=dev` as the target environment for sugarkube commands
 - Cluster brought up following [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
+
+The Raspberry Pi base cluster setup does **not** install an ingress controller automatically.
+dspace v3's k3s deployment assumes Traefik is installed as the cluster ingress. Before continuing,
+follow the sugarkube instructions to install and confirm Traefik is running in `kube-system`:
+[Install and verify Traefik ingress](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md#install-and-verify-traefik-ingress).
+Once `kubectl -n kube-system get svc -l app.kubernetes.io/name=traefik` shows a `traefik` service,
+return here and continue with the dspace deployment steps.
 
 The GHCR workflows build **multi-arch container images** including `linux/arm64`, so the images are
 ready to run on the Raspberry Pi cluster without modification.
@@ -55,7 +68,7 @@ ready to run on the Raspberry Pi cluster without modification.
 ### Required access and tooling
 
 - You have sugarkube's three-server HA cluster online following the Raspberry Pi setup guide
-  (`just ha3 env=dev`), with Traefik enabled by default in k3s.
+  (`just ha3 env=dev`) and have installed Traefik using the sugarkube operations guide.
 - You can log in to GHCR with a token that can pull `ghcr.io/democratizedspace` images and charts.
 - Cloudflare manages the DNS zone for the hostname that will front dspace, and you can create a
   tunnel route that targets `traefik.kube-system.svc.cluster.local:80` inside the cluster.
