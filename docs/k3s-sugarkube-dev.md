@@ -48,7 +48,7 @@ ready to run on the Raspberry Pi cluster without modification.
 
 ### Staging domain
 
-- Default public URL for the v3 sugarkube + k3s environment: https://staging.democratized.space
+- Default public URL for the v3 sugarkube + k3s environment: `staging.democratized.space`
 - You can substitute a different domain or subdomain, but examples below assume
   `staging.democratized.space`.
 
@@ -83,7 +83,7 @@ just helm-oci-install \
   default_tag=v3-latest
 ```
 
-3. **Verify**: Check the deployment and open the site at `https://staging.democratized.space`.
+3. **Verify**: Check the deployment and open the site at `staging.democratized.space`.
 
 The sections below provide full context for each step, branch-specific tag conventions, and
 troubleshooting guidance.
@@ -186,10 +186,10 @@ kubectl -n dspace get pods,svc,ingress
 # Check sugarkube status helper
 just app-status namespace=dspace release=dspace
 
-# Open the site at https://staging.democratized.space
+# Open the site at `staging.democratized.space`
 ```
 
-Open the site at `https://staging.democratized.space` after the rollout completes.
+Open the site at `staging.democratized.space` after the rollout completes.
 
 If you use Cloudflare, ensure the tunnel route points to the Traefik service hostname and that the
 DNS record for `staging.democratized.space` is proxied through the tunnel.
