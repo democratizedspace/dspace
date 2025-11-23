@@ -22,6 +22,16 @@ prerequisites.
   [cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md)
 - Promotion guidance for landing v3 changes on `main`: [merge-plan.md](./merge-plan.md)
 
+## Published artifacts
+
+- dspace multi-arch container images are published to GHCR at
+  `ghcr.io/democratizedspace/dspace`.
+  - Tags include `v3-latest`, `v3-<short-sha>`, and semantic versions such as `v3.0.0`.
+  - Example image reference: `ghcr.io/democratizedspace/dspace:v3-latest`.
+- The Helm chart is published as an OCI artifact to
+  `oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>`, where `<chartVersion>` comes
+  from `charts/dspace/Chart.yaml`.
+
 ## Assumptions and prerequisites
 
 ### Hardware and cluster configuration
@@ -35,6 +45,12 @@ This guide assumes you are deploying to sugarkube's **Raspberry Pi 5 three-serve
 
 The GHCR workflows build **multi-arch container images** including `linux/arm64`, so the images are
 ready to run on the Raspberry Pi cluster without modification.
+
+### Staging domain
+
+- Default public URL for the v3 sugarkube + k3s environment: `staging.democratized.space`
+- You can substitute a different domain or subdomain, but examples below assume
+  `staging.democratized.space`.
 
 ### Required access and tooling
 
@@ -63,11 +79,11 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.dev.yaml \
   version_file=docs/apps/dspace.version \
-  host=dspace-v3.<your-domain> \
+  host=staging.democratized.space \
   default_tag=v3-latest
 ```
 
-3. **Verify**: Check the deployment and open the site at `https://dspace-v3.<your-domain>`.
+3. **Verify**: Check the deployment and open the site at `staging.democratized.space`.
 
 The sections below provide full context for each step, branch-specific tag conventions, and
 troubleshooting guidance.
@@ -117,12 +133,18 @@ kubectl -n kube-system get svc -l app.kubernetes.io/name=traefik
 3. Install the Cloudflare Tunnel connector on a node that can reach the cluster API, then create a
    DNS route to the Traefik service using the sugarkube guide:
    [cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md).
+   - Use a **named Cloudflare Tunnel** in the Zero Trust dashboard and add a DNS CNAME record:
+     `staging` → `<UUID>.cfargotunnel.com` (copy the `<UUID>` from your tunnel details).
+   - This CNAME makes `staging.democratized.space` resolve to the tunnel, which terminates TLS and
+     forwards traffic to Traefik inside the k3s cluster.
+   - For detailed Cloudflare-side steps (creating the tunnel, DNS records, etc.), see the sugarkube
+     documentation: https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md
 
 ## Step 3: Deploy with sugarkube
 
 The sugarkube [dspace app guide](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md)
-wraps the `helm-oci-*` recipes so you can install or upgrade with one command. Substitute your domain
-and desired tags as needed.
+wraps the `helm-oci-*` recipes so you can install or upgrade with one command. Substitute another
+domain if you are not using `staging.democratized.space`, and choose image tags as needed.
 
 ```bash
 # Install or upgrade the release with Traefik ingress
@@ -131,7 +153,7 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.dev.yaml \
   version_file=docs/apps/dspace.version \
-  host=dspace-<branch>.<your-domain> \
+  host=staging.democratized.space \
   default_tag=<branch>-latest
 
 # Roll forward to a specific build (e.g., <branch>-<shortsha>)
@@ -164,11 +186,13 @@ kubectl -n dspace get pods,svc,ingress
 # Check sugarkube status helper
 just app-status namespace=dspace release=dspace
 
-# Open the site at https://dspace-<branch>.<your-domain>
+# Open the site at `staging.democratized.space`
 ```
 
+Open the site at `staging.democratized.space` after the rollout completes.
+
 If you use Cloudflare, ensure the tunnel route points to the Traefik service hostname and that the
-DNS record for `dspace-<branch>.<your-domain>` is proxied through the tunnel.
+DNS record for `staging.democratized.space` is proxied through the tunnel.
 
 ## Troubleshooting
 
