@@ -39,6 +39,10 @@ Prerequisites:
 - Sugarkube ha3 cluster is running *and* you have completed the Traefik installation in the
   sugarkube operations guide:
   [Install and verify Traefik ingress](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md#install-and-verify-traefik-ingress).
+- Cloudflare Tunnel is configured following the sugarkube guide so that
+  `staging.democratized.space` forwards to `http://traefik.kube-system.svc.cluster.local:80`
+  through the tunnel’s `*.cfargotunnel.com` endpoint. See
+  [cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md).
 
 ### Hardware and cluster configuration
 
@@ -131,33 +135,105 @@ crane ls ghcr.io/democratizedspace/dspace | grep "^<branch>-"
 helm pull oci://ghcr.io/democratizedspace/charts/dspace --version <version> --untar
 ```
 
-## Step 2: Prepare the sugarkube cluster for ingress
+## Step 2: Confirm sugarkube + Cloudflare Tunnel prerequisites
 
-1. Bring up or refresh the HA cluster on each Raspberry Pi by following the sugarkube guide:
-   [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
-   and day-two operations in
-   [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md).
-2. Verify Traefik is available (required for the ingress class):
+These checks assume you have already followed the sugarkube docs for cluster bring-up, Traefik, and
+Cloudflare Tunnels. Refer back to
+[raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
+and [cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md)
+if anything below is missing.
+
+1. Cluster online: `just cluster-status env=dev` should show the three nodes Ready.
+2. Traefik healthy:
+
+   ```bash
+   just traefik-status env=dev
+   kubectl -n kube-system get svc -l app.kubernetes.io/name=traefik
+   ```
+
+3. Cloudflare Tunnel connector installed in the cluster (from the sugarkube tunnel guide):
+
+   ```bash
+   just cf-tunnel-install env=dev token="$CF_TUNNEL_TOKEN"
+   kubectl -n cloudflare get deploy,po
+   ```
+
+   The tunnel should route `staging.democratized.space` to
+   `http://traefik.kube-system.svc.cluster.local:80` and your DNS should contain
+   `staging.democratized.space` → `<UUID>.cfargotunnel.com` as a proxied CNAME.
+
+## Step 3: Deploy dspace v3 on a Sugarkube + Cloudflare Tunnel cluster
+
+This section assumes you have already completed the sugarkube bring-up, Traefik installation, and
+Cloudflare Tunnel steps in the sugarkube repo:
+
+- 3-node HA k3s cluster created with sugarkube
+- Traefik installed and healthy (`just traefik-install env=dev`, `just traefik-status env=dev`)
+- Cloudflare Tunnel connector running in the cluster via
+  `just cf-tunnel-install env=dev token="$CF_TUNNEL_TOKEN"`
+- Cloudflare route forwarding `staging.democratized.space` →
+  `http://traefik.kube-system.svc.cluster.local:80`
+- DNS CNAME: `staging.democratized.space` → `<UUID>.cfargotunnel.com`
+
+See sugarkube’s [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
+and [cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md)
+for the full tunnel and ingress setup.
+
+### 3.1 Create or confirm the namespace
 
 ```bash
-kubectl -n kube-system get svc -l app.kubernetes.io/name=traefik
+kubectl create namespace dspace --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-3. Install the Cloudflare Tunnel connector on a node that can reach the cluster API, then create a
-   DNS route to the Traefik service using the sugarkube guide:
-   [cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md).
-   - Use a **named Cloudflare Tunnel** in the Zero Trust dashboard and add a DNS CNAME record:
-     `staging` → `<UUID>.cfargotunnel.com` (copy the `<UUID>` from your tunnel details).
-   - This CNAME makes `staging.democratized.space` resolve to the tunnel, which terminates TLS and
-     forwards traffic to Traefik inside the k3s cluster.
-   - For detailed Cloudflare-side steps (creating the tunnel, DNS records, etc.), see the sugarkube
-     documentation: https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md
+### 3.2 Prepare secrets and configuration
 
-## Step 3: Deploy with sugarkube
+Add the runtime secrets the chart needs (replace placeholder values):
 
-The sugarkube [dspace app guide](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md)
-wraps the `helm-oci-*` recipes so you can install or upgrade with one command. Substitute another
-domain if you are not using `staging.democratized.space`, and choose image tags as needed.
+```bash
+kubectl -n dspace create secret generic dspace-secrets \
+  --from-literal=DATABASE_URL='postgres://user:pass@db-host:5432/dspace' \
+  --from-literal=JWT_SECRET='replace-me-with-a-random-string' \
+  --dry-run=client -o yaml | kubectl apply -f -
+```
+
+In your Helm values (see below), enable `secret.enabled: true` and map the keys to environment
+variables:
+
+```yaml
+secret:
+  enabled: true
+  stringData:
+    DATABASE_URL: ${DATABASE_URL}
+    JWT_SECRET: ${JWT_SECRET}
+env:
+  - name: NODE_ENV
+    value: production
+```
+
+### 3.3 Define ingress values for staging
+
+Create a minimal override file (for example `values-sugarkube-staging.yaml`) that sets the ingress
+host and class for Traefik:
+
+```yaml
+image:
+  repository: ghcr.io/democratizedspace/dspace
+  tag: v3-latest
+
+ingress:
+  enabled: true
+  className: traefik
+  host: staging.democratized.space
+```
+
+You can also start from the sugarkube defaults in
+`docs/examples/dspace.values.dev.yaml` (in the sugarkube repo) and override the ingress host and
+image tag for the build you want to run.
+
+### 3.4 Install or upgrade the Helm release
+
+Use the sugarkube `helm-oci-*` recipes to install the chart into the `dspace` namespace. Substitute
+your image tag if you are not using `v3-latest`.
 
 ```bash
 # Install or upgrade the release with Traefik ingress
@@ -167,15 +243,15 @@ just helm-oci-install \
   values=docs/examples/dspace.values.dev.yaml \
   version_file=docs/apps/dspace.version \
   host=staging.democratized.space \
-  default_tag=<branch>-latest
+  default_tag=v3-latest
 
-# Roll forward to a specific build (e.g., <branch>-<shortsha>)
+# Roll forward to a specific build (e.g., v3-<shortsha>)
 just helm-oci-upgrade \
   release=dspace namespace=dspace \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.dev.yaml \
   version_file=docs/apps/dspace.version \
-  tag=<branch>-<shortsha>
+  tag=v3-<shortsha>
 ```
 
 Notes:
@@ -185,8 +261,6 @@ Notes:
 - `default_tag` sets the fallback image tag. Provide `tag=<imageTag>` to target a specific image.
 - When deploying from `main`, align `default_tag` or `tag` with the `main-*` tags created by the
   workflow.
-- Values file reference: `docs/examples/dspace.values.dev.yaml` in the sugarkube repo contains the
-  ingress host and Cloudflare defaults for the dev environment.
 - If you prefer a direct Helm check before running sugarkube, run the quick test from the
   [Helm install section](./charts.md#install-from-ghcr-oci) with the same ingress host.
 
@@ -198,14 +272,32 @@ kubectl -n dspace get pods,svc,ingress
 
 # Check sugarkube status helper
 just app-status namespace=dspace release=dspace
-
-# Open the site at `staging.democratized.space`
 ```
 
-Open the site at `staging.democratized.space` after the rollout completes.
+### Verification
 
-If you use Cloudflare, ensure the tunnel route points to the Traefik service hostname and that the
-DNS record for `staging.democratized.space` is proxied through the tunnel.
+After the Helm deployment, verify the ingress host and Traefik routing:
+
+```bash
+kubectl -n dspace get pods
+kubectl -n dspace get svc,ingress
+```
+
+The Ingress should show `staging.democratized.space` as the host with the `traefik` class. Open
+`https://staging.democratized.space` in a browser; you should see the dspace v3 UI served through
+the Cloudflare Tunnel.
+
+## End-to-end checklist (dspace staging)
+
+- [ ] Sugarkube cluster: `just cluster-status` is healthy.
+- [ ] Traefik: `just traefik-status` is healthy.
+- [ ] Cloudflare Tunnel: connector running (`kubectl -n cloudflare get deploy,po`) and `/ready`
+      returns 200.
+- [ ] Cloudflare route: `staging.democratized.space` → `http://traefik.kube-system.svc.cluster.local:80`.
+- [ ] DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
+- [ ] dspace Helm release deployed in `dspace`.
+- [ ] `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
+- [ ] Browsing `https://staging.democratized.space` shows the dspace v3 UI.
 
 ## Troubleshooting
 
