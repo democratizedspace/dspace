@@ -154,13 +154,11 @@ and
 
 Once those are in place, the remainder of this document focuses on deploying dspace v3 itself.
 
-## Deploy dspace v3 on a Sugarkube + Cloudflare Tunnel cluster
-
 The steps below pick up after the tunnel and Traefik are live and verified. Replace example secret
 values with real credentials and adjust the namespace or host only if your environment differs from
 `staging.democratized.space`.
 
-### Step 3: Prepare the namespace and secrets
+## Step 3: Prepare the namespace and secrets
 
 Create or reuse the dspace namespace:
 
@@ -169,22 +167,24 @@ kubectl create namespace dspace
 # If it already exists, rerun with --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-Create the secrets expected by the chart (replace placeholder values):
+Create the secrets expected by the chart (replace placeholder values). The chart consumes
+`METRICS_TOKEN` via the `metricsToken` key, so include it alongside the database and JWT secrets:
 
 ```bash
 kubectl -n dspace create secret generic dspace-secrets \
   --from-literal=POSTGRES_PASSWORD='example-postgres-password' \
-  --from-literal=JWT_SECRET='example-jwt-secret'
+  --from-literal=JWT_SECRET='example-jwt-secret' \
+  --from-literal=metricsToken='example-metrics-token'
 ```
 
 If you keep credentials in a separate repo or secret manager, sync them into this namespace before
 running Helm.
 
-### Step 4: Set ingress values for `staging.democratized.space`
+## Step 4: Set ingress values for `staging.democratized.space`
 
 Start from the sugarkube values file (`docs/examples/dspace.values.dev.yaml` in the sugarkube repo)
-or create a minimal overlay such as `values-staging.yaml` to force Traefik ingress with the
-Cloudflare hostname:
+and layer the ingress block below into your copy. If you prefer to keep overrides isolated, create
+`values-staging.yaml` with this ingress section and pass both files to Helm:
 
 ```yaml
 ingress:
@@ -197,10 +197,11 @@ ingress:
           pathType: Prefix
 ```
 
-Keep any additional settings from the sugarkube defaults (database connection info, storage, etc.)
-and layer this ingress block on top.
+Keep any additional settings from the sugarkube defaults (database connection info, storage, etc.).
+When deploying with multiple files, use `--values dspace.values.dev.yaml --values values-staging.yaml`
+so the ingress host overlays the sugarkube defaults.
 
-### Step 5: Install or upgrade the Helm release
+## Step 5: Install or upgrade the Helm release
 
 Deploy via the sugarkube justfile wrapper (recommended so chart versions stay aligned with the
 sugarkube app guide):
@@ -243,12 +244,12 @@ through the Cloudflare Tunnel and Traefik.
 - [ ] Sugarkube cluster: `just cluster-status` is healthy.
 - [ ] Traefik: `just traefik-status` is healthy.
 - [ ] Cloudflare Tunnel: connector running (`kubectl -n cloudflare get deploy,po`) and `/ready`
-      returns 200.
+      returns 200 (`kubectl -n cloudflare port-forward <pod> 8080:8080 && curl http://localhost:8080/ready`).
 - [ ] Cloudflare route: `staging.democratized.space` →
       `http://traefik.kube-system.svc.cluster.local:80`.
 - [ ] DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
 - [ ] dspace Helm release deployed in `dspace` (or your chosen) namespace.
-- [ ] `kubectl -n <dspace-namespace> get ingress` shows host `staging.democratized.space`.
+- [ ] `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
 - [ ] Browsing `https://staging.democratized.space` shows the dspace v3 UI.
 
 ## Troubleshooting
