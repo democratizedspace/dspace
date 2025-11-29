@@ -40,7 +40,7 @@ prerequisites.
 
 Prerequisites:
 
-- Sugarkube ha3 cluster is running *and* you have completed the Traefik installation in the
+- Sugarkube ha3 cluster is running _and_ you have completed the Traefik installation in the
   sugarkube operations guide:
   [Install and verify Traefik ingress](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md#install-and-verify-traefik-ingress).
 
@@ -75,7 +75,7 @@ ready to run on the Raspberry Pi cluster without modification.
   (`just ha3 env=dev`) and have installed Traefik using the sugarkube operations guide.
 - You can log in to GHCR with a token that can pull `ghcr.io/democratizedspace` images and charts.
 - Cloudflare manages the DNS zone for the hostname that will front dspace, and you can create a
-  tunnel route that targets `traefik.kube-system.svc.cluster.local:80` inside the cluster.
+  published application route that targets `traefik.kube-system.svc.cluster.local` inside the cluster.
 - `kubectl` is pointed at the cluster and `just` is installed where you will run the sugarkube
   commands.
 
@@ -147,8 +147,8 @@ Helm release:
 - Traefik is installed and healthy (`just traefik-install` and `just traefik-status`).
 - Cloudflare Tunnel connector is running in the cluster via
   `just cf-tunnel-install env=dev token="$CF_TUNNEL_TOKEN"`.
-- Tunnel route sends `staging.democratized.space` to
-  `http://traefik.kube-system.svc.cluster.local:80`.
+- Published application route sends `staging.democratized.space` to
+  `traefik.kube-system.svc.cluster.local` (Type: HTTP).
 - DNS CNAME points `staging.democratized.space` to the tunnel endpoint (`<UUID>.cfargotunnel.com`).
 
 For the full tunnel and Traefik steps, follow sugarkube's
@@ -160,18 +160,24 @@ and
 
 Helm and `just helm-oci-install` only create Kubernetes resources (Deployment, Service, Ingress);
 they do **not** configure Cloudflare routes or DNS records. You must configure those separately in
-the Cloudflare dashboard.
+the Cloudflare dashboard **before** running the Helm install.
 
-1. **Add the public hostname route:**
+1. **Add a published application route:**
    - In the Cloudflare dashboard, open the `democratized.space` zone.
    - Navigate to **Zero Trust → Networks → Tunnels** and select the existing tunnel for your
      cluster (e.g., `dspace-staging-v3`).
-   - Under **Public Hostnames** (or **Application routes**), click **Add a public hostname** and
-     configure:
+   - Open the **Published application routes** tab and click **Add a published application route**.
+   - Fill in the **Hostname** section:
      - **Subdomain**: `staging`
      - **Domain**: `democratized.space`
+     - **Path**: leave blank
+   - A banner will confirm that a DNS record for `staging.democratized.space` will be created.
+   - Fill in the **Service** section:
      - **Type**: `HTTP`
-     - **URL** (Service): `http://traefik.kube-system.svc.cluster.local:80`
+     - **URL**: `traefik.kube-system.svc.cluster.local`
+   - Leave all advanced settings (HTTP Host Header, Disable Chunked Encoding, Access JWT, etc.) at
+     their defaults. This is fine for staging and causes Cloudflare to send
+     `Host: staging.democratized.space` to Traefik.
    - Save the route.
 
 2. **Verify DNS record:**
@@ -181,8 +187,8 @@ the Cloudflare dashboard.
      - **Name**: `staging`
      - **Target**: `<tunnel-UUID>.cfargotunnel.com`
      - **Proxy status**: Proxied (orange cloud)
-   - Cloudflare typically creates this automatically when you add the public hostname, but verify
-     it exists.
+   - Cloudflare typically creates this automatically when you add the published application route,
+     but verify it exists.
 
 Once those are in place, the remainder of this document focuses on deploying dspace v3 itself.
 
@@ -280,8 +286,8 @@ through the Cloudflare Tunnel and Traefik.
   - Shell 1: `kubectl -n cloudflare port-forward deploy/cloudflare-tunnel 2000:2000`
   - Shell 2: `curl -fsS http://localhost:2000/ready`
   - A JSON response containing `"status":200` confirms the tunnel is healthy.
-- [ ] Cloudflare route: `staging.democratized.space` →
-      `http://traefik.kube-system.svc.cluster.local:80`.
+- [ ] Published application route: `staging.democratized.space` →
+      `traefik.kube-system.svc.cluster.local` (Type: HTTP).
 - [ ] DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
 - [ ] dspace Helm release deployed in `dspace` (or your chosen) namespace.
 - [ ] `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
