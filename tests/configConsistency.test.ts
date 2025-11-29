@@ -34,14 +34,22 @@ function parseYamlFile<T = unknown>(relativePath: string): T {
     return parseYaml(readFile(relativePath)) as T;
 }
 
+/**
+ * Minimal interfaces for testing purposes only.
+ * These interfaces only include fields that are being validated by the tests.
+ * Additional fields in the YAML files are allowed but not type-checked.
+ */
 interface HelmValues {
     service: {
         port: number;
+        [key: string]: unknown;
     };
     probes: {
         readinessPath: string;
         livenessPath: string;
+        [key: string]: unknown;
     };
+    [key: string]: unknown;
 }
 
 interface DockerComposeConfig {
@@ -51,9 +59,13 @@ interface DockerComposeConfig {
             environment: string[];
             healthcheck: {
                 test: string[];
+                [key: string]: unknown;
             };
+            [key: string]: unknown;
         };
+        [key: string]: unknown;
     };
+    [key: string]: unknown;
 }
 
 interface K8sDeployment {
@@ -61,20 +73,27 @@ interface K8sDeployment {
         template: {
             spec: {
                 containers: Array<{
-                    ports: Array<{ containerPort: number }>;
-                    env: Array<{ name: string; value: string }>;
-                    livenessProbe?: { httpGet: { path: string; port: number } };
-                    readinessProbe?: { httpGet: { path: string; port: number } };
+                    ports: Array<{ containerPort: number; [key: string]: unknown }>;
+                    env: Array<{ name: string; value: string; [key: string]: unknown }>;
+                    livenessProbe?: { httpGet: { path: string; port: number; [key: string]: unknown }; [key: string]: unknown };
+                    readinessProbe?: { httpGet: { path: string; port: number; [key: string]: unknown }; [key: string]: unknown };
+                    [key: string]: unknown;
                 }>;
+                [key: string]: unknown;
             };
+            [key: string]: unknown;
         };
+        [key: string]: unknown;
     };
+    [key: string]: unknown;
 }
 
 interface K8sService {
     spec: {
-        ports: Array<{ port: number; targetPort: number }>;
+        ports: Array<{ port: number; targetPort: number; [key: string]: unknown }>;
+        [key: string]: unknown;
     };
+    [key: string]: unknown;
 }
 
 describe('config consistency: Dockerfile', () => {
@@ -225,6 +244,7 @@ describe('config consistency: health endpoint implementation', () => {
 
     it('/health is an alias for /healthz', () => {
         const health = readFile('frontend/src/pages/health.ts');
-        expect(health).toContain('healthz');
+        // Verify actual re-export from healthz.ts, not just string match
+        expect(health).toMatch(/export\s*\{\s*GET\s*\}\s*from\s+['"]\.\/healthz(\.ts)?['"]/);
     });
 });

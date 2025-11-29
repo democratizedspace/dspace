@@ -93,20 +93,23 @@ jobs:
           
           # Wait for container to start (up to 30 seconds)
           echo "Waiting for container to start..."
+          SUCCESS=false
           for i in {1..30}; do
             if curl -fsS http://127.0.0.1:8080/healthz > /dev/null 2>&1; then
               echo "Health check passed!"
+              SUCCESS=true
               break
-            fi
-            if [ $i -eq 30 ]; then
-              echo "Health check failed after 30 seconds"
-              docker logs dspace-smoke-test
-              docker stop dspace-smoke-test
-              docker rm dspace-smoke-test
-              exit 1
             fi
             sleep 1
           done
+          
+          if [ "$SUCCESS" = "false" ]; then
+            echo "Health check failed after 30 seconds"
+            docker logs dspace-smoke-test
+            docker stop dspace-smoke-test
+            docker rm dspace-smoke-test
+            exit 1
+          fi
           
           # Verify both health endpoints
           echo "Checking /healthz..."
