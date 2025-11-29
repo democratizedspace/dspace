@@ -60,6 +60,26 @@ npm run dev
 
 The site will be available at `http://localhost:3002`.
 
+### Local Development vs Production/Staging
+
+| Environment | Port | Server | Health Endpoints |
+|-------------|------|--------|------------------|
+| Local dev   | 3002 | `astro dev` | `/healthz`, `/livez` |
+| Production/Staging | 8080 | Built Astro server | `/healthz`, `/livez` |
+
+**Local development** uses the Astro dev server (`npm run dev`) on port 3002 with hot module
+replacement for fast iteration.
+
+**Production/Staging containers** (built from the root `Dockerfile`) run the compiled Astro
+server on port 8080. The container exposes health endpoints for Kubernetes probes:
+
+- `/healthz` – Readiness probe (HTTP 200 when ready to serve traffic)
+- `/livez` – Liveness probe (HTTP 200 when the process is alive)
+
+The Helm chart (`charts/dspace`) and docker-compose use port 8080 by default. All
+configuration files (Dockerfile, Helm values, k8s manifests, docs) are validated by the
+`tests/configConsistency.test.ts` test to ensure they stay in sync.
+
 ## Architecture Overview
 
 DSPACE uses Astro's Server-Side Rendering (SSR) with partial hydration of Svelte components on the client side.

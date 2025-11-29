@@ -1,29 +1,33 @@
-FROM node:18-alpine
+# DEPRECATED: Use the root Dockerfile for production builds.
+# This file is provided for backward compatibility and local Docker Compose use only.
+# It mirrors the root Dockerfile configuration (port 8080, production server, /healthz probe).
+FROM node:20-alpine
 
-# Install curl
-RUN apk add --no-cache curl
+# Install required system packages
+RUN apk add --no-cache curl dumb-init \
+    && mkdir -p /app \
+    && chown node:node /app
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy workspace and package files
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json .npmrc ./
-COPY frontend/package.json frontend/
-
-# Install dependencies without running scripts
-RUN corepack enable && pnpm install --filter frontend --frozen-lockfile --ignore-scripts --prod
-
-# Copy the rest of the application
-COPY frontend ./frontend
-
-# Set environment variables for the port and host
-ENV PORT=3002
+# Set environment variables for production
+ENV NODE_ENV=production
+ENV PORT=8080
 ENV HOST=0.0.0.0
 
-# Expose port 3002
-EXPOSE 3002
+# Note: For local development, use `npm run dev` or `pnpm run dev` directly.
+# This Dockerfile builds and runs the production server.
 
-HEALTHCHECK CMD curl -f http://localhost:3002/health || exit 1
+# Copy built artifacts and dependencies (assume pre-built)
+# For full builds, use the root Dockerfile which includes multi-stage build.
+COPY --chown=node:node dist ./dist
+COPY --chown=node:node node_modules ./node_modules
+COPY --chown=node:node package.json ./
 
-# Run the application
-CMD ["pnpm", "--filter", "frontend", "run", "dev"]
+USER node
+EXPOSE 8080
+
+HEALTHCHECK CMD curl -fsS http://127.0.0.1:${PORT:-8080}/healthz > /dev/null || exit 1
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["node", "dist/server/entry.mjs"]

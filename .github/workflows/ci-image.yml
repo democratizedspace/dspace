@@ -71,6 +71,55 @@ jobs:
           provenance: false
           cache-from: type=gha,scope=ci-image-local
           cache-to: type=gha,mode=max,scope=ci-image-local
+          load: true
+          tags: dspace-test:latest
+
+      - name: Build image for smoke test (no cache for forks)
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          platforms: linux/amd64
+          provenance: false
+          load: true
+          tags: dspace-test:latest
+
+      - name: Smoke test - verify container boots and health endpoint responds
+        run: |
+          # Start container in background
+          docker run -d --name dspace-smoke-test -p 127.0.0.1:8080:8080 dspace-test:latest
+          
+          # Wait for container to start (up to 30 seconds)
+          echo "Waiting for container to start..."
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:8080/healthz > /dev/null 2>&1; then
+              echo "Health check passed!"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "Health check failed after 30 seconds"
+              docker logs dspace-smoke-test
+              docker stop dspace-smoke-test
+              docker rm dspace-smoke-test
+              exit 1
+            fi
+            sleep 1
+          done
+          
+          # Verify both health endpoints
+          echo "Checking /healthz..."
+          curl -fsS http://127.0.0.1:8080/healthz
+          echo ""
+          echo "Checking /livez..."
+          curl -fsS http://127.0.0.1:8080/livez
+          echo ""
+          
+          # Cleanup
+          docker stop dspace-smoke-test
+          docker rm dspace-smoke-test
+          echo "Smoke test passed!"
 
   image:
     name: Build and push image
