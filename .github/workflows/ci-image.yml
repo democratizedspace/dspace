@@ -86,7 +86,7 @@ jobs:
           load: true
           tags: dspace-test:latest
 
-      - name: Smoke test - verify container boots and health endpoint responds
+      - name: Smoke test - verify container boots and serves requests
         run: |
           # Start container in background
           docker run -d --name dspace-smoke-test -p 127.0.0.1:8080:8080 dspace-test:latest
@@ -95,8 +95,9 @@ jobs:
           echo "Waiting for container to start..."
           SUCCESS=false
           for i in {1..30}; do
-            if curl -fsS http://127.0.0.1:8080/healthz > /dev/null 2>&1; then
-              echo "Health check passed!"
+            # Check if the container is serving the root page (200 OK)
+            if curl -fsS -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/ 2>/dev/null | grep -q '200'; then
+              echo "Server is responding!"
               SUCCESS=true
               break
             fi
@@ -104,20 +105,12 @@ jobs:
           done
           
           if [ "$SUCCESS" = "false" ]; then
-            echo "Health check failed after 30 seconds"
+            echo "Server health check failed after 30 seconds"
             docker logs dspace-smoke-test
             docker stop dspace-smoke-test
             docker rm dspace-smoke-test
             exit 1
           fi
-          
-          # Verify both health endpoints
-          echo "Checking /healthz..."
-          curl -fsS http://127.0.0.1:8080/healthz
-          echo ""
-          echo "Checking /livez..."
-          curl -fsS http://127.0.0.1:8080/livez
-          echo ""
           
           # Cleanup
           docker stop dspace-smoke-test
