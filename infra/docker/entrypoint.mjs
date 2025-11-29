@@ -1,5 +1,4 @@
 import process from 'node:process';
-import { startServer } from './dist/server/entry.mjs';
 
 const log = (level, message, fields = {}) => {
   const payload = {
@@ -12,8 +11,6 @@ const log = (level, message, fields = {}) => {
 };
 
 let shutdownRequested = false;
-let control;
-let donePromise;
 let metricsServer;
 
 async function shutdown(signal) {
@@ -34,12 +31,6 @@ async function shutdown(signal) {
         });
       });
       metricsServer = undefined;
-    }
-    if (control?.stop) {
-      await control.stop();
-    }
-    if (donePromise) {
-      await donePromise;
     }
     log('info', 'Server stopped cleanly', { signal });
     process.exit(0);
@@ -83,18 +74,16 @@ async function main() {
       });
     }
   }
-  const { server, done } = await startServer();
-  control = server;
-  donePromise = done;
-  const host = server.host ?? '0.0.0.0';
-  const port = server.port;
+
+  // Import the Astro server entry - in standalone mode, this auto-starts the server
+  // when the module is loaded, so we don't need to call startServer() ourselves
+  await import('./dist/server/entry.mjs');
+
   log('info', 'DSPACE server started', {
-    host,
-    port,
+    host: process.env.HOST || '0.0.0.0',
+    port: process.env.PORT || 8080,
     featureFlags: process.env.DSPACE_FEATURE_FLAGS || '',
   });
-  await done;
-  log('info', 'HTTP server closed');
 }
 
 main().catch((error) => {
