@@ -88,15 +88,17 @@ and configured your Cloudflare Tunnel, deploying dspace from the `v3` branch req
    - [Build and publish GHCR image](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
    - [Publish Helm chart](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
 
-2. **Deploy to cluster**: Run the sugarkube helm-oci-install command from your control node:
+2. **Deploy to cluster**: On a sugarkube control node (e.g., `sugarkube0`), run the following from
+   `~/sugarkube`. The staging host (`staging.democratized.space`) is defined in
+   `docs/examples/dspace.values.staging.yaml`:
 
 ```bash
+cd ~/sugarkube
 just helm-oci-install \
   release=dspace namespace=dspace \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
-  values=docs/examples/dspace.values.dev.yaml \
+  values=docs/examples/dspace.values.dev.yaml,docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  host=staging.democratized.space \
   default_tag=v3-latest
 ```
 
@@ -198,6 +200,9 @@ values with real credentials and adjust the namespace or host only if your envir
 
 ## Step 3: Prepare the namespace
 
+> **Where to run:** Commands in Steps 3–5 (`kubectl`, `just helm-oci-install`) are executed on a
+> sugarkube control node (e.g., `sugarkube0`) with the sugarkube repo checked out at `~/sugarkube`.
+
 Create or reuse the dspace namespace:
 
 ```bash
@@ -219,11 +224,11 @@ If you later add optional features (e.g., protected metrics scraping), you can c
 reference them via the chart's `secret` or `env` values. For the default v3 deployment, skip secret
 creation entirely.
 
-## Step 4: Set ingress values for `staging.democratized.space`
+## Step 4: Staging ingress values
 
-Start from the sugarkube values file (`docs/examples/dspace.values.dev.yaml` in the sugarkube repo)
-and layer the ingress block below into your copy. If you prefer to keep overrides isolated, create
-`values-staging.yaml` with this ingress section and pass both files to Helm:
+The staging ingress values for dspace are version-controlled in the sugarkube repo at
+[`docs/examples/dspace.values.staging.yaml`](https://github.com/futuroptimist/sugarkube/blob/main/docs/examples/dspace.values.staging.yaml).
+This file contains the staging-specific overrides:
 
 ```yaml
 ingress:
@@ -236,34 +241,34 @@ The chart uses a single `host` string (not a list) and creates one Ingress rule 
 with a catch-all path (`/`). TLS is disabled by default because Cloudflare terminates TLS at the
 tunnel edge before forwarding to Traefik inside the cluster.
 
-When deploying with multiple files, use `--values dspace.values.dev.yaml --values values-staging.yaml`
-so the ingress host overlays the sugarkube defaults.
+Deploys from the Pis are run from `~/sugarkube` using `just helm-oci-install` with both
+`dspace.values.dev.yaml` and `dspace.values.staging.yaml` passed via the `values=` parameter. No
+manual creation of a values file is required.
 
 ## Step 5: Install or upgrade the Helm release
 
 Deploy via the sugarkube justfile wrapper (recommended so chart versions stay aligned with the
-sugarkube app guide):
+sugarkube app guide). From `~/sugarkube` on a sugarkube control node:
 
 ```bash
+cd ~/sugarkube
 just helm-oci-install \
   release=dspace namespace=dspace \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
-  values=docs/examples/dspace.values.dev.yaml \
+  values=docs/examples/dspace.values.dev.yaml,docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  host=staging.democratized.space \
   default_tag=v3-latest
 ```
 
 To target a specific image build, add `tag=<branch>-<shortsha>` or use `just helm-oci-upgrade` with
-the same arguments. If you are running Helm directly, mirror the same values file and ingress host:
+the same arguments. If you are running Helm directly, mirror the same values files:
 
 ```bash
 helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
   --namespace dspace --create-namespace \
   --version "$(cat docs/apps/dspace.version)" \
   --values docs/examples/dspace.values.dev.yaml \
-  --set ingress.host=staging.democratized.space \
-  --set ingress.className=traefik
+  --values docs/examples/dspace.values.staging.yaml
 ```
 
 ### Verification
