@@ -109,6 +109,7 @@ function lsKey(store) {
 }
 
 function lsRead(store) {
+    if (typeof window === 'undefined') return undefined;
     try {
         const raw = localStorage.getItem(lsKey(store));
         return raw ? JSON.parse(raw) : undefined;
@@ -119,6 +120,7 @@ function lsRead(store) {
 }
 
 function lsWrite(store, value) {
+    if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(lsKey(store), JSON.stringify(value));
     } catch (err) {
@@ -127,6 +129,7 @@ function lsWrite(store, value) {
 }
 
 function lsClear(store) {
+    if (typeof window === 'undefined') return;
     try {
         localStorage.removeItem(lsKey(store));
     } catch (err) {
@@ -222,19 +225,25 @@ export const validateGameState = (state) => {
 let gameState = initializeGameState();
 export const state = writable(gameState);
 
-export const ready = (async () => {
-    try {
-        const stored = await read(STATE_STORE);
-        if (stored) {
-            gameState = validateGameState(stored);
-            state.set(gameState);
-        }
-    } catch (err) {
-        console.error('Error loading game state from IndexedDB:', err);
-    } finally {
-        readyResolved = true;
-    }
-})();
+// Only execute in browser environment to avoid SSR issues with IndexedDB
+export const ready =
+    typeof window !== 'undefined'
+        ? (async () => {
+              try {
+                  const stored = await read(STATE_STORE);
+                  if (stored) {
+                      gameState = validateGameState(stored);
+                      state.set(gameState);
+                  }
+              } catch (err) {
+                  console.error('Error loading game state from IndexedDB:', err);
+              } finally {
+                  readyResolved = true;
+              }
+          })()
+        : Promise.resolve().then(() => {
+              readyResolved = true;
+          });
 
 let writeQueue = Promise.resolve();
 

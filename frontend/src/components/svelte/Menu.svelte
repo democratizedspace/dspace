@@ -6,8 +6,8 @@
 
     export let pathname;
 
-    // get avatarUrl from localStorage key of same name
-    let avatarUrl = localStorage.getItem('avatarUrl');
+    // get avatarUrl from localStorage key of same name (only in browser)
+    let avatarUrl = typeof window !== 'undefined' ? localStorage.getItem('avatarUrl') : null;
     let mounted = false;
 
     const toggleShowUnpinned = () => {

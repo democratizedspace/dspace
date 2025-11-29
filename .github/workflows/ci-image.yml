@@ -91,14 +91,13 @@ jobs:
           # Start container in background
           docker run -d --name dspace-smoke-test -p 127.0.0.1:8080:8080 dspace-test:latest
           
-          # Wait for container to start (up to 60 seconds)
-          echo "Waiting for container to start..."
+          # Wait for server to start responding (up to 60 seconds)
+          echo "Waiting for server to start..."
           SUCCESS=false
           for i in {1..60}; do
-            # Check if the container is serving requests (any HTTP response)
             HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 http://127.0.0.1:8080/ 2>/dev/null || echo "000")
             if [ "$HTTP_CODE" = "200" ]; then
-              echo "Server is responding with HTTP $HTTP_CODE!"
+              echo "Server is responding with HTTP 200!"
               SUCCESS=true
               break
             fi
