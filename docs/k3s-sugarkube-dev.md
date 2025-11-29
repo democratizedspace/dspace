@@ -156,6 +156,34 @@ For the full tunnel and Traefik steps, follow sugarkube's
 and
 [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md).
 
+### Configure Cloudflare Tunnel hostname and DNS
+
+Helm and `just helm-oci-install` only create Kubernetes resources (Deployment, Service, Ingress);
+they do **not** configure Cloudflare routes or DNS records. You must configure those separately in
+the Cloudflare dashboard.
+
+1. **Add the public hostname route:**
+   - In the Cloudflare dashboard, open the `democratized.space` zone.
+   - Navigate to **Zero Trust → Networks → Tunnels** and select the existing tunnel for your
+     cluster (e.g., `dspace-staging-v3`).
+   - Under **Public Hostnames** (or **Application routes**), click **Add a public hostname** and
+     configure:
+     - **Subdomain**: `staging`
+     - **Domain**: `democratized.space`
+     - **Type**: `HTTP`
+     - **URL** (Service): `http://traefik.kube-system.svc.cluster.local:80`
+   - Save the route.
+
+2. **Verify DNS record:**
+   - In the Cloudflare dashboard, go to **DNS → Records** for the `democratized.space` zone.
+   - Confirm there is a proxied CNAME record:
+     - **Type**: `CNAME`
+     - **Name**: `staging`
+     - **Target**: `<tunnel-UUID>.cfargotunnel.com`
+     - **Proxy status**: Proxied (orange cloud)
+   - Cloudflare typically creates this automatically when you add the public hostname, but verify
+     it exists.
+
 Once those are in place, the remainder of this document focuses on deploying dspace v3 itself.
 
 The steps below pick up after the tunnel and Traefik are live and verified. Replace example secret
