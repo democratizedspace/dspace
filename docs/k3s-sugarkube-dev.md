@@ -89,7 +89,8 @@ and configured your Cloudflare Tunnel, deploying dspace from the `v3` branch req
    - [Publish Helm chart](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
 
 2. **Deploy to cluster**: On a sugarkube control node (e.g., `sugarkube0`), run the following from
-   `~/sugarkube`:
+   `~/sugarkube`. The staging host (`staging.democratized.space`) is defined in
+   `dspace.values.staging.yaml`:
 
 ```bash
 cd ~/sugarkube
