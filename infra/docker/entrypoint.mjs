@@ -1,5 +1,4 @@
 import process from 'node:process';
-import { startMetricsServer } from './metrics.mjs';
 import { startServer } from './dist/server/entry.mjs';
 
 const log = (level, message, fields = {}) => {
@@ -70,6 +69,9 @@ async function main() {
     const metricsPort = Number.parseInt(process.env.DSPACE_METRICS_PORT ?? '', 10);
     const port = Number.isInteger(metricsPort) ? metricsPort : undefined;
     try {
+      // Lazy import metrics module only when needed to avoid prom-client resolution
+      // errors when metrics are disabled
+      const { startMetricsServer } = await import('./metrics.mjs');
       metricsServer = startMetricsServer({ port });
       const address = metricsServer.address();
       log('info', 'Metrics server enabled', {
