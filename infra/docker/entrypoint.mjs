@@ -1,5 +1,5 @@
 import process from 'node:process';
-import { startMetricsServer } from '../metrics.mjs';
+import { startMetricsServer } from './metrics.mjs';
 import { startServer } from './dist/server/entry.mjs';
 
 const log = (level, message, fields = {}) => {
