@@ -1,5 +1,9 @@
 # Deploying dspace v3 to k3s with sugarkube
 
+> **Scope:** This runbook covers **staging** (`staging.democratized.space`) using the `v3` branch.
+> The production site (`democratized.space`) currently runs v2.x from the `main` branch and is
+> managed separately.
+
 Use this runbook to take [`dspace@v3`](https://github.com/democratizedspace/dspace/tree/v3) from source to a running web server on the sugarkube
 three-server HA k3s cluster. It links directly to the sugarkube recipes, GHCR build workflows,
 and Cloudflare Tunnel notes so you can move from zero to serving traffic without hunting for
@@ -158,7 +162,7 @@ The steps below pick up after the tunnel and Traefik are live and verified. Repl
 values with real credentials and adjust the namespace or host only if your environment differs from
 `staging.democratized.space`.
 
-## Step 3: Prepare the namespace and secrets
+## Step 3: Prepare the namespace
 
 Create or reuse the dspace namespace:
 
@@ -167,18 +171,19 @@ kubectl create namespace dspace
 # If it already exists, rerun with --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-Create the secrets expected by the chart (replace placeholder values). The chart consumes
-`METRICS_TOKEN` via the `metricsToken` key, so include it alongside the database and JWT secrets:
+Alternatively, Helm can create the namespace automatically when you include `--create-namespace` in
+the install command.
 
-```bash
-kubectl -n dspace create secret generic dspace-secrets \
-  --from-literal=POSTGRES_PASSWORD='example-postgres-password' \
-  --from-literal=JWT_SECRET='example-jwt-secret' \
-  --from-literal=metricsToken='example-metrics-token'
-```
+**Note:** dspace v3 is a frontend-only deployment with no backend services. All game state is stored
+client-side (localStorage and IndexedDB), so there are no secrets required by default:
 
-If you keep credentials in a separate repo or secret manager, sync them into this namespace before
-running Helm.
+- No Postgres database connection
+- No JWT-based authentication
+- No metrics token (metrics are served unauthenticated unless you enable `METRICS_TOKEN`)
+
+If you later add optional features (e.g., protected metrics scraping), you can create secrets and
+reference them via the chart's `secret` or `env` values. For the default v3 deployment, skip secret
+creation entirely.
 
 ## Step 4: Set ingress values for `staging.democratized.space`
 
@@ -190,14 +195,13 @@ and layer the ingress block below into your copy. If you prefer to keep override
 ingress:
   enabled: true
   className: traefik
-  hosts:
-    - host: staging.democratized.space
-      paths:
-        - path: /
-          pathType: Prefix
+  host: staging.democratized.space
 ```
 
-Keep any additional settings from the sugarkube defaults (database connection info, storage, etc.).
+The chart uses a single `host` string (not a list) and creates one Ingress rule for that hostname
+with a catch-all path (`/`). TLS is disabled by default because Cloudflare terminates TLS at the
+tunnel edge before forwarding to Traefik inside the cluster.
+
 When deploying with multiple files, use `--values dspace.values.dev.yaml --values values-staging.yaml`
 so the ingress host overlays the sugarkube defaults.
 
@@ -224,7 +228,7 @@ helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
   --namespace dspace --create-namespace \
   --version "$(cat docs/apps/dspace.version)" \
   --values docs/examples/dspace.values.dev.yaml \
-  --set ingress.hosts[0].host=staging.democratized.space \
+  --set ingress.host=staging.democratized.space \
   --set ingress.className=traefik
 ```
 
@@ -244,7 +248,10 @@ through the Cloudflare Tunnel and Traefik.
 - [ ] Sugarkube cluster: `just cluster-status` is healthy.
 - [ ] Traefik: `just traefik-status` is healthy.
 - [ ] Cloudflare Tunnel: connector running (`kubectl -n cloudflare get deploy,po`) and `/ready`
-      returns 200 (`kubectl -n cloudflare port-forward <pod> 8080:8080 && curl http://localhost:8080/ready`).
+      returns 200. Verify with a two-shell port-forward:
+  - Shell 1: `kubectl -n cloudflare port-forward deploy/cloudflare-tunnel 2000:2000`
+  - Shell 2: `curl -fsS http://localhost:2000/ready`
+  - A JSON response containing `"status":200` confirms the tunnel is healthy.
 - [ ] Cloudflare route: `staging.democratized.space` →
       `http://traefik.kube-system.svc.cluster.local:80`.
 - [ ] DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
