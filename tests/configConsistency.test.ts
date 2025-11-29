@@ -12,6 +12,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parse as parseYaml } from 'yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, '..');
@@ -27,6 +28,53 @@ function readFile(relativePath: string): string {
         throw new Error(`File not found: ${fullPath}`);
     }
     return readFileSync(fullPath, 'utf8');
+}
+
+function parseYamlFile<T = unknown>(relativePath: string): T {
+    return parseYaml(readFile(relativePath)) as T;
+}
+
+interface HelmValues {
+    service: {
+        port: number;
+    };
+    probes: {
+        readinessPath: string;
+        livenessPath: string;
+    };
+}
+
+interface DockerComposeConfig {
+    services: {
+        app: {
+            ports: string[];
+            environment: string[];
+            healthcheck: {
+                test: string[];
+            };
+        };
+    };
+}
+
+interface K8sDeployment {
+    spec: {
+        template: {
+            spec: {
+                containers: Array<{
+                    ports: Array<{ containerPort: number }>;
+                    env: Array<{ name: string; value: string }>;
+                    livenessProbe?: { httpGet: { path: string; port: number } };
+                    readinessProbe?: { httpGet: { path: string; port: number } };
+                }>;
+            };
+        };
+    };
+}
+
+interface K8sService {
+    spec: {
+        ports: Array<{ port: number; targetPort: number }>;
+    };
 }
 
 describe('config consistency: Dockerfile', () => {
@@ -52,22 +100,18 @@ describe('config consistency: Dockerfile', () => {
 });
 
 describe('config consistency: Helm chart (charts/dspace)', () => {
-    const valuesYaml = readFile('charts/dspace/values.yaml');
+    const values = parseYamlFile<HelmValues>('charts/dspace/values.yaml');
 
     it('service.port matches canonical port', () => {
-        expect(valuesYaml).toMatch(new RegExp(`service:\\s*\\n\\s*type:\\s*\\w+\\s*\\n\\s*port:\\s*${CANONICAL_PORT}`));
+        expect(values.service.port).toBe(CANONICAL_PORT);
     });
 
     it('readiness probe uses canonical health endpoint', () => {
-        expect(valuesYaml).toMatch(
-            new RegExp(`readinessPath:\\s*${CANONICAL_HEALTH_PATH}`)
-        );
+        expect(values.probes.readinessPath).toBe(CANONICAL_HEALTH_PATH);
     });
 
     it('liveness probe uses canonical liveness endpoint', () => {
-        expect(valuesYaml).toMatch(
-            new RegExp(`livenessPath:\\s*${CANONICAL_LIVENESS_PATH}`)
-        );
+        expect(values.probes.livenessPath).toBe(CANONICAL_LIVENESS_PATH);
     });
 });
 
@@ -89,59 +133,56 @@ describe('config consistency: Helm deployment template', () => {
 });
 
 describe('config consistency: docker-compose.yml', () => {
-    const dockerCompose = readFile('docker-compose.yml');
+    const dockerCompose = parseYamlFile<DockerComposeConfig>('docker-compose.yml');
+    const appService = dockerCompose.services.app;
 
     it('port mapping uses canonical port', () => {
-        expect(dockerCompose).toMatch(
-            new RegExp(`ports:\\s*\\n\\s*-\\s*['"]?${CANONICAL_PORT}:${CANONICAL_PORT}`)
-        );
+        const portMapping = appService.ports.find((p) => p.includes(String(CANONICAL_PORT)));
+        expect(portMapping).toBeDefined();
+        expect(portMapping).toBe(`${CANONICAL_PORT}:${CANONICAL_PORT}`);
     });
 
     it('PORT environment variable is canonical port', () => {
-        expect(dockerCompose).toMatch(
-            new RegExp(`PORT\\s*=\\s*${CANONICAL_PORT}`)
-        );
+        const portEnv = appService.environment.find((e) => e.startsWith('PORT='));
+        expect(portEnv).toBe(`PORT=${CANONICAL_PORT}`);
     });
 
     it('healthcheck uses canonical health endpoint', () => {
-        expect(dockerCompose).toContain(CANONICAL_HEALTH_PATH);
+        const healthcheckCmd = appService.healthcheck.test.join(' ');
+        expect(healthcheckCmd).toContain(CANONICAL_HEALTH_PATH);
     });
 });
 
 describe('config consistency: infra/k8s manifests', () => {
-    const deployment = readFile('infra/k8s/dspace-deployment.yaml');
-    const service = readFile('infra/k8s/dspace-service.yaml');
+    const deployment = parseYamlFile<K8sDeployment>('infra/k8s/dspace-deployment.yaml');
+    const service = parseYamlFile<K8sService>('infra/k8s/dspace-service.yaml');
+    const container = deployment.spec.template.spec.containers[0];
 
     it('deployment container port is canonical', () => {
-        expect(deployment).toMatch(
-            new RegExp(`containerPort:\\s*${CANONICAL_PORT}`)
-        );
+        expect(container.ports[0].containerPort).toBe(CANONICAL_PORT);
     });
 
     it('deployment PORT env is canonical', () => {
-        expect(deployment).toMatch(
-            new RegExp(`value:\\s*["']?${CANONICAL_PORT}["']?`)
-        );
+        const portEnv = container.env.find((e) => e.name === 'PORT');
+        expect(portEnv?.value).toBe(String(CANONICAL_PORT));
     });
 
     it('deployment readiness probe uses canonical health endpoint', () => {
-        expect(deployment).toMatch(
-            new RegExp(`readinessProbe:[\\s\\S]*path:\\s*${CANONICAL_HEALTH_PATH}`)
-        );
+        expect(container.readinessProbe?.httpGet.path).toBe(CANONICAL_HEALTH_PATH);
+        expect(container.readinessProbe?.httpGet.port).toBe(CANONICAL_PORT);
     });
 
     it('deployment liveness probe uses canonical liveness endpoint', () => {
-        expect(deployment).toMatch(
-            new RegExp(`livenessProbe:[\\s\\S]*path:\\s*${CANONICAL_LIVENESS_PATH}`)
-        );
+        expect(container.livenessProbe?.httpGet.path).toBe(CANONICAL_LIVENESS_PATH);
+        expect(container.livenessProbe?.httpGet.port).toBe(CANONICAL_PORT);
     });
 
     it('service port is canonical', () => {
-        expect(service).toMatch(new RegExp(`port:\\s*${CANONICAL_PORT}`));
+        expect(service.spec.ports[0].port).toBe(CANONICAL_PORT);
     });
 
     it('service targetPort is canonical', () => {
-        expect(service).toMatch(new RegExp(`targetPort:\\s*${CANONICAL_PORT}`));
+        expect(service.spec.ports[0].targetPort).toBe(CANONICAL_PORT);
     });
 });
 

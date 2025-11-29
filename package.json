@@ -63,7 +63,8 @@
     "ts-jest": "^29.4.1",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4",
-    "wait-on": "^7.0.1"
+    "wait-on": "^7.0.1",
+    "yaml": "^2.8.1"
   },
   "dependencies": {
     "openai": "^5.16.0"
