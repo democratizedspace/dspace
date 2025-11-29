@@ -90,7 +90,7 @@ and configured your Cloudflare Tunnel, deploying dspace from the `v3` branch req
 
 2. **Deploy to cluster**: On a sugarkube control node (e.g., `sugarkube0`), run the following from
    `~/sugarkube`. The staging host (`staging.democratized.space`) is defined in
-   `dspace.values.staging.yaml`:
+   `docs/examples/dspace.values.staging.yaml`:
 
 ```bash
 cd ~/sugarkube
@@ -241,9 +241,9 @@ The chart uses a single `host` string (not a list) and creates one Ingress rule 
 with a catch-all path (`/`). TLS is disabled by default because Cloudflare terminates TLS at the
 tunnel edge before forwarding to Traefik inside the cluster.
 
-Deploys from the Pis are run from `~/sugarkube` using `just helm-oci-install`, which is already
-wired to use both `dspace.values.dev.yaml` and `dspace.values.staging.yaml` together. No manual
-creation of a values file is required.
+Deploys from the Pis are run from `~/sugarkube` using `just helm-oci-install` with both
+`dspace.values.dev.yaml` and `dspace.values.staging.yaml` passed via the `values=` parameter. No
+manual creation of a values file is required.
 
 ## Step 5: Install or upgrade the Helm release
 
