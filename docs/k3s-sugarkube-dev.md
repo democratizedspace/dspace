@@ -244,7 +244,8 @@ through the Cloudflare Tunnel and Traefik.
 - [ ] Sugarkube cluster: `just cluster-status` is healthy.
 - [ ] Traefik: `just traefik-status` is healthy.
 - [ ] Cloudflare Tunnel: connector running (`kubectl -n cloudflare get deploy,po`) and `/ready`
-      returns 200 (`kubectl -n cloudflare port-forward <pod> 8080:8080 && curl http://localhost:8080/ready`).
+      returns 200 (in one shell: `kubectl -n cloudflare port-forward deploy/cloudflare-tunnel 2000:2000`;
+      in another: `curl -fsS http://localhost:2000/ready`).
 - [ ] Cloudflare route: `staging.democratized.space` →
       `http://traefik.kube-system.svc.cluster.local:80`.
 - [ ] DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
