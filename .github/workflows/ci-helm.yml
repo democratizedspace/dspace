@@ -39,6 +39,9 @@ jobs:
       - name: Build chart dependencies
         run: helm dependency build charts/dspace
 
+      - name: Verify chart version sync
+        run: bash scripts/check-dspace-chart-version.sh
+
       - name: Lint chart
         run: helm lint charts/dspace
 
