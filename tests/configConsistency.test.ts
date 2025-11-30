@@ -240,9 +240,10 @@ describe('config consistency: health endpoint implementation', () => {
         expect(livez).toContain('buildLivezResponse');
     });
 
-    it('health payload returns ok status and uptime', () => {
+    it('health payload returns readiness and liveness statuses with uptime', () => {
         const helpers = readFile('frontend/src/utils/runtimeEndpoints.ts');
-        expect(helpers).toContain("status: 'ok'");
+        expect(helpers).toContain("'ready'");
+        expect(helpers).toContain("'alive'");
         expect(helpers).toContain('uptimeSeconds');
     });
 
