@@ -31,6 +31,21 @@ jobs:
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || '' }}
 
+      - name: Verify chart and docs versions match
+        run: |
+          chart_version=$(grep '^version:' charts/dspace/Chart.yaml | awk '{print $2}')
+          doc_version=$(grep -E '^[0-9]' docs/apps/dspace.version | head -n 1)
+
+          if [ -z "${doc_version}" ]; then
+            echo "docs/apps/dspace.version is missing the chart version" >&2
+            exit 1
+          fi
+
+          if [ "${chart_version}" != "${doc_version}" ]; then
+            echo "Chart version (${chart_version}) does not match docs/apps/dspace.version (${doc_version})" >&2
+            exit 1
+          fi
+
       - name: Setup Helm
         uses: azure/setup-helm@v4
         with:

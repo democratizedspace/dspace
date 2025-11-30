@@ -34,7 +34,8 @@ prerequisites.
   - Example image reference: `ghcr.io/democratizedspace/dspace:v3-latest`.
 - The Helm chart is published as an OCI artifact to
   `oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>`, where `<chartVersion>` comes
-  from `charts/dspace/Chart.yaml`.
+  from `charts/dspace/Chart.yaml` (currently `3.0.0` on the `v3` branch). The same chart version
+  is mirrored in `docs/apps/dspace.version` for the sugarkube helpers.
 
 ## Assumptions and prerequisites
 
@@ -134,7 +135,7 @@ This prevents `main` builds from overwriting `v3-latest` and keeps environments 
 crane ls ghcr.io/democratizedspace/dspace | grep "^<branch>-"
 
 # Check available chart versions
-helm pull oci://ghcr.io/democratizedspace/charts/dspace --version <version> --untar
+helm pull oci://ghcr.io/democratizedspace/charts/dspace --version "$(cat docs/apps/dspace.version)" --untar
 ```
 
 ## Step 2: Confirm the sugarkube + Cloudflare Tunnel prerequisites

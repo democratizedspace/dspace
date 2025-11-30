@@ -1,0 +1,3 @@
+# Helm chart version for dspace v3 deployments.
+# This file is read by sugarkube's helm-oci helpers and must match charts/dspace/Chart.yaml.
+3.0.0
