@@ -88,8 +88,10 @@ jobs:
 
       - name: Smoke test - verify container boots and serves requests
         run: |
-          # Start container in background
-          docker run -d --name dspace-smoke-test -p 127.0.0.1:8080:8080 dspace-test:latest
+          # Start container in background with NODE_OPTIONS to show uncaught exceptions
+          docker run -d --name dspace-smoke-test -p 127.0.0.1:8080:8080 \
+            -e NODE_OPTIONS="--unhandled-rejections=warn" \
+            dspace-test:latest
           
           # Wait for server to start responding (up to 60 seconds)
           echo "Waiting for server to start..."
@@ -112,8 +114,10 @@ jobs:
               echo "--- Response body (first 500 chars) ---"
               echo "$BODY" | head -c 500
               echo ""
-              echo "--- Container logs ---"
-              docker logs dspace-smoke-test 2>&1 | tail -50
+              echo "--- Container logs (stdout and stderr) ---"
+              docker logs dspace-smoke-test 2>&1 | tail -100
+              echo "--- Node.js process info ---"
+              docker exec dspace-smoke-test sh -c 'ps aux' 2>&1 || true
               echo "=== End debug output ==="
             else
               echo "Attempt $i: HTTP $HTTP_CODE"
@@ -125,8 +129,10 @@ jobs:
             echo "=== Server health check failed after 60 seconds ==="
             echo "--- Full container logs ---"
             docker logs dspace-smoke-test 2>&1
-            echo "--- Final curl response ---"
+            echo "--- Final verbose curl response ---"
             curl -v --max-time 5 http://127.0.0.1:8080/ 2>&1 || true
+            echo "--- Test healthz endpoint ---"
+            curl -v --max-time 5 http://127.0.0.1:8080/healthz 2>&1 || true
             docker stop dspace-smoke-test
             docker rm dspace-smoke-test
             exit 1

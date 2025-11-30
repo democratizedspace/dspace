@@ -10,6 +10,19 @@ const log = (level, message, fields = {}) => {
   console.log(JSON.stringify(payload));
 };
 
+// Log uncaught exceptions and unhandled rejections for debugging SSR issues
+process.on('uncaughtException', (error) => {
+  log('error', 'Uncaught exception', {
+    error: error instanceof Error ? error.stack || error.message : String(error),
+  });
+});
+
+process.on('unhandledRejection', (reason) => {
+  log('error', 'Unhandled promise rejection', {
+    reason: reason instanceof Error ? reason.stack || reason.message : String(reason),
+  });
+});
+
 let shutdownRequested = false;
 let metricsServer;
 
