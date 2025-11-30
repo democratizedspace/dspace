@@ -1,14 +1,13 @@
+import type { APIRoute } from 'astro';
+import { buildHealthPayload } from './healthz.ts';
+
 export const prerender = false;
 
-export async function GET() {
-    return new Response(
-        JSON.stringify({
-            status: 'alive',
-            uptimeSeconds: process.uptime(),
-            timestamp: new Date().toISOString(),
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
-}
+export const GET: APIRoute = async () =>
+    new Response(JSON.stringify(buildHealthPayload()), {
+        status: 200,
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Cache-Control': 'no-store',
+        },
+    });

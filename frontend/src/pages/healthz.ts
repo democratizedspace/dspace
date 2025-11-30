@@ -1,18 +1,23 @@
-import { parseFeatureFlags } from '../utils/featureFlags';
+import type { APIRoute } from 'astro';
 
 export const prerender = false;
 
-export async function GET() {
-    const { tokens: featureFlags } = parseFeatureFlags(process.env.DSPACE_FEATURE_FLAGS);
+const startedAt = Date.now();
 
-    return new Response(
-        JSON.stringify({
-            status: 'ready',
-            timestamp: new Date().toISOString(),
-            features: featureFlags,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
-}
+export const buildHealthPayload = () => ({
+    status: 'ok',
+    uptimeSeconds: Number(process.uptime().toFixed(0)),
+    timestamp: new Date().toISOString(),
+    version: process.env.npm_package_version,
+    environment: process.env.NODE_ENV || 'production',
+    startedAt: new Date(startedAt).toISOString(),
+});
+
+export const GET: APIRoute = async () =>
+    new Response(JSON.stringify(buildHealthPayload()), {
+        status: 200,
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Cache-Control': 'no-store',
+        },
+    });

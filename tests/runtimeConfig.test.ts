@@ -4,17 +4,25 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { GET as getRuntimeConfig } from '../frontend/src/pages/config.json.ts';
 
 describe('runtime config service', () => {
-    const originalEnv = process.env.DSPACE_FEATURE_FLAGS;
+    const originalFeatureFlags = process.env.DSPACE_FEATURE_FLAGS;
+    const originalOfflineOverride = process.env.DSPACE_OFFLINE_WORKER_ENABLED;
 
     beforeEach(() => {
         delete process.env.DSPACE_FEATURE_FLAGS;
+        delete process.env.DSPACE_OFFLINE_WORKER_ENABLED;
     });
 
     afterEach(() => {
-        if (originalEnv === undefined) {
+        if (originalFeatureFlags === undefined) {
             delete process.env.DSPACE_FEATURE_FLAGS;
         } else {
-            process.env.DSPACE_FEATURE_FLAGS = originalEnv;
+            process.env.DSPACE_FEATURE_FLAGS = originalFeatureFlags;
+        }
+
+        if (originalOfflineOverride === undefined) {
+            delete process.env.DSPACE_OFFLINE_WORKER_ENABLED;
+        } else {
+            process.env.DSPACE_OFFLINE_WORKER_ENABLED = originalOfflineOverride;
         }
     });
 
@@ -32,5 +40,14 @@ describe('runtime config service', () => {
         const body = await response.json();
         expect(body.offlineWorker?.enabled).toBe(false);
         expect(body.featureFlags).toContain('offlineWorker.enabled=false');
+    });
+
+    it('respects the DSPACE_OFFLINE_WORKER_ENABLED env override', async () => {
+        process.env.DSPACE_OFFLINE_WORKER_ENABLED = 'false';
+        const response = await getRuntimeConfig();
+        expect(response.status).toBe(200);
+        expect(response.headers.get('cache-control')).toBe('no-store');
+        const body = await response.json();
+        expect(body.offlineWorker?.enabled).toBe(false);
     });
 });
