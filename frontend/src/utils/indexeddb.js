@@ -1,5 +1,6 @@
 // import { log } from './devLog.js';
 import { runMigrations } from './migrations.js';
+import { isBrowser } from './ssr.js';
 
 // Legacy DB helpers (kept for backward compatibility)
 const DB_NAME = 'dspaceDB';
@@ -9,8 +10,19 @@ const LEGACY_STORE_NAME = 'quests';
 let dbInstance = null;
 
 function getIndexedDB() {
-    const g = typeof window !== 'undefined' ? window : globalThis;
-    return g.indexedDB || g.webkitIndexedDB || g.mozIndexedDB || g.msIndexedDB || null;
+    // In browser, use window.indexedDB
+    if (isBrowser) {
+        return (
+            window.indexedDB ||
+            window.webkitIndexedDB ||
+            window.mozIndexedDB ||
+            window.msIndexedDB ||
+            null
+        );
+    }
+    // In Node.js, check globalThis for polyfills (e.g., fake-indexeddb for testing)
+    const g = globalThis;
+    return g.indexedDB || null;
 }
 
 function hasIndexedDB() {

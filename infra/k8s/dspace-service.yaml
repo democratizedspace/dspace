@@ -6,6 +6,6 @@ spec:
   selector:
     app: dspace-app
   ports:
-  - port: 3002
-    targetPort: 3002
+  - port: 8080
+    targetPort: 8080
   type: ClusterIP

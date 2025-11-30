@@ -1,5 +1,7 @@
+import { isBrowser } from './ssr.js';
+
 export const getLocalStorage = () => {
-    if (!window.localStorage) {
+    if (!isBrowser || !window.localStorage) {
         console.log('Local storage is not supported by this browser.');
         return [];
     }

@@ -5,6 +5,7 @@ import {
     isUsingLocalStorage,
 } from './gameState/common.js';
 import { addItems } from './gameState/inventory.js';
+import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
@@ -130,6 +131,9 @@ export const importV1V2 = (itemList) => {
 
 // v2 -> v3
 export const importV2V3 = async () => {
+    // Only run in browser environment
+    if (!isBrowser) return;
+
     let migrated;
     try {
         const legacy = localStorage.getItem('gameState');
@@ -158,7 +162,7 @@ export const importV2V3 = async () => {
 
 // Auto-migrate legacy v2 state on first v3 load when localStorage data is present.
 try {
-    if (typeof window !== 'undefined' && window.localStorage?.getItem('gameState')) {
+    if (isBrowser && localStorage.getItem('gameState')) {
         importV2V3();
     }
 } catch {

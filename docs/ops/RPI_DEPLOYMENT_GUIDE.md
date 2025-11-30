@@ -58,7 +58,14 @@ From any node, start the container:
 docker compose up --build -d
 ```
 
-The `app` service exposes DSPACE on port **3002**. Create a Cloudflare Tunnel pointing at `http://localhost:3002` to serve the game publicly.
+The `app` service exposes DSPACE on port **8080**. Create a Cloudflare Tunnel pointing at `http://localhost:8080` to serve the game publicly.
+
+### Health Endpoints
+
+The container provides the following health endpoints:
+
+- `/healthz` – Readiness probe (returns 200 when ready to accept traffic)
+- `/livez` – Liveness probe (returns 200 when the process is alive)
 
 ## Deploying on a k3s Cluster
 
@@ -75,15 +82,13 @@ sudo cat /var/lib/rancher/k3s/server/node-token
 curl -sfL https://get.k3s.io | K3S_URL=https://<CONTROL_PLANE_IP>:6443 K3S_TOKEN=<NODE_TOKEN> sh -
 ```
 
-Build the container images and load them into k3s:
+Build the container image and load it into k3s:
 
 ```bash
-# DSPACE
-docker build -t dspace-app:latest -f frontend/Dockerfile ./frontend
+# DSPACE (uses root Dockerfile)
+docker build -t dspace-app:latest .
 k3s ctr images import dspace-app:latest
 ```
-
-The Dockerfile installs dependencies with `--ignore-scripts` so build steps work even without dev dependencies.
 
 Apply the manifests:
 
@@ -91,7 +96,7 @@ Apply the manifests:
 kubectl apply -f infra/k8s/
 ```
 
-`infra/k8s/dspace-deployment.yaml` and `infra/k8s/dspace-service.yaml` describe the DSPACE Deployment and Service.
+`infra/k8s/dspace-deployment.yaml` and `infra/k8s/dspace-service.yaml` describe the DSPACE Deployment and Service (port 8080, with `/healthz` and `/livez` probes).
 
 ## GitHub Deployment Workflow
 

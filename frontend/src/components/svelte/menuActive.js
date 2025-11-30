@@ -1,3 +1,5 @@
+import { isBrowser } from '../../utils/ssr.js';
+
 const normalizePathname = (value) => {
     if (typeof value !== 'string') {
         return '';
@@ -50,11 +52,7 @@ const matchesTarget = (current, target) => {
 export const isMenuItemActive = (pathname, item) => {
     const target = normalizeHref(item?.href);
     const current = normalizePathname(
-        typeof pathname === 'string'
-            ? pathname
-            : typeof window !== 'undefined'
-            ? window.location.pathname
-            : ''
+        typeof pathname === 'string' ? pathname : isBrowser ? window.location.pathname : ''
     );
 
     if (!target || !current) {

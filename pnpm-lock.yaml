@@ -84,6 +84,9 @@ importers:
       wait-on:
         specifier: ^7.0.1
         version: 7.2.0
+      yaml:
+        specifier: ^2.8.1
+        version: 2.8.1
 
   frontend:
     dependencies:

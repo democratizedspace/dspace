@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { isBrowser } from '../ssr.js';
 
 const DB_NAME = 'dspaceGameState';
 const DB_VERSION = 1;
@@ -21,7 +22,7 @@ function warnFallback() {
     warnedFallback = true;
     const message =
         'IndexedDB is unavailable; falling back to localStorage. Storage may be limited.';
-    if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+    if (isBrowser && typeof window.alert === 'function') {
         window.alert(message);
     } else {
         console.warn(message);
@@ -29,7 +30,7 @@ function warnFallback() {
 }
 
 function openDB() {
-    if (!('indexedDB' in globalThis)) {
+    if (!isBrowser || !('indexedDB' in globalThis)) {
         return Promise.reject(new Error('IndexedDB not supported'));
     }
     if (!dbPromise) {
@@ -109,6 +110,7 @@ function lsKey(store) {
 }
 
 function lsRead(store) {
+    if (!isBrowser) return undefined;
     try {
         const raw = localStorage.getItem(lsKey(store));
         return raw ? JSON.parse(raw) : undefined;
@@ -119,6 +121,7 @@ function lsRead(store) {
 }
 
 function lsWrite(store, value) {
+    if (!isBrowser) return;
     try {
         localStorage.setItem(lsKey(store), JSON.stringify(value));
     } catch (err) {
@@ -127,6 +130,7 @@ function lsWrite(store, value) {
 }
 
 function lsClear(store) {
+    if (!isBrowser) return;
     try {
         localStorage.removeItem(lsKey(store));
     } catch (err) {
@@ -135,6 +139,8 @@ function lsClear(store) {
 }
 
 async function read(store) {
+    // On server, return undefined - storage is client-only
+    if (!isBrowser) return undefined;
     const localValue = lsRead(store);
     if (useLocalStorage) return localValue;
     try {
@@ -156,6 +162,8 @@ async function read(store) {
 }
 
 async function write(store, value, options = {}) {
+    // On server, skip all persistence - storage is client-only
+    if (!isBrowser) return;
     const { skipLocalStorage = false } = options;
 
     if (!skipLocalStorage) {
@@ -172,6 +180,8 @@ async function write(store, value, options = {}) {
 }
 
 async function clearStore(store) {
+    // On server, skip all persistence - storage is client-only
+    if (!isBrowser) return;
     lsClear(store);
     if (useLocalStorage) return;
     try {
@@ -222,19 +232,24 @@ export const validateGameState = (state) => {
 let gameState = initializeGameState();
 export const state = writable(gameState);
 
-export const ready = (async () => {
-    try {
-        const stored = await read(STATE_STORE);
-        if (stored) {
-            gameState = validateGameState(stored);
-            state.set(gameState);
-        }
-    } catch (err) {
-        console.error('Error loading game state from IndexedDB:', err);
-    } finally {
-        readyResolved = true;
-    }
-})();
+// Only execute in browser environment to avoid SSR issues with IndexedDB
+export const ready = isBrowser
+    ? (async () => {
+          try {
+              const stored = await read(STATE_STORE);
+              if (stored) {
+                  gameState = validateGameState(stored);
+                  state.set(gameState);
+              }
+          } catch (err) {
+              console.error('Error loading game state from IndexedDB:', err);
+          } finally {
+              readyResolved = true;
+          }
+      })()
+    : Promise.resolve().then(() => {
+          readyResolved = true;
+      });
 
 let writeQueue = Promise.resolve();
 
@@ -290,7 +305,16 @@ export const closeGameStateDatabaseForTesting = async () => {
     }
 };
 
-export const exportGameStateString = () => btoa(JSON.stringify(gameState));
+export const exportGameStateString = () => {
+    const jsonStr = JSON.stringify(gameState);
+    if (typeof btoa === 'function') {
+        return btoa(jsonStr);
+    }
+    if (typeof Buffer !== 'undefined') {
+        return Buffer.from(jsonStr, 'utf8').toString('base64');
+    }
+    throw new Error('Base64 encoding is not supported in this environment');
+};
 
 const decodeBase64 = (value) => {
     if (typeof atob === 'function') {

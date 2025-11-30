@@ -217,8 +217,13 @@ export const constructLink = (astroRedirect, url, redirectLink) => {
 
 export const base64ToObject = (base64) => {
     try {
-        // decode base64 string
-        const urlEncoded = atob(base64);
+        // decode base64 string - use Buffer on server, atob in browser
+        let urlEncoded;
+        if (typeof atob !== 'undefined') {
+            urlEncoded = atob(base64);
+        } else {
+            urlEncoded = Buffer.from(base64, 'base64').toString('binary');
+        }
 
         // URL decode
         const urlDecoded = decodeURIComponent(urlEncoded);
@@ -353,7 +358,11 @@ export function formatTime(date) {
     return timeFormats;
 }
 
-export function getRelativeTimeString(date, lang = navigator.language) {
+export function getRelativeTimeString(date, lang = undefined) {
+    // Use navigator.language in browser, fall back to 'en' on server
+    if (lang === undefined) {
+        lang = typeof navigator !== 'undefined' ? navigator.language : 'en';
+    }
     // Allow dates or times to be passed
     const timeMs = typeof date === 'number' ? date : date.getTime();
 
@@ -542,11 +551,19 @@ export function arrayBufferToBase64(buffer) {
     for (let i = 0; i < len; i++) {
         binary += String.fromCharCode(bytes[i]);
     }
-    return window.btoa(binary);
+    // Use Buffer on server, btoa in browser
+    if (typeof btoa !== 'undefined') {
+        return btoa(binary);
+    }
+    return Buffer.from(binary, 'binary').toString('base64');
 }
 
 export async function getFileAsBase64(filename) {
     if (!filename) {
+        return '';
+    }
+    // FileReader is browser-only, return empty string on server
+    if (typeof FileReader === 'undefined') {
         return '';
     }
     try {

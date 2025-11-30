@@ -1,6 +1,4 @@
 import process from 'node:process';
-import { startMetricsServer } from '../metrics.mjs';
-import { startServer } from './dist/server/entry.mjs';
 
 const log = (level, message, fields = {}) => {
   const payload = {
@@ -12,9 +10,20 @@ const log = (level, message, fields = {}) => {
   console.log(JSON.stringify(payload));
 };
 
+// Log uncaught exceptions and unhandled rejections for debugging SSR issues
+process.on('uncaughtException', (error) => {
+  log('error', 'Uncaught exception', {
+    error: error instanceof Error ? error.stack || error.message : String(error),
+  });
+});
+
+process.on('unhandledRejection', (reason) => {
+  log('error', 'Unhandled promise rejection', {
+    reason: reason instanceof Error ? reason.stack || reason.message : String(reason),
+  });
+});
+
 let shutdownRequested = false;
-let control;
-let donePromise;
 let metricsServer;
 
 async function shutdown(signal) {
@@ -35,12 +44,6 @@ async function shutdown(signal) {
         });
       });
       metricsServer = undefined;
-    }
-    if (control?.stop) {
-      await control.stop();
-    }
-    if (donePromise) {
-      await donePromise;
     }
     log('info', 'Server stopped cleanly', { signal });
     process.exit(0);
@@ -70,6 +73,9 @@ async function main() {
     const metricsPort = Number.parseInt(process.env.DSPACE_METRICS_PORT ?? '', 10);
     const port = Number.isInteger(metricsPort) ? metricsPort : undefined;
     try {
+      // Lazy import metrics module only when needed to avoid prom-client resolution
+      // errors when metrics are disabled
+      const { startMetricsServer } = await import('./metrics.mjs');
       metricsServer = startMetricsServer({ port });
       const address = metricsServer.address();
       log('info', 'Metrics server enabled', {
@@ -81,18 +87,16 @@ async function main() {
       });
     }
   }
-  const { server, done } = await startServer();
-  control = server;
-  donePromise = done;
-  const host = server.host ?? '0.0.0.0';
-  const port = server.port;
+
+  // Import the Astro server entry - in standalone mode, this auto-starts the server
+  // when the module is loaded, so we don't need to call startServer() ourselves
+  await import('./dist/server/entry.mjs');
+
   log('info', 'DSPACE server started', {
-    host,
-    port,
+    host: process.env.HOST || '0.0.0.0',
+    port: process.env.PORT || 8080,
     featureFlags: process.env.DSPACE_FEATURE_FLAGS || '',
   });
-  await done;
-  log('info', 'HTTP server closed');
 }
 
 main().catch((error) => {

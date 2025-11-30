@@ -3,11 +3,12 @@
     import { getItemCount } from '../../utils/gameState/inventory.js';
     import { onMount } from 'svelte';
     import { isMenuItemActive } from './menuActive.js';
+    import { isBrowser } from '../../utils/ssr.js';
 
     export let pathname;
 
-    // get avatarUrl from localStorage key of same name
-    let avatarUrl = localStorage.getItem('avatarUrl');
+    // get avatarUrl from localStorage key of same name (SSR-safe)
+    let avatarUrl = isBrowser ? localStorage.getItem('avatarUrl') : null;
     let mounted = false;
 
     const toggleShowUnpinned = () => {
