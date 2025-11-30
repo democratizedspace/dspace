@@ -95,19 +95,38 @@ jobs:
           echo "Waiting for server to start..."
           SUCCESS=false
           for i in {1..60}; do
-            HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 http://127.0.0.1:8080/ 2>/dev/null || echo "000")
+            # Get HTTP response code and body for debugging
+            RESPONSE=$(curl -s -w '\n%{http_code}' --max-time 5 http://127.0.0.1:8080/ 2>/dev/null || echo -e "\n000")
+            HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+            BODY=$(echo "$RESPONSE" | head -n -1)
+            
             if [ "$HTTP_CODE" = "200" ]; then
               echo "Server is responding with HTTP 200!"
               SUCCESS=true
               break
             fi
-            echo "Attempt $i: HTTP $HTTP_CODE, waiting..."
+            
+            # Show verbose output for debugging SSR issues
+            if [ "$i" -eq 5 ] || [ "$i" -eq 10 ] || [ "$i" -eq 30 ]; then
+              echo "=== Attempt $i: HTTP $HTTP_CODE ==="
+              echo "--- Response body (first 500 chars) ---"
+              echo "$BODY" | head -c 500
+              echo ""
+              echo "--- Container logs ---"
+              docker logs dspace-smoke-test 2>&1 | tail -50
+              echo "=== End debug output ==="
+            else
+              echo "Attempt $i: HTTP $HTTP_CODE"
+            fi
             sleep 1
           done
           
           if [ "$SUCCESS" = "false" ]; then
-            echo "Server health check failed after 60 seconds"
-            docker logs dspace-smoke-test
+            echo "=== Server health check failed after 60 seconds ==="
+            echo "--- Full container logs ---"
+            docker logs dspace-smoke-test 2>&1
+            echo "--- Final curl response ---"
+            curl -v --max-time 5 http://127.0.0.1:8080/ 2>&1 || true
             docker stop dspace-smoke-test
             docker rm dspace-smoke-test
             exit 1
