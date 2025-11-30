@@ -128,8 +128,8 @@ describe('SSR Safety - Static analysis of source files', () => {
                 const filePath = path.join(frontendDir, file);
                 const content = fs.readFileSync(filePath, 'utf8');
 
-                // Extract script content
-                const scriptMatch = content.match(/<script[^>]*>([\s\S]*?)<\/script>/);
+                // Extract script content (case-insensitive to handle any casing)
+                const scriptMatch = content.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
                 if (!scriptMatch) continue;
 
                 const scriptContent = scriptMatch[1];
@@ -162,8 +162,11 @@ describe('SSR Safety - Static analysis of source files', () => {
                     }
 
                     // Track function definition entry (const fn = () => { or function fn() { or async function)
+                    // Matches: const fn = () =>, const fn = (x) =>, const fn = x =>, async function fn()
                     const isFunctionDef =
-                        /^\s*(const|let|var)\s+\w+\s*=\s*(async\s+)?(\([^)]*\)|)\s*=>/.test(line) ||
+                        /^\s*(const|let|var)\s+\w+\s*=\s*(async\s+)?(?:\([^)]*\)|\w+)\s*=>/.test(
+                            line
+                        ) ||
                         /^\s*(async\s+)?function\s+\w+/.test(line) ||
                         /^\s*(const|let|var)\s+\w+\s*=\s*(async\s+)?function/.test(line);
 
@@ -229,7 +232,7 @@ describe('SSR Safety - Static analysis of source files', () => {
                 const filePath = path.join(frontendDir, file);
                 const content = fs.readFileSync(filePath, 'utf8');
 
-                const scriptMatch = content.match(/<script[^>]*>([\s\S]*?)<\/script>/);
+                const scriptMatch = content.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
                 if (!scriptMatch) continue;
 
                 const scriptContent = scriptMatch[1];
@@ -262,8 +265,11 @@ describe('SSR Safety - Static analysis of source files', () => {
                     }
 
                     // Track function definition entry
+                    // Matches: const fn = () =>, const fn = (x) =>, const fn = x =>, async function fn()
                     const isFunctionDef =
-                        /^\s*(const|let|var)\s+\w+\s*=\s*(async\s+)?(\([^)]*\)|)\s*=>/.test(line) ||
+                        /^\s*(const|let|var)\s+\w+\s*=\s*(async\s+)?(?:\([^)]*\)|\w+)\s*=>/.test(
+                            line
+                        ) ||
                         /^\s*(async\s+)?function\s+\w+/.test(line) ||
                         /^\s*(const|let|var)\s+\w+\s*=\s*(async\s+)?function/.test(line);
 
