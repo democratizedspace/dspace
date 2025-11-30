@@ -11,7 +11,7 @@ function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
     return flagOverride ?? true;
 }
 
-function buildHeaders(existing?: HeadersInit): HeadersInit {
+function buildHeaders(): HeadersInit {
     return {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'no-store',
