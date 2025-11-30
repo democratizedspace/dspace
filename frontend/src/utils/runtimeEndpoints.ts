@@ -1,8 +1,6 @@
 import type { FeatureFlagParseResult } from './featureFlags';
 import { parseFeatureFlags, readBooleanOverride } from './featureFlags';
 
-const startedAt = Date.now();
-
 function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
     const envOverride = readBooleanOverride(process.env.DSPACE_OFFLINE_WORKER_ENABLED);
     if (envOverride !== undefined) {
@@ -14,23 +12,10 @@ function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
 }
 
 function buildHeaders(existing?: HeadersInit): HeadersInit {
-    const baseHeaders: Record<string, string> = {
+    return {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'no-store',
     };
-
-    if (!existing) {
-        return baseHeaders;
-    }
-
-    const merged = new Headers(existing);
-    for (const [key, value] of Object.entries(baseHeaders)) {
-        if (!merged.has(key)) {
-            merged.set(key, value);
-        }
-    }
-
-    return merged;
 }
 
 export function buildRuntimeConfigResponse(): Response {
@@ -50,25 +35,29 @@ export function buildRuntimeConfigResponse(): Response {
     });
 }
 
-function buildHealthBody() {
+function buildHealthBody(status: 'ready' | 'alive') {
+    const flags = parseFeatureFlags(process.env.DSPACE_FEATURE_FLAGS);
+    const startedAt = new Date(Date.now() - process.uptime() * 1000);
+
     return {
-        status: 'ok',
+        status,
         uptimeSeconds: process.uptime(),
-        startedAt: new Date(startedAt).toISOString(),
+        startedAt: startedAt.toISOString(),
         timestamp: new Date().toISOString(),
         version: process.env.DSPACE_VERSION || process.env.npm_package_version || 'unknown',
+        features: flags.tokens,
     };
 }
 
 export function buildHealthResponse(): Response {
-    return new Response(JSON.stringify(buildHealthBody()), {
+    return new Response(JSON.stringify(buildHealthBody('ready')), {
         status: 200,
         headers: buildHeaders(),
     });
 }
 
 export function buildLivezResponse(): Response {
-    return new Response(JSON.stringify(buildHealthBody()), {
+    return new Response(JSON.stringify(buildHealthBody('alive')), {
         status: 200,
         headers: buildHeaders(),
     });

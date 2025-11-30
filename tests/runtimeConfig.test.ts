@@ -77,9 +77,10 @@ describe('runtime endpoints', () => {
     for (const res of [healthResponse, liveResponse]) {
       expect(res.status).toBe(200);
       const body = await res.json();
-      expect(body.status).toBe('ok');
+      expect(body.status === 'ready' || body.status === 'alive').toBe(true);
       expect(body.uptimeSeconds).toBeGreaterThanOrEqual(0);
       expect(body.version).toBe('test-version');
+      expect(body.features).toStrictEqual([]);
     }
   });
 });
