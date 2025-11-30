@@ -305,7 +305,16 @@ export const closeGameStateDatabaseForTesting = async () => {
     }
 };
 
-export const exportGameStateString = () => btoa(JSON.stringify(gameState));
+export const exportGameStateString = () => {
+    const jsonStr = JSON.stringify(gameState);
+    if (typeof btoa === 'function') {
+        return btoa(jsonStr);
+    }
+    if (typeof Buffer !== 'undefined') {
+        return Buffer.from(jsonStr, 'utf8').toString('base64');
+    }
+    throw new Error('Base64 encoding is not supported in this environment');
+};
 
 const decodeBase64 = (value) => {
     if (typeof atob === 'function') {
