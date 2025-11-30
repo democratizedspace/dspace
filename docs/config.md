@@ -51,9 +51,9 @@ Flux consumption details:
 
 ## Observability & Probes
 
-- **Liveness**: `GET /livez` returns `{ status: 'alive', uptimeSeconds, timestamp }`.
-- **Readiness**: `GET /healthz` returns `{ status: 'ready', features: [], timestamp }` and echoes
-  `DSPACE_FEATURE_FLAGS` so operators can confirm feature toggles in-flight.
+- **Liveness**: `GET /livez` returns `{status:'ok',uptimeSeconds,timestamp,version}`.
+- **Readiness**: `GET /healthz` returns `{status:'ok',uptimeSeconds,timestamp,version,features}` and
+  echoes `DSPACE_FEATURE_FLAGS` so operators can confirm feature toggles in-flight.
 - **Metrics**: `GET /metrics` exposes Prometheus counters/gauges via `prom-client`. Protect this
   endpoint with `METRICS_TOKEN`.
 - **Kubernetes probes**: The Helm chart issues HTTP GET probes against `/livez` and `/healthz` on
@@ -74,9 +74,10 @@ Flux consumption details:
 ## Runtime configuration service
 
 - `GET /config.json` streams runtime toggles so operators can verify feature flags without
-  redeploying. The payload includes `featureFlags` (raw `DSPACE_FEATURE_FLAGS` tokens) and an
-  `offlineWorker.enabled` boolean. Setting `offlineWorker.enabled=false` disables service worker
-  registration while keeping the rest of the app online.
+  redeploying. The payload includes `featureFlags` (raw `DSPACE_FEATURE_FLAGS` tokens), an
+  `offlineWorker.enabled` boolean, and the active `environment`. Set
+  `offlineWorker.enabled=false` via `DSPACE_FEATURE_FLAGS` or `DSPACE_OFFLINE_WORKER_ENABLED` to
+  disable service worker registration while keeping the rest of the app online.
 
 ## Scaling & Resources
 

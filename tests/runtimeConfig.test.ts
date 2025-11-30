@@ -4,17 +4,25 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { GET as getRuntimeConfig } from '../frontend/src/pages/config.json.ts';
 
 describe('runtime config service', () => {
-    const originalEnv = process.env.DSPACE_FEATURE_FLAGS;
+    const originalFeatureFlags = process.env.DSPACE_FEATURE_FLAGS;
+    const originalOfflineEnv = process.env.DSPACE_OFFLINE_WORKER_ENABLED;
 
     beforeEach(() => {
         delete process.env.DSPACE_FEATURE_FLAGS;
+        delete process.env.DSPACE_OFFLINE_WORKER_ENABLED;
     });
 
     afterEach(() => {
-        if (originalEnv === undefined) {
+        if (originalFeatureFlags === undefined) {
             delete process.env.DSPACE_FEATURE_FLAGS;
         } else {
-            process.env.DSPACE_FEATURE_FLAGS = originalEnv;
+            process.env.DSPACE_FEATURE_FLAGS = originalFeatureFlags;
+        }
+
+        if (originalOfflineEnv === undefined) {
+            delete process.env.DSPACE_OFFLINE_WORKER_ENABLED;
+        } else {
+            process.env.DSPACE_OFFLINE_WORKER_ENABLED = originalOfflineEnv;
         }
     });
 
@@ -23,6 +31,7 @@ describe('runtime config service', () => {
         expect(response.status).toBe(200);
         const body = await response.json();
         expect(body.offlineWorker?.enabled).toBe(true);
+        expect(body.environment).toBeDefined();
     });
 
     it('disables the offline worker when the flag is set to false', async () => {
@@ -32,5 +41,13 @@ describe('runtime config service', () => {
         const body = await response.json();
         expect(body.offlineWorker?.enabled).toBe(false);
         expect(body.featureFlags).toContain('offlineWorker.enabled=false');
+    });
+
+    it('overrides offline worker using environment variable', async () => {
+        process.env.DSPACE_OFFLINE_WORKER_ENABLED = 'false';
+        const response = await getRuntimeConfig();
+        expect(response.status).toBe(200);
+        const body = await response.json();
+        expect(body.offlineWorker?.enabled).toBe(false);
     });
 });

@@ -9,8 +9,10 @@ describe('health probes', () => {
         const res = await readinessGET();
         expect(res.status).toBe(200);
         const body = await res.json();
-        expect(body.status).toBe('ready');
+        expect(body.status).toBe('ok');
         expect(typeof body.timestamp).toBe('string');
+        expect(typeof body.uptimeSeconds).toBe('number');
+        expect(typeof body.version).toBe('string');
         expect(Array.isArray(body.features)).toBe(true);
     });
 
@@ -22,8 +24,9 @@ describe('health probes', () => {
         const res = await livenessGET();
         expect(res.status).toBe(200);
         const body = await res.json();
-        expect(body.status).toBe('alive');
+        expect(body.status).toBe('ok');
         expect(typeof body.uptimeSeconds).toBe('number');
+        expect(typeof body.version).toBe('string');
     });
 
     it('marks liveness route as dynamic', () => {

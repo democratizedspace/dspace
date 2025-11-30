@@ -1,0 +1,16 @@
+{
+  "id": "2025-02-17-ci-runtime-health-endpoints",
+  "date": "2025-02-17",
+  "component": "ci-image",
+  "rootCause": "CI image missed /config.json, /healthz, /livez; smoke test 19794646398 hit 404.",
+  "resolution": "Added Astro API routes for /config.json, /healthz, /livez and validated in tests.",
+  "references": [
+    "Dockerfile",
+    "infra/docker/entrypoint.mjs",
+    "frontend/src/pages/config.json.ts",
+    "frontend/src/pages/healthz.ts",
+    "frontend/src/pages/livez.ts",
+    "tests/runtimeConfig.test.ts",
+    "frontend/__tests__/healthEndpoint.test.js"
+  ]
+}
