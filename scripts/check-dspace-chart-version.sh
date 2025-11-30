@@ -14,7 +14,7 @@ if [[ ! -f "$version_file" ]]; then
   exit 1
 fi
 
-chart_version=$(awk -F': *' '$1 == "version" {print $2}' "$chart_file" | head -n1)
+chart_version=$(grep '^version:' "$chart_file" | awk '{print $2}')
 version_line=$(grep -E '^[0-9]+\.[0-9]+\.[0-9]+' "$version_file" | head -n1)
 
 if [[ -z "$chart_version" ]]; then
