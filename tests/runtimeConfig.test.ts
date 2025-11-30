@@ -21,6 +21,7 @@ describe('runtime config service', () => {
     it('enables the offline worker by default', async () => {
         const response = await getRuntimeConfig();
         expect(response.status).toBe(200);
+        expect(response.headers.get('cache-control')).toBe('no-store');
         const body = await response.json();
         expect(body.offlineWorker?.enabled).toBe(true);
     });

@@ -1,0 +1,14 @@
+{
+  "id": "2025-11-30-ci-image-smoke-config-healthz",
+  "date": "2025-11-30",
+  "component": "ci",
+  "rootCause": "The Dockerized Astro runtime lacked /config.json, /healthz, and /livez handlers so the smoke test and Helm probes hit the Astro 404 page.",
+  "resolution": "Implemented runtime config and health endpoints in Astro (with middleware fallbacks) and verified they return HTTP 200 JSON.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/19794646398",
+    "frontend/src/pages/config.json.ts",
+    "frontend/src/pages/healthz.ts",
+    "frontend/src/pages/livez.ts",
+    "frontend/src/middleware.ts"
+  ]
+}
