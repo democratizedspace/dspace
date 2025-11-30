@@ -353,7 +353,11 @@ export function formatTime(date) {
     return timeFormats;
 }
 
-export function getRelativeTimeString(date, lang = navigator.language) {
+export function getRelativeTimeString(date, lang = undefined) {
+    // Use navigator.language in browser, fall back to 'en' on server
+    if (lang === undefined) {
+        lang = typeof navigator !== 'undefined' ? navigator.language : 'en';
+    }
     // Allow dates or times to be passed
     const timeMs = typeof date === 'number' ? date : date.getTime();
 
