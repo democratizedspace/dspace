@@ -1,0 +1,3 @@
+# Helm chart version for the dspace app consumed by sugarkube's helm-oci helpers.
+# Keep this value in sync with charts/dspace/Chart.yaml:version before publishing.
+3.0.0
