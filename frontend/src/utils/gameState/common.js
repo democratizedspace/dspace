@@ -139,6 +139,8 @@ function lsClear(store) {
 }
 
 async function read(store) {
+    // On server, return undefined - storage is client-only
+    if (!isBrowser) return undefined;
     const localValue = lsRead(store);
     if (useLocalStorage) return localValue;
     try {
@@ -160,6 +162,8 @@ async function read(store) {
 }
 
 async function write(store, value, options = {}) {
+    // On server, skip all persistence - storage is client-only
+    if (!isBrowser) return;
     const { skipLocalStorage = false } = options;
 
     if (!skipLocalStorage) {
@@ -176,6 +180,8 @@ async function write(store, value, options = {}) {
 }
 
 async function clearStore(store) {
+    // On server, skip all persistence - storage is client-only
+    if (!isBrowser) return;
     lsClear(store);
     if (useLocalStorage) return;
     try {
