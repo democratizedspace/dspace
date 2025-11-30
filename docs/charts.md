@@ -64,12 +64,13 @@ Replace `dspace.example.com` with a domain routed to your Traefik ingress contro
 ## Install from GHCR (OCI)
 
 The chart is published to the GitHub Container Registry on `v3` pushes. Install it directly
-from the OCI registry using the latest version (see `charts/dspace/Chart.yaml` or the
-registry for available versions):
+from the OCI registry using the latest version (see `charts/dspace/Chart.yaml`,
+`docs/apps/dspace.version`, or the registry for available versions). The current published
+chart version is `3.0.0`.
 
 ```bash
 helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
-  --version <version> \
+  --version 3.0.0 \
   --set ingress.enabled=true \
   --set ingress.host=dspace.example.com \
   --set image.tag=v3.0.0

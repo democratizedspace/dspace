@@ -1,6 +1,6 @@
 apiVersion: v2
 name: dspace
-version: 0.1.0
+version: 3.0.0 # Keep in sync with docs/apps/dspace.version for sugarkube installs.
 description: Helm chart for deploying the DSPACE application
 type: application
 appVersion: "v3.0.0"

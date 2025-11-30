@@ -34,7 +34,8 @@ prerequisites.
   - Example image reference: `ghcr.io/democratizedspace/dspace:v3-latest`.
 - The Helm chart is published as an OCI artifact to
   `oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>`, where `<chartVersion>` comes
-  from `charts/dspace/Chart.yaml`.
+  from `charts/dspace/Chart.yaml` and `docs/apps/dspace.version` (current value: `3.0.0`). Keep
+  those files in sync so sugarkube pulls the expected chart.
 
 ## Assumptions and prerequisites
 

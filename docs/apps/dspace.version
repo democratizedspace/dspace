@@ -1,0 +1,3 @@
+# Helm chart version consumed by sugarkube automation.
+# Keep in sync with charts/dspace/Chart.yaml version.
+3.0.0
