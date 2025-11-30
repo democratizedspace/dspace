@@ -5,6 +5,7 @@
     import QuestChatOption from './QuestChatOption.svelte';
     import { questFinished } from '../../../utils/gameState.js';
     import { state } from '../../../utils/gameState/common.js';
+    import { isBrowser } from '../../../utils/ssr.js';
 
     export let quest;
     export let pointer;
@@ -18,8 +19,10 @@
     let rewardItems = [];
     let dialogueMap;
 
+    // Only access localStorage in browser environment to avoid SSR errors
     const avatar =
-        localStorage.getItem('avatarUrl') || '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
+        (isBrowser ? localStorage.getItem('avatarUrl') : null) ||
+        '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
 
     onMount(() => {
         // Initialize quest-related data after component is mounted

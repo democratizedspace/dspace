@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { isBrowser } from '../ssr.js';
 
 const DB_NAME = 'dspaceGameState';
 const DB_VERSION = 1;
@@ -21,7 +22,7 @@ function warnFallback() {
     warnedFallback = true;
     const message =
         'IndexedDB is unavailable; falling back to localStorage. Storage may be limited.';
-    if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+    if (isBrowser && typeof window.alert === 'function') {
         window.alert(message);
     } else {
         console.warn(message);
@@ -29,7 +30,7 @@ function warnFallback() {
 }
 
 function openDB() {
-    if (!('indexedDB' in globalThis)) {
+    if (!isBrowser || !('indexedDB' in globalThis)) {
         return Promise.reject(new Error('IndexedDB not supported'));
     }
     if (!dbPromise) {
@@ -109,7 +110,7 @@ function lsKey(store) {
 }
 
 function lsRead(store) {
-    if (typeof window === 'undefined') return undefined;
+    if (!isBrowser) return undefined;
     try {
         const raw = localStorage.getItem(lsKey(store));
         return raw ? JSON.parse(raw) : undefined;
@@ -120,7 +121,7 @@ function lsRead(store) {
 }
 
 function lsWrite(store, value) {
-    if (typeof window === 'undefined') return;
+    if (!isBrowser) return;
     try {
         localStorage.setItem(lsKey(store), JSON.stringify(value));
     } catch (err) {
@@ -129,7 +130,7 @@ function lsWrite(store, value) {
 }
 
 function lsClear(store) {
-    if (typeof window === 'undefined') return;
+    if (!isBrowser) return;
     try {
         localStorage.removeItem(lsKey(store));
     } catch (err) {
@@ -226,24 +227,23 @@ let gameState = initializeGameState();
 export const state = writable(gameState);
 
 // Only execute in browser environment to avoid SSR issues with IndexedDB
-export const ready =
-    typeof window !== 'undefined'
-        ? (async () => {
-              try {
-                  const stored = await read(STATE_STORE);
-                  if (stored) {
-                      gameState = validateGameState(stored);
-                      state.set(gameState);
-                  }
-              } catch (err) {
-                  console.error('Error loading game state from IndexedDB:', err);
-              } finally {
-                  readyResolved = true;
+export const ready = isBrowser
+    ? (async () => {
+          try {
+              const stored = await read(STATE_STORE);
+              if (stored) {
+                  gameState = validateGameState(stored);
+                  state.set(gameState);
               }
-          })()
-        : Promise.resolve().then(() => {
+          } catch (err) {
+              console.error('Error loading game state from IndexedDB:', err);
+          } finally {
               readyResolved = true;
-          });
+          }
+      })()
+    : Promise.resolve().then(() => {
+          readyResolved = true;
+      });
 
 let writeQueue = Promise.resolve();
 

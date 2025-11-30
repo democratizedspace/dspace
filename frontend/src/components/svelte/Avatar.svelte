@@ -1,5 +1,7 @@
 <script>
-    const avatarUrl = localStorage.getItem('avatarUrl');
+    import { isBrowser } from '../../utils/ssr.js';
+    // Only access localStorage in browser environment
+    const avatarUrl = isBrowser ? localStorage.getItem('avatarUrl') : null;
 </script>
 
 <div>
