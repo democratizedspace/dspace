@@ -232,14 +232,19 @@ describe('config consistency: documentation', () => {
 describe('config consistency: health endpoint implementation', () => {
     it('healthz.ts endpoint exists', () => {
         const healthz = readFile('frontend/src/pages/healthz.ts');
-        expect(healthz).toContain('status');
-        expect(healthz).toContain('ready');
+        expect(healthz).toContain('buildHealthResponse');
     });
 
     it('livez.ts endpoint exists', () => {
         const livez = readFile('frontend/src/pages/livez.ts');
-        expect(livez).toContain('status');
-        expect(livez).toContain('alive');
+        expect(livez).toContain('buildLivezResponse');
+    });
+
+    it('health payload returns readiness and liveness statuses with uptime', () => {
+        const helpers = readFile('frontend/src/utils/runtimeEndpoints.ts');
+        expect(helpers).toContain("'ready'");
+        expect(helpers).toContain("'alive'");
+        expect(helpers).toContain('uptimeSeconds');
     });
 
     it('/health is an alias for /healthz', () => {
