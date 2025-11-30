@@ -126,6 +126,66 @@ This pattern ensures:
 - Tests can detect when components are ready for interaction
 - Better user experience during initial load
 
+### SSR Safety
+
+Since DSPACE uses Astro SSR, JavaScript modules execute both on the server (Node.js) and
+client (browser). Browser-only APIs like `localStorage`, `IndexedDB`, `window`, `document`,
+and `navigator` will cause HTTP 500 errors during SSR if accessed without guards.
+
+#### The `isBrowser` Utility
+
+Use the centralized SSR utility at `frontend/src/utils/ssr.js`:
+
+```javascript
+import { isBrowser, onBrowser } from '../utils/ssr.js';
+
+// Guard direct access
+if (isBrowser) {
+    const value = localStorage.getItem('key');
+}
+
+// Or use the helper for inline expressions
+const value = onBrowser(() => localStorage.getItem('key'), null);
+```
+
+#### Common SSR Pitfalls
+
+1. **Default parameter values** are evaluated at module import time:
+   ```javascript
+   // BAD - crashes on server
+   function greet(lang = navigator.language) { }
+   
+   // GOOD - check at runtime
+   function greet(lang = undefined) {
+       lang = lang ?? (typeof navigator !== 'undefined' ? navigator.language : 'en');
+   }
+   ```
+
+2. **Top-level code** runs during module import on both server and client:
+   ```javascript
+   // BAD - runs immediately during SSR
+   const theme = localStorage.getItem('theme');
+   
+   // GOOD - guard with isBrowser
+   import { isBrowser } from '../utils/ssr.js';
+   const theme = isBrowser ? localStorage.getItem('theme') : 'dark';
+   ```
+
+3. **Browser-only functions** like `atob`, `btoa`, `FileReader`:
+   ```javascript
+   // Use Buffer fallback for server
+   const decoded = typeof atob === 'function' 
+       ? atob(encoded) 
+       : Buffer.from(encoded, 'base64').toString('utf8');
+   ```
+
+#### SSR Safety Tests
+
+The test suite at `frontend/tests/ssrSafety.test.ts` uses static analysis to verify:
+- JS utilities import `isBrowser` when accessing browser APIs
+- Svelte components guard `localStorage` with `isBrowser` or `onMount`
+- No unguarded top-level `window`/`document` access
+
 ## Development Workflow
 
 ### Branching Strategy
@@ -144,6 +204,70 @@ We follow a feature branch workflow:
 3. Ensure all tests pass with `npm test`
 4. Get approval from at least one maintainer
 5. Squash and merge into the main branch
+
+### CI/CD Pipeline
+
+#### GitHub Actions Workflows
+
+The repository has several CI workflows in `.github/workflows/`:
+
+- **ci.yml** - Main CI: runs lint, tests, E2E tests on every PR
+- **ci-image.yml** - Docker image build and smoke test on every PR
+- **deploy.yml** - Production deployment (on merge to main)
+
+#### Docker Image Build
+
+The root `Dockerfile` builds the production image:
+
+1. Installs dependencies with `pnpm install --frozen-lockfile`
+2. Runs `pnpm run build` to compile the Astro SSR application
+3. Creates a minimal runtime image with only production dependencies
+4. Exposes port 8080 and starts with `node entrypoint.mjs`
+
+**Important**: The Docker build uses the current PR code, so any SSR safety fixes
+must be in the source before the image will work correctly.
+
+#### Smoke Test
+
+The `ci-image.yml` workflow includes a smoke test that:
+
+1. Builds the Docker image from the PR code
+2. Starts the container with `NODE_OPTIONS="--unhandled-rejections=warn"`
+3. Polls `/config.json` endpoint until it returns HTTP 200 (up to 60 seconds)
+4. Verifies basic server functionality
+
+**Why `/config.json` instead of `/`?**
+
+The `/config.json` endpoint is a simple API route that doesn't depend on the game state
+system or complex SSR. If this endpoint works but `/` returns 500, it indicates an SSR
+issue in the page components rather than a fundamental server problem.
+
+#### Debugging CI Failures
+
+When the smoke test fails with HTTP 500:
+
+1. Check container logs for error messages (shown in CI output)
+2. Look for SSR-related errors (IndexedDB, localStorage, window, navigator)
+3. Ensure all browser API access is guarded with `isBrowser`
+4. The error may be silently caught by Astro - check `entrypoint.mjs` for error handlers
+
+Common SSR issues in CI:
+- `IndexedDB not supported` - Storage code running on server
+- `navigator is not defined` - Browser API in default parameter
+- `window is not defined` - Unguarded window access
+- `atob/btoa is not defined` - Use Buffer fallback for base64
+
+#### Configuration Consistency
+
+The test at `tests/configConsistency.test.ts` validates that ports and health endpoints
+are consistent across:
+- `Dockerfile`
+- `docker-compose.yml`
+- `charts/dspace/values.yaml` (Helm)
+- `infra/k8s/` manifests
+- Documentation
+
+Run `npm test` to verify configuration stays in sync.
 
 ## Testing Strategy
 
