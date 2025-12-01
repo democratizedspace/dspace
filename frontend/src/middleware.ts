@@ -21,14 +21,16 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
             message: 'Unhandled error while processing request',
             error,
         });
-        throw error;
+        return new Response('Internal Server Error', { status: 500 });
     }
 
     if (response.status >= 500) {
         logServerError({
             route: pathname,
             method: context.request.method,
-            message: 'Request returned a server error response',
+            message: handledPaths.has(pathname)
+                ? 'Runtime endpoint returned 500'
+                : 'Request returned a server error response',
             context: { status: response.status },
         });
     }
@@ -41,15 +43,37 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
         return response;
     }
 
-    switch (pathname) {
-        case '/config.json':
-            return buildRuntimeConfigResponse();
-        case '/healthz':
-        case '/health':
-            return buildHealthResponse();
-        case '/livez':
-            return buildLivezResponse();
-        default:
-            return response;
+    try {
+        switch (pathname) {
+            case '/config.json':
+                return buildRuntimeConfigResponse();
+            case '/healthz':
+            case '/health':
+                return buildHealthResponse(pathname);
+            case '/livez':
+                return buildLivezResponse(pathname);
+            default:
+                return response;
+        }
+    } catch (error) {
+        logServerError({
+            route: pathname,
+            method: context.request.method,
+            message: 'Failed to build runtime endpoint response',
+            error,
+        });
+
+        const fallbackBody =
+            pathname === '/config.json'
+                ? { error: 'config_unavailable' }
+                : { status: 'unhealthy' };
+
+        return new Response(JSON.stringify(fallbackBody), {
+            status: 503,
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Cache-Control': 'no-store',
+            },
+        });
     }
 };

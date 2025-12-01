@@ -92,29 +92,53 @@ jobs:
           docker run -d --name dspace-smoke-test -p 127.0.0.1:8080:8080 \
             -e NODE_OPTIONS="--unhandled-rejections=warn" \
             dspace-test:latest
-          
+
           # Wait for server to start responding (up to 60 seconds)
           # Test /config.json first as it's a simple API endpoint that doesn't use gameState
           echo "Waiting for server to start..."
           SUCCESS=false
           for i in {1..60}; do
-            # Get HTTP response code and body for debugging - test config.json first
-            RESPONSE=$(curl -s -w '\n%{http_code}' --max-time 5 http://127.0.0.1:8080/config.json 2>/dev/null || echo -e "\n000")
-            HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-            BODY=$(echo "$RESPONSE" | head -n -1)
-            
-            if [ "$HTTP_CODE" = "200" ]; then
+            CONFIG_RESPONSE=$(curl -s -w '\n%{http_code}' --max-time 5 http://127.0.0.1:8080/config.json 2>/dev/null || echo -e "\n000")
+            CONFIG_CODE=$(echo "$CONFIG_RESPONSE" | tail -n1)
+            CONFIG_BODY=$(echo "$CONFIG_RESPONSE" | head -n -1)
+
+            HEALTH_RESPONSE=$(curl -s -w '\n%{http_code}' --max-time 5 http://127.0.0.1:8080/healthz 2>/dev/null || echo -e "\n000")
+            HEALTH_CODE=$(echo "$HEALTH_RESPONSE" | tail -n1)
+            HEALTH_BODY=$(echo "$HEALTH_RESPONSE" | head -n -1)
+
+            if [ "$CONFIG_CODE" = "200" ]; then
               echo "Server is responding with HTTP 200 on /config.json!"
-              echo "Response body: $BODY"
+              echo "Response body: $CONFIG_BODY"
               SUCCESS=true
               break
             fi
-            
-            # Show verbose output for debugging SSR issues
+
+            if [ "$HEALTH_CODE" = "200" ]; then
+              echo "Server is responding with HTTP 200 on /healthz!"
+              echo "Response body: $HEALTH_BODY"
+              SUCCESS=true
+              break
+            fi
+
+            if [ "$CONFIG_CODE" = "503" ] && [ -n "$CONFIG_BODY" ]; then
+              echo "Attempt $i: /config.json returned 503 with body:"
+              echo "$CONFIG_BODY" | head -c 500
+              echo ""
+            fi
+
+            if [ "$HEALTH_CODE" = "503" ] && [ -n "$HEALTH_BODY" ]; then
+              echo "Attempt $i: /healthz returned 503 with body:"
+              echo "$HEALTH_BODY" | head -c 500
+              echo ""
+            fi
+
             if [ "$i" -eq 5 ] || [ "$i" -eq 10 ] || [ "$i" -eq 30 ]; then
-              echo "=== Attempt $i: HTTP $HTTP_CODE (testing /config.json) ==="
-              echo "--- Response body (first 500 chars) ---"
-              echo "$BODY" | head -c 500
+              echo "=== Attempt $i debug ==="
+              echo "--- /config.json (HTTP $CONFIG_CODE) body (first 500 chars) ---"
+              echo "$CONFIG_BODY" | head -c 500
+              echo ""
+              echo "--- /healthz (HTTP $HEALTH_CODE) body (first 500 chars) ---"
+              echo "$HEALTH_BODY" | head -c 500
               echo ""
               echo "--- Container logs (stdout and stderr) ---"
               docker logs dspace-smoke-test 2>&1 | tail -100
@@ -122,11 +146,11 @@ jobs:
               docker exec dspace-smoke-test sh -c 'ps aux' 2>&1 || true
               echo "=== End debug output ==="
             else
-              echo "Attempt $i: HTTP $HTTP_CODE"
+              echo "Attempt $i: /config.json HTTP $CONFIG_CODE, /healthz HTTP $HEALTH_CODE"
             fi
             sleep 1
           done
-          
+
           if [ "$SUCCESS" = "false" ]; then
             echo "=== Server health check failed after 60 seconds ==="
             echo "--- Full container logs ---"
@@ -137,6 +161,8 @@ jobs:
             curl -v --max-time 5 http://127.0.0.1:8080/healthz 2>&1 || true
             echo "--- Test root endpoint ---"
             curl -v --max-time 5 http://127.0.0.1:8080/ 2>&1 || true
+            echo "--- Error logs (level:error) ---"
+            docker logs dspace-smoke-test 2>&1 | grep -F '"level":"error"' || true
             docker stop dspace-smoke-test
             docker rm dspace-smoke-test
             exit 1

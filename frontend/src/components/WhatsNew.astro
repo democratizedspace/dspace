@@ -18,6 +18,7 @@ try {
 }
 
 const changelogsReversed = [...changelogs].reverse();
+const hasChangelogs = changelogsReversed.length > 0;
 
 function prepareHtml(html, slug) {
     const withNotes = appendChangelogNotes(html, slug);
@@ -44,11 +45,17 @@ function prepareHtml(html, slug) {
 }
 ---
 
-<span class="wrapper">   
-    {changelogsReversed.slice(0, 1).map(doc => (
-        <h3>Latest update: {doc.frontmatter.title}</h3>
-        <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
-    ))}
+<span class="wrapper">
+    {hasChangelogs ? (
+        changelogsReversed.slice(0, 1).map(doc => (
+            <>
+                <h3>Latest update: {doc.frontmatter.title}</h3>
+                <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
+            </>
+        ))
+    ) : (
+        <p class="fallback">Unable to load the latest updates right now.</p>
+    )}
     <Button href="/changelog" text="View all updates" />
 </span>
 
@@ -66,7 +73,12 @@ function prepareHtml(html, slug) {
     }
 
     .wrapper {
-		background-color: white;
+                background-color: white;
         padding: 20px;
+    }
+
+    .fallback {
+        color: var(--color-text, #111827);
+        margin: 0;
     }
 </style>

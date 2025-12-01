@@ -3,15 +3,45 @@ import Page from '../components/Page.astro';
 import WhatsNew from '../components/WhatsNew.astro';
 import UIResponsiveness from '../components/svelte/UIResponsiveness.svelte';
 import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
+import { logServerError } from '../utils/serverLogger';
+
+const route = Astro.url?.pathname ?? '/';
+const method = Astro.request?.method ?? 'GET';
+
+let renderError: Error | undefined;
+
+try {
+    // Placeholder for any future server-side data preparation. Keeping the guard in place
+    // ensures unexpected errors are logged and surfaced to operators instead of resulting
+    // in opaque 500s.
+} catch (error) {
+    renderError = error instanceof Error ? error : new Error(String(error));
+    logServerError({
+        route,
+        method,
+        message: 'Failed to render homepage',
+        error: renderError,
+        context: { url: Astro.url?.toString() },
+    });
+}
 ---
 
 <Page columns="1">
-    <script>
-        window.dspaceStart = performance.now();
-    </script>
-    <WhatsNew />
-    <FailoverStatus client:load />
-    <UIResponsiveness client:load />
+    {renderError ? (
+        <div class="fallback">
+            <h3>We hit a snag starting the homepage.</h3>
+            <p>Our team has been notified. Please try again in a moment.</p>
+        </div>
+    ) : (
+        <>
+            <script>
+                window.dspaceStart = performance.now();
+            </script>
+            <WhatsNew />
+            <FailoverStatus client:load />
+            <UIResponsiveness client:load />
+        </>
+    )}
 </Page>
 
 <style>
@@ -19,6 +49,13 @@ import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
         background-color: white;
         padding: 20px;
         border-radius: 20px;
+        color: black;
+    }
+
+    .fallback {
+        background-color: white;
+        padding: 20px;
+        border-radius: 12px;
         color: black;
     }
 </style>
