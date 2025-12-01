@@ -25,7 +25,7 @@ describe('logServerError', () => {
             route: '/',
             method: 'GET',
             message: 'boom',
-            status: 500,
+            context: { status: 500 },
         });
         expect(payload.stack).toContain('Error: boom');
     });
@@ -44,5 +44,41 @@ describe('logServerError', () => {
             message: 'string error',
         });
         expect(payload.stack).toBeUndefined();
+    });
+
+    it('falls back to unknown error when error is null', () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        logServerError({ route: '/', method: 'POST', error: null });
+
+        const payload = JSON.parse(consoleSpy.mock.calls[0][0]);
+        expect(payload.message).toBe('Unknown error');
+    });
+
+    it('redacts sensitive keys when serializing objects', () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const errorObject = { message: 'boom', password: 'secret-token', status: 500 };
+
+        logServerError({ route: '/', method: 'POST', error: errorObject });
+
+        const payload = JSON.parse(consoleSpy.mock.calls[0][0]);
+        expect(payload.message).toContain('boom');
+        expect(payload.message).not.toContain('secret-token');
+    });
+
+    it('handles unserializable objects gracefully', () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const errorObject = {
+            message: 'boom',
+            code: 'E_BAD',
+            toJSON() {
+                throw new Error('nope');
+            },
+        };
+
+        logServerError({ route: '/', method: 'POST', error: errorObject });
+
+        const payload = JSON.parse(consoleSpy.mock.calls[0][0]);
+        expect(payload.message).toContain('boom');
     });
 });

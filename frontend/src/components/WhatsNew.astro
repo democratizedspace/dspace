@@ -10,7 +10,7 @@ try {
 } catch (error) {
     logServerError({
         route: '/',
-        method: Astro?.request?.method ?? 'UNKNOWN',
+        method: Astro.request.method ?? 'UNKNOWN',
         message: 'Failed to load changelog entries for homepage',
         error,
     });
