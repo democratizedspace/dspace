@@ -9,6 +9,10 @@ import { logServerError } from './utils/serverLogger';
 export const onRequest = async (context: APIContext, next: () => Promise<Response>) => {
     const { pathname } = new URL(context.request.url);
     const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
+    const jsonHeaders = {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+    } satisfies HeadersInit;
 
     let response: Response;
 
@@ -21,7 +25,7 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
             message: 'Unhandled error while processing request',
             error,
         });
-        throw error;
+        return new Response('Internal Server Error', { status: 500 });
     }
 
     if (response.status >= 500) {
@@ -33,9 +37,18 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
         });
     }
 
-    // Allow page routes to handle these endpoints when present. If a build omits the
-    // route files (as happened in the broken Docker image), fall back to the shared
-    // helpers so the probes stay available.
+    if (handledPaths.has(pathname) && response.status >= 500) {
+        logServerError({
+            route: pathname,
+            method: context.request.method,
+            message: 'Runtime endpoint returned 500',
+            context: { status: response.status },
+        });
+    }
+
+    // Allow page routes to handle these endpoints when present. If a build omits the route
+    // files (as happened in the broken Docker image), fall back to the shared helpers so the
+    // probes stay available.
 
     if (!handledPaths.has(pathname) || response.status !== 404) {
         return response;
@@ -43,12 +56,51 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
 
     switch (pathname) {
         case '/config.json':
-            return buildRuntimeConfigResponse();
+            try {
+                return buildRuntimeConfigResponse();
+            } catch (error) {
+                logServerError({
+                    route: pathname,
+                    method: context.request.method,
+                    message: 'Failed to build runtime endpoint response',
+                    error,
+                });
+                return new Response(JSON.stringify({ error: 'config_unavailable' }), {
+                    status: 503,
+                    headers: jsonHeaders,
+                });
+            }
         case '/healthz':
         case '/health':
-            return buildHealthResponse();
+            try {
+                return buildHealthResponse();
+            } catch (error) {
+                logServerError({
+                    route: pathname,
+                    method: context.request.method,
+                    message: 'Failed to build runtime endpoint response',
+                    error,
+                });
+                return new Response(JSON.stringify({ status: 'unhealthy' }), {
+                    status: 503,
+                    headers: jsonHeaders,
+                });
+            }
         case '/livez':
-            return buildLivezResponse();
+            try {
+                return buildLivezResponse();
+            } catch (error) {
+                logServerError({
+                    route: pathname,
+                    method: context.request.method,
+                    message: 'Failed to build runtime endpoint response',
+                    error,
+                });
+                return new Response(JSON.stringify({ status: 'unhealthy' }), {
+                    status: 503,
+                    headers: jsonHeaders,
+                });
+            }
         default:
             return response;
     }
