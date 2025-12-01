@@ -7,12 +7,10 @@ const ALLOWED_KEYS = ['message', 'name', 'code', 'status', 'statusCode'];
 
 function safeStringify(value: unknown): string {
     try {
-        return JSON.stringify(
-            value,
-            (key, val) =>
-                SENSITIVE_KEYS.some(sensitiveKey => key.toLowerCase().includes(sensitiveKey))
-                    ? '[REDACTED]'
-                    : val,
+        return JSON.stringify(value, (key, val) =>
+            SENSITIVE_KEYS.some((sensitiveKey) => key.toLowerCase().includes(sensitiveKey))
+                ? '[REDACTED]'
+                : val
         );
     } catch {
         return String(value);
@@ -43,7 +41,11 @@ function normalizeError(error: unknown): { message: string; stack?: string } {
                 continue;
             }
 
-            if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+            if (
+                typeof value === 'string' ||
+                typeof value === 'number' ||
+                typeof value === 'boolean'
+            ) {
                 sanitized[key] = value;
             } else {
                 sanitized[key] = '[REDACTED]';
