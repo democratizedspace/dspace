@@ -9,10 +9,6 @@ import { logServerError } from './utils/serverLogger';
 export const onRequest = async (context: APIContext, next: () => Promise<Response>) => {
     const { pathname } = new URL(context.request.url);
     const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
-    const jsonHeaders = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Cache-Control': 'no-store',
-    } satisfies HeadersInit;
 
     let response: Response;
 
@@ -37,15 +33,6 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
         });
     }
 
-    if (handledPaths.has(pathname) && response.status >= 500) {
-        logServerError({
-            route: pathname,
-            method: context.request.method,
-            message: 'Runtime endpoint returned 500',
-            context: { status: response.status },
-        });
-    }
-
     // Allow page routes to handle these endpoints when present. If a build omits the route
     // files (as happened in the broken Docker image), fall back to the shared helpers so the
     // probes stay available.
@@ -56,51 +43,12 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
 
     switch (pathname) {
         case '/config.json':
-            try {
-                return buildRuntimeConfigResponse();
-            } catch (error) {
-                logServerError({
-                    route: pathname,
-                    method: context.request.method,
-                    message: 'Failed to build runtime endpoint response',
-                    error,
-                });
-                return new Response(JSON.stringify({ error: 'config_unavailable' }), {
-                    status: 503,
-                    headers: jsonHeaders,
-                });
-            }
+            return buildRuntimeConfigResponse();
         case '/healthz':
         case '/health':
-            try {
-                return buildHealthResponse();
-            } catch (error) {
-                logServerError({
-                    route: pathname,
-                    method: context.request.method,
-                    message: 'Failed to build runtime endpoint response',
-                    error,
-                });
-                return new Response(JSON.stringify({ status: 'unhealthy' }), {
-                    status: 503,
-                    headers: jsonHeaders,
-                });
-            }
+            return buildHealthResponse();
         case '/livez':
-            try {
-                return buildLivezResponse();
-            } catch (error) {
-                logServerError({
-                    route: pathname,
-                    method: context.request.method,
-                    message: 'Failed to build runtime endpoint response',
-                    error,
-                });
-                return new Response(JSON.stringify({ status: 'unhealthy' }), {
-                    status: 503,
-                    headers: jsonHeaders,
-                });
-            }
+            return buildLivezResponse();
         default:
             return response;
     }

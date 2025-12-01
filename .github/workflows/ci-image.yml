@@ -127,12 +127,12 @@ jobs:
               echo "--- /healthz: HTTP $HEALTH_CODE ---"
               echo "$HEALTH_BODY" | head -c 500
               echo ""
-              if [ "$CONFIG_CODE" -ge 500 ] && [ -z "$CONFIG_BODY" ]; then
-                echo "Observed opaque 500 on /config.json"
-              fi
-              if [ "$HEALTH_CODE" -ge 500 ] && [ -z "$HEALTH_BODY" ]; then
-                echo "Observed opaque 500 on /healthz"
-              fi
+                if [[ "$CONFIG_CODE" =~ ^[0-9]+$ ]] && [ "$CONFIG_CODE" -ge 500 ] && [ -z "$CONFIG_BODY" ]; then
+                  echo "Observed opaque 500 on /config.json"
+                fi
+                if [[ "$HEALTH_CODE" =~ ^[0-9]+$ ]] && [ "$HEALTH_CODE" -ge 500 ] && [ -z "$HEALTH_BODY" ]; then
+                  echo "Observed opaque 500 on /healthz"
+                fi
               echo "--- Container logs (stdout and stderr) ---"
               docker logs dspace-smoke-test 2>&1 | tail -100
               echo "--- Node.js process info ---"
