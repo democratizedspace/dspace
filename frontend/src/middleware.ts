@@ -4,15 +4,38 @@ import {
     buildLivezResponse,
     buildRuntimeConfigResponse,
 } from './utils/runtimeEndpoints';
+import { logServerError } from './utils/serverLogger';
 
 export const onRequest = async (context: APIContext, next: () => Promise<Response>) => {
     const { pathname } = new URL(context.request.url);
     const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
 
+    let response: Response;
+
+    try {
+        response = await next();
+    } catch (error) {
+        logServerError({
+            route: pathname,
+            method: context.request.method,
+            message: 'Unhandled error while processing request',
+            error,
+        });
+        throw error;
+    }
+
+    if (response.status >= 500) {
+        logServerError({
+            route: pathname,
+            method: context.request.method,
+            message: 'Request returned a server error response',
+            context: { status: response.status },
+        });
+    }
+
     // Allow page routes to handle these endpoints when present. If a build omits the
     // route files (as happened in the broken Docker image), fall back to the shared
     // helpers so the probes stay available.
-    const response = await next();
 
     if (!handledPaths.has(pathname) || response.status !== 404) {
         return response;
