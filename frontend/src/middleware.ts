@@ -9,6 +9,7 @@ import { logServerError } from './utils/serverLogger';
 export const onRequest = async (context: APIContext, next: () => Promise<Response>) => {
     const { pathname } = new URL(context.request.url);
     const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
+    const criticalPaths = new Set([...handledPaths, '/']);
 
     let response: Response;
 
@@ -21,10 +22,10 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
             message: 'Unhandled error while processing request',
             error,
         });
-        throw error;
+        return new Response('Internal Server Error', { status: 500 });
     }
 
-    if (response.status >= 500) {
+    if (response.status >= 500 && criticalPaths.has(pathname)) {
         logServerError({
             route: pathname,
             method: context.request.method,
@@ -41,15 +42,40 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
         return response;
     }
 
-    switch (pathname) {
-        case '/config.json':
-            return buildRuntimeConfigResponse();
-        case '/healthz':
-        case '/health':
-            return buildHealthResponse();
-        case '/livez':
-            return buildLivezResponse();
-        default:
-            return response;
+    try {
+        switch (pathname) {
+            case '/config.json':
+                return buildRuntimeConfigResponse();
+            case '/healthz':
+            case '/health':
+                return buildHealthResponse();
+            case '/livez':
+                return buildLivezResponse();
+            default:
+                return response;
+        }
+    } catch (error) {
+        logServerError({
+            route: pathname,
+            method: context.request.method,
+            message: 'Failed to build runtime endpoint response',
+            error,
+        });
+
+        const body = handledPaths.has(pathname)
+            ? pathname === '/config.json'
+                ? JSON.stringify({ error: 'config_unavailable' })
+                : JSON.stringify({ status: 'unhealthy' })
+            : 'Internal Server Error';
+
+        const shouldSendJson =
+            pathname === '/config.json' || pathname.startsWith('/health') || pathname === '/livez';
+
+        return new Response(body, {
+            status: 503,
+            headers: shouldSendJson
+                ? { 'Content-Type': 'application/json; charset=utf-8' }
+                : undefined,
+        });
     }
 };

@@ -44,12 +44,22 @@ function prepareHtml(html, slug) {
 }
 ---
 
-<span class="wrapper">   
-    {changelogsReversed.slice(0, 1).map(doc => (
-        <h3>Latest update: {doc.frontmatter.title}</h3>
-        <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
-    ))}
-    <Button href="/changelog" text="View all updates" />
+<span class="wrapper">
+    {changelogsReversed.length > 0 ? (
+        <>
+            {changelogsReversed.slice(0, 1).map(doc => (
+                <>
+                    <h3>Latest update: {doc.frontmatter.title}</h3>
+                    <span
+                        set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}
+                    ></span>
+                </>
+            ))}
+            <Button href="/changelog" text="View all updates" />
+        </>
+    ) : (
+        <p class="fallback">Unable to load the latest updates right now.</p>
+    )}
 </span>
 
 <style>
@@ -60,13 +70,18 @@ function prepareHtml(html, slug) {
 
     span {
         background-color: white;
-        color: black; 
+        color: black;
         padding: 10px;
         border-radius: 20px;
     }
 
     .wrapper {
-		background-color: white;
+                background-color: white;
         padding: 20px;
+    }
+
+    .fallback {
+        margin: 0;
+        font-weight: 600;
     }
 </style>
