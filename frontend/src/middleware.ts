@@ -21,7 +21,7 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
             message: 'Unhandled error while processing request',
             error,
         });
-        return new Response('Internal Server Error', { status: 500 });
+        throw error;
     }
 
     if (response.status >= 500) {
