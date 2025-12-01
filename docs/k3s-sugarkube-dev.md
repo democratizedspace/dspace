@@ -285,6 +285,43 @@ Confirm the ingress shows `staging.democratized.space` as the host and the `trae
 then open `https://staging.democratized.space` in a browser. You should see the dspace v3 UI served
 through the Cloudflare Tunnel and Traefik.
 
+### Fast manual redeploy (emergency push)
+
+Use this when you already have dspace running on sugarkube and want the latest `v3-latest` image
+rolled out quickly (normal Kubernetes rolling behavior is fine). This reuses the existing chart
+version and values; it simply forces Helm to pull the refreshed image tag.
+
+1. **Build and publish a new image:** Follow [Step 1](#step-1-build-and-publish-ghcr-artifacts-from-the-right-branch)
+   to trigger the GHCR image workflow for `v3`. Ensure the run publishes both `v3-<shortsha>` and
+   moves `v3-latest` to that build.
+2. **Redeploy the Helm release:** From `~/sugarkube` on a control node, rerun the same install
+   command used above (chart version stays `3.0.0`; the image comes from `v3-latest`):
+
+   ```bash
+   cd ~/sugarkube
+   just helm-oci-install \
+     release=dspace namespace=dspace \
+     chart=oci://ghcr.io/democratizedspace/charts/dspace \
+     values=docs/examples/dspace.values.dev.yaml,docs/examples/dspace.values.staging.yaml \
+     version_file=docs/apps/dspace.version \
+     default_tag=v3-latest
+   ```
+
+3. **Verify the new image is live:**
+
+   ```bash
+   kubectl get pods -n dspace -o wide
+   kubectl get deploy -n dspace dspace -o yaml | grep "image:"
+   ```
+
+   You should see the Deployment and pods referencing `ghcr.io/democratizedspace/dspace:v3-latest`
+   (which should point at your newest `v3-<shortsha>` build). Load the site to confirm the expected
+   version or build SHA if your UI exposes it.
+
+> This is the fast path and may cause brief downtime while the Deployment rolls pods. More gradual
+> rollouts (canary/blue-green) can be layered on later using native Kubernetes strategies or
+> additional sugarkube automation.
+
 ## End-to-end checklist for dspace staging
 
 - [ ] Sugarkube cluster: `just cluster-status` is healthy.

@@ -60,12 +60,16 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8080
 ENV HOST=0.0.0.0
+# Copy frontend node_modules symlinks and the root-level .pnpm directory they point to.
+# The symlinks in frontend/node_modules point to ../../node_modules/.pnpm/, so we need to
+# preserve that structure in the runtime image.
 COPY --from=prod-deps /workspace/frontend/node_modules ./node_modules
+COPY --from=prod-deps /workspace/node_modules/.pnpm ../node_modules/.pnpm
 COPY --from=build /workspace/frontend/dist ./dist
 COPY --from=build /workspace/frontend/package.json ./package.json
 COPY infra/docker/entrypoint.mjs ./entrypoint.mjs
 COPY infra/metrics.mjs ./metrics.mjs
-RUN chown -R node:node /app
+RUN chown -R node:node /app /node_modules
 USER node
 EXPOSE 8080
 HEALTHCHECK CMD curl -fsS http://127.0.0.1:${PORT:-8080}/healthz > /dev/null || exit 1

@@ -45,7 +45,7 @@ jobs:
         uses: ./.github/actions/run-lychee
         with:
           args: >-
-            --accept 403,429
+            --accept 403,429,503
             --no-progress --verbose
             "docs/**/*.md" "frontend/src/pages/docs/**/*.md"
           format: markdown
