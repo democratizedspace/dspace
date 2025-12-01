@@ -55,6 +55,15 @@ describe('logServerError', () => {
         expect(payload.message).toBe('Unknown error');
     });
 
+    it('falls back to unknown error when error is undefined', () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        logServerError({ route: '/', method: 'POST', error: undefined });
+
+        const payload = JSON.parse(consoleSpy.mock.calls[0][0]);
+        expect(payload.message).toBe('Unknown error');
+    });
+
     it('redacts sensitive keys when serializing objects', () => {
         const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
         const errorObject = { message: 'boom', password: 'secret-token', status: 500 };
