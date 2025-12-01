@@ -1,10 +1,27 @@
 ---
 import Button from './Button.astro';
 import { appendChangelogNotes } from '../utils/changelogNotes';
+import { logRequestError } from '../utils/server-logger.js';
 
-const changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
+const route = Astro.url?.pathname ?? '/';
+const method = Astro.request?.method ?? 'GET';
 
-const changelogsReversed = changelogs.reverse();
+let changelogsReversed = [];
+let changelogError;
+
+try {
+    const changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
+    changelogsReversed = [...changelogs].reverse();
+} catch (error) {
+    changelogError = error instanceof Error ? error : new Error(String(error));
+    logRequestError({
+        route,
+        method,
+        message: 'Failed to load homepage changelog entries',
+        error: changelogError,
+        context: { url: Astro.url?.toString() },
+    });
+}
 
 function prepareHtml(html, slug) {
     const withNotes = appendChangelogNotes(html, slug);
@@ -32,10 +49,16 @@ function prepareHtml(html, slug) {
 ---
 
 <span class="wrapper">   
-    {changelogsReversed.slice(0, 1).map(doc => (
-        <h3>Latest update: {doc.frontmatter.title}</h3>
-        <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
-    ))}
+    {changelogError ? (
+        <p class="status" role="status">
+            Unable to load the latest updates right now. Please try again later.
+        </p>
+    ) : (
+        changelogsReversed.slice(0, 1).map((doc) => (
+            <h3>Latest update: {doc.frontmatter.title}</h3>
+            <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
+        ))
+    )}
     <Button href="/changelog" text="View all updates" />
 </span>
 
@@ -47,13 +70,18 @@ function prepareHtml(html, slug) {
 
     span {
         background-color: white;
-        color: black; 
+        color: black;
         padding: 10px;
         border-radius: 20px;
     }
 
+    .status {
+        margin: 0;
+        font-style: italic;
+    }
+
     .wrapper {
-		background-color: white;
+                background-color: white;
         padding: 20px;
     }
 </style>
