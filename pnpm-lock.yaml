@@ -99,6 +99,9 @@ importers:
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.121
+      ajv:
+        specifier: ^8.12.0
+        version: 8.17.1
       astro-seo:
         specifier: ^0.7.4
         version: 0.7.6
@@ -184,9 +187,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^8.39.0
         version: 8.39.0(eslint@9.32.0)(typescript@5.1.6)
-      ajv:
-        specifier: ^8.12.0
-        version: 8.17.1
       astro:
         specifier: ^2.3.2
         version: 2.10.15(@types/node@18.19.121)
