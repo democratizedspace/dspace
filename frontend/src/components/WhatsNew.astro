@@ -1,10 +1,23 @@
 ---
 import Button from './Button.astro';
 import { appendChangelogNotes } from '../utils/changelogNotes';
+import { logServerError } from '../utils/serverLogger';
 
-const changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
+let changelogs = [];
 
-const changelogsReversed = changelogs.reverse();
+try {
+    changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
+} catch (error) {
+    logServerError({
+        route: '/',
+        method: Astro.request.method ?? 'UNKNOWN',
+        message: 'Failed to load changelog entries for homepage',
+        error,
+    });
+    changelogs = [];
+}
+
+const changelogsReversed = [...changelogs].reverse();
 
 function prepareHtml(html, slug) {
     const withNotes = appendChangelogNotes(html, slug);

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { APIContext } from 'astro';
 
 import { onRequest } from '../frontend/src/middleware';
@@ -43,5 +43,36 @@ describe('runtime middleware fallback', () => {
 
     expect(response.status).toBe(200);
     expect(await response.text()).toBe('ok');
+  });
+
+  it('logs and rethrows errors from downstream handlers', async () => {
+    const context = createContext('/error');
+    const logSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await expect(() =>
+      onRequest(context, async () => {
+        throw new Error('boom');
+      }),
+    ).rejects.toThrow('boom');
+
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    const payload = JSON.parse(logSpy.mock.calls[0][0]);
+    expect(payload.route).toBe('/error');
+    expect(payload.method).toBe('GET');
+    expect(payload.message).toBe('boom');
+  });
+
+  it('logs 5xx responses returned by upstream handlers', async () => {
+    const context = createContext('/healthz');
+    const logSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await onRequest(context, async () => new Response(null, { status: 503 }));
+
+    expect(response.status).toBe(503);
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    const payload = JSON.parse(logSpy.mock.calls[0][0]);
+    expect(payload.route).toBe('/healthz');
+    expect(payload.method).toBe('GET');
+    expect(payload.context.status).toBe(503);
   });
 });
