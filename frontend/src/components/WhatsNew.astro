@@ -1,10 +1,24 @@
 ---
 import Button from './Button.astro';
 import { appendChangelogNotes } from '../utils/changelogNotes';
+import { logHomepageError } from '../utils/homepageLogging';
 
-const changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
+const { changelogs: providedChangelogs } = Astro.props;
 
-const changelogsReversed = changelogs.reverse();
+let changelogEntries = Array.isArray(providedChangelogs) ? providedChangelogs : [];
+
+if (changelogEntries.length === 0) {
+    try {
+        changelogEntries = await Astro.glob('../pages/docs/md/changelog/*.md');
+    } catch (error) {
+        logHomepageError(Astro.request, Astro.url, error, {
+            step: 'component-load-changelogs',
+        });
+        changelogEntries = [];
+    }
+}
+
+const changelogsReversed = [...changelogEntries].reverse();
 
 function prepareHtml(html, slug) {
     const withNotes = appendChangelogNotes(html, slug);
