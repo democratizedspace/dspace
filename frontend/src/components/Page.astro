@@ -4,15 +4,27 @@ import Header from '../components/Header.astro';
 import Menu from '../components/svelte/Menu.svelte';
 import Updater from '../components/svelte/Updater.svelte';
 import { getCookieItems } from '../utils.js';
+import { logRouteError } from '../utils/logging';
 
-const {title, message } = Astro.props;
+const { title, message } = Astro.props;
 
-const cookie = Astro.request.headers.get('cookie');
+let cookie = '';
+let itemList = [];
+let pathname = '/';
 
-const itemList = getCookieItems(cookie);
-
-// get path of URL
-const pathname = Astro.url.pathname;
+try {
+    cookie = Astro.request?.headers.get('cookie') ?? '';
+    itemList = getCookieItems(cookie);
+    pathname = Astro.url?.pathname ?? '/';
+} catch (error) {
+    logRouteError({
+        route: pathname,
+        method: Astro.request?.method ?? 'GET',
+        message: 'Failed to prepare layout data',
+        error,
+    });
+    Astro.response.status = 500;
+}
 ---
 
 <Layout title="DSPACE">

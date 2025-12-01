@@ -1,10 +1,24 @@
 ---
 import Button from './Button.astro';
 import { appendChangelogNotes } from '../utils/changelogNotes';
+import { logRouteError } from '../utils/logging';
 
-const changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
+let changelogError: Error | undefined;
+let changelogs = [] as Awaited<ReturnType<typeof Astro.glob>>;
 
-const changelogsReversed = changelogs.reverse();
+try {
+    changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
+} catch (error) {
+    changelogError = error instanceof Error ? error : new Error(String(error));
+    logRouteError({
+        route: '/',
+        method: Astro.request?.method ?? 'GET',
+        message: 'Failed to load changelog entries for homepage',
+        error: changelogError,
+    });
+}
+
+const changelogsReversed = changelogs.slice().reverse();
 
 function prepareHtml(html, slug) {
     const withNotes = appendChangelogNotes(html, slug);
@@ -31,11 +45,17 @@ function prepareHtml(html, slug) {
 }
 ---
 
-<span class="wrapper">   
-    {changelogsReversed.slice(0, 1).map(doc => (
-        <h3>Latest update: {doc.frontmatter.title}</h3>
-        <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
-    ))}
+<span class="wrapper">
+    {changelogError ? (
+        <p class="error">We couldn't load the latest updates. Please try again shortly.</p>
+    ) : (
+        changelogsReversed.slice(0, 1).map((doc) => (
+            <>
+                <h3>Latest update: {doc.frontmatter.title}</h3>
+                <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
+            </>
+        ))
+    )}
     <Button href="/changelog" text="View all updates" />
 </span>
 
@@ -47,13 +67,18 @@ function prepareHtml(html, slug) {
 
     span {
         background-color: white;
-        color: black; 
+        color: black;
         padding: 10px;
         border-radius: 20px;
     }
 
     .wrapper {
-		background-color: white;
+                background-color: white;
         padding: 20px;
+    }
+
+    .error {
+        color: #b91c1c;
+        margin: 0;
     }
 </style>
