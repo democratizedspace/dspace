@@ -33,9 +33,9 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
         });
     }
 
-    // Allow page routes to handle these endpoints when present. If a build omits the
-    // route files (as happened in the broken Docker image), fall back to the shared
-    // helpers so the probes stay available.
+    // Allow page routes to handle these endpoints when present. If a build omits the route
+    // files (as happened in the broken Docker image), fall back to the shared helpers so the
+    // probes stay available.
 
     if (!handledPaths.has(pathname) || response.status !== 404) {
         return response;

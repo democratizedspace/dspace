@@ -4,10 +4,12 @@ import { appendChangelogNotes } from '../utils/changelogNotes';
 import { logServerError } from '../utils/serverLogger';
 
 let changelogs = [];
+let changelogError: Error | undefined;
 
 try {
     changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
 } catch (error) {
+    changelogError = error instanceof Error ? error : new Error(String(error));
     logServerError({
         route: '/',
         method: Astro.request.method ?? 'UNKNOWN',
@@ -44,12 +46,19 @@ function prepareHtml(html, slug) {
 }
 ---
 
-<span class="wrapper">   
-    {changelogsReversed.slice(0, 1).map(doc => (
-        <h3>Latest update: {doc.frontmatter.title}</h3>
-        <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
-    ))}
+<span class="wrapper">
+    {changelogsReversed.length > 0 ? (
+        changelogsReversed.slice(0, 1).map(doc => (
+            <>
+                <h3>Latest update: {doc.frontmatter.title}</h3>
+                <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
+            </>
+        ))
+    ) : (
+        <p class="fallback">Unable to load the latest updates right now.</p>
+    )}
     <Button href="/changelog" text="View all updates" />
+    {changelogError && <p class="fallback">Please check back after a refresh.</p>}
 </span>
 
 <style>
@@ -60,13 +69,17 @@ function prepareHtml(html, slug) {
 
     span {
         background-color: white;
-        color: black; 
+        color: black;
         padding: 10px;
         border-radius: 20px;
     }
 
     .wrapper {
-		background-color: white;
+        background-color: white;
         padding: 20px;
+    }
+
+    .fallback {
+        margin: 0;
     }
 </style>
