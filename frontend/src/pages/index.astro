@@ -1,15 +1,45 @@
 ---
 import Page from '../components/Page.astro';
-import WhatsNew from '../components/WhatsNew.astro';
 import UIResponsiveness from '../components/svelte/UIResponsiveness.svelte';
 import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
+import { logServerError } from '../utils/serverLogger';
+
+const route = Astro.url?.pathname ?? '/';
+const method = Astro.request?.method ?? 'GET';
+
+let WhatsNewComponent: typeof import('../components/WhatsNew.astro').default | null = null;
+let renderError: Error | undefined;
+
+try {
+    const module = await import('../components/WhatsNew.astro');
+    WhatsNewComponent = module.default;
+} catch (error) {
+    renderError = error instanceof Error ? error : new Error(String(error));
+    logServerError({
+        route,
+        method,
+        message: 'Failed to render homepage',
+        error: renderError,
+        context: { url: Astro.url?.toString() },
+    });
+}
 ---
 
 <Page columns="1">
     <script>
         window.dspaceStart = performance.now();
     </script>
-    <WhatsNew />
+    {renderError || !WhatsNewComponent ? (
+        <div class="fallback">
+            <h3>Unable to load latest updates</h3>
+            <p>
+                The homepage content is temporarily unavailable. Please refresh the page or
+                check back shortly.
+            </p>
+        </div>
+    ) : (
+        <WhatsNewComponent />
+    )}
     <FailoverStatus client:load />
     <UIResponsiveness client:load />
 </Page>
@@ -20,5 +50,10 @@ import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
         padding: 20px;
         border-radius: 20px;
         color: black;
+    }
+
+    .fallback {
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
     }
 </style>

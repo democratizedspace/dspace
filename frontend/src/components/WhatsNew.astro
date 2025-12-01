@@ -4,6 +4,7 @@ import { appendChangelogNotes } from '../utils/changelogNotes';
 import { logServerError } from '../utils/serverLogger';
 
 let changelogs = [];
+let changelogLoadError = false;
 
 try {
     changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
@@ -15,9 +16,11 @@ try {
         error,
     });
     changelogs = [];
+    changelogLoadError = true;
 }
 
 const changelogsReversed = [...changelogs].reverse();
+const hasChangelogEntries = changelogsReversed.length > 0;
 
 function prepareHtml(html, slug) {
     const withNotes = appendChangelogNotes(html, slug);
@@ -44,11 +47,21 @@ function prepareHtml(html, slug) {
 }
 ---
 
-<span class="wrapper">   
-    {changelogsReversed.slice(0, 1).map(doc => (
-        <h3>Latest update: {doc.frontmatter.title}</h3>
-        <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
-    ))}
+<span class="wrapper">
+    {hasChangelogEntries ? (
+        changelogsReversed.slice(0, 1).map(doc => (
+            <>
+                <h3>Latest update: {doc.frontmatter.title}</h3>
+                <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
+            </>
+        ))
+    ) : (
+        <p class="changelog-fallback">
+            {changelogLoadError
+                ? 'Unable to load the latest updates right now.'
+                : 'No changelog entries are available yet.'}
+        </p>
+    )}
     <Button href="/changelog" text="View all updates" />
 </span>
 
@@ -60,13 +73,18 @@ function prepareHtml(html, slug) {
 
     span {
         background-color: white;
-        color: black; 
+        color: black;
         padding: 10px;
         border-radius: 20px;
     }
 
     .wrapper {
-		background-color: white;
+        background-color: white;
         padding: 20px;
+    }
+
+    .changelog-fallback {
+        margin: 0;
+        color: #4b5563;
     }
 </style>

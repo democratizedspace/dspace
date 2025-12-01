@@ -92,45 +92,90 @@ jobs:
           docker run -d --name dspace-smoke-test -p 127.0.0.1:8080:8080 \
             -e NODE_OPTIONS="--unhandled-rejections=warn" \
             dspace-test:latest
-          
-          # Wait for server to start responding (up to 60 seconds)
-          # Test /config.json first as it's a simple API endpoint that doesn't use gameState
+
+          get_body_and_code() {
+            local url="$1"
+            curl -s -w '\n%{http_code}' --max-time 5 "$url" 2>/dev/null || echo -e "\n000"
+          }
+
+          print_snapshot() {
+            local attempt="$1"
+            local config_code="$2"
+            local health_code="$3"
+            local root_code="$4"
+            local config_body="$5"
+            local health_body="$6"
+            local root_body="$7"
+            echo "=== Attempt ${attempt}: /config.json ${config_code}," \
+              "/healthz ${health_code}, / ${root_code} ==="
+            echo "--- Response body: /config.json (first 500 chars) ---"
+            echo "$config_body" | head -c 500
+            echo ""
+            echo "--- Response body: /healthz (first 500 chars) ---"
+            echo "$health_body" | head -c 500
+            echo ""
+            echo "--- Response body: / (first 500 chars) ---"
+            echo "$root_body" | head -c 500
+            echo ""
+            echo "--- Container logs (tail) ---"
+            docker logs dspace-smoke-test 2>&1 | tail -100
+            echo "--- Node.js process info ---"
+            docker exec dspace-smoke-test sh -c 'ps aux' 2>&1 || true
+            echo "=== End debug output ==="
+          }
+
           echo "Waiting for server to start..."
           SUCCESS=false
+
           for i in {1..60}; do
-            # Get HTTP response code and body for debugging - test config.json first
-            RESPONSE=$(curl -s -w '\n%{http_code}' --max-time 5 http://127.0.0.1:8080/config.json 2>/dev/null || echo -e "\n000")
-            HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-            BODY=$(echo "$RESPONSE" | head -n -1)
-            
-            if [ "$HTTP_CODE" = "200" ]; then
-              echo "Server is responding with HTTP 200 on /config.json!"
-              echo "Response body: $BODY"
+            CONFIG_RESPONSE=$(get_body_and_code http://127.0.0.1:8080/config.json)
+            CONFIG_CODE=$(echo "$CONFIG_RESPONSE" | tail -n1)
+            CONFIG_BODY=$(echo "$CONFIG_RESPONSE" | head -n -1)
+
+            HEALTH_RESPONSE=$(get_body_and_code http://127.0.0.1:8080/healthz)
+            HEALTH_CODE=$(echo "$HEALTH_RESPONSE" | tail -n1)
+            HEALTH_BODY=$(echo "$HEALTH_RESPONSE" | head -n -1)
+
+            ROOT_RESPONSE=$(get_body_and_code http://127.0.0.1:8080/)
+            ROOT_CODE=$(echo "$ROOT_RESPONSE" | tail -n1)
+            ROOT_BODY=$(echo "$ROOT_RESPONSE" | head -n -1)
+
+            if [ "$CONFIG_CODE" = "200" ] || [ "$HEALTH_CODE" = "200" ]; then
+              echo "Server responded successfully: /config.json ${CONFIG_CODE}," \
+                "/healthz ${HEALTH_CODE}"
+              echo "Response body (/config.json): $CONFIG_BODY"
+              echo "Response body (/healthz): $HEALTH_BODY"
               SUCCESS=true
               break
             fi
-            
-            # Show verbose output for debugging SSR issues
+
             if [ "$i" -eq 5 ] || [ "$i" -eq 10 ] || [ "$i" -eq 30 ]; then
-              echo "=== Attempt $i: HTTP $HTTP_CODE (testing /config.json) ==="
-              echo "--- Response body (first 500 chars) ---"
-              echo "$BODY" | head -c 500
-              echo ""
-              echo "--- Container logs (stdout and stderr) ---"
-              docker logs dspace-smoke-test 2>&1 | tail -100
-              echo "--- Node.js process info ---"
-              docker exec dspace-smoke-test sh -c 'ps aux' 2>&1 || true
-              echo "=== End debug output ==="
+              print_snapshot "$i" "$CONFIG_CODE" "$HEALTH_CODE" "$ROOT_CODE" \
+                "$CONFIG_BODY" "$HEALTH_BODY" "$ROOT_BODY"
             else
-              echo "Attempt $i: HTTP $HTTP_CODE"
+              echo "Attempt $i: /config.json ${CONFIG_CODE}, /healthz ${HEALTH_CODE}," \
+                "/ ${ROOT_CODE}"
             fi
+
+            if [ "$CONFIG_CODE" -ge 500 ] || [ "$HEALTH_CODE" -ge 500 ] || \
+              [ "$ROOT_CODE" -ge 500 ]; then
+              echo "Detected server error response; waiting for recovery..."
+              echo "Bodies (truncated):"
+              echo "/config.json:" && echo "$CONFIG_BODY" | head -c 500 && echo ""
+              echo "/healthz:" && echo "$HEALTH_BODY" | head -c 500 && echo ""
+              echo "/:" && echo "$ROOT_BODY" | head -c 500 && echo ""
+            fi
+
             sleep 1
           done
-          
+
           if [ "$SUCCESS" = "false" ]; then
             echo "=== Server health check failed after 60 seconds ==="
             echo "--- Full container logs ---"
             docker logs dspace-smoke-test 2>&1
+            echo "--- Error lines from container logs ---"
+            docker logs dspace-smoke-test 2>&1 | grep '"level":"error"' \
+              | tail -50 || true
             echo "--- Final verbose curl response on /config.json ---"
             curl -v --max-time 5 http://127.0.0.1:8080/config.json 2>&1 || true
             echo "--- Test healthz endpoint ---"
@@ -141,21 +186,20 @@ jobs:
             docker rm dspace-smoke-test
             exit 1
           fi
-          
-          # Also verify the root page loads
+
           echo "Testing root page..."
-          ROOT_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 http://127.0.0.1:8080/ 2>/dev/null || echo "000")
+          ROOT_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 \
+            http://127.0.0.1:8080/ 2>/dev/null || echo "000")
           if [ "$ROOT_CODE" != "200" ]; then
             echo "WARNING: Root page returned HTTP $ROOT_CODE instead of 200"
             echo "--- Root page response ---"
             curl -v --max-time 10 http://127.0.0.1:8080/ 2>&1 || true
-            # Don't fail the test - config.json works, SSR has issues
-            echo "NOTE: Basic API endpoints work, but SSR pages have issues. This is a pre-existing bug."
+            echo "NOTE: Basic runtime endpoints are responding; investigate SSR failures" \
+              "separately."
           else
             echo "Root page is responding with HTTP 200!"
           fi
-          
-          # Cleanup
+
           docker stop dspace-smoke-test
           docker rm dspace-smoke-test
           echo "Smoke test passed!"
