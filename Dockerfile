@@ -69,7 +69,7 @@ COPY --from=build /workspace/frontend/dist ./dist
 COPY --from=build /workspace/frontend/package.json ./package.json
 COPY infra/docker/entrypoint.mjs ./entrypoint.mjs
 COPY infra/metrics.mjs ./metrics.mjs
-RUN chown -R node:node /app
+RUN chown -R node:node /app /node_modules
 USER node
 EXPOSE 8080
 HEALTHCHECK CMD curl -fsS http://127.0.0.1:${PORT:-8080}/healthz > /dev/null || exit 1
