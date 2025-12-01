@@ -1,3 +1,4 @@
+/** Context object for server-side logging. */
 export interface ServerLogContext {
     [key: string]: unknown;
 }
