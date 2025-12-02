@@ -1,21 +1,23 @@
 # syntax=docker/dockerfile:1.7
 
-FROM node:20-alpine AS base
+FROM node:20-bookworm-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ENV PYTHON="/usr/bin/python3"
-RUN apk add --no-cache \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
         curl \
         python3 \
-        build-base \
-        pkgconfig \
-        cairo-dev \
-        pango-dev \
-        libjpeg-turbo-dev \
-        giflib-dev \
-        freetype-dev \
-    && ln -sf python3 /usr/bin/python \
-    && corepack enable
+        python-is-python3 \
+        build-essential \
+        pkg-config \
+        libcairo2-dev \
+        libpango1.0-dev \
+        libjpeg62-turbo-dev \
+        libgif-dev \
+        libfreetype6-dev \
+    && corepack enable \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /workspace
 
 FROM base AS deps
@@ -45,15 +47,18 @@ COPY packages/cache-version/package.json packages/cache-version/
 COPY frontend/scripts frontend/scripts
 RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --filter ./frontend... --frozen-lockfile --prod
 
-FROM node:20-alpine AS runtime
-RUN apk add --no-cache \
+FROM node:20-bookworm-slim AS runtime
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
         dumb-init \
         curl \
-        cairo \
-        pango \
-        libjpeg-turbo \
-        giflib \
-        freetype \
+        libcairo2 \
+        libpango-1.0-0 \
+        libpangoft2-1.0-0 \
+        libjpeg62-turbo \
+        libgif7 \
+        libfreetype6 \
+    && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /app \
     && chown node:node /app
 WORKDIR /app
