@@ -75,4 +75,18 @@ describe('runtime middleware fallback', () => {
     expect(payload.method).toBe('GET');
     expect(payload.context.status).toBe(503);
   });
+
+  it('logs 5xx homepage responses for visibility in cluster logs', async () => {
+    const context = createContext('/');
+    const logSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await onRequest(context, async () => new Response(null, { status: 500 }));
+
+    expect(response.status).toBe(500);
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    const payload = JSON.parse(logSpy.mock.calls[0][0]);
+    expect(payload.route).toBe('/');
+    expect(payload.method).toBe('GET');
+    expect(payload.context.status).toBe(500);
+  });
 });
