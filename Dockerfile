@@ -7,6 +7,7 @@ ENV PYTHON="/usr/bin/python3"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
+        ca-certificates \
         curl \
         libjpeg62-turbo-dev \
         libcairo2-dev \
@@ -53,12 +54,6 @@ RUN apt-get update \
         ca-certificates \
         curl \
         dumb-init \
-        libcairo2 \
-        libfreetype6 \
-        libgif7 \
-        libjpeg62-turbo \
-        libpango-1.0-0 \
-        libpangocairo-1.0-0 \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /app \
     && chown node:node /app
