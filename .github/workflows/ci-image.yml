@@ -44,6 +44,13 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
+      - name: Compute build metadata
+        run: |
+          pkg_version="$(node -p "require('./package.json').version")"
+          short_sha="$(git rev-parse --short HEAD)"
+          echo "DSPACE_VERSION=v${pkg_version}+${short_sha}" >> "$GITHUB_ENV"
+          echo "DSPACE_ENV=ci" >> "$GITHUB_ENV"
+
       - name: Install dependencies (creates host node_modules)
         run: pnpm install --frozen-lockfile --reporter=append-only
 
@@ -59,6 +66,9 @@ jobs:
           push: false
           platforms: linux/amd64
           provenance: false
+          build-args: |
+            DSPACE_VERSION=${{ env.DSPACE_VERSION }}
+            DSPACE_ENV=${{ env.DSPACE_ENV }}
 
       - name: Build image with local node_modules present
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
@@ -73,6 +83,9 @@ jobs:
           cache-to: type=gha,mode=max,scope=ci-image-local
           load: true
           tags: dspace-test:latest
+          build-args: |
+            DSPACE_VERSION=${{ env.DSPACE_VERSION }}
+            DSPACE_ENV=${{ env.DSPACE_ENV }}
 
       - name: Build image for smoke test (no cache for forks)
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork
@@ -85,6 +98,9 @@ jobs:
           provenance: false
           load: true
           tags: dspace-test:latest
+          build-args: |
+            DSPACE_VERSION=${{ env.DSPACE_VERSION }}
+            DSPACE_ENV=${{ env.DSPACE_ENV }}
 
       - name: Smoke test - verify container boots and serves requests
         run: |
@@ -219,6 +235,7 @@ jobs:
           echo "sha_tag=${sha_tag}" >> "$GITHUB_OUTPUT"
           echo "latest_tag=${latest_tag}" >> "$GITHUB_OUTPUT"
           echo "version_tag=${version_tag}" >> "$GITHUB_OUTPUT"
+          echo "short_sha=${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Set image metadata
         id: metadata
@@ -237,6 +254,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute build metadata
+        id: build-version
+        run: |
+          echo "value=v${{ steps.version.outputs.version }}+${{ steps.tags.outputs.short_sha }}" >> "$GITHUB_OUTPUT"
+          echo "env_name=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -262,3 +285,6 @@ jobs:
             org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            DSPACE_VERSION=${{ steps.build-version.outputs.value }}
+            DSPACE_ENV=${{ steps.build-version.outputs.env_name }}

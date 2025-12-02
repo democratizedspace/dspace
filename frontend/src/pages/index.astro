@@ -4,6 +4,13 @@ import WhatsNew from '../components/WhatsNew.astro';
 import UIResponsiveness from '../components/svelte/UIResponsiveness.svelte';
 import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
 
+const version =
+    import.meta.env?.DSPACE_VERSION ??
+    process.env.DSPACE_VERSION ??
+    process.env.npm_package_version ??
+    'dev';
+const environment = import.meta.env?.DSPACE_ENV ?? process.env.DSPACE_ENV ?? 'unknown';
+
 // Component rendering errors (e.g., in <WhatsNew />) are caught by middleware. Add SSR
 // preparation logic here if the homepage requires it in the future.
 ---
@@ -12,12 +19,48 @@ import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
     <script>
         window.dspaceStart = performance.now();
     </script>
+    <div class="build-meta" aria-label="Build metadata">
+        <span class="badge env">{environment}</span>
+        <span class="badge version">{version}</span>
+    </div>
     <WhatsNew />
     <FailoverStatus client:load />
     <UIResponsiveness client:load />
 </Page>
 
 <style>
+    .build-meta {
+        display: inline-flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        align-items: center;
+        font-size: 0.9rem;
+        color: #1f2937;
+    }
+
+    .badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 999px;
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        text-transform: lowercase;
+        letter-spacing: 0.01em;
+    }
+
+    .badge.env {
+        background: #eef2ff;
+        border-color: #c7d2fe;
+        color: #3730a3;
+    }
+
+    .badge.version {
+        background: #ecfeff;
+        border-color: #a5f3fc;
+        color: #0f172a;
+        font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+            monospace;
+    }
+
     div {
         background-color: white;
         padding: 20px;

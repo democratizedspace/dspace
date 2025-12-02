@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { APIContext } from 'astro';
 
 import { onRequest } from '../frontend/src/middleware';
+import { buildHealthResponse } from '../frontend/src/utils/runtimeEndpoints';
 
 function createContext(pathname: string): APIContext {
   return {
@@ -88,5 +89,21 @@ describe('runtime middleware fallback', () => {
     expect(payload.route).toBe('/');
     expect(payload.method).toBe('GET');
     expect(payload.context.status).toBe(500);
+  });
+
+  it('includes version and environment in health response', async () => {
+    const previousVersion = process.env.DSPACE_VERSION;
+    const previousEnv = process.env.DSPACE_ENV;
+    process.env.DSPACE_VERSION = 'v3.0.0+test';
+    process.env.DSPACE_ENV = 'staging';
+
+    const response = buildHealthResponse();
+    const body = await response.json();
+
+    expect(body.version).toBe('v3.0.0+test');
+    expect(body.env).toBe('staging');
+
+    process.env.DSPACE_VERSION = previousVersion;
+    process.env.DSPACE_ENV = previousEnv;
   });
 });

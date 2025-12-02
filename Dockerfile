@@ -1,9 +1,16 @@
 # syntax=docker/dockerfile:1.7
 
+ARG DSPACE_VERSION=dev
+ARG DSPACE_ENV=unknown
+
 FROM node:20-bookworm-slim AS base
+ARG DSPACE_VERSION
+ARG DSPACE_ENV
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ENV PYTHON="/usr/bin/python3"
+ENV DSPACE_VERSION="${DSPACE_VERSION}"
+ENV DSPACE_ENV="${DSPACE_ENV}"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
@@ -49,6 +56,8 @@ COPY frontend/scripts frontend/scripts
 RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --filter ./frontend... --frozen-lockfile --prod
 
 FROM node:20-bookworm-slim AS runtime
+ARG DSPACE_VERSION=dev
+ARG DSPACE_ENV=unknown
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -61,6 +70,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8080
 ENV HOST=0.0.0.0
+ENV DSPACE_VERSION="${DSPACE_VERSION}"
+ENV DSPACE_ENV="${DSPACE_ENV}"
 # Copy frontend node_modules symlinks and the root-level .pnpm directory they point to.
 # The symlinks in frontend/node_modules point to ../../node_modules/.pnpm/, so we need to
 # preserve that structure in the runtime image.

@@ -12,6 +12,8 @@ service:
   type: ClusterIP
   port: 8080
 
+environment: staging
+
 ingress:
   enabled: false
   className: traefik
