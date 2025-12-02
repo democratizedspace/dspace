@@ -3,45 +3,19 @@ import Page from '../components/Page.astro';
 import WhatsNew from '../components/WhatsNew.astro';
 import UIResponsiveness from '../components/svelte/UIResponsiveness.svelte';
 import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
-import { logServerError } from '../utils/serverLogger';
 
-const route = Astro.url?.pathname ?? '/';
-const method = Astro.request?.method ?? 'GET';
-
-let renderError: Error | undefined;
-
-try {
-    // Placeholder for future SSR preparation. Keeping the try/catch ensures any unexpected
-    // errors during render are logged with structured metadata.
-} catch (error) {
-    renderError = error instanceof Error ? error : new Error(String(error));
-    logServerError({
-        route,
-        method,
-        message: 'Failed to render homepage',
-        error: renderError,
-        context: { url: Astro.url?.toString() },
-    });
-}
+// Component rendering errors (e.g., in <WhatsNew />) are caught by middleware. Add SSR
+// preparation logic here if the homepage requires it in the future.
 ---
 
-{renderError ? (
-    <Page columns="1">
-        <div class="fallback">
-            <h3>Something went wrong while loading the homepage.</h3>
-            <p>Please try again shortly.</p>
-        </div>
-    </Page>
-) : (
-    <Page columns="1">
-        <script>
-            window.dspaceStart = performance.now();
-        </script>
-        <WhatsNew />
-        <FailoverStatus client:load />
-        <UIResponsiveness client:load />
-    </Page>
-)}
+<Page columns="1">
+    <script>
+        window.dspaceStart = performance.now();
+    </script>
+    <WhatsNew />
+    <FailoverStatus client:load />
+    <UIResponsiveness client:load />
+</Page>
 
 <style>
     div {
