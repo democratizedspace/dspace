@@ -4,11 +4,22 @@ import WhatsNew from '../components/WhatsNew.astro';
 import UIResponsiveness from '../components/svelte/UIResponsiveness.svelte';
 import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
 
+const version =
+    import.meta.env?.DSPACE_VERSION ??
+    process.env.DSPACE_VERSION ??
+    process.env.npm_package_version ??
+    'dev';
+const environment = import.meta.env?.DSPACE_ENV ?? process.env.DSPACE_ENV ?? 'unknown';
+
 // Component rendering errors (e.g., in <WhatsNew />) are caught by middleware. Add SSR
 // preparation logic here if the homepage requires it in the future.
 ---
 
 <Page columns="1">
+    <div class="build-meta" aria-label="Build metadata">
+        <span class="env">{environment}</span>
+        <span class="version">{version}</span>
+    </div>
     <script>
         window.dspaceStart = performance.now();
     </script>
@@ -27,5 +38,23 @@ import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
 
     .fallback {
         text-align: center;
+    }
+
+    .build-meta {
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        border-radius: 9999px;
+        background-color: #f4f4f5;
+        color: #1f2933;
+        float: right;
+    }
+
+    .build-meta .env {
+        font-weight: 600;
+        text-transform: lowercase;
     }
 </style>

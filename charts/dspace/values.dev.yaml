@@ -6,3 +6,5 @@ image:
 ingress:
   enabled: true
   host: dspace-v3.example.dev # replace with your dev domain
+
+environment: dev
