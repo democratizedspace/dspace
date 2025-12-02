@@ -57,6 +57,8 @@ secret:
   enabled: false
   stringData: {}
 
+environment: unknown
+
 env: []
 
 resources:
