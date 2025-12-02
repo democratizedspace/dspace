@@ -5,21 +5,11 @@ import { logServerError } from '../utils/serverLogger';
 
 let changelogs = [];
 let changelogError: Error | undefined;
-
-try {
-    changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
-} catch (error) {
-    changelogError = error instanceof Error ? error : new Error(String(error));
-    logServerError({
-        route: '/',
-        method: Astro.request.method ?? 'UNKNOWN',
-        message: 'Failed to load changelog entries for homepage',
-        error,
-    });
-    changelogs = [];
-}
-
-const changelogsReversed = [...changelogs].reverse();
+let latestUpdateHtml: string | undefined;
+let latestUpdateTitle: string | undefined;
+let changelogRenderError: Error | undefined;
+const route = Astro.url?.pathname ?? '/';
+const method = Astro.request?.method ?? 'GET';
 
 function prepareHtml(html, slug) {
     const withNotes = appendChangelogNotes(html, slug);
@@ -44,21 +34,56 @@ function prepareHtml(html, slug) {
         </style>
     `;
 }
+
+try {
+    changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
+} catch (error) {
+    changelogError = error instanceof Error ? error : new Error(String(error));
+    logServerError({
+        route,
+        method,
+        message: 'Failed to load homepage changelog entries',
+        error: changelogError,
+        context: { url: Astro.url?.toString() },
+    });
+    changelogs = [];
+}
+
+const changelogsReversed = [...changelogs].reverse();
+
+try {
+    if (changelogsReversed.length > 0) {
+        const [latest] = changelogsReversed;
+        latestUpdateTitle = latest?.frontmatter?.title;
+        latestUpdateHtml = prepareHtml(latest?.compiledContent(), latest?.frontmatter?.slug);
+    }
+} catch (error) {
+    changelogRenderError = error instanceof Error ? error : new Error(String(error));
+    logServerError({
+        route,
+        method,
+        message: 'Failed to prepare homepage changelog content',
+        error: changelogRenderError,
+        context: { url: Astro.url?.toString() },
+    });
+    latestUpdateHtml = undefined;
+    latestUpdateTitle = undefined;
+}
 ---
 
 <span class="wrapper">
-    {changelogsReversed.length > 0 ? (
-        changelogsReversed.slice(0, 1).map(doc => (
-            <>
-                <h3>Latest update: {doc.frontmatter.title}</h3>
-                <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
-            </>
-        ))
+    {latestUpdateHtml && latestUpdateTitle ? (
+        <>
+            <h3>Latest update: {latestUpdateTitle}</h3>
+            <span set:html={latestUpdateHtml}></span>
+        </>
     ) : (
         <p class="fallback">Unable to load the latest updates right now.</p>
     )}
     <Button href="/changelog" text="View all updates" />
-    {changelogError && <p class="fallback">Please check back after a refresh.</p>}
+    {(changelogError || changelogRenderError) && (
+        <p class="fallback">Please check back after a refresh.</p>
+    )}
 </span>
 
 <style>
