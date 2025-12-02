@@ -3,6 +3,9 @@ import Button from './Button.astro';
 import { appendChangelogNotes } from '../utils/changelogNotes';
 import { logServerError } from '../utils/serverLogger';
 
+const method = Astro.request?.method ?? 'GET';
+const route = Astro.url?.pathname ?? '/';
+
 let changelogs = [];
 let changelogError: Error | undefined;
 
@@ -11,10 +14,11 @@ try {
 } catch (error) {
     changelogError = error instanceof Error ? error : new Error(String(error));
     logServerError({
-        route: '/',
-        method: Astro.request.method ?? 'UNKNOWN',
-        message: 'Failed to load changelog entries for homepage',
-        error,
+        route,
+        method,
+        message: 'Failed to load homepage changelog entries',
+        error: changelogError,
+        context: { url: Astro.url?.toString() },
     });
     changelogs = [];
 }
