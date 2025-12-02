@@ -30,6 +30,10 @@ spec:
           env:
             - name: PORT
               value: "{{ .Values.service.port }}"
+            - name: DSPACE_VERSION
+              value: {{ .Values.image.tag | quote }}
+            - name: DSPACE_ENV
+              value: {{ .Values.environment | default "unknown" | quote }}
           {{- if .Values.env }}
             {{- toYaml .Values.env | nindent 12 }}
           {{- end }}

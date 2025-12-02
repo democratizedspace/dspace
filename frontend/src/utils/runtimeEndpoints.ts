@@ -54,12 +54,16 @@ function buildHealthBody(status: 'ready' | 'alive') {
     const flags = parseFeatureFlags(process.env.DSPACE_FEATURE_FLAGS);
     const startedAt = new Date(Date.now() - process.uptime() * 1000);
 
+    const version = process.env.DSPACE_VERSION || process.env.npm_package_version || 'unknown';
+    const env = process.env.DSPACE_ENV || 'unknown';
+
     return {
         status,
         uptimeSeconds: process.uptime(),
         startedAt: startedAt.toISOString(),
         timestamp: new Date().toISOString(),
-        version: process.env.DSPACE_VERSION || process.env.npm_package_version || 'unknown',
+        version,
+        env,
         features: flags.tokens,
     };
 }

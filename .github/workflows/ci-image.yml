@@ -44,6 +44,13 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
+      - name: Compute build version
+        id: build-version
+        run: |
+          pkg_version=$(node -p "require('./package.json').version")
+          short_sha="${GITHUB_SHA::7}"
+          echo "version=v${pkg_version}+${short_sha}" >> "$GITHUB_OUTPUT"
+
       - name: Install dependencies (creates host node_modules)
         run: pnpm install --frozen-lockfile --reporter=append-only
 
@@ -59,6 +66,8 @@ jobs:
           push: false
           platforms: linux/amd64
           provenance: false
+          build-args: |
+            DSPACE_VERSION=${{ steps.build-version.outputs.version }}
 
       - name: Build image with local node_modules present
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
@@ -73,6 +82,8 @@ jobs:
           cache-to: type=gha,mode=max,scope=ci-image-local
           load: true
           tags: dspace-test:latest
+          build-args: |
+            DSPACE_VERSION=${{ steps.build-version.outputs.version }}
 
       - name: Build image for smoke test (no cache for forks)
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork
@@ -85,6 +96,8 @@ jobs:
           provenance: false
           load: true
           tags: dspace-test:latest
+          build-args: |
+            DSPACE_VERSION=${{ steps.build-version.outputs.version }}
 
       - name: Smoke test - verify container boots and serves requests
         run: |
@@ -219,6 +232,7 @@ jobs:
           echo "sha_tag=${sha_tag}" >> "$GITHUB_OUTPUT"
           echo "latest_tag=${latest_tag}" >> "$GITHUB_OUTPUT"
           echo "version_tag=${version_tag}" >> "$GITHUB_OUTPUT"
+          echo "build_version=v${{ steps.version.outputs.version }}+${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Set image metadata
         id: metadata
@@ -262,3 +276,5 @@ jobs:
             org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            DSPACE_VERSION=${{ steps.tags.outputs.build_version }}
