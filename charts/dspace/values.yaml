@@ -1,7 +1,7 @@
 replicaCount: 2
 
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: ''
+fullnameOverride: ''
 
 image:
   repository: ghcr.io/democratizedspace/dspace
@@ -15,16 +15,16 @@ service:
 ingress:
   enabled: false
   className: traefik
-  host: ""
+  host: ''
   annotations: {}
   tls:
     enabled: false
-    secretName: ""
+    secretName: ''
 
 serviceAccount:
   create: true
   annotations: {}
-  name: ""
+  name: ''
   automountServiceAccountToken: false
 
 podSecurityContext:
@@ -56,6 +56,8 @@ configMap:
 secret:
   enabled: false
   stringData: {}
+
+environment: unknown
 
 env: []
 

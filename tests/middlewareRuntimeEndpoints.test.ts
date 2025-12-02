@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { APIContext } from 'astro';
 
 import { onRequest } from '../frontend/src/middleware';
+import { buildHealthResponse } from '../frontend/src/utils/runtimeEndpoints';
 
 function createContext(pathname: string): APIContext {
   return {
@@ -12,7 +13,10 @@ function createContext(pathname: string): APIContext {
 describe('runtime middleware fallback', () => {
   it('falls back to shared handlers when a route is missing', async () => {
     const context = createContext('/config.json');
-    const response = await onRequest(context, async () => new Response(null, { status: 404 }));
+    const response = await onRequest(
+      context,
+      async () => new Response(null, { status: 404 })
+    );
 
     expect(response.status).toBe(200);
     expect(response.headers.get('cache-control')).toBe('no-store');
@@ -30,7 +34,10 @@ describe('runtime middleware fallback', () => {
 
   it('handles the /health alias when missing from the build', async () => {
     const context = createContext('/health');
-    const response = await onRequest(context, async () => new Response(null, { status: 404 }));
+    const response = await onRequest(
+      context,
+      async () => new Response(null, { status: 404 })
+    );
 
     expect(response.status).toBe(200);
     const body = await response.json();
@@ -39,7 +46,10 @@ describe('runtime middleware fallback', () => {
 
   it('ignores unrelated paths', async () => {
     const context = createContext('/unrelated');
-    const response = await onRequest(context, async () => new Response('ok', { status: 200 }));
+    const response = await onRequest(
+      context,
+      async () => new Response('ok', { status: 200 })
+    );
 
     expect(response.status).toBe(200);
     expect(await response.text()).toBe('ok');
@@ -52,7 +62,7 @@ describe('runtime middleware fallback', () => {
     await expect(() =>
       onRequest(context, async () => {
         throw new Error('boom');
-      }),
+      })
     ).rejects.toThrow('boom');
 
     expect(logSpy).toHaveBeenCalledTimes(1);
@@ -66,7 +76,10 @@ describe('runtime middleware fallback', () => {
     const context = createContext('/healthz');
     const logSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    const response = await onRequest(context, async () => new Response(null, { status: 503 }));
+    const response = await onRequest(
+      context,
+      async () => new Response(null, { status: 503 })
+    );
 
     expect(response.status).toBe(503);
     expect(logSpy).toHaveBeenCalledTimes(1);
@@ -80,7 +93,10 @@ describe('runtime middleware fallback', () => {
     const context = createContext('/');
     const logSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    const response = await onRequest(context, async () => new Response(null, { status: 500 }));
+    const response = await onRequest(
+      context,
+      async () => new Response(null, { status: 500 })
+    );
 
     expect(response.status).toBe(500);
     expect(logSpy).toHaveBeenCalledTimes(1);
@@ -88,5 +104,22 @@ describe('runtime middleware fallback', () => {
     expect(payload.route).toBe('/');
     expect(payload.method).toBe('GET');
     expect(payload.context.status).toBe(500);
+  });
+
+  it('includes version and environment in health response', async () => {
+    const originalVersion = process.env.DSPACE_VERSION;
+    const originalEnv = process.env.DSPACE_ENV;
+
+    process.env.DSPACE_VERSION = 'v3.0.0+test';
+    process.env.DSPACE_ENV = 'staging';
+
+    const response = buildHealthResponse();
+    const body = await response.json();
+
+    expect(body.version).toBe('v3.0.0+test');
+    expect(body.env).toBe('staging');
+
+    process.env.DSPACE_VERSION = originalVersion;
+    process.env.DSPACE_ENV = originalEnv;
   });
 });

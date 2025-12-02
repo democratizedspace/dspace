@@ -1,5 +1,7 @@
 replicaCount: 1
 
+environment: dev
+
 image:
   pullPolicy: IfNotPresent
 
