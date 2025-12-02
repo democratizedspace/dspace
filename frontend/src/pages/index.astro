@@ -3,19 +3,48 @@ import Page from '../components/Page.astro';
 import WhatsNew from '../components/WhatsNew.astro';
 import UIResponsiveness from '../components/svelte/UIResponsiveness.svelte';
 import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
+import { logServerError } from '../utils/serverLogger';
+
+const route = Astro.url?.pathname ?? '/';
+const method = Astro.request?.method ?? 'GET';
+
+let renderError: Error | undefined;
+
+try {
+    // Placeholder for future server-side preparation work. Wrapped to ensure errors
+    // are logged and surfaced via the fallback UI instead of crashing the route.
+} catch (error) {
+    renderError = error instanceof Error ? error : new Error(String(error));
+    logServerError({
+        route,
+        method,
+        message: 'Failed to render homepage',
+        error: renderError,
+        context: { url: Astro.url?.toString() },
+    });
+}
 ---
 
 <Page columns="1">
-    <script>
-        window.dspaceStart = performance.now();
-    </script>
-    <WhatsNew />
-    <FailoverStatus client:load />
-    <UIResponsiveness client:load />
+    {renderError ? (
+        <div class="fallback">
+            <h3>Something went wrong while loading the homepage.</h3>
+            <p>Please try again shortly.</p>
+        </div>
+    ) : (
+        <>
+            <script>
+                window.dspaceStart = performance.now();
+            </script>
+            <WhatsNew />
+            <FailoverStatus client:load />
+            <UIResponsiveness client:load />
+        </>
+    )}
 </Page>
 
 <style>
-    div {
+    .fallback {
         background-color: white;
         padding: 20px;
         border-radius: 20px;
