@@ -48,4 +48,34 @@ test.describe('Dark mode toggle', () => {
         );
         await expectLocalStorageValue(page, 'dspace-theme', toggledTheme);
     });
+
+    test('keeps the chosen theme across navigation', async ({ page }) => {
+        await page.goto('/');
+        await waitForHydration(page);
+
+        const html = page.locator('html');
+        const body = page.locator('body');
+        const toggle = page.getByRole('button', { name: /toggle dark mode/i });
+
+        await expect(toggle).toHaveAttribute('data-hydrated', 'true');
+
+        const initialTheme = (await html.getAttribute('data-theme')) === 'light' ? 'light' : 'dark';
+        const targetTheme = initialTheme === 'dark' ? 'light' : 'dark';
+
+        await toggle.click();
+
+        const routes = ['/', '/quests', '/wallet', '/profile', '/stats'];
+        for (const route of routes) {
+            await page.goto(route);
+            await page.waitForLoadState('networkidle');
+            await waitForHydration(page);
+
+            await expect(html).toHaveAttribute('data-theme', targetTheme);
+            await expect(body).toHaveAttribute('data-theme', targetTheme);
+
+            const currentToggle = page.getByRole('button', { name: /toggle dark mode/i });
+            await expect(currentToggle).toHaveAttribute('data-hydrated', 'true');
+            await expect(currentToggle).toContainText(targetTheme === 'dark' ? /Dark mode/ : /Light mode/);
+        }
+    });
 });

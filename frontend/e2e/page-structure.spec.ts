@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { clearUserData, waitForHydration } from './test-helpers';
 
 test.describe('Page Layout Structure', () => {
     test.beforeEach(async ({ page }) => {
@@ -117,5 +117,60 @@ test.describe('Page Layout Structure', () => {
 
         // Take a screenshot for visual verification
         await page.screenshot({ path: './test-artifacts/desktop-view.png' });
+    });
+
+    for (const { label, viewport } of [
+        { label: 'desktop', viewport: { width: 1280, height: 720 } },
+        { label: 'mobile', viewport: { width: 430, height: 900 } },
+    ]) {
+        test.describe(`Header layout (${label})`, () => {
+            test.use({ viewport });
+
+            test('keeps the brand centered with toggle on the right', async ({ page }) => {
+                await page.goto('/');
+                await waitForHydration(page);
+
+                const header = page.locator('header.header');
+                const brand = page.locator('[data-testid="brand"]');
+                const toggle = page.getByRole('button', { name: /toggle dark mode/i });
+
+                const [headerBox, brandBox, toggleBox] = await Promise.all([
+                    header.boundingBox(),
+                    brand.boundingBox(),
+                    toggle.boundingBox(),
+                ]);
+
+                if (!headerBox || !brandBox || !toggleBox) {
+                    throw new Error('Unable to read header layout');
+                }
+
+                const headerCenter = headerBox.x + headerBox.width / 2;
+                const brandCenter = brandBox.x + brandBox.width / 2;
+
+                expect(Math.abs(brandCenter - headerCenter)).toBeLessThanOrEqual(16);
+                expect(toggleBox.x).toBeGreaterThan(headerCenter - 12);
+                expect(toggleBox.y).toBeLessThanOrEqual(headerBox.y + headerBox.height * 0.6);
+
+                const overlaps = !(
+                    brandBox.x + brandBox.width <= toggleBox.x ||
+                    toggleBox.x + toggleBox.width <= brandBox.x ||
+                    brandBox.y + brandBox.height <= toggleBox.y ||
+                    toggleBox.y + toggleBox.height <= brandBox.y
+                );
+                expect(overlaps).toBeFalsy();
+            });
+        });
+    }
+
+    test.describe('Navigation cleanup', () => {
+        test('omits Flywheel link and blocks direct access', async ({ page }) => {
+            await page.goto('/');
+            await waitForHydration(page);
+
+            await expect(page.getByRole('link', { name: /flywheel/i })).toHaveCount(0);
+
+            const response = await page.goto('/flywheel');
+            expect(response?.status()).toBe(404);
+        });
     });
 });

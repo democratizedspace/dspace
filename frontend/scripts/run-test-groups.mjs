@@ -85,7 +85,7 @@ const TEST_GROUPS = [
             'touch-item-selector.spec.ts',
             'touch-menu.spec.ts',
             'ui-responsiveness.spec.ts',
-            'v3-regressions.spec.ts',
+            'wallet-page.spec.ts',
         ],
         parallel: false,
         workers: 1,
