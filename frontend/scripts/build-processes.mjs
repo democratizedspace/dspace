@@ -19,3 +19,6 @@ fs.writeFileSync(outPath, JSON.stringify(processes, null, 4) + '\n');
 
 const { syncCacheVersion } = await import('./sync-cache-version.mjs');
 await syncCacheVersion();
+
+const { injectCacheVersionIntoServiceWorker } = await import('./inject-cache-version-into-sw.mjs');
+await injectCacheVersionIntoServiceWorker();
