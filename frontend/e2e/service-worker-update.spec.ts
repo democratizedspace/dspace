@@ -3,6 +3,7 @@ import { clearUserData, waitForHydration } from './test-helpers';
 
 const SW_REGISTRATION_TIMEOUT_MS = 15000;
 const SW_EVENT_CAPTURE_TIMEOUT_MS = 2000;
+const ASTRO_ASSET_PATH = '/_astro/';
 
 test.describe('Service Worker Update', () => {
     test.beforeEach(async ({ page }) => {
@@ -44,10 +45,10 @@ test.describe('Service Worker Update', () => {
         expect(swRegistered).toBe(true);
 
         // Check that the main stylesheet loads successfully
-        const stylesheetResponse = await page.evaluate(async () => {
+        const stylesheetResponse = await page.evaluate(async (assetPath) => {
             const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
             const assetLinks = links.filter((link) =>
-                (link as HTMLLinkElement).href.includes('/_astro/')
+                (link as HTMLLinkElement).href.includes(assetPath)
             );
 
             if (assetLinks.length === 0) {
@@ -66,7 +67,7 @@ test.describe('Service Worker Update', () => {
                     error: String(error),
                 };
             }
-        });
+        }, ASTRO_ASSET_PATH);
 
         expect(stylesheetResponse.found).toBe(true);
         expect(stylesheetResponse.status).toBe(200);
@@ -158,10 +159,10 @@ test.describe('Service Worker Update', () => {
         await waitForHydration(page);
 
         // Verify CSS still loads correctly (no 404s)
-        const cssLoadsAfterUpdate = await page.evaluate(async () => {
+        const cssLoadsAfterUpdate = await page.evaluate(async (assetPath) => {
             const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
             const assetLinks = links.filter((link) =>
-                (link as HTMLLinkElement).href.includes('/_astro/')
+                (link as HTMLLinkElement).href.includes(assetPath)
             );
 
             if (assetLinks.length === 0) {
@@ -182,7 +183,7 @@ test.describe('Service Worker Update', () => {
 
             const allOk = results.every((r) => r.ok);
             return { success: allOk, results };
-        });
+        }, ASTRO_ASSET_PATH);
 
         expect(cssLoadsAfterUpdate.success).toBe(true);
 
@@ -261,7 +262,7 @@ test.describe('Service Worker Update', () => {
 
         page.on('response', (response) => {
             const url = response.url();
-            if (url.includes('/_astro/') && url.match(/\.(css|js)$/)) {
+            if (url.includes(ASTRO_ASSET_PATH) && url.match(/\.(css|js)$/)) {
                 cssRequests.push({ url, status: response.status() });
             }
         });
