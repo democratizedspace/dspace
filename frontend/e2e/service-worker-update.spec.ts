@@ -234,8 +234,8 @@ test.describe('Service Worker Update', () => {
                     if (registration.installing) {
                         events.push('installing');
                         registration.installing.addEventListener('statechange', (e) => {
-                            const target = e.target as ServiceWorker;
-                            events.push(`state:${target.state}`);
+                            const target = e.target as { state?: string };
+                            events.push(`state:${target?.state || 'unknown'}`);
                         });
                     }
 
