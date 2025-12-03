@@ -83,7 +83,9 @@ describe('registerOfflineWorker', () => {
         serviceWorker.register.mockResolvedValue({ waiting: waitingWorker });
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
-        const { registerOfflineWorker } = await import('../src/scripts/offlineWorkerRegistration.js');
+        const { registerOfflineWorker } = await import(
+            '../src/scripts/offlineWorkerRegistration.js'
+        );
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -121,7 +123,9 @@ describe('registerOfflineWorker', () => {
         serviceWorker.register.mockResolvedValue(registration);
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
-        const { registerOfflineWorker } = await import('../src/scripts/offlineWorkerRegistration.js');
+        const { registerOfflineWorker } = await import(
+            '../src/scripts/offlineWorkerRegistration.js'
+        );
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -143,26 +147,26 @@ describe('registerOfflineWorker', () => {
     });
 
     it('skips registration when offline worker disabled via config', async () => {
-        fetch.mockImplementation(() =>
-            mockFetchResponse({ offlineWorker: { enabled: false } })
-        );
+        fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: false } }));
 
-        const { registerOfflineWorker } = await import('../src/scripts/offlineWorkerRegistration.js');
+        const { registerOfflineWorker } = await import(
+            '../src/scripts/offlineWorkerRegistration.js'
+        );
 
         registerOfflineWorker();
         await dispatchLoad();
 
         expect(serviceWorker.register).not.toHaveBeenCalled();
-        expect(consoleInfoSpy).toHaveBeenCalledWith(
-            'Offline worker disabled via runtime config.'
-        );
+        expect(consoleInfoSpy).toHaveBeenCalledWith('Offline worker disabled via runtime config.');
     });
 
     it('logs warning when service worker registration fails', async () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: {} }));
         serviceWorker.register.mockRejectedValue(new Error('Registration failed'));
 
-        const { registerOfflineWorker } = await import('../src/scripts/offlineWorkerRegistration.js');
+        const { registerOfflineWorker } = await import(
+            '../src/scripts/offlineWorkerRegistration.js'
+        );
 
         registerOfflineWorker();
         await dispatchLoad();

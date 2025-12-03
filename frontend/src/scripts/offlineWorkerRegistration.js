@@ -39,18 +39,13 @@ export function registerOfflineWorker() {
                 return;
             }
             refreshing = true;
-            navigator.serviceWorker.removeEventListener(
-                'controllerchange',
-                handleControllerChange
-            );
+            navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
             window.location.reload();
         };
 
-        navigator.serviceWorker.addEventListener(
-            'controllerchange',
-            handleControllerChange,
-            { once: true }
-        );
+        navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange, {
+            once: true,
+        });
     }
 
     function setupUpdateHandling(registration) {
@@ -71,10 +66,7 @@ export function registerOfflineWorker() {
             worker.addEventListener(
                 'statechange',
                 () => {
-                    if (
-                        worker.state === 'installed' &&
-                        navigator.serviceWorker.controller
-                    ) {
+                    if (worker.state === 'installed' && navigator.serviceWorker.controller) {
                         triggerUpdate(registration);
                     }
                 },
