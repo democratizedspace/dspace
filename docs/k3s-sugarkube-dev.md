@@ -295,7 +295,7 @@ Watch pods replace and confirm the new build:
 
 ```bash
 sudo kubectl get pods -n dspace -w
-kubectl -n dspace port-forward svc/dspace 8080:8080
+sudo kubectl -n dspace port-forward svc/dspace 8080:8080
 curl -s http://localhost:8080/healthz | jq
 ```
 
