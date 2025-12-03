@@ -176,9 +176,63 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                                                 return;
                                         }
 
-                                        navigator.serviceWorker.register('/service-worker.js').catch((error) => {
-                                                console.warn('Service worker registration failed:', error);
-                                        });
+                                        function triggerUpdate(registration) {
+                                                const waiting = registration.waiting;
+                                                if (!waiting) {
+                                                        return;
+                                                }
+
+                                                waiting.postMessage({ type: 'SKIP_WAITING' });
+
+                                                let refreshing = false;
+                                                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                                                        if (refreshing) {
+                                                                return;
+                                                        }
+                                                        refreshing = true;
+                                                        window.location.reload();
+                                                });
+                                        }
+
+                                        function setupUpdateHandling(registration) {
+                                                if (!registration) {
+                                                        return;
+                                                }
+
+                                                if (registration.waiting) {
+                                                        triggerUpdate(registration);
+                                                        return;
+                                                }
+
+                                                const listen = (worker) => {
+                                                        if (!worker) {
+                                                                return;
+                                                        }
+                                                        worker.addEventListener('statechange', () => {
+                                                                if (
+                                                                        worker.state === 'installed' &&
+                                                                        navigator.serviceWorker.controller
+                                                                ) {
+                                                                        triggerUpdate(registration);
+                                                                }
+                                                        });
+                                                };
+
+                                                if (registration.installing) {
+                                                        listen(registration.installing);
+                                                } else {
+                                                        registration.addEventListener('updatefound', () => {
+                                                                listen(registration.installing);
+                                                        });
+                                                }
+                                        }
+
+                                        navigator.serviceWorker
+                                                .register('/service-worker.js')
+                                                .then((registration) => setupUpdateHandling(registration))
+                                                .catch((error) => {
+                                                        console.warn('Service worker registration failed:', error);
+                                                });
                                 });
                         }
                 </script>
