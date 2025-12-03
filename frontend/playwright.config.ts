@@ -27,7 +27,14 @@ declare const process: {
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
 
-await ensurePlaywrightBrowsers({ cwd: frontendDir });
+// Try to ensure Playwright browsers are available
+// In CI, browsers may be pre-installed or handled separately
+try {
+    await ensurePlaywrightBrowsers({ cwd: frontendDir });
+} catch (error) {
+    // Log warning but don't fail - browsers may be available via other means
+    console.warn('Warning: Could not ensure Playwright browsers:', error.message);
+}
 
 function ensureAstroBuildArtifacts(): void {
     const serverEntrypoint = join(frontendDir, 'dist', 'server', 'entry.mjs');
