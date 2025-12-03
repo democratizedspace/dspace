@@ -149,7 +149,8 @@ test.describe('Page Layout Structure', () => {
 
                 expect(Math.abs(brandCenter - headerCenter)).toBeLessThanOrEqual(16);
                 expect(toggleBox.x).toBeGreaterThan(headerCenter - 12);
-                expect(toggleBox.y).toBeLessThanOrEqual(headerBox.y + headerBox.height * 0.6);
+                expect(toggleBox.y).toBeGreaterThanOrEqual(headerBox.y - 8);
+                expect(toggleBox.y + toggleBox.height).toBeLessThanOrEqual(headerBox.y + headerBox.height + 8);
 
                 const overlaps = !(
                     brandBox.x + brandBox.width <= toggleBox.x ||

@@ -17,6 +17,15 @@ const __dirname = path.dirname(__filename);
 const CPU_CORES = os.cpus().length;
 const MAX_WORKERS = Math.max(2, Math.floor(CPU_CORES / 2)); // Use half the available cores, minimum 2
 
+// Standardize the preview port so grouped runs don't collide with any existing
+// dev/preview server that might already be bound to the default 3000.
+const DEFAULT_PLAYWRIGHT_PORT = process.env.PLAYWRIGHT_PORT || '4173';
+process.env.PLAYWRIGHT_PORT = DEFAULT_PLAYWRIGHT_PORT;
+process.env.PORT = process.env.PORT || DEFAULT_PLAYWRIGHT_PORT;
+if (!process.env.BASE_URL) {
+    process.env.BASE_URL = `http://127.0.0.1:${DEFAULT_PLAYWRIGHT_PORT}`;
+}
+
 // Configuration: Test groups
 const TEST_GROUPS = [
     {
