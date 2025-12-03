@@ -164,28 +164,20 @@ function isStaticAsset(pathname) {
 
 function cacheFirstAsset(request) {
     return caches.match(request).then((cachedResponse) => {
-        const fetchAndUpdate = () =>
-            fetch(request)
-                .then((response) => {
-                    if (response.ok) {
-                        caches
-                            .open(RUNTIME_NAME)
-                            .then((cache) => cache.put(request, response.clone()));
-                        return response;
-                    }
-                    if (cachedResponse) {
-                        return cachedResponse;
-                    }
+        return fetch(request)
+            .then((response) => {
+                if (response.ok) {
+                    caches
+                        .open(RUNTIME_NAME)
+                        .then((cache) => cache.put(request, response.clone()));
                     return response;
-                })
-                .catch(() => cachedResponse);
-
-        if (cachedResponse) {
-            fetchAndUpdate();
-            return cachedResponse;
-        }
-
-        return fetchAndUpdate();
+                }
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
+                return response;
+            })
+            .catch(() => cachedResponse || Response.error());
     });
 }
 

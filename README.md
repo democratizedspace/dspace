@@ -76,7 +76,7 @@ Create quests, items, and processes for the game:
   - [Cloudflare Load Balancing](./docs/ops/cloudflare_load_balancing.md) - High availability
   - [Failover Procedures](./docs/ops/failover_procedures.md) - Handling outages
   - [Netlify Migration](./docs/ops/netlify-migration.md) - Self-hosting background
-- [Offline-First Strategy](./docs/ops/offline-first.md) - PWA capabilities
+  - [Offline-First Strategy](./docs/ops/offline-first.md) - PWA capabilities
 - [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
 - [k3s + Sugarkube](./docs/k3s-sugarkube-dev.md) - HA cluster setup
 

@@ -120,6 +120,8 @@ export function registerOfflineWorker() {
                 return;
             }
 
+            // A single reload is expected to refresh all stylesheet URLs, so additional
+            // failures after the first attempt are allowed to fall through.
             if (attemptedReload || Date.now() - startTime > reloadWindowMs) {
                 return;
             }
