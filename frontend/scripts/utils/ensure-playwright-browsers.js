@@ -119,10 +119,12 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         env = process.env,
         platform = process.platform,
         installSystemDeps = true,
+        browser: providedBrowser,
     } = options;
 
+    const browser = providedBrowser ?? (await getChromiumBrowser());
+
     if (process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD === '1') {
-        const browser = await getChromiumBrowser();
         if (browser && !hasChromiumExecutable(browser)) {
             console.warn(
                 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium browser is missing. E2E tests may fail.'
@@ -131,7 +133,6 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         return;
     }
 
-    const browser = await getChromiumBrowser();
     if (!browser) {
         // Playwright not installed, skip browser check
         return;

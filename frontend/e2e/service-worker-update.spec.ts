@@ -25,14 +25,32 @@ async function waitForServiceWorkerReady(page: Page, timeoutMs: number) {
                 }
             }
 
-            if (registration?.active) {
-                return { registered: true, activeState: registration.active.state || 'activated' };
-            }
+            if (registration) {
+                try {
+                    const readyRegistration = await Promise.race([
+                        navigator.serviceWorker.ready,
+                        new Promise((resolve) => setTimeout(() => resolve(null), 500)),
+                    ]);
 
-            if (registration?.installing) {
-                lastState = `installing:${registration.installing.state}`;
-            } else if (registration?.waiting) {
-                lastState = `waiting:${registration.waiting.state}`;
+                    if (readyRegistration?.active) {
+                        return {
+                            registered: true,
+                            activeState: readyRegistration.active.state || 'activated',
+                        };
+                    }
+                } catch (error) {
+                    lastState = `ready-error:${String(error)}`;
+                }
+
+                if (registration.active) {
+                    return { registered: true, activeState: registration.active.state || 'activated' };
+                }
+
+                if (registration.installing) {
+                    lastState = `installing:${registration.installing.state}`;
+                } else if (registration.waiting) {
+                    lastState = `waiting:${registration.waiting.state}`;
+                }
             }
 
             await new Promise((resolve) => setTimeout(resolve, 100));
