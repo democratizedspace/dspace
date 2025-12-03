@@ -83,7 +83,9 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                 </div>
                 <script is:inline type="module">
                         import { installOfflineToast } from '/src/scripts/offlineToast.js';
+                        import { registerOfflineWorker } from '/src/scripts/offlineWorkerRegistration.js';
                         installOfflineToast();
+                        registerOfflineWorker();
                 </script>
 
                 <script is:inline>
@@ -143,46 +145,7 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                                 }
                         })();
                 </script>
-
-                <script is:inline>
-                        if ('serviceWorker' in navigator) {
-                                const shouldEnableOfflineWorker = async () => {
-                                        try {
-                                                const response = await fetch('/config.json', {
-                                                        cache: 'no-cache',
-                                                        headers: {
-                                                                Accept: 'application/json',
-                                                        },
-                                                });
-
-                                                if (!response.ok) {
-                                                        throw new Error(`Unexpected status ${response.status}`);
-                                                }
-
-                                                const config = await response.json();
-                                                return config?.offlineWorker?.enabled !== false;
-                                        } catch (error) {
-                                                console.warn(
-                                                        'Failed to load runtime config, enabling offline worker by default:',
-                                                        error
-                                                );
-                                                return true;
-                                        }
-                                };
-
-                                window.addEventListener('load', async () => {
-                                        if (!(await shouldEnableOfflineWorker())) {
-                                                console.info('Offline worker disabled via runtime config.');
-                                                return;
-                                        }
-
-                                        navigator.serviceWorker.register('/service-worker.js').catch((error) => {
-                                                console.warn('Service worker registration failed:', error);
-                                        });
-                                });
-                        }
-                </script>
-	</body>
+        </body>
 </html>
 <style>
         :root {

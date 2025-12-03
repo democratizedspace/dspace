@@ -13,6 +13,16 @@ const CONFIG_PATH = '/config.json';
 const PRECACHE_URLS = ['/', '/play', '/quests', '/settings'];
 const RUNTIME_MATCHERS = [/^\/quests\//, /^\/assets\//, /^\/docs\//];
 
+self.addEventListener('message', (event) => {
+    if (!event.data || typeof event.data !== 'object') {
+        return;
+    }
+
+    if (event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+});
+
 function prewarmConfigCache() {
     return caches.open(RUNTIME_NAME).then((cache) =>
         fetch(new Request(CONFIG_PATH, { cache: 'reload' }))
