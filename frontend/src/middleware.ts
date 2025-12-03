@@ -38,6 +38,17 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
     // probes stay available.
 
     if (!handledPaths.has(pathname) || response.status !== 404) {
+        const contentType = response.headers.get('Content-Type') || '';
+        const isHtml = contentType.includes('text/html');
+
+        if (pathname === '/service-worker.js') {
+            response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+        } else if (pathname === '/cache-version.js' || pathname === '/config.json' || isHtml) {
+            response.headers.set('Cache-Control', 'no-store');
+        } else if (pathname.startsWith('/_astro/')) {
+            response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+        }
+
         return response;
     }
 

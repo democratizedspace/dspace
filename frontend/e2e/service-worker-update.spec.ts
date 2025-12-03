@@ -2,8 +2,26 @@ import { expect, test, Page } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
 const SW_REGISTRATION_TIMEOUT_MS = 20000;
-const SW_EVENT_CAPTURE_TIMEOUT_MS = 2000;
 const ASTRO_ASSET_PATH = '/_astro/';
+
+async function resetServiceWorkers(page: Page) {
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.evaluate(async () => {
+        if (!('serviceWorker' in navigator)) {
+            return;
+        }
+
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map((registration) => registration.unregister()));
+
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map((name) => caches.delete(name)));
+    });
+
+    await page.reload({ waitUntil: 'networkidle' });
+}
 
 async function waitForServiceWorkerReady(page: Page, timeoutMs: number) {
     const pollRegistration = async () =>
@@ -156,16 +174,15 @@ async function isPageStyled(page: Page) {
 
 test.describe('Service Worker Update', () => {
     test.beforeEach(async ({ page }) => {
+        await resetServiceWorkers(page);
         await clearUserData(page);
     });
 
     test('service worker registers and caches assets correctly', async ({ page }) => {
-        // Navigate to the home page
         await page.goto('/');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        // Wait for service worker to register
         const swRegistration = await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
 
         if (!swRegistration.registered) {
@@ -174,130 +191,81 @@ test.describe('Service Worker Update', () => {
 
         expect(swRegistration.registered).toBe(true);
 
-        // Check that the main stylesheet loads successfully
         const stylesheetResponse = await checkFirstStylesheetLoads(page, ASTRO_ASSET_PATH);
 
         expect(stylesheetResponse.found).toBe(true);
         expect(stylesheetResponse.status).toBe(200);
 
-        // Verify that the page is styled (not the unstyled "giant rocket" state)
-        // Check for some known styled element
         const mainElement = page.getByRole('main');
         await expect(mainElement).toBeVisible();
 
-        // Get computed styles to verify CSS is applied
         const hasStyles = await isPageStyled(page);
 
         expect(hasStyles).toBe(true);
     });
 
-    test('service worker updates correctly when cache version changes', async ({ page }) => {
-        // First load: register the service worker
+    test('performs coordinated updates without CSS 404s', async ({ page }) => {
+        const swResponse = await page.request.get('/service-worker.js');
+        const swSource = await swResponse.text();
+        const versionMatch = /SW_CACHE_VERSION\s*=\s*'([^']+)'/.exec(swSource);
+        const currentVersion = versionMatch?.[1] ?? 'playwright';
+        const updatedSource = versionMatch
+            ? swSource.replace(versionMatch[0], `const SW_CACHE_VERSION = '${currentVersion}-e2e'`)
+            : `${swSource}\n// updated for test`;
+
+        let serveUpdated = false;
+        await page.route('**/service-worker.js', (route) => {
+            if (serveUpdated) {
+                serveUpdated = false;
+                route.fulfill({
+                    status: 200,
+                    contentType: 'application/javascript',
+                    body: updatedSource,
+                });
+                return;
+            }
+            route.continue();
+        });
+
         await page.goto('/');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        // Wait for SW registration to complete
         const swActive = await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
-
-        if (!swActive.registered) {
-            console.error('Service worker was not active:', swActive);
-        }
-
         expect(swActive.registered).toBe(true);
 
-        // Simulate a "new build" by forcing SW update check
-        // In real scenario, the SW file changes due to CACHE_VERSION injection
-        // Here we'll trigger an update and verify the update mechanism works
-        const updateTriggered = await page.evaluate(async () => {
-            const registration = await navigator.serviceWorker.getRegistration();
-            if (!registration) {
-                return false;
-            }
-
-            try {
-                await registration.update();
-                return true;
-            } catch (error) {
-                console.error('SW update failed:', error);
-                return false;
+        const cssRequests: Array<{ url: string; status: number }> = [];
+        page.on('response', (response) => {
+            const url = response.url();
+            if (url.includes(ASTRO_ASSET_PATH) && url.match(/\.(css|js)$/)) {
+                cssRequests.push({ url, status: response.status() });
             }
         });
 
-        expect(updateTriggered).toBe(true);
+        serveUpdated = true;
 
-        // Wait a moment for update to process
-        await page.waitForTimeout(1000);
+        await Promise.all([
+            page.waitForNavigation({ waitUntil: 'networkidle' }),
+            page.evaluate(async () => {
+                const registration = await navigator.serviceWorker.getRegistration();
+                await registration?.update();
+            }),
+        ]);
 
-        // Reload the page normally (not hard reload)
-        await page.reload({ waitUntil: 'networkidle' });
         await waitForHydration(page);
 
-        // Verify CSS still loads correctly (no 404s)
         const cssLoadsAfterUpdate = await checkAllStylesheetsLoad(page, ASTRO_ASSET_PATH);
 
         expect(cssLoadsAfterUpdate.success).toBe(true);
-
-        // Verify page remains styled
-        const stillStyled = await isPageStyled(page);
-
-        expect(stillStyled).toBe(true);
+        expect(cssRequests.some((req) => req.status === 404)).toBe(false);
+        expect(await isPageStyled(page)).toBe(true);
     });
 
-    test('service worker skipWaiting and reload logic works', async ({ page }) => {
-        // This test verifies the SKIP_WAITING + reload behavior
+    test('assets remain accessible during navigation with service worker enabled', async ({ page }) => {
         await page.goto('/');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        // Setup listeners for SW lifecycle events
-        const swEvents = await page.evaluate((captureTimeoutMs) => {
-            return new Promise((resolve) => {
-                if (!('serviceWorker' in navigator)) {
-                    resolve({ registered: false });
-                    return;
-                }
-
-                const events: string[] = [];
-
-                navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-                    events.push('registered');
-
-                    if (registration.waiting) {
-                        events.push('waiting');
-                    }
-
-                    if (registration.active) {
-                        events.push('active');
-                    }
-
-                    if (registration.installing) {
-                        events.push('installing');
-                        registration.installing.addEventListener('statechange', (e) => {
-                            const target = e.target as { state?: string };
-                            events.push(`state:${target?.state || 'unknown'}`);
-                        });
-                    }
-
-                    // Resolve after a short delay to capture events
-                    setTimeout(() => {
-                        resolve({ registered: true, events });
-                    }, captureTimeoutMs);
-                });
-            });
-        }, SW_EVENT_CAPTURE_TIMEOUT_MS);
-
-        expect((swEvents as { registered: boolean }).registered).toBe(true);
-        expect((swEvents as { events: string[] }).events).toContain('registered');
-    });
-
-    test('assets remain accessible during service worker updates', async ({ page }) => {
-        // Navigate and wait for initial load
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
-
-        // Track all network requests to CSS files
         const cssRequests: Array<{ url: string; status: number }> = [];
 
         page.on('response', (response) => {
@@ -307,17 +275,14 @@ test.describe('Service Worker Update', () => {
             }
         });
 
-        // Navigate to another page
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        // Navigate back
         await page.goto('/');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        // Check that no CSS requests resulted in 404
         const failed404s = cssRequests.filter((req) => req.status === 404);
 
         if (failed404s.length > 0) {

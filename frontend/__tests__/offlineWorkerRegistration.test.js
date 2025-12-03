@@ -49,6 +49,8 @@ describe('registerOfflineWorker', () => {
             controller: {},
         };
 
+        window.__DS_DISABLE_SW = undefined;
+
         Object.defineProperty(navigator, 'serviceWorker', {
             configurable: true,
             value: serviceWorker,
@@ -68,15 +70,16 @@ describe('registerOfflineWorker', () => {
             configurable: true,
             value: originalLocation,
         });
+        delete window.__DS_DISABLE_SW;
     });
 
     it('registers service worker when enabled and triggers waiting update', async () => {
         const waitingWorker = { postMessage: vi.fn() };
         const controllerChangeHandlers = [];
 
-        serviceWorker.addEventListener.mockImplementation((event, handler, options) => {
+        serviceWorker.addEventListener.mockImplementation((event, handler) => {
             if (event === 'controllerchange') {
-                controllerChangeHandlers.push({ handler, options });
+                controllerChangeHandlers.push(handler);
             }
         });
 
@@ -93,13 +96,12 @@ describe('registerOfflineWorker', () => {
         expect(serviceWorker.register).toHaveBeenCalledWith('/service-worker.js');
         expect(waitingWorker.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
         expect(controllerChangeHandlers).toHaveLength(1);
-        expect(controllerChangeHandlers[0].options).toEqual({ once: true });
 
-        controllerChangeHandlers[0].handler();
+        controllerChangeHandlers[0]();
 
         expect(serviceWorker.removeEventListener).toHaveBeenCalledWith(
             'controllerchange',
-            controllerChangeHandlers[0].handler
+            controllerChangeHandlers[0]
         );
         expect(window.location.reload).toHaveBeenCalledTimes(1);
     });
@@ -109,9 +111,9 @@ describe('registerOfflineWorker', () => {
         const installingWorker = { addEventListener: vi.fn(), state: 'installing' };
         const controllerChangeHandlers = [];
 
-        serviceWorker.addEventListener.mockImplementation((event, handler, options) => {
+        serviceWorker.addEventListener.mockImplementation((event, handler) => {
             if (event === 'controllerchange') {
-                controllerChangeHandlers.push({ handler, options });
+                controllerChangeHandlers.push(handler);
             }
         });
 
@@ -141,8 +143,7 @@ describe('registerOfflineWorker', () => {
         handler();
 
         expect(waitingWorker.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
-        expect(controllerChangeHandlers[0].options).toEqual({ once: true });
-        controllerChangeHandlers[0].handler();
+        controllerChangeHandlers[0]();
         expect(window.location.reload).toHaveBeenCalledTimes(1);
     });
 
@@ -158,6 +159,51 @@ describe('registerOfflineWorker', () => {
 
         expect(serviceWorker.register).not.toHaveBeenCalled();
         expect(consoleInfoSpy).toHaveBeenCalledWith('Offline worker disabled via runtime config.');
+    });
+
+    it('skips registration when disabled via environment flag', async () => {
+        window.__DS_DISABLE_SW = true;
+        fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
+
+        const { registerOfflineWorker } = await import(
+            '../src/scripts/offlineWorkerRegistration.js'
+        );
+
+        registerOfflineWorker();
+        await dispatchLoad();
+
+        expect(serviceWorker.register).not.toHaveBeenCalled();
+        expect(consoleInfoSpy).toHaveBeenCalledWith('Offline worker disabled via environment flag.');
+    });
+
+    it('retries stylesheets that 404 shortly after load when controlled by service worker', async () => {
+        const waitingWorker = { postMessage: vi.fn() };
+        serviceWorker.register.mockResolvedValue({ waiting: waitingWorker });
+
+        fetch.mockImplementation((url) => {
+            if (typeof url === 'string' && url.includes('_astro/')) {
+                return Promise.resolve({ status: 404, ok: false });
+            }
+            return mockFetchResponse({ offlineWorker: { enabled: true } });
+        });
+
+        const { registerOfflineWorker } = await import(
+            '../src/scripts/offlineWorkerRegistration.js'
+        );
+
+        registerOfflineWorker();
+        await dispatchLoad();
+
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/_astro/app.css';
+        const errorEvent = new Event('error', { bubbles: true });
+
+        link.dispatchEvent(errorEvent);
+
+        await vi.waitFor(() => {
+            expect(window.location.reload).toHaveBeenCalledTimes(1);
+        });
     });
 
     it('logs warning when service worker registration fails', async () => {

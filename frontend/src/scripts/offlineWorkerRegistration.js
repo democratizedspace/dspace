@@ -25,14 +25,24 @@ export function registerOfflineWorker() {
         }
     };
 
-    function triggerUpdate(registration) {
-        const { waiting } = registration || {};
-        if (!waiting) {
-            return;
+    const shouldRegister = () => {
+        const envEnabled =
+            typeof import.meta !== 'undefined'
+                ? import.meta.env?.PUBLIC_ENABLE_SERVICE_WORKER
+                : undefined;
+
+        if (envEnabled === 'false') {
+            return false;
         }
 
-        waiting.postMessage({ type: 'SKIP_WAITING' });
+        if (typeof window !== 'undefined' && window.__DS_DISABLE_SW === true) {
+            return false;
+        }
 
+        return true;
+    };
+
+    function attachControllerReload() {
         let refreshing = false;
         const handleControllerChange = () => {
             if (refreshing) {
@@ -43,15 +53,24 @@ export function registerOfflineWorker() {
             window.location.reload();
         };
 
-        navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange, {
-            once: true,
-        });
+        navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+    }
+
+    function triggerUpdate(registration) {
+        const { waiting } = registration || {};
+        if (!waiting) {
+            return;
+        }
+
+        waiting.postMessage({ type: 'SKIP_WAITING' });
     }
 
     function setupUpdateHandling(registration) {
         if (!registration) {
             return;
         }
+
+        attachControllerReload();
 
         if (registration.waiting) {
             triggerUpdate(registration);
@@ -83,7 +102,47 @@ export function registerOfflineWorker() {
         }
     }
 
+    function installStylesheetRecovery() {
+        if (!navigator.serviceWorker.controller) {
+            return;
+        }
+
+        const startTime = Date.now();
+        const reloadWindowMs = 30_000;
+        let attemptedReload = false;
+
+        const handleResourceError = (event) => {
+            const target = event?.target;
+            const isStylesheet =
+                target instanceof HTMLLinkElement && target.rel === 'stylesheet' && target.href;
+
+            if (!isStylesheet) {
+                return;
+            }
+
+            if (attemptedReload || Date.now() - startTime > reloadWindowMs) {
+                return;
+            }
+
+            fetch(target.href, { cache: 'no-cache' })
+                .then((response) => {
+                    if (response.status === 404 && navigator.serviceWorker.controller) {
+                        attemptedReload = true;
+                        window.location.reload();
+                    }
+                })
+                .catch(() => {});
+        };
+
+        window.addEventListener('error', handleResourceError, true);
+    }
+
     window.addEventListener('load', async () => {
+        if (!shouldRegister()) {
+            console.info('Offline worker disabled via environment flag.');
+            return;
+        }
+
         if (!(await shouldEnableOfflineWorker())) {
             console.info('Offline worker disabled via runtime config.');
             return;
@@ -93,6 +152,7 @@ export function registerOfflineWorker() {
             .register('/service-worker.js')
             .then((registration) => {
                 setupUpdateHandling(registration);
+                installStylesheetRecovery();
             })
             .catch((error) => {
                 console.warn('Service worker registration failed:', error);
