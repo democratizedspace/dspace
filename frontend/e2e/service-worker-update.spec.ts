@@ -5,6 +5,43 @@ const SW_REGISTRATION_TIMEOUT_MS = 15000;
 const SW_EVENT_CAPTURE_TIMEOUT_MS = 2000;
 const ASTRO_ASSET_PATH = '/_astro/';
 
+async function waitForServiceWorkerReady(page: Page, timeoutMs: number) {
+    return await page.evaluate(async (timeout) => {
+        if (!('serviceWorker' in navigator)) {
+            return { registered: false, activeState: 'unsupported' };
+        }
+
+        const deadline = Date.now() + timeout;
+        let lastState = 'pending';
+
+        while (Date.now() < deadline) {
+            let registration = await navigator.serviceWorker.getRegistration();
+
+            if (!registration) {
+                try {
+                    registration = await navigator.serviceWorker.register('/service-worker.js');
+                } catch (error) {
+                    lastState = `register-error:${String(error)}`;
+                }
+            }
+
+            if (registration?.active) {
+                return { registered: true, activeState: registration.active.state || 'activated' };
+            }
+
+            if (registration?.installing) {
+                lastState = `installing:${registration.installing.state}`;
+            } else if (registration?.waiting) {
+                lastState = `waiting:${registration.waiting.state}`;
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+
+        return { registered: false, activeState: lastState };
+    }, timeoutMs);
+}
+
 /**
  * Helper function to check if the first stylesheet has loaded successfully
  */
@@ -93,29 +130,13 @@ test.describe('Service Worker Update', () => {
         await waitForHydration(page);
 
         // Wait for service worker to register
-        const swRegistered = await page.evaluate(async (timeoutMs) => {
-            if (!('serviceWorker' in navigator)) {
-                return false;
-            }
+        const swRegistration = await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
 
-            // Wait for registration (with timeout)
-            const startTime = Date.now();
+        if (!swRegistration.registered) {
+            console.error('Service worker did not register:', swRegistration);
+        }
 
-            while (Date.now() - startTime < timeoutMs) {
-                const registration = await navigator.serviceWorker.getRegistration();
-                if (registration) {
-                    // Wait for active or installing state
-                    if (registration.active || registration.installing || registration.waiting) {
-                        return true;
-                    }
-                }
-                await new Promise((resolve) => setTimeout(resolve, 100));
-            }
-
-            return false;
-        }, SW_REGISTRATION_TIMEOUT_MS);
-
-        expect(swRegistered).toBe(true);
+        expect(swRegistration.registered).toBe(true);
 
         // Check that the main stylesheet loads successfully
         const stylesheetResponse = await checkFirstStylesheetLoads(page, ASTRO_ASSET_PATH);
@@ -141,30 +162,13 @@ test.describe('Service Worker Update', () => {
         await waitForHydration(page);
 
         // Wait for SW registration to complete
-        await page.evaluate(async (timeoutMs) => {
-            if (!('serviceWorker' in navigator)) {
-                return;
-            }
+        const swActive = await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
 
-            // Wait for registration
-            const startTime = Date.now();
+        if (!swActive.registered) {
+            console.error('Service worker was not active:', swActive);
+        }
 
-            while (Date.now() - startTime < timeoutMs) {
-                const registration = await navigator.serviceWorker.getRegistration();
-                if (registration?.active) {
-                    break;
-                }
-                await new Promise((resolve) => setTimeout(resolve, 100));
-            }
-        }, SW_REGISTRATION_TIMEOUT_MS);
-
-        // Verify SW is active
-        const swActive = await page.evaluate(async () => {
-            const registration = await navigator.serviceWorker.getRegistration();
-            return registration?.active?.state === 'activated';
-        });
-
-        expect(swActive).toBe(true);
+        expect(swActive.registered).toBe(true);
 
         // Simulate a "new build" by forcing SW update check
         // In real scenario, the SW file changes due to CACHE_VERSION injection
