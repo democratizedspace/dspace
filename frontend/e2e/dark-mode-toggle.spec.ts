@@ -64,7 +64,7 @@ test.describe('Dark mode toggle', () => {
 
         await toggle.click();
 
-        const routes = ['/', '/quests', '/wallet', '/profile', '/stats'];
+        const routes = ['/', '/quests', '/wallet', '/inventory', '/docs'];
         for (const route of routes) {
             await page.goto(route);
             await page.waitForLoadState('networkidle');
