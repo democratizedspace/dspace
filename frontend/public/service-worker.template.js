@@ -1,6 +1,6 @@
 /* eslint-env serviceworker */
 
-const SW_CACHE_VERSION = '2025-02-15';
+const SW_CACHE_VERSION = '__CACHE_VERSION__';
 self.CACHE_VERSION = SW_CACHE_VERSION;
 
 const PRECACHE_PREFIX = 'dspace-precache-v';

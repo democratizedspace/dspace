@@ -18,4 +18,7 @@ fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, JSON.stringify(processes, null, 4) + '\n');
 
 const { syncCacheVersion } = await import('./sync-cache-version.mjs');
+const { injectCacheVersionIntoServiceWorker } = await import('./inject-cache-version-into-sw.mjs');
+
 await syncCacheVersion();
+await injectCacheVersionIntoServiceWorker();
