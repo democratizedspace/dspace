@@ -1,5 +1,6 @@
 ---
 import { SEO } from "astro-seo";
+import { THEME_STORAGE_KEY } from '../lib/theme';
 
 export interface Props {
 	title: string;
@@ -40,13 +41,49 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
                 <meta name="generator" content={Astro.generator} />
                 <script is:inline>
-                        try {
-                                const storedTheme = localStorage.getItem('theme');
-                                const theme = storedTheme === 'light' ? 'light' : 'dark';
-                                document.documentElement.dataset.theme = theme;
-                        } catch (error) {
-                                document.documentElement.dataset.theme = 'dark';
-                        }
+                        (function initTheme() {
+                                var storageKey = '${THEME_STORAGE_KEY}';
+                                var theme = 'dark';
+
+                                var prefersLight = false;
+                                try {
+                                        prefersLight =
+                                                typeof window !== 'undefined' &&
+                                                !!window.matchMedia &&
+                                                window.matchMedia('(prefers-color-scheme: light)').matches;
+                                } catch (error) {
+                                        prefersLight = false;
+                                }
+
+                                try {
+                                        var storedTheme = localStorage.getItem(storageKey);
+                                        if (storedTheme === 'light' || storedTheme === 'dark') {
+                                                theme = storedTheme;
+                                        } else {
+                                                theme = prefersLight ? 'light' : 'dark';
+                                                localStorage.setItem(storageKey, theme);
+                                        }
+                                } catch (error) {
+                                        theme = prefersLight ? 'light' : 'dark';
+                                }
+
+                                var applyTheme = function () {
+                                        try {
+                                                document.documentElement.dataset.theme = theme;
+                                                if (document.body) {
+                                                        document.body.dataset.theme = theme;
+                                                }
+                                        } catch (error) {
+                                                /* noop */
+                                        }
+                                };
+
+                                applyTheme();
+
+                                if (!document.body) {
+                                        document.addEventListener('DOMContentLoaded', applyTheme, { once: true });
+                                }
+                        })();
                 </script>
         </head>
         <body>

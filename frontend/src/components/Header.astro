@@ -12,14 +12,19 @@ export interface Props {
 <a href="#main" class="skip-link">Skip to main content</a>
 
 <header class="header">
-    <a href="/" aria-label="Go to homepage" class="brand">
-        <div class="vertical">
-            <Logo />
-            <span class="text-gradient title">DSPACE</span>
-            <p class="domain">democratized.space</p>
+    <div class="header__grid">
+        <span class="header__spacer" aria-hidden="true"></span>
+        <a href="/" aria-label="Go to homepage" class="brand">
+            <div class="vertical">
+                <Logo />
+                <span class="text-gradient title">DSPACE</span>
+                <p class="domain">democratized.space</p>
+            </div>
+        </a>
+        <div class="header__toggle">
+            <ThemeToggle client:load />
         </div>
-    </a>
-    <ThemeToggle client:load />
+    </div>
 </header>
 
 <style>
@@ -37,16 +42,32 @@ export interface Props {
     }
 
     .header {
-        display: flex;
+        width: 100%;
+        padding: 0.5rem 0;
+    }
+
+    .header__grid {
+        display: grid;
+        grid-template-columns: minmax(48px, 1fr) auto minmax(48px, 1fr);
         align-items: center;
-        justify-content: space-between;
         gap: 1rem;
-        flex-wrap: wrap;
+        max-width: 68ch;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .header__spacer {
+        display: block;
+    }
+
+    .header__toggle {
+        justify-self: end;
     }
 
     .brand {
-        flex: 1;
         min-width: 0;
+        justify-self: center;
+        text-align: center;
     }
 
     .text-gradient {
@@ -128,5 +149,21 @@ export interface Props {
 
     .skip-link:focus {
         top: 0;
+    }
+
+    @media (max-width: 540px) {
+        .header__grid {
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-areas:
+                'brand toggle';
+        }
+
+        .header__spacer {
+            display: none;
+        }
+
+        .brand {
+            justify-self: start;
+        }
     }
 </style>
