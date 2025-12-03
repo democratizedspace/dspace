@@ -47,7 +47,11 @@ function ensureAstroBuildArtifacts(): void {
 
 // Determine the base URL from environment variables or use default
 const protocol = process.env.PROTOCOL || 'http';
-const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const port = process.env.PLAYWRIGHT_PORT ? parseInt(process.env.PLAYWRIGHT_PORT, 10) : 4173;
+// Propagate the resolved port so preview/server commands and downstream tools
+// stay aligned even when the host sets a default PORT.
+process.env.PLAYWRIGHT_PORT = String(port);
+process.env.PORT = String(port);
 // Default to an explicit IPv4 loopback address so Chromium never attempts an
 // IPv6-only connection (which would manifest as intermittent
 // net::ERR_CONNECTION_REFUSED failures when the preview server binds only to
@@ -208,7 +212,7 @@ export default defineConfig({
     // Configure webServer to start the app server before running tests
     webServer: {
         // Use production preview server so grouped E2E tests don't restart the dev server
-        command: `npm run preview -- --port ${port}`,
+        command: `node scripts/ensure-astro-build.mjs && astro preview --host 0.0.0.0 --port ${port}`,
         cwd: frontendDir,
         url: baseURL,
         reuseExistingServer: !isCI,

@@ -1,0 +1,227 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Menu from '../../components/svelte/Menu.svelte';
+import Updater from '../../components/svelte/Updater.svelte';
+import Card from '../../components/Card.astro';
+import { getCookieItems, getWalletBalance, parseCookie, prettyPrintNumber } from '../../utils.js';
+
+const cookie = Astro.request.headers.get('cookie') ?? '';
+const pathname = Astro.url.pathname;
+const itemList = getCookieItems(cookie);
+
+const knownCurrencies = {
+    dUSD: {
+        name: 'dUSD',
+        description: 'Spendable currency for items, processes, and conversions.',
+    },
+    dBI: {
+        name: 'dBI',
+        description: 'Earned alongside dUSD from the basic income process.',
+    },
+};
+
+const currencySymbols = Object.keys(parseCookie(cookie)).reduce((symbols, key) => {
+    const match = key.match(/^currency-balance-([A-Za-z0-9]+)$/);
+    if (match?.[1]) {
+        symbols.add(match[1]);
+    }
+    return symbols;
+}, new Set(Object.keys(knownCurrencies)));
+
+const currencies = Array.from(currencySymbols)
+    .map((symbol) => {
+        const metadata = knownCurrencies[symbol] ?? {
+            name: symbol,
+            description: 'Tracked wallet currency.',
+        };
+
+        return {
+            symbol,
+            ...metadata,
+            balance: prettyPrintNumber(getWalletBalance(Astro.request, symbol)),
+        };
+    })
+    .sort((a, b) => a.symbol.localeCompare(b.symbol));
+---
+
+<Layout title="Wallet">
+    <main class="wallet-page">
+        <Header title="" body="" href="" />
+        <Updater shouldUpdate={itemList.length === 0} />
+        <Menu pathname={pathname} client:idle />
+
+        <section class="wallet-hero">
+            <div>
+                <h1>Wallet</h1>
+                <p class="lead">
+                    Track your balances and launch the basic income process without leaving the page.
+                </p>
+            </div>
+        </section>
+
+        <section class="balance-section" aria-labelledby="wallet-balances">
+            <div class="section-header">
+                <h2 id="wallet-balances">Balances</h2>
+                <p class="section-hint">Balances persist in your browser and power shop transactions.</p>
+            </div>
+            <ul class="balance-list" role="list">
+                {currencies.map((currency) => (
+                    <li class="balance-row" data-currency={currency.symbol}>
+                        <div>
+                            <p class="balance-label">{currency.name}</p>
+                            <p class="balance-description">{currency.description}</p>
+                        </div>
+                        <p class="balance-value" aria-label={`${currency.symbol} balance`}>
+                            {currency.balance} {currency.symbol}
+                        </p>
+                    </li>
+                ))}
+            </ul>
+        </section>
+
+        <section class="process-section" aria-labelledby="wallet-processes">
+            <div class="section-header">
+                <h2 id="wallet-processes">Basic income</h2>
+                <p class="section-hint">
+                    Start the daily payout to receive both dUSD and dBI. You can revisit this page any time
+                    to launch it again after the duration ends.
+                </p>
+            </div>
+            <ul class="card-list" role="list">
+                <Card
+                    title="Launch basic income"
+                    body="Earn 100 dUSD and 100 dBI each time the 24-hour process completes."
+                    href="/processes/basic-income"
+                    duration="1d"
+                >
+                    <p class="card-footnote">The process can be restarted once the timer finishes.</p>
+                </Card>
+            </ul>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .wallet-page {
+        max-width: 72ch;
+        margin: 0 auto;
+        padding: 1.5rem 1rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .wallet-hero {
+        background: linear-gradient(90deg, rgba(0, 255, 34, 0.12), rgba(0, 255, 34, 0.04));
+        border: 1px solid rgba(0, 255, 34, 0.3);
+        border-radius: 16px;
+        padding: 1.5rem;
+        color: var(--color-heading);
+    }
+
+    h1 {
+        margin: 0 0 0.25rem;
+        font-size: 1.75rem;
+    }
+
+    .lead {
+        margin: 0;
+        color: var(--color-text);
+        line-height: 1.5;
+    }
+
+    .section-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        margin-bottom: 0.75rem;
+    }
+
+    h2 {
+        margin: 0;
+        color: var(--color-heading);
+    }
+
+    .section-hint {
+        margin: 0;
+        color: var(--color-text);
+        opacity: 0.9;
+    }
+
+    .balance-section,
+    .process-section {
+        background: rgba(12, 20, 16, 0.7);
+        border: 1px solid rgba(0, 255, 34, 0.28);
+        border-radius: 16px;
+        padding: 1.25rem;
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+    }
+
+    .balance-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .balance-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.5rem;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 0.9rem 1rem;
+    }
+
+    .balance-label {
+        margin: 0 0 0.1rem;
+        font-weight: 700;
+        color: var(--color-heading);
+    }
+
+    .balance-description {
+        margin: 0;
+        color: var(--color-text);
+        line-height: 1.4;
+    }
+
+    .balance-value {
+        margin: 0;
+        font-weight: 800;
+        color: var(--color-heading);
+        font-size: 1rem;
+        white-space: nowrap;
+    }
+
+    .card-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .card-footnote {
+        margin: 0.5rem 0 0;
+        color: var(--color-text);
+        line-height: 1.4;
+    }
+
+    @media (max-width: 640px) {
+        .wallet-page {
+            padding: 1rem;
+        }
+
+        .balance-row {
+            grid-template-columns: 1fr;
+            align-items: flex-start;
+        }
+
+        .balance-value {
+            font-size: 0.95rem;
+        }
+    }
+</style>
