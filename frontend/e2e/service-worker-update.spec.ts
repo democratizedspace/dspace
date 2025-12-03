@@ -6,9 +6,9 @@ const SW_EVENT_CAPTURE_TIMEOUT_MS = 2000;
 const ASTRO_ASSET_PATH = '/_astro/';
 
 /**
- * Helper function to check if stylesheets have loaded successfully
+ * Helper function to check if the first stylesheet has loaded successfully
  */
-async function checkStylesheetLoads(page: Page, assetPath: string) {
+async function checkFirstStylesheetLoads(page: Page, assetPath: string) {
     return await page.evaluate(async (path) => {
         const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
         const assetLinks = links.filter((link) => (link as HTMLLinkElement).href.includes(path));
@@ -72,9 +72,8 @@ async function isPageStyled(page: Page) {
             try {
                 const htmlLink = link as HTMLLinkElement;
                 // Some browsers may throw if sheet is cross-origin or not loaded
-                return (
-                    htmlLink.sheet && htmlLink.sheet.cssRules && htmlLink.sheet.cssRules.length > 0
-                );
+                // Use optional chaining to safely access cssRules
+                return (htmlLink.sheet?.cssRules?.length ?? 0) > 0;
             } catch (e) {
                 return false;
             }
@@ -119,7 +118,7 @@ test.describe('Service Worker Update', () => {
         expect(swRegistered).toBe(true);
 
         // Check that the main stylesheet loads successfully
-        const stylesheetResponse = await checkStylesheetLoads(page, ASTRO_ASSET_PATH);
+        const stylesheetResponse = await checkFirstStylesheetLoads(page, ASTRO_ASSET_PATH);
 
         expect(stylesheetResponse.found).toBe(true);
         expect(stylesheetResponse.status).toBe(200);
