@@ -82,6 +82,7 @@ const TEST_GROUPS = [
             'item-preview.spec.ts',
             'logout-flow.spec.ts',
             'stats-page.spec.ts',
+            'v3-regressions.spec.ts',
             'touch-item-selector.spec.ts',
             'touch-menu.spec.ts',
             'ui-responsiveness.spec.ts',

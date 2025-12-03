@@ -40,13 +40,47 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
                 <meta name="generator" content={Astro.generator} />
                 <script is:inline>
-                        try {
-                                const storedTheme = localStorage.getItem('theme');
-                                const theme = storedTheme === 'light' ? 'light' : 'dark';
-                                document.documentElement.dataset.theme = theme;
-                        } catch (error) {
-                                document.documentElement.dataset.theme = 'dark';
-                        }
+                        (function bootstrapTheme() {
+                                const storageKey = 'dspace-theme';
+                                const fallbackTheme = 'dark';
+
+                                const apply = (theme) => {
+                                        document.documentElement.dataset.theme = theme;
+                                        const assignToBody = () => {
+                                                const body = document.body;
+                                                if (body) {
+                                                        body.setAttribute('data-theme', theme);
+                                                }
+                                        };
+
+                                        if (document.readyState === 'loading') {
+                                                document.addEventListener(
+                                                        'DOMContentLoaded',
+                                                        assignToBody,
+                                                        { once: true }
+                                                );
+                                        } else {
+                                                assignToBody();
+                                        }
+                                };
+
+                                try {
+                                        const storedTheme = localStorage.getItem(storageKey);
+                                        if (storedTheme === 'light' || storedTheme === 'dark') {
+                                                apply(storedTheme);
+                                                return;
+                                        }
+
+                                        const prefersDark = window
+                                                .matchMedia?.('(prefers-color-scheme: dark)')
+                                                ?.matches;
+                                        const resolvedTheme = prefersDark ? 'dark' : 'light';
+                                        localStorage.setItem(storageKey, resolvedTheme);
+                                        apply(resolvedTheme);
+                                } catch (error) {
+                                        apply(fallbackTheme);
+                                }
+                        })();
                 </script>
         </head>
         <body>

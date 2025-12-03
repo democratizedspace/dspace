@@ -12,14 +12,18 @@ export interface Props {
 <a href="#main" class="skip-link">Skip to main content</a>
 
 <header class="header">
-    <a href="/" aria-label="Go to homepage" class="brand">
-        <div class="vertical">
-            <Logo />
-            <span class="text-gradient title">DSPACE</span>
-            <p class="domain">democratized.space</p>
-        </div>
-    </a>
-    <ThemeToggle client:load />
+    <div class="header__brand">
+        <a href="/" aria-label="Go to homepage" class="brand" data-testid="brand-stack">
+            <div class="vertical">
+                <Logo />
+                <span class="text-gradient title">DSPACE</span>
+                <p class="domain">democratized.space</p>
+            </div>
+        </a>
+    </div>
+    <div class="header__toggle" aria-label="Theme selection">
+        <ThemeToggle client:load />
+    </div>
 </header>
 
 <style>
@@ -37,16 +41,24 @@ export interface Props {
     }
 
     .header {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        justify-content: space-between;
         gap: 1rem;
-        flex-wrap: wrap;
+        width: 100%;
+        margin-inline: auto;
     }
 
-    .brand {
-        flex: 1;
+    .header__brand {
+        grid-column: 2;
+        justify-self: center;
+        text-align: center;
         min-width: 0;
+    }
+
+    .header__toggle {
+        grid-column: 3;
+        justify-self: end;
     }
 
     .text-gradient {
@@ -62,6 +74,12 @@ export interface Props {
         margin: 0 auto;
         font-size: 2em;
         max-width: 100%;
+    }
+
+    .brand {
+        display: inline-flex;
+        justify-content: center;
+        text-align: center;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -114,6 +132,21 @@ export interface Props {
         font-size: 0.8em;
         color: #00ff22;
         margin-top: 0px;
+    }
+
+    @media (max-width: 640px) {
+        .header {
+            grid-template-columns: 1fr auto;
+            grid-template-rows: auto auto;
+        }
+
+        .header__brand {
+            grid-column: 1 / -1;
+        }
+
+        .header__toggle {
+            grid-column: 2;
+        }
     }
 
     .skip-link {

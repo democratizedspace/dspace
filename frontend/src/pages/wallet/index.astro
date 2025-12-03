@@ -1,0 +1,70 @@
+---
+import Header from '../../components/Header.astro';
+import Layout from '../../layouts/Layout.astro';
+import Menu from '../../components/svelte/Menu.svelte';
+import Updater from '../../components/svelte/Updater.svelte';
+import WalletOverview from './WalletOverview.svelte';
+import { getCookieItems } from '../../utils.js';
+
+const cookie = Astro.request.headers.get('cookie');
+const itemList = getCookieItems(cookie);
+const pathname = Astro.url.pathname;
+---
+
+<Layout title="Wallet">
+    <main id="main">
+        <div class="wallet-page">
+            <Header title="" body="" href="" />
+            <Updater shouldUpdate={itemList.length === 0} />
+            <Menu pathname={pathname} client:idle />
+
+            <section class="wallet-hero">
+                <p class="eyebrow">Finance</p>
+                <h1>Wallet</h1>
+                <p class="lede">
+                    Claim daily basic income, monitor your balances, and keep offsets and emissions in check.
+                </p>
+            </section>
+
+            <WalletOverview client:load />
+        </div>
+    </main>
+</Layout>
+
+<style>
+    .wallet-page {
+        margin: 0 auto;
+        max-width: 960px;
+        padding: 1.5rem 1rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .wallet-hero {
+        background: linear-gradient(120deg, rgba(0, 255, 34, 0.1), rgba(0, 0, 0, 0.35));
+        border: 1px solid rgba(105, 140, 220, 0.35);
+        border-radius: 18px;
+        padding: 1.5rem;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .eyebrow {
+        margin: 0 0 0.35rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--color-pill-active);
+    }
+
+    h1 {
+        margin: 0;
+        color: var(--color-heading);
+    }
+
+    .lede {
+        margin: 0.5rem 0 0;
+        color: var(--color-text);
+        line-height: 1.6;
+    }
+</style>
