@@ -43,7 +43,7 @@ export const isServer = !isBrowser;
  *
  * @example
  * // Get localStorage value, defaulting to null on server
- * const theme = onBrowser(() => localStorage.getItem('theme'), null);
+ * const theme = onBrowser(() => localStorage.getItem('dspace-theme'), null);
  *
  * @example
  * // Get window dimensions, defaulting to 0 on server

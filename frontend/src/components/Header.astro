@@ -12,14 +12,19 @@ export interface Props {
 <a href="#main" class="skip-link">Skip to main content</a>
 
 <header class="header">
-    <a href="/" aria-label="Go to homepage" class="brand">
-        <div class="vertical">
-            <Logo />
-            <span class="text-gradient title">DSPACE</span>
-            <p class="domain">democratized.space</p>
+    <div class="header-inner">
+        <span aria-hidden="true" class="header-spacer"></span>
+        <a href="/" aria-label="Go to homepage" class="brand" data-testid="brand">
+            <div class="vertical">
+                <Logo />
+                <span class="text-gradient title">DSPACE</span>
+                <p class="domain">democratized.space</p>
+            </div>
+        </a>
+        <div class="header-actions" data-testid="header-actions">
+            <ThemeToggle client:load />
         </div>
-    </a>
-    <ThemeToggle client:load />
+    </div>
 </header>
 
 <style>
@@ -37,16 +42,28 @@ export interface Props {
     }
 
     .header {
-        display: flex;
+        padding: 0.25rem 0;
+    }
+
+    .header-inner {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        justify-content: space-between;
         gap: 1rem;
-        flex-wrap: wrap;
+    }
+
+    .header-spacer {
+        height: 1px;
     }
 
     .brand {
-        flex: 1;
         min-width: 0;
+        justify-self: center;
+        text-align: center;
+    }
+
+    .header-actions {
+        justify-self: end;
     }
 
     .text-gradient {
@@ -114,6 +131,28 @@ export interface Props {
         font-size: 0.8em;
         color: #00ff22;
         margin-top: 0px;
+    }
+
+    @media (max-width: 720px) {
+        .header-inner {
+            grid-template-columns: 1fr auto;
+            grid-template-areas:
+                'brand brand'
+                'spacer actions';
+            row-gap: 0.5rem;
+        }
+
+        .brand {
+            grid-area: brand;
+        }
+
+        .header-spacer {
+            grid-area: spacer;
+        }
+
+        .header-actions {
+            grid-area: actions;
+        }
     }
 
     .skip-link {

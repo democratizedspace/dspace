@@ -40,13 +40,41 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
                 <meta name="generator" content={Astro.generator} />
                 <script is:inline>
-                        try {
-                                const storedTheme = localStorage.getItem('theme');
-                                const theme = storedTheme === 'light' ? 'light' : 'dark';
-                                document.documentElement.dataset.theme = theme;
-                        } catch (error) {
-                                document.documentElement.dataset.theme = 'dark';
-                        }
+                        (function bootstrapTheme() {
+                                const STORAGE_KEY = 'dspace-theme';
+                                const DEFAULT_THEME = 'dark';
+
+                                const apply = (theme) => {
+                                        document.documentElement.dataset.theme = theme;
+
+                                        if (document.body) {
+                                                document.body.setAttribute('data-theme', theme);
+                                                return;
+                                        }
+
+                                        document.addEventListener(
+                                                'DOMContentLoaded',
+                                                () => document.body?.setAttribute('data-theme', theme),
+                                                { once: true }
+                                        );
+                                };
+
+                                try {
+                                        const stored = localStorage.getItem(STORAGE_KEY);
+                                        const theme =
+                                                stored === 'light' || stored === 'dark'
+                                                        ? stored
+                                                        : window.matchMedia?.('(prefers-color-scheme: light)').matches
+                                                        ? 'light'
+                                                        : DEFAULT_THEME;
+
+                                        apply(theme);
+                                        localStorage.setItem(STORAGE_KEY, theme);
+                                } catch (error) {
+                                        console.warn('Failed to read theme preference; falling back to dark.', error);
+                                        apply(DEFAULT_THEME);
+                                }
+                        })();
                 </script>
         </head>
         <body>

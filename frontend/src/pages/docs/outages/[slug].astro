@@ -1,0 +1,49 @@
+---
+import Page from '../../../components/Page.astro';
+import Chip from '../../../components/Chip.astro';
+import { fixMarkdownText } from '../../../utils';
+
+const { slug } = Astro.params;
+const outages = await Astro.glob('../md/outages/*.md');
+const outage = outages.find((doc) => doc.frontmatter.slug === slug);
+
+const title = outage?.frontmatter?.title ?? 'Outage not found';
+const html = outage ? fixMarkdownText(outage.compiledContent()) : '';
+---
+
+<Page title={title} columns="1">
+    <div class="breadcrumbs">
+        <Chip text="Docs" href="/docs" />
+        <span>→</span>
+        <Chip text="Outages" href="/docs/outages" />
+        {outage && <Chip text={title} href={`/docs/outages/${slug}`} />}
+    </div>
+
+    {outage ? (
+        <span class="content" set:html={html} />
+    ) : (
+        <p class="content">We couldn't find that outage entry.</p>
+    )}
+</Page>
+
+<style>
+    .breadcrumbs {
+        display: flex;
+        gap: 0.35rem;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .content {
+        background-color: white;
+        color: black;
+        padding: 10px;
+        border-radius: 20px;
+        overflow: auto;
+        display: block;
+    }
+
+    p.content {
+        margin: 0;
+    }
+</style>
