@@ -15,16 +15,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-// Try to ensure Playwright browsers are available if running E2E tests
-// This will fail gracefully for unit tests or when Playwright isn't installed
-try {
-    const { ensurePlaywrightBrowsers } = await import('./utils/ensure-playwright-browsers.js');
-    await ensurePlaywrightBrowsers({ cwd: rootDir });
-} catch (error) {
-    // Silently ignore errors - Playwright may not be needed for this test run
-    // The error will be caught and logged by ensurePlaywrightBrowsers if it's actually needed
-}
-
+// Do *not* touch Playwright here; this file is used by unit tests too.
+// Playwright browser management is handled by playwright.config.ts for E2E tests only.
 ensureAstroBuild();
 
 // Directories to ensure exist
