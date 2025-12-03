@@ -8,7 +8,7 @@ const repoRoot = path.resolve(projectRoot, '..');
 const publicDir = path.join(projectRoot, 'public');
 const outputPath = path.join(publicDir, 'cache-version.js');
 
-async function resolveCacheVersion() {
+export async function resolveCacheVersion() {
     const modulePath = path.join(repoRoot, 'packages', 'cache-version', 'index.js');
     const { CACHE_VERSION } = await import(pathToFileURL(modulePath).href);
     if (typeof CACHE_VERSION !== 'string' || CACHE_VERSION.trim().length === 0) {

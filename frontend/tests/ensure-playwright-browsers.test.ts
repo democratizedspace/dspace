@@ -175,7 +175,7 @@ describe('ensurePlaywrightBrowsers', () => {
 
         const { ensurePlaywrightBrowsers } = await importModule();
 
-        ensurePlaywrightBrowsers({
+        await ensurePlaywrightBrowsers({
             cwd,
             env: { ...process.env },
             platform: 'linux',
@@ -202,7 +202,7 @@ describe('ensurePlaywrightBrowsers', () => {
         process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = '1';
 
         try {
-            ensurePlaywrightBrowsers({
+            await ensurePlaywrightBrowsers({
                 cwd,
                 env: { ...process.env },
                 platform: 'linux',
