@@ -40,6 +40,7 @@ const TEST_GROUPS = [
             'docs-changelog.spec.ts',
             'failover-status.spec.ts',
             'home-page-basic.spec.ts',
+            'v3-regressions.spec.ts',
             'profile-avatar-selection.spec.ts',
             'profile-page.spec.ts',
             'mobile-process-form.spec.ts',

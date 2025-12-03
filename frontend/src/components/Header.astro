@@ -12,14 +12,17 @@ export interface Props {
 <a href="#main" class="skip-link">Skip to main content</a>
 
 <header class="header">
-    <a href="/" aria-label="Go to homepage" class="brand">
+    <div class="header__spacer" aria-hidden="true"></div>
+    <a href="/" aria-label="Go to homepage" class="brand" data-testid="brand">
         <div class="vertical">
             <Logo />
             <span class="text-gradient title">DSPACE</span>
             <p class="domain">democratized.space</p>
         </div>
     </a>
-    <ThemeToggle client:load />
+    <div class="header__actions">
+        <ThemeToggle client:load />
+    </div>
 </header>
 
 <style>
@@ -37,16 +40,26 @@ export interface Props {
     }
 
     .header {
-        display: flex;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
         align-items: center;
-        justify-content: space-between;
         gap: 1rem;
-        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .header__spacer {
+        min-height: 1px;
+    }
+
+    .header__actions {
+        justify-self: end;
+        align-self: start;
     }
 
     .brand {
-        flex: 1;
         min-width: 0;
+        justify-self: center;
+        text-align: center;
     }
 
     .text-gradient {
@@ -91,7 +104,6 @@ export interface Props {
     .vertical {
         display: flex;
         flex-direction: column;
-        /* center */
         align-items: center;
     }
 
@@ -128,5 +140,19 @@ export interface Props {
 
     .skip-link:focus {
         top: 0;
+    }
+
+    @media (max-width: 640px) {
+        .header {
+            grid-template-columns: 1fr auto;
+        }
+
+        .header__spacer {
+            display: none;
+        }
+
+        .brand {
+            justify-self: start;
+        }
     }
 </style>

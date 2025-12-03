@@ -1,47 +1,19 @@
 <script>
     import { onMount } from 'svelte';
+    import { initializeTheme, setTheme } from '../../lib/theme';
 
-    const STORAGE_KEY = 'theme';
-    const DEFAULT_THEME = 'dark';
-
-    let theme = DEFAULT_THEME;
+    /** @type {'light' | 'dark'} */
+    let theme = 'dark';
     let isReady = false;
 
-    const applyTheme = (nextTheme) => {
-        theme = nextTheme;
-
-        if (typeof document !== 'undefined') {
-            document.documentElement.setAttribute('data-theme', nextTheme);
-        }
-
-        try {
-            localStorage.setItem(STORAGE_KEY, nextTheme);
-        } catch (error) {
-            console.warn('Unable to persist theme preference:', error);
-        }
-    };
-
     onMount(() => {
-        let storedTheme = null;
-
-        try {
-            storedTheme = localStorage.getItem(STORAGE_KEY);
-        } catch (error) {
-            console.warn('Unable to read theme preference:', error);
-        }
-
-        if (storedTheme === 'dark' || storedTheme === 'light') {
-            applyTheme(storedTheme);
-        } else {
-            applyTheme(DEFAULT_THEME);
-        }
-
+        theme = initializeTheme();
         isReady = true;
     });
 
     const toggleTheme = () => {
         const nextTheme = theme === 'dark' ? 'light' : 'dark';
-        applyTheme(nextTheme);
+        theme = setTheme(nextTheme);
     };
 </script>
 
@@ -53,6 +25,7 @@
     on:click={toggleTheme}
     disabled={!isReady}
     data-hydrated={isReady ? 'true' : 'false'}
+    data-testid="theme-toggle"
 >
     <span class="theme-toggle__icon" aria-hidden="true">
         {theme === 'dark' ? '🌙' : '☀️'}

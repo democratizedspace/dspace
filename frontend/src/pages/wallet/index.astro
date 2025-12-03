@@ -1,0 +1,65 @@
+---
+import Page from '../../components/Page.astro';
+import Card from '../../components/Card.astro';
+import WalletBalances from '../../components/svelte/WalletBalances.svelte';
+---
+
+<Page title="Wallet" message="Track and grow your DSPACE balances" columns="1">
+    <section class="wallet">
+        <WalletBalances client:load />
+
+        <div class="wallet__actions">
+            <h2>Income & conversions</h2>
+            <p class="wallet__hint">
+                Launch the daily payout or offset emissions without leaving your wallet.
+            </p>
+            <ul class="card-grid">
+                <Card
+                    href="/quests/ubi/basicincome"
+                    title="Collect daily basic income"
+                    body="Earn dUSD and dBI through the UBI quest line."
+                />
+                <Card
+                    href="/processes/dCarbon-dOffset-1"
+                    title="Convert dCarbon to dOffset"
+                    body="Retire carbon and keep your impact in check."
+                />
+            </ul>
+        </div>
+    </section>
+</Page>
+
+<style>
+    .wallet {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .wallet__actions {
+        background: rgba(23, 33, 48, 0.65);
+        border: 1px solid rgba(105, 140, 220, 0.35);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    }
+
+    h2 {
+        margin: 0 0 0.25rem;
+        color: var(--color-heading);
+    }
+
+    .wallet__hint {
+        margin: 0 0 1rem;
+        color: #c7d7ff;
+    }
+
+    .card-grid {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+</style>

@@ -1,5 +1,6 @@
 ---
 import { SEO } from "astro-seo";
+import { DEFAULT_THEME, THEME_STORAGE_KEY } from '../lib/theme';
 
 export interface Props {
 	title: string;
@@ -11,7 +12,7 @@ const sitewideTitle = `DSPACE (democratized.space)`;
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme={DEFAULT_THEME}>
         <head>
                 <SEO
 			title={sitewideTitle}
@@ -40,16 +41,56 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
                 <meta name="generator" content={Astro.generator} />
                 <script is:inline>
-                        try {
-                                const storedTheme = localStorage.getItem('theme');
-                                const theme = storedTheme === 'light' ? 'light' : 'dark';
-                                document.documentElement.dataset.theme = theme;
-                        } catch (error) {
-                                document.documentElement.dataset.theme = 'dark';
-                        }
+                        (() => {
+                                const storageKey = {JSON.stringify(THEME_STORAGE_KEY)};
+                                const fallback = {JSON.stringify(DEFAULT_THEME)};
+
+                                const isTheme = (value) =>
+                                        value === 'light' || value === 'dark';
+
+                                const resolveTheme = () => {
+                                        try {
+                                                const stored = localStorage.getItem(storageKey);
+                                                if (isTheme(stored)) return stored;
+                                        } catch (error) {
+                                                console.warn(
+                                                        'Unable to read theme preference:',
+                                                        error
+                                                );
+                                        }
+
+                                        try {
+                                                const prefersDark = window
+                                                        .matchMedia?.(
+                                                                '(prefers-color-scheme: dark)'
+                                                        )
+                                                        .matches;
+                                                return prefersDark ? 'dark' : 'light';
+                                        } catch (error) {
+                                                console.warn(
+                                                        'Unable to detect system theme preference:',
+                                                        error
+                                                );
+                                                return fallback;
+                                        }
+                                };
+
+                                const theme = resolveTheme();
+                                const root = document.documentElement;
+                                const body = document.body;
+
+                                if (root) root.dataset.theme = theme;
+                                if (body) body.dataset.theme = theme;
+
+                                try {
+                                        localStorage.setItem(storageKey, theme);
+                                } catch (error) {
+                                        console.warn('Unable to persist theme preference:', error);
+                                }
+                        })();
                 </script>
         </head>
-        <body>
+        <body data-theme={DEFAULT_THEME}>
                 <div id="starry">
                         <slot />
                 </div>
