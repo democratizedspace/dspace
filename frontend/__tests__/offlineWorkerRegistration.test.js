@@ -173,7 +173,9 @@ describe('registerOfflineWorker', () => {
         await dispatchLoad();
 
         expect(serviceWorker.register).not.toHaveBeenCalled();
-        expect(consoleInfoSpy).toHaveBeenCalledWith('Offline worker disabled via environment flag.');
+        expect(consoleInfoSpy).toHaveBeenCalledWith(
+            'Offline worker disabled via environment flag.'
+        );
     });
 
     it('retries stylesheets that 404 shortly after load when controlled by service worker', async () => {

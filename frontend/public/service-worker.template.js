@@ -167,9 +167,7 @@ function cacheFirstAsset(request) {
         const networkFetch = fetch(request)
             .then((response) => {
                 if (response.ok) {
-                    caches
-                        .open(RUNTIME_NAME)
-                        .then((cache) => cache.put(request, response.clone()));
+                    caches.open(RUNTIME_NAME).then((cache) => cache.put(request, response.clone()));
                     return response;
                 }
                 if (cachedResponse) {
@@ -193,9 +191,7 @@ function handleRuntimeRequest(request) {
         fetch(request)
             .then((response) => {
                 if (response && response.ok) {
-                    caches
-                        .open(RUNTIME_NAME)
-                        .then((cache) => cache.put(request, response.clone()));
+                    caches.open(RUNTIME_NAME).then((cache) => cache.put(request, response.clone()));
                     return response;
                 }
                 return cachedResponse || response;

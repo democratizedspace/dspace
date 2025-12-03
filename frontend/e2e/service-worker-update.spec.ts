@@ -261,7 +261,9 @@ test.describe('Service Worker Update', () => {
         expect(await isPageStyled(page)).toBe(true);
     });
 
-    test('assets remain accessible during navigation with service worker enabled', async ({ page }) => {
+    test('assets remain accessible during navigation with service worker enabled', async ({
+        page,
+    }) => {
         await page.goto('/');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
