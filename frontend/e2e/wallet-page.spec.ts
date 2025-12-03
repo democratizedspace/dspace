@@ -10,8 +10,8 @@ test.describe('Wallet page', () => {
         await expect(page.getByRole('heading', { name: /wallet/i })).toBeVisible();
         const balanceRows = page.locator('.balance-row');
         await expect(await balanceRows.count()).toBeGreaterThanOrEqual(2);
-        await expect(page.locator('.balance-value')).toContainText(/dUSD/);
-        await expect(page.locator('.balance-value')).toContainText(/dBI/);
+        await expect(page.getByLabel('dUSD balance')).toContainText(/dUSD/);
+        await expect(page.getByLabel('dBI balance')).toContainText(/dBI/);
 
         const processCard = page.getByRole('heading', { name: /launch basic income/i });
         await expect(processCard).toBeVisible();
