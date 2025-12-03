@@ -164,7 +164,7 @@ function isStaticAsset(pathname) {
 
 function cacheFirstAsset(request) {
     return caches.match(request).then((cachedResponse) => {
-        return fetch(request)
+        const networkFetch = fetch(request)
             .then((response) => {
                 if (response.ok) {
                     caches
@@ -178,6 +178,13 @@ function cacheFirstAsset(request) {
                 return response;
             })
             .catch(() => cachedResponse || Response.error());
+
+        if (cachedResponse) {
+            networkFetch.catch(() => {});
+            return cachedResponse;
+        }
+
+        return networkFetch;
     });
 }
 
