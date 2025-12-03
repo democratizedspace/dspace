@@ -15,8 +15,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-// Skip Playwright browser checks here - they will be done by playwright.config.ts for E2E tests
-// This allows unit tests to run without Playwright browsers installed
+// Check if we're running E2E tests by looking at npm_lifecycle_event or parent process
+// This allows us to skip Playwright browser checks for unit tests
+const isE2ETest =
+    process.env.npm_lifecycle_event?.includes('e2e') ||
+    process.env.npm_lifecycle_script?.includes('playwright') ||
+    process.env.npm_lifecycle_script?.includes('@playwright/test');
+
+if (isE2ETest) {
+    // Only import and call ensurePlaywrightBrowsers for E2E tests
+    const { ensurePlaywrightBrowsers } = await import('./utils/ensure-playwright-browsers.js');
+    await ensurePlaywrightBrowsers({ cwd: rootDir });
+}
+
 ensureAstroBuild();
 
 // Directories to ensure exist
