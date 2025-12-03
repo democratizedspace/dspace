@@ -2,7 +2,7 @@
 
 // This placeholder is replaced at build time to force a new service worker version
 // whenever the cache/build version changes.
-const SW_CACHE_VERSION = '2025-02-15';
+const SW_CACHE_VERSION = '__CACHE_VERSION__';
 self.CACHE_VERSION = SW_CACHE_VERSION;
 
 const PRECACHE_PREFIX = 'dspace-precache-v';
