@@ -73,6 +73,16 @@ export async function purgeClientState(page: Page): Promise<void> {
         localStorage.clear();
         sessionStorage.clear();
 
+        if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map((registration) => registration.unregister()));
+        }
+
+        if ('caches' in self) {
+            const cacheKeys = await caches.keys();
+            await Promise.all(cacheKeys.map((key) => caches.delete(key)));
+        }
+
         const targets = ['CustomContent', 'dspaceGameState', 'dspaceDB', 'dspaceGameSaves'];
         const anyIndexedDB = indexedDB as unknown as {
             databases?: () => Promise<Array<{ name?: string | null }>>;

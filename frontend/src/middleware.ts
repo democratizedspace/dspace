@@ -37,19 +37,30 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
     // files (as happened in the broken Docker image), fall back to the shared helpers so the
     // probes stay available.
 
-    if (!handledPaths.has(pathname) || response.status !== 404) {
-        return response;
+    const contentType = response.headers.get('content-type') || '';
+    const isHashedAsset = pathname.startsWith('/_astro/') && /[a-f0-9]{8,}\.[^./]+$/.test(pathname);
+
+    if (contentType.includes('text/html')) {
+        response.headers.set('Cache-Control', 'no-store, must-revalidate');
+    } else if (pathname === '/service-worker.js') {
+        response.headers.set('Cache-Control', 'no-cache');
+    } else if (isHashedAsset) {
+        response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
     }
 
-    switch (pathname) {
-        case '/config.json':
-            return buildRuntimeConfigResponse();
-        case '/healthz':
-        case '/health':
-            return buildHealthResponse();
-        case '/livez':
-            return buildLivezResponse();
-        default:
-            return response;
+    if (handledPaths.has(pathname) && response.status === 404) {
+        switch (pathname) {
+            case '/config.json':
+                return buildRuntimeConfigResponse();
+            case '/healthz':
+            case '/health':
+                return buildHealthResponse();
+            case '/livez':
+                return buildLivezResponse();
+            default:
+                return response;
+        }
     }
+
+    return response;
 };

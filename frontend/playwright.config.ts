@@ -211,6 +211,7 @@ export default defineConfig({
         trace: 'on-first-retry',
         actionTimeout: 15000,
         navigationTimeout: 15000,
+        serviceWorkers: 'block',
         // Still keep this for safety, but we're using HTTP
         ignoreHTTPSErrors: true,
     },

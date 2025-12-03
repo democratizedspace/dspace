@@ -20,7 +20,7 @@ describe('service worker caching contract', () => {
 
         expect(entries).not.toContain('/config.json');
         expect(content).toContain(
-            "const RUNTIME_MATCHERS = [/^\\/quests\\//, /^\\/assets\\//, /^\\/docs\\//];"
+            "const RUNTIME_MATCHERS = [/^\\/quests\\//, /^\\/assets\\//, /^\\/docs\\//, /^\\/_astro\\//];"
         );
         expect(content).toContain("const CONFIG_PATH = '/config.json';");
         expect(content).toMatch(/function prewarmConfigCache\(\)/);
@@ -28,6 +28,9 @@ describe('service worker caching contract', () => {
         expect(content).toMatch(/if \(url\.pathname === CONFIG_PATH\) {\s*return true;/);
         expect(content).toMatch(
             /if \(url\.pathname === CONFIG_PATH\) {\s*event\.respondWith\(handleConfigFetch\(request\)\)/
+        );
+        expect(content).toContain(
+            "const HASHED_ASSET_PATTERN = /\\/[_]astro\\/.*\\.(css|js|mjs|woff2?|svg)$/;"
         );
     });
 });

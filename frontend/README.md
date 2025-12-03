@@ -78,6 +78,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 ```
 
+## Service worker update strategy
+
+-   Navigations are served with a network-first strategy so new HTML reaches clients before cached
+    pages, preventing mismatched hashed asset URLs after deploys.
+-   Hashed static assets from `/_astro/` use cache-first responses with background refresh and keep
+    the two most recent cache versions so existing tabs retain working CSS/JS during rollouts.
+-   The service worker only activates after receiving a `SKIP_WAITING` message from the client; the
+    registration code reloads once on `controllerchange`, eliminating the need for manual hard
+    refreshes.
+-   A defensive stylesheet error listener triggers a single normal reload when a 404 occurs while a
+    service worker controls the page, covering the "CSS 404 until hard reload" edge case.
+
 ## Project Structure
 
 ```

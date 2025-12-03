@@ -25,6 +25,9 @@ describe('registerOfflineWorker', () => {
     beforeEach(async () => {
         loadHandlers = [];
 
+        process.env.DSPACE_OFFLINE_WORKER_ENABLED = 'true';
+        process.env.DSPACE_OFFLINE_WORKER_DISABLED = 'false';
+
         vi.spyOn(window, 'addEventListener').mockImplementation((event, handler) => {
             if (event === 'load') {
                 loadHandlers.push(handler);
@@ -68,6 +71,8 @@ describe('registerOfflineWorker', () => {
             configurable: true,
             value: originalLocation,
         });
+        delete process.env.DSPACE_OFFLINE_WORKER_ENABLED;
+        delete process.env.DSPACE_OFFLINE_WORKER_DISABLED;
     });
 
     it('registers service worker when enabled and triggers waiting update', async () => {
@@ -146,6 +151,31 @@ describe('registerOfflineWorker', () => {
         expect(window.location.reload).toHaveBeenCalledTimes(1);
     });
 
+    it('reloads once when a stylesheet 404 occurs under SW control', async () => {
+        fetch.mockResolvedValue({ status: 404 });
+        serviceWorker.controller = {};
+
+        const reload = vi.fn();
+        const { installStylesheet404Recovery } = await import(
+            '../src/scripts/offlineWorkerRegistration.js'
+        );
+
+        installStylesheet404Recovery({ reload });
+
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/_astro/app.css';
+        document.body.appendChild(link);
+
+        link.dispatchEvent(new Event('error', { bubbles: true }));
+
+        await vi.waitFor(() => expect(reload).toHaveBeenCalledTimes(1));
+
+        link.dispatchEvent(new Event('error', { bubbles: true }));
+
+        expect(reload).toHaveBeenCalledTimes(1);
+    });
+
     it('skips registration when offline worker disabled via config', async () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: false } }));
 
@@ -158,6 +188,20 @@ describe('registerOfflineWorker', () => {
 
         expect(serviceWorker.register).not.toHaveBeenCalled();
         expect(consoleInfoSpy).toHaveBeenCalledWith('Offline worker disabled via runtime config.');
+    });
+
+    it('skips registration when disabled via environment', async () => {
+        process.env.DSPACE_OFFLINE_WORKER_DISABLED = 'true';
+        fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
+
+        const { registerOfflineWorker } = await import(
+            '../src/scripts/offlineWorkerRegistration.js'
+        );
+
+        registerOfflineWorker();
+        await dispatchLoad();
+
+        expect(serviceWorker.register).not.toHaveBeenCalled();
     });
 
     it('logs warning when service worker registration fails', async () => {

@@ -4,6 +4,7 @@ import { clearUserData, waitForHydration } from './test-helpers';
 const SW_REGISTRATION_TIMEOUT_MS = 20000;
 const SW_EVENT_CAPTURE_TIMEOUT_MS = 2000;
 const ASTRO_ASSET_PATH = '/_astro/';
+const TEST_SW_VERSION_TAG = 'e2e-update';
 
 async function waitForServiceWorkerReady(page: Page, timeoutMs: number) {
     const pollRegistration = async () =>
@@ -134,6 +135,73 @@ async function checkAllStylesheetsLoad(page: Page, assetPath: string) {
     }, assetPath);
 }
 
+async function injectUpdatedServiceWorker(page: Page) {
+    const currentSource = await page.evaluate(async () => {
+        const response = await fetch('/service-worker.js', { cache: 'no-store' });
+        return response.text();
+    });
+
+    const bumpedSource = currentSource.replace(
+        /(SW_CACHE_VERSION\s*=\s*')[^']+(')/,
+        `$1${TEST_SW_VERSION_TAG}$2`
+    );
+
+    const finalSource =
+        bumpedSource === currentSource
+            ? `${currentSource}\n// bumped:${TEST_SW_VERSION_TAG}`
+            : bumpedSource;
+
+    await page.route('**/service-worker.js', (route) => {
+        if (route.request().method() !== 'GET') {
+            route.continue();
+            return;
+        }
+
+        route.fulfill({
+            status: 200,
+            contentType: 'application/javascript',
+            body: finalSource,
+        });
+    });
+
+    try {
+        const updateResult = await page.evaluate(async () => {
+            const registration = await navigator.serviceWorker.getRegistration();
+            if (!registration) {
+                return { updated: false };
+            }
+
+            await registration.update();
+
+            const worker = registration.waiting || registration.installing;
+            if (!worker) {
+                return { updated: true, waiting: false };
+            }
+
+            const reachedInstalled = await new Promise<boolean>((resolve) => {
+                if (worker.state === 'installed') {
+                    resolve(true);
+                    return;
+                }
+
+                worker.addEventListener(
+                    'statechange',
+                    () => resolve(worker.state === 'installed'),
+                    { once: true }
+                );
+
+                setTimeout(() => resolve(worker.state === 'installed'), 2000);
+            });
+
+            return { updated: true, waiting: reachedInstalled };
+        });
+
+        return updateResult;
+    } finally {
+        await page.unroute('**/service-worker.js');
+    }
+}
+
 /**
  * Helper function to check if page is styled by verifying loaded CSS rules
  */
@@ -155,6 +223,8 @@ async function isPageStyled(page: Page) {
 }
 
 test.describe('Service Worker Update', () => {
+    test.use({ serviceWorkers: 'allow' });
+
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
     });
@@ -206,28 +276,9 @@ test.describe('Service Worker Update', () => {
 
         expect(swActive.registered).toBe(true);
 
-        // Simulate a "new build" by forcing SW update check
-        // In real scenario, the SW file changes due to CACHE_VERSION injection
-        // Here we'll trigger an update and verify the update mechanism works
-        const updateTriggered = await page.evaluate(async () => {
-            const registration = await navigator.serviceWorker.getRegistration();
-            if (!registration) {
-                return false;
-            }
+        const updateTriggered = await injectUpdatedServiceWorker(page);
 
-            try {
-                await registration.update();
-                return true;
-            } catch (error) {
-                console.error('SW update failed:', error);
-                return false;
-            }
-        });
-
-        expect(updateTriggered).toBe(true);
-
-        // Wait a moment for update to process
-        await page.waitForTimeout(1000);
+        expect(updateTriggered.updated).toBe(true);
 
         // Reload the page normally (not hard reload)
         await page.reload({ waitUntil: 'networkidle' });
@@ -242,6 +293,34 @@ test.describe('Service Worker Update', () => {
         const stillStyled = await isPageStyled(page);
 
         expect(stillStyled).toBe(true);
+    });
+
+    test('does not surface CSS 404s after a coordinated SW update', async ({ page }) => {
+        await page.goto('/');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
+
+        const stylesheetResponses: Array<{ url: string; status: number }> = [];
+        page.on('response', (response) => {
+            const url = response.url();
+            if (url.includes(ASTRO_ASSET_PATH) && url.match(/\.(css|js)$/)) {
+                stylesheetResponses.push({ url, status: response.status() });
+            }
+        });
+
+        const updateResult = await injectUpdatedServiceWorker(page);
+        expect(updateResult.updated).toBe(true);
+
+        await page.reload({ waitUntil: 'networkidle' });
+        await waitForHydration(page);
+
+        const cssLoadsAfterUpdate = await checkAllStylesheetsLoad(page, ASTRO_ASSET_PATH);
+        expect(cssLoadsAfterUpdate.success).toBe(true);
+
+        const failed404s = stylesheetResponses.filter((entry) => entry.status === 404);
+        expect(failed404s).toHaveLength(0);
     });
 
     test('service worker skipWaiting and reload logic works', async ({ page }) => {

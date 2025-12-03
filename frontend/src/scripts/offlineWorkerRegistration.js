@@ -1,5 +1,69 @@
+const STYLESHEET_RETRY_WINDOW_MS = 15000;
+
+function isServiceWorkerEnabledByEnv() {
+    if (typeof process !== 'undefined' && process?.env) {
+        const env = process.env;
+        if (env.DSPACE_OFFLINE_WORKER_DISABLED === 'true') {
+            return false;
+        }
+
+        if (env.NODE_ENV === 'test' && env.DSPACE_OFFLINE_WORKER_ENABLED !== 'true') {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+export function installStylesheet404Recovery({ reload = () => window.location.reload() } = {}) {
+    if (typeof window === 'undefined') {
+        return;
+    }
+
+    let attemptedRecovery = false;
+    const startedAt = Date.now();
+
+    const maybeRecover = async (event) => {
+        const target = event?.target;
+        const isStylesheet =
+            target instanceof HTMLLinkElement && target.rel === 'stylesheet' && target.href;
+
+        if (!isStylesheet || attemptedRecovery) {
+            return;
+        }
+
+        if (!navigator.serviceWorker?.controller) {
+            return;
+        }
+
+        if (Date.now() - startedAt > STYLESHEET_RETRY_WINDOW_MS) {
+            return;
+        }
+
+        try {
+            const response = await fetch(target.href, { cache: 'no-store' });
+            if (response.status !== 404) {
+                return;
+            }
+        } catch (error) {
+            console.warn('Stylesheet recovery fetch failed:', error);
+            return;
+        }
+
+        attemptedRecovery = true;
+        window.removeEventListener('error', maybeRecover, true);
+        reload();
+    };
+
+    window.addEventListener('error', maybeRecover, true);
+}
+
 export function registerOfflineWorker() {
     if (!('serviceWorker' in navigator)) {
+        return;
+    }
+
+    if (!isServiceWorkerEnabledByEnv()) {
         return;
     }
 
@@ -84,6 +148,8 @@ export function registerOfflineWorker() {
     }
 
     window.addEventListener('load', async () => {
+        installStylesheet404Recovery();
+
         if (!(await shouldEnableOfflineWorker())) {
             console.info('Offline worker disabled via runtime config.');
             return;
