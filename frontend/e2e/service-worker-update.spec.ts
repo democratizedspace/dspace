@@ -1,6 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
+const SW_REGISTRATION_TIMEOUT_MS = 15000;
+const SW_EVENT_CAPTURE_TIMEOUT_MS = 2000;
+
 test.describe('Service Worker Update', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
@@ -13,28 +16,30 @@ test.describe('Service Worker Update', () => {
         await waitForHydration(page);
 
         // Wait for service worker to register
-        const swRegistered = await page.evaluate(async () => {
-            if (!('serviceWorker' in navigator)) {
-                return false;
-            }
-
-            // Wait for registration (with timeout)
-            const timeout = 15000;
-            const startTime = Date.now();
-
-            while (Date.now() - startTime < timeout) {
-                const registration = await navigator.serviceWorker.getRegistration();
-                if (registration) {
-                    // Wait for active or installing state
-                    if (registration.active || registration.installing || registration.waiting) {
-                        return true;
-                    }
+        const swRegistered = await page.evaluate(
+            async (timeoutMs) => {
+                if (!('serviceWorker' in navigator)) {
+                    return false;
                 }
-                await new Promise((resolve) => setTimeout(resolve, 100));
-            }
 
-            return false;
-        });
+                // Wait for registration (with timeout)
+                const startTime = Date.now();
+
+                while (Date.now() - startTime < timeoutMs) {
+                    const registration = await navigator.serviceWorker.getRegistration();
+                    if (registration) {
+                        // Wait for active or installing state
+                        if (registration.active || registration.installing || registration.waiting) {
+                            return true;
+                        }
+                    }
+                    await new Promise((resolve) => setTimeout(resolve, 100));
+                }
+
+                return false;
+            },
+            SW_REGISTRATION_TIMEOUT_MS
+        );
 
         expect(swRegistered).toBe(true);
 
@@ -99,29 +104,23 @@ test.describe('Service Worker Update', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        // Wait for SW registration and get initial cache version
-        const initialCacheVersion = await page.evaluate(async () => {
+        // Wait for SW registration to complete
+        await page.evaluate(async (timeoutMs) => {
             if (!('serviceWorker' in navigator)) {
-                return null;
+                return;
             }
 
             // Wait for registration
-            const timeout = 15000;
             const startTime = Date.now();
 
-            while (Date.now() - startTime < timeout) {
+            while (Date.now() - startTime < timeoutMs) {
                 const registration = await navigator.serviceWorker.getRegistration();
                 if (registration?.active) {
-                    // Try to get CACHE_VERSION from the service worker
-                    // The SW sets self.CACHE_VERSION
                     break;
                 }
                 await new Promise((resolve) => setTimeout(resolve, 100));
             }
-
-            // Check if CACHE_VERSION is exposed
-            return (self as { CACHE_VERSION?: string }).CACHE_VERSION || null;
-        });
+        }, SW_REGISTRATION_TIMEOUT_MS);
 
         // Verify SW is active
         const swActive = await page.evaluate(async () => {
@@ -211,7 +210,7 @@ test.describe('Service Worker Update', () => {
         await waitForHydration(page);
 
         // Setup listeners for SW lifecycle events
-        const swEvents = await page.evaluate(() => {
+        const swEvents = await page.evaluate((captureTimeoutMs) => {
             return new Promise((resolve) => {
                 if (!('serviceWorker' in navigator)) {
                     resolve({ registered: false });
@@ -242,10 +241,10 @@ test.describe('Service Worker Update', () => {
                     // Resolve after a short delay to capture events
                     setTimeout(() => {
                         resolve({ registered: true, events });
-                    }, 2000);
+                    }, captureTimeoutMs);
                 });
             });
-        });
+        }, SW_EVENT_CAPTURE_TIMEOUT_MS);
 
         expect((swEvents as { registered: boolean }).registered).toBe(true);
         expect((swEvents as { events: string[] }).events).toContain('registered');
