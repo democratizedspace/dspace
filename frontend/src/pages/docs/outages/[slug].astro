@@ -2,13 +2,16 @@
 import Page from '../../../components/Page.astro';
 import Chip from '../../../components/Chip.astro';
 import { fixMarkdownText } from '../../../utils';
+import createDOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
 
 const { slug } = Astro.params;
 const outages = await Astro.glob('../md/outages/*.md');
 const outage = outages.find((doc) => doc.frontmatter.slug === slug);
 
 const title = outage?.frontmatter?.title ?? 'Outage not found';
-const html = outage ? fixMarkdownText(outage.compiledContent()) : '';
+const DOMPurify = createDOMPurify((new JSDOM('')).window as unknown as Window);
+const html = outage ? DOMPurify.sanitize(fixMarkdownText(outage.compiledContent())) : '';
 ---
 
 <Page title={title} columns="1">
