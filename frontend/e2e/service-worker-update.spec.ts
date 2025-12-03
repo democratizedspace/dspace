@@ -1,73 +1,125 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, Page } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
 const SW_REGISTRATION_TIMEOUT_MS = 15000;
 const SW_EVENT_CAPTURE_TIMEOUT_MS = 2000;
 const ASTRO_ASSET_PATH = '/_astro/';
 
+/**
+ * Helper function to check if stylesheets have loaded successfully
+ */
+async function checkStylesheetLoads(page: Page, assetPath: string) {
+    return await page.evaluate(async (path) => {
+        const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+        const assetLinks = links.filter((link) => (link as HTMLLinkElement).href.includes(path));
+
+        if (assetLinks.length === 0) {
+            return { found: false, status: 0 };
+        }
+
+        const firstStylesheet = assetLinks[0] as HTMLLinkElement;
+        try {
+            const response = await fetch(firstStylesheet.href, { cache: 'no-cache' });
+            return { found: true, status: response.status, url: firstStylesheet.href };
+        } catch (error) {
+            return {
+                found: true,
+                status: 0,
+                url: firstStylesheet.href,
+                error: String(error),
+            };
+        }
+    }, assetPath);
+}
+
+/**
+ * Helper function to check if multiple stylesheets load successfully
+ */
+async function checkAllStylesheetsLoad(page: Page, assetPath: string) {
+    return await page.evaluate(async (path) => {
+        const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+        const assetLinks = links.filter((link) => (link as HTMLLinkElement).href.includes(path));
+
+        if (assetLinks.length === 0) {
+            return { success: false, reason: 'no stylesheets found' };
+        }
+
+        const results = await Promise.all(
+            assetLinks.map(async (link) => {
+                const href = (link as HTMLLinkElement).href;
+                try {
+                    const response = await fetch(href, { cache: 'no-cache' });
+                    return { url: href, status: response.status, ok: response.ok };
+                } catch (error) {
+                    return { url: href, status: 0, ok: false, error: String(error) };
+                }
+            })
+        );
+
+        const allOk = results.every((r) => r.ok);
+        return { success: allOk, results };
+    }, assetPath);
+}
+
+/**
+ * Helper function to check if page is styled by verifying loaded CSS rules
+ */
+async function isPageStyled(page: Page) {
+    return await page.evaluate(() => {
+        // Check that at least one stylesheet has loaded CSS rules
+        const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+        return links.some((link) => {
+            try {
+                const htmlLink = link as HTMLLinkElement;
+                // Some browsers may throw if sheet is cross-origin or not loaded
+                return (
+                    htmlLink.sheet && htmlLink.sheet.cssRules && htmlLink.sheet.cssRules.length > 0
+                );
+            } catch (e) {
+                return false;
+            }
+        });
+    });
+}
+
 test.describe('Service Worker Update', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
     });
 
-    test('service worker registers and caches assets correctly', async ({ page, context }) => {
+    test('service worker registers and caches assets correctly', async ({ page }) => {
         // Navigate to the home page
         await page.goto('/');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
         // Wait for service worker to register
-        const swRegistered = await page.evaluate(
-            async (timeoutMs) => {
-                if (!('serviceWorker' in navigator)) {
-                    return false;
-                }
-
-                // Wait for registration (with timeout)
-                const startTime = Date.now();
-
-                while (Date.now() - startTime < timeoutMs) {
-                    const registration = await navigator.serviceWorker.getRegistration();
-                    if (registration) {
-                        // Wait for active or installing state
-                        if (registration.active || registration.installing || registration.waiting) {
-                            return true;
-                        }
-                    }
-                    await new Promise((resolve) => setTimeout(resolve, 100));
-                }
-
+        const swRegistered = await page.evaluate(async (timeoutMs) => {
+            if (!('serviceWorker' in navigator)) {
                 return false;
-            },
-            SW_REGISTRATION_TIMEOUT_MS
-        );
+            }
+
+            // Wait for registration (with timeout)
+            const startTime = Date.now();
+
+            while (Date.now() - startTime < timeoutMs) {
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (registration) {
+                    // Wait for active or installing state
+                    if (registration.active || registration.installing || registration.waiting) {
+                        return true;
+                    }
+                }
+                await new Promise((resolve) => setTimeout(resolve, 100));
+            }
+
+            return false;
+        }, SW_REGISTRATION_TIMEOUT_MS);
 
         expect(swRegistered).toBe(true);
 
         // Check that the main stylesheet loads successfully
-        const stylesheetResponse = await page.evaluate(async (assetPath) => {
-            const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
-            const assetLinks = links.filter((link) =>
-                (link as HTMLLinkElement).href.includes(assetPath)
-            );
-
-            if (assetLinks.length === 0) {
-                return { found: false, status: 0 };
-            }
-
-            const firstStylesheet = assetLinks[0] as HTMLLinkElement;
-            try {
-                const response = await fetch(firstStylesheet.href, { cache: 'no-cache' });
-                return { found: true, status: response.status, url: firstStylesheet.href };
-            } catch (error) {
-                return {
-                    found: true,
-                    status: 0,
-                    url: firstStylesheet.href,
-                    error: String(error),
-                };
-            }
-        }, ASTRO_ASSET_PATH);
+        const stylesheetResponse = await checkStylesheetLoads(page, ASTRO_ASSET_PATH);
 
         expect(stylesheetResponse.found).toBe(true);
         expect(stylesheetResponse.status).toBe(200);
@@ -78,28 +130,12 @@ test.describe('Service Worker Update', () => {
         await expect(mainElement).toBeVisible();
 
         // Get computed styles to verify CSS is applied
-        const hasStyles = await page.evaluate(() => {
-            const main = document.querySelector('main');
-            if (!main) return false;
-
-            const styles = window.getComputedStyle(main);
-            // Check that styles are applied (not just default browser styles)
-            // We're looking for any non-default styling
-            return (
-                styles.display !== '' ||
-                styles.padding !== '0px' ||
-                styles.margin !== '0px' ||
-                styles.backgroundColor !== 'rgba(0, 0, 0, 0)'
-            );
-        });
+        const hasStyles = await isPageStyled(page);
 
         expect(hasStyles).toBe(true);
     });
 
-    test('service worker updates correctly when cache version changes', async ({
-        page,
-        context,
-    }) => {
+    test('service worker updates correctly when cache version changes', async ({ page }) => {
         // First load: register the service worker
         await page.goto('/');
         await page.waitForLoadState('networkidle');
@@ -159,52 +195,17 @@ test.describe('Service Worker Update', () => {
         await waitForHydration(page);
 
         // Verify CSS still loads correctly (no 404s)
-        const cssLoadsAfterUpdate = await page.evaluate(async (assetPath) => {
-            const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
-            const assetLinks = links.filter((link) =>
-                (link as HTMLLinkElement).href.includes(assetPath)
-            );
-
-            if (assetLinks.length === 0) {
-                return { success: false, reason: 'no stylesheets found' };
-            }
-
-            const results = await Promise.all(
-                assetLinks.map(async (link) => {
-                    const href = (link as HTMLLinkElement).href;
-                    try {
-                        const response = await fetch(href, { cache: 'no-cache' });
-                        return { url: href, status: response.status, ok: response.ok };
-                    } catch (error) {
-                        return { url: href, status: 0, ok: false, error: String(error) };
-                    }
-                })
-            );
-
-            const allOk = results.every((r) => r.ok);
-            return { success: allOk, results };
-        }, ASTRO_ASSET_PATH);
+        const cssLoadsAfterUpdate = await checkAllStylesheetsLoad(page, ASTRO_ASSET_PATH);
 
         expect(cssLoadsAfterUpdate.success).toBe(true);
 
         // Verify page remains styled
-        const stillStyled = await page.evaluate(() => {
-            const main = document.querySelector('main');
-            if (!main) return false;
-
-            const styles = window.getComputedStyle(main);
-            return (
-                styles.display !== '' ||
-                styles.padding !== '0px' ||
-                styles.margin !== '0px' ||
-                styles.backgroundColor !== 'rgba(0, 0, 0, 0)'
-            );
-        });
+        const stillStyled = await isPageStyled(page);
 
         expect(stillStyled).toBe(true);
     });
 
-    test('service worker skipWaiting and reload logic works', async ({ page, context }) => {
+    test('service worker skipWaiting and reload logic works', async ({ page }) => {
         // This test verifies the SKIP_WAITING + reload behavior
         await page.goto('/');
         await page.waitForLoadState('networkidle');
