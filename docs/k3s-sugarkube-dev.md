@@ -274,6 +274,34 @@ helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
   --values docs/examples/dspace.values.staging.yaml
 ```
 
+### Force a rollout restart when using mutable tags (e.g., `v3-latest`)
+
+When redeploying with a mutable tag such as `v3-latest`, Helm may report an upgrade without
+changing the Deployment template because the chart version and image tag stay the same. In that
+case Kubernetes will not create a new ReplicaSet, and pods keep running the previous image digest.
+
+After triggering the Sugarkube helper, explicitly roll the Deployment to ensure pods pull the
+latest digest:
+
+```bash
+cd ~/sugarkube
+just dspace-oci-redeploy
+
+sudo kubectl rollout restart deploy dspace -n dspace
+sudo kubectl rollout status deploy dspace -n dspace --timeout=120s
+```
+
+Watch pods replace and confirm the new build:
+
+```bash
+sudo kubectl get pods -n dspace -w
+sudo kubectl -n dspace port-forward svc/dspace 8080:8080
+curl -s http://localhost:8080/healthz | jq
+```
+
+For production, prefer immutable tags (for example `v3.0.0+<sha>`) so Helm-driven manifest changes
+automatically roll pods without a manual restart.
+
 ### Verification
 
 ```bash
