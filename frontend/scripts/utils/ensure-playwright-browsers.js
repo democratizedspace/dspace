@@ -1,7 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { chromium } from '@playwright/test';
 
 const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test', 'cli.js');
 const INSTALL_ARGS = ['install', '--with-deps', 'chromium', 'chromium-headless-shell'];
@@ -100,22 +99,38 @@ export function hasChromiumExecutable(browser) {
     }
 }
 
-export function ensurePlaywrightBrowsers(options = {}) {
+async function getChromiumBrowser() {
+    try {
+        const { chromium } = await import('@playwright/test');
+        return chromium;
+    } catch (error) {
+        // @playwright/test not installed, return null
+        return null;
+    }
+}
+
+export async function ensurePlaywrightBrowsers(options = {}) {
     const {
         cwd = process.cwd(),
         installArgs = INSTALL_ARGS,
         env = process.env,
-        browser = chromium,
         platform = process.platform,
         installSystemDeps = true,
     } = options;
 
     if (process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD === '1') {
-        if (!hasChromiumExecutable(browser)) {
+        const browser = await getChromiumBrowser();
+        if (browser && !hasChromiumExecutable(browser)) {
             console.warn(
                 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium browser is missing. E2E tests may fail.'
             );
         }
+        return;
+    }
+
+    const browser = await getChromiumBrowser();
+    if (!browser) {
+        // Playwright not installed, skip browser check
         return;
     }
 

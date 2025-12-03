@@ -16,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-ensurePlaywrightBrowsers({ cwd: rootDir });
+await ensurePlaywrightBrowsers({ cwd: rootDir });
 ensureAstroBuild();
 
 // Directories to ensure exist

@@ -27,7 +27,7 @@ declare const process: {
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
 
-ensurePlaywrightBrowsers({ cwd: frontendDir });
+await ensurePlaywrightBrowsers({ cwd: frontendDir });
 
 function ensureAstroBuildArtifacts(): void {
     const serverEntrypoint = join(frontendDir, 'dist', 'server', 'entry.mjs');
