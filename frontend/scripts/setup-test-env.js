@@ -10,13 +10,13 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { ensureAstroBuild } from './ensure-astro-build.mjs';
-import { ensurePlaywrightBrowsers } from './utils/ensure-playwright-browsers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-await ensurePlaywrightBrowsers({ cwd: rootDir });
+// Skip Playwright browser checks here - they will be done by playwright.config.ts for E2E tests
+// This allows unit tests to run without Playwright browsers installed
 ensureAstroBuild();
 
 // Directories to ensure exist
