@@ -75,7 +75,9 @@ test.describe('Dark mode toggle', () => {
 
             const currentToggle = page.getByRole('button', { name: /toggle dark mode/i });
             await expect(currentToggle).toHaveAttribute('data-hydrated', 'true');
-            await expect(currentToggle).toContainText(targetTheme === 'dark' ? /Dark mode/ : /Light mode/);
+            await expect(currentToggle).toContainText(
+                targetTheme === 'dark' ? /Dark mode/ : /Light mode/
+            );
         }
     });
 });
