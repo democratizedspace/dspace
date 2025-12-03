@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { resolveCacheVersion } from './sync-cache-version.mjs';
 
@@ -39,8 +39,8 @@ export async function injectCacheVersionIntoServiceWorker() {
 }
 
 if (process.argv[1]) {
-    const invokedPath = path.resolve(process.argv[1]);
-    if (invokedPath === fileURLToPath(import.meta.url)) {
+    const invokedUrl = pathToFileURL(path.resolve(process.argv[1])).href;
+    if (import.meta.url === invokedUrl) {
         await injectCacheVersionIntoServiceWorker();
     }
 }
