@@ -7,6 +7,7 @@ let serviceWorker;
 let originalLocation;
 let consoleWarnSpy;
 let consoleInfoSpy;
+let originalEnvFlag;
 
 const mockFetchResponse = (data, ok = true, status = 200) =>
     Promise.resolve({
@@ -24,6 +25,7 @@ async function dispatchLoad() {
 describe('registerOfflineWorker', () => {
     beforeEach(async () => {
         loadHandlers = [];
+        originalEnvFlag = process.env.DSPACE_ENABLE_SERVICE_WORKER;
 
         vi.spyOn(window, 'addEventListener').mockImplementation((event, handler) => {
             if (event === 'load') {
@@ -68,6 +70,7 @@ describe('registerOfflineWorker', () => {
             configurable: true,
             value: originalLocation,
         });
+        process.env.DSPACE_ENABLE_SERVICE_WORKER = originalEnvFlag;
     });
 
     it('registers service worker when enabled and triggers waiting update', async () => {
@@ -158,6 +161,22 @@ describe('registerOfflineWorker', () => {
 
         expect(serviceWorker.register).not.toHaveBeenCalled();
         expect(consoleInfoSpy).toHaveBeenCalledWith('Offline worker disabled via runtime config.');
+    });
+
+    it('skips registration when environment flag disables service workers', async () => {
+        process.env.DSPACE_ENABLE_SERVICE_WORKER = 'false';
+
+        const { registerOfflineWorker } = await import(
+            '../src/scripts/offlineWorkerRegistration.js'
+        );
+
+        registerOfflineWorker();
+        await dispatchLoad();
+
+        expect(serviceWorker.register).not.toHaveBeenCalled();
+        expect(consoleInfoSpy).toHaveBeenCalledWith(
+            'Offline worker disabled via environment flag.'
+        );
     });
 
     it('logs warning when service worker registration fails', async () => {

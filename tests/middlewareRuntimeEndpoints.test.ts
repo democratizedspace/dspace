@@ -124,4 +124,48 @@ describe('runtime middleware fallback', () => {
     expect(payload.method).toBe('GET');
     expect(payload.context.status).toBe(500);
   });
+
+  it('marks HTML routes as non-cacheable', async () => {
+    const context = createContext('/quests');
+    const response = await onRequest(
+      context,
+      async () =>
+        new Response('<html></html>', {
+          status: 200,
+          headers: { 'content-type': 'text/html; charset=utf-8' },
+        })
+    );
+
+    expect(response.headers.get('cache-control')).toBe('no-store');
+  });
+
+  it('avoids caching the service worker script aggressively', async () => {
+    const context = createContext('/service-worker.js');
+    const response = await onRequest(
+      context,
+      async () =>
+        new Response('self.skipWaiting()', {
+          status: 200,
+          headers: { 'content-type': 'application/javascript' },
+        })
+    );
+
+    expect(response.headers.get('cache-control')).toBe('no-cache');
+  });
+
+  it('marks hashed assets as immutable', async () => {
+    const context = createContext('/_astro/main.12345.css');
+    const response = await onRequest(
+      context,
+      async () =>
+        new Response('.css{}', {
+          status: 200,
+          headers: { 'content-type': 'text/css' },
+        })
+    );
+
+    expect(response.headers.get('cache-control')).toBe(
+      'public, max-age=31536000, immutable'
+    );
+  });
 });

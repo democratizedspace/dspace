@@ -18,8 +18,12 @@ describe('offline service worker integration', () => {
         const registrationModuleContents = readFileSync(registrationModulePath, 'utf8');
 
         expect(layoutContents).toMatch(
-            /import\s+\{\s*registerOfflineWorker\s*\}\s+from\s+['"]\/src\/scripts\/offlineWorkerRegistration\.js['"];\s*registerOfflineWorker\(\);/
+            /import\s+\{\s*registerOfflineWorker\s*\}\s+from\s+['"]\/src\/scripts\/offlineWorkerRegistration\.js['"]/s
         );
+        expect(layoutContents).toMatch(
+            /import\s+\{\s*setupStylesheetRecovery\s*\}\s+from\s+['"]\/src\/scripts\/stylesheetRecovery\.js['"]/s
+        );
+        expect(layoutContents).toMatch(/registerOfflineWorker\(\);\s*setupStylesheetRecovery\(\);/s);
         expect(registrationModuleContents).toMatch(
             /navigator\.serviceWorker\s*\.\s*register\(['"]\/service-worker\.js['"]\)/
         );

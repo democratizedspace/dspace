@@ -33,6 +33,19 @@ export const onRequest = async (context: APIContext, next: () => Promise<Respons
         });
     }
 
+    const contentType = response.headers.get('content-type') || '';
+
+    if (pathname === '/service-worker.js') {
+        response.headers.set('cache-control', 'no-cache');
+    } else if (contentType.includes('text/html')) {
+        response.headers.set('cache-control', 'no-store');
+    } else if (pathname.startsWith('/_astro/')) {
+        const existing = response.headers.get('cache-control');
+        if (!existing || !/immutable/i.test(existing)) {
+            response.headers.set('cache-control', 'public, max-age=31536000, immutable');
+        }
+    }
+
     // Allow page routes to handle these endpoints when present. If a build omits the route
     // files (as happened in the broken Docker image), fall back to the shared helpers so the
     // probes stay available.

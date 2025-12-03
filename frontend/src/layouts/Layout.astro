@@ -146,8 +146,10 @@ const sitewideTitle = `DSPACE (democratized.space)`;
 
                 <script is:inline type="module">
                         import { registerOfflineWorker } from '/src/scripts/offlineWorkerRegistration.js';
+                        import { setupStylesheetRecovery } from '/src/scripts/stylesheetRecovery.js';
 
                         registerOfflineWorker();
+                        setupStylesheetRecovery();
                 </script>
         </body>
 </html>

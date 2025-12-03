@@ -1,5 +1,28 @@
+function isServiceWorkerAllowed() {
+    const envFlag =
+        typeof process !== 'undefined' ? process.env?.DSPACE_ENABLE_SERVICE_WORKER : undefined;
+    if (envFlag === '0' || envFlag === 'false') {
+        return false;
+    }
+
+    const publicFlag =
+        typeof import.meta !== 'undefined'
+            ? import.meta.env?.PUBLIC_ENABLE_SERVICE_WORKER
+            : undefined;
+    if (publicFlag === '0' || publicFlag === 'false') {
+        return false;
+    }
+
+    return true;
+}
+
 export function registerOfflineWorker() {
     if (!('serviceWorker' in navigator)) {
+        return;
+    }
+
+    if (!isServiceWorkerAllowed()) {
+        console.info('Offline worker disabled via environment flag.');
         return;
     }
 

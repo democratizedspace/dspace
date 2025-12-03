@@ -64,6 +64,15 @@ For a quick reference of the values baked into each overlay, see **Environment o
 [`docs/config.md`](../../docs/config.md); it captures the hostnames, image strategy, metrics, and
 feature flags surfaced by these `values.yaml` files.
 
+## Static assets and cache headers
+
+- Rolling updates with at least two replicas (default in the chart and enabled for `int`/`prod`)
+  keep the previous pod online while the new build becomes ready so clients with old HTML can still
+  fetch hashed assets during a deployment window.
+- The Astro middleware now sets `Cache-Control: no-store` for HTML, `Cache-Control: no-cache` for
+  `/service-worker.js`, and long-lived immutable caching for `/_astro/*` bundles to align with
+  Traefik and any downstream CDN behavior.
+
 ## Metrics & Monitoring
 
 - Enable metrics collection by setting the overlay's `env.extra` entry for

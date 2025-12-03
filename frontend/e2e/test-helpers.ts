@@ -66,8 +66,13 @@ import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
  * Utility functions to help with testing the DSpace application
  */
 
-export async function purgeClientState(page: Page): Promise<void> {
-    await navigateWithRetry(page, '/');
+export async function purgeClientState(
+    page: Page,
+    { navigate = true }: { navigate?: boolean } = {}
+): Promise<void> {
+    if (navigate) {
+        await navigateWithRetry(page, '/');
+    }
 
     await page.evaluate(async (gameStateModule: string) => {
         localStorage.clear();
@@ -77,6 +82,24 @@ export async function purgeClientState(page: Page): Promise<void> {
         const anyIndexedDB = indexedDB as unknown as {
             databases?: () => Promise<Array<{ name?: string | null }>>;
         };
+
+        if ('serviceWorker' in navigator) {
+            try {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(registrations.map((registration) => registration.unregister()));
+            } catch (error) {
+                console.warn('Failed to unregister service workers before purge:', error);
+            }
+        }
+
+        if ('caches' in self) {
+            try {
+                const keys = await caches.keys();
+                await Promise.all(keys.map((key) => caches.delete(key)));
+            } catch (error) {
+                console.warn('Failed to clear service worker caches before purge:', error);
+            }
+        }
 
         try {
             const module = await import(/* @vite-ignore */ gameStateModule);
@@ -179,8 +202,11 @@ export async function purgeClientState(page: Page): Promise<void> {
 /**
  * Clears persisted user data for backwards compatibility with older helpers.
  */
-export async function clearUserData(page: Page): Promise<void> {
-    await purgeClientState(page);
+export async function clearUserData(
+    page: Page,
+    options: { navigate?: boolean } = {}
+): Promise<void> {
+    await purgeClientState(page, options);
 }
 
 export async function waitForQuestRecordByTitle(

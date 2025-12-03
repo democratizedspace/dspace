@@ -73,12 +73,21 @@ Create quests, items, and processes for the game:
   - [Docker Deployment](./docs/ops/deploy/docker.md) - Container-based deployment
   - [Monitoring Setup](./docs/ops/monitoring_setup.md) - Prometheus and Grafana
   - [Backup System](./docs/ops/backup_system.md) - Automated backups
-  - [Cloudflare Load Balancing](./docs/ops/cloudflare_load_balancing.md) - High availability
-  - [Failover Procedures](./docs/ops/failover_procedures.md) - Handling outages
-  - [Netlify Migration](./docs/ops/netlify-migration.md) - Self-hosting background
-  - [Offline-First Strategy](./docs/ops/offline-first.md) - PWA capabilities
+- [Cloudflare Load Balancing](./docs/ops/cloudflare_load_balancing.md) - High availability
+- [Failover Procedures](./docs/ops/failover_procedures.md) - Handling outages
+- [Netlify Migration](./docs/ops/netlify-migration.md) - Self-hosting background
+- [Offline-First Strategy](./docs/ops/offline-first.md) - PWA capabilities
 - [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
 - [k3s + Sugarkube](./docs/k3s-sugarkube-dev.md) - HA cluster setup
+
+### Service worker update strategy
+
+- Navigations are served with a network-first policy while keeping an offline fallback so new
+  HTML is fetched on deploys and avoids stale asset references.
+- Versioned caches for hashed assets are retained across one prior release, and the client triggers
+  a single reload when an updated worker takes control to avoid manual hard reloads.
+- Stylesheet errors under a controlling worker trigger a one-time reload to heal transient 404s
+  seen immediately after deploys.
 
 ### Architecture & Technical Design
 

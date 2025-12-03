@@ -1,9 +1,18 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { expect, test, Page } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
 const SW_REGISTRATION_TIMEOUT_MS = 20000;
 const SW_EVENT_CAPTURE_TIMEOUT_MS = 2000;
 const ASTRO_ASSET_PATH = '/_astro/';
+const CURRENT_DIR = path.dirname(fileURLToPath(import.meta.url));
+const SERVICE_WORKER_PATH = path.resolve(CURRENT_DIR, '../public/service-worker.js');
+const SERVICE_WORKER_SOURCE = readFileSync(SERVICE_WORKER_PATH, 'utf8');
+
+test.use({ serviceWorkers: 'allow' });
 
 async function waitForServiceWorkerReady(page: Page, timeoutMs: number) {
     const pollRegistration = async () =>
@@ -154,13 +163,25 @@ async function isPageStyled(page: Page) {
     });
 }
 
-test.describe('Service Worker Update', () => {
-    test.beforeEach(async ({ page }) => {
-        await clearUserData(page);
-    });
+async function reloadUntilControlled(page: Page) {
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+        const isControlled = await page.evaluate(() =>
+            Boolean(navigator.serviceWorker?.controller)
+        );
 
+        if (isControlled) {
+            return;
+        }
+
+        await page.reload({ waitUntil: 'networkidle' });
+        await waitForHydration(page);
+    }
+}
+
+test.describe('Service Worker Update', () => {
     test('service worker registers and caches assets correctly', async ({ page }) => {
         // Navigate to the home page
+        await clearUserData(page);
         await page.goto('/');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
@@ -193,6 +214,7 @@ test.describe('Service Worker Update', () => {
 
     test('service worker updates correctly when cache version changes', async ({ page }) => {
         // First load: register the service worker
+        await clearUserData(page);
         await page.goto('/');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
@@ -244,8 +266,67 @@ test.describe('Service Worker Update', () => {
         expect(stillStyled).toBe(true);
     });
 
+    test('cached assets survive network 404s during a service worker upgrade', async ({ page }) => {
+        let swVersion = 1;
+
+        await page.route('**/service-worker.js', (route) => {
+            route.fulfill({
+                contentType: 'application/javascript',
+                body: `${SERVICE_WORKER_SOURCE}\n// test-version:${swVersion}\n`,
+            });
+        });
+
+        const cssResponses: Array<{ url: string; status: number }> = [];
+        page.on('response', (response) => {
+            const url = response.url();
+            if (url.includes(ASTRO_ASSET_PATH) && url.match(/\.css($|\?)/)) {
+                cssResponses.push({ url, status: response.status() });
+            }
+        });
+
+        await clearUserData(page);
+        await page.goto('/');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const swReady = await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
+        expect(swReady.registered).toBe(true);
+
+        await reloadUntilControlled(page);
+
+        const primaryStylesheet = await page.evaluate(() => {
+            const link = document.querySelector('link[rel="stylesheet"]') as HTMLLinkElement | null;
+            return link?.href || null;
+        });
+
+        expect(primaryStylesheet).toBeTruthy();
+
+        await page.route(primaryStylesheet as string, (route) =>
+            route.fulfill({ status: 404, body: 'missing stylesheet' })
+        );
+
+        swVersion += 1;
+
+        await Promise.all([
+            page.waitForNavigation({ waitUntil: 'networkidle' }),
+            page.evaluate(async () => {
+                const registration = await navigator.serviceWorker.getRegistration();
+                await registration?.update();
+            }),
+        ]);
+
+        await waitForHydration(page);
+
+        const failedCss = cssResponses.filter((entry) => entry.status === 404);
+        expect(failedCss).toHaveLength(0);
+
+        const styled = await isPageStyled(page);
+        expect(styled).toBe(true);
+    });
+
     test('service worker skipWaiting and reload logic works', async ({ page }) => {
         // This test verifies the SKIP_WAITING + reload behavior
+        await clearUserData(page);
         await page.goto('/');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
@@ -293,6 +374,7 @@ test.describe('Service Worker Update', () => {
 
     test('assets remain accessible during service worker updates', async ({ page }) => {
         // Navigate and wait for initial load
+        await clearUserData(page);
         await page.goto('/');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
