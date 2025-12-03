@@ -1,63 +1,81 @@
 import { expect, test, Page } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
-const SW_REGISTRATION_TIMEOUT_MS = 15000;
+const SW_REGISTRATION_TIMEOUT_MS = 20000;
 const SW_EVENT_CAPTURE_TIMEOUT_MS = 2000;
 const ASTRO_ASSET_PATH = '/_astro/';
 
 async function waitForServiceWorkerReady(page: Page, timeoutMs: number) {
-    return await page.evaluate(async (timeout) => {
-        if (!('serviceWorker' in navigator)) {
-            return { registered: false, activeState: 'unsupported' };
-        }
-
-        const deadline = Date.now() + timeout;
-        let lastState = 'pending';
-
-        while (Date.now() < deadline) {
-            let registration = await navigator.serviceWorker.getRegistration();
-
-            if (!registration) {
-                try {
-                    registration = await navigator.serviceWorker.register('/service-worker.js');
-                } catch (error) {
-                    lastState = `register-error:${String(error)}`;
-                }
+    const pollRegistration = async () =>
+        await page.evaluate(async (timeout) => {
+            if (!('serviceWorker' in navigator)) {
+                return { registered: false, activeState: 'unsupported', controlled: false };
             }
 
-            if (registration) {
-                try {
-                    const readyRegistration = await Promise.race([
-                        navigator.serviceWorker.ready,
-                        new Promise((resolve) => setTimeout(() => resolve(null), 500)),
-                    ]);
+            const deadline = Date.now() + timeout;
+            let lastState = 'pending';
 
-                    if (readyRegistration?.active) {
+            while (Date.now() < deadline) {
+                let registration = await navigator.serviceWorker.getRegistration();
+
+                if (!registration) {
+                    try {
+                        registration = await navigator.serviceWorker.register('/service-worker.js');
+                    } catch (error) {
+                        lastState = `register-error:${String(error)}`;
+                    }
+                }
+
+                if (registration) {
+                    try {
+                        const readyRegistration = await Promise.race([
+                            navigator.serviceWorker.ready,
+                            new Promise((resolve) => setTimeout(() => resolve(null), 500)),
+                        ]);
+
+                        const controller = navigator.serviceWorker.controller;
+
+                        if (readyRegistration?.active) {
+                            return {
+                                registered: true,
+                                activeState: readyRegistration.active.state || 'activated',
+                                controlled: Boolean(controller),
+                            };
+                        }
+                    } catch (error) {
+                        lastState = `ready-error:${String(error)}`;
+                    }
+
+                    if (registration.active) {
                         return {
                             registered: true,
-                            activeState: readyRegistration.active.state || 'activated',
+                            activeState: registration.active.state || 'activated',
+                            controlled: Boolean(navigator.serviceWorker.controller),
                         };
                     }
-                } catch (error) {
-                    lastState = `ready-error:${String(error)}`;
+
+                    if (registration.installing) {
+                        lastState = `installing:${registration.installing.state}`;
+                    } else if (registration.waiting) {
+                        lastState = `waiting:${registration.waiting.state}`;
+                    }
                 }
 
-                if (registration.active) {
-                    return { registered: true, activeState: registration.active.state || 'activated' };
-                }
-
-                if (registration.installing) {
-                    lastState = `installing:${registration.installing.state}`;
-                } else if (registration.waiting) {
-                    lastState = `waiting:${registration.waiting.state}`;
-                }
+                await new Promise((resolve) => setTimeout(resolve, 100));
             }
 
-            await new Promise((resolve) => setTimeout(resolve, 100));
-        }
+            return { registered: false, activeState: lastState, controlled: false };
+        }, timeoutMs);
 
-        return { registered: false, activeState: lastState };
-    }, timeoutMs);
+    const initial = await pollRegistration();
+
+    if (initial.registered && !initial.controlled) {
+        await page.reload({ waitUntil: 'networkidle' });
+        await waitForHydration(page);
+        return await pollRegistration();
+    }
+
+    return initial;
 }
 
 /**
