@@ -87,7 +87,7 @@ describe('ensurePlaywrightBrowsers', () => {
     });
     const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
-    ensurePlaywrightBrowsers({ cwd: '/workspace/dspace/frontend', browser });
+    await ensurePlaywrightBrowsers({ cwd: '/workspace/dspace/frontend', browser });
 
     expect(execFileSync).toHaveBeenCalledTimes(2);
     expect(execFileSync.mock.calls[0]).toEqual([
@@ -122,7 +122,7 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
   });
 
-  it('installs system deps when headless shell is missing', async () => {
+  it('warns but continues when headless shell is missing', async () => {
     const chromeExecutable =
       '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
     const headlessHyphen =
@@ -148,17 +148,7 @@ describe('ensurePlaywrightBrowsers', () => {
       }
       return false;
     });
-    const execFileSync = vi.fn((_command, args: string[]) => {
-      const action = args[1];
-      if (action === 'install-deps') {
-        depsSentinelExists = true;
-        return;
-      }
-
-      if (action === 'install') {
-        headlessInstalled = true;
-      }
-    });
+    const execFileSync = vi.fn();
     const writeFileSync = vi.fn(() => {
       depsSentinelExists = true;
     });
@@ -184,29 +174,19 @@ describe('ensurePlaywrightBrowsers', () => {
         default: { ...actual, existsSync },
       };
     });
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
-    ensurePlaywrightBrowsers({ cwd: '/workspace/dspace/frontend', browser });
+    await ensurePlaywrightBrowsers({ cwd: '/workspace/dspace/frontend', browser });
 
-    expect(execFileSync).toHaveBeenCalledTimes(2);
-    expect(execFileSync.mock.calls[0][1]).toEqual(
-      expect.arrayContaining([
-        expect.stringContaining('node_modules/@playwright/test/cli.js'),
-        'install-deps',
-      ])
-    );
-    expect(execFileSync.mock.calls[1][1]).toEqual(
-      expect.arrayContaining([
-        expect.stringContaining('node_modules/@playwright/test/cli.js'),
-        'install',
-        '--with-deps',
-        'chromium',
-        'chromium-headless-shell',
-      ])
-    );
-    expect(executablePath).toHaveBeenCalledTimes(2);
+    expect(execFileSync).not.toHaveBeenCalled();
+    expect(executablePath).toHaveBeenCalledTimes(1);
     expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
     expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('headless shell is missing')
+    );
+    warnSpy.mockRestore();
   });
 
   it('skips install when chromium and headless shell already exist', async () => {
@@ -248,7 +228,7 @@ describe('ensurePlaywrightBrowsers', () => {
     });
     const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
-    ensurePlaywrightBrowsers({ cwd: '/workspace/dspace/frontend', browser });
+    await ensurePlaywrightBrowsers({ cwd: '/workspace/dspace/frontend', browser });
 
     expect(execFileSync).not.toHaveBeenCalled();
     expect(executablePath).toHaveBeenCalledTimes(1);

@@ -1,5 +1,7 @@
 /* eslint-env serviceworker */
 
+importScripts('/cache-version.js');
+
 const SW_CACHE_VERSION = '__CACHE_VERSION__';
 self.CACHE_VERSION = SW_CACHE_VERSION;
 

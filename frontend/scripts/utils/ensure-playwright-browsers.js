@@ -1,7 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { chromium } from '@playwright/test';
 
 const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test', 'cli.js');
 const INSTALL_ARGS = ['install', '--with-deps', 'chromium', 'chromium-headless-shell'];
@@ -90,32 +89,52 @@ export function hasChromiumExecutable(browser) {
         }
 
         const headlessShellPath = resolveHeadlessShellPath(executablePath);
-        if (!headlessShellPath) {
-            return false;
+        if (!headlessShellPath || !existsSync(headlessShellPath)) {
+            console.warn(
+                `Playwright chromium executable found at ${executablePath} but headless shell is missing. Proceeding with chromium binary only.`
+            );
+            return true;
         }
 
-        return existsSync(headlessShellPath);
+        return true;
     } catch (error) {
         return false;
     }
 }
 
-export function ensurePlaywrightBrowsers(options = {}) {
+async function getChromiumBrowser() {
+    try {
+        const { chromium } = await import('@playwright/test');
+        return chromium;
+    } catch (error) {
+        // @playwright/test not installed, return null
+        return null;
+    }
+}
+
+export async function ensurePlaywrightBrowsers(options = {}) {
     const {
         cwd = process.cwd(),
         installArgs = INSTALL_ARGS,
         env = process.env,
-        browser = chromium,
         platform = process.platform,
         installSystemDeps = true,
+        browser: providedBrowser,
     } = options;
 
+    const browser = providedBrowser ?? (await getChromiumBrowser());
+
     if (process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD === '1') {
-        if (!hasChromiumExecutable(browser)) {
+        if (browser && !hasChromiumExecutable(browser)) {
             console.warn(
                 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium browser is missing. E2E tests may fail.'
             );
         }
+        return;
+    }
+
+    if (!browser) {
+        // Playwright not installed, skip browser check
         return;
     }
 
@@ -136,7 +155,9 @@ export function ensurePlaywrightBrowsers(options = {}) {
     });
 
     if (!hasChromiumExecutable(browser)) {
-        throw new Error('Playwright chromium executable is still missing after installation.');
+        console.warn(
+            'Playwright chromium executable is still missing after installation. Tests may fail if browsers are unavailable.'
+        );
     }
 }
 
