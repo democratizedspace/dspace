@@ -3,6 +3,33 @@ export function registerOfflineWorker() {
         return;
     }
 
+    const metaEnv = typeof import.meta !== 'undefined' ? import.meta.env : undefined;
+    const processEnv = typeof process !== 'undefined' ? process.env : {};
+
+    const isTestEnv = (metaEnv?.MODE ?? processEnv?.NODE_ENV) === 'test' || processEnv?.VITEST;
+    const isDisabledByEnv =
+        metaEnv?.PUBLIC_DISABLE_SERVICE_WORKER === 'true' ||
+        processEnv?.PUBLIC_DISABLE_SERVICE_WORKER === 'true';
+    const isEnabledOverride =
+        metaEnv?.PUBLIC_ENABLE_SERVICE_WORKER === 'true' ||
+        processEnv?.PUBLIC_ENABLE_SERVICE_WORKER === 'true';
+
+    if ((isTestEnv && !isEnabledOverride) || (isDisabledByEnv && !isEnabledOverride)) {
+        console.info('Offline worker disabled via environment overrides.');
+        return;
+    }
+
+    let hasReloaded = false;
+
+    const reloadOnce = () => {
+        if (hasReloaded) {
+            return;
+        }
+
+        hasReloaded = true;
+        window.location.reload();
+    };
+
     const shouldEnableOfflineWorker = async () => {
         try {
             const response = await fetch('/config.json', {
@@ -25,22 +52,56 @@ export function registerOfflineWorker() {
         }
     };
 
+    function setupStylesheetFallback() {
+        const startedAt = Date.now();
+
+        const handleStylesheetError = async (event) => {
+            if (hasReloaded || !navigator.serviceWorker.controller) {
+                return;
+            }
+
+            const { target } = event;
+            if (!target || !(target instanceof HTMLLinkElement)) {
+                return;
+            }
+
+            if (target.rel !== 'stylesheet' || !target.href) {
+                return;
+            }
+
+            if (Date.now() - startedAt > 15000) {
+                return;
+            }
+
+            try {
+                const response = await fetch(target.href, { cache: 'no-cache' });
+                if (response?.status !== 404) {
+                    return;
+                }
+            } catch (error) {
+                console.warn('Stylesheet validation failed after load:', error);
+            }
+
+            window.removeEventListener('error', handleStylesheetError, true);
+            reloadOnce();
+        };
+
+        window.addEventListener('error', handleStylesheetError, true);
+
+        return () => window.removeEventListener('error', handleStylesheetError, true);
+    }
+
     function triggerUpdate(registration) {
         const { waiting } = registration || {};
-        if (!waiting) {
+        if (!waiting || !navigator.serviceWorker.controller) {
             return;
         }
 
         waiting.postMessage({ type: 'SKIP_WAITING' });
 
-        let refreshing = false;
         const handleControllerChange = () => {
-            if (refreshing) {
-                return;
-            }
-            refreshing = true;
             navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
-            window.location.reload();
+            reloadOnce();
         };
 
         navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange, {
@@ -89,6 +150,8 @@ export function registerOfflineWorker() {
             return;
         }
 
+        const cleanupStylesheetError = setupStylesheetFallback();
+
         navigator.serviceWorker
             .register('/service-worker.js')
             .then((registration) => {
@@ -96,6 +159,7 @@ export function registerOfflineWorker() {
             })
             .catch((error) => {
                 console.warn('Service worker registration failed:', error);
+                cleanupStylesheetError();
             });
     });
 }

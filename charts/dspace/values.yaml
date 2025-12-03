@@ -69,6 +69,12 @@ resources:
     cpu: 250m
     memory: 256Mi
 
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
 nodeSelector: {}
 
 tolerations: []

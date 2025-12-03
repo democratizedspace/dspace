@@ -70,6 +70,18 @@ export async function purgeClientState(page: Page): Promise<void> {
     await navigateWithRetry(page, '/');
 
     await page.evaluate(async (gameStateModule: string) => {
+        try {
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(registrations.map((registration) => registration.unregister()));
+            }
+
+            const cacheNames = await caches.keys();
+            await Promise.all(cacheNames.map((name) => caches.delete(name)));
+        } catch (error) {
+            console.warn('Failed to reset service worker state before tests:', error);
+        }
+
         localStorage.clear();
         sessionStorage.clear();
 
@@ -157,6 +169,8 @@ export async function purgeClientState(page: Page): Promise<void> {
             )
         );
     }, GAME_STATE_MODULE);
+
+    await page.reload({ waitUntil: 'domcontentloaded' });
 
     const waitTargets = ['CustomContent', 'dspaceGameState', 'dspaceDB', 'dspaceGameSaves'];
     await page.waitForFunction(

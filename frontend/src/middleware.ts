@@ -1,55 +1,68 @@
-import type { APIContext } from 'astro';
+import type { MiddlewareHandler } from 'astro';
 import {
     buildHealthResponse,
     buildLivezResponse,
     buildRuntimeConfigResponse,
-} from './utils/runtimeEndpoints';
-import { logServerError } from './utils/serverLogger';
+} from './utils/runtimeEndpoints.js';
+import { logServerError } from './utils/serverLogger.js';
 
-export const onRequest = async (context: APIContext, next: () => Promise<Response>) => {
-    const { pathname } = new URL(context.request.url);
-    const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
+const IMMUTABLE_CACHE_HEADER = 'public, max-age=31536000, immutable';
+const NO_STORE_HEADER = 'no-store, must-revalidate';
+const NO_CACHE_HEADER = 'no-cache';
 
-    let response: Response;
+function isHashedAsset(pathname: string): boolean {
+    return (
+        pathname.startsWith('/_astro/') ||
+        (pathname.startsWith('/assets/') && /\.(c|m)?js($|\?)/.test(pathname)) ||
+        (pathname.startsWith('/assets/') && /\.css($|\?)/.test(pathname))
+    );
+}
+
+function applyCacheHeaders(response: Response, url: URL): Response {
+    const contentType = response.headers.get('content-type') || '';
+
+    if (url.pathname === '/service-worker.js') {
+        response.headers.set('Cache-Control', NO_CACHE_HEADER);
+    } else if (contentType.includes('text/html')) {
+        response.headers.set('Cache-Control', NO_STORE_HEADER);
+    } else if (isHashedAsset(url.pathname)) {
+        response.headers.set('Cache-Control', IMMUTABLE_CACHE_HEADER);
+    }
+
+    return response;
+}
+
+export const onRequest: MiddlewareHandler = async ({ request }, next) => {
+    const url = new URL(request.url);
 
     try {
-        response = await next();
+        const upstreamResponse = await next();
+
+        if (upstreamResponse.status === 404) {
+            if (url.pathname === '/config.json') {
+                return applyCacheHeaders(buildRuntimeConfigResponse(), url);
+            }
+
+            if (url.pathname === '/health' || url.pathname === '/healthz') {
+                return applyCacheHeaders(buildHealthResponse(), url);
+            }
+
+            if (url.pathname === '/livez') {
+                return applyCacheHeaders(buildLivezResponse(), url);
+            }
+        }
+
+        if (upstreamResponse.status >= 500) {
+            logServerError({
+                route: url.pathname,
+                method: request.method,
+                context: { status: upstreamResponse.status },
+            });
+        }
+
+        return applyCacheHeaders(upstreamResponse, url);
     } catch (error) {
-        logServerError({
-            route: pathname,
-            method: context.request.method,
-            message: 'Unhandled error while processing request',
-            error,
-        });
+        logServerError({ route: url.pathname, method: request.method, error });
         throw error;
-    }
-
-    if (response.status >= 500) {
-        logServerError({
-            route: pathname,
-            method: context.request.method,
-            message: 'Request returned a server error response',
-            context: { status: response.status },
-        });
-    }
-
-    // Allow page routes to handle these endpoints when present. If a build omits the route
-    // files (as happened in the broken Docker image), fall back to the shared helpers so the
-    // probes stay available.
-
-    if (!handledPaths.has(pathname) || response.status !== 404) {
-        return response;
-    }
-
-    switch (pathname) {
-        case '/config.json':
-            return buildRuntimeConfigResponse();
-        case '/healthz':
-        case '/health':
-            return buildHealthResponse();
-        case '/livez':
-            return buildLivezResponse();
-        default:
-            return response;
     }
 };

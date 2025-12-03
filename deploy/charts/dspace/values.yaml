@@ -32,6 +32,12 @@ podSecurityContext:
 
 terminationGracePeriodSeconds: 30
 
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
 securityContext:
   enabled: true
   runAsNonRoot: true

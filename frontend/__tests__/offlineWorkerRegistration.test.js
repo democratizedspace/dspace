@@ -7,6 +7,7 @@ let serviceWorker;
 let originalLocation;
 let consoleWarnSpy;
 let consoleInfoSpy;
+let originalEnv;
 
 const mockFetchResponse = (data, ok = true, status = 200) =>
     Promise.resolve({
@@ -24,6 +25,13 @@ async function dispatchLoad() {
 describe('registerOfflineWorker', () => {
     beforeEach(async () => {
         loadHandlers = [];
+        originalEnv = { ...process.env };
+
+        process.env = {
+            ...originalEnv,
+            NODE_ENV: 'development',
+            PUBLIC_ENABLE_SERVICE_WORKER: 'true',
+        };
 
         vi.spyOn(window, 'addEventListener').mockImplementation((event, handler) => {
             if (event === 'load') {
@@ -68,6 +76,7 @@ describe('registerOfflineWorker', () => {
             configurable: true,
             value: originalLocation,
         });
+        process.env = originalEnv;
     });
 
     it('registers service worker when enabled and triggers waiting update', async () => {
@@ -158,6 +167,23 @@ describe('registerOfflineWorker', () => {
 
         expect(serviceWorker.register).not.toHaveBeenCalled();
         expect(consoleInfoSpy).toHaveBeenCalledWith('Offline worker disabled via runtime config.');
+    });
+
+    it('skips registration when disabled via environment variable', async () => {
+        process.env.PUBLIC_DISABLE_SERVICE_WORKER = 'true';
+        process.env.PUBLIC_ENABLE_SERVICE_WORKER = 'false';
+
+        const { registerOfflineWorker } = await import(
+            '../src/scripts/offlineWorkerRegistration.js'
+        );
+
+        registerOfflineWorker();
+        await dispatchLoad();
+
+        expect(serviceWorker.register).not.toHaveBeenCalled();
+        expect(consoleInfoSpy).toHaveBeenCalledWith(
+            'Offline worker disabled via environment overrides.'
+        );
     });
 
     it('logs warning when service worker registration fails', async () => {

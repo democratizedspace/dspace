@@ -4,6 +4,7 @@ import { clearUserData, waitForHydration } from './test-helpers';
 const SW_REGISTRATION_TIMEOUT_MS = 20000;
 const SW_EVENT_CAPTURE_TIMEOUT_MS = 2000;
 const ASTRO_ASSET_PATH = '/_astro/';
+const CSS_ROUTE_GLOB = '**/_astro/**.css';
 
 async function waitForServiceWorkerReady(page: Page, timeoutMs: number) {
     const pollRegistration = async () =>
@@ -325,5 +326,50 @@ test.describe('Service Worker Update', () => {
         }
 
         expect(failed404s.length).toBe(0);
+    });
+
+    test('recovers from stylesheet 404s by reloading under service worker control', async ({
+        page,
+    }) => {
+        await page.goto('/');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
+
+        await page.evaluate(async () => {
+            const cacheNames = await caches.keys();
+            await Promise.all(cacheNames.map((name) => caches.delete(name)));
+        });
+
+        let cssRequestCount = 0;
+        const cssStatuses: number[] = [];
+
+        page.on('response', (response) => {
+            const url = response.url();
+            if (url.includes(ASTRO_ASSET_PATH) && url.match(/\.css($|\?)/)) {
+                cssStatuses.push(response.status());
+            }
+        });
+
+        await page.route(CSS_ROUTE_GLOB, async (route) => {
+            cssRequestCount += 1;
+            if (cssRequestCount === 1) {
+                await route.fulfill({ status: 404, body: 'not-found' });
+                return;
+            }
+
+            await route.continue();
+        });
+
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await expect.poll(() => cssStatuses.includes(404)).toBe(true);
+        await expect.poll(() => cssStatuses.includes(200)).toBe(true);
+
+        const styledAfterRecovery = await isPageStyled(page);
+        expect(styledAfterRecovery).toBe(true);
     });
 });

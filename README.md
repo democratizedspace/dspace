@@ -80,6 +80,15 @@ Create quests, items, and processes for the game:
 - [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
 - [k3s + Sugarkube](./docs/k3s-sugarkube-dev.md) - HA cluster setup
 
+### Service Worker Update Strategy
+
+- HTML responses are served with `Cache-Control: no-store` so navigations fetch the latest markup,
+  while `/service-worker.js` is served with `Cache-Control: no-cache` to force update checks.
+- Hashed JS/CSS under `/_astro/` and versioned assets use immutable caching; runtime caches retain
+  the current and previous versions to avoid 404s during rollouts.
+- The service worker waits for a `{ type: 'SKIP_WAITING' }` message before activation and reloads
+  the page once when a new controller takes over or when a stylesheet returns a fast 404.
+
 ### Architecture & Technical Design
 
 - [Contributor Guides](./docs/contrib/README.md) - Technical references for contributors
@@ -113,6 +122,7 @@ Prompts for AI-assisted development:
 We welcome contributions! See our [Contributing Guide](./CONTRIBUTING.md) to get started.
 
 Key contribution areas:
+
 - Create quests, items, and processes
 - Improve documentation
 - Fix bugs and add features
