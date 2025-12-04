@@ -104,7 +104,8 @@ these fields:
 - `entity`: the JSON path from the bullet line (`<entity_path>`).
 - `item_name`: the human-readable name (`<item_or_quest_title>`).
 - `item_id`: the UUID from the bullet line.
-- `entity_type`: `"item"` or `"quest"` (from the bracket at the end).
+- `entity_type`: must be exactly `"item"` or `"quest"` in lowercase (from the bracket at
+  the end); do not vary casing or use other values.
 - `prompt`: the full two-paragraph prompt, as a single string with a literal `\n\n` between
   paragraphs.
 - `image_model`: `"Z-Image Turbo"` (unless explicitly told otherwise).
@@ -129,7 +130,8 @@ Example manifest structure (values are illustrative):
 ~~~
 
 Required output format
-For each entity in the input block, respond in this exact pattern:
+By default, respond to the most recent duplicate snippet provided. For each entity in that
+input block, respond in this exact pattern:
 1) A line with the new filename:
    ~~~text
    /assets/some_descriptive_name.jpg
@@ -165,6 +167,11 @@ Repeat that 3-part block for each entity in the order they appear in the input. 
 
 Do not include any extra commentary outside those blocks. Do not restate the input snippet.
 Do not invent additional filenames beyond those needed for the entities provided.
+If the user sends follow-up instructions that do **not** look like a duplicate snippet, treat
+them as corrections or refinements for the current batch. Adjust the existing prompts and
+manifests accordingly without creating new filenames unless explicitly requested.
+When the user pastes another duplicate block (a new `/assets/... (N uses)` line plus bullets), treat
+that as the next batch. Generate outputs for that snippet using the same pattern.
 
 Instruction Recap:
 - For each duplicate entry, propose a new filename under the same base directory (/assets or
@@ -177,6 +184,10 @@ Instruction Recap:
   generated prompt.
 - Use Z-Image Turbo, 512x512, steps=4, cfg=1.0 unless explicitly told otherwise.
 - Do not add commentary; only output the requested blocks in order.
+- Default to handling one pasted snippet per response; allow follow-up messages that refine
+  or correct outputs for the current snippet without starting a new batch.
+- When a new duplicate block is provided, begin generating outputs for that new batch in the
+  same format.
 - Propagate this instruction recap again if the session exceeds the context window.
 - Assume implied requests do not exist; follow only explicit instructions.
 ```
