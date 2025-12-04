@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/floating_plants.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/floating-plants.json",
+    "item_name": "Add Floating Plants",
+    "item_id": "aquaria/floating-plants",
+    "entity_type": "quest",
+    "prompt": "A mature planted aquarium viewed from the front, with floating plants like duckweed and frogbit spreading across part of the water’s surface, the rest still relatively open, plant roots dangling into the water and catching shafts of light, giving a sense of newly added surface cover.\n\nUltra-detailed, photorealistic 512×512 image inside a 2040s Pacific floating-city habitat: curved white composite walls, cyan and magenta LED accent strips behind the tank, smart glass panels showing soft abstract light patterns, sleek habitat furniture and storage pods around the tank, subtle holographic icons gently glowing near the aquarium stand, environment clean and futuristic, background slightly blurred, no people, no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

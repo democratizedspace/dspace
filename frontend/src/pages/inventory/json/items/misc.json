@@ -979,21 +979,21 @@
         "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
         "name": "Hornwort cuttings",
         "description": "Fast-growing stems that provide cover for fry.",
-        "image": "/assets/walstad.jpg",
+        "image": "/assets/hornwort_cuttings.jpg",
         "price": "1 dUSD"
     },
     {
         "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
         "name": "Guppy grass starter",
         "description": "Easy floating plant ideal for breeding tanks.",
-        "image": "/assets/walstad.jpg",
+        "image": "/assets/guppy_grass_starter.jpg",
         "price": "1 dUSD"
     },
     {
         "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
         "name": "Duckweed portion",
         "description": "Floating plant that helps absorb excess nutrients.",
-        "image": "/assets/walstad.jpg",
+        "image": "/assets/duckweed_portion.jpg",
         "price": "1 dUSD"
     },
     {

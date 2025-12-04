@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/aquarium_top_off.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/top-off.json",
+    "item_name": "Top Off Evaporated Water",
+    "item_id": "aquaria/top-off",
+    "entity_type": "quest",
+    "prompt": "A planted Walstad aquarium mid “top-off,” using a gravity-fed manual siphon system instead of pouring. A transparent bucket of clean water sits clearly higher than the aquarium on a stand or shelf behind it. One end of a clear flexible hose is visibly submerged deep inside the elevated bucket, below the water surface, and you can see the column of water leaving the bucket through the hose. The hose then arcs downward from the bucket and enters the aquarium, with the open end just below the water surface in the tank, showing a strong stream of water flowing out into the aquarium. Near the highest point of the hose loop, above the aquarium rim, a manual hand-pump bulb is gripped by a human arm and hand, showing how the flow was started; the bulb and hose are clearly connected in a single continuous line from bucket to tank. The old waterline is faintly visible on the aquarium glass just above the current level, plants and hardscape remain undisturbed, and small bubbles form where the incoming stream hits the surface. There are no other tubes or pumps; the only water source is the elevated bucket feeding the siphon by gravity.\n\nUltra-detailed, photorealistic 512×512 image inside a 2040s Pacific floating-city habitat: sleek composite countertop or stand under the tank, curved wall panels and cyan/magenta LED strips, subtle holographic UI elements near the bucket or on a nearby console showing water level or temperature, environment bright and advanced but cozy, background slightly blurred, only the person’s arm and hand visible (no face, no full body), no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

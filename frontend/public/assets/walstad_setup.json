@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/walstad_setup.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/walstad.json",
+    "item_name": "Set up a Walstad tank",
+    "item_id": "aquaria/walstad",
+    "entity_type": "quest",
+    "prompt": "A new Walstad aquarium in the middle of setup, with an 80-liter glass tank showing a visible cross-section of the layered substrate—dark organic soil on the bottom and light sand cap above—several bunches of plants partially planted and some still waiting on a towel or tray beside the tank, water only partially filled.\n\nUltra-detailed, photorealistic 512×512 image inside a 2040s Pacific floating-city habitat: smooth modular stand or workbench, curved white walls with cyan and magenta LED accent strips, smart glass panels in the background, neatly arranged high-tech tools and containers blurred behind the main setup, faint holographic schematics or checklists hovering near the tank, environment tidy and clearly experimental, background slightly blurred, no people, no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

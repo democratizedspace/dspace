@@ -2,7 +2,7 @@
     "id": "aquaria/top-off",
     "title": "Top Off Evaporated Water",
     "description": "Use a hand pump siphon and aged water to restore aquarium levels.",
-    "image": "/assets/walstad.jpg",
+    "image": "/assets/aquarium_top_off.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/water_testing.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/water-testing.json",
+    "item_name": "Test water parameters",
+    "item_id": "aquaria/water-testing",
+    "entity_type": "quest",
+    "prompt": "An aquarist testing water parameters for a planted Walstad tank using a liquid aquarium test kit. On a lab-style surface in front of the tank, several clear test tubes are filled to the 5 mL line with tank water, each tinted different colors from added reagents. A gloved hand in blue nitrile gloves is gently swirling one capped tube, with safety goggles resting nearby and an open logbook showing handwritten notes and ppm columns. In the background, the Walstad aquarium with plants and hardscape is slightly out of focus, reinforcing that the tests are for this tank.\n\nUltra-detailed, photorealistic 512×512 image inside a 2040s Pacific floating-city habitat: sleek light-grey work surface with soft reflections, curved white wall panels and cyan/magenta LED accent strips, subtle holographic UI elements hovering near the test kit showing ammonia, nitrite, and nitrate readouts. The scene feels clinical but cozy, background slightly blurred, no faces visible (only hands and protective gear), no text overlays, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

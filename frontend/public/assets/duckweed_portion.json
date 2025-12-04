@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/duckweed_portion.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Duckweed portion",
+    "item_id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+    "entity_type": "item",
+    "prompt": "A dense portion of bright green duckweed floating on still dark water inside a small clear glass bowl or container, viewed mostly from above, with individual tiny round leaves and clusters clearly visible against the contrasting dark surface.\n\nUltra-detailed, photorealistic 512×512 macro or product-style shot inside a 2040s Pacific floating-city habitat: clean light-colored counter with gentle reflections, cyan and magenta LED accents grazing the bowl, hints of curved habitat architecture and compact equipment in the softly blurred background, perhaps a faint holographic label or status glow near but not overlapping the bowl, environment minimalist and advanced, no hands, no people, no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

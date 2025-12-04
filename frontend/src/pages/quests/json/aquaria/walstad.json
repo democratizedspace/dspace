@@ -2,7 +2,7 @@
     "id": "aquaria/walstad",
     "title": "Set up a Walstad tank",
     "description": "Create a low-tech planted aquarium using the Walstad method.",
-    "image": "/assets/walstad.jpg",
+    "image": "/assets/walstad_setup.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
