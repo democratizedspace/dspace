@@ -9,12 +9,22 @@ const PRECACHE_PREFIX = 'dspace-precache-v';
 const RUNTIME_PREFIX = 'dspace-runtime-v';
 const PRECACHE_NAME = `${PRECACHE_PREFIX}${SW_CACHE_VERSION}`;
 const RUNTIME_NAME = `${RUNTIME_PREFIX}${SW_CACHE_VERSION}`;
+const MAX_CACHE_HISTORY = 2;
 
 // Keep config flags on a runtime, network-first path so updates flow without waiting for a cache
 // version bump. The install handler warms the runtime cache to support offline boots.
 const CONFIG_PATH = '/config.json';
 const PRECACHE_URLS = ['/', '/play', '/quests', '/settings'];
-const RUNTIME_MATCHERS = [/^\/quests\//, /^\/assets\//, /^\/docs\//];
+const RUNTIME_MATCHERS = [/^\/quests\//, /^\/assets\//, /^\/docs\//, /^\/_astro\//];
+const NAVIGATION_FALLBACK = '/';
+const ASSET_EXTENSIONS = [/\.css(\?.*)?$/i, /\.js(\?.*)?$/i];
+
+function extractCacheVersion(cacheName, prefix) {
+    if (!cacheName.startsWith(prefix)) {
+        return null;
+    }
+    return cacheName.slice(prefix.length);
+}
 
 function prewarmConfigCache() {
     return caches.open(RUNTIME_NAME).then((cache) =>
@@ -48,21 +58,42 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches
             .keys()
-            .then((keys) =>
-                Promise.all(
+            .then((keys) => {
+                const versions = new Set([SW_CACHE_VERSION]);
+
+                keys.forEach((key) => {
+                    const version =
+                        extractCacheVersion(key, PRECACHE_PREFIX) ||
+                        extractCacheVersion(key, RUNTIME_PREFIX);
+                    if (version) {
+                        versions.add(version);
+                    }
+                });
+
+                const sortedVersions = Array.from(versions).sort((a, b) => b.localeCompare(a));
+                const keepVersions = new Set(sortedVersions.slice(0, MAX_CACHE_HISTORY));
+
+                return Promise.all(
                     keys.map((key) => {
                         const isPrecache = key.startsWith(PRECACHE_PREFIX);
                         const isRuntime = key.startsWith(RUNTIME_PREFIX);
-                        if (key === PRECACHE_NAME || key === RUNTIME_NAME) {
+
+                        if (!isPrecache && !isRuntime) {
                             return Promise.resolve(false);
                         }
-                        if (isPrecache || isRuntime) {
-                            return caches.delete(key);
+
+                        const version = isPrecache
+                            ? extractCacheVersion(key, PRECACHE_PREFIX)
+                            : extractCacheVersion(key, RUNTIME_PREFIX);
+
+                        if (version && keepVersions.has(version)) {
+                            return Promise.resolve(false);
                         }
-                        return Promise.resolve(false);
+
+                        return caches.delete(key);
                     })
-                )
-            )
+                );
+            })
             .then(() => self.clients.claim())
     );
 });
@@ -73,7 +104,7 @@ self.addEventListener('message', (event) => {
     }
 
     if (event.data.type === 'SKIP_WAITING') {
-        self.skipWaiting();
+        event.waitUntil(self.skipWaiting().then(() => self.clients.claim()));
     }
 });
 
@@ -85,13 +116,7 @@ function shouldHandleRequest(request) {
     if (url.origin !== self.location.origin) {
         return false;
     }
-    if (url.pathname === CONFIG_PATH) {
-        return true;
-    }
-    if (PRECACHE_URLS.includes(url.pathname)) {
-        return true;
-    }
-    return RUNTIME_MATCHERS.some((regex) => regex.test(url.pathname));
+    return true;
 }
 
 function handleConfigFetch(request) {
@@ -107,6 +132,71 @@ function handleConfigFetch(request) {
     );
 }
 
+function handleNavigation(request) {
+    return caches.open(PRECACHE_NAME).then((cache) =>
+        fetch(request)
+            .then((response) => {
+                if (response && response.ok) {
+                    cache.put(request, response.clone());
+                }
+                return response;
+            })
+            .catch(() =>
+                cache.match(request).then((cached) => cached || cache.match(NAVIGATION_FALLBACK))
+            )
+    );
+}
+
+function isStaticAsset(pathname) {
+    if (!pathname.startsWith('/_astro/')) {
+        return false;
+    }
+
+    return ASSET_EXTENSIONS.some((pattern) => pattern.test(pathname));
+}
+
+function cacheFirstAsset(request) {
+    return caches.open(RUNTIME_NAME).then((cache) =>
+        cache.match(request).then((cachedResponse) => {
+            const networkFetch = fetch(request)
+                .then((response) => {
+                    if (response.ok) {
+                        cache.put(request, response.clone());
+                        return response;
+                    }
+                    if (cachedResponse) {
+                        return cachedResponse;
+                    }
+                    return response;
+                })
+                .catch(() => cachedResponse || Response.error());
+
+            if (cachedResponse) {
+                networkFetch.catch(() => {});
+                return cachedResponse;
+            }
+
+            return networkFetch;
+        })
+    );
+}
+
+function handleRuntimeRequest(request) {
+    return caches.open(RUNTIME_NAME).then((cache) =>
+        cache.match(request).then((cachedResponse) =>
+            fetch(request)
+                .then((response) => {
+                    if (response && response.ok) {
+                        cache.put(request, response.clone());
+                        return response;
+                    }
+                    return cachedResponse || response;
+                })
+                .catch(() => cachedResponse || caches.match(NAVIGATION_FALLBACK))
+        )
+    );
+}
+
 self.addEventListener('fetch', (event) => {
     const { request } = event;
     if (!shouldHandleRequest(request)) {
@@ -119,22 +209,22 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    event.respondWith(
-        caches.match(request).then((cachedResponse) => {
-            if (cachedResponse) {
-                return cachedResponse;
-            }
+    if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
+        event.respondWith(handleNavigation(request));
+        return;
+    }
 
-            return caches.open(RUNTIME_NAME).then((cache) =>
-                fetch(request)
-                    .then((response) => {
-                        if (response.ok) {
-                            cache.put(request, response.clone());
-                        }
-                        return response;
-                    })
-                    .catch(() => caches.match('/'))
-            );
-        })
-    );
+    if (PRECACHE_URLS.includes(url.pathname)) {
+        event.respondWith(handleNavigation(request));
+        return;
+    }
+
+    if (isStaticAsset(url.pathname)) {
+        event.respondWith(cacheFirstAsset(request));
+        return;
+    }
+
+    if (RUNTIME_MATCHERS.some((regex) => regex.test(url.pathname))) {
+        event.respondWith(handleRuntimeRequest(request));
+    }
 });

@@ -41,6 +41,13 @@ npm run check        # Lint and format check
 npm run build        # Production build
 ```
 
+E2E tests rely on Playwright. Install the browser binaries and system dependencies before running them locally:
+
+```bash
+npx playwright install chromium
+npx playwright install-deps
+```
+
 See [Testing Guide](./frontend/TESTING.md) for detailed testing information.
 
 ## Documentation Index
@@ -79,6 +86,17 @@ Create quests, items, and processes for the game:
   - [Offline-First Strategy](./docs/ops/offline-first.md) - PWA capabilities
 - [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
 - [k3s + Sugarkube](./docs/k3s-sugarkube-dev.md) - HA cluster setup
+
+### Service worker update strategy
+
+The offline worker uses a coordinated update flow to avoid "CSS 404 until hard reload" issues:
+
+- New workers stay in `waiting` until the page explicitly sends `SKIP_WAITING`, then a single
+  `controllerchange` reload brings the new version online.
+- Navigations prefer the network with cached fallbacks, while hashed assets use cache-first and keep
+  the previous cache generation to bridge deploys.
+- Service worker and HTML responses are served with `no-cache`/`no-store` so browsers always recheck
+  for updates, while hashed assets are long-lived and immutable.
 
 ### Architecture & Technical Design
 

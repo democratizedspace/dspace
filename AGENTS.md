@@ -61,6 +61,50 @@ SKIP_E2E=1 npm test
   instead of using `.npmrc` proxy settings.
 - Use `nvm use` to match the Node.js version specified in `.nvmrc` (Node 20 LTS).
 
+## Code Formatting with Prettier
+
+**Important**: The repository has multiple Prettier configuration files. Always use the **frontend-specific** configuration when formatting frontend code.
+
+### Configuration Files
+
+- **Root configs** (`.prettierrc`, `.prettierrc.js`): Basic configs for root-level files
+- **Frontend configs** (`frontend/.prettierrc`, `frontend/.prettierrc.json`): **Primary configs for all frontend code**
+  - `frontend/.prettierrc` is the authoritative config (includes `printWidth: 100`)
+  - `frontend/.prettierrc.json` is legacy and may differ
+
+### Formatting Frontend Files
+
+When formatting files in `frontend/`, Prettier automatically picks up `frontend/.prettierrc`. Always:
+
+1. **Run formatting from the frontend directory**:
+   ```bash
+   cd frontend
+   npm run format        # Format all files
+   npm run format:check  # Check formatting
+   ```
+
+2. **Or use the frontend config explicitly**:
+   ```bash
+   npx prettier --config frontend/.prettierrc --write path/to/file.js
+   ```
+
+3. **Never use the root config for frontend files** - it has different settings and will cause CI failures.
+
+### Key Settings in `frontend/.prettierrc`
+
+- `printWidth: 100` - Lines longer than 100 characters should be wrapped
+- `tabWidth: 4` - Use 4 spaces for indentation
+- `singleQuote: true` - Use single quotes
+- `semi: true` - Always use semicolons
+- `trailingComma: 'es5'` - Trailing commas where valid in ES5
+
+### Troubleshooting
+
+If CI formatting checks fail but local checks pass:
+1. Ensure you're running prettier from the `frontend/` directory
+2. Check which config prettier is using: `npx prettier --find-config-path src/path/to/file.js`
+3. The config should be `frontend/.prettierrc`, not the root `.prettierrc`
+
 ## Dependency Management
 
 - GitHub Dependabot automatically opens weekly PRs for npm updates (see `.github/dependabot.yml`).
