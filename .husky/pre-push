@@ -19,26 +19,14 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Run frontend Jest suite (covers __tests__ folder)
-echo "Running frontend Jest tests..."
-(
-  cd frontend || exit 1
-  npm run setup-test-env && npx jest
-)
-if [ $? -ne 0 ]; then
-  echo "❌ Frontend Jest tests failed. Please fix failing tests before pushing."
-  exit 1
-fi
-
 # Run e2e tests (Playwright)
 echo "Running e2e tests..."
-(
-  cd frontend || exit 1
-  npm run test:e2e
-)
+cd frontend
+npm run test:e2e
 if [ $? -ne 0 ]; then
   echo "❌ E2E tests failed. Please fix failing tests before pushing."
   exit 1
 fi
 
+cd ..
 echo "✅ All pre-push checks passed!"

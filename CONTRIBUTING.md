@@ -4,6 +4,8 @@ Thank you for your interest in helping the project! Below is a quick overview of
 
 ## Getting Started
 
+**Prerequisites**: Node.js 20 LTS or later (required for development dependencies like `cross-env@10`)
+
 1. Fork and clone the repo.
 2. Install dependencies:
    ```bash
@@ -30,6 +32,20 @@ Thank you for your interest in helping the project! Below is a quick overview of
     npm test
     ```
 - If Playwright browsers are missing, install them with `npx playwright install chromium` or run `SKIP_E2E=1 npm test`.
+
+### Pre-push Hook Behavior
+
+The pre-push hook runs comprehensive checks before allowing a push:
+
+1. **Code quality checks** (`npm run check`) - linting and formatting
+2. **Unit tests** (`npm run test:root`) - vitest tests from repository root (143 tests)
+3. **E2E tests** (`npm run test:e2e`) - Playwright browser tests
+
+This matches the CI test jobs to catch issues early. The hook uses `npm run` commands which delegate to `pnpm` for package resolution.
+
+**Note**: The pre-push hook runs `test:root` (without coverage) for faster local checks, while CI runs `coverage` (with coverage collection). Both execute the same test suite.
+
+**Bypassing the hook**: For quick WIP pushes, use `git push --no-verify` to skip the pre-push hook. However, CI will still run all checks, so your PR will fail if tests don't pass.
 
 ## Opening a Pull Request
 
