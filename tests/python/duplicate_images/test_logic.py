@@ -37,18 +37,32 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
 
     _write_json(
         quests_dir / "astronomy" / "andromeda.json",
-        {"id": "astronomy/andromeda", "title": "Andromeda Quest", "image": "/assets/quests/solar.jpg"},
+        {
+            "id": "astronomy/andromeda",
+            "title": "Andromeda Quest",
+            "image": "/assets/quests/solar.jpg",
+            "description": "Chart the Andromeda galaxy.",
+        },
     )
     _write_json(
         quests_dir / "astrobiology" / "origin.json",
-        {"id": "astrobiology/origin", "title": "Origin Quest", "image": "/assets/quests/solar.jpg"},
+        {
+            "id": "astrobiology/origin",
+            "title": "Origin Quest",
+            "image": "/assets/quests/solar.jpg",
+        },
     )
 
     _write_json(
         items_dir / "tanks.json",
         [
             {"id": "tank-150", "name": "Tank 150", "image": "/assets/aquarium.jpg"},
-            {"id": "tank-200", "name": "Tank 200", "image": "/assets/quests/solar.jpg"},
+            {
+                "id": "tank-200",
+                "name": "Tank 200",
+                "image": "/assets/quests/solar.jpg",
+                "description": "A 200 liter aquarium for research fish.",
+            },
         ],
     )
 
@@ -69,6 +83,8 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
     assert "astronomy/andromeda" in formatted
     assert "Tank 200" in formatted
     assert "tank-200" in formatted
+    assert '"Chart the Andromeda galaxy."' in formatted
+    assert '"A 200 liter aquarium for research fish."' in formatted
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total duplicates remaining: 2" in formatted
 

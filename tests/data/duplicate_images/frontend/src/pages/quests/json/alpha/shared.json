@@ -1,5 +1,6 @@
 {
   "id": "alpha/shared",
   "title": "Shared Path Quest",
+  "description": "Share a path between two quests to conserve assets.",
   "image": "/assets/shared-path.jpg"
 }

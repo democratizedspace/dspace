@@ -2,6 +2,7 @@
   {
     "id": "shared-tool",
     "name": "Shared Tool",
+    "description": "A multi-tool referenced by multiple entries.",
     "image": "/assets/shared-path.jpg"
   },
   {
