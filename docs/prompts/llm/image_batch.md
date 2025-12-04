@@ -20,8 +20,10 @@ Before using the prompt, generate duplicate-image snippets locally from the DSPA
 4. After the LLM returns new assets for that block, paste the next block to process another batch.
 
 ```text
-Use this prompt to generate new image assets and metadata for DSPACE v3 when the user pastes a
-duplicate block after this message.
+You will be given a snippet from the output of `scripts.duplicate_images find-duplicate-images`
+after the following prompt. Use that snippet to generate new image filenames, two-paragraph
+generation prompts, and JSON manifests for each duplicate listed under the shared image path at
+the top of the snippet.
 
 Responsibilities
 - For each bullet line under the shared image path, propose a new, descriptive image filename
