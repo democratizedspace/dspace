@@ -11,10 +11,9 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Run unit tests
+# Run unit tests (from root to avoid module loading issues)
 echo "Running unit tests..."
-cd frontend
-npx jest
+npm run test:root
 if [ $? -ne 0 ]; then
   echo "❌ Unit tests failed. Please fix failing tests before pushing."
   exit 1
@@ -22,11 +21,12 @@ fi
 
 # Run e2e tests (Playwright)
 echo "Running e2e tests..."
-npx playwright test
+cd frontend || exit 1
+npm run test:e2e
 if [ $? -ne 0 ]; then
   echo "❌ E2E tests failed. Please fix failing tests before pushing."
   exit 1
 fi
 
-cd ..
-echo "✅ All pre-push checks passed!" 
+cd .. || exit 1
+echo "✅ All pre-push checks passed!"
