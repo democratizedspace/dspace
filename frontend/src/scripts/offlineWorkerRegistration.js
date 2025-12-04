@@ -54,10 +54,7 @@ export function registerOfflineWorker() {
             window.location.reload();
         };
 
-        navigator.serviceWorker.addEventListener(
-            'controllerchange',
-            reloadPage
-        );
+        navigator.serviceWorker.addEventListener('controllerchange', reloadPage);
         navigator.serviceWorker.addEventListener('message', (event) => {
             if (event?.data?.type === 'DS_FORCE_RELOAD') {
                 reloadPage();
@@ -100,14 +97,8 @@ export function registerOfflineWorker() {
             }
 
             worker.addEventListener('statechange', () => {
-                console.info(
-                    'Service worker update: state change',
-                    worker.state
-                );
-                if (
-                    worker.state === 'installed' &&
-                    navigator.serviceWorker.controller
-                ) {
+                console.info('Service worker update: state change', worker.state);
+                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
                     triggerUpdate(registration, reloadPage);
                     reloadPage();
                 }
@@ -137,9 +128,7 @@ export function registerOfflineWorker() {
         const handleResourceError = (event) => {
             const target = event?.target;
             const isStylesheet =
-                target instanceof HTMLLinkElement &&
-                target.rel === 'stylesheet' &&
-                target.href;
+                target instanceof HTMLLinkElement && target.rel === 'stylesheet' && target.href;
 
             if (!isStylesheet) {
                 return;
@@ -153,10 +142,7 @@ export function registerOfflineWorker() {
 
             fetch(target.href, { cache: 'no-cache' })
                 .then((response) => {
-                    if (
-                        response.status === 404 &&
-                        navigator.serviceWorker.controller
-                    ) {
+                    if (response.status === 404 && navigator.serviceWorker.controller) {
                         attemptedReload = true;
                         window.location.reload();
                     }
@@ -166,8 +152,7 @@ export function registerOfflineWorker() {
 
         window.addEventListener('error', handleResourceError, true);
 
-        const removeListener = () =>
-            window.removeEventListener('error', handleResourceError, true);
+        const removeListener = () => window.removeEventListener('error', handleResourceError, true);
 
         setTimeout(removeListener, reloadWindowMs);
 
