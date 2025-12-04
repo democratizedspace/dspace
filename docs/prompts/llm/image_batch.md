@@ -105,6 +105,8 @@ these fields:
 - `item_name`: the human-readable name (`<item_or_quest_title>`).
 - `item_id`: the UUID from the bullet line.
 - `entity_type`: `"item"` or `"quest"` (from the bracket at the end).
+  - `entity_type` MUST be exactly `"item"` or `"quest"` in lowercase—no other values or
+    casing.
 - `prompt`: the full two-paragraph prompt, as a single string with a literal `\n\n` between
   paragraphs.
 - `image_model`: `"Z-Image Turbo"` (unless explicitly told otherwise).
@@ -165,6 +167,18 @@ Repeat that 3-part block for each entity in the order they appear in the input. 
 
 Do not include any extra commentary outside those blocks. Do not restate the input snippet.
 Do not invent additional filenames beyond those needed for the entities provided.
+Each response normally handles the most recent duplicate snippet. If the user sends a follow-up
+message without a new snippet, treat it as a correction or refinement for the current batch:
+adjust or regenerate the relevant prompts/JSON without starting new filenames. When a new
+duplicate snippet is pasted (with `/assets/... (N uses)` and bullet lines), begin a new batch and
+generate outputs for that snippet in the same 3-part pattern.
+
+Multi-turn handling
+- If the user follows up without pasting a new duplicate block, stay on the current batch and
+  revise only the affected entities as requested. Do not create new filenames for untouched
+  entities unless explicitly asked.
+- When the user pastes another duplicate block (a new snippet), recognize it as a new batch and
+  produce filename/prompt/JSON blocks for that snippet as usual.
 
 Instruction Recap:
 - For each duplicate entry, propose a new filename under the same base directory (/assets or
@@ -177,6 +191,10 @@ Instruction Recap:
   generated prompt.
 - Use Z-Image Turbo, 512x512, steps=4, cfg=1.0 unless explicitly told otherwise.
 - Do not add commentary; only output the requested blocks in order.
+- Default to handling one duplicate snippet per response. If the user sends follow-up messages
+  about the current snippet, refine or correct the prompts/JSON without starting a new batch.
+- When the user provides a new duplicate block, begin output for that new batch using the same
+  ordered 3-part blocks per entity.
 - Propagate this instruction recap again if the session exceeds the context window.
 - Assume implied requests do not exist; follow only explicit instructions.
 ```
