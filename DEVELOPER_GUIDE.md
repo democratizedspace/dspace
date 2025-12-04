@@ -379,6 +379,19 @@ The repository includes a pre-commit hook that automatically runs:
 - Quest schema validation for changed quests
 - Quick test suite (unit tests + critical E2E tests)
 
+### Duplicate image detector CLI
+
+Use the duplicate image detector to find quests or items that reuse the same image asset:
+
+```bash
+python -m scripts.duplicate_image_detector
+```
+
+The command scans quest JSON under `frontend/src/pages/quests/json/` and item JSON under
+`frontend/src/pages/inventory/json/items/` to find image URLs that appear more than once. The
+output lists each reused image, the total number of uses, and the quest or item entries that
+reference it. These entries are the v3 assets that still need unique images.
+
 This ensures that committed code maintains quality standards.
 
 ### Writing Tests

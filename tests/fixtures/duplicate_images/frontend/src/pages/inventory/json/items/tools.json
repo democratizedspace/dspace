@@ -1,0 +1,12 @@
+[
+    {
+        "id": "tool-1",
+        "name": "Shared Tool",
+        "image": "/assets/shared.jpg"
+    },
+    {
+        "id": "tool-2",
+        "name": "Unique Tool",
+        "image": "/assets/unique-tool.jpg"
+    }
+]
