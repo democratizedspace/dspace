@@ -154,7 +154,7 @@ const value = onBrowser(() => localStorage.getItem('key'), null);
    ```javascript
    // BAD - crashes on server
    function greet(lang = navigator.language) { }
-   
+
    // GOOD - check at runtime
    function greet(lang = undefined) {
        lang = lang ?? (typeof navigator !== 'undefined' ? navigator.language : 'en');
@@ -165,7 +165,7 @@ const value = onBrowser(() => localStorage.getItem('key'), null);
    ```javascript
    // BAD - runs immediately during SSR
    const theme = localStorage.getItem('theme');
-   
+
    // GOOD - guard with isBrowser
    import { isBrowser } from '../utils/ssr.js';
    const theme = isBrowser ? localStorage.getItem('theme') : 'dark';
@@ -174,8 +174,8 @@ const value = onBrowser(() => localStorage.getItem('key'), null);
 3. **Browser-only functions** like `atob`, `btoa`, `FileReader`:
    ```javascript
    // Use Buffer fallback for server
-   const decoded = typeof atob === 'function' 
-       ? atob(encoded) 
+   const decoded = typeof atob === 'function'
+       ? atob(encoded)
        : Buffer.from(encoded, 'base64').toString('utf8');
    ```
 
@@ -807,13 +807,20 @@ Use the duplicate image detector to find quests or inventory items that still sh
 asset (a v3 cleanup task). The tool runs locally and scans quest JSON under
 `frontend/src/pages/quests/json` and item JSON under `frontend/src/pages/inventory/json/items`.
 
-```
+**Important**: This command must be run from the repository root directory (not from `frontend/`),
+as Python needs to resolve the `scripts` package from the root.
+
+```bash
+# From the repository root directory
 python -m scripts.duplicate_images find-duplicate-images
 ```
 
 The report lists each reused image URL, how many times it appears, and the quest or item entries
 that reference it. Treat the output as the backlog of image assets that still need unique
 replacements.
+
+**Windows/PowerShell**: The command works the same way on Windows. Ensure you're in the root
+directory (`C:\Users\...\dspace\`) before running the command, not in the `frontend` subdirectory.
 
 ### Testing Environment Limitations
 
