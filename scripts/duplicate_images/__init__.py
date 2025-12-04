@@ -62,7 +62,7 @@ def _quest_reference(path: Path, repo_root: Path) -> Iterable[ImageReference]:
 
     identifier = str(data.get("id") or data.get("title") or path.stem)
     name = data.get("title")
-    name = str(name) if name is not None else None
+    name = name if isinstance(name, str) else None
     return [
         ImageReference(
             source="quest",
@@ -90,7 +90,7 @@ def _item_references(path: Path, repo_root: Path) -> Iterable[ImageReference]:
             continue
         identifier = str(entry.get("id") or entry.get("name") or f"item-{index}")
         name = entry.get("name")
-        name = str(name) if name is not None else None
+        name = name if isinstance(name, str) else None
         references.append(
             ImageReference(
                 source="item",
@@ -166,9 +166,11 @@ def format_duplicates(duplicates: ImageMap) -> str:
     return "\n".join(lines)
 
 
-def serialize_duplicates(duplicates: ImageMap) -> Dict[str, List[Dict[str, str]]]:
+def serialize_duplicates(
+    duplicates: ImageMap,
+) -> Dict[str, List[Dict[str, str | None]]]:
     """Convert duplicate image mappings to JSON-serializable format."""
-    result: Dict[str, List[Dict[str, str]]] = {}
+    result: Dict[str, List[Dict[str, str | None]]] = {}
     for image, references in duplicates.items():
         result[image] = [
             {
