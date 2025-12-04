@@ -1,0 +1,17 @@
+[
+  {
+    "id": "shared-tool",
+    "name": "Shared Tool",
+    "image": "/assets/shared-path.jpg"
+  },
+  {
+    "id": "duplicate-kit",
+    "name": "Duplicate Kit",
+    "image": "/assets/quests/duplicate-content.jpg"
+  },
+  {
+    "id": "conflict-kit",
+    "name": "Conflict Kit",
+    "image": "/assets/quests/conflict.jpg"
+  }
+]

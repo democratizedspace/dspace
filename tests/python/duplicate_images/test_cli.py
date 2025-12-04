@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -8,10 +9,13 @@ from pathlib import Path
 from scripts.duplicate_images import (
     collect_image_references,
     find_duplicates,
+    find_identical_files,
     format_duplicates,
-    serialize_duplicates,
+    serialize_report,
 )
 from scripts.duplicate_images.__main__ import DEFAULT_ITEMS_DIR, DEFAULT_QUESTS_DIR
+
+FIXTURE_ROOT = Path(__file__).parents[2] / "data" / "duplicate_images"
 
 
 def _write_json(path: Path, payload: object) -> None:
@@ -75,19 +79,12 @@ def test_default_paths_are_exposed() -> None:
 
 def test_cli_json_output(tmp_path: Path) -> None:
     """Test --json flag produces valid JSON matching the logic layer."""
-    quests_dir = tmp_path / "quests"
-    items_dir = tmp_path / "items"
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
 
-    _write_json(
-        quests_dir / "astronomy" / "andromeda.json",
-        {"id": "astronomy/andromeda", "title": "Andromeda Quest", "image": "/assets/quests/solar.jpg"},
-    )
-    _write_json(
-        items_dir / "tanks.json",
-        [
-            {"id": "tank-200", "name": "Tank 200", "image": "/assets/quests/solar.jpg"},
-        ],
-    )
+    # Include identical files with real content and a duplicate path reference
+    shutil.copytree(FIXTURE_ROOT, repo_root, dirs_exist_ok=True)
 
     command = [
         sys.executable,
@@ -95,7 +92,7 @@ def test_cli_json_output(tmp_path: Path) -> None:
         "scripts.duplicate_images",
         "find-duplicate-images",
         "--root",
-        str(tmp_path),
+        str(repo_root),
         "--quests-dir",
         str(quests_dir),
         "--items-dir",
@@ -108,22 +105,28 @@ def test_cli_json_output(tmp_path: Path) -> None:
     assert result.returncode == 0
     output = json.loads(result.stdout)
 
-    # Validate structure matches expected JSON format
-    assert "/assets/quests/solar.jpg" in output
-    refs = output["/assets/quests/solar.jpg"]
+    assert set(output.keys()) == {"duplicates", "identicalFiles"}
+
+    duplicate_map = output["duplicates"]
+    assert "/assets/shared-path.jpg" in duplicate_map
+    refs = duplicate_map["/assets/shared-path.jpg"]
     assert len(refs) == 2
 
-    # Check quest reference
     quest_ref = next(r for r in refs if r["source"] == "quest")
-    assert quest_ref["identifier"] == "astronomy/andromeda"
-    assert quest_ref["name"] == "Andromeda Quest"
-    assert "quests/astronomy/andromeda.json" in quest_ref["path"]
+    assert quest_ref["identifier"] == "alpha/shared"
+    assert quest_ref["name"] == "Shared Path Quest"
+    assert "quests/json/alpha/shared.json" in quest_ref["path"]
 
-    # Check item reference
     item_ref = next(r for r in refs if r["source"] == "item")
-    assert item_ref["identifier"] == "tank-200"
-    assert item_ref["name"] == "Tank 200"
-    assert "items/tanks.json" in item_ref["path"]
+    assert item_ref["identifier"] == "shared-tool"
+    assert item_ref["name"] == "Shared Tool"
+    assert "items/tools.json" in item_ref["path"]
+
+    identical_files = output["identicalFiles"]
+    assert len(identical_files) == 1
+    digest, paths = next(iter(identical_files.items()))
+    assert len(digest) == 64
+    assert set(paths) == {"/assets/duplicate-content.jpg", "/assets/quests/duplicate-content.jpg"}
 
 
 def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
@@ -149,10 +152,11 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
     # Call logic layer directly
     usages = collect_image_references(quests_dir, items_dir, tmp_path)
     duplicates = find_duplicates(usages)
+    identical = find_identical_files(usages.keys(), tmp_path)
 
     # Get both text and JSON representations
-    text_output = format_duplicates(duplicates)
-    json_data = serialize_duplicates(duplicates)
+    text_output = format_duplicates(duplicates, identical)
+    json_data = serialize_report(duplicates, identical)
 
     # Verify text output contains all the data from logic layer
     assert "/assets/shared.png" in duplicates
@@ -167,12 +171,17 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
     assert "tool-kit" in text_output
 
     # Check JSON output has same structure
-    assert "/assets/shared.png" in json_data
-    assert len(json_data["/assets/shared.png"]) == 3
-    identifiers = {ref["identifier"] for ref in json_data["/assets/shared.png"]}
+    assert "duplicates" in json_data
+    assert "/assets/shared.png" in json_data["duplicates"]
+    assert len(json_data["duplicates"]["/assets/shared.png"]) == 3
+    identifiers = {ref["identifier"] for ref in json_data["duplicates"]["/assets/shared.png"]}
     assert identifiers == {"science/sample", "science/secondary", "tool-kit"}
-    names = {ref["name"] for ref in json_data["/assets/shared.png"] if ref["name"]}
+    names = {
+        ref["name"] for ref in json_data["duplicates"]["/assets/shared.png"] if ref["name"]
+    }
     assert names == {"Sample Quest", "Secondary Quest", "Tool Kit"}
+
+    assert json_data["identicalFiles"] == {}
 
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total duplicates remaining: 2" in text_output
