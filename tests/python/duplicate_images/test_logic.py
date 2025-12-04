@@ -25,18 +25,18 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
 
     _write_json(
         quests_dir / "astronomy" / "andromeda.json",
-        {"id": "astronomy/andromeda", "image": "/assets/quests/solar.jpg"},
+        {"id": "astronomy/andromeda", "title": "Andromeda Quest", "image": "/assets/quests/solar.jpg"},
     )
     _write_json(
         quests_dir / "astrobiology" / "origin.json",
-        {"id": "astrobiology/origin", "image": "/assets/quests/solar.jpg"},
+        {"id": "astrobiology/origin", "title": "Origin Quest", "image": "/assets/quests/solar.jpg"},
     )
 
     _write_json(
         items_dir / "tanks.json",
         [
-            {"id": "tank-150", "image": "/assets/aquarium.jpg"},
-            {"id": "tank-200", "image": "/assets/quests/solar.jpg"},
+            {"id": "tank-150", "name": "Tank 150", "image": "/assets/aquarium.jpg"},
+            {"id": "tank-200", "name": "Tank 200", "image": "/assets/quests/solar.jpg"},
         ],
     )
 
@@ -53,7 +53,10 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
 
     formatted = format_duplicates(duplicates)
     assert "/assets/quests/solar.jpg (3 uses)" in formatted
+    assert "Andromeda Quest" in formatted
     assert "astronomy/andromeda" in formatted
+    assert "Tank 200" in formatted
+    assert "tank-200" in formatted
 
 
 def test_collect_image_references_requires_valid_json(tmp_path: Path) -> None:
