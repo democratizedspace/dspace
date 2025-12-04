@@ -143,6 +143,15 @@ def find_duplicates(usages: ImageMap) -> ImageMap:
     return {image: refs for image, refs in usages.items() if len(refs) > 1}
 
 
+def count_total_duplicates(duplicates: ImageMap) -> int:
+    """Calculate total number of duplicate image uses.
+
+    For each duplicate image URI used N times, there are (N - 1) duplicates.
+    Total = sum of (uses - 1) for all duplicate URIs.
+    """
+    return sum(len(references) - 1 for references in duplicates.values())
+
+
 def format_duplicates(duplicates: ImageMap) -> str:
     if not duplicates:
         return ""
@@ -163,6 +172,12 @@ def format_duplicates(duplicates: ImageMap) -> str:
                 lines.append(
                     f"  - {reference.display_path()} :: {reference.identifier} [{reference.source}]"
                 )
+
+    # Add summary at the bottom
+    total_duplicates = count_total_duplicates(duplicates)
+    lines.append("")
+    lines.append(f"Total duplicates remaining: {total_duplicates}")
+
     return "\n".join(lines)
 
 
