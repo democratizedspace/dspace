@@ -7,9 +7,10 @@ conversational: true
 # DSPACE Image Batch Prompt
 Type: evergreen
 
+NOTE: You can paste the fenced prompt below directly into an LLM chat.
+
 ```text
-NOTE: This entire block can be pasted directly into an LLM. Nested examples use `~~~` fences
-instead of ``` so they do not close the main block.
+Nested examples use `~~~` fences instead of ``` so they do not close the main block.
 
 Use this prompt to generate new image assets and metadata for DSPACE v3 when the
 duplicate-image CLI reports that the same image path is used by multiple quests or items.
