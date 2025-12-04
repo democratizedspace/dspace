@@ -32,6 +32,7 @@ class ImageReference:
     file_path: Path
     image: str
     name: str | None = None
+    description: str | None = None
 
     def display_path(self) -> str:
         return self.file_path.as_posix()
@@ -79,6 +80,8 @@ def _quest_reference(path: Path, repo_root: Path) -> Iterable[ImageReference]:
     identifier = str(data.get("id") or data.get("title") or path.stem)
     name = data.get("title")
     name = name if isinstance(name, str) else None
+    description = data.get("description")
+    description = description if isinstance(description, str) else None
     return [
         ImageReference(
             source="quest",
@@ -86,6 +89,7 @@ def _quest_reference(path: Path, repo_root: Path) -> Iterable[ImageReference]:
             file_path=_relative_to_root(path, repo_root),
             image=image,
             name=name,
+            description=description,
         )
     ]
 
@@ -107,6 +111,8 @@ def _item_references(path: Path, repo_root: Path) -> Iterable[ImageReference]:
         identifier = str(entry.get("id") or entry.get("name") or f"item-{index}")
         name = entry.get("name")
         name = name if isinstance(name, str) else None
+        description = entry.get("description")
+        description = description if isinstance(description, str) else None
         references.append(
             ImageReference(
                 source="item",
@@ -114,6 +120,7 @@ def _item_references(path: Path, repo_root: Path) -> Iterable[ImageReference]:
                 file_path=_relative_to_root(path, repo_root),
                 image=image,
                 name=name,
+                description=description,
             )
         )
     return references
@@ -223,6 +230,8 @@ def format_duplicates(
                 lines.append(
                     f"  - {reference.display_path()} :: {reference.identifier} [{reference.source}]"
                 )
+            if reference.description:
+                lines.append(f'    - "{reference.description}"')
 
     if identical_files:
         lines.append("")
@@ -253,6 +262,7 @@ def serialize_duplicates(
                 "identifier": ref.identifier,
                 "path": ref.display_path(),
                 "name": ref.name,
+                "description": ref.description,
             }
             for ref in references
         ]

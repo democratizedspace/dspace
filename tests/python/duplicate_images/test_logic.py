@@ -12,6 +12,7 @@ from scripts.duplicate_images import (
     find_duplicates,
     find_identical_files,
     format_duplicates,
+    serialize_report,
 )
 
 
@@ -71,6 +72,60 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
     assert "tank-200" in formatted
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total duplicates remaining: 2" in formatted
+
+
+def test_includes_descriptions_in_output_and_serialization(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    quest_description = "Hydrate rockwool cubes before planting seeds."
+    item_description = "Rockwool starter plug soaked and ready."
+
+    _write_json(
+        quests_dir / "hydroponics" / "prep.json",
+        {
+            "id": "hydroponics/prep",
+            "title": "Hydroponics Prep",
+            "description": quest_description,
+            "image": "/assets/rockwool_wet.jpg",
+        },
+    )
+
+    _write_json(
+        items_dir / "hydroponics.json",
+        [
+            {
+                "id": "rockwool-prepped",
+                "name": "Soaked Rockwool Plug",
+                "description": item_description,
+                "image": "/assets/rockwool_wet.jpg",
+            },
+            {
+                "id": "rockwool-dry",
+                "name": "Dry Rockwool Plug",
+                "image": "/assets/rockwool_wet.jpg",
+            },
+        ],
+    )
+
+    usages = collect_image_references(quests_dir, items_dir, repo_root)
+    duplicates = find_duplicates(usages)
+
+    assert "/assets/rockwool_wet.jpg" in duplicates
+    formatted = format_duplicates(duplicates)
+
+    assert '    - "Hydrate rockwool cubes before planting seeds."' in formatted
+    assert '    - "Rockwool starter plug soaked and ready."' in formatted
+    assert "Dry Rockwool Plug" in formatted
+    assert '"Dry Rockwool Plug"' not in formatted  # no description line for missing description
+
+    serialized = serialize_report(duplicates)
+    refs = serialized["duplicates"]["/assets/rockwool_wet.jpg"]
+    description_by_id = {ref["identifier"]: ref["description"] for ref in refs}
+    assert description_by_id["hydroponics/prep"] == quest_description
+    assert description_by_id["rockwool-prepped"] == item_description
+    assert description_by_id["rockwool-dry"] is None
 
 
 def test_reports_identical_files_by_content(tmp_path: Path) -> None:

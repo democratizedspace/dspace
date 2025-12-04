@@ -29,16 +29,31 @@ def test_cli_reports_duplicates(tmp_path: Path) -> None:
 
     _write_json(
         quests_dir / "science" / "sample.json",
-        {"id": "science/sample", "title": "Sample Quest", "image": "/assets/shared.png"},
+        {
+            "id": "science/sample",
+            "title": "Sample Quest",
+            "description": "Description for sample quest.",
+            "image": "/assets/shared.png",
+        },
     )
     _write_json(
         quests_dir / "science" / "secondary.json",
-        {"id": "science/secondary", "title": "Secondary Quest", "image": "/assets/shared.png"},
+        {
+            "id": "science/secondary",
+            "title": "Secondary Quest",
+            "description": "Description for secondary quest.",
+            "image": "/assets/shared.png",
+        },
     )
     _write_json(
         items_dir / "tools.json",
         [
-            {"id": "tool-kit", "name": "Tool Kit", "image": "/assets/shared.png"},
+            {
+                "id": "tool-kit",
+                "name": "Tool Kit",
+                "description": "Description for toolkit item.",
+                "image": "/assets/shared.png",
+            },
             {"id": "unique-tool", "name": "Unique Tool", "image": "/assets/unique.png"},
         ],
     )
@@ -67,6 +82,9 @@ def test_cli_reports_duplicates(tmp_path: Path) -> None:
     assert "science/secondary" in stdout
     assert "Tool Kit" in stdout
     assert "tool-kit" in stdout
+    assert '    - "Description for sample quest."' in stdout
+    assert '    - "Description for secondary quest."' in stdout
+    assert '    - "Description for toolkit item."' in stdout
     assert "/assets/unique.png" not in stdout
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total duplicates remaining: 2" in stdout
@@ -111,15 +129,18 @@ def test_cli_json_output(tmp_path: Path) -> None:
     assert "/assets/shared-path.jpg" in duplicate_map
     refs = duplicate_map["/assets/shared-path.jpg"]
     assert len(refs) == 2
+    assert all("description" in ref for ref in refs)
 
     quest_ref = next(r for r in refs if r["source"] == "quest")
     assert quest_ref["identifier"] == "alpha/shared"
     assert quest_ref["name"] == "Shared Path Quest"
+    assert quest_ref["description"] == "Quest fixture description for shared image."
     assert "quests/json/alpha/shared.json" in quest_ref["path"]
 
     item_ref = next(r for r in refs if r["source"] == "item")
     assert item_ref["identifier"] == "shared-tool"
     assert item_ref["name"] == "Shared Tool"
+    assert item_ref["description"] == "Item fixture description for shared image."
     assert "items/tools.json" in item_ref["path"]
 
     identical_files = output["identicalFiles"]
@@ -136,16 +157,31 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
 
     _write_json(
         quests_dir / "science" / "sample.json",
-        {"id": "science/sample", "title": "Sample Quest", "image": "/assets/shared.png"},
+        {
+            "id": "science/sample",
+            "title": "Sample Quest",
+            "description": "Description for sample quest.",
+            "image": "/assets/shared.png",
+        },
     )
     _write_json(
         quests_dir / "science" / "secondary.json",
-        {"id": "science/secondary", "title": "Secondary Quest", "image": "/assets/shared.png"},
+        {
+            "id": "science/secondary",
+            "title": "Secondary Quest",
+            "description": "Description for secondary quest.",
+            "image": "/assets/shared.png",
+        },
     )
     _write_json(
         items_dir / "tools.json",
         [
-            {"id": "tool-kit", "name": "Tool Kit", "image": "/assets/shared.png"},
+            {
+                "id": "tool-kit",
+                "name": "Tool Kit",
+                "description": "Description for toolkit item.",
+                "image": "/assets/shared.png",
+            },
         ],
     )
 
@@ -169,6 +205,9 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
     assert "science/secondary" in text_output
     assert "Tool Kit" in text_output
     assert "tool-kit" in text_output
+    assert '    - "Description for sample quest."' in text_output
+    assert '    - "Description for secondary quest."' in text_output
+    assert '    - "Description for toolkit item."' in text_output
 
     # Check JSON output has same structure
     assert "duplicates" in json_data
@@ -180,6 +219,12 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
         ref["name"] for ref in json_data["duplicates"]["/assets/shared.png"] if ref["name"]
     }
     assert names == {"Sample Quest", "Secondary Quest", "Tool Kit"}
+    descriptions = {
+        ref["identifier"]: ref["description"] for ref in json_data["duplicates"]["/assets/shared.png"]
+    }
+    assert descriptions["science/sample"] == "Description for sample quest."
+    assert descriptions["science/secondary"] == "Description for secondary quest."
+    assert descriptions["tool-kit"] == "Description for toolkit item."
 
     assert json_data["identicalFiles"] == {}
 
