@@ -205,6 +205,21 @@ We follow a feature branch workflow:
 4. Get approval from at least one maintainer
 5. Squash and merge into the main branch
 
+### Duplicate image detector
+
+Use the Python CLI to report any quests or items that still share an image URL in v3 content.
+
+Run it from the repo root:
+
+```bash
+python -m scripts.duplicate_images find-duplicate-images
+```
+
+The tool scans `frontend/src/pages/quests/json/` and
+`frontend/src/pages/inventory/json/items/`, then prints each reused image alongside the
+referencing quest or item path and identifier. These entries represent places where new image
+assets are still needed to restore one-image-per-entry parity.
+
 ### CI/CD Pipeline
 
 #### GitHub Actions Workflows

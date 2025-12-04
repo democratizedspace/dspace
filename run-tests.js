@@ -40,6 +40,13 @@ function runTests(exec = execSync, platform = os.platform()) {
                 console.error(`${colors.red}Error: no root tests were run.${colors.reset}`);
                 return 1;
             }
+
+            console.log(`${colors.yellow}Running duplicate image CLI tests...${colors.reset}`);
+            const pythonOutput = exec('python -m pytest scripts/duplicate_images/tests', {
+                encoding: 'utf-8',
+                stdio: 'pipe'
+            });
+            process.stdout.write(pythonOutput);
         } else {
             console.log(
                 `${colors.yellow}Skipping root unit tests — coverage already generated in CI.${colors.reset}`
