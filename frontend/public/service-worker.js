@@ -18,7 +18,6 @@ const PRECACHE_URLS = ['/', '/play', '/quests', '/settings'];
 const RUNTIME_MATCHERS = [/^\/quests\//, /^\/assets\//, /^\/docs\//, /^\/_astro\//];
 const NAVIGATION_FALLBACK = '/';
 const ASSET_EXTENSIONS = [/\.css(\?.*)?$/i, /\.js(\?.*)?$/i];
-let skipWaitingRequested = false;
 
 function extractCacheVersion(cacheName, prefix) {
     if (!cacheName.startsWith(prefix)) {
@@ -95,21 +94,7 @@ self.addEventListener('activate', (event) => {
                     })
                 );
             })
-            .then(() =>
-                self.clients
-                    .claim()
-                    .then(() =>
-                        self.clients
-                            .matchAll({ type: 'window' })
-                            .then((clients) =>
-                                Promise.all(
-                                    clients.map((client) =>
-                                        client.postMessage({ type: 'DS_FORCE_RELOAD' })
-                                    )
-                                )
-                            )
-                    )
-            )
+            .then(() => self.clients.claim())
     );
 });
 
@@ -119,23 +104,7 @@ self.addEventListener('message', (event) => {
     }
 
     if (event.data.type === 'SKIP_WAITING') {
-        skipWaitingRequested = true;
-        event.waitUntil(
-            self
-                .skipWaiting()
-                .then(() => self.clients.claim())
-                .then(() =>
-                    self.clients
-                        .matchAll({ type: 'window' })
-                        .then((clients) =>
-                            Promise.all(
-                                clients.map((client) =>
-                                    client.postMessage({ type: 'DS_FORCE_RELOAD' })
-                                )
-                            )
-                        )
-                )
-        );
+        event.waitUntil(self.skipWaiting().then(() => self.clients.claim()));
     }
 });
 
@@ -187,40 +156,44 @@ function isStaticAsset(pathname) {
 }
 
 function cacheFirstAsset(request) {
-    return caches.match(request).then((cachedResponse) => {
-        const networkFetch = fetch(request)
-            .then((response) => {
-                if (response.ok) {
-                    caches.open(RUNTIME_NAME).then((cache) => cache.put(request, response.clone()));
+    return caches.open(RUNTIME_NAME).then((cache) =>
+        cache.match(request).then((cachedResponse) => {
+            const networkFetch = fetch(request)
+                .then((response) => {
+                    if (response.ok) {
+                        cache.put(request, response.clone());
+                        return response;
+                    }
+                    if (cachedResponse) {
+                        return cachedResponse;
+                    }
                     return response;
-                }
-                if (cachedResponse) {
-                    return cachedResponse;
-                }
-                return response;
-            })
-            .catch(() => cachedResponse || Response.error());
+                })
+                .catch(() => cachedResponse || Response.error());
 
-        if (cachedResponse) {
-            networkFetch.catch(() => {});
-            return cachedResponse;
-        }
+            if (cachedResponse) {
+                networkFetch.catch(() => {});
+                return cachedResponse;
+            }
 
-        return networkFetch;
-    });
+            return networkFetch;
+        })
+    );
 }
 
 function handleRuntimeRequest(request) {
-    return caches.match(request).then((cachedResponse) =>
-        fetch(request)
-            .then((response) => {
-                if (response && response.ok) {
-                    caches.open(RUNTIME_NAME).then((cache) => cache.put(request, response.clone()));
-                    return response;
-                }
-                return cachedResponse || response;
-            })
-            .catch(() => cachedResponse || caches.match(NAVIGATION_FALLBACK))
+    return caches.open(RUNTIME_NAME).then((cache) =>
+        cache.match(request).then((cachedResponse) =>
+            fetch(request)
+                .then((response) => {
+                    if (response && response.ok) {
+                        cache.put(request, response.clone());
+                        return response;
+                    }
+                    return cachedResponse || response;
+                })
+                .catch(() => cachedResponse || caches.match(NAVIGATION_FALLBACK))
+        )
     );
 }
 

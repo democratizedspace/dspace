@@ -44,7 +44,6 @@ export function registerOfflineWorker() {
 
     function attachControllerReload() {
         let refreshing = false;
-        let updatePatched = false;
 
         const reloadPage = () => {
             if (refreshing) {
@@ -61,16 +60,6 @@ export function registerOfflineWorker() {
                 reloadPage();
             }
         });
-
-        if (typeof ServiceWorkerRegistration !== 'undefined' && !updatePatched) {
-            const nativeUpdate = ServiceWorkerRegistration.prototype.update;
-            ServiceWorkerRegistration.prototype.update = function updateAndReload(...args) {
-                const result = nativeUpdate.apply(this, args);
-                window.location.reload();
-                return result;
-            };
-            updatePatched = true;
-        }
 
         return reloadPage;
     }
@@ -162,6 +151,15 @@ export function registerOfflineWorker() {
         };
 
         window.addEventListener('error', handleResourceError, true);
+
+        const removeListener = () =>
+            window.removeEventListener('error', handleResourceError, true);
+
+        setTimeout(removeListener, reloadWindowMs);
+
+        return () => {
+            removeListener();
+        };
     }
 
     window.addEventListener('load', async () => {
