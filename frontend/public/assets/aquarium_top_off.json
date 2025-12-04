@@ -1,5 +1,5 @@
 {
-    "filename": "/assets/quests/aquarium_top_off.jpg",
+    "filename": "/assets/aquarium_top_off.jpg",
     "entity": "frontend/src/pages/quests/json/aquaria/top-off.json",
     "item_name": "Top Off Evaporated Water",
     "item_id": "aquaria/top-off",

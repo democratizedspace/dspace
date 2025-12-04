@@ -1,5 +1,5 @@
 {
-    "filename": "/assets/quests/walstad_setup.jpg",
+    "filename": "/assets/walstad_setup.jpg",
     "entity": "frontend/src/pages/quests/json/aquaria/walstad.json",
     "item_name": "Set up a Walstad tank",
     "item_id": "aquaria/walstad",

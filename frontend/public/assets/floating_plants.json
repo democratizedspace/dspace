@@ -1,5 +1,5 @@
 {
-    "filename": "/assets/quests/floating_plants.jpg",
+    "filename": "/assets/floating_plants.jpg",
     "entity": "frontend/src/pages/quests/json/aquaria/floating-plants.json",
     "item_name": "Add Floating Plants",
     "item_id": "aquaria/floating-plants",
