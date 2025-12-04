@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import defaultdict
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -33,6 +34,8 @@ def _load_json(path: Path) -> object:
             return json.load(handle)
     except json.JSONDecodeError as err:
         raise DuplicateImageError(f"Invalid JSON in {path}: {err}") from err
+    except OSError as err:
+        raise DuplicateImageError(f"Failed to read {path}: {err}") from err
 
 
 def _ensure_directory(path: Path, label: str) -> None:
@@ -53,7 +56,7 @@ def _quest_reference(path: Path, repo_root: Path) -> Iterable[ImageReference]:
         raise DuplicateImageError(f"Quest file {path} must contain a JSON object.")
 
     image = data.get("image")
-    if not isinstance(image, str):
+    if not isinstance(image, str) or not image:
         return []
 
     identifier = str(data.get("id") or data.get("title") or path.stem)
@@ -79,7 +82,7 @@ def _item_references(path: Path, repo_root: Path) -> Iterable[ImageReference]:
         if not isinstance(entry, dict):
             continue
         image = entry.get("image")
-        if not isinstance(image, str):
+        if not isinstance(image, str) or not image:
             continue
         identifier = str(entry.get("id") or entry.get("name") or f"item-{index}")
         references.append(
@@ -109,7 +112,7 @@ def collect_image_references(
     _ensure_directory(quests_dir, "Quest")
     _ensure_directory(items_dir, "Item")
 
-    mapping: DefaultDict[str, List[ImageReference]] = DefaultDict(list)
+    mapping: DefaultDict[str, List[ImageReference]] = defaultdict(list)
 
     for quest_path in sorted(quests_dir.rglob("*.json")):
         _append_references(mapping, _quest_reference(quest_path, repo_root))
