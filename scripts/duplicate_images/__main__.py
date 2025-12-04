@@ -1,4 +1,10 @@
-"""Command line interface for duplicate image detection."""
+"""Command line interface for duplicate image detection.
+
+Reports duplicate quest/item image usage by path and highlights byte-identical files that live at
+different paths under ``frontend/public``. Quests are read from
+``frontend/src/pages/quests/json`` and inventory items from
+``frontend/src/pages/inventory/json/items`` relative to the repository root.
+"""
 
 from __future__ import annotations
 
@@ -11,7 +17,9 @@ from . import (
     DuplicateImageError,
     collect_image_references,
     find_duplicates,
+    find_identical_files,
     format_duplicates,
+    serialize_identical_files,
     serialize_duplicates,
 )
 
@@ -66,12 +74,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         usages = collect_image_references(args.quests_dir, args.items_dir, args.root)
         duplicates = find_duplicates(usages)
+        identical_files = find_identical_files(usages.keys(), args.root)
 
         if args.json:
-            output = json.dumps(serialize_duplicates(duplicates), indent=2)
+            output = json.dumps(
+                {
+                    "by_path": serialize_duplicates(duplicates),
+                    "by_content": serialize_identical_files(identical_files),
+                },
+                indent=2,
+            )
             print(output)
         else:
-            output = format_duplicates(duplicates)
+            output = format_duplicates(duplicates, identical_files)
             if output:
                 print(output)
             else:

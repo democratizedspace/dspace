@@ -1,0 +1,17 @@
+[
+  {
+    "id": "tool-kit",
+    "name": "Tool Kit",
+    "image": "/assets/shared.png"
+  },
+  {
+    "id": "alias-tool",
+    "name": "Alias Tool",
+    "image": "/assets/quests/alias.png"
+  },
+  {
+    "id": "duplicate-name",
+    "name": "Duplicate Name Tool",
+    "image": "/assets/quests/duplicate-name.png"
+  }
+]

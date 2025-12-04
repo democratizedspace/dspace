@@ -4,6 +4,7 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+import shutil
 
 from scripts.duplicate_images import (
     collect_image_references,
@@ -17,6 +18,15 @@ from scripts.duplicate_images.__main__ import DEFAULT_ITEMS_DIR, DEFAULT_QUESTS_
 def _write_json(path: Path, payload: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
+def _copy_fixture_repo(tmp_path: Path) -> Path:
+    repo_root = tmp_path / "repo"
+    shutil.copytree(FIXTURE_ROOT, repo_root, dirs_exist_ok=True)
+    return repo_root
+
+
+FIXTURE_ROOT = Path(__file__).resolve().parents[2] / "data" / "duplicate_images"
 
 
 def test_cli_reports_duplicates(tmp_path: Path) -> None:
@@ -109,9 +119,11 @@ def test_cli_json_output(tmp_path: Path) -> None:
     output = json.loads(result.stdout)
 
     # Validate structure matches expected JSON format
-    assert "/assets/quests/solar.jpg" in output
-    refs = output["/assets/quests/solar.jpg"]
+    assert set(output.keys()) == {"by_path", "by_content"}
+    assert "/assets/quests/solar.jpg" in output["by_path"]
+    refs = output["by_path"]["/assets/quests/solar.jpg"]
     assert len(refs) == 2
+    assert output["by_content"] == {}
 
     # Check quest reference
     quest_ref = next(r for r in refs if r["source"] == "quest")
@@ -176,3 +188,31 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
 
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total duplicates remaining: 2" in text_output
+
+
+def test_cli_reports_identical_files(tmp_path: Path) -> None:
+    repo_root = _copy_fixture_repo(tmp_path)
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    command = [
+        sys.executable,
+        "-m",
+        "scripts.duplicate_images",
+        "find-duplicate-images",
+        "--root",
+        str(repo_root),
+        "--quests-dir",
+        str(quests_dir),
+        "--items-dir",
+        str(items_dir),
+    ]
+
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+
+    assert result.returncode == 0
+    stdout = result.stdout
+    assert "/assets/shared.png (3 uses)" in stdout
+    assert "Identical image files (same content, different paths):" in stdout
+    assert "- /assets/alias.png" in stdout
+    assert "- /assets/quests/alias.png" in stdout
