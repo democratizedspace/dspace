@@ -23,6 +23,7 @@ class ImageReference:
     identifier: str
     file_path: Path
     image: str
+    name: str | None = None
 
     def display_path(self) -> str:
         return self.file_path.as_posix()
@@ -60,12 +61,15 @@ def _quest_reference(path: Path, repo_root: Path) -> Iterable[ImageReference]:
         return []
 
     identifier = str(data.get("id") or data.get("title") or path.stem)
+    name = data.get("title")
+    name = str(name) if name is not None else None
     return [
         ImageReference(
             source="quest",
             identifier=identifier,
             file_path=_relative_to_root(path, repo_root),
             image=image,
+            name=name,
         )
     ]
 
@@ -85,12 +89,15 @@ def _item_references(path: Path, repo_root: Path) -> Iterable[ImageReference]:
         if not isinstance(image, str) or not image:
             continue
         identifier = str(entry.get("id") or entry.get("name") or f"item-{index}")
+        name = entry.get("name")
+        name = str(name) if name is not None else None
         references.append(
             ImageReference(
                 source="item",
                 identifier=identifier,
                 file_path=_relative_to_root(path, repo_root),
                 image=image,
+                name=name,
             )
         )
     return references
@@ -148,9 +155,14 @@ def format_duplicates(duplicates: ImageMap) -> str:
         )
         lines.append(f"{image} ({len(references)} uses)")
         for reference in references:
-            lines.append(
-                f"  - {reference.display_path()} :: {reference.identifier} [{reference.source}]"
-            )
+            if reference.name:
+                lines.append(
+                    f"  - {reference.display_path()} :: {reference.name} - {reference.identifier} [{reference.source}]"
+                )
+            else:
+                lines.append(
+                    f"  - {reference.display_path()} :: {reference.identifier} [{reference.source}]"
+                )
     return "\n".join(lines)
 
 
@@ -163,6 +175,7 @@ def serialize_duplicates(duplicates: ImageMap) -> Dict[str, List[Dict[str, str]]
                 "source": ref.source,
                 "identifier": ref.identifier,
                 "path": ref.display_path(),
+                "name": ref.name,
             }
             for ref in references
         ]
