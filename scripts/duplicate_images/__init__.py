@@ -107,10 +107,12 @@ def _append_references(
 def collect_image_references(
     quests_dir: Path, items_dir: Path, repo_root: Path
 ) -> ImageMap:
-    """Return a map of image URLs to their quest/item references.
+    """
+    Return a map of image URLs to their quest/item references.
     
     This is a stable entrypoint for tests and future CI gates.
-    It remains side-effect-free (pure function over paths)."""
+    It remains side-effect-free (pure function over paths).
+    """
 
     _ensure_directory(quests_dir, "Quest")
     _ensure_directory(items_dir, "Item")
@@ -127,10 +129,12 @@ def collect_image_references(
 
 
 def find_duplicates(usages: ImageMap) -> ImageMap:
-    """Filter image references to only those used more than once.
+    """
+    Filter image references to only those used more than once.
     
     This is a stable entrypoint for tests and future CI gates.
-    It remains side-effect-free (pure function over mappings)."""
+    It remains side-effect-free (pure function over mappings).
+    """
     return {image: refs for image, refs in usages.items() if len(refs) > 1}
 
 
