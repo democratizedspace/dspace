@@ -152,8 +152,7 @@ export function registerOfflineWorker() {
 
         window.addEventListener('error', handleResourceError, true);
 
-        const removeListener = () =>
-            window.removeEventListener('error', handleResourceError, true);
+        const removeListener = () => window.removeEventListener('error', handleResourceError, true);
 
         setTimeout(removeListener, reloadWindowMs);
 
