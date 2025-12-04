@@ -99,8 +99,9 @@ self.addEventListener('activate', (event) => {
                     keys.map((key) => {
                         const isPrecache = key.startsWith(PRECACHE_PREFIX);
                         const isRuntime = key.startsWith(RUNTIME_PREFIX);
+                        const isNavigation = key.startsWith(NAVIGATION_PREFIX);
 
-                        if (!isPrecache && !isRuntime && !key.startsWith(NAVIGATION_PREFIX)) {
+                        if (!isPrecache && !isRuntime && !isNavigation) {
                             return Promise.resolve(false);
                         }
 
@@ -109,6 +110,15 @@ self.addEventListener('activate', (event) => {
                             : isRuntime
                               ? extractCacheVersion(key, RUNTIME_PREFIX)
                               : extractCacheVersion(key, NAVIGATION_PREFIX);
+
+                        // For navigation caches, only keep the current version
+                        // For other caches (precache/runtime), keep MAX_CACHE_HISTORY versions
+                        if (isNavigation) {
+                            if (version === SW_CACHE_VERSION) {
+                                return Promise.resolve(false);
+                            }
+                            return caches.delete(key);
+                        }
 
                         if (version && keepVersions.has(version)) {
                             return Promise.resolve(false);
@@ -169,6 +179,8 @@ function handleConfigFetch(request) {
 }
 
 function handleNavigation(request) {
+    // Network-first strategy with cache: 'no-store' ensures fresh HTML while online.
+    // Cached HTML is only used as an offline-only fallback when the network is unavailable.
     const navigationRequest = new Request(request, { cache: 'no-store' });
     return caches.open(NAVIGATION_CACHE).then((cache) =>
         fetch(navigationRequest)
@@ -202,7 +214,11 @@ function cacheFirstAsset(request) {
             const networkFetch = fetch(request)
                 .then((response) => {
                     if (response.ok) {
-                        cache.put(request, response.clone());
+                        // Only cache non-HTML responses in runtime cache
+                        const contentType = response.headers.get('content-type') || '';
+                        if (!contentType.includes('text/html')) {
+                            cache.put(request, response.clone());
+                        }
                         return response;
                     }
                     if (cached) {
@@ -245,7 +261,11 @@ function handleRuntimeRequest(request) {
             fetch(request)
                 .then((response) => {
                     if (response && response.ok) {
-                        cache.put(request, response.clone());
+                        // Only cache non-HTML responses in runtime cache
+                        const contentType = response.headers.get('content-type') || '';
+                        if (!contentType.includes('text/html')) {
+                            cache.put(request, response.clone());
+                        }
                         return response;
                     }
                     return cachedResponse || response;
