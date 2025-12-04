@@ -11,6 +11,7 @@ from . import (
     DuplicateImageError,
     collect_image_references,
     find_duplicates,
+    find_identical_files,
     format_duplicates,
     serialize_duplicates,
 )
@@ -24,7 +25,10 @@ DEFAULT_ITEMS_DIR = (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Find quest and item entries that share image assets."
+        description=(
+            "Find quest and item entries that reuse image assets by path and by identical file"
+            " content."
+        )
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -66,12 +70,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         usages = collect_image_references(args.quests_dir, args.items_dir, args.root)
         duplicates = find_duplicates(usages)
+        identical_files = find_identical_files(usages.keys(), args.root)
 
         if args.json:
-            output = json.dumps(serialize_duplicates(duplicates), indent=2)
+            output = json.dumps(
+                serialize_duplicates(duplicates, identical_files), indent=2
+            )
             print(output)
         else:
-            output = format_duplicates(duplicates)
+            output = format_duplicates(duplicates, identical_files)
             if output:
                 print(output)
             else:

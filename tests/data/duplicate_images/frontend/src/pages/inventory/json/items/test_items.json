@@ -1,0 +1,17 @@
+[
+  {
+    "id": "item-shared",
+    "name": "Item Shared Image",
+    "image": "/assets/shared.jpg"
+  },
+  {
+    "id": "item-identical",
+    "name": "Item Identical Image",
+    "image": "/assets/quests/identical_b.jpg"
+  },
+  {
+    "id": "item-different",
+    "name": "Item Different Bytes",
+    "image": "/assets/quests/unique_name.jpg"
+  }
+]
