@@ -2,6 +2,12 @@
   {
     "id": "shared-tool",
     "name": "Shared Tool",
+    "image": "/assets/shared-path.jpg",
+    "description": "Shared tool description"
+  },
+  {
+    "id": "shared-no-desc",
+    "name": "Shared Without Description",
     "image": "/assets/shared-path.jpg"
   },
   {

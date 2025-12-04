@@ -37,18 +37,32 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
 
     _write_json(
         quests_dir / "astronomy" / "andromeda.json",
-        {"id": "astronomy/andromeda", "title": "Andromeda Quest", "image": "/assets/quests/solar.jpg"},
+        {
+            "id": "astronomy/andromeda",
+            "title": "Andromeda Quest",
+            "image": "/assets/quests/solar.jpg",
+            "description": "Explore the Andromeda galaxy.",
+        },
     )
     _write_json(
         quests_dir / "astrobiology" / "origin.json",
-        {"id": "astrobiology/origin", "title": "Origin Quest", "image": "/assets/quests/solar.jpg"},
+        {
+            "id": "astrobiology/origin",
+            "title": "Origin Quest",
+            "image": "/assets/quests/solar.jpg",
+        },
     )
 
     _write_json(
         items_dir / "tanks.json",
         [
             {"id": "tank-150", "name": "Tank 150", "image": "/assets/aquarium.jpg"},
-            {"id": "tank-200", "name": "Tank 200", "image": "/assets/quests/solar.jpg"},
+            {
+                "id": "tank-200",
+                "name": "Tank 200",
+                "image": "/assets/quests/solar.jpg",
+                "description": "A large tank for star samples.",
+            },
         ],
     )
 
@@ -69,6 +83,8 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
     assert "astronomy/andromeda" in formatted
     assert "Tank 200" in formatted
     assert "tank-200" in formatted
+    assert '"Explore the Andromeda galaxy."' in formatted
+    assert '"A large tank for star samples."' in formatted
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total duplicates remaining: 2" in formatted
 
@@ -83,7 +99,7 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
     # Duplicate paths by string
     assert "/assets/shared-path.jpg" in duplicates
     shared_refs = duplicates["/assets/shared-path.jpg"]
-    assert len(shared_refs) == 2
+    assert len(shared_refs) == 3
 
     # Identical bytes across different paths
     assert len(identical) == 1
