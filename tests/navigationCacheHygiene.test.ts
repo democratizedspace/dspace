@@ -121,8 +121,8 @@ describe('service worker navigation cache hygiene', () => {
 
         // Pre-populate caches with old version data
         const oldNavigationCache = await cacheApi.open(`dspace-pages-v${firstVersion}`);
-        const oldPrecache = await cacheApi.open(`dspace-precache-v${firstVersion}`);
-        const oldRuntime = await cacheApi.open(`dspace-runtime-v${firstVersion}`);
+        await cacheApi.open(`dspace-precache-v${firstVersion}`);
+        await cacheApi.open(`dspace-runtime-v${firstVersion}`);
 
         await oldNavigationCache.put(
             'https://example.test/',
@@ -310,6 +310,7 @@ describe('service worker navigation cache hygiene', () => {
         expect(fetchHandlers?.length).toBeGreaterThan(0);
 
         let capturedResponse: FakeResponse | undefined;
+        let responsePromise: Promise<FakeResponse> | undefined;
         const questRequest = new FakeRequest('https://example.test/quests/play/1', {
             method: 'GET',
         });
@@ -317,14 +318,15 @@ describe('service worker navigation cache hygiene', () => {
         fetchHandlers?.[0]({
             request: questRequest,
             respondWith(response: Promise<FakeResponse>) {
-                response.then((r) => {
+                responsePromise = response.then((r) => {
                     capturedResponse = r;
+                    return r;
                 });
             },
         });
 
-        // Wait for async handling
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        // Wait for async handling by awaiting the response promise
+        await responsePromise;
 
         // Check that HTML was NOT cached in RUNTIME cache
         const runtimeCache = cachesStore.get('dspace-runtime-v2025-02-01');

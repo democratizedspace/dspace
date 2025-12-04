@@ -32,28 +32,26 @@ describe('build output validation', () => {
     it('should not contain /src/scripts/ paths in built HTML files', () => {
         const htmlFiles = findHtmlFiles(distPath);
 
-        // Skip if no HTML files found (build might not have run)
+        // Fail if no HTML files found (build might not have run)
         if (htmlFiles.length === 0) {
-            console.warn('No HTML files found in dist/, skipping test');
-            return;
+            throw new Error(
+                `No HTML files found in ${distPath}. Ensure the build has run before testing.`
+            );
         }
 
         for (const htmlFile of htmlFiles) {
             const contents = readFileSync(htmlFile, 'utf8');
 
-            // Check for absolute /src/scripts/ paths that should have been bundled
-            expect(contents).not.toContain('/src/scripts/offlineToast.js');
-            expect(contents).not.toContain('/src/scripts/offlineWorkerRegistration.js');
-
-            // More general check for any /src/scripts/ path
+            // Check for any /src/scripts/ path
             const srcScriptsMatch = contents.match(/["']\/src\/scripts\/[^"']+\.js["']/);
             if (srcScriptsMatch) {
+                const relativePath = htmlFile.startsWith(repoRoot)
+                    ? htmlFile.slice(repoRoot.length + 1)
+                    : htmlFile;
                 throw new Error(
-                    `Found unbundled /src/scripts/ reference in ${htmlFile}: ${srcScriptsMatch[0]}`
+                    `Found unbundled /src/scripts/ reference in ${relativePath}: ${srcScriptsMatch[0]}`
                 );
             }
         }
-
-        expect(htmlFiles.length).toBeGreaterThan(0);
     });
 });

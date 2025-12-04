@@ -180,7 +180,7 @@ function handleConfigFetch(request) {
 
 function handleNavigation(request) {
     // Network-first strategy with cache: 'no-store' ensures fresh HTML while online.
-    // Cached HTML is only used as an offline-only fallback when the network is unavailable.
+    // Successfully fetched HTML is cached for use as an offline fallback when the network becomes unavailable.
     const navigationRequest = new Request(request, { cache: 'no-store' });
     return caches.open(NAVIGATION_CACHE).then((cache) =>
         fetch(navigationRequest)
@@ -215,7 +215,7 @@ function cacheFirstAsset(request) {
                 .then((response) => {
                     if (response.ok) {
                         // Only cache non-HTML responses in runtime cache
-                        const contentType = response.headers.get('content-type') || '';
+                        const contentType = (response.headers.get('content-type') || '').toLowerCase();
                         if (!contentType.includes('text/html')) {
                             cache.put(request, response.clone());
                         }
@@ -262,7 +262,7 @@ function handleRuntimeRequest(request) {
                 .then((response) => {
                     if (response && response.ok) {
                         // Only cache non-HTML responses in runtime cache
-                        const contentType = response.headers.get('content-type') || '';
+                        const contentType = (response.headers.get('content-type') || '').toLowerCase();
                         if (!contentType.includes('text/html')) {
                             cache.put(request, response.clone());
                         }
