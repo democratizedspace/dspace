@@ -41,6 +41,13 @@ npm run check        # Lint and format check
 npm run build        # Production build
 ```
 
+E2E tests rely on Playwright. Install the browser binaries and system dependencies before running them locally:
+
+```bash
+npx playwright install chromium
+npx playwright install-deps
+```
+
 See [Testing Guide](./frontend/TESTING.md) for detailed testing information.
 
 ## Documentation Index
