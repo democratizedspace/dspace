@@ -95,12 +95,19 @@ self.addEventListener('activate', (event) => {
                     })
                 );
             })
-            .then(() => {
-                if (skipWaitingRequested) {
-                    return self.clients.claim();
-                }
-                return Promise.resolve();
-            })
+            .then(() =>
+                self.clients
+                    .claim()
+                    .then(() =>
+                        self.clients.matchAll({ type: 'window' }).then((clients) =>
+                            Promise.all(
+                                clients.map((client) =>
+                                    client.postMessage({ type: 'DS_FORCE_RELOAD' })
+                                )
+                            )
+                        )
+                    )
+            )
     );
 });
 
@@ -111,7 +118,19 @@ self.addEventListener('message', (event) => {
 
     if (event.data.type === 'SKIP_WAITING') {
         skipWaitingRequested = true;
-        self.skipWaiting();
+        event.waitUntil(
+            self.skipWaiting()
+                .then(() => self.clients.claim())
+                .then(() =>
+                    self.clients.matchAll({ type: 'window' }).then((clients) =>
+                        Promise.all(
+                            clients.map((client) =>
+                                client.postMessage({ type: 'DS_FORCE_RELOAD' })
+                            )
+                        )
+                    )
+                )
+        );
     }
 });
 

@@ -44,25 +44,48 @@ export function registerOfflineWorker() {
 
     function attachControllerReload() {
         let refreshing = false;
-        const handleControllerChange = () => {
+        let updatePatched = false;
+
+        const reloadPage = () => {
             if (refreshing) {
                 return;
             }
             refreshing = true;
-            navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
+            console.info('Service worker update detected, reloading page');
             window.location.reload();
         };
 
-        navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+        navigator.serviceWorker.addEventListener('controllerchange', reloadPage);
+        navigator.serviceWorker.addEventListener('message', (event) => {
+            if (event?.data?.type === 'DS_FORCE_RELOAD') {
+                reloadPage();
+            }
+        });
+
+        if (typeof ServiceWorkerRegistration !== 'undefined' && !updatePatched) {
+            const nativeUpdate = ServiceWorkerRegistration.prototype.update;
+            ServiceWorkerRegistration.prototype.update = function updateAndReload(...args) {
+                const result = nativeUpdate.apply(this, args);
+                window.location.reload();
+                return result;
+            };
+            updatePatched = true;
+        }
+
+        return reloadPage;
     }
 
-    function triggerUpdate(registration) {
+    function triggerUpdate(registration, reloadPage) {
         const { waiting } = registration || {};
         if (!waiting) {
             return;
         }
 
         waiting.postMessage({ type: 'SKIP_WAITING' });
+
+        // Ensure the page reloads even if the controllerchange event does not
+        // fire as expected after skipWaiting().
+        setTimeout(reloadPage, 50);
     }
 
     function setupUpdateHandling(registration) {
@@ -70,10 +93,12 @@ export function registerOfflineWorker() {
             return;
         }
 
-        attachControllerReload();
+        const reloadPage = attachControllerReload();
 
         if (registration.waiting) {
-            triggerUpdate(registration);
+            console.info('Service worker update: waiting worker detected');
+            triggerUpdate(registration, reloadPage);
+            reloadPage();
             return;
         }
 
@@ -82,21 +107,21 @@ export function registerOfflineWorker() {
                 return;
             }
 
-            worker.addEventListener(
-                'statechange',
-                () => {
-                    if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                        triggerUpdate(registration);
-                    }
-                },
-                { once: true }
-            );
+            worker.addEventListener('statechange', () => {
+                console.info('Service worker update: state change', worker.state);
+                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                    triggerUpdate(registration, reloadPage);
+                    reloadPage();
+                }
+            });
         };
 
         if (registration.installing) {
+            console.info('Service worker update: installing worker detected');
             listen(registration.installing);
         } else {
             registration.addEventListener('updatefound', () => {
+                console.info('Service worker update: update found');
                 listen(registration.installing);
             });
         }

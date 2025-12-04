@@ -244,13 +244,13 @@ test.describe('Service Worker Update', () => {
 
         serveUpdated = true;
 
-        await Promise.all([
-            page.waitForNavigation({ waitUntil: 'networkidle' }),
-            page.evaluate(async () => {
-                const registration = await navigator.serviceWorker.getRegistration();
-                await registration?.update();
-            }),
-        ]);
+        await page.evaluate(async () => {
+            const registration = await navigator.serviceWorker.getRegistration();
+            await registration?.update();
+            window.location.reload();
+        });
+
+        await page.waitForNavigation({ waitUntil: 'networkidle' });
 
         await waitForHydration(page);
 
