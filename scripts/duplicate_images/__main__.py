@@ -66,18 +66,20 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         usages = collect_image_references(args.quests_dir, args.items_dir, args.root)
         duplicates = find_duplicates(usages)
-    except DuplicateImageError as err:
-        parser.exit(status=1, message=f"error: {err}\n")
-
-    if args.json:
-        output = json.dumps(serialize_duplicates(duplicates), indent=2)
-        print(output)
-    else:
-        output = format_duplicates(duplicates)
-        if output:
+        
+        if args.json:
+            output = json.dumps(serialize_duplicates(duplicates), indent=2)
             print(output)
         else:
-            print("No duplicate images found.")
+            output = format_duplicates(duplicates)
+            if output:
+                print(output)
+            else:
+                print("No duplicate images found.")
+    except DuplicateImageError as err:
+        parser.exit(status=1, message=f"error: {err}\n")
+    except (TypeError, ValueError) as err:
+        parser.exit(status=1, message=f"error: failed to serialize output: {err}\n")
 
     return 0
 

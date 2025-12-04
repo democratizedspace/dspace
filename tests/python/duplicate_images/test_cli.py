@@ -102,7 +102,7 @@ def test_cli_json_output(tmp_path: Path) -> None:
 
     assert result.returncode == 0
     output = json.loads(result.stdout)
-    
+
     # Validate structure matches expected JSON format
     assert "/assets/quests/solar.jpg" in output
     refs = output["/assets/quests/solar.jpg"]
