@@ -261,6 +261,138 @@ test.describe('Service Worker Update', () => {
         expect(await isPageStyled(page)).toBe(true);
     });
 
+    test('activates new worker when previous assets are removed', async ({ page }) => {
+        const swResponse = await page.request.get('/service-worker.js');
+        const swSource = await swResponse.text();
+        const versionMatch = /SW_CACHE_VERSION\s*=\s*'([^']+)'/.exec(swSource);
+        const currentVersion = versionMatch?.[1] ?? 'playwright';
+        const updatedSource = versionMatch
+            ? swSource.replace(versionMatch[0], `const SW_CACHE_VERSION = '${currentVersion}-2'`)
+            : `${swSource}\n// updated for test`;
+
+        let serveUpdated = false;
+        await page.route('**/service-worker.js', (route) => {
+            if (serveUpdated) {
+                serveUpdated = false;
+                route.fulfill({
+                    status: 200,
+                    contentType: 'application/javascript',
+                    body: updatedSource,
+                });
+                return;
+            }
+            route.continue();
+        });
+
+        const assetRewrites = new Map<string, string>();
+        let simulateDeploy = false;
+
+        await page.route('**/*', async (route) => {
+            const request = route.request();
+            const url = request.url();
+
+            if (url.endsWith('/service-worker.js')) {
+                await route.continue();
+                return;
+            }
+
+            if (!simulateDeploy) {
+                await route.continue();
+                return;
+            }
+
+            if (assetRewrites.has(url)) {
+                await route.fulfill({ status: 404, contentType: 'text/plain', body: 'gone' });
+                return;
+            }
+
+            for (const [, replacement] of assetRewrites) {
+                if (url === replacement) {
+                    const extension = replacement.split('.').pop()?.toLowerCase() ?? 'js';
+                    const contentType = extension === 'css' ? 'text/css' : 'application/javascript';
+                    const body = extension === 'css' ? 'body{opacity:1;}' : 'export default {};';
+                    await route.fulfill({ status: 200, contentType, body });
+                    return;
+                }
+            }
+
+            if (request.resourceType() === 'document') {
+                const response = await route.fetch();
+                const headers = response.headers();
+                let body = await response.text();
+
+                for (const [original, replacement] of assetRewrites) {
+                    body = body.replaceAll(original, replacement);
+                }
+
+                await route.fulfill({
+                    status: response.status(),
+                    headers,
+                    body,
+                });
+                return;
+            }
+
+            await route.continue();
+        });
+
+        await page.goto('/');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const initialAssets = await page.evaluate(() => {
+            const urls = new Set<string>();
+            document
+                .querySelectorAll('link[rel="stylesheet"], script[type="module"]')
+                .forEach((node) => {
+                    const href = (node as HTMLLinkElement).href || (node as HTMLScriptElement).src;
+                    if (href?.includes('/_astro/')) {
+                        urls.add(href);
+                    }
+                });
+            return Array.from(urls);
+        });
+
+        initialAssets.forEach((url, index) => {
+            const extension = new URL(url).pathname.split('.').pop() ?? 'js';
+            const origin = new URL(url).origin;
+            assetRewrites.set(url, `${origin}/_astro/redeploy-${index}.${extension}`);
+        });
+
+        const assetFailures: Array<{ url: string; status: number }> = [];
+        page.on('response', (response) => {
+            const url = response.url();
+            if (
+                url.includes(ASTRO_ASSET_PATH) &&
+                url.match(/\.(css|js)(\?|$)/) &&
+                response.status() >= 400
+            ) {
+                assetFailures.push({ url, status: response.status() });
+            }
+        });
+
+        serveUpdated = true;
+        await page.evaluate(() => navigator.serviceWorker.getRegistration()?.update());
+        simulateDeploy = true;
+
+        await page.evaluate(async () => {
+            const registration = await navigator.serviceWorker.getRegistration();
+            registration?.waiting?.postMessage({ type: 'SKIP_WAITING' });
+        });
+
+        await page.reload({ waitUntil: 'networkidle' });
+        await waitForHydration(page);
+
+        const swReady = await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
+
+        expect(swReady.registered).toBe(true);
+        expect(swReady.controlled).toBe(true);
+        expect(assetFailures).toHaveLength(0);
+
+        const hasStyles = await isPageStyled(page);
+        expect(hasStyles).toBe(true);
+    });
+
     test('assets remain accessible during navigation with service worker enabled', async ({
         page,
     }) => {

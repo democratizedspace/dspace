@@ -25,6 +25,9 @@ function readDocumentedRoutes(): { routes: string[]; line: string } {
         throw new Error('Could not find "Precache routes" line in offline-first runbook');
     }
     const matches = Array.from(precacheLine.matchAll(/`([^`]+)`/g));
+    if (matches.length === 0 && precacheLine.toLowerCase().includes('(none')) {
+        return { routes: [], line: precacheLine };
+    }
     const routes = matches.map(([, route]) => route);
     return { routes, line: precacheLine };
 }

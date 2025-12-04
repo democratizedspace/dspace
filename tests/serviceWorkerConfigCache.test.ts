@@ -11,9 +11,9 @@ describe('service worker caching contract', () => {
         const content = readFileSync(serviceWorkerPath, 'utf8');
 
         const precacheMatch = content.match(/const PRECACHE_URLS = \[(?<entries>[\s\S]*?)\];/);
-        expect(precacheMatch?.groups?.entries).toBeTruthy();
+        const rawEntries = precacheMatch?.groups?.entries ?? '';
 
-        const entries = precacheMatch!.groups!.entries
+        const entries = rawEntries
             .split(',')
             .map((entry) => entry.replace(/['"`]/g, '').trim())
             .filter(Boolean);
@@ -24,7 +24,7 @@ describe('service worker caching contract', () => {
         );
         expect(content).toContain("const CONFIG_PATH = '/config.json';");
         expect(content).toMatch(/function prewarmConfigCache\(\)/);
-        expect(content).toMatch(/\.then\(\(\) => prewarmConfigCache\(\)\)/);
+        expect(content).toMatch(/prewarmConfigCache\(\);/);
         expect(content).toMatch(/request\.method !== 'GET'/);
         expect(content).toMatch(
             /if \(url\.pathname === CONFIG_PATH\) {\s*event\.respondWith\(handleConfigFetch\(request\)\)/
