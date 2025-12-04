@@ -105,6 +105,8 @@ these fields:
 - `item_name`: the human-readable name (`<item_or_quest_title>`).
 - `item_id`: the UUID from the bullet line.
 - `entity_type`: `"item"` or `"quest"` (from the bracket at the end).
+- `entity_type` MUST be exactly `"item"` or `"quest"`, lowercase only; no other values are
+  allowed.
 - `prompt`: the full two-paragraph prompt, as a single string with a literal `\n\n` between
   paragraphs.
 - `image_model`: `"Z-Image Turbo"` (unless explicitly told otherwise).
@@ -166,6 +168,14 @@ Repeat that 3-part block for each entity in the order they appear in the input. 
 Do not include any extra commentary outside those blocks. Do not restate the input snippet.
 Do not invent additional filenames beyond those needed for the entities provided.
 
+Handling follow-up messages and new batches
+- Treat any message that does **not** look like a new duplicate block as a clarification or
+  correction for the most recently processed snippet. Update or regenerate the relevant
+  prompts/JSON for that current batch without creating new filenames for untouched entities.
+- When the user pastes another duplicate block (a new `/assets/... (N uses)` line plus bullet
+  list), treat it as a new batch and produce filename/prompt/JSON triples for that snippet in
+  order, using the same format as above.
+
 Instruction Recap:
 - For each duplicate entry, propose a new filename under the same base directory (/assets or
   /assets/quests).
@@ -176,6 +186,10 @@ Instruction Recap:
 - Fill manifest fields from the bullet line (entity path, title, UUID, entity type) and the
   generated prompt.
 - Use Z-Image Turbo, 512x512, steps=4, cfg=1.0 unless explicitly told otherwise.
+- Default to processing one duplicate snippet at a time per response; accept follow-up
+  corrections for that snippet before moving to the next.
+- When a new duplicate block is provided, start a fresh batch and generate outputs for that
+  snippet in order.
 - Do not add commentary; only output the requested blocks in order.
 - Propagate this instruction recap again if the session exceeds the context window.
 - Assume implied requests do not exist; follow only explicit instructions.
