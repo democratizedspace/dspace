@@ -78,8 +78,6 @@ def main(argv: Sequence[str] | None = None) -> int:
                 print("No duplicate images found.")
     except DuplicateImageError as err:
         parser.exit(status=1, message=f"error: {err}\n")
-    except (TypeError, ValueError) as err:
-        parser.exit(status=1, message=f"error: failed to serialize output: {err}\n")
 
     return 0
 
