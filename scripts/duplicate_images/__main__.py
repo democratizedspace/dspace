@@ -1,4 +1,10 @@
-"""Command line interface for duplicate image detection."""
+"""Command line interface for duplicate image detection.
+
+The CLI scans quest JSON under ``frontend/src/pages/quests/json`` and inventory item JSON
+under ``frontend/src/pages/inventory/json/items``. It reports duplicates in two ways:
+* Multiple quests/items referencing the same image path string.
+* Different image paths that resolve to identical files in ``frontend/public``.
+"""
 
 from __future__ import annotations
 
@@ -11,6 +17,7 @@ from . import (
     DuplicateImageError,
     collect_image_references,
     find_duplicates,
+    find_identical_files,
     format_duplicates,
     serialize_duplicates,
 )
@@ -24,7 +31,9 @@ DEFAULT_ITEMS_DIR = (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Find quest and item entries that share image assets."
+        description=(
+            "Find quest and item entries that share image assets by path and by file content."
+        )
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -66,12 +75,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         usages = collect_image_references(args.quests_dir, args.items_dir, args.root)
         duplicates = find_duplicates(usages)
+        identical_files = find_identical_files(usages.keys(), args.root)
 
         if args.json:
-            output = json.dumps(serialize_duplicates(duplicates), indent=2)
+            output = json.dumps(
+                serialize_duplicates(duplicates, identical_files), indent=2
+            )
             print(output)
         else:
-            output = format_duplicates(duplicates)
+            output = format_duplicates(duplicates, identical_files)
             if output:
                 print(output)
             else:

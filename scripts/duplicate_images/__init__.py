@@ -1,14 +1,21 @@
-"""Duplicate image detector for quest and item assets."""
+"""Duplicate image detector for quest and item assets.
+
+This module reports two categories of duplication:
+* Multiple entities (quests or items) referencing the same image path string.
+* Distinct image paths that point to byte-identical files on disk (under frontend/public).
+"""
 
 from __future__ import annotations
 
 from collections import defaultdict
+import hashlib
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import DefaultDict, Dict, Iterable, List
+from typing import DefaultDict, Dict, Iterable, List, Set
 
 ImageMap = Dict[str, List["ImageReference"]]
+ContentDuplicateMap = Dict[str, List[str]]
 
 
 class DuplicateImageError(Exception):
@@ -103,6 +110,40 @@ def _item_references(path: Path, repo_root: Path) -> Iterable[ImageReference]:
     return references
 
 
+def _iter_existing_image_paths(image_paths: Iterable[str], repo_root: Path) -> Iterable[tuple[str, Path]]:
+    """Yield image path strings paired with real files that exist on disk.
+
+    The input values come directly from JSON `image` fields (e.g. "/assets/foo.jpg").
+    We strip the leading slash and resolve them relative to the repository root to locate
+    files under ``frontend/public``. Missing files are ignored so callers can still
+    report duplicates by path even when an asset has not been added yet.
+    """
+
+    seen: Set[str] = set()
+    for image_path in image_paths:
+        if image_path in seen:
+            continue
+        seen.add(image_path)
+
+        relative_path = image_path.lstrip("/")
+        candidate_paths = [
+            repo_root / "frontend" / "public" / relative_path,
+            repo_root / relative_path,
+        ]
+        for disk_path in candidate_paths:
+            if disk_path.is_file():
+                yield image_path, disk_path
+                break
+
+
+def _hash_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(8192), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def _append_references(
     mapping: DefaultDict[str, List[ImageReference]],
     references: Iterable[ImageReference],
@@ -143,6 +184,22 @@ def find_duplicates(usages: ImageMap) -> ImageMap:
     return {image: refs for image, refs in usages.items() if len(refs) > 1}
 
 
+def find_identical_files(
+    image_paths: Iterable[str], repo_root: Path
+) -> ContentDuplicateMap:
+    """Group image paths that resolve to identical files by their SHA-256 hash."""
+
+    hash_to_paths: DefaultDict[str, List[str]] = defaultdict(list)
+
+    for image_path, disk_path in _iter_existing_image_paths(image_paths, repo_root):
+        file_hash = _hash_file(disk_path)
+        hash_to_paths[file_hash].append(image_path)
+
+    return {
+        file_hash: sorted(paths) for file_hash, paths in hash_to_paths.items() if len(paths) > 1
+    }
+
+
 def count_total_duplicates(duplicates: ImageMap) -> int:
     """Calculate total number of duplicate image uses.
 
@@ -152,40 +209,57 @@ def count_total_duplicates(duplicates: ImageMap) -> int:
     return sum(len(references) - 1 for references in duplicates.values())
 
 
-def format_duplicates(duplicates: ImageMap) -> str:
-    if not duplicates:
+def format_duplicates(
+    duplicates: ImageMap, identical_files: ContentDuplicateMap | None = None
+) -> str:
+    if not duplicates and not identical_files:
         return ""
 
     lines: List[str] = []
-    for image in sorted(duplicates):
-        references = sorted(
-            duplicates[image],
-            key=lambda ref: (ref.source, ref.display_path(), ref.identifier),
-        )
-        lines.append(f"{image} ({len(references)} uses)")
-        for reference in references:
-            if reference.name:
-                lines.append(
-                    f"  - {reference.display_path()} :: {reference.name} - {reference.identifier} [{reference.source}]"
-                )
-            else:
-                lines.append(
-                    f"  - {reference.display_path()} :: {reference.identifier} [{reference.source}]"
-                )
+    if duplicates:
+        for image in sorted(duplicates):
+            references = sorted(
+                duplicates[image],
+                key=lambda ref: (ref.source, ref.display_path(), ref.identifier),
+            )
+            lines.append(f"{image} ({len(references)} uses)")
+            for reference in references:
+                if reference.name:
+                    lines.append(
+                        f"  - {reference.display_path()} :: {reference.name} - {reference.identifier} [{reference.source}]"
+                    )
+                else:
+                    lines.append(
+                        f"  - {reference.display_path()} :: {reference.identifier} [{reference.source}]"
+                    )
 
-    # Add summary at the bottom
-    total_duplicates = count_total_duplicates(duplicates)
-    lines.append("")
-    lines.append(f"Total duplicates remaining: {total_duplicates}")
+        # Add summary at the bottom
+        total_duplicates = count_total_duplicates(duplicates)
+        lines.append("")
+        lines.append(f"Total duplicates remaining: {total_duplicates}")
+
+    if identical_files:
+        if lines:
+            lines.append("")
+        lines.append("Identical image files (same content, different paths):")
+        for file_hash in sorted(identical_files):
+            lines.append(f"hash {file_hash}:")
+            for path in sorted(identical_files[file_hash]):
+                lines.append(f"  - {path}")
 
     return "\n".join(lines)
 
 
 def serialize_duplicates(
-    duplicates: ImageMap,
-) -> Dict[str, List[Dict[str, str | None]]]:
-    """Convert duplicate image mappings to JSON-serializable format."""
-    result: Dict[str, List[Dict[str, str | None]]] = {}
+    duplicates: ImageMap, identical_files: ContentDuplicateMap | None = None
+) -> Dict[str, List[Dict[str, str | None]] | Dict[str, List[str]]]:
+    """Convert duplicate image mappings to JSON-serializable format.
+
+    The returned mapping preserves the original duplicate-by-path data and, when provided,
+    appends an ``identical_files`` section that groups paths whose on-disk bytes match.
+    """
+
+    result: Dict[str, List[Dict[str, str | None]] | Dict[str, List[str]]] = {}
     for image, references in duplicates.items():
         result[image] = [
             {
@@ -196,4 +270,8 @@ def serialize_duplicates(
             }
             for ref in references
         ]
+
+    if identical_files:
+        result["identical_files"] = {hash_: sorted(paths) for hash_, paths in identical_files.items()}
+
     return result

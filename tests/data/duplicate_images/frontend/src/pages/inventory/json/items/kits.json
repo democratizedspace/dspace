@@ -1,0 +1,12 @@
+[
+  {
+    "id": "tool-kit",
+    "name": "Tool Kit",
+    "image": "/assets/shared.jpg"
+  },
+  {
+    "id": "spare-sensor",
+    "name": "Spare Sensor",
+    "image": "/assets/same-name.jpg"
+  }
+]
