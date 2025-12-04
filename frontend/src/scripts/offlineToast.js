@@ -133,3 +133,5 @@ export function installOfflineToast(options = {}) {
         },
     };
 }
+
+export default installOfflineToast;
