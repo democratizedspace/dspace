@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/dwind_wind_energy_token.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "dWind",
+    "item_id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67",
+    "entity_type": "item",
+    "prompt": "A translucent, glass-like token representing 1 watt of wind-generated energy floats just above the surface of a sleek tablet on a clean desk. The token is the size of a large coin, with an etched abstract symbol combining a three-blade turbine silhouette and swirling wind lines, softly glowing in cool blue-green tones. On the tablet screen beneath it, faint unfocused graphs and geometric shapes hint at energy production data and a growing balance of similar tokens, without any readable text or numbers, making it clear this is a digital asset tied to real-world wind power.\n\nNear-future solarpunk financial-tech aesthetic rendered as a 512×512 photorealistic image, with soft cinematic lighting and a shallow depth of field that keeps the token sharp and the background gently blurred. The setting is a bright, high-tech workspace with subtle hints of sustainable design like a potted plant and warm natural materials at the edges of the frame. No brand logos or explicit UI labels are visible, no faces are shown, and the composition centers the glowing token and tablet so it reads clearly as a clean, modern icon for wind-backed energy credits.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

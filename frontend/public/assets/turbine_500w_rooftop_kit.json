@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/turbine_500w_rooftop_kit.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "500 W wind turbine",
+    "item_id": "743681a7-d2e7-465c-af07-43665079bf4d",
+    "entity_type": "item",
+    "prompt": "A realistic 500 W three-blade horizontal-axis wind turbine kit is being assembled in a bright rooftop-access workshop. The turbine has a rotor roughly one and a half meters across mounted on a sturdy white mast that reaches about chest height on an unseen technician, with the generator housed in a compact but clearly substantial nacelle behind the hub. A heavy steel base plate with multiple bolt holes sits beside it, along with thick black DC cables, a separate 24 V charge controller box with subtle indicator lights, weather-proof mounting brackets sized for a rooftop edge or short tower, and a small spread of hand tools like a wrench set and torque key on the floor. Through a large open door or window, you can see the nearby rooftop with railings and a hint of solar panels, making it clear this turbine is meant for real residential-scale power rather than a tiny desktop gadget.\n\nPhotorealistic 512×512 near-future renewable-energy aesthetic with soft natural daylight filling a clean urban workshop space, lightly solarpunk in tone. The room has pale walls, organized shelves, and a bit of greenery visible outside, with the turbine and its large rotor clearly dominating the composition so its scale feels believable for a 500 W system. Surfaces of metal and plastic are rendered realistically, with no brand logos or readable text on equipment, and only a partial view of the technician’s arms and hands adjusting a bolt to avoid a clear face. The lighting is cinematic but gentle, the background is slightly blurred to keep focus on the turbine, and the overall scene is uncluttered so it reads well as an icon for a rooftop-scale wind power kit.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}
