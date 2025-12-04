@@ -1,23 +1,10 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { execSync } from 'node:child_process';
 
 describe('build output validation', () => {
     const repoRoot = process.cwd();
     const distPath = join(repoRoot, 'frontend', 'dist');
-
-    beforeAll(() => {
-        // Ensure the project is built before running tests
-        try {
-            execSync('cd frontend && npm run build', {
-                cwd: repoRoot,
-                stdio: 'pipe',
-            });
-        } catch (error) {
-            console.warn('Build failed in test setup:', error);
-        }
-    });
 
     function findHtmlFiles(dir: string): string[] {
         const files: string[] = [];
@@ -59,7 +46,7 @@ describe('build output validation', () => {
             expect(contents).not.toContain('/src/scripts/offlineWorkerRegistration.js');
 
             // More general check for any /src/scripts/ path
-            const srcScriptsMatch = contents.match(/["']/src/scripts/[^"']+\.js["']/);
+            const srcScriptsMatch = contents.match(/["']\/src\/scripts\/[^"']+\.js["']/);
             if (srcScriptsMatch) {
                 throw new Error(
                     `Found unbundled /src/scripts/ reference in ${htmlFile}: ${srcScriptsMatch[0]}`
