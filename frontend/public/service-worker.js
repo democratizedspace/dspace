@@ -108,8 +108,8 @@ self.addEventListener('activate', (event) => {
                         const version = isPrecache
                             ? extractCacheVersion(key, PRECACHE_PREFIX)
                             : isRuntime
-                              ? extractCacheVersion(key, RUNTIME_PREFIX)
-                              : extractCacheVersion(key, NAVIGATION_PREFIX);
+                            ? extractCacheVersion(key, RUNTIME_PREFIX)
+                            : extractCacheVersion(key, NAVIGATION_PREFIX);
 
                         // For navigation caches, only keep the current version
                         // For other caches (precache/runtime), keep MAX_CACHE_HISTORY versions
@@ -215,7 +215,9 @@ function cacheFirstAsset(request) {
                 .then((response) => {
                     if (response.ok) {
                         // Only cache non-HTML responses in runtime cache
-                        const contentType = (response.headers.get('content-type') || '').toLowerCase();
+                        const contentType = (
+                            response.headers.get('content-type') || ''
+                        ).toLowerCase();
                         if (!contentType.includes('text/html')) {
                             cache.put(request, response.clone());
                         }
@@ -262,7 +264,9 @@ function handleRuntimeRequest(request) {
                 .then((response) => {
                     if (response && response.ok) {
                         // Only cache non-HTML responses in runtime cache
-                        const contentType = (response.headers.get('content-type') || '').toLowerCase();
+                        const contentType = (
+                            response.headers.get('content-type') || ''
+                        ).toLowerCase();
                         if (!contentType.includes('text/html')) {
                             cache.put(request, response.clone());
                         }
