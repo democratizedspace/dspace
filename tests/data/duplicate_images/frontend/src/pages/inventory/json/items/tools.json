@@ -2,12 +2,14 @@
   {
     "id": "shared-tool",
     "name": "Shared Tool",
-    "image": "/assets/shared-path.jpg"
+    "image": "/assets/shared-path.jpg",
+    "description": "Reusable wrench and driver kit for shared repairs."
   },
   {
     "id": "duplicate-kit",
     "name": "Duplicate Kit",
-    "image": "/assets/quests/duplicate-content.jpg"
+    "image": "/assets/quests/duplicate-content.jpg",
+    "description": "Backup toolkit mirroring the primary loadout."
   },
   {
     "id": "conflict-kit",

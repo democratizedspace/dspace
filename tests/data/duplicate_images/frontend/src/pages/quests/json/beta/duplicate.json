@@ -1,5 +1,6 @@
 {
   "id": "beta/duplicate-content",
   "title": "Duplicate Content Quest",
-  "image": "/assets/duplicate-content.jpg"
+  "image": "/assets/duplicate-content.jpg",
+  "description": "Review mirrored quest assets for redundant uploads."
 }
