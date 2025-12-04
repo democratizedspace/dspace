@@ -64,6 +64,8 @@ def test_cli_reports_duplicates(tmp_path: Path) -> None:
     assert "Tool Kit" in stdout
     assert "tool-kit" in stdout
     assert "/assets/unique.png" not in stdout
+    # Verify summary appears (3 uses - 1 = 2 duplicates)
+    assert "Total duplicates remaining: 2" in stdout
 
 
 def test_default_paths_are_exposed() -> None:
@@ -171,3 +173,6 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
     assert identifiers == {"science/sample", "science/secondary", "tool-kit"}
     names = {ref["name"] for ref in json_data["/assets/shared.png"] if ref["name"]}
     assert names == {"Sample Quest", "Secondary Quest", "Tool Kit"}
+
+    # Verify summary appears (3 uses - 1 = 2 duplicates)
+    assert "Total duplicates remaining: 2" in text_output

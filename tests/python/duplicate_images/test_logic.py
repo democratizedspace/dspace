@@ -57,6 +57,8 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
     assert "astronomy/andromeda" in formatted
     assert "Tank 200" in formatted
     assert "tank-200" in formatted
+    # Verify summary appears (3 uses - 1 = 2 duplicates)
+    assert "Total duplicates remaining: 2" in formatted
 
 
 def test_collect_image_references_requires_valid_json(tmp_path: Path) -> None:
