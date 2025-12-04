@@ -107,7 +107,11 @@ def _append_references(
 def collect_image_references(
     quests_dir: Path, items_dir: Path, repo_root: Path
 ) -> ImageMap:
-    """Return a map of image URLs to their quest/item references."""
+    """Return a map of image URLs to their quest/item references.
+
+    This is a stable entrypoint for tests and future CI gates.
+    It remains side-effect-free (pure function over paths).
+    """
 
     _ensure_directory(quests_dir, "Quest")
     _ensure_directory(items_dir, "Item")
@@ -124,6 +128,11 @@ def collect_image_references(
 
 
 def find_duplicates(usages: ImageMap) -> ImageMap:
+    """Filter image references to only those used more than once.
+
+    This is a stable entrypoint for tests and future CI gates.
+    It remains side-effect-free (pure function over mappings).
+    """
     return {image: refs for image, refs in usages.items() if len(refs) > 1}
 
 
@@ -143,3 +152,18 @@ def format_duplicates(duplicates: ImageMap) -> str:
                 f"  - {reference.display_path()} :: {reference.identifier} [{reference.source}]"
             )
     return "\n".join(lines)
+
+
+def serialize_duplicates(duplicates: ImageMap) -> Dict[str, List[Dict[str, str]]]:
+    """Convert duplicate image mappings to JSON-serializable format."""
+    result: Dict[str, List[Dict[str, str]]] = {}
+    for image, references in duplicates.items():
+        result[image] = [
+            {
+                "source": ref.source,
+                "identifier": ref.identifier,
+                "path": ref.display_path(),
+            }
+            for ref in references
+        ]
+    return result
