@@ -38,10 +38,12 @@ Thank you for your interest in helping the project! Below is a quick overview of
 The pre-push hook runs comprehensive checks before allowing a push:
 
 1. **Code quality checks** (`npm run check`) - linting and formatting
-2. **Unit tests** (`npm run test:root`) - vitest tests from repository root (143 tests)
+2. **Unit tests** (`npm run test:root`) - vitest tests from repository root
 3. **E2E tests** (`npm run test:e2e`) - Playwright browser tests
 
-This matches the CI test jobs to catch issues early. The hook uses `npm run` commands which delegate to `pnpm` for package resolution.
+This matches the CI test jobs to catch issues early.
+
+**Important:** The pre-push hook uses `npm run` commands. Since this project specifies `"packageManager": "pnpm@9.0.0"` in `package.json`, you should ensure you have `pnpm` installed and use it for package management. The CI workflows use `pnpm` directly, so using `pnpm run` for scripts ensures your environment matches CI exactly.
 
 **Note**: The pre-push hook runs `test:root` (without coverage) for faster local checks, while CI runs `coverage` (with coverage collection). Both execute the same test suite.
 
