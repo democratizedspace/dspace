@@ -202,9 +202,7 @@ def count_total_duplicates(duplicates: ImageMap) -> int:
 def format_duplicates(
     duplicates: ImageMap, identical_files: IdenticalImageMap | None = None
 ) -> str:
-    if not duplicates:
-        duplicates = {}
-
+    duplicates = duplicates or {}
     identical_files = identical_files or {}
     if not duplicates and not identical_files:
         return ""
@@ -219,12 +217,7 @@ def format_duplicates(
         for reference in references:
             if reference.name:
                 lines.append(
-                    "  - {path} :: {name} - {identifier} [{source}]".format(
-                        path=reference.display_path(),
-                        name=reference.name,
-                        identifier=reference.identifier,
-                        source=reference.source,
-                    )
+                    f"  - {reference.display_path()} :: {reference.name} - {reference.identifier} [{reference.source}]"
                 )
             else:
                 lines.append(
