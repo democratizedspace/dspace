@@ -2,6 +2,7 @@
   {
     "id": "shared-tool",
     "name": "Shared Tool",
+    "description": "Item fixture description for shared image.",
     "image": "/assets/shared-path.jpg"
   },
   {
