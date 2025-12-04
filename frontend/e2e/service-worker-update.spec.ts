@@ -261,6 +261,93 @@ test.describe('Service Worker Update', () => {
         expect(await isPageStyled(page)).toBe(true);
     });
 
+    test('activates new worker when stale HTML references removed assets', async ({ page }) => {
+        const swResponse = await page.request.get('/service-worker.js');
+        const swSource = await swResponse.text();
+        const versionMatch = /SW_CACHE_VERSION\s*=\s*'([^']+)'/.exec(swSource);
+        const currentVersion = versionMatch?.[1] ?? 'playwright';
+        const updatedSource = versionMatch
+            ? swSource.replace(versionMatch[0], `const SW_CACHE_VERSION = '${currentVersion}-stale'`)
+            : `${swSource}\n// updated for stale test`;
+
+        let serveUpdated = false;
+        const staleAssetPath = '/_astro/stale.css';
+        const staleScriptPath = '/_astro/stale.js';
+        const failedAssets: string[] = [];
+        const requestedAssets: string[] = [];
+
+        await page.route('**/service-worker.js', (route) => {
+            if (serveUpdated) {
+                serveUpdated = false;
+                route.fulfill({
+                    status: 200,
+                    contentType: 'application/javascript',
+                    body: updatedSource,
+                });
+                return;
+            }
+            route.continue();
+        });
+
+        await page.route(`**${staleAssetPath}`, (route) =>
+            route.fulfill({ status: 404, contentType: 'text/css', body: 'missing' })
+        );
+        await page.route(`**${staleScriptPath}`, (route) =>
+            route.fulfill({ status: 404, contentType: 'application/javascript', body: 'missing' })
+        );
+
+        page.on('response', (response) => {
+            const url = response.url();
+            if (url.includes(ASTRO_ASSET_PATH) && url.match(/\.(css|js)$/) && response.status() === 404) {
+                failedAssets.push(url);
+            }
+        });
+
+        page.on('request', (request) => {
+            const url = request.url();
+            if (url.includes(ASTRO_ASSET_PATH) && url.match(/\.(css|js)$/)) {
+                requestedAssets.push(url);
+            }
+        });
+
+        await page.goto('/');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
+
+        await page.evaluate(
+            async ({ cacheName, cssPath, jsPath }) => {
+                const cache = await caches.open(cacheName);
+                const html =
+                    `<!doctype html><html><head><link rel="stylesheet" href="${cssPath}" />` +
+                    `</head><body><main>cached</main><script type="module" src="${jsPath}"></script>` +
+                    '</body></html>';
+
+                await cache.put('/', new Response(html, { headers: { 'Content-Type': 'text/html' } }));
+            },
+            { cacheName: 'dspace-navigation', cssPath: staleAssetPath, jsPath: staleScriptPath }
+        );
+
+        serveUpdated = true;
+        await page.evaluate(async () => {
+            const registration = await navigator.serviceWorker.getRegistration();
+            await registration?.update();
+            window.location.reload();
+        });
+
+        await page.waitForNavigation({ waitUntil: 'networkidle' });
+        await waitForHydration(page);
+
+        const swReadyAfterUpdate = await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
+        expect(swReadyAfterUpdate.registered).toBe(true);
+        expect(swReadyAfterUpdate.controlled).toBe(true);
+
+        expect(failedAssets).toHaveLength(0);
+        expect(requestedAssets.some((url) => url.includes(staleAssetPath))).toBe(false);
+        expect(requestedAssets.some((url) => url.includes(staleScriptPath))).toBe(false);
+    });
+
     test('assets remain accessible during navigation with service worker enabled', async ({
         page,
     }) => {

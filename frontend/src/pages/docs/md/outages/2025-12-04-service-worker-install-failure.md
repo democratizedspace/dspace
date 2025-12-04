@@ -1,0 +1,6 @@
+slug: '2025-12-04-service-worker-install-failure'
+summary: 'SW install failed because precache included HTML routes that returned non-OK responses. New SW never activated; old SW served stale HTML referencing removed hashed assets, causing CSS/JS 404s.'
+impact: 'Users saw unstyled “rocket page” after deployments; dynamic imports broke; offlineToast path 404ed.'
+root_cause: 'Using cache.addAll on routes that were not safe to precache; HTML cached by old SW; offlineToast referenced via /src path.'
+resolution: 'Removed HTML from precache, rewrote install to be resilient, enforced network-first navigation, fixed offlineToast import, restored correct update flow.'
+lessons: 'Never precache HTML routes in Astro/Vite apps; install handlers must never throw; always use network-first HTML to avoid stale hashed assets.'

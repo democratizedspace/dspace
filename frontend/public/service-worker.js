@@ -10,14 +10,16 @@ const RUNTIME_PREFIX = 'dspace-runtime-v';
 const PRECACHE_NAME = `${PRECACHE_PREFIX}${SW_CACHE_VERSION}`;
 const RUNTIME_NAME = `${RUNTIME_PREFIX}${SW_CACHE_VERSION}`;
 const MAX_CACHE_HISTORY = 2;
+const NAVIGATION_CACHE_NAME = 'dspace-navigation';
+const NAVIGATION_FALLBACK = '/';
 
 // Keep config flags on a runtime, network-first path so updates flow without waiting for a cache
 // version bump. The install handler warms the runtime cache to support offline boots.
 const CONFIG_PATH = '/config.json';
-const PRECACHE_URLS = ['/', '/play', '/quests', '/settings'];
+const PRECACHE_URLS = [];
 const RUNTIME_MATCHERS = [/^\/quests\//, /^\/assets\//, /^\/docs\//, /^\/_astro\//];
-const NAVIGATION_FALLBACK = '/';
 const ASSET_EXTENSIONS = [/\.css(\?.*)?$/i, /\.js(\?.*)?$/i];
+let skipWaitingRequested = false;
 
 function extractCacheVersion(cacheName, prefix) {
     if (!cacheName.startsWith(prefix)) {
@@ -28,7 +30,7 @@ function extractCacheVersion(cacheName, prefix) {
 
 function prewarmConfigCache() {
     return caches.open(RUNTIME_NAME).then((cache) =>
-        fetch(new Request(CONFIG_PATH, { cache: 'reload' }))
+        fetch(new Request(CONFIG_PATH, { cache: 'no-store' }))
             .then((response) => {
                 if (response.ok) {
                     cache.put(CONFIG_PATH, response.clone());
@@ -42,15 +44,29 @@ function prewarmConfigCache() {
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches
-            .open(PRECACHE_NAME)
-            .then((cache) =>
-                cache.addAll(PRECACHE_URLS.map((url) => new Request(url, { cache: 'reload' })))
-            )
-            .catch((error) => {
+        (async () => {
+            try {
+                const cache = await caches.open(PRECACHE_NAME);
+                for (const url of PRECACHE_URLS) {
+                    try {
+                        const response = await fetch(url, { cache: 'no-store' });
+                        if (response.ok) {
+                            await cache.put(url, response.clone());
+                        }
+                    } catch (error) {
+                        console.warn('Skipping precache entry due to fetch error:', url, error);
+                    }
+                }
+            } catch (error) {
                 console.warn('Service worker precache failed:', error);
-            })
-            .then(() => prewarmConfigCache())
+            }
+
+            try {
+                await prewarmConfigCache();
+            } catch (error) {
+                console.warn('Service worker config prewarm failed:', error);
+            }
+        })()
     );
 });
 
@@ -94,7 +110,12 @@ self.addEventListener('activate', (event) => {
                     })
                 );
             })
-            .then(() => self.clients.claim())
+            .then(() => {
+                if (skipWaitingRequested) {
+                    return self.clients.claim();
+                }
+                return undefined;
+            })
     );
 });
 
@@ -104,7 +125,8 @@ self.addEventListener('message', (event) => {
     }
 
     if (event.data.type === 'SKIP_WAITING') {
-        event.waitUntil(self.skipWaiting().then(() => self.clients.claim()));
+        skipWaitingRequested = true;
+        event.waitUntil(self.skipWaiting());
     }
 });
 
@@ -128,13 +150,17 @@ function handleConfigFetch(request) {
                 }
                 return response;
             })
-            .catch(() => cache.match(CONFIG_PATH).then((cached) => cached || caches.match('/')))
+            .catch(() =>
+                cache
+                    .match(CONFIG_PATH)
+                    .then((cached) => cached || caches.match('/') || Response.error())
+            )
     );
 }
 
 function handleNavigation(request) {
-    return caches.open(PRECACHE_NAME).then((cache) =>
-        fetch(request)
+    return caches.open(NAVIGATION_CACHE_NAME).then((cache) =>
+        fetch(request.url, { cache: 'no-store' })
             .then((response) => {
                 if (response && response.ok) {
                     cache.put(request, response.clone());
@@ -142,7 +168,9 @@ function handleNavigation(request) {
                 return response;
             })
             .catch(() =>
-                cache.match(request).then((cached) => cached || cache.match(NAVIGATION_FALLBACK))
+                cache
+                    .match(request)
+                    .then((cached) => cached || cache.match(NAVIGATION_FALLBACK) || Response.error())
             )
     );
 }
@@ -186,13 +214,15 @@ function handleRuntimeRequest(request) {
         cache.match(request).then((cachedResponse) =>
             fetch(request)
                 .then((response) => {
-                    if (response && response.ok) {
+                    const contentType = response.headers.get('content-type') || '';
+
+                    if (response && response.ok && !contentType.includes('text/html')) {
                         cache.put(request, response.clone());
                         return response;
                     }
                     return cachedResponse || response;
                 })
-                .catch(() => cachedResponse || caches.match(NAVIGATION_FALLBACK))
+                .catch(() => cachedResponse || Response.error())
         )
     );
 }
