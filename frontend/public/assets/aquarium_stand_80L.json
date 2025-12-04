@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/aquarium_stand_80L.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "aquarium stand (80 L)",
+    "item_id": "98609b23-4811-4275-8d83-ad59a2797753",
+    "entity_type": "item",
+    "prompt": "A sturdy, modern aquarium stand sized for an 80-liter tank, shown as the main subject with a clean empty glass tank or glass outline on top, optional storage shelf or doors below for equipment, designed to look practical but stylish enough for a compact futuristic habitat.\n\nUltra-detailed, photorealistic 512×512 product-style image inside a 2040s Pacific floating-city habitat: smooth composite flooring with soft reflections, curved wall panels, integrated cyan and magenta LED accent strips, smart glass surfaces and a few minimalistic storage pods or drawers, subtle holographic indicators on a nearby wall console, environment clean and uncluttered, background slightly blurred, no people, no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

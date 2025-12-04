@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/walstad.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Heated Walstad aquarium with guppies (80 L, 26°C)",
+    "item_id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+    "entity_type": "item",
+    "prompt": "A heated 80-liter Walstad planted aquarium filled with lush green plants and a lively school of small tropical guppies (Poecilia reticulata), slim livebearer bodies only a few centimeters long, males with large colorful fan-shaped tails and spotted patterns, females slightly larger and plainer, gentle pearling on the leaves, rich soil capped with sand, discreet heater and thermometer on the back wall, water at 26°C, the tank feeling like a mature, thriving ecosystem, no goldfish, no round-bodied carp.\n\nUltra-detailed, photorealistic 512×512 image inside a 2040s Pacific floating-city habitat: curved white composite walls, integrated LED light strips in cyan and magenta, smart glass window panels with soft abstract reflections, sleek modular furniture with rounded corners, floating or recessed shelves with small plants and gadgets, subtle holographic UI glows and status icons on nearby surfaces, everything clean and clutter-free, background slightly blurred, no people, no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}
