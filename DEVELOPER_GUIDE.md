@@ -801,6 +801,20 @@ These lists are sortable and filterable according to the specific capabilities o
 
 Through real-world testing and debugging sessions, we've gathered valuable insights that can help new developers avoid common pitfalls.
 
+### Duplicate Image Detector CLI
+
+Use the duplicate image detector to find quests or inventory items that still share the same image
+asset (a v3 cleanup task). The tool runs locally and scans quest JSON under
+`frontend/src/pages/quests/json` and item JSON under `frontend/src/pages/inventory/json/items`.
+
+```
+python -m scripts.duplicate_images find-duplicate-images
+```
+
+The report lists each reused image URL, how many times it appears, and the quest or item entries
+that reference it. Treat the output as the backlog of image assets that still need unique
+replacements.
+
 ### Testing Environment Limitations
 
 #### Browser Capabilities in Test Environments
