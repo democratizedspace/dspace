@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/portable_solar_panel_200w_foldable.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "portable solar panel",
+    "item_id": "02b32152-a7b2-458e-9643-7b754c722165",
+    "entity_type": "item",
+    "prompt": "A foldable 200 W monocrystalline solar panel is fully unfolded on a low adjustable kickstand in bright sunlight, its dark-blue cells arranged in four hinged segments with visible but unobtrusive silver busbars. A pair of thick MC4 leads runs from a junction box on the back edge of the panel toward the foreground, ending in clearly recognizable MC4 connectors resting on the ground. The panel is set up on a small rooftop terrace or campsite pad with a backpack and stainless steel water bottle nearby for scale, emphasizing that this is a portable but serious power source that can deliver 20 V at up to 10 A.\n\nPhotorealistic 512×512 near-future solarpunk aesthetic with soft, natural daylight and clean, modern surroundings. The background shows a few planters, railings, and distant low-rise buildings or trees slightly out of focus, suggesting a sustainable urban homestead or eco-campsite. Colors are balanced and realistic, with no visible brand logos or readable text on the panel or connectors, and no faces in frame—only a partial glimpse of a person’s hands adjusting the kickstand. The composition is uncluttered and centered on the panel so it reads clearly as a portable 200 W solar module.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

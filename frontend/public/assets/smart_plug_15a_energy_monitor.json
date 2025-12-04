@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/smart_plug_15a_energy_monitor.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "smart plug",
+    "item_id": "a5395e29-1862-4eb7-8517-5d161635e032",
+    "entity_type": "item",
+    "prompt": "A compact white smart plug rated for 120 V AC up to 15 A is plugged into a standard wall outlet in a modern living room, with a space heater cord or electric kettle cord connected to its front-facing socket to suggest a substantial 1.8 kW load. The plug has a single subtle indicator LED and a small recessed button on the side, with a slightly thicker body than a basic adapter to hint at the embedded metering electronics. Nearby on a small side table, a smartphone displays a softly blurred app interface with a circular energy-usage gauge and a simple schedule timeline, making it clear this device tracks consumption and can be controlled remotely without any readable text.\n\nPhotorealistic 512×512 near-future interior with soft, warm lighting and a clean, slightly solarpunk aesthetic: light-colored walls, minimal decor, and perhaps a potted plant or two in the background. The smart plug and the outlet are framed prominently and sharply in focus, while furniture and decor are gently blurred to avoid distraction. No logos or explicit labels appear on the plug, outlet, or phone UI, and no faces are visible, only a partial view of a person’s hand near the phone. The image communicates everyday residential electrics upgraded with subtle, high-tech energy awareness and scheduling.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

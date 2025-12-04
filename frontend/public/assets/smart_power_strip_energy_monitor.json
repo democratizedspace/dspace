@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/smart_power_strip_energy_monitor.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "smart power strip",
+    "item_id": "7318a5ba-fac3-476e-a532-c813ed9b18e5",
+    "entity_type": "item",
+    "prompt": "A four-outlet smart power strip lies on a clean desktop next to a laptop and small desk lamp, its housing a smooth rectangular bar with four grounded AC sockets spaced evenly along the top and a short, thick power cord leading to a nearby wall outlet. A subtle row of tiny indicator LEDs near one end hints at per-outlet status and energy monitoring, and a recessed power button is visible on the side. A smartphone on the desk shows a blurred interface with simple colored graphs and on/off tiles, clearly implying scheduling and real-time energy-use monitoring for devices plugged into the strip without showing any readable text.\n\nPhotorealistic 512×512 near-future home-office aesthetic with soft, indirect lighting and a slightly solarpunk vibe: light wood desk, a small plant, and minimal clutter, with the smart power strip positioned as the main focus in the foreground. The background elements, like the laptop and lamp, are slightly out of focus to keep the viewer’s eye on the strip and its outlets. No brand logos or explicit labels are visible on the devices, and no faces are shown, only a partial view of a person’s hand reaching toward one of the outlets. The scene feels modern, efficient, and technologically mature, emphasizing networked energy-aware hardware in an everyday environment.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

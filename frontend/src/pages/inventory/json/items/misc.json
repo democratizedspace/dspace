@@ -68,7 +68,7 @@
         "name": "portable solar panel",
         "description": "Foldable 200 W monocrystalline panel with MC4 leads; outputs 20 V at 10A.",
         "price": "200 dUSD",
-        "image": "/assets/solar_setup_small.jpg",
+        "image": "/assets/portable_solar_panel_200w_foldable.jpg",
         "hardening": {
             "passes": 2,
             "score": 80,
@@ -155,7 +155,7 @@
         "name": "500 W wind turbine",
         "description": "500 W three-blade horizontal-axis wind turbine kit with integrated charge controller providing 24 V DC output.",
         "price": "700 dUSD",
-        "image": "/assets/turbine.jpg",
+        "image": "/assets/turbine_500w_rooftop_kit.jpg",
         "hardening": {
             "passes": 1,
             "score": 70,
@@ -306,7 +306,7 @@
         "id": "a5395e29-1862-4eb7-8517-5d161635e032",
         "name": "smart plug",
         "description": "Wi-Fi plug rated for 120 V AC loads up to 15 A (1.8 kW). Tracks energy use and schedules via app.",
-        "image": "/assets/smart_plug.jpg",
+        "image": "/assets/smart_plug_15a_energy_monitor.jpg",
         "price": "15 dUSD",
         "type": "tool",
         "hardening": {
@@ -326,7 +326,7 @@
         "id": "7318a5ba-fac3-476e-a532-c813ed9b18e5",
         "name": "smart power strip",
         "description": "Four-outlet WiFi strip that monitors energy use and schedules devices remotely.",
-        "image": "/assets/smart_plug.jpg",
+        "image": "/assets/smart_power_strip_energy_monitor.jpg",
         "price": "35 dUSD",
         "type": "tool",
         "hardening": {
@@ -540,7 +540,7 @@
         "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67",
         "name": "dWind",
         "description": "a token that represents 1 Watt of energy generated using a wind turbine.",
-        "image": "/assets/turbine.jpg",
+        "image": "/assets/dwind_wind_energy_token.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -771,14 +771,14 @@
         "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
         "name": "Solar setup (200 Wh)",
         "description": "A 200 W solar panel, charge controller, and 200 Wh battery pack in a weatherproof enclosure. Ready to use!",
-        "image": "/assets/solar_setup_small.jpg",
+        "image": "/assets/solar_setup_200wh_portable_kit.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
         "name": "Solar setup (1 kWh)",
         "description": "A 200 W solar panel, charge controller, and 1 kWh battery in a weatherproof enclosure. Ready to use!",
-        "image": "/assets/solar_setup_small.jpg",
+        "image": "/assets/solar_setup_1kwh_enclosure.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {

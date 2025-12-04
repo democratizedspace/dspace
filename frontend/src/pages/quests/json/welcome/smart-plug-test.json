@@ -10,7 +10,7 @@
             { "task": "codex-quest-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }
         ]
     },
-    "image": "/assets/smart_plug.jpg",
+    "image": "/assets/smart_plug_test_dwatt_kwh.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/solar_setup_200wh_portable_kit.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Solar setup (200 Wh)",
+    "item_id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+    "entity_type": "item",
+    "prompt": "A smaller, ultra-portable solar power kit is displayed on a wooden deck: a 200 W foldable monocrystalline panel is partially unfolded on its kickstand, with MC4 cables running into a compact weatherproof power box about the size of a thick lunchbox. The box has a sturdy carry handle on top, rubberized corners, DC input jacks from the panel, and discreet venting, clearly housing a charge controller and a 200 Wh battery pack inside. A phone, small LED lantern, and USB cable sit nearby to hint at typical loads, emphasizing that this 200 Wh system is ready to use for short-term off-grid power.\n\nPhotorealistic 512×512 near-future solarpunk style with soft afternoon sunlight and a cozy outdoor setting, such as a balcony or tiny-house porch with plants and railings in the background, blurred just enough to keep focus on the kit. The materials look tactile and believable, with matte plastics, brushed metal hardware, and realistic cabling, but with no visible brand logos or readable text on the devices. No faces are shown; only a partial view of a person’s hand reaching toward the power box’s ports. The scene feels clean, optimistic, and slightly high-tech, making the 200 Wh portable kit immediately recognizable as a smaller sibling to a full-scale rooftop system.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  
