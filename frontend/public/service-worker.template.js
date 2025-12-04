@@ -7,9 +7,10 @@ self.CACHE_VERSION = SW_CACHE_VERSION;
 
 const PRECACHE_PREFIX = 'dspace-precache-v';
 const RUNTIME_PREFIX = 'dspace-runtime-v';
+const NAVIGATION_PREFIX = 'dspace-pages-v';
 const PRECACHE_NAME = `${PRECACHE_PREFIX}${SW_CACHE_VERSION}`;
 const RUNTIME_NAME = `${RUNTIME_PREFIX}${SW_CACHE_VERSION}`;
-const NAVIGATION_CACHE = 'dspace-pages';
+const NAVIGATION_CACHE = `${NAVIGATION_PREFIX}${SW_CACHE_VERSION}`;
 const MAX_CACHE_HISTORY = 2;
 
 // Keep config flags on a runtime, network-first path so updates flow without waiting for a cache
@@ -84,7 +85,8 @@ self.addEventListener('activate', (event) => {
                 keys.forEach((key) => {
                     const version =
                         extractCacheVersion(key, PRECACHE_PREFIX) ||
-                        extractCacheVersion(key, RUNTIME_PREFIX);
+                        extractCacheVersion(key, RUNTIME_PREFIX) ||
+                        extractCacheVersion(key, NAVIGATION_PREFIX);
                     if (version) {
                         versions.add(version);
                     }
@@ -98,13 +100,15 @@ self.addEventListener('activate', (event) => {
                         const isPrecache = key.startsWith(PRECACHE_PREFIX);
                         const isRuntime = key.startsWith(RUNTIME_PREFIX);
 
-                        if (!isPrecache && !isRuntime) {
+                        if (!isPrecache && !isRuntime && !key.startsWith(NAVIGATION_PREFIX)) {
                             return Promise.resolve(false);
                         }
 
                         const version = isPrecache
                             ? extractCacheVersion(key, PRECACHE_PREFIX)
-                            : extractCacheVersion(key, RUNTIME_PREFIX);
+                            : isRuntime
+                              ? extractCacheVersion(key, RUNTIME_PREFIX)
+                              : extractCacheVersion(key, NAVIGATION_PREFIX);
 
                         if (version && keepVersions.has(version)) {
                             return Promise.resolve(false);
@@ -114,10 +118,16 @@ self.addEventListener('activate', (event) => {
                     })
                 );
             })
-            .then(() => {
+            .then(async () => {
                 if (skipWaitingRequested) {
                     return self.clients.claim();
                 }
+
+                const clientList = await self.clients.matchAll();
+                if (clientList.length === 0) {
+                    return self.clients.claim();
+                }
+
                 return false;
             })
     );
@@ -186,31 +196,46 @@ function isStaticAsset(pathname) {
 }
 
 function cacheFirstAsset(request) {
-    return caches.match(request).then((crossCacheMatch) =>
-        caches.open(RUNTIME_NAME).then((cache) =>
-            cache.match(request).then((cachedResponse) => {
-                const cached = cachedResponse || crossCacheMatch;
-                const networkFetch = fetch(request)
-                    .then((response) => {
-                        if (response.ok) {
-                            cache.put(request, response.clone());
-                            return response;
-                        }
-                        if (cached) {
-                            return cached;
-                        }
+    return caches.open(RUNTIME_NAME).then((cache) =>
+        cache.match(request).then((cachedResponse) => {
+            const cached = cachedResponse;
+            const networkFetch = fetch(request)
+                .then((response) => {
+                    if (response.ok) {
+                        cache.put(request, response.clone());
                         return response;
-                    })
-                    .catch(() => cached || Response.error());
+                    }
+                    if (cached) {
+                        return cached;
+                    }
+                    return response;
+                })
+                .catch(() => cached || Response.error());
 
-                if (cached) {
-                    networkFetch.catch(() => {});
-                    return cached;
+            if (cached) {
+                networkFetch.catch(() => {});
+                return cached;
+            }
+
+            return networkFetch;
+        })
+    );
+}
+
+function handlePrecachedAsset(request) {
+    return caches.open(PRECACHE_NAME).then((cache) =>
+        cache.match(request).then((cachedResponse) => {
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+
+            return fetch(request).then((response) => {
+                if (response.ok) {
+                    cache.put(request, response.clone());
                 }
-
-                return networkFetch;
-            })
-        )
+                return response;
+            });
+        })
     );
 }
 
@@ -242,12 +267,12 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
-        event.respondWith(handleNavigation(request));
+    if (PRECACHE_URLS.includes(url.pathname)) {
+        event.respondWith(handlePrecachedAsset(request));
         return;
     }
 
-    if (PRECACHE_URLS.includes(url.pathname)) {
+    if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
         event.respondWith(handleNavigation(request));
         return;
     }

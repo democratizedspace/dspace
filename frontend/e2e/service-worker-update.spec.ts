@@ -339,7 +339,7 @@ test.describe('Service Worker Update', () => {
             ? swSource.replace(versionMatch[0], `const SW_CACHE_VERSION = '${nextVersion}'`)
             : `${swSource}\n// deploy simulation`;
 
-        let serveUpdated = true;
+        let serveUpdated = false;
         await page.route('**/service-worker.js', (route) => {
             if (serveUpdated) {
                 serveUpdated = false;
@@ -368,7 +368,7 @@ test.describe('Service Worker Update', () => {
             const results = await Promise.all(
                 urls.map(async (url) => {
                     try {
-                        const response = await fetch(url, { cache: 'no-store' });
+                        const response = await fetch(url);
                         return { url, status: response.status, ok: response.ok };
                     } catch (error) {
                         return { url, status: 0, ok: false, error: String(error) };

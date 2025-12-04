@@ -87,8 +87,7 @@ describe('service worker install resilience', () => {
         };
 
         const fetch = async (input: string | FakeRequest) => {
-            const urlValue = typeof input === 'string' ? input : input.url ?? String(input);
-            const url = String(urlValue);
+            const url = typeof input === 'string' ? input : input.url ?? String(input);
 
             fetchLog.push(url);
             if (url.includes('manifest') || url.includes('favicon') || url.includes('logo.png')) {
@@ -135,7 +134,7 @@ describe('service worker install resilience', () => {
         installHandlers?.forEach((handler) =>
             handler({
                 waitUntil(promise: Promise<unknown>) {
-                    waitUntilPromises.push(Promise.resolve(promise));
+                    waitUntilPromises.push(promise);
                 },
             })
         );
