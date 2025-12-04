@@ -99,13 +99,15 @@ self.addEventListener('activate', (event) => {
                 self.clients
                     .claim()
                     .then(() =>
-                        self.clients.matchAll({ type: 'window' }).then((clients) =>
-                            Promise.all(
-                                clients.map((client) =>
-                                    client.postMessage({ type: 'DS_FORCE_RELOAD' })
+                        self.clients
+                            .matchAll({ type: 'window' })
+                            .then((clients) =>
+                                Promise.all(
+                                    clients.map((client) =>
+                                        client.postMessage({ type: 'DS_FORCE_RELOAD' })
+                                    )
                                 )
                             )
-                        )
                     )
             )
     );
@@ -119,16 +121,19 @@ self.addEventListener('message', (event) => {
     if (event.data.type === 'SKIP_WAITING') {
         skipWaitingRequested = true;
         event.waitUntil(
-            self.skipWaiting()
+            self
+                .skipWaiting()
                 .then(() => self.clients.claim())
                 .then(() =>
-                    self.clients.matchAll({ type: 'window' }).then((clients) =>
-                        Promise.all(
-                            clients.map((client) =>
-                                client.postMessage({ type: 'DS_FORCE_RELOAD' })
+                    self.clients
+                        .matchAll({ type: 'window' })
+                        .then((clients) =>
+                            Promise.all(
+                                clients.map((client) =>
+                                    client.postMessage({ type: 'DS_FORCE_RELOAD' })
+                                )
                             )
                         )
-                    )
                 )
         );
     }
