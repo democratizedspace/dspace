@@ -9,15 +9,17 @@ const PRECACHE_PREFIX = 'dspace-precache-v';
 const RUNTIME_PREFIX = 'dspace-runtime-v';
 const PRECACHE_NAME = `${PRECACHE_PREFIX}${SW_CACHE_VERSION}`;
 const RUNTIME_NAME = `${RUNTIME_PREFIX}${SW_CACHE_VERSION}`;
+const NAVIGATION_CACHE = 'dspace-pages';
 const MAX_CACHE_HISTORY = 2;
 
 // Keep config flags on a runtime, network-first path so updates flow without waiting for a cache
 // version bump. The install handler warms the runtime cache to support offline boots.
 const CONFIG_PATH = '/config.json';
-const PRECACHE_URLS = ['/', '/play', '/quests', '/settings'];
+const PRECACHE_URLS = ['/manifest.webmanifest', '/favicon.ico', '/assets/logo.png'];
 const RUNTIME_MATCHERS = [/^\/quests\//, /^\/assets\//, /^\/docs\//, /^\/_astro\//];
 const NAVIGATION_FALLBACK = '/';
 const ASSET_EXTENSIONS = [/\.css(\?.*)?$/i, /\.js(\?.*)?$/i];
+let skipWaitingRequested = false;
 
 function extractCacheVersion(cacheName, prefix) {
     if (!cacheName.startsWith(prefix)) {
@@ -28,7 +30,7 @@ function extractCacheVersion(cacheName, prefix) {
 
 function prewarmConfigCache() {
     return caches.open(RUNTIME_NAME).then((cache) =>
-        fetch(new Request(CONFIG_PATH, { cache: 'reload' }))
+        fetch(new Request(CONFIG_PATH, { cache: 'no-store' }))
             .then((response) => {
                 if (response.ok) {
                     cache.put(CONFIG_PATH, response.clone());
@@ -40,17 +42,35 @@ function prewarmConfigCache() {
     );
 }
 
+async function safePrecache(cache, urls) {
+    for (const url of urls) {
+        try {
+            const response = await fetch(url, { cache: 'no-store' });
+            if (response?.ok) {
+                await cache.put(url, response.clone());
+            }
+        } catch (error) {
+            console.warn('Skipping precache entry due to fetch failure:', url, error);
+        }
+    }
+}
+
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches
-            .open(PRECACHE_NAME)
-            .then((cache) =>
-                cache.addAll(PRECACHE_URLS.map((url) => new Request(url, { cache: 'reload' })))
-            )
-            .catch((error) => {
+        (async () => {
+            try {
+                const cache = await caches.open(PRECACHE_NAME);
+                await safePrecache(cache, PRECACHE_URLS);
+            } catch (error) {
                 console.warn('Service worker precache failed:', error);
-            })
-            .then(() => prewarmConfigCache())
+            }
+
+            try {
+                await prewarmConfigCache();
+            } catch (error) {
+                console.warn('Service worker config prewarm failed:', error);
+            }
+        })()
     );
 });
 
@@ -94,7 +114,12 @@ self.addEventListener('activate', (event) => {
                     })
                 );
             })
-            .then(() => self.clients.claim())
+            .then(() => {
+                if (skipWaitingRequested) {
+                    return self.clients.claim();
+                }
+                return false;
+            })
     );
 });
 
@@ -104,7 +129,8 @@ self.addEventListener('message', (event) => {
     }
 
     if (event.data.type === 'SKIP_WAITING') {
-        event.waitUntil(self.skipWaiting().then(() => self.clients.claim()));
+        skipWaitingRequested = true;
+        event.waitUntil(self.skipWaiting());
     }
 });
 
@@ -121,7 +147,7 @@ function shouldHandleRequest(request) {
 
 function handleConfigFetch(request) {
     return caches.open(RUNTIME_NAME).then((cache) =>
-        fetch(request)
+        fetch(request, { cache: 'no-store' })
             .then((response) => {
                 if (response.ok) {
                     cache.put(CONFIG_PATH, response.clone());
@@ -133,8 +159,9 @@ function handleConfigFetch(request) {
 }
 
 function handleNavigation(request) {
-    return caches.open(PRECACHE_NAME).then((cache) =>
-        fetch(request)
+    const navigationRequest = new Request(request, { cache: 'no-store' });
+    return caches.open(NAVIGATION_CACHE).then((cache) =>
+        fetch(navigationRequest)
             .then((response) => {
                 if (response && response.ok) {
                     cache.put(request, response.clone());
@@ -142,7 +169,10 @@ function handleNavigation(request) {
                 return response;
             })
             .catch(() =>
-                cache.match(request).then((cached) => cached || cache.match(NAVIGATION_FALLBACK))
+                cache
+                    .match(request)
+                    .then((cached) => cached || cache.match(NAVIGATION_FALLBACK))
+                    .then((fallback) => fallback || Response.error())
             )
     );
 }
@@ -156,28 +186,31 @@ function isStaticAsset(pathname) {
 }
 
 function cacheFirstAsset(request) {
-    return caches.open(RUNTIME_NAME).then((cache) =>
-        cache.match(request).then((cachedResponse) => {
-            const networkFetch = fetch(request)
-                .then((response) => {
-                    if (response.ok) {
-                        cache.put(request, response.clone());
+    return caches.match(request).then((crossCacheMatch) =>
+        caches.open(RUNTIME_NAME).then((cache) =>
+            cache.match(request).then((cachedResponse) => {
+                const cached = cachedResponse || crossCacheMatch;
+                const networkFetch = fetch(request)
+                    .then((response) => {
+                        if (response.ok) {
+                            cache.put(request, response.clone());
+                            return response;
+                        }
+                        if (cached) {
+                            return cached;
+                        }
                         return response;
-                    }
-                    if (cachedResponse) {
-                        return cachedResponse;
-                    }
-                    return response;
-                })
-                .catch(() => cachedResponse || Response.error());
+                    })
+                    .catch(() => cached || Response.error());
 
-            if (cachedResponse) {
-                networkFetch.catch(() => {});
-                return cachedResponse;
-            }
+                if (cached) {
+                    networkFetch.catch(() => {});
+                    return cached;
+                }
 
-            return networkFetch;
-        })
+                return networkFetch;
+            })
+        )
     );
 }
 

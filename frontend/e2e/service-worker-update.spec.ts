@@ -293,4 +293,94 @@ test.describe('Service Worker Update', () => {
 
         expect(failed404s.length).toBe(0);
     });
+
+    test('recovers when old asset URLs are removed during deploy', async ({ page }) => {
+        await page.goto('/');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        let swState = await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
+        if (!swState.controlled) {
+            await page.reload({ waitUntil: 'networkidle' });
+            await waitForHydration(page);
+            swState = await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
+        }
+
+        expect(swState.registered).toBe(true);
+        expect(swState.controlled).toBe(true);
+
+        const assetUrls = await page.evaluate(() => {
+            const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+                .map((link) => (link as HTMLLinkElement).href)
+                .filter((href) => href.includes('/_astro/'));
+            const scripts = Array.from(document.querySelectorAll('script[type="module"][src]'))
+                .map((script) => (script as HTMLScriptElement).src)
+                .filter((src) => src.includes('/_astro/'));
+
+            return Array.from(new Set([...styles, ...scripts]));
+        });
+
+        expect(assetUrls.length).toBeGreaterThan(0);
+
+        const blockedAssets = new Set(assetUrls);
+
+        await page.route(
+            (routeUrl) => blockedAssets.has(routeUrl.toString()),
+            (route) => {
+                route.fulfill({ status: 404, contentType: 'text/plain', body: 'missing' });
+            }
+        );
+
+        const swResponse = await page.request.get('/service-worker.js');
+        const swSource = await swResponse.text();
+        const versionMatch = /SW_CACHE_VERSION\s*=\s*'([^']+)'/.exec(swSource);
+        const nextVersion = `${versionMatch?.[1] ?? 'playwright'}-deploy`;
+        const updatedSource = versionMatch
+            ? swSource.replace(versionMatch[0], `const SW_CACHE_VERSION = '${nextVersion}'`)
+            : `${swSource}\n// deploy simulation`;
+
+        let serveUpdated = true;
+        await page.route('**/service-worker.js', (route) => {
+            if (serveUpdated) {
+                serveUpdated = false;
+                route.fulfill({
+                    status: 200,
+                    contentType: 'application/javascript',
+                    body: updatedSource,
+                });
+                return;
+            }
+            route.continue();
+        });
+
+        await page.evaluate(async () => {
+            const registration = await navigator.serviceWorker.getRegistration();
+            await registration?.update();
+        });
+
+        await page.reload({ waitUntil: 'networkidle' });
+        await waitForHydration(page);
+
+        const updatedState = await waitForServiceWorkerReady(page, SW_REGISTRATION_TIMEOUT_MS);
+        expect(updatedState.controlled).toBe(true);
+
+        const assetStatuses = await page.evaluate(async (urls) => {
+            const results = await Promise.all(
+                urls.map(async (url) => {
+                    try {
+                        const response = await fetch(url, { cache: 'no-store' });
+                        return { url, status: response.status, ok: response.ok };
+                    } catch (error) {
+                        return { url, status: 0, ok: false, error: String(error) };
+                    }
+                })
+            );
+
+            return results;
+        }, assetUrls);
+
+        const failedAssets = assetStatuses.filter((asset) => !asset.ok);
+
+        expect(failedAssets).toEqual([]);
+    });
 });
