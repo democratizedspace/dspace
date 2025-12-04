@@ -8,27 +8,20 @@ conversational: true
 Type: evergreen
 
 NOTE: You can paste the fenced prompt below directly into an LLM chat.
-
-```text
 Nested examples use `~~~` fences instead of ``` so they do not close the main block.
 
-Use this prompt to generate new image assets and metadata for DSPACE v3 when the
-duplicate-image CLI reports that the same image path is used by multiple quests or items.
-
-Workflow
-1. Run the duplicate detector from the DSPACE repo root:
-   ~~~bash
+Before using the prompt, generate duplicate-image snippets locally from the DSPACE repo root:
+1. Run the detector:
+   ```bash
    python -m scripts.duplicate_images find-duplicate-images
-   ~~~
-2. Copy one duplicate block from the output, for example:
-   ~~~text
-   /assets/turbine.jpg (2 uses)
-     - frontend/src/pages/inventory/json/items/misc.json :: 500 W wind turbine - 743681a7-d2e7-465c-af07-43665079bf4d [item]
-     - frontend/src/pages/inventory/json/items/misc.json :: dWind - d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67 [item]
-   ~~~
-3. Paste that block at the end of this prompt and let the LLM generate a new image filename,
-generation prompt, and JSON manifest for each listed quest or item. Follow these rules
-carefully.
+   ```
+2. Copy one duplicate block from the output (one image path and its bullet list of entities).
+3. Paste that single block **after** the fenced prompt below when chatting with the LLM.
+4. After the LLM returns new assets for that block, paste the next block to process another batch.
+
+```text
+Use this prompt to generate new image assets and metadata for DSPACE v3 when the user pastes a
+duplicate block after this message.
 
 Responsibilities
 - For each bullet line under the shared image path, propose a new, descriptive image filename
