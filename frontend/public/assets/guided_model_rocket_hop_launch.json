@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/guided_model_rocket_hop_launch.jpg",
+    "entity": "frontend/src/pages/quests/json/rocketry/suborbital-hop.json",
+    "item_name": "Guided Model Rocket Hop",
+    "item_id": "rocketry/suborbital-hop",
+    "entity_type": "quest",
+    "prompt": "A servo-stabilized model rocket, printed entirely from solid green PLA, is captured just as it lifts off from a small launch pad, bright exhaust plume pushing downward as the slender 35 cm, 25 mm diameter airframe climbs almost straight up. The pointed green nose cone, cylindrical green body, and green fins are clearly visible, with a slightly glossy 3D-printed surface that catches the light and a compact guidance fincan at the base. The rocket is shown only a short distance above the pad—well within the first few meters of flight—so its attitude is nearly vertical, with only the slightest natural tilt, emphasizing a realistic early boost phase instead of a dramatic sideways angle.\n\nThe scene takes place at a dedicated near-future launch range in a solarpunk 2040s environment: a tidy concrete pad surrounded by low grass, a short launch rail or rod visible behind the rocket, distant safety barriers, and soft blue sky with a few clouds. Photorealistic 512×512 composition with subtle motion blur on the exhaust plume while keeping the small rocket itself sharp. The scale of the rocket is clearly model-sized compared to nearby ground equipment, such as a compact tripod camera or small toolbox near the pad. Colors are clean and optimistic, dominated by the vivid green of the PLA rocket against neutral ground and soft natural tones in the background, with no brand logos, readable text, or people fully in frame.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

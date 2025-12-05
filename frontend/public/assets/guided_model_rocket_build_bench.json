@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/guided_model_rocket_build_bench.jpg",
+    "entity": "frontend/src/pages/quests/json/rocketry/guided-rocket-build.json",
+    "item_name": "Build a Guided Model Rocket",
+    "item_id": "rocketry/guided-rocket-build",
+    "entity_type": "quest",
+    "prompt": "A bright workbench scene shows the components of a guided model rocket mid-build: a 3D-printed servo-ready fincan, a slim 25 mm body tube section, and an avionics sled, all printed from solid green PLA so the plastic parts share the same clean, uniform green color. The green avionics sled and fincan are designed to fit cleanly inside the rocket, so the sled is no wider than the body tube—its width clearly equal to or slightly smaller than the tube’s diameter, with servos and electronics tucked within that footprint instead of sticking out to the sides. Two or three miniature servos with control horns are wired to the fincan, and thin wires and micro connectors are laid out in an organized way, with a compact screwdriver and wire stripper nearby. A partially assembled rocket with matching green printed sections sits in the background, and a small action camera module or nose cone housing rests off to one side, clearly meant to ride at the top of the stack.\n\nThe setting is a near-future solarpunk rocketry workshop, with soft, even lighting from overhead panels and a neutral work surface that makes the green printed parts stand out. Photorealistic 512×512 image with a slightly angled top-down perspective so the build flow from green fincan to green, body-tube-width avionics sled to nose payload is visually obvious. In the blurred background, a thin laptop or tablet displays abstract diagrams or code blocks without readable text, reinforcing the programming aspect of the quest. No brand logos, no legible writing, and only partial hints of hands or arms if included, keeping the focus on the guided rocket build process itself and the realistic, flight-ready proportions of the green 3D-printed components.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

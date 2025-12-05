@@ -2,7 +2,7 @@
     "id": "rocketry/suborbital-hop",
     "title": "Guided Model Rocket Hop",
     "description": "Run the guided hop simulator, prep the range, and fly a servo-stabilized model rocket with onboard video.",
-    "image": "/assets/rocket_parachute.jpg",
+    "image": "/assets/guided_model_rocket_hop_launch.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

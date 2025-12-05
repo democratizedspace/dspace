@@ -2,7 +2,7 @@
     "id": "rocketry/guided-rocket-build",
     "title": "Build a Guided Model Rocket",
     "description": "Print a servo-ready fincan, assemble the avionics, and program guidance for a camera-equipped hop.",
-    "image": "/assets/rocket_parachute.jpg",
+    "image": "/assets/guided_model_rocket_build_bench.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

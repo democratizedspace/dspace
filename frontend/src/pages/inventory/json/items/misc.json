@@ -567,7 +567,7 @@
         "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
         "name": "parachute harness kit",
         "description": "30 cm Kevlar shock cord with nylon harness and steel swivel clips for attaching a model rocket body to its parachute; ~10 g.",
-        "image": "/assets/rocket_parachute.jpg",
+        "image": "/assets/model_rocket_parachut_harness_kit.jpg",
         "price": "5 dUSD",
         "unit": "each",
         "hardening": {
@@ -583,7 +583,7 @@
         "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
         "name": "launch-capable model rocket (parachute)",
         "description": "35 cm tall, 25 mm body tube rocket with single-use B6-4 motor, flame-resistant wadding and a 30 cm nylon parachute pre-installed; ~70 g launch weight. Baseline airframe for guidance upgrades.",
-        "image": "/assets/rocket_parachute.jpg",
+        "image": "/assets/model_rocket_parachute_airframe.jpg",
         "price": "25 dUSD",
         "unit": "each",
         "hardening": {
@@ -635,7 +635,7 @@
         "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
         "name": "guided flight stack",
         "description": "Assembled fincan, avionics sled, servos, and Arduino wired for closed-loop fin steering.",
-        "image": "/assets/rocket_parachute.jpg",
+        "image": "/assets/guided_flight_avionics_stack.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {

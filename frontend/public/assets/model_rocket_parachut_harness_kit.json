@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/model_rocket_parachute_harness_kit.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "parachute harness kit",
+    "item_id": "84324403-0bd8-411a-b575-a3c966c8a73e",
+    "entity_type": "item",
+    "prompt": "A compact model rocket parachute harness kit laid out neatly on a light-gray work mat: a thin, braided Kevlar shock cord about 30 cm long coiled in a tidy loop, with its ends securely knotted to small steel swivel clips and a short nylon loop that would anchor inside the rocket body. The cord looks like rugged braided string rather than a flat fabric strap, with a slightly textured surface and narrow diameter that clearly reads as lightweight but very strong. In the softly blurred background, the tail end of a small model rocket and a folded nylon parachute hint at how this kit will be used without drawing attention away from the Kevlar harness components.\n\nNear-future rocketry workbench in a solarpunk 2040s setting, with soft overhead lighting and a clean, organized layout. Photorealistic 512×512 image, slightly top-down perspective so the thin Kevlar cord, knots, and swivel clips are clearly visible and readable as a complete connection system, with subtle reflections on the metal hardware. Colors are muted and practical—grays, off-whites, natural yellow-beige Kevlar, and a hint of safety orange or red on one clip—without brand logos, printed text, or clutter, creating a calm, technical vibe suitable for an inventory icon focused on the cord-based harness.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/guided_flight_avionics_stack.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "guided flight stack",
+    "item_id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+    "entity_type": "item",
+    "prompt": "An assembled guided flight stack for a model rocket rests on an anti-static mat: a 3D-printed fincan with four stubby fins and tiny servo housings, an avionics sled holding a slim Arduino-style microcontroller, and compact servos connected with neatly routed wires and micro connectors. The components are bolted together into a single integrated module, with the fincan at one end and the electronics sled riding just above it, clearly showing how this unit would slide into a 25 mm body tube. Nearby on the mat are a few spare screws and a small hex driver, reinforcing that this is a ready-to-install guided fin stack.\n\nThe scene is a near-future hobby rocketry lab with a clean, high-tech aesthetic: soft, cool-white overhead lighting, a neutral work surface, and blurred hints of other rockets and tools on shelves behind. Photorealistic 512×512 image with a three-quarter perspective that emphasizes depth and structure of the guided flight stack, while keeping the background understated. The style is crisp and technical with subtle splashes of color in the wiring and plastic parts, no visible brand names or on-screen code, and no people in frame so the module reads clearly as a focused, upgradeable guidance component.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

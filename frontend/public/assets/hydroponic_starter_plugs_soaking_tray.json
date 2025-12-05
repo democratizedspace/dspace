@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/hydroponic_starter_plugs_soaking_tray.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/plug-soak.json",
+    "item_name": "Soak Starter Plugs",
+    "item_id": "hydroponics/plug-soak",
+    "entity_type": "quest",
+    "prompt": "A shallow tray on a workbench is filled with multiple rockwool starter plugs arranged in a neat grid, all partially submerged in clear water as they soak. Every cube is the same pale beige color typical of rockwool, with only subtle darkening near the base where the water has been absorbed, making them look uniformly hydrated rather than dyed or multicolored. A pair of gloved hands is visible from the side, gently pressing one plug down into the tray, and in the softly blurred background there are hints of tubing, nutrient bottles, and a small hydroponic seedling rack, visually reinforcing that this is the preparation step for a hydroponic grow system.\n\nClean, near-future hydroponics lab in a solarpunk 2040s setting, with soft, cinematic overhead lighting that creates gentle highlights on the water surface and the tops of the plugs. Photorealistic 512×512 image with a slightly elevated camera angle so the soaking tray reads clearly as the central quest action, while background equipment is understated and out of focus. Colors are natural and calming—monochrome beige plugs with subtle wet-versus-dry shading, neutral surfaces, and soft greens in the distance—with no visible logos, written labels, or brand text, and only the hands and forearms of the person shown to keep the scene anonymous yet human.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  
