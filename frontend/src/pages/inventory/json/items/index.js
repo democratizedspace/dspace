@@ -1,8 +1,9 @@
-import aquarium from './aquarium.json' assert { type: 'json' };
-import awards from './awards.json' assert { type: 'json' };
-import hydroponics from './hydroponics.json' assert { type: 'json' };
-import tools from './tools.json' assert { type: 'json' };
-import misc from './misc.json' assert { type: 'json' };
+// Import JSON files directly - Vite handles JSON imports natively without assertions
+import aquarium from './aquarium.json';
+import awards from './awards.json';
+import hydroponics from './hydroponics.json';
+import tools from './tools.json';
+import misc from './misc.json';
 
 const withCategory = (items, category) => items.map((item) => ({ ...item, category }));
 
