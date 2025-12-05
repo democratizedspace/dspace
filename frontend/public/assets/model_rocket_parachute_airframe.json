@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/model_rocket_parachute_airframe.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "launch-capable model rocket (parachute)",
+    "item_id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+    "entity_type": "item",
+    "prompt": "A slender 35 cm tall model rocket with a 25 mm body tube stands on a small launch pad, its entire airframe a solid, uniform green as if it were 3D-printed from glossy green PLA. The pointed nose cone, cylindrical body, and clean fins are all the same consistent shade of green, with only subtle variations from highlights and shadows, and a small nozzle for a single-use B6-4 motor is visible at the base. A few squares of flame-resistant wadding and a loosely coiled parachute shroud line sit beside the pad, hinting that a 30 cm nylon parachute is packed inside the rocket.\n\nThe environment is an outdoor but controlled launch area in a near-future solarpunk setting: a flat concrete pad or compact launch rail surrounded by grass and distant trees, with soft afternoon light and a calm sky. Photorealistic 512×512 image framed to keep the rocket centered and crisp while the background is gently blurred, emphasizing this as a baseline, ready-to-fly airframe. Colors are clean and optimistic, dominated by the solid green of the printed rocket with neutral tones in the surroundings, no visible logos or printed text, and no people fully in frame—perhaps only a gloved hand or edge of a tool entering from one side to suggest preflight checks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}
