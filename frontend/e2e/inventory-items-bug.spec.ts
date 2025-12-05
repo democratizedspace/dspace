@@ -72,7 +72,9 @@ test.describe('Inventory Items Display - Bug Fix Verification', () => {
         await expect(itemCards.first()).toBeVisible({ timeout: 5000 });
 
         // Find the search input
-        const searchInput = page.locator('input[type="search"], input[placeholder*="Search"]').first();
+        const searchInput = page
+            .locator('input[type="search"], input[placeholder*="Search"]')
+            .first();
         await expect(searchInput).toBeVisible();
 
         // Search for "aquarium"
