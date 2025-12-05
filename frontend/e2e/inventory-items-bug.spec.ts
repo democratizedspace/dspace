@@ -24,7 +24,7 @@ test.describe('Inventory Items Display - Bug Fix Verification', () => {
         // Wait for items to appear after checkbox is checked
         const itemCards = page.locator('.item');
         await expect(itemCards.first()).toBeVisible({ timeout: 5000 });
-        
+
         // Count visible items
         const count = await itemCards.count();
         expect(count).toBeGreaterThan(0);
@@ -48,7 +48,7 @@ test.describe('Inventory Items Display - Bug Fix Verification', () => {
         // No item cards should be visible when checkbox is unchecked and inventory is empty
         const itemCards = page.locator('.item');
         const count = await itemCards.count();
-        
+
         // This is expected - user has no items in their inventory
         expect(count).toBe(0);
     });
@@ -74,14 +74,14 @@ test.describe('Inventory Items Display - Bug Fix Verification', () => {
         // Find the search input
         const searchInput = page.locator('input[type="search"], input[placeholder*="Search"]').first();
         await expect(searchInput).toBeVisible();
-        
+
         // Search for "aquarium"
         await searchInput.fill('aquarium');
 
         // Verify filtered results
         const filteredItems = page.locator('.item').filter({ hasText: /aquarium/i });
         await expect(filteredItems.first()).toBeVisible({ timeout: 5000 });
-        
+
         const count = await filteredItems.count();
         expect(count).toBeGreaterThan(0);
     });
