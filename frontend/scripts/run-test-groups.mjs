@@ -49,6 +49,7 @@ const TEST_GROUPS = [
             'docs-changelog.spec.ts',
             'failover-status.spec.ts',
             'home-page-basic.spec.ts',
+            'inventory-items-bug.spec.ts',
             'profile-avatar-selection.spec.ts',
             'profile-page.spec.ts',
             'service-worker-update.spec.ts',
