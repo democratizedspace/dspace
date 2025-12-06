@@ -599,7 +599,7 @@
         "id": "5873d7b0-dd0f-436f-b942-286aedd253d0",
         "name": "guided hop telemetry",
         "description": "CSV export of apogee, attitude hold, and drift estimates from the guided model rocket hop simulator.",
-        "image": "/assets/rocket_min.gif",
+        "image": "/assets/guided_hop_telemetry_csv_panel.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -628,7 +628,7 @@
         "id": "bdc905f5-c36f-4608-9c7f-da7b0988572f",
         "name": "keychain camera kit",
         "description": "20 g keychain HD camera, lithium cell, and mounting frame sized for 30–35 mm nosecones.",
-        "image": "/assets/rocket_min.gif",
+        "image": "/assets/keychain_camera_kit_30mm_nosecone.jpg",
         "price": "22 dUSD"
     },
     {
@@ -649,28 +649,28 @@
         "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
         "name": "nosecone camera module",
         "description": "Keychain camera epoxied into a printed sled with removable hatch for battery swaps.",
-        "image": "/assets/rocket_min.gif",
+        "image": "/assets/nosecone_camera_sled_module.jpg",
         "price": "24 dUSD"
     },
     {
         "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da",
         "name": "guided launch pad checklist",
         "description": "Annotated field checklist covering fin sweep, servo wiggle test, arming plug, and range calls.",
-        "image": "/assets/rocket_min.gif",
+        "image": "/assets/guided_launch_pad_field_checklist.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
         "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe",
         "name": "guided countdown card",
         "description": "T-30 to liftoff script with servo arming callouts and pad clear confirmations.",
-        "image": "/assets/rocket_min.gif",
+        "image": "/assets/guided_countdown_card.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
         "id": "60a1e598-084e-4325-9c2c-fb5d95d19f41",
         "name": "guided flight log capsule",
         "description": "Recovered SD card capsule containing post-flight gyro traces and onboard video index.",
-        "image": "/assets/rocket_min.gif",
+        "image": "/assets/guided_flight_log_capsule.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {

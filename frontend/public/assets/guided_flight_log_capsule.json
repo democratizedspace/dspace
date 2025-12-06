@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/guided_flight_log_capsule.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "guided flight log capsule",
+    "item_id": "60a1e598-084e-4325-9c2c-fb5d95d19f41",
+    "entity_type": "item",
+    "prompt": "A small, cylindrical SD card capsule recovered from a dusty launch field, resting on a weathered but clean gloved palm. The capsule body is 3D-printed from bright green PLA with fine layer lines, while a contrasting darker cap shows a tiny twist-lock or bayonet-style mechanism and a subtle translucent window hinting at an SD card inside. In the softly out-of-focus background, a **very small** model rocket only about 35 cm long with matching green PLA fins and nosecone sits on a low stand, clearly a hobby-scale vehicle rather than anything full-sized, reinforcing that the capsule carries post-flight gyro traces and a video index from a compact guided model rocket.\n\nThe style is photorealistic with a grounded near-future rocketry vibe: muted colors, soft natural lighting as if in late afternoon, and a shallow depth of field that keeps the green PLA capsule crisply detailed while the tiny rocket and landscape are gently out of focus. No text or logos appear on the capsule or gear, and no face is visible—only a gloved hand and hints of a minimalist 2040s flight range with safe, carefully arranged equipment—fitting into DSPACE’s solarpunk, safety-conscious aesthetic.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

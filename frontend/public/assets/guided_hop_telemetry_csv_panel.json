@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/guided_hop_telemetry_csv_panel.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "guided hop telemetry",
+    "item_id": "5873d7b0-dd0f-436f-b942-286aedd253d0",
+    "entity_type": "item",
+    "prompt": "A tablet or rugged field laptop screen showing a clean telemetry dashboard derived from a guided model rocket hop: multiple colored line graphs labeled implicitly by their shapes, clearly representing apogee profile, attitude hold, and lateral drift over time. Next to the graphs, a stylized CSV file icon and a small rocket silhouette hint at data export from a simulator, with gridlines and axes but no visible text labels. The device rests on a launch table beside a compact model rocket lying on its side, with its 3D-printed green PLA fins and nosecone clearly visible to emphasize that it is a hobby-scale, printable airframe.\n\nNear-future, high-tech rocketry lab aesthetic with soft, cinematic lighting and a slightly stylized but mostly photorealistic look at 512×512 resolution. The scene takes place on a tidy outdoor launch range workstation or an open-air shelter with hints of cables, checklists, and tools blurred in the background. Colors are muted but modern, with the green PLA rocket providing a bright accent, and with no brand logos or readable text anywhere on the screen or equipment. No full faces are visible—only perhaps a gloved hand at the edge of the frame adjusting the device—maintaining a calm, data-focused 2040s test environment.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

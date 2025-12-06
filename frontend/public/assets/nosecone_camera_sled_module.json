@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/nosecone_camera_sled_module.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "nosecone camera module",
+    "item_id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+    "entity_type": "item",
+    "prompt": "A close-up of a 3D-printed nosecone sled with a tiny keychain-style HD camera neatly epoxied into its cradle, all sized for a slim model rocket nosecone. The sled and the visible sections of the nosecone interior are made from bright green PLA, with clean layer lines and a smooth, slightly matte finish. The camera lens peeks out through a clean oval cutout, and a removable green hatch panel with tiny screws or clips is shown swung slightly open to hint at easy battery swaps. Fine wiring routes from the camera toward the back of the sled, with a small lithium cell nestled behind it, all arranged in a compact, well-organized layout on a workbench.\n\nNear-future solarpunk rocketry workspace in the 2040s: a clean, well-lit lab or maker bench with soft, cinematic lighting and subtle reflections on the plastic parts. The style is photorealistic with gentle depth of field so the green PLA camera sled and nosecone stand out clearly at small icon size, while the background is softly blurred tools and rocket components without any visible text or logos. The overall mood is precise, safe, and hands-on, with no human faces, at most a hint of gloved hands out of focus at the edge of the frame.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  
