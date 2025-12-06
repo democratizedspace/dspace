@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/model_rocket_night_launch.jpg",
+    "entity": "frontend/src/pages/quests/json/rocketry/night-launch.json",
+    "item_name": "Night Launch",
+    "item_id": "rocketry/night-launch",
+    "entity_type": "quest",
+    "prompt": "A small launch pad set up on open ground at night, holding a sleek 35 cm-tall hobbyist model rocket with a bright green PLA body and contrasting dark fins, clearly scaled to a tabletop-style rocket rather than a full-size vehicle. A red or warm-toned countdown LED sits beside the pad, and a coiled launch cable leads back to an unseen control box outside the frame. The sky is dark but clear, with a few bright stars visible, and the foreground is gently lit enough to clearly show the compact rocket’s proportions relative to the pad, launch rail, and safety perimeter markers, emphasizing a carefully prepared night launch rather than the rocket already in flight.\n\nThe scene should embody a near-future solarpunk atmosphere, with subtle hints of advanced but accessible tech such as small solar lanterns or low-profile battery packs illuminating the launch site. Use soft cinematic lighting to balance the contrast between the dark sky and the lit launch equipment, with realistic materials and terrain rendered in a lightly stylized, photorealistic 512×512 frame. Avoid brand logos and readable text, and if any people are implied, show only distant silhouettes or hands near the control equipment, maintaining a safe, calm, and inspiring mood.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

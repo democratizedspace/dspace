@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/model_rocket_static_engine_test.jpg",
+    "entity": "frontend/src/pages/quests/json/rocketry/static-test.json",
+    "item_name": "Perform a Static Engine Test",
+    "item_id": "rocketry/static-test",
+    "entity_type": "quest",
+    "prompt": "A securely mounted model rocket engine clamped to a low-profile metal test stand outdoors, firing a bright, controlled exhaust plume horizontally while remaining fixed in place. Next to the stand, the compact 35 cm-tall model rocket with a vivid green PLA body and dark fins rests on a small display cradle, clearly separate from the engine under test but visually tying the equipment together. The engine is connected via wires to a compact control and data-logging unit resting on a nearby table or crate, with visible but tidy cabling, and in the background, a few simple safety barriers or cones and a fire extinguisher on standby highlight that this is a careful static test, not a launch.\n\nDepict the scene in a grounded near-future style with clean, realistic materials and a solarpunk flavor—perhaps small solar panels attached to the data unit or subtle eco-friendly design cues on the equipment. Use soft, cinematic daylight with slightly desaturated colors to keep the exhaust flame and engine hardware visually clear in a 512×512 photorealistic frame. Avoid any brand logos or legible text on gear, and keep human presence minimal—only gloved hands at the edge of the frame or distant silhouettes behind a barrier, reinforcing safe and responsible testing.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/rocket_fuel_mixture_calibration.jpg",
+    "entity": "frontend/src/pages/quests/json/rocketry/fuel-mixture.json",
+    "item_name": "Fuel Mixture Calibration",
+    "item_id": "rocketry/fuel-mixture",
+    "entity_type": "quest",
+    "prompt": "A close-up of a compact model rocket engine test bench on a sturdy table, focused on a set of small labeled containers holding oxidizer and fuel components for a hobbyist rocket. Measuring syringes, graduated cylinders, and a small digital scale are neatly arranged next to a mixing beaker with a pale propellant mixture inside. In the background, a partially assembled model rocket and a notebook with hand-drawn mixture diagrams are visible out of focus, making it clear that the scene is about carefully dialing in a safe oxidizer-to-fuel ratio before flight.\n\nNear-future, solarpunk-inspired home workshop environment lit by soft, diffuse LED panels, with clean tools, light-colored work surfaces, and subtle hints of advanced materials like carbon-fiber textures and smart glass. The image should be photorealistic at 512×512, with cinematic but gentle lighting, minimal clutter, and no visible brand logos or readable text on any objects. If any human presence is shown, limit it to gloved hands adjusting instruments or pouring fluids, without showing a full face or making the scene look unsafe.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  
