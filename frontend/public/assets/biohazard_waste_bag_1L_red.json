@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/biohazard_waste_bag_1L_red.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "biohazard waste bag",
+    "item_id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+    "entity_type": "item",
+    "prompt": "A close-up of a compact 1 L bright red biohazard waste bag made from slightly glossy plastic, clearly sized for tabletop use and small enough to be held in one hand. The bag stands upright on a clean countertop, only a little taller than a pair of nitrile gloves laid flat beside it and noticeably shorter than a nearby roll of paper towels, making it obvious that it is much smaller than a household trash bag. It is loosely filled with a few folded bandages and disposable gloves that appear only as soft, non-gory shapes pressing gently against the plastic, and a small roll of unused biohazard bags lies next to it to suggest there are more available.\n\nThe setting is a clean, near-future first-aid station with a soft solarpunk aesthetic: smooth composite countertop, muted colors, and a hint of advanced equipment in the blurred background such as a compact medical sensor panel and modular storage bins. Lighting is soft and cinematic, with gentle reflections on the red plastic emphasizing the bag’s small size and form in a photorealistic 512×512 square composition. No brand logos or readable text appear on the bag or equipment, and no faces are visible—at most, a gloved hand can hover near the bag, reinforcing safe, calm biohazard disposal.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

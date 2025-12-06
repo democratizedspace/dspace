@@ -2,7 +2,7 @@
     "id": "firstaid/stop-nosebleed",
     "title": "Stop a Nosebleed",
     "description": "Sit upright, lean forward, and pinch the soft part of your nose with a sterile gauze pad. Wear nitrile gloves from a first aid kit, use an antiseptic wipe around your nostrils after bleeding slows, and keep your head tilted forward the whole time. Never tilt your head back or insert anything into the nostrils.",
-    "image": "/assets/rescue.jpg",
+    "image": "/assets/stop_nosebleed_first_aid.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

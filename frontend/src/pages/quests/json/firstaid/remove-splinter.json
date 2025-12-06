@@ -2,7 +2,7 @@
     "id": "firstaid/remove-splinter",
     "title": "Remove a Splinter",
     "description": "Take out a small splinter to prevent infection.",
-    "image": "/assets/rescue.jpg",
+    "image": "/assets/remove_splinter_first_aid.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

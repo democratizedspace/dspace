@@ -2,7 +2,7 @@
     "id": "firstaid/wound-care",
     "title": "Practice Basic Wound Care",
     "description": "Practice cleaning a minor cut with soap, gloves, an antiseptic wipe, antibiotic ointment and a bandage.",
-    "image": "/assets/rescue.jpg",
+    "image": "/assets/basic_wound_care_practice.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

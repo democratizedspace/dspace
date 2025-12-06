@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/stop_nosebleed_first_aid.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/stop-nosebleed.json",
+    "item_name": "Stop a Nosebleed",
+    "item_id": "firstaid/stop-nosebleed",
+    "entity_type": "quest",
+    "prompt": "A person is shown from the nose down, seated upright and leaning slightly forward, holding a folded sterile gauze pad against the soft part of their nose with a gloved hand. The other hand rests on a small table that holds an open box of nitrile gloves, a pack of antiseptic wipes, and a simple first-aid kit, all arranged neatly with no readable text or logos. There is no visible blood on the gauze—only a subtle hint that it is in use—emphasizing correct posture and technique rather than graphic detail.\n\nThe setting is a calm, near-future home or clinic environment with soft, even lighting and a solarpunk aesthetic: smooth, light-colored walls, a compact smart panel or clock on the wall in the blurred background, and organized storage for supplies. The 512×512 image should be photorealistic with cinematic but gentle lighting, clearly showing that the person’s head remains tilted forward and that nothing is inserted into the nostrils. Only the lower half of the face is visible, keeping the person non-identifiable while highlighting safe, correct nosebleed care.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

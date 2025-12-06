@@ -2,7 +2,7 @@
     "id": "firstaid/change-bandage",
     "title": "Change a Bandage",
     "description": "Swap an old bandage for a fresh one to keep a minor cut clean.",
-    "image": "/assets/rescue.jpg",
+    "image": "/assets/change_bandage_first_aid.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
