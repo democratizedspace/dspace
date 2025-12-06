@@ -6,5 +6,7 @@
     "entity_type": "quest",
     "prompt": "A rugged hand crank generator sits on a workbench, with its metal crank handle extended and ready to turn, connected via a DC cable to a compact 200 Wh battery pack resting beside it. The generator housing has simple ventilation slots and a small indicator light, while the battery pack shows a generic charge icon on a tiny display, suggesting that manual effort is topping it up. Scattered around the bench are a few 3D-printed plastic gears and housing parts, a hex key, and a partially assembled rotor, making it clear that many of the components were printed and assembled by the user.\n\nThe environment is a near-future solarpunk maker space with clean composite countertops, a 3D printer visible in soft focus in the background, and neatly organized bins of parts on a shelf. Soft, cinematic lighting in a photorealistic 512×512 composition highlights the crank, the cable leading to the 200 Wh pack, and the printed parts without clutter or harsh shadows. There are no brand logos or readable text anywhere, and only a hand on the crank or nearby tools suggests human presence, reinforcing the idea of using a hand-built generator to charge a small battery pack.",
     "image_model": "Nano Banana Pro",
-    "resolution": "512x512"
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
 }
