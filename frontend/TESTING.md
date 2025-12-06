@@ -130,7 +130,6 @@ guards against regressions that previously slipped through manual QA.
 When creating new test files:
 
 1. For E2E tests:
-
     - Place `.spec.ts` files in the `frontend/e2e/` directory
     - Add them to a test group in `frontend/scripts/run-test-groups.mjs`
     - Use the `Docs Experience`, `Management Dashboards`, or `UI Interaction` groups for docs,
@@ -225,7 +224,6 @@ describe('ItemForm Component', () => {
 We have specialized tests to ensure content quality:
 
 1. **Quest Quality Tests** (`questQuality.test.js`):
-
     - Validates NPC dialogue style consistency and fails on mismatches
     - Checks for ethical considerations in aquarium quests and fails on violations
     - Verifies proper quest progression and dependencies. Failures now occur if any quest chain issues are detected.
@@ -249,7 +247,6 @@ We have specialized tests to ensure content quality:
     - Validates duration strings and item references
     - Warns when processes lack items or have extreme durations
 6. **Quest Dependency Tests** (`questDependencies.test.js`):
-
     - Ensures quest chains reference existing quests
     - Detects circular dependencies that could block progress
 
@@ -610,7 +607,6 @@ If you encounter persistent issues, try:
 The "Game Systems" test group currently has some known failures:
 
 1. **Chat System Tests**: Tests fail when the chat interface cannot be found. This may occur if:
-
     - The chat feature is under active development
     - The selectors have changed since the tests were written
     - The chat components aren't properly hydrating

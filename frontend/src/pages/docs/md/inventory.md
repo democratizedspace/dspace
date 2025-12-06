@@ -10,20 +10,17 @@ Your inventory contains all the items you've collected through quests, processes
 Items in DSPACE fall into several categories:
 
 1. Resources
-
     - Energy units ([dWatt](/docs/dwatt), [dSolar](/docs/solar))
     - Currency ([dUSD](/docs/dusd))
     - Raw materials (PLA filament, water)
 
 2. Tools and Equipment
-
     - 3D printers
     - Solar panels and batteries
     - Aquarium equipment
     - Hydroponics systems
 
 3. Components
-
     - 3D printed parts
     - Rocket components
     - Electronic components
@@ -49,7 +46,6 @@ Each item has:
 Items are interconnected through:
 
 1. Processes
-
     - Required items (checked but not consumed)
     - Consumed items (removed when process starts)
     - Created items (added when process completes)

@@ -191,7 +191,6 @@ npm run test:e2e:groups
     ```
 
 2. **Strict Mode Violations**: Playwright runs in strict mode, which means:
-
     - Selectors that match multiple elements will cause tests to fail
     - Always check element count before attempting operations
     - Use `.first()` when dealing with potentially multiple matches
