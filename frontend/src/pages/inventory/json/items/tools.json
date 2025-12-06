@@ -2,7 +2,7 @@
     {
         "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
         "name": "entry-level FDM 3D printer",
-        "description": "Entry-level FDM printer, 220×220×250 mm build, heated bed, 0.4 mm nozzle.",
+        "description": "Entry-level FDM printer with a 220×220×250 mm build volume, heated bed, and 0.4 mm nozzle.",
         "image": "/assets/3dprinter.jpg",
         "price": "220 dUSD",
         "type": "tool",
