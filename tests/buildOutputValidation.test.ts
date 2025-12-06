@@ -36,11 +36,12 @@ describe('build output validation', () => {
             return files;
         }
 
+        // CI should cache frontend/dist between jobs to avoid rebuilding on every test run.
         execSync('npm run build', { stdio: 'inherit' });
         return findBuildFiles(distPath);
     }
 
-    it('should not contain /src/scripts/ paths in built HTML files', () => {
+    it('should not contain /src/scripts/ paths in built files', () => {
         const buildFiles = getBuildFiles();
 
         expect(buildFiles.length).toBeGreaterThan(0);
