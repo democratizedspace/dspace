@@ -2,7 +2,7 @@
     "id": "chemistry/safe-reaction",
     "title": "Demonstrate a Safe Chemical Reaction",
     "description": "Phoenix walks you through a harmless experiment that introduces eco-friendly propellant basics.",
-    "image": "/assets/quests/safe_eco_propellant_reaction.png",
+    "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "3dprinting/temperature-tower",
     "title": "Print a Temperature Tower",
     "description": "Find the ideal nozzle temperature by printing a simple calibration tower.",
-    "image": "/assets/quests/temperature_tower_calibration.png",
+    "image": "/assets/quests/temperature_tower_calibration.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [

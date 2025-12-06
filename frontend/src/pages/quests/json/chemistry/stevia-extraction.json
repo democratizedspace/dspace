@@ -2,7 +2,7 @@
     "id": "chemistry/stevia-extraction",
     "title": "Extract Stevia Sweetener",
     "description": "Use simple chemistry to make a sweet extract from stevia leaves.",
-    "image": "/assets/quests/stevia_leaf_extraction_setup.png",
+    "image": "/assets/quests/stevia_leaf_extraction_setup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [

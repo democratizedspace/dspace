@@ -7,4 +7,4 @@
     "prompt": "A photorealistic close-up of a vivid blue PLA 3D-printing temperature calibration tower standing on a printer build plate. The tower features two vertical pillars with large embossed numbers decreasing in 10°C steps from 240 at the bottom to 180 at the top. Horizontal bridges span the pillars at each level, displaying a clear gradient of print quality: heavy stringing and wispy plastic are visible at the bottom (240°C), which gradually clears up to become crisp and clean at the top (180°C). The background is a soft-focus studio shot showing the lower gantry of a black open-frame FDM printer and a spool of blue filament.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}
