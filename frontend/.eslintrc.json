@@ -18,7 +18,8 @@
         "node_modules/**/*",
         "test-results/**/*",
         "coverage/**/*",
-        "*.config.cjs"
+        "*.config.cjs",
+        "src/pages/inventory/json/items/index.js"
     ],
     "overrides": [
         {

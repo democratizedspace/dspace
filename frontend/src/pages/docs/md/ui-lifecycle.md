@@ -36,8 +36,8 @@ To avoid hydration mismatches and make tests predictable, follow this pattern in
 </div>
 ```
 
--   Use `onMount` for any code that depends on the browser environment.
--   Include a `data-hydrated="true"` attribute once the component is ready. Tests wait for this attribute before interacting with the component.
+- Use `onMount` for any code that depends on the browser environment.
+- Include a `data-hydrated="true"` attribute once the component is ready. Tests wait for this attribute before interacting with the component.
 
 ## UI Responsiveness Metrics
 
@@ -47,11 +47,11 @@ hydration takes.
 
 ## Debugging Tips
 
--   Check the browser console for hydration warnings. They usually mean a mismatch between the
-    server-rendered HTML and the hydrated component.
--   When writing Playwright tests, wait for `[data-hydrated="true"]` before performing actions.
--   If a component behaves differently in tests versus the browser, ensure initialization logic is
-    wrapped in `onMount`.
+- Check the browser console for hydration warnings. They usually mean a mismatch between the
+  server-rendered HTML and the hydrated component.
+- When writing Playwright tests, wait for `[data-hydrated="true"]` before performing actions.
+- If a component behaves differently in tests versus the browser, ensure initialization logic is
+  wrapped in `onMount`.
 
 For additional details on testing strategies, see
 [Testing Guide](../../../../TESTING.md) and the broader

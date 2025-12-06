@@ -1,8 +1,9 @@
-import aquarium from './aquarium.json' assert { type: 'json' };
-import awards from './awards.json' assert { type: 'json' };
-import hydroponics from './hydroponics.json' assert { type: 'json' };
-import tools from './tools.json' assert { type: 'json' };
-import misc from './misc.json' assert { type: 'json' };
+// Import JSON files with import attributes (modern syntax)
+import aquarium from './aquarium.json' with { type: 'json' };
+import awards from './awards.json' with { type: 'json' };
+import hydroponics from './hydroponics.json' with { type: 'json' };
+import tools from './tools.json' with { type: 'json' };
+import misc from './misc.json' with { type: 'json' };
 
 const withCategory = (items, category) => items.map((item) => ({ ...item, category }));
 

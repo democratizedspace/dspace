@@ -4,12 +4,12 @@ DSPACE is a free and open source web-based space exploration idle game where pla
 
 ## Tech Stack
 
--   **Framework**: [Astro](https://astro.build/) with [Svelte](https://svelte.dev/) components
--   **Styling**: PostCSS with SCSS
--   **Testing**: Jest with Testing Library
--   **Documentation**: Markdown with Remarkable and Prism code highlighting (maps `text` to `plaintext`)
--   **API Integration**: token.place
--   **Code Quality**: ESLint, Prettier
+- **Framework**: [Astro](https://astro.build/) with [Svelte](https://svelte.dev/) components
+- **Styling**: PostCSS with SCSS
+- **Testing**: Jest with Testing Library
+- **Documentation**: Markdown with Remarkable and Prism code highlighting (maps `text` to `plaintext`)
+- **API Integration**: token.place
+- **Code Quality**: ESLint, Prettier
 
 > 📖 For comprehensive documentation, see our [Developer Guide](../DEVELOPER_GUIDE.md).
 
@@ -64,9 +64,9 @@ DSPACE uses ES Modules throughout the codebase:
 
 When creating new files:
 
--   Use `.js` extension for standard ES module files
--   Use `.cjs` extension for CommonJS files (rare, mostly for config files)
--   Always use `import`/`export` syntax instead of `require`/`module.exports`
+- Use `.js` extension for standard ES module files
+- Use `.cjs` extension for CommonJS files (rare, mostly for config files)
+- Always use `import`/`export` syntax instead of `require`/`module.exports`
 
 For Node.js scripts that need `__dirname` or `__filename`:
 
@@ -114,9 +114,9 @@ frontend/
 
 ### Prerequisites
 
--   Node.js 18.x or 20.x (LTS)
--   npm 7.x or higher
--   Git
+- Node.js 18.x or 20.x (LTS)
+- npm 7.x or higher
+- Git
 
 The repo ships with a `.nvmrc` file targeting Node.js 20. Run `nvm use` to
 align your local environment.
@@ -160,9 +160,9 @@ The [Developer Guide](../DEVELOPER_GUIDE.md#testing-strategy) also contains high
 
 Our testing infrastructure consists of:
 
--   **Unit Tests** - Using Jest and Testing Library for component and utility testing
--   **End-to-End Tests** - Using Playwright for full application workflow testing
--   **Test Groups** - Optimized test execution through logical grouping and parallelization
+- **Unit Tests** - Using Jest and Testing Library for component and utility testing
+- **End-to-End Tests** - Using Playwright for full application workflow testing
+- **Test Groups** - Optimized test execution through logical grouping and parallelization
 
 Common commands for testing:
 
@@ -191,7 +191,6 @@ npm run test:e2e:groups
     ```
 
 2. **Strict Mode Violations**: Playwright runs in strict mode, which means:
-
     - Selectors that match multiple elements will cause tests to fail
     - Always check element count before attempting operations
     - Use `.first()` when dealing with potentially multiple matches
@@ -240,9 +239,9 @@ Based on real-world experience with the test suite, here are some valuable insig
 
 When writing tests, be aware of potential browser environment limitations:
 
--   **localStorage and sessionStorage** may not be available in headless environments
--   **Cookies** might be restricted in test runners
--   **Network abilities** may vary between local and CI environments
+- **localStorage and sessionStorage** may not be available in headless environments
+- **Cookies** might be restricted in test runners
+- **Network abilities** may vary between local and CI environments
 
 Our test suite now includes capability detection to handle these variations (see `test-coverage.spec.ts`). You should make your tests resilient to these limitations:
 
@@ -326,21 +325,21 @@ For more detailed guidelines, see [TESTING.md](./TESTING.md) for our comprehensi
 
 We follow strict code quality guidelines:
 
--   Use TypeScript for type safety
--   Follow the [Svelte best practices](https://svelte.dev/docs#template-syntax-each)
--   Maintain component-based architecture
--   Write tests for new features
--   Document complex logic and components
+- Use TypeScript for type safety
+- Follow the [Svelte best practices](https://svelte.dev/docs#template-syntax-each)
+- Maintain component-based architecture
+- Write tests for new features
+- Document complex logic and components
 
 ### Game Systems
 
 The game features several core systems:
 
--   Virtual inventory management
--   Quest and mission progression
--   Resource production and management
--   Community interaction features
--   Achievement tracking
+- Virtual inventory management
+- Quest and mission progression
+- Resource production and management
+- Community interaction features
+- Achievement tracking
 
 ### Custom Content System
 
@@ -354,8 +353,8 @@ Custom content integrates seamlessly with built-in game content.
 
 ## Accessibility
 
--   Interactive form controls display visible focus outlines.
--   Remove buttons include descriptive `aria-label` attributes.
+- Interactive form controls display visible focus outlines.
+- Remove buttons include descriptive `aria-label` attributes.
 
 The Avatar Picker now disables its **Select** button until an avatar option is highlighted.
 This prevents accidental submissions and improves keyboard and screen reader navigation.
@@ -366,9 +365,9 @@ Please see the [Contribution Guide](../CONTRIBUTORS.md) and our [Developer Guide
 
 ## Community
 
--   Join our [Discord](https://discord.gg/A3UAfYvnxM) for discussions
--   Visit [democratized.space](https://democratized.space) to play the game
--   Check out the [documentation](https://democratized.space/docs) for detailed guides
+- Join our [Discord](https://discord.gg/A3UAfYvnxM) for discussions
+- Visit [democratized.space](https://democratized.space) to play the game
+- Check out the [documentation](https://democratized.space/docs) for detailed guides
 
 ## License
 

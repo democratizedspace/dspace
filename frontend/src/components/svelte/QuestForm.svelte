@@ -1324,7 +1324,9 @@
         color: black;
         font-size: 16px;
         border: 2px solid #007006;
-        transition: border-color 0.2s, box-shadow 0.2s;
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s;
     }
 
     select {

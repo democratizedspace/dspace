@@ -49,7 +49,9 @@
         font: inherit;
         gap: 0.5rem;
         padding: 0.35rem 0.85rem;
-        transition: background-color 120ms ease-in-out, opacity 120ms ease-in-out;
+        transition:
+            background-color 120ms ease-in-out,
+            opacity 120ms ease-in-out;
     }
 
     .theme-toggle:focus-visible {

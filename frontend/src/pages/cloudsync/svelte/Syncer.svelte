@@ -109,8 +109,8 @@
                 data-testid={messageType === 'error'
                     ? 'sync-error'
                     : messageType === 'success'
-                    ? 'sync-success'
-                    : undefined}
+                      ? 'sync-success'
+                      : undefined}
             >
                 {message}
             </p>

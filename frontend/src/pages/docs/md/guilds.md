@@ -11,16 +11,16 @@ so explorers can lean on in-universe experts instead of grinding alone.
 
 ## Metaguild structure
 
--   **Specialist wings** – Sydney, Hydro, Nova, and the rest of the persona
-    roster each lead a discipline-focused wing (print farm, hydroponics,
-    rocketry, medicine, and more). Their quests unlock tooling, safety
-    checklists, and ongoing maintenance tasks for the whole crew.
--   **Donation board** – The [Leaderboard](/leaderboard) tracks dUSD donations
-    that power the universal basic income pool. Crew members can celebrate the
-    top supporters and see which wings are currently funding new projects.
--   **Operations log** – The [Stats](/stats) destination and quest trees
-    highlight the shared progress the Metaguild has already cataloged, keeping
-    everyone aligned on what content ships next.
+- **Specialist wings** – Sydney, Hydro, Nova, and the rest of the persona
+  roster each lead a discipline-focused wing (print farm, hydroponics,
+  rocketry, medicine, and more). Their quests unlock tooling, safety
+  checklists, and ongoing maintenance tasks for the whole crew.
+- **Donation board** – The [Leaderboard](/leaderboard) tracks dUSD donations
+  that power the universal basic income pool. Crew members can celebrate the
+  top supporters and see which wings are currently funding new projects.
+- **Operations log** – The [Stats](/stats) destination and quest trees
+  highlight the shared progress the Metaguild has already cataloged, keeping
+  everyone aligned on what content ships next.
 
 ## How to get involved
 

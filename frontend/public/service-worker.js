@@ -108,8 +108,8 @@ self.addEventListener('activate', (event) => {
                         const version = isPrecache
                             ? extractCacheVersion(key, PRECACHE_PREFIX)
                             : isRuntime
-                            ? extractCacheVersion(key, RUNTIME_PREFIX)
-                            : extractCacheVersion(key, NAVIGATION_PREFIX);
+                              ? extractCacheVersion(key, RUNTIME_PREFIX)
+                              : extractCacheVersion(key, NAVIGATION_PREFIX);
 
                         // For navigation caches, only keep the current version
                         // For other caches (precache/runtime), keep MAX_CACHE_HISTORY versions

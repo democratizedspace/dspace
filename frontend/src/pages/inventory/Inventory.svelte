@@ -20,20 +20,14 @@
             };
             return acc;
         }, {});
-
-        // Set initial inventory state
-        updateInventorySource();
     });
 
-    // Function to update the inventory source based on the showAllItems toggle
-    function updateInventorySource() {
-        if (!isClientSide) return;
-        currentInventory = showAllItems ? allItems : $state.inventory;
-    }
-
-    // Reactive statement to update inventory when state changes or toggle is flipped
-    $: if (isClientSide) {
-        updateInventorySource();
+    // Reactive statement to update inventory when showAllItems or isClientSide changes
+    // The block ensures reactivity tracks both variables
+    $: {
+        if (isClientSide) {
+            currentInventory = showAllItems ? allItems : $state.inventory;
+        }
     }
 </script>
 
