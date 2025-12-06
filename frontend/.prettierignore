@@ -29,6 +29,3 @@ src/pages/docs/md/changelog/*.md
 
 # Large process list; skip Prettier
 src/pages/processes/processes.json
-
-# JSON import attributes not supported by Prettier 2.8.8
-src/pages/inventory/json/items/index.js

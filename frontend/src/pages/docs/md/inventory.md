@@ -37,12 +37,12 @@ Items in DSPACE fall into several categories:
 
 Each item has:
 
--   Unique ID
--   Name
--   Description
--   Image
--   Count (quantity in inventory)
--   Related processes (requires/consumes/creates)
+- Unique ID
+- Name
+- Description
+- Image
+- Count (quantity in inventory)
+- Related processes (requires/consumes/creates)
 
 ## Item Relationships
 
@@ -63,21 +63,21 @@ Items are interconnected through:
 
 With v3, you can create custom items that:
 
--   Can be used in custom processes
--   Can be granted by custom quests
--   Are stored locally by default
--   Can be contributed to the base game
+- Can be used in custom processes
+- Can be granted by custom quests
+- Are stored locally by default
+- Can be contributed to the base game
 
 ## Item Management
 
 The inventory interface allows you to:
 
--   View item details and counts
--   See related processes
--   Track item dependencies using the new `dependencies` field
--   Manage custom items and preview them from the **Manage Items** page using
-    the **Preview** button next to each entry
--   Remove custom items you no longer need directly from this page
+- View item details and counts
+- See related processes
+- Track item dependencies using the new `dependencies` field
+- Manage custom items and preview them from the **Manage Items** page using
+  the **Preview** button next to each entry
+- Remove custom items you no longer need directly from this page
 
 All inventory data is now stored locally using IndexedDB. For cross-device backups you can use the new [Cloud Sync](/docs/cloud-sync) feature.
 

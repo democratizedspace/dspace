@@ -23,11 +23,11 @@ DSPACE processes should:
 
 Every process requires the following properties:
 
--   **title**: Clear, descriptive name for the process (required)
--   **duration**: Time required to complete the process in format `#h #m` (space optional, e.g., `1h30m`; units are case-insensitive, required)
--   **requireItems**: Items needed but not consumed (optional)
--   **consumeItems**: Items removed from inventory when process starts (optional)
--   **createItems**: Items added to inventory when process completes (optional)
+- **title**: Clear, descriptive name for the process (required)
+- **duration**: Time required to complete the process in format `#h #m` (space optional, e.g., `1h30m`; units are case-insensitive, required)
+- **requireItems**: Items needed but not consumed (optional)
+- **consumeItems**: Items removed from inventory when process starts (optional)
+- **createItems**: Items added to inventory when process completes (optional)
 
 At least one of `requireItems`, `consumeItems`, or `createItems` must be specified for a process to be useful.
 
@@ -35,10 +35,10 @@ At least one of `requireItems`, `consumeItems`, or `createItems` must be specifi
 
 Custom processes are validated against a JSON schema when created. The schema ensures:
 
--   Titles have at least three characters
--   Durations use the `h`, `m`, or `s` units (decimals allowed)
--   Item relationships include positive counts
--   At least one of `requireItems`, `consumeItems`, or `createItems` is present
+- Titles have at least three characters
+- Durations use the `h`, `m`, or `s` units (decimals allowed)
+- Item relationships include positive counts
+- At least one of `requireItems`, `consumeItems`, or `createItems` is present
 
 Processes that fail validation will not be saved and the form displays helpful error messages.
 
@@ -46,10 +46,10 @@ Processes that fail validation will not be saved and the form displays helpful e
 
 Duration must follow the pattern `(\d+h\s*)?(\d+m\s*)?(\d+s\s*)?` (units are case-insensitive), for example:
 
--   "30m" (30 minutes)
--   "2h" (2 hours)
--   "1h 30m" (1 hour, 30 minutes)
--   "5m 30s" (5 minutes, 30 seconds)
+- "30m" (30 minutes)
+- "2h" (2 hours)
+- "1h 30m" (1 hour, 30 minutes)
+- "5m 30s" (5 minutes, 30 seconds)
 
 Fractional values are allowed, so `0.5h` will be interpreted as thirty minutes. Submitted values are normalized; for example, `0.5h 30s` becomes `30m 30s` on save.
 
@@ -70,47 +70,47 @@ When designing processes, consider these common categories:
 
 ### Manufacturing Processes
 
--   **3D Printing**: Creating physical components from digital designs
--   **Assembly**: Combining components into more complex systems
--   **Recycling**: Converting waste materials into usable resources
+- **3D Printing**: Creating physical components from digital designs
+- **Assembly**: Combining components into more complex systems
+- **Recycling**: Converting waste materials into usable resources
 
 ### Biological Processes
 
--   **Plant Cultivation**: Growing plants for food, oxygen, or research
--   **Aquaculture**: Raising aquatic organisms
--   **Composting**: Creating nutrients from organic waste
+- **Plant Cultivation**: Growing plants for food, oxygen, or research
+- **Aquaculture**: Raising aquatic organisms
+- **Composting**: Creating nutrients from organic waste
 
 ### Energy Processes
 
--   **Generation**: Creating energy from renewable sources
--   **Storage**: Storing energy for later use
--   **Conversion**: Transforming energy between forms
+- **Generation**: Creating energy from renewable sources
+- **Storage**: Storing energy for later use
+- **Conversion**: Transforming energy between forms
 
 ### Educational Processes
 
--   **Experimentation**: Scientific tests and demonstrations
--   **Simulation**: Virtual modeling of space phenomena
--   **Analysis**: Data examination and interpretation
+- **Experimentation**: Scientific tests and demonstrations
+- **Simulation**: Virtual modeling of space phenomena
+- **Analysis**: Data examination and interpretation
 
 ## Process Design Best Practices
 
 ### Balancing Time and Reward
 
--   Process duration should correlate with the value of created items
--   Consider educational value when determining time requirements
--   Allow shorter processes to chain into longer progression paths
+- Process duration should correlate with the value of created items
+- Consider educational value when determining time requirements
+- Allow shorter processes to chain into longer progression paths
 
 ### Item Relationships
 
--   Ensure logical connections between required/consumed items and outputs
--   Create process chains where outputs become inputs for more advanced processes
--   Consider physical conservation of materials (input mass roughly equals output mass)
+- Ensure logical connections between required/consumed items and outputs
+- Create process chains where outputs become inputs for more advanced processes
+- Consider physical conservation of materials (input mass roughly equals output mass)
 
 ### Educational Components
 
--   Include realistic time scales when appropriate
--   Model actual procedures used in space exploration
--   Demonstrate scientific principles through process outcomes
+- Include realistic time scales when appropriate
+- Model actual procedures used in space exploration
+- Demonstrate scientific principles through process outcomes
 
 ## Example Processes
 
@@ -174,10 +174,10 @@ Processes go through several states during their lifecycle:
 
 The UI displays different controls depending on the state:
 
--   NOT_STARTED: "Start" button
--   IN_PROGRESS: Progress bar, remaining time, "Pause" and "Cancel" buttons
--   PAUSED: Progress bar, remaining time, "Resume" and "Cancel" buttons
--   FINISHED: "Collect" button
+- NOT_STARTED: "Start" button
+- IN_PROGRESS: Progress bar, remaining time, "Pause" and "Cancel" buttons
+- PAUSED: Progress bar, remaining time, "Resume" and "Cancel" buttons
+- FINISHED: "Collect" button
 
 ## Contribution Workflow
 

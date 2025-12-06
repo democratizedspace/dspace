@@ -10,8 +10,8 @@ serves it locally.
 
 ## Requirements
 
--   Git
--   Docker and Docker Compose
+- Git
+- Docker and Docker Compose
 
 ## Quick start
 
@@ -44,9 +44,9 @@ commands. Use it from the repository root:
 
 These additional documents cover more complex deployments:
 
--   [Raspberry Pi k3s Deployment][raspi-k3s]
--   [Failover Procedures][failover]
--   [Monitoring Setup][monitoring]
+- [Raspberry Pi k3s Deployment][raspi-k3s]
+- [Failover Procedures][failover]
+- [Monitoring Setup][monitoring]
 
 [raspi-k3s]: https://github.com/democratizedspace/dspace/blob/main/docs/deploy/raspi.md
 [failover]: https://github.com/democratizedspace/dspace/blob/main/docs/failover_procedures.md

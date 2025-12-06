@@ -17,28 +17,28 @@ detected an update and continued serving stale cached content.
 
 ## Impact
 
--   Users visiting after a deployment would see an unstyled page with missing CSS assets.
--   The layout would display a large rocket image without proper styling.
--   Functionality was degraded but the site remained partially usable.
--   Users had to perform a hard reload (Ctrl+F5 or Cmd+Shift+R) to clear the cache and see the
-    correct styled version.
+- Users visiting after a deployment would see an unstyled page with missing CSS assets.
+- The layout would display a large rocket image without proper styling.
+- Functionality was degraded but the site remained partially usable.
+- Users had to perform a hard reload (Ctrl+F5 or Cmd+Shift+R) to clear the cache and see the
+  correct styled version.
 
 ## Resolution
 
--   Created a service worker template (`service-worker.template.js`) with a `__CACHE_VERSION__`
-    placeholder.
--   Implemented a build-time injection script (`inject-cache-version-into-sw.mjs`) that reads
-    the current `CACHE_VERSION` from `packages/cache-version/index.js` and generates
-    `service-worker.js` with the actual version embedded.
--   Exported `resolveCacheVersion()` from `sync-cache-version.mjs` for reuse across build
-    scripts.
--   Integrated the injection process into the prebuild workflow so every build produces a
-    different service worker file.
--   Added comprehensive E2E tests with Playwright to verify:
-    -   Service worker registers and caches assets correctly
-    -   Service worker updates when cache version changes
-    -   CSS assets remain accessible during updates (no 404s)
-    -   SKIP_WAITING and reload logic executes properly
+- Created a service worker template (`service-worker.template.js`) with a `__CACHE_VERSION__`
+  placeholder.
+- Implemented a build-time injection script (`inject-cache-version-into-sw.mjs`) that reads
+  the current `CACHE_VERSION` from `packages/cache-version/index.js` and generates
+  `service-worker.js` with the actual version embedded.
+- Exported `resolveCacheVersion()` from `sync-cache-version.mjs` for reuse across build
+  scripts.
+- Integrated the injection process into the prebuild workflow so every build produces a
+  different service worker file.
+- Added comprehensive E2E tests with Playwright to verify:
+    - Service worker registers and caches assets correctly
+    - Service worker updates when cache version changes
+    - CSS assets remain accessible during updates (no 404s)
+    - SKIP_WAITING and reload logic executes properly
 
 ## Technical Details
 
@@ -61,9 +61,9 @@ This ensures that:
 
 ## Lessons / Follow-ups
 
--   Service workers must change between deployments to trigger browser update detection.
--   Build-time injection is more reliable than runtime `importScripts()` for cache versioning.
--   E2E tests should verify the complete service worker lifecycle, not just unit-level behavior.
--   Cache version mismatches between HTML and assets will cause 404s if the SW doesn't update.
--   Always test deployment scenarios in staging to catch cache invalidation issues before
-    production.
+- Service workers must change between deployments to trigger browser update detection.
+- Build-time injection is more reliable than runtime `importScripts()` for cache versioning.
+- E2E tests should verify the complete service worker lifecycle, not just unit-level behavior.
+- Cache version mismatches between HTML and assets will cause 404s if the SW doesn't update.
+- Always test deployment scenarios in staging to catch cache invalidation issues before
+  production.
