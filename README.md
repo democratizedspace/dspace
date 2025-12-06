@@ -41,6 +41,9 @@ npm run check        # Lint and format check
 npm run build        # Production build
 ```
 
+Root-level tests validate the built frontend bundle; they will trigger `npm run build` if
+`frontend/dist` is missing, so running the build first keeps test runs quicker.
+
 E2E tests rely on Playwright. Install the browser binaries and system dependencies before running them locally:
 
 ```bash

@@ -1,9 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Page } from '@playwright/test';
 
 vi.mock('/src/utils/gameState/common.js', () => ({}), { virtual: true });
 
-import { navigateWithRetry } from '../frontend/e2e/test-helpers';
+import { navigateWithRetry, type Page } from '../frontend/e2e/test-helpers';
 
 describe('navigateWithRetry', () => {
   it('retries navigation when the preview server is not ready', async () => {
