@@ -2,7 +2,7 @@
     "id": "energy/portable-solar-panel",
     "title": "Test a Portable Solar Panel",
     "description": "Harvest sunshine anywhere with a foldable panel.",
-    "image": "/assets/quests/solar_200Wh.jpg",
+    "image": "/assets/quests/portable_foldable_solar_panel_test.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

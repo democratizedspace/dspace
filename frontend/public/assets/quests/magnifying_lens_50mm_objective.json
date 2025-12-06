@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/magnifying_lens_50mm_objective.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "50 mm magnifying lens",
+    "item_id": "0254a829-9002-4a75-8af2-03cd961601da",
+    "entity_type": "item",
+    "prompt": "A 50 mm glass magnifying lens rests on a clean work surface, positioned directly in front of a slim cardboard or metal telescope tube so it is clearly being used as the objective lens. The circular lens is held in a simple black or dark gray ring mount, with faint reflections and subtle edge curvature showing its optical shape, and a ruler or caliper nearby suggests its focal length and diameter. In the background, slightly out of focus, are a small tripod mount, a star chart, and a notebook with rough optical sketches (no readable text), making it obvious that this lens is destined for a DIY telescope project rather than casual magnifying-glass use.\n\nThe scene is rendered in a near-future solarpunk style: a tidy maker desk with smooth composite surfaces, soft white task lighting, and a window hinting at a twilight sky outside. The 512×512 image should be photorealistic, with gentle cinematic lighting that creates subtle highlights on the glass and metal without harsh glare. No brand logos or readable markings appear on any objects, and there are no full human figures—at most, a partial hand adjusting the lens mount—keeping the focus on the 50 mm magnifying lens as a telescope objective in a small, hopeful astronomy workshop.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

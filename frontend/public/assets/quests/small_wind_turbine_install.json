@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/small_wind_turbine_install.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/wind-turbine.json",
+    "item_name": "Install a Wind Turbine",
+    "item_id": "energy/wind-turbine",
+    "entity_type": "quest",
+    "prompt": "A small horizontal-axis wind turbine is mounted on a short tower anchored in a backyard or on a low rooftop, its three blades clearly visible as it faces into a light breeze. Heavy-gauge cables run down the tower to a compact charge controller and the same style of 200 Wh battery pack used in the solar quests, both mounted on a nearby wall or inside a small weather-protected enclosure. In the background, a solar panel or two can be seen on a shed roof, emphasizing that this turbine supplements an existing solar setup rather than replacing it.\n\nThe environment is a bright, breezy near-future solarpunk homestead with garden beds, greenery, and a few distant trees, rendered photorealistically in a 512×512 image. Soft, natural lighting and a slightly dynamic composition—perhaps with a hint of motion blur on the blade tips—suggest active generation without being dramatic. No brand logos or readable text appear on the turbine, controller, or battery, and no full people are shown, keeping the focus on installing a small-scale wind turbine as a friendly complement to solar power.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

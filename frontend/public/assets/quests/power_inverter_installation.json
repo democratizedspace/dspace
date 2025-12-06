@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/power_inverter_installation.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/power-inverter.json",
+    "item_name": "Install a Power Inverter",
+    "item_id": "energy/power-inverter",
+    "entity_type": "quest",
+    "prompt": "A small power inverter is mounted on the wall of a utility nook or inside an equipment cabinet, with thick DC cables running from a nearby 200 Wh battery pack into the inverter’s input terminals and a standard household AC outlet panel on its output side. A multimeter or plug-in outlet tester is inserted into one of the AC sockets, its tiny display glowing with generic segments to suggest verification of safe power conversion. A hand holding a screwdriver or torque wrench is visible near the inverter’s connection points, emphasizing careful installation and secure wiring.\n\nThe space has a tidy near-future solarpunk aesthetic, with organized conduit, labeled but unreadable icons near switches, and a glimpse of solar panels or greenery outside a nearby window, rendered photorealistically at 512×512. Soft, cinematic lighting highlights the inverter’s vents, the red and black DC leads, and the simple AC outlet face, without any brand logos or legible writing. No full human figures appear, keeping the focus on converting battery DC into AC for household gear in a clean, safe installation.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

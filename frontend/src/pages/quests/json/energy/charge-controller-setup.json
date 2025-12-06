@@ -2,7 +2,7 @@
     "id": "energy/charge-controller-setup",
     "title": "Configure a Solar Charge Controller",
     "description": "Wire and configure a charge controller to safely charge your 200 Wh battery.",
-    "image": "/assets/quests/solar_200Wh.jpg",
+    "image": "/assets/quests/solar_charge_controller_setup.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

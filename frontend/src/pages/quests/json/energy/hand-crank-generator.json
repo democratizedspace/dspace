@@ -12,7 +12,7 @@
             { "task": "codex-upgrade-2025-08-06b", "date": "2025-08-06", "score": 85 }
         ]
     },
-    "image": "/assets/quests/solar_200Wh.jpg",
+    "image": "/assets/quests/hand_crank_generator_200Wh.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

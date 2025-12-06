@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/solar_charge_controller_setup.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/charge-controller-setup.json",
+    "item_name": "Configure a Solar Charge Controller",
+    "item_id": "energy/charge-controller-setup",
+    "entity_type": "quest",
+    "prompt": "A compact solar charge controller is mounted on a light-colored wall above a small 200 Wh battery pack, with neatly organized wires running from a tabletop photovoltaic panel input, through the controller, and down to the battery terminals. A gloved hand is shown tightening a screw terminal or pressing a button on the controller’s simple interface, while a small multimeter rests nearby with its probes clipped to the battery leads, confirming that the system is charging safely. The display on the controller glows softly with generic bar icons and small blocks, but no readable numbers or text, clearly conveying configuration and wiring without any brand names.\n\nThe scene takes place in a bright near-future solarpunk workshop or balcony nook, with smooth composite surfaces, soft LED strip lighting, and a glimpse of solar panels or greenery in the blurred background. The 512×512 image is photorealistic with gentle, cinematic lighting that emphasizes the tidy wiring and clear flow from panel to controller to battery. No logos, labels, or legible text appear anywhere, and only hands and forearms are visible, highlighting safe, methodical setup of a solar charge controller for a 200 Wh pack.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

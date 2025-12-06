@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/masking_tape_roll.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "masking tape",
+    "item_id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
+    "entity_type": "item",
+    "prompt": "A partially used roll of beige masking tape sits on a smooth workbench, with a short length pulled out, torn cleanly, and gently pressed across the edge of a cardboard telescope tube to suggest it is being used to temporarily secure lenses during assembly. Small bits of tape are also visible along the tube holding a lens cell or spacer ring in place, but the lens itself is just out of focus, keeping attention on the tape. Nearby lie a pair of scissors or a utility knife with a retracted blade, a pencil, and a few small paper labels, reinforcing the idea of careful, reversible positioning rather than permanent construction.\n\nThe environment continues the near-future solarpunk workshop aesthetic: a clean desk surface, softly lit by overhead LEDs and a bit of natural light from a nearby window, with subtle hints of other projects in the blurred background, such as 3D-printed parts or small optical components. The 512×512 image should be photorealistic, with gentle cinematic lighting that shows the matte paper texture of the masking tape and the soft shadow it casts, without any brand logos or readable text on the tape core. No human faces are visible—only perhaps a fingertip pressing the tape down—centering the image on masking tape as a low-tack, temporary fastening tool for optical assembly work.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

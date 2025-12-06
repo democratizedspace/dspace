@@ -1502,7 +1502,7 @@
         "id": "0254a829-9002-4a75-8af2-03cd961601da",
         "name": "50 mm magnifying lens",
         "description": "Glass lens with ~50 mm focal length used as a telescope objective.",
-        "image": "/assets/quests/solar.jpg",
+        "image": "/assets/quests/magnifying_lens_50mm_objective.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1542,7 +1542,7 @@
         "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
         "name": "masking tape",
         "description": "Low-tack paper tape for temporarily securing lenses during assembly.",
-        "image": "/assets/quests/solar.jpg",
+        "image": "/assets/quests/masking_tape_roll.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {

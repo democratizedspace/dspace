@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/solar_panel_rooftop_setup.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/solar.json",
+    "item_name": "Set up a solar panel",
+    "item_id": "energy/solar",
+    "entity_type": "quest",
+    "prompt": "A single medium-sized solar panel is mounted on a small rooftop or balcony railing, angled toward the sun and connected via conduit to a compact junction box and 200 Wh battery pack just inside a nearby open door. The wall outlet inside the room is visible but unused, with a powered device such as a table lamp or small fan plugged instead into a nearby DC or inverter outlet fed by the solar-battery system. A simple hand-drawn note taped near the outlet shows a crossed-out fossil-fuel power plant icon and a sun powering the device, conveying the decision to rely on solar instead of the grid.\n\nThe scene is rendered photorealistically in a 512×512 near-future solarpunk style, with bright natural daylight, greenery on adjacent balconies, and perhaps a distant view of other rooftops covered in panels. Soft, cinematic lighting highlights the glint of sunlight on the solar glass and the subtle indicators on the battery pack, while the interior space looks cozy and modern. No brand logos or readable labels appear anywhere, and no full human figures are shown, underscoring the idea of taking electrical generation into one’s own hands and starting to go off the grid.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

@@ -2,7 +2,7 @@
     "id": "energy/offgrid-charger",
     "title": "Charge a Device Off-Grid",
     "description": "Charge a phone off-grid with a 200 W panel, charge controller, 200 Wh LiFePO4 battery and USB cable.",
-    "image": "/assets/quests/solar_200Wh.jpg",
+    "image": "/assets/quests/offgrid_phone_charging_200Wh.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
