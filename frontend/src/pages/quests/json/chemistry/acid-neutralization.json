@@ -2,7 +2,7 @@
     "id": "chemistry/acid-neutralization",
     "title": "Neutralize an Acid Spill",
     "description": "Use basic chemistry to make a workspace safe again.",
-    "image": "/assets/quests/testprint.png",
+    "image": "/assets/quests/acid_spill_neutralization_setup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "energy/biogas-digester",
     "title": "Build a Biogas Digester",
     "description": "Ferment kitchen scraps into methane for cooking.",
-    "image": "/assets/quests/solar_200Wh.jpg",
+    "image": "/assets/quests/biogas_digester_small_scale.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
