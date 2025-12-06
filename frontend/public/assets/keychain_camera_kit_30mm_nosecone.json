@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/keychain_camera_kit_30mm_nosecone.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "keychain camera kit",
+    "item_id": "bdc905f5-c36f-4608-9c7f-da7b0988572f",
+    "entity_type": "item",
+    "prompt": "A neatly arranged keychain camera kit laid out on a light-colored workbench: a tiny HD keychain camera, a slender lithium cell, and a compact 3D-printed mounting frame clearly sized to slide into a 30–35 mm rocket nosecone. The mounting frame is printed in bright green PLA with visible layer lines and curved sides that match a nosecone’s inner profile. A partially disassembled model rocket nosecone with matching green PLA plastic and a caliper lie nearby, reinforcing the precise sizing and printable nature of the hardware for model rocketry.\n\nThe image is rendered in a near-future maker-lab style, mostly photorealistic with soft, cinematic overhead lighting and subtle reflections on the plastic and metal surfaces. Background elements like tools, storage bins, and other rocket parts are softly blurred to keep the green PLA frame and nosecone components clear at 512×512 resolution. Colors are slightly muted but optimistic, in line with a solarpunk 2040s workshop, with no brand logos or readable text anywhere and no human faces—only perhaps a cropped forearm or gloved hand at the margin.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/guided_launch_pad_field_checklist.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "guided launch pad checklist",
+    "item_id": "daf6573f-804c-46e6-aa70-d9a41c8c81da",
+    "entity_type": "item",
+    "prompt": "A rugged clipboard or foldable field card resting on a launch table next to a small guided model rocket standing upright on its pad. The checklist card is covered with tidy rows of unlabeled checkboxes and small icon-like symbols suggesting fin sweep inspection, servo wiggle test, arming plug insertion, and range safety calls, but without any readable text. The rocket on the pad has a clearly 3D-printed green PLA nosecone and fins with faint layer lines, emphasizing that the airframe is built from printable parts. A pen or grease pencil lies across the card, and a safety plug lanyard and small tool set sit nearby, clearly indicating a thorough pre-launch procedure.\n\nThe visual style is a clean, near-future launch range scene with soft daylight and a slightly stylized but mostly photorealistic look appropriate for a 512×512 DSPACE asset. The background shows a simple, open field or dry lakebed with minimal structures, gently out of focus so the green PLA rocket and checklist are the main focus. Colors are muted and modern, with no brand names or large text visible, and no human faces—only perhaps a gloved hand hovering near the clipboard—emphasizing a careful, safety-first 2040s rocketry workflow.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}
