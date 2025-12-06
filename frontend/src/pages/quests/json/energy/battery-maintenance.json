@@ -2,7 +2,7 @@
     "id": "energy/battery-maintenance",
     "title": "Maintain Your Battery Pack",
     "description": "Cycle your 200 Wh battery pack with solar to keep it healthy.",
-    "image": "/assets/quests/solar_200Wh.jpg",
+    "image": "/assets/quests/solar_battery_pack_200Wh_maintenance.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

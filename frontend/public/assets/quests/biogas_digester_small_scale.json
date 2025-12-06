@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/biogas_digester_small_scale.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/biogas-digester.json",
+    "item_name": "Build a Biogas Digester",
+    "item_id": "energy/biogas-digester",
+    "entity_type": "quest",
+    "prompt": "A small household-scale biogas digester stands in a sunny backyard corner, built from a repurposed plastic drum or tank with clearly marked inlet and outlet pipes and a flexible gas line leading to a modest gas storage bag or inflated bladder. A bucket of chopped kitchen scraps and a small funnel sit nearby, while a simple information board or laminated sheet with diagrams (no readable text) leans against the tank, emphasizing that food waste is being fermented into methane for cooking. In the background, a compact outdoor gas burner or camp-style stove connected by hose to the gas bag suggests the end use of the produced biogas.\n\nThe scene fits a near-future solarpunk homestead aesthetic: raised garden beds, a few solar panels on a nearby shed roof, and lush greenery surrounding the digester, all rendered photorealistically at 512×512. Lighting is warm and natural, highlighting the curved surfaces of the tank and the semi-translucent gas bag without making anything look industrial or intimidating. No brand names or labels are visible, and no full human figures appear—perhaps only a hand holding a scoop of food scraps—keeping the focus on the biogas digester as a friendly, low-tech system that turns kitchen waste into clean cooking fuel.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

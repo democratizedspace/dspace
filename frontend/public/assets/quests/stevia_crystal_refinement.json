@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/stevia_crystal_refinement.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/stevia-crystals.json",
+    "item_name": "Refine Stevia Crystals",
+    "item_id": "chemistry/stevia-crystals",
+    "entity_type": "quest",
+    "prompt": "A close-up of a shallow glass dish or crystallization tray shows small, translucent stevia crystals forming in a thin layer, with a gentle light catching their facets to make them sparkle slightly. A stainless steel spoon or spatula rests on the edge of the dish with a small pile of collected crystals, and in the background, a beaker containing a pale, filtered stevia solution sits on a lab mat next to a simple paper coffee filter or funnel setup, all neatly arranged. Beside them is a small plate holding several fresh stevia leaves that look similar to mint: oval to elliptical leaves with serrated, jagged edges, a clear central midrib, and opposite pairs along a short stem, matching the typical morphology of Stevia rebaudiana foliage.\n\nThe workspace is a clean, near-future solarpunk kitchen-lab hybrid, with smooth composite counters, soft natural daylight from a nearby window, and warm-toned LED accents, rendered in a photorealistic 512×512 style. The scene feels inviting rather than clinical, with no brand logos or readable text on any equipment or containers, and a calm color palette of greens, whites, and warm neutrals. No people are visible; the focus is entirely on the crystals, tools, and botanically accurate stevia leaves, conveying a careful, eco-friendly refinement process from plant material to sweet crystals.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

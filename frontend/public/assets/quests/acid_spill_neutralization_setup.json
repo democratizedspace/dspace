@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/acid_spill_neutralization_setup.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/acid-neutralization.json",
+    "item_name": "Neutralize an Acid Spill",
+    "item_id": "chemistry/acid-neutralization",
+    "entity_type": "quest",
+    "prompt": "A small chemical workspace shows a minor acid spill on a tray being safely neutralized: a nitrile-gloved hand gently sprinkles a fine white powder from a plastic scoop onto the damp area, which is confined to a shallow spill tray on a countertop. Nearby, a labeled but unreadable squeeze bottle, a stack of absorbent pads, and a closed container for waste indicate that the goal is to make the area safe again. In the background, slightly out of focus, a pair of safety goggles, a chemical-resistant apron hanging from a hook, and a simple warning symbol (no text) reinforce that this is a controlled cleanup procedure.\n\nThe environment is a well-ventilated near-future solarpunk lab or workshop with smooth composite counters, a visible fume hood or vent panel, and soft overhead LED lighting. The 512×512 image should be photorealistic with cinematic lighting that clearly highlights the gloved hand, neutralizing powder, and spill tray while keeping other details subdued. No brand logos or readable text appear on any containers or equipment, and no full faces are shown—only hands and arms—presenting neutralization as a calm, methodical safety routine rather than an emergency.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

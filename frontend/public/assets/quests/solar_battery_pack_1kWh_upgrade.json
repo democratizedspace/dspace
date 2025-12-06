@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/solar_battery_pack_1kWh_upgrade.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/battery-upgrade.json",
+    "item_name": "Install a Larger Battery",
+    "item_id": "energy/battery-upgrade",
+    "entity_type": "quest",
+    "prompt": "A sleek 1 kWh home battery pack and enclosure is mounted on a wall in a small utility nook, with heavy-gauge cables running to a compact solar charge controller and a tidy breaker panel. The enclosure is a smooth, rectangular box with subtle ventilation slots and a small status light bar, clearly larger than a portable pack but still human-scale, and labeled only with abstract icons rather than readable text or logos. On the floor or a nearby shelf sits the original smaller 200 Wh battery pack disconnected, along with a coiled bundle of new cabling and mounting hardware, emphasizing that the user is upgrading storage capacity.\n\nThe environment has a clean, near-future solarpunk aesthetic—light-colored walls, organized conduit runs, and a glimpse of rooftop solar panels through a nearby window or open door. Soft, cinematic lighting highlights the clean lines of the new 1 kWh enclosure and the neatly arranged wiring in a photorealistic 512×512 image. No brand names or detailed technical labels are visible, and there are no full human figures—perhaps only a hand holding a screwdriver or torque wrench—to keep the focus on the expanded solar setup and upgraded energy storage.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

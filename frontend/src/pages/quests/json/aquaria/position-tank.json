@@ -2,7 +2,7 @@
     "id": "aquaria/position-tank",
     "title": "Move the Walstad tank",
     "description": "Atlas helps you lift the empty 80 L Walstad aquarium onto a sturdy stand. Clear the path, lift with your legs and keep the glass supported.",
-    "image": "/assets/quests/walstad.jpg",
+    "image": "/assets/quests/position_tank.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "aquaria/water-testing",
     "title": "Test water parameters",
     "description": "Use the Aquarium liquid test kit to check ammonia, nitrite and nitrate before adding shrimp. Put on nitrile gloves and safety goggles, work in a ventilated area and discard reagents per the kit manual.",
-    "image": "/assets/quests/walstad.jpg",
+    "image": "/assets/quests/water_testing.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

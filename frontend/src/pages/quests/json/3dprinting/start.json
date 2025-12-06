@@ -2,7 +2,7 @@
     "id": "3dprinter/start",
     "title": "Set up your first 3D printer",
     "description": "Accept Sydney's offer of a 3D printer, and learn how to set it up for use in your space exploration adventure.",
-    "image": "/assets/quests/start.png",
+    "image": "/assets/quests/first_3d_printer_setup.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [

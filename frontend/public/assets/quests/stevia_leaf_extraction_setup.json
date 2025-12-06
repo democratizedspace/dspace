@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/stevia_leaf_extraction_setup.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/stevia-extraction.json",
+    "item_name": "Extract Stevia Sweetener",
+    "item_id": "chemistry/stevia-extraction",
+    "entity_type": "quest",
+    "prompt": "A small extraction setup is arranged on a countertop: a clear glass jar partially filled with fresh green stevia leaves and water or light alcohol sits next to a second container holding a pale, sweet stevia extract. A simple strainer or fine mesh filter is positioned between them, with droplets of liquid caught mid-drip into the receiving container, while a wooden spoon or glass stirring rod rests across the top of the jar with leaves. A small kitchen scale, a measuring spoon, and a folded kitchen towel sit nearby to suggest measured, repeatable chemistry using basic household tools.\n\nThe environment is a bright, solarpunk-inspired kitchen-lab with lots of natural light, light-colored composite counters, and a few minimal high-tech accents like a compact smart display showing abstract icons rather than text, rendered photorealistically at 512×512. The lighting is soft and inviting, making the greens of the leaves and the clarity of the extract stand out without harsh reflections or shadows. No brand logos or readable text appear on any containers, appliances, or tools, and no human figures are present, keeping the focus on the gentle, plant-based extraction process that turns stevia leaves into a sweet liquid extract.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  
