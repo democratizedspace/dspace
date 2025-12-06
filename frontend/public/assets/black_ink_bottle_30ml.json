@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/black_ink_bottle_30ml.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "bottle of black ink",
+    "item_id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
+    "entity_type": "item",
+    "prompt": "A small 30 mL glass bottle of waterproof black ink sits on a clean writing desk, about the height of a fingertip, with a dark, opaque liquid visible through the clear glass. The bottle has a simple screw cap and a wide, stable base so it is clearly sized for careful calligraphy rather than industrial use. A few tiny ink stains around the neck hint at regular use, and a feather quill rests nearby on the tabletop, its tip facing toward the bottle to imply it will be dipped for writing.\n\nThe scene takes place on a tidy near-future solarpunk writing station, with a smooth composite desktop, a softly glowing task lamp, and a blurred hint of a digital note-taking device or smart display in the background. The 512×512 image should be photorealistic with soft, cinematic lighting that creates gentle reflections on the glass and ink surface while keeping the label area free of any logos or readable text. The composition is uncluttered and centered on the ink bottle, with no faces or full human figures visible, just a calm, focused workspace.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

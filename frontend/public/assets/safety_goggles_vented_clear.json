@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/safety_goggles_vented_clear.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "safety goggles",
+    "item_id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+    "entity_type": "item",
+    "prompt": "A pair of clear polycarbonate safety goggles with side vents and a soft gasket sits on a neutral-colored work surface, angled so that the wraparound shape and vent details are easy to see. The wide lens is slightly curved and transparent, with no scratches or text, and an adjustable elastic strap with a small buckle lies loosely behind the frame. In the blurred background, a folded pair of prescription glasses is visible to show that the goggles are large enough to fit over them, along with a small corner of a lab tray and a pair of nitrile gloves.\n\nThe environment is a tidy near-future lab or workshop with a solarpunk feel: smooth composite countertop, softly glowing task lighting, and hints of modular storage or instrumentation in soft focus. The 512×512 image should be photorealistic with gentle, cinematic lighting that creates subtle reflections on the lenses without obscuring transparency. Avoid all brand logos or readable markings on the goggles, and keep the scene free of people—only tools and surfaces should be visible to clearly present the goggles as a standalone safety item.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

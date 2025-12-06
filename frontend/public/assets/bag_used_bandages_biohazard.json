@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/bag_used_bandages_biohazard.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/dispose-bandages.json",
+    "item_name": "Bag Used Bandages",
+    "item_id": "firstaid/dispose-bandages",
+    "entity_type": "quest",
+    "prompt": "A gloved hand is shown carefully placing a loosely wrapped bundle of used bandages into a small bright red biohazard bag that is already partially open on a countertop. The bandages are off-white with only the faintest suggestion of discoloration—no gore or graphic detail—and the bag’s interior is dark, emphasizing containment rather than contents. Beside the bag, a pump bottle of soap, a small stack of clean paper towels, and a sink faucet hint that the next step is washing up after sealing the bag.\n\nThe setting is a compact near-future bathroom or utility sink area with a solarpunk aesthetic, featuring clean composite surfaces, a low-profile faucet, and soft ambient lighting. The 512×512 image should be photorealistic with cinematic lighting that highlights the red bag as the focal point while keeping the background slightly out of focus. There are no brand logos or readable text on the bag or soap bottle, and only the lower forearm and gloved hand of the person are visible, conveying safe, calm disposal practice.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}
