@@ -2,7 +2,7 @@
     "id": "rocketry/preflight-check",
     "title": "Preflight Checklist",
     "description": "Confirm gear and run a quick launch sequence.",
-    "image": "/assets/rocket_launch.jpg",
+    "image": "/assets/model_rocket_preflight_checklist.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
