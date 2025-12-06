@@ -42,7 +42,8 @@ npm run build        # Production build
 ```
 
 Root-level tests validate the built frontend bundle; they will trigger `npm run build` if
-`frontend/dist` is missing, so running the build first keeps test runs quicker.
+`frontend/dist` is missing, so running the build first keeps test runs quicker. Cache the
+`frontend/dist` directory between CI jobs to avoid rebuilding when the validation test runs.
 
 E2E tests rely on Playwright. Install the browser binaries and system dependencies before running them locally:
 
