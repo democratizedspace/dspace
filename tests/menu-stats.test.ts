@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import menu from '../frontend/src/config/menu.json';
+import menu from '../frontend/src/config/menu.json' assert { type: 'json' };
 
 describe('Menu stats entry', () => {
     it('exposes Stats as an available destination', () => {

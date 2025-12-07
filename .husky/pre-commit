@@ -30,7 +30,7 @@ else
   echo "Running full code checks..."
   npm run check
   echo "Running full test suite (without e2e)..."
-  SKIP_E2E=1 npm run test:pr
+  npx cross-env SKIP_E2E=1 npm run test:pr
   if [ $? -ne 0 ]; then
     echo "❌ Tests failed. Commit aborted."
     exit 1
