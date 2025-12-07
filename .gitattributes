@@ -1,0 +1,26 @@
+# Normalize text files to LF to avoid CRLF/LF churn across platforms
+* text=auto eol=lf
+
+# Preserve CRLF for Windows scripts
+*.bat eol=crlf
+*.cmd eol=crlf
+*.ps1 eol=crlf
+
+# Treat binary assets as binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.svg binary
+*.mp4 binary
+*.mov binary
+*.mp3 binary
+*.wav binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.otf binary
+*.pdf binary
