@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/orion_light_pollution_count.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/light-pollution.json",
+    "item_name": "Measure Light Pollution",
+    "item_id": "astronomy/light-pollution",
+    "entity_type": "quest",
+    "prompt": "A stargazer stands just off-frame while a small observing table in the foreground holds a planisphere set to winter, a red-filtered flashlight, and an open mission logbook. On the visible page, a simple outline of Orion is drawn with dots for its main stars and a handwritten number count (no readable text), clearly indicating that the observer has tallied how many stars are visible. In the sky above the table, the constellation Orion appears over the rooftops, but only some of its fainter stars are shown, hinting at light pollution.\n\nThe environment is a near-future solarpunk suburb rendered photorealistically at 512×512: houses with rooftop solar panels and warm windows line the horizon, and a soft skyglow competes with the stars. The red flashlight casts a gentle glow over the logbook and planisphere, preserving night vision while allowing notes to be taken. No logos or readable labels appear on any items, and no full human figures dominate the scene, focusing attention on the act of counting Orion’s stars to measure local light pollution.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

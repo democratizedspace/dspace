@@ -13,7 +13,7 @@
             { "task": "codex-quest-upgrade-2025-08-14", "date": "2025-08-14", "score": 95 }
         ]
     },
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/iss_flyover_backyard_observation.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

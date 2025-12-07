@@ -2,7 +2,7 @@
     "id": "astronomy/iss-photo",
     "title": "Photograph the ISS",
     "description": "Use a tracking app and tripod phone to capture the ISS streak and log it.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/iss_long_exposure_phone_photo.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
