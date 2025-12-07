@@ -7,5 +7,4 @@
     "prompt": "A backyard observing setup shows a basic refracting telescope on a tripod pointed toward a dark, starry sky, with a planisphere and a red-filtered flashlight spread out on a small table beside it. The planisphere is set to an autumn evening, and a notebook with a simple sketch of the Andromeda Galaxy as an elongated smudge (no text) lies open next to the flashlight. In the sky above the telescope, the stars are visible but the galaxy itself is not explicitly drawn, leaving its location to the player’s imagination and emphasizing the search process.\n\nThe environment is a near-future solarpunk residential area with silhouettes of rooftops, a few dim house lights, and hints of rooftop solar panels, all rendered photorealistically at 512×512. Lighting is subtle and cinematic: the red flashlight casts a soft glow on the table without ruining the dark adaptation vibe, and the sky dominates the frame. No brand logos or readable labels appear anywhere, and no full human figures are present—only the gear and the night—conveying the quiet, careful task of using analog tools to locate the Andromeda Galaxy while preserving night vision.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

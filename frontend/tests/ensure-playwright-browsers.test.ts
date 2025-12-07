@@ -142,7 +142,7 @@ describe('ensurePlaywrightSystemDeps', () => {
                 fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
             })
         ).toThrow('install-deps failed');
-});
+    });
 });
 
 describe('ensurePlaywrightBrowsers', () => {

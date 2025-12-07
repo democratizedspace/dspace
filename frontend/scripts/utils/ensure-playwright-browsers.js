@@ -187,7 +187,10 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         fs = { existsSync, writeFileSync },
     } = options;
 
-    const { existsSync: fsExistsSync = existsSync, writeFileSync: fsWriteFileSync = writeFileSync } = fs ?? {};
+    const {
+        existsSync: fsExistsSync = existsSync,
+        writeFileSync: fsWriteFileSync = writeFileSync,
+    } = fs ?? {};
 
     if (platform !== 'linux') {
         return false;
