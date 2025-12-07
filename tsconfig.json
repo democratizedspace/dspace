@@ -2,13 +2,17 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
+    "baseUrl": ".",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "noEmit": true,
     "types": ["vitest/globals", "@playwright/test"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "astro": ["./frontend/node_modules/astro/dist/@types/astro.d.ts"]
+    }
   },
   "include": ["backend/**/*.ts", "common/**/*.ts", "src/**/*.ts", "tests/**/*.ts", "scripts/**/*.ts"]
 }

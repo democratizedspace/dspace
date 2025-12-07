@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { execSync } from 'node:child_process';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -6,7 +7,7 @@ describe('build output validation', () => {
     const repoRoot = process.cwd();
     const distPath = join(repoRoot, 'frontend', 'dist');
 
-    function findHtmlFiles(dir: string): string[] {
+    function findBuildFiles(dir: string): string[] {
         const files: string[] = [];
 
         try {
@@ -16,8 +17,8 @@ describe('build output validation', () => {
                 const stat = statSync(fullPath);
 
                 if (stat.isDirectory()) {
-                    files.push(...findHtmlFiles(fullPath));
-                } else if (entry.endsWith('.html')) {
+                    files.push(...findBuildFiles(fullPath));
+                } else if (entry.endsWith('.html') || entry.endsWith('.js') || entry.endsWith('.mjs')) {
                     files.push(fullPath);
                 }
             }
@@ -28,29 +29,36 @@ describe('build output validation', () => {
         return files;
     }
 
-    const htmlFiles = findHtmlFiles(distPath);
-    const skipTest = htmlFiles.length === 0;
+    function getBuildFiles(): string[] {
+        const files = findBuildFiles(distPath);
 
-    it.skipIf(skipTest)(
-        'should not contain /src/scripts/ paths in built HTML files',
-        () => {
+        if (files.length > 0) {
+            return files;
+        }
 
-            for (const htmlFile of htmlFiles) {
-                const contents = readFileSync(htmlFile, 'utf8');
+        // CI should cache frontend/dist between jobs to avoid rebuilding on every test run.
+        execSync('npm run build', { stdio: 'inherit' });
+        return findBuildFiles(distPath);
+    }
 
-                // Check for any /src/scripts/ path
-                const srcScriptsMatch = contents.match(
-                    /["']\/src\/scripts\/[^"']+\.js["']/
+    it('should not contain /src/scripts/ paths in built files', () => {
+        const buildFiles = getBuildFiles();
+
+        expect(buildFiles.length).toBeGreaterThan(0);
+
+        for (const buildFile of buildFiles) {
+            const contents = readFileSync(buildFile, 'utf8');
+
+            // Check for any /src/scripts/ path
+            const srcScriptsMatch = contents.match(/["']\/src\/scripts\/[^"']+\.(?:js|mjs)["']/);
+            if (srcScriptsMatch) {
+                const relativePath = buildFile.startsWith(repoRoot)
+                    ? buildFile.slice(repoRoot.length + 1)
+                    : buildFile;
+                throw new Error(
+                    `Found unbundled /src/scripts/ reference in ${relativePath}: ${srcScriptsMatch[0]}`
                 );
-                if (srcScriptsMatch) {
-                    const relativePath = htmlFile.startsWith(repoRoot)
-                        ? htmlFile.slice(repoRoot.length + 1)
-                        : htmlFile;
-                    throw new Error(
-                        `Found unbundled /src/scripts/ reference in ${relativePath}: ${srcScriptsMatch[0]}`
-                    );
-                }
             }
         }
-    );
+    }, 120000);
 });
