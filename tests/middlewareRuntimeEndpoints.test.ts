@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { APIContext } from 'astro';
+import type { MiddlewareContext } from '../frontend/src/middleware';
 
 import { onRequest } from '../frontend/src/middleware';
 import { buildHealthResponse } from '../frontend/src/utils/runtimeEndpoints';
 
-function createContext(pathname: string): APIContext {
+function createContext(pathname: string): MiddlewareContext {
   return {
     request: new Request(`http://localhost${pathname}`),
-  } as unknown as APIContext;
+  } as unknown as MiddlewareContext;
 }
 
 describe('runtime middleware fallback', () => {
