@@ -48,6 +48,9 @@ importers:
       chartjs-node-canvas:
         specifier: ^5.0.0
         version: 5.0.0(chart.js@4.5.0)
+      cross-env:
+        specifier: ^10.1.0
+        version: 10.1.0
       fake-indexeddb:
         specifier: ^6.1.0
         version: 6.1.0
