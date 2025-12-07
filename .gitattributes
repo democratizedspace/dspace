@@ -6,6 +6,9 @@
 *.cmd eol=crlf
 *.ps1 eol=crlf
 
+# Treat SVGs as text for readable diffs
+*.svg text
+
 # Treat binary assets as binary
 *.png binary
 *.jpg binary
@@ -13,7 +16,6 @@
 *.gif binary
 *.webp binary
 *.ico binary
-*.svg binary
 *.mp4 binary
 *.mov binary
 *.mp3 binary
