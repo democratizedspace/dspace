@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import processes from '../frontend/src/generated/processes.json';
+import processes from '../frontend/src/generated/processes.json' assert { type: 'json' };
 import fs from 'fs';
 import path from 'path';
 

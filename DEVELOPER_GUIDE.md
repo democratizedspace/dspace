@@ -592,6 +592,9 @@ Our project uses both Prettier and ESLint to maintain code quality:
    - Husky and lint-staged automatically check formatting and linting
    - Files with issues will be blocked from being committed until fixed
    - Run fix commands before committing if you encounter errors
+   - Line endings: `.gitattributes` normalizes text files to LF while keeping Windows
+     scripts on CRLF. On Windows, set `git config core.autocrlf false` (or `input`) to
+     avoid CRLF churn in commits.
 
 ### Resolving ESLint and Prettier Conflicts
 
