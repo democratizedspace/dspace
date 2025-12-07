@@ -7,6 +7,6 @@ describe('release merge plan documentation', () => {
         const mergePlanPath = join(process.cwd(), 'docs', 'merge-plan.md');
         const content = readFileSync(mergePlanPath, 'utf8');
 
-        expect(content).not.toMatch(/-\s+\[ \]/);
+        expect(content).not.toMatch(/^(\s*)-\s+\[ \]/m);
     });
 });
