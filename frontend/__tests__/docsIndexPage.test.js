@@ -15,9 +15,9 @@ describe('docs index.astro', () => {
 
         // Using import assertions for JSON imports
         expect(content).toMatch(
-            /import (?:sections|docsSections) from '\.\/(?:json\/)?sections\.json' assert { type: 'json' }/
+            /import sections from '\.\/json\/sections\.json' assert { type: 'json' }/
         );
-        expect(content).toMatch(/(?:sections|docsSections)\.map/);
+        expect(content).toMatch(/sections\.map/);
 
         const allLinks = sections.flatMap((section) => section.links);
         const codexPromptLink = allLinks.find((link) => link.href === '/docs/prompts-codex');
