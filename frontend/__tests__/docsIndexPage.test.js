@@ -4,7 +4,7 @@ import path from 'path';
 import { describe, it, expect } from 'vitest';
 
 const docsIndexFile = path.join(__dirname, '../src/pages/docs/index.astro');
-const docsSectionsFile = path.join(__dirname, '../src/pages/docs/sections.json');
+const docsSectionsFile = path.join(__dirname, '../src/pages/docs/json/sections.json');
 
 describe('docs index.astro', () => {
     it('renders docs navigation from JSON sections', () => {
