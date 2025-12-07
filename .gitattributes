@@ -1,0 +1,34 @@
+* text=auto eol=lf
+
+# Windows scripts
+*.bat eol=crlf
+*.cmd eol=crlf
+*.ps1 eol=crlf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.bmp binary
+*.tif binary
+*.tiff binary
+*.avif binary
+*.mp3 binary
+*.mp4 binary
+*.wav binary
+*.zip binary
+*.gz binary
+*.tgz binary
+*.tar binary
+*.7z binary
+*.rar binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+*.wasm binary
