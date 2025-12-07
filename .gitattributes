@@ -1,9 +1,13 @@
+# Normalize text files to LF to avoid CRLF/LF churn across platforms
 * text=auto eol=lf
 
-# Preserve Windows-friendly endings for scripts executed by cmd/PowerShell
+# Preserve CRLF for Windows scripts executed by cmd/PowerShell
 *.bat eol=crlf
 *.cmd eol=crlf
 *.ps1 eol=crlf
+
+# Treat SVGs as text for readable diffs
+*.svg text
 
 # Treat binary assets as binary to avoid line-ending churn
 *.png binary
@@ -24,3 +28,6 @@
 *.eot binary
 *.woff binary
 *.woff2 binary
+*.mov binary
+*.wav binary
+*.pdf binary

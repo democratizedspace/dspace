@@ -1,4 +1,3 @@
-import type { APIContext } from 'astro';
 import {
     buildHealthResponse,
     buildLivezResponse,
@@ -6,7 +5,11 @@ import {
 } from './utils/runtimeEndpoints';
 import { logServerError } from './utils/serverLogger';
 
-export const onRequest = async (context: APIContext, next: () => Promise<Response>) => {
+export interface MiddlewareContext {
+    request: Request;
+}
+
+export const onRequest = async (context: MiddlewareContext, next: () => Promise<Response>) => {
     const { pathname } = new URL(context.request.url);
     const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
 
