@@ -120,6 +120,9 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         platform = process.platform,
         installSystemDeps = true,
         browser: providedBrowser,
+        depsStampPath,
+        exec = execFileSync,
+        fs = { existsSync, writeFileSync },
     } = options;
 
     const browser = providedBrowser ?? (await getChromiumBrowser());
@@ -145,10 +148,18 @@ export async function ensurePlaywrightBrowsers(options = {}) {
     const cliPath = resolvePlaywrightCLI(cwd);
 
     if (installSystemDeps) {
-        ensurePlaywrightSystemDeps({ cwd, env, cliPath, platform });
+        ensurePlaywrightSystemDeps({
+            cwd,
+            env,
+            cliPath,
+            platform,
+            depsStampPath,
+            exec,
+            fs,
+        });
     }
 
-    execFileSync(process.execPath, [cliPath, ...installArgs], {
+    exec(process.execPath, [cliPath, ...installArgs], {
         stdio: 'inherit',
         cwd,
         env,
@@ -172,7 +183,11 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         platform = process.platform,
         cliPath = resolvePlaywrightCLI(cwd),
         depsStampPath = getSystemDepsSentinelPath(cwd),
+        exec = execFileSync,
+        fs = { existsSync, writeFileSync },
     } = options;
+
+    const { existsSync: fsExistsSync = existsSync, writeFileSync: fsWriteFileSync = writeFileSync } = fs ?? {};
 
     if (platform !== 'linux') {
         return false;
@@ -182,12 +197,12 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         return false;
     }
 
-    if (existsSync(depsStampPath)) {
+    if (fsExistsSync(depsStampPath)) {
         return false;
     }
 
     try {
-        execFileSync(process.execPath, [cliPath, ...INSTALL_DEPS_ARGS], {
+        exec(process.execPath, [cliPath, ...INSTALL_DEPS_ARGS], {
             stdio: 'inherit',
             cwd,
             env,
@@ -205,7 +220,7 @@ export function ensurePlaywrightSystemDeps(options = {}) {
     }
 
     try {
-        writeFileSync(depsStampPath, `${new Date().toISOString()}\n`);
+        fsWriteFileSync(depsStampPath, `${new Date().toISOString()}\n`);
     } catch (error) {
         console.warn(
             `Unable to create Playwright deps sentinel file at ${depsStampPath}: ${error.message}`
