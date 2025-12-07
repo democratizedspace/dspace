@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/binary_star_albireo_observation.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/binary-star.json",
+    "item_name": "Split a Binary Star",
+    "item_id": "astronomy/binary-star",
+    "entity_type": "quest",
+    "prompt": "A basic refracting telescope stands on a tripod in a dark backyard, aimed toward a clear starry sky, with a planisphere and red flashlight resting on a small table nearby. An open observing notebook shows a circular eyepiece sketch with two small colored dots—one golden, one bluish—drawn side by side to represent a binary star, but with no readable text around them. The telescope’s focuser and eyepiece are sharply in focus, while the distant sky and surrounding rooftops are softly blurred, suggesting the quiet task of splitting a binary star like Albireo and noting its colors.\n\nThe environment is a near-future solarpunk neighborhood with subtle silhouettes of houses and rooftop solar panels against the night sky, rendered photorealistically at 512×512. Soft, cinematic lighting from the red flashlight and a dim porch light keeps the gear visible without ruining the dark, and the stars remain strong in the background. No brand logos or legible labels appear anywhere, and no full human figures are visible—only the telescope and observing tools—highlighting the experience of carefully resolving a colorful binary star through a backyard scope.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

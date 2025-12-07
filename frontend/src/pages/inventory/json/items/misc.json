@@ -1197,7 +1197,7 @@
         "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
-        "image": "/assets/quests/solar.jpg",
+        "image": "/assets/quests/basic_refracting_telescope_backyard.jpg",
         "dependencies": ["0", "3"],
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
@@ -1509,21 +1509,21 @@
         "id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
         "name": "20 mm magnifying lens",
         "description": "Small lens with ~20 mm focal length for use as a telescope eyepiece.",
-        "image": "/assets/quests/solar.jpg",
+        "image": "/assets/quests/magnifying_lens_20mm_eyepiece.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "2794503d-fbe7-4031-a63e-deac531f9784",
         "name": "cardboard mailing tube",
         "description": "Sturdy cardboard tube about 40 cm long to hold telescope optics.",
-        "image": "/assets/quests/solar.jpg",
+        "image": "/assets/quests/cardboard_mailing_tube_telescope_body.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
         "name": "camera tripod",
         "description": "Aluminum tripod with 3-way pan head; extends 0.5–1.5 m, supports up to 3 kg, weighs 1.2 kg.",
-        "image": "/assets/quests/solar.jpg",
+        "image": "/assets/quests/camera_tripod_astronomy.jpg",
         "price": "30 dUSD",
         "hardening": {
             "passes": 1,
@@ -1549,7 +1549,7 @@
         "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
         "name": "digital camera",
         "description": "Mirrorless camera capable of long-exposure astrophotography.",
-        "image": "/assets/quests/solar.jpg",
+        "image": "/assets/quests/digital_camera_astrophotography.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {

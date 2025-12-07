@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/magnifying_lens_20mm_eyepiece.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "20 mm magnifying lens",
+    "item_id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
+    "entity_type": "item",
+    "prompt": "A small 20 mm magnifying lens assembly designed as a telescope eyepiece sits on a workbench, housed in a short black metal barrel with a beveled eye lens at the top. The lower end of the barrel tapers slightly to fit into a simple focuser, and faint reflections on the glass show its curvature and compact optics. Nearby on the table are the larger 50 mm objective lens in its mount, a cardboard tube, and a few spacer rings, making it clear that this smaller lens will be used at the viewing end of a homemade refractor.\n\nThe workspace continues the near-future solarpunk astronomy aesthetic: smooth light-colored desktop, soft LED task lighting, and a blurred backdrop showing a whiteboard with orbit diagrams and a small tripod. The 512×512 image should be photorealistic with gentle cinematic lighting that brings out the metal and glass textures without harsh glare or visible brand names. No readable text appears on the eyepiece barrel, and no full human figures are in frame—perhaps only a fingertip resting beside the eyepiece—focusing attention on the compact 20 mm lens as the telescope’s eyepiece.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

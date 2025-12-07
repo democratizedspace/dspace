@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/digital_camera_astrophotography.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "digital camera",
+    "item_id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+    "entity_type": "item",
+    "prompt": "A mirrorless digital camera with a medium telephoto lens is mounted on a sturdy tripod outdoors at night, pointed toward a starry sky just above the horizon. The camera’s rear screen glows softly, showing a faint, long-exposure view of the Milky Way or a dense star field rendered as abstract light patches with no readable UI text. A remote shutter release or intervalometer hangs from the side, and a small red-filtered flashlight and notebook with exposure settings (unreadable scribbles) lie on a nearby stool, emphasizing that the camera is being used for astrophotography.\n\nThe environment is a quiet near-future solarpunk backyard or rooftop with low walls, potted plants, and a hint of solar panels silhouetted against the night, all rendered photorealistically at 512×512. Soft, natural-looking starlight and subtle ambient lighting from a nearby building keep the scene visible without washing out the sky. No brand logos or legible markings appear on the camera or tripod, and no full human figures are visible—only the gear and its surroundings—highlighting the camera’s role as a long-exposure astrophotography tool.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

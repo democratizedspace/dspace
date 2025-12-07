@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/camera_tripod_astronomy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "camera tripod",
+    "item_id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+    "entity_type": "item",
+    "prompt": "An aluminum camera tripod with three telescoping legs stands on a flat patio surface at dusk, with its 3-way pan head clearly visible and no telescope or camera mounted on it. The center column is partially extended and the quick-release plate sits empty on top, making it obvious that this is a generic mount ready to support different optical or imaging gear. A padded carrying case and a small hex key lie near one of the legs, while a simple clamp-style mount or adapter rests on the ground, hinting that the tripod will later be used to hold a small telescope tube or digital camera.\n\nThe scene is rendered in a near-future solarpunk style with soft, photorealistic 512×512 lighting: warm ambient glow from a nearby window contrasts with the deepening blue sky and a few early stars above a low balcony wall. Subtle reflections highlight the aluminum legs and plastic clamps without drawing attention to any brand markings, and no readable text appears on the tripod or accessories. No full human figures are visible—only the tripod and its small collection of tools and adapters—emphasizing its role as a lightweight, versatile mount for astronomy equipment.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

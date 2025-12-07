@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/cardboard_mailing_tube_telescope_body.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "cardboard mailing tube",
+    "item_id": "2794503d-fbe7-4031-a63e-deac531f9784",
+    "entity_type": "item",
+    "prompt": "A sturdy brown cardboard mailing tube about 40 cm long lies horizontally on a clean workbench, with both plastic end caps removed so the hollow interior for telescope optics is visible. The tube rests beside a small stack of round lens cells and spacer rings sized to fit inside, and faint pencil marks around one end hint at where the objective lens will be taped in place. A roll of masking tape, a ruler, and a simple sketch of a refractor layout (no readable text) complete the scene, clearly showing that this tube is being repurposed as the main body for a simple telescope.\n\nThe workspace is a cozy near-future solarpunk maker corner with smooth composite surfaces, soft overhead lighting, and a window showing twilight sky tones. The 512×512 image should be photorealistic with gentle cinematic lighting that brings out the texture of the cardboard and the plastic end caps without harsh shadows. No brand logos or readable labels appear anywhere, and no full people are visible—at most, a fingertip touching the edge of the tube—keeping the focus on the mailing tube as robust housing for telescope optics.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

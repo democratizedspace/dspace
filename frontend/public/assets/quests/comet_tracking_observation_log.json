@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/comet_tracking_observation_log.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/comet-tracking.json",
+    "item_name": "Track a Visiting Comet",
+    "item_id": "astronomy/comet-tracking",
+    "entity_type": "quest",
+    "prompt": "A small telescope on a tripod is set up on a patio at night, aimed toward a starry sky where a subtle, fuzzy streak representing a comet is just visible near the horizon, rendered as a soft, elongated glow rather than a dramatic special effect. On a nearby table, an open notebook shows several simple star charts with dotted paths and date marks (no readable text), clearly indicating that the comet’s position has been plotted across multiple nights. A red flashlight, a pencil, and a digital watch or small timer lie beside the notebook, underscoring the repeated observational effort.\n\nThe scene is a near-future solarpunk backyard with low fences, garden beds, and hints of solar-powered homes in the distance, all rendered photorealistically at 512×512. Soft, cinematic lighting keeps the foreground gear visible while preserving the dark sky, and a gentle gradient from horizon glow to higher altitude darkness suggests changing observing conditions. No brand logos or legible writing appear anywhere, and no full human figures are shown—only the telescope, sky, and logbook—emphasizing the process of patiently tracking a visiting comet over several nights.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  

@@ -1,0 +1,13 @@
+{
+    "filename": "/assets/quests/basic_refracting_telescope_backyard.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "basic telescope",
+    "item_id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+    "entity_type": "item",
+    "prompt": "A simple refracting telescope with a slender white tube and small objective lens is mounted on a lightweight tripod in a backyard at dusk, aimed slightly upward toward the first stars appearing in the sky. The focuser and eyepiece at the back are clearly visible, and a red-dot finder or small aiming scope sits on top of the main tube. Nearby on a patio table rest a planisphere, a red-filtered flashlight, and a notebook with sketched circles representing planets and moons, all hinting at casual backyard astronomy.\n\nThe scene is a near-future solarpunk yard with low fences, raised garden beds, and a few rooftop solar panels visible on neighboring houses, rendered photorealistically in a 512×512 frame. Soft, cinematic lighting blends the blue of the darkening sky with warm ambient light from a nearby window, gently highlighting the telescope without blowing out any details. No brand logos or readable text appear anywhere, and no full people are in view—only the telescope and accessories—presenting a friendly, approachable beginner’s instrument for stargazing.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }
+  
