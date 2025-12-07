@@ -2,7 +2,8 @@ import { loadGameState, saveGameState } from './common.js';
 import { hasItems, burnItems, addItems } from './inventory.js';
 import { durationInSeconds } from '../../utils.js';
 
-import processes from '../../generated/processes.json';
+// Using import assertions for JSON imports
+import processes from '../../generated/processes.json' assert { type: 'json' };
 
 export const hasRequiredAndConsumedItems = (processId) => {
     const process = processes.find((p) => p.id === processId);

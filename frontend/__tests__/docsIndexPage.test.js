@@ -13,8 +13,11 @@ describe('docs index.astro', () => {
         const sections = JSON.parse(fs.readFileSync(docsSectionsFile, 'utf8'));
         const content = fs.readFileSync(docsIndexFile, 'utf8');
 
-        expect(content).toMatch(/import docsSections from '\.\/sections.json'/);
-        expect(content).toMatch(/docsSections\.map/);
+        // Using import assertions for JSON imports
+        expect(content).toMatch(
+            /import (?:sections|docsSections) from '\.\/(?:json\/)?sections\.json' assert { type: 'json' }/
+        );
+        expect(content).toMatch(/(?:sections|docsSections)\.map/);
 
         const allLinks = sections.flatMap((section) => section.links);
         const codexPromptLink = allLinks.find((link) => link.href === '/docs/prompts-codex');

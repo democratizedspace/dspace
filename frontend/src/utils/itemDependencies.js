@@ -1,4 +1,5 @@
-import itemQuestMap from '../generated/itemQuestMap.json';
+// Using import assertions for JSON imports
+import itemQuestMap from '../generated/itemQuestMap.json' assert { type: 'json' };
 
 export function getQuestsForItem(itemId) {
     const entry = itemQuestMap[itemId];

@@ -1,5 +1,6 @@
 import Ajv from 'ajv';
-import schema from '../pages/quests/jsonSchemas/quest.json';
+// Using import assertions for JSON imports
+import schema from '../pages/quests/jsonSchemas/quest.json' assert { type: 'json' };
 
 const ajv = new Ajv();
 const validate = ajv.compile(schema);
