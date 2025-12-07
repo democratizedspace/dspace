@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/simple_cardboard_telescope_assembly.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/basic-telescope.json",
+    "item_name": "Assemble a Simple Telescope",
+    "item_id": "astronomy/basic-telescope",
+    "entity_type": "quest",
+    "prompt": "A close-up view shows gloved hands sliding a 50 mm objective lens cell into one end of a cardboard mailing tube while a 20 mm eyepiece assembly and a roll of masking tape lie nearby on the workbench. Short strips of masking tape already secure the objective cell at the rim of the tube, and an aluminum camera tripod stands ready in the background with a simple clamp mount waiting to hold the finished telescope. A printed safety card with a bold sun icon crossed out (no text) sits off to the side, subtly reminding that the instrument must never be aimed at the Sun.\n\nThe workspace is a shaded near-future solarpunk garage or balcony lab, lit by diffuse daylight from a nearby window and soft LED strips, rendered photorealistically in a 512×512 frame. The lighting highlights the cardboard texture, lens reflections, and matte masking tape without harsh glare, and the overall composition is tidy and focused. No brand logos or readable text appear anywhere, and only forearms and hands are visible, emphasizing the careful, hands-on process of assembling a simple refractor for viewing Jupiter’s moons while working safely in the shade.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

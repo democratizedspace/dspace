@@ -2,7 +2,7 @@
     "id": "astronomy/basic-telescope",
     "title": "Assemble a Simple Telescope",
     "description": "Use 50 mm and 20 mm magnifying lenses, masking tape, a cardboard mailing tube and a camera tripod to build a simple refractor for viewing Jupiter's moons. Work in the shade and never aim at the Sun.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/simple_cardboard_telescope_assembly.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

@@ -1,4 +1,5 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import path from 'node:path';
 
 const execFileSyncMock = vi.fn();
 const existsSyncMock = vi.fn();
@@ -40,6 +41,7 @@ async function importModule(): Promise<EnsureModule> {
 describe('ensurePlaywrightSystemDeps', () => {
     const cwd = '/workspace/dspace/frontend';
     const cliPath = `${cwd}/node_modules/@playwright/test/cli.js`;
+    const depsStampPath = path.join(cwd, '.playwright-deps-installed-test');
 
     beforeEach(() => {
         execFileSyncMock.mockReset();
@@ -53,7 +55,7 @@ describe('ensurePlaywrightSystemDeps', () => {
             if (target === cliPath) {
                 return true;
             }
-            if (target.endsWith('.playwright-deps-installed')) {
+            if (target === depsStampPath) {
                 return false;
             }
             return false;
@@ -63,13 +65,21 @@ describe('ensurePlaywrightSystemDeps', () => {
 
         const env = { ...process.env };
 
-        const result = ensurePlaywrightSystemDeps({ cwd, env, platform: 'linux', cliPath });
+        const result = ensurePlaywrightSystemDeps({
+            cwd,
+            env,
+            platform: 'linux',
+            cliPath,
+            depsStampPath,
+            exec: execFileSyncMock,
+            fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
+        });
 
         expect(result).toBe(true);
         expect(execFileSyncMock).toHaveBeenCalledTimes(1);
         expect(execFileSyncMock.mock.calls[0][1]).toEqual([cliPath, 'install-deps']);
         expect(writeFileSyncMock).toHaveBeenCalledWith(
-            `${cwd}/.playwright-deps-installed`,
+            depsStampPath,
             expect.stringMatching(/\d{4}-\d{2}-\d{2}/)
         );
     });
@@ -79,7 +89,7 @@ describe('ensurePlaywrightSystemDeps', () => {
             if (target === cliPath) {
                 return true;
             }
-            if (target.endsWith('.playwright-deps-installed')) {
+            if (target === depsStampPath) {
                 return true;
             }
             return false;
@@ -89,7 +99,15 @@ describe('ensurePlaywrightSystemDeps', () => {
 
         const env = { ...process.env };
 
-        const result = ensurePlaywrightSystemDeps({ cwd, env, platform: 'linux', cliPath });
+        const result = ensurePlaywrightSystemDeps({
+            cwd,
+            env,
+            platform: 'linux',
+            cliPath,
+            depsStampPath,
+            exec: execFileSyncMock,
+            fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
+        });
 
         expect(result).toBe(false);
         expect(execFileSyncMock).not.toHaveBeenCalled();
@@ -101,7 +119,7 @@ describe('ensurePlaywrightSystemDeps', () => {
             if (target === cliPath) {
                 return true;
             }
-            if (target.endsWith('.playwright-deps-installed')) {
+            if (target === depsStampPath) {
                 return false;
             }
             return false;
@@ -119,6 +137,9 @@ describe('ensurePlaywrightSystemDeps', () => {
                 env: { ...process.env, CI: 'true' },
                 platform: 'linux',
                 cliPath,
+                depsStampPath,
+                exec: execFileSyncMock,
+                fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
             })
         ).toThrow('install-deps failed');
     });
@@ -130,6 +151,7 @@ describe('ensurePlaywrightBrowsers', () => {
     const chromiumPath = '/root/.cache/ms-playwright/chromium-1234/chrome';
     const headlessShellPath =
         '/root/.cache/ms-playwright/chromium-headless-shell-1234/headless_shell';
+    const depsStampPath = path.join(cwd, '.playwright-deps-installed-test');
 
     beforeEach(() => {
         execFileSyncMock.mockReset();
@@ -149,7 +171,7 @@ describe('ensurePlaywrightBrowsers', () => {
             if (target === cliPath) {
                 return true;
             }
-            if (target === `${cwd}/.playwright-deps-installed`) {
+            if (target === depsStampPath) {
                 return sentinelExists;
             }
             if (target === chromiumPath) {
@@ -179,6 +201,9 @@ describe('ensurePlaywrightBrowsers', () => {
             cwd,
             env: { ...process.env },
             platform: 'linux',
+            depsStampPath,
+            exec: execFileSyncMock,
+            fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
         });
 
         expect(execFileSyncMock).toHaveBeenCalledTimes(2);

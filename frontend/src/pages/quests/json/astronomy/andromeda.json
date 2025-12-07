@@ -2,7 +2,7 @@
     "id": "astronomy/andromeda",
     "title": "Locate the Andromeda Galaxy",
     "description": "Use a planisphere star chart, a red flashlight and a basic telescope to locate our neighboring galaxy while preserving night vision.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/andromeda_galaxy_backyard_hunt.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

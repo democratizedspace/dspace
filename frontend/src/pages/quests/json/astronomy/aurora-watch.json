@@ -2,7 +2,7 @@
     "id": "astronomy/aurora-watch",
     "title": "Watch the Aurora",
     "description": "Check the aurora forecast and step outside with a red flashlight to log the lights.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/aurora_watch_red_flashlight.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

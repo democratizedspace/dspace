@@ -1,12 +1,15 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [svelte()],
   resolve: {
     alias: {
-      svelte: path.resolve('./frontend/node_modules/svelte')
+      svelte: path.resolve(__dirname, './frontend/node_modules/svelte')
     }
   },
   test: {

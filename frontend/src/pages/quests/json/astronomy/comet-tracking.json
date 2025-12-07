@@ -2,7 +2,7 @@
     "id": "astronomy/comet-tracking",
     "title": "Track a Visiting Comet",
     "description": "Use your telescope to plot a comet's path across several nights.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/comet_tracking_observation_log.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
