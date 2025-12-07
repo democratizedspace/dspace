@@ -1,0 +1,197 @@
+---
+import Page from '../components/Page.astro';
+
+const wings = [
+    {
+        title: 'Print farm',
+        description:
+            'Sydney leads additive manufacturing runs, keeps the printers tuned, and queues new '
+            + 'hardware when the crew needs spare parts.',
+    },
+    {
+        title: 'Hydroponics lab',
+        description:
+            'Hydro steers the greenhouse, balancing nutrient mixes and onboarding gardeners so the '
+            + 'Metaguild can fund more stipends.',
+    },
+    {
+        title: 'Launch pad',
+        description:
+            'Nova keeps avionics checklists and field repairs on track so rocketry quests stay '
+            + 'flight-ready for every recruit.',
+    },
+];
+
+const milestones = [
+    {
+        title: 'Unlock your callsign',
+        detail:
+            'Finish the Universal Basic Income questline to receive your daily stipend and '
+            + 'Metaguild badge.',
+    },
+    {
+        title: 'Support the pool',
+        detail:
+            'Visit the donation Leaderboard to boost the guild treasury and celebrate the top '
+            + 'supporters.',
+    },
+    {
+        title: 'Team up with specialists',
+        detail:
+            'Chat with NPC personas like Sydney, Hydro, and Nova when you need build reviews or '
+            + 'new quest ideas.',
+    },
+];
+---
+
+<Page title="Guilds">
+    <li class="intro-card">
+        <p class="lede">
+            Guilds are live in DSPACE as collaborative crews that pool equipment, quests, and
+            funding.
+            The Metaguild serves as the flagship organization,
+            and this page keeps its doors open for new recruits.
+        </p>
+        <p>
+            Need more detail? Read the full <a href="/docs/guilds">Guilds guide</a> for structure,
+            rewards, and chat tips.
+        </p>
+    </li>
+
+    <li class="section-card">
+        <section>
+            <h3>Meet the wings</h3>
+            <p>
+                Each specialist keeps a wing of the Metaguild humming so you do not have to grind
+                alone.
+            </p>
+            <ul class="card-grid">
+                {wings.map((wing) => (
+                    <li class="card">
+                        <h4>{wing.title}</h4>
+                        <p>{wing.description}</p>
+                    </li>
+                ))}
+            </ul>
+        </section>
+    </li>
+
+    <li class="section-card">
+        <section>
+            <h3>Join the roster</h3>
+            <p>
+                Follow these steps to earn your stipend and plug into the guild tools already live
+                in this build.
+            </p>
+            <ol>
+                {milestones.map((milestone) => (
+                    <li>
+                        <strong>{milestone.title}.</strong> {milestone.detail}
+                    </li>
+                ))}
+            </ol>
+        </section>
+    </li>
+</Page>
+
+<style>
+    :global(.link-card-grid-1) {
+        list-style: none;
+    }
+
+    .intro-card,
+    .section-card {
+        background: rgba(7, 28, 19, 0.9);
+        border-radius: 16px;
+        padding: 1.25rem;
+        color: #f4fff6;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(121, 232, 154, 0.25);
+    }
+
+    .intro-card p,
+    .section-card p {
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .intro-card p + p,
+    .section-card p + p {
+        margin-top: 0.5rem;
+    }
+
+    .lede {
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    .section-card + .section-card {
+        margin-top: 1rem;
+    }
+
+    .section-card h3 {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        font-size: 1.3rem;
+    }
+
+    .card-grid {
+        list-style: none;
+        display: grid;
+        gap: 1rem;
+        padding: 0;
+        margin: 0;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .card {
+        background: rgba(6, 20, 12, 0.9);
+        border: 1px solid rgba(121, 232, 154, 0.35);
+        border-radius: 12px;
+        padding: 1rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .card h4 {
+        margin: 0;
+        font-size: 1.1rem;
+    }
+
+    .card p {
+        margin: 0;
+        color: #e4ffea;
+        line-height: 1.5;
+        font-size: 0.95rem;
+    }
+
+    ol {
+        margin: 0;
+        padding-left: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    li strong {
+        color: #c6ffe0;
+    }
+
+    a {
+        color: #9fffbf;
+    }
+
+    a:hover,
+    a:focus {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .intro-card,
+        .section-card {
+            padding: 1rem;
+        }
+    }
+</style>

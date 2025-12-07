@@ -58,8 +58,7 @@
     },
     {
         "name": "Guilds",
-        "href": "/guilds",
-        "comingSoon": true
+        "href": "/guilds"
     },
     {
         "name": "Stats",
