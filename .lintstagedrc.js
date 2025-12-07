@@ -1,9 +1,9 @@
 module.exports = {
   // Run lint and format checks on JavaScript, TypeScript, and Svelte files
   "frontend/**/*.{js,ts,svelte}": [
-    "npm run lint:fix -- --quiet", 
-    "npm run lint -- --quiet",
-    "npm run format -- --quiet",
+    "npm --prefix frontend run lint:fix -- --quiet",
+    "npm --prefix frontend run lint -- --quiet",
+    "npm --prefix frontend run format -- --quiet",
     // Run test for changed source files
     () => `npm test`
   ],
@@ -15,7 +15,7 @@ module.exports = {
   
   // TypeScript type checking for TS files
   "frontend/**/*.ts": [
-    () => "npm run check"
+    () => "npm --prefix frontend run check"
   ],
 
   // Validate quest JSON files
@@ -28,6 +28,6 @@ module.exports = {
 
   // Format JSON, markdown, and CSS files
   "frontend/**/*.{json,md,css,scss}": [
-    "npm run format -- --quiet"
+    "npm --prefix frontend run format -- --quiet"
   ]
 }
