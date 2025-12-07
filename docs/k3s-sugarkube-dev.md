@@ -350,21 +350,23 @@ version and values; it simply forces Helm to pull the refreshed image tag.
 > rollouts (canary/blue-green) can be layered on later using native Kubernetes strategies or
 > additional sugarkube automation.
 
-## End-to-end checklist for dspace staging
+## End-to-end verification for dspace staging
 
-- [ ] Sugarkube cluster: `just cluster-status` is healthy.
-- [ ] Traefik: `just traefik-status` is healthy.
-- [ ] Cloudflare Tunnel: connector running (`kubectl -n cloudflare get deploy,po`) and `/ready`
-      returns 200. Verify with a two-shell port-forward:
+Use this quick runbook to confirm staging is healthy after a deploy:
+
+- Sugarkube cluster: `just cluster-status` is healthy.
+- Traefik: `just traefik-status` is healthy.
+- Cloudflare Tunnel: connector running (`kubectl -n cloudflare get deploy,po`) and `/ready`
+  returns 200. Verify with a two-shell port-forward:
   - Shell 1: `kubectl -n cloudflare port-forward deploy/cloudflare-tunnel 2000:2000`
   - Shell 2: `curl -fsS http://localhost:2000/ready`
   - A JSON response containing `"status":200` confirms the tunnel is healthy.
-- [ ] Published application route: `staging.democratized.space` →
-      `traefik.kube-system.svc.cluster.local` (Type: HTTP).
-- [ ] DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
-- [ ] dspace Helm release deployed in `dspace` (or your chosen) namespace.
-- [ ] `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
-- [ ] Browsing `https://staging.democratized.space` shows the dspace v3 UI.
+- Published application route: `staging.democratized.space` →
+  `traefik.kube-system.svc.cluster.local` (Type: HTTP).
+- DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
+- dspace Helm release deployed in `dspace` (or your chosen) namespace.
+- `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
+- Browsing `https://staging.democratized.space` shows the dspace v3 UI.
 
 ## Troubleshooting
 

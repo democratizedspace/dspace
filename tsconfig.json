@@ -14,5 +14,12 @@
       "astro": ["./frontend/node_modules/astro/dist/@types/astro.d.ts"]
     }
   },
-  "include": ["backend/**/*.ts", "common/**/*.ts", "src/**/*.ts", "tests/**/*.ts", "scripts/**/*.ts"]
+  "include": [
+    "backend/**/*.ts",
+    "common/**/*.ts",
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "tests/**/*.d.ts",
+    "scripts/**/*.ts"
+  ]
 }
