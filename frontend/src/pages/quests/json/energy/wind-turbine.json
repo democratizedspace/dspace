@@ -2,7 +2,7 @@
     "id": "energy/wind-turbine",
     "title": "Install a Wind Turbine",
     "description": "Supplement your solar setup with power from the breeze.",
-    "image": "/assets/quests/solar_200Wh.jpg",
+    "image": "/assets/quests/small_wind_turbine_install.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

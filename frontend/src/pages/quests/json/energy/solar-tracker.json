@@ -2,7 +2,7 @@
     "id": "energy/solar-tracker",
     "title": "Build a Solar Tracker",
     "description": "Rotate your 200 Wh kit to follow the sun.",
-    "image": "/assets/quests/solar_200Wh.jpg",
+    "image": "/assets/quests/solar_tracker_200Wh_kit.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

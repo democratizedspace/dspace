@@ -2,7 +2,7 @@
     "id": "energy/power-inverter",
     "title": "Install a Power Inverter",
     "description": "Convert your battery's DC output into AC for household gear.",
-    "image": "/assets/quests/solar_200Wh.jpg",
+    "image": "/assets/quests/power_inverter_installation.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

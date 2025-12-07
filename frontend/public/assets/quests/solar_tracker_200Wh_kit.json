@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/solar_tracker_200Wh_kit.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/solar-tracker.json",
+    "item_name": "Build a Solar Tracker",
+    "item_id": "energy/solar-tracker",
+    "entity_type": "quest",
+    "prompt": "A single 200 W solar panel is mounted on a small two-axis tracking frame in a backyard or rooftop garden, with its tilt and rotation clearly adjustable via visible hinges and a compact actuator or gear assembly at the base. Cables run from the panel down the tracker’s support into a nearby 200 Wh battery pack and charge controller sitting on a low platform, forming a tidy self-contained kit. A simple control box with a few unlabeled buttons and arrow icons is attached to the tracker’s base, and a small arrow diagram sketched on a notepad nearby shows the panel following the sun across the sky.\n\nThe surrounding environment is a lush near-future solarpunk yard with planter boxes, a low fence, and perhaps a glimpse of other stationary solar panels in the distance, rendered photorealistically in a 512×512 composition. Warm, natural sunlight casts soft shadows that emphasize the panel’s orientation and the mechanical parts of the tracker without harsh glare. There are no brand logos or readable text, and only a partial view of a hand adjusting the control box suggests human interaction, making the system feel approachable and clearly dedicated to rotating a small solar kit to follow the sun.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}
