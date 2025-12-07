@@ -14,7 +14,7 @@
             }
         ]
     },
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/meteor_shower_observation_log.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

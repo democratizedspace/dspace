@@ -2,7 +2,7 @@
     "id": "astronomy/light-pollution",
     "title": "Measure Light Pollution",
     "description": "Count Orion's stars with a planisphere and red flashlight. Log the count.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/orion_light_pollution_count.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/meteor_shower_observation_log.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/meteor-shower.json",
+    "item_name": "Document a Meteor Shower",
+    "item_id": "astronomy/meteor-shower",
+    "entity_type": "quest",
+    "prompt": "A basic telescope sits idle on a tripod in a dark backyard while the sky above shows several faint meteor streaks radiating from a point high overhead, rendered as thin, subtle lines rather than dramatic fireballs. On a small table in the foreground, a planisphere, red flashlight, and open mission logbook are arranged together; the logbook page shows tally marks and short lines radiating from a central point in a circle, indicating counted meteors and their directions (no readable text). A pencil rests across the notebook, ready for the next streak.\n\nThe environment continues the photorealistic 512×512 near-future solarpunk style: low fences, garden beds, and silhouetted solar rooftops form the horizon. Lighting is minimal—the red flashlight provides a small pool of warm light on the table while the rest of the scene is lit mainly by starlight and distant house lights. No brand logos or legible labels appear anywhere, and no full human figures are shown, keeping the focus on documenting a meteor shower with telescope, planisphere, red light, and mission logbook.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

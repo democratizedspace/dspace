@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/constellation_mapping_logbook.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/constellations.json",
+    "item_name": "Map the Constellations",
+    "item_id": "astronomy/constellations",
+    "entity_type": "quest",
+    "prompt": "A backyard observing table holds a spread-out planisphere, a red-filtered flashlight glowing softly, and an open mission logbook filled with simple star pattern sketches and connecting lines (no readable text). In the background, a basic telescope stands on a tripod pointed toward the sky, but the focus of the image is on the notebook pages where key constellations have been traced and labeled with small symbols. Above the scene, a clear night sky filled with recognizable star patterns arches over silhouetted rooftops, suggesting that the player is identifying and mapping constellations for celestial navigation practice.\n\nThe environment is a near-future solarpunk neighborhood, with hints of rooftop solar panels and garden beds visible at the edges of the frame, rendered photorealistically at 512×512. Soft, cinematic lighting from the red flashlight illuminates the logbook and planisphere without overpowering the starlight, preserving the dark-adapted mood. No brand logos or readable labels appear anywhere, and no full human figures are visible—only the observing tools—emphasizing the quiet, methodical process of mapping constellations by hand.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+  }

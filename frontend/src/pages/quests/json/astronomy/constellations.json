@@ -2,7 +2,7 @@
     "id": "astronomy/constellations",
     "title": "Map the Constellations",
     "description": "Identify key star patterns to aid celestial navigation.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/constellation_mapping_logbook.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

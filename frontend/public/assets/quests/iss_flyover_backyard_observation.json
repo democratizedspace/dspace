@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/iss_flyover_backyard_observation.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/iss-flyover.json",
+    "item_name": "Spot the ISS",
+    "item_id": "astronomy/iss-flyover",
+    "entity_type": "quest",
+    "prompt": "A basic refracting telescope on a tripod stands in a backyard at dusk, aimed toward a patch of sky where a bright point of light—representing the ISS—streaks subtly overhead. On a small table nearby, a smartphone glows with a satellite-tracking app showing a simple arc across a map, and an open mission logbook with a pen rests beside it, ready to record the sighting time (no readable text). A red-filtered flashlight lies on the table, turned on but angled downward, casting a gentle crimson glow that preserves night vision.\n\nThe scene is rendered in a photorealistic 512×512 near-future solarpunk style: rooftop solar panels are visible on neighboring houses, and garden beds frame the observing area. Soft twilight and early stars blend with the warm tones from nearby windows, while the ISS trail is hinted at with a short, bright streak rather than an exaggerated effect. No brand logos or legible labels appear on the telescope, phone, or notebook, and no full human figures are visible—only hands or arms at most—highlighting the use of a tracking app and basic telescope to watch the station pass overhead and log the event.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

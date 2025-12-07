@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/orion_nebula_backyard_observation.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/orion-nebula.json",
+    "item_name": "Observe the Orion Nebula",
+    "item_id": "astronomy/orion-nebula",
+    "entity_type": "quest",
+    "prompt": "A basic refracting telescope stands on a tripod in a backyard, pointed toward the constellation Orion rising above the horizon. On a nearby table, a planisphere set to winter, a red flashlight, and an open mission logbook are arranged together; the visible page shows a small eyepiece sketch of Orion’s sword region with a softly glowing patch in the middle representing the Orion Nebula (no readable text). The Orion pattern is visible in the sky above, with a slightly brighter, diffuse area where the nebula lies, but not so detailed that it looks like a space telescope photo.\n\nThe scene is rendered photorealistically at 512×512 in a near-future solarpunk neighborhood: low fences, gardens, and solar-clad rooftops form the lower part of the image, while the sky dominates the upper half. Soft, cinematic lighting from house windows and the red flashlight provides just enough illumination on the gear without washing out the stars. No brand logos or legible labels appear, and no full human figures are shown, centering the experience on using a planisphere, red flashlight, and basic telescope to find and observe the Orion Nebula.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

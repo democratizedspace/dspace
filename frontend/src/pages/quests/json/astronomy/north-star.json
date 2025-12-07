@@ -2,7 +2,7 @@
     "id": "astronomy/north-star",
     "title": "Locate the North Star",
     "description": "Use the Big Dipper to spot Polaris for navigation practice.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/north_star_polaris_location.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

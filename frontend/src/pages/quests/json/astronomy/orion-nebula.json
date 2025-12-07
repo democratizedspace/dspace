@@ -2,7 +2,7 @@
     "id": "astronomy/orion-nebula",
     "title": "Observe the Orion Nebula",
     "description": "Use a planisphere, red flashlight and basic telescope to find the Orion Nebula.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/orion_nebula_backyard_observation.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

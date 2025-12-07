@@ -2,7 +2,7 @@
     "id": "astronomy/jupiter-moons",
     "title": "Track Jupiter's Moons",
     "description": "Observe the four largest moons nightly to understand orbital motion.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/jupiter_moons_orbital_tracking.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

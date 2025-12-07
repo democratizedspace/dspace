@@ -2,7 +2,7 @@
     "id": "astronomy/lunar-eclipse",
     "title": "Photograph a Lunar Eclipse",
     "description": "Capture images of the Moon as it moves through Earth's shadow.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/lunar_eclipse_astrophotography.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

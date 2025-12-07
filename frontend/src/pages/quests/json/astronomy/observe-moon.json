@@ -2,7 +2,7 @@
     "id": "astronomy/observe-moon",
     "title": "Observe the Moon",
     "description": "Use a basic telescope, mission logbook, quill, ink and red flashlight to sketch lunar craters safely.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/lunar_crater_sketching_session.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
