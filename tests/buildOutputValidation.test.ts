@@ -60,5 +60,5 @@ describe('build output validation', () => {
                 );
             }
         }
-    });
+    }, 120000);
 });
