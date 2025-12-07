@@ -1,7 +1,7 @@
 ---
 import Page from '../components/Page.astro';
 import inventoryItems from './inventory/json/items';
-import processes from '../generated/processes.json' assert { type: 'json' };
+import processes from '../generated/processes.json';
 
 const questModules = await Astro.glob('./quests/json/*/*.json');
 const quests = questModules.map((module) =>
