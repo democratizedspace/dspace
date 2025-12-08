@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-content-counts-cross-platform",
+  "date": "2025-12-08",
+  "component": "content validation",
+  "rootCause": "Content integrity tests counted quests and items via shell globbing that returned zero on Windows, triggering false regressions.",
+  "resolution": "Reimplemented content counting with Node fs/path traversal to produce consistent totals on all platforms.",
+  "references": [
+    "scripts/tests/contentIntegrity.test.ts",
+    "scripts/baselines/contentCounts.json"
+  ]
+}

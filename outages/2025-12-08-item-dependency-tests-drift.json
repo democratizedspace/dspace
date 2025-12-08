@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-item-dependency-tests-drift",
+  "date": "2025-12-08",
+  "component": "data scripts",
+  "rootCause": "generate-item-dependencies expectations referenced items no longer present in the quest reward/require data, so the map accessors threw on undefined entries during test runs.",
+  "resolution": "Aligned the dependency tests with current items and quests that actually have require and reward relationships.",
+  "references": [
+    "scripts/generate-item-dependencies.js",
+    "tests/generateItemDependencies.test.ts"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-playwright-tests-os-awareness",
+  "date": "2025-12-08",
+  "component": "test infrastructure",
+  "rootCause": "ensurePlaywrightBrowsers unit tests encoded Linux-specific path expectations, causing failures on Windows when path separators and CLI locations differed.",
+  "resolution": "Normalized path construction with Node path utilities, reused repo-root paths, and adjusted expectations to handle Windows separators while keeping Linux coverage.",
+  "references": [
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts",
+    "frontend/scripts/utils/ensure-playwright-browsers.js"
+  ]
+}

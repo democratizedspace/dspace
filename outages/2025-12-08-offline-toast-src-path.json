@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-offline-toast-src-path",
+  "date": "2025-12-08",
+  "component": "frontend build",
+  "rootCause": "The 404 build output still referenced /src/scripts/offlineToast.js, leaving a source-only path in the bundled files and tripping build validation.",
+  "resolution": "Resolved offlineToast through Astro asset resolution so the layout imports the bundled asset path instead of leaking /src references.",
+  "references": [
+    "frontend/src/layouts/Layout.astro",
+    "tests/buildOutputValidation.test.ts"
+  ]
+}

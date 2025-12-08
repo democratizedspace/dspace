@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-new-quests-path-resolution",
+  "date": "2025-12-08",
+  "component": "documentation tooling",
+  "rootCause": "The new quests doc updater and test relied on brittle relative paths, which failed to resolve the markdown file on Windows during regeneration checks.",
+  "resolution": "Standardized path resolution with fileURLToPath and repo-root joins so the script and tests locate new-quests.md across platforms.",
+  "references": [
+    "scripts/update-new-quests.js",
+    "tests/newQuestsList.test.ts"
+  ]
+}

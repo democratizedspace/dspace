@@ -1,10 +1,15 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { fileURLToPath, pathToFileURL } = require('url');
+
+const repoRoot = path.resolve(
+  path.dirname(fileURLToPath(pathToFileURL(__filename))),
+  '..'
+);
 
 const frontendOutput = path.join(
-  __dirname,
-  '..',
+  repoRoot,
   'frontend',
   'src',
   'pages',
@@ -12,7 +17,7 @@ const frontendOutput = path.join(
   'md',
   'new-quests.md'
 );
-const docsOutput = path.join(__dirname, '..', 'docs', 'new-quests.md');
+const docsOutput = path.join(repoRoot, 'docs', 'new-quests.md');
 
 const PRE_V2_COMMIT = 'fc840def24c5140411d2892f468960acb8250681';
 const V2_COMMIT = '93a834691af174b3c8b9895e9a27ce72e10e8299';
@@ -128,8 +133,7 @@ function getDocFallbackSections() {
 
 function listQuestFiles(ref) {
   const questDir = path.join(
-    __dirname,
-    '..',
+    repoRoot,
     'frontend',
     'src',
     'pages',

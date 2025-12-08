@@ -81,8 +81,12 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                 <div id="starry">
                         <slot />
                 </div>
-                <script is:inline type="module">
-                        import installOfflineToast from '../scripts/offlineToast.js';
+                <script
+                        is:inline
+                        type="module"
+                        define:vars={{ offlineToastModule: Astro.resolve('../scripts/offlineToast.js') }}
+                >
+                        import installOfflineToast from '{offlineToastModule}';
                         installOfflineToast();
                 </script>
 

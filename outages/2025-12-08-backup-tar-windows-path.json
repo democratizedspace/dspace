@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-backup-tar-windows-path",
+  "date": "2025-12-08",
+  "component": "build scripts",
+  "rootCause": "scripts/backup.mjs invoked tar with absolute Windows paths containing drive letters, which tar interpreted as remote hosts, breaking backups on Windows.",
+  "resolution": "Updated the backup script to create output directories, run tar from the repo root with relative archive targets, and avoid shell quoting issues on Windows.",
+  "references": [
+    "scripts/backup.mjs",
+    "tests/backupScript.test.ts"
+  ]
+}

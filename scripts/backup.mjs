@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 
@@ -18,11 +18,12 @@ for (let i = 0; i < rawArgs.length; i += 1) {
 
 const sources = targets.length > 0 ? targets : ['backend', 'frontend'];
 
-const outPath = path.resolve(outDir);
+const cwd = process.cwd();
+const outPath = path.resolve(cwd, outDir);
 mkdirSync(outPath, { recursive: true });
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-const file = path.join(outPath, `backup-${timestamp}.tar.gz`);
-const args = sources.map((p) => `'${p}'`).join(' ');
-execSync(`tar -czf '${file}' ${args}`, { stdio: 'inherit' });
-console.log(`Created backup at ${file}`);
+const absoluteFile = path.join(outPath, `backup-${timestamp}.tar.gz`);
+const relativeFile = path.relative(cwd, absoluteFile) || `.${path.sep}${path.basename(absoluteFile)}`;
+execFileSync('tar', ['-czf', relativeFile, ...sources], { cwd, stdio: 'inherit' });
+console.log(`Created backup at ${absoluteFile}`);
 
