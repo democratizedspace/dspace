@@ -4,7 +4,7 @@ import path from 'node:path';
 describe('GitHub workflow pnpm cache', () => {
     const repoRoot = path.resolve(__dirname, '..');
     const expectations: Record<string, number> = {
-        '.github/workflows/ci.yml': 1,
+        '.github/workflows/ci.yml': 2,
         '.github/workflows/tests.yml': 3,
         '.github/workflows/quest-chart.yml': 1,
     };
