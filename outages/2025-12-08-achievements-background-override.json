@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-achievements-background-override",
+  "date": "2025-12-08",
+  "component": "frontend",
+  "rootCause": "The Achievements page injected a page-specific radial gradient on the body, overriding the global dark theme and breaking consistency with other routes.",
+  "resolution": "Removed the body background override so the Achievements route inherits the shared DSPACE theme colors.",
+  "references": [
+    "frontend/src/pages/achievements/index.astro",
+    "frontend/src/components/Page.astro"
+  ]
+}

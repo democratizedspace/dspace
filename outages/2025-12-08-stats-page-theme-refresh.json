@@ -1,0 +1,12 @@
+{
+  "id": "2025-12-08-stats-page-theme-refresh",
+  "date": "2025-12-08",
+  "component": "frontend",
+  "rootCause": "The Game Stats route relied on bespoke dark overlays and loose layout instead of the shared cards and grid spacing used elsewhere, making it feel off-brand versus other themed pages.",
+  "resolution": "Rebuilt the stats layout with the Page grid, reused Card components for the metric highlights, and matched section styling to the shared DSPACE surface colors and borders.",
+  "references": [
+    "frontend/src/pages/stats.astro",
+    "frontend/src/components/Page.astro",
+    "frontend/src/components/Card.astro"
+  ]
+}

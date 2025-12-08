@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-titles-background-override",
+  "date": "2025-12-08",
+  "component": "frontend",
+  "rootCause": "The titles page replaced the site-wide background with a custom gradient, diverging from the DSPACE theme and causing visual drift across routes.",
+  "resolution": "Removed the body-level gradient so the titles route uses the shared theme provided by the Page layout.",
+  "references": [
+    "frontend/src/pages/titles/index.astro",
+    "frontend/src/components/Page.astro"
+  ]
+}

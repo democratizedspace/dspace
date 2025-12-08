@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-leaderboard-background-override",
+  "date": "2025-12-08",
+  "component": "frontend",
+  "rootCause": "The leaderboard route set its own body gradient instead of relying on the shared theme, leading to inconsistent theming across the navigation header and content area.",
+  "resolution": "Dropped the page-level body styling so the leaderboard inherits the global DSPACE palette through the Page layout.",
+  "references": [
+    "frontend/src/pages/leaderboard/index.astro",
+    "frontend/src/components/Page.astro"
+  ]
+}

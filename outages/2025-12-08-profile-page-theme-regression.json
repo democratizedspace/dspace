@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-profile-page-theme-regression",
+  "date": "2025-12-08",
+  "component": "frontend",
+  "rootCause": "The profile route rendered directly inside the base Layout without the shared Page shell, so it skipped the site header, menu, and centered content spacing defined by the DSPACE theme.",
+  "resolution": "Wrap the profile view with the Page component, align its sections with themed panels, and let the page grid manage responsive spacing.",
+  "references": [
+    "frontend/src/pages/profile/index.astro",
+    "frontend/src/components/Page.astro"
+  ]
+}
