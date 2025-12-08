@@ -197,6 +197,12 @@ We follow a feature branch workflow:
 3. Push to your branch and create a PR
 4. Ensure tests pass before requesting review
 
+### Commit Messages
+
+Commit messages must start with a conventional prefix enforced by the commit-msg hook. Use
+messages like `feat: add quest assets`, `fix: handle Windows path resolution`, or `chore: bump
+dev dependency`. The prefix should describe the change type, followed by a concise description.
+
 ### Pull Request Process
 
 1. Update documentation for any new features
