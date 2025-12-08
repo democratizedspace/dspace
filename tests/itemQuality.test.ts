@@ -63,7 +63,7 @@ describe("item quality", () => {
     );
   });
 
-  it("prices the first aid kit so it is no longer a beta placeholder", () => {
+  it("prices the first aid kit instead of using a beta placeholder", () => {
     const firstAidKit = (items as Array<Record<string, any>>).find(
       (item) => item.name === "first aid kit"
     );
