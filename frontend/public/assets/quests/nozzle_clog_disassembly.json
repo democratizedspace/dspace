@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/nozzle_clog_disassembly.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/nozzle-clog.json",
+    "item_name": "Fix a Clogged Nozzle",
+    "item_id": "3dprinting/nozzle-clog",
+    "entity_type": "quest",
+    "prompt": "A 3D printer partially disassembled on a workbench after a severe nozzle clog: the print head carriage is opened or removed, revealing the hotend separated from the extruder, with a charred piece of filament and remnants of a “blob of death” nearby on a metal tray. Small tools—hex keys, screwdrivers, and pliers—are laid out, and a spare nozzle or hotend sits to one side, ready for replacement. The printer frame in the background makes it clear this is the same machine being repaired.\n\nNear-future solarpunk workshop aesthetic with warm lighting and tidy but busy workbench vibes, plus a small plant in the background. Photorealistic 512×512 rendering, no brand logos or legible text. The image should clearly convey a deeper teardown required to fix or replace a clogged nozzle after a major failure.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

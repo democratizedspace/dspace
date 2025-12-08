@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/nozzle_cleaning_tools.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/nozzle-cleaning.json",
+    "item_name": "Clear a Clogged Nozzle",
+    "item_id": "3dprinting/nozzle-cleaning",
+    "entity_type": "quest",
+    "prompt": "A close-up of a 3D printer’s hotend and nozzle being cleaned: the printer is heated with the nozzle pointed downward over the build plate, and a gloved hand uses a brass brush or cleaning tool to wipe away softened plastic. On the workbench, a small tray holds a nozzle cleaning kit with acupuncture needles, a tiny wrench, and a piece of cleaning filament partially fed into the extruder. The scene looks like a routine maintenance operation rather than a catastrophic failure.\n\nNear-future solarpunk workshop aesthetic with neutral backgrounds, soft lighting, and subtle greenery. Photorealistic 512×512 rendering, no brand logos or readable text on tools or printer. The composition should clearly communicate “heat and clean the nozzle to restore smooth extrusion.”",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

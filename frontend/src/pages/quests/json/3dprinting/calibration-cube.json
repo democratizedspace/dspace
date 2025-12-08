@@ -2,7 +2,7 @@
     "id": "3dprinting/calibration-cube",
     "title": "Print a Calibration Cube",
     "description": "Print and measure a 20 mm calibration cube to verify your printer's accuracy.",
-    "image": "/assets/quests/benchy_25.jpg",
+    "image": "/assets/quests/calibration_cube_measure.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
