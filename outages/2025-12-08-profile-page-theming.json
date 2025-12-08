@@ -1,0 +1,8 @@
+{
+  "id": "2025-12-08-profile-page-theming",
+  "date": "2025-12-08",
+  "component": "frontend/profile",
+  "rootCause": "The profile route rendered directly with Layout instead of the shared Page shell, so the global header, menu spacing, and themed surface styling were bypassed.",
+  "resolution": "Wrapped the profile content in the Page component and restyled its cards to use the standard themed surface, borders, and grid spacing.",
+  "references": ["frontend/src/pages/profile/index.astro"]
+}

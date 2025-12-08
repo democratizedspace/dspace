@@ -1,0 +1,8 @@
+{
+  "id": "2025-12-08-leaderboard-background-reset",
+  "date": "2025-12-08",
+  "component": "frontend/leaderboard",
+  "rootCause": "The leaderboard route set its own body background gradient, diverging from the shared site theme.",
+  "resolution": "Removed the custom background so the standard DSPACE theme applies consistently.",
+  "references": ["frontend/src/pages/leaderboard/index.astro"]
+}

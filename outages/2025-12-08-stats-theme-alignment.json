@@ -1,0 +1,8 @@
+{
+  "id": "2025-12-08-stats-theme-alignment",
+  "date": "2025-12-08",
+  "component": "frontend/stats",
+  "rootCause": "The stats page relied on custom section styling that didn’t match the shared card-based DSPACE theme.",
+  "resolution": "Rebuilt the stats layout with the shared Card component and theme variables for grids and tables, aligning visuals with the global shell.",
+  "references": ["frontend/src/pages/stats.astro"]
+}

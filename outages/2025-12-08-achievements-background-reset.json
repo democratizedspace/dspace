@@ -1,0 +1,8 @@
+{
+  "id": "2025-12-08-achievements-background-reset",
+  "date": "2025-12-08",
+  "component": "frontend/achievements",
+  "rootCause": "The Achievements page overrode the global theme by applying a custom green body background.",
+  "resolution": "Removed the per-page body background so the shared DSPACE theme controls the layout and colors.",
+  "references": ["frontend/src/pages/achievements/index.astro"]
+}

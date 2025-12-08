@@ -1,5 +1,6 @@
 ---
 import Page from '../components/Page.astro';
+import Card from '../components/Card.astro';
 import inventoryItems from './inventory/json/items';
 import processes from '../generated/processes.json';
 
@@ -104,15 +105,11 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
 ---
 
 <Page title="Game Stats">
-    <section class="intro">
-        <p>
-            DSPACE keeps growing. Here’s a snapshot of the quests, inventory, and processes that power
-            your exploration.
-        </p>
-    </section>
-
-    <section aria-labelledby="quest-overview">
-        <h3 id="quest-overview">Quest overview</h3>
+    <Card
+        title="Quest overview"
+        body="DSPACE keeps growing. Here’s a snapshot of the quests powering your exploration."
+        disabled={true}
+    >
         <dl class="stat-grid">
             <div>
                 <dt>Total quests</dt>
@@ -144,31 +141,36 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
             </div>
         </dl>
 
-        <table>
-            <caption>Quest catalog by category</caption>
-            <thead>
-                <tr>
-                    <th scope="col">Category</th>
-                    <th scope="col">Quests</th>
-                    <th scope="col">Dialogue nodes</th>
-                    <th scope="col">Dialogue options</th>
-                </tr>
-            </thead>
-            <tbody>
-                {questCategories.map((category) => (
+        <div class="table-wrapper">
+            <table class="data-table">
+                <caption>Quest catalog by category</caption>
+                <thead>
                     <tr>
-                        <th scope="row">{category.label}</th>
-                        <td>{category.quests}</td>
-                        <td>{category.dialogueNodes}</td>
-                        <td>{category.dialogueOptions}</td>
+                        <th scope="col">Category</th>
+                        <th scope="col">Quests</th>
+                        <th scope="col">Dialogue nodes</th>
+                        <th scope="col">Dialogue options</th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
-    </section>
+                </thead>
+                <tbody>
+                    {questCategories.map((category) => (
+                        <tr>
+                            <th scope="row">{category.label}</th>
+                            <td>{category.quests}</td>
+                            <td>{category.dialogueNodes}</td>
+                            <td>{category.dialogueOptions}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    </Card>
 
-    <section aria-labelledby="inventory-overview">
-        <h3 id="inventory-overview">Inventory overview</h3>
+    <Card
+        title="Inventory overview"
+        body="A look at what’s ready for your missions."
+        disabled={true}
+    >
         <dl class="stat-grid">
             <div>
                 <dt>Inventory items</dt>
@@ -180,27 +182,32 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
             </div>
         </dl>
 
-        <table>
-            <caption>Inventory by category</caption>
-            <thead>
-                <tr>
-                    <th scope="col">Category</th>
-                    <th scope="col">Items</th>
-                </tr>
-            </thead>
-            <tbody>
-                {inventoryCategories.map((category) => (
+        <div class="table-wrapper">
+            <table class="data-table">
+                <caption>Inventory by category</caption>
+                <thead>
                     <tr>
-                        <th scope="row">{category.label}</th>
-                        <td>{category.count}</td>
+                        <th scope="col">Category</th>
+                        <th scope="col">Items</th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
-    </section>
+                </thead>
+                <tbody>
+                    {inventoryCategories.map((category) => (
+                        <tr>
+                            <th scope="row">{category.label}</th>
+                            <td>{category.count}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    </Card>
 
-    <section aria-labelledby="process-overview">
-        <h3 id="process-overview">Process overview</h3>
+    <Card
+        title="Process overview"
+        body="Manufacturing and hardening throughput at a glance."
+        disabled={true}
+    >
         <dl class="stat-grid">
             <div>
                 <dt>Total processes</dt>
@@ -219,42 +226,24 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
                 <dd>{processesWithDuration}</dd>
             </div>
         </dl>
-    </section>
+    </Card>
 </Page>
 
 <style>
-    section {
-        background: rgba(0, 0, 0, 0.35);
-        border-radius: 16px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-        border: 1px solid var(--color-border);
-    }
-
-    .intro p {
-        margin: 0;
-        font-size: 1rem;
-        line-height: 1.5;
-    }
-
-    h3 {
-        margin-top: 0;
-        margin-bottom: 1rem;
-        font-size: 1.4rem;
-    }
-
     .stat-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
         gap: 1rem;
-        margin: 0 0 1.5rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
     }
 
     .stat-grid div {
-        background: rgba(0, 0, 0, 0.2);
+        background: rgba(0, 0, 0, 0.18);
         border-radius: 12px;
         padding: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--color-border);
     }
 
     dt {
@@ -262,28 +251,36 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
         text-transform: uppercase;
         letter-spacing: 0.05em;
         margin-bottom: 0.5rem;
-        color: var(--color-muted-text, #cde6d2);
+        color: var(--color-pill-text);
+        opacity: 0.85;
     }
 
     dd {
         margin: 0;
         font-size: 1.5rem;
-        font-weight: 600;
+        font-weight: 700;
+        color: var(--color-heading);
     }
 
-    table {
+    .table-wrapper {
+        margin-top: 1.5rem;
+        overflow-x: auto;
+    }
+
+    .data-table {
         width: 100%;
         border-collapse: collapse;
-        background: rgba(0, 0, 0, 0.2);
+        background: rgba(0, 0, 0, 0.15);
         border-radius: 12px;
         overflow: hidden;
     }
 
     caption {
         text-align: left;
-        font-weight: 600;
+        font-weight: 700;
         padding: 1rem;
-        background: rgba(0, 0, 0, 0.25);
+        background: rgba(0, 0, 0, 0.2);
+        color: var(--color-heading);
     }
 
     th,
@@ -291,6 +288,11 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
         padding: 0.75rem 1rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         text-align: left;
+        color: var(--color-pill-text);
+    }
+
+    th[scope='row'] {
+        color: var(--color-heading);
     }
 
     tbody tr:last-child th,
@@ -299,34 +301,8 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
     }
 
     @media (max-width: 600px) {
-        section {
-            padding: 1rem;
-        }
-
-        table,
-        tbody,
-        tr,
-        th,
-        td {
-            display: block;
-        }
-
-        th,
-        td {
-            padding: 0.5rem 0;
-            border: none;
-        }
-
-        th[scope='row'] {
-            font-size: 1.1rem;
-        }
-
-        td {
-            color: var(--color-muted-text, #cde6d2);
-        }
-
-        caption {
-            padding: 0.75rem 0;
+        .stat-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>

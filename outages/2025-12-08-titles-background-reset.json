@@ -1,0 +1,8 @@
+{
+  "id": "2025-12-08-titles-background-reset",
+  "date": "2025-12-08",
+  "component": "frontend/titles",
+  "rootCause": "The titles page applied a bespoke body gradient instead of inheriting the global DSPACE theme.",
+  "resolution": "Dropped the local background override so the page uses the shared theme shell.",
+  "references": ["frontend/src/pages/titles/index.astro"]
+}
