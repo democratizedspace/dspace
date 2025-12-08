@@ -197,6 +197,17 @@ We follow a feature branch workflow:
 3. Push to your branch and create a PR
 4. Ensure tests pass before requesting review
 
+### Commit Messages
+
+Pre-commit hooks enforce a simple conventional commit prefix. Start each message with a
+type followed by a colon and a short description, for example:
+
+- `feat: add new feature`
+- `fix: handle windows pre-push`
+- `chore: update dependencies`
+
+Use lowercase types without scopes unless you have a clear need (e.g., `feat(frontend): ...`).
+
 ### Pull Request Process
 
 1. Update documentation for any new features
