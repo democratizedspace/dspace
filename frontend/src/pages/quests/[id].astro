@@ -6,7 +6,7 @@ const { id } = Astro.params;
 ---
 
 <Page title="Quest details" message="Review the objectives and requirements for this quest.">
-    <Card title="Quest details" disabled={true} textbox={true}>
+    <Card title="Quest details" textbox={true}>
         <div class="quest-detail">
             <QuestDetail questId={id} client:load />
         </div>

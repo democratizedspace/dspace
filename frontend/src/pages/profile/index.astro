@@ -6,7 +6,7 @@ import ProfileTitles from './ProfileTitles.svelte';
 ---
 
 <Page title="Profile" message="Pick your avatar and review the titles you've unlocked.">
-    <Card title="Profile" disabled={true} textbox={true}>
+    <Card title="Profile" textbox={true}>
         <div class="profile-grid">
             <section class="panel">
                 <h1>Choose a default avatar</h1>
@@ -17,7 +17,6 @@ import ProfileTitles from './ProfileTitles.svelte';
             </section>
 
             <section class="panel">
-                <h2 class="section-heading">Unlocked titles</h2>
                 <ProfileTitles client:load />
             </section>
         </div>
