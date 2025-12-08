@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-new-quests-path-brittle",
+  "date": "2025-12-08",
+  "component": "docs",
+  "rootCause": "new-quests regeneration used brittle relative paths that failed on Windows",
+  "resolution": "Resolve paths from the script and test file URLs using Node path utilities",
+  "references": [
+    "tests/newQuestsList.test.ts",
+    "scripts/update-new-quests.js"
+  ]
+}

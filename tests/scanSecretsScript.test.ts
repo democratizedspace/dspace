@@ -1,5 +1,9 @@
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
 import { expect, test } from 'vitest';
+
+function hasPython3() {
+    return spawnSync('python3', ['--version'], { stdio: 'ignore' }).status === 0;
+}
 
 function runScanner(diff: string) {
     return execSync('python3 scripts/scan-secrets.py', {
@@ -9,7 +13,9 @@ function runScanner(diff: string) {
     });
 }
 
-test('scan-secrets script exits cleanly for safe diff', () => {
+const testIfPython = test.runIf(hasPython3());
+
+testIfPython('scan-secrets script exits cleanly for safe diff', () => {
     const safeDiff = [
         'diff --git a/example.txt b/example.txt',
         '--- a/example.txt',
@@ -21,7 +27,7 @@ test('scan-secrets script exits cleanly for safe diff', () => {
     expect(() => runScanner(safeDiff)).not.toThrow();
 });
 
-test('scan-secrets script flags credential-like additions', () => {
+testIfPython('scan-secrets script flags credential-like additions', () => {
     const secretLine = "+const token = 'sk-test-abc1234567890'; // scan-secrets: ignore";
     const secretDiff = [
         'diff --git a/app.js b/app.js',

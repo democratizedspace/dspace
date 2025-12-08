@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import path from 'node:path';
 
 const MODULE_PATH =
   '../../frontend/scripts/utils/ensure-playwright-browsers.js';
+const isWindows = process.platform === 'win32';
 const originalEnv = process.env;
 
 describe('ensurePlaywrightBrowsers', () => {
@@ -24,7 +26,9 @@ describe('ensurePlaywrightBrowsers', () => {
     }
   });
 
-  it('installs system deps and browsers when chromium executable is missing', async () => {
+  it.runIf(!isWindows)(
+    'installs system deps and browsers when chromium executable is missing',
+    async () => {
     const chromeExecutable =
       '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
     const headlessHyphen =
@@ -120,9 +124,10 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(executablePath).toHaveBeenCalledTimes(2);
     expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
     expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
-  });
+    }
+  );
 
-  it('warns but continues when headless shell is missing', async () => {
+  it.runIf(!isWindows)('warns but continues when headless shell is missing', async () => {
     const chromeExecutable =
       '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
     const headlessHyphen =
@@ -189,7 +194,7 @@ describe('ensurePlaywrightBrowsers', () => {
     warnSpy.mockRestore();
   });
 
-  it('skips install when chromium and headless shell already exist', async () => {
+  it.runIf(!isWindows)('skips install when chromium and headless shell already exist', async () => {
     const chromeExecutable =
       '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
     const headlessHyphen =
@@ -235,7 +240,7 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
   });
 
-  it('prefers underscore headless directories when present', async () => {
+  it.runIf(!isWindows)('prefers underscore headless directories when present', async () => {
     const linuxExecutablePath =
       '/root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome';
     const headlessHyphen =
@@ -258,7 +263,7 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(resolveHeadlessShellPath(linuxExecutablePath)).toBe(headlessUnderscore);
   });
 
-  it('falls back to hyphenated headless directories', async () => {
+  it.runIf(!isWindows)('falls back to hyphenated headless directories', async () => {
     const macExecutablePath =
       '/Users/dev/Library/Caches/ms-playwright/chromium-1181/chrome-mac/Chromium.app/Contents/MacOS/Chromium';
     const headlessHyphen =
@@ -280,10 +285,12 @@ describe('ensurePlaywrightBrowsers', () => {
   });
 
   it('includes executable extensions when deriving headless shell path', async () => {
-    const windowsExecutable =
-      'C:/Users/runner/AppData/Local/ms-playwright/chromium-1181/chrome-win/chrome.exe';
-    const headlessPath =
-      'C:/Users/runner/AppData/Local/ms-playwright/chromium-headless-shell-1181/chrome-win/headless_shell.exe';
+    const windowsExecutable = path.normalize(
+      'C:/Users/runner/AppData/Local/ms-playwright/chromium-1181/chrome-win/chrome.exe'
+    );
+    const headlessPath = path.normalize(
+      'C:/Users/runner/AppData/Local/ms-playwright/chromium-headless-shell-1181/chrome-win/headless_shell.exe'
+    );
 
     vi.doMock('node:fs', async () => {
       const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
@@ -300,7 +307,7 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(resolveHeadlessShellPath(windowsExecutable)).toBe(headlessPath);
   });
 
-  it('throws a helpful error when the Playwright CLI is missing', async () => {
+  it.runIf(!isWindows)('throws a helpful error when the Playwright CLI is missing', async () => {
     vi.doMock('node:fs', async () => {
       const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
       return {

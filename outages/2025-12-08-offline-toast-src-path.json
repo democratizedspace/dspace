@@ -1,0 +1,10 @@
+{
+  "id": "2025-12-08-offline-toast-src-path",
+  "date": "2025-12-08",
+  "component": "frontend",
+  "rootCause": "Layout inline module import left /src/scripts/offlineToast.js references in built output",
+  "resolution": "Resolve the offline toast module via Astro so the bundler rewrites the path",
+  "references": [
+    "tests/buildOutputValidation.test.ts"
+  ]
+}

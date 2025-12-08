@@ -1,9 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import update from '../scripts/update-new-quests.js';
-import { globSync } from 'glob';
+
+const testDir = path.dirname(fileURLToPath(import.meta.url));
 
 process.env.NEW_QUESTS_REF = process.env.NEW_QUESTS_REF || 'HEAD';
 
@@ -23,7 +25,7 @@ const { getReleaseSections, generateMarkdown, listQuestFiles } = update as {
 };
 
 const listPath = path.join(
-  __dirname,
+  testDir,
   '../frontend/src/pages/docs/md/new-quests.md'
 );
 
@@ -73,7 +75,7 @@ describe('new quests list', () => {
 
   it('syncs root docs copy', () => {
     const rootDoc = fs.readFileSync(
-      path.join(__dirname, '../docs/new-quests.md'),
+      path.join(testDir, '../docs/new-quests.md'),
       'utf8'
     );
     const frontendDoc = fs.readFileSync(listPath, 'utf8');

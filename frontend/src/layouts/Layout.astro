@@ -1,6 +1,8 @@
 ---
 import { SEO } from "astro-seo";
 
+const offlineToastModule = Astro.resolve('../scripts/offlineToast.js');
+
 export interface Props {
 	title: string;
 }
@@ -82,7 +84,7 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                         <slot />
                 </div>
                 <script is:inline type="module">
-                        import installOfflineToast from '../scripts/offlineToast.js';
+                        import installOfflineToast from "{offlineToastModule}";
                         installOfflineToast();
                 </script>
 

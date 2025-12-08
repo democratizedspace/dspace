@@ -1,0 +1,10 @@
+{
+  "id": "2025-12-08-backup-tar-windows-path",
+  "date": "2025-12-08",
+  "component": "tooling",
+  "rootCause": "scripts/backup.mjs invoked tar with absolute Windows paths containing drive letters, which tar interpreted as remote hosts",
+  "resolution": "Run tar from the repo root with relative archive paths and create the output directory recursively",
+  "references": [
+    "tests/backupScript.test.ts"
+  ]
+}
