@@ -2,42 +2,38 @@
 
 ## Overview
 
-The repo is being restructured to support a long-term `apps/` + `packages/` monorepo layout while
-keeping CI jobs, quests, and deployment workflows stable. This document tracks planned and completed
-moves so contributors can stage their work accordingly.
+The repo continues to center `frontend/` and `backend/` as the primary application roots while
+shared code gradually migrates into `packages/*`. Past experiments to relocate projects under
+`apps/*` have been retired to avoid needless churn; these notes track structural work that remains
+active.
 
 ## Planned Actions
 
-1. **Application folders**: Graduate existing `frontend/` and `backend/` projects into
-   `apps/frontend` and `apps/backend`. Preserve developer muscle memory by leaving shims or
-   alias scripts until downstream documentation and tooling finish updating.
-2. **Shared code packages**: Introduce `packages/*` for reusable utilities (types, content schemas,
+1. **Shared code packages**: Introduce `packages/*` for reusable utilities (types, content schemas,
    telemetry hooks). Existing shared modules under `scripts/`, `tests/`, or `backend/` will migrate
    gradually.
-3. **Infrastructure overlays**: Layer environment-specific configuration inside `infra/` (e.g.,
+2. **Infrastructure overlays**: Layer environment-specific configuration inside `infra/` (e.g.,
    `infra/k8s/environments/production`) and document entry points under `docs/ops/deploy/`. Secrets
    stay out of the repo, but variable names and expected files belong in docs.
-4. **Offline-first rigor**: Iterate on the offline UX now that a service worker precaches core
+3. **Offline-first rigor**: Iterate on the offline UX now that a service worker precaches core
    routes (`/`, `/play`, `/quests/*`) and versioned cache keys come from the shared
    `@dspace/cache-version` package. Offline toasts now announce when connectivity returns before
    auto-hiding; keep fixtures for legacy save data under `tests/fixtures/save-data/` so migrations
    stay reversible while upcoming work focuses on staged asset cleanup.
-5. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
+4. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
    JSON schemas, snapshot quest/NPC bios, and gate telemetry via explicit opt-in toggles.
 
 ### Current Iteration Focus (2025-09)
 
-- **Apps scaffolding**: Add an `apps/` directory with a placeholder README that maps existing
-  application roots and captures the migration contract (e.g., `frontend` remains the source of
-  truth until parity is confirmed). Update `pnpm-workspace.yaml` to recognise `apps/*` so early
-  adopters can experiment without breaking the legacy workspace.
+- **Packages-first extraction**: Continue moving shared utilities into `packages/*` while keeping
+  the `frontend/` and `backend/` entry points stable.
 
 ## Sequencing Strategy
 
 - Draft documentation and update README navigation before moving code so contributors know where
   assets are headed.
-- Relocate infrastructure directories first; they have fewer Node-based dependencies and make the
-  root cleaner for future `apps/*` moves.
+- Relocate infrastructure directories first; they have fewer Node-based dependencies and keep the
+  root clear for future package reshaping.
 - Update pnpm workspaces, tsconfig path aliases, and Jest/Vitest configs immediately after moving a
   project directory. Provide compatibility scripts (e.g., `npm run dev:legacy`) until downstream
   guides are refreshed.
@@ -69,3 +65,5 @@ moves so contributors can stage their work accordingly.
 - Captured the service-worker cache strategy, save-data versioning, rollback flow, and
   `offlineWorker.enabled` flag expectations in `docs/ops/offline-first.md` so operators can follow
   the runbook that shipped with the live worker.
+- Removed the abandoned `apps/*` relocation experiment to keep the workspace focused on
+  `frontend/`, `backend/`, and shared packages.

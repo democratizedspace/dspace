@@ -22,12 +22,12 @@ feature, quest, and CI job stays intact.
 
 ## High-ROI refactors
 1. **Monorepo shape**
-   - Gradually shift to `apps/frontend`, `apps/backend`, and `packages/*` (shared types, auth,
-     content schemas).
+   - Keep `frontend/` and `backend/` as the canonical application entry points while expanding
+     shared code under `packages/*` (types, auth, content schemas).
    - Keep `infra/k8s`, `infra/ansible`, and `infra/monitoring` in sync with env-specific overlays and
      updated deploy docs.
-   - Update pnpm workspaces, TypeScript paths, Jest/Vitest aliases, importers, and scripts as moves
-     land.
+   - Update pnpm workspaces, TypeScript paths, Jest/Vitest aliases, importers, and scripts alongside
+     any package moves.
 2. **Offline-first rigor**
    - Specify a service-worker strategy: precache `/`, `/play`, `/quests/*`; runtime-cache assets and
      quest JSON; version cache keys for busting.
