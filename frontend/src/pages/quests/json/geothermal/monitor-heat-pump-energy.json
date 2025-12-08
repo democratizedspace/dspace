@@ -2,7 +2,7 @@
     "id": "geothermal/monitor-heat-pump-energy",
     "title": "Monitor Heat Pump Energy Use",
     "description": "Install a smart plug to track how much power your ground loop consumes.",
-    "image": "/assets/quests/charge.jpg",
+    "image": "/assets/quests/heat_pump_smart_plug_monitor.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

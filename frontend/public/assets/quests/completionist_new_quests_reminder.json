@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/completionist_new_quests_reminder.jpg",
+    "entity": "frontend/src/pages/quests/json/completionist/reminder.json",
+    "item_name": "Check for New Quests",
+    "item_id": "completionist/reminder",
+    "entity_type": "quest",
+    "prompt": "A cozy desk scene in a dimly lit room where a computer monitor or holographic display shows a stylized DSPACE quest hub screen with several new quest icons highlighted by subtle glow or “new” indicators (using color and iconography instead of readable text). A digital clock or small calendar on the desk shows the passage of time through simple symbols, suggesting that the player is checking back regularly for new challenges. A mug and a small plant add to the lived-in feel.\n\nNear-future solarpunk aesthetic with soft, warm lighting and clean lines. Photorealistic 512×512 rendering with no legible UI text or brand logos; quest names and labels are represented as abstract bars or icons. The composition should convey the idea of returning often to check for fresh quests.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -2,7 +2,7 @@
     "id": "geothermal/survey-ground-temperature",
     "title": "Survey for Geothermal Heat",
     "description": "Measure the ground temperature to see if a heat pump will work.",
-    "image": "/assets/quests/charge.jpg",
+    "image": "/assets/quests/geothermal_ground_temperature_probe.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

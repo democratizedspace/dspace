@@ -2,7 +2,7 @@
     "id": "3dprinting/blob-of-death",
     "title": "Witness a Blob of Death",
     "description": "Skipping a first-layer check lets a failed Z homing extrude in mid-air, engulfing the nozzle in molten plastic.",
-    "image": "/assets/quests/benchy_25.jpg",
+    "image": "/assets/quests/blob_of_death_nozzle_fail.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [

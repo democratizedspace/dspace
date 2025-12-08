@@ -2,7 +2,7 @@
     "id": "3dprinting/benchy_25",
     "title": "3D Print 25 Benchies",
     "description": "Increase your 3D printing output! To complete this quest, print at least 25 Benchies.",
-    "image": "/assets/quests/benchy_25.jpg",
+    "image": "/assets/quests/benchy_batch_25.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [

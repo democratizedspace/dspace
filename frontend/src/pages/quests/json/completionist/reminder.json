@@ -2,7 +2,7 @@
     "id": "completionist/reminder",
     "title": "Check for New Quests",
     "description": "Return regularly to see what fresh challenges await you.",
-    "image": "/assets/quests/completionist.jpg",
+    "image": "/assets/quests/completionist_new_quests_reminder.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/blob_of_death_nozzle_fail.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/blob-of-death.json",
+    "item_name": "Witness a Blob of Death",
+    "item_id": "3dprinting/blob-of-death",
+    "entity_type": "quest",
+    "prompt": "A close-up view inside a 3D printer enclosure showing a catastrophic “blob of death” failure: the hotend area is engulfed in a huge, chaotic ball of molten plastic that has wrapped around the nozzle and partially around the print head. Below, the build plate is mostly empty or has a small failed first layer on one side, with strands of filament draped in mid-air, clearly indicating that extrusion continued without proper bed contact. The printer frame and motion components around the blob are still intact but look at risk from the plastic mess.\n\nNear-future solarpunk workshop setting with soft lighting and a few tools in the blurred background, but no visible brand logos or text on the printer. Photorealistic 512×512 style, focusing tightly on the disastrous plastic glob and the floating strands so it’s immediately obvious that skipping a first-layer check led to a mid-air extrusion failure. No people are shown in frame.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
