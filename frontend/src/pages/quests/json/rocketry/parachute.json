@@ -2,7 +2,7 @@
     "id": "rocketry/parachute",
     "title": "Add a parachute",
     "description": "Upgrade your rocket with a nylon parachute for gentle landings and possible reuse.",
-    "image": "/assets/quests/parachute.jpg",
+    "image": "/assets/quests/model_rocket_parachute_installation.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

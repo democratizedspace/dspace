@@ -2,7 +2,7 @@
     "id": "astronomy/saturn-rings",
     "title": "Spot Saturn's Rings",
     "description": "Use a planisphere and your basic telescope to find Saturn and resolve its rings.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/saturn_rings_planisphere_setup.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/satellite_pass_tracking_scope.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/satellite-pass.json",
+    "item_name": "Track a Satellite Pass",
+    "item_id": "astronomy/satellite-pass",
+    "entity_type": "quest",
+    "prompt": "A compact telescope on a sturdy tripod aimed toward the sky, with a smartphone or small tablet mounted to the side showing a simple, text-free trajectory arc representing an overhead satellite pass. The mount and device are clearly attached to the telescope, and the sky above shows a faint streak of light arcing across the stars, suggesting the satellite moving overhead. On the ground beside the tripod, a small observing notebook and a pen are visible, hinting at logging the event.\n\nPhotorealistic near-future setting in a quiet rooftop or open field environment, illuminated by soft, diffuse night lighting with distant city glows and a hint of renewable tech like rooftop solar or a small wind turbine. The 512×512 image leans into a clean, high-tech yet approachable aesthetic, with no brand logos or readable text on the device screen. The composition keeps the telescope and mounted device prominent, making it obvious that this is an interactive satellite-tracking setup.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -2,7 +2,7 @@
     "id": "astronomy/venus-phases",
     "title": "Observe Venus's Phases",
     "description": "Use a planisphere and basic telescope to track Venus through its lunar-like phases.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/venus_phases_telescope_sequence.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

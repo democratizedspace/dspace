@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/model_rocket_parachute_installation.jpg",
+    "entity": "frontend/src/pages/quests/json/rocketry/parachute.json",
+    "item_name": "Add a parachute",
+    "item_id": "rocketry/parachute",
+    "entity_type": "quest",
+    "prompt": "A small model rocket resting horizontally on a clean workbench while a bright nylon parachute is being attached near the top of the body tube. The rocket is about 30–40 cm long with a smooth cylindrical body, simple fins, and a removable nose cone set aside nearby. The parachute is semi-folded, with thin suspension lines clearly visible being tied to a secure anchor point inside the rocket, and a compact fire-resistant wadding pad and simple launch tools scattered neatly around the scene to show careful preparation.\n\nPhotorealistic near-future solarpunk workshop aesthetic in a 512×512 frame: soft, even lighting from an overhead LED panel, pale wood or light metal table, and a few subtle high-tech touches like a small tablet off to the side showing a simple schematic. Colors are clean and saturated but not cartoony, with no visible brand logos or text. The composition focuses tightly on the rocket body and parachute hardware so the attachment process is obvious at a glance, with only forearms and hands visible if a person is present.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
