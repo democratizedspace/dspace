@@ -1,0 +1,12 @@
+{
+  "id": "new-quests-path-windows",
+  "date": "2025-12-12",
+  "component": "scripts/update-new-quests",
+  "rootCause": "Path resolution relied on __dirname joins and POSIX git paths, which failed on Windows during newQuestsList tests when writing frontend/src/pages/docs/md/new-quests.md.",
+  "resolution": "Migrated update-new-quests to ESM with fileURLToPath-derived repo roots, normalized git commands, and updated tests to use the resolved repo paths before regenerating docs.",
+  "references": [
+    "scripts/update-new-quests.mjs",
+    "tests/newQuestsList.test.ts",
+    "docs/new-quests.md"
+  ]
+}

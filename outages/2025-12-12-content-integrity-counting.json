@@ -1,0 +1,12 @@
+{
+  "id": "content-integrity-counting",
+  "date": "2025-12-12",
+  "component": "tests:content-integrity",
+  "rootCause": "Content integrity counts used POSIX globbing, returning zero quests/items on Windows and causing false regressions while CI stayed green on Linux.",
+  "resolution": "Replaced shell-dependent globbing with pure Node directory traversal for quests, items, NPC assets, and processes so counts are platform-agnostic.",
+  "references": [
+    "scripts/tests/contentIntegrity.test.ts",
+    "frontend/src/pages/quests/json",
+    "frontend/src/pages/inventory/json/items"
+  ]
+}

@@ -1,10 +1,14 @@
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const repoRoot = path.resolve(__dirname, '..');
 
 const frontendOutput = path.join(
-  __dirname,
-  '..',
+  repoRoot,
   'frontend',
   'src',
   'pages',
@@ -12,7 +16,8 @@ const frontendOutput = path.join(
   'md',
   'new-quests.md'
 );
-const docsOutput = path.join(__dirname, '..', 'docs', 'new-quests.md');
+const docsOutput = path.join(repoRoot, 'docs', 'new-quests.md');
+const questDirRelative = path.posix.join('frontend', 'src', 'pages', 'quests', 'json');
 
 const PRE_V2_COMMIT = 'fc840def24c5140411d2892f468960acb8250681';
 const V2_COMMIT = '93a834691af174b3c8b9895e9a27ce72e10e8299';
@@ -20,7 +25,7 @@ const V21_COMMIT = 'd956e807d49114da2d0ff28aacef91341813bf82';
 
 function commitExists(ref) {
   try {
-    execSync(`git cat-file -e ${ref}^{commit}`, { stdio: 'ignore' });
+    execSync(`git cat-file -e ${ref}^{commit}`, { cwd: repoRoot, stdio: 'ignore' });
     return true;
   } catch (error) {
     return false;
@@ -127,28 +132,21 @@ function getDocFallbackSections() {
 }
 
 function listQuestFiles(ref) {
-  const questDir = path.join(
-    __dirname,
-    '..',
-    'frontend',
-    'src',
-    'pages',
-    'quests',
-    'json'
-  );
   const cmd = ref
-    ? `git ls-tree -r --name-only ${ref} ${questDir}`
-    : `git ls-tree -r --name-only HEAD ${questDir}`;
+    ? `git ls-tree -r --name-only ${ref} ${questDirRelative}`
+    : `git ls-tree -r --name-only HEAD ${questDirRelative}`;
   let output;
   try {
     output = execSync(cmd, {
       encoding: 'utf8',
       stdio: ['pipe', 'pipe', 'ignore'],
+      cwd: repoRoot,
     });
   } catch {
-    output = execSync(`git ls-tree -r --name-only HEAD ${questDir}`, {
+    output = execSync(`git ls-tree -r --name-only HEAD ${questDirRelative}`, {
       encoding: 'utf8',
       stdio: ['pipe', 'pipe', 'ignore'],
+      cwd: repoRoot,
     });
   }
   return output.trim().split(/\n/).filter(Boolean);
@@ -157,8 +155,8 @@ function listQuestFiles(ref) {
 function getQuestPathsBetween(fromRef, toRef) {
   try {
     const diff = execSync(
-      `git diff --name-only --diff-filter=A ${fromRef} ${toRef} -- frontend/src/pages/quests/json`,
-      { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }
+      `git diff --name-only --diff-filter=A ${fromRef} ${toRef} -- ${questDirRelative}`,
+      { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], cwd: repoRoot }
     );
     return diff
       .split('\n')
@@ -188,36 +186,44 @@ function computeReleaseSections() {
   let v3Ref = envRef || 'origin/v3';
   try {
     if (!envRef) {
-      execSync('git fetch origin main --depth=100000', { stdio: 'ignore' });
-      execSync('git fetch origin v3 --depth=100000', { stdio: 'ignore' });
+      execSync('git fetch origin main --depth=100000', {
+        stdio: 'ignore',
+        cwd: repoRoot,
+      });
+      execSync('git fetch origin v3 --depth=100000', {
+        stdio: 'ignore',
+        cwd: repoRoot,
+      });
     }
-    execSync(`git rev-parse --verify ${v3Ref}`, { stdio: 'ignore' });
+    execSync(`git rev-parse --verify ${v3Ref}`, { stdio: 'ignore', cwd: repoRoot });
   } catch (err) {
-    // fallback to local HEAD if remote or ref is unavailable
     v3Ref = 'HEAD';
   }
   const releases = [
     { version: 'v3', from: V21_COMMIT, to: v3Ref },
     { version: 'v2.1', from: V2_COMMIT, to: V21_COMMIT },
-    { version: 'v2', from: PRE_V2_COMMIT, to: V2_COMMIT },
+    { version: 'v2.0', from: PRE_V2_COMMIT, to: V2_COMMIT },
   ];
-  if (releases.some((r) => !commitExists(r.from) || !commitExists(r.to))) {
-    throw new Error('Missing git history for new quest generation');
-  }
-
-  return releases.map((r) => {
-    const paths = getQuestPathsBetween(r.from, r.to);
-    const groups = groupQuests(paths);
-    const toQuests = Array.from(new Set(listQuestFiles(r.to)));
-    const fromQuests = Array.from(new Set(listQuestFiles(r.from)));
-    return {
-      version: r.version,
-      prevCount: fromQuests.length,
-      currentCount: toQuests.length,
-      groups,
-      newCount: groups.reduce((sum, group) => sum + group.quests.length, 0),
-    };
+  const sections = [];
+  releases.forEach((release) => {
+    if (!commitExists(release.to) || !commitExists(release.from)) {
+      return;
+    }
+    const quests = getQuestPathsBetween(release.from, release.to);
+    const current = listQuestFiles(release.to).length;
+    const prev = listQuestFiles(release.from).length;
+    sections.push({
+      version: release.version,
+      prevCount: prev,
+      currentCount: current,
+      groups: groupQuests(quests),
+      newCount: quests.length,
+    });
   });
+  if (!sections.length) {
+    return getDocFallbackSections();
+  }
+  return sections;
 }
 
 function getReleaseSections() {
@@ -235,7 +241,7 @@ function generateMarkdown(sections) {
     "slug: 'new-quests'",
     '---',
     '',
-    '<!-- Auto-generated by scripts/update-new-quests.js. Run `npm run new-quests:update` to refresh. -->',
+    '<!-- Auto-generated by scripts/update-new-quests.mjs. Run `npm run new-quests:update` to refresh. -->',
     '',
   ];
   sections.forEach((section, idx) => {
@@ -275,11 +281,28 @@ function main() {
   fs.writeFileSync(docsOutput, content);
 }
 
-if (require.main === module) {
+const isDirectRun = process.argv[1]
+  ? path.resolve(process.argv[1]) === __filename
+  : false;
+
+if (isDirectRun) {
   main();
 }
 
-module.exports = {
+export {
+  listQuestFiles,
+  getQuestPathsBetween,
+  groupQuests,
+  getDocFallbackSections,
+  getReleaseSections,
+  generateMarkdown,
+  main,
+  PRE_V2_COMMIT,
+  V2_COMMIT,
+  V21_COMMIT,
+};
+
+export default {
   listQuestFiles,
   getQuestPathsBetween,
   groupQuests,
