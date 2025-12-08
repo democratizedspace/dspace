@@ -2,7 +2,7 @@
     "id": "rocketry/recovery-run",
     "title": "Practice Rocket Recovery",
     "description": "Launch with a parachute and retrieve the rocket intact.",
-    "image": "/assets/quests/parachute.jpg",
+    "image": "/assets/quests/model_rocket_recovery_run_field.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

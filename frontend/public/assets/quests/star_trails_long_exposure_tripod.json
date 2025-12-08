@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/star_trails_long_exposure_tripod.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/star-trails.json",
+    "item_name": "Capture Star Trails",
+    "item_id": "astronomy/star-trails",
+    "entity_type": "quest",
+    "prompt": "A sturdy camera on a tripod set up on a balcony or open hillside at night, with the lens aimed at the sky and a remote shutter release or intervalometer connected. In the distance above, long circular arcs of star trails sweep across the sky, clearly showing the rotation of the Earth over time. The foreground includes a small notebook or log on a nearby surface and perhaps a thermos or mug, hinting at a long, patient observing and imaging session without cluttering the scene.\n\nPhotorealistic near-future solarpunk landscape at 512×512 resolution, with subtle hints of sustainable tech like a distant wind turbine silhouette or rooftop solar panels on a nearby building. Soft, cinematic lighting from natural night sky glow and minimal artificial light keeps the scene grounded and calm. No brand logos or text are visible on the camera or gear; the composition emphasizes the contrast between the sharp, solid tripod and the smooth arcs of star trails above.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

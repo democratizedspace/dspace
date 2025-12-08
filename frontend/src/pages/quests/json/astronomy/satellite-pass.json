@@ -2,7 +2,7 @@
     "id": "astronomy/satellite-pass",
     "title": "Track a Satellite Pass",
     "description": "Nova helps you follow an overhead satellite using your telescope.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/satellite_pass_tracking_scope.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

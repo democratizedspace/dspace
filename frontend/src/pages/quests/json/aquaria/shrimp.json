@@ -2,7 +2,7 @@
     "id": "aquaria/shrimp",
     "title": "Add dwarf shrimp",
     "description": "Introduce hardy shrimp with drip acclimation to keep the tank clean and water stable.",
-    "image": "/assets/quests/shrimp.svg",
+    "image": "/assets/quests/dwarf_shrimp_drip_acclimation.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

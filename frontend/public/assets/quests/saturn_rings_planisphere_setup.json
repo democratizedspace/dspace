@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/saturn_rings_planisphere_setup.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/saturn-rings.json",
+    "item_name": "Spot Saturn's Rings",
+    "item_id": "astronomy/saturn-rings",
+    "entity_type": "quest",
+    "prompt": "A basic telescope on a tripod set up in a small yard or balcony at night, with a circular planisphere laid out on a table or held in a hand in the foreground. The telescope is pointed toward a bright star-like object low in the sky, while the planisphere shows a simplified constellation pattern with a highlighted region, visually guiding the viewer toward Saturn’s location without any explicit text. A simple folding chair, a red-filtered flashlight, and a notebook nearby reinforce the sense of a deliberate observing session aimed at spotting Saturn’s rings.\n\nNear-future solarpunk aesthetic with subtle hints of sustainable living, such as potted plants and a glimpse of rooftop solar panels or a compact vertical garden in the background. The 512×512 image is photorealistic with gentle cinematic lighting and a natural-looking starfield. No logos or readable words appear on the telescope or planisphere; the composition keeps the telescope and planisphere prominent so the connection between star chart and target planet is visually clear.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

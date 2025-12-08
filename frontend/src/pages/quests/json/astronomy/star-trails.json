@@ -2,7 +2,7 @@
     "id": "astronomy/star-trails",
     "title": "Capture Star Trails",
     "description": "Use long-exposure photography to show the Earth's rotation.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/star_trails_long_exposure_tripod.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

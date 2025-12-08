@@ -2,7 +2,7 @@
     "id": "astronomy/planetary-alignment",
     "title": "Planetary Alignment",
     "description": "Use a star chart to track a rare alignment of planets.",
-    "image": "/assets/quests/solar.jpg",
+    "image": "/assets/quests/planetary_alignment_star_chart.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
