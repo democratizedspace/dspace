@@ -1,52 +1,30 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/Card.astro';
+import Page from '../../components/Page.astro';
 import ItemForm from '../../components/svelte/ItemForm.svelte';
 
 const title = "Create Custom Item";
 ---
 
-<Layout title={title}>
-    <main>
-        <h1>{title}</h1>
-        <p class="description">
-            Create a custom item that can be used in quests, processes, and added to your inventory.
-        </p>
-        
+<Page title={title} message="Create custom items that can be used across quests, processes, and inventory.">
+    <Card title={title} disabled={true} textbox={true}>
         <div class="form-container">
             <ItemForm client:load />
         </div>
-    </main>
-</Layout>
+    </Card>
+</Page>
 
 <style>
-    main {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 2rem;
-        color: var(--color-text);
-    }
-    
-    h1 {
-        text-align: center;
-        color: #0f2;
-        margin-bottom: 1rem;
-    }
-    
-    .description {
-        text-align: center;
-        margin-bottom: 2rem;
-        color: #68d46d;
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
-    
     .form-container {
-        margin-top: 2rem;
+        margin-top: 0.5rem;
     }
 
-    @media (max-width: 600px) {
-        main {
-            padding: 1rem;
-        }
+    .form-container :global(form) {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+        color: var(--color-text);
     }
 </style>

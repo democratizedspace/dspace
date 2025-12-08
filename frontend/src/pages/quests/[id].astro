@@ -1,20 +1,24 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/Card.astro';
+import Page from '../../components/Page.astro';
 import QuestDetail from './svelte/QuestDetail.svelte';
 const { id } = Astro.params;
 ---
 
-<Layout title="Quest Details">
-    <main>
-        <QuestDetail questId={id} client:load />
-    </main>
-</Layout>
+<Page title="Quest details" message="Review the objectives and requirements for this quest.">
+    <Card title="Quest details" disabled={true} textbox={true}>
+        <div class="quest-detail">
+            <QuestDetail questId={id} client:load />
+        </div>
+    </Card>
+</Page>
 
 <style>
-    main {
-        margin: auto;
-        padding: 2rem;
-        max-width: 800px;
+    .quest-detail {
         color: var(--color-text);
     }
-</style> 
+
+    .quest-detail :global(h1) {
+        color: var(--color-heading);
+    }
+</style>
