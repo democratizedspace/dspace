@@ -12,6 +12,12 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
             href: '/docs/changelog/20251101',
             linkLabel: 'November 1, 2025 changelog',
         },
+        {
+            message:
+                'Process requirements are now enforced for both materials and machines. Review the latest guide for the fully shipped workflow.',
+            href: '/docs/processes',
+            linkLabel: 'Process guide',
+        },
     ],
     '20221031': [
         {
