@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/completionist_catalog_logbook.jpg",
+    "entity": "frontend/src/pages/quests/json/completionist/catalog.json",
+    "item_name": "Catalog Your Trophy",
+    "item_id": "completionist/catalog",
+    "entity_type": "quest",
+    "prompt": "A neatly organized desk scene featuring an open, high-quality logbook titled with a subtle emblem rather than readable text, showing a sketch of a Completionist trophy on the current page. Beside the logbook sits a gleaming Completionist Award II–style medal or crystal trophy resting on a small stand, with a pen and a compact tablet device nearby, hinting that the player is formally cataloging their achievements. The background includes a tidy shelf with a few other abstract trophy shapes softly blurred, emphasizing that this particular award is being documented.\n\nNear-future, solarpunk aesthetic in a cozy workspace: warm, diffuse lighting, light wood textures, and a hint of greenery at the edge of the frame. Photorealistic 512×512 rendering with clean composition, no legible text, and no brand logos. The scene should feel organized and calm, focusing on the act of recording a prized achievement in a personal archive.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

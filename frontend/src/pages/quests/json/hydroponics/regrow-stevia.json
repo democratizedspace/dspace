@@ -2,7 +2,7 @@
     "id": "hydroponics/regrow-stevia",
     "title": "Regrow Your Stevia",
     "description": "Hydro shows you how to coax another harvest from trimmed plants.",
-    "image": "/assets/quests/hydroponics_tub.jpg",
+    "image": "/assets/quests/hydroponic_stevia_regrow.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

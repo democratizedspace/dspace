@@ -2,7 +2,7 @@
     "id": "completionist/catalog",
     "title": "Catalog Your Trophy",
     "description": "Log your Completionist Award II so you never misplace it.",
-    "image": "/assets/quests/completionist.jpg",
+    "image": "/assets/quests/completionist_catalog_logbook.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "hydroponics/stevia",
     "title": "Grow Stevia Hydroponically",
     "description": "Cultivate stevia plants for a natural sweetener.",
-    "image": "/assets/quests/hydroponics_tub.jpg",
+    "image": "/assets/quests/hydroponic_stevia_starter_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "aquaria/water-change",
     "title": "Perform a partial water change",
     "description": "Swap out a quarter of the tank water for conditioned tap water to keep fish healthy.",
-    "image": "/assets/quests/goldfish.jpg",
+    "image": "/assets/quests/goldfish_partial_water_change.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

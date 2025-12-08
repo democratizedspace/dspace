@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponic_basil_tub.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/basil.json",
+    "item_name": "Grow basil hydroponically",
+    "item_id": "hydroponics/basil",
+    "entity_type": "quest",
+    "prompt": "A compact indoor hydroponic tub dedicated to basil, with several bright green basil plants growing from net pots in the lid and roots visible in the nutrient solution through a small window or translucent side panel. Soft LED grow lights shine from above, casting a gentle glow on the leaves, while a small bottle of nutrient concentrate and a measuring spoon sit next to the tub. The scene is focused on the tub itself, clearly showing a soil-free basil setup.\n\nNear-future solarpunk kitchen or balcony corner with clean counters, a bit of natural light, and other small plants in the background. Photorealistic 512×512 style with no brand logos, no legible labels, and no people—just the equipment. The composition should clearly convey \"growing basil hydroponically\" in a practical, approachable way.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
