@@ -1,0 +1,10 @@
+{
+  "id": "2025-09-09-titles-background-override",
+  "date": "2025-09-09",
+  "component": "frontend",
+  "rootCause": "The titles page applied a custom body gradient, diverging from the shared DSPACE theme.",
+  "resolution": "Deleted the custom body styling so titles render with the standard background and chrome.",
+  "references": [
+    "frontend/src/pages/titles/index.astro"
+  ]
+}

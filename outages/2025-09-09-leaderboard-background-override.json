@@ -1,0 +1,10 @@
+{
+  "id": "2025-09-09-leaderboard-background-override",
+  "date": "2025-09-09",
+  "component": "frontend",
+  "rootCause": "Leaderboard styling reset the body background locally, causing inconsistencies with the shared theme.",
+  "resolution": "Removed the page-level body background override so the leaderboard follows the standard layout.",
+  "references": [
+    "frontend/src/pages/leaderboard/index.astro"
+  ]
+}

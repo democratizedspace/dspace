@@ -1,0 +1,10 @@
+{
+  "id": "2025-09-09-stats-page-theming",
+  "date": "2025-09-09",
+  "component": "frontend",
+  "rootCause": "Stats content used bespoke containers and table framing that did not match the shared DSPACE panels.",
+  "resolution": "Rebuilt the stats layout inside a themed Page panel with shared borders and spacing for consistency.",
+  "references": [
+    "frontend/src/pages/stats.astro"
+  ]
+}

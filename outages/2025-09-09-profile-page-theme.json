@@ -1,0 +1,10 @@
+{
+  "id": "2025-09-09-profile-page-theme",
+  "date": "2025-09-09",
+  "component": "frontend",
+  "rootCause": "The profile route rendered outside the shared Page layout, so it missed the DSPACE header and menu.",
+  "resolution": "Wrapped the profile UI in the Page component and themed panels to restore the site-wide chrome.",
+  "references": [
+    "frontend/src/pages/profile/index.astro"
+  ]
+}

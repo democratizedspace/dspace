@@ -1,0 +1,10 @@
+{
+  "id": "2025-09-09-achievements-theme-override",
+  "date": "2025-09-09",
+  "component": "frontend",
+  "rootCause": "The achievements page overrode the global background with a custom green gradient, diverging from the site theme.",
+  "resolution": "Removed the per-page background override so the achievements route inherits the global DSPACE styling.",
+  "references": [
+    "frontend/src/pages/achievements/index.astro"
+  ]
+}

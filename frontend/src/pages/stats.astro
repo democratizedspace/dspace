@@ -104,131 +104,157 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
 ---
 
 <Page title="Game Stats">
-    <section class="intro">
-        <p>
-            DSPACE keeps growing. Here’s a snapshot of the quests, inventory, and processes that power
-            your exploration.
-        </p>
-    </section>
+    <li class="stats-card">
+        <section class="intro">
+            <p>
+                DSPACE keeps growing. Here’s a snapshot of the quests, inventory, and processes that
+                power your exploration.
+            </p>
+        </section>
 
-    <section aria-labelledby="quest-overview">
-        <h3 id="quest-overview">Quest overview</h3>
-        <dl class="stat-grid">
-            <div>
-                <dt>Total quests</dt>
-                <dd data-testid="stats-total-quests">{totalQuests}</dd>
+        <section aria-labelledby="quest-overview" class="panel">
+            <div class="section-header">
+                <h3 id="quest-overview">Quest overview</h3>
+                <p class="section-hint">Track the breadth and depth of the quest catalog.</p>
             </div>
-            <div>
-                <dt>Quest categories</dt>
-                <dd>{questCategories.length}</dd>
-            </div>
-            <div>
-                <dt>Dialogue nodes</dt>
-                <dd>{totalDialogueNodes}</dd>
-            </div>
-            <div>
-                <dt>Dialogue options</dt>
-                <dd>{totalDialogueOptions}</dd>
-            </div>
-            <div>
-                <dt>NPC guides</dt>
-                <dd>{uniqueNpcCount}</dd>
-            </div>
-            <div>
-                <dt>Quests rewarding items</dt>
-                <dd>{rewardedItemIds.size}</dd>
-            </div>
-            <div>
-                <dt>Quests that launch processes</dt>
-                <dd>{questsRequiringProcesses.size}</dd>
-            </div>
-        </dl>
+            <dl class="stat-grid">
+                <div>
+                    <dt>Total quests</dt>
+                    <dd data-testid="stats-total-quests">{totalQuests}</dd>
+                </div>
+                <div>
+                    <dt>Quest categories</dt>
+                    <dd>{questCategories.length}</dd>
+                </div>
+                <div>
+                    <dt>Dialogue nodes</dt>
+                    <dd>{totalDialogueNodes}</dd>
+                </div>
+                <div>
+                    <dt>Dialogue options</dt>
+                    <dd>{totalDialogueOptions}</dd>
+                </div>
+                <div>
+                    <dt>NPC guides</dt>
+                    <dd>{uniqueNpcCount}</dd>
+                </div>
+                <div>
+                    <dt>Quests rewarding items</dt>
+                    <dd>{rewardedItemIds.size}</dd>
+                </div>
+                <div>
+                    <dt>Quests that launch processes</dt>
+                    <dd>{questsRequiringProcesses.size}</dd>
+                </div>
+            </dl>
 
-        <table>
-            <caption>Quest catalog by category</caption>
-            <thead>
-                <tr>
-                    <th scope="col">Category</th>
-                    <th scope="col">Quests</th>
-                    <th scope="col">Dialogue nodes</th>
-                    <th scope="col">Dialogue options</th>
-                </tr>
-            </thead>
-            <tbody>
-                {questCategories.map((category) => (
-                    <tr>
-                        <th scope="row">{category.label}</th>
-                        <td>{category.quests}</td>
-                        <td>{category.dialogueNodes}</td>
-                        <td>{category.dialogueOptions}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    </section>
+            <div class="table-shell">
+                <div class="table-header">
+                    <h4>Quest catalog by category</h4>
+                    <p class="section-hint">Sorted by quest count.</p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Category</th>
+                            <th scope="col">Quests</th>
+                            <th scope="col">Dialogue nodes</th>
+                            <th scope="col">Dialogue options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {questCategories.map((category) => (
+                            <tr>
+                                <th scope="row">{category.label}</th>
+                                <td>{category.quests}</td>
+                                <td>{category.dialogueNodes}</td>
+                                <td>{category.dialogueOptions}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-    <section aria-labelledby="inventory-overview">
-        <h3 id="inventory-overview">Inventory overview</h3>
-        <dl class="stat-grid">
-            <div>
-                <dt>Inventory items</dt>
-                <dd data-testid="stats-total-items">{totalItems}</dd>
+        <section aria-labelledby="inventory-overview" class="panel">
+            <div class="section-header">
+                <h3 id="inventory-overview">Inventory overview</h3>
+                <p class="section-hint">Items ready to power recipes and quests.</p>
             </div>
-            <div>
-                <dt>Categories</dt>
-                <dd>{inventoryCategories.length}</dd>
-            </div>
-        </dl>
+            <dl class="stat-grid">
+                <div>
+                    <dt>Inventory items</dt>
+                    <dd data-testid="stats-total-items">{totalItems}</dd>
+                </div>
+                <div>
+                    <dt>Categories</dt>
+                    <dd>{inventoryCategories.length}</dd>
+                </div>
+            </dl>
 
-        <table>
-            <caption>Inventory by category</caption>
-            <thead>
-                <tr>
-                    <th scope="col">Category</th>
-                    <th scope="col">Items</th>
-                </tr>
-            </thead>
-            <tbody>
-                {inventoryCategories.map((category) => (
-                    <tr>
-                        <th scope="row">{category.label}</th>
-                        <td>{category.count}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    </section>
+            <div class="table-shell">
+                <div class="table-header">
+                    <h4>Inventory by category</h4>
+                    <p class="section-hint">Largest categories appear first.</p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Category</th>
+                            <th scope="col">Items</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {inventoryCategories.map((category) => (
+                            <tr>
+                                <th scope="row">{category.label}</th>
+                                <td>{category.count}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-    <section aria-labelledby="process-overview">
-        <h3 id="process-overview">Process overview</h3>
-        <dl class="stat-grid">
-            <div>
-                <dt>Total processes</dt>
-                <dd data-testid="stats-total-processes">{totalProcesses}</dd>
+        <section aria-labelledby="process-overview" class="panel">
+            <div class="section-header">
+                <h3 id="process-overview">Process overview</h3>
+                <p class="section-hint">A quick look at the operations powering your settlement.</p>
             </div>
-            <div>
-                <dt>With hardening history</dt>
-                <dd>{processesWithHardening}</dd>
-            </div>
-            <div>
-                <dt>Recorded hardening passes</dt>
-                <dd>{totalHardeningPasses}</dd>
-            </div>
-            <div>
-                <dt>Processes with durations</dt>
-                <dd>{processesWithDuration}</dd>
-            </div>
-        </dl>
-    </section>
+            <dl class="stat-grid">
+                <div>
+                    <dt>Total processes</dt>
+                    <dd data-testid="stats-total-processes">{totalProcesses}</dd>
+                </div>
+                <div>
+                    <dt>With hardening history</dt>
+                    <dd>{processesWithHardening}</dd>
+                </div>
+                <div>
+                    <dt>Recorded hardening passes</dt>
+                    <dd>{totalHardeningPasses}</dd>
+                </div>
+                <div>
+                    <dt>Processes with durations</dt>
+                    <dd>{processesWithDuration}</dd>
+                </div>
+            </dl>
+        </section>
+    </li>
 </Page>
 
 <style>
-    section {
-        background: rgba(0, 0, 0, 0.35);
-        border-radius: 16px;
+    .stats-card {
+        list-style: none;
         padding: 1.5rem;
-        margin-bottom: 2rem;
-        border: 1px solid var(--color-border);
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        background: linear-gradient(180deg, rgba(3, 58, 3, 0.6), rgba(3, 58, 3, 0.4));
+        border: 1px solid rgba(0, 255, 34, 0.28);
+        border-radius: 18px;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
     }
 
     .intro p {
@@ -237,10 +263,37 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
         line-height: 1.5;
     }
 
+    .panel {
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(0, 255, 34, 0.2);
+        border-radius: 14px;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .section-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .section-hint {
+        margin: 0;
+        color: var(--color-text);
+        opacity: 0.85;
+    }
+
     h3 {
-        margin-top: 0;
-        margin-bottom: 1rem;
+        margin: 0;
         font-size: 1.4rem;
+    }
+
+    h4 {
+        margin: 0;
+        font-size: 1.05rem;
+        color: var(--color-heading);
     }
 
     .stat-grid {
@@ -271,25 +324,26 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
         font-weight: 600;
     }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background: rgba(0, 0, 0, 0.2);
+    .table-shell {
+        background: rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(0, 255, 34, 0.18);
         border-radius: 12px;
         overflow: hidden;
     }
 
-    caption {
-        text-align: left;
-        font-weight: 600;
-        padding: 1rem;
-        background: rgba(0, 0, 0, 0.25);
+    .table-header {
+        padding: 1rem 1rem 0.5rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
     }
 
     th,
     td {
         padding: 0.75rem 1rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         text-align: left;
     }
 
