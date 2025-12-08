@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/retraction_test_benchy.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/retraction-test.json",
+    "item_name": "Tune Retraction Settings",
+    "item_id": "3dprinting/retraction-test",
+    "entity_type": "quest",
+    "prompt": "A close-up of a single Benchy model on a 3D printer’s build plate being used for retraction tuning. The Benchy in the foreground shows minimal stringing and clean details, while in the background a small row of earlier test Benchies with visible stringing and wispy filament strands are lined up on the workbench. A laptop or printer screen off to the side shows a simple icon-only slider graphic, suggesting adjustments to retraction settings without any readable text.\n\nNear-future solarpunk workshop aesthetic with warm lighting, tidy cables, and a plant or two on shelves. Photorealistic 512×512 rendering, no brand logos or legible UI text. The composition should make it obvious that the user is printing Benchy specifically to tune retraction and reduce stringing.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

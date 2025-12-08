@@ -2,7 +2,7 @@
     "id": "3dprinting/filament-change",
     "title": "Swap Filament",
     "description": "Swap to green PLA on your entry-level FDM printer with goggles, wire cutters, and a 10 g purge.",
-    "image": "/assets/quests/benchy_25.jpg",
+    "image": "/assets/quests/filament_swap_green_pla.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [

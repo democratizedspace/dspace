@@ -2,7 +2,7 @@
     "id": "3dprinting/benchy_10",
     "title": "3D Print 10 Benchies",
     "description": "Put your 3D printer to the test! To complete this quest, print at least 10 Benchies.",
-    "image": "/assets/quests/benchy_10.jpg",
+    "image": "/assets/quests/benchy_10_lineup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [

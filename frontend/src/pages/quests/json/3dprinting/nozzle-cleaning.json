@@ -2,7 +2,7 @@
     "id": "3dprinting/nozzle-cleaning",
     "title": "Clear a Clogged Nozzle",
     "description": "Heat and clean the nozzle to restore smooth extrusion.",
-    "image": "/assets/quests/benchy_25.jpg",
+    "image": "/assets/quests/nozzle_cleaning_tools.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [

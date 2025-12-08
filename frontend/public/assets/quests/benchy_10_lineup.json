@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/benchy_10_lineup.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/benchy_10.json",
+    "item_name": "3D Print 10 Benchies",
+    "item_id": "3dprinting/benchy_10",
+    "entity_type": "quest",
+    "prompt": "A 3D printer on a tidy workbench with a neat lineup of exactly 10 finished Benchy boat models arranged in a row along the front edge of the table. The Benchies are printed in a few different filament colors but kept in a single straight line so they’re easy to count at a glance. The printer’s build plate shows one more Benchy either just completed or nearly finished, emphasizing that the printer has been running repeatedly to reach the 10-print goal.\n\nNear-future solarpunk workshop aesthetic with warm ambient lighting, clean cable management, a couple of small plants, and maybe a tiny solar gadget on a shelf. Photorealistic 512×512 rendering with no brand logos or legible text on the printer. The composition should clearly communicate “10 Benchies printed” as a stepping stone toward high-output printing.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -2,7 +2,7 @@
     "id": "3dprinting/retraction-test",
     "title": "Tune Retraction Settings",
     "description": "Print a single Benchy while adjusting retraction to reduce stringing.",
-    "image": "/assets/quests/benchy_25.jpg",
+    "image": "/assets/quests/retraction_test_benchy.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "3dprinting/spool-holder",
     "title": "Print a Spool Holder",
     "description": "Keep filament tidy by printing a simple spool holder.",
-    "image": "/assets/quests/benchy_25.jpg",
+    "image": "/assets/quests/spool_holder_print_setup.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [

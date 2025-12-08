@@ -2,7 +2,7 @@
     "id": "3dprinting/phone-stand",
     "title": "Print a Phone Stand",
     "description": "Practice 3D printing by making a handy phone stand.",
-    "image": "/assets/quests/benchy_25.jpg",
+    "image": "/assets/quests/phone_stand_print.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [

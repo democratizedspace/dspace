@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/calibration_cube_measure.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/calibration-cube.json",
+    "item_name": "Print a Calibration Cube",
+    "item_id": "3dprinting/calibration-cube",
+    "entity_type": "quest",
+    "prompt": "A close-up of a freshly printed 20 mm calibration cube in a single solid color being measured with digital calipers on a workbench. The cube sits on a small cutting mat or ruler, and the caliper jaws lightly grip one edge, with the display showing an icon-only measurement bar rather than readable numbers. In the background, a 3D printer is slightly out of focus, clearly the machine that produced the cube.\n\nNear-future solarpunk workshop vibe with soft, warm lighting and a couple of tools and plants in the blurred background. Photorealistic 512×512 rendering, no brand logos or legible numbers on the calipers. The image should clearly convey the idea of printing and measuring a calibration cube to verify dimensional accuracy.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
