@@ -201,8 +201,7 @@ We follow a feature branch workflow:
 
 Commit messages must start with a conventional prefix enforced by the commit-msg hook. Use
 messages like `feat: add quest assets`, `fix: handle Windows path resolution`, or `chore: bump
-dev dependency`. The prefix should describe the change type, followed by a concise description
-in lowercase.
+dev dependency`. The prefix should describe the change type, followed by a concise description.
 
 ### Pull Request Process
 
