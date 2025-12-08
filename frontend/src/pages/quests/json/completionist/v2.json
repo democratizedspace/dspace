@@ -2,7 +2,7 @@
     "id": "completionist/v2",
     "title": "Congrats for finishing all the quests!!",
     "description": "Here's a trophy for your efforts!",
-    "image": "/assets/quests/completionist.jpg",
+    "image": "/assets/quests/completionist_trophy_award.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

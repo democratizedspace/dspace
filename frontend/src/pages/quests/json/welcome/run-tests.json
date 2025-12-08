@@ -2,7 +2,7 @@
     "id": "welcome/run-tests",
     "title": "Run the Test Suite",
     "description": "Learn how to run DSPACE's automated tests to ensure your changes are correct.",
-    "image": "/assets/quests/completionist.jpg",
+    "image": "/assets/quests/run_tests_terminal_dashboard.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

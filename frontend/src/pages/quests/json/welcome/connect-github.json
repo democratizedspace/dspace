@@ -2,7 +2,7 @@
     "id": "welcome/connect-github",
     "title": "Connect GitHub",
     "description": "Link your GitHub account to enable cloud sync and quest submissions.",
-    "image": "/assets/quests/completionist.jpg",
+    "image": "/assets/quests/connect_github_integration.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

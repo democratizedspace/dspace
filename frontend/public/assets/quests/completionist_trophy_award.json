@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/completionist_trophy_award.jpg",
+    "entity": "frontend/src/pages/quests/json/completionist/v2.json",
+    "item_name": "Congrats for finishing all the quests!!",
+    "item_id": "completionist/v2",
+    "entity_type": "quest",
+    "prompt": "A celebratory scene on a clean desk where the Completionist Award II trophy stands prominently in the center, freshly placed. Confetti or small paper stars are scattered lightly around it, and a soft glow or halo effect emphasizes the trophy’s importance. In the background, a computer or holographic display shows a stylized “all quests complete” progress ring or icon-only badge, avoiding any readable text while clearly signaling full completion.\n\nNear-future solarpunk interior with warm, uplifting lighting and subtle greenery. Photorealistic 512×512 rendering with no brand logos or legible UI text; the focus is on the sense of accomplishment and the newly earned trophy. No full human figures are shown—at most a partial hand reaching toward the award.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_ground_temperature_probe.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/survey-ground-temperature.json",
+    "item_name": "Survey for Geothermal Heat",
+    "item_id": "geothermal/survey-ground-temperature",
+    "entity_type": "quest",
+    "prompt": "A small outdoor scene showing a person’s lower legs and boots beside a compact digital ground-temperature probe inserted into a patch of soil or lawn, with a cable running to a handheld meter displaying a simple temperature gauge icon instead of readable numbers. Nearby, a shallow test hole or auger core is visible, suggesting that the ground at a certain depth is being evaluated for geothermal suitability. The background hints at a residential yard or field with subtle renewable-energy cues like distant solar panels.\n\nNear-future solarpunk outdoor aesthetic with soft, natural daylight and realistic vegetation. Photorealistic 512×512 image with no brand logos or legible text on the meter; the interface relies on icons and a clear temperature bar. The composition should make it obvious that the quest involves measuring ground temperature to check if a heat pump will work.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
