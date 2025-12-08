@@ -1,8 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import fs from 'fs';
 import path from 'path';
-import { globSync } from 'glob';
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const baselineFile = path.join(__dirname, '../baselines/contentCounts.json');
 const baseline = JSON.parse(fs.readFileSync(baselineFile, 'utf8'));
 const questDir = path.join(__dirname, '../../frontend/src/pages/quests/json');
@@ -10,12 +12,43 @@ const itemsDir = path.join(__dirname, '../../frontend/src/pages/inventory/json/i
 const processesFile = path.join(__dirname, '../../frontend/src/generated/processes.json');
 const npcDir = path.join(__dirname, '../../frontend/public/assets/npc');
 
+function countJsonFiles(dir: string): number {
+    return fs.readdirSync(dir, { withFileTypes: true }).reduce((sum, entry) => {
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+            return sum + countJsonFiles(fullPath);
+        }
+        return sum + (entry.name.endsWith('.json') ? 1 : 0);
+    }, 0);
+}
+
+function countItems(dir: string): number {
+    return fs.readdirSync(dir, { withFileTypes: true }).reduce((sum, entry) => {
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+            return sum + countItems(fullPath);
+        }
+        if (!entry.name.endsWith('.json')) return sum;
+        const data = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+        return sum + (Array.isArray(data) ? data.length : 0);
+    }, 0);
+}
+
+function countNpcImages(dir: string): number {
+    return fs.readdirSync(dir, { withFileTypes: true }).reduce((sum, entry) => {
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+            return sum + countNpcImages(fullPath);
+        }
+        return sum + (/\.(png|jpe?g|webp)$/i.test(entry.name) ? 1 : 0);
+    }, 0);
+}
+
 function getCounts() {
-    const quests = globSync(path.join(questDir, '**/*.json')).length;
-    const itemFiles = globSync(path.join(itemsDir, '*.json'));
-    const items = itemFiles.reduce((sum, file) => sum + JSON.parse(fs.readFileSync(file, 'utf8')).length, 0);
+    const quests = countJsonFiles(questDir);
+    const items = countItems(itemsDir);
     const processes = JSON.parse(fs.readFileSync(processesFile, 'utf8')).length;
-    const npcImages = fs.readdirSync(npcDir).filter(f => /\.(png|jpe?g|webp)$/.test(f)).length;
+    const npcImages = countNpcImages(npcDir);
     return { quests, items, processes, npcImages };
 }
 

@@ -2,10 +2,14 @@ import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
-import update from '../scripts/update-new-quests.js';
-import { globSync } from 'glob';
+import { fileURLToPath } from 'url';
+import update from '../scripts/update-new-quests.mjs';
 
 process.env.NEW_QUESTS_REF = process.env.NEW_QUESTS_REF || 'HEAD';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const repoRoot = path.resolve(__dirname, '..');
 
 type Group = { tree: string; quests: string[] };
 type Section = {
@@ -23,8 +27,13 @@ const { getReleaseSections, generateMarkdown, listQuestFiles } = update as {
 };
 
 const listPath = path.join(
-  __dirname,
-  '../frontend/src/pages/docs/md/new-quests.md'
+  repoRoot,
+  'frontend',
+  'src',
+  'pages',
+  'docs',
+  'md',
+  'new-quests.md'
 );
 
 describe('new quests list', () => {
@@ -53,7 +62,7 @@ describe('new quests list', () => {
 
   it('is up-to-date when regenerated', () => {
     const before = fs.readFileSync(listPath, 'utf8');
-    execSync('node scripts/update-new-quests.js');
+    execSync('node scripts/update-new-quests.mjs', { cwd: repoRoot });
     const after = fs.readFileSync(listPath, 'utf8');
     fs.writeFileSync(listPath, before);
     expect(
@@ -73,7 +82,7 @@ describe('new quests list', () => {
 
   it('syncs root docs copy', () => {
     const rootDoc = fs.readFileSync(
-      path.join(__dirname, '../docs/new-quests.md'),
+      path.join(repoRoot, 'docs', 'new-quests.md'),
       'utf8'
     );
     const frontendDoc = fs.readFileSync(listPath, 'utf8');

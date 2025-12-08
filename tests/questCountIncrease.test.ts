@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import compare from '../scripts/compareQuestCount.js';
+import compare from '../scripts/compareQuestCount.mjs';
 
 const { listQuestFiles, BASE_COMMIT } = compare as {
   listQuestFiles: (ref?: string) => string[];

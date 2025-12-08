@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { installOfflineToast } from '../frontend/src/scripts/offlineToast.js';
+import { installOfflineToast } from '../frontend/public/scripts/offlineToast.js';
 
 const originalOnLineDescriptor = Object.getOwnPropertyDescriptor(
   Navigator.prototype,
