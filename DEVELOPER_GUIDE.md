@@ -205,6 +205,14 @@ We follow a feature branch workflow:
 4. Get approval from at least one maintainer
 5. Squash and merge into the main branch
 
+### Commit messages
+
+- Start messages with a type followed by a colon, for example: `feat: add quest data`,
+  `fix: handle process validation`, `chore: update dependencies`.
+- Optional scope is allowed, such as `feat(quests): add lunar samples`.
+- Commit messages shorter than 10 characters or missing the type prefix will be rejected by the
+  commit hook.
+
 ### CI/CD Pipeline
 
 #### GitHub Actions Workflows
