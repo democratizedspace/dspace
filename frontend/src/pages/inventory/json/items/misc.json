@@ -1233,7 +1233,7 @@
         "name": "first aid kit",
         "description": "Adhesive bandages, sterile gauze pads, antiseptic wipes and nitrile gloves packed for emergencies.",
         "image": "/assets/quests/basic_circuit.svg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "35 dUSD"
     },
     {
         "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",

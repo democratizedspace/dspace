@@ -62,4 +62,17 @@ describe("item quality", () => {
       PriceExemptionReason.BETA_PLACEHOLDER
     );
   });
+
+  it("prices the first aid kit instead of using a beta placeholder", () => {
+    const firstAidKit = (items as Array<Record<string, any>>).find(
+      (item) => item.name === "first aid kit"
+    );
+
+    expect(firstAidKit).toBeDefined();
+    expect(firstAidKit?.price).toBeDefined();
+    expect(firstAidKit?.price).toMatch(/[0-9]/);
+    expect(firstAidKit?.priceExemptionReason ?? null).not.toBe(
+      PriceExemptionReason.BETA_PLACEHOLDER
+    );
+  });
 });
