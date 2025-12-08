@@ -197,6 +197,13 @@ We follow a feature branch workflow:
 3. Push to your branch and create a PR
 4. Ensure tests pass before requesting review
 
+### Commit Messages
+
+- Start commit messages with a conventional type like `feat:`, `fix:`, `docs:`, `style:`,
+  `refactor:`, `test:`, or `chore:`.
+- Optional scopes are allowed (e.g., `feat(ui): add quest banner`).
+- Keep the summary concise but descriptive, for example `fix: handle ESM vitest config`.
+
 ### Pull Request Process
 
 1. Update documentation for any new features
