@@ -2,7 +2,7 @@
     "id": "welcome/howtodoquests",
     "title": "How to do quests",
     "description": "Learn how quest mechanics work, including dialogue choices, real items, and safe processes.",
-    "image": "/assets/quests/howtodoquests.jpg",
+    "image": "/assets/quests/how_to_do_quests_flowchart.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

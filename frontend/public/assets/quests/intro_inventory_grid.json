@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/intro_inventory_grid.jpg",
+    "entity": "frontend/src/pages/quests/json/welcome/intro-inventory.json",
+    "item_name": "Check Your Inventory",
+    "item_id": "welcome/intro-inventory",
+    "entity_type": "quest",
+    "prompt": "A clean UI-style scene showing a large holographic or glassy screen hovering above a desk, filled with a grid of simple item icons like tools, tokens, and plants, all rendered without legible text. In front of the screen is a small stack of real-world items that match a few of the icons, tying the digital inventory to physical objects. A controller or small handheld device rests on the desk, hinting that the viewer is actively inspecting their collection.\n\nNear-future solarpunk lab or study with soft ambient lighting, pale greens and blues, and subtle greenery in the background. Photorealistic 512×512 look with slightly stylized UI elements, no brand logos, and no faces—only a partial silhouette or hand if any person is shown. The image should immediately suggest \"checking your inventory\" in a playful but grounded way.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -2,7 +2,7 @@
     "id": "energy/dWatt-1e8",
     "title": "Store a Colossal 100,000,000 dWatt",
     "description": "Prove your dedication by collecting a staggering 100,000,000 dWatt.",
-    "image": "/assets/quests/dWatt_1e7.jpg",
+    "image": "/assets/quests/dwatt_1e8_energy_megagrid.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

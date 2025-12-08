@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponic_stevia_regrow.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/regrow-stevia.json",
+    "item_name": "Regrow Your Stevia",
+    "item_id": "hydroponics/regrow-stevia",
+    "entity_type": "quest",
+    "prompt": "A deep rectangular hydroponic tub about 6–8 inches (15–20 cm) deep, filled with expanded clay pebbles (Hydroton) and dedicated to stevia plants mid-regrowth. Several stevia stems show fresh new leaves emerging from previously cut points, with the plants looking like small, healthy shrubs rather than seedlings. The depth of the tub and thick layer of pebbles make it clear there is plenty of root volume hidden below the surface, suitable for a mature hydroponic stevia root system.\n\nNear-future solarpunk interior with soft ambient lighting, light-colored shelves or countertops, and a bit of background greenery. A small compost or trimmings dish with a few cut stevia stems sits beside the tub to hint at previous harvests, and a discrete smart sensor or tiny display on the tub shows simple icons indicating healthy conditions, with no readable text. Photorealistic 512×512 rendering, no brand logos, and no people in frame—the focus is entirely on the deep hydroponic tub and the regrowing stevia plants.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

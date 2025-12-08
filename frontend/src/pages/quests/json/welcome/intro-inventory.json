@@ -2,7 +2,7 @@
     "id": "welcome/intro-inventory",
     "title": "Check Your Inventory",
     "description": "Learn how to view items you've collected so far.",
-    "image": "/assets/quests/howtodoquests.jpg",
+    "image": "/assets/quests/intro_inventory_grid.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
