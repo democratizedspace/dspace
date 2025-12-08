@@ -1,0 +1,8 @@
+{
+  "id": "stats-page-theme-alignment",
+  "date": "2025-12-08",
+  "component": "frontend/ui/stats",
+  "rootCause": "Stats page used custom panels instead of shared cards, leaving it off-theme.",
+  "resolution": "Rebuilt stats panels with Card components and themed tables to match the layout.",
+  "references": ["frontend/src/pages/stats.astro"]
+}

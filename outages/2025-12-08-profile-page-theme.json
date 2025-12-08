@@ -1,0 +1,8 @@
+{
+  "id": "profile-page-missing-page-wrapper",
+  "date": "2025-12-08",
+  "component": "frontend/ui/profile",
+  "rootCause": "Profile route skipped the Page layout, so header and menu framing never rendered.",
+  "resolution": "Moved profile into Page with a card grid for avatar selection and titles.",
+  "references": ["frontend/src/pages/profile/index.astro"]
+}

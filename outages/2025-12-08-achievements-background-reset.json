@@ -1,0 +1,8 @@
+{
+  "id": "achievements-page-theme-override",
+  "date": "2025-12-08",
+  "component": "frontend/ui/achievements",
+  "rootCause": "Achievements set a custom green body background that overrode the shared theme.",
+  "resolution": "Deleted the page-specific background so the global DSPACE styling stays applied.",
+  "references": ["frontend/src/pages/achievements/index.astro"]
+}
