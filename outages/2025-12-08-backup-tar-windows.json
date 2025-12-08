@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-backup-tar-windows",
+  "date": "2025-12-08",
+  "component": "scripts",
+  "rootCause": "backup.mjs used absolute Windows tar targets so tar treated the drive as a host.",
+  "resolution": "Call tar with repo-relative paths after creating the backup directory.",
+  "references": [
+    "scripts/backup.mjs",
+    "tests/backupScript.test.ts"
+  ]
+}

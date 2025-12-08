@@ -1,8 +1,11 @@
-const { execSync } = require('child_process');
-const path = require('path');
-const fs = require('fs');
-const { getReleaseSections } = require('./update-new-quests.js');
+import { execSync } from 'node:child_process';
+import path from 'node:path';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { getReleaseSections } from './update-new-quests.mjs';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const QUEST_DIR = path.join(__dirname, '..', 'frontend', 'src', 'pages', 'quests', 'json');
 const BASE_COMMIT = 'd956e807d49114da2d0ff28aacef91341813bf82'; // v2.1
 
@@ -39,10 +42,7 @@ function readJsonFiles(dir) {
     });
 }
 
-module.exports = {
-  listQuestFiles,
-  BASE_COMMIT,
-};
+export { listQuestFiles, BASE_COMMIT };
 
 function main() {
   const v21Files = listQuestFiles(BASE_COMMIT);
@@ -58,6 +58,6 @@ function main() {
   }
 }
 
-if (require.main === module) {
+if (process.argv[1] === __filename) {
   main();
 }

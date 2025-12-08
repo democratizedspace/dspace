@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-new-quests-pathing",
+  "date": "2025-12-08",
+  "component": "docs",
+  "rootCause": "new-quests regeneration used brittle relative paths that failed on Windows.",
+  "resolution": "Resolve paths via fileURLToPath and sync both doc copies in the updater.",
+  "references": [
+    "tests/newQuestsList.test.ts",
+    "scripts/update-new-quests.mjs"
+  ]
+}

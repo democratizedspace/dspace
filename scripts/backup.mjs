@@ -1,7 +1,10 @@
 #!/usr/bin/env node
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { mkdirSync } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const rawArgs = process.argv.slice(2);
 let outDir = 'backups';
@@ -18,11 +21,16 @@ for (let i = 0; i < rawArgs.length; i += 1) {
 
 const sources = targets.length > 0 ? targets : ['backend', 'frontend'];
 
-const outPath = path.resolve(outDir);
+const outPath = path.resolve(repoRoot, outDir);
 mkdirSync(outPath, { recursive: true });
+const relativeOutDir = path.relative(repoRoot, outPath) || '.';
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-const file = path.join(outPath, `backup-${timestamp}.tar.gz`);
-const args = sources.map((p) => `'${p}'`).join(' ');
-execSync(`tar -czf '${file}' ${args}`, { stdio: 'inherit' });
-console.log(`Created backup at ${file}`);
+const tarTarget = path.join(relativeOutDir, `backup-${timestamp}.tar.gz`);
+const tarSources = sources.map((p) => {
+    const relative = path.relative(repoRoot, path.resolve(repoRoot, p));
+    return relative || '.';
+});
+
+execFileSync('tar', ['-czf', tarTarget, ...tarSources], { cwd: repoRoot, stdio: 'inherit' });
+console.log(`Created backup at ${path.join(outPath, path.basename(tarTarget))}`);
 

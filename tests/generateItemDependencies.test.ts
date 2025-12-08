@@ -11,13 +11,19 @@ const getId = (name: string) => items.find((i) => i.name === name)?.id;
 describe('generate-item-dependencies buildMap', () => {
   it('includes quests that require items', () => {
     const map = buildMap();
-    const telescope = getId('basic telescope');
-    expect(map[telescope!].requires).toContain('astronomy/constellations');
+    const dWatt = getId('dWatt');
+
+    expect(dWatt).toBeDefined();
+    expect(map[dWatt!]).toBeDefined();
+    expect(map[dWatt!].requires).toContain('energy/hand-crank-generator');
   });
 
   it('includes quests that reward items', () => {
     const map = buildMap();
-    const solarPanel = getId('portable solar panel');
-    expect(map[solarPanel!].rewards).toContain('energy/dWatt-1e3');
+    const smartPlug = getId('smart power strip');
+
+    expect(smartPlug).toBeDefined();
+    expect(map[smartPlug!]).toBeDefined();
+    expect(map[smartPlug!].rewards).toContain('welcome/smart-plug-test');
   });
 });

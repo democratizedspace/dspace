@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-playwright-paths-windows",
+  "date": "2025-12-08",
+  "component": "tests",
+  "rootCause": "Tests expected POSIX cache paths and CLI locations that do not match Windows.",
+  "resolution": "Normalize expectations, skip Linux-only cases and reuse repo-relative CLI lookup.",
+  "references": [
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts",
+    "frontend/scripts/utils/ensure-playwright-browsers.js"
+  ]
+}

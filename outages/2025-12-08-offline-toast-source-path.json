@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-offline-toast-source-path",
+  "date": "2025-12-08",
+  "component": "frontend",
+  "rootCause": "Layout inlined offline toast, leaving /src/scripts paths in the build output.",
+  "resolution": "Bundle offline toast via a script tag so the build rewrites the path.",
+  "references": [
+    "frontend/src/layouts/Layout.astro",
+    "tests/buildOutputValidation.test.ts"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-08-item-dependency-drift",
+  "date": "2025-12-08",
+  "component": "tests",
+  "rootCause": "Tests targeted quest/item pairs no longer present in current data.",
+  "resolution": "Assert against current items with requires/rewards entries and guard missing ids.",
+  "references": [
+    "tests/generateItemDependencies.test.ts",
+    "scripts/generate-item-dependencies.js"
+  ]
+}

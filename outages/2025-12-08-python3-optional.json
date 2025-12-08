@@ -1,0 +1,8 @@
+{
+  "id": "2025-12-08-python3-optional",
+  "date": "2025-12-08",
+  "component": "tests",
+  "rootCause": "scan-secrets tests assumed python3 was installed, failing on Windows dev machines.",
+  "resolution": "Skip scan-secrets tests without python3 while still running them in CI.",
+  "references": ["tests/scanSecretsScript.test.ts", "scripts/scan-secrets.py"]
+}

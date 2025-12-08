@@ -1,10 +1,11 @@
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const frontendOutput = path.join(
-  __dirname,
-  '..',
+  repoRoot,
   'frontend',
   'src',
   'pages',
@@ -12,7 +13,7 @@ const frontendOutput = path.join(
   'md',
   'new-quests.md'
 );
-const docsOutput = path.join(__dirname, '..', 'docs', 'new-quests.md');
+const docsOutput = path.join(repoRoot, 'docs', 'new-quests.md');
 
 const PRE_V2_COMMIT = 'fc840def24c5140411d2892f468960acb8250681';
 const V2_COMMIT = '93a834691af174b3c8b9895e9a27ce72e10e8299';
@@ -128,8 +129,7 @@ function getDocFallbackSections() {
 
 function listQuestFiles(ref) {
   const questDir = path.join(
-    __dirname,
-    '..',
+    repoRoot,
     'frontend',
     'src',
     'pages',
@@ -275,11 +275,11 @@ function main() {
   fs.writeFileSync(docsOutput, content);
 }
 
-if (require.main === module) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   main();
 }
 
-module.exports = {
+export {
   listQuestFiles,
   getQuestPathsBetween,
   groupQuests,
