@@ -8,16 +8,27 @@ const { buildMap } = gen as {
 
 const getId = (name: string) => items.find((i) => i.name === name)?.id;
 
+function expectItemEntry(name: string, map: ReturnType<typeof buildMap>) {
+  const id = getId(name);
+  expect(id, `Expected to find item id for ${name}`).toBeDefined();
+  expect(map[id!], `Expected dependency map entry for ${name}`).toBeDefined();
+  return map[id!];
+}
+
 describe('generate-item-dependencies buildMap', () => {
   it('includes quests that require items', () => {
     const map = buildMap();
-    const smartPlug = getId('smart plug');
-    expect(map[smartPlug!].requires).toContain('welcome/intro-inventory');
+    const smartPlug = expectItemEntry('smart plug', map);
+
+    expect(smartPlug.requires).toContain('welcome/intro-inventory');
+    expect(smartPlug.requires.length).toBeGreaterThan(0);
   });
 
   it('includes quests that reward items', () => {
     const map = buildMap();
-    const dChat = getId('dChat');
-    expect(map[dChat!].rewards).toContain('welcome/howtodoquests');
+    const dChat = expectItemEntry('dChat', map);
+
+    expect(dChat.rewards).toContain('welcome/howtodoquests');
+    expect(dChat.rewards.length).toBeGreaterThan(0);
   });
 });

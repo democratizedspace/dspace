@@ -2,8 +2,8 @@
   "id": "item-dependencies-test-drift",
   "date": "2025-12-12",
   "component": "scripts/generate-item-dependencies",
-  "rootCause": "Tests referenced legacy items (basic telescope, portable solar panel) that no longer appeared in quest requires/rewards data, causing undefined map entries and TypeErrors on Windows runs.",
-  "resolution": "Aligned the generate-item-dependencies tests with current quest data by asserting on smart plug requirements and dChat rewards generated from live JSON content.",
+  "rootCause": "Generate-item-dependencies assertions drifted again, leaving the tests to dereference undefined map entries when item ids changed or were missing during Windows runs.",
+  "resolution": "Assert the existence of the smart plug and dChat entries before checking their quest relationships so the tests fail clearly and stay aligned with the current quest JSON.",
   "references": [
     "tests/generateItemDependencies.test.ts",
     "scripts/generate-item-dependencies.js",

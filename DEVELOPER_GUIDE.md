@@ -296,6 +296,19 @@ This command:
 - Runs end-to-end tests in optimized groups
 - Provides detailed feedback on test failures
 
+### Root Test Suite Parity
+
+The `root-tests` CI job runs on every push or pull request targeting `v3` and executes the
+same commands developers can run locally:
+
+```bash
+npm run check
+npm run test:root -- --testTimeout=20000
+```
+
+Run this pairing on Windows, macOS, or Linux before opening a PR to catch build output
+validation, item dependency mapping, and other repository-level checks early.
+
 ### Unit Tests
 
 Unit tests focus on testing individual components and utilities in isolation:

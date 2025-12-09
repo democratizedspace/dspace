@@ -4,7 +4,7 @@ import path from 'node:path';
 describe('GitHub workflow pnpm cache', () => {
     const repoRoot = path.resolve(__dirname, '..');
     const expectations: Record<string, number> = {
-        '.github/workflows/ci.yml': 2,
+        '.github/workflows/ci.yml': 1,
         '.github/workflows/tests.yml': 3,
         '.github/workflows/quest-chart.yml': 1,
     };
@@ -20,4 +20,14 @@ describe('GitHub workflow pnpm cache', () => {
             expect(content).toMatch(/hashFiles\(['"]pnpm-lock\.yaml['"]\)/);
         });
     }
+});
+
+describe('GitHub workflow npm cache', () => {
+    const workflowPath = path.join(__dirname, '..', '.github', 'workflows', 'ci.yml');
+
+    it('uses the npm cache for root-tests', () => {
+        const content = fs.readFileSync(workflowPath, 'utf8');
+        const npmCacheMatches = content.match(/cache:\s*npm/g) ?? [];
+        expect(npmCacheMatches.length).toBeGreaterThanOrEqual(1);
+    });
 });

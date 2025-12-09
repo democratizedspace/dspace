@@ -2,11 +2,12 @@
   "id": "offline-toast-src-path",
   "date": "2025-12-12",
   "component": "frontend:build",
-  "rootCause": "The Layout inline script imported offlineToast from /src/scripts, leaving an unbundled /src/scripts/offlineToast.js reference in the 404 build output and breaking Windows/Linux parity checks.",
-  "resolution": "Moved offlineToast.js to frontend/public/scripts and switched Layout.astro to import it from the public /scripts path so built pages no longer leak source-only URLs.",
+  "rootCause": "A hard-coded /src/scripts/offlineToast.js import in the layout leaked into the 404 server chunk, leaving unbundled source paths in build artifacts on Windows and Linux.",
+  "resolution": "Relocated offlineToast.js into frontend/src/scripts and resolved it with Astro.resolve inside Layout.astro so the bundled asset path is emitted instead of any /src reference.",
   "references": [
-    "frontend/public/scripts/offlineToast.js",
+    "frontend/src/scripts/offlineToast.js",
     "frontend/src/layouts/Layout.astro",
-    "tests/buildOutputValidation.test.ts"
+    "tests/buildOutputValidation.test.ts",
+    "tests/offlineToast.test.ts"
   ]
 }
