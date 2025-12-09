@@ -23,11 +23,11 @@ When creating items, consider these categories:
 
 ### Core Item Types
 
-- **Resources**: Basic materials like energy units (dWatt), currency (dUSD), raw materials
-- **Tools & Equipment**: Devices used to perform processes (3D printers, sensors, etc.)
-- **Components**: Parts used in constructing larger systems (rocket parts, circuit boards)
-- **Consumables**: Items that get used up through processes (fuel, nutrients, filament)
-- **Educational**: Items that provide information or learning opportunities
+-   **Resources**: Basic materials like energy units (dWatt), currency (dUSD), raw materials
+-   **Tools & Equipment**: Devices used to perform processes (3D printers, sensors, etc.)
+-   **Components**: Parts used in constructing larger systems (rocket parts, circuit boards)
+-   **Consumables**: Items that get used up through processes (fuel, nutrients, filament)
+-   **Educational**: Items that provide information or learning opportunities
 
 ## Item Structure Guidelines
 
@@ -35,12 +35,12 @@ When creating items, consider these categories:
 
 Every item requires the following basic properties:
 
-- **name**: Descriptive name of the item (required)
-- **description**: Detailed explanation of the item's purpose and use (required)
-    - **image**: Visual representation of the item (required)
-- **price**: Value in game currency (optional)
-- **unit**: Measurement unit for the item (e.g., kg, L, watts) (optional)
-- **type**: Classification or category (optional)
+-   **name**: Descriptive name of the item (required)
+-   **description**: Detailed explanation of the item's purpose and use (required)
+    -   **image**: Visual representation of the item (required)
+-   **price**: Value in game currency (optional)
+-   **unit**: Measurement unit for the item (e.g., kg, L, watts) (optional)
+-   **type**: Classification or category (optional)
 
 ### Implementation State
 
@@ -86,14 +86,14 @@ Items in DSPACE are often connected to other game elements:
 
 ### Process Relationships
 
-- **Required by**: Processes that need this item to run but don't consume it
-- **Consumed by**: Processes that use up this item
-- **Created by**: Processes that produce this item
+-   **Required by**: Processes that need this item to run but don't consume it
+-   **Consumed by**: Processes that use up this item
+-   **Created by**: Processes that produce this item
 
 ### Quest Relationships
 
-- **Required for**: Quest dialogue options that need this item
-- **Granted by**: Quests that give this item as a reward or during dialogue
+-   **Required for**: Quest dialogue options that need this item
+-   **Granted by**: Quests that give this item as a reward or during dialogue
 
 When creating custom items, consider how they might connect to:
 
@@ -172,12 +172,12 @@ Alternatively, you can follow the traditional manual workflow:
 
 We're particularly interested in new items that cover:
 
-- Sustainable materials and recycling
-- Energy storage and generation
-- Life support systems
-- Scientific instruments
-- Plant cultivation tools
-- Water management systems
-- Educational models and demonstrations
+-   Sustainable materials and recycling
+-   Energy storage and generation
+-   Life support systems
+-   Scientific instruments
+-   Plant cultivation tools
+-   Water management systems
+-   Educational models and demonstrations
 
 By following these guidelines, you'll create items that enhance gameplay while advancing DSPACE's mission of democratizing space exploration through education.

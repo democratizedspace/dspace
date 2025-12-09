@@ -91,9 +91,7 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
-        transition:
-            transform 150ms ease,
-            border-color 150ms ease;
+        transition: transform 150ms ease, border-color 150ms ease;
     }
 
     article.unlocked {

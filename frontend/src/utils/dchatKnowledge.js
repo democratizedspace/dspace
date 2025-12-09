@@ -46,8 +46,8 @@ function getQuestData() {
                 Array.isArray(quest.rewards) && quest.rewards.length > 0
                     ? quest.rewards
                     : Array.isArray(quest.rewardItems)
-                      ? quest.rewardItems.map((item) => item.id)
-                      : [],
+                    ? quest.rewardItems.map((item) => item.id)
+                    : [],
         }))
         .sort((a, b) => a.title.localeCompare(b.title));
 }

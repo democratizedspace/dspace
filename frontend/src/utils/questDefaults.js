@@ -28,7 +28,7 @@ export function applyQuestDefaults(partial = {}) {
 
     const start = dialogue.some((node) => node?.id === sanitizedStart)
         ? sanitizedStart
-        : (dialogue[0]?.id ?? DEFAULT_DIALOGUE_NODE_ID);
+        : dialogue[0]?.id ?? DEFAULT_DIALOGUE_NODE_ID;
 
     const requiresQuests = Array.isArray(partial.requiresQuests)
         ? partial.requiresQuests.filter((id) => typeof id === 'string' && id.trim() !== '')

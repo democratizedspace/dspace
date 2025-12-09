@@ -9,10 +9,10 @@ These guidelines outline the process for contributing your custom quests to the 
 
 ## Prerequisites
 
-- [Quest Development Guidelines](/docs/quest-guidelines)
-- Familiarity with [Quest Trees](/docs/quest-trees)
-- Node.js environment with this repository cloned
-- Review the [Quest Template Example](/docs/quest-template)
+-   [Quest Development Guidelines](/docs/quest-guidelines)
+-   Familiarity with [Quest Trees](/docs/quest-trees)
+-   Node.js environment with this repository cloned
+-   Review the [Quest Template Example](/docs/quest-template)
 
 ## Workflow
 
@@ -40,8 +40,8 @@ These guidelines outline the process for contributing your custom quests to the 
 
 ## Tips
 
-- Keep dialogue concise and educational.
-- Include safety notes where appropriate.
-- Run `npm test` before opening a pull request (use `SKIP_E2E=1 npm test` only if browsers are unavailable).
+-   Keep dialogue concise and educational.
+-   Include safety notes where appropriate.
+-   Run `npm test` before opening a pull request (use `SKIP_E2E=1 npm test` only if browsers are unavailable).
 
 Happy quest building!

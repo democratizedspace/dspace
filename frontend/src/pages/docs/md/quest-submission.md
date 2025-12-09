@@ -9,10 +9,10 @@ This guide describes how to submit your custom quests to become part of the offi
 
 ## Prerequisites
 
-- Familiarity with the [Quest Development Guidelines](/docs/quest-guidelines)
-- A local copy of this repository with all dependencies installed
-- Optional: start from the [Quest Template Example](/docs/quest-template) for a minimal JSON
-  structure
+-   Familiarity with the [Quest Development Guidelines](/docs/quest-guidelines)
+-   A local copy of this repository with all dependencies installed
+-   Optional: start from the [Quest Template Example](/docs/quest-template) for a minimal JSON
+    structure
 
 ## Submission Options
 

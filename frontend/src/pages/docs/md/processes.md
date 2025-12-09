@@ -45,9 +45,9 @@ Duration indicates the amount of time required for the process to complete. It's
 
 #### Duration Examples
 
-- Quick processes: "2s", "30s", "1m"
-- Medium processes: "1h30m", "1h 30m", "2h 8m 11s"
-- Long processes: "12h 52m 51s", "48h", "7d", "28d"
+-   Quick processes: "2s", "30s", "1m"
+-   Medium processes: "1h30m", "1h 30m", "2h 8m 11s"
+-   Long processes: "12h 52m 51s", "48h", "7d", "28d"
 
 The system automatically converts these durations into milliseconds for precise timing.
 
@@ -80,20 +80,20 @@ Here are some example processes from the base game:
 
 ### 3D Printing
 
-- Benchy test print: 1h 30m, consumes 15 g filament and 150 dWatt
-- Rocket body tube: 2h 8m 11s, consumes 18.48g filament and 266.67 dWatt
-- Full rocket: 12h 52m 51s, consumes 91g filament and 1610.10 dWatt
+-   Benchy test print: 1h 30m, consumes 15 g filament and 150 dWatt
+-   Rocket body tube: 2h 8m 11s, consumes 18.48g filament and 266.67 dWatt
+-   Full rocket: 12h 52m 51s, consumes 91g filament and 1610.10 dWatt
 
 ### Hydroponics
 
-- Soak rockwool: 15m
-- Germinate basil: 7d
-- Grow basil: 28d, requires grow light, consumes 16128 dWatt
+-   Soak rockwool: 15m
+-   Germinate basil: 7d
+-   Grow basil: 28d, requires grow light, consumes 16128 dWatt
 
 ### Energy Generation
 
-- Solar 200Wh: 1h, creates 200 dWatt and 200 dSolar
-- Solar 1000Wh: 5h, creates 1000 dWatt and 1000 dSolar
+-   Solar 200Wh: 1h, creates 200 dWatt and 200 dSolar
+-   Solar 1000Wh: 5h, creates 1000 dWatt and 1000 dSolar
 
 ## Lifecycle
 

@@ -130,6 +130,7 @@ guards against regressions that previously slipped through manual QA.
 When creating new test files:
 
 1. For E2E tests:
+
     - Place `.spec.ts` files in the `frontend/e2e/` directory
     - Add them to a test group in `frontend/scripts/run-test-groups.mjs`
     - Use the `Docs Experience`, `Management Dashboards`, or `UI Interaction` groups for docs,
@@ -194,10 +195,10 @@ When tests fail, several options are available for debugging:
 
 In CI environments, tests run with special settings:
 
-- No server reuse (`reuseExistingServer: false`)
-- Headless browsers
-- Runs Chromium, Firefox, and WebKit to ensure cross-browser compatibility
-- Parallel execution based on available CPU cores
+-   No server reuse (`reuseExistingServer: false`)
+-   Headless browsers
+-   Runs Chromium, Firefox, and WebKit to ensure cross-browser compatibility
+-   Parallel execution based on available CPU cores
 
 The `npm test` command (alias `test:pr`) simulates this environment locally before you submit a PR.
 
@@ -205,9 +206,9 @@ The `npm test` command (alias `test:pr`) simulates this environment locally befo
 
 ### Unit Tests
 
-- Unit test files are located in `__tests__/` directory
-- Name your tests with `.test.js` extension
-- Use Jest's `describe` and `it` syntax for clear organization
+-   Unit test files are located in `__tests__/` directory
+-   Name your tests with `.test.js` extension
+-   Use Jest's `describe` and `it` syntax for clear organization
 
 Example:
 
@@ -224,6 +225,7 @@ describe('ItemForm Component', () => {
 We have specialized tests to ensure content quality:
 
 1. **Quest Quality Tests** (`questQuality.test.js`):
+
     - Validates NPC dialogue style consistency and fails on mismatches
     - Checks for ethical considerations in aquarium quests and fails on violations
     - Verifies proper quest progression and dependencies. Failures now occur if any quest chain issues are detected.
@@ -247,6 +249,7 @@ We have specialized tests to ensure content quality:
     - Validates duration strings and item references
     - Warns when processes lack items or have extreme durations
 6. **Quest Dependency Tests** (`questDependencies.test.js`):
+
     - Ensures quest chains reference existing quests
     - Detects circular dependencies that could block progress
 
@@ -287,9 +290,9 @@ It inserts many items, processes, and quests in parallel and reports how long th
 
 ### End-to-End Tests
 
-- E2E test files are in the `e2e/` directory
-- Name your tests with `.spec.ts` extension
-- Use Playwright's `test.describe` and `test` syntax
+-   E2E test files are in the `e2e/` directory
+-   Name your tests with `.spec.ts` extension
+-   Use Playwright's `test.describe` and `test` syntax
 
 Example:
 
@@ -472,17 +475,17 @@ Since DSpace uses Astro SSR with hydrated Svelte components:
 
 Tests generate artifacts for debugging:
 
-- **Screenshots**: In `test-artifacts/` directory
-- **Videos**: In `test-videos/` directory
-- **Traces**: In `.playwright-artifacts/traces/` directory
+-   **Screenshots**: In `test-artifacts/` directory
+-   **Videos**: In `test-videos/` directory
+-   **Traces**: In `.playwright-artifacts/traces/` directory
 
 These should be ignored in version control but preserved locally for debugging.
 
 ## Further Resources
 
-- [Playwright Documentation](https://playwright.dev/docs/intro)
-- [Jest Documentation](https://jestjs.io/docs/getting-started)
-- [Svelte Testing Library](https://testing-library.com/docs/svelte-testing-library/intro/)
+-   [Playwright Documentation](https://playwright.dev/docs/intro)
+-   [Jest Documentation](https://jestjs.io/docs/getting-started)
+-   [Svelte Testing Library](https://testing-library.com/docs/svelte-testing-library/intro/)
 
 ## Developer Insights
 
@@ -492,9 +495,9 @@ These insights were gathered from real debugging scenarios and represent common 
 
 Tests might fail due to browser environment limitations, particularly:
 
-- **localStorage restrictions**: Affects game save tests
-- **Cookie restrictions**: Affects session management tests
-- **Fetch API limitations**: Affects API call tests
+-   **localStorage restrictions**: Affects game save tests
+-   **Cookie restrictions**: Affects session management tests
+-   **Fetch API limitations**: Affects API call tests
 
 Our test-coverage.spec.ts handles these issues by:
 
@@ -587,9 +590,9 @@ if ((await chatButton.count()) > 0) {
 
 Remember that E2E tests require a running development server:
 
-- Server must be running on port 3002 (`npm run preview`)
-- Run your server in a separate terminal before starting tests
-- If tests show connection errors, check that your server is running
+-   Server must be running on port 3002 (`npm run preview`)
+-   Run your server in a separate terminal before starting tests
+-   If tests show connection errors, check that your server is running
 
 ## Troubleshooting
 
@@ -607,6 +610,7 @@ If you encounter persistent issues, try:
 The "Game Systems" test group currently has some known failures:
 
 1. **Chat System Tests**: Tests fail when the chat interface cannot be found. This may occur if:
+
     - The chat feature is under active development
     - The selectors have changed since the tests were written
     - The chat components aren't properly hydrating
@@ -757,9 +761,9 @@ npm test -- imageReferences
 
 If you encounter warnings about missing or incorrect images:
 
-- Check the image paths in your quest JSON files
-- Ensure all images are placed in the correct directory structure
-- Verify that images meet the size and dimension requirements
+-   Check the image paths in your quest JSON files
+-   Ensure all images are placed in the correct directory structure
+-   Verify that images meet the size and dimension requirements
 
 ### End-to-End Tests
 
