@@ -3,7 +3,7 @@
   "date": "2025-12-12",
   "component": "scripts/generate-item-dependencies",
   "rootCause": "Tests referenced legacy items (basic telescope, portable solar panel) that no longer appeared in quest requires/rewards data, causing undefined map entries and TypeErrors on Windows runs.",
-  "resolution": "Aligned the generate-item-dependencies tests with current quest data by asserting on smart plug requirements and dChat rewards generated from live JSON content.",
+  "resolution": "Updated the generate-item-dependencies tests to search for welcome quest IDs in the generated map (requires and rewards) and to assert that the matched item IDs exist in the canonical inventory data, reducing brittleness when item names change again.",
   "references": [
     "tests/generateItemDependencies.test.ts",
     "scripts/generate-item-dependencies.js",

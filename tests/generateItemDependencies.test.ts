@@ -6,18 +6,35 @@ const { buildMap } = gen as {
   buildMap: () => Record<string, { requires: string[]; rewards: string[] }>;
 };
 
-const getId = (name: string) => items.find((i) => i.name === name)?.id;
+const itemById = new Map(items.map((item) => [item.id, item]));
 
 describe('generate-item-dependencies buildMap', () => {
+  const questRequiresId = 'welcome/intro-inventory';
+  const questRewardsId = 'welcome/howtodoquests';
+
   it('includes quests that require items', () => {
     const map = buildMap();
-    const smartPlug = getId('smart plug');
-    expect(map[smartPlug!].requires).toContain('welcome/intro-inventory');
+    const entry = Object.entries(map).find(([, value]) =>
+      value.requires?.includes(questRequiresId)
+    );
+
+    expect(entry?.[0]).toBeDefined();
+
+    const [itemId, value] = entry!;
+    expect(itemById.has(itemId)).toBe(true);
+    expect(value.requires).toContain(questRequiresId);
   });
 
   it('includes quests that reward items', () => {
     const map = buildMap();
-    const dChat = getId('dChat');
-    expect(map[dChat!].rewards).toContain('welcome/howtodoquests');
+    const entry = Object.entries(map).find(([, value]) =>
+      value.rewards?.includes(questRewardsId)
+    );
+
+    expect(entry?.[0]).toBeDefined();
+
+    const [itemId, value] = entry!;
+    expect(itemById.has(itemId)).toBe(true);
+    expect(value.rewards).toContain(questRewardsId);
   });
 });

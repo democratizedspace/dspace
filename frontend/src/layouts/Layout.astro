@@ -8,6 +8,7 @@ export interface Props {
 const { title } = Astro.props as Props;
 
 const sitewideTitle = `DSPACE (democratized.space)`;
+const offlineToastModulePath = '/scripts/offlineToast.js';
 ---
 
 <!DOCTYPE html>
@@ -82,8 +83,11 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                         <slot />
                 </div>
                 <script is:inline type="module">
-                        import installOfflineToast from '/scripts/offlineToast.js';
-                        installOfflineToast();
+                        import(/* @vite-ignore */ offlineToastModulePath)
+                                .then(({ default: installOfflineToast }) => installOfflineToast())
+                                .catch((error) =>
+                                        console.warn('Failed to load offline toast module', error)
+                                );
                 </script>
 
                 <script is:inline>

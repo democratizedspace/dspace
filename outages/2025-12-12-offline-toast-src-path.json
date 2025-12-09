@@ -2,8 +2,8 @@
   "id": "offline-toast-src-path",
   "date": "2025-12-12",
   "component": "frontend:build",
-  "rootCause": "The Layout inline script imported offlineToast from /src/scripts, leaving an unbundled /src/scripts/offlineToast.js reference in the 404 build output and breaking Windows/Linux parity checks.",
-  "resolution": "Moved offlineToast.js to frontend/public/scripts and switched Layout.astro to import it from the public /scripts path so built pages no longer leak source-only URLs.",
+  "rootCause": "A static inline import for the offline toast kept resolving to /src/scripts/offlineToast.js during SSR builds, so the 404 chunk still referenced the source path even after relocating the asset to public/.",
+  "resolution": "Switched Layout.astro to dynamically import the public /scripts/offlineToast.js bundle with a Vite-ignore hint, preventing bundling from rewriting the URL back to /src and keeping built assets free of source-only paths.",
   "references": [
     "frontend/public/scripts/offlineToast.js",
     "frontend/src/layouts/Layout.astro",

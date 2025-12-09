@@ -11,7 +11,7 @@
     "pretest:root": "node frontend/scripts/build-processes.mjs",
     "dev": "cd frontend && npm run dev",
     "test": "npm run test:pr",
-    "test:root": "vitest run --config vitest.config.mts --testTimeout 20000",
+    "test:root": "vitest run --config vitest.config.mts",
     "coverage": "vitest run --config vitest.config.mts --coverage",
     "test:watch": "cd frontend && npm run test:watch",
     "test:e2e": "cd frontend && npm run test:e2e",
@@ -68,7 +68,8 @@
     "yaml": "^2.8.1"
   },
   "dependencies": {
-    "openai": "^5.16.0"
+    "openai": "^5.16.0",
+    "prom-client": "^15.1.3"
   },
   "license": "MIT"
 }
