@@ -34,4 +34,12 @@ describe('generate-item-dependencies buildMap', () => {
     expect(fishFriend.rewards.length).toBeGreaterThan(0);
     expect(fishFriend.rewards).toContain('aquaria/goldfish');
   });
+
+  it('captures items granted mid-quest', () => {
+    const map = buildMap();
+    const phStrip = expectItemEntry('pH strip', map);
+
+    expect(phStrip.rewards.length).toBeGreaterThan(0);
+    expect(phStrip.rewards).toContain('aquaria/ph-strip-test');
+  });
 });

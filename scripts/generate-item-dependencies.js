@@ -38,6 +38,7 @@ function collectItemDeps(obj, questId, map) {
 
   if (obj.requiresItems) addDeps(obj.requiresItems, questId, map, 'requires');
   if (obj.rewards) addDeps(obj.rewards, questId, map, 'rewards');
+  if (obj.grantsItems) addDeps(obj.grantsItems, questId, map, 'rewards');
   for (const v of Object.values(obj)) collectItemDeps(v, questId, map);
 }
 
