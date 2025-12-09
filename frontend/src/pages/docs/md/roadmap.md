@@ -11,7 +11,8 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## 2026
 
-- [ ] top-down isometric base building (deferred from 2024 roadmap)
+- Top-down isometric base building remains deferred from the 2024 roadmap while we focus on
+  shipping supporting systems first.
 
 ## 2025
 
