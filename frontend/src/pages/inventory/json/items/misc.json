@@ -849,7 +849,7 @@
         "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
         "name": "5 mm LED",
         "description": "A 5 mm red light-emitting diode for basic electronics projects.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/led_5mm_red.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1398,7 +1398,7 @@
         "id": "3455faac-8811-4991-b818-cecb98e8fff7",
         "name": "lab coat",
         "description": "Knee-length cotton lab coat with snap buttons and two pockets; one size fits most.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/lab_coat_white.jpg",
         "price": "15 dUSD"
     },
     {
