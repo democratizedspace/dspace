@@ -296,6 +296,13 @@ This command:
 - Runs end-to-end tests in optimized groups
 - Provides detailed feedback on test failures
 
+### Root test suite (CI parity)
+
+The `root-tests` GitHub Actions job runs `npm run check` followed by
+`npm run test:root -- --testTimeout=20000` on every pull request into `v3`. Run the same commands
+locally (Linux, macOS, or Windows) to catch build-output validation and data integrity regressions
+before pushing.
+
 ### Unit Tests
 
 Unit tests focus on testing individual components and utilities in isolation:

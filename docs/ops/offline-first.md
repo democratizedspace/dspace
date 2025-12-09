@@ -26,9 +26,10 @@ both the app shell and worker invalidate caches in lockstep.
   and media assets are retained across versions, while HTML is always served fresh or from the
   dedicated navigation cache.
 - **Offline notification**: The global layout loads `installOfflineToast` from
-  `frontend/src/scripts/offlineToast.js` via a bundled relative import, wiring `window`
-  online/offline events to an accessible status toast. It now announces when connectivity returns
-  before auto-hiding so players know their data is syncing again.
+  `frontend/public/scripts/offlineToast.js` via the shared `/scripts/offlineToast.js`
+  public path, wiring `window` online/offline events to an accessible status toast. It now
+  announces when connectivity returns before auto-hiding so players know their data is syncing
+  again.
 - **Versioning**: Store the current `CACHE_VERSION` inside `localStorage` (key
   `dspace-cache-version`) to detect mismatches. The global layout loads
   `/cache-version.js` on boot, writes `self.CACHE_VERSION` to storage, and fires a
