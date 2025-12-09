@@ -7,7 +7,9 @@ This is just a tentative roadmap showing what I'm hoping to work on next. Things
 
 ## 2027 and beyond
 
-- [ ] multiplayer (targeting 2027 or later)
+Multiplayer ambitions are deferred so we can keep shipping single-player systems with fewer
+dependencies. We'll revisit cooperative play once the supporting infrastructure and moderation
+tooling are ready.
 
 ## 2026
 
