@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/adhesive_bandages.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "adhesive bandages",
+    "item_id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
+    "entity_type": "item",
+    "prompt": "A small stack of sterile adhesive bandage strips fanned out on a tabletop, with a few still sealed in their individual paper wrappers and one partially peeled open to show the padded center. The wrappers use simple color blocks and a cross icon in place of readable branding. In the background, a faint glimpse of a first aid kit case or other medical items hints that these strips are part of a larger emergency setup.\n\nNear-future solarpunk medical aesthetic with clean, soft lighting and a neutral, uncluttered background. Photorealistic 512×512 rendering with no brand logos or legible text. The composition should clearly identify these as everyday adhesive bandages, distinct from more complex medical gear.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

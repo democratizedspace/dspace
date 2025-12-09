@@ -2,7 +2,7 @@
     "id": "ubi/reminder",
     "title": "Set a UBI Reminder",
     "description": "Schedule a daily reminder so you never miss your dUSD payout.",
-    "image": "/assets/quests/basicincome.jpg",
+    "image": "/assets/quests/ubi_daily_reminder.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "ubi/basicincome",
     "title": "Earn basic income",
     "description": "Learn about the basic income system and how to earn dUSD.",
-    "image": "/assets/quests/basicincome.jpg",
+    "image": "/assets/quests/ubi_basic_income_overview.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

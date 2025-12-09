@@ -856,7 +856,7 @@
         "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
         "name": "220 Ohm Resistor",
         "description": "A resistor commonly used to limit current to an LED.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/220_ohm_resistor.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1147,7 +1147,7 @@
         "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
         "name": "fan case",
         "description": "Keeps a Raspberry Pi cool during heavy workloads.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/raspberry_pi_fan_case.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1232,7 +1232,7 @@
         "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
         "name": "first aid kit",
         "description": "Adhesive bandages, sterile gauze pads, antiseptic wipes and nitrile gloves packed for emergencies.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/first_aid_kit.jpg",
         "price": "35 dUSD"
     },
     {
@@ -1260,7 +1260,7 @@
         "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
         "name": "adhesive bandages",
         "description": "Sterile strips to cover small cuts and scrapes.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/adhesive_bandages.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1281,7 +1281,7 @@
         "id": "0dde854e-7fcb-40ac-88ea-9afd9196f856",
         "name": "antibiotic ointment packet",
         "description": "Single-use packet of triple antibiotic ointment for minor cuts.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/antibiotic_ointment_packet.jpg",
         "price": "0.25 dUSD",
         "unit": "each",
         "hardening": {
@@ -1336,7 +1336,7 @@
         "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
         "name": "250 mL glass beaker",
         "description": "Borosilicate beaker with 50 mL marks and a spout; handles hot liquids without shattering.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/beaker_250ml_glass.jpg",
         "price": "3 dUSD"
     },
     {
