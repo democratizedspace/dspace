@@ -58,6 +58,12 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         },
         {
             message:
+                'Branching questlines now live inside the Quest Trees map so you can browse the shipped dialogue paths and requirements.',
+            href: '/docs/quest-trees',
+            linkLabel: 'Quest trees',
+        },
+        {
+            message:
                 'The long-promised Contributors Guide is now live with workflow and testing guidance ' +
                 'plus documentation checklists for new pull requests.',
             href: '/docs/contributors-guide',
