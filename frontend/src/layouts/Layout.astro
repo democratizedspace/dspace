@@ -82,6 +82,7 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                         <slot />
                 </div>
                 <script is:inline type="module">
+                        // Use the public /scripts path so the build never emits /src references.
                         import installOfflineToast from '/scripts/offlineToast.js';
                         installOfflineToast();
                 </script>

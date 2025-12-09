@@ -30,14 +30,7 @@ describe('build output validation', () => {
     }
 
     function getBuildFiles(): string[] {
-        const files = findBuildFiles(distPath);
-
-        if (files.length > 0) {
-            return files;
-        }
-
-        // CI should cache frontend/dist between jobs to avoid rebuilding on every test run.
-        execSync('npm run build', { stdio: 'inherit' });
+        execSync('npm --prefix frontend run build -- --clean', { stdio: 'inherit' });
         return findBuildFiles(distPath);
     }
 

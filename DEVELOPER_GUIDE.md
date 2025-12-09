@@ -286,15 +286,19 @@ Before submitting a pull request, run the comprehensive cross-platform test suit
 ```bash
 # From project root
 npm test
+npm run test:root -- --testTimeout=20000
 ```
 
-This command:
+`npm test`:
 
 - Works on both Windows and Unix-like systems
 - Runs linting and formatting checks
 - Executes all unit tests
 - Runs end-to-end tests in optimized groups
 - Provides detailed feedback on test failures
+
+`npm run test:root -- --testTimeout=20000` focuses on lint, type safety, and repo-level guards.
+CI runs this exact suite on every PR targeting `v3`, so keep it green locally to avoid surprises.
 
 ### Unit Tests
 

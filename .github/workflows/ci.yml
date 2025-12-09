@@ -3,6 +3,7 @@ on:
   push:
     branches: [v3]
   pull_request:
+    branches: [v3]
 
 jobs:
   build:
@@ -79,6 +80,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --reporter=append-only
       - name: Run lint and type checks
-        run: pnpm run check
+        run: npm run check
       - name: Run root tests
-        run: pnpm run test:root -- --testTimeout=20000
+        run: npm run test:root -- --testTimeout=20000

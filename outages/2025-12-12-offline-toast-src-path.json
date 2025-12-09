@@ -3,10 +3,11 @@
   "date": "2025-12-12",
   "component": "frontend:build",
   "rootCause": "The Layout inline script imported offlineToast from /src/scripts, leaving an unbundled /src/scripts/offlineToast.js reference in the 404 build output and breaking Windows/Linux parity checks.",
-  "resolution": "Moved offlineToast.js to frontend/public/scripts and switched Layout.astro to import it from the public /scripts path so built pages no longer leak source-only URLs.",
+  "resolution": "Confirmed Layout.astro only loads the toast from the public /scripts path and updated build validation to rebuild from a clean dist so stale /src/script references cannot persist in server chunks like 404.",
   "references": [
     "frontend/public/scripts/offlineToast.js",
     "frontend/src/layouts/Layout.astro",
-    "tests/buildOutputValidation.test.ts"
+    "tests/buildOutputValidation.test.ts",
+    "docs/ops/offline-first.md"
   ]
 }

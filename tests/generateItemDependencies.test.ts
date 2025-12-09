@@ -11,13 +11,17 @@ const getId = (name: string) => items.find((i) => i.name === name)?.id;
 describe('generate-item-dependencies buildMap', () => {
   it('includes quests that require items', () => {
     const map = buildMap();
-    const smartPlug = getId('smart plug');
-    expect(map[smartPlug!].requires).toContain('welcome/intro-inventory');
+    const pineBoard = getId('Pine board');
+    expect(pineBoard).toBeDefined();
+    expect(map[pineBoard!]).toBeDefined();
+    expect(map[pineBoard!].requires).toContain('woodworking/workbench');
   });
 
   it('includes quests that reward items', () => {
     const map = buildMap();
-    const dChat = getId('dChat');
-    expect(map[dChat!].rewards).toContain('welcome/howtodoquests');
+    const dUsd = getId('dUSD');
+    expect(dUsd).toBeDefined();
+    expect(map[dUsd!]).toBeDefined();
+    expect(map[dUsd!].rewards).toContain('ubi/basicincome');
   });
 });
