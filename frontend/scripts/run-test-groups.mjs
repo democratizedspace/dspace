@@ -88,6 +88,7 @@ const TEST_GROUPS = [
         name: 'UI Interaction',
         files: [
             'chat-persona-switching.spec.ts',
+            'chat-rag-context.spec.ts',
             'dark-mode-toggle.spec.ts',
             'local-storage-helpers.spec.ts',
             'item-preview.spec.ts',

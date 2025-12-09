@@ -10,7 +10,10 @@ conversation. Choose dChat for general knowledge, or switch to Sydney,
 Nova, or Hydro to receive guidance steeped in their specialties. Each
 persona keeps its existing lore and draws from the shared quest, item, and
 process knowledge base once you connect an OpenAI API key in the chat
-settings.
+settings. The chat payload now also includes your live quest progress,
+active process timers, and current inventory so answers stay grounded.
+Ask open-ended questions about quests, items, or processes and the
+personas will answer with that live context.
 
 ## dChat
 

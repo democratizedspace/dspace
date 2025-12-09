@@ -19,6 +19,29 @@ describe('buildDchatKnowledge', () => {
         expect(knowledge).toContain('Processes:');
     });
 
+    test('summarizes quest progress and process state', () => {
+        const now = Date.now();
+        const knowledge = buildDchatKnowledge({
+            quests: {
+                'welcome/howtodoquests': { stepId: 1 },
+                'welcome/intro-inventory': { finished: true },
+            },
+            processes: {
+                'outlet-dWatt-1e3': {
+                    startedAt: now - 5000,
+                    duration: 10000,
+                    elapsedBeforePause: 0,
+                },
+            },
+        });
+
+        expect(knowledge).toContain('Quest progress:');
+        expect(knowledge).toMatch(/How to do quests/);
+        expect(knowledge).toMatch(/finished/);
+        expect(knowledge).toContain('Processes in flight:');
+        expect(knowledge).toMatch(/Buy 1 kWh of electricity from a wall outlet/);
+    });
+
     test('includes essential tutorial quests', () => {
         const knowledge = buildDchatKnowledge({});
         expect(knowledge).toContain('How to do quests');
