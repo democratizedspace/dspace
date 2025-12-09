@@ -222,6 +222,7 @@ function summarizeProcessProgress(gameState = {}) {
     }
 
     return Object.entries(gameState.processes)
+        .filter(([, processState]) => processState !== undefined)
         .slice(0, MAX_PROCESS_STATUS_ENTRIES)
         .map(([processId, processState]) => describeProcessProgress(processId, processState))
         .sort((a, b) => a.localeCompare(b));
