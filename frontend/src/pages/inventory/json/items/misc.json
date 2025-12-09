@@ -820,7 +820,7 @@
         "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
         "name": "Arduino Uno",
         "description": "A beginner-friendly microcontroller board ideal for electronics projects.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/arduino_uno_board.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -870,7 +870,7 @@
         "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
         "name": "LED indicator module",
         "description": "5 mm red LED pre-wired with a 220 Ω resistor and jumper leads for breadboard projects.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/led_indicator_module.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -918,14 +918,14 @@
         "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
         "name": "Wheel Encoder",
         "description": "Pair of low-resolution quadrature encoders for tracking robot wheel rotation.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/wheel_encoder_pair.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
         "name": "12 V DC motor",
         "description": "Small brushed 12 V DC motor suited for hand-crank generators.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/dc_motor_12v.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 1,
@@ -1112,7 +1112,7 @@
         "id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
         "name": "M.2 PoE+ HAT",
         "description": "Provides power over Ethernet and an M.2 slot for NVMe drives.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/m2_poe_hat.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1176,7 +1176,7 @@
         "id": "849eb5e1-9f63-488b-80d3-913492049090",
         "name": "external backup SSD",
         "description": "Stores nightly database dumps from your cluster.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/external_backup_ssd.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1384,7 +1384,7 @@
         "id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4",
         "name": "electrical tape",
         "description": "19 mm × 20 m PVC electrical tape for insulating wire splices.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/electrical_tape_roll.jpg",
         "price": "2 dUSD",
         "unit": "roll",
         "hardening": {
@@ -1474,7 +1474,7 @@
         "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
         "name": "Thermistor (10k NTC)",
         "description": "A temperature-sensitive resistor for Arduino voltage dividers.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/thermistor_10k_ntc.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1488,14 +1488,14 @@
         "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
         "name": "Photoresistor",
         "description": "A light-dependent resistor for measuring brightness.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/photoresistor_ldr.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "828d6c3b-66a5-4064-b221-97630274502b",
         "name": "5 V Power Supply",
         "description": "A battery pack or USB adapter that provides a stable 5 V DC output.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/power_supply_5v.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {

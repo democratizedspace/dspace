@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/wheel_encoder_pair.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Wheel Encoder",
+    "item_id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+    "entity_type": "item",
+    "prompt": "A pair of compact wheel encoders for small robots resting on a wooden workbench: each encoder consists of a plastic housing with a slotted disk and a small sensor module mounted beside it. The two encoders are placed face-to-face, and in the background a small robot chassis with wheels is slightly out of focus, with one encoder visible mounted near a wheel hub. Thin signal wires extend from each encoder, ready to be plugged into a controller.\n\nNear-future solarpunk robotics lab aesthetic with warm lighting, tidy tools on a pegboard, and a plant or solar panel visible in the background. Photorealistic 512×512 rendering, no brand logos or legible text. The composition should clearly show that this is a pair of low-resolution wheel encoders used for tracking rotation on a robot.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
