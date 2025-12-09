@@ -63,6 +63,13 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
             href: '/docs/contributors-guide',
             linkLabel: 'Contributors Guide',
         },
+        {
+            message:
+                'Open-ended NPC chat is now live through the dChat personas and their quest-aware knowledge base. ' +
+                'Visit the NPC guide for the latest conversation tips.',
+            href: '/docs/npcs',
+            linkLabel: 'NPC guide',
+        },
     ],
     '20230915': [
         {

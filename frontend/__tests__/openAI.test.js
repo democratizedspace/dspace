@@ -27,8 +27,25 @@ jest.mock('openai', () => {
     };
 });
 
+const mockedState = {
+    quests: {
+        'welcome/howtodoquests': { stepId: 2 },
+        'welcome/intro-inventory': { finished: true },
+    },
+    processes: {
+        'outlet-dWatt-1e3': {
+            startedAt: 0,
+            duration: 2000,
+            elapsedBeforePause: 0,
+        },
+    },
+    inventory: {
+        '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6': 2,
+    },
+};
+
 jest.mock('../src/utils/gameState/common.js', () => ({
-    loadGameState: jest.fn(() => ({ openAI: { apiKey: 'test-key' } })),
+    loadGameState: jest.fn(() => mockedState),
     ready: Promise.resolve(),
 }));
 
@@ -59,6 +76,8 @@ describe('gpt-5 chat responses utility', () => {
         );
         expect(call.input[1].content[0].text).toContain('white PLA filament');
         expect(call.input[1].content[0].text).toContain('How to do quests');
+        expect(call.input[1].content[0].text).toContain('Quest progress');
+        expect(call.input[1].content[0].text).toContain('Processes in flight');
         expect(call.input[2]).toEqual({
             role: 'assistant',
             content: [

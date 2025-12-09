@@ -5,6 +5,8 @@ import { evaluateAchievements } from './achievements.js';
 const MAX_ITEMS = 25;
 const MAX_PROCESSES = 20;
 const MAX_QUESTS = 25;
+const MAX_QUEST_STATUS_ENTRIES = 12;
+const MAX_PROCESS_STATUS_ENTRIES = 8;
 const MAX_ACHIEVEMENT_ENTRIES = 6;
 const PRIORITY_QUEST_IDS = [
     'welcome/howtodoquests',
@@ -165,6 +167,66 @@ function summarizeQuests() {
         });
 }
 
+function describeQuestProgress(questId, questState) {
+    const quest = quests.find((entry) => entry.id === questId);
+    const title = quest?.title || questId;
+    if (questState?.finished) {
+        return `${title}: finished`;
+    }
+    if (typeof questState?.stepId === 'number') {
+        const stepNumber = questState.stepId + 1;
+        return `${title}: step ${stepNumber} in progress`;
+    }
+    return `${title}: in progress`;
+}
+
+function summarizeQuestProgress(gameState = {}) {
+    if (!gameState || typeof gameState !== 'object' || !gameState.quests) {
+        return [];
+    }
+
+    return Object.entries(gameState.quests)
+        .slice(0, MAX_QUEST_STATUS_ENTRIES)
+        .map(([questId, questState]) => describeQuestProgress(questId, questState))
+        .sort((a, b) => a.localeCompare(b));
+}
+
+function describeProcessProgress(processId, processState = {}) {
+    const process = processes.find((entry) => entry.id === processId);
+    const title = process?.title || processId;
+    const { startedAt, duration, pausedAt, elapsedBeforePause } = processState;
+    if (!startedAt || !duration) {
+        return `${title}: not started`;
+    }
+
+    let elapsed = elapsedBeforePause || 0;
+    if (pausedAt) {
+        elapsed += pausedAt - startedAt;
+    } else {
+        elapsed += Date.now() - startedAt;
+    }
+
+    const progress = Math.min(100, Math.max(0, Math.round((elapsed / duration) * 100)));
+    if (progress >= 100) {
+        return `${title}: finished (100%)`;
+    }
+    if (pausedAt) {
+        return `${title}: paused (${progress}%)`;
+    }
+    return `${title}: in progress (${progress}%)`;
+}
+
+function summarizeProcessProgress(gameState = {}) {
+    if (!gameState || typeof gameState !== 'object' || !gameState.processes) {
+        return [];
+    }
+
+    return Object.entries(gameState.processes)
+        .slice(0, MAX_PROCESS_STATUS_ENTRIES)
+        .map(([processId, processState]) => describeProcessProgress(processId, processState))
+        .sort((a, b) => a.localeCompare(b));
+}
+
 export function buildDchatKnowledge(gameState = {}) {
     const knowledgeSections = [];
 
@@ -183,6 +245,11 @@ export function buildDchatKnowledge(gameState = {}) {
         knowledgeSections.push(`Quests: ${questSummary.join(' || ')}`);
     }
 
+    const questProgressSummary = summarizeQuestProgress(gameState);
+    if (questProgressSummary.length > 0) {
+        knowledgeSections.push(`Quest progress: ${questProgressSummary.join(' | ')}`);
+    }
+
     const achievementSummary = summarizeAchievements(gameState);
     if (achievementSummary.length > 0) {
         knowledgeSections.push(`Achievements: ${achievementSummary.join(' | ')}`);
@@ -191,6 +258,11 @@ export function buildDchatKnowledge(gameState = {}) {
     const processSummary = summarizeProcesses();
     if (processSummary.length > 0) {
         knowledgeSections.push(`Processes: ${processSummary.join(' | ')}`);
+    }
+
+    const processProgressSummary = summarizeProcessProgress(gameState);
+    if (processProgressSummary.length > 0) {
+        knowledgeSections.push(`Processes in flight: ${processProgressSummary.join(' | ')}`);
     }
 
     return knowledgeSections.join('\n\n');
@@ -203,6 +275,8 @@ export function __testables() {
         summarizeItems,
         summarizeProcesses,
         summarizeQuests,
+        summarizeQuestProgress,
+        summarizeProcessProgress,
         prioritizeQuests,
         summarizeAchievements,
     };
