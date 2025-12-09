@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/lab_coat_white.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "lab coat",
+    "item_id": "3455faac-8811-4991-b818-cecb98e8fff7",
+    "entity_type": "item",
+    "prompt": "A knee-length white cotton lab coat hanging on a wooden peg or hook against a softly lit wall, the fabric slightly textured and natural-looking. The coat has snap buttons down the front, two large lower pockets, and a smaller chest pocket, with the sleeves rolled once at the cuffs to suggest a comfortable, one-size-fits-most garment. A simple stethoscope or pen peeks from one pocket, hinting at scientific or medical work without being specific.\n\nNear-future solarpunk lab aesthetic with warm, indirect lighting, a few plants nearby, and hints of clean lab benches or glassware in soft focus. Photorealistic 512×512 rendering, no brand logos, name tags, or legible text on the coat. The composition should make the lab coat feel like a ready-to-wear, practical inventory item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

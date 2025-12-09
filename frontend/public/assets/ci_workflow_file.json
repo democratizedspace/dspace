@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ci_workflow_file.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "CI workflow file",
+    "item_id": "306793ac-e420-4859-9742-9076fff6ab57",
+    "entity_type": "item",
+    "prompt": "A laptop on a wooden desk displaying a stylized code editor with a single `.github/workflows/ci.yml` file open in a tab, represented by colored blocks and bracket-like shapes instead of readable text. Beside the laptop lies a printed sheet of paper with a simple flow diagram of green checkmark icons connected by arrows, hinting that the file defines a continuous integration workflow that runs tests on push. A mechanical keyboard, mug, and small plant complete the scene.\n\nNear-future solarpunk workspace aesthetic with warm ambient lighting, subtle LED backlighting behind the desk, and perhaps a tiny solar panel or eco-themed sticker in the background. Photorealistic 512×512 rendering, no brand logos and no legible text on the screen or paper. The composition should clearly represent the CI workflow file as a digital artifact in the inventory.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

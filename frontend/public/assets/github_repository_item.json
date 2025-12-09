@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/github_repository_item.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "GitHub repository",
+    "item_id": "52593d07-908b-4109-92cf-826b2184ef6f",
+    "entity_type": "item",
+    "prompt": "A laptop on a developer’s desk displaying a stylized DSPACE project page on the left and a GitHub-style repository card on the right, connected by a glowing link icon between them. The repository card shows a simple folder icon, branch icon, and a few colored bars representing commits and activity, all without readable text or exact GitHub branding. On the desk are a notebook with sketched diagrams, a mug, and a small plant, suggesting an active development workflow.\n\nNear-future solarpunk workspace aesthetic with warm lighting, wooden surfaces, and maybe a tiny solar panel gadget in the background. Photorealistic 512×512 rendering with no real logos or legible UI text. The composition should clearly convey the concept of a remote Git repository hosted on GitHub as an inventory item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

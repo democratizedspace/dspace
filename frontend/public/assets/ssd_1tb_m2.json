@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ssd_1tb_m2.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "bootable 1TB SSD",
+    "item_id": "4af856b5-b5c1-494f-8037-9b6559785633",
+    "entity_type": "item",
+    "prompt": "A sleek 1 TB M.2 NVMe SSD resting on an anti-static mat next to a small USB or NVMe enclosure and a laptop in the background. The SSD has a slim rectangular PCB with a simple, abstract label that avoids readable branding, and a subtle “1 TB” capacity suggested by iconography rather than text. A faint glow from the laptop screen hints that the operating system has already been cloned and the drive is ready to boot.\n\nNear-future solarpunk workspace aesthetic with warm lighting, clean wooden surfaces, and a potted plant or tiny solar gadget nearby. Photorealistic 512×512 rendering with no brand logos or legible text on the SSD or enclosure. The composition should emphasize the SSD as a ready-to-use, bootable storage device in the inventory.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

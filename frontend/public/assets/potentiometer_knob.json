@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/potentiometer_knob.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Potentiometer",
+    "item_id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",
+    "entity_type": "item",
+    "prompt": "A small rotary potentiometer lying on a wooden electronics workbench, with its knurled metal shaft pointing upward and three solder pins visible along the bottom edge. A simple black knob is pushed onto the shaft, showing a white indicator line that could be used to set the position. In the background, a partially wired breadboard and a few resistors and jumper wires are softly out of focus, suggesting that this variable resistor is used for adjusting signal levels in basic circuits.\n\nNear-future solarpunk electronics aesthetic with warm, soft lighting, neatly arranged tools, and a hint of greenery or a tiny solar gadget at the edge of the frame. Photorealistic 512×512 rendering, no brand logos or legible text on the potentiometer or surrounding objects. The composition should clearly emphasize the potentiometer and its knob as a standalone inventory item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
