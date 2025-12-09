@@ -63,10 +63,10 @@ test.describe('chat RAG context', () => {
 
         const personaSelector = chatPanel.getByLabel('Talk to');
         await personaSelector.selectOption('hydro');
-        // Wait for the persona to actually change in the store
-        await expect(personaSelector).toHaveValue('hydro', { timeout: 5000 });
-        // Additional wait for any async persona switching logic
-        await page.waitForTimeout(200);
+        // Wait for the persona summary to update, confirming the switch is complete
+        await expect(chatPanel.locator('.persona-summary')).toHaveText(
+            'Hydroponics caretaker focused on nutrient balance.'
+        );
         
         await chatPanel.getByRole('textbox').fill('How am I progressing?');
         await chatPanel.getByRole('button', { name: 'Send' }).click();
