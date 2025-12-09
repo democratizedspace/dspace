@@ -8,8 +8,8 @@ The `tokenPlaceChat` utility sends messages to the service and returns the model
 
 The API endpoint defaults to `https://token.place/api`. You can override it:
 
--   **Game settings**: set a custom URL in your saved game state.
--   **Environment variable**: set `VITE_TOKEN_PLACE_URL` when building or running tests.
+- **Game settings**: set a custom URL in your saved game state.
+- **Environment variable**: set `VITE_TOKEN_PLACE_URL` when building or running tests.
 
 ```bash
 VITE_TOKEN_PLACE_URL=https://my-token-place/api npm run dev

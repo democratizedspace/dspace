@@ -18,6 +18,6 @@ You can burn down accumulated dCarbon by converting it to
 [dOffset](/inventory/item/b0ac46e6-6c60-48f0-b753-d9b6ad9935a6). The conversion process lives in the
 **Processes** tab:
 
--   Run the **dCarbon to dOffset** process to exchange batches of dCarbon.
--   Each run consumes dCarbon and a small amount of [dUSD](/inventory/item/5247a603-294a-4a34-a884-1ae20969b2a1) to retire
-    the emissions and mint dOffset in return.
+- Run the **dCarbon to dOffset** process to exchange batches of dCarbon.
+- Each run consumes dCarbon and a small amount of [dUSD](/inventory/item/5247a603-294a-4a34-a884-1ae20969b2a1) to retire
+  the emissions and mint dOffset in return.

@@ -24,5 +24,5 @@ database stays in sync with the application.
 
 ## Migration History
 
--   **v2** – adds a `createdAt` timestamp to items, processes and quests.
--   **v3** – adds an `updatedAt` timestamp to all records.
+- **v2** – adds a `createdAt` timestamp to items, processes and quests.
+- **v3** – adds an `updatedAt` timestamp to all records.

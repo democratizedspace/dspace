@@ -10,20 +10,17 @@ Your inventory contains all the items you've collected through quests, processes
 Items in DSPACE fall into several categories:
 
 1. Resources
-
     - Energy units ([dWatt](/docs/dwatt), [dSolar](/docs/solar))
     - Currency ([dUSD](/docs/dusd))
     - Raw materials (PLA filament, water)
 
 2. Tools and Equipment
-
     - 3D printers
     - Solar panels and batteries
     - Aquarium equipment
     - Hydroponics systems
 
 3. Components
-
     - 3D printed parts
     - Rocket components
     - Electronic components
@@ -37,19 +34,18 @@ Items in DSPACE fall into several categories:
 
 Each item has:
 
--   Unique ID
--   Name
--   Description
--   Image
--   Count (quantity in inventory)
--   Related processes (requires/consumes/creates)
+- Unique ID
+- Name
+- Description
+- Image
+- Count (quantity in inventory)
+- Related processes (requires/consumes/creates)
 
 ## Item Relationships
 
 Items are interconnected through:
 
 1. Processes
-
     - Required items (checked but not consumed)
     - Consumed items (removed when process starts)
     - Created items (added when process completes)
@@ -63,21 +59,21 @@ Items are interconnected through:
 
 With v3, you can create custom items that:
 
--   Can be used in custom processes
--   Can be granted by custom quests
--   Are stored locally by default
--   Can be contributed to the base game
+- Can be used in custom processes
+- Can be granted by custom quests
+- Are stored locally by default
+- Can be contributed to the base game
 
 ## Item Management
 
 The inventory interface allows you to:
 
--   View item details and counts
--   See related processes
--   Track item dependencies using the new `dependencies` field
--   Manage custom items and preview them from the **Manage Items** page using
-    the **Preview** button next to each entry
--   Remove custom items you no longer need directly from this page
+- View item details and counts
+- See related processes
+- Track item dependencies using the new `dependencies` field
+- Manage custom items and preview them from the **Manage Items** page using
+  the **Preview** button next to each entry
+- Remove custom items you no longer need directly from this page
 
 All inventory data is now stored locally using IndexedDB. For cross-device backups you can use the new [Cloud Sync](/docs/cloud-sync) feature.
 

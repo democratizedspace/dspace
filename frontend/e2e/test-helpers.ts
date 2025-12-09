@@ -39,7 +39,7 @@ export async function navigateWithRetry(
             lastError = error;
 
             const message =
-                error instanceof Error ? error.message ?? String(error) : String(error ?? '');
+                error instanceof Error ? (error.message ?? String(error)) : String(error ?? '');
             const isRetryable = CONNECTION_REFUSED_PATTERNS.some((pattern) =>
                 message.includes(pattern)
             );
@@ -391,7 +391,10 @@ export async function findAndClickButton(page: Page, buttonText: string): Promis
  * ItemSelector is complex because it has different states (collapsed/expanded)
  */
 export class ItemSelectorHelper {
-    constructor(private page: Page, private selectorContainer: string | Locator) {}
+    constructor(
+        private page: Page,
+        private selectorContainer: string | Locator
+    ) {}
 
     /**
      * Opens the item selector by clicking the Select Item button

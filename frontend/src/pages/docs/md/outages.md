@@ -25,4 +25,4 @@ Prompts for incident response should instruct agents to consult this catalog and
 
 ## Recent narrative entries
 
--   [2025-12-02 – v3 UI regressions](/docs/outages/2025-12-02-v3-ui-regressions)
+- [2025-12-02 – v3 UI regressions](/docs/outages/2025-12-02-v3-ui-regressions)

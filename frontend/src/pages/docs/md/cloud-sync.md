@@ -25,8 +25,8 @@ Remove them at any time from the Settings page.
 
 ## What gets synced?
 
--   Game save data
--   Custom quests, items, and processes
+- Game save data
+- Custom quests, items, and processes
 
 Syncs happen in the background whenever changes occur.
 
