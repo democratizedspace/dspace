@@ -57,7 +57,7 @@ test.describe('chat RAG context', () => {
 
         const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
         await expect(chatPanel).toBeVisible();
-        
+
         // Wait for the component to be hydrated
         await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
 
@@ -67,7 +67,7 @@ test.describe('chat RAG context', () => {
         await expect(chatPanel.locator('.persona-summary')).toHaveText(
             'Hydroponics caretaker focused on nutrient balance.'
         );
-        
+
         await chatPanel.getByRole('textbox').fill('How am I progressing?');
         await chatPanel.getByRole('button', { name: 'Send' }).click();
 
