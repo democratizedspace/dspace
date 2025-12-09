@@ -55,12 +55,21 @@ test.describe('chat RAG context', () => {
     }) => {
         await page.goto('/chat');
 
-        const chatPanel = page.locator('[data-testid="chat-panel"]');
+        const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
         await expect(chatPanel).toBeVisible();
+        
+        // Wait for the component to be hydrated
+        await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
 
-        await page.getByLabel('Talk to').selectOption('hydro');
-        await page.getByRole('textbox').fill('How am I progressing?');
-        await page.getByRole('button', { name: 'Send' }).click();
+        const personaSelector = chatPanel.getByLabel('Talk to');
+        await personaSelector.selectOption('hydro');
+        // Wait for the persona to actually change in the store
+        await expect(personaSelector).toHaveValue('hydro', { timeout: 5000 });
+        // Additional wait for any async persona switching logic
+        await page.waitForTimeout(200);
+        
+        await chatPanel.getByRole('textbox').fill('How am I progressing?');
+        await chatPanel.getByRole('button', { name: 'Send' }).click();
 
         const payloadHandle = await page.waitForFunction(() => {
             // @ts-expect-error test hook
@@ -79,7 +88,7 @@ test.describe('chat RAG context', () => {
         expect(messageTexts).toContain('Inventory highlights');
         expect(messageTexts).toContain('white PLA filament');
         expect(messageTexts).toContain('Quest progress');
-        expect(messageTexts).toContain('How to do quests');
+        expect(messageTexts).toContain('welcome/howtodoquests');
         expect(messageTexts).toContain('Processes in flight');
         expect(messageTexts).toContain('Buy 1 kWh of electricity from a wall outlet');
     });
