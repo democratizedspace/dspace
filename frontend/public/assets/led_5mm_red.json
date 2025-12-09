@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/led_5mm_red.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "5 mm LED",
+    "item_id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+    "entity_type": "item",
+    "prompt": "A 5 mm red LED lying on a wooden desk next to a breadboard, its clear epoxy dome and two metal leads clearly visible, with the longer anode lead slightly bent for insertion. In the background, a simple circuit on the breadboard shows another red LED lit up with a resistor and a few jumper wires, suggesting that this LED is intended for basic electronics projects. The scene focuses on the LED in the foreground so its size and shape are unmistakable.\n\nNear-future solarpunk electronics aesthetic with warm lighting, tidy tools, and a touch of greenery or a small solar panel at the edge of the frame. Photorealistic 512×512 rendering with no brand logos or legible text. The composition should clearly present the LED as a single component inventory item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

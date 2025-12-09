@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/microsd_card_64gb.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "64GB microSD card",
+    "item_id": "36042a2b-861a-4192-a991-98778898963a",
+    "entity_type": "item",
+    "prompt": "A 64 GB microSD card lying on a wooden desk next to a USB microSD card reader and a Raspberry Pi-style single-board computer in the background. The card has a simple black body with a small colored label area that uses abstract shapes instead of readable branding, and “64 GB” is implied by iconography rather than text. A faint glow on the contacts and the nearby board hints that this card is used to flash an operating system before cloning to an SSD.\n\nNear-future solarpunk electronics aesthetic with warm lighting, neat cable management, and a small plant or solar gadget on the edge of the frame. Photorealistic 512×512 rendering, no brand logos or legible text anywhere on the card or reader. The composition should clearly emphasize the microSD card as a standalone inventory item with a sense of capacity and purpose.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

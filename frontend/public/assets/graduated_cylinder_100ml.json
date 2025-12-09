@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/graduated_cylinder_100ml.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "100 mL graduated cylinder",
+    "item_id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+    "entity_type": "item",
+    "prompt": "A tall 100 mL glass graduated cylinder standing upright on a lab bench, about 26 cm in height, partially filled with clear liquid at the 60 mL mark. The cylinder has fine 1 mL graduations etched along its side and a small spout at the top for pouring, all rendered without readable numbers. A rubber stopper and a small beaker sit nearby, suggesting typical lab use.\n\nNear-future solarpunk laboratory aesthetic with clean countertops, warm but neutral lighting, and a hint of copper piping or sustainable equipment in the background, along with a small plant. Photorealistic 512×512 rendering with no brand logos or legible text. The composition should clearly present the graduated cylinder as precision glassware in the inventory.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

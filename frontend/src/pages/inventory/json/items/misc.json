@@ -842,14 +842,14 @@
         "id": "3cd82744-d2aa-414e-9f03-80024b624066",
         "name": "Jumper Wires",
         "description": "Flexible wires with pin connectors for building temporary circuits.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/jumper_wires_set.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
         "name": "5 mm LED",
         "description": "A 5 mm red light-emitting diode for basic electronics projects.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/led_5mm_red.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -965,7 +965,7 @@
         "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",
         "name": "Potentiometer",
         "description": "Variable resistor for adjusting signal levels in circuits.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/potentiometer_knob.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1126,7 +1126,7 @@
         "id": "36042a2b-861a-4192-a991-98778898963a",
         "name": "64GB microSD card",
         "description": "Used to flash the operating system before cloning to the SSD.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/microsd_card_64gb.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1161,7 +1161,7 @@
         "id": "4af856b5-b5c1-494f-8037-9b6559785633",
         "name": "bootable 1TB SSD",
         "description": "An M.2 drive with the OS cloned and ready to boot.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/ssd_1tb_m2.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1183,14 +1183,14 @@
         "id": "52593d07-908b-4109-92cf-826b2184ef6f",
         "name": "GitHub repository",
         "description": "A remote Git repository hosted on GitHub.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/github_repository_item.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "306793ac-e420-4859-9742-9076fff6ab57",
         "name": "CI workflow file",
         "description": "A `.github/workflows/ci.yml` that runs tests on push.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/ci_workflow_file.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1343,7 +1343,7 @@
         "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
         "name": "100 mL graduated cylinder",
         "description": "Glass cylinder with 1 mL graduations and a spout; stands 26 cm tall.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/graduated_cylinder_100ml.jpg",
         "price": "4 dUSD",
         "unit": "each",
         "hardening": {
@@ -1398,7 +1398,7 @@
         "id": "3455faac-8811-4991-b818-cecb98e8fff7",
         "name": "lab coat",
         "description": "Knee-length cotton lab coat with snap buttons and two pockets; one size fits most.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/lab_coat_white.jpg",
         "price": "15 dUSD"
     },
     {
@@ -1447,7 +1447,7 @@
         "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
         "name": "liquid soap",
         "description": "Mild hand soap for cleaning skin before treating a wound.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/liquid_soap_pump_bottle.jpg",
         "price": "3 dUSD"
     },
     {
