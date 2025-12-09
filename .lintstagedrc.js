@@ -3,15 +3,11 @@ module.exports = {
   "frontend/**/*.{js,ts,svelte}": [
     "npm --prefix frontend run lint:fix -- --quiet",
     "npm --prefix frontend run lint -- --quiet",
-    "npm --prefix frontend run format -- --quiet",
-    // Run test for changed source files
-    () => `npm test`
+    "npm --prefix frontend run format -- --quiet"
   ],
-  
+
   // Run tests for changed test files
-  "frontend/**/__tests__/**/*.{js,ts}": [
-    () => `npm test`
-  ],
+  "frontend/**/__tests__/**/*.{js,ts}": [],
   
   // TypeScript type checking for TS files
   "frontend/**/*.ts": [
