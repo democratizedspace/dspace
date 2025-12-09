@@ -2,7 +2,7 @@
     "id": "ubi/first-payment",
     "title": "Claim Your First UBI",
     "description": "Withdraw your daily dUSD for the first time.",
-    "image": "/assets/quests/basicincome.jpg",
+    "image": "/assets/quests/ubi_first_payment_claim.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

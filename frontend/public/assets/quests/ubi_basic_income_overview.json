@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/ubi_basic_income_overview.jpg",
+    "entity": "frontend/src/pages/quests/json/ubi/basicincome.json",
+    "item_name": "Earn basic income",
+    "item_id": "ubi/basicincome",
+    "entity_type": "quest",
+    "prompt": "A cozy workspace where a person’s hands rest near a laptop displaying a stylized DSPACE basic income dashboard: a central icon of a dome or globe with a simple income stream graphic flowing into a balance area, all represented with colored shapes instead of readable text. Around the laptop are a notebook with a few simple diagrams, a mug, and a small plant, suggesting someone is learning how the basic income system works and how to earn dUSD.\n\nNear-future solarpunk aesthetic with warm, indirect lighting, wooden surfaces, and greenery nearby. Photorealistic 512×512 rendering with no brand logos and no legible UI labels—the interface uses iconography and bars to convey information. The composition should feel educational and inviting, clearly representing “learn about basic income and how to earn dUSD.”",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

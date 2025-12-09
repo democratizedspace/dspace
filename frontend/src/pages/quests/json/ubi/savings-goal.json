@@ -2,7 +2,7 @@
     "id": "ubi/savings-goal",
     "title": "Start a Savings Jar",
     "description": "Set aside some dUSD for future plans.",
-    "image": "/assets/quests/basicincome.jpg",
+    "image": "/assets/quests/ubi_savings_jar.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

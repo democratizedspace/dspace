@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/ubi_first_payment_claim.jpg",
+    "entity": "frontend/src/pages/quests/json/ubi/first-payment.json",
+    "item_name": "Claim Your First UBI",
+    "item_id": "ubi/first-payment",
+    "entity_type": "quest",
+    "prompt": "A smartphone held above a desk displaying a stylized DSPACE wallet screen where a large dUSD coin icon and a bright \"claim\" checkmark icon indicate that today’s basic income payout is ready. On the desk below are a few physical dUSD-themed tokens or coins and a small plant, reinforcing the idea of digital currency with real-world impact. The UI uses color blocks and iconography instead of readable text.\n\nNear-future solarpunk aesthetic with soft lighting, clean wooden surfaces, and perhaps a hint of solar panels or greenery outside a nearby window. Photorealistic 512×512 rendering with no brand logos and no legible words on the phone. The composition should clearly represent the excitement of claiming your first daily UBI payment.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

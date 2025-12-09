@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/first_aid_kit.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "first aid kit",
+    "item_id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+    "entity_type": "item",
+    "prompt": "A compact first aid kit case sitting on a clean tabletop, its lid open to reveal neatly organized contents: adhesive bandages, sterile gauze pads, small antiseptic wipe packets, and a pair of rolled-up nitrile gloves. The items are arranged in shallow compartments or elastic loops inside the kit, making it easy to see that it is packed for emergencies. A simple red cross icon is embossed on the case, without any readable text.\n\nNear-future solarpunk home or workshop aesthetic with warm lighting and a calm, orderly environment. Photorealistic 512×512 rendering with no brand logos or legible labels on any of the medical supplies. The composition should instantly read as a ready-to-use first aid kit item in the inventory.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

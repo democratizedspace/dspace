@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/ubi_savings_jar.jpg",
+    "entity": "frontend/src/pages/quests/json/ubi/savings-goal.json",
+    "item_name": "Start a Savings Jar",
+    "item_id": "ubi/savings-goal",
+    "entity_type": "quest",
+    "prompt": "A glass savings jar on a desk or shelf partially filled with stylized dUSD coin tokens and a few folded digital-looking \"notes,\" with a subtle holographic label on the jar showing a generic savings icon instead of readable text. Next to the jar, a notebook page or tablet screen displays a simple progress ring or bar with a goal marker, indicating that the user has started setting aside part of their daily basic income for future plans. Nearby, a small plant and warm lighting make the scene inviting.\n\nNear-future solarpunk home or studio aesthetic with wooden surfaces, soft light, and hints of sustainable tech or greenery in the background. Photorealistic 512×512 rendering with no brand logos or legible writing on the jar or screen. The composition should strongly evoke “start a savings jar with your dUSD” and feel optimistic and forward-looking.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
