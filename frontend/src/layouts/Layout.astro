@@ -1,5 +1,6 @@
 ---
 import { SEO } from "astro-seo";
+import { OFFLINE_TOAST_PUBLIC_PATH } from "../utils/offlineToastPath";
 
 export interface Props {
 	title: string;
@@ -81,9 +82,19 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                 <div id="starry">
                         <slot />
                 </div>
-                <script is:inline type="module">
-                        import installOfflineToast from '/scripts/offlineToast.js';
-                        installOfflineToast();
+                <script
+                        is:inline
+                        type="module"
+                        define:vars={{ offlineToastPath: OFFLINE_TOAST_PUBLIC_PATH }}
+                >
+                        import(offlineToastPath)
+                                .then(({ default: installOfflineToast }) => installOfflineToast())
+                                .catch((error) =>
+                                        console.warn(
+                                                'Failed to load offline toast script:',
+                                                error
+                                        )
+                                );
                 </script>
 
                 <script is:inline>
