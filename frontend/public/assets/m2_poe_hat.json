@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/m2_poe_hat.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "M.2 PoE+ HAT",
+    "item_id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
+    "entity_type": "item",
+    "prompt": "A compact M.2 PoE+ HAT PCB resting on an anti-static mat: one end features an RJ-45 Ethernet jack with magnetics for power-over-Ethernet, and the center of the board has an M.2 slot with a small NVMe SSD partially inserted. A 40-pin header footprint or stacking connector is visible along one edge, indicating that the board can sit on top of a single-board computer. The PoE+ and M.2 components are clearly identifiable, but any silkscreen text is replaced by simple icons.\n\nNear-future solarpunk hardware lab aesthetic with warm lighting, a few tools, and a small single-board computer blurred in the background. Photorealistic 512×512 rendering with no brand logos or legible writing. The composition should clearly communicate that this board provides both power over Ethernet and an M.2 slot for NVMe drives.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

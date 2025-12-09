@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/photoresistor_ldr.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Photoresistor",
+    "item_id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
+    "entity_type": "item",
+    "prompt": "A small photoresistor (LDR) with a round, light-sensitive top and two metal leads lying on a wooden desk next to a breadboard. The serpentine pattern on the sensor face is clearly visible, and in the background a simple circuit shows another LDR wired to an Arduino with a few jumper wires, suggesting that it is used to measure brightness. The focus stays on the single photoresistor in the foreground so its distinctive shape is obvious.\n\nNear-future solarpunk electronics aesthetic with warm lighting, tidy tools, and a few plants or a tiny solar panel nearby. Photorealistic 512×512 rendering, no brand logos or legible text. The composition should clearly present the photoresistor as a light-dependent resistor inventory item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

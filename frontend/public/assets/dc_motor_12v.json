@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/dc_motor_12v.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "12 V DC motor",
+    "item_id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
+    "entity_type": "item",
+    "prompt": "A small brushed 12 V DC motor with a cylindrical metal body lies on a wooden workbench, its shaft pointing toward a hand-crank mechanism or small pulley nearby. Two insulated wires exit the back of the motor, ending in stripped leads ready to be connected. In the background, a simple hand-crank generator assembly and a few gears are softly out of focus, suggesting that this motor is suited for use in small mechanical projects.\n\nNear-future solarpunk workshop aesthetic with warm lighting, a few neatly arranged tools, and a plant or solar gadget on the edge of the frame. Photorealistic 512×512 rendering with no brand logos or legible markings on the motor. The composition should clearly show the motor’s form factor as a standalone inventory item labeled “12 V DC motor.”",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/led_indicator_module.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "LED indicator module",
+    "item_id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
+    "entity_type": "item",
+    "prompt": "A small LED indicator module lying on a wooden electronics bench: a 5 mm red LED mounted on a tiny board or header, with a 220 Ω resistor and two jumper leads pre-wired so it can plug directly into a breadboard. The LED and resistor are clearly visible and the jumper leads terminate in pin connectors. In the background, a breadboard circuit shows another copy of the module already plugged in and glowing, illustrating its use in quick prototypes.\n\nNear-future solarpunk electronics aesthetic with warm lighting, organized tools, and a bit of greenery or a small solar panel nearby. Photorealistic 512×512 rendering, no brand logos or legible text. The composition should clearly communicate that this is a pre-wired LED indicator module ready to drop into breadboard projects.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
