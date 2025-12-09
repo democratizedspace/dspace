@@ -20,8 +20,9 @@ active.
    `@dspace/cache-version` package. Offline toasts now announce when connectivity returns before
    auto-hiding; keep fixtures for legacy save data under `tests/fixtures/save-data/` so migrations
    stay reversible while upcoming work focuses on staged asset cleanup.
-4. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
-   JSON schemas, snapshot quest/NPC bios, and gate telemetry via explicit opt-in toggles.
+4. **Testing & telemetry**: Contract tests between the frontend and backend via shared JSON
+   schemas and opt-in telemetry gating remain on deck; quest/NPC bios now ship with snapshot
+   coverage in the test suite.
 
 ### Current Iteration Focus (2025-09)
 
