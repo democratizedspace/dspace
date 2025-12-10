@@ -45,16 +45,24 @@ Parsing the input block
   - `<entity_path>` is a repo-relative path to a JSON file, such as
     `frontend/src/pages/inventory/json/items/misc.json` or
     `frontend/src/pages/quests/json/aquaria/walstad.json`.
+    - If the entity path is under `frontend/src/pages/inventory/`, put the resulting image
+      filenames in `/assets/*.jpg`.
+    - If the entity path is under `frontend/src/pages/quests/`, put the resulting image
+      filenames in `/assets/quests/*.jpg`.
   - `<item_or_quest_title>` is the human-readable name.
   - `<uuid>` is the item or quest ID.
   - `<entity_type>` is either `item` or `quest`.
 - Use this information to fill in the manifest fields exactly.
 
 Choosing filenames
-- Keep the same base directory as the original image path:
-  - If the original path is `/assets/...`, new filenames should also start with `/assets/`.
-  - If the original path is `/assets/quests/...`, new filenames should start with
-    `/assets/quests/`.
+- Always base the new file's directory on the entity path, not the original image location:
+  - Inventory entity paths (`frontend/src/pages/inventory/...`) must produce filenames under
+    `/assets/*.jpg`.
+  - Quest entity paths (`frontend/src/pages/quests/...`) must produce filenames under
+    `/assets/quests/*.jpg`.
+  - If the original image path disagrees with the entity path (e.g., an inventory entity using
+    an image in `/assets/quests/`), ignore the original location and follow the entity path's
+    category.
 - Pick a descriptive filename in `snake_case`, ending in `.jpg`. Examples:
   - `/assets/walstad_heated_80L.jpg`
   - `/assets/quests/aquarium_top_off.jpg`
