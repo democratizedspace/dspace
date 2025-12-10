@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/lab_spill_tray_on_bench.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "spill tray",
+    "item_id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+    "entity_type": "item",
+    "prompt": "A sturdy polypropylene spill tray with a 2 cm lip is placed on a lab workbench, its 300 × 200 mm footprint clearly visible against a clean, light-colored surface. Inside the tray sits a small beaker and a dropper bottle, with a few tiny, dried acid stains and faint discoloration showing that the tray has contained previous drips without damage. The tray’s shallow walls are straight and uniform, and there is a slight gloss to the plastic, emphasizing that it is lightweight but durable and easy to clean.\n\nThe setting is a compact, near-future home lab or workshop with a solarpunk aesthetic: bright but soft lighting, modular shelving in the background holding neatly arranged bottles and sensors, and hints of green plants at the edges of the frame. The style is photorealistic at 512×512 resolution with clean composition, no brand logos or text, and the spill tray centered so its shape, size, and protective role in safe chemistry work are immediately understood.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

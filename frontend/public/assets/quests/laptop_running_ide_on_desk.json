@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/laptop_running_ide_on_desk.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Laptop Computer",
+    "item_id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+    "entity_type": "item",
+    "prompt": "A slim laptop computer sits open on a tidy workstation, its screen displaying a simple code editor or IDE layout with colored code blocks and a device connection panel, but no readable text. A compact USB cable runs from the laptop toward the edge of the frame, implying a microcontroller or Arduino-style board just out of view. The keyboard and trackpad are clearly visible, and the laptop’s design is generic and unbranded, emphasizing that it is a capable portable machine for writing and uploading sketches.\n\nThe scene is a near-future solarpunk maker space with soft, indirect lighting, a few neatly coiled cables, and hints of small electronics projects on shelves in the background. The style is photorealistic at 512×512 resolution, with muted but warm tones and no logos or explicit text. The composition centers the laptop as the focal point, making it clear that this is a general-purpose development machine in a high-tech but approachable DIY environment.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

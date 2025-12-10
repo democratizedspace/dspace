@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/ph_up_solution_dropper.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "pH up solution (potassium carbonate)",
+    "item_id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+    "entity_type": "item",
+    "prompt": "A small, clearly labeled but text-free bottle of pH up solution in a translucent amber or opaque white plastic stands on a hydroponic bench next to a clear measuring cup filled with nutrient solution. A slender dropper is held above the cup, releasing a single droplet into the liquid, with a subtle color tint in the bottle suggesting potassium carbonate. In the background, the soft silhouettes of leafy green plants and a simple digital pH meter hint that this alkaline solution is used to raise the pH of a growing system.\n\nThe scene is a near-future indoor grow space with a solarpunk vibe: clean vertical racks, efficient LED lighting casting a soft glow, and tidy tubing and sensors integrated into the setup. The style is photorealistic at 512×512 resolution, with gentle, natural colors and no visible text or brand logos. The composition keeps the bottle, dropper, and measuring cup as the main focus, clearly conveying precise, careful adjustment of nutrient solution pH in a high-tech but approachable home lab.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

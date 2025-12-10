@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/heat_shrink_tubing_closeup.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "heat-shrink tubing",
+    "item_id": "96083990-f333-4e42-ab04-7eb2a234570e",
+    "entity_type": "item",
+    "prompt": "A short length of 3 mm 2:1 polyolefin heat-shrink tubing is shown slipped over a freshly soldered wire joint on a small electronics project. The joint connects two color-coded insulated wires, and the tubing is partially shrunk so you can still see its matte surface hugging the connection while a section remains slightly expanded near the edge. A compact, pen-style heat source hovers nearby, out of focus, hinting that the tubing is about to be fully shrunk to insulate and protect the soldered joint.\n\nNear-future solarpunk electronics workbench scene with clean, well-organized tools and a softly lit background of modular circuit boards and labeled bins. The aesthetic is high-tech but human-scale, with warm, cinematic lighting and subtle reflections on the tabletop. The image is photorealistic at 512×512 resolution, with no visible text or logos, and focuses clearly on the tubing and joint so the item reads instantly as heat-shrink used in careful DIY electronics.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

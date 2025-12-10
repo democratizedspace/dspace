@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/m2_2230_nvme_module_closeup.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "1TB 2230 M.2 SSD",
+    "item_id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
+    "entity_type": "item",
+    "prompt": "A tiny 2230-format M.2 NVMe SSD module rests on a neutral surface, its compact dimensions emphasized by a fingertip or small coin partially in frame for scale. The module shows a single main chip and a connector edge with gold contacts, but any labels are simplified or blurred so no readable text or brand appears. The green or dark PCB and minimalist layout highlight how much storage is packed into such a small form factor, making it clear that this is a 1 TB drive suitable for compact systems like single-board computers.\n\nThe backdrop is a near-future electronics bench with a solarpunk feel: soft, even lighting, a few blurred tools and a microcomputer board in the background, and a subtle hint of greenery or natural materials. The image is photorealistic at 512×512 resolution, with the SSD module crisply in focus and centered in the composition. No logos or explicit text are visible, giving a clean, high-tech impression of dense, efficient storage ready to boot a tiny but powerful computing node.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
