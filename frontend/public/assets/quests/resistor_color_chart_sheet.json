@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/resistor_color_chart_sheet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "resistor color chart",
+    "item_id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+    "entity_type": "item",
+    "prompt": "A printed resistor color chart sheet lies flat on a clean desk, showing several rows of illustrated resistors with colored bands aligned next to simple, unlabeled value bars. The resistors are drawn clearly with band sequences in different combinations, and a few loose real resistors are scattered on top of the page to tie the reference to physical components. A pen and a small multimeter sit nearby out of focus, hinting that the sheet is used while measuring and decoding resistor values.\n\nThe environment is a bright, near-future study nook or electronics corner with a solarpunk aesthetic: warm sunlight, light wood furniture, and a small plant in the background. The style is photorealistic at 512×512 resolution, with soft cinematic lighting and no readable text or brand logos on the sheet or tools. The composition keeps the chart centered and clearly visible so it instantly reads as a resistor color reference used for quick lookups during circuit work.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

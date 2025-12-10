@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/raspberry_pi5_board_closeup.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Raspberry Pi 5 board",
+    "item_id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+    "entity_type": "item",
+    "prompt": "A compact next-generation single-board computer sits on a light wooden desk, shown from an angle that highlights its main processor, memory package, and 40-pin header along one edge. Dual micro-HDMI-style connectors, USB ports, and an Ethernet jack are clearly visible on the side, while a small heatsink or low-profile fan sits atop the main chip to suggest its higher performance. The board is unmistakably modern and powerful but unbranded, with any silkscreen text reduced to unreadable marks.\n\nThe environment is a cozy, near-future solarpunk workshop with warm natural light, shelves holding other boards in the background, and a small plant adding a touch of green. The image is photorealistic at 512×512 resolution with cinematic depth of field and no legible logos or text. The composition keeps the board in crisp focus, presenting it as the heart of a small cluster or edge-computing project ready for more advanced builds.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

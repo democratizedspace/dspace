@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/pi_cluster_node_with_hat_and_ssd.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Pi cluster node",
+    "item_id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+    "entity_type": "item",
+    "prompt": "A single-board computer cluster node is shown fully assembled on a desk, with a tall stack consisting of the main board, a neatly mounted HAT providing additional ports or power, and a slim NVMe-style SSD in a carrier bolted beneath or alongside. A small, quiet fan or low-profile heatsink sits over the main processor, with carefully routed power and network cables connected to the node. The layered construction makes it clear that this is one node in a larger cluster, ready to slide into a multi-node frame or stand beside other identical units.\n\nThe scene is a near-future solarpunk homelab with warm, indirect lighting, copper piping or cable conduits along the wall, and another blurred cluster stack in the background. The image is photorealistic at 512×512 resolution with cinematic depth of field and no readable logos or text. The composition highlights the stacked board, HAT, SSD, and cooling solution, capturing the feeling of a compact but powerful cluster node built for always-on experiments.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

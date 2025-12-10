@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/sterile_gauze_pads_on_table.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "sterile gauze pads",
+    "item_id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
+    "entity_type": "item",
+    "prompt": "Several sterile gauze pads are laid out on a smooth tabletop, with one pad partially unfolded to show its breathable, woven texture. An opened but unbranded wrapper sits nearby, hinting at their sterile packaging without showing readable text, and a small roll of cohesive bandage is slightly out of focus at the edge of the frame. The pads are clearly sized for medium wounds, stacked neatly to give a sense of quantity and readiness in a basic first-aid setup.\n\nThe scene takes place in a bright, near-future solarpunk home first-aid corner: soft natural light from a window, light wood surfaces, and a small potted plant in the background. The image is photorealistic at 512×512 resolution, with gentle shadows and no logos or explicit text anywhere in view. The composition centers the gauze pads, making them the unmistakable focus as clean, breathable dressings prepared for quick, careful wound care.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

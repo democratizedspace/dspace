@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/micro_servo_pair_with_horns.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "micro servo pair",
+    "item_id": "dc5897f0-acec-4c3b-ad4d-535054e768f6",
+    "entity_type": "item",
+    "prompt": "Two matching micro servos are placed side by side on a wooden work surface, each with a small metal output shaft and a detachable white servo horn mounted on top. Their three-wire leads trail away in parallel, ending just out of frame, and a couple of extra unmounted servo horns and screws are scattered nearby to show the included hardware. The scale of the servos is emphasized by a fingertip or ruler edge at one side, making it clear they are light 9 g units suitable for thrust-vectoring mechanisms and small robotics.\n\nThe environment is a near-future solarpunk robotics bench with soft, focused lighting, a blurred view of a small rocket model or test rig in the background, and a few neatly organized tools along the edge. The image is photorealistic at 512×512 resolution, with shallow depth of field that keeps the servos and their horns in sharp focus. No brand logos or readable text are visible, conveying a clean, high-tech workspace where precise, matched servos are central components for advanced motion experiments.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
