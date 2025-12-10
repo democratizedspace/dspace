@@ -71,6 +71,13 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         },
         {
             message:
+                'Pair the new guide with the contributor landing page for quickstart checklists and ' +
+                'links back to the core repository docs.',
+            href: '/docs/contribute',
+            linkLabel: 'Contribute doc',
+        },
+        {
+            message:
                 'Open-ended NPC chat is now live through the dChat personas and their quest-aware knowledge base. ' +
                 'Visit the NPC guide for the latest conversation tips.',
             href: '/docs/npcs',
