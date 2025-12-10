@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/flashed_microsd_card_with_reader.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "flashed microSD card",
+    "item_id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
+    "entity_type": "item",
+    "prompt": "A microSD card sits in front of a small USB card reader on a wooden desk, with a faint glow from a nearby computer screen reflecting off the plastic. The card is positioned so its distinctive shape and gold contacts are visible, while any printed label details are blurred or simplified to avoid readable text. In the background, a single-board computer with an empty card slot and a connected SSD can be seen slightly out of focus, implying that this card holds an operating system image ready to be flashed or cloned.\n\nThe setting is a near-future solarpunk workspace with warm, ambient lighting, tidy cables, and a small plant or two near the window. The image is photorealistic at 512×512 resolution, with soft depth of field that keeps the microSD card and reader in sharp focus as the main subjects. No logos or explicit text are visible, making the card feel like a generic but mission-critical boot medium prepared for a modern cluster build.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
