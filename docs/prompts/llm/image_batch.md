@@ -55,13 +55,14 @@ Parsing the input block
 - Use this information to fill in the manifest fields exactly.
 
 Choosing filenames
-- Keep the same base directory as the original image path:
-  - If the original path is `/assets/...`, new filenames should also start with `/assets/`.
-  - If the original path is `/assets/quests/...`, new filenames should start with
-    `/assets/quests/`.
-  - When the entity path shows the asset belongs to inventory vs. quests, prioritize that
-    directory: inventory entities go under `/assets/`, quest entities go under
-    `/assets/quests/`.
+- Always base the new file's directory on the entity path, not the original image location:
+  - Inventory entity paths (`frontend/src/pages/inventory/...`) must produce filenames under
+    `/assets/*.jpg`.
+  - Quest entity paths (`frontend/src/pages/quests/...`) must produce filenames under
+    `/assets/quests/*.jpg`.
+  - If the original image path disagrees with the entity path (e.g., an inventory entity using
+    an image in `/assets/quests/`), ignore the original location and follow the entity path's
+    category.
 - Pick a descriptive filename in `snake_case`, ending in `.jpg`. Examples:
   - `/assets/walstad_heated_80L.jpg`
   - `/assets/quests/aquarium_top_off.jpg`
