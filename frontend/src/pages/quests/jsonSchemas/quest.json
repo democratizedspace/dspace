@@ -57,7 +57,10 @@
                                                 "type": "number"
                                             }
                                         },
-                                        "required": ["id", "count"]
+                                        "required": [
+                                            "id",
+                                            "count"
+                                        ]
                                     }
                                 },
                                 "grantsItems": {
@@ -72,7 +75,10 @@
                                                 "type": "number"
                                             }
                                         },
-                                        "required": ["id", "count"]
+                                        "required": [
+                                            "id",
+                                            "count"
+                                        ]
                                     }
                                 },
                                 "requiresGitHub": {
@@ -82,11 +88,17 @@
                                     "type": "string"
                                 }
                             },
-                            "required": ["type", "text"]
+                            "required": [
+                                "type",
+                                "text"
+                            ]
                         }
                     }
                 },
-                "required": ["id", "text"]
+                "required": [
+                    "id",
+                    "text"
+                ]
             }
         },
         "rewards": {
@@ -101,7 +113,10 @@
                         "type": "number"
                     }
                 },
-                "required": ["id", "count"]
+                "required": [
+                    "id",
+                    "count"
+                ]
             }
         },
         "requiresQuests": {
@@ -111,5 +126,13 @@
             }
         }
     },
-    "required": ["id", "title", "description", "image", "npc", "start", "dialogue"]
+    "required": [
+        "id",
+        "title",
+        "description",
+        "image",
+        "npc",
+        "start",
+        "dialogue"
+    ]
 }

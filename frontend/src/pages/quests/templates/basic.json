@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 0,
         "score": 0,
-        "emoji": "\ud83d\udd27",
+        "emoji": "🔧",
         "history": []
     },
     "image": "/assets/quests/solar.jpg",
@@ -15,7 +15,13 @@
         {
             "id": "start",
             "text": "Great progress so far! Next let's learn the constellations visible this season.",
-            "options": [{ "type": "goto", "goto": "study", "text": "I'm excited to learn!" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "study",
+                    "text": "I'm excited to learn!"
+                }
+            ]
         },
         {
             "id": "study",
@@ -30,16 +36,29 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "I can spot them easily now!",
-                    "requiresItems": [{ "id": "item-id", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "item-id",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent! Recognizing these patterns will help you orient spacecraft sightings and plan future observations.",
-            "options": [{ "type": "finish", "text": "Thanks, Nova!", "requiresGitHub": false }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Nova!",
+                    "requiresGitHub": false
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/jupiter-moons"]
+    "requiresQuests": [
+        "astronomy/jupiter-moons"
+    ]
 }
