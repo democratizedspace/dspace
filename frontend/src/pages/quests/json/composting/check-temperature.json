@@ -2,7 +2,7 @@
     "id": "composting/check-temperature",
     "title": "Check Compost Temperature",
     "description": "Measure the heat of your compost to ensure active decomposition.",
-    "image": "/assets/bucket.jpg",
+    "image": "/assets/quests/bucket.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

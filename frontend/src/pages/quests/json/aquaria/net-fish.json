@@ -2,7 +2,7 @@
     "id": "aquaria/net-fish",
     "title": "Catch a fish with a net",
     "description": "Use an aquarium net to move a fish safely during cleaning.",
-    "image": "/assets/aquarium_net.jpg",
+    "image": "/assets/quests/aquarium_net.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

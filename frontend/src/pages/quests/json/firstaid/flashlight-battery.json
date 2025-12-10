@@ -2,7 +2,7 @@
     "id": "firstaid/flashlight-battery",
     "title": "Check Flashlight Battery",
     "description": "Measure your emergency flashlight's 9 V battery with a digital multimeter.",
-    "image": "/assets/battery.jpg",
+    "image": "/assets/quests/battery.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "woodworking/apply-finish",
     "title": "Apply a Wood Finish",
     "description": "Seal your project with a protective coat.",
-    "image": "/assets/door.jpg",
+    "image": "/assets/quests/door.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [

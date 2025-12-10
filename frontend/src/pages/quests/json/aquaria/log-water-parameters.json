@@ -2,7 +2,7 @@
     "id": "aquaria/log-water-parameters",
     "title": "Log Water Parameters",
     "description": "Use a liquid test kit and logbook to track ammonia, nitrite, nitrate and pH. Wear nitrile gloves.",
-    "image": "/assets/paperwork.jpg",
+    "image": "/assets/quests/paperwork.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

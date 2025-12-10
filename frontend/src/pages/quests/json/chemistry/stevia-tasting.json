@@ -2,7 +2,7 @@
     "id": "chemistry/stevia-tasting",
     "title": "Taste Test Stevia Crystals",
     "description": "Evaluate the sweetness of your freshly made stevia crystals.",
-    "image": "/assets/dCarbon.jpg",
+    "image": "/assets/quests/dCarbon.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [

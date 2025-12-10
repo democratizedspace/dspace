@@ -2,7 +2,7 @@
     "id": "aquaria/balance-ph",
     "title": "Balance aquarium pH",
     "description": "Use buffer solution to adjust tank pH and confirm stability.",
-    "image": "/assets/pH_strip.jpg",
+    "image": "/assets/quests/pH_strip.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

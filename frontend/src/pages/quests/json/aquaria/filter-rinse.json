@@ -2,7 +2,7 @@
     "id": "aquaria/filter-rinse",
     "title": "Rinse Sponge Filter",
     "description": "Unplug air pump. Rinse sponge filter in dechlorinated water to restore flow and protect bacteria.",
-    "image": "/assets/aquarium_filter.jpg",
+    "image": "/assets/quests/aquarium_filter.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

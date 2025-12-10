@@ -2,7 +2,7 @@
     "id": "woodworking/step-stool",
     "title": "Build a step stool",
     "description": "Build a sturdy pine step stool and practice safe cutting and gluing.",
-    "image": "/assets/door.jpg",
+    "image": "/assets/quests/door.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
