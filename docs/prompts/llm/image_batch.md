@@ -45,6 +45,10 @@ Parsing the input block
   - `<entity_path>` is a repo-relative path to a JSON file, such as
     `frontend/src/pages/inventory/json/items/misc.json` or
     `frontend/src/pages/quests/json/aquaria/walstad.json`.
+    - If the entity path is under `frontend/src/pages/inventory/`, put the resulting image
+      filenames in `/assets/*.jpg`.
+    - If the entity path is under `frontend/src/pages/quests/`, put the resulting image
+      filenames in `/assets/quests/*.jpg`.
   - `<item_or_quest_title>` is the human-readable name.
   - `<uuid>` is the item or quest ID.
   - `<entity_type>` is either `item` or `quest`.
@@ -54,6 +58,9 @@ Choosing filenames
 - Keep the same base directory as the original image path:
   - If the original path is `/assets/...`, new filenames should also start with `/assets/`.
   - If the original path is `/assets/quests/...`, new filenames should start with
+    `/assets/quests/`.
+  - When the entity path shows the asset belongs to inventory vs. quests, prioritize that
+    directory: inventory entities go under `/assets/`, quest entities go under
     `/assets/quests/`.
 - Pick a descriptive filename in `snake_case`, ending in `.jpg`. Examples:
   - `/assets/walstad_heated_80L.jpg`
