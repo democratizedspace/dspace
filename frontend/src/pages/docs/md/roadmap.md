@@ -3,11 +3,13 @@ title: 'Roadmap'
 slug: 'roadmap'
 ---
 
-This is just a tentative roadmap showing what I'm hoping to work on next. Things are subject to change, timelines are subject to delays, and some things may be reprioritized.
+This is just a tentative roadmap showing what I'm hoping to work on next. Things are subject to
+change, timelines are subject to delays, and some things may be reprioritized.
 
 ## 2027 and beyond
 
-- [ ] multiplayer (targeting 2027 or later)
+Multiplayer remains a long-term research area; updates will follow once prototypes reach
+community testing.
 
 ## 2026
 
