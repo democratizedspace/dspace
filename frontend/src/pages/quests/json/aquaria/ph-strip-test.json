@@ -2,7 +2,7 @@
     "id": "aquaria/ph-strip-test",
     "title": "Check aquarium pH",
     "description": "Use a disposable strip to confirm your tank's pH.",
-    "image": "/assets/pH_strip.jpg",
+    "image": "/assets/quests/pH_strip.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "aquaria/aquarium-light",
     "title": "Install an aquarium light",
     "description": "Add LED lighting to support plant growth and fish health.",
-    "image": "/assets/aquarium_light.jpg",
+    "image": "/assets/quests/aquarium_light.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

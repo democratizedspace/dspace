@@ -2,7 +2,7 @@
     "id": "chemistry/precipitation-reaction",
     "title": "Form a Precipitate",
     "description": "Mix two solutions until a solid appears.",
-    "image": "/assets/pH_strip.jpg",
+    "image": "/assets/quests/pH_strip.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
