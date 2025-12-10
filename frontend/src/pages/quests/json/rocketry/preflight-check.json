@@ -2,7 +2,7 @@
     "id": "rocketry/preflight-check",
     "title": "Preflight Checklist",
     "description": "Confirm gear and run a quick launch sequence.",
-    "image": "/assets/model_rocket_preflight_checklist.jpg",
+    "image": "/assets/quests/model_rocket_preflight_checklist.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
@@ -25,9 +25,18 @@
                     "type": "goto",
                     "goto": "arm",
                     "requiresItems": [
-                        { "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b", "count": 1 },
-                        { "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac", "count": 1 },
-                        { "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d", "count": 1 }
+                        {
+                            "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                            "count": 1
+                        },
+                        {
+                            "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                            "count": 1
+                        }
                     ],
                     "text": "All set, gear in hand."
                 }
@@ -45,7 +54,12 @@
                 {
                     "type": "goto",
                     "goto": "done",
-                    "requiresItems": [{ "id": "63362e5c-9897-4710-8ef6-26540fabd0ca", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
+                            "count": 1
+                        }
+                    ],
                     "text": "Launch successful!"
                 }
             ]
@@ -61,5 +75,10 @@
             ]
         }
     ],
-    "rewards": [{ "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52", "count": 1 }]
+    "rewards": [
+        {
+            "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
+            "count": 1
+        }
+    ]
 }

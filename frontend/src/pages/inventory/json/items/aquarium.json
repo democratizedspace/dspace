@@ -87,7 +87,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-update-2025-08-11", "date": "2025-08-11", "score": 60 }
+                {
+                    "task": "codex-item-update-2025-08-11",
+                    "date": "2025-08-11",
+                    "score": 60
+                }
             ]
         }
     },
@@ -226,7 +230,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-07", "date": "2025-08-07", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
             ]
         }
     },
@@ -234,7 +242,7 @@
         "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
         "name": "Dwarf shrimp",
         "description": "Neocaridina davidi (~1.5 cm) algae grazer for 20-26°C planted tanks.",
-        "image": "/assets/quests/dwarf_shrimp_glass_closeup.jpg",
+        "image": "/assets/dwarf_shrimp_glass_closeup.jpg",
         "price": "3 dUSD",
         "unit": "each",
         "hardening": {
@@ -338,7 +346,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-14", "date": "2025-08-14", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
             ]
         }
     },

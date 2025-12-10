@@ -2,7 +2,7 @@
     "id": "rocketry/guided-rocket-build",
     "title": "Build a Guided Model Rocket",
     "description": "Print a servo-ready fincan, assemble the avionics, and program guidance for a camera-equipped hop.",
-    "image": "/assets/guided_model_rocket_build_bench.jpg",
+    "image": "/assets/quests/guided_model_rocket_build_bench.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
@@ -30,7 +30,12 @@
                     "type": "goto",
                     "goto": "print-sled",
                     "text": "Fincan cooled and off the bed.",
-                    "requiresItems": [{ "id": "125eaa46-48f1-4cef-adaa-c200892af437", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "125eaa46-48f1-4cef-adaa-c200892af437",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -48,8 +53,14 @@
                     "goto": "assemble-stack",
                     "text": "Sled fits cleanly into the fincan.",
                     "requiresItems": [
-                        { "id": "125eaa46-48f1-4cef-adaa-c200892af437", "count": 1 },
-                        { "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf", "count": 1 }
+                        {
+                            "id": "125eaa46-48f1-4cef-adaa-c200892af437",
+                            "count": 1
+                        },
+                        {
+                            "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -67,7 +78,12 @@
                     "type": "goto",
                     "goto": "calibrate",
                     "text": "Servos move cleanly and wiring is tidy.",
-                    "requiresItems": [{ "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -85,8 +101,14 @@
                     "goto": "camera",
                     "text": "Firmware passes the bench tilt test.",
                     "requiresItems": [
-                        { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
-                        { "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64", "count": 1 }
+                        {
+                            "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -104,7 +126,12 @@
                     "type": "goto",
                     "goto": "wrap",
                     "text": "Camera wiring is tucked and hatch secured.",
-                    "requiresItems": [{ "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -120,8 +147,18 @@
         }
     ],
     "rewards": [
-        { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
-        { "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792", "count": 1 }
+        {
+            "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+            "count": 1
+        },
+        {
+            "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+            "count": 1
+        }
     ],
-    "requiresQuests": ["rocketry/firstlaunch", "rocketry/parachute", "rocketry/preflight-check"]
+    "requiresQuests": [
+        "rocketry/firstlaunch",
+        "rocketry/parachute",
+        "rocketry/preflight-check"
+    ]
 }

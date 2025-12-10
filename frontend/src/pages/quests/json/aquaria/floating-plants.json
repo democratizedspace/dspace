@@ -2,7 +2,7 @@
     "id": "aquaria/floating-plants",
     "title": "Add Floating Plants",
     "description": "Introduce guppy grass to help balance nutrients in your tank.",
-    "image": "/assets/floating_plants.jpg",
+    "image": "/assets/quests/floating_plants.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
@@ -46,5 +46,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/shrimp"]
+    "requiresQuests": [
+        "aquaria/shrimp"
+    ]
 }

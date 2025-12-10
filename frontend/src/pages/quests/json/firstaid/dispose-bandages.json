@@ -2,7 +2,7 @@
     "id": "firstaid/dispose-bandages",
     "title": "Bag Used Bandages",
     "description": "Use a biohazard bag to discard used bandages and wash up.",
-    "image": "/assets/bag_used_bandages_biohazard.jpg",
+    "image": "/assets/quests/bag_used_bandages_biohazard.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
@@ -52,5 +52,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/change-bandage"]
+    "requiresQuests": [
+        "firstaid/change-bandage"
+    ]
 }
