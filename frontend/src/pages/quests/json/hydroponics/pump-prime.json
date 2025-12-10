@@ -2,7 +2,7 @@
     "id": "hydroponics/pump-prime",
     "title": "Prime Water Pump",
     "description": "Prep the pump so it doesn't run dry.",
-    "image": "/assets/quests/hydroponics_tub.jpg",
+    "image": "/assets/hydroponics_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
@@ -30,12 +30,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Pump is primed",
-                    "requiresItems": [
-                        {
-                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a", "count": 1 }]
                 }
             ]
         },
@@ -51,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/pump-install"
-    ]
+    "requiresQuests": ["hydroponics/pump-install"]
 }

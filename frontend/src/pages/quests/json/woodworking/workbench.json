@@ -2,7 +2,7 @@
     "id": "woodworking/workbench",
     "title": "Build a simple workbench",
     "description": "Construct a sturdy bench to support future projects.",
-    "image": "/assets/quests/door.jpg",
+    "image": "/assets/door.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [

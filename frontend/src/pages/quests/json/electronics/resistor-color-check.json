@@ -19,12 +19,12 @@
         },
         {
             "id": "check",
-            "text": "Orient the gold tolerance band to the right. Compare the remaining stripes against a resistor color chart or run verify-resistor-color-code. Red-red-brown-gold equals 220 Ω ±5%.",
+            "text": "Orient the gold tolerance band to the right. Compare the remaining stripes against a resistor color chart or run verify-resistor-color-code. Red-red-brown-gold equals 220 \u03a9 \u00b15%.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Confirmed 220 Ω.",
+                    "text": "Confirmed 220 \u03a9.",
                     "process": "verify-resistor-color-code",
                     "requiresItems": [
                         {

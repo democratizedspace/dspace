@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "completionist/v2"
-    ]
+    "requiresQuests": ["completionist/v2"]
 }

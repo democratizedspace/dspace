@@ -68,7 +68,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "devops/pi-cluster-hardware"
-    ]
+    "requiresQuests": ["devops/pi-cluster-hardware"]
 }

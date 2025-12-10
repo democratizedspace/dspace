@@ -26,14 +26,8 @@
                     "goto": "code",
                     "text": "Parts ready.",
                     "requiresItems": [
-                        {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
-                            "count": 1
-                        },
-                        {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 2
-                        }
+                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
+                        { "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c", "count": 2 }
                     ]
                 }
             ]
@@ -49,8 +43,6 @@
             ]
         }
     ],
-    "requiresQuests": [
-        "robotics/servo-control"
-    ],
+    "requiresQuests": ["robotics/servo-control"],
     "rewards": []
 }

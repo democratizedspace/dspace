@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "programming/temp-alert"
-    ]
+    "requiresQuests": ["programming/temp-alert"]
 }

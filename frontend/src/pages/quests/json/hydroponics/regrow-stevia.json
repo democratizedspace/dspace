@@ -51,7 +51,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/stevia"
-    ]
+    "requiresQuests": ["hydroponics/stevia"]
 }

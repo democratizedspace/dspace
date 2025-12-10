@@ -2,7 +2,7 @@
     "id": "chemistry/ph-adjustment",
     "title": "Adjust Solution pH",
     "description": "Bring a nutrient solution into range using acid or base.",
-    "image": "/assets/quests/pH_strip.jpg",
+    "image": "/assets/pH_strip.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
@@ -51,7 +51,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "chemistry/ph-test"
-    ]
+    "requiresQuests": ["chemistry/ph-test"]
 }

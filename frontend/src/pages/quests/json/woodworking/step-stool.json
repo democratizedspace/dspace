@@ -2,7 +2,7 @@
     "id": "woodworking/step-stool",
     "title": "Build a step stool",
     "description": "Build a sturdy pine step stool and practice safe cutting and gluing.",
-    "image": "/assets/quests/door.jpg",
+    "image": "/assets/door.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
@@ -109,9 +109,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "woodworking/birdhouse"
-    ],
+    "requiresQuests": ["woodworking/birdhouse"],
     "hardening": {
         "passes": 1,
         "score": 65,

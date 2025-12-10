@@ -62,7 +62,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "electronics/data-logger"
-    ]
+    "requiresQuests": ["electronics/data-logger"]
 }

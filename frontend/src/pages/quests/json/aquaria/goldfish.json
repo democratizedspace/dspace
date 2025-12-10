@@ -120,8 +120,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "welcome/howtodoquests",
-        "aquaria/breeding"
-    ]
+    "requiresQuests": ["welcome/howtodoquests", "aquaria/breeding"]
 }

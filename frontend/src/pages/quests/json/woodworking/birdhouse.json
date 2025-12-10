@@ -2,7 +2,7 @@
     "id": "woodworking/birdhouse",
     "title": "Build a birdhouse",
     "description": "Use simple tools to craft a home for local birds.",
-    "image": "/assets/quests/door.jpg",
+    "image": "/assets/door.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
@@ -101,9 +101,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "woodworking/workbench"
-    ],
+    "requiresQuests": ["woodworking/workbench"],
     "hardening": {
         "passes": 1,
         "score": 80,

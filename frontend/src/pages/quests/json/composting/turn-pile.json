@@ -24,7 +24,7 @@
             }
         ]
     },
-    "image": "/assets/quests/bucket.jpg",
+    "image": "/assets/bucket.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
@@ -119,7 +119,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "composting/start"
-    ]
+    "requiresQuests": ["composting/start"]
 }

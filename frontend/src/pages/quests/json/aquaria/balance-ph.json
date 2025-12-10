@@ -2,35 +2,21 @@
     "id": "aquaria/balance-ph",
     "title": "Balance aquarium pH",
     "description": "Use buffer solution to adjust tank pH and confirm stability.",
-    "image": "/assets/quests/pH_strip.jpg",
+    "image": "/assets/pH_strip.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
             "text": "pH is off. Let's bring it back into range.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "buffer",
-                    "text": "Ready to adjust"
-                }
-            ]
+            "options": [{ "type": "goto", "goto": "buffer", "text": "Ready to adjust" }]
         },
         {
             "id": "buffer",
             "text": "Add the buffer according to instructions and stir well.",
             "options": [
-                {
-                    "type": "process",
-                    "process": "adjust-ph",
-                    "text": "Adjust pH"
-                },
-                {
-                    "type": "goto",
-                    "goto": "verify",
-                    "text": "Buffer added"
-                }
+                { "type": "process", "process": "adjust-ph", "text": "Adjust pH" },
+                { "type": "goto", "goto": "verify", "text": "Buffer added" }
             ]
         },
         {
@@ -41,28 +27,16 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "pH stable",
-                    "requiresItems": [
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice work keeping your fish comfortable!",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Happy fish"
-                }
-            ]
+            "options": [{ "type": "finish", "text": "Happy fish" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "aquaria/ph-strip-test"
-    ]
+    "requiresQuests": ["aquaria/ph-strip-test"]
 }

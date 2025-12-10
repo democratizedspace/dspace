@@ -2,7 +2,7 @@
     "id": "hydroponics/nutrient-check",
     "title": "Refresh Nutrient Solution",
     "description": "Top off your hydroponic tub with fresh nutrients while keeping yourself and the plants safe.",
-    "image": "/assets/quests/hydroponics_nutrients.jpg",
+    "image": "/assets/hydroponics_nutrients.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
@@ -57,14 +57,8 @@
                     "process": "measure-ec-solution",
                     "text": "Check EC levels.",
                     "requiresItems": [
-                        {
-                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
-                            "count": 1
-                        },
-                        {
-                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                            "count": 1
-                        }
+                        { "id": "71655665-4a59-41f4-9084-dad4d976df91", "count": 1 },
+                        { "id": "fc2bb989-f192-4891-8bde-78ae631dae78", "count": 1 }
                     ]
                 },
                 {
@@ -92,9 +86,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/basil"
-    ],
+    "requiresQuests": ["hydroponics/basil"],
     "hardening": {
         "passes": 4,
         "score": 80,

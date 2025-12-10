@@ -87,9 +87,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "electronics/potentiometer-dimmer"
-    ],
+    "requiresQuests": ["electronics/potentiometer-dimmer"],
     "hardening": {
         "passes": 5,
         "score": 97,

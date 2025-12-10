@@ -2,7 +2,7 @@
     "id": "hydroponics/root-rinse",
     "title": "Rinse the Roots",
     "description": "Flush salts from the root zone with clean water.",
-    "image": "/assets/quests/hydroponics_tub.jpg",
+    "image": "/assets/hydroponics_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
@@ -51,7 +51,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/filter-clean"
-    ]
+    "requiresQuests": ["hydroponics/filter-clean"]
 }

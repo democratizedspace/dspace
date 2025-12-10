@@ -29,7 +29,7 @@
             }
         ]
     },
-    "image": "/assets/quests/hydroponic_lamp.jpg",
+    "image": "/assets/hydroponic_lamp.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
@@ -82,7 +82,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/bucket_10"
-    ]
+    "requiresQuests": ["hydroponics/bucket_10"]
 }

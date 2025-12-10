@@ -9,13 +9,7 @@
         {
             "id": "start",
             "text": "Healthy pressure keeps flow steady. Want to check it?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "measure",
-                    "text": "Let's read the gauge."
-                }
-            ]
+            "options": [{ "type": "goto", "goto": "measure", "text": "Let's read the gauge." }]
         },
         {
             "id": "measure",
@@ -32,16 +26,9 @@
         {
             "id": "finish",
             "text": "Great! Logging pressure helps spot leaks early.",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "I'll keep monitoring."
-                }
-            ]
+            "options": [{ "type": "finish", "text": "I'll keep monitoring." }]
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "geothermal/survey-ground-temperature"
-    ]
+    "requiresQuests": ["geothermal/survey-ground-temperature"]
 }

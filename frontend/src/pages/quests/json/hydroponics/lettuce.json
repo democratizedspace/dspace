@@ -2,7 +2,7 @@
     "id": "hydroponics/lettuce",
     "title": "Grow Lettuce Hydroponically",
     "description": "Plant lettuce seeds and harvest fresh leaves using your hydroponic setup.",
-    "image": "/assets/quests/hydroponic_lettuce.jpg",
+    "image": "/assets/hydroponic_lettuce.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
@@ -45,9 +45,7 @@
             ]
         }
     ],
-    "requiresQuests": [
-        "hydroponics/basil"
-    ],
+    "requiresQuests": ["hydroponics/basil"],
     "rewards": [
         {
             "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",

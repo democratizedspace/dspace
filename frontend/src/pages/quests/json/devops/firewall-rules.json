@@ -31,14 +31,8 @@
                     "goto": "finish",
                     "text": "Rules applied.",
                     "requiresItems": [
-                        {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
+                        { "id": "df7e94e2-76b9-4865-b843-2ec21feb258e", "count": 1 },
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
                     ]
                 }
             ]
@@ -55,7 +49,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "devops/auto-updates"
-    ]
+    "requiresQuests": ["devops/auto-updates"]
 }

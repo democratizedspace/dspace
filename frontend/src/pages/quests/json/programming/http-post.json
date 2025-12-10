@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "programming/json-api"
-    ]
+    "requiresQuests": ["programming/json-api"]
 }

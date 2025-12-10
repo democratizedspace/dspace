@@ -9,13 +9,7 @@
         {
             "id": "start",
             "text": "A lead snapped. Ventilate, turn on the fume extractor, wear goggles, keep the hot iron on its stand, and clear flammables.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "prep",
-                    "text": "What gear do I need?"
-                }
-            ]
+            "options": [{ "type": "goto", "goto": "prep", "text": "What gear do I need?" }]
         },
         {
             "id": "prep",
@@ -36,46 +30,16 @@
                     "goto": "finish",
                     "text": "Wire joined and cool",
                     "requiresItems": [
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
-                            "count": 1
-                        },
-                        {
-                            "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
-                            "count": 1
-                        },
-                        {
-                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
-                            "count": 2
-                        },
-                        {
-                            "id": "96083990-f333-4e42-ab04-7eb2a234570e",
-                            "count": 5
-                        },
-                        {
-                            "id": "dad7f853-ccc9-40be-b226-89272708db84",
-                            "count": 1
-                        },
-                        {
-                            "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
-                            "count": 1
-                        },
-                        {
-                            "id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26",
-                            "count": 1
-                        },
-                        {
-                            "id": "593fc442-f437-4449-94e5-17b7b4625c41",
-                            "count": 1
-                        },
-                        {
-                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
-                            "count": 1
-                        }
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
+                        { "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f", "count": 1 },
+                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 },
+                        { "id": "96083990-f333-4e42-ab04-7eb2a234570e", "count": 5 },
+                        { "id": "dad7f853-ccc9-40be-b226-89272708db84", "count": 1 },
+                        { "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0", "count": 1 },
+                        { "id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26", "count": 1 },
+                        { "id": "593fc442-f437-4449-94e5-17b7b4625c41", "count": 1 },
+                        { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 }
                     ]
                 }
             ]
@@ -83,61 +47,23 @@
         {
             "id": "finish",
             "text": "Nice work! Unplug the iron, let it cool on its stand, shrink tubing, wipe the tip, and store gear.",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Thanks, Orion!"
-                }
-            ]
+            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
         }
     ],
-    "rewards": [
-        {
-            "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c",
-            "count": 1
-        }
-    ],
+    "rewards": [{ "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c", "count": 1 }],
     "requiresQuests": [],
     "hardening": {
         "passes": 7,
         "score": 94,
         "emoji": "💯",
         "history": [
-            {
-                "task": "codex-refine-2025-08-07",
-                "date": "2025-08-07",
-                "score": 60
-            },
-            {
-                "task": "codex-solder-wire-polish-2025-08-07",
-                "date": "2025-08-07",
-                "score": 78
-            },
-            {
-                "task": "codex-solder-wire-hardening-2025-08-12",
-                "date": "2025-08-12",
-                "score": 92
-            },
-            {
-                "task": "codex-solder-wire-hardening-2025-08-15",
-                "date": "2025-08-15",
-                "score": 94
-            },
-            {
-                "task": "codex-solder-wire-hardening-2025-08-16",
-                "date": "2025-08-16",
-                "score": 94
-            },
-            {
-                "task": "codex-solder-wire-hardening-2025-08-22",
-                "date": "2025-08-22",
-                "score": 94
-            },
-            {
-                "task": "codex-solder-wire-hardening-2025-09-20",
-                "date": "2025-09-20",
-                "score": 94
-            }
+            { "task": "codex-refine-2025-08-07", "date": "2025-08-07", "score": 60 },
+            { "task": "codex-solder-wire-polish-2025-08-07", "date": "2025-08-07", "score": 78 },
+            { "task": "codex-solder-wire-hardening-2025-08-12", "date": "2025-08-12", "score": 92 },
+            { "task": "codex-solder-wire-hardening-2025-08-15", "date": "2025-08-15", "score": 94 },
+            { "task": "codex-solder-wire-hardening-2025-08-16", "date": "2025-08-16", "score": 94 },
+            { "task": "codex-solder-wire-hardening-2025-08-22", "date": "2025-08-22", "score": 94 },
+            { "task": "codex-solder-wire-hardening-2025-09-20", "date": "2025-09-20", "score": 94 }
         ]
     }
 }

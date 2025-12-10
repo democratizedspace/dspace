@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "electronics/thermistor-reading"
-    ]
+    "requiresQuests": ["electronics/thermistor-reading"]
 }

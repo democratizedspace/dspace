@@ -2,7 +2,7 @@
     "id": "chemistry/buffer-solution",
     "title": "Prepare a Buffer Solution",
     "description": "Mix vinegar and baking soda to resist pH swings.",
-    "image": "/assets/quests/pH_strip.jpg",
+    "image": "/assets/pH_strip.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
@@ -30,12 +30,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "pH is stable around 7.",
-                    "requiresItems": [
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }]
                 }
             ]
         },
@@ -51,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "chemistry/ph-test"
-    ]
+    "requiresQuests": ["chemistry/ph-test"]
 }

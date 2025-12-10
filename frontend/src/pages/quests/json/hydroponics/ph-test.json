@@ -2,7 +2,7 @@
     "id": "hydroponics/ph-test",
     "title": "Test Hydroponic pH",
     "description": "Check acidity so your plants stay healthy.",
-    "image": "/assets/quests/hydroponics_nutrients.jpg",
+    "image": "/assets/hydroponics_nutrients.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
@@ -55,9 +55,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/nutrient-check"
-    ],
+    "requiresQuests": ["hydroponics/nutrient-check"],
     "hardening": {
         "passes": 2,
         "score": 70,

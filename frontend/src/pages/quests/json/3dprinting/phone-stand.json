@@ -65,7 +65,5 @@
             ]
         }
     ],
-    "requiresQuests": [
-        "3dprinter/start"
-    ]
+    "requiresQuests": ["3dprinter/start"]
 }

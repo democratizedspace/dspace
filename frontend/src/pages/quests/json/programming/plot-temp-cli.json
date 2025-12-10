@@ -45,7 +45,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "programming/temp-logger"
-    ]
+    "requiresQuests": ["programming/temp-logger"]
 }

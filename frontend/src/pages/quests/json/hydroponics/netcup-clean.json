@@ -2,7 +2,7 @@
     "id": "hydroponics/netcup-clean",
     "title": "Clean Net Cups",
     "description": "Sanitize net cups to keep roots disease-free.",
-    "image": "/assets/quests/hydroponics_tub.jpg",
+    "image": "/assets/hydroponics_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
@@ -31,14 +31,8 @@
                     "goto": "scrub",
                     "text": "Water is ready",
                     "requiresItems": [
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        },
-                        {
-                            "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
-                            "count": 1
-                        }
+                        { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 },
+                        { "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3", "count": 1 }
                     ]
                 }
             ]
@@ -71,9 +65,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/tub-scrub"
-    ],
+    "requiresQuests": ["hydroponics/tub-scrub"],
     "hardening": {
         "passes": 1,
         "score": 60,

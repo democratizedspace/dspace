@@ -45,8 +45,6 @@
             ]
         }
     ],
-    "requiresQuests": [
-        "robotics/pan-tilt"
-    ],
+    "requiresQuests": ["robotics/pan-tilt"],
     "rewards": []
 }

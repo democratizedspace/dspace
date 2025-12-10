@@ -51,7 +51,5 @@
             "count": 3
         }
     ],
-    "requiresQuests": [
-        "energy/solar-1kWh"
-    ]
+    "requiresQuests": ["energy/solar-1kWh"]
 }

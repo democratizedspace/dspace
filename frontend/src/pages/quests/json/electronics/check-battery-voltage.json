@@ -2,7 +2,7 @@
     "id": "electronics/check-battery-voltage",
     "title": "Check a battery pack's voltage",
     "description": "Use a digital multimeter to check a 12 V LiFePO4 battery pack after disconnecting it and placing it on a dry, non-conductive surface. Wear safety goggles throughout.",
-    "image": "/assets/quests/battery.jpg",
+    "image": "/assets/battery.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
@@ -66,31 +66,11 @@
         "score": 95,
         "emoji": "💯",
         "history": [
-            {
-                "task": "codex-hardening-2025-08-05",
-                "date": "2025-08-05",
-                "score": 60
-            },
-            {
-                "task": "codex-upgrade-2025-08-05",
-                "date": "2025-08-05",
-                "score": 80
-            },
-            {
-                "task": "codex-polish-2025-08-05",
-                "date": "2025-08-05",
-                "score": 92
-            },
-            {
-                "task": "codex-upgrade-2025-08-06",
-                "date": "2025-08-06",
-                "score": 94
-            },
-            {
-                "task": "codex-refine-2025-08-06",
-                "date": "2025-08-06",
-                "score": 95
-            }
+            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
+            { "task": "codex-upgrade-2025-08-05", "date": "2025-08-05", "score": 80 },
+            { "task": "codex-polish-2025-08-05", "date": "2025-08-05", "score": 92 },
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 94 },
+            { "task": "codex-refine-2025-08-06", "date": "2025-08-06", "score": 95 }
         ]
     }
 }

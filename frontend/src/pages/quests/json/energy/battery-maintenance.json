@@ -30,12 +30,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Battery cycled",
-                    "requiresItems": [
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 }]
                 }
             ]
         },
@@ -51,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "energy/solar"
-    ]
+    "requiresQuests": ["energy/solar"]
 }

@@ -78,7 +78,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/lettuce"
-    ]
+    "requiresQuests": ["hydroponics/lettuce"]
 }

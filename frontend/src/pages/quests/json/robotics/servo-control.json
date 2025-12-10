@@ -56,9 +56,7 @@
             ]
         }
     ],
-    "requiresQuests": [
-        "electronics/arduino-blink"
-    ],
+    "requiresQuests": ["electronics/arduino-blink"],
     "rewards": [
         {
             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",

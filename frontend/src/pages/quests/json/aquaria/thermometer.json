@@ -2,7 +2,7 @@
     "id": "aquaria/thermometer",
     "title": "Attach Aquarium Thermometer",
     "description": "Attach a stick-on strip thermometer outside the aquarium glass to monitor water temperature.",
-    "image": "/assets/quests/aquarium_thermometer.jpg",
+    "image": "/assets/aquarium_thermometer.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
@@ -15,14 +15,8 @@
                     "goto": "attach",
                     "text": "Area is clean and dry.",
                     "requiresItems": [
-                        {
-                            "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
-                            "count": 1
-                        },
-                        {
-                            "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
-                            "count": 1
-                        }
+                        { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
+                        { "id": "0b85f058-38f2-4e9a-93e9-d47441608619", "count": 1 }
                     ]
                 }
             ]
@@ -37,18 +31,9 @@
                     "text": "Thermometer attached",
                     "process": "attach-aquarium-thermometer",
                     "requiresItems": [
-                        {
-                            "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
-                            "count": 1
-                        },
-                        {
-                            "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
-                            "count": 1
-                        },
-                        {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-                            "count": 1
-                        }
+                        { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
+                        { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
+                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
                     ]
                 }
             ]
@@ -56,43 +41,20 @@
         {
             "id": "finish",
             "text": "Wait a few minutes for the numbers to steady. Plug the heater back in with dry hands and confirm the display shows a safe temperature.",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "All set!"
-                }
-            ]
+            "options": [{ "type": "finish", "text": "All set!" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "aquaria/position-tank"
-    ],
+    "requiresQuests": ["aquaria/position-tank"],
     "hardening": {
         "passes": 4,
         "score": 95,
         "emoji": "💯",
         "history": [
-            {
-                "task": "codex-quest-hardening-2025-08-13",
-                "date": "2025-08-13",
-                "score": 60
-            },
-            {
-                "task": "codex-quest-hardening-2025-08-14",
-                "date": "2025-08-14",
-                "score": 80
-            },
-            {
-                "task": "codex-quest-hardening-2025-08-16",
-                "date": "2025-08-16",
-                "score": 90
-            },
-            {
-                "task": "codex-quest-hardening-2025-08-16-2",
-                "date": "2025-08-16",
-                "score": 95
-            }
+            { "task": "codex-quest-hardening-2025-08-13", "date": "2025-08-13", "score": 60 },
+            { "task": "codex-quest-hardening-2025-08-14", "date": "2025-08-14", "score": 80 },
+            { "task": "codex-quest-hardening-2025-08-16", "date": "2025-08-16", "score": 90 },
+            { "task": "codex-quest-hardening-2025-08-16-2", "date": "2025-08-16", "score": 95 }
         ]
     }
 }

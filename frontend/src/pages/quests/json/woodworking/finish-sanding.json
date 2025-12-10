@@ -2,7 +2,7 @@
     "id": "woodworking/finish-sanding",
     "title": "Finish Sand Your Project",
     "description": "Smooth the surface of your latest build with fine-grit paper before applying finish.",
-    "image": "/assets/quests/door.jpg",
+    "image": "/assets/door.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "woodworking/step-stool"
-    ]
+    "requiresQuests": ["woodworking/step-stool"]
 }

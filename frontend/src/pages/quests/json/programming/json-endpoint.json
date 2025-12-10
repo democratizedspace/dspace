@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "programming/web-server"
-    ]
+    "requiresQuests": ["programming/web-server"]
 }

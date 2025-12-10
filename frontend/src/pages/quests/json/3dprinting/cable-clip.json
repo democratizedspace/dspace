@@ -55,7 +55,5 @@
             "count": 5
         }
     ],
-    "requiresQuests": [
-        "3dprinter/start"
-    ]
+    "requiresQuests": ["3dprinter/start"]
 }

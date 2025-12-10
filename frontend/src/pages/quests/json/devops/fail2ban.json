@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "devops/ssh-hardening"
-    ]
+    "requiresQuests": ["devops/ssh-hardening"]
 }

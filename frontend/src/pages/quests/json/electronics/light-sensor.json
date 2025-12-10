@@ -9,13 +9,7 @@
         {
             "id": "start",
             "text": "Hey again! Orion here. Let's build a light sensor. Set the board on a non-conductive surface, put on safety goggles and clip on an anti-static wrist strap. Discharge static by touching grounded metal, keep hands dry, and unplug the board before wiring to avoid shorts.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "materials",
-                    "text": "What do I need?"
-                }
-            ]
+            "options": [{ "type": "goto", "goto": "materials", "text": "What do I need?" }]
         },
         {
             "id": "materials",
@@ -31,46 +25,16 @@
                     "goto": "wire",
                     "text": "Ready to wire!",
                     "requiresItems": [
-                        {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
-                            "count": 1
-                        },
-                        {
-                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
-                            "count": 1
-                        },
-                        {
-                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
-                            "count": 3
-                        },
-                        {
-                            "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
-                            "count": 1
-                        },
-                        {
-                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
-                            "count": 1
-                        },
-                        {
-                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
-                            "count": 1
-                        },
-                        {
-                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
+                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
+                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
+                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 3 },
+                        { "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3", "count": 1 },
+                        { "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac", "count": 1 },
+                        { "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612", "count": 1 },
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2", "count": 1 },
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
                     ]
                 }
             ]
@@ -85,18 +49,9 @@
                     "text": "Wired up and measured.",
                     "process": "measure-photoresistor",
                     "requiresItems": [
-                        {
-                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
-                            "count": 1
-                        },
-                        {
-                            "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
+                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
+                        { "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
                     ]
                 }
             ]
@@ -104,23 +59,12 @@
         {
             "id": "code",
             "text": "Plug the USB cable back in and upload a sketch that reads A0 and prints to the serial monitor. Shade and expose the sensor to watch the values shift. Avoid pointing lasers at the sensor, and don't stare into bright lamps during testing.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Numbers are changing!"
-                }
-            ]
+            "options": [{ "type": "goto", "goto": "finish", "text": "Numbers are changing!" }]
         },
         {
             "id": "finish",
             "text": "Nice work! Unplug the board before making changes, coil the USB cable, and store all parts for future builds.",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Cool!"
-                }
-            ]
+            "options": [{ "type": "finish", "text": "Cool!" }]
         }
     ],
     "rewards": [],

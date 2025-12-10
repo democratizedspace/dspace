@@ -78,7 +78,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "energy/solar-1kWh"
-    ]
+    "requiresQuests": ["energy/solar-1kWh"]
 }

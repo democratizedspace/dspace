@@ -2,7 +2,7 @@
     "id": "hydroponics/pump-install",
     "title": "Install Submersible Pump",
     "description": "Add circulation to keep nutrients moving.",
-    "image": "/assets/quests/hydroponics_tub.jpg",
+    "image": "/assets/hydroponics_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/reservoir-refresh"
-    ]
+    "requiresQuests": ["hydroponics/reservoir-refresh"]
 }

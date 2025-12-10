@@ -2,20 +2,14 @@
     "id": "composting/check-temperature",
     "title": "Check Compost Temperature",
     "description": "Measure the heat of your compost to ensure active decomposition.",
-    "image": "/assets/quests/bucket.jpg",
+    "image": "/assets/bucket.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
             "text": "Wondering if your compost is cooking? Let's find out.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "probe",
-                    "text": "How do I check?"
-                }
-            ]
+            "options": [{ "type": "goto", "goto": "probe", "text": "How do I check?" }]
         },
         {
             "id": "probe",
@@ -25,12 +19,7 @@
                     "type": "goto",
                     "goto": "reading",
                     "process": "measure-compost-temperature",
-                    "requiresItems": [
-                        {
-                            "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
-                            "count": 1
-                        }
-                    ],
+                    "requiresItems": [{ "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8", "count": 1 }],
                     "text": "Take the temperature"
                 }
             ]
@@ -38,27 +27,14 @@
         {
             "id": "reading",
             "text": "The dial climbs to a toasty 60 °C—microbes are feasting happily!",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Nice, it's hot!"
-                }
-            ]
+            "options": [{ "type": "goto", "goto": "finish", "text": "Nice, it's hot!" }]
         },
         {
             "id": "finish",
             "text": "Keep monitoring and turning to maintain that microbial frenzy.",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Will do!"
-                }
-            ]
+            "options": [{ "type": "finish", "text": "Will do!" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "composting/start"
-    ]
+    "requiresQuests": ["composting/start"]
 }

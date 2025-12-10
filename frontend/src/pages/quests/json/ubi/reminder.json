@@ -45,7 +45,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "ubi/first-payment"
-    ]
+    "requiresQuests": ["ubi/first-payment"]
 }

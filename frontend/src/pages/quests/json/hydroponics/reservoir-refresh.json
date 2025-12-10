@@ -2,7 +2,7 @@
     "id": "hydroponics/reservoir-refresh",
     "title": "Refresh the Reservoir",
     "description": "Swap out old nutrient solution for a fresh batch.",
-    "image": "/assets/quests/hydroponics_nutrients.jpg",
+    "image": "/assets/hydroponics_nutrients.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
@@ -51,7 +51,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/basil"
-    ]
+    "requiresQuests": ["hydroponics/basil"]
 }

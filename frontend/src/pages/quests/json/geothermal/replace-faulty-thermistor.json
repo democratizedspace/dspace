@@ -47,7 +47,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "geothermal/install-backup-thermistor"
-    ]
+    "requiresQuests": ["geothermal/install-backup-thermistor"]
 }

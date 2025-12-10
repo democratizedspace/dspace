@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "firstaid/wound-care"
-    ]
+    "requiresQuests": ["firstaid/wound-care"]
 }

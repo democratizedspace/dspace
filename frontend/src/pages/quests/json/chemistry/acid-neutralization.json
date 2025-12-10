@@ -51,7 +51,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "chemistry/ph-test"
-    ]
+    "requiresQuests": ["chemistry/ph-test"]
 }

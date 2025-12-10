@@ -2,20 +2,14 @@
     "id": "composting/start",
     "title": "Start a Compost Bucket",
     "description": "Begin recycling kitchen scraps into soil.",
-    "image": "/assets/quests/bucket.jpg",
+    "image": "/assets/bucket.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
             "text": "Waste not, friend! Let's turn scraps into nutrient-rich compost.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "bucket",
-                    "text": "Sounds good!"
-                }
-            ]
+            "options": [{ "type": "goto", "goto": "bucket", "text": "Sounds good!" }]
         },
         {
             "id": "bucket",
@@ -23,23 +17,13 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        }
-                    ],
+                    "grantsItems": [{ "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }],
                     "text": "I'll take the bucket."
                 },
                 {
                     "type": "goto",
                     "goto": "fill",
-                    "requiresItems": [
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        }
-                    ],
+                    "requiresItems": [{ "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }],
                     "text": "Bucket ready!"
                 }
             ]
@@ -48,20 +32,11 @@
             "id": "fill",
             "text": "Add plant trimmings and kitchen scraps, then cover with dry leaves.",
             "options": [
-                {
-                    "type": "process",
-                    "process": "start-compost-bin",
-                    "text": "Adding scraps."
-                },
+                { "type": "process", "process": "start-compost-bin", "text": "Adding scraps." },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        }
-                    ],
+                    "requiresItems": [{ "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }],
                     "text": "The mix looks good!"
                 }
             ]
@@ -69,16 +44,9 @@
         {
             "id": "finish",
             "text": "Nice! Keep layering greens and browns, and soon you'll have rich compost.",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Can't wait to see it turn."
-                }
-            ]
+            "options": [{ "type": "finish", "text": "Can't wait to see it turn." }]
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/reservoir-refresh"
-    ]
+    "requiresQuests": ["hydroponics/reservoir-refresh"]
 }
