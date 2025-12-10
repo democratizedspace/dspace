@@ -75,4 +75,18 @@ describe("item quality", () => {
       PriceExemptionReason.BETA_PLACEHOLDER
     );
   });
+
+  it("treats in-game currency tokens as currency instead of beta placeholders", () => {
+    const currencyItems = ["dCarbon", "dWatt", "dUSD"];
+
+    for (const name of currencyItems) {
+      const currencyItem = (items as Array<Record<string, any>>).find(
+        (item) => item.name === name
+      );
+
+      expect(currencyItem).toBeDefined();
+      expect(currencyItem?.priceExemptionReason).toBe(PriceExemptionReason.CURRENCY);
+      expect(currencyItem?.price).toBeUndefined();
+    }
+  });
 });
