@@ -620,7 +620,7 @@
         "id": "dc5897f0-acec-4c3b-ad4d-535054e768f6",
         "name": "micro servo pair",
         "description": "Matched 9 g servos with metal gears and servo horns for thrust-vectoring experiments.",
-        "image": "/assets/quests/micro_servo_pair_with_horns.jpg",
+        "image": "/assets/micro_servo_pair_with_horns.jpg",
         "price": "18 dUSD",
         "unit": "pair"
     },
@@ -642,7 +642,7 @@
         "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
         "name": "stability firmware",
         "description": "Verified Arduino sketch implementing fin hold routines and range safety tilts for guided hops.",
-        "image": "/assets/quests/stability_firmware_code_interface.jpg",
+        "image": "/assets/stability_firmware_code_interface.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -827,7 +827,7 @@
         "id": "d1105b87-8185-4a30-ba55-406384be169f",
         "name": "solderless breadboard",
         "description": "400-point solderless breadboard with power rails for quick circuit prototyping.",
-        "image": "/assets/quests/solderless_breadboard_with_components.jpg",
+        "image": "/assets/solderless_breadboard_with_components.jpg",
         "price": "10 dUSD",
         "type": "tool",
         "unit": "board",
@@ -863,7 +863,7 @@
         "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
         "name": "resistor color chart",
         "description": "Printed reference sheet for decoding resistor color bands.",
-        "image": "/assets/quests/resistor_color_chart_sheet.jpg",
+        "image": "/assets/resistor_color_chart_sheet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -884,7 +884,7 @@
         "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
         "name": "USB Type-A to Type-B cable",
         "description": "1 m USB 2.0 cable for connecting an Arduino Uno to a computer.",
-        "image": "/assets/quests/usb_a_to_b_cable_arduino_connection.jpg",
+        "image": "/assets/usb_a_to_b_cable_arduino_connection.jpg",
         "price": "3 dUSD",
         "unit": "each",
         "hardening": {
@@ -1105,7 +1105,7 @@
         "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
         "name": "Raspberry Pi 5 board",
         "description": "A compact single-board computer with plenty of power for small clusters.",
-        "image": "/assets/quests/raspberry_pi5_board_closeup.jpg",
+        "image": "/assets/raspberry_pi5_board_closeup.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1154,7 +1154,7 @@
         "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
         "name": "flashed microSD card",
         "description": "Contains Raspberry Pi OS ready for cloning to SSD.",
-        "image": "/assets/quests/flashed_microsd_card_with_reader.jpg",
+        "image": "/assets/flashed_microsd_card_with_reader.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1168,7 +1168,7 @@
         "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
         "name": "Pi cluster node",
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
-        "image": "/assets/quests/pi_cluster_node_with_hat_and_ssd.jpg",
+        "image": "/assets/pi_cluster_node_with_hat_and_ssd.jpg",
         "dependencies": ["129", "131"],
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
@@ -1267,7 +1267,7 @@
         "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
         "name": "sterile gauze pads",
         "description": "Breathable squares for dressing medium wounds.",
-        "image": "/assets/quests/sterile_gauze_pads_on_table.jpg",
+        "image": "/assets/sterile_gauze_pads_on_table.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1357,7 +1357,7 @@
         "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
         "name": "glass stir rod",
         "description": "25 cm solid glass rod for mixing solutions without introducing contaminants.",
-        "image": "/assets/quests/glass_stir_rod_with_beaker.jpg",
+        "image": "/assets/glass_stir_rod_with_beaker.jpg",
         "price": "1 dUSD"
     },
     {

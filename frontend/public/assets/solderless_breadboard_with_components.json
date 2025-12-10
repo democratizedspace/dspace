@@ -1,5 +1,5 @@
 {
-    "filename": "/assets/quests/solderless_breadboard_with_components.jpg",
+    "filename": "/assets/solderless_breadboard_with_components.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "solderless breadboard",
     "item_id": "d1105b87-8185-4a30-ba55-406384be169f",
