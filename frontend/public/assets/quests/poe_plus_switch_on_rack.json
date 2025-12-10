@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/poe_plus_switch_on_rack.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "PoE+ switch",
+    "item_id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+    "entity_type": "item",
+    "prompt": "A compact PoE+ network switch sits on a small equipment shelf or rack, its front panel showing a row of active Ethernet ports with tiny status LEDs glowing. Several slim network cables plug into the ports and neatly route toward a wall or conduit, suggesting that the switch is powering and connecting multiple devices like cameras or access points. The switch’s casing is a simple, unbranded metal or matte plastic box, and ventilation slots hint at quiet, efficient operation without any visible logos or text labels.\n\nThe environment is a tidy, near-future home lab or network closet with a solarpunk twist: modular panels, subtle cable management channels, and a hint of natural light from a nearby window. The lighting is soft and cinematic, giving gentle reflections off the switch and cables, while the background remains slightly blurred to keep attention on the PoE+ switch as the central object. The image is photorealistic at 512×512 resolution, with no harsh shadows or UI overlays, conveying a calm, high-tech infrastructure hub that fits into a sustainable, connected home.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

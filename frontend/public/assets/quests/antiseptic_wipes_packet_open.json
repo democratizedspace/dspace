@@ -1,0 +1,9 @@
+{
+    "filename": "/assets/quests/antiseptic_wipes_packet_open.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "antiseptic wipes",
+    "item_id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+    "entity_type": "item",
+    "prompt": "A small packet of antiseptic wipes is shown partially opened on a smooth surface, with one wipe pulled out and folded, its slightly textured, moist material catching the light. The packet is simple and unbranded, using solid colors and abstract shapes with no readable text, and a subtle icon or color cue suggests its medical purpose. Nearby, a pair of small scissors and a roll of bandage are softly out of focus, implying that the wipes are used to clean skin before bandaging a minor cut or scratch.\n\nThe scene takes place in a bright, near-future first-aid corner or family workshop with a solarpunk atmosphere: warm natural light, a hint of wooden shelving, and maybe a small potted plant in the background. The image is photorealistic at 512×512 resolution, with soft cinematic lighting and no logos or text. Composition keeps the open packet and exposed wipe as the focal point while the background elements subtly support the idea of hygienic, prepared self-care in a high-tech yet human-friendly environment.",
+    "resolution": "512x512"
+}
