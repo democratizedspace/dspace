@@ -89,7 +89,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "rocketry/recovery-run"
-    ]
+    "requiresQuests": ["rocketry/recovery-run"]
 }

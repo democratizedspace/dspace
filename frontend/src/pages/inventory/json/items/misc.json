@@ -889,7 +889,7 @@
         "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
         "name": "USB Cable",
         "description": "Standard USB cable for charging or data transfer between devices.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -923,7 +923,7 @@
         "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1152,7 +1152,7 @@
         "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
         "name": "Ethernet cable",
         "description": "A simple cable for wired network connections.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1181,10 +1181,7 @@
         "name": "Pi cluster node",
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
         "image": "/assets/pi_cluster_node_with_hat_and_ssd.jpg",
-        "dependencies": [
-            "129",
-            "131"
-        ],
+        "dependencies": ["129", "131"],
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1213,10 +1210,7 @@
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
         "image": "/assets/basic_refracting_telescope_backyard.jpg",
-        "dependencies": [
-            "0",
-            "3"
-        ],
+        "dependencies": ["0", "3"],
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1499,7 +1493,7 @@
         "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
         "name": "10k Ohm Resistor",
         "description": "A resistor for sensor voltage divider circuits.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/quests/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1674,7 +1668,7 @@
         "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c",
         "name": "soldered jumper wire",
         "description": "10 cm 22 AWG stranded jumper wire with a soldered splice and 2 mm heat-shrink insulation; ~2 g.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/quests/basic_circuit.svg",
         "price": "0.20 dUSD",
         "unit": "each",
         "hardening": {

@@ -51,7 +51,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "hydroponics/top-off"
-    ]
+    "requiresQuests": ["hydroponics/top-off"]
 }

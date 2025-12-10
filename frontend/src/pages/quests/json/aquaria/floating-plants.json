@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "aquaria/shrimp"
-    ]
+    "requiresQuests": ["aquaria/shrimp"]
 }

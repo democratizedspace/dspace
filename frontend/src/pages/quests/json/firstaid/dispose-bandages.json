@@ -52,7 +52,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "firstaid/change-bandage"
-    ]
+    "requiresQuests": ["firstaid/change-bandage"]
 }

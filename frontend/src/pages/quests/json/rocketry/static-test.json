@@ -46,7 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "rocketry/parachute"
-    ]
+    "requiresQuests": ["rocketry/parachute"]
 }

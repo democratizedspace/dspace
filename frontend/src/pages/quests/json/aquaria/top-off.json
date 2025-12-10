@@ -62,7 +62,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "aquaria/water-change"
-    ]
+    "requiresQuests": ["aquaria/water-change"]
 }
