@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_mint_cutting_clone.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/mint-cutting.json",
+    "item_name": "Clone Mint Cutting",
+    "item_id": "hydroponics/mint-cutting",
+    "entity_type": "quest",
+    "prompt": "A fresh green mint cutting with several bright leaves is nestled in a small hydroponic cloning setup, such as a net pot filled with a pale grow cube sitting in a shallow tray of nutrient solution. Fine white roots are just beginning to emerge from the bottom of the cube, visible through the side of a transparent container or at the base of the cutting. In the softly blurred background, you can see other mature mint plants in a row, suggesting this single cutting will grow into an abundant supply for endless tea.\n\nThe environment is a compact near-future indoor herb lab with a solarpunk aesthetic: sleek shelving, subtle LED grow lights casting soft white-green highlights, and clean materials like glass, matte plastic, and brushed metal. The 512×512 image is photorealistic with a lightly stylized finish, focusing on the mint cutting and its container in the center of the frame. No labels or text appear anywhere, and no full faces are visible—only perhaps a distant hint of a hand adjusting a net pot, kept out of primary focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

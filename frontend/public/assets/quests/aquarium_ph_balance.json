@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/aquarium_ph_balance.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/balance-ph.json",
+    "item_name": "Balance aquarium pH",
+    "item_id": "aquaria/balance-ph",
+    "entity_type": "quest",
+    "prompt": "A medium-sized glass aquarium sits on a sturdy stand, with a small test vial of tank water and a pH color comparison card laid out on the surface in front of it. A dropper bottle labeled only with a simple color band (no text) is poised over the vial, suggesting that buffer solution has just been added to bring the pH into range. The fish and aquatic plants inside the tank look calm and healthy, with subtle bubbles rising from a filter or air stone, signaling that the tank’s chemistry is stable.\n\nThe setting is a cozy near-future living space with a solarpunk twist: the aquarium area is lit by soft, indirect lighting and a hint of natural daylight, with clean lines, a bit of greenery, and minimalistic high-tech details around. Photorealistic 512×512 framing keeps the test vial and aquarium as dual focal points, with the pH card and buffer bottle clearly visible but free of any readable text. Human presence is limited to a partially visible hand or forearm near the vial, keeping attention on the idea of balanced water chemistry.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

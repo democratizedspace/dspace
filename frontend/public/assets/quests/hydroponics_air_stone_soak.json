@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_air_stone_soak.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/air-stone-soak.json",
+    "item_name": "Soak Air Stone",
+    "item_id": "hydroponics/air-stone-soak",
+    "entity_type": "quest",
+    "prompt": "A close-up of a small cylindrical hydroponic air stone soaking in a clear container of water, with flexible airline tubing attached and coiled neatly on a clean work surface. Tiny streams of bubbles start to rise evenly from the porous surface of the stone, hinting that it is being primed for use. In the soft background, there is a glimpse of a tidy hydroponic reservoir and a few leafy green plants growing in net pots, slightly out of focus so the air stone and its container remain the main subject.\n\nNear-future solarpunk hydroponics aesthetic in a bright indoor grow lab: soft, diffuse white lighting, clean countertops, and subtle high-tech touches like sleek tubing and minimalistic fixtures. Photorealistic 512×512 framing with the container and air stone centered or slightly off-center against an uncluttered background. No brand logos or visible text anywhere, and no full faces—at most a hint of a gloved hand adjusting the tubing at the edge of the frame.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
