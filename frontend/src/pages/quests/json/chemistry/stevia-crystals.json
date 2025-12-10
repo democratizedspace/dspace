@@ -51,5 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["chemistry/stevia-extraction"]
+    "requiresQuests": [
+        "chemistry/stevia-extraction"
+    ]
 }

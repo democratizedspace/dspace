@@ -2,7 +2,7 @@
     "id": "aquaria/heater-install",
     "title": "Install an aquarium heater",
     "description": "Install a 150 W heater in a Walstad tank and verify 26°C with a stick-on thermometer.",
-    "image": "/assets/aquarium_heater.jpg",
+    "image": "/assets/quests/aquarium_heater.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
@@ -26,8 +26,14 @@
                     "goto": "set",
                     "text": "Heater mounted, still unplugged.",
                     "requiresItems": [
-                        { "id": "0b85f058-38f2-4e9a-93e9-d47441608619", "count": 1 },
-                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+                        {
+                            "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -45,7 +51,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/sponge-filter"],
+    "requiresQuests": [
+        "aquaria/sponge-filter"
+    ],
     "hardening": {
         "passes": 3,
         "score": 92,

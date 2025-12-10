@@ -66,5 +66,8 @@
             "count": 10
         }
     ],
-    "requiresQuests": ["hydroponics/basil", "3dprinter/start"]
+    "requiresQuests": [
+        "hydroponics/basil",
+        "3dprinter/start"
+    ]
 }

@@ -89,5 +89,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/firewall-rules"]
+    "requiresQuests": [
+        "devops/firewall-rules"
+    ]
 }

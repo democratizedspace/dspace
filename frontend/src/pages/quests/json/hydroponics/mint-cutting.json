@@ -2,7 +2,7 @@
     "id": "hydroponics/mint-cutting",
     "title": "Clone Mint Cutting",
     "description": "Root a mint sprig for endless tea.",
-    "image": "/assets/hydroponics_tub.jpg",
+    "image": "/assets/quests/hydroponics_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
@@ -26,8 +26,14 @@
                     "process": "clone-mint-cutting",
                     "text": "Cut and plant",
                     "requiresItems": [
-                        { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 },
-                        { "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1", "count": 1 }
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        }
                     ]
                 },
                 {
@@ -35,8 +41,14 @@
                     "goto": "finish",
                     "text": "Cutting is nestled in",
                     "requiresItems": [
-                        { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 },
-                        { "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1", "count": 1 }
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -53,5 +65,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/plug-soak"]
+    "requiresQuests": [
+        "hydroponics/plug-soak"
+    ]
 }

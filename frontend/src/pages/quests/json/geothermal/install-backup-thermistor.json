@@ -74,5 +74,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/calibrate-ground-sensor"]
+    "requiresQuests": [
+        "geothermal/calibrate-ground-sensor"
+    ]
 }

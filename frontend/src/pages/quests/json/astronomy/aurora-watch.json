@@ -46,5 +46,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/light-pollution"]
+    "requiresQuests": [
+        "astronomy/light-pollution"
+    ]
 }

@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Your API returns static data. Let's feed it live temperature readings.",
-            "options": [{ "type": "goto", "goto": "code", "text": "Sounds great." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Sounds great."
+                }
+            ]
         },
         {
             "id": "code",
@@ -19,16 +25,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Endpoint streaming data!",
-                    "requiresItems": [{ "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice! Clients can now fetch the current temperature from your server.",
-            "options": [{ "type": "finish", "text": "API live." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "API live."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/json-api"]
+    "requiresQuests": [
+        "programming/json-api"
+    ]
 }

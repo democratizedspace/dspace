@@ -25,7 +25,12 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Mask is sanitized",
-                    "requiresItems": [{ "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -41,5 +46,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/learn-cpr"]
+    "requiresQuests": [
+        "firstaid/learn-cpr"
+    ]
 }

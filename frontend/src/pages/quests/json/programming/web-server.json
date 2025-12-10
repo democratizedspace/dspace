@@ -46,5 +46,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/hello-sensor"]
+    "requiresQuests": [
+        "programming/hello-sensor"
+    ]
 }

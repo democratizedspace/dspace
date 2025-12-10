@@ -46,5 +46,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/daily-backups"]
+    "requiresQuests": [
+        "devops/daily-backups"
+    ]
 }

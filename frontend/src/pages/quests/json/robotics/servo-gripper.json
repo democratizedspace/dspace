@@ -46,5 +46,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/servo-control"]
+    "requiresQuests": [
+        "robotics/servo-control"
+    ]
 }

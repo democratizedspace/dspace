@@ -30,7 +30,12 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "pH is stable around 7.",
-                    "requiresItems": [{ "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -46,5 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["chemistry/ph-test"]
+    "requiresQuests": [
+        "chemistry/ph-test"
+    ]
 }

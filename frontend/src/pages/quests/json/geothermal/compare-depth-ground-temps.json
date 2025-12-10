@@ -47,5 +47,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/log-ground-temperature"]
+    "requiresQuests": [
+        "geothermal/log-ground-temperature"
+    ]
 }

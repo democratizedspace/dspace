@@ -31,10 +31,22 @@
                     "goto": "finish",
                     "text": "New filament loaded.",
                     "requiresItems": [
-                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 10 },
-                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
-                        { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 }
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 10
+                        },
+                        {
+                            "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -51,16 +63,34 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,
         "emoji": "💯",
         "history": [
-            { "task": "codex-quest-hardening-2025-08-12", "date": "2025-08-12", "score": 60 },
-            { "task": "codex-quest-refinement-2025-08-17", "date": "2025-08-17", "score": 80 },
-            { "task": "codex-quest-clarity-2025-08-19", "date": "2025-08-19", "score": 90 },
-            { "task": "codex-quest-polish-2025-08-22", "date": "2025-08-22", "score": 95 }
+            {
+                "task": "codex-quest-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-17",
+                "date": "2025-08-17",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-clarity-2025-08-19",
+                "date": "2025-08-19",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-polish-2025-08-22",
+                "date": "2025-08-22",
+                "score": 95
+            }
         ]
     }
 }

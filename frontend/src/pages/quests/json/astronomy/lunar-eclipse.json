@@ -51,5 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/observe-moon"]
+    "requiresQuests": [
+        "astronomy/observe-moon"
+    ]
 }

@@ -7,10 +7,26 @@
         "score": 95,
         "emoji": "💯",
         "history": [
-            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
-            { "task": "codex-quest-refinement-2025-08-06", "date": "2025-08-06", "score": 80 },
-            { "task": "codex-quest-refresh-2025-02-14", "date": "2025-02-14", "score": 90 },
-            { "task": "codex-quest-upgrade-2025-08-14", "date": "2025-08-14", "score": 95 }
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06",
+                "date": "2025-08-06",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-refresh-2025-02-14",
+                "date": "2025-02-14",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-upgrade-2025-08-14",
+                "date": "2025-08-14",
+                "score": 95
+            }
         ]
     },
     "image": "/assets/quests/iss_flyover_backyard_observation.jpg",
@@ -42,9 +58,18 @@
                     "goto": "finish",
                     "text": "I saw it streak by!",
                     "requiresItems": [
-                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 },
-                        { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 },
-                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -61,5 +86,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/observe-moon"]
+    "requiresQuests": [
+        "astronomy/observe-moon"
+    ]
 }

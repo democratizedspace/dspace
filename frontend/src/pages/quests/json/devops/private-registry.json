@@ -51,5 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/docker-compose"]
+    "requiresQuests": [
+        "devops/docker-compose"
+    ]
 }

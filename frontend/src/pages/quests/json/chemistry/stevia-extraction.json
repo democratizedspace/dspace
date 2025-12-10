@@ -51,5 +51,8 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/stevia", "chemistry/safe-reaction"]
+    "requiresQuests": [
+        "hydroponics/stevia",
+        "chemistry/safe-reaction"
+    ]
 }

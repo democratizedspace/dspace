@@ -132,5 +132,7 @@
             ]
         }
     ],
-    "requiresQuests": ["electronics/arduino-blink"]
+    "requiresQuests": [
+        "electronics/arduino-blink"
+    ]
 }

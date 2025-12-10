@@ -55,5 +55,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/constellations"]
+    "requiresQuests": [
+        "astronomy/constellations"
+    ]
 }

@@ -75,5 +75,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/jupiter-moons"]
+    "requiresQuests": [
+        "astronomy/jupiter-moons"
+    ]
 }

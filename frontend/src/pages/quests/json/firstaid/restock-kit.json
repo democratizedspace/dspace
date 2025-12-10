@@ -54,5 +54,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/assemble-kit"]
+    "requiresQuests": [
+        "firstaid/assemble-kit"
+    ]
 }

@@ -58,7 +58,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/basic-circuit"
+    ],
     "hardening": {
         "passes": 3,
         "score": 60,

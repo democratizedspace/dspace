@@ -51,5 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["ubi/basicincome"]
+    "requiresQuests": [
+        "ubi/basicincome"
+    ]
 }

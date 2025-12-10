@@ -51,5 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinting/phone-stand"]
+    "requiresQuests": [
+        "3dprinting/phone-stand"
+    ]
 }

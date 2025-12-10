@@ -46,5 +46,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-graph"]
+    "requiresQuests": [
+        "programming/temp-graph"
+    ]
 }

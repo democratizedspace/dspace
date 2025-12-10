@@ -9,17 +9,34 @@
         {
             "id": "start",
             "text": "Greetings! I'm dChat, your helpful AI assistant. Let's write a quick script that gathers temperature information from a sensor.",
-            "options": [{ "type": "goto", "goto": "script", "text": "Sounds good" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "script",
+                    "text": "Sounds good"
+                }
+            ]
         },
         {
             "id": "script",
             "text": "Connect a basic temperature sensor and run this short Python example. The program will guide you through logging the data to a file.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "The data is logging" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "The data is logging"
+                }
+            ]
         },
         {
             "id": "finish",
             "text": "Excellent! This simple automation will assist you with larger projects down the road.",
-            "options": [{ "type": "finish", "text": "Cool!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Cool!"
+                }
+            ]
         }
     ],
     "rewards": [],

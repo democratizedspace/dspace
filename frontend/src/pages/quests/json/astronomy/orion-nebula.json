@@ -30,9 +30,18 @@
                     "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
-                        { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 },
-                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 },
-                        { "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5", "count": 1 }
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
                     ],
                     "text": "The nebula glows!"
                 }
@@ -50,5 +59,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/andromeda"]
+    "requiresQuests": [
+        "astronomy/andromeda"
+    ]
 }

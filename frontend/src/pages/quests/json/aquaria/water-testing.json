@@ -68,17 +68,39 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/walstad"],
+    "requiresQuests": [
+        "aquaria/walstad"
+    ],
     "hardening": {
         "passes": 5,
         "score": 95,
         "emoji": "💯",
         "history": [
-            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
-            { "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 80 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 },
-            { "task": "codex-upgrade-2025-08-10", "date": "2025-08-10", "score": 94 },
-            { "task": "codex-quest-refinement-2025-08-12", "date": "2025-08-12", "score": 95 }
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
+            },
+            {
+                "task": "codex-upgrade-2025-08-10",
+                "date": "2025-08-10",
+                "score": 94
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-12",
+                "date": "2025-08-12",
+                "score": 95
+            }
         ]
     }
 }

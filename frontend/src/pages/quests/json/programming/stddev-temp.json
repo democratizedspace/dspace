@@ -46,5 +46,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/median-temp"]
+    "requiresQuests": [
+        "programming/median-temp"
+    ]
 }

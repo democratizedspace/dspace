@@ -55,5 +55,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/servo-gripper"]
+    "requiresQuests": [
+        "robotics/servo-gripper"
+    ]
 }

@@ -58,5 +58,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench"]
+    "requiresQuests": [
+        "woodworking/workbench"
+    ]
 }

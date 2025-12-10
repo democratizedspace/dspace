@@ -2,7 +2,7 @@
     "id": "electronics/test-gfci-outlet",
     "title": "Test a GFCI Outlet",
     "description": "Verify a ground-fault circuit interrupter outlet with a plug-in tester.",
-    "image": "/assets/outlet.jpg",
+    "image": "/assets/quests/outlet.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
@@ -30,16 +30,28 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Outlet passed.",
-                    "requiresItems": [{ "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice work! The GFCI is wired correctly and trips as expected. Test it monthly and replace damaged outlets.",
-            "options": [{ "type": "finish", "text": "Safety confirmed." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Safety confirmed."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/continuity-test"]
+    "requiresQuests": [
+        "electronics/continuity-test"
+    ]
 }

@@ -51,5 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/basic-telescope"]
+    "requiresQuests": [
+        "astronomy/basic-telescope"
+    ]
 }

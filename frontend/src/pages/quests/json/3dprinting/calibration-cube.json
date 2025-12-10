@@ -36,10 +36,22 @@
                     "goto": "measure",
                     "text": "Cube cooled and removed.",
                     "requiresItems": [
-                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 15 },
-                        { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
-                        { "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4", "count": 1 }
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 15
+                        },
+                        {
+                            "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                            "count": 1
+                        },
+                        {
+                            "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -57,18 +69,30 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Dimensions noted.",
-                    "requiresItems": [{ "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent! Record the measurements and tweak firmware or slicer settings as needed before your next print.",
-            "options": [{ "type": "finish", "text": "All set." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All set."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 3,
         "score": 82,

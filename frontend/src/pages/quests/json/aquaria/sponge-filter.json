@@ -2,7 +2,7 @@
     "id": "aquaria/sponge-filter",
     "title": "Install a sponge filter",
     "description": "Add gentle filtration to keep your tank clean without harming shrimp.",
-    "image": "/assets/aquarium_filter.jpg",
+    "image": "/assets/quests/aquarium_filter.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
@@ -26,9 +26,18 @@
                     "goto": "install",
                     "text": "Sponge rinsed and tubing attached.",
                     "requiresItems": [
-                        { "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56", "count": 1 },
-                        { "id": "60e517b4-5807-4983-afb8-e2aad1566587", "count": 1 },
-                        { "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686", "count": 1 }
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
+                        },
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        },
+                        {
+                            "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -50,5 +59,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing"]
+    "requiresQuests": [
+        "aquaria/water-testing"
+    ]
 }

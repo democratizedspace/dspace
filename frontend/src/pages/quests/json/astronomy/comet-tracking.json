@@ -51,5 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/meteor-shower"]
+    "requiresQuests": [
+        "astronomy/meteor-shower"
+    ]
 }

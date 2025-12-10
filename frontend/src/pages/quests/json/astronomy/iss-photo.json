@@ -31,8 +31,14 @@
                     "goto": "capture",
                     "text": "Pass time noted, gear set.",
                     "requiresItems": [
-                        { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 },
-                        { "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b", "count": 1 }
+                        {
+                            "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -45,7 +51,12 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Photo saved and logged.",
-                    "requiresItems": [{ "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -61,5 +72,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/iss-flyover"]
+    "requiresQuests": [
+        "astronomy/iss-flyover"
+    ]
 }

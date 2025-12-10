@@ -2,7 +2,7 @@
     "id": "aquaria/net-fish",
     "title": "Catch a fish with a net",
     "description": "Use an aquarium net to move a fish safely during cleaning.",
-    "image": "/assets/aquarium_net.jpg",
+    "image": "/assets/quests/aquarium_net.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
@@ -26,7 +26,12 @@
                     "goto": "release",
                     "text": "Fish is secure in the bucket.",
                     "process": "catch-fish",
-                    "requiresItems": [{ "id": "ee7d437d-7426-47cd-b691-386dd20f4e47", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -54,5 +59,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/water-change"]
+    "requiresQuests": [
+        "aquaria/water-change"
+    ]
 }
