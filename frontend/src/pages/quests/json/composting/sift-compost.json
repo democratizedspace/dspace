@@ -2,7 +2,7 @@
     "id": "composting/sift-compost",
     "title": "Sift Finished Compost",
     "description": "Screen compost to remove large chunks for a fine finished mix.",
-    "image": "/assets/bucket.jpg",
+    "image": "/assets/quests/bucket.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "rocketry/fuel-mixture",
     "title": "Fuel Mixture Calibration",
     "description": "Dial in a safe oxidizer-to-fuel ratio for a hobbyist model rocket before launch.",
-    "image": "/assets/rocket_fuel_mixture_calibration.jpg",
+    "image": "/assets/quests/rocket_fuel_mixture_calibration.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
@@ -24,7 +24,12 @@
                 {
                     "type": "goto",
                     "goto": "adjust",
-                    "requiresItems": [{ "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                            "count": 1
+                        }
+                    ],
                     "text": "Scale ready, mixture measured."
                 }
             ]
@@ -51,5 +56,10 @@
             ]
         }
     ],
-    "rewards": [{ "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52", "count": 1 }]
+    "rewards": [
+        {
+            "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
+            "count": 1
+        }
+    ]
 }

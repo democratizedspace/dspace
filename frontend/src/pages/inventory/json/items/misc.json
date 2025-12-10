@@ -575,7 +575,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-18", "date": "2025-08-18", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
             ]
         }
     },
@@ -591,7 +595,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-24", "date": "2025-08-24", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-24",
+                    "date": "2025-08-24",
+                    "score": 60
+                }
             ]
         }
     },
@@ -713,7 +721,11 @@
             "score": 60,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-24", "date": "2025-08-24", "score": 60 }
+                {
+                    "task": "codex-item-hardening-2025-08-24",
+                    "date": "2025-08-24",
+                    "score": 60
+                }
             ]
         }
     },
@@ -877,7 +889,7 @@
         "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
         "name": "USB Cable",
         "description": "Standard USB cable for charging or data transfer between devices.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -904,14 +916,14 @@
         "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
         "name": "Laptop Computer",
         "description": "A portable computer capable of running the Arduino IDE and uploading sketches.",
-        "image": "/assets/quests/laptop_running_ide_on_desk.jpg",
+        "image": "/assets/laptop_running_ide_on_desk.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1119,7 +1131,7 @@
         "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
         "name": "1TB 2230 M.2 SSD",
         "description": "A tiny NVMe drive perfect for booting a Pi.",
-        "image": "/assets/quests/m2_2230_nvme_module_closeup.jpg",
+        "image": "/assets/m2_2230_nvme_module_closeup.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1133,14 +1145,14 @@
         "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
         "name": "PoE+ switch",
         "description": "Powers multiple devices and provides network connectivity.",
-        "image": "/assets/quests/poe_plus_switch_on_rack.jpg",
+        "image": "/assets/poe_plus_switch_on_rack.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
         "name": "Ethernet cable",
         "description": "A simple cable for wired network connections.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1197,7 +1209,7 @@
         "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
-        "image": "/assets/quests/basic_refracting_telescope_backyard.jpg",
+        "image": "/assets/basic_refracting_telescope_backyard.jpg",
         "dependencies": ["0", "3"],
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
@@ -1205,7 +1217,7 @@
         "id": "98f6252e-95c2-468a-b110-69d47604df2c",
         "name": "planisphere star chart",
         "description": "A rotating sky map for matching constellations to the current date and time.",
-        "image": "/assets/quests/planisphere_star_chart.jpg",
+        "image": "/assets/planisphere_star_chart.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1239,14 +1251,14 @@
         "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
         "name": "CPR pocket mask",
         "description": "A reusable one-way valve mask for delivering rescue breaths safely.",
-        "image": "/assets/quests/cpr_pocket_mask_case_open.jpg",
+        "image": "/assets/cpr_pocket_mask_case_open.jpg",
         "price": "18 dUSD"
     },
     {
         "id": "b397aa70-3503-4e40-b84a-4d5609578d2b",
         "name": "CPR training manikin",
         "description": "Life-size torso manikin for practicing chest compressions and rescue breaths.",
-        "image": "/assets/quests/cpr_training_manikin_torso.jpg",
+        "image": "/assets/cpr_training_manikin_torso.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1274,7 +1286,7 @@
         "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
         "name": "antiseptic wipes",
         "description": "Pre-moistened wipes that kill germs before bandaging.",
-        "image": "/assets/quests/antiseptic_wipes_packet_open.jpg",
+        "image": "/assets/antiseptic_wipes_packet_open.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1301,7 +1313,7 @@
         "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
         "name": "nitrile gloves (pair)",
         "description": "Disposable nitrile gloves to protect hands from chemicals.",
-        "image": "/assets/quests/nitrile_gloves_pair_on_table.jpg",
+        "image": "/assets/nitrile_gloves_pair_on_table.jpg",
         "price": "0.50 dUSD"
     },
     {
@@ -1364,7 +1376,7 @@
         "id": "96083990-f333-4e42-ab04-7eb2a234570e",
         "name": "heat-shrink tubing",
         "description": "3 mm 2:1 polyolefin heat-shrink tube insulates solder joints; sold per cm.",
-        "image": "/assets/quests/heat_shrink_tubing_closeup.jpg",
+        "image": "/assets/heat_shrink_tubing_closeup.jpg",
         "price": "0.01 dUSD",
         "unit": "cm",
         "hardening": {
@@ -1413,7 +1425,7 @@
         "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
         "name": "spill tray",
         "description": "Polypropylene tray with 2 cm lip to contain acid drips; 300 × 200 mm; ~150 g.",
-        "image": "/assets/quests/lab_spill_tray_on_bench.jpg",
+        "image": "/assets/lab_spill_tray_on_bench.jpg",
         "price": "5 dUSD"
     },
     {
@@ -1440,7 +1452,7 @@
         "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
         "name": "pH up solution (potassium carbonate)",
         "description": "Alkaline solution used to raise nutrient solution pH.",
-        "image": "/assets/quests/ph_up_solution_dropper.jpg",
+        "image": "/assets/ph_up_solution_dropper.jpg",
         "price": "8 dUSD"
     },
     {
@@ -1481,7 +1493,7 @@
         "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
         "name": "10k Ohm Resistor",
         "description": "A resistor for sensor voltage divider circuits.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/basic_circuit.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1502,28 +1514,28 @@
         "id": "0254a829-9002-4a75-8af2-03cd961601da",
         "name": "50 mm magnifying lens",
         "description": "Glass lens with ~50 mm focal length used as a telescope objective.",
-        "image": "/assets/quests/magnifying_lens_50mm_objective.jpg",
+        "image": "/assets/magnifying_lens_50mm_objective.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
         "name": "20 mm magnifying lens",
         "description": "Small lens with ~20 mm focal length for use as a telescope eyepiece.",
-        "image": "/assets/quests/magnifying_lens_20mm_eyepiece.jpg",
+        "image": "/assets/magnifying_lens_20mm_eyepiece.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "2794503d-fbe7-4031-a63e-deac531f9784",
         "name": "cardboard mailing tube",
         "description": "Sturdy cardboard tube about 40 cm long to hold telescope optics.",
-        "image": "/assets/quests/cardboard_mailing_tube_telescope_body.jpg",
+        "image": "/assets/cardboard_mailing_tube_telescope_body.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
         "name": "camera tripod",
         "description": "Aluminum tripod with 3-way pan head; extends 0.5–1.5 m, supports up to 3 kg, weighs 1.2 kg.",
-        "image": "/assets/quests/camera_tripod_astronomy.jpg",
+        "image": "/assets/camera_tripod_astronomy.jpg",
         "price": "30 dUSD",
         "hardening": {
             "passes": 1,
@@ -1542,14 +1554,14 @@
         "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
         "name": "masking tape",
         "description": "Low-tack paper tape for temporarily securing lenses during assembly.",
-        "image": "/assets/quests/masking_tape_roll.jpg",
+        "image": "/assets/masking_tape_roll.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
         "name": "digital camera",
         "description": "Mirrorless camera capable of long-exposure astrophotography.",
-        "image": "/assets/quests/digital_camera_astrophotography.jpg",
+        "image": "/assets/digital_camera_astrophotography.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1656,7 +1668,7 @@
         "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c",
         "name": "soldered jumper wire",
         "description": "10 cm 22 AWG stranded jumper wire with a soldered splice and 2 mm heat-shrink insulation; ~2 g.",
-        "image": "/assets/quests/basic_circuit.svg",
+        "image": "/assets/basic_circuit.svg",
         "price": "0.20 dUSD",
         "unit": "each",
         "hardening": {

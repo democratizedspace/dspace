@@ -2,7 +2,7 @@
     "id": "hydroponics/plug-soak",
     "title": "Soak Starter Plugs",
     "description": "Hydrate rockwool cubes so seeds sprout happily.",
-    "image": "/assets/hydroponic_starter_plugs_soaking_tray.jpg",
+    "image": "/assets/quests/hydroponic_starter_plugs_soaking_tray.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

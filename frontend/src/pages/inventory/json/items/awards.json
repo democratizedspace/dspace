@@ -86,7 +86,11 @@
             "score": 65,
             "emoji": "🌀",
             "history": [
-                { "task": "codex-item-hardening-2025-08-16", "date": "2025-08-16", "score": 65 }
+                {
+                    "task": "codex-item-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 65
+                }
             ]
         }
     },

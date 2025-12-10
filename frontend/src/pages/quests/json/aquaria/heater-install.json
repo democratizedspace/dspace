@@ -2,7 +2,7 @@
     "id": "aquaria/heater-install",
     "title": "Install an aquarium heater",
     "description": "Install a 150 W heater in a Walstad tank and verify 26°C with a stick-on thermometer.",
-    "image": "/assets/aquarium_heater.jpg",
+    "image": "/assets/quests/aquarium_heater.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "aquaria/top-off",
     "title": "Top Off Evaporated Water",
     "description": "Use a hand pump siphon and aged water to restore aquarium levels.",
-    "image": "/assets/aquarium_top_off.jpg",
+    "image": "/assets/quests/aquarium_top_off.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
@@ -15,8 +15,14 @@
                     "goto": "topoff",
                     "text": "Setup done.",
                     "requiresItems": [
-                        { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
-                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 2 }
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 2
+                        }
                     ]
                 }
             ]
@@ -47,7 +53,12 @@
         {
             "id": "finish",
             "text": "Nice! You've got water aging for the next evaporation top-off.",
-            "options": [{ "type": "finish", "text": "Job done." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Job done."
+                }
+            ]
         }
     ],
     "rewards": [],

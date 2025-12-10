@@ -2,7 +2,7 @@
     "id": "hydroponics/filter-clean",
     "title": "Rinse Grow Bed Filter",
     "description": "Clear out the gunk so the roots can breathe.",
-    "image": "/assets/hydroponics_tub.jpg",
+    "image": "/assets/quests/hydroponics_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

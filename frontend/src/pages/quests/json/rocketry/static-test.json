@@ -2,7 +2,7 @@
     "id": "rocketry/static-test",
     "title": "Perform a Static Engine Test",
     "description": "Fire your rocket engine while it's secured to verify thrust and stability.",
-    "image": "/assets/model_rocket_static_engine_test.jpg",
+    "image": "/assets/quests/model_rocket_static_engine_test.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

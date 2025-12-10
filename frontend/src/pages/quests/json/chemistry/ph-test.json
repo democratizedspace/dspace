@@ -12,7 +12,7 @@
             { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 }
         ]
     },
-    "image": "/assets/pH_strip.jpg",
+    "image": "/assets/quests/pH_strip.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [

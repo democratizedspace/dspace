@@ -2,7 +2,7 @@
     "id": "woodworking/coffee-table",
     "title": "Build a coffee table",
     "description": "Craft a low table to anchor your living space.",
-    "image": "/assets/door.jpg",
+    "image": "/assets/quests/door.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [

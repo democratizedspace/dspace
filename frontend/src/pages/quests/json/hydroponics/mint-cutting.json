@@ -2,7 +2,7 @@
     "id": "hydroponics/mint-cutting",
     "title": "Clone Mint Cutting",
     "description": "Root a mint sprig for endless tea.",
-    "image": "/assets/hydroponics_tub.jpg",
+    "image": "/assets/quests/hydroponics_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

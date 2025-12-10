@@ -7,10 +7,14 @@
         "score": 60,
         "emoji": "🌀",
         "history": [
-            { "task": "codex-quest-hardening-2025-08-15", "date": "2025-08-15", "score": 60 }
+            {
+                "task": "codex-quest-hardening-2025-08-15",
+                "date": "2025-08-15",
+                "score": 60
+            }
         ]
     },
-    "image": "/assets/smart_plug_test_dwatt_kwh.jpg",
+    "image": "/assets/quests/smart_plug_test_dwatt_kwh.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
