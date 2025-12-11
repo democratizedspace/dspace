@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_hello_sensor_logging.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/hello-sensor.json",
+    "item_name": "Log Temperature Data",
+    "item_id": "programming/hello-sensor",
+    "entity_type": "quest",
+    "prompt": "A compact single-board computer sits next to a breadboard-mounted thermistor or sensor module, both connected via tidy jumper wires, while a nearby laptop shows a terminal window streaming timestamped readings in simple rows, all rendered as abstract characters without legible words. A second pane in the terminal displays a tiny script—just a handful of lines—that opens the sensor, reads values, and appends them to a log file icon shown in the corner of the screen, illustrating how little code is needed to capture data.\n\nThe environment has a near-future solarpunk developer-lab vibe: soft ambient lighting, pale desk surfaces, and a couple of potted plants or 3D-printed organizers blurred in the background. The 512×512 photorealistic composition centers on the sensor hardware and terminal output, with the rest of the workspace gently out of focus. No brand logos or readable text appear anywhere, and no faces are shown—only a hand resting on the keyboard—emphasizing that a short script can continuously record sensor information for later analysis.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

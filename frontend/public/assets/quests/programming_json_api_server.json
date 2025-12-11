@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_json_api_server.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/json-api.json",
+    "item_name": "Serve JSON Data",
+    "item_id": "programming/json-api",
+    "entity_type": "quest",
+    "prompt": "A workstation monitor shows a browser-like window requesting data from a local server, with the response rendered as a tidy, indented JSON tree: curly braces, colons, and brackets are clearly visible while all keys and values are abstract shapes instead of readable text. Beside the main window, a small pane displays a minimalist code snippet that defines a route handler returning structured data. A tiny sensor node or single-board computer sits next to the keyboard, implying that live readings are being served as JSON.\n\nThe environment adopts a near-future solarpunk aesthetic: soft ambient lighting, a clean desk with pale materials, and a couple of plants or solar-themed objects blurred in the background. The 512×512 photorealistic composition centers on the JSON response view and the code pane, with hardware and other items quietly out of focus. No brand logos or legible words appear anywhere, and no faces are shown—only a hand on the mouse—emphasizing that the server now responds with structured JSON data suitable for APIs.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

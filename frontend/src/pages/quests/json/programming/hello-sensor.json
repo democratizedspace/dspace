@@ -2,7 +2,7 @@
     "id": "programming/hello-sensor",
     "title": "Log Temperature Data",
     "description": "dChat shows you how a short script can capture sensor information for later analysis.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_hello_sensor_logging.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_replace_faulty_thermistor.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/replace-faulty-thermistor.json",
+    "item_name": "Replace Faulty Thermistor",
+    "item_id": "geothermal/replace-faulty-thermistor",
+    "entity_type": "quest",
+    "prompt": "In a geothermal utility room, a worn-out waterproof thermistor probe is being disconnected from a junction box on the wall while a new probe with a clean cable jacket lies coiled and ready beside it. A gloved hand loosens the old wires from a terminal block, and the new probe’s leads are neatly labeled and waiting to be installed in the same positions. In the background, the loop piping and heat pump are visible in soft focus, suggesting that this sensor is part of a larger monitoring system.\n\nThe environment has a near-future solarpunk mechanical-room feel: soft neutral lighting, tidy wiring channels, and hints of other control electronics arranged in an orderly way. The 512×512 photorealistic composition centers on the old and new thermistor leads and the open junction box, with the rest of the room gently blurred. No brand logos or legible text appear anywhere, and no faces are visible—only gloved hands and forearms—emphasizing the careful swap of a dead probe and preparation for verifying that readings remain accurate.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

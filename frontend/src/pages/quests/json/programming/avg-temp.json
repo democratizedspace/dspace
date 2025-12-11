@@ -2,7 +2,7 @@
     "id": "programming/avg-temp",
     "title": "Compute Average Temperature",
     "description": "Write a small script that reads your log file and prints the daily average temperature.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_compute_avg_temperature.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
