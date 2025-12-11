@@ -87,6 +87,7 @@ def test_cli_reports_duplicates(tmp_path: Path) -> None:
     assert '    - "Description for toolkit item."' in stdout
     assert "/assets/unique.png" not in stdout
     # Verify summary appears (3 uses - 1 = 2 duplicates)
+    assert "Total path-based duplicates: 2" in stdout
     assert "Total duplicates remaining: 2" in stdout
 
 
@@ -188,10 +189,10 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
     # Call logic layer directly
     usages = collect_image_references(quests_dir, items_dir, tmp_path)
     duplicates = find_duplicates(usages)
-    identical = find_identical_files(usages.keys(), tmp_path)
+    identical = find_identical_files(usages, tmp_path)
 
     # Get both text and JSON representations
-    text_output = format_duplicates(duplicates, identical)
+    text_output = format_duplicates(duplicates, identical, usages)
     json_data = serialize_report(duplicates, identical)
 
     # Verify text output contains all the data from logic layer
@@ -229,4 +230,5 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
     assert json_data["identicalFiles"] == {}
 
     # Verify summary appears (3 uses - 1 = 2 duplicates)
+    assert "Total path-based duplicates: 2" in text_output
     assert "Total duplicates remaining: 2" in text_output

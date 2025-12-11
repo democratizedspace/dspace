@@ -64,13 +64,14 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
         "frontend/src/pages/quests/json/astronomy/andromeda.json",
     ]
 
-    formatted = format_duplicates(duplicates)
+    formatted = format_duplicates(duplicates, all_references=usages)
     assert "/assets/quests/solar.jpg (3 uses)" in formatted
     assert "Andromeda Quest" in formatted
     assert "astronomy/andromeda" in formatted
     assert "Tank 200" in formatted
     assert "tank-200" in formatted
     # Verify summary appears (3 uses - 1 = 2 duplicates)
+    assert "Total path-based duplicates: 2" in formatted
     assert "Total duplicates remaining: 2" in formatted
 
 
@@ -113,7 +114,7 @@ def test_includes_descriptions_in_output_and_serialization(tmp_path: Path) -> No
     duplicates = find_duplicates(usages)
 
     assert "/assets/rockwool_wet.jpg" in duplicates
-    formatted = format_duplicates(duplicates)
+    formatted = format_duplicates(duplicates, all_references=usages)
 
     assert '    - "Hydrate rockwool cubes before planting seeds."' in formatted
     assert '    - "Rockwool starter plug soaked and ready."' in formatted
@@ -133,7 +134,7 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
 
     usages = collect_image_references(quests_dir, items_dir, repo_root)
     duplicates = find_duplicates(usages)
-    identical = find_identical_files(usages.keys(), repo_root)
+    identical = find_identical_files(usages, repo_root)
 
     # Duplicate paths by string
     assert "/assets/shared-path.jpg" in duplicates
@@ -152,10 +153,15 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
     identical_paths = {path for paths in identical.values() for path in paths}
     assert conflict_paths.isdisjoint(identical_paths)
 
-    formatted = format_duplicates(duplicates, identical)
+    formatted = format_duplicates(duplicates, identical, usages)
     assert "Identical image files (same content, different paths):" in formatted
     assert "/assets/duplicate-content.jpg" in formatted
     assert "/assets/quests/duplicate-content.jpg" in formatted
+    assert "Quest fixture description for duplicate content" in formatted
+    assert "Item fixture description for duplicate content" in formatted
+    assert "Total path-based duplicates: 1" in formatted
+    assert "Total identical-file duplicates: 1" in formatted
+    assert "Total duplicates remaining: 2" in formatted
 
 
 def test_collect_image_references_requires_valid_json(tmp_path: Path) -> None:
