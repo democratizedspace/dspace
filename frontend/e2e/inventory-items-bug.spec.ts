@@ -97,9 +97,7 @@ test.describe('Inventory Items Display - Bug Fix Verification', () => {
         const showAllCheckbox = page.getByRole('checkbox', { name: /show all items/i });
         await showAllCheckbox.check();
 
-        const toolCard = page.getByRole('link', {
-            name: /entry-level fdm 3d printer \(clogged nozzle\)/i,
-        });
+        const toolCard = page.getByRole('link', { name: /clogged nozzle/i });
         const aquariumCard = page.getByRole('link', { name: /aquarium \(150 l\)/i });
         const toolsChip = page.getByRole('button', { name: 'Tools' });
         const aquariumChip = page.getByRole('button', { name: 'Aquarium' });
