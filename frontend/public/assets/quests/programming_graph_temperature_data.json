@@ -1,8 +1,8 @@
 {
     "filename": "/assets/quests/programming_graph_temperature_data.jpg",
-    "entity": "frontend/src/pages/quests/json/programming/temp-graph.json",
+    "entity": "frontend/src/pages/quests/json/programming/graph-temp.json",
     "item_name": "Graph Temperature Data",
-    "item_id": "programming/temp-graph",
+    "item_id": "programming/graph-temp",
     "entity_type": "quest",
     "prompt": "A wide monitor displays a plotting application or script output window filled with a clear line chart of temperature readings over several days, with smooth curves and small markers at each logged point, while axes and legends are rendered as abstract ticks with no readable labels. Next to the graph, a small panel lists several log files as icons—one highlighted to show which dataset is being plotted. On the desk in front of the monitor rests a compact single-board computer enclosure and a notebook with hand-drawn sketches of trend lines and annotations.\n\nThe environment is a near-future solarpunk lab or office space: soft balanced lighting, pale surfaces, and biophilic touches such as plants and wooden accents in the blurred background. The 512×512 photorealistic composition centers on the temperature graph window and the chosen log file icon, with the rest of the setup gently out of focus. No brand logos or legible words appear anywhere, and no faces are visible—only a hand on a mouse—emphasizing that the script is graphing logger values to visualize trends over time.",
     "image_model": "Nano Banana Pro",
