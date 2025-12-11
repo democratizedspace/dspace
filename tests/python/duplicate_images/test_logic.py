@@ -159,7 +159,9 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
     assert "/assets/quests/duplicate-content.jpg" in formatted
     assert "Quest fixture description for duplicate content" in formatted
     assert "Item fixture description for duplicate content" in formatted
+    assert "Total path-based duplicates: 1" in formatted
     assert "Total identical-file duplicates: 1" in formatted
+    assert "Total duplicates remaining: 2" in formatted
 
 
 def test_collect_image_references_requires_valid_json(tmp_path: Path) -> None:

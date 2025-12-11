@@ -250,14 +250,12 @@ def format_duplicates(
                 for reference in references:
                     if reference.name:
                         lines.append(
-                            "    - "
-                            f"{reference.display_path()} :: {reference.name} - {reference.identifier} "
+                            f"    - {reference.display_path()} :: {reference.name} - {reference.identifier} "
                             f"[{reference.source}]"
                         )
                     else:
                         lines.append(
-                            "    - "
-                            f"{reference.display_path()} :: {reference.identifier} [{reference.source}]"
+                            f"    - {reference.display_path()} :: {reference.identifier} [{reference.source}]"
                         )
                     if reference.description:
                         lines.append(f'      - "{reference.description}"')
