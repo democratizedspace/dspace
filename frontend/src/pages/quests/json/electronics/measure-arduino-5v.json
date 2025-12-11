@@ -2,7 +2,7 @@
     "id": "electronics/measure-arduino-5v",
     "title": "Measure Arduino 5 V output",
     "description": "Verify the 5 V pin on an Arduino Uno with a multimeter.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_measure_arduino_5v_output.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

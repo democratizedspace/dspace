@@ -2,7 +2,7 @@
     "id": "electronics/led-polarity",
     "title": "Check LED polarity with a multimeter",
     "description": "Use a digital multimeter's diode mode to find which lead of a loose 5 mm LED is positive. Disconnect power, work on a dry non-conductive surface, wear safety goggles, and only use the meter's built-in diode test.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_led_polarity_multimeter_diode_test.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

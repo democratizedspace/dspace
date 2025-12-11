@@ -2,7 +2,7 @@
     "id": "electronics/measure-led-current",
     "title": "Measure LED Current",
     "description": "Use a digital multimeter to measure the current through a basic LED circuit.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_measure_led_current_multimeter_series.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

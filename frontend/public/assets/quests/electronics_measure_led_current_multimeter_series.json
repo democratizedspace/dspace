@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_measure_led_current_multimeter_series.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/measure-led-current.json",
+    "item_name": "Measure LED Current",
+    "item_id": "electronics/measure-led-current",
+    "entity_type": "quest",
+    "prompt": "A basic LED circuit on a breadboard is powered by a small low-voltage supply or battery pack, with a 5 mm LED and series resistor clearly visible. A digital multimeter is inserted in series with the LED, its red lead connected to the resistor and its black lead connected back to the supply, showing the correct current-measurement wiring. The meter’s display shows a simple bar or segmented icon at a modest position on the scale, suggesting a small, safe current through the LED without readable numbers.\n\nThe scene fits a near-future solarpunk electronics lab: soft white lighting, pale non-conductive work surfaces, and neatly arranged tools and components blurred in the background. The 512×512 photorealistic composition centers on the breadboard, LED, resistor, and multimeter wiring path, with the power source and surroundings kept gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands and forearms near the leads—highlighting safe, correct current measurement in a simple LED circuit.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

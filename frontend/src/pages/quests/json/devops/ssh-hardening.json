@@ -14,7 +14,7 @@
             }
         ]
     },
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_ssh_hardening_keys.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

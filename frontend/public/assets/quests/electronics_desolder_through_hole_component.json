@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_desolder_through_hole_component.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/desolder-component.json",
+    "item_name": "Desolder a component",
+    "item_id": "electronics/desolder-component",
+    "entity_type": "quest",
+    "prompt": "A scrap printed circuit board rests on a ventilated electronics workbench, with a through-hole resistor partially removed from its pads. One gloved hand operates a heated soldering iron while the other holds a spring-loaded desoldering pump poised over the molten solder, and nearby are a flux pen and a length of copper solder wick laid neatly on the mat. The person is wearing clear safety goggles, and a small fume extractor or fan is visible pulling vapors away from the work area.\n\nThe scene follows a near-future solarpunk lab aesthetic: soft but bright lighting, clean non-conductive surfaces, and organized tools in the blurred background, including bins of spare components and a compact multimeter. The 512×512 photorealistic composition centers on the joint being desoldered, with the iron tip, pump nozzle, and lifted resistor lead clearly visible. No logos or readable text appear anywhere, and no faces are shown—only goggles, hands, and arms—highlighting safe, methodical removal of a component from a waste board.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

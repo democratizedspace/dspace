@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_led_polarity_multimeter_diode_test.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/led-polarity.json",
+    "item_name": "Check LED polarity with a multimeter",
+    "item_id": "electronics/led-polarity",
+    "entity_type": "quest",
+    "prompt": "A loose 5 mm LED rests on a dry, non-conductive mat, with its two leads clearly separated and straightened. A digital multimeter set to diode mode has its red and black probes gently touching the LED’s leads, and the LED glows faintly to indicate forward conduction, while the meter’s display shows a simple diode symbol instead of readable numbers. The person handling the probes is wearing clear safety goggles, and no external power source is connected beyond the meter itself.\n\nThe environment is a near-future solarpunk electronics workbench with soft lighting, tidy organization, and a few other LEDs and resistors in a parts tray blurred in the background. The 512×512 photorealistic composition focuses on the LED, probes, and meter, with surrounding surfaces and tools gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands and forearms—emphasizing safe use of the meter’s built-in diode test to identify the LED’s positive lead.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
