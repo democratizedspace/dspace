@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/install_sponge_filter_aquarium.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/sponge-filter.json",
+    "item_name": "Install a sponge filter",
+    "item_id": "aquaria/sponge-filter",
+    "entity_type": "quest",
+    "prompt": "A small sponge filter is fully installed inside a planted aquarium, its cylindrical sponge and uplift tube clearly visible in the corner of the tank with a gentle stream of fine bubbles rising from the top. Shrimp and small fish swim calmly nearby, and the sponge looks soft and unobtrusive against a backdrop of plants, rocks, and driftwood. An air line runs up the back of the tank to an air pump sitting above the water line outside the aquarium, emphasizing that gentle, shrimp-safe filtration has been added.\n\nThe environment is a serene near-future solarpunk living space, with the aquarium resting on a clean stand, nearby houseplants, and soft ambient lighting. The 512×512 image is photorealistic with mild stylization, no logos or text on equipment, and a composition that frames the sponge filter prominently while still showcasing the vibrant tank inhabitants and aquascape in pleasant soft focus around it.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

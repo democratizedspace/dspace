@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/mission_log_entry_page.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "mission log entry",
+    "item_id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+    "entity_type": "item",
+    "prompt": "A close-up view of a single A5 notebook page shows a handwritten mission log entry, with lines of text in dark ink and a few small doodled symbols, all too small to read clearly. The rest of the notebook extends out of frame, with the spine just visible at the left edge and a bookmark ribbon tucked between pages. A pen lies nearby, and a faint shadow of a spacesuit patch or mission emblem pin in the corner hints at a spaceflight or rocketry context without showing any specific logo.\n\nThe setting is a near-future solarpunk workspace: soft overhead lighting, a glimpse of a control panel or tablet screen in the background, and a potted plant adding warmth. The 512×512 image is photorealistic with mild stylization, no readable text or brand marks, and a composition that focuses tightly on the filled logbook page and the sense of a single recorded mission event.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

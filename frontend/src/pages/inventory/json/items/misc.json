@@ -23,7 +23,7 @@
         "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
         "name": "sheet of printer paper",
         "description": "Single 216 × 279 mm (8.5 × 11 in) sheet of 80 g/m² letter printer paper.",
-        "image": "/assets/paperwork.jpg",
+        "image": "/assets/letter_printer_paper_sheet.jpg",
         "price": "0.02 dUSD",
         "unit": "sheet",
         "hardening": {
@@ -468,7 +468,7 @@
         "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
         "name": "rocket launch checklist",
         "description": "A5 laminated card (148×210 mm, ~25 g) listing pad setup, arming and 10-sec countdown steps.",
-        "image": "/assets/paperwork.jpg",
+        "image": "/assets/rocket_launch_checklist_card.jpg",
         "price": "2 dUSD",
         "hardening": {
             "passes": 1,
@@ -513,7 +513,7 @@
         "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
         "name": "pH strip",
         "description": "Disposable 0–14 pH test strip with 1-unit resolution; 0.3 g each.",
-        "image": "/assets/pH_strip.jpg",
+        "image": "/assets/single_ph_test_strip.jpg",
         "price": "0.15 dUSD",
         "unit": "each",
         "hardening": {
@@ -1466,7 +1466,7 @@
         "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
         "name": "paper towel",
         "description": "Single sheet for drying hands or cleaning small spills.",
-        "image": "/assets/paperwork.jpg",
+        "image": "/assets/single_paper_towel_sheet.jpg",
         "price": "0.05 dUSD",
         "unit": "sheet",
         "hardening": {
@@ -1592,7 +1592,7 @@
         "id": "70bb8d86-2c4e-4330-9705-371891934686",
         "name": "mission logbook",
         "description": "A5 (148 × 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
-        "image": "/assets/paperwork.jpg",
+        "image": "/assets/hardbound_mission_logbook.jpg",
         "price": "8 dUSD",
         "hardening": {
             "passes": 1,
@@ -1688,7 +1688,7 @@
         "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
         "name": "mission log entry",
         "description": "One handwritten entry recording a mission event in the logbook.",
-        "image": "/assets/paperwork.jpg",
+        "image": "/assets/mission_log_entry_page.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     }
 ]

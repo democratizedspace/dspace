@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_water_test_logbook.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "water test logbook",
+    "item_id": "b8602362-2035-4f00-9376-f48d8668cf38",
+    "entity_type": "item",
+    "prompt": "A waterproof A5 notebook with a flexible cover lies open on a table next to an aquarium test kit, its pages showing faint grid lines and small, neatly ruled sections without any legible writing. A pen rests diagonally across the page, and a few small vials of colored aquarium water hint at recent tests for pH, ammonia, nitrite, and nitrate. In the soft background, a planted aquarium with fish is visible, tying the logbook directly to tracking water parameters.\n\nThe scene is framed in a cozy near-future living space with a solarpunk vibe: the aquarium glows gently, nearby plants decorate the room, and warm, soft lighting illuminates the notebook without creating glare. The 512×512 image is photorealistic with subtle stylization, free of logos and readable text, and composed so that the open logbook and test kit are the main focus while the aquarium and room surroundings fade into a pleasant soft focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -3,7 +3,7 @@
         "id": "92261497-d605-4db1-8710-953cf73d765c",
         "name": "hydroponics kit",
         "description": "Starter kit with a 10 L reservoir, pump, tubing and net pots for indoor hydroponics.",
-        "image": "/assets/hydroponics.jpg",
+        "image": "/assets/hydroponic_ph_test_strip_pack.jpg",
         "price": "50 dUSD",
         "hardening": {
             "passes": 1,
