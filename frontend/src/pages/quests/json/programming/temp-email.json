@@ -2,7 +2,7 @@
     "id": "programming/temp-email",
     "title": "Email Temperature Alert",
     "description": "Trigger an email when the sensor exceeds a set temperature.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_temperature_email_alert.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

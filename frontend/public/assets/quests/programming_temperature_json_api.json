@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_temperature_json_api.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/temp-json-api.json",
+    "item_name": "Serve Temperature as JSON",
+    "item_id": "programming/temp-json-api",
+    "entity_type": "quest",
+    "prompt": "A browser window on a laptop shows a simple HTTP request to a local server endpoint, with the response rendered as a compact JSON object containing an abstract key–value pair that clearly represents a temperature reading and timestamp, though no text is legible. Alongside this, a small terminal pane displays the server log as it handles incoming requests, with icons for each response instead of verbose text. A small sensor node with a thermistor sits next to the laptop, connected over USB or network, indicating the source of the live data.\n\nThe scene is a near-future solarpunk programming corner: soft indirect lighting, a clean desk, and a couple of plants or minimalist gadgets blurred in the background. The 512×512 photorealistic composition focuses on the JSON response window and the terminal log, with hardware and other objects gently out of focus. No brand logos or legible words appear anywhere, and no faces are visible—only a hand near the trackpad—highlighting that the latest sensor reading is being exposed via a JSON API endpoint.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

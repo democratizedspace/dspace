@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_minimal_web_server.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/web-server.json",
+    "item_name": "Serve a Web Page",
+    "item_id": "programming/web-server",
+    "entity_type": "quest",
+    "prompt": "A laptop displays a code editor containing a tiny HTTP server script—just a few lines long—with a single route that returns a simple text response, visually indicated with abstract quotes and a speech bubble icon instead of readable words. In a browser window beside the editor, a local URL is open showing a clean page with one line of centered text represented by a generic “Hello” style graphic. A small note card on the desk has a simple diagram of a client arrow pointing to a server box, emphasizing the request–response flow.\n\nThe environment is a near-future solarpunk developer desk: soft, warm lighting, a minimal keyboard and mouse, and a couple of plants or subtle tech sculptures blurred in the background. The 512×512 photorealistic composition centers on the editor and browser windows, with the diagram and peripherals gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only a hand on the mouse—emphasizing that a tiny HTTP server has been written to respond with a basic “Hello, world” style page.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
