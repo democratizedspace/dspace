@@ -166,9 +166,7 @@ def find_duplicates(usages: ImageMap) -> ImageMap:
     return {image: refs for image, refs in usages.items() if len(refs) > 1}
 
 
-def find_identical_files(
-    image_paths: Iterable[str], repo_root: Path
-) -> IdenticalImageMap:
+def find_identical_files(usages: Mapping[str, List[ImageReference]], repo_root: Path) -> IdenticalImageMap:
     """Group image paths that point to identical files on disk.
 
     Paths that do not resolve to files under ``frontend/public`` are ignored to keep
@@ -176,7 +174,7 @@ def find_identical_files(
     """
 
     content_map: DefaultDict[str, List[str]] = defaultdict(list)
-    for image in sorted(set(image_paths)):
+    for image in sorted(usages):
         relative_path = image.lstrip("/")
         if not relative_path:
             continue
@@ -207,13 +205,18 @@ def count_total_duplicates(duplicates: ImageMap) -> int:
 
 
 def format_duplicates(
-    duplicates: ImageMap, identical_files: IdenticalImageMap | None = None
+    duplicates: ImageMap,
+    identical_files: IdenticalImageMap | None = None,
+    all_references: ImageMap | None = None,
 ) -> str:
     duplicates = duplicates or {}
     identical_files = identical_files or {}
+    all_references = all_references or {}
     if not duplicates and not identical_files:
         return ""
 
+    path_duplicate_count = count_total_duplicates(duplicates)
+    identical_duplicate_count = 0
     lines: List[str] = []
     for image in sorted(duplicates):
         references = sorted(
@@ -240,12 +243,38 @@ def format_duplicates(
             lines.append(f"hash {digest}:")
             for path in sorted(identical_files[digest]):
                 lines.append(f"  - {path}")
+                references = sorted(
+                    all_references.get(path, []),
+                    key=lambda ref: (ref.source, ref.display_path(), ref.identifier),
+                )
+                for reference in references:
+                    if reference.name:
+                        lines.append(
+                            "    - "
+                            f"{reference.display_path()} :: {reference.name} - {reference.identifier} "
+                            f"[{reference.source}]"
+                        )
+                    else:
+                        lines.append(
+                            "    - "
+                            f"{reference.display_path()} :: {reference.identifier} [{reference.source}]"
+                        )
+                    if reference.description:
+                        lines.append(f'      - "{reference.description}"')
+            identical_duplicate_count += max(0, len(identical_files[digest]) - 1)
 
     if duplicates:
-        # Add summary at the bottom
-        total_duplicates = count_total_duplicates(duplicates)
         lines.append("")
-        lines.append(f"Total duplicates remaining: {total_duplicates}")
+        lines.append(f"Total path-based duplicates: {path_duplicate_count}")
+
+    if identical_files:
+        lines.append("")
+        lines.append(f"Total identical-file duplicates: {identical_duplicate_count}")
+
+    if duplicates or identical_files:
+        overall_total = path_duplicate_count + identical_duplicate_count
+        lines.append("")
+        lines.append(f"Total duplicates remaining: {overall_total}")
 
     return "\n".join(lines)
 

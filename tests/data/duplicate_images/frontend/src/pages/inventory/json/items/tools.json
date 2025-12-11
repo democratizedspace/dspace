@@ -8,6 +8,7 @@
   {
     "id": "duplicate-kit",
     "name": "Duplicate Kit",
+    "description": "Item fixture description for duplicate content.",
     "image": "/assets/quests/duplicate-content.jpg"
   },
   {
