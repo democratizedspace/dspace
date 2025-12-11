@@ -24,7 +24,7 @@
             }
         ]
     },
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_dspace_docker_compose.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

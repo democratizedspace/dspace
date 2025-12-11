@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/compost_sift_finished_mix.jpg",
+    "entity": "frontend/src/pages/quests/json/composting/sift-compost.json",
+    "item_name": "Sift Finished Compost",
+    "item_id": "composting/sift-compost",
+    "entity_type": "quest",
+    "prompt": "A gardener is sifting finished compost through a rectangular mesh screen set over a wheelbarrow or large tub. Rich, dark, fine compost falls through the mesh, forming a smooth pile below, while larger bits of sticks and uncomposted material remain on top of the screen. A small shovel or trowel rests nearby, and a filled bucket of finished compost stands ready to be carried to the garden beds.\n\nThe scene has a near-future solarpunk backyard aesthetic: soft afternoon light, a mix of raised beds or planters in the blurred background, and perhaps a small rain barrel or solar-powered garden light visible. The 512\u00d7512 photorealistic composition focuses on the mesh screen, fine compost, and container below, with everything else gently out of focus. No logos or readable text appear anywhere, and only arms and hands are shown, emphasizing the satisfying step of screening compost for a fine, ready-to-use soil amendment.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
