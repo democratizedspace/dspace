@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/wooden_wall_tool_rack.jpg",
+    "entity": "frontend/src/pages/quests/json/woodworking/tool-rack.json",
+    "item_name": "Build a Tool Rack",
+    "item_id": "woodworking/tool-rack",
+    "entity_type": "quest",
+    "prompt": "A sturdy wooden tool rack is mounted on a wall above a workbench, holding an organized row of hand tools: screwdrivers, pliers, a small hand saw, a hammer, and a measuring tape. The rack is made from smooth, light-colored boards with evenly spaced slots and hooks, clearly designed for easy access and tidiness. Below the rack, the workbench surface is mostly clear, with only a few wood shavings and a square or pencil visible, emphasizing that the rack is actively used to keep tools off the bench.\n\nThe workshop environment blends classic woodworking with a near-future solarpunk aesthetic: warm, soft lighting; a window with greenery outside; and a couple of modern touches like a compact dust collector or sensor panel, all without any readable text or brand logos. The 512×512 image is photorealistic with gentle stylization, composed so that the tool rack and hanging tools are the central focus while the rest of the shop fades into a comfortable, inviting blur.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

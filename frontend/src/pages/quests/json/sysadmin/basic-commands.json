@@ -2,7 +2,7 @@
     "id": "sysadmin/basic-commands",
     "title": "Learn Basic Linux Commands",
     "description": "Practice core shell commands on an Ubuntu 24.04 LTS Minimal server.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/linux_basic_shell_commands.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

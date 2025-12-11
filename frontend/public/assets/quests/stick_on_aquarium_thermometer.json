@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/stick_on_aquarium_thermometer.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/thermometer.json",
+    "item_name": "Attach Aquarium Thermometer",
+    "item_id": "aquaria/thermometer",
+    "entity_type": "quest",
+    "prompt": "A glass aquarium is shown from the side, with a slim stick-on strip thermometer neatly attached to the outside of the front pane near the lower third of the water line. The numbers on the strip are present but too small to read clearly, and a soft glow behind one section suggests the current temperature. Inside the tank, aquatic plants, smooth stones, and a few small fish create a healthy, stable environment, while the water surface reflects gentle room light to emphasize that this is a display tank being monitored for temperature.\n\nThe scene is set in a bright, cozy near-future living space with a solarpunk vibe: indoor plants around the aquarium, warm indirect lighting, and minimal, clean furniture in the background. The 512×512 image is photorealistic with subtle stylization, no readable text or logos, and a clear composition that keeps the thermometer strip and the aquarium glass as the central focus while the room around it fades into soft focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -2,7 +2,7 @@
     "id": "robotics/wheel-encoders",
     "title": "Add Wheel Encoders",
     "description": "Install wheel encoders to log wheel rotation for straighter paths. Disconnect power and secure the robot before wiring.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/robot_wheel_encoders_install.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

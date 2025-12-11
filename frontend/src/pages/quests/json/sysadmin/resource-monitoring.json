@@ -2,7 +2,7 @@
     "id": "sysadmin/resource-monitoring",
     "title": "Monitor System Resources",
     "description": "Track CPU, memory, and disk on Ubuntu 24.04 LTS Minimal using top and df.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/linux_resource_monitoring_dashboard.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

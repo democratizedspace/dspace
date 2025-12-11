@@ -2,7 +2,7 @@
     "id": "sysadmin/log-analysis",
     "title": "Inspect System Logs",
     "description": "Use journalctl and tail to spot issues on Ubuntu 24.04 LTS Minimal.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/linux_system_log_analysis.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

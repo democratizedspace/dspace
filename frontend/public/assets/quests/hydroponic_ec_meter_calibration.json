@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponic_ec_meter_calibration.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/ec-calibrate.json",
+    "item_name": "Calibrate EC Meter",
+    "item_id": "hydroponics/ec-calibrate",
+    "entity_type": "quest",
+    "prompt": "A handheld EC meter with a slim probe is shown resting on the edge of a clear glass or plastic beaker filled with calibration solution, the probe tip submerged in the liquid. Next to the beaker, a small bottle labeled by color only (no readable text) hints at calibration fluid, and a hydroponic reservoir with tubing and leafy plants is visible in the soft background. The meter's display is lit, but the numbers are too small to read, making it clear the focus is on the calibration process rather than specific values.\n\nThe setting is a clean, near-future hydroponics corner with a solarpunk aesthetic: bright, diffuse lighting, vertical grow towers or tubs with lush green plants, and organized shelves with nutrient bottles and tools. The 512×512 image is lightly stylized but photorealistic, with no logos or readable words. The composition centers on the EC meter, probe, and calibration beaker while the surrounding hydroponic gear provides context in gentle soft focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

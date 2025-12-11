@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/linux_system_log_analysis.jpg",
+    "entity": "frontend/src/pages/quests/json/sysadmin/log-analysis.json",
+    "item_name": "Inspect System Logs",
+    "item_id": "sysadmin/log-analysis",
+    "entity_type": "quest",
+    "prompt": "A workstation with a large monitor shows a terminal-style window filled with dense, scrolling lines of log-like text in varied colors, none of it readable at the individual word level. Next to the log window, a second, smaller panel hints at filtered output or a timeline of events, again with text too small to read. On the desk, a small server tower with status LEDs and a pair of headphones suggest someone is focused on inspecting system logs and tracking down issues on a dedicated machine.\n\nThe scene is lit with soft, cool-toned light in a near-future solarpunk workspace: plants arranged behind the monitor, subtle ambient lighting strips, and tidy cable routing. The 512×512 image is photorealistic with gentle stylization, no visible logos or readable text, and a composition that centers the glowing log window while the surrounding server hardware and environment provide context for system log analysis.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
