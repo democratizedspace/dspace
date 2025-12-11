@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_grow_bed_filter_rinse.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/filter-clean.json",
+    "item_name": "Rinse Grow Bed Filter",
+    "item_id": "hydroponics/filter-clean",
+    "entity_type": "quest",
+    "prompt": "A rectangular sponge-style grow bed filter from a hydroponic system being rinsed clean under a gentle stream of water in a deep sink or basin. The filter is held at an angle by a gloved hand so murky water and bits of root debris and biofilm are washing away, revealing cleaner foam toward the top. In the background, slightly out of focus, you can see a section of the hydroponic grow bed and a few leafy plants, emphasizing that this filter keeps the roots’ environment clear and breathable.\n\nThe scene is set in a tidy near-future indoor grow workshop with a solarpunk vibe: smooth composite sink, stainless fixtures, and soft overhead lighting that creates gentle reflections on the wet surfaces. Photorealistic 512×512 composition with the filter and rinsing water as the clear focal point. No logos or text, and the person’s body is mostly out of frame—only forearms and nitrile gloves are visible to keep the image focused on the maintenance action.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
