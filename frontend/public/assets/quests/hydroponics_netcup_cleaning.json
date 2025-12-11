@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_netcup_cleaning.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/netcup-clean.json",
+    "item_name": "Clean Net Cups",
+    "item_id": "hydroponics/netcup-clean",
+    "entity_type": "quest",
+    "prompt": "Several plastic net cups used for hydroponics are arranged in a sink or shallow basin, with a soft brush scrubbing one cup under a gentle stream of water. The net cup being cleaned has bits of old root material and residue being rinsed away, while the others soak nearby in clean water or a mild sanitizing solution. A pair of nitrile gloves and a small bottle marked only with a colored band (indicating sanitizer, not showing any text) sit on the edge of the sink.\n\nThe image is set in a tidy near-future solarpunk grow lab, with smooth countertops, stainless fixtures, and soft, even lighting that makes the 512×512 scene look photorealistic. Background hints of hydroponic tubs and leafy plants are blurred so the sink, cups, and cleaning action remain the focus. There are no logos or readable words, and the only human features visible are hands and forearms in gloves, emphasizing safe and hygienic preparation of net cups.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_pump_prime.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/pump-prime.json",
+    "item_name": "Prime Water Pump",
+    "item_id": "hydroponics/pump-prime",
+    "entity_type": "quest",
+    "prompt": "A submersible pump sits fully submerged in the corner of a hydroponic reservoir tub filled with clear nutrient solution, with bubbles emerging from its outlet as it pushes water through attached tubing. A gloved hand is gently tilting the pump or squeezing a short priming bulb in the line to release trapped air, ensuring that the pump is fully primed. The tubing arcs up toward the surface and disappears through a small notch in the tub lid, which has a few empty net cup holes visible.\n\nThe environment follows a near-future solarpunk hydroponics aesthetic: bright but soft lighting, clean tub surfaces, and subtle reflections on the water. The 512×512 photorealistic composition centers on the pump and the moving bubbles, with surrounding plants, hoses, and lab furnishings slightly blurred. There are no logos or readable labels anywhere, and the person’s body is out of frame aside from hands and forearms, emphasizing safe, methodical pump priming before continuous operation.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

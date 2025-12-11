@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_tub_scrub.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/tub-scrub.json",
+    "item_name": "Scrub the Grow Tub",
+    "item_id": "hydroponics/tub-scrub",
+    "entity_type": "quest",
+    "prompt": "The inside of an empty hydroponic grow tub is being scrubbed clean with a soft brush, revealing smooth walls as a thin film of residue is washed away by a small stream of rinse water. A gloved hand holds the brush firmly, and a bit of foamy cleaning solution clings to the corners of the tub, while a drain or siphon hose is visible at the bottom carrying away the dirty water. The removed lid with net cup holes rests nearby, showing how the tub is normally covered during operation.\n\nThe scene is set in a polished near-future solarpunk grow lab, with bright, diffuse lighting and clean materials like matte plastic and brushed metal. The 512×512 photorealistic composition centers on the tub interior, brush, and flowing water, with background elements like other tubs, plants, and tools gently blurred. No brand logos or readable text appear anywhere, and only gloved hands and forearms are shown, highlighting safe, thorough cleaning of the reservoir walls to prevent biofilm buildup.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

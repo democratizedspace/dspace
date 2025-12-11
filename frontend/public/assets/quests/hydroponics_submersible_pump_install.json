@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_submersible_pump_install.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/pump-install.json",
+    "item_name": "Install Submersible Pump",
+    "item_id": "hydroponics/pump-install",
+    "entity_type": "quest",
+    "prompt": "The inside of a hydroponic reservoir tub is shown from above, with a compact submersible pump being placed carefully at the bottom by a gloved hand. The pump’s power cable and flexible outlet tubing are neatly routed toward one corner of the tub, where they will exit through a cutout in the lid. The tub walls are clean, and a few net cup openings in the lid are visible at the top of the frame, ready for plants to be added.\n\nThe scene uses a near-future solarpunk hydroponics style: smooth plastic and composite materials, soft neutral colors with green accents, and gentle overhead lighting that keeps the 512×512 image clear and realistic. Background details like a power strip, timer, or controller are visible but softened so the pump and its placement inside the reservoir remain the focal point. No brand logos or visible text appear anywhere, and only the installer’s hands and forearms are shown to highlight the careful installation process.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

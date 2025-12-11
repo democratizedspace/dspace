@@ -2,7 +2,7 @@
     "id": "hydroponics/netcup-clean",
     "title": "Clean Net Cups",
     "description": "Sanitize net cups to keep roots disease-free.",
-    "image": "/assets/quests/hydroponics_tub.jpg",
+    "image": "/assets/quests/hydroponics_netcup_cleaning.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
