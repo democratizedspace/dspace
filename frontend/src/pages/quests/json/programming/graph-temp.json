@@ -2,7 +2,7 @@
     "id": "programming/graph-temp",
     "title": "Graph Temperature Logs",
     "description": "Visualize the data you recorded with temp-logger.",
-    "image": "/assets/quests/programming_graph_temp_logger_output.jpg",
+    "image": "/assets/quests/programming_graph_temperature_data.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

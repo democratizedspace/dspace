@@ -2,7 +2,7 @@
     "id": "programming/temp-logger",
     "title": "Log Temperature Data",
     "description": "Write a simple script that records hourly temperature readings.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_temperature_logger_script.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

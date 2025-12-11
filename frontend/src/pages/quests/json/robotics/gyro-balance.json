@@ -2,7 +2,7 @@
     "id": "robotics/gyro-balance",
     "title": "Balance with a gyroscope",
     "description": "Use a gyroscope and servos to keep a platform upright.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/robotics_gyro_balance_platform.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

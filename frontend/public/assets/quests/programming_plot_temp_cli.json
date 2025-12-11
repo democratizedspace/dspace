@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_plot_temp_cli.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/plot-temp-cli.json",
+    "item_name": "Plot Temperature Data via CLI",
+    "item_id": "programming/plot-temp-cli",
+    "entity_type": "quest",
+    "prompt": "A laptop terminal window is open on a clean desk, showing a Python command being run and a simple ASCII-style confirmation that a temperature log file has been turned into a chart file, while a separate plotting window displays a smooth line chart of temperature over time. The axes are marked with abstract ticks and dots instead of readable text, and a small file icon labeled only with a generic chart symbol sits in a folder view beside the log file icon. A small single-board computer with a thermistor module attached rests near the laptop, implying that the data came from an earlier logging script.\n\nThe scene fits a near-future solarpunk coding workspace: soft ambient lighting, pale desk surfaces, and a couple of plants or renewable-themed decorations blurred in the background. The 512×512 photorealistic composition centers on the terminal, the plot window, and the sensor hardware, with everything else gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only a hand near the keyboard—emphasizing using Python via the command line to convert a temperature log into a line chart.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

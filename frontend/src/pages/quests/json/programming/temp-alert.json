@@ -2,7 +2,7 @@
     "id": "programming/temp-alert",
     "title": "Set Temperature Alert",
     "description": "Write a script that warns you when the sensor crosses a threshold.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_temperature_threshold_alert.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

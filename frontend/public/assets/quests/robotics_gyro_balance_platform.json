@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/robotics_gyro_balance_platform.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/gyro-balance.json",
+    "item_name": "Balance with a gyroscope",
+    "item_id": "robotics/gyro-balance",
+    "entity_type": "quest",
+    "prompt": "A small rectangular platform is mounted on a central pivot or set of narrow legs, with two hobby servos attached underneath controlling its tilt in two axes. On top of the platform sits a compact microcontroller board wired to a tiny gyroscope/IMU breakout, with neatly routed jumper wires between them. The platform is shown balanced nearly level, with a small ball resting calmly in the center, while ghosted positions of the platform at slight angles suggest that the servos are constantly adjusting to keep it upright.\n\nThe scene is a near-future solarpunk robotics workbench: soft directional lighting, pale non-conductive surfaces, and an organized spread of tools and extra sensor boards in the blurred background. The 512×512 photorealistic composition centers on the balancing platform, servos, and gyroscope board, with everything else gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands hovering near the microcontroller—emphasizing the use of a gyroscope and servos to keep a platform stable and upright.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

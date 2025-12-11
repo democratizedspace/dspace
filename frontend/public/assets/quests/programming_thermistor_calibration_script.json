@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_thermistor_calibration_script.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/thermistor-calibration.json",
+    "item_name": "Calibrate a Thermistor",
+    "item_id": "programming/thermistor-calibration",
+    "entity_type": "quest",
+    "prompt": "A breadboard holds a 10 kΩ thermistor in a voltage divider with a precision resistor, wired to an Arduino whose USB cable connects to a laptop. The laptop screen shows an Arduino or Python script where a highlighted section converts raw analog readings into temperature values using a calibration curve or formula, illustrated by a small graph icon with a curved line. On the table nearby, two clear cups of water—one icy, one warm—are used as reference points, and the thermistor probe is shown being moved between them during calibration.\n\nThe scene is a near-future solarpunk electronics-and-coding workspace: soft white lighting, clean non-conductive surfaces, and a few well-organized components and tools blurred in the background. The 512×512 photorealistic composition centers on the thermistor circuit, the script on screen, and the two water baths, with the rest of the desk gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands adjusting the probe—emphasizing accurate temperature measurement using a 10 k thermistor and an Arduino-based script.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

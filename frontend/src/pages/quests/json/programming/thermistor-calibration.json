@@ -2,7 +2,7 @@
     "id": "programming/thermistor-calibration",
     "title": "Calibrate a Thermistor",
     "description": "Use a 10k thermistor to measure temperature accurately with an Arduino script.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_thermistor_calibration_script.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

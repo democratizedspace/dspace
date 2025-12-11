@@ -2,7 +2,7 @@
     "id": "programming/stddev-temp",
     "title": "Compute Temperature Standard Deviation",
     "description": "Extend your script to report the standard deviation of daily temperature readings.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_temperature_stddev.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

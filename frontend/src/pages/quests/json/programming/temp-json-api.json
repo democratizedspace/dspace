@@ -2,7 +2,7 @@
     "id": "programming/temp-json-api",
     "title": "Serve Temperature as JSON",
     "description": "Expose the latest sensor reading at a JSON endpoint.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_temperature_json_api.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

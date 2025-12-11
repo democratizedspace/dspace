@@ -2,7 +2,7 @@
     "id": "programming/web-server",
     "title": "Serve a Web Page",
     "description": "Write a tiny HTTP server that responds with 'Hello, world'.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_minimal_web_server.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

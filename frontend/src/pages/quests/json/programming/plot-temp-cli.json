@@ -2,7 +2,7 @@
     "id": "programming/plot-temp-cli",
     "title": "Plot Temperature Data via CLI",
     "description": "Use Python to turn your temperature log into a line chart.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_plot_temp_cli.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
