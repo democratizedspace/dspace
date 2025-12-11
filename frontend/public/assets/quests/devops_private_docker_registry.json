@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_private_docker_registry.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/private-registry.json",
+    "item_name": "Run a Private Docker Registry",
+    "item_id": "devops/private-registry",
+    "entity_type": "quest",
+    "prompt": "A mini server or Raspberry Pi cluster sits next to a laptop showing a stylized registry dashboard: container image icons are arranged in a private repository rack, with small padlock symbols indicating restricted access, all without readable text. A simple network diagram is sketched on a tablet beside the laptop, showing developer workstations pushing images to the local registry and the registry distributing them to nodes in the cluster. A USB drive or small external SSD lies nearby, hinting at local storage for images.\n\nThe scene is a near-future solarpunk development nook: soft neutral lighting, clean desk surfaces, and a few plants and 3D-printed organizers in the blurred background. The 512×512 photorealistic composition centers on the laptop screen, server, and registry diagram, with surrounding items kept slightly out of focus. No brand logos or legible words appear anywhere, and no human faces are visible—only hands and forearms near the keyboard—conveying the sense of hosting your own secure Docker registry on the cluster.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

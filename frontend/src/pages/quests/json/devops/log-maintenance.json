@@ -2,7 +2,7 @@
     "id": "devops/log-maintenance",
     "title": "Set Up Log Rotation",
     "description": "Prevent logs from filling your server by compressing old files.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_log_rotation.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

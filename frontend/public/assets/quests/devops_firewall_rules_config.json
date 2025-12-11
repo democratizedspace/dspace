@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_firewall_rules_config.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/firewall-rules.json",
+    "item_name": "Configure Firewall Rules",
+    "item_id": "devops/firewall-rules",
+    "entity_type": "quest",
+    "prompt": "A network diagram sketched on a tablet or laptop screen shows a small cluster of servers behind a stylized firewall icon, with only a few green lines passing through labeled as open paths and several red lines blocked, all represented with shapes and icons rather than readable text. On the desk in front of the screen, a compact router and a Raspberry Pi stack sit next to a notepad with port numbers drawn as simple dots arranged in columns, some circled and some crossed out. A pair of Ethernet cables is coiled neatly, hinting at a carefully controlled network.\n\nThe environment features a near-future solarpunk home lab: soft lighting, pale surfaces, and a modest amount of greenery or solar-themed decor in the background. The 512×512 photorealistic composition centers on the diagram and the cluster hardware, with surrounding shelves and cables slightly blurred. No logos or legible text appear anywhere, and no faces are visible—only hands and forearms near the tablet—conveying the sense of thoughtfully locking down network ports to only what is needed.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_k3s_cluster_deploy.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/k3s-deploy.json",
+    "item_name": "Deploy with k3s",
+    "item_id": "devops/k3s-deploy",
+    "entity_type": "quest",
+    "prompt": "A cluster of three or four Raspberry Pis is arranged on a small rack with neat Ethernet connections to a nearby switch, each board glowing with status LEDs. A laptop screen beside the cluster shows a stylized Kubernetes-style dashboard with simple colored boxes representing nodes and pods distributed across them, without any readable labels. A small figurine or badge resembling a minimalist constellation hints at an “Orion” guide watching over the deployment.\n\nThe setting is a near-future solarpunk maker lab: soft, cool lighting, clean white and wood surfaces, and a few plants or 3D-printed tools in the background. The 512×512 photorealistic composition keeps the Pis, switch, and dashboard in focus, with the rest of the room slightly blurred. No brand logos or legible text appear, and no faces are visible—just a hand resting near the keyboard—capturing the feeling of DSPACE running across multiple Pis via k3s in a compact, efficient cluster.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

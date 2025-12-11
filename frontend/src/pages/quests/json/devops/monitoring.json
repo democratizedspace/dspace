@@ -2,7 +2,7 @@
     "id": "devops/monitoring",
     "title": "Set Up Monitoring",
     "description": "Install Prometheus and Grafana to monitor your Pi cluster.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_monitoring_dashboard.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

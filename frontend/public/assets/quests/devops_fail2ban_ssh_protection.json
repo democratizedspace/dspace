@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_fail2ban_ssh_protection.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/fail2ban.json",
+    "item_name": "Block SSH Brute Force",
+    "item_id": "devops/fail2ban",
+    "entity_type": "quest",
+    "prompt": "A compact server or Raspberry Pi sits on a clean desk next to a laptop showing a stylized log viewer: horizontal rows with icons indicating failed login attempts, some highlighted in red and then crossed out by shield icons, all without any readable text. A small padlock figurine or shield symbol rests between the laptop and the server, visually reinforcing the idea of blocking repeated attacks. Ethernet cables run neatly from the device to a small router, suggesting it is exposed but defended.\n\nThe scene is framed in a near-future solarpunk workspace with soft, cool lighting, pale materials, and a hint of greenery in the background. The 512×512 photorealistic composition keeps the laptop screen and server as the main focal points, with cables and peripherals slightly blurred. No brand logos or legible words appear anywhere, and no faces are visible—only a hand hovered near the keyboard at most—emphasizing the quiet, automated protection provided by a Fail2ban-style SSH brute-force defense.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

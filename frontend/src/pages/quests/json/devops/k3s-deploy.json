@@ -2,7 +2,7 @@
     "id": "devops/k3s-deploy",
     "title": "Deploy with k3s",
     "description": "Orion teaches you how to run DSPACE across multiple Pis with k3s.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_k3s_cluster_deploy.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

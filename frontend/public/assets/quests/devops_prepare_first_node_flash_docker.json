@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_prepare_first_node_flash_docker.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/prepare-first-node.json",
+    "item_name": "Prepare the First Node",
+    "item_id": "devops/prepare-first-node",
+    "entity_type": "quest",
+    "prompt": "A laptop on a desk shows a stylized OS flashing tool window with a simple progress bar, while a USB card reader with a microSD card inserted is plugged into the side. Next to the laptop, a single Raspberry Pi board waits on an anti-static mat, along with a small SSD or USB drive that will later host containers. A notepad sketch illustrates the first node’s role with a simple box diagram and a container icon labeled only with a generic whale-shaped symbol, avoiding readable text.\n\nThe environment is a tidy near-future solarpunk workspace: soft lighting, organized cables, and a subtle mix of white, metal, and pale wood surfaces, with a small plant adding a touch of green. The 512×512 photorealistic composition keeps the laptop, card reader, and Pi in focus, with background elements like shelves and tools softly blurred. No brand logos or legible words appear, and no faces are visible—just hands near the keyboard—evoking the careful process of flashing the OS and preparing the first node for Docker under an expert guide.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -2,7 +2,7 @@
     "id": "devops/prepare-first-node",
     "title": "Prepare the First Node",
     "description": "Flash the OS and install Docker under Orion's guidance.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_prepare_first_node_flash_docker.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

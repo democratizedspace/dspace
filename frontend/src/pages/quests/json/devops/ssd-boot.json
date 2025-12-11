@@ -2,7 +2,7 @@
     "id": "devops/ssd-boot",
     "title": "Boot from SSD",
     "description": "Clone the OS to an SSD and enable M.2 boot.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_pi_ssd_boot.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
