@@ -1430,26 +1430,6 @@
         "price": "5 dUSD"
     },
     {
-        "id": "7c811503-d0ca-4254-825a-ebeb06a88231",
-        "name": "pH down solution (500 mL)",
-        "description": "500 mL bottle of phosphoric acid to lower hydroponic nutrient pH; includes dropper.",
-        "image": "/assets/ph_down_solution_500ml_bottle.jpg",
-        "price": "10 dUSD",
-        "unit": "bottle",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-14",
-                    "date": "2025-08-14",
-                    "score": 65
-                }
-            ]
-        }
-    },
-    {
         "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
         "name": "pH up solution (potassium carbonate)",
         "description": "Alkaline solution used to raise nutrient solution pH.",
