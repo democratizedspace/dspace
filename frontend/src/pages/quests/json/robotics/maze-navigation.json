@@ -2,7 +2,7 @@
     "id": "robotics/maze-navigation",
     "title": "Navigate a Simple Maze",
     "description": "Program your robot to drive through a basic maze layout.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/robot_maze_navigation.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

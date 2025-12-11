@@ -2,7 +2,7 @@
     "id": "robotics/servo-arm",
     "title": "Assemble a Servo Arm",
     "description": "Build a simple arm that can lift light objects.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/simple_servo_robot_arm.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

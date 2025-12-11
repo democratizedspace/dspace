@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/robot_obstacle_avoidance.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/obstacle-avoidance.json",
+    "item_name": "Add Obstacle Avoidance",
+    "item_id": "robotics/obstacle-avoidance",
+    "entity_type": "quest",
+    "prompt": "A compact two-wheeled mobile robot rolls across a smooth floor toward a small cardboard box, but its front-mounted ultrasonic or infrared distance sensor is clearly pointed at the obstacle, indicating it is about to steer around it. The robot has a tidy chassis with a visible microcontroller board, a battery pack, and the sensor module on a short bracket at the front. The trajectory is suggested by the slight turn of its wheels, showing that the robot is changing direction to avoid the object.\n\nThe scene takes place in a bright solarpunk living room or lab, with large windows, green plants, and minimalistic furniture in the background. Soft, natural light streams in, casting gentle shadows and giving the photorealistic 512×512 image a calm, near-future feel. There are no brand logos or textual overlays, and the composition is clean so that the relationship between the robot and the obstacle is immediately clear.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

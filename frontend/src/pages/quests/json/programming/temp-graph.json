@@ -2,7 +2,7 @@
     "id": "programming/temp-graph",
     "title": "Graph Temperature Data",
     "description": "Plot the values from your logger to visualize trends over time.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/temperature_log_line_chart.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
