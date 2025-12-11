@@ -2,7 +2,7 @@
     "id": "firstaid/restock-kit",
     "title": "Restock Your First Aid Kit",
     "description": "Replace used supplies so you're ready for emergencies.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/firstaid_restock_kit_supplies.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

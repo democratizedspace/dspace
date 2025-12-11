@@ -2,7 +2,7 @@
     "id": "firstaid/treat-burn",
     "title": "Treat a Minor Burn",
     "description": "Cool and dress a small burn so it heals cleanly.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/firstaid_treat_minor_burn.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

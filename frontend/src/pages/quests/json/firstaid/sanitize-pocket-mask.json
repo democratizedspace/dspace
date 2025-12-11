@@ -2,7 +2,7 @@
     "id": "firstaid/sanitize-pocket-mask",
     "title": "Sanitize Your CPR Pocket Mask",
     "description": "Clean and disinfect your CPR mask so it's safe for the next emergency.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/firstaid_sanitize_cpr_pocket_mask.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

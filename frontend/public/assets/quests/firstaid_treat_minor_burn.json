@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/firstaid_treat_minor_burn.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/treat-burn.json",
+    "item_name": "Treat a Minor Burn",
+    "item_id": "firstaid/treat-burn",
+    "entity_type": "quest",
+    "prompt": "At a kitchen-style sink, a person is holding their own hand or forearm under a gentle stream of cool running water, with a small, clearly localized reddened area visible but no broken skin or severe injury. A timer or watch is nearby to suggest rinsing for several minutes, and on the counter sit sterile nonstick dressings, adhesive tape, and wrapped antiseptic wipes ready to be applied once cooling is complete. A compact first aid kit stands open in the background, indicating that these supplies came from it.\n\nThe environment is a near-future solarpunk home kitchen or bathroom: soft natural and LED lighting, pale surfaces, and a small plant or two in the blurred background to keep the scene calm and non-threatening. The 512×512 photorealistic composition focuses on the running water, the minor burn area, and the arranged dressings, with plumbing fixtures and decor gently out of focus. No brand logos or legible text appear anywhere, and no faces are shown—only hands and arms—emphasizing safe, simple care for a small burn without depicting anything graphic.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

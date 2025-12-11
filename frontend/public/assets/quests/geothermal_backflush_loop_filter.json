@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_backflush_loop_filter.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/backflush-loop-filter.json",
+    "item_name": "Backflush Loop Filter",
+    "item_id": "geothermal/backflush-loop-filter",
+    "entity_type": "quest",
+    "prompt": "A sturdy plastic bucket or tub is filled with clear water, and a compact submersible pump sits at the bottom, connected via flexible hoses to a cylindrical geothermal loop filter resting above the bucket on a stand. One hose runs from the pump outlet into the filter inlet, while another hose carries cloudy water exiting the filter back into the bucket, visibly washing out trapped debris. A gloved hand is steadying the filter housing, and a small set of basic tools lies nearby in case the housing needs to be opened for inspection.\n\nThe scene is set in a near-future solarpunk utility area or garage: soft, practical lighting, concrete or sealed flooring, and glimpses of other renewable-energy gear like coiled tubing or a small heat pump in the blurred background. The 512×512 photorealistic composition centers on the pump, hoses, and filter, with the bucket and surrounding equipment slightly out of focus. No logos or legible text appear anywhere, and no faces are visible—only hands and forearms—highlighting the process of backflushing a geothermal loop filter with a submersible pump.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

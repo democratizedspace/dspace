@@ -2,7 +2,7 @@
     "id": "geothermal/calibrate-ground-sensor",
     "title": "Calibrate Ground Sensor",
     "description": "Use ice and boiling water to calibrate your thermistor before burying it.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_calibrate_ground_thermistor_sensor.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/firstaid_sanitize_cpr_pocket_mask.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/sanitize-pocket-mask.json",
+    "item_name": "Sanitize Your CPR Pocket Mask",
+    "item_id": "firstaid/sanitize-pocket-mask",
+    "entity_type": "quest",
+    "prompt": "A CPR pocket mask and its hard carrying case are placed on a clean countertop beside a bottle of surface-safe disinfectant and a stack of disposable wipes. A person wearing nitrile gloves is carefully wiping down the mask’s contact surfaces, including the one-way valve assembly, while the case sits open to air dry. A small first aid kit is visible in the background, and a soft towel or drying pad lies under the mask to keep everything organized and off the bare surface.\n\nThe environment is a near-future solarpunk home or training space with soft lighting, pale materials, and subtle greenery or natural textures blurred in the background. The 512×512 photorealistic composition focuses on the mask, wipes, and gloved hands performing the cleaning, with surrounding items gently out of focus. No brand logos or legible text are present anywhere, and no faces are shown—only hands and forearms—highlighting the safe, methodical sanitizing of a CPR pocket mask between uses.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

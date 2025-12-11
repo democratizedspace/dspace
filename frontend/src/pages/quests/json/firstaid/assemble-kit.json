@@ -2,7 +2,7 @@
     "id": "firstaid/assemble-kit",
     "title": "Assemble a First Aid Kit",
     "description": "Assemble a basic first aid kit so you're ready for minor injuries.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/firstaid_assemble_basic_kit.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

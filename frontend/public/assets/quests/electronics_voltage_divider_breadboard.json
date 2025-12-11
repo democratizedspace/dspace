@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_voltage_divider_breadboard.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/voltage-divider.json",
+    "item_name": "Build a Voltage Divider",
+    "item_id": "electronics/voltage-divider",
+    "entity_type": "quest",
+    "prompt": "A solderless breadboard holds a simple voltage divider circuit: a 220 Ω resistor and a 10 kΩ resistor are connected in series between a clearly labeled 5 V rail and ground rail, with a jumper wire connected at the junction between them to tap the mid-point voltage. A compact low-voltage supply or battery pack feeds the rails, and a digital multimeter probe is gently touching the junction point while the other probe sits on ground, confirming that the split is around half of the original 5 V. The resistor color bands are clearly visible and distinct so the values can be recognized.\n\nThe scene is set in a near-future solarpunk electronics lab with soft, even lighting, clean non-conductive surfaces, and neatly organized components in the blurred background. The 512×512 photorealistic composition centers on the breadboard and the two resistors, with the meter, power source, and surrounding tools slightly out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only a hand and forearm near the probes—highlighting the clarity of a basic voltage divider circuit built on a breadboard.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
