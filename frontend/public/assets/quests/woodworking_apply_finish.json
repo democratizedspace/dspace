@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_apply_finish.jpg",
+    "entity": "frontend/src/pages/quests/json/woodworking/apply-finish.json",
+    "item_name": "Apply a Wood Finish",
+    "item_id": "woodworking/apply-finish",
+    "entity_type": "quest",
+    "prompt": "A freshly built wooden tabletop lies on a sturdy workbench, its grain clearly visible as a wide natural-bristle brush lays down a smooth coat of clear finish along the surface. The edges of the board are slightly rounded, and a small open can of finish sits nearby with a gentle reflection of light on the liquid. In the background, clamps, neatly stacked boards, and a few hand tools are softly out of focus, emphasizing that this is the last protective step on a completed project rather than rough construction.\n\nThe scene is set in a clean near-future woodworking shop with a solarpunk aesthetic: warm diffuse lighting, pale wood and matte metal surfaces, and subtle high-tech details like a compact dust collection hose and an unobtrusive air-quality sensor on the wall. The 512×512 image is photorealistic, centering on the brush, finish, and glowing wood surface, with no brand logos or readable text anywhere. Only gloved hands and forearms are visible, keeping the focus on the calm, careful act of sealing the project with a protective coat.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

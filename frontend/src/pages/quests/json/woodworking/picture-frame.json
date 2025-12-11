@@ -2,7 +2,7 @@
     "id": "woodworking/picture-frame",
     "title": "Craft a Picture Frame",
     "description": "Make a simple frame to showcase your favorite photo.",
-    "image": "/assets/quests/door.jpg",
+    "image": "/assets/quests/woodworking_picture_frame_craft.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [

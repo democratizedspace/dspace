@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_coffee_table_build.jpg",
+    "entity": "frontend/src/pages/quests/json/woodworking/coffee-table.json",
+    "item_name": "Build a coffee table",
+    "item_id": "woodworking/coffee-table",
+    "entity_type": "quest",
+    "prompt": "A low rectangular coffee table is under construction on a workbench, with its four legs attached to a sturdy top and a simple lower stretcher or shelf being positioned between the legs. The design is clean and modern, with straight lines and slightly softened edges, and a few layout lines are still lightly visible in pencil on the underside. A drill, some wood screws, and a clamp or two rest nearby, showing that the table is mid-build but structurally clear.\n\nThe workshop has a near-future solarpunk vibe: warm, diffuse lighting, pale wood tones, and a neatly organized wall of tools behind the bench. A glimpse of a cozy living space or seating area is suggested through a doorway or window in the background, hinting at where the finished table will live. The 512×512 photorealistic composition centers on the coffee table and the hands aligning the lower stretcher, with no brand logos or readable text anywhere and all faces kept out of frame.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

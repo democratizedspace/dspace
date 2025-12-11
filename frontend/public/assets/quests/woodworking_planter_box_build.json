@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_planter_box_build.jpg",
+    "entity": "frontend/src/pages/quests/json/woodworking/planter-box.json",
+    "item_name": "Build a Planter Box",
+    "item_id": "woodworking/planter-box",
+    "entity_type": "quest",
+    "prompt": "A rectangular wooden planter box is being assembled on a workbench from weather-resistant boards, with the side panels and bottom already joined and the end pieces being positioned. The box is proportioned to sit comfortably on a balcony or in a small yard, and a few small drainage holes are visible along the bottom edge. Nearby, there are a bag of soil, a small trowel, and a few herb seedlings in tiny pots, hinting at the box’s future role as a home for herbs.\n\nThe workshop is bright and airy with a near-future solarpunk aesthetic: sunlight filters through a window onto pale wood and matte metal surfaces, and a glimpse of greenery is visible just outside. The 512×512 photorealistic composition focuses on the planter box and assembly tools, while background elements like clamps, racks, and other projects remain soft and unobtrusive. No logos or readable text appear anywhere, and only hands and arms are visible, showing careful construction of the planter that will soon host living plants.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

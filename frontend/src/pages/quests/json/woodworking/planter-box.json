@@ -2,7 +2,7 @@
     "id": "woodworking/planter-box",
     "title": "Build a Planter Box",
     "description": "Cedar guides you through crafting a simple planter for herbs.",
-    "image": "/assets/quests/door.jpg",
+    "image": "/assets/quests/woodworking_planter_box_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [

@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/woodworking_finish_sanding.jpg",
+    "entity": "frontend/src/pages/quests/json/woodworking/finish-sanding.json",
+    "item_name": "Finish Sand Your Project",
+    "item_id": "woodworking/finish-sanding",
+    "entity_type": "quest",
+    "prompt": "A nearly completed wooden project panel is being sanded with a fine-grit sanding block on a workbench, with smooth curls of dust collecting along the grain. The surface already looks even and clean, and the sanding strokes are light, indicating this is a final pass before finish. A stack of labeled-but-unreadable sandpaper sheets with different grits, a dust mask, and a small vacuum hose or dust extractor nozzle are nearby, emphasizing attention to detail and safety.\n\nThe setting is a tidy near-future woodworking shop with solarpunk elements: air-filtration vents, organized storage, and soft, warm overhead lighting that creates gentle highlights on the wood. The 512×512 photorealistic composition focuses on the sanding block and the luminous wood surface, with background tools and fixtures subtly blurred. No logos or readable text appear, and only hands and forearms are shown, capturing the quiet, focused moment of finish sanding before applying a protective coat.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}
