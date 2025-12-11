@@ -1287,7 +1287,8 @@
         "name": "antiseptic wipes",
         "description": "Pre-moistened wipes that kill germs before bandaging.",
         "image": "/assets/antiseptic_wipes_packet_open.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "0.15 dUSD",
+        "unit": "each"
     },
     {
         "id": "0dde854e-7fcb-40ac-88ea-9afd9196f856",
