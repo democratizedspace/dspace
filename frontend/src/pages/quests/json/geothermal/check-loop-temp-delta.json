@@ -2,7 +2,7 @@
     "id": "geothermal/check-loop-temp-delta",
     "title": "Check Loop Temperature Delta",
     "description": "Use two thermistors with an Arduino to compare loop inlet and outlet temps.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_check_loop_temp_delta_dual_thermistors.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

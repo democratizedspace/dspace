@@ -2,7 +2,7 @@
     "id": "geothermal/purge-loop-air",
     "title": "Purge Air from Ground Loop",
     "description": "Use a submersible pump to flush out trapped bubbles from your geothermal loop.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_purge_air_from_ground_loop.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

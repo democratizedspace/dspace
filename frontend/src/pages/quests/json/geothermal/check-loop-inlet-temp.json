@@ -2,7 +2,7 @@
     "id": "geothermal/check-loop-inlet-temp",
     "title": "Check Loop Inlet Temperature",
     "description": "Use an Arduino to log the water temperature entering the heat pump.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_check_loop_inlet_temp_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

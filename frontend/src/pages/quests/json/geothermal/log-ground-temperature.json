@@ -2,7 +2,7 @@
     "id": "geothermal/log-ground-temperature",
     "title": "Log Ground Temperature",
     "description": "Use a buried thermistor with Arduino to monitor ground temperature over time.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_log_ground_temperature_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

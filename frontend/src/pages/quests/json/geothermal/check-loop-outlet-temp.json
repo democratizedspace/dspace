@@ -2,7 +2,7 @@
     "id": "geothermal/check-loop-outlet-temp",
     "title": "Check Loop Outlet Temperature",
     "description": "Log the water temperature leaving the heat pump with an Arduino thermistor.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_check_loop_outlet_temp_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

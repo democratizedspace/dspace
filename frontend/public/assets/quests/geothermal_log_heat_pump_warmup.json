@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_log_heat_pump_warmup.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/log-heat-pump-warmup.json",
+    "item_name": "Log Heat Pump Warmup",
+    "item_id": "geothermal/log-heat-pump-warmup",
+    "entity_type": "quest",
+    "prompt": "Inside a geothermal mechanical room, an Arduino-based logger is attached to both the inlet and outlet pipes of a heat pump using two thermistor probes strapped to the insulated lines. A nearby display or laptop shows a stylized chart where one or both temperature lines rapidly rise and then level off after the system starts, clearly conveying a warmup curve but with no readable text or numbers. A gloved hand is reaching toward the heat pump’s power switch or control panel, suggesting the moment of startup that begins the logging session.\n\nThe environment is a near-future solarpunk utility space: soft, even lighting; tidy, labeled but non-readable piping; and other renewable energy hardware faintly visible in the background. The 512×512 photorealistic composition focuses on the sensors, logger, and chart, with the rest of the room gently blurred. No brand logos or legible text appear anywhere, and no faces are visible—only hands and forearms—emphasizing the process of tracking how quickly loop temperature rises after the heat pump is turned on.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

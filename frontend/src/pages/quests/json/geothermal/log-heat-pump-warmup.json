@@ -2,7 +2,7 @@
     "id": "geothermal/log-heat-pump-warmup",
     "title": "Log Heat Pump Warmup",
     "description": "Track how quickly the loop temperature rises after startup.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_log_heat_pump_warmup.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

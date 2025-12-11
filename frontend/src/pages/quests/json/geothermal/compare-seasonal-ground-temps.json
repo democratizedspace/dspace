@@ -2,7 +2,7 @@
     "id": "geothermal/compare-seasonal-ground-temps",
     "title": "Compare Seasonal Ground Temps",
     "description": "Use a second thermistor to log ground temperatures in different seasons.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_compare_seasonal_ground_temps.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

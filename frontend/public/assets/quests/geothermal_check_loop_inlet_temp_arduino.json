@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_check_loop_inlet_temp_arduino.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/check-loop-inlet-temp.json",
+    "item_name": "Check Loop Inlet Temperature",
+    "item_id": "geothermal/check-loop-inlet-temp",
+    "entity_type": "quest",
+    "prompt": "A small geothermal heat pump system is shown in a utility room, with insulated water pipes entering the unit. Near the inlet pipe, a waterproof thermistor probe is strapped securely against the copper or PEX line with thermal paste and zip ties, and its cable runs back to an Arduino mounted on a nearby panel with a small breadboard. A laptop or compact display shows a stylized scrolling temperature graph with no readable text, indicating that the inlet water temperature is being logged over time.\n\nThe environment follows a near-future solarpunk utility aesthetic: soft, practical lighting, tidy pipe runs, and a few other renewable energy elements such as a small manifold or pressure tank visible in soft focus. The 512×512 photorealistic composition centers on the inlet pipe, sensor, and Arduino, with the heat pump cabinet and background equipment slightly blurred. No brand logos or legible text appear anywhere, and no faces are visible—only hands near the wiring at most—emphasizing safe, methodical logging of loop inlet temperature.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

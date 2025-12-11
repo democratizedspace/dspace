@@ -2,7 +2,7 @@
     "id": "geothermal/compare-depth-ground-temps",
     "title": "Compare Depth Ground Temps",
     "description": "Bury two thermistors at different depths and log their readings for a day.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_compare_depth_ground_temps.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
