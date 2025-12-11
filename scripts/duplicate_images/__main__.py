@@ -82,7 +82,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         usages = collect_image_references(args.quests_dir, args.items_dir, args.root)
         duplicates = find_duplicates(usages)
-        identical_files = find_identical_files(usages.keys(), args.root)
+        identical_files = find_identical_files(usages, args.root)
 
         if args.json:
             output = json.dumps(
