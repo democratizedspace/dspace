@@ -2,7 +2,7 @@
     "id": "electronics/servo-sweep",
     "title": "Sweep a Servo",
     "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0° to 180°.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_servo_sweep_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

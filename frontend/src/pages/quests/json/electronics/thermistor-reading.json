@@ -2,7 +2,7 @@
     "id": "electronics/thermistor-reading",
     "title": "Read a Thermistor",
     "description": "Wire a thermistor to your Arduino and log temperature values.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_thermistor_reading_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

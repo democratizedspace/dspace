@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_resistor_color_band_check.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/resistor-color-check.json",
+    "item_name": "Verify resistor color bands",
+    "item_id": "electronics/resistor-color-check",
+    "entity_type": "quest",
+    "prompt": "A few through-hole resistors are neatly lined up on a dry, non-conductive mat, with one resistor held closer to the viewer in a pair of tweezers so its four colored bands are clearly visible and in focus. Beside the components lies a small printed resistor color code chart rendered as colored stripes and circles without readable numbers or letters, making it obvious that the user is matching band patterns to values. A pencil and notepad with handwritten stripes and approximate ohm symbols reinforce that the values are being decoded before installation.\n\nThe environment is a near-future solarpunk electronics desk: soft diffuse lighting, pale surfaces, and small storage bins of components in the blurred background. The 512×512 photorealistic composition centers on the highlighted resistor and the abstract color chart, with surrounding items gently out of focus. There are no brand logos or legible text anywhere, and no faces—only a hand holding the tweezers—emphasizing the careful process of verifying resistor values by their color bands.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

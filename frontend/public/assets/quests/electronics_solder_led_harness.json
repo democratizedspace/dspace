@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_solder_led_harness.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/solder-led-harness.json",
+    "item_name": "Solder an LED Harness",
+    "item_id": "electronics/solder-led-harness",
+    "entity_type": "quest",
+    "prompt": "On a ventilated electronics workbench, a 5 mm LED and a 220 Ω resistor are being soldered inline between two pre-stripped jumper wires, forming a compact harness. One gloved hand holds the twisted joint steady with tweezers while the other guides a soldering iron tip and feeds in a small amount of solder, creating a shiny, smooth connection. Nearby on the dry non-conductive mat are a spool of solder, a brass tip cleaner, and a small fan or fume extractor pulling smoke away from the work area; the LED’s polarity is clearly respected with the resistor on the correct lead.\n\nThe environment has a near-future solarpunk lab vibe: soft bright lighting, neat organization of tools and components, and a few plants or natural textures just visible in the blurred background. The 512×512 photorealistic composition centers on the joint being soldered, the LED body, resistor, and jumper insulation colors all clearly distinguishable. No brand logos or legible text appear anywhere, and no faces are visible—only safety goggles, hands, and forearms—highlighting careful, ventilated soldering of an LED harness.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

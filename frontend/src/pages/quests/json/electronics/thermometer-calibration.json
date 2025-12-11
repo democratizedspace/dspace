@@ -2,7 +2,7 @@
     "id": "electronics/thermometer-calibration",
     "title": "Calibrate a Thermometer",
     "description": "Use water baths to verify your thermometer's accuracy.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_thermometer_calibration_water_baths.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

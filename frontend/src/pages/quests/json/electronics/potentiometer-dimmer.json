@@ -29,7 +29,7 @@
             }
         ]
     },
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_potentiometer_led_dimmer.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

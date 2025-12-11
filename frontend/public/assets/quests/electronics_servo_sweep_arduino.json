@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_servo_sweep_arduino.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/servo-sweep.json",
+    "item_name": "Sweep a Servo",
+    "item_id": "electronics/servo-sweep",
+    "entity_type": "quest",
+    "prompt": "A small plastic hobby servo is mounted on a non-conductive platform, with its three-wire cable connected to an Arduino on a nearby breadboard. A simple cardboard or plastic pointer is attached to the servo horn, and multiple faint ghosted positions are suggested in the background, showing it sweeping from 0° to 180°. A laptop off to the side displays a stylized code editor with a highlighted block of servo control code, though all text is rendered as abstract lines.\n\nThe scene fits a near-future solarpunk lab: soft lighting, clean work surfaces, and a few 3D-printed brackets and spare servos stored in the blurred background. The 512×512 photorealistic composition focuses on the servo, pointer, and Arduino wiring, with the laptop and tools providing context while staying slightly out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands near the board or servo—conveying the feel of using an example sketch to sweep a servo smoothly through its range.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
