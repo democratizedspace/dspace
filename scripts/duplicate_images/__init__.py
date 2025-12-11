@@ -242,11 +242,11 @@ def format_duplicates(
         for digest in sorted(identical_files):
             lines.append(f"hash {digest}:")
             for path in sorted(identical_files[digest]):
-                lines.append(f"  - {path}")
                 references = sorted(
                     all_references.get(path, []),
                     key=lambda ref: (ref.source, ref.display_path(), ref.identifier),
                 )
+                lines.append(f"  - {path} ({len(references)} uses)")
                 for reference in references:
                     if reference.name:
                         lines.append(
