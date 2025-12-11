@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_gravel_bag_1kg.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "aquarium gravel (1 kg)",
+    "item_id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
+    "entity_type": "item",
+    "prompt": "A clear plastic 1 kg bag of washed river gravel rests on a table beside a small glass aquarium. Through the bag, you can see smooth 5–10 mm stones in natural browns, grays, and tans, with a small portion of the gravel poured out into a shallow dish to show the size and texture more clearly. A faint rinse of water in the dish suggests that the gravel has been washed and is ready to be used as aquarium substrate after a final quick rinse.\n\nThe scene is set in a near-future solarpunk home aquarium corner: soft natural light, a few aquatic plants waiting in cups, and a clean, minimal stand for the tank. The 512×512 image is photorealistic with gentle stylization, no brand logos or readable text on the bag, and a composition that centers the gravel bag and small pile of stones while the aquarium and surroundings remain softly blurred in the background.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

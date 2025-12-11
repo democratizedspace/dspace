@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/5_gallon_hdpe_bucket.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "5 gallon bucket",
+    "item_id": "0564d441-7367-412e-b709-dad770814a39",
+    "entity_type": "item",
+    "prompt": "A white 19 L (5 gal) high-density polyethylene bucket with a sturdy metal handle sits on a concrete or workshop floor. The bucket\u2019s rim is reinforced, and the handle has a simple plastic grip, making it look comfortable for carrying liquids or bulk materials. The sides are plain and unbranded, and a faint waterline inside suggests that it is commonly used to haul water, cleaning solution, or other fluids.\n\nThe environment is a near-future solarpunk utility area with soft, natural-looking light, a hose reel or faucet in the background, and neatly organized tools or containers on shelves. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the bucket, and a composition that centers the bucket and handle while the rest of the utility space remains softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

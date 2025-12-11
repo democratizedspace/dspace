@@ -168,7 +168,7 @@
         "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
         "name": "aquarium gravel (1 kg)",
         "description": "1 kg bag of washed 5–10 mm river gravel for aquarium substrate; rinse before use.",
-        "image": "/assets/gravel.jpg",
+        "image": "/assets/aquarium_gravel_bag_1kg.jpg",
         "price": "1 dUSD",
         "unit": "kg",
         "hardening": {
@@ -262,7 +262,7 @@
         "id": "60e517b4-5807-4983-afb8-e2aad1566587",
         "name": "Airline tubing",
         "description": "2 m of 4 mm inner diameter clear PVC tubing for aquarium air pumps or drip acclimation.",
-        "image": "/assets/bucket.jpg",
+        "image": "/assets/aquarium_airline_tubing_2m.jpg",
         "price": "2 dUSD",
         "unit": "2 m coil",
         "hardening": {
@@ -396,7 +396,7 @@
         "id": "97317bc3-507a-4e2c-912b-507d586cee87",
         "name": "gravel vacuum",
         "description": "Self-priming siphon with 2 m (6.5 ft) hose and 4 cm (1.6 in) tube; moves ~3 L/min to clear debris.",
-        "image": "/assets/gravel.jpg",
+        "image": "/assets/aquarium_gravel_vacuum_siphon.jpg",
         "price": "10 dUSD",
         "hardening": {
             "passes": 2,

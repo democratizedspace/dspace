@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/print_removal_scraper_tool.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "print removal scraper",
+    "item_id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4",
+    "entity_type": "item",
+    "prompt": "A thin spring-steel print removal scraper with a wide, flat blade and an ergonomic handle is shown sliding under the edge of a 3D print on a build plate. The blade is flexible and slightly beveled, clearly thin enough to lift parts without gouging the surface, and the handle is shaped for a comfortable, secure grip with no branding or text. A partially lifted rectangular print demonstrates how the tool is used to gently pop prints free.\n\nThe scene is a near-future solarpunk maker space with a 3D printer occupying the background, soft overhead lighting, and neatly organized tools nearby. The 512×512 image is photorealistic with gentle stylization, no logos or legible markings on the scraper or printer, and a composition that focuses on the blade slipping under the print edge while the rest of the printer and workspace fades into a soft blur.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

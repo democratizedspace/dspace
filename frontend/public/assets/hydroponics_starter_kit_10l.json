@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydroponics_starter_kit_10l.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "hydroponics kit",
+    "item_id": "92261497-d605-4db1-8710-953cf73d765c",
+    "entity_type": "item",
+    "prompt": "A compact hydroponics starter kit is laid out on a work surface: a 10 L rectangular reservoir with a fitted lid, a small submersible pump, lengths of clear tubing, and several net pots arranged neatly beside it. The lid has circular cutouts ready for the net pots, and the pump’s cable and tubing are coiled in a tidy way that suggests an easy first-time setup. No plants are present yet, emphasizing that this is a starter kit waiting to be assembled and planted.\n\nThe scene is a bright near-future solarpunk indoor garden corner with soft, diffused light, a couple of mature plants in the background, and perhaps a small grow light or sensor module visible in soft focus. The 512×512 image is photorealistic with gentle stylization, no logos or text on any components, and a composition that keeps the reservoir, pump, tubing, and net pots clearly visible as a complete starter kit while the surrounding space remains pleasantly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

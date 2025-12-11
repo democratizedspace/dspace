@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_airline_tubing_2m.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Airline tubing",
+    "item_id": "60e517b4-5807-4983-afb8-e2aad1566587",
+    "entity_type": "item",
+    "prompt": "A neatly coiled length of clear PVC airline tubing lies on a table next to a small glass aquarium, showing its 4 mm inner diameter and flexible, kink-free shape. The coil is about 2 meters long, with both cut ends visible, ready to connect between an air pump and an air stone or drip acclimation setup. In the background, an air pump, a sponge filter, or a hanging bag of acclimating fish suggests the typical uses for this tubing in an aquarium environment.\n\nThe scene is set in a near-future solarpunk home aquarium corner with soft, diffused lighting, healthy aquatic plants in the tank, and a few neatly organized accessories on a nearby shelf. The 512×512 image is photorealistic with gentle stylization, no logos or text on the tubing or gear, and a composition that keeps the coiled airline tubing as the clear focal point while the aquarium and equipment remain softly blurred behind it.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

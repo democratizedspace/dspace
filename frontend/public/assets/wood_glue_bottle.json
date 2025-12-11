@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/wood_glue_bottle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Wood glue",
+    "item_id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+    "entity_type": "item",
+    "prompt": "A plastic bottle of wood glue with a tapered applicator tip stands on a workbench beside two clamped wooden boards, a thin bead of glue visible squeezed along the joint line. A small droplet is frozen at the tip, showing that it has just been used to bond the pieces together. The bottle’s label is simple and icon-based, with no readable text, making it clear that this is a dedicated adhesive for wood rather than a generic glue.\n\nThe scene is a near-future solarpunk woodworking space with soft, even lighting, clean walls, and organized clamps and tools hanging behind the bench. The 512×512 image is photorealistic with gentle stylization, no logos or legible labels on the bottle, and a composition that focuses on the glue bottle and clamped boards while the rest of the shop remains softly out of focus, emphasizing careful, safe assembly work.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
