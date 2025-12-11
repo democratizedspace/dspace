@@ -2,7 +2,7 @@
     "id": "hydroponics/nutrient-check",
     "title": "Refresh Nutrient Solution",
     "description": "Top off your hydroponic tub with fresh nutrients while keeping yourself and the plants safe.",
-    "image": "/assets/quests/hydroponics_nutrients.jpg",
+    "image": "/assets/quests/hydroponics_nutrient_solution_refresh.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

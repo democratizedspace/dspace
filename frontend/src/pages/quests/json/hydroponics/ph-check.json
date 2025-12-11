@@ -2,7 +2,7 @@
     "id": "hydroponics/ph-check",
     "title": "Check Solution pH",
     "description": "Measure the nutrient bath's pH and correct it to keep plants happy.",
-    "image": "/assets/quests/hydroponics_nutrients.jpg",
+    "image": "/assets/quests/hydroponics_solution_ph_check.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

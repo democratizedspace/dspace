@@ -2,7 +2,7 @@
     "id": "hydroponics/top-off",
     "title": "Top Off the Reservoir",
     "description": "Add fresh water to keep nutrient levels stable.",
-    "image": "/assets/quests/hydroponics_tub.jpg",
+    "image": "/assets/quests/hydroponics_reservoir_top_off.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

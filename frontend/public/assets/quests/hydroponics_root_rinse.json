@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_root_rinse.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/root-rinse.json",
+    "item_name": "Rinse the Roots",
+    "item_id": "hydroponics/root-rinse",
+    "entity_type": "quest",
+    "prompt": "A cluster of healthy plant roots is lifted gently from a hydroponic net cup, dangling over a basin or sink while a gentle stream of clean water rinses away accumulated salts. The roots are pale and fibrous, with a few bits of residue washing off into the basin, and the plant’s green stem and leaves are visible at the top of the frame. Nearby, a hydroponic tub or lid is visible, indicating that the plant has been temporarily removed for maintenance.\n\nThe setting is a bright near-future solarpunk grow lab, with soft white lighting that makes the roots and water flow appear crisp and detailed at 512×512 resolution. Background hydroponic gear, other plants, and lab fixtures are slightly out of focus so the rinsing action is clearly emphasized. No brand logos or readable text appear anywhere, and only gloved hands and forearms are visible, reinforcing safe and careful handling of the root zone.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

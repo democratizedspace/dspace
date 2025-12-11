@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_reservoir_top_off.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/top-off.json",
+    "item_name": "Top Off the Reservoir",
+    "item_id": "hydroponics/top-off",
+    "entity_type": "quest",
+    "prompt": "An open hydroponic reservoir tub shows its nutrient solution level slightly below a subtle internal mark, and a clear pitcher of plain water is being poured in to bring the level back up. The liquid stream is clearly visible, and the surface of the solution ripples gently as it rises. Net cups planted with leafy greens sit in the lid above, with their stems and leaves visible while their roots remain concealed within the tub.\n\nThe image takes place in a near-future solarpunk grow room with soft, even lighting and clean, minimal furnishings. The 512×512 photorealistic composition keeps the pouring pitcher, reservoir opening, and rising liquid level as the focal points, while plants and background equipment are softly blurred. No brand logos or readable text appear anywhere, and only parts of the user’s hands and arms are visible, emphasizing the simple maintenance act of topping off the reservoir.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
