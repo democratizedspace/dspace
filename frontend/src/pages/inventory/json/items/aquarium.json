@@ -420,7 +420,7 @@
         "id": "b8602362-2035-4f00-9376-f48d8668cf38",
         "name": "water test logbook",
         "description": "Waterproof A5 notebook with 100 pre-numbered pages for recording aquarium parameters.",
-        "image": "/assets/paperwork.jpg",
+        "image": "/assets/aquarium_water_test_logbook.jpg",
         "price": "4 dUSD",
         "type": "tool",
         "hardening": {

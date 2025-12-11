@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hardbound_mission_logbook.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "mission logbook",
+    "item_id": "70bb8d86-2c4e-4330-9705-371891934686",
+    "entity_type": "item",
+    "prompt": "A closed A5 hardbound logbook with a slightly textured cover rests on a workbench, its spine and edges hinting at a thick stack of pre-numbered pages inside. A slim elastic band wraps around the book or a ribbon bookmark peeks from the bottom, emphasizing that it is designed for long-term mission and maintenance notes. Around it lie a pen, a small mechanical part, and a patch of schematic paper, giving a sense that this book travels between workstations and records mission events.\n\nThe scene is a softly lit near-future engineering bay or mission control corner, with a solarpunk aesthetic: warm lighting, a plant on a nearby shelf, and the subtle glow of a status panel or tablet in the background. The 512×512 image is photorealistic with slight stylization, no logos or readable text on the cover, and a composition that centers the sturdy logbook while the surrounding tools and equipment stay gently out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

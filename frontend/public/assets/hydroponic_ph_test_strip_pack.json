@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydroponic_ph_test_strip_pack.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "pH test strip pack",
+    "item_id": "092dae11-237a-43cc-b342-246aabbba258",
+    "entity_type": "item",
+    "prompt": "A small cardboard pack of pH test strips lies on a clean work surface next to a shallow dish of tinted hydroponic nutrient solution. Several unused strips fan out beside the pack, and one used strip rests near the dish, its color squares clearly visible but not labeled, showing a gradient that suggests a reading between pH 4 and 9. In the soft background, a hydroponic tub with green plants and tubing hints that these strips are used to check the nutrient solution.\n\nThe scene sits in a bright near-future solarpunk grow lab: vertical planters, tidy tubing, and gentle sunlight filtering through a nearby window, supplemented by soft white grow lights. The 512×512 image is photorealistic with subtle stylization, no logos or readable text on the packaging, and a clean composition that focuses on the pack of strips, the used strip, and the nutrient sample while the rest of the hydroponic setup blurs softly behind them.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
