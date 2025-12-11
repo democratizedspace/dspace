@@ -155,8 +155,8 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
 
     formatted = format_duplicates(duplicates, identical, usages)
     assert "Identical image files (same content, different paths):" in formatted
-    assert "/assets/duplicate-content.jpg" in formatted
-    assert "/assets/quests/duplicate-content.jpg" in formatted
+    assert "  - /assets/duplicate-content.jpg (1 uses)" in formatted
+    assert "  - /assets/quests/duplicate-content.jpg (1 uses)" in formatted
     assert "Quest fixture description for duplicate content" in formatted
     assert "Item fixture description for duplicate content" in formatted
     assert "Total path-based duplicates: 1" in formatted

@@ -232,3 +232,35 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total path-based duplicates: 2" in text_output
     assert "Total duplicates remaining: 2" in text_output
+
+
+def test_cli_reports_identical_file_usage_counts(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    shutil.copytree(FIXTURE_ROOT, repo_root, dirs_exist_ok=True)
+
+    command = [
+        sys.executable,
+        "-m",
+        "scripts.duplicate_images",
+        "find-duplicate-images",
+        "--root",
+        str(repo_root),
+        "--quests-dir",
+        str(quests_dir),
+        "--items-dir",
+        str(items_dir),
+    ]
+
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+
+    assert result.returncode == 0
+    stdout = result.stdout
+    assert "Identical image files (same content, different paths):" in stdout
+    assert "  - /assets/duplicate-content.jpg (1 uses)" in stdout
+    assert "  - /assets/quests/duplicate-content.jpg (1 uses)" in stdout
+    assert "Total path-based duplicates: 1" in stdout
+    assert "Total identical-file duplicates: 1" in stdout
+    assert "Total duplicates remaining: 2" in stdout
