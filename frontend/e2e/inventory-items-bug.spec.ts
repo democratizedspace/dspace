@@ -99,21 +99,23 @@ test.describe('Inventory Items Display - Bug Fix Verification', () => {
 
         const toolCard = page.getByRole('link', { name: /entry-level fdm 3d printer/i });
         const aquariumCard = page.getByRole('link', { name: /aquarium \(150 l\)/i });
+        const toolsChip = page.getByRole('button', { name: 'Tools' });
+        const aquariumChip = page.getByRole('button', { name: 'Aquarium' });
 
         await expect(toolCard).toBeVisible();
         await expect(aquariumCard).toBeVisible();
 
-        await page.getByRole('button', { name: 'Tools' }).click();
+        await toolsChip.click();
 
         await expect(toolCard).toBeVisible();
         await expect(aquariumCard).toHaveCount(0);
 
-        await page.getByRole('button', { name: 'Aquarium' }).click();
+        await aquariumChip.click();
 
         await expect(toolCard).toBeVisible();
         await expect(aquariumCard).toBeVisible();
 
-        await page.getByRole('button', { name: 'Tools' }).click();
+        await toolsChip.click();
 
         await expect(aquariumCard).toBeVisible();
         await expect(toolCard).toHaveCount(0);
