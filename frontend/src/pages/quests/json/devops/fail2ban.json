@@ -2,7 +2,7 @@
     "id": "devops/fail2ban",
     "title": "Block SSH Brute Force",
     "description": "Install Fail2ban to ban repeated failed logins.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_fail2ban_ssh_protection.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "devops/pi-cluster-hardware",
     "title": "Plan Your Pi Cluster",
     "description": "Orion lists the parts needed to build a Raspberry Pi cluster.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_pi_cluster_hardware_planning.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

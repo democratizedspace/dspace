@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_enable_https.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/enable-https.json",
+    "item_name": "Secure the Cluster with HTTPS",
+    "item_id": "devops/enable-https",
+    "entity_type": "quest",
+    "prompt": "A small home server setup shows a Raspberry Pi or mini-PC on a desk, connected to a compact router, while a nearby laptop screen displays a stylized web browser window with a prominent lock icon in the address bar and a simple certificate-style badge, all rendered without readable text. A subtle network diagram is sketched on a notepad beside the laptop, with arrows from the internet to the server, implying traffic being encrypted end-to-end. Soft status lights on the router and server indicate everything is online and healthy.\n\nThe environment follows a near-future solarpunk aesthetic: clean desk surfaces in pale wood and metal, soft ambient lighting, and a small plant or two near the window. The 512×512 photorealistic composition centers on the laptop screen and server, with background details like shelves and cable routing slightly out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only perhaps a hand resting near the trackpad—conveying that HTTPS and TLS are now protecting the cluster’s services.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

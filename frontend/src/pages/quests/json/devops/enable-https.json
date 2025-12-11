@@ -2,7 +2,7 @@
     "id": "devops/enable-https",
     "title": "Secure the Cluster with HTTPS",
     "description": "Use Let's Encrypt to add TLS encryption to your services.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_enable_https.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

@@ -2,7 +2,7 @@
     "id": "devops/private-registry",
     "title": "Run a Private Docker Registry",
     "description": "Host your own Docker images on the cluster.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_private_docker_registry.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
