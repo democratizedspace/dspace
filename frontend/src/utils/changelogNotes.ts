@@ -52,7 +52,13 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
     '20230630': [
         {
             message:
-                'Inventory filters, the contributor tooling roadmap, and the dChat knowledge base all matured in the November 1, 2025 release. Read the v3 changelog for the latest details.',
+                'The promised inventory filters landed as category chips on the Inventory page—toggle Aquarium, Awards, Hydroponics, Tools, and Misc without waiting on a future release.',
+            href: '/docs/inventory',
+            linkLabel: 'Inventory guide',
+        },
+        {
+            message:
+                'The broader v3 rollout is chronicled in the November 1, 2025 changelog if you want to trace how these systems evolved after the original roadmap.',
             href: '/docs/changelog/20251101',
             linkLabel: 'November 1, 2025 changelog',
         },

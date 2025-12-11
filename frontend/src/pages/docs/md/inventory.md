@@ -74,6 +74,8 @@ The inventory interface allows you to:
 - Manage custom items and preview them from the **Manage Items** page using
   the **Preview** button next to each entry
 - Remove custom items you no longer need directly from this page
+- Filter everything with category chips on the main **Inventory** page when
+  you toggle **Show all items**
 
 All inventory data is now stored locally using IndexedDB. For cross-device backups you can use the new [Cloud Sync](/docs/cloud-sync) feature.
 

@@ -87,4 +87,30 @@ test.describe('Inventory Items Display - Bug Fix Verification', () => {
         const count = await filteredItems.count();
         expect(count).toBeGreaterThan(0);
     });
+
+    test('inventory page items can be filtered by category chips', async ({ page }) => {
+        await page.goto('/inventory');
+        await page.waitForLoadState('networkidle');
+
+        await waitForHydration(page);
+
+        const showAllCheckbox = page.getByRole('checkbox', { name: /show all items/i });
+        await showAllCheckbox.check();
+
+        const toolCard = page.getByRole('link', { name: /entry-level fdm 3d printer/i });
+        const aquariumCard = page.getByRole('link', { name: /aquarium \(150 l\)/i });
+
+        await expect(toolCard).toBeVisible();
+        await expect(aquariumCard).toBeVisible();
+
+        await page.getByRole('button', { name: 'Tools' }).click();
+
+        await expect(toolCard).toBeVisible();
+        await expect(aquariumCard).toHaveCount(0);
+
+        await page.getByRole('button', { name: 'Aquarium' }).click();
+
+        await expect(aquariumCard).toBeVisible();
+        await expect(toolCard).toHaveCount(0);
+    });
 });
