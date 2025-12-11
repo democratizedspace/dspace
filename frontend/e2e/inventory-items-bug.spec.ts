@@ -110,6 +110,11 @@ test.describe('Inventory Items Display - Bug Fix Verification', () => {
 
         await page.getByRole('button', { name: 'Aquarium' }).click();
 
+        await expect(toolCard).toBeVisible();
+        await expect(aquariumCard).toBeVisible();
+
+        await page.getByRole('button', { name: 'Tools' }).click();
+
         await expect(aquariumCard).toBeVisible();
         await expect(toolCard).toHaveCount(0);
     });
