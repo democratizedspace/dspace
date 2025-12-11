@@ -22,7 +22,7 @@
         "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
         "name": "Beginner hydroponics tub",
         "description": "20 L (5 gal) plastic tub with lid, six 50 mm net pots and airline grommet for starter hydroponics.",
-        "image": "/assets/hydroponics_tub.jpg",
+        "image": "/assets/beginner_hydroponics_tub_6_net_pots.jpg",
         "price": "35 dUSD",
         "hardening": {
             "passes": 1,
@@ -177,7 +177,7 @@
         "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
         "name": "hydroponic grow lamp",
         "description": "Full-spectrum LED panel delivering 36 W of light, enough to cover a 0.25 m² grow area for seedlings and herbs. Includes hanging kit and 12 V power adapter.",
-        "image": "/assets/hydroponic_lamp.jpg",
+        "image": "/assets/hydroponic_grow_lamp_36w_panel.jpg",
         "price": "30 dUSD",
         "hardening": {
             "passes": 1,
@@ -196,7 +196,7 @@
         "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
         "name": "submersible water pump",
         "description": "12 V DC pump rated at 200 L/h (53 gph) for circulating nutrient solution in small hydroponic systems; draws 3 W and includes 8 mm outlet barb.",
-        "image": "/assets/hydroponics_tub.jpg",
+        "image": "/assets/submersible_hydroponic_water_pump.jpg",
         "price": "15 dUSD",
         "hardening": {
             "passes": 1,
@@ -215,14 +215,14 @@
         "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
         "name": "hydroponics tub (ready)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
-        "image": "/assets/hydroponics_tub.jpg",
+        "image": "/assets/hydroponics_tub_healthy_ready_plants.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
         "name": "hydroponics tub (nutrient deficient)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
-        "image": "/assets/hydroponics_tub.jpg",
+        "image": "/assets/hydroponics_tub_nutrient_deficient_plants.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -276,7 +276,7 @@
         "id": "c687abb3-7b52-4344-97dc-8b7e0881ed9d",
         "name": "LED grow light (20W)",
         "description": "Full-spectrum 20 W LED panel lights 0.2 m² for seedlings or herbs; includes kit and 12 V adapter.",
-        "image": "/assets/hydroponic_lamp.jpg",
+        "image": "/assets/led_grow_light_20w_panel.jpg",
         "price": "25 dUSD",
         "hardening": {
             "passes": 1,

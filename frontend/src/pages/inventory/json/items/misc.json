@@ -259,7 +259,7 @@
         "id": "1498a7a1-2739-4943-a32f-4c277244a825",
         "name": "Hypercar (80% charge)",
         "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 80% charged.",
-        "image": "/assets/hypercar.jpg",
+        "image": "/assets/hypercar_80_percent_charge.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -733,7 +733,7 @@
         "id": "5e283c0b-fd3c-4884-ae32-9a237f02a40e",
         "name": "Hypercar (20% charge)",
         "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 20% charged.",
-        "image": "/assets/hypercar.jpg",
+        "image": "/assets/hypercar_20_percent_charge.jpg",
         "price": "30000 dUSD"
     },
     {

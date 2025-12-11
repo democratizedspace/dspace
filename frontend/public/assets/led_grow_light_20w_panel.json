@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/led_grow_light_20w_panel.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "LED grow light (20W)",
+    "item_id": "c687abb3-7b52-4344-97dc-8b7e0881ed9d",
+    "entity_type": "item",
+    "prompt": "A compact 20 W LED grow light panel hangs over a small tray of seedlings and herbs, its thin rectangular body suspended by simple metal wires from an adjustable bar. The panel surface glows with a soft, full-spectrum white-pink light, casting gentle illumination on the plants below and clearly covering a modest 0.2 m\u00b2 grow area. A slim 12 V power adapter brick and cable are visible along the side of the setup, emphasizing that this is a low-power kit intended for starter hydroponic or soil grows.\n\nThe scene sits in a near-future solarpunk indoor garden corner, with other leafy plants in the background and a mix of natural daylight and the panel\u2019s glow creating soft, cinematic lighting. The 512\u00d7512 image is photorealistic with light stylization, no brand logos or readable text on the lamp or adapter, and a clean composition that centers the glowing panel and its small, well-lit plant tray while the rest of the room remains gently out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

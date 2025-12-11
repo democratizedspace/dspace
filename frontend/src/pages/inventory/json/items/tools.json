@@ -222,7 +222,7 @@
         "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
         "name": "digital multimeter",
         "description": "Handheld multimeter with manual 20 V DC range, measures up to 600 V, 10 A and 2 MΩ. Includes test probes and replaceable fuse.",
-        "image": "/assets/launch_controller.jpg",
+        "image": "/assets/digital_multimeter_handheld_tool.jpg",
         "price": "20 dUSD",
         "type": "tool",
         "unit": "meter",
