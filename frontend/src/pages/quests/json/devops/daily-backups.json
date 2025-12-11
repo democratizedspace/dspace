@@ -2,7 +2,7 @@
     "id": "devops/daily-backups",
     "title": "Configure Daily Backups",
     "description": "Use a cron job to archive your game data each night.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_daily_backups_cron.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

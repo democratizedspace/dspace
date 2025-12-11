@@ -14,7 +14,7 @@
             }
         ]
     },
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_ci_pipeline_setup.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

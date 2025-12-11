@@ -24,7 +24,7 @@
             }
         ]
     },
-    "image": "/assets/quests/bucket.jpg",
+    "image": "/assets/quests/compost_turn_bucket.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [

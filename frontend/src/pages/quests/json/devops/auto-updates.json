@@ -2,7 +2,7 @@
     "id": "devops/auto-updates",
     "title": "Enable Automatic Updates",
     "description": "Keep your Pi cluster secure with unattended upgrades.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/devops_enable_auto_updates.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

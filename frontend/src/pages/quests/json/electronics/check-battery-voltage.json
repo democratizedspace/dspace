@@ -2,7 +2,7 @@
     "id": "electronics/check-battery-voltage",
     "title": "Check a battery pack's voltage",
     "description": "Use a digital multimeter to check a 12 V LiFePO4 battery pack after disconnecting it and placing it on a dry, non-conductive surface. Wear safety goggles throughout.",
-    "image": "/assets/quests/battery.jpg",
+    "image": "/assets/quests/electronics_check_battery_pack_voltage.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
