@@ -2,7 +2,7 @@
     "id": "programming/json-endpoint",
     "title": "Serve JSON Data",
     "description": "Extend your server to respond with structured JSON.",
-    "image": "/assets/quests/programming_json_api_server.jpg",
+    "image": "/assets/quests/programming_json_endpoint.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
