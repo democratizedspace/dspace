@@ -98,7 +98,10 @@ test.describe('Inventory Items Display - Bug Fix Verification', () => {
         await showAllCheckbox.check();
 
         const toolCard = page.getByRole('link', { name: /clogged nozzle/i });
-        const aquariumCard = page.getByRole('link', { name: /aquarium \(150 l\)/i });
+        const aquariumCard = page.getByRole('link', {
+            name: 'aquarium (150 L) 90×45×45 cm',
+            exact: true,
+        });
         const toolsChip = page.getByRole('button', { name: 'Tools' });
         const aquariumChip = page.getByRole('button', { name: 'Aquarium' });
 
