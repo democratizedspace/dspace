@@ -2,7 +2,7 @@
     "id": "electronics/voltage-divider",
     "title": "Build a Voltage Divider",
     "description": "Split 5 V to about 2.5 V using 220 \u03a9 and 10 k\u03a9 resistors on a Breadboard.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_voltage_divider_breadboard.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

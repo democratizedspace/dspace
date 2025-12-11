@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_calibrate_ground_thermistor_sensor.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/calibrate-ground-sensor.json",
+    "item_name": "Calibrate Ground Sensor",
+    "item_id": "geothermal/calibrate-ground-sensor",
+    "entity_type": "quest",
+    "prompt": "On a workbench, a waterproof thermistor probe destined for burial in the ground is being calibrated using two clear containers of water: one packed with ice and water, the other steaming slightly to indicate hot, but not boiling, water on a heat-safe pad. The probe is immersed first in the icy bath and then in the hot bath, connected by a cable to a small display or laptop showing a stylized temperature readout with no readable text. A notepad beside the setup has two columns of marks representing measured and reference values, and the probe cable is coiled neatly to show that it is still portable.\n\nThe environment is a near-future solarpunk workshop with soft, even lighting, pale surfaces, and hints of outdoor gear or coils of geothermal tubing blurred in the background. The 512×512 photorealistic composition centers on the thermistor probe and the two water baths, with the display and notes providing context while slightly out of focus. No brand logos or legible words appear anywhere, and no faces are visible—only hands moving the probe between baths—emphasizing careful calibration of a ground temperature sensor before it is buried.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

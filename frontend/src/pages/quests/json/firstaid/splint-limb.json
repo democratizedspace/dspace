@@ -2,7 +2,7 @@
     "id": "firstaid/splint-limb",
     "title": "Splint a Minor Fracture",
     "description": "Practice immobilizing a minor limb injury with supplies from a first aid kit. Only attempt this on stable injuries and call emergency services for serious fractures.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/firstaid_splint_minor_limb_practice.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

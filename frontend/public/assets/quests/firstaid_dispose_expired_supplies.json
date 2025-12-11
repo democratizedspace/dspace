@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/firstaid_dispose_expired_supplies.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/dispose-expired.json",
+    "item_name": "Dispose Expired First Aid Supplies",
+    "item_id": "firstaid/dispose-expired",
+    "entity_type": "quest",
+    "prompt": "An open first aid kit sits on a table, with its contents spread out into two small groups: fresh-looking supplies neatly stacked on one side and a smaller pile of worn, clearly expired items on the other, such as crumpled bandage wrappers and old ointment tubes with faded markings. A hand wearing a nitrile glove is placing one of the older items into a small household trash bin lined with a bag, while the good supplies are being organized back into the kit. A simple wall calendar in the background, with non-readable dates, hints at checking expiration times.\n\nThe scene fits a near-future solarpunk home setting: soft warm lighting, clean surfaces, and subtle greenery or natural textures in the blurred background. The 512×512 photorealistic composition focuses on the kit, the separated supplies, and the motion toward the trash bin, with surrounding furniture and decor gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only gloved hands and arms—emphasizing the habit of clearing out old first aid items so the kit stays reliable.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

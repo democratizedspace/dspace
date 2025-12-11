@@ -2,7 +2,7 @@
     "id": "geothermal/backflush-loop-filter",
     "title": "Backflush Loop Filter",
     "description": "Use a submersible pump to rinse debris from the geothermal loop filter.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_backflush_loop_filter.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

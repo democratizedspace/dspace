@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/firstaid_restock_kit_supplies.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/restock-kit.json",
+    "item_name": "Restock Your First Aid Kit",
+    "item_id": "firstaid/restock-kit",
+    "entity_type": "quest",
+    "prompt": "A first aid kit case sits open on a table, already containing some supplies, while freshly purchased replacement items are neatly arranged beside it: new packs of bandages, sealed gauze, antiseptic wipes, an elastic bandage, a small bottle of saline, and a fresh pair of nitrile gloves. A printed checklist on a clipboard lies nearby with boxes partly ticked off, though any text is rendered as simple lines and shapes. A shopping bag or small delivery box in the background hints that these supplies have just been restocked.\n\nThe scene reflects a near-future solarpunk home or office setting: soft, balanced lighting, clean surfaces, and a plant or two in the blurred background to give the space a calm, prepared feel. The 512×512 photorealistic composition centers on the open kit and the new supplies being added, with surrounding objects and decor slightly out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands placing items into the kit—highlighting the routine habit of restocking used first aid supplies.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

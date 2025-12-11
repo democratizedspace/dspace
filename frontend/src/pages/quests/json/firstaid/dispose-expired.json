@@ -2,7 +2,7 @@
     "id": "firstaid/dispose-expired",
     "title": "Dispose Expired First Aid Supplies",
     "description": "Clear out old items so your first aid kit stays reliable.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/firstaid_dispose_expired_supplies.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/firstaid_assemble_basic_kit.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/assemble-kit.json",
+    "item_name": "Assemble a First Aid Kit",
+    "item_id": "firstaid/assemble-kit",
+    "entity_type": "quest",
+    "prompt": "A basic first aid kit is laid out on a clean tabletop beside an open, empty case, showing neatly arranged supplies ready to be packed. Visible items include adhesive bandages, sterile gauze pads, a roll of medical tape, small scissors, tweezers, wrapped antiseptic wipes, a pair of nitrile gloves, and a simple elastic bandage, all in plain, non-branded packaging. The case itself is a compact, sturdy container with a simple cross symbol, clearly sized to be kept at home or in a backpack.\n\nThe environment has a near-future solarpunk home aesthetic: soft natural and LED lighting, pale surfaces, and a potted plant or two blurred in the background, suggesting a calm, prepared living space. The 512×512 photorealistic composition centers on the supplies and open kit, with background furniture and decor gently out of focus. No logos or legible text appear anywhere, and no faces are visible—only hands placing items into the case—emphasizing thoughtful assembly of a basic first aid kit for minor injuries.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

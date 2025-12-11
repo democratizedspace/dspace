@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/firstaid_splint_minor_limb_practice.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/splint-limb.json",
+    "item_name": "Splint a Minor Fracture",
+    "item_id": "firstaid/splint-limb",
+    "entity_type": "quest",
+    "prompt": "On a padded mat, a volunteer’s lower arm or leg is being gently splinted to practice immobilizing a minor, stable injury. Soft padding such as folded gauze or a small towel is placed under and around the limb, and a lightweight commercial splint or rigid board is aligned alongside it. A person wearing nitrile gloves is wrapping an elastic bandage in wide, overlapping turns to secure the splint without cutting off circulation, while an open first aid kit and a phone lie nearby to suggest readiness to call emergency services for serious injuries.\n\nThe scene has a near-future solarpunk home or training-room aesthetic: soft neutral lighting, clean surroundings, and simple wall decor or greenery blurred in the background. The 512×512 photorealistic composition centers on the limb, padding, and splinting technique, with the rest of the room gently out of focus. No brand logos or legible text appear anywhere, and the volunteer’s face is kept out of frame—only the limb and helpers’ hands are visible—emphasizing careful, low-stress practice of splinting without depicting severe trauma.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
