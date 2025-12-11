@@ -60,6 +60,22 @@ def _relative_to_root(path: Path, repo_root: Path) -> Path:
         return path
 
 
+def _format_reference_lines(reference: ImageReference, indent: int = 2) -> list[str]:
+    base_indent = " " * indent
+    label = f"{reference.display_path()} :: {reference.identifier} [{reference.source}]"
+    if reference.name:
+        label = (
+            f"{reference.display_path()} :: {reference.name} - {reference.identifier} "
+            f"[{reference.source}]"
+        )
+
+    lines = [f"{base_indent}- {label}"]
+    if reference.description:
+        lines.append(f'{base_indent}  - "{reference.description}"')
+
+    return lines
+
+
 def _hash_file(path: Path) -> str:
     hasher = hashlib.sha256()
     with path.open("rb") as handle:
@@ -206,11 +222,20 @@ def count_total_duplicates(duplicates: ImageMap) -> int:
     return sum(len(references) - 1 for references in duplicates.values())
 
 
+def count_identical_duplicates(identical_files: Mapping[str, List[str]]) -> int:
+    """Calculate total duplicate count across identical file groups."""
+
+    return sum(len(paths) - 1 for paths in identical_files.values())
+
+
 def format_duplicates(
-    duplicates: ImageMap, identical_files: IdenticalImageMap | None = None
+    duplicates: ImageMap,
+    identical_files: IdenticalImageMap | None = None,
+    all_references: ImageMap | None = None,
 ) -> str:
     duplicates = duplicates or {}
     identical_files = identical_files or {}
+    reference_lookup = all_references or {}
     if not duplicates and not identical_files:
         return ""
 
@@ -222,16 +247,7 @@ def format_duplicates(
         )
         lines.append(f"{image} ({len(references)} uses)")
         for reference in references:
-            if reference.name:
-                lines.append(
-                    f"  - {reference.display_path()} :: {reference.name} - {reference.identifier} [{reference.source}]"
-                )
-            else:
-                lines.append(
-                    f"  - {reference.display_path()} :: {reference.identifier} [{reference.source}]"
-                )
-            if reference.description:
-                lines.append(f'    - "{reference.description}"')
+            lines.extend(_format_reference_lines(reference))
 
     if identical_files:
         lines.append("")
@@ -240,12 +256,23 @@ def format_duplicates(
             lines.append(f"hash {digest}:")
             for path in sorted(identical_files[digest]):
                 lines.append(f"  - {path}")
+                references = reference_lookup.get(path, [])
+                if not references:
+                    continue
 
-    if duplicates:
-        # Add summary at the bottom
-        total_duplicates = count_total_duplicates(duplicates)
+                sorted_references = sorted(
+                    references, key=lambda ref: (ref.source, ref.display_path(), ref.identifier)
+                )
+                for reference in sorted_references:
+                    lines.extend(_format_reference_lines(reference, indent=4))
+
+    if duplicates or identical_files:
         lines.append("")
-        lines.append(f"Total duplicates remaining: {total_duplicates}")
+        path_duplicates = count_total_duplicates(duplicates)
+        identical_duplicates = count_identical_duplicates(identical_files)
+        lines.append(f"Duplicate path references: {path_duplicates}")
+        lines.append(f"Identical file duplicates: {identical_duplicates}")
+        lines.append(f"Total duplicates: {path_duplicates + identical_duplicates}")
 
     return "\n".join(lines)
 

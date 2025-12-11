@@ -1,5 +1,6 @@
 {
   "id": "beta/duplicate-content",
   "title": "Duplicate Content Quest",
+  "description": "Quest description for duplicate content image.",
   "image": "/assets/duplicate-content.jpg"
 }

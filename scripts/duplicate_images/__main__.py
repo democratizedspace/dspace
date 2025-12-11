@@ -91,7 +91,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             print(output)
         else:
-            output = format_duplicates(duplicates, identical_files)
+            output = format_duplicates(duplicates, identical_files, usages)
             if output:
                 print(output)
             else:
