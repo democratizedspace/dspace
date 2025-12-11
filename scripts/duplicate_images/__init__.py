@@ -13,10 +13,10 @@ import hashlib
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import DefaultDict, Dict, Iterable, List, Mapping
+from typing import DefaultDict, Dict, Iterable, List, Mapping, Set
 
 ImageMap = Dict[str, List["ImageReference"]]
-IdenticalImageMap = Dict[str, List[str]]
+IdenticalImageMap = Dict[str, List["ImageReference"]]
 
 
 class DuplicateImageError(Exception):
@@ -167,7 +167,7 @@ def find_duplicates(usages: ImageMap) -> ImageMap:
 
 
 def find_identical_files(
-    image_paths: Iterable[str], repo_root: Path
+    image_map: Mapping[str, List[ImageReference]], repo_root: Path
 ) -> IdenticalImageMap:
     """Group image paths that point to identical files on disk.
 
@@ -175,8 +175,8 @@ def find_identical_files(
     path-based duplicate detection intact even when assets are missing locally.
     """
 
-    content_map: DefaultDict[str, List[str]] = defaultdict(list)
-    for image in sorted(set(image_paths)):
+    content_map: DefaultDict[str, List[ImageReference]] = defaultdict(list)
+    for image, references in sorted(image_map.items()):
         relative_path = image.lstrip("/")
         if not relative_path:
             continue
@@ -192,9 +192,15 @@ def find_identical_files(
             # interrupting path-based duplicate detection.
             continue
 
-        content_map[digest].append(image)
+        content_map[digest].extend(references)
 
-    return {digest: paths for digest, paths in content_map.items() if len(paths) > 1}
+    identical_files: IdenticalImageMap = {}
+    for digest, references in content_map.items():
+        unique_paths: Set[str] = {reference.image for reference in references}
+        if len(unique_paths) > 1:
+            identical_files[digest] = references
+
+    return identical_files
 
 
 def count_total_duplicates(duplicates: ImageMap) -> int:
@@ -206,6 +212,17 @@ def count_total_duplicates(duplicates: ImageMap) -> int:
     return sum(len(references) - 1 for references in duplicates.values())
 
 
+def count_identical_duplicates(identical_files: IdenticalImageMap) -> int:
+    """Calculate total duplicate groups for identical files across different paths."""
+
+    total = 0
+    for references in identical_files.values():
+        unique_paths = {reference.image for reference in references}
+        if len(unique_paths) > 1:
+            total += len(unique_paths) - 1
+    return total
+
+
 def format_duplicates(
     duplicates: ImageMap, identical_files: IdenticalImageMap | None = None
 ) -> str:
@@ -215,6 +232,8 @@ def format_duplicates(
         return ""
 
     lines: List[str] = []
+    path_duplicate_total = count_total_duplicates(duplicates)
+    identical_duplicate_total = count_identical_duplicates(identical_files)
     for image in sorted(duplicates):
         references = sorted(
             duplicates[image],
@@ -233,19 +252,42 @@ def format_duplicates(
             if reference.description:
                 lines.append(f'    - "{reference.description}"')
 
+    if duplicates:
+        lines.append("")
+        lines.append(f"Total duplicate uses (same path): {path_duplicate_total}")
+
     if identical_files:
         lines.append("")
         lines.append("Identical image files (same content, different paths):")
         for digest in sorted(identical_files):
             lines.append(f"hash {digest}:")
-            for path in sorted(identical_files[digest]):
-                lines.append(f"  - {path}")
+            references = sorted(
+                identical_files[digest],
+                key=lambda ref: (ref.source, ref.image, ref.identifier),
+            )
+            for reference in references:
+                if reference.name:
+                    lines.append(
+                        "  - "
+                        f"{reference.image} :: {reference.name} - {reference.identifier} "
+                        f"[{reference.source}]"
+                    )
+                else:
+                    lines.append(
+                        f"  - {reference.image} :: {reference.identifier} [{reference.source}]"
+                    )
+                if reference.description:
+                    lines.append(f'    - "{reference.description}"')
 
-    if duplicates:
-        # Add summary at the bottom
-        total_duplicates = count_total_duplicates(duplicates)
         lines.append("")
-        lines.append(f"Total duplicates remaining: {total_duplicates}")
+        lines.append(
+            f"Total duplicate uses (identical files): {identical_duplicate_total}"
+        )
+
+    overall_total = path_duplicate_total + identical_duplicate_total
+    if overall_total:
+        lines.append("")
+        lines.append(f"Total duplicates overall: {overall_total}")
 
     return "\n".join(lines)
 
@@ -270,11 +312,12 @@ def serialize_duplicates(
 
 
 def serialize_report(
-    duplicates: ImageMap, identical_files: Mapping[str, List[str]] | None = None
+    duplicates: ImageMap, identical_files: IdenticalImageMap | None = None
 ) -> Dict[str, object]:
     return {
         "duplicates": serialize_duplicates(duplicates),
         "identicalFiles": {
-            digest: list(paths) for digest, paths in (identical_files or {}).items()
+            digest: sorted({reference.image for reference in references})
+            for digest, references in (identical_files or {}).items()
         },
     }
