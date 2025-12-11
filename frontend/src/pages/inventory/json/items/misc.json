@@ -252,7 +252,7 @@
         "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
         "name": "dCarbon",
         "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
-        "image": "/assets/dCarbon.jpg",
+        "image": "/assets/dcarbon_token.jpg",
         "priceExemptionReason": "CURRENCY"
     },
     {
@@ -1110,7 +1110,7 @@
         "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
         "name": "stevia extract",
         "description": "Concentrated sweetener derived from stevia leaves.",
-        "image": "/assets/dCarbon.jpg",
+        "image": "/assets/stevia_extract_bottle.jpg",
         "price": "8 dUSD"
     },
     {
@@ -1265,7 +1265,7 @@
         "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
         "name": "stevia crystals",
         "description": "Highly concentrated sweetener purified from stevia extract.",
-        "image": "/assets/dCarbon.jpg",
+        "image": "/assets/stevia_crystals_jar.jpg",
         "price": "12 dUSD"
     },
     {
@@ -1418,7 +1418,7 @@
         "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
         "name": "hydrochloric acid (37%, 500 mL)",
         "description": "Lab-grade 37% HCl in a vented plastic bottle; always add acid to water when diluting.",
-        "image": "/assets/hydroponics_nutrients.jpg",
+        "image": "/assets/hydrochloric_acid_37pct_safety_bottle.jpg",
         "price": "12 dUSD",
         "unit": "bottle"
     },
@@ -1433,7 +1433,7 @@
         "id": "7c811503-d0ca-4254-825a-ebeb06a88231",
         "name": "pH down solution (500 mL)",
         "description": "500 mL bottle of phosphoric acid to lower hydroponic nutrient pH; includes dropper.",
-        "image": "/assets/hydroponics_nutrients.jpg",
+        "image": "/assets/ph_down_solution_500ml_bottle.jpg",
         "price": "10 dUSD",
         "unit": "bottle",
         "hardening": {

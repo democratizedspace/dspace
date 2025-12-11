@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydrogen_peroxide_3pct_amber_bottle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "hydrogen peroxide (3%)",
+    "item_id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
+    "entity_type": "item",
+    "prompt": "A 250 mL amber plastic bottle with a secure, child-resistant cap stands on a lab bench, marked only with a simple droplet-and-bubbles hazard icon instead of readable text. The bottle is slightly translucent so that the clear liquid inside is just visible. Nearby, a pair of nitrile gloves and a small brush or cloth suggest that the 3% hydrogen peroxide is used for sanitizing hydroponic equipment, while a hydroponic tub and tubing appear softly in the background.\n\nThe setting is a near-future solarpunk hydroponics workspace with soft, even lighting, neatly coiled hoses, and a couple of healthy plants growing in a system behind the bottle. The 512\u00d7512 image is photorealistic with subtle stylization, no logos or readable labels, and a composition that centers the amber bottle and safety-aware surroundings while the rest of the environment stays gently out of focus, reinforcing safe, careful chemical handling.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

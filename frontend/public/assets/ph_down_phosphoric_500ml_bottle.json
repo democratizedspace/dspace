@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "pH down solution (500 mL)",
+    "item_id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+    "entity_type": "item",
+    "prompt": "A 500 mL opaque plastic bottle with a secure dropper cap stands on a bench next to a measuring syringe and a small beaker of tinted nutrient solution. The bottle carries a simple downward arrow and droplet icon instead of readable text, clearly suggesting a \u201cpH down\u201d product. A few drops are shown mid-air or as tiny ripples in the beaker, implying that a measured amount is being added to lower reservoir pH rather than poured directly from the bottle.\n\nThe scene is set in a careful near-future solarpunk hydroponics workspace with gloves and safety goggles resting nearby, softly reminding of safe acid handling. Background elements include a hydroponic tub and lush plants, lit by soft, even lighting. The 512\u00d7512 image is photorealistic with subtle stylization, no logos or legible wording on the bottle, and a composition that keeps the pH down bottle, syringe, and beaker as the focal trio while the rest of the lab stays gently blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

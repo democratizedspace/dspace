@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydroponic_nutrient_concentrate_1l_bottle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "hydroponic nutrient concentrate (1 L)",
+    "item_id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+    "entity_type": "item",
+    "prompt": "A tall 1 L translucent plastic bottle filled with slightly tinted nutrient concentrate stands on a shelf, with a simple leaf-and-droplet icon indicating plant fertilizer rather than any readable text. In front of the bottle, a measuring syringe draws up a small amount of the concentrate, and a large reservoir tub with clear water sits nearby, suggesting that the concentrate will be diluted at a precise ratio for leafy greens. A few healthy hydroponic plants in net pots are visible in the soft background.\n\nThe setting is a bright near-future solarpunk grow room, with reflective panels, organized rows of containers, and soft overhead lighting. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or legible wording on the bottle, and a composition that emphasizes the nutrient concentrate bottle, the drawn syringe, and the waiting reservoir while the rest of the grow environment stays pleasantly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

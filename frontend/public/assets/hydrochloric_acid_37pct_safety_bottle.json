@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydrochloric_acid_37pct_safety_bottle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "hydrochloric acid (37%, 500 mL)",
+    "item_id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+    "entity_type": "item",
+    "prompt": "A sturdy 500 mL vented plastic bottle of hydrochloric acid stands in a chemical safety tray, its cap tightly closed and the label showing only bold hazard pictograms and a simple \u201cacid\u201d icon with no readable text. Nearby, a pair of chemical-resistant gloves, safety goggles, and a small beaker of clear water sit ready for careful dilution. The bottle\u2019s design, tray, and surrounding PPE convey that this is a concentrated lab-grade acid requiring respect and proper handling.\n\nThe scene is a controlled near-future solarpunk lab environment with soft, even lighting, non-cluttered benches, and a fume hood or vented enclosure softly visible in the background. The 512\u00d7512 image is photorealistic with gentle stylization, explicitly free of logos and legible writing, and composed so that the acid bottle, safety tray, and protective equipment are the central focus while the rest of the lab remains blurred, highlighting safe chemical practice.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
