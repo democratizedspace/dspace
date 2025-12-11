@@ -2,7 +2,7 @@
     "id": "electronics/solder-wire",
     "title": "Solder a Wire Connection",
     "description": "Join jumper wires with a soldering kit, heat-shrink tubing, and a heat gun. Keep a brass tip cleaner handy, ventilate, and wear safety goggles.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_solder_wire_connection.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

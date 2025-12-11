@@ -2,7 +2,7 @@
     "id": "electronics/temperature-plot",
     "title": "Plot Temperature Data",
     "description": "Generate a chart from your thermistor log using Python.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_temperature_plot_python.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

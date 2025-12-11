@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_measure_resistor_multimeter.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/measure-resistance.json",
+    "item_name": "Measure a Resistor",
+    "item_id": "electronics/measure-resistance",
+    "entity_type": "quest",
+    "prompt": "A single loose through-hole resistor rests on a dry, light-colored non-conductive mat, with its leads spread slightly apart. A digital multimeter is set to resistance mode, and its red and black probes gently grip the resistor leads, clearly making contact without touching anything else. The meter’s display shows a simple bar or segmented icon at a medium position instead of readable digits, suggesting a specific resistance value being measured. The person holding the probes is wearing clear safety goggles, and no other powered equipment is nearby, emphasizing that the component is safely out of any circuit.\n\nThe scene takes place in a near-future solarpunk electronics workspace: soft, even lighting, pale benchtop surfaces, and neatly organized parts bins and tools blurred in the background. The 512×512 photorealistic composition focuses on the resistor, probes, and multimeter, with surrounding objects gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only gloved or bare hands and forearms—highlighting safe, deliberate confirmation of a resistor’s value with a multimeter.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

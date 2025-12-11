@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_thermistor_reading_arduino.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/thermistor-reading.json",
+    "item_name": "Read a Thermistor",
+    "item_id": "electronics/thermistor-reading",
+    "entity_type": "quest",
+    "prompt": "An Arduino is wired to a small breadboard holding a thermistor and a fixed resistor in a voltage divider configuration, with three neatly colored jumper wires connecting the sensor pair to an analog input and the 5 V and ground rails. A hand hovers just above the thermistor, or gently pinches it between two fingers, causing a subtle change in the circuit. A laptop screen nearby shows a stylized scrolling readout of temperature values or a simple bar graph, with all text replaced by abstract marks.\n\nThe scene is a near-future solarpunk electronics lab: soft white lighting, clean work surfaces, and tidy storage of components and tools in the blurred background. The 512×512 photorealistic composition focuses on the Arduino, thermistor wiring, and human interaction with the sensor, while the laptop and surroundings are gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands and forearms—capturing the experience of reading and logging thermistor-based temperature values with a microcontroller.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

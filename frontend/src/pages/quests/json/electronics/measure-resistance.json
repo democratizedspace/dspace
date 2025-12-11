@@ -2,7 +2,7 @@
     "id": "electronics/measure-resistance",
     "title": "Measure a Resistor",
     "description": "Use a digital multimeter to confirm a loose resistor's value. Disconnect all power, keep metal jewelry off, set components on a dry non-conductive surface, and wear safety goggles.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_measure_resistor_multimeter.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

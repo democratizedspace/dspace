@@ -2,7 +2,7 @@
     "id": "electronics/tin-soldering-iron",
     "title": "Tin a Soldering Iron",
     "description": "Prepare your soldering iron for clean joints by tinning the tip.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_tin_soldering_iron_tip.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

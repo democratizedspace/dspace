@@ -2,7 +2,7 @@
     "id": "electronics/resistor-color-check",
     "title": "Verify resistor color bands",
     "description": "Confirm a resistor's value by decoding its color bands before installing it in a circuit.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_resistor_color_band_check.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

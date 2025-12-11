@@ -2,7 +2,7 @@
     "id": "electronics/solder-led-harness",
     "title": "Solder an LED Harness",
     "description": "Join a 5 mm LED and 220 Ω resistor to two jumper wires using a soldering iron kit. Ventilate and wear safety goggles.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_solder_led_harness.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
