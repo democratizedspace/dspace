@@ -2,7 +2,7 @@
     "id": "programming/median-temp",
     "title": "Compute Median Temperature",
     "description": "Extend your script to report the median temperature from your log.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_compute_median_temperature.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

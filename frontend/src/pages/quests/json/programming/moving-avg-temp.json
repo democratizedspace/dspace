@@ -2,7 +2,7 @@
     "id": "programming/moving-avg-temp",
     "title": "Compute Moving Average Temperature",
     "description": "Add a moving average to your temperature analysis script.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_moving_average_temperature.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

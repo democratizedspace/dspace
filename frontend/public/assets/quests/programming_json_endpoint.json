@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_json_endpoint.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/json-endpoint.json",
+    "item_name": "Serve JSON Data",
+    "item_id": "programming/json-endpoint",
+    "entity_type": "quest",
+    "prompt": "A code editor on a laptop screen shows a small web server script with one function clearly highlighted, visually bracketed as a JSON endpoint handler, while a side-by-side panel displays the server’s response as a compact JSON object of abstract keys and values. A simple diagram on a nearby notepad shows a sensor icon pointing to a server box and then to a client screen, reinforcing that structured data flows from hardware to an HTTP JSON endpoint.\n\nThe scene is a near-future solarpunk programming desk: soft, even lighting, a minimal keyboard and mouse, and a tiny networked sensor puck resting on the tabletop, with plants or clean shelving blurred in the background. The 512×512 photorealistic composition focuses on the highlighted route handler and the JSON response pane, with the physical hardware providing secondary context. No brand logos or legible text appear anywhere, and no faces are visible—only hands hovering near the keyboard—emphasizing the creation of a dedicated JSON endpoint for serving structured data.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
