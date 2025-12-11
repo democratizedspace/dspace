@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_compute_median_temperature.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/median-temp.json",
+    "item_name": "Compute Median Temperature",
+    "item_id": "programming/median-temp",
+    "entity_type": "quest",
+    "prompt": "A laptop displays a simple statistics script in a code editor: a highlighted section shows a function that reads a list of temperature values and selects the median, illustrated by a vertical marker drawn in the middle of a small sorted bar chart overlay. Below the editor, a console pane prints an abstract numeric result next to a thermometer icon, showing that the script has computed a representative middle temperature for the day. A printed log page with columns of times and readings sits next to the laptop, underlining the connection between raw data and the median calculation.\n\nThe environment is a near-future solarpunk study space: soft warm lighting, pale desk surfaces, and plants or wooden decor in the blurred background, creating a calm, analytical mood. The 512×512 photorealistic composition focuses on the script and tiny bar-chart illustration, with peripherals and paper logs gently out of focus. No brand logos or legible words appear anywhere, and no faces are visible—only a hand on the trackpad—emphasizing that the script extends earlier analysis to report the median temperature from logged data.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

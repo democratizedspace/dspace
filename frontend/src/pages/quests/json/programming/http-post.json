@@ -2,7 +2,7 @@
     "id": "programming/http-post",
     "title": "Accept POST Data",
     "description": "Update your server to handle POST requests and log JSON payloads.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_http_post_endpoint.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

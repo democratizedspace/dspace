@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_compute_avg_temperature.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/avg-temp.json",
+    "item_name": "Compute Average Temperature",
+    "item_id": "programming/avg-temp",
+    "entity_type": "quest",
+    "prompt": "A laptop sits on a tidy desk displaying a code editor window with a short script: a few lines read an abstract log file icon and produce a single daily average temperature, indicated by a bold numeric placeholder and a small thermometer icon instead of readable text. Next to the laptop is a compact single-board computer with a thermistor module attached, and a printed sheet or notebook page shows a small table of times and temperatures drawn as simple marks, reinforcing that the script is summarizing logged data.\n\nThe scene follows a near-future solarpunk workspace aesthetic: soft, warm lighting, pale wood and metal surfaces, and a couple of plants or natural textures gently blurred in the background. The 512×512 photorealistic composition centers on the laptop screen, sensor hardware, and rough data sketch, with everything else slightly out of focus. No brand logos or legible words appear anywhere, and no faces are visible—only a hand resting near the keyboard—highlighting the act of computing a daily average temperature from a log file using a small script.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

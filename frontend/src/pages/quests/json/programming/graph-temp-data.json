@@ -2,7 +2,7 @@
     "id": "programming/graph-temp-data",
     "title": "Graph Your Temperature Logs",
     "description": "Use a short script to plot the readings you've been recording.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/programming_graph_temperature_logs_script.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

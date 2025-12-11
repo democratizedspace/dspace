@@ -2,7 +2,7 @@
     "id": "geothermal/replace-faulty-thermistor",
     "title": "Replace Faulty Thermistor",
     "description": "Swap out a dead probe and verify readings stay true.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_replace_faulty_thermistor.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
