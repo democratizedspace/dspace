@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_install_backup_thermistor.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/install-backup-thermistor.json",
+    "item_name": "Install Backup Thermistor",
+    "item_id": "geothermal/install-backup-thermistor",
+    "entity_type": "quest",
+    "prompt": "A geothermal monitoring junction box is open on a wall, revealing neatly organized terminal blocks and an Arduino-based controller inside. A gloved hand is adding wires from a new backup thermistor probe into an unused terminal pair, matching the color coding of an existing primary probe cable already connected. The new probe itself, still coiled and labeled with a simple tag, lies on a nearby ledge ready to be routed out to the ground loop or borehole.\n\nThe environment is a near-future solarpunk mechanical space: soft neutral lighting, clean wiring paths, and hints of other control gear such as relays or communication modules blurred in the background. The 512×512 photorealistic composition centers on the open box, terminal strip, and two parallel sensor cables, with the rest of the room gently out of focus. No brand logos or legible text are present, and no faces are visible—only hands and forearms—emphasizing the redundancy gained by installing a backup thermistor for cross-checking ground temperature readings.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

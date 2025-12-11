@@ -2,7 +2,7 @@
     "id": "geothermal/install-backup-thermistor",
     "title": "Install Backup Thermistor",
     "description": "Add a second probe so you can cross-check ground temperature readings.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_install_backup_thermistor.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

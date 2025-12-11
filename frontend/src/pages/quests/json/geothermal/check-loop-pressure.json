@@ -2,7 +2,7 @@
     "id": "geothermal/check-loop-pressure",
     "title": "Check Loop Pressure",
     "description": "Verify the ground loop is holding pressure with a quick gauge check.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/geothermal_check_loop_pressure_gauge.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
