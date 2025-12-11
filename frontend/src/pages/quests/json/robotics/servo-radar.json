@@ -2,7 +2,7 @@
     "id": "robotics/servo-radar",
     "title": "Scan with a servo-mounted sensor",
     "description": "Sweep an ultrasonic sensor on a servo to map nearby obstacles.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/servo_ultrasonic_radar_scan.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

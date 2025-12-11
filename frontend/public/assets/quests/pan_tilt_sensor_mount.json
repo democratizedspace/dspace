@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/pan_tilt_sensor_mount.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/pan-tilt.json",
+    "item_name": "Make a Pan-Tilt Mount",
+    "item_id": "robotics/pan-tilt",
+    "entity_type": "quest",
+    "prompt": "A compact pan-tilt mount built from two small servo motors is shown on a workbench, with one servo providing horizontal rotation and the other stacked on top for vertical tilt. Mounted on the top platform is a lightweight sensor module, such as a small camera or ultrasonic rangefinder, wired back to a microcontroller board sitting nearby. The mount is clearly articulated, with visible servo horns and linkage, making it obvious that the sensor can sweep across the environment in both directions.\n\nThe scene is set in a tidy solarpunk robotics lab with bright ambient lighting, organized shelves, and a couple of green plants bringing life to the space. The image is a 512×512 photorealistic frame with subtle stylization, no text or logos, and soft focus on the background. The pan-tilt assembly and the mounted sensor remain the main focus, framed by a few scattered tools such as a screwdriver or 3D-printed brackets that hint at hands-on construction.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

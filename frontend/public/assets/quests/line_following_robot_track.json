@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/line_following_robot_track.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/line-follower.json",
+    "item_name": "Build a line-following robot",
+    "item_id": "robotics/line-follower",
+    "entity_type": "quest",
+    "prompt": "A small two-wheeled line-following robot sits on a white tabletop track made from a thick black line that curves gently across a sheet of paper or a foam board. The robot has a compact chassis with two drive wheels, a caster at the rear, and two downward-facing reflectance or light sensors mounted at the front, positioned directly over the dark track line. Thin wires run from the sensors back to a visible microcontroller board on top, with a small battery pack neatly strapped to the frame, making it obvious that the robot is built for following the contrasting line.\n\nSet in a clean, near-future hobby workshop with soft, even lighting and a subtle solarpunk vibe: a few green plants, shelves with organized parts bins, and maybe a sunlit window with distant city rooftops. The style is photorealistic 512×512 with slightly stylized colors, no brand logos, no text on the track. The composition centers the robot and the curved black line so it reads clearly as a line-following training setup, with background details softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

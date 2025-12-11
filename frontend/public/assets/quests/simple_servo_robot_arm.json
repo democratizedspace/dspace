@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/simple_servo_robot_arm.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/servo-arm.json",
+    "item_name": "Assemble a Servo Arm",
+    "item_id": "robotics/servo-arm",
+    "entity_type": "quest",
+    "prompt": "A simple three-joint robot arm made from small hobby servos and lightweight plastic or 3D-printed segments is mounted to a flat base on a workbench. The arm is reaching out to gently lift a small object like a foam cube or wooden block, with the joints clearly visible and wires running neatly along the segments back to a microcontroller board. The design should look approachable and DIY, emphasizing that this is a beginner-friendly servo arm capable of lifting light objects rather than an industrial machine.\n\nThe background is a bright near-future workshop with organized tools, storage bins, and a couple of potted plants that give it a solarpunk feel. Soft, cinematic lighting and a slightly stylized photorealistic look keep the image friendly and inviting, with no brand logos or text elements. The composition centers on the arm and the object it is lifting, while the rest of the surroundings remain subtly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

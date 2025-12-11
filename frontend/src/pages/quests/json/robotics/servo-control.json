@@ -2,7 +2,7 @@
     "id": "robotics/servo-control",
     "title": "Control a Servo Motor",
     "description": "Learn to move a servo with an Arduino.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/arduino_servo_control.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

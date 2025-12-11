@@ -2,7 +2,7 @@
     "id": "robotics/line-follower",
     "title": "Build a line-following robot",
     "description": "Use two light sensors to make a simple robot follow a track.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/line_following_robot_track.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

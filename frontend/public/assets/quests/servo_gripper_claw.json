@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/servo_gripper_claw.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/servo-gripper.json",
+    "item_name": "Build a Servo Gripper",
+    "item_id": "robotics/servo-gripper",
+    "entity_type": "quest",
+    "prompt": "A small servo-powered gripper is mounted on a flat base or the end of a short arm, shown grasping a lightweight object such as a sponge cube or a 3D-printed block. The gripper has two opposing jaws made from plastic or 3D-printed parts, driven by a single hobby servo with a visible horn and linkage connecting to the jaws. Wires run from the servo to a nearby microcontroller board, clearly indicating that the claw is actuated and controllable.\n\nThe backdrop is a bright solarpunk robotics workbench with soft, diffused lighting, a few tools, and neatly organized components in bins. The image is a lightly stylized but mostly photorealistic 512×512 frame with no brand logos or text, focusing on the gripper mechanism and the object it is holding while the rest of the workspace remains subtly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
