@@ -2,7 +2,7 @@
     "id": "electronics/desolder-component",
     "title": "Desolder a component",
     "description": "Remove a through-hole resistor from a scrap PCB using a desoldering pump, flux pen and solder wick. Work in a ventilated area and wear safety goggles.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_desolder_through_hole_component.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

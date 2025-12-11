@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_arduino_blink_led.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/arduino-blink.json",
+    "item_name": "Blink an LED with Arduino",
+    "item_id": "electronics/arduino-blink",
+    "entity_type": "quest",
+    "prompt": "On a tidy workbench, an Arduino Uno is connected to a solderless breadboard with a single 5 mm LED and a current-limiting resistor wired from a digital I/O pin to ground. The LED is lit in mid-blink, casting a tiny glow on the surrounding breadboard holes, while a USB cable runs from the Arduino to a laptop just off-frame. A notebook with a hand-drawn timing diagram of on/off intervals lies nearby, underscoring that this simple circuit is being used to learn microcontroller programming.\n\nThe scene adopts a near-future solarpunk electronics lab aesthetic: soft, even lighting, pale work surfaces, and subtle high-tech details like a compact logic analyzer or small sensor module in the blurred background. The 512×512 photorealistic image centers the Arduino and blinking LED, with the laptop, tools, and background equipment slightly out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only a hand hovering near the board—capturing the approachable magic of making an LED blink with code.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

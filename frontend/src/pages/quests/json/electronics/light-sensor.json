@@ -2,7 +2,7 @@
     "id": "electronics/light-sensor",
     "title": "Build a Light Sensor",
     "description": "Use a photoresistor and Arduino to measure ambient brightness.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_light_sensor_arduino_photoresistor.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

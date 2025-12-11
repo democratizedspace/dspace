@@ -2,7 +2,7 @@
     "id": "electronics/continuity-test",
     "title": "Check USB cable continuity",
     "description": "Use a digital multimeter in continuity mode to check an unplugged USB cable while wearing safety goggles.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_usb_cable_continuity_test.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

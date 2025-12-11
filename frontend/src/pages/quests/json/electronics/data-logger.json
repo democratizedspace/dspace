@@ -2,7 +2,7 @@
     "id": "electronics/data-logger",
     "title": "Log Temperature Data",
     "description": "Use a Raspberry Pi to record readings from your thermistor.",
-    "image": "/assets/quests/basic_circuit.svg",
+    "image": "/assets/quests/electronics_pi_temperature_data_logger.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
