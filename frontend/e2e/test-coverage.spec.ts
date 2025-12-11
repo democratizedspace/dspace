@@ -253,12 +253,7 @@ test('verify playwright web server is properly configured', async ({ page }, tes
     // Get the playwright config to confirm the webServer settings
     const configPath = path.resolve(__dirname, '../playwright.config.ts');
 
-    // Check if file exists before reading
-    if (!fs.existsSync(configPath)) {
-        console.error(`File not found: ${configPath}`);
-        test.skip(true, `Could not find file: ${configPath}`);
-        return;
-    }
+    expect(fs.existsSync(configPath), `Expected Playwright config at ${configPath}`).toBeTruthy();
 
     const configContent = fs.readFileSync(configPath, 'utf8');
 
