@@ -2,7 +2,7 @@
     "id": "aquaria/breeding",
     "title": "Breed your guppies",
     "description": "Raise the next generation of fish among dense plants.",
-    "image": "/assets/quests/guppy.jpg",
+    "image": "/assets/quests/aquaria_guppy_breeding_plants.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [

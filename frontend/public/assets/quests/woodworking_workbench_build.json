@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_workbench_build.jpg",
+    "entity": "frontend/src/pages/quests/json/woodworking/workbench.json",
+    "item_name": "Build a simple workbench",
+    "item_id": "woodworking/workbench",
+    "entity_type": "quest",
+    "prompt": "A sturdy woodworking workbench is taking shape in the center of a shop, with thick legs, a solid top, and a lower shelf already assembled. Dog holes are being marked or drilled along the top, and a heavy front vise or clamp system is being bolted into place on one corner. Various hand tools, clamps, and a measuring tape lie on the surface, making it clear this bench is being built to support many future projects.\n\nThe environment is a bright, near-future maker space with a solarpunk aesthetic: high windows or skylights provide soft daylight, complemented by subtle LED strips, and there are hints of other stations—electronics, plants, or 3D printers—in the blurred background. The 512×512 photorealistic composition centers the workbench and the hands tightening bolts, with no brand logos or readable labels. Only arms and hands are shown, capturing the moment when a simple set of boards becomes a dedicated, sturdy workbench for all the builds to come.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

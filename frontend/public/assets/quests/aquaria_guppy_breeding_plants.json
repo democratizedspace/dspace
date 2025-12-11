@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/aquaria_guppy_breeding_plants.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/breeding.json",
+    "item_name": "Breed your guppies",
+    "item_id": "aquaria/breeding",
+    "entity_type": "quest",
+    "prompt": "A medium-sized aquarium is densely planted with tall stems, floating plants, and patches of fine-leaved greenery, creating a sheltered jungle for guppies. In the foreground, a colorful adult guppy pair swims near a cluster of newborn fry hiding among the plants and near a gentle sponge filter. The lighting is soft and warm, highlighting the fish and foliage while leaving the back of the tank slightly darker, suggesting a safe, secluded breeding environment.\n\nThe scene fits a near-future solarpunk home or lab aesthetic: the aquarium rests on a clean stand in front of a simple backdrop, with subtle high-tech touches like a sleek LED light strip and a compact controller box visible but unobtrusive. The 512×512 photorealistic composition centers on the adult guppies and fry amid dense plants, with no logos or readable text on any equipment. No human figures are visible, keeping the focus entirely on the peaceful, thriving guppy breeding setup.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
