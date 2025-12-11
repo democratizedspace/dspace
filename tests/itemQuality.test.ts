@@ -89,4 +89,17 @@ describe("item quality", () => {
       expect(currencyItem?.price).toBeUndefined();
     }
   });
+
+  it("prices antiseptic wipes instead of using a beta placeholder", () => {
+    const antisepticWipes = (items as Array<Record<string, any>>).find(
+      (item) => item.name === "antiseptic wipes"
+    );
+
+    expect(antisepticWipes).toBeDefined();
+    expect(antisepticWipes?.price).toBeDefined();
+    expect(antisepticWipes?.price).toMatch(/[0-9]/);
+    expect(antisepticWipes?.priceExemptionReason ?? null).not.toBe(
+      PriceExemptionReason.BETA_PLACEHOLDER
+    );
+  });
 });
