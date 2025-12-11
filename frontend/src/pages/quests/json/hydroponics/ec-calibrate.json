@@ -2,7 +2,7 @@
     "id": "hydroponics/ec-calibrate",
     "title": "Calibrate EC Meter",
     "description": "Use calibration solution so readings stay accurate.",
-    "image": "/assets/quests/aquarium_thermometer.jpg",
+    "image": "/assets/quests/hydroponic_ec_meter_calibration.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

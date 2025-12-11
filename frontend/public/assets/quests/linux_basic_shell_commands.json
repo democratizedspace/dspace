@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/linux_basic_shell_commands.jpg",
+    "entity": "frontend/src/pages/quests/json/sysadmin/basic-commands.json",
+    "item_name": "Learn Basic Linux Commands",
+    "item_id": "sysadmin/basic-commands",
+    "entity_type": "quest",
+    "prompt": "A sleek laptop sits on a minimalist desk, its screen displaying a dark terminal window with several lines of structured text in light-colored fonts, suggesting shell commands and output without any specific words being legible. A compact server or small form factor PC is visible beside the laptop, with network and power cables plugged in, hinting at a dedicated Ubuntu server being managed. A notebook with a few diagrams and a pen rests nearby, reinforcing that someone is practicing basic command-line operations.\n\nThe environment is a bright near-future home lab or study area with a solarpunk aesthetic: plants on the windowsill, soft natural light, and clean cable management. The 512×512 image is photorealistic with slight stylization, no readable text or logos anywhere on screen or hardware, and a composition that highlights the terminal window as the primary focus while the surrounding workspace and greenery provide context in gentle soft focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

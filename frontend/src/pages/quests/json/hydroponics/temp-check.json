@@ -2,7 +2,7 @@
     "id": "hydroponics/temp-check",
     "title": "Check Water Temperature",
     "description": "Make sure the reservoir stays in the sweet spot.",
-    "image": "/assets/quests/aquarium_thermometer.jpg",
+    "image": "/assets/quests/hydroponic_reservoir_temp_check.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [

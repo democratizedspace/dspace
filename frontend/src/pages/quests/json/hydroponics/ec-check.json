@@ -2,7 +2,7 @@
     "id": "hydroponics/ec-check",
     "title": "Check Solution EC",
     "description": "Measure nutrient strength with an EC meter.",
-    "image": "/assets/quests/aquarium_thermometer.jpg",
+    "image": "/assets/quests/hydroponic_ec_meter_check.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
