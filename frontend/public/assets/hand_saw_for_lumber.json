@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hand_saw_for_lumber.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Handsaw",
+    "item_id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+    "entity_type": "item",
+    "prompt": "A basic hand saw with a straight steel blade and a comfortable handle rests across a length of lumber on a workbench, with sawdust scattered beneath a partially completed cut. The teeth of the blade are clearly visible along the edge, and the handle is shaped for a firm grip without any branding or text. The placement makes it obvious that the saw is used for cutting boards to size in small woodworking projects.\n\nThe setting is a near-future solarpunk woodshop with soft, natural-looking light, a tidy arrangement of tools in the background, and a potted plant adding a bit of greenery. The 512×512 image is photorealistic with gentle stylization, no logos or readable markings on the saw, and a composition that centers the saw, the cut in the lumber, and the sawdust while the rest of the environment remains softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/5_gallon_bucket_chlorinated_tap_water.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "5 gallon bucket of tap water (chlorinated)",
+    "item_id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+    "entity_type": "item",
+    "prompt": "A standard 5 gallon bucket is filled nearly to the brim with clear tap water, tiny bubbles clinging to the sides and surface suggesting it was drawn recently. The bucket sits near an indoor faucet or hose bib, with a simple icon-only sticker implying municipal tap water without any readable words. The scene subtly conveys that this water is untreated and chlorinated, not yet suitable for sensitive hydroponic or aquarium use.\n\nThe setting is a near-future solarpunk utility or prep area with soft, even lighting, nearby pipes or fixtures, and organized cleaning or garden tools in the blurred background. The 512×512 image is photorealistic with gentle stylization, no logos or legible text, and a composition that centers the filled bucket and water surface while the surroundings remain softly out of focus, emphasizing that this is basic tap water in a container.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

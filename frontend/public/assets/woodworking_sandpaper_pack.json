@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/woodworking_sandpaper_pack.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Sandpaper pack",
+    "item_id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+    "entity_type": "item",
+    "prompt": "A small fan of sandpaper sheets in assorted grits is spread out on a wooden workbench, ranging from coarse to fine with subtly different colors and textures. A simple cardboard sleeve or band sits nearby, implying a multi-grit pack without any readable text. Fine dust on the bench and a partially smoothed piece of lumber in the background suggest the sheets are actively used for sanding rough boards and finishing projects.\n\nThe environment is a bright near-future solarpunk woodshop with soft, warm lighting, a potted plant on a shelf, and neatly stored tools along the wall. The 512×512 image is photorealistic with gentle stylization, no logos or legible labels on the sandpaper, and a composition that centers the fan of sheets and the partially sanded board while the rest of the shop fades into a soft blur.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

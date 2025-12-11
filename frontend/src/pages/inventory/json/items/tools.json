@@ -70,7 +70,7 @@
         "id": "7892ffc6-c651-445f-946b-7edc998cf389",
         "name": "Benchy",
         "description": "60 mm long calibration tugboat 3D printed in PLA; weighs about 15 g and uses about 5 m of filament.",
-        "image": "/assets/benchy.jpg",
+        "image": "/assets/3d_printed_benchy_calibration_model.jpg",
         "price": "0.30 dUSD",
         "type": "tool",
         "hardening": {
@@ -263,7 +263,7 @@
         "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4",
         "name": "print removal scraper",
         "description": "Thin spring-steel scraper with ergonomic handle lifts prints off the build plate without gouging.",
-        "image": "/assets/benchy.jpg",
+        "image": "/assets/print_removal_scraper_tool.jpg",
         "price": "6 dUSD",
         "type": "tool",
         "hardening": {
@@ -277,7 +277,7 @@
         "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
         "name": "claw hammer (16 oz)",
         "description": "450 g (16 oz) drop-forged steel head, curved claw and 330 mm (13 in) fiberglass handle for nails.",
-        "image": "/assets/door.jpg",
+        "image": "/assets/claw_hammer_16oz.jpg",
         "price": "10 dUSD",
         "type": "tool",
         "hardening": {
@@ -358,7 +358,7 @@
         "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
         "name": "helping hands",
         "description": "Adjustable third-hand tool with alligator clips and magnifier to hold small parts while soldering.",
-        "image": "/assets/benchy.jpg",
+        "image": "/assets/helping_hands_soldering_tool.jpg",
         "price": "10 dUSD",
         "type": "tool",
         "hardening": {
@@ -453,7 +453,7 @@
         "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32",
         "name": "paintbrush",
         "description": "50 mm natural-bristle brush for applying wood paint and finishes.",
-        "image": "/assets/door.jpg",
+        "image": "/assets/paintbrush_50mm_natural_bristle.jpg",
         "price": "3 dUSD",
         "type": "tool",
         "hardening": {
@@ -668,7 +668,7 @@
         "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
         "name": "compost sifter",
         "description": "Wooden frame with 1 cm mesh to screen finished compost; 40×40 cm, 1 kg.",
-        "image": "/assets/bucket.jpg",
+        "image": "/assets/compost_sifter_wooden_frame.jpg",
         "price": "20 dUSD",
         "type": "tool",
         "unit": "sifter",

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/3d_printed_benchy_calibration_model.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "Benchy",
+    "item_id": "7892ffc6-c651-445f-946b-7edc998cf389",
+    "entity_type": "item",
+    "prompt": "A small 3D-printed tugboat (Benchy) about 60 mm long sits on a smooth build plate, its layered hull, cabin, and smokestack clearly showing the fine details used to evaluate print quality. The model is printed in a single color of PLA, with subtle layer lines visible along the curved bow and cabin roof, and the tiny portholes and texturing are crisp but not exaggerated. A strand of filament remains lightly curled near the base, hinting at the roughly 5 m of filament consumed.\n\nThe scene is a near-future solarpunk maker space with a desktop FDM 3D printer in the background, soft ambient lighting, and neatly organized spools of filament on a shelf. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the printer or model, and a composition that centers the Benchy on the build plate while the rest of the printer and workspace remain softly out of focus, emphasizing it as a calibration print.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

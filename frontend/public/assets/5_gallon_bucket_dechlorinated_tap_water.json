@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/5_gallon_bucket_dechlorinated_tap_water.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "5 gallon bucket of dechlorinated tap water",
+    "item_id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+    "entity_type": "item",
+    "prompt": "A 5 gallon bucket of water sits in a bright indoor corner near a window, with the water surface calm and clear, a faint line of condensation on the inside walls suggesting it has been sitting for some time. A simple timer or clock in the soft background and a small hydroponic tub nearby imply that the water has been left to stand so chlorine can dissipate and is now ready for use. The bucket looks identical to a standard utility bucket, without any branding or text.\n\nThe environment is a near-future solarpunk grow space with soft daylight, leafy plants, and hydroponic equipment visible in gentle soft focus. The 512×512 image is photorealistic with light stylization, no logos or legible writing, and a composition that centers the bucket and calm water surface while the surrounding plants and gear signal that the water is safe and prepared for hydroponic use.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

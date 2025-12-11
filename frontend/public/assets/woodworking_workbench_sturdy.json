@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/woodworking_workbench_sturdy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Workbench",
+    "item_id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
+    "entity_type": "item",
+    "prompt": "A sturdy wooden workbench stands in the center of a workshop, with a thick top, strong legs, and perhaps a built-in vise or clamping area along one edge. The surface is mostly clear except for a few hand tools, and there are visible dog holes or clamp spots that make it ideal for holding workpieces securely while sawing or assembling projects. Beneath the bench, a shelf holds organized bins or toolboxes, reinforcing its role as a central, safe workspace.\n\nThe environment is a near-future solarpunk woodshop with soft, warm lighting, a wall of neatly hung tools behind the bench, and a window letting in natural light with greenery visible outside. The 512×512 image is photorealistic with gentle stylization, no logos or text on the bench or tools, and a composition that places the workbench prominently in the frame while the rest of the shop remains softly blurred, emphasizing it as the main safe working surface.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

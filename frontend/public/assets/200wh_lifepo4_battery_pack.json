@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/200wh_lifepo4_battery_pack.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "200 Wh battery pack",
+    "item_id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+    "entity_type": "item",
+    "prompt": "A compact 12 V lithium iron phosphate battery pack sits on a clean workbench, roughly the size of a small brick, with sturdy terminals or leads emerging from one end. A subtle icon-based label suggests built-in protection circuitry without readable text, and a pair of heavy-gauge wires with ring lugs or an Anderson-style connector emphasize that it can deliver substantial current. In the background, a small solar charge controller or DC load hints that the pack stores about 200 Wh for renewable energy projects.\n\nThe environment is a near-future solarpunk energy corner with soft, diffuse lighting, a small solar panel leaning against the wall, and neatly routed cables. The 512×512 image is photorealistic with gentle stylization, no logos or legible wording on the pack or equipment, and a composition that centers the battery pack and its connectors while the rest of the renewable-energy workspace remains softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

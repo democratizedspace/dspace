@@ -3,7 +3,7 @@
         "id": "92261497-d605-4db1-8710-953cf73d765c",
         "name": "hydroponics kit",
         "description": "Starter kit with a 10 L reservoir, pump, tubing and net pots for indoor hydroponics.",
-        "image": "/assets/hydroponics.jpg",
+        "image": "/assets/hydroponics_starter_kit_10l.jpg",
         "price": "50 dUSD",
         "hardening": {
             "passes": 1,
@@ -106,14 +106,14 @@
         "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
         "name": "5 gallon bucket of tap water (chlorinated)",
         "description": "A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics.",
-        "image": "/assets/bucket_water.jpg",
+        "image": "/assets/5_gallon_bucket_chlorinated_tap_water.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
         "name": "5 gallon bucket of dechlorinated tap water",
         "description": "A standard 19 L (5 gal) bucket filled with tap water that's been left for 48 hours so chlorine dissipates. Ready for hydroponic use.",
-        "image": "/assets/bucket_water.jpg",
+        "image": "/assets/5_gallon_bucket_dechlorinated_tap_water.jpg",
         "price": "8.20 dUSD",
         "hardening": {
             "passes": 1,
@@ -158,7 +158,7 @@
         "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
         "name": "harvestable basil plant",
         "description": "Mature Genovese basil in a 4 cm rockwool cube, ~20 cm tall and ready to harvest.",
-        "image": "/assets/hydroponic_basil_adult.jpg",
+        "image": "/assets/hydroponic_basil_plant_harvestable.jpg",
         "price": "5 dUSD",
         "hardening": {
             "passes": 1,
@@ -248,7 +248,7 @@
         "id": "29190faf-8581-4769-b871-f0ee283840e1",
         "name": "harvested basil plant",
         "description": "A basil plant that has been freshly harvested. Don't worry, it'll grow back eventually!",
-        "image": "/assets/hydroponic_basil_harvested.jpg",
+        "image": "/assets/hydroponic_basil_plant_harvested.jpg",
         "price": "6 dUSD"
     },
     {
@@ -427,7 +427,7 @@
         "id": "9f91173d-2609-4127-896d-7578078135db",
         "name": "porous air stone",
         "description": "Porous 5 cm (2 in) ceramic air stone that diffuses air bubbles in hydroponic reservoirs.",
-        "image": "/assets/hydroponics.jpg",
+        "image": "/assets/porous_ceramic_air_stone_5cm.jpg",
         "price": "3.00 dUSD",
         "unit": "each",
         "hardening": {
