@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_stick_on_thermometer_strip.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "aquarium thermometer (0–50°C)",
+    "item_id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+    "entity_type": "item",
+    "prompt": "A glass aquarium pane is shown close-up with a vertical stick-on thermometer strip adhered to the outside, its colored segments faintly visible but too small to read. Inside the tank, plants and a few small fish swim against a softly lit background, and the waterline is clearly visible above the thermometer position. The strip shows a gentle highlighted band in the mid-range, implying a temperature somewhere in the 0\u201350 \u00b0C range without exposing a specific value.\n\nThe setting is a near-future solarpunk living space with soft natural light, additional houseplants around the aquarium, and minimal, clean decor in the blurred background. The 512×512 image is photorealistic with gentle stylization, no logos or legible text on the strip or equipment, and a composition that focuses on the thermometer strip and nearby glass while the rest of the tank and room remain softly out of focus, emphasizing quick visual checks of aquarium temperature.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

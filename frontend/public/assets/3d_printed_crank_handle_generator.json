@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/3d_printed_crank_handle_generator.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "3D printed crank handle",
+    "item_id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
+    "entity_type": "item",
+    "prompt": "A 3D printed PLA crank handle lies next to a small DC generator housing, its hub designed to fit snugly onto the motor shaft with a printed keyway or set-screw hole visible. The ergonomic handle extends outward with a rounded grip that can be comfortably rotated by hand, and the surface shows fine layer lines consistent with FDM printing. Assembled, the crank and generator clearly form a simple hand-powered generator system.\n\nThe scene is a near-future solarpunk maker bench with soft, even lighting, a multimeter and LED test load nearby, and a compact 3D printer and filament spools in the blurred background. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or text on the handle or tools, and a composition that centers the crank, its hub, and the generator mount while the rest of the workspace remains softly out of focus, emphasizing printable, human-powered energy experiments.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

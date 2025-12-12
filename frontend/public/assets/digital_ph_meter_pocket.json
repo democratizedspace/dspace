@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/digital_ph_meter_pocket.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "digital pH meter",
+    "item_id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
+    "entity_type": "item",
+    "prompt": "A pocket-sized digital pH meter with a slim rectangular body lies on a workbench, its protective cap removed to reveal the small electrode at the tip. The display shows a numeric reading with a decimal place, but the digits are too small to read clearly, suggesting accurate pH measurement from 0\u201314 without exposing a specific value. Beside the meter, a small calibration solution vial and a beaker of water indicate that the device can be calibrated and then dipped into hydroponic reservoirs.\n\nThe environment is a near-future solarpunk hydroponics corner with soft, even lighting, nutrient tubs and lush plants visible in the blurred background, and neatly arranged bottles and tools. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the meter or bottles, and a composition that centers the pH meter, its exposed electrode, and the calibration vial while the rest of the grow setup remains softly out of focus, emphasizing precise nutrient monitoring.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

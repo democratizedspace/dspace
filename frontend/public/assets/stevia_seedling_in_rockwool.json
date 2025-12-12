@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/stevia_seedling_in_rockwool.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia seedling",
+    "item_id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+    "entity_type": "item",
+    "prompt": "A young stevia seedling rises from a small rockwool cube, its delicate stem topped with a few narrow, serrated leaves that distinguish it from broader-leaf herbs. The cube sits in a shallow tray with other plugs, some showing newly emerged sprouts, and the rockwool appears evenly moist. The plant is small and tender, clearly at an early stage where it still needs careful handling and controlled conditions.\n\nThe scene is a near-future solarpunk grow station with soft, even lighting from an overhead LED bar, hydroponic equipment and additional seedling trays blurred in the background, and clean, modular surfaces. The 512×512 image is photorealistic with gentle stylization, no logos or text on the gear, and a composition that keeps the stevia seedling and its cube in sharp focus while the rest of the environment remains softly out of focus, emphasizing its role as a young, promising plant.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/wire_cutters_angled_electronics.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "wire cutters",
+    "item_id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+    "entity_type": "item",
+    "prompt": "A pair of small angled-cutting pliers rests on an electronics workbench, their sharp jaws aligned just above a cluster of component leads protruding through a PCB. The cutting edges are clean and slightly offset, clearly designed to trim leads and small wires flush to the board. The handles are compact and coated with simple, grippy insulation, with no logos or text, and a few freshly snipped bits of wire lie scattered on the silicone mat below.\n\nThe environment is a near-future solarpunk electronics station with soft, even lighting, an anti-static silicone mat, and neatly organized bins of components and tools visible in soft focus. The 512×512 image is photorealistic with gentle stylization, no readable markings on the cutters or equipment, and a composition that centers the angled jaws and trimmed leads while the rest of the workspace remains pleasantly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

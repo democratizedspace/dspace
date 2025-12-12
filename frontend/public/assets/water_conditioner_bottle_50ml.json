@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/water_conditioner_bottle_50ml.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Water conditioner",
+    "item_id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+    "entity_type": "item",
+    "prompt": "A small 50 mL plastic bottle of aquarium water conditioner stands on a counter next to a clear measuring cap and a glass of tap water, its translucent blue liquid visible through the bottle. The label is minimal and icon-based, hinting at chlorine and chloramine neutralization without any readable text, and a few drops are mid-pour into the water. In the background, a freshwater aquarium with a filter and plants suggests that this conditioner is used to treat tap water before it enters the tank.\n\nThe scene is a near-future solarpunk living space with soft, even lighting, healthy houseplants, and a tidy aquarium corner visible in gentle soft focus. The 512×512 image is photorealistic with gentle stylization, no logos or legible writing on the bottle, and a composition that centers the water conditioner, measuring cap, and glass of water while the aquarium and room details remain softly blurred, emphasizing safe preparation of water for aquatic life.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/basil_seedling_rockwool_plug.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "basil seedling",
+    "item_id": "5712947f-716c-4f71-b28d-fcb811631080",
+    "entity_type": "item",
+    "prompt": "A two-week-old Genovese basil seedling grows from a small 3 cm rockwool plug set in a plastic tray, its central stem supporting a pair of broad cotyledons and the first true leaves beginning to unfurl. The plant stands about 5 cm tall, looking sturdy but still juvenile, with the rockwool cube visibly moist and lightly textured. A few neighboring plugs, some just sprouting, hint at a tray of hydroponic seedlings.\n\nThe environment is a near-future solarpunk indoor grow area with soft, diffused light from overhead full-spectrum LEDs, other seedling trays and nutrient reservoirs blurred in the background, and clean, bright surfaces. The 512×512 image is photorealistic with gentle stylization, no logos or text on any equipment, and a composition that centers the basil seedling and its rockwool plug while the rest of the grow space stays softly out of focus, emphasizing early-stage hydroponic growth.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

@@ -41,7 +41,7 @@
         "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
         "name": "basil seeds",
         "description": "Packet of ~50 Genovese basil seeds for hydroponic germination.",
-        "image": "/assets/basil_seeds.jpg",
+        "image": "/assets/basil_seeds_packet.jpg",
         "price": "2 dUSD",
         "unit": "packet",
         "hardening": {
@@ -139,7 +139,7 @@
         "id": "5712947f-716c-4f71-b28d-fcb811631080",
         "name": "basil seedling",
         "description": "Two-week-old Genovese basil in a 3 cm rockwool plug, ~5 cm tall and ~5 g.",
-        "image": "/assets/basil_seedlings.jpg",
+        "image": "/assets/basil_seedling_rockwool_plug.jpg",
         "price": "1 dUSD",
         "hardening": {
             "passes": 1,
@@ -229,7 +229,7 @@
         "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
         "name": "bundle of basil leaves",
         "description": "Fresh-cut 30 g (1 oz) bundle of Genovese basil leaves from hydroponic plants; use or sell soon.",
-        "image": "/assets/basil_harvested.jpg",
+        "image": "/assets/bundle_of_basil_leaves_30g.jpg",
         "price": "2 dUSD",
         "hardening": {
             "passes": 1,
@@ -269,7 +269,7 @@
         "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
         "name": "Lettuce Seeds",
         "description": "Seeds for growing crisp hydroponic lettuce.",
-        "image": "/assets/hydroponic_lettuce.jpg",
+        "image": "/assets/hydroponic_lettuce_seeds_packet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -335,7 +335,7 @@
         "id": "71655665-4a59-41f4-9084-dad4d976df91",
         "name": "EC meter",
         "description": "Handheld EC meter (0–2000 ppm) for monitoring hydroponic nutrient strength.",
-        "image": "/assets/aquarium_thermometer.jpg",
+        "image": "/assets/hydroponic_ec_meter_handheld.jpg",
         "price": "18 dUSD",
         "hardening": {
             "passes": 1,
@@ -368,7 +368,7 @@
         "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
         "name": "digital pH meter",
         "description": "Pocket-sized meter measures pH 0–14 with ±0.1 accuracy; includes calibration solution.",
-        "image": "/assets/aquarium_thermometer.jpg",
+        "image": "/assets/digital_ph_meter_pocket.jpg",
         "price": "15 dUSD",
         "hardening": {
             "passes": 1,
@@ -447,7 +447,7 @@
         "id": "8f7c2e83-285a-4b29-9a3a-312f0dce2745",
         "name": "mechanical outlet timer",
         "description": "24 h analog timer with 15 min segments; rated 120 V AC, 15 A. Controls grow lights offline.",
-        "image": "/assets/aquarium_light.jpg",
+        "image": "/assets/mechanical_outlet_timer_24h.jpg",
         "price": "10 dUSD",
         "unit": "each",
         "type": "tool",

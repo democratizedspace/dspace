@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/compost_thermometer_30cm_probe.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "compost thermometer",
+    "item_id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+    "entity_type": "item",
+    "prompt": "A stainless steel compost thermometer with a 30 cm probe is shown inserted into the center of a compost pile, its round dial resting just above the surface. The scale on the dial ranges from low to high temperatures with colored zones but the numbers are too small to read clearly, implying a 0\u2013100 \u00b0C / 32\u2013212 \u00b0F range. Steam or a light haze rises gently from the pile, suggesting active microbial heating at the core.\n\nThe environment is a near-future solarpunk garden or homestead with soft daylight, raised beds, and lush plants in the blurred background, plus a few tools leaning against a fence. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the thermometer, and a composition that centers the dial, probe, and textured compost surface while the surrounding garden remains softly out of focus, emphasizing monitoring of compost pile heat.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

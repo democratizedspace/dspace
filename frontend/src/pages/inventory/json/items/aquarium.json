@@ -99,7 +99,7 @@
         "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
         "name": "aquarium heater (150 W)",
         "description": "Submersible 150 W heater with 20–30°C thermostat, auto shutoff and 1.5 m 120 V cord; warms 150 L.",
-        "image": "/assets/aquarium_heater.jpg",
+        "image": "/assets/aquarium_heater_150w.jpg",
         "price": "22 dUSD",
         "hardening": {
             "passes": 2,
@@ -123,7 +123,7 @@
         "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
         "name": "aquarium LED light (20 W)",
         "description": "Clip-on 20 W LED light (6500 K) for 60–80 L freshwater tanks; 1.5 m cord with switch.",
-        "image": "/assets/aquarium_light.jpg",
+        "image": "/assets/aquarium_led_light_20w_clip_on.jpg",
         "price": "20 dUSD",
         "hardening": {
             "passes": 1,
@@ -142,7 +142,7 @@
         "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
         "name": "aquarium thermometer (0–50°C)",
         "description": "Stick-on strip thermometer for aquariums; 0–50°C range with ±1°C accuracy.",
-        "image": "/assets/aquarium_thermometer.jpg",
+        "image": "/assets/aquarium_stick_on_thermometer_strip.jpg",
         "price": "7 dUSD",
         "hardening": {
             "passes": 1,
@@ -161,7 +161,7 @@
         "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
         "name": "7 pH freshwater aquarium (150 L)",
         "description": "An freshwater aquarium with a pH of 7.",
-        "image": "/assets/aquarium_filled.jpg",
+        "image": "/assets/freshwater_aquarium_150l_ph7.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -188,7 +188,7 @@
         "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
         "name": "aquarium net",
         "description": "10 cm nylon mesh net with 30 cm handle for moving fish during tank maintenance.",
-        "image": "/assets/aquarium_net.jpg",
+        "image": "/assets/aquarium_net_10cm.jpg",
         "price": "5 dUSD",
         "type": "tool",
         "hardening": {
@@ -320,7 +320,7 @@
         "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
         "name": "aquarium air pump",
         "description": "5 W diaphragm air pump supplies ~3 L/min at 12 kPa for tanks ≤40 L; 1 m 120 V cord; <40 dB noise.",
-        "image": "/assets/aquarium_filter.jpg",
+        "image": "/assets/aquarium_air_pump_5w.jpg",
         "price": "15 dUSD",
         "hardening": {
             "passes": 1,
@@ -339,7 +339,7 @@
         "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
         "name": "Sponge filter",
         "description": "Air-driven sponge filter for ≤40 L (10 gal) tanks; 5 cm foam; needs 4 mm airline and air pump.",
-        "image": "/assets/aquarium_filter.jpg",
+        "image": "/assets/sponge_filter_for_small_aquarium.jpg",
         "price": "6 dUSD",
         "hardening": {
             "passes": 1,
@@ -358,7 +358,7 @@
         "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
         "name": "Aquarium liquid test kit",
         "description": "Liquid reagent kit for aquariums. Four 15 mL bottles and test tubes provide ~130 tests for ammonia, nitrite and nitrate.",
-        "image": "/assets/aquarium_thermometer.jpg",
+        "image": "/assets/aquarium_liquid_test_kit.jpg",
         "price": "25 dUSD",
         "hardening": {
             "passes": 1,
@@ -377,7 +377,7 @@
         "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
         "name": "Water conditioner",
         "description": "50 mL bottle of sodium thiosulfate solution that neutralizes chlorine and chloramine in tap water before aquarium use.",
-        "image": "/assets/aquarium_filled.jpg",
+        "image": "/assets/water_conditioner_bottle_50ml.jpg",
         "price": "6 dUSD",
         "hardening": {
             "passes": 1,

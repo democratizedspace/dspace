@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/sponge_filter_for_small_aquarium.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Sponge filter",
+    "item_id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+    "entity_type": "item",
+    "prompt": "A compact air-driven sponge filter sits in the corner of a small glass aquarium, its 5 cm foam cylinder resting on a plastic base with an uplift tube rising toward the surface. A 4 mm airline connects to the base, sending a gentle stream of bubbles up through the sponge, and a few shrimp or small fish swim calmly nearby. The sponge itself is dark and porous, clearly acting as both mechanical and biological filtration for tanks up to about 40 L.\n\nThe environment is a near-future solarpunk aquarium nook with soft natural light, live plants and smooth gravel in the tank, and neatly routed airline tubing leading to an off-screen pump. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable text on any equipment, and a composition that centers the sponge filter, bubbles, and nearby livestock while the rest of the tank and room remain softly out of focus, emphasizing gentle, shrimp-safe filtration.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

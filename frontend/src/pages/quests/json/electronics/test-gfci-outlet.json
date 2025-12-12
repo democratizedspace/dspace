@@ -2,7 +2,7 @@
     "id": "electronics/test-gfci-outlet",
     "title": "Test a GFCI Outlet",
     "description": "Verify a ground-fault circuit interrupter outlet with a plug-in tester.",
-    "image": "/assets/quests/outlet.jpg",
+    "image": "/assets/quests/test_gfci_outlet.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [

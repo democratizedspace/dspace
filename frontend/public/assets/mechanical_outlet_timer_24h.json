@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/mechanical_outlet_timer_24h.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "mechanical outlet timer",
+    "item_id": "8f7c2e83-285a-4b29-9a3a-312f0dce2745",
+    "entity_type": "item",
+    "prompt": "A compact mechanical outlet timer plugs into a wall socket, its circular 24-hour dial ringed with small push-in segments and a single on/off override switch on the face. A short cord from a grow light or aquarium light is plugged into the timer\u2019s front outlet, clearly showing that it controls power to the light on a schedule. The dial markings are visible but too small to read, implying 15-minute segments without exposing specific numbers.\n\nThe environment is a near-future solarpunk indoor growing corner with soft, even lighting, a hydroponic tub or planter glowing in the background, and clean, cable-managed surroundings. The 512×512 image is photorealistic with gentle stylization, no logos or legible text on the timer, and a composition that centers the timer, its dial, and the connected plug while the rest of the wall, cords, and grow setup remain softly blurred, emphasizing offline automation of lighting.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

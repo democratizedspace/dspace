@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/test_gfci_outlet.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/test-gfci-outlet.json",
+    "item_name": "Test a GFCI Outlet",
+    "item_id": "electronics/test-gfci-outlet",
+    "entity_type": "quest",
+    "prompt": "A person’s hand is shown pressing the test button on a GFCI outlet, while a plug-in tester remains inserted into the neighboring receptacle. The outlet face has the familiar test and reset buttons, and the tester’s LEDs are lit in a clear pattern, though any labels and text are too small to read. The composition makes it obvious that the sequence is to press the GFCI test button, observe the tester’s LEDs and outlet behavior, and then reset the outlet.\n\nThe environment is a near-future solarpunk home interior with soft, even lighting, clean walls, and a few plants or energy monitors in the blurred background. The 512×512 image is photorealistic with gentle stylization, no visible logos or readable text on the tester or outlet, and a composition that centers the hand, tester, and GFCI face while the rest of the room remains softly out of focus, emphasizing safe, hands-on verification of ground-fault protection.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
