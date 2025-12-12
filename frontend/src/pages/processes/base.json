@@ -218,7 +218,7 @@
         "id": "repair-clogged-nozzle",
         "title": "Disassemble and clear a clogged 3D printer nozzle",
         "requireItems": [
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
             { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 }
         ],
         "consumeItems": [{ "id": "564a76de-925b-4457-a548-d015168abe0c", "count": 1 }],
@@ -229,7 +229,7 @@
         "id": "repair-blob-of-death",
         "title": "Remove a blob of plastic and install a new nozzle",
         "requireItems": [
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
             { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 }
         ],
         "consumeItems": [
@@ -2764,7 +2764,7 @@
                 "count": 1
             },
             {
-                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                 "count": 1
             },
             {
@@ -2799,7 +2799,7 @@
         "image": "/assets/pla_white.jpg",
         "requireItems": [
             { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
         ],
         "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 10 }],
         "createItems": [],
@@ -2898,7 +2898,7 @@
                 "count": 1
             },
             {
-                "id": "7a5888c3-ce36-496f-a1b2-3ecdca66836a",
+                "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
                 "count": 1
             },
             {
@@ -3316,7 +3316,7 @@
                 "count": 1
             },
             {
-                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                 "count": 1
             },
             {
@@ -3460,7 +3460,7 @@
                 "count": 1
             },
             {
-                "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                 "count": 1
             },
             {
@@ -3478,7 +3478,7 @@
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3530,7 +3530,7 @@
         "requireItems": [
             { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
             { "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22", "count": 1 },
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 }
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3556,7 +3556,7 @@
             { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
             { "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03", "count": 1 },
             { "id": "dad7f853-ccc9-40be-b226-89272708db84", "count": 1 },
-            { "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4", "count": 1 },
+            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
             { "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00", "count": 1 }
         ],
         "consumeItems": [],
@@ -3607,7 +3607,7 @@
             { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
             { "id": "dad7f853-ccc9-40be-b226-89272708db84", "count": 1 },
             { "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00", "count": 1 },
-            { "id": "7a5888c3-ce36-496f-a1b2-3ecdca66836a", "count": 1 },
+            { "id": "87f670ce-3630-42bb-84c0-9243cf630d05", "count": 1 },
             { "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1", "count": 1 },
             { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
         ],

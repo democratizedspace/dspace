@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/soldered_jumper_wire_10cm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "soldered jumper wire",
+    "item_id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c",
+    "entity_type": "item",
+    "prompt": "A short 10 cm length of 22 AWG stranded jumper wire lies on a desk, with a neat soldered splice visible in the middle and a snug piece of 2 mm heat-shrink tubing shrunk over the joint. The insulation on either side of the splice is a solid color, and the heat-shrink segment is slightly darker and smoother, clearly reinforcing the repaired or extended connection. A soldering iron and a small spool of heat-shrink tubing appear in the background, making it obvious that this is a carefully soldered jumper rather than a bare twist.\n\nThe environment is a near-future solarpunk electronics workspace with soft, even lighting, tidy bins of wire and components, and a plant or two in the blurred distance. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on tools, and a composition that centers the wire, splice, and heat-shrink while the rest of the bench and lab equipment remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

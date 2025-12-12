@@ -2,7 +2,7 @@
     "filename": "/assets/safety_goggles_side_shields.jpg",
     "entity": "frontend/src/pages/inventory/json/items/tools.json",
     "item_name": "safety goggles",
-    "item_id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
+    "item_id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
     "entity_type": "item",
     "prompt": "A close-up side view of a different pair of clear polycarbonate safety goggles designed with prominent side shields and a slimmer frame, resting on a light-colored lab bench. The transparent side panels extend back from the main lens, clearly showing how they protect the wearer’s peripheral vision, while the adjustable strap disappears softly into the background. A small digital scale and a tray with neatly arranged tools are out of focus behind the goggles, reinforcing that these are sturdy, everyday protective gear.\n\nThe scene is a near-future first-aid or fabrication workstation rendered in a photorealistic 512×512 style, with soft, cinematic overhead lighting and a muted solarpunk palette of whites, grays, and soft greens. The composition should be uncluttered and centered on the goggles, with no brand logos or readable markings anywhere in the frame. No people are visible; the image focuses purely on the object and its environment, conveying safety and preparedness without any dramatic elements.",
     "image_model": "Z-Image Turbo",

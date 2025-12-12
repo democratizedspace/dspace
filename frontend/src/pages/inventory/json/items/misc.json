@@ -889,7 +889,7 @@
         "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
         "name": "USB Cable",
         "description": "Standard USB cable for charging or data transfer between devices.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/usb_cable_standard.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -923,7 +923,7 @@
         "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/servo_motor_small_hobby.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1152,7 +1152,7 @@
         "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
         "name": "Ethernet cable",
         "description": "A simple cable for wired network connections.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/ethernet_network_cable.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1327,7 +1327,7 @@
     {
         "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
         "name": "safety goggles",
-        "description": "Polycarbonate goggles with vents and adjustable strap; fit over glasses, block splashes. 100 g.",
+        "description": "ANSI Z87.1 polycarbonate goggles with vents, side shields, adjustable strap; fit over glasses, block splashes; 80–100 g.",
         "image": "/assets/safety_goggles_vented_clear.jpg",
         "price": "8 dUSD",
         "type": "tool",
@@ -1474,7 +1474,7 @@
         "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
         "name": "10k Ohm Resistor",
         "description": "A resistor for sensor voltage divider circuits.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/10k_ohm_resistor_through_hole.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1649,7 +1649,7 @@
         "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c",
         "name": "soldered jumper wire",
         "description": "10 cm 22 AWG stranded jumper wire with a soldered splice and 2 mm heat-shrink insulation; ~2 g.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/soldered_jumper_wire_10cm.jpg",
         "price": "0.20 dUSD",
         "unit": "each",
         "hardening": {

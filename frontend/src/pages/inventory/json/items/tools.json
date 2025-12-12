@@ -120,7 +120,7 @@
         "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
         "name": "soldering iron kit",
         "description": "30 W fixed-temp pen iron with metal stand, cellulose sponge, and 1 m of 0.8 mm lead-free solder.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/soldering_iron_kit_30w.jpg",
         "price": "25 dUSD",
         "type": "tool",
         "unit": "kit",
@@ -146,7 +146,7 @@
         "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
         "name": "desoldering pump",
         "description": "190 mm aluminum vacuum pump with spring and PTFE tip; 70 g; removes molten solder from PCB joints.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/desoldering_pump_vacuum.jpg",
         "price": "8 dUSD",
         "type": "tool",
         "hardening": {
@@ -166,7 +166,7 @@
         "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
         "name": "solder wick",
         "description": "2 mm wide no-clean copper braid for removing solder from pads; sold in 1 m rolls.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/solder_wick_copper_braid_2mm.jpg",
         "price": "3 dUSD",
         "type": "tool",
         "unit": "1.5 m spool",
@@ -184,25 +184,10 @@
         }
     },
     {
-        "id": "06146006-5615-4c1a-98dd-ff1b107ec893",
-        "name": "flux pen",
-        "description": "10 mL no-clean flux pen with fine tip for aiding solder flow during rework; ~15 g.",
-        "image": "/assets/basic_circuit.svg",
-        "price": "7 dUSD",
-        "type": "tool",
-        "unit": "pen",
-        "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
-        }
-    },
-    {
         "id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26",
         "name": "heat gun",
         "description": "1200 W heat gun with 300 °C and 600 °C settings and a built-in stand for shrinking tubing.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/heat_gun_two_setting.jpg",
         "price": "20 dUSD",
         "type": "tool",
         "hardening": {
@@ -297,7 +282,7 @@
         "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
         "name": "wire stripper",
         "description": "Spring-loaded tool strips 24–10 AWG insulation; built-in cutter; 120 mm, 75 g.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/wire_stripper_multi_gauge.jpg",
         "price": "15 dUSD",
         "type": "tool",
         "unit": "tool",
@@ -357,7 +342,7 @@
     {
         "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
         "name": "helping hands",
-        "description": "Adjustable third-hand tool with alligator clips and magnifier to hold small parts while soldering.",
+        "description": "Adjustable dual-arm third-hand tool with alligator clips, magnifier, and weighted base; holds small parts while soldering; 150 g.",
         "image": "/assets/helping_hands_soldering_tool.jpg",
         "price": "10 dUSD",
         "type": "tool",
@@ -372,7 +357,7 @@
         "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
         "name": "tape measure",
         "description": "3 m (10 ft) retractable steel tape measure with metric and imperial markings.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/tape_measure_3m_retractable.jpg",
         "price": "8 dUSD",
         "type": "tool",
         "hardening": {
@@ -392,7 +377,7 @@
         "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
         "name": "precision screwdriver set",
         "description": "Four-piece set with #00/#0 Phillips and 1.5/2.5 mm flathead drivers for electronics and robots.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/precision_screwdriver_set_4pc.jpg",
         "price": "12 dUSD",
         "type": "tool",
         "hardening": {
@@ -424,27 +409,6 @@
                     "task": "codex-item-hardening-2025-08-10",
                     "date": "2025-08-10",
                     "score": 60
-                }
-            ]
-        }
-    },
-    {
-        "id": "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4",
-        "name": "safety goggles",
-        "description": "ANSI Z87.1 polycarbonate goggles with side shields, adjustable strap; fit over glasses, 80 g.",
-        "image": "/assets/rescue.jpg",
-        "price": "8 dUSD",
-        "type": "tool",
-        "unit": "pair",
-        "hardening": {
-            "passes": 1,
-            "score": 65,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-item-hardening-2025-08-12",
-                    "date": "2025-08-12",
-                    "score": 65
                 }
             ]
         }
@@ -491,12 +455,12 @@
     },
     {
         "id": "dad7f853-ccc9-40be-b226-89272708db84",
-        "name": "solder flux pen",
-        "description": "10 mL no-clean flux pen with chisel tip (2% solids) to improve solder wetting on PCB pads.",
-        "image": "/assets/basic_circuit.svg",
+        "name": "flux pen",
+        "description": "10 mL no-clean flux pen with fine or chisel tip (2% solids) to improve solder flow and wetting on PCB pads; ~15 g.",
+        "image": "/assets/flux_pen_no_clean_10ml.jpg",
         "price": "5 dUSD",
         "type": "tool",
-        "unit": "10 mL pen",
+        "unit": "pen",
         "hardening": {
             "passes": 1,
             "score": 65,
@@ -511,24 +475,10 @@
         }
     },
     {
-        "id": "7a5888c3-ce36-496f-a1b2-3ecdca66836a",
-        "name": "helping hands tool",
-        "description": "Adjustable dual-arm third-hand soldering aid with alligator clips and weighted base; 150 g.",
-        "image": "/assets/basic_circuit.svg",
-        "price": "12 dUSD",
-        "type": "tool",
-        "hardening": {
-            "passes": 0,
-            "score": 0,
-            "emoji": "🛠️",
-            "history": []
-        }
-    },
-    {
         "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
         "name": "lead-free solder spool",
         "description": "100 g spool of 0.8 mm Sn99.3 Cu0.7 rosin-core solder wire (~14 m) for electronics prototyping.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/lead_free_solder_spool_0_8mm.jpg",
         "price": "12 dUSD",
         "type": "tool",
         "unit": "100 g spool",
@@ -570,7 +520,7 @@
         "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
         "name": "silicone soldering mat",
         "description": "300 × 200 × 3 mm silicone work mat with screw trays; heat‑resistant to 500 °C (932 °F); ~180 g.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/silicone_soldering_mat_300x200.jpg",
         "price": "15 dUSD",
         "type": "tool",
         "unit": "mat",
@@ -632,7 +582,7 @@
         "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
         "name": "needle-nose pliers",
         "description": "125 mm steel pliers with 1 mm tips for gripping and bending leads in tight spaces.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/needle_nose_pliers_125mm.jpg",
         "price": "6 dUSD",
         "type": "tool",
         "unit": "pair",
@@ -647,7 +597,7 @@
         "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
         "name": "brass tip cleaner",
         "description": "50 mm brass wire sponge in a weighted steel holder; 40 g; cleans iron tips without water.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/brass_tip_cleaner_sponge_holder.jpg",
         "price": "5 dUSD",
         "type": "tool",
         "unit": "each",
@@ -683,7 +633,7 @@
         "id": "593fc442-f437-4449-94e5-17b7b4625c41",
         "name": "solder fume extractor",
         "description": "120 mm fan with activated carbon filter draws solder fumes away; USB powered; 200 g.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/solder_fume_extractor_fan.jpg",
         "price": "30 dUSD",
         "type": "tool",
         "hardening": {

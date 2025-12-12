@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/lead_free_solder_spool_0_8mm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "lead-free solder spool",
+    "item_id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
+    "entity_type": "item",
+    "prompt": "A 100 g spool of 0.8 mm solder wire sits on an electronics bench, its shiny lead-free alloy neatly wound around a plastic reel. The free end of the solder extends slightly from the spool, resting near a small PCB and soldering iron stand, suggesting it is ready for prototyping work. The reel\u2019s hub carries a simple icon-based label with no readable text, indicating lead-free composition without specifying exact alloy details.\n\nThe scene is a near-future solarpunk electronics workspace with soft, even lighting, an anti-static mat beneath the components, and a few organized bins of parts in the background. The 512×512 image is photorealistic with gentle stylization, no logos or legible writing, and a composition that centers the spool, loose solder end, and adjacent PCB while the rest of the bench and tools remain softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

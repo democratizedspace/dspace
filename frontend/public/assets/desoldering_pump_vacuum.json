@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/desoldering_pump_vacuum.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "desoldering pump",
+    "item_id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
+    "entity_type": "item",
+    "prompt": "A 190 mm aluminum desoldering pump rests on an electronics bench, its cylindrical body and spring-loaded plunger clearly visible along with a small PTFE tip at the end. The plunger is cocked and ready, with a thumb button near the top indicating how it is triggered to suck up molten solder. A tinned PCB joint and a small puddle of solder on a nearby pad make it clear that the pump is used to pull solder away from PCB joints during rework.\n\nThe setting is a near-future solarpunk electronics station with soft, even lighting, a soldering iron stand and spool of solder close by, and organized bins of components in the blurred background. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable text on the pump, and a composition that centers the desoldering pump and the PCB area it is pointed at while the rest of the workspace remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

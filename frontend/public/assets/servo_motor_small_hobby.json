@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/servo_motor_small_hobby.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Servo Motor",
+    "item_id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+    "entity_type": "item",
+    "prompt": "A small hobby servo motor with a rectangular plastic body sits on a work surface, its three-wire cable (brown, red, orange) trailing toward the edge of the frame and a white plastic servo horn screwed onto the output shaft. A few additional horns and mounting screws lie nearby, making it clear that the motor can be attached to different linkages for precise movement. The size and form factor are typical of RC and microcontroller projects rather than industrial servos.\n\nThe scene is a near-future solarpunk electronics and robotics corner with soft, even lighting, a microcontroller board and a few 3D-printed brackets in the blurred background, and perhaps a small plant on a shelf. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the servo, and a composition that keeps the servo motor, its horn, and cable as the focal group while the surrounding workspace remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

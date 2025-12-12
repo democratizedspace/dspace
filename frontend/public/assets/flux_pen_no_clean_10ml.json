@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/flux_pen_no_clean_10ml.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "flux pen",
+    "item_id": "dad7f853-ccc9-40be-b226-89272708db84",
+    "entity_type": "item",
+    "prompt": "A slim 10 mL flux pen with a translucent body lies on an electronics workbench, its fine felt tip slightly tinted from use and a protective cap snapped off and resting nearby. The pen body shows a faint fluid level and a simple icon-based label, with no readable text, clearly indicating it dispenses no-clean flux for soldering and rework. A small PCB with freshly soldered joints and a soldering iron tip nearby hint at the pen\u2019s role in improving solder flow.\n\nThe scene is a near-future solarpunk electronics station with soft, even lighting, an anti-static mat under the work, and neatly organized tools and components visible in gentle soft focus. The 512×512 image is photorealistic with light stylization, no logos or legible writing on the pen or tools, and a composition that centers the flux pen, its tip, and the nearby PCB while the rest of the bench remains softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

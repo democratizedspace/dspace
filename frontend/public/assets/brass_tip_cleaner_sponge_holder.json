@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/brass_tip_cleaner_sponge_holder.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "brass tip cleaner",
+    "item_id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
+    "entity_type": "item",
+    "prompt": "A compact brass tip cleaner sits on a workbench, consisting of a 50 mm brass wire sponge nestled in a small weighted metal cup. The tangled brass strands are slightly darkened from use, and a soldering iron tip is shown just above or lightly touching the sponge, suggesting that excess solder and residue are being wiped off without water. The metal holder is simple and unbranded, with a stable base to prevent tipping.\n\nThe setting is a near-future solarpunk electronics station with soft, even lighting, a soldering iron stand and spool of solder nearby, and organized tools in the blurred background. The 512×512 image is photorealistic with gentle stylization, no logos or text on the cleaner or tools, and a composition that centers the brass sponge and holder while the rest of the workspace remains softly out of focus, making its function as a tip cleaner immediately clear.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
