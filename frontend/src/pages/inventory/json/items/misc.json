@@ -1327,7 +1327,7 @@
     {
         "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
         "name": "safety goggles",
-        "description": "Polycarbonate goggles with vents and adjustable strap; fit over glasses, block splashes. 100 g.",
+        "description": "ANSI Z87.1 polycarbonate goggles with vents, side shields, adjustable strap; fit over glasses, block splashes; 80–100 g.",
         "image": "/assets/safety_goggles_vented_clear.jpg",
         "price": "8 dUSD",
         "type": "tool",
