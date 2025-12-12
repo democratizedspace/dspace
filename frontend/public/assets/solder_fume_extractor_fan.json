@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/solder_fume_extractor_fan.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "solder fume extractor",
+    "item_id": "593fc442-f437-4449-94e5-17b7b4625c41",
+    "entity_type": "item",
+    "prompt": "A compact solder fume extractor with a 120 mm fan and square housing sits on a workbench behind an active soldering station, its front face covered by a removable activated carbon filter. The fan is angled toward a PCB being soldered, and faint wisps of smoke are drawn toward the black filter, illustrating how it pulls fumes away from the operator. A USB cable snakes from the back of the unit to a nearby power hub, hinting at its low-power, portable design.\n\nThe scene is a near-future solarpunk electronics lab with soft, even lighting, plants on a shelf, and neatly routed cables around other equipment. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable text on the fan or tools, and a composition that focuses on the fume extractor, its filter, and the faint smoke trails while the rest of the bench and background remain softly out of focus, emphasizing safe, clean soldering practice.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

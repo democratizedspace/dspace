@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/needle_nose_pliers_125mm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "needle-nose pliers",
+    "item_id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+    "entity_type": "item",
+    "prompt": "A pair of 125 mm needle-nose pliers lies on an electronics workbench, their long, slender jaws tapering down to fine 1 mm tips that can reach into tight spaces. The steel jaws are slightly textured for grip, and the handles are covered in simple insulated grips with no branding or text. Nearby, a small PCB and a few bent component leads clearly show that the pliers are used for gripping and bending leads during assembly.\n\nThe scene is a near-future solarpunk lab bench with soft, even lighting, an anti-static mat beneath the tools, and neatly organized component bins and a small plant in the blurred background. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable labels, and a composition that highlights the pliers\u2019 fine tips and a partially assembled circuit board while the rest of the workspace remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

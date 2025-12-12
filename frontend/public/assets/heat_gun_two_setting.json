@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/heat_gun_two_setting.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "heat gun",
+    "item_id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26",
+    "entity_type": "item",
+    "prompt": "A compact 1200 W heat gun rests on a soldering-safe work surface, its nozzle pointing away from nearby components and its built-in stand deployed to keep the hot end elevated. A simple control switch on the handle shows two heat settings, but the markings are too small to read clearly, suggesting different temperature levels without giving exact numbers. A length of heat-shrink tubing on a wire nearby is partially shrunken, clearly demonstrating the tool\u2019s use for shrinking tubing rather than heavy industrial work.\n\nThe environment is a near-future solarpunk electronics and repair station with soft, even lighting, a silicone mat under the work area, and organized tools and parts on shelves in the blurred background. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable labels on the heat gun, and a composition that centers the gun, its stand, and the shrunken tubing while the rest of the workspace remains softly out of focus to emphasize safe, controlled use.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

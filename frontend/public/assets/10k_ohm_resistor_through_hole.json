@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/10k_ohm_resistor_through_hole.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "10k Ohm Resistor",
+    "item_id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+    "entity_type": "item",
+    "prompt": "A single 10 k\u03a9 through-hole resistor lies on an anti-static mat, its cylindrical body with colored bands clearly visible and two straight leads extending outward on either side. The bands are painted in a standard color code pattern but are too small to interpret precisely, emphasizing that this is a typical resistor used in sensor voltage dividers and other circuits. Nearby, a small breadboard and a sensor module hint at how the resistor is used to form a voltage divider.\n\nThe environment is a near-future solarpunk electronics workbench with soft, even lighting, neatly arranged components in organizers, and a small plant tucked beside an oscilloscope or multimeter in the background. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on equipment, and a composition that centers the resistor and its leads while the surrounding tools and boards remain softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
