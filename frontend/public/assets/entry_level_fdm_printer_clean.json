@@ -7,4 +7,4 @@
     "prompt": "A clean entry-level FDM 3D printer with a 220\u00d7220\u00d7250 mm build volume and 0.4 mm nozzle is shown in standby, its print head parked at the home position and the build plate empty and freshly leveled. The frame is simple and open, with the control panel showing a neutral ready screen without readable text, and a single spool of filament is mounted to the side or top of the machine. The overall appearance is tidy and ready for routine printing.\n\nThe environment is a near-future solarpunk workshop with soft, even lighting, organized tools, and filament spools on a nearby shelf, plus a plant adding a touch of green. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable labels on the printer, and a composition that centers the printer frame, bed, and hotend while the rest of the workspace remains softly blurred, emphasizing a reliable, everyday hobby machine.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

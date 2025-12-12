@@ -7,4 +7,4 @@
     "prompt": "An entry-level FDM 3D printer with a 220\u00d7220\u00d7250 mm build volume sits idle, its print head hovering above the bed with a visible blob of hardened filament at the nozzle tip and a rough, failed first layer on the build surface. The rest of the printer frame and bed look clean, but the nozzle clearly needs cleaning before another print. The control panel shows a neutral or error state without readable text, emphasizing that the issue is mechanical, not software.\n\nThe environment is a near-future solarpunk maker space with soft, even lighting, neatly organized tools, and spare nozzles and cleaning brushes in the blurred background. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable markings on the printer, and a composition that centers the clogged nozzle, messy filament at the hotend, and imperfect first layer while the rest of the machine remains softly out of focus, illustrating a common 3D printing maintenance scenario.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

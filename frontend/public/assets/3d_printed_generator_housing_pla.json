@@ -7,4 +7,4 @@
     "prompt": "A 3D printed PLA generator housing sits on a bench, shaped as a compact enclosure with a cylindrical cavity for a small DC motor and a side mount for a hand crank. The motor partially fitted into the housing shows its shaft protruding through a reinforced front panel, where a printed bearing surface or boss keeps it aligned. Mounting holes and internal ribs are visible, clearly indicating that the housing is designed to hold the motor and crank securely during use.\n\nThe environment is a near-future solarpunk maker space with soft, even lighting, a simple FDM printer and spools of filament in the blurred background, and a multimeter and LED bulb nearby to suggest test loads. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or text on the housing or tools, and a composition that centers the printed enclosure and motor cavity while the rest of the workspace remains softly out of focus, emphasizing functional printed mechanics.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}
