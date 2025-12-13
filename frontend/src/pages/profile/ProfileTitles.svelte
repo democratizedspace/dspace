@@ -37,13 +37,21 @@
                     class="item"
                     data-unlocked={title.unlocked ? 'true' : 'false'}
                     data-selected={selectedTitleId === title.id ? 'true' : 'false'}
+                    role={title.unlocked ? 'button' : undefined}
+                    tabindex={title.unlocked ? 0 : undefined}
+                    on:click={() => title.unlocked && selectTitle(title)}
+                    on:keydown={(e) => {
+                        if (title.unlocked && (e.key === 'Enter' || e.key === ' ')) {
+                            e.preventDefault();
+                            selectTitle(title);
+                        }
+                    }}
                 >
                     <Chip
                         text={title.name}
                         disabled={!title.unlocked}
                         inverted={title.unlocked}
                         pressed={selectedTitleId === title.id}
-                        onClick={() => selectTitle(title)}
                     />
                     <span
                         class={`status ${title.unlocked ? 'unlocked' : 'locked'}`}
@@ -106,6 +114,11 @@
     .item[data-unlocked='true']:not([data-selected='true']):hover {
         background: rgba(37, 61, 37, 0.65);
         cursor: pointer;
+    }
+
+    .item[data-unlocked='true']:focus-visible {
+        outline: 2px solid rgba(104, 212, 109, 0.8);
+        outline-offset: 2px;
     }
 
     .status {
