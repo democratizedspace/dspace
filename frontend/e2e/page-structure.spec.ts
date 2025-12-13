@@ -133,26 +133,31 @@ test.describe('Page Layout Structure', () => {
                 const header = page.locator('header.header');
                 const brand = page.locator('[data-testid="brand"]');
                 const toggle = page.getByRole('button', { name: /toggle dark mode/i });
+                const avatarLink = page.getByRole('link', { name: /^profile$/i });
+                const avatarImage = avatarLink.getByRole('img', { name: /profile avatar/i });
 
-                const [headerBox, brandBox, toggleBox] = await Promise.all([
+                const [headerBox, brandBox, toggleBox, avatarBox] = await Promise.all([
                     header.boundingBox(),
                     brand.boundingBox(),
                     toggle.boundingBox(),
+                    avatarLink.boundingBox(),
                 ]);
 
-                if (!headerBox || !brandBox || !toggleBox) {
+                if (!headerBox || !brandBox || !toggleBox || !avatarBox) {
                     throw new Error('Unable to read header layout');
                 }
 
                 const headerCenter = headerBox.x + headerBox.width / 2;
                 const brandCenter = brandBox.x + brandBox.width / 2;
 
-                expect(Math.abs(brandCenter - headerCenter)).toBeLessThanOrEqual(16);
+                expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(0.5);
                 expect(toggleBox.x).toBeGreaterThan(headerCenter - 12);
+                expect(avatarBox.x).toBeGreaterThan(headerCenter - 12);
                 expect(toggleBox.y).toBeGreaterThanOrEqual(headerBox.y - 8);
-                expect(toggleBox.y + toggleBox.height).toBeLessThanOrEqual(
-                    headerBox.y + headerBox.height + 8
-                );
+                expect(avatarBox.y).toBeGreaterThanOrEqual(headerBox.y - 8);
+                expect(avatarBox.x).toBeGreaterThanOrEqual(toggleBox.x - 4);
+                expect(avatarBox.y).toBeGreaterThan(toggleBox.y);
+                expect(toggleBox.y + toggleBox.height).toBeLessThanOrEqual(avatarBox.y - 2);
 
                 const overlaps = !(
                     brandBox.x + brandBox.width <= toggleBox.x ||
@@ -161,6 +166,18 @@ test.describe('Page Layout Structure', () => {
                     toggleBox.y + toggleBox.height <= brandBox.y
                 );
                 expect(overlaps).toBeFalsy();
+
+                const headerRight = headerBox.x + headerBox.width;
+                const actionsRight = Math.max(
+                    toggleBox.x + toggleBox.width,
+                    avatarBox.x + avatarBox.width
+                );
+                expect(headerRight - actionsRight).toBeLessThanOrEqual(16);
+
+                await expect(avatarImage).toHaveAttribute(
+                    'src',
+                    /\/assets\/pfp\/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14\.jpg$/
+                );
             });
         });
     }
