@@ -127,6 +127,7 @@ const TEST_GROUPS = [
         files: [
             'test-quest-chat.spec.ts',
             'tutorial-quest.spec.ts',
+            'quest-grant-items.spec.ts',
             'quests.spec.ts',
             'constellations-quest.spec.ts',
             'custom-content.spec.ts',

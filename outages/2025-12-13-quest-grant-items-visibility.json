@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-13-quest-grant-items-visibility",
+  "date": "2025-12-13",
+  "component": "frontend-quests",
+  "rootCause": "CompactItemList skipped rendering when all counts were zero, so tutorial grant and require lists vanished once custom quests began loading players with empty inventories.",
+  "resolution": "Always render provided item definitions and add unit plus Playwright coverage for the tutorial grant and requires options.",
+  "references": [
+    "frontend/src/components/svelte/CompactItemList.svelte",
+    "frontend/e2e/quest-grant-items.spec.ts"
+  ]
+}
