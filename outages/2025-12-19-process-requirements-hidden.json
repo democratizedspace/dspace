@@ -1,0 +1,10 @@
+{
+    "id": "process-requirements-hidden-at-zero",
+    "date": "2025-12-19",
+    "component": "frontend/processes",
+    "rootCause": "CompactItemList hid item rows whenever all inventory counts were zero, so process pages suppressed required/created item lists for new players despite data existing.",
+    "resolution": "Removed the zero-count short-circuit so CompactItemList always renders provided items and added a regression test for zero-count rendering.",
+    "references": [
+        "https://staging.democratized.space/processes/solar-200Wh"
+    ]
+}
