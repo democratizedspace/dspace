@@ -18,8 +18,8 @@
     // Local State
     let fullItemList = [];
     let isMounted = false;
+    let hasItems = false;
     const itemCounts = writable(getItemCounts(itemList));
-    $: isEmpty = Object.values($itemCounts).every((qty) => qty === 0);
 
     // Generate the full item list with additional properties
     function generateFullItemList() {
@@ -43,6 +43,7 @@
     $: {
         itemCounts.set(getItemCounts(itemList));
         fullItemList = generateFullItemList();
+        hasItems = itemList?.length > 0;
     }
 
     function getQty(count) {
@@ -52,49 +53,47 @@
     }
 </script>
 
-{#if isMounted}
-    {#if !isEmpty}
-        <div class="Container">
-            <Chip inverted={!inverted} {disabled} text="">
-                <div class="vertical">
-                    {#each fullItemList as item (item.id)}
-                        <div class="horizontal">
-                            <DelayedRender delaySeconds={0.1}>
-                                <span slot="content">
-                                    <a href={`/inventory/item/${item.id}`}>
-                                        <img src={item.image} class="icon" alt={item.name} />
-                                    </a>
-                                </span>
-
-                                <span slot="fallback">
+{#if isMounted && hasItems}
+    <div class="Container">
+        <Chip inverted={!inverted} {disabled} text="">
+            <div class="vertical">
+                {#each fullItemList as item (item.id)}
+                    <div class="horizontal">
+                        <DelayedRender delaySeconds={0.1}>
+                            <span slot="content">
+                                <a href={`/inventory/item/${item.id}`}>
                                     <img src={item.image} class="icon" alt={item.name} />
-                                </span>
-                            </DelayedRender>
+                                </a>
+                            </span>
 
-                            <p
-                                class:disabled={disabled || $itemCounts[item.id] < item.count}
-                                class:inverted
-                            >
-                                {prettyPrintNumber($itemCounts[item.id])}
-                                {#if item.count !== null}
-                                    <span
-                                        class="qty {getQty(item.count) < 0 && !noRed ? 'neg' : ''}"
-                                    >
-                                        {#if getQty(item.count) < 0}
-                                            −{prettyPrintNumber(Math.abs(getQty(item.count)))}
-                                        {:else}
-                                            {prettyPrintNumber(getQty(item.count))}
-                                        {/if}
-                                    </span>
-                                {/if}
-                                x {item.name}
-                            </p>
-                        </div>
-                    {/each}
-                </div>
-            </Chip>
-        </div>
-    {/if}
+                            <span slot="fallback">
+                                <img src={item.image} class="icon" alt={item.name} />
+                            </span>
+                        </DelayedRender>
+
+                        <p
+                            class:disabled={disabled || $itemCounts[item.id] < item.count}
+                            class:inverted
+                        >
+                            {prettyPrintNumber($itemCounts[item.id])}
+                            {#if item.count !== null}
+                                <span
+                                    class="qty {getQty(item.count) < 0 && !noRed ? 'neg' : ''}"
+                                >
+                                    {#if getQty(item.count) < 0}
+                                        −{prettyPrintNumber(Math.abs(getQty(item.count)))}
+                                    {:else}
+                                        {prettyPrintNumber(getQty(item.count))}
+                                    {/if}
+                                </span>
+                            {/if}
+                            x {item.name}
+                        </p>
+                    </div>
+                {/each}
+            </div>
+        </Chip>
+    </div>
 {/if}
 
 <style>

@@ -1,0 +1,11 @@
+{
+  "id": "OUT-2025-12-13-process-requirements-missing",
+  "date": "2025-12-13",
+  "component": "frontend/process view",
+  "rootCause": "The CompactItemList component suppressed rendering whenever all tracked inventory counts were zero. Process pages pass requireItems and createItems lists that default to zero quantities, so the regression hid both lists entirely even though the data existed.",
+  "resolution": "Adjusted CompactItemList to render whenever an item list is provided, regardless of current inventory counts. This ensures process requirement and creation lists remain visible even when the player has none of the items.",
+  "references": [
+    "frontend/src/components/svelte/CompactItemList.svelte",
+    "frontend/src/components/svelte/Process.svelte"
+  ]
+}
