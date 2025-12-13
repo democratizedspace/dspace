@@ -178,12 +178,16 @@ test.describe('Page Layout Structure', () => {
                 ).toBeLessThan(pixelTolerance);
 
                 expect(leftmostControl).toBeGreaterThan(headerCenter - 12);
-                expect(rightmostControl).toBeLessThanOrEqual(headerBox.x + headerBox.width + 2);
+                expect(rightmostControl).toBeLessThanOrEqual(
+                    headerBox.x + headerBox.width + pixelTolerance
+                );
 
-                expect(toggleBox.y + toggleBox.height).toBeLessThanOrEqual(avatarBox.y + 2);
-                expect(avatarBox.y).toBeGreaterThanOrEqual(headerBox.y - 4);
+                expect(toggleBox.y + toggleBox.height).toBeLessThanOrEqual(
+                    avatarBox.y + pixelTolerance
+                );
+                expect(avatarBox.y).toBeGreaterThanOrEqual(headerBox.y - pixelTolerance * 2);
                 expect(avatarBox.y + avatarBox.height).toBeLessThanOrEqual(
-                    headerBox.y + headerBox.height + 8
+                    headerBox.y + headerBox.height + pixelTolerance * 4
                 );
 
                 const overlapsBrand = (boxA: typeof brandBox, boxB: typeof brandBox) =>
