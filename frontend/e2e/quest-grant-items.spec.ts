@@ -17,7 +17,7 @@ test.describe('Quest grant items regression', () => {
         const grantOption = page.getByRole('button', { name: /Great, free stuff! Thanks!/i });
         await expect(grantOption).toBeVisible();
 
-        const itemList = grantOption.locator('.vertical.container');
+        const itemList = grantOption.locator('.Container .vertical');
         const rows = itemList.locator('.horizontal');
         await expect(rows.nth(0)).toContainText(/dCarbon/i);
         await expect(rows.nth(0)).toContainText(/10/);
