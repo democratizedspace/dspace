@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_led_light_20w_clip_on.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "aquarium LED light (20 W)",
+    "item_id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+    "entity_type": "item",
+    "prompt": "A slim 20 W clip-on aquarium LED light is mounted on the rim of a mid-sized freshwater tank, its bar-style fixture extending over the water surface. The LEDs emit a clean 6500 K white glow that evenly illuminates plants and fish below, and the compact clip-on bracket grips the glass securely. A power cord with an inline switch trails neatly from the fixture toward a nearby outlet, clearly indicating a simple plug-in design for 60\u201380 L tanks.\n\nThe scene is a near-future solarpunk living room or fish room with soft ambient lighting, houseplants near the aquarium, and tidy cable management. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the light or switch, and a composition that centers the LED bar, its clip mount, and the illuminated tank beneath while the surrounding room stays softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

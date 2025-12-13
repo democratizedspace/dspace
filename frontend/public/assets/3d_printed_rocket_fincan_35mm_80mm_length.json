@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/3d_printed_rocket_fincan_35mm_80mm_length.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "3D printed fincan",
+    "item_id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
+    "entity_type": "item",
+    "prompt": "An 80 mm long 3D printed PLA fincan for a 35 mm model rocket stands on a table, with four symmetrical fins radiating from the lower section of the cylinder. The fins are thin yet sturdy, with crisp edges, and the interior bore is sized to slide over a 35 mm body tube while the base opening clearly accepts an 18 mm motor. The lightweight construction is evident from the thin walls and sparse internal ribbing visible at the base, suggesting a mass around 12 g.\n\nThe scene is a near-future solarpunk rocketry bench with soft, even lighting, nearby body tubes and nose cones in the blurred background, and a compact 3D printer off to one side. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable markings, and a composition that centers the fincan\u2019s fins, length, and motor opening while the rest of the workspace remains softly out of focus, emphasizing its role as a simple, modular rocket base.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

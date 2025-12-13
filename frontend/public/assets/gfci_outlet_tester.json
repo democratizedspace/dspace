@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/gfci_outlet_tester.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "GFCI outlet tester",
+    "item_id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+    "entity_type": "item",
+    "prompt": "A compact GFCI outlet tester is plugged into a wall receptacle, its small rectangular body featuring three indicator LEDs and a single test button on the front. The LEDs are illuminated in a particular pattern, but the legends next to them are too small to read, implying that the tester can diagnose wiring conditions without exposing specific text. The tester housing is plain and unbranded, and the wall plate around the outlet is clean and modern.\n\nThe scene is a near-future solarpunk interior with soft, even lighting, clean white walls, and a few pieces of minimalist furniture and plants in the blurred background. The 512×512 image is photorealistic with gentle stylization, no readable text or logos on the tester or outlet, and a composition that centers the tester and outlet while the rest of the room remains softly out of focus, emphasizing safe, quick verification of GFCI wiring.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

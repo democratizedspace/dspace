@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/servo_ready_rocket_fincan_35mm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "servo-ready fincan",
+    "item_id": "125eaa46-48f1-4cef-adaa-c200892af437",
+    "entity_type": "item",
+    "prompt": "A 3D printed PLA fincan for a 35 mm model rocket stands upright on a workbench, its cylindrical base blending into four evenly spaced fins with clean, sharp trailing edges. Rectangular cutouts on the sides reveal mounting bays for 9 g servos, and shallow channels are visible along the surface for routing servo wires up toward the body tube. The internal diameter is clearly sized for a 35 mm airframe, and the motor mount opening at the base hints at standard hobby motor compatibility.\n\nThe environment is a near-future solarpunk rocketry workspace with soft, even lighting, a small FDM printer and a few servo motors in the blurred background, and organized bins of hardware and wires. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or text on the fincan or tools, and a composition that centers the servo cutouts, wiring channels, and aerodynamic fin shape while the rest of the bench remains softly out of focus, emphasizing a guidance-ready fincan.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

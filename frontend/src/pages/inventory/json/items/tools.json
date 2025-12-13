@@ -3,7 +3,7 @@
         "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
         "name": "entry-level FDM 3D printer",
         "description": "Entry-level FDM printer with a 220×220×250 mm build volume, heated bed, and 0.4 mm nozzle.",
-        "image": "/assets/3dprinter.jpg",
+        "image": "/assets/entry_level_fdm_printer_clean.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
@@ -28,7 +28,7 @@
         "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
         "name": "0.4 mm brass nozzle",
         "description": "Replacement 0.4 mm brass nozzle compatible with entry-level FDM printers.",
-        "image": "/assets/3dprinter.jpg",
+        "image": "/assets/brass_nozzle_0_4mm_replacement.jpg",
         "price": "2 dUSD",
         "type": "tool",
         "hardening": {
@@ -42,7 +42,7 @@
         "id": "564a76de-925b-4457-a548-d015168abe0c",
         "name": "entry-level FDM 3D printer (clogged nozzle)",
         "description": "Printer with a nozzle clogged by a failed first layer; requires cleaning before use.",
-        "image": "/assets/3dprinter.jpg",
+        "image": "/assets/entry_level_fdm_printer_clogged_nozzle.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
@@ -56,7 +56,7 @@
         "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
         "name": "entry-level FDM 3D printer (blob of death)",
         "description": "Printer whose hotend is engulfed in melted plastic after a mid-air extrusion.",
-        "image": "/assets/3dprinter.jpg",
+        "image": "/assets/entry_level_fdm_printer_blob_of_death.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
@@ -228,7 +228,7 @@
         "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
         "name": "digital calipers",
         "description": "150 mm stainless steel digital calipers with 0.01 mm resolution and auto-off.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/digital_calipers_150mm.jpg",
         "price": "15 dUSD",
         "type": "tool",
         "hardening": {
@@ -323,7 +323,7 @@
         "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
         "name": "wire cutters",
         "description": "Angled-cutting pliers for trimming component leads and wires cleanly.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/wire_cutters_angled_electronics.jpg",
         "price": "12 dUSD",
         "type": "tool",
         "hardening": {
@@ -397,7 +397,7 @@
         "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
         "name": "anti-static wrist strap",
         "description": "Adjustable wrist strap with grounding cord to prevent electrostatic discharge while handling components.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/anti_static_wrist_strap_grounding_cord.jpg",
         "price": "7 dUSD",
         "type": "tool",
         "hardening": {
@@ -437,7 +437,7 @@
         "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
         "name": "compost thermometer",
         "description": "Stainless compost thermometer with 30 cm probe and 0–100 °C/32–212 °F dial to check pile core heat.",
-        "image": "/assets/aquarium_thermometer.jpg",
+        "image": "/assets/compost_thermometer_30cm_probe.jpg",
         "price": "15 dUSD",
         "type": "tool",
         "hardening": {
@@ -499,7 +499,7 @@
         "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
         "name": "GFCI outlet tester",
         "description": "Compact plug-in tester with three LEDs and a test button to check GFCI wiring; 50 g (1.8 oz).",
-        "image": "/assets/outlet.jpg",
+        "image": "/assets/gfci_outlet_tester.jpg",
         "price": "12 dUSD",
         "type": "tool",
         "unit": "tester",
@@ -541,7 +541,7 @@
         "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
         "name": "precision tweezers",
         "description": "ESD-safe stainless steel tweezers with 0.1 mm fine tips for placing tiny SMD parts; 120 mm long and 15 g.",
-        "image": "/assets/basic_circuit.svg",
+        "image": "/assets/precision_tweezers_esd_safe.jpg",
         "price": "5 dUSD",
         "type": "tool",
         "unit": "pair",

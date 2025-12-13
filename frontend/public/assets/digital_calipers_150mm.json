@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/digital_calipers_150mm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "digital calipers",
+    "item_id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+    "entity_type": "item",
+    "prompt": "A pair of 150 mm stainless steel digital calipers lies on a workbench, its jaws partially open to measure a small 3D-printed part. The LCD screen displays a precise value with two decimal places, but the digits are too small to read clearly, suggesting fine resolution without showing specific numbers. The slider and buttons are minimal and unbranded, and etched scale markings along the beam hint at metric measurements alongside the digital readout.\n\nThe environment is a near-future solarpunk maker space with soft, even lighting, a 3D printer and electronics parts in the blurred background, and a plant adding a bit of green near the edge of the frame. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the calipers, and a composition that centers the jaws, measured part, and display while the rest of the workspace remains softly out of focus, emphasizing precise measurement for fabrication and robotics.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

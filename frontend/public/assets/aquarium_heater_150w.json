@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_heater_150w.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "aquarium heater (150 W)",
+    "item_id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+    "entity_type": "item",
+    "prompt": "A submersible 150 W aquarium heater is shown attached vertically to the inside glass of a medium-sized tank using suction cups, its slim cylindrical body partially covered by a protective plastic guard. A small adjustable thermostat dial sits near the top of the heater, and a temperature scale is visible but too small to read, suggesting a 20\u201330 \u00b0C range. The power cord exits the waterline and drapes neatly over the back rim toward a nearby outlet.\n\nThe scene is a near-future solarpunk aquarium corner with soft, even lighting, live plants and fish in the tank, and a stick-on thermometer strip on the outside glass in the blurred background. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the heater or equipment, and a composition that centers the heater, its mounting, and the warmed tank environment while the rest of the room remains softly out of focus, emphasizing reliable temperature control for a 150 L aquarium.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

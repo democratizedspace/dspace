@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydroponic_ec_meter_handheld.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "EC meter",
+    "item_id": "71655665-4a59-41f4-9084-dad4d976df91",
+    "entity_type": "item",
+    "prompt": "A handheld EC meter with a slender body and detachable probe cap lies next to a small container of nutrient solution, its tip dipped into the liquid. The screen shows a numeric value and unit indicator, but the text is too small to read, implying a 0\u20132000 ppm range without giving exact numbers. The meter\u2019s controls are minimal and unbranded, and a hydroponic tub with healthy plants is visible in the background, clearly tying the reading to nutrient strength monitoring.\n\nThe scene is a near-future solarpunk grow area with soft, even lighting, tidy tubing and cables, and organized bottles of nutrients in the blurred background. The 512×512 image is photorealistic with gentle stylization, no logos or legible text on the meter or containers, and a composition that centers the EC meter, its probe, and the sample cup while the rest of the hydroponic setup remains softly out of focus, emphasizing practical, routine measurement.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

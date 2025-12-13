@@ -213,7 +213,7 @@
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
         "name": "3D printing kit",
         "description": "Assembled FDM printer, 0.4 mm nozzle, 180×180×180 mm build with 500 g PLA.",
-        "image": "/assets/3dprinter.jpg",
+        "image": "/assets/3d_printing_kit_entry_level_printer_and_pla.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
@@ -353,14 +353,14 @@
         "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
         "name": "3D printed body tube",
         "description": "A body tube for a modular model rocket.",
-        "image": "/assets/3dprinted_rocket_body_tube.jpg",
+        "image": "/assets/3d_printed_rocket_body_tube.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
         "name": "3D printed fincan",
         "description": "80 mm PLA fincan for 35 mm rockets; four fins, ~12 g; fits 18 mm motors.",
-        "image": "/assets/3dprinted_rocket_fincan.jpg",
+        "image": "/assets/3d_printed_rocket_fincan_35mm_80mm_length.jpg",
         "price": "4 dUSD",
         "hardening": {
             "passes": 1,
@@ -614,14 +614,14 @@
         "id": "125eaa46-48f1-4cef-adaa-c200892af437",
         "name": "servo-ready fincan",
         "description": "3D printed PLA fincan with cutouts for 9 g servos and wiring channels sized for 35 mm rockets.",
-        "image": "/assets/3dprinted_rocket_fincan.jpg",
+        "image": "/assets/servo_ready_rocket_fincan_35mm.jpg",
         "price": "6 dUSD"
     },
     {
         "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf",
         "name": "avionics sled",
         "description": "PETG sled that locks into the fincan and holds an Arduino, IMU breakout, and wiring harness.",
-        "image": "/assets/3dprinted_rocket_body_tube.jpg",
+        "image": "/assets/3d_printed_avionics_sled_petg.jpg",
         "price": "4 dUSD"
     },
     {
@@ -956,21 +956,21 @@
         "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
         "name": "3D Printed Phone Stand",
         "description": "A simple stand to hold your smartphone upright on a desk.",
-        "image": "/assets/3dprinter.jpg",
+        "image": "/assets/3d_printed_phone_stand_desk.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "3326e89c-5883-473d-a68f-3ea560093966",
         "name": "3D printed generator housing",
         "description": "PLA housing that holds the motor and crank.",
-        "image": "/assets/3dprinter.jpg",
+        "image": "/assets/3d_printed_generator_housing_pla.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
         "name": "3D printed crank handle",
         "description": "PLA crank handle to spin a generator.",
-        "image": "/assets/3dprinter.jpg",
+        "image": "/assets/3d_printed_crank_handle_generator.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -984,7 +984,7 @@
         "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
         "name": "Guppy group",
         "description": "Three females and one male guppy ready to breed.",
-        "image": "/assets/guppy.jpg",
+        "image": "/assets/guppy_group_breeding.jpg",
         "price": "6 dUSD"
     },
     {
@@ -1075,14 +1075,14 @@
         "id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
         "name": "stevia seeds",
         "description": "Seeds of the Stevia rebaudiana plant.",
-        "image": "/assets/basil_seeds.jpg",
+        "image": "/assets/stevia_seeds_packet.jpg",
         "price": "5 dUSD"
     },
     {
         "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
         "name": "stevia seedling",
         "description": "A young stevia plant sprouted in rockwool.",
-        "image": "/assets/basil_seedlings.jpg",
+        "image": "/assets/stevia_seedling_in_rockwool.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -1096,7 +1096,7 @@
         "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
         "name": "bundle of stevia leaves",
         "description": "Fresh stevia leaves with natural sweetness.",
-        "image": "/assets/basil_harvested.jpg",
+        "image": "/assets/bundle_of_stevia_leaves.jpg",
         "price": "3 dUSD"
     },
     {
@@ -1224,7 +1224,7 @@
         "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
         "name": "red flashlight",
         "description": "50 lumen handheld light with red lens to preserve night vision; runs ~3 h on a 9 V battery.",
-        "image": "/assets/aquarium_light.jpg",
+        "image": "/assets/red_flashlight_50_lumen.jpg",
         "price": "8 dUSD",
         "unit": "flashlight",
         "hardening": {

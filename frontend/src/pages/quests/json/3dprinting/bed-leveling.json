@@ -2,7 +2,7 @@
     "id": "3dprinting/bed-leveling",
     "title": "Level the Print Bed",
     "description": "After power-off and cooling, level the FDM bed with a sheet of printer paper.",
-    "image": "/assets/quests/3dprinter.jpg",
+    "image": "/assets/quests/bed_leveling_printer_paper_test.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [

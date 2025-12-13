@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/stevia_seeds_packet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia seeds",
+    "item_id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
+    "entity_type": "item",
+    "prompt": "A small, unbranded seed packet with a simple stevia leaf illustration lies on a tabletop, partly open, with several tiny light-brown seeds scattered in front of it. The packet’s design is minimal and text-free, and a rockwool cube tray or small pot is positioned nearby to hint at where the seeds will be sown. The overall arrangement makes it clear that these are seeds of the Stevia rebaudiana plant, intended for cultivation rather than culinary use directly.\n\nThe scene is a near-future solarpunk indoor gardening station with soft, diffused lighting, other seed packets and gardening tools in the blurred background, and a few mature herbs growing under LED lights. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the packet, and a composition that centers the stevia seeds and packet while the rest of the environment remains softly out of focus, emphasizing the beginning of a new sweet herb crop.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

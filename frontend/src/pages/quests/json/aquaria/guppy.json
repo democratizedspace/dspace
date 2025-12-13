@@ -2,7 +2,7 @@
     "id": "aquaria/guppy",
     "title": "Add guppies",
     "description": "Introduce colorful guppies to your community tank.",
-    "image": "/assets/quests/guppy.jpg",
+    "image": "/assets/quests/add_guppies_to_tank.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
