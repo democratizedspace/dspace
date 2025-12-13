@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/spool_holder_print_setup.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/spool-holder.json",
+    "item_name": "Print a Spool Holder",
+    "item_id": "3dprinting/spool-holder",
+    "entity_type": "quest",
+    "prompt": "A 3D printer on a workbench printing a simple, functional spool holder: the holder’s base and upright arms are clearly visible on the build plate. Beside the printer, a finished spool holder is already in use, supporting a filament spool so it unwinds smoothly toward the extruder. Loose spools resting directly on the table in the background provide contrast, showing why the printed holder is helpful for keeping filament tidy.\n\nNear-future solarpunk workspace aesthetic with warm lighting, organized tools, and a plant on a shelf. Photorealistic 512×512 rendering, no brand logos or legible text. The composition should clearly convey that the quest is about printing a spool holder to organize filament.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

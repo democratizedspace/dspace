@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/electrical_tape_roll.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "electrical tape",
+    "item_id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4",
+    "entity_type": "item",
+    "prompt": "A single roll of black PVC electrical tape sits on a wooden workbench, with the loose end pulled out slightly to show its width of about 19 mm. Next to it, a pair of wire cutters and a short length of wire with a freshly wrapped splice demonstrate how the tape is used to insulate connections. The tape has a matte finish and looks flexible and slightly stretchy.\n\nNear-future solarpunk workshop aesthetic with warm lighting, organized hand tools in the background, and a small plant adding color. Photorealistic 512×512 rendering, no brand logos or legible markings on the inner core of the tape. The composition should clearly represent a standard roll of electrical tape suitable for insulating wire splices.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

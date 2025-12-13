@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/thermistor_10k_ntc.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Thermistor (10k NTC)",
+    "item_id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+    "entity_type": "item",
+    "prompt": "A small 10k NTC thermistor lying on a wooden electronics workbench, with its tiny epoxy bead sensor and two thin insulated leads clearly visible. The bead is held slightly above the surface as if ready to be soldered or inserted into a breadboard, and in the background an Arduino Uno and a simple voltage divider circuit with a resistor and jumper wires are softly out of focus, hinting at its use in temperature-sensing projects.\n\nNear-future solarpunk electronics aesthetic with warm, soft lighting, neatly arranged tools, and a small plant or solar gadget on the edge of the frame. Photorealistic 512×512 rendering, no brand logos or legible text anywhere. The composition should clearly emphasize the thermistor as a single temperature-sensitive resistor component in the inventory.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

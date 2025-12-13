@@ -1,0 +1,91 @@
+{
+    "id": "woodworking/workbench",
+    "title": "Build a simple workbench",
+    "description": "Construct a sturdy bench to support future projects.",
+    "image": "/assets/quests/woodworking_workbench_build.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey there! I'm Cedar, your woodworking mentor. Before we dive into fancy projects, you'll need a dependable work surface.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "What do I need?"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "I'll supply a few pine boards and some wood glue. With those you can assemble a basic but solid bench frame.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Thanks for the supplies!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I've got everything ready."
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Arrange the boards into a rectangle, glue the joints, and clamp them until dry. Add legs and check that the bench is level and secure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bench assembled!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! This bench will serve as the foundation for all your future woodworking quests.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Claim my new workbench."
+                },
+                {
+                    "type": "finish",
+                    "text": "Thanks, Cedar!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ]
+}

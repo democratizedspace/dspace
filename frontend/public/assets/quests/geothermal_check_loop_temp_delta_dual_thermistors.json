@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_check_loop_temp_delta_dual_thermistors.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/check-loop-temp-delta.json",
+    "item_name": "Check Loop Temperature Delta",
+    "item_id": "geothermal/check-loop-temp-delta",
+    "entity_type": "quest",
+    "prompt": "Two insulated pipes—one loop inlet and one loop outlet—are shown side by side in a geothermal utility area, each with its own thermistor probe firmly strapped to the pipe surface with thermal paste and clamps. Both probes run back to a single Arduino on a nearby panel, with clearly separated, color-coded wiring for the two sensor channels. A laptop screen displays a stylized graph with two differently colored lines, slightly offset from each other, indicating inlet and outlet temperatures being logged together for comparison.\n\nThe setting is a near-future solarpunk mechanical room: soft, neutral lighting, clean piping and cable runs, and hints of other renewable equipment in the blurred background. The 512×512 photorealistic composition focuses on the paired sensors and the Arduino, with the heat pump casing and rest of the room softly out of focus. No brand logos or legible text are visible, and no faces appear—only hands near the wiring—highlighting the concept of checking loop temperature delta using two thermistors and a microcontroller.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

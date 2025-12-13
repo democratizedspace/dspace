@@ -1,0 +1,125 @@
+{
+    "id": "woodworking/step-stool",
+    "title": "Build a step stool",
+    "description": "Build a sturdy pine step stool and practice safe cutting and gluing.",
+    "image": "/assets/quests/woodworking_step_stool_build.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've mastered small projects. Ready to build a sturdy step stool?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "I'm ready"
+                }
+            ]
+        },
+        {
+            "id": "gather",
+            "text": "Gather boards, glue, handsaw, and tape measure. Goggles on, lay out gear.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 2
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Gather parts"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 2
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Parts ready"
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Measure boards, cut with handsaw, glue frame and supports, cure, then test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Stool assembled"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nicely done! The step stool is ready—check for wobble before use.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "0d4a7b77-f241-4c19-9365-c74647066802",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Take the stool"
+                },
+                {
+                    "type": "finish",
+                    "text": "Onward!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/birdhouse"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-refine-step-stool-2025-08-19",
+                "date": "2025-08-19",
+                "score": 65
+            }
+        ]
+    }
+}

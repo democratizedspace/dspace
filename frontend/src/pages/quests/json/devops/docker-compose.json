@@ -1,0 +1,92 @@
+{
+    "id": "devops/docker-compose",
+    "title": "Launch DSPACE in Docker",
+    "description": "Start DSPACE with Docker Compose and expose it securely through a Cloudflare Tunnel.",
+    "hardening": {
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-16",
+                "date": "2025-08-16",
+                "score": 80
+            },
+            {
+                "task": "codex-hardening-2025-08-19",
+                "date": "2025-08-19",
+                "score": 90
+            }
+        ]
+    },
+    "image": "/assets/quests/devops_dspace_docker_compose.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "On your Pi, run `docker compose up -d --build` to start containers. Stop with `docker compose down`.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "run-docker-compose",
+                    "text": "Build and run containers."
+                },
+                {
+                    "type": "goto",
+                    "goto": "tunnel",
+                    "text": "Container running.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "tunnel",
+            "text": "Use PoE+ switch and Ethernet cable. Run `cloudflared tunnel --url localhost:3002`. Keep token safe.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-cloudflare-tunnel",
+                    "text": "Expose DSPACE through Cloudflare Tunnel."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Tunnel online.",
+                    "requiresItems": [
+                        {
+                            "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                            "count": 1
+                        },
+                        {
+                            "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Everything is running! Keep the Cloudflare token secret. For multi-node setups, see the k3s guide.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/prepare-first-node"]
+}

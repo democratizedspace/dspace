@@ -1,0 +1,11 @@
+{
+  "id": "2025-10-19-quest-duplicate-title-sync",
+  "date": "2025-10-19",
+  "component": "frontend:e2e",
+  "rootCause": "The constellations quest duplicate-title Playwright scenario queried IndexedDB before QuestForm finished synchronizing built-in quests, so the lookup saw zero matching IDs and failed the safety assertion.",
+  "resolution": "Teach the duplicate-title e2e to poll for existing quest IDs so it waits for QuestForm's IndexedDB synchronization to complete before validating that no additional records are created.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18622435241/job/53095316970",
+    "frontend/e2e/constellations-quest.spec.ts"
+  ]
+}

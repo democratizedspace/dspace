@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/submersible_hydroponic_water_pump.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "submersible water pump",
+    "item_id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+    "entity_type": "item",
+    "prompt": "A compact 12 V submersible water pump sits on a damp work surface next to a shallow tray of water, its dark rectangular body fitted with a small 8 mm outlet barb on top. A short length of flexible tubing is pushed onto the barb, and a pair of low-voltage wires extend from the back of the pump toward the edge of the frame. Measurement markings on the tray or a small note nearby are implied but not readable, emphasizing that this pump is sized for circulating nutrient solution in small hydroponic systems.\n\nThe scene is set in a clean near-future hydroponics prep area, with a larger tub and lush plants visible in soft focus behind the pump. Soft, even lighting highlights the pump\u2019s simple shape and connections without casting harsh shadows. The 512\u00d7512 image is photorealistic with subtle stylization, free of logos or readable text, and composed so that the pump, outlet barb, and attached tubing are the main focal points while the background hydroponic context remains gently blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

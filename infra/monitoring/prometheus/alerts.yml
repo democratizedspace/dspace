@@ -1,0 +1,38 @@
+groups:
+  - name: dspace
+    rules:
+      - alert: DspaceDown
+        expr: up{job="dspace"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: DSpace service is down
+          description: No metrics have been scraped from the dspace job for over a minute
+          runbook: https://github.com/democratizedspace/dspace/blob/main/monitoring/README.md#dspacedown
+      - alert: DspaceHighErrorRate
+        expr: |
+          rate(http_requests_total{job="dspace",status=~"5.."}[5m]) /
+          rate(http_requests_total{job="dspace"}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High error rate on DSpace
+          description: More than 5% of HTTP requests returned 5xx status codes
+          runbook: https://github.com/democratizedspace/dspace/blob/main/monitoring/README.md#dspacehigherrorrate
+      - alert: DspaceHighLatency
+        expr: |
+          histogram_quantile(
+            0.99,
+            sum by (le) (
+              rate(http_request_duration_seconds_bucket{job="dspace"}[5m])
+            )
+          ) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High request latency on DSpace
+          description: 99th percentile request latency above 500ms
+          runbook: https://github.com/democratizedspace/dspace/blob/main/monitoring/README.md#dspacehighlatency

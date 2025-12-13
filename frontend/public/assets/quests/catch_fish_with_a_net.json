@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/catch_fish_with_a_net.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/net-fish.json",
+    "item_name": "Catch a fish with a net",
+    "item_id": "aquaria/net-fish",
+    "entity_type": "quest",
+    "prompt": "A hand carefully guides an aquarium net through the water of a planted tank, gently herding a small fish toward the net’s opening. The fish is just entering the soft nylon mesh, and other tank inhabitants and plants sway undisturbed in the background, emphasizing a calm, controlled movement rather than frantic chasing. A bucket or smaller holding tank sits beside the main aquarium, ready to receive the fish once it is safely in the net.\n\nThe environment is a near-future solarpunk home aquarium setup with soft, even lighting, additional tanks or plants in the blurred background, and neatly organized maintenance tools nearby. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the net or equipment, and a composition that centers the net, fish, and guiding hand while the rest of the tank and room remain softly out of focus, emphasizing safe, low-stress fish transfers during cleaning.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

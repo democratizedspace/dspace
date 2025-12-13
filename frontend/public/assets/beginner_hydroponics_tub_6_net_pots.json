@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/beginner_hydroponics_tub_6_net_pots.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "Beginner hydroponics tub",
+    "item_id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+    "entity_type": "item",
+    "prompt": "A 20 L plastic tote-style tub with a snug lid is shown on a workbench, with six evenly spaced 50 mm net pots snapped into circular holes on the lid. Each net pot contains clay pebbles and a tiny seedling or starter plug, and a small rubber grommet is installed near one corner of the lid where an airline can pass into the tub. The tub is clean and empty or just partially filled with clear water, clearly representing a beginner hydroponics tub kit ready for a first setup.\n\nThe environment is a bright near-future solarpunk grow corner, with additional tubs and tools stacked neatly in the background and a couple of leafy plants providing a sense of life. Soft, diffuse lighting gives the 512\u00d7512 image a photorealistic but gently stylized look, with no logos or readable text on the tub. The composition centers the lidded tub and net pots while the surroundings fade into soft focus, reinforcing that this is an entry-level hydroponic system.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

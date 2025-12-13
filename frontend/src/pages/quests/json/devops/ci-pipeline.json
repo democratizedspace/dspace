@@ -1,0 +1,67 @@
+{
+    "id": "devops/ci-pipeline",
+    "title": "Set Up a CI Pipeline",
+    "description": "Configure GitHub Actions to run tests whenever you push.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-19",
+                "date": "2025-08-19",
+                "score": 60
+            }
+        ]
+    },
+    "image": "/assets/quests/devops_ci_pipeline_setup.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Automation keeps your code reliable. Let's add a CI workflow.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "edit",
+                    "text": "Walk me through it."
+                }
+            ]
+        },
+        {
+            "id": "edit",
+            "text": "Create a `.github/workflows/ci.yml` that installs dependencies and runs `npm run test:pr`. Keep tokens secret and grant minimal permissions.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-ci-workflow",
+                    "text": "Write the workflow file."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Workflow added.",
+                    "requiresItems": [
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Every push will now trigger tests automatically.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Nice!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/docker-compose"]
+}

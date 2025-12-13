@@ -1,0 +1,59 @@
+{
+    "id": "robotics/servo-arm",
+    "title": "Assemble a Servo Arm",
+    "description": "Build a simple arm that can lift light objects.",
+    "image": "/assets/quests/simple_servo_robot_arm.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You're getting comfortable with servos. Let's take the next step and build a small robotic arm that can pick things up and set them down.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Sounds challenging!"
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Bolt the servo to a sturdy base with a precision screwdriver set, attach a short arm segment, and program it to move smoothly between positions. Test with light loads before trying anything heavier.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-servo-arm",
+                    "text": "Bolt servo and arm"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Arm works well",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! With this arm you can experiment with more complex motions later on.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["robotics/servo-gripper"]
+}

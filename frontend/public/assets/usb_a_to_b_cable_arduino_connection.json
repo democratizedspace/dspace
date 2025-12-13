@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/usb_a_to_b_cable_arduino_connection.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "USB Type-A to Type-B cable",
+    "item_id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+    "entity_type": "item",
+    "prompt": "A one-meter USB Type-A to Type-B cable is shown connecting a compact microcontroller board to a nearby laptop at the edge of the frame. The rectangular Type-A plug is firmly seated in the laptop, while the more square Type-B plug is connected to the board, with the cable forming a gentle curve across a wooden work surface. The cable is clearly visible end to end, with a slightly textured jacket and strain reliefs at both connectors, making it obvious that this is the standard link used for uploading sketches and powering the board.\n\nThe scene is a tidy, near-future solarpunk electronics bench with warm natural light from a nearby window, softly illuminating neatly organized tools and a few green plants in the background. The style is photorealistic at 512×512 resolution with cinematic lighting, shallow depth of field, and no visible brand logos or readable text. The composition keeps the cable and its two distinct connectors in sharp focus so it reads clearly as a USB Type-A to Type-B cable in a high-tech but approachable DIY lab.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

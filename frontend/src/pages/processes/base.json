@@ -1,0 +1,4174 @@
+[
+    {
+        "id": "outlet-dWatt-1e3",
+        "title": "Buy 1 kWh of electricity from a wall outlet",
+        "requireItems": [
+            {
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 0.18
+            }
+        ],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1000
+            },
+            {
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                "count": 0.98
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "outlet-dWatt-1e4",
+        "title": "Use a smart plug to buy 10 kWh of electricity from a wall outlet",
+        "image": "/assets/smart_plug.jpg",
+        "requireItems": [
+            {
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 1.8
+            }
+        ],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 10000
+            },
+            {
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                "count": 9.77
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "outlet-dWatt-1e5",
+        "title": "Use a smart plug to buy 100 kWh of electricity from a wall outlet",
+        "image": "/assets/smart_plug.jpg",
+        "requireItems": [
+            {
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 18
+            }
+        ],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 100000
+            },
+            {
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                "count": 97.7
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "smart-plug-schedule-12h",
+        "title": "Set smart plug to a 12 h on/off cycle",
+        "requireItems": [
+            {
+                "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "bucket-water-chlorinated",
+        "title": "Fill a 19 L (5 gal) bucket with chlorinated tap water from a sink",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [
+            {
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+                "count": 1
+            }
+        ],
+        "duration": "3m"
+    },
+    {
+        "id": "3dprint-benchy",
+        "title": "3D print a 60 mm Benchy calibration model",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 15
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 150
+            }
+        ],
+        "createItems": [
+            {
+                "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 15
+            }
+        ],
+        "duration": "1h 30m"
+    },
+    {
+        "id": "3dprint-nozzle-clog",
+        "title": "Start a print without checking the first layer that clogs the nozzle",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 5
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 50
+            }
+        ],
+        "createItems": [
+            {
+                "id": "564a76de-925b-4457-a548-d015168abe0c",
+                "count": 1
+            }
+        ],
+        "duration": "30m"
+    },
+    {
+        "id": "3dprint-blob-of-death",
+        "title": "Miss Z homing and engulf the extruder in a blob of plastic",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 10
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 100
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                "count": 1
+            }
+        ],
+        "duration": "45m"
+    },
+    {
+        "id": "repair-clogged-nozzle",
+        "title": "Disassemble and clear a clogged 3D printer nozzle",
+        "requireItems": [
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "564a76de-925b-4457-a548-d015168abe0c",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "duration": "1h"
+    },
+    {
+        "id": "repair-blob-of-death",
+        "title": "Remove a blob of plastic and install a new nozzle",
+        "requireItems": [
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                "count": 1
+            },
+            {
+                "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "duration": "1h 30m"
+    },
+    {
+        "id": "level-3d-printer-bed",
+        "title": "Use a sheet of printer paper to level an entry-level FDM 3D printer bed",
+        "image": "/assets/3dprinter.jpg",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "3dprint-rocket",
+        "title": "3D print a 100 mm model rocket using 91 g of green PLA on an entry-level FDM printer",
+        "image": "/assets/modelrocket.jpg",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 91
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1600
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
+                "count": 1
+            }
+        ],
+        "duration": "13h"
+    },
+    {
+        "id": "bucket-water-dechlorinated",
+        "title": "Leave a 5 gal bucket of tap water uncovered for 48h so chlorine dissipates",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "duration": "48h"
+    },
+    {
+        "id": "condition-bucket-water",
+        "title": "Add 5 mL of water conditioner to a 5 gal bucket to neutralize chlorine",
+        "image": "/assets/bucket_water.jpg",
+        "requireItems": [
+            {
+                "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                "count": 0.1
+            },
+            {
+                "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "duration": "2m"
+    },
+    {
+        "id": "rockwool-soak",
+        "title": "Soak 11 hydroponic starter plugs in a 5 gallon bucket of dechlorinated tap water",
+        "image": "/assets/rockwool_wet.jpg",
+        "requireItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 11
+            }
+        ],
+        "duration": "30m"
+    },
+    {
+        "id": "germinate-basil",
+        "title": "Germinate basil seeds in starter plugs",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
+                "count": 10
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5712947f-716c-4f71-b28d-fcb811631080",
+                "count": 10
+            }
+        ],
+        "duration": "7d"
+    },
+    {
+        "id": "prepare-hydroponic-tub",
+        "title": "Prepare a hydroponics tub with water and nutrient solution",
+        "image": "/assets/hydroponics_tub.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "refresh-hydroponic-tub",
+        "title": "Drain and refill a hydroponics tub with fresh nutrient solution",
+        "image": "/assets/hydroponics_nutrients.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "clone-mint-cutting",
+        "title": "Clone a mint cutting in a soaked starter plug",
+        "image": "/assets/hydroponics_tub.jpg",
+        "requireItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "grow-basil",
+        "title": "Grow 11 basil seedlings under a hydroponic lamp for four weeks until harvest-ready",
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5712947f-716c-4f71-b28d-fcb811631080",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 24192
+            }
+        ],
+        "createItems": [
+            {
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "28d"
+    },
+    {
+        "id": "regrow-basil",
+        "title": "Regrow 11 harvested basil plants in a ready hydroponics tub using 8,064 dWatts",
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "29190faf-8581-4769-b871-f0ee283840e1",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 8064
+            }
+        ],
+        "createItems": [
+            {
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "14d"
+    },
+    {
+        "id": "harvest-basil",
+        "title": "Harvest your hydroponic basil plants",
+        "image": "/assets/basil_harvested.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
+                "count": 11
+            },
+            {
+                "id": "29190faf-8581-4769-b871-f0ee283840e1",
+                "count": 11
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "germinate-stevia",
+        "title": "Germinate stevia seeds in starter plugs",
+        "image": "/assets/basil_seedlings.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
+                "count": 11
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                "count": 11
+            }
+        ],
+        "duration": "7d"
+    },
+    {
+        "id": "grow-stevia",
+        "title": "Grow six stevia seedlings in a hydroponics tub under a 36 W lamp for four weeks",
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                "count": 6
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 16128
+            }
+        ],
+        "createItems": [
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 6
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "28d",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "regrow-stevia",
+        "title": "Regrow harvested stevia plants in a hydroponic tub",
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "b2248af9-151b-4268-989d-4bb408a6147c",
+                "count": 11
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 8064
+            }
+        ],
+        "createItems": [
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 11
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "14d"
+    },
+    {
+        "id": "harvest-stevia",
+        "title": "Trim a hydroponic stevia plant and collect 11 leaves",
+        "image": "/assets/hydroponic_basil_harvested.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                "count": 11
+            },
+            {
+                "id": "b2248af9-151b-4268-989d-4bb408a6147c",
+                "count": 1
+            }
+        ],
+        "duration": "3m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-harvest-stevia-2025-08-20",
+                    "date": "2025-08-20",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "extract-stevia",
+        "title": "Steep 11 stevia leaves in hot water for 1h to make stevia extract",
+        "image": "/assets/basil_harvested.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                "count": 11
+            }
+        ],
+        "createItems": [
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            }
+        ],
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "purify-stevia",
+        "title": "purify stevia extract into crystals",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                "count": 1
+            }
+        ],
+        "duration": "6h"
+    },
+    {
+        "id": "sink",
+        "title": "find your sink",
+        "requireItems": [],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                "count": 1
+            }
+        ],
+        "duration": "10s"
+    },
+    {
+        "id": "3dprint-rocket-body-tube",
+        "title": "3D Print a rocket body tube",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 18.48
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 266.67
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 18.48
+            }
+        ],
+        "duration": "2h 8m 11s"
+    },
+    {
+        "id": "3dprint-rocket-nosecone-coupler",
+        "title": "3D print a rocket nosecone coupler",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 6.32
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 112.92
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "05c339ee-f50b-419a-804a-341f850b85e9",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 6.32
+            }
+        ],
+        "duration": "54m 12s"
+    },
+    {
+        "id": "3dprint-rocket-nosecone",
+        "title": "3D print a rocket nosecone",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 13.9
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 223.4375
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 13.9
+            }
+        ],
+        "duration": "1h 47m 15s"
+    },
+    {
+        "id": "3dprint-rocket-fincan",
+        "title": "3D print a rocket fincan",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 52.3
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1006.70139
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 52.3
+            }
+        ],
+        "duration": "8h 3m 13s"
+    },
+    {
+        "id": "3dprint-guided-fincan",
+        "title": "3D print a servo-ready fincan",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 58.4
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1125
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "125eaa46-48f1-4cef-adaa-c200892af437",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 58.4
+            }
+        ],
+        "duration": "8h 45m"
+    },
+    {
+        "id": "3dprint-guidance-sled",
+        "title": "3D print a guidance avionics sled",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 24.8
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 420
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 24.8
+            }
+        ],
+        "duration": "3h 20m"
+    },
+    {
+        "id": "mask-rocket-body-tube",
+        "title": "Mask a rocket body tube with masking tape for painting",
+        "image": "/assets/modelrocket.jpg",
+        "requireItems": [
+            {
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
+                "count": 0.1
+            }
+        ],
+        "createItems": [],
+        "duration": "3m"
+    },
+    {
+        "id": "assemble-rocket",
+        "title": "Assemble your rocket",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
+                "count": 1
+            },
+            {
+                "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+                "count": 1
+            },
+            {
+                "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
+                "count": 1
+            },
+            {
+                "id": "05c339ee-f50b-419a-804a-341f850b85e9",
+                "count": 1
+            },
+            {
+                "id": "4d817f1c-d78d-4fac-a514-402bce330693",
+                "count": 1
+            },
+            {
+                "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "launch-rocket",
+        "title": "Launch your rocket!",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
+                "count": 1
+            },
+            {
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                "count": 1
+            }
+        ],
+        "duration": "30s"
+    },
+    {
+        "id": "repair-model-rocket",
+        "title": "Glue cracked fins on a damaged model rocket using superglue",
+        "image": "/assets/rocket_damaged.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "launch-rocket-parachute",
+        "title": "Launch a model rocket with parachute recovery",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                "count": 1
+            }
+        ],
+        "duration": "45s"
+    },
+    {
+        "id": "suborbital-hop",
+        "title": "Simulate a guided model rocket hop",
+        "requireItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "5873d7b0-dd0f-436f-b942-286aedd253d0",
+                "count": 1
+            }
+        ],
+        "duration": "12m"
+    },
+    {
+        "id": "assemble-guided-flight-stack",
+        "title": "Assemble the guided flight stack",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "125eaa46-48f1-4cef-adaa-c200892af437",
+                "count": 1
+            },
+            {
+                "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf",
+                "count": 1
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "dc5897f0-acec-4c3b-ad4d-535054e768f6",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.2
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
+        "duration": "35m"
+    },
+    {
+        "id": "calibrate-guided-flight-stack",
+        "title": "Upload and tune stability firmware",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+                "count": 1
+            }
+        ],
+        "duration": "20m"
+    },
+    {
+        "id": "install-rocket-camera",
+        "title": "Install the nosecone camera module",
+        "requireItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "bdc905f5-c36f-4608-9c7f-da7b0988572f",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            }
+        ],
+        "duration": "25m"
+    },
+    {
+        "id": "range-setup-guided-hop",
+        "title": "Complete the guided launch pad checks",
+        "requireItems": [
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            },
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da",
+                "count": 1
+            }
+        ],
+        "duration": "8m"
+    },
+    {
+        "id": "countdown-guided-hop",
+        "title": "Walk through the guided countdown",
+        "requireItems": [
+            {
+                "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da",
+                "count": 1
+            },
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe",
+                "count": 1
+            }
+        ],
+        "duration": "2m"
+    },
+    {
+        "id": "launch-guided-hop",
+        "title": "Launch a guided model rocket hop",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+                "count": 1
+            },
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            },
+            {
+                "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            },
+            {
+                "id": "60a1e598-084e-4325-9c2c-fb5d95d19f41",
+                "count": 1
+            },
+            {
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "assemble-rocket-parachute",
+        "title": "Install a parachute system on a model rocket",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            },
+            {
+                "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                "count": 1
+            },
+            {
+                "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6",
+                "count": 1
+            },
+            {
+                "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
+                "count": 1
+            },
+            {
+                "id": "9477a618-591b-45e0-9d81-18d60b848490",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            }
+        ],
+        "duration": "60s"
+    },
+    {
+        "id": "setup-solar-enclosure-200Wh",
+        "title": "Add a 200 Wh battery pack, charge controller, and 200 W solar panel to an outdoor watertight enclosure",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "disassemble-enclosure-200Wh",
+        "title": "Disassemble a 200 Wh solar enclosure",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "setup-solar-enclosure-1kWh",
+        "title": "Add a 1 kWh battery, charge controller, and 200 W solar panel to an outdoor watertight enclosure",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "7246c1c8-f22e-4d31-acd3-967f91b8626a",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "disassemble-enclosure-1kWh",
+        "title": "Disassemble a 1 kWh solar enclosure",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "7246c1c8-f22e-4d31-acd3-967f91b8626a",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "solar-200Wh",
+        "title": "Generate 200 Wh of electricity using solar",
+        "requireItems": [
+            {
+                "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 200
+            },
+            {
+                "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                "count": 200
+            }
+        ],
+        "duration": "1h"
+    },
+    {
+        "id": "solar-1000Wh",
+        "title": "Generate 1000 Wh of electricity using solar",
+        "requireItems": [
+            {
+                "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1000
+            },
+            {
+                "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                "count": 1000
+            }
+        ],
+        "duration": "5h"
+    },
+    {
+        "id": "prepare-aquarium",
+        "title": "Prepare a 150 L aquarium",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                "count": 1
+            },
+            {
+                "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                "count": 1
+            },
+            {
+                "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            },
+            {
+                "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
+                "count": 20
+            }
+        ],
+        "createItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            }
+        ],
+        "duration": "2h"
+    },
+    {
+        "id": "add-goldfish",
+        "title": "Add a goldfish to your aquarium",
+        "image": "/assets/aquarium_goldfish.jpg",
+        "requireItems": [
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            },
+            {
+                "id": "40920981-bf9f-4b89-b887-bebe7006f7dc",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "feed-goldfish",
+        "title": "Feed your goldfish",
+        "image": "/assets/goldfish_food.jpg",
+        "requireItems": [
+            {
+                "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "36a1168f-0109-4a8c-b70b-45f8ca582297",
+                "count": 1
+            }
+        ],
+        "duration": "8h",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "heat-walstad",
+        "title": "Install a heater in your Walstad tank",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            },
+            {
+                "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "stock-guppies",
+        "title": "Add guppies to your heated Walstad tank",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                "count": 1
+            },
+            {
+                "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                "count": 1
+            }
+        ],
+        "duration": "1m"
+    },
+    {
+        "id": "dCarbon-dOffset-1",
+        "title": "dCarbon to dOffset",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                "count": 1
+            },
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "b0ac46e6-6c60-48f0-b753-d9b6ad9935a6",
+                "count": 1
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "dCarbon-dOffset-10",
+        "title": "dCarbon to dOffset",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+                "count": 10
+            },
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 100
+            }
+        ],
+        "createItems": [
+            {
+                "id": "b0ac46e6-6c60-48f0-b753-d9b6ad9935a6",
+                "count": 10
+            }
+        ],
+        "duration": "5s"
+    },
+    {
+        "id": "basic-income",
+        "title": "basic income",
+        "requireItems": [],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 100
+            },
+            {
+                "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
+                "count": 100
+            }
+        ],
+        "duration": "1d"
+    },
+    {
+        "id": "charge-hypercar",
+        "title": "Charge your Hypercar",
+        "requireItems": [
+            {
+                "id": "5258f098-6cae-4ee5-8888-435b08f1675a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5e283c0b-fd3c-4884-ae32-9a237f02a40e",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 32400
+            }
+        ],
+        "createItems": [
+            {
+                "id": "1498a7a1-2739-4943-a32f-4c277244a825",
+                "count": 1
+            }
+        ],
+        "duration": "2h"
+    },
+    {
+        "id": "flash-sd-card",
+        "title": "Use a laptop to flash Raspberry Pi OS onto a 64 GB microSD card",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "36042a2b-861a-4192-a991-98778898963a",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "clone-os-to-ssd",
+        "title": "Clone OS to M.2 SSD",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
+                "count": 1
+            },
+            {
+                "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "4af856b5-b5c1-494f-8037-9b6559785633",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "assemble-pi-node",
+        "title": "Assemble a Pi cluster node",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                "count": 1
+            },
+            {
+                "id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
+                "count": 1
+            },
+            {
+                "id": "4af856b5-b5c1-494f-8037-9b6559785633",
+                "count": 1
+            },
+            {
+                "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "create-ci-workflow",
+        "title": "Add a GitHub Actions CI workflow",
+        "requireItems": [
+            {
+                "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "run-docker-compose",
+        "title": "Launch DSPACE with Docker Compose",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "create-cloudflare-tunnel",
+        "title": "Create a Cloudflare Tunnel to port 3002",
+        "requireItems": [
+            {
+                "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                "count": 1
+            },
+            {
+                "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "join-k3s-cluster",
+        "title": "Join nodes to a k3s cluster",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "install-monitoring-stack",
+        "title": "Install Prometheus and Grafana",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "configure-daily-backups",
+        "title": "Configure daily backups to SSD",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "assemble-basic-telescope",
+        "title": "Assemble a basic telescope",
+        "requireItems": [
+            {
+                "id": "0254a829-9002-4a75-8af2-03cd961601da",
+                "count": 1
+            },
+            {
+                "id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
+                "count": 1
+            },
+            {
+                "id": "2794503d-fbe7-4031-a63e-deac531f9784",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            },
+            {
+                "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "measure-ph",
+        "title": "Measure hydroponic nutrient solution pH with a test strip",
+        "image": "/assets/pH_strip.jpg",
+        "requireItems": [
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-22",
+                    "date": "2025-08-22",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "measure-ec",
+        "title": "Measure hydroponic nutrient EC",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "measure-battery-voltage",
+        "title": "Check a 12 V battery pack's voltage with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "measure-solar-panel-current",
+        "title": "Measure a portable solar panel's short-circuit current in direct sun",
+        "image": "/assets/solar_setup_small.jpg",
+        "requireItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-20",
+                    "date": "2025-08-20",
+                    "score": 70
+                }
+            ]
+        }
+    },
+    {
+        "id": "measure-solar-panel-voltage",
+        "title": "Measure a portable solar panel's open-circuit voltage in direct sun",
+        "image": "/assets/solar_setup_small.jpg",
+        "requireItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "measure-resistance",
+        "title": "Measure a 220 \u03a9 resistor with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "check-led-polarity",
+        "title": "Identify LED anode and cathode using a multimeter's diode mode",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "assemble-led-indicator-module",
+        "title": "Assemble an LED indicator module on a breadboard",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            }
+        ],
+        "createItems": [
+            {
+                "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "measure-photoresistor",
+        "title": "Measure a photoresistor's resistance using a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "calibrate-multimeter",
+        "title": "Calibrate a digital multimeter using a 220 \u03a9 reference resistor",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m"
+    },
+    {
+        "id": "wear-anti-static-wrist-strap",
+        "title": "Clip an anti-static wrist strap to ground before handling electronics",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-wear-anti-static-wrist-strap-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "measure-ec-solution",
+        "title": "Measure hydroponic nutrient solution EC with a handheld meter",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "calibrate-ec-meter",
+        "title": "Calibrate EC meter with 1000 ppm solution",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "adjust-ph",
+        "title": "Adjust solution pH",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "wash-hands",
+        "title": "Wash your hands with soap and running water",
+        "image": "/assets/tap.jpg",
+        "requireItems": [
+            {
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "dry-hands",
+        "title": "Dry your hands with a paper towel",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            {
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "30s"
+    },
+    {
+        "id": "pack-first-aid-kit",
+        "title": "Pack a basic first aid kit",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
+                "count": 1
+            },
+            {
+                "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
+                "count": 1
+            },
+            {
+                "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                "count": 1
+            }
+        ],
+        "duration": "2m"
+    },
+    {
+        "id": "clean-minor-cut",
+        "title": "Wash and bandage a minor cut",
+        "image": "/assets/rescue.jpg",
+        "requireItems": [
+            {
+                "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                "count": 1
+            },
+            {
+                "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+                "count": 1
+            },
+            {
+                "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
+                "count": 1
+            },
+            {
+                "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
+                "count": 1
+            },
+            {
+                "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "practice-cpr",
+        "title": "Practice 30:2 CPR on a training manikin",
+        "requireItems": [
+            {
+                "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                "count": 1
+            },
+            {
+                "id": "b397aa70-3503-4e40-b84a-4d5609578d2b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "20m"
+    },
+    {
+        "id": "observe-jupiter-moons",
+        "title": "Observe Jupiter's four Galilean moons through a basic telescope",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "20m"
+    },
+    {
+        "id": "identify-constellations",
+        "title": "Identify constellations with a star chart",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30m"
+    },
+    {
+        "id": "observe-meteor-shower",
+        "title": "Watch a meteor shower with your telescope",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1h"
+    },
+    {
+        "id": "photograph-lunar-eclipse",
+        "title": "Photograph a lunar eclipse with a telescope",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "45m"
+    },
+    {
+        "id": "arduino-ide-install",
+        "title": "Install the Arduino IDE",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "arduino-servo-sweep",
+        "title": "Upload and run the Servo Sweep example on an Arduino Uno",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "828d6c3b-66a5-4064-b221-97630274502b",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "arduino-thermistor-read",
+        "title": "Log temperature from a thermistor using an Arduino Uno",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                "count": 1
+            },
+            {
+                "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "15m"
+    },
+    {
+        "id": "plot-temperature-data",
+        "title": "Plot logged temperature data using Python and Matplotlib",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "arduino-led-blink",
+        "title": "Upload the Blink sketch to an Arduino Uno and flash a 5 mm LED on a breadboard",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 2
+            },
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "arduino-potentiometer-dimmer",
+        "title": "Dim an LED with a potentiometer on Arduino",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            },
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "raspberry-pi-serial-log",
+        "title": "Log Arduino temperature data on a Raspberry Pi",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "15m"
+    },
+    {
+        "id": "pyserial-install",
+        "title": "Install pyserial on a Raspberry Pi",
+        "requireItems": [
+            {
+                "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "drip-acclimate-shrimp",
+        "title": "Drip acclimate dwarf shrimp to your aquarium",
+        "requireItems": [
+            {
+                "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1h"
+    },
+    {
+        "id": "rinse-aquarium-filter",
+        "title": "Rinse sponge filter in a bucket of dechlorinated water to preserve beneficial bacteria",
+        "requireItems": [
+            {
+                "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "partial-water-change",
+        "title": "Use gravel vacuum with 2 m hose and 19 L (5 gal) bucket to change 5% of water in 150 L aquarium",
+        "requireItems": [
+            {
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "count": 1
+            },
+            {
+                "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                "count": 0.05
+            }
+        ],
+        "createItems": [],
+        "duration": "30m"
+    },
+    {
+        "id": "print-calibration-cube",
+        "title": "3D print a 20 mm calibration cube on an entry-level FDM 3D printer using 15 g of green PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 15
+            }
+        ],
+        "createItems": [],
+        "duration": "1h"
+    },
+    {
+        "id": "measure-calibration-cube",
+        "title": "Measure 20 mm calibration cube with digital calipers; log dimensions in mission logbook using quill",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            {
+                "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            },
+            {
+                "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "swap-green-pla-filament",
+        "title": "Install green PLA filament on an entry-level FDM printer and purge 10 g",
+        "image": "/assets/pla_green.jpg",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 10
+            }
+        ],
+        "createItems": [],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "swap-white-pla-filament",
+        "title": "Swap to white PLA filament on an entry-level FDM 3D printer",
+        "image": "/assets/pla_white.jpg",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 10
+            }
+        ],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "print-benchy",
+        "title": "3D print a 60 mm Benchy calibration boat on an entry-level FDM printer with 15 g white PLA",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 15
+            }
+        ],
+        "createItems": [
+            {
+                "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                "count": 1
+            }
+        ],
+        "duration": "1h 30m"
+    },
+    {
+        "id": "solder-led-resistor",
+        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 \u03a9 resistor with two jumper wires",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 2
+            }
+        ],
+        "createItems": [
+            {
+                "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
+                "count": 1
+            }
+        ],
+        "duration": "15m"
+    },
+    {
+        "id": "strip-jumper-wire",
+        "title": "Strip 5 mm of insulation from a jumper wire",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
+    },
+    {
+        "id": "solder-wire-connection",
+        "title": "Join two jumper wires using a soldering iron kit, flux pen, helping hands tool, and safety goggles",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                "count": 1
+            },
+            {
+                "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+                "count": 1
+            },
+            {
+                "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 2
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "96083990-f333-4e42-ab04-7eb2a234570e",
+                "count": 5
+            }
+        ],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "verify-resistor-color-code",
+        "title": "Confirm a 220 \u03a9 resistor's value using a printed color code chart",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            },
+            {
+                "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "print-phone-stand",
+        "title": "3D print a smartphone stand on an entry-level FDM 3D printer using 20 g of white PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 20
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                "count": 1
+            }
+        ],
+        "duration": "2h"
+    },
+    {
+        "id": "print-generator-housing",
+        "title": "3D print a generator housing on an entry-level FDM printer using 40 g of white PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 40
+            }
+        ],
+        "createItems": [
+            {
+                "id": "3326e89c-5883-473d-a68f-3ea560093966",
+                "count": 1
+            }
+        ],
+        "duration": "4h"
+    },
+    {
+        "id": "print-crank-handle",
+        "title": "3D print a crank handle on an entry-level FDM printer using 20 g of white PLA filament",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 20
+            }
+        ],
+        "createItems": [
+            {
+                "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
+                "count": 1
+            }
+        ],
+        "duration": "2h"
+    },
+    {
+        "id": "check-iss-pass",
+        "title": "Find and log the next ISS flyover with a smartphone app and mission logbook",
+        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "requireItems": [
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "write-mission-log-entry",
+        "title": "Write a mission log entry with a feather quill and black ink",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            },
+            {
+                "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "measure-aquarium-ph",
+        "title": "Dip a pH strip into a 150 L freshwater aquarium and match the color to the chart",
+        "image": "/assets/aquarium_filled.jpg",
+        "requireItems": [
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "attach-aquarium-thermometer",
+        "title": "Dry aquarium glass with a paper towel and attach a strip thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-attach-aquarium-thermometer-2025-08-24",
+                    "date": "2025-08-24",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "check-aquarium-temperature",
+        "title": "Check aquarium water temperature with an attached strip thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "30s"
+    },
+    {
+        "id": "log-aquarium-test-results",
+        "title": "Record aquarium water parameters in a logbook using a liquid test kit",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            {
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "count": 1
+            },
+            {
+                "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                "count": 1
+            },
+            {
+                "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "stop-nosebleed",
+        "title": "Use gloves, gauze, and antiseptic from a first aid kit to control a minor nosebleed",
+        "image": "/assets/rescue.jpg",
+        "requireItems": [
+            {
+                "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
+                "count": 1
+            },
+            {
+                "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "10m"
+    },
+    {
+        "id": "hand-crank-50Wh",
+        "title": "Generate 50 Wh with a hand crank generator",
+        "requireItems": [
+            {
+                "id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 50
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "charge-smartphone",
+        "title": "Fully charge a smartphone from a 200 Wh battery pack using a USB cable",
+        "image": "/assets/battery.jpg",
+        "requireItems": [
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 10
+            }
+        ],
+        "createItems": [],
+        "duration": "1h"
+    },
+    {
+        "id": "charge-battery-pack-solar",
+        "title": "Charge a 200 Wh battery pack in direct sun using a 200 W solar panel and charge controller",
+        "image": "/assets/solar_setup_small.jpg",
+        "requireItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 200
+            },
+            {
+                "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                "count": 200
+            }
+        ],
+        "duration": "1h"
+    },
+    {
+        "id": "test-cable-continuity",
+        "title": "Verify USB cable continuity with a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "charge-battery-pack-wind",
+        "title": "Charge a 200 Wh battery pack with a 500 W wind turbine",
+        "image": "/assets/turbine.jpg",
+        "requireItems": [
+            {
+                "id": "743681a7-d2e7-465c-af07-43665079bf4d",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 200
+            },
+            {
+                "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67",
+                "count": 200
+            }
+        ],
+        "duration": "30m"
+    },
+    {
+        "id": "build-birdhouse",
+        "title": "Assemble a pine birdhouse with hand tools",
+        "image": "/assets/door.jpg",
+        "requireItems": [
+            {
+                "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                "count": 1
+            },
+            {
+                "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                "count": 1
+            },
+            {
+                "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 1
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 1
+            },
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
+                "count": 1
+            }
+        ],
+        "duration": "1h"
+    },
+    {
+        "id": "start-compost-bin",
+        "title": "Start a kitchen compost bucket using a 5 gallon bucket",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "measure-arduino-5v",
+        "title": "Measure the 5 V pin on an Arduino Uno using a digital multimeter",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "turn-compost-bucket",
+        "title": "Aerate compost in a 5 gallon bucket by rotating contents",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "measure-compost-temperature",
+        "title": "Check core temperature of a compost pile with a compost thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "measure-compost-moisture",
+        "title": "Gauge compost moisture with a probe meter",
+        "image": "/assets/compost_moisture_meter_probe.jpg",
+        "requireItems": [
+            {
+                "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "sift-compost",
+        "title": "Separate finished compost using a mesh sifter",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            {
+                "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m"
+    },
+    {
+        "id": "tin-soldering-iron-tip",
+        "title": "Heat the soldering iron and melt solder on the tip while wearing safety goggles",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "clean-soldering-iron-tip",
+        "title": "Wipe the soldering iron tip on a damp sponge to remove oxidation",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m"
+    },
+    {
+        "id": "check-flashlight-battery",
+        "title": "Measure a red flashlight's 9 V battery with a digital multimeter",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "80d30825-a42b-4add-b715-322e1713952c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 2,
+            "score": 70,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                },
+                {
+                    "task": "codex-process-hardening-2025-09-27",
+                    "date": "2025-09-27",
+                    "score": 70
+                }
+            ]
+        }
+    },
+    {
+        "id": "desolder-through-hole",
+        "title": "Heat a through-hole joint and clear it with a spring-loaded pump while wearing safety goggles",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "desolder-smd-with-wick",
+        "title": "Remove solder from a PCB pad with solder wick and a soldering iron",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+                "count": 1
+            },
+            {
+                "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "assemble-servo-arm",
+        "title": "Bolt a micro servo to a base and attach its plastic horn as an arm with a precision screwdriver set",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 70
+                }
+            ]
+        }
+    },
+    {
+        "id": "solder-smd-resistor",
+        "title": "Solder a 220 \u03a9 SMD resistor onto a PCB using a flux pen and precision tweezers",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                "count": 1
+            },
+            {
+                "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+                "count": 1
+            },
+            {
+                "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+                "count": 1
+            },
+            {
+                "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "test-gfci-outlet",
+        "title": "Test a GFCI outlet's wiring with a plug-in tester and its test/reset buttons",
+        "image": "/assets/outlet.jpg",
+        "requireItems": [
+            {
+                "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-test-gfci-outlet-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "use-soldering-mat",
+        "title": "Place a heat-resistant silicone mat on the workbench before powering the soldering iron",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
+                "count": 1
+            },
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-use-soldering-mat-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "use-solder-fume-extractor",
+        "title": "Place a solder fume extractor near the workspace and switch it on before soldering",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "593fc442-f437-4449-94e5-17b7b4625c41",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "generate-ssh-key",
+        "title": "Generate an ed25519 SSH key pair on a laptop and copy it to a Pi cluster node",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "harden-sshd-config",
+        "title": "Disable password login and root SSH access, then restart sshd",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "configure-ufw-firewall",
+        "title": "Use a laptop to install UFW on a Pi node and allow only SSH and HTTPS",
+        "image": "/assets/settings.jpg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-configure-ufw-firewall-2025-08-24",
+                    "date": "2025-08-24",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "measure-filament-diameter",
+        "title": "Measure 1.75 mm PLA filament at three points with digital calipers",
+        "image": "/assets/pla_white.jpg",
+        "requireItems": [
+            {
+                "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                "count": 1
+            },
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "use-brass-tip-cleaner",
+        "title": "Clean soldering iron tip using a brass wire sponge",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "trim-resistor-leads",
+        "title": "Trim excess leads from a soldered 220 \u03a9 resistor using wire cutters",
+        "image": "/assets/quests/basic_circuit.svg",
+        "requireItems": [
+            {
+                "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2m"
+    },
+    {
+        "id": "replace-launch-controller-battery",
+        "title": "Replace the 9 V battery in a model rocket launch controller",
+        "image": "/assets/launch_controller.jpg",
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "80d30825-a42b-4add-b715-322e1713952c",
+                "count": 1
+            }
+        ],
+        "createItems": [],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    }
+]

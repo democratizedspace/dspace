@@ -1,0 +1,12 @@
+{
+  "id": "2025-10-19-github-token-save-race",
+  "date": "2025-10-19",
+  "component": "cloud sync",
+  "rootCause": "Saving GitHub credentials only enqueued asynchronous IndexedDB writes, so reloading the page immediately after clicking Save left the token missing and cleared the field on the next visit.",
+  "resolution": "Game state persistence now records timestamps, mirrors writes to localStorage before IndexedDB, and prefers the newest snapshot on load; added regression tests covering the fallback path.",
+  "references": [
+    "frontend/src/utils/gameState/common.js",
+    "frontend/__tests__/githubToken.test.js",
+    "frontend/__tests__/gameState/common.test.js"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/silicone_soldering_mat_300x200.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "silicone soldering mat",
+    "item_id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
+    "entity_type": "item",
+    "prompt": "A 300 \u00d7 200 mm silicone soldering mat lies on a workbench, its surface divided into a central flat workspace and several small screw trays and compartments along the edges. A few screws, components, and a tiny PCB rest in the trays, while a soldering iron stand and tools sit safely on the heat-resistant central area. The mat is slightly textured and clearly thick enough (around 3 mm) to protect the bench, with no logos or text printed on it.\n\nThe scene is a near-future solarpunk electronics station with soft, even lighting, tidy shelves of parts in the background, and a plant adding a bit of green at the edge of the frame. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable labels on the mat or tools, and a composition that centers the mat, its compartments, and the organized small parts while the rest of the workspace remains softly out of focus, emphasizing its role as a heat-resistant, anti-static work surface.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

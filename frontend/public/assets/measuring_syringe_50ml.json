@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/measuring_syringe_50ml.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "50 mL measuring syringe",
+    "item_id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+    "entity_type": "item",
+    "prompt": "A 50 mL polypropylene syringe without a needle lies on a work surface next to a small puddle-free spill tray, its clear barrel showing bold but unreadable volume markings and a smoothly sliding plunger. The syringe tip points toward a bottle of nutrient solution in the background, and a small amount of colored liquid remains inside the barrel, making it obvious that it is used for dosing nutrients into a reservoir. No needle is attached, reinforcing that this is a measuring tool, not for injection.\n\nThe environment is a neat near-future solarpunk hydroponic station with soft, diffused lighting, a few bottles and tubs organized on shelves, and healthy plants visible just beyond the main focus. The 512\u00d7512 image is photorealistic with mild stylization, no logos or readable text on the syringe, and a composition that keeps the syringe and its measured liquid as the focal point while the rest of the workspace remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

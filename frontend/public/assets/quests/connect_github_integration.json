@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/connect_github_integration.jpg",
+    "entity": "frontend/src/pages/quests/json/welcome/connect-github.json",
+    "item_name": "Connect GitHub",
+    "item_id": "welcome/connect-github",
+    "entity_type": "quest",
+    "prompt": "A developer’s desk with a laptop open to a stylized DSPACE settings or integrations screen on one side and a GitHub-style logo panel on the other, connected by a glowing link icon or animated-looking line between them. The UI uses colored blocks and recognizable iconography but no readable text. A notification-style badge appears near the link icon to show that the DSPACE account has been successfully connected to GitHub for syncing and submissions.\n\nNear-future solarpunk workspace aesthetic with soft, indirect lighting, a few sticky notes, and a plant or two. Photorealistic 512×512 rendering, no brand logos that exactly match real trademarks—just suggestive iconography—and no legible text. No people are in frame; the focus is on the linked UIs representing account connection.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

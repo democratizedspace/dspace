@@ -1,0 +1,79 @@
+{
+    "id": "electronics/resistor-color-check",
+    "title": "Verify resistor color bands",
+    "description": "Confirm a resistor's value by decoding its color bands before installing it in a circuit.",
+    "image": "/assets/quests/electronics_resistor_color_band_check.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Need to confirm this resistor's value? Power down the circuit and hold off on soldering until we read its stripes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "check",
+                    "text": "Show me."
+                }
+            ]
+        },
+        {
+            "id": "check",
+            "text": "Orient the gold tolerance band to the right. Compare the remaining stripes against a resistor color chart or run verify-resistor-color-code. Red-red-brown-gold equals 220 \u03a9 \u00b15%.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Confirmed 220 \u03a9.",
+                    "process": "verify-resistor-color-code",
+                    "requiresItems": [
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great. Label the resistor or store it for later use.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "electronics/basic-circuit"
+    ],
+    "hardening": {
+        "passes": 2,
+        "score": 78,
+        "emoji": "\u2705",
+        "history": [
+            {
+                "task": "codex-refine-2025-08-07",
+                "date": "2025-08-07",
+                "score": 60
+            },
+            {
+                "task": "codex-refine-2025-08-11",
+                "date": "2025-08-11",
+                "score": 78
+            }
+        ]
+    }
+}

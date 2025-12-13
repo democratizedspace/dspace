@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/model_rocket_launch_controller.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "launch controller",
+    "item_id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+    "entity_type": "item",
+    "prompt": "A handheld model rocket launch controller rests on a weathered launch table, its housing shaped like a small rectangular remote with a bright LED near the top and a safety key inserted into a prominent slot. A single launch button is visible under a protective ridge or ring, and a thick pair of insulated leads extends several meters away toward the edge of the frame, clearly suggesting a 6 m cable run to the launch pad. A small 9 V battery compartment door is outlined on the back or underside of the controller, reinforcing its portable power source.\n\nThe environment is a near-future solarpunk launch site under soft daylight, with a model rocket and launch rail visible in the blurred background and a few patches of grass or plants growing around the pad. The 512\u00d7512 image is photorealistic with subtle stylization, containing no logos or readable text on the controller, and a composition that keeps the safety key, LED, and launch button as central elements while the cable and distant rocket provide context in gentle soft focus.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

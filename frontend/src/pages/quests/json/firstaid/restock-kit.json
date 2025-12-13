@@ -1,0 +1,58 @@
+{
+    "id": "firstaid/restock-kit",
+    "title": "Restock Your First Aid Kit",
+    "description": "Replace used supplies so you're ready for emergencies.",
+    "image": "/assets/quests/firstaid_restock_kit_supplies.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Recent scrapes have thinned out your first aid kit. Let's top it up so you're ready for the next emergency.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "What should I replace?"
+                }
+            ]
+        },
+        {
+            "id": "gather",
+            "text": "Wash your hands, remove expired items, and add adhesive bandages, sterile gauze pads and antiseptic wipes. Keep everything sealed and dry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Everything's replaced",
+                    "requiresItems": [
+                        {
+                            "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
+                            "count": 1
+                        },
+                        {
+                            "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
+                            "count": 1
+                        },
+                        {
+                            "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Perfect! Keeping your kit stocked and disposing of expired items safely means small injuries won't slow you down.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Safety first!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["firstaid/assemble-kit"]
+}

@@ -1,0 +1,615 @@
+<script>
+    import { createEventDispatcher, onMount } from 'svelte';
+    import ItemSelector from './ItemSelector.svelte';
+    import ProcessPreview from './ProcessPreview.svelte';
+    import items from '../../pages/inventory/json/items';
+    import { durationInSeconds, prettyPrintDuration } from '../../utils.js';
+    import { createProcess } from '../../utils/customcontent.js';
+    import { validateProcessData } from '../../utils/customProcessValidation.js';
+
+    export let title = '';
+    export let duration = '';
+    export let requireItems = [];
+    export let consumeItems = [];
+    export let createItems = [];
+
+    let isClientSide = false;
+    let showPreview = false;
+    let validationErrors = {};
+    let successMessage = '';
+    let errorMessage = '';
+    let lastCreatedProcessId = null;
+    let isSubmitting = false;
+
+    const dispatch = createEventDispatcher();
+
+    onMount(() => {
+        isClientSide = true;
+    });
+
+    function addItemRequirement() {
+        requireItems = [...requireItems, { id: '', count: 1 }];
+    }
+
+    function addItemConsumption() {
+        consumeItems = [...consumeItems, { id: '', count: 1 }];
+    }
+
+    function addItemCreation() {
+        createItems = [...createItems, { id: '', count: 1 }];
+    }
+
+    function removeItemRequirement(index) {
+        requireItems = requireItems.filter((_, i) => i !== index);
+    }
+
+    function removeItemConsumption(index) {
+        consumeItems = consumeItems.filter((_, i) => i !== index);
+    }
+
+    function removeItemCreation(index) {
+        createItems = createItems.filter((_, i) => i !== index);
+    }
+
+    function handleItemSelect(event, itemType, index) {
+        const { itemId } = event.detail;
+        if (itemType === 'require') {
+            requireItems[index].id = itemId;
+        } else if (itemType === 'consume') {
+            consumeItems[index].id = itemId;
+        } else if (itemType === 'create') {
+            createItems[index].id = itemId;
+        }
+    }
+
+    function validateDuration(duration) {
+        // Accept durations like "1h 30m", "45s", "0.5h" or any combination
+        // cspell:ignore dhms
+        const pattern = /^(\d+(?:\.\d+)?[dhms]\s*)+$/;
+        const trimmed = duration.trim();
+        if (!pattern.test(trimmed)) {
+            return false;
+        }
+        return durationInSeconds(trimmed) > 0;
+    }
+
+    function validateItems() {
+        // Check if any item has negative or zero count
+        const allItems = [...requireItems, ...consumeItems, ...createItems];
+        return allItems.every((item) => item.count > 0);
+    }
+
+    function validateForm() {
+        const errors = {};
+
+        if (!title.trim()) {
+            errors.title = 'Title is required';
+        }
+
+        if (!duration.trim() || !validateDuration(duration)) {
+            errors.duration = 'Invalid duration';
+        }
+
+        if (!validateItems()) {
+            errors.items = 'Item counts must be positive';
+        }
+
+        const { valid, errors: schemaErrors } = validateProcessData({
+            title,
+            duration,
+            requireItems,
+            consumeItems,
+            createItems,
+        });
+
+        if (!valid && schemaErrors) {
+            schemaErrors.forEach((err) => {
+                if (err.keyword === 'anyOf') {
+                    errors.items = 'At least one item relationship is required';
+                } else if (err.instancePath === '/title') {
+                    errors.title = err.message || 'Invalid title';
+                } else if (err.instancePath === '/duration') {
+                    errors.duration = err.message || 'Invalid duration';
+                } else if (
+                    err.instancePath.startsWith('/requireItems') ||
+                    err.instancePath.startsWith('/consumeItems') ||
+                    err.instancePath.startsWith('/createItems')
+                ) {
+                    errors.items = err.message || 'Invalid items';
+                }
+            });
+        }
+
+        validationErrors = errors;
+        return Object.keys(errors).length === 0;
+    }
+
+    function sanitizeItemList(itemsToSanitize) {
+        return itemsToSanitize
+            .map((item) => ({
+                id: item?.id ?? '',
+                count: Number(item?.count ?? 0),
+            }))
+            .filter((item) => item.id && item.count > 0);
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
+        if (isSubmitting) {
+            return;
+        }
+
+        successMessage = '';
+        errorMessage = '';
+        isSubmitting = true;
+
+        const normalizedDuration = prettyPrintDuration(durationInSeconds(duration));
+        const preparedProcess = {
+            title: title.trim(),
+            duration: normalizedDuration,
+            requireItems: sanitizeItemList(requireItems),
+            consumeItems: sanitizeItemList(consumeItems),
+            createItems: sanitizeItemList(createItems),
+        };
+
+        try {
+            const createdId = await createProcess(
+                preparedProcess.title,
+                preparedProcess.duration,
+                preparedProcess.requireItems,
+                preparedProcess.consumeItems,
+                preparedProcess.createItems
+            );
+
+            duration = normalizedDuration;
+            requireItems = preparedProcess.requireItems;
+            consumeItems = preparedProcess.consumeItems;
+            createItems = preparedProcess.createItems;
+
+            const formData = new FormData();
+            formData.append('title', preparedProcess.title);
+            formData.append('duration', preparedProcess.duration);
+            formData.append('requireItems', JSON.stringify(preparedProcess.requireItems));
+            formData.append('consumeItems', JSON.stringify(preparedProcess.consumeItems));
+            formData.append('createItems', JSON.stringify(preparedProcess.createItems));
+
+            if (createdId != null) {
+                formData.append('id', String(createdId));
+                lastCreatedProcessId = createdId;
+            } else {
+                lastCreatedProcessId = null;
+            }
+
+            successMessage = 'Process created successfully!';
+            dispatch('submit', formData);
+        } catch (error) {
+            console.error('Failed to create process:', error);
+            errorMessage = 'Failed to save process. Please try again.';
+        } finally {
+            isSubmitting = false;
+        }
+    }
+</script>
+
+<div data-hydrated={isClientSide ? 'true' : 'false'}>
+    {#if isClientSide}
+        {#if successMessage}
+            <div class="success-message" role="status" aria-live="polite">
+                {successMessage}
+                {#if lastCreatedProcessId}
+                    <a class="success-link" href={`/processes/${lastCreatedProcessId}`}>
+                        View process
+                    </a>
+                {/if}
+            </div>
+        {/if}
+
+        {#if errorMessage}
+            <div class="form-error" role="alert">{errorMessage}</div>
+        {/if}
+
+        <form on:submit={handleSubmit} class="process-form">
+            <div class="form-group">
+                <label for="title">Title*</label>
+                <input
+                    type="text"
+                    id="title"
+                    bind:value={title}
+                    placeholder="Process title"
+                    class:error={validationErrors.title}
+                    required
+                />
+                {#if validationErrors.title}
+                    <span class="error-message">{validationErrors.title}</span>
+                {/if}
+            </div>
+
+            <div class="form-group">
+                <label for="duration">Duration*</label>
+                <input
+                    type="text"
+                    id="duration"
+                    bind:value={duration}
+                    placeholder="e.g. 1h 30m"
+                    class:error={validationErrors.duration}
+                    required
+                />
+                {#if validationErrors.duration}
+                    <span class="error-message">{validationErrors.duration}</span>
+                {/if}
+            </div>
+
+            <div class="form-group">
+                <label for="required-items-section">Required Items</label>
+                <div id="required-items-section">
+                    {#each requireItems as item, index}
+                        <div class="item-row">
+                            <ItemSelector
+                                {items}
+                                selectedItemId={item.id}
+                                label="Select Required Item"
+                                on:select={(e) => handleItemSelect(e, 'require', index)}
+                            />
+                            <input
+                                type="number"
+                                bind:value={item.count}
+                                placeholder="Count"
+                                min="1"
+                            />
+                            <button
+                                type="button"
+                                class="remove-button"
+                                aria-label="Remove required item"
+                                on:click={() => removeItemRequirement(index)}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    {/each}
+                    <button type="button" class="add-button" on:click={addItemRequirement}
+                        >Add Required Item</button
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="consumed-items-section">Consumed Items</label>
+                <div id="consumed-items-section">
+                    {#each consumeItems as item, index}
+                        <div class="item-row">
+                            <ItemSelector
+                                {items}
+                                selectedItemId={item.id}
+                                label="Select Consumed Item"
+                                on:select={(e) => handleItemSelect(e, 'consume', index)}
+                            />
+                            <input
+                                type="number"
+                                bind:value={item.count}
+                                placeholder="Count"
+                                min="1"
+                            />
+                            <button
+                                type="button"
+                                class="remove-button"
+                                aria-label="Remove consumed item"
+                                on:click={() => removeItemConsumption(index)}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    {/each}
+                    <button type="button" class="add-button" on:click={addItemConsumption}
+                        >Add Consumed Item</button
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="created-items-section">Created Items</label>
+                <div id="created-items-section">
+                    {#each createItems as item, index}
+                        <div class="item-row">
+                            <ItemSelector
+                                {items}
+                                selectedItemId={item.id}
+                                label="Select Created Item"
+                                on:select={(e) => handleItemSelect(e, 'create', index)}
+                            />
+                            <input
+                                type="number"
+                                bind:value={item.count}
+                                placeholder="Count"
+                                min="1"
+                            />
+                            <button
+                                type="button"
+                                class="remove-button"
+                                aria-label="Remove created item"
+                                on:click={() => removeItemCreation(index)}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    {/each}
+                    <button type="button" class="add-button" on:click={addItemCreation}
+                        >Add Created Item</button
+                    >
+                </div>
+            </div>
+
+            {#if validationErrors.items}
+                <div class="error-message">{validationErrors.items}</div>
+            {/if}
+
+            <div class="form-submit">
+                <button type="submit" class="submit-button" disabled={isSubmitting}>
+                    {isSubmitting ? 'Saving…' : 'Create Process'}
+                </button>
+                <button
+                    type="button"
+                    class="preview-button"
+                    on:click={async () => {
+                        if (validateForm()) {
+                            showPreview = true;
+                        }
+                    }}
+                >
+                    Preview
+                </button>
+            </div>
+        </form>
+    {:else}
+        <div class="loading-container">
+            <p class="loading-text">Loading process form...</p>
+        </div>
+    {/if}
+
+    {#if showPreview}
+        <ProcessPreview {title} {duration} {requireItems} {consumeItems} {createItems} />
+    {/if}
+</div>
+
+<style>
+    .process-form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #2c5837;
+        border-radius: 12px;
+        border: 2px solid #007006;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .success-message {
+        margin: 0 auto 20px auto;
+        max-width: 600px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        background: #1f7a1f;
+        border: 2px solid #00cc00;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .success-link {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    .success-link:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+
+    .form-error {
+        margin: 0 auto 20px auto;
+        max-width: 600px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        background: #441414;
+        border: 2px solid #ff3e3e;
+        color: #ffb3b3;
+        text-align: center;
+    }
+
+    .loading-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: #2c5837;
+        border-radius: 12px;
+        border: 2px solid #007006;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .loading-text {
+        font-size: 16px;
+        font-style: italic;
+        color: #d0ffd0;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 6px;
+        color: white;
+    }
+
+    input {
+        padding: 10px;
+        border-radius: 8px;
+        background: #68d46d;
+        color: black;
+        font-size: 16px;
+        border: 2px solid #007006;
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s;
+    }
+
+    input[type='text'] {
+        width: 85%;
+    }
+
+    input.error {
+        border-color: #ff3e3e;
+        background-color: #ffecec;
+    }
+
+    input[type='number'] {
+        width: 80px;
+        text-align: center;
+    }
+
+    input:focus {
+        border-color: #0f0;
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+        outline: 3px solid #0f0;
+        outline-offset: 2px;
+    }
+
+    .item-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+
+    .item-row :global(.item-selector) {
+        flex: 1;
+        min-width: 0; /* Allows flex item to shrink below content size */
+    }
+
+    .remove-button {
+        padding: 5px 10px;
+        background-color: #ff4444;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+        white-space: nowrap;
+        min-width: 80px;
+    }
+
+    .remove-button:hover {
+        background-color: #cc0000;
+    }
+
+    .add-button {
+        margin-top: 10px;
+        padding: 8px 16px;
+        background-color: #4488ff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+    }
+
+    .add-button:hover {
+        background-color: #0055cc;
+    }
+
+    .submit-button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #00cc00;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+    }
+
+    .submit-button:hover {
+        background-color: #009900;
+    }
+
+    .preview-button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #0055cc;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .preview-button:hover {
+        background-color: #003d99;
+    }
+
+    .remove-button:focus-visible,
+    .add-button:focus-visible,
+    .submit-button:focus-visible,
+    .preview-button:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+
+    .error-message {
+        color: #ff3e3e;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .form-submit {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 480px) {
+        .process-form {
+            padding: 10px;
+        }
+
+        input[type='text'] {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .item-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .form-submit {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .submit-button,
+        .preview-button {
+            width: 100%;
+            margin-left: 0;
+        }
+    }
+</style>

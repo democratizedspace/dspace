@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_step_stool_build.jpg",
+    "entity": "frontend/src/pages/quests/json/woodworking/step-stool.json",
+    "item_name": "Build a step stool",
+    "item_id": "woodworking/step-stool",
+    "entity_type": "quest",
+    "prompt": "A compact wooden step stool is being built on a workbench, with two side pieces and a top tread already assembled and a lower stretcher about to be glued and clamped into place. The stool has clean, rounded edges and a cut-out handhold in the top step to make it easy to carry. A handsaw or small circular saw, glue bottle, and a set of clamps lie nearby, and pencil layout lines show that cuts were carefully planned for safety and stability.\n\nThe scene is set in a modern near-future woodworking shop with solarpunk character: organized tool walls, soft indirect lighting, and perhaps a small safety reminder poster in the background without readable text. The 512×512 photorealistic composition highlights the stool and the hands positioning the stretcher, while the rest of the workshop fades into a gentle blur. There are no logos or readable words anywhere, and only arms and hands are shown, reinforcing the idea of a sturdy, safely built step stool made with attention and care.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

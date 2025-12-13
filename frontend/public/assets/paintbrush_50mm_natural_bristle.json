@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/paintbrush_50mm_natural_bristle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "paintbrush",
+    "item_id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32",
+    "entity_type": "item",
+    "prompt": "A 50 mm natural-bristle paintbrush rests across the rim of a small tray or can of wood finish, its bristles lightly coated and shaped in a smooth arc. The handle is wooden or composite, comfortably contoured with no branding or text, and a nearby board shows a freshly brushed, slightly glossy surface that transitions to bare wood. Fine streaks in the finish highlight the brush’s width and its use for applying paint or varnish to wooden surfaces.\n\nThe workshop setting has a near-future solarpunk aesthetic with soft, warm lighting, clean walls, and organized shelves of finishes and tools in the background. The 512×512 image is photorealistic with gentle stylization, no logos or labels on the brush or container, and a composition that centers the brush, finish tray, and partially coated board while the rest of the environment remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

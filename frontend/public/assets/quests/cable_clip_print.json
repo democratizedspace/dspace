@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/cable_clip_print.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/cable-clip.json",
+    "item_name": "Print a Cable Clip",
+    "item_id": "3dprinting/cable-clip",
+    "entity_type": "quest",
+    "prompt": "A 3D printer on a workbench printing a small, U-shaped cable clip on the build plate, with several finished clips scattered neatly nearby and a few snapped onto bundled cables behind the printer. One cable bundle is clearly routed through several of the new clips along the side or back of the frame, showing how they reduce clutter. The clips are simple and functional, printed in a single solid color.\n\nNear-future solarpunk workshop aesthetic with warm lighting, tidy tools, and maybe a small plant or two. Photorealistic 512×512 rendering with no brand logos or legible text. The composition should make it obvious that the quest is about 3D printing a simple cable clip and using it to organize printer wiring.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

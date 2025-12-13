@@ -1,0 +1,187 @@
+# Writing great process prompts for the _dspace_ repo
+
+Codex is a sandboxed engineering agent that can open this repository,
+run its own tests, and send you a ready‑made PR—but only if you give it a
+clear, file‑scoped prompt. Use this guide alongside
+[Codex Prompts](baseline.md) when working on processes. To keep the
+prompt docs evolving, see the [Codex meta prompt](meta.md). If these
+templates drift, refresh them with the [Codex Prompt Upgrader](upgrader.md).
+For failing GitHub Actions runs, use the [Codex CI-failure fix prompt](ci-fix.md).
+For fundamental design tips see the
+[Process Development Guidelines](/docs/process-guidelines).
+
+> **TL;DR**
+>
+> 1. Scope changes to a single process entry.
+> 2. Say exactly what output you expect (tests, docs).
+> 3. Stop when the spec is complete. Codex treats all remaining text as
+>    mandatory instructions.
+> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`;
+>    scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
+>    commit with an emoji prefix.
+
+---
+
+## 1. Quick start (Web vs CLI)
+
+- **Add or update a process**
+  - Web: use the “Code” button and attach the repo.
+  - CLI: `codex "add process 3dprinting/solar-mount"`
+- **Ask about process data**
+  - Web: use the “Ask” button.
+  - CLI: `codex exec "explain frontend/src/pages/processes/base.json"`
+- **Run process tests**
+  - Web: not supported yet.
+  - CLI:
+    ```bash
+    codex exec "npm run lint && npm run type-check && npm run build && \
+    npm run test:ci && \
+    npm run test:ci -- processQuality && \
+    git diff --cached | ./scripts/scan-secrets.py"
+    ```
+
+See the [OpenAI CLI repository][openai-cli] for more flags.
+
+---
+
+## 2. Prompt ingredients
+
+| Ingredient           | Why it matters                                                          |
+| -------------------- | ----------------------------------------------------------------------- |
+| **Goal sentence**    | Gives the agent a north star (“Add lettuce seed input to hydroponics”). |
+| **Files to touch**   | Limits search space → faster & cheaper.                                 |
+| **Constraints**      | Coding style, a11y, process schema rules.                               |
+| **Acceptance check** | e.g. “`npm run test:ci` and `npm run test:ci -- processQuality` pass”.  |
+
+Codex merges these instructions with any `AGENTS.md` files in scope, so keep
+prompt‑level rules short and concrete.
+
+---
+
+## 3. Reusable template
+
+```text
+You are working in democratizedspace/dspace.
+
+GOAL: <one sentence process addition or edit>.
+
+FILES OF INTEREST
+- frontend/src/pages/processes/base.json   ← process registry
+- frontend/src/pages/processes/hardening/* ← hardening metadata
+
+REQUIREMENTS
+1. Follow the process schema.
+2. Use realistic durations and item relationships grounded in real-world timing.
+3. Ensure the process is referenced by at least one quest or item; create
+   missing items or quest hooks as needed.
+4. Use only existing image assets; do not add new image files.
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+6. Run `npm run test:ci -- processQuality` and fix any failures.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+8. Update docs or items if needed.
+
+OUTPUT
+A pull request with the completed process and passing checks.
+```
+
+## Implementation Prompt
+
+Use this when you want Codex to automatically create or upgrade a process.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Edit or create
+processes under `frontend/src/pages/processes/base.json` with corresponding
+hardening files in `frontend/src/pages/processes/hardening`. Ensure realistic
+steps, durations, item references, and passing checks (`npm run lint`,
+`npm run type-check`, `npm run build`, `npm run test:ci`, and
+`npm run test:ci -- processQuality`).
+Verify the process links to existing quests or items, add missing registry
+entries if needed, reuse existing image assets, and scan for secrets with
+`git diff --cached | ./scripts/scan-secrets.py` before committing.
+
+USER:
+1. Follow the steps above.
+2. Run the commands listed in the system prompt before committing.
+3. Summarize the new or updated process in the PR description.
+4. Use an emoji-prefixed commit message like `📝 : – update process`.
+
+OUTPUT:
+A pull request implementing the process with all tests green.
+```
+
+## Upgrade prompt for existing processes
+
+Use this prompt to refine processes and track quality as the game evolves.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository.
+
+USER:
+1. Pick a process from `frontend/src/generated/processes.json` that lacks a
+   `hardening` block or has a low score.
+2. Improve clarity, realism and item references. Ensure durations are feasible
+   and related items exist in `frontend/src/pages/inventory/json/items`.
+3. When updating the `image` field, reuse an existing image URL already in the
+   repository; do not introduce new or external images.
+4. Update or create the process's `hardening` block, incrementing `passes`,
+   refreshing the evaluator `score`, swapping the status `emoji` and appending a
+   history entry with the Codex task ID, date and score. Choose the emoji based
+   on:
+   - 0 passes → score 0 → 🛠️ Draft
+   - ≥1 pass & score ≥60 → 🌀 First polishing pass
+   - ≥2 passes & score ≥75 → ✅ Meets internal quality bar
+   - ≥3 passes & score ≥90 → 💯 Hardened – locked until spec change
+   Example:
+   "hardening": {
+     "passes": 1,
+     "score": 60,
+     "emoji": "🌀",
+     "history": [
+       { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
+     ]
+   }
+5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+6. Run `npm run test:ci -- processQuality`. Update docs or items if needed.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+8. Use an emoji-prefixed commit message like `📝 : – refine process details`.
+
+OUTPUT:
+A pull request with the refined process, updated hardening block and passing tests.
+```
+
+## Additional tips for AI assistance
+
+Modern assistants can be powerful collaborators. Keep in mind:
+
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible
+  but incorrect details.
+
+[openai-cli]: https://platform.openai.com/docs/guides/openai-cli/
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep process-writing guidance current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Verify process schema and `generated/processes.json` references remain accurate.
+2. Incorporate new process development guidelines or registry paths.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the process prompt doc with passing checks.
+```

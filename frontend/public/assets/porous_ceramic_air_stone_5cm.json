@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/porous_ceramic_air_stone_5cm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "porous air stone",
+    "item_id": "9f91173d-2609-4127-896d-7578078135db",
+    "entity_type": "item",
+    "prompt": "A cylindrical 5 cm ceramic air stone with a slightly rough, porous surface lies on a damp work surface next to a short length of flexible airline tubing. One end of the air stone has a small plastic or metal barb where the tubing can attach, clearly showing how it integrates into an air pump system. Behind it, a partially visible hydroponic reservoir or bucket with gently bubbling water suggests how the stone diffuses air into the nutrient solution when in use.\n\nThe environment is a near-future solarpunk hydroponics area with soft, even lighting, healthy plants in the background, and neatly routed tubing along the edges of a grow tub. The 512×512 image is photorealistic with light stylization, no logos or text on the stone, and a composition that centers the air stone and tubing connection while the rest of the hydroponic equipment and greenery remains softly blurred, emphasizing its role as a bubble diffuser in reservoirs.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

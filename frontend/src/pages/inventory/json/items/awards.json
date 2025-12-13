@@ -1,0 +1,154 @@
+[
+    {
+        "id": "fe46e236-5d03-4c95-9b38-68b045a0df03",
+        "name": "Benchy Award",
+        "description": "Resin trophy of classic 3D Benchy boat for your first calibration print.",
+        "image": "/assets/benchy_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+        "name": "Motor Award",
+        "description": "12 cm tall brushed aluminum trophy shaped like an Edison Model M motor; awarded to early buyers.",
+        "image": "/assets/motor_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "946b07b7-2b2c-4507-a725-edb270d8e910",
+        "name": "Rocket Award",
+        "description": "15 cm tall brushed aluminum rocket trophy awarded for printing your first model rocket.",
+        "image": "/assets/rocket_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
+        "name": "Rocketeer Award",
+        "description": "12 cm aluminum rocket trophy for your first model rocket launch.",
+        "image": "/assets/rocketeer_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "1394c366-5078-49cf-b24e-c748e8428234",
+        "name": "Completionist Award",
+        "description": "15 cm aluminum trophy etched 'Completionist 2023'; reward for finishing every quest on 2023-01-01.",
+        "image": "/assets/completionist_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "96e11500-a2ce-4531-a1b5-3a92c44fcb9d",
+        "name": "Tree Hugger Award",
+        "description": "12 cm bamboo trophy laser-engraved with a tree; awarded for converting dCarbon to dOffset.",
+        "image": "/assets/tree_hugger_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+        "name": "Completionist Award II",
+        "description": "12 cm aluminum trophy dated 2023-06-30; reward for finishing all quests.",
+        "image": "/assets/completionist_award_ii.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
+        "name": "Hydro Award",
+        "description": "10 cm aluminum droplet trophy engraved 'Hydration Hero'; reward for hauling ten buckets to dChat.",
+        "image": "/assets/hydro_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 65
+                }
+            ]
+        }
+    }
+]

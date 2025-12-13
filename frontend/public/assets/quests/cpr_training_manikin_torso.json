@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/cpr_training_manikin_torso.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "CPR training manikin",
+    "item_id": "b397aa70-3503-4e40-b84a-4d5609578d2b",
+    "entity_type": "item",
+    "prompt": "A life-size CPR training manikin torso lies on a low training mat, showing the chest, shoulders, and simplified facial features without realistic skin tones. The chest plate has a subtle indication of where hands should be placed for compressions, and a pair of gloved hands is positioned correctly, captured mid-compression to show the concept of pushing straight down. Next to the manikin, a simple timing device or tablet is visible in soft focus, suggesting guided practice without any readable text.\n\nThe training area is a clean, near-future community center or classroom with a solarpunk aesthetic: soft, even lighting, light-colored flooring, and hints of greenery or natural materials in the background. The image is photorealistic at 512×512 resolution but avoids graphic detail, focusing on the manikin and the act of practice. No logos or explicit text appear anywhere, and no identifiable faces are shown, just partial arms and hands demonstrating calm, precise CPR technique.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

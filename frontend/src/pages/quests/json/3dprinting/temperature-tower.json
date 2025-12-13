@@ -1,0 +1,50 @@
+{
+    "id": "3dprinting/temperature-tower",
+    "title": "Print a Temperature Tower",
+    "description": "Find the ideal nozzle temperature by printing a simple calibration tower.",
+    "image": "/assets/quests/temperature_tower_calibration.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's dial in your filament settings with a temperature tower.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Great idea!"
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Slice the tower so each section prints a few degrees cooler than the last.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Tower complete",
+                    "requiresItems": [
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 30
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Check which layer looks best and use that temp for future prints.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Got it, thanks!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinting/retraction-test"]
+}

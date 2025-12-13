@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/rocket_launch_checklist_card.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "rocket launch checklist",
+    "item_id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
+    "entity_type": "item",
+    "prompt": "An A5 laminated card lies on a launch prep table, its surface filled with neat blocks of text and small checkboxes that are too small to read individually but clearly arranged as a checklist. A dry-erase marker rests diagonally across the card, with a few boxes visibly ticked in pale ink. Nearby, a small model rocket on its launch pad and a coiled ignition cable hint that this card guides pad setup, arming, and countdown procedures.\n\nThe setting is a bright near-future outdoor or semi-outdoor launch area with a solarpunk atmosphere: clear sky or soft clouds overhead, clean launch rail equipment, and a few green plants or grass visible at the edges of the frame. The 512×512 image is photorealistic with subtle stylization, no logos or readable text on the card, and a composition that keeps the laminated checklist front and center while the rocket and surrounding area provide context in gentle soft focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

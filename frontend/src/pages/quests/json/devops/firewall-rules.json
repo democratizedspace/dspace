@@ -1,0 +1,53 @@
+{
+    "id": "devops/firewall-rules",
+    "title": "Configure Firewall Rules",
+    "description": "Lock down network ports to only what you need.",
+    "image": "/assets/quests/devops_firewall_rules_config.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Open ports invite trouble. Let's add a firewall to your node.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Show me."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Install UFW and allow SSH and HTTPS. Deny everything else by default.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "configure-ufw-firewall",
+                    "text": "Apply UFW rules."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Rules applied.",
+                    "requiresItems": [
+                        { "id": "df7e94e2-76b9-4865-b843-2ec21feb258e", "count": 1 },
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Your node now exposes only the ports it needs.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "System secured."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/auto-updates"]
+}

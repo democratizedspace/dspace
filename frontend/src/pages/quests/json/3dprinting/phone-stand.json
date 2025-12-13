@@ -1,0 +1,69 @@
+{
+    "id": "3dprinting/phone-stand",
+    "title": "Print a Phone Stand",
+    "description": "Practice 3D printing by making a handy phone stand.",
+    "image": "/assets/quests/phone_stand_print.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey there, it's Sydney again! Ready for a quick project? We'll print a simple phone stand. Grab your 3D printer and some PLA.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Sounds good. What's next?"
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Clean and level the build plate, load PLA filament, then slice the stand STL and begin printing. Keep hands away from the hot nozzle and ensure the area is ventilated.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 15
+                        }
+                    ],
+                    "grantsItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Print started!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        }
+                    ],
+                    "text": "The stand is finished and cooled!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! Let the print cool before removing it, then enjoy a sturdy stand for your phone. Remember to turn off the printer.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Sydney!"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["3dprinter/start"]
+}

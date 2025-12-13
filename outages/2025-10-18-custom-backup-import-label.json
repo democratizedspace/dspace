@@ -1,0 +1,12 @@
+{
+  "id": "2025-10-18-custom-backup-import-label",
+  "date": "2025-10-18",
+  "component": "frontend/contentbackup",
+  "rootCause": "The custom content import textarea lost its accessible label, so Playwright could not locate it and assistive technology users could not trigger imports.",
+  "resolution": "Restored an accessible name on the textarea and added focused tests to ensure the importer remains discoverable and wired to the import helper.",
+  "references": [
+    "frontend/e2e/custom-backup.spec.ts",
+    "frontend/src/pages/contentbackup/svelte/Importer.svelte",
+    "tests/customContentBackupImporterAccessibility.test.ts"
+  ]
+}

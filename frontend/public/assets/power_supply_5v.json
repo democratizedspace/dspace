@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/power_supply_5v.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "5 V Power Supply",
+    "item_id": "828d6c3b-66a5-4064-b221-97630274502b",
+    "entity_type": "item",
+    "prompt": "A small 5 V power supply rests on a wooden desk: a compact USB wall adapter and a matching USB cable plugged into it, with the other end ending in a USB connector suitable for powering microcontrollers. Nearby on the desk, a small battery pack with a 5 V USB output sits slightly out of focus, reinforcing that either a USB adapter or battery pack can provide a stable 5 V DC output. A microcontroller board and a few glowing LEDs are blurred in the background.\n\nNear-future solarpunk workspace aesthetic with warm lighting, clean cable routing, and a plant or solar gadget in view. Photorealistic 512×512 rendering, no brand logos or legible markings on the adapter or battery pack. The composition should clearly suggest “5 V power supply” as a flexible power source in the inventory.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

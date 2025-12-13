@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/robot_odometry_wheel_encoders.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/odometry-basics.json",
+    "item_name": "Track distance with wheel encoders",
+    "item_id": "robotics/odometry-basics",
+    "entity_type": "quest",
+    "prompt": "A small differential-drive robot is shown from a low side angle, highlighting its two main wheels with optical or magnetic encoders attached to each axle. Thin encoder discs or small sensor modules are clearly visible next to the wheels, with wires leading back to a microcontroller board mounted on top of the chassis. Beside the robot, a tablet or notebook displays a simple visualization of distance traveled—perhaps a horizontal bar or numeric readout—so it is obvious that the wheel encoder pulses are being converted into measured distance.\n\nThe setting is a bright near-future STEM lab with clean benches, storage drawers, and a few leafy plants lending a solarpunk touch. Soft, diffused lighting gives the 512×512 image a lightly stylized photorealistic look. There are no brand names or visible text on the screen, and the composition keeps the encoders, wheels, and small distance display as the key focal elements, with the rest of the lab subtly blurred in the background.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

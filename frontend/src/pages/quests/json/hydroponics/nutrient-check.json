@@ -1,0 +1,117 @@
+{
+    "id": "hydroponics/nutrient-check",
+    "title": "Refresh Nutrient Solution",
+    "description": "Top off your hydroponic tub with fresh nutrients while keeping yourself and the plants safe.",
+    "image": "/assets/quests/hydroponics_nutrient_solution_refresh.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Plants quickly deplete minerals in recirculating systems. We'll top off the reservoir so your basil stays strong and avoids nutrient deficiencies.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "add",
+                    "text": "Sounds good!"
+                }
+            ]
+        },
+        {
+            "id": "add",
+            "text": "Slip on nitrile gloves and safety goggles. Use a 50 mL syringe to measure the manufacturer-recommended dose of hydroponic nutrient solution, dissolve it in a bucket of clean water, then slowly pour it into the reservoir. Keep the submersible water pump running so the solution mixes evenly, wipe up any splashes immediately, and dip a pH strip to confirm the solution is between 5.5 and 6.5.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Mix and circulate.",
+                    "requiresItems": [
+                        {
+                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        },
+                        {
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                            "count": 1
+                        },
+                        {
+                            "id": "092dae11-237a-43cc-b342-246aabbba258",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "measure-ec-solution",
+                    "text": "Check EC levels.",
+                    "requiresItems": [
+                        { "id": "71655665-4a59-41f4-9084-dad4d976df91", "count": 1 },
+                        { "id": "fc2bb989-f192-4891-8bde-78ae631dae78", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reservoir topped off!",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Mark today's date on the tub, monitor the water level every few days, rinse your measuring tools, wash your hands after mixing, and store nutrients safely away from kids and pets.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["hydroponics/basil"],
+    "hardening": {
+        "passes": 4,
+        "score": 80,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-refine-2025-08-05",
+                "date": "2025-08-05",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-14",
+                "date": "2025-08-14",
+                "score": 80
+            }
+        ]
+    }
+}

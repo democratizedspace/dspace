@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+- this project uses Astro SSR + hydration of Svelte components on the client side. Thus, interactivity must happen after onMount, and this is especially important when writing tests.
+- after every change, run all tests (unit, playwright, linter) to ensure nothing regressed and help guide development of new features.
+- whenever possible, create unit tests, integration tests, playwright tests, and anything else that may be relevant to make the codebase more robust and less prone to unexpected regressions.
+- you may commit to git locally to make sure your changes also pass precommit hooks. Make sure you don't git push to the origin yourself. Ask me to do it, just to be safe! I want to review all code to make sure we're headed in the right direction and not breaking our tests.
+- look for user journeys based on certain obvious interactions with pages via playwright, and write unique tests for those. This should be a fairly fluid idle game that feels natural and fun to use.
+- When building UIs, check the available Svelte components that have been created already, and try to reuse components when possible. In particular, anything that functions as a button should use the Chip.svelte component. This component's CSS should match that of Chip.astro, which shouldn't be touched for the most part.
+- when possible, update both README.md and frontend/README.md and find a better split between those two files whenever possible. In particular, make the root README more high-level and additional READMEs more detailed for their particular domain.

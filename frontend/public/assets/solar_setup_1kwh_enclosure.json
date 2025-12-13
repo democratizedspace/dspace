@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/solar_setup_1kwh_enclosure.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Solar setup (1 kWh)",
+    "item_id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
+    "entity_type": "item",
+    "prompt": "A compact off-grid solar setup is arranged on a sunlit rooftop: a single 200 W monocrystalline solar panel leans on a sturdy metal frame, its MC4 cables running neatly into a weatherproof enclosure the size of a small suitcase. The enclosure is mounted against a short parapet wall and has a gasketed front door slightly ajar, revealing an internal charge controller with small status lights and a large 1 kWh battery pack wired below it, with thick red and black cables and proper strain relief. A coiled AC extension cord exits through a sealed port at the bottom, making it clear this 1 kWh system is ready to power small appliances or a backup load.\n\nNear-future, solarpunk rooftop setting rendered as a photorealistic 512×512 scene with soft, cinematic late-afternoon light and subtle lens bloom on metallic edges. The surrounding roof shows a few other sustainability touches like planters and distant solar arrays, blurred so they don’t distract from the main system. No brand logos or readable labels are visible on the enclosure or charge controller, and there are no people in frame, just a clean, engineered installation. The composition keeps the enclosure and panel as the main focal points, clearly communicating a robust 1 kWh residential-scale solar power kit.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

@@ -1,0 +1,11 @@
+{
+  "id": "2025-10-19-logout-flow-gistid-metadata",
+  "date": "2025-10-19",
+  "component": "frontend/cloud-sync",
+  "rootCause": "The Playwright helper that primes the saved cloud sync gist ID wrote only to IndexedDB without updating the _meta.lastUpdated timestamp or the localStorage snapshots. When the app reloaded it detected the older IndexedDB timestamp and kept the stale localStorage value, so the logout flow test never saw the expected gist ID.",
+  "resolution": "Update the setCloudGistId helper to mirror saveGameState by bumping _meta.lastUpdated and syncing the gameState/gameStateBackup entries in localStorage, and extend the logout flow test with an assertion that verifies the gist ID is persisted before reload.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18637540270/job/53130814970",
+    "frontend/e2e/logout-flow.spec.ts"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/ubi_daily_reminder.jpg",
+    "entity": "frontend/src/pages/quests/json/ubi/reminder.json",
+    "item_name": "Set a UBI Reminder",
+    "item_id": "ubi/reminder",
+    "entity_type": "quest",
+    "prompt": "A smartphone lying on a bedside table or small desk, its screen showing a stylized notification card with a dUSD coin icon and a small bell or alarm icon, indicating a daily basic income reminder. Next to the phone are a simple analog clock or digital alarm and a notepad with a few scribbles, suggesting that the user has scheduled the reminder to never miss their payout. The notification UI is composed of shapes and icons only, without readable text.\n\nNear-future solarpunk home aesthetic with warm, early-morning or evening lighting and a plant or two nearby. Photorealistic 512×512 rendering with no brand logos and no legible words. The composition should clearly convey “set a daily reminder for your UBI payout” in a friendly, low-stress way.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "2025-10-18-quest-form-indexeddb-sync",
+  "date": "2025-10-18",
+  "component": "frontend quest builder",
+  "rootCause": "QuestForm only validated duplicate titles against server-provided data and never persisted built-in quests into IndexedDB. The e2e duplicate-title flow expected an existing record and failed when none was written.",
+  "resolution": "Persist quests supplied by the server into the CustomContent IndexedDB store on load so duplicate-title checks compare against real records, and add unit coverage to ensure the sync keeps working.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18612605001/job/53072829421",
+    "https://github.com/democratizedspace/dspace/actions/runs/18612605001/job/53072829422"
+  ]
+}

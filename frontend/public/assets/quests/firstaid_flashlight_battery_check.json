@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/firstaid_flashlight_battery_check.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/flashlight-battery.json",
+    "item_name": "Check Flashlight Battery",
+    "item_id": "firstaid/flashlight-battery",
+    "entity_type": "quest",
+    "prompt": "A sturdy emergency flashlight lies on a table next to a compact digital multimeter and a single rectangular 9 V battery. The multimeter\u2019s probes are touching the battery terminals, and the flashlight is oriented so its lens and rugged body are clearly visible, implying that it\u2019s part of an emergency kit. The meter\u2019s display shows a stylized bar or geometric shape instead of readable digits, focusing attention on the act of testing rather than the exact value.\n\nThe setting is a calm near-future home or first-aid prep corner with a solarpunk vibe: soft warm lighting, a simple shelf with a first-aid kit and a small radio in the blurred background, and perhaps a potted plant nearby. The 512\u00d7512 photorealistic composition keeps the flashlight, battery, and multimeter as the central trio, with no brand logos or legible text anywhere. No human faces are visible\u2014only a hand or forearm may be present\u2014emphasizing routine, responsible checking of emergency flashlight batteries.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

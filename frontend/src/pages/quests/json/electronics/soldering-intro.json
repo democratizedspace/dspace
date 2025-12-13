@@ -1,0 +1,84 @@
+{
+    "id": "electronics/tin-soldering-iron",
+    "title": "Tin a Soldering Iron",
+    "description": "Prepare your soldering iron for clean joints by tinning the tip.",
+    "image": "/assets/quests/electronics_tin_soldering_iron_tip.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Good to see you progressing! Before soldering, lay out a silicone mat, secure your work in helping hands, plug in your station, keep a brass tip cleaner nearby, and have a damp sponge ready.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "tin",
+                    "text": "Iron is heating up.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+                            "count": 1
+                        },
+                        {
+                            "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
+                            "count": 1
+                        },
+                        {
+                            "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "tin",
+            "text": "Once the tip is hot, melt a little solder across it, then wipe on the damp sponge to leave a thin, shiny layer that resists oxidation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Tip looks shiny."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! A tinned tip makes future joints easier and cleaner. Unplug the iron and let it cool safely.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All done."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/basic-circuit"],
+    "hardening": {
+        "passes": 3,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-14",
+                "date": "2025-08-14",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-15",
+                "date": "2025-08-15",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-17",
+                "date": "2025-08-17",
+                "score": 60
+            }
+        ]
+    }
+}

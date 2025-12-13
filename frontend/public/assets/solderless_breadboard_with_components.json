@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/solderless_breadboard_with_components.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "solderless breadboard",
+    "item_id": "d1105b87-8185-4a30-ba55-406384be169f",
+    "entity_type": "item",
+    "prompt": "A mid-sized 400-point solderless breadboard with dual power rails sits in the center of a clean work surface, populated with a few jumper wires, resistors, and a blinking-style LED circuit. The red and blue markings along the rails are visible but not readable, and the components are plugged into neat rows, clearly showcasing how the board is used for quick circuit prototyping without any solder. A couple of loose jumper wires and a small microcontroller module rest nearby out of focus, reinforcing the idea of rapid experimentation.\n\nThe setting is a near-future solarpunk electronics bench with soft, warm lighting and light wood surfaces, with modular storage bins and a hint of greenery in the background. The image is photorealistic at 512×512 resolution, featuring shallow depth of field so the breadboard and its connected components remain the crisp focal point. No logos or readable text appear, giving a clean, approachable view of a high-tech yet beginner-friendly prototyping setup.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

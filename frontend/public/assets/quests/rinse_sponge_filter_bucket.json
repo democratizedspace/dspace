@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/rinse_sponge_filter_bucket.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/filter-rinse.json",
+    "item_name": "Rinse Sponge Filter",
+    "item_id": "aquaria/filter-rinse",
+    "entity_type": "quest",
+    "prompt": "A pair of hands gently squeezes a dark aquarium sponge filter inside a bucket of slightly cloudy water, showing debris swirling away from the sponge. The sponge is clearly the cylindrical type used with air-driven filters, with its uplift tube removed or off to the side, and bubbles cling to its surface. In the background, an unplugged air pump with tubing and a nearby aquarium hint that the sponge was removed from the tank and is being rinsed in dechlorinated water to restore flow without harming the beneficial bacteria.\n\nThe scene is lit with soft, warm light in a near-future solarpunk home aquarium corner: lush plants around the tank, clean cabinetry, and gentle reflections from the aquarium glass. The 512×512 image is photorealistic with light stylization, no logos or text on equipment, and a composition that focuses on the sponge, the bucket of water, and careful handling while the rest of the room and aquarium equipment remain softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

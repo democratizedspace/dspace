@@ -1,0 +1,165 @@
+{
+    "id": "electronics/arduino-blink",
+    "title": "Blink an LED with Arduino",
+    "description": "Learn to program a microcontroller by blinking an LED.",
+    "image": "/assets/quests/electronics_arduino_blink_led.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey! Orion here. Ready to blink an LED with a microcontroller? Work on a dry, non-conductive surface, discharge static by touching a grounded object, keep liquids away, wear safety goggles, and leave the USB Type-A to Type-B cable unplugged until every wire is double-checked.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Absolutely! What do I need?"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 Ω Resistor, a 5 mm LED, Safety Goggles, a USB Type-A to Type-B cable, a Laptop Computer with the Arduino IDE installed, and a Resistor Color Chart. If the IDE isn't installed, run the 'Install the Arduino IDE' process. Use the chart to confirm the resistor bands read red-red-brown (220 Ω). Place the LED's long leg (anode) into digital pin 13 through the resistor and its short leg (cathode) to GND. Keep power unplugged while wiring.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-ide-install",
+                    "text": "Install the Arduino IDE"
+                },
+                {
+                    "type": "goto",
+                    "goto": "upload",
+                    "text": "Got it all wired up. What's next?",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 2
+                        },
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "upload",
+            "text": "Connect the board to the Laptop Computer with the USB Type-A to Type-B cable. In the Arduino IDE open File > Examples > 01.Basics > Blink. Under Tools choose Board: Arduino Uno and the correct Port, then click Upload. Wait for 'Done uploading'; the board resets and the LED blinks once per second. Avoid touching the circuit while it's powered.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Upload complete and the LED is blinking!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work—you just programmed a microcontroller. Always unplug the USB Type-A to Type-B cable before adjusting wiring and avoid staring directly into the LED. For a detailed walkthrough, open the 'Blink an LED with Arduino' process. Experiment with new patterns or sensors to build skills for bigger projects.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-led-blink",
+                    "text": "Open the detailed blink process"
+                },
+                {
+                    "type": "finish",
+                    "text": "Thanks Orion, that was awesome!"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["electronics/basic-circuit"],
+    "rewards": [
+        {
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+            "count": 1
+        }
+    ],
+    "hardening": {
+        "passes": 10,
+        "score": 100,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-refine-2025-08-05",
+                "date": "2025-08-05",
+                "score": 90
+            },
+            {
+                "task": "codex-improve-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            },
+            {
+                "task": "codex-refresh-2025-08-07",
+                "date": "2025-08-07",
+                "score": 98
+            },
+            {
+                "task": "codex-quest-update-2025-09-16",
+                "date": "2025-09-16",
+                "score": 99
+            },
+            {
+                "task": "codex-quest-refine-2025-09-17",
+                "date": "2025-09-17",
+                "score": 100
+            },
+            {
+                "task": "codex-quest-refresh-2025-09-18",
+                "date": "2025-09-18",
+                "score": 100
+            },
+            {
+                "task": "codex-quest-polish-2025-09-19",
+                "date": "2025-09-19",
+                "score": 100
+            },
+            {
+                "task": "codex-quest-update-2025-09-20",
+                "date": "2025-09-20",
+                "score": 100
+            }
+        ]
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_birdhouse_build.jpg",
+    "entity": "frontend/src/pages/quests/json/woodworking/birdhouse.json",
+    "item_name": "Build a birdhouse",
+    "item_id": "woodworking/birdhouse",
+    "entity_type": "quest",
+    "prompt": "On a workbench, a small wooden birdhouse is being assembled from simple pine panels: the front panel with a round entrance hole is already attached, and a sloped roof piece is being positioned on top. A few wood screws and a hand screwdriver or small drill lie nearby, along with a square and pencil marks showing careful layout. The parts are clearly scaled to be a cozy home for backyard birds, with soft edges and a simple hanging loop or mounting bracket visible.\n\nThe workshop environment has a near-future solarpunk feel, with soft, warm lighting, pale wood tones, and neatly organized tools on a wall panel behind the bench. The 512×512 photorealistic composition centers on the birdhouse and the hands assembling it, while background details like clamps, shavings, and greenery glimpsed through a window remain gently blurred. No brand logos or readable text appear, and the maker’s face is out of frame, keeping attention on the approachable, friendly woodworking project.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

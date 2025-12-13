@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/acid-dilution.json",
+    "item_name": "Dilute Hydrochloric Acid Safely",
+    "item_id": "chemistry/acid-dilution",
+    "entity_type": "quest",
+    "prompt": "A chemistry workbench shows a clear beaker of water sitting on a spill tray, while a gloved hand carefully pours concentrated hydrochloric acid from a small labeled bottle into the beaker. The acid bottle has a simple hazard pictogram and color band but no readable words, emphasizing safety without text. A second empty beaker and a glass stirring rod rest nearby, along with visible safety gear such as chemical splash goggles and a pair of nitrile gloves laid out on the bench.\n\nThe environment is a bright, near-future teaching lab with a solarpunk feel: clean white benches, subtle green accents, and soft, even overhead lighting that gives the scene a crisp, photorealistic 512×512 look. The composition centers the acid being added to the water inside the spill tray, with the rest of the lab decor slightly blurred to avoid distraction. No faces are visible, only forearms and hands, and there are no brand logos or explicit text anywhere in the frame.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

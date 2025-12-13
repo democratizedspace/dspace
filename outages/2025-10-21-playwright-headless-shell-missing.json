@@ -1,0 +1,11 @@
+{
+  "id": "2025-10-21-playwright-headless-shell-missing",
+  "date": "2025-10-21",
+  "component": "frontend/e2e",
+  "rootCause": "CI sharded Playwright jobs attempted to launch Chromium without the chromium headless shell binary because our setup script invoked the Playwright CLI via npx without explicitly requesting the headless shell download.",
+  "resolution": "Updated ensure-playwright-browsers to call the local Playwright CLI directly and install chromium-headless-shell alongside chromium so headless launches succeed in CI.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18610825343/job/53068671174",
+    "https://github.com/democratizedspace/dspace/actions/runs/18610825343/job/53068671177"
+  ]
+}

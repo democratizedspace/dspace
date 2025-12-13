@@ -1,0 +1,87 @@
+{
+    "id": "woodworking/planter-box",
+    "title": "Build a Planter Box",
+    "description": "Cedar guides you through crafting a simple planter for herbs.",
+    "image": "/assets/quests/woodworking_planter_box_build.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready for another project? Let's make a wooden planter box for your hydroponic experiments.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Sure thing!"
+                }
+            ]
+        },
+        {
+            "id": "gather",
+            "text": "You'll need a few pine boards, some wood glue, and a 16 oz claw hammer. I'll supply what you lack.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Gather materials"
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Materials ready",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Cut the boards to length, use the hammer and glue to assemble the box, and let everything dry overnight.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Box assembled"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! This planter will hold soil or even a small hydroponic tub.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looks sturdy!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/workbench"]
+}

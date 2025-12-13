@@ -1,0 +1,62 @@
+{
+    "id": "woodworking/tool-rack",
+    "title": "Build a Tool Rack",
+    "description": "Organize your workspace with a simple rack for hand tools.",
+    "image": "/assets/quests/wooden_wall_tool_rack.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your workbench is piling up with loose tools. Let's craft a wall-mounted rack to keep everything within reach.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cut",
+                    "text": "Great idea!"
+                }
+            ]
+        },
+        {
+            "id": "cut",
+            "text": "Measure a pine board to length, carve slots with a wood chisel, then sand the edges smooth.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Rack is ready",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
+                            "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Mount the rack near your bench so tools are always organized and easy to grab.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Everything in its place!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/workbench"]
+}

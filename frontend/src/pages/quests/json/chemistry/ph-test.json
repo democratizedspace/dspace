@@ -1,0 +1,77 @@
+{
+    "id": "chemistry/ph-test",
+    "title": "Measure Solution pH",
+    "description": "Use pH strips to check solution acidity while wearing protective gear.",
+    "hardening": {
+        "passes": 3,
+        "score": 92,
+        "emoji": "💯",
+        "history": [
+            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
+            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 80 },
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 }
+        ]
+    },
+    "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before working with anything reactive, let's practice measuring pH. Gather one pH strip, a pair of nitrile gloves, safety goggles, and a lab coat. Set the solution on a stable surface, keep food and drinks away, and suit up before opening the strip packet.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Got it."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "With gloves, goggles, and lab coat on, open the strip packet, hold the strip by the dry end, and dip just the tip for one second. Keep your face back to avoid fumes, shake off excess liquid, and immediately compare the color to the chart to log the value.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Reading the strip."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Result logged",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "3455faac-8811-4991-b818-cecb98e8fff7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! We'll use those readings when formulating safer propellants. Neutralize or store the solution safely, toss the used strip in the trash, and wash your hands after removing gloves.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Looking forward to it."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["chemistry/safe-reaction"]
+}

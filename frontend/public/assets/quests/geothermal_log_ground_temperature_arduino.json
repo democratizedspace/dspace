@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_log_ground_temperature_arduino.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/log-ground-temperature.json",
+    "item_name": "Log Ground Temperature",
+    "item_id": "geothermal/log-ground-temperature",
+    "entity_type": "quest",
+    "prompt": "Outdoors near a geothermal site, a single waterproof thermistor cable disappears into the soil next to a subtle ground marker stake, while the cable’s other end runs to a small weatherproof box mounted on a post. Inside the box, visible through a partially open door, an Arduino with a microSD shield or logging module blinks gently as it records data. A tablet or handheld device resting on a shelf shows a stylized time-series graph, implying that the ground temperature readings have been collected over days or weeks.\n\nThe setting is a near-future solarpunk landscape: soft daylight, low vegetation, and a small solar panel mounted above the logger box to power the system. The 512×512 photorealistic composition centers on the buried probe entry point and the logging enclosure, with the rest of the surroundings softly blurred. No brand logos or legible text appear anywhere, and no faces are in frame—only a hand closing the logger door—highlighting long-term ground temperature monitoring with a buried thermistor and Arduino.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

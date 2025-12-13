@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_air_pump_5w.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "aquarium air pump",
+    "item_id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
+    "entity_type": "item",
+    "prompt": "A small 5 W diaphragm aquarium air pump sits on a shelf above a tank, its compact housing connected to a length of 4 mm airline tubing running down to the aquarium. A soft indicator light or simple icon on the pump shows that it is running, and a gentle stream of bubbles in the tank below suggests a flow of about 3 L/min at modest pressure. The power cord runs neatly to a nearby outlet, and the pump rests on rubber feet to keep noise and vibration under 40 dB.\n\nThe scene is a near-future solarpunk living space with soft, even lighting, plants around the aquarium, and a cleanly organized cluster of cables and timers on the wall. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable text on the pump, and a composition that centers the pump body, airline connection, and bubbles in the tank while the rest of the room remains softly out of focus, emphasizing quiet, efficient aeration for small aquariums.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

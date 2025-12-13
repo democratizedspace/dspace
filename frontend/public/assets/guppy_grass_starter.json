@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/guppy_grass_starter.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Guppy grass starter",
+    "item_id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+    "entity_type": "item",
+    "prompt": "A small starter portion of guppy grass (Najas) arranged as a loose, bright-green bundle of fine feathery stems, resting in a shallow glass dish or tray filled with aquarium water, a few tiny bubbles clinging to the leaves to suggest freshness and recent submersion.\n\nUltra-detailed, photorealistic 512×512 macro or product-style shot inside a 2040s Pacific floating-city habitat: smooth white or light-grey work surface with soft reflections, integrated cyan and magenta underlighting, hints of curved wall panels and compact lab tools in soft focus, maybe a subtle holographic readout projected above the table, environment clean and clinical-but-cozy, background slightly blurred, no hands, no people, no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

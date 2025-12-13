@@ -1,0 +1,185 @@
+<script>
+    import {
+        loadCloudGistId,
+        uploadGameStateToGist,
+        downloadGameStateFromGist,
+        clearCloudGistId,
+    } from '../../../utils/cloudSync.js';
+    import { onMount } from 'svelte';
+    import {
+        isValidGitHubToken,
+        loadGitHubToken,
+        saveGitHubToken,
+        clearGitHubToken,
+    } from '../../../utils/githubToken.js';
+
+    let root;
+    let token = '';
+    let gistId = '';
+    let message = '';
+    let messageType = '';
+
+    const announce = (text, type = '') => {
+        message = text;
+        messageType = type;
+    };
+
+    onMount(async () => {
+        token = await loadGitHubToken();
+        gistId = await loadCloudGistId();
+        root?.setAttribute('data-hydrated', 'true');
+        if (typeof window !== 'undefined') {
+            window.__cloudSyncReady = true;
+        }
+    });
+
+    const saveToken = async () => {
+        await saveGitHubToken(token);
+    };
+
+    const clearTokenLocal = async () => {
+        token = '';
+        await clearGitHubToken();
+    };
+
+    const handleUpload = async () => {
+        try {
+            if (!isValidGitHubToken(token)) {
+                announce('GitHub token looks invalid', 'error');
+                return;
+            }
+            const id = await uploadGameStateToGist(token);
+            gistId = id;
+            announce('Upload successful', 'success');
+        } catch (err) {
+            console.error(err);
+            announce('Upload failed', 'error');
+        }
+    };
+
+    const clearGistId = async () => {
+        gistId = '';
+        await clearCloudGistId();
+    };
+
+    const handleDownload = async () => {
+        try {
+            if (!gistId) {
+                announce('Gist ID required', 'error');
+                return;
+            }
+            await downloadGameStateFromGist(token, gistId);
+            announce('Download successful', 'success');
+        } catch (err) {
+            console.error(err);
+            announce('Download failed', 'error');
+        }
+    };
+</script>
+
+<div class="chip-container" bind:this={root} data-testid="cloud-sync-form">
+    <div class="vertical">
+        <div class="form-group">
+            <label for="token">GitHub Token*</label>
+            <div class="token-input">
+                <input id="token" type="password" bind:value={token} />
+                <button type="button" on:click={saveToken}>Save</button>
+                <button type="button" on:click={clearTokenLocal} data-testid="clear-sync-token"
+                    >Clear</button
+                >
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="gist">Gist ID</label>
+            <div class="token-input">
+                <input id="gist" type="text" bind:value={gistId} />
+                <button type="button" on:click={clearGistId} data-testid="clear-gist-id"
+                    >Clear</button
+                >
+            </div>
+        </div>
+        <div class="buttons">
+            <button type="button" class="chip" on:click={handleUpload}> Upload </button>
+            <button type="button" class="chip" on:click={handleDownload}> Download </button>
+        </div>
+        {#if message}
+            <p
+                class={`message ${messageType}`}
+                role={messageType === 'error' ? 'alert' : 'status'}
+                data-testid={messageType === 'error'
+                    ? 'sync-error'
+                    : messageType === 'success'
+                      ? 'sync-success'
+                      : undefined}
+            >
+                {message}
+            </p>
+        {/if}
+    </div>
+</div>
+
+<style>
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+    }
+    .token-input {
+        display: flex;
+        gap: 10px;
+    }
+    .form-group label {
+        font-weight: bold;
+    }
+    .buttons {
+        display: flex;
+        gap: 10px;
+    }
+    .chip {
+        opacity: 0.8;
+        background-color: #68d46d;
+        border-radius: 0.4rem;
+        color: black;
+        border: none;
+        padding: 6px 12px;
+        font-size: 1em;
+        font-weight: 600;
+    }
+    .chip:hover,
+    .chip:focus-visible {
+        opacity: 1;
+        cursor: pointer;
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+    .message {
+        color: #90ee90;
+    }
+
+    .message.error {
+        color: #ff9f9f;
+    }
+    input {
+        flex: 1;
+        padding: 5px;
+        border-radius: 6px;
+    }
+
+    .chip-container {
+        text-align: center;
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        opacity: 0.8;
+        background-color: #007006;
+        border-radius: 0.4rem;
+        color: white;
+        margin: 1px;
+        padding: 5px;
+    }
+    .chip-container:hover {
+        opacity: 1;
+    }
+</style>

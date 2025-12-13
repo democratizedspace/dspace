@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/harvested_stevia_plant.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "harvested stevia plant",
+    "item_id": "b2248af9-151b-4268-989d-4bb408a6147c",
+    "entity_type": "item",
+    "prompt": "A stevia plant in a small pot or net cup is shown after harvesting, with many of its larger leaves removed and only smaller leaves and bare stems remaining. A small dish or tray beside the plant holds a loose pile of freshly cut stevia leaves, clearly separated to show what has been collected. The plant still looks alive and rooted, with a healthy growing medium visible at the base, signaling that it can regrow new foliage over time.\n\nThe setting is a near-future solarpunk growing space similar to the harvestable version, with soft, even lighting, other green plants nearby, and perhaps a compact grow light overhead. The 512×512 image is photorealistic with light stylization, no logos or text, and a composition that focuses on the trimmed stevia plant and harvested leaves while the rest of the garden area remains gently blurred, emphasizing sustainable, repeated harvests.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

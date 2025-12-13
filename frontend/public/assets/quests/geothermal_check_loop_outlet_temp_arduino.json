@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_check_loop_outlet_temp_arduino.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/check-loop-outlet-temp.json",
+    "item_name": "Check Loop Outlet Temperature",
+    "item_id": "geothermal/check-loop-outlet-temp",
+    "entity_type": "quest",
+    "prompt": "In the same geothermal utility setup, attention shifts to the outlet pipe leaving the heat pump. A second waterproof thermistor probe is firmly attached to the warm outlet line with thermal paste and straps, its cable routed neatly back to an Arduino on a small DIN rail with a compact breadboard. A nearby display or laptop shows a stylized line graph where the outlet temperature rises and settles after startup, all rendered without readable text so the trend, not the numbers, is the focus.\n\nThe setting remains a near-future solarpunk mechanical room: clean insulated piping, labeled valves with non-readable markings, and soft, even lighting that makes the hardware feel orderly and approachable. The 512×512 photorealistic composition centers on the outlet pipe sensor and Arduino, with the rest of the heat pump and auxiliary equipment gently blurred. No logos or legible words appear anywhere, and no faces are visible—only gloved hands near the wiring—highlighting careful logging of loop outlet temperature with an Arduino thermistor.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

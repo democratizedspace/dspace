@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/position_tank.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/position-tank.json",
+    "item_name": "Move the Walstad tank",
+    "item_id": "aquaria/position-tank",
+    "entity_type": "quest",
+    "prompt": "An empty 80-liter Walstad aquarium being carefully moved onto a sturdy stand, the glass tank completely dry and free of substrate or water, held by a person and a compact helper robot working together. The person lifts with bent knees and a straight back, hands under the glass rim, while the robot supports the opposite side, making sure the tank stays level as they step toward the stand. The stand is simple, modern, and clearly sized for the tank, with the path around it cleared of obstacles to emphasize safe lifting and good ergonomics.\n\nUltra-detailed, photorealistic 512×512 image inside a 2040s Pacific floating-city habitat: sleek composite flooring and curved white wall panels, cyan and magenta LED accent strips, smart glass windows with soft reflections, and a few holographic UI hints near the stand showing level indicators or load icons. The scene feels bright and safe, slightly blurred background, no faces visible (just arms, torso, and the robot helper), no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

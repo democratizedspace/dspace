@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_compare_depth_ground_temps.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/compare-depth-ground-temps.json",
+    "item_name": "Compare Depth Ground Temps",
+    "item_id": "geothermal/compare-depth-ground-temps",
+    "entity_type": "quest",
+    "prompt": "In a small outdoor test area, two waterproof thermistor probes are buried at different depths in the soil near a modest geothermal test site, with their cables emerging and running to a weather-protected junction box connected to an Arduino datalogger. The ground surface shows two labeled but non-readable stakes or markers indicating the shallow and deeper probe locations. A portable display or tablet resting on a nearby stand shows a stylized chart with two temperature traces, illustrating how readings from the two depths differ over the course of a day.\n\nThe environment fits a near-future solarpunk yard or field site: soft daylight, healthy plants, and perhaps a small solar panel powering the logger visible in the blurred background. The 512×512 photorealistic composition centers on the probe cables, stakes, and logger enclosure, with the rest of the landscape gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands adjusting a cable or stake—emphasizing the experiment of comparing ground temperature at different depths.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

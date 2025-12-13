@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/portable_foldable_solar_panel_test.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/portable-solar-panel.json",
+    "item_name": "Test a Portable Solar Panel",
+    "item_id": "energy/portable-solar-panel",
+    "entity_type": "quest",
+    "prompt": "A slender foldable solar panel is fully opened on a patch of grass or a smooth campsite surface, its multiple dark blue segments connected by visible fabric hinges and angled toward the sun. A compact power meter or small USB load tester is plugged into the panel’s junction box, with a cable running to a phone-sized device or battery pack resting nearby, indicating that the panel is actively being tested. A lightweight backpack and a reusable water bottle sit off to one side, reinforcing the idea that this panel is meant to be portable and used anywhere.\n\nThe background shows a near-future solarpunk outdoor scene—perhaps the edge of a park or a rooftop garden—with planters, low railings, and distant buildings partially covered in greenery, all rendered photorealistically in a 512×512 frame. Soft, natural lighting emphasizes the texture of the panel fabric and the silicon cells without harsh glare, and the composition is uncluttered and centered on the foldable panel. No brand logos or readable labels appear on the gear, and no full people are visible—just the equipment, suggesting someone is testing a portable solar panel in the field.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

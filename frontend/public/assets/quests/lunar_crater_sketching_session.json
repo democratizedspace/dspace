@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/lunar_crater_sketching_session.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/observe-moon.json",
+    "item_name": "Observe the Moon",
+    "item_id": "astronomy/observe-moon",
+    "entity_type": "quest",
+    "prompt": "A basic telescope on a tripod is pointed at a bright, half-illuminated Moon in the night sky, while a small table in the foreground holds an open mission logbook where a quill and inkwell sit beside a detailed sketch of lunar craters (no readable text). A red-filtered flashlight rests on the table, casting a warm pool of light over the page and ink bottle without flooding the scene. The quill’s feather and the dark ink provide a subtle old-school contrast to the modern telescope, underscoring the mix of analog and near-future tools.\n\nThe backyard setting follows the photorealistic 512×512 solarpunk aesthetic: garden beds, a low fence, and rooftops with solar panels frame the horizon, while stars twinkle faintly around the Moon. Soft cinematic lighting from the Moon and distant windows balances with the red flashlight glow on the table, preserving the intimate sketching atmosphere. No brand logos or legible labels appear anywhere, and no full human figures are visible—perhaps just a hand resting near the quill—highlighting the safe, reflective act of observing and sketching the Moon by red light.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

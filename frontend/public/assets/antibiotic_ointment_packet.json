@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/antibiotic_ointment_packet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "antibiotic ointment packet",
+    "item_id": "0dde854e-7fcb-40ac-88ea-9afd9196f856",
+    "entity_type": "item",
+    "prompt": "A small foil packet of triple antibiotic ointment lying on a light-colored surface next to a single folded adhesive bandage, ready to treat a minor cut. The packet is torn open at one corner with a tiny bead of ointment visible near the opening, but any printed area on the packet shows only simple color blocks and a medical cross icon instead of readable text. A faint reflection on the foil emphasizes the single-use, sealed nature of the packet.\n\nNear-future solarpunk medical aesthetic with soft, clean lighting and a minimal background, perhaps hinting at a first aid kit case slightly out of focus. Photorealistic 512×512 rendering with no brand logos or legible writing. The composition should clearly communicate that this is a single-use antibiotic ointment packet item, distinct from the full first aid kit.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

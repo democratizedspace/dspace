@@ -1,0 +1,77 @@
+{
+    "id": "devops/ssd-boot",
+    "title": "Boot from SSD",
+    "description": "Clone the OS to an SSD and enable M.2 boot.",
+    "image": "/assets/quests/devops_pi_ssd_boot.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Next we'll copy the OS to the SSD so the Pi boots quicker and lasts longer.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "I'm ready."
+                }
+            ]
+        },
+        {
+            "id": "clone",
+            "text": "Run `lsblk` to locate the drive then use `sudo rpi-clone /dev/sda` to clone the system. Set the boot order to USB boot in raspi-config and power down when it finishes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "clone-os-to-ssd",
+                    "text": "Cloning now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "move",
+                    "text": "Clone complete.",
+                    "requiresItems": [
+                        {
+                            "id": "4af856b5-b5c1-494f-8037-9b6559785633",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "move",
+            "text": "Insert the SSD into the PoE HAT's M.2 slot and add `dtparam=nvme` to `/boot/config.txt`. Boot again and confirm the partitions mount from the SSD.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-pi-node",
+                    "text": "Installing HAT and SSD."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Booted from SSD.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! The Pi now runs from the SSD. Time to launch DSPACE.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Let's launch it."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["devops/prepare-first-node"]
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/iss_long_exposure_phone_photo.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/iss-photo.json",
+    "item_name": "Photograph the ISS",
+    "item_id": "astronomy/iss-photo",
+    "entity_type": "quest",
+    "prompt": "A smartphone is mounted horizontally on a compact tripod in a backyard at night, aimed at the sky just above the rooftops. On the phone’s screen, a long-exposure preview shows a bright, slightly curved streak representing the ISS crossing a field of small star points, with no legible UI text. A mission logbook lies open on a nearby table with a simple sketch of the streak path and time marks, and a red flashlight rests beside it, casting a soft glow over the page while leaving the sky dark.\n\nThe environment follows the near-future solarpunk aesthetic: low fences, rooftop solar panels, and a few potted plants are visible around the observing area, rendered photorealistically at 512×512. The lighting combines faint horizon glow with the cool darkness of the sky, while the phone’s screen and red flashlight add localized highlights. No brand logos or readable labels appear on the phone, tripod, or notebook, and no full people are shown—only a partial hand adjusting the tripod—conveying the process of using a tracking app and tripod-mounted phone to capture the ISS streak and log it.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

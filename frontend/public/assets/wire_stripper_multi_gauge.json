@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/wire_stripper_multi_gauge.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "wire stripper",
+    "item_id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+    "entity_type": "item",
+    "prompt": "A spring-loaded wire stripper lies on a work surface, its jaws partly open to reveal multiple notched holes labeled for different wire gauges, with a short piece of insulated wire positioned ready to be stripped. The built-in cutter section near the pivot shows a cleanly snipped wire end, and the handles are covered in simple non-slip grips with no visible branding. A few small lengths of insulation and bare copper wires scattered nearby make it clear that the tool has been actively used for stripping 24\u201310 AWG conductors.\n\nThe environment is a near-future solarpunk electronics and wiring bench with soft, even lighting, neatly bundled cables and a modular power distribution panel in the blurred background, plus a small plant adding a touch of green. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable markings, and a composition that centers the wire stripper, partially stripped wire, and small offcuts while the rest of the workspace remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

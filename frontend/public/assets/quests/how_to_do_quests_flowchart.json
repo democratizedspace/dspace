@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/how_to_do_quests_flowchart.jpg",
+    "entity": "frontend/src/pages/quests/json/welcome/howtodoquests.json",
+    "item_name": "How to do quests",
+    "item_id": "welcome/howtodoquests",
+    "entity_type": "quest",
+    "prompt": "A friendly tutorial desk scene showing a tablet or slim laptop with a stylized quest flow diagram on the screen made of icons and arrows rather than readable text, alongside a few printed cards laid out in a simple sequence: dialogue bubble icon, real-world object icon, safety shield icon, and a checkmark. A mug and a small potted plant sit nearby, making the scene feel welcoming and instructive without being cluttered.\n\nNear-future solarpunk aesthetic with warm ambient lighting, clean lines, and natural materials. Photorealistic 512×512 rendering, no brand logos, and no legible text anywhere on screens or papers. Any human presence is limited to a partial hand pointing at one of the cards. The composition should clearly evoke \"how quests work\" in a playful, approachable way.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

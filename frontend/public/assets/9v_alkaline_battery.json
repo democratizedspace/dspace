@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/9v_alkaline_battery.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "9 V battery",
+    "item_id": "80d30825-a42b-4add-b715-322e1713952c",
+    "entity_type": "item",
+    "prompt": "A single 9 V alkaline battery stands upright on a neutral work surface, with its two snap terminals clearly visible on the top. The casing is a simple two-tone design with no readable branding or text, emphasizing that it is a generic 6F22 9 V cell intended for electronics projects and test equipment. Nearby, a small multimeter and a breadboard with a few jumper wires hint at its typical use powering small circuits and handheld tools.\n\nThe scene is set in a near-future solarpunk electronics nook with soft, even lighting, a plant on a nearby shelf, and neatly organized components in the blurred background. The 512×512 image is photorealistic with gentle stylization, no logos or legible writing on the battery or tools, and a composition that keeps the 9 V battery and its terminals as the focal point while the surrounding workspace remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

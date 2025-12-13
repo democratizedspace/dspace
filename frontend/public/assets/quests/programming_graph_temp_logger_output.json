@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_graph_temp_logger_output.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/graph-temp.json",
+    "item_name": "Graph Temperature Logs",
+    "item_id": "programming/graph-temp",
+    "entity_type": "quest",
+    "prompt": "A desktop monitor shows a minimalist dashboard for a temperature-logging program: several colored line graphs stack vertically, each representing different sensors or time windows, all rendered without readable legends or labels. Alongside the graphs, a small icon representing the `temp-logger` script appears as a stylized terminal window, hinting that this visualization is fed by a command-line tool. On the desk in front of the monitor sit a keyboard, a small single-board computer enclosure, and a notepad with hand-drawn mini graphs matching the screen’s curves.\n\nThe scene fits a near-future solarpunk coding nook: soft, cool lighting, a clean work surface, and decor featuring plants or subtle renewable-energy motifs in the blurred background. The 512×512 photorealistic composition keeps the multi-graph display as the main focal point, with hardware and sketches adding supporting context. No brand logos or legible text appear anywhere, and no faces are visible—only a hand near the keyboard—emphasizing that temperature data logged with `temp-logger` is being visualized in a clear, script-driven UI.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

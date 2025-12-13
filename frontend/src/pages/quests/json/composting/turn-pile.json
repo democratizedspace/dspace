@@ -1,0 +1,123 @@
+{
+    "id": "composting/turn-pile",
+    "title": "Turn Your Compost Bucket",
+    "description": "Aerate the compost by stirring the mix so microbes stay active.",
+    "hardening": {
+        "passes": 3,
+        "score": 90,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-update-2025-08-16",
+                "date": "2025-08-16",
+                "score": 65
+            },
+            {
+                "task": "codex-quest-update-2025-08-18",
+                "date": "2025-08-18",
+                "score": 90
+            }
+        ]
+    },
+    "image": "/assets/quests/compost_turn_bucket.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A stagnant bucket can smell. Wear nitrile gloves and let's give it fresh air.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "I'm ready to turn it."
+                }
+            ]
+        },
+        {
+            "id": "mix",
+            "text": "Stir greens and browns with gloved hands until loose and damp. Avoid steam.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "turn-compost-bucket",
+                    "text": "Stir the bucket"
+                },
+                {
+                    "type": "goto",
+                    "goto": "temp",
+                    "process": "measure-compost-temperature",
+                    "requiresItems": [
+                        {
+                            "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Check core temperature"
+                },
+                {
+                    "type": "goto",
+                    "goto": "moisture",
+                    "process": "measure-compost-moisture",
+                    "requiresItems": [
+                        {
+                            "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Measure moisture level"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Looks aerated now"
+                }
+            ]
+        },
+        {
+            "id": "temp",
+            "text": "Thermometer reads 55 °C—ideal. Remove the probe carefully; it may be hot.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Great, I'll keep turning"
+                }
+            ]
+        },
+        {
+            "id": "moisture",
+            "text": "Meter shows 55% moisture—ideal for microbes. Rinse the probe after use.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Moisture looks good"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Turn every few days to speed decomposition. Wash hands after.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Nova!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["composting/start"]
+}

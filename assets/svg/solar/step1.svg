@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+  <!-- placeholder icon for solar basics step 1 -->
+  <rect width="64" height="64" fill="#ccc" />
+  <text x="8" y="32" font-size="12">step1</text>
+</svg>

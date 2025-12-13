@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_potentiometer_led_dimmer.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/potentiometer-dimmer.json",
+    "item_name": "Dim an LED with a Potentiometer",
+    "item_id": "electronics/potentiometer-dimmer",
+    "entity_type": "quest",
+    "prompt": "On a clean breadboard, an Arduino is wired to a 5 mm LED and a small rotary potentiometer, with the LED glowing softly. The LED is connected through a current-limiting resistor to one of the Arduino’s PWM-capable pins, while three wires from the potentiometer run back to an analog input and the 5 V and ground rails. A hand gently turns the potentiometer’s knob, and the LED’s brightness is clearly in mid-transition—neither fully bright nor fully off—capturing the idea of adjustable dimming via code.\n\nThe scene uses a near-future solarpunk electronics lab aesthetic: soft overhead lighting, pale non-conductive surfaces, and a few neatly arranged sensors and boards in the blurred background. A laptop off to the side shows a stylized graph or slider that echoes the changing brightness, but with no readable text. The 512×512 photorealistic composition centers the Arduino, potentiometer, and LED, with no brand logos, no legible labels, and no visible faces—only hands and forearms gently adjusting the control.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

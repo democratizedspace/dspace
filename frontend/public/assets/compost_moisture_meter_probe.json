@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/compost_moisture_meter_probe.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "compost moisture meter",
+    "item_id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+    "entity_type": "item",
+    "prompt": "An analog compost moisture meter with a long 20 cm stainless steel probe is shown partially inserted into a dark, crumbly compost pile inside a bin or tumbler. The round dial at the top is angled toward the viewer, its needle pointing to a mid-range zone, but the numbers and labels are too small to read, suggesting a 0\u2013100% scale without exposing exact markings. Bits of organic matter cling lightly to the probe, clearly indicating it is designed to gauge compost dampness at depth.\n\nThe surrounding environment is a near-future solarpunk garden space with raised beds, lush plants, and soft outdoor lighting. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the meter, and a composition that highlights the probe, dial, and compost surface while the rest of the garden and tools remain softly blurred, emphasizing practical, data-informed compost care.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

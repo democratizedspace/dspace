@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponic_reservoir_temp_check.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/temp-check.json",
+    "item_name": "Check Water Temperature",
+    "item_id": "hydroponics/temp-check",
+    "entity_type": "quest",
+    "prompt": "A compact digital thermometer probe is shown clipped to the rim of a hydroponic reservoir, with its stainless steel sensor immersed in the nutrient solution and a small display module resting safely on the lid or nearby surface. The reservoir contains gently bubbling water and submerged roots from vigorous green plants in net pots above, and a coiled airline or pump tubing reinforces that this is part of a live system. The thermometer display is lit but the numbers remain too small to read, making the focus the act of monitoring water temperature.\n\nThe scene is framed in a bright solarpunk grow room with soft daylight from a nearby window, additional full-spectrum grow lights overhead, and an organized array of tubs and containers. The 512×512 image is lightly stylized and photorealistic, with no visible logos or readable text. The composition highlights the reservoir edge, thermometer probe, and surface of the solution, while the plants and room details stay gently out of focus to create a calm, high-tech gardening atmosphere.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

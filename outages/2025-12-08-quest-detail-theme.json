@@ -1,0 +1,8 @@
+{
+  "id": "quest-detail-page-layout-gaps",
+  "date": "2025-12-08",
+  "component": "frontend/ui/quests/detail",
+  "rootCause": "Quest detail rendered in the bare layout without navigation or theme spacing.",
+  "resolution": "Wrapped quest detail content in Page and Card components to restore spacing.",
+  "references": ["frontend/src/pages/quests/[id].astro"]
+}

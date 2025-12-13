@@ -1,0 +1,11 @@
+{
+  "id": "duplicate-dev-dependency",
+  "date": "2025-08-28",
+  "component": "frontend package",
+  "rootCause": "`frontend/package.json` listed `@astrojs/node` twice in devDependencies, which broke new uniqueness checks.",
+  "resolution": "Removed the duplicate entry and added a test ensuring devDependency keys are unique.",
+  "references": [
+    "frontend/package.json",
+    "tests/packageManager.test.ts"
+  ]
+}

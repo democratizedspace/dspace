@@ -1,0 +1,84 @@
+{
+    "id": "aquaria/water-testing",
+    "title": "Test water parameters",
+    "description": "Use the Aquarium liquid test kit to check ammonia, nitrite and nitrate before adding shrimp. Put on nitrile gloves and safety goggles, work in a ventilated area and discard reagents per the kit manual.",
+    "image": "/assets/quests/water_testing.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The tank should be cycling nicely. Grab the Aquarium liquid test kit, protective gear, and a logbook so we can confirm it's safe for shrimp.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "explain",
+                    "text": "How do I test it?"
+                }
+            ]
+        },
+        {
+            "id": "explain",
+            "text": "Rinse each tube with tank water, fill to the 5 mL line, then add the specified drops from the Aquarium liquid test kit. Cap and shake away from your face. Wear nitrile gloves and safety goggles to avoid contact with the reagents, then log the readings in your water test logbook. Ammonia and nitrite must read 0 ppm; keep nitrate under 40 ppm.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "results",
+                    "text": "Okay, I'll test now.",
+                    "requiresItems": [
+                        {
+                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "results",
+            "text": "If ammonia or nitrite shows up, let the tank cycle longer. If nitrate reads over 40 ppm, run the partial-water-change process to dilute it. Pour used test water down a sink with running water, rinse the tubes and store them dry.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Nitrate is high—start a partial water change."
+                },
+                {
+                    "type": "finish",
+                    "text": "All clear! Levels look good."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["aquaria/walstad"],
+    "hardening": {
+        "passes": 5,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
+            { "task": "codex-upgrade-2025-08-04", "date": "2025-08-04", "score": 80 },
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 },
+            { "task": "codex-upgrade-2025-08-10", "date": "2025-08-10", "score": 94 },
+            { "task": "codex-quest-refinement-2025-08-12", "date": "2025-08-12", "score": 95 }
+        ]
+    }
+}

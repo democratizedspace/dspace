@@ -1,0 +1,467 @@
+[
+    {
+        "id": "92261497-d605-4db1-8710-953cf73d765c",
+        "name": "hydroponics kit",
+        "description": "Starter kit with a 10 L reservoir, pump, tubing and net pots for indoor hydroponics.",
+        "image": "/assets/hydroponics_starter_kit_10l.jpg",
+        "price": "50 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hydroponics-kit-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+        "name": "Beginner hydroponics tub",
+        "description": "20 L (5 gal) plastic tub with lid, six 50 mm net pots and airline grommet for starter hydroponics.",
+        "image": "/assets/beginner_hydroponics_tub_6_net_pots.jpg",
+        "price": "35 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
+        "name": "basil seeds",
+        "description": "Packet of ~50 Genovese basil seeds for hydroponic germination.",
+        "image": "/assets/basil_seeds_packet.jpg",
+        "price": "2 dUSD",
+        "unit": "packet",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
+        "name": "hydroponic starter plug",
+        "description": "2.5 cm (1 in) rockwool cube with seed hole for starting plants in hydro systems.",
+        "image": "/assets/rockwool.jpg",
+        "price": "0.30 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-05-07",
+                    "date": "2025-05-07",
+                    "score": 80
+                }
+            ]
+        }
+    },
+    {
+        "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+        "name": "hydroponic nutrient concentrate (1 L)",
+        "description": "1 L 9-3-6 NPK concentrate; mix 5 mL per L of water for leafy greens.",
+        "image": "/assets/hydroponic_nutrient_concentrate_1l_bottle.jpg",
+        "price": "25 dUSD",
+        "unit": "L",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hydroponics-nutrients-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "156d06b2-ff10-4265-9ae9-3b7753c0206e",
+        "name": "5 gallon bucket of tap water (chlorinated)",
+        "description": "A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics.",
+        "image": "/assets/5_gallon_bucket_chlorinated_tap_water.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+        "name": "5 gallon bucket of dechlorinated tap water",
+        "description": "A standard 19 L (5 gal) bucket filled with tap water that's been left for 48 hours so chlorine dissipates. Ready for hydroponic use.",
+        "image": "/assets/5_gallon_bucket_dechlorinated_tap_water.jpg",
+        "price": "8.20 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+        "name": "soaked hydroponic starter plug",
+        "description": "A hydroponic starter plug soaked in water. Used to germinate seeds.",
+        "image": "/assets/soaked_hydroponic_starter_plug.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "5712947f-716c-4f71-b28d-fcb811631080",
+        "name": "basil seedling",
+        "description": "Two-week-old Genovese basil in a 3 cm rockwool plug, ~5 cm tall and ~5 g.",
+        "image": "/assets/basil_seedling_rockwool_plug.jpg",
+        "price": "1 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+        "name": "harvestable basil plant",
+        "description": "Mature Genovese basil in a 4 cm rockwool cube, ~20 cm tall and ready to harvest.",
+        "image": "/assets/hydroponic_basil_plant_harvestable.jpg",
+        "price": "5 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+        "name": "hydroponic grow lamp",
+        "description": "Full-spectrum LED panel delivering 36 W of light, enough to cover a 0.25 m² grow area for seedlings and herbs. Includes hanging kit and 12 V power adapter.",
+        "image": "/assets/hydroponic_grow_lamp_36w_panel.jpg",
+        "price": "30 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+        "name": "submersible water pump",
+        "description": "12 V DC pump rated at 200 L/h (53 gph) for circulating nutrient solution in small hydroponic systems; draws 3 W and includes 8 mm outlet barb.",
+        "image": "/assets/submersible_hydroponic_water_pump.jpg",
+        "price": "15 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+        "name": "hydroponics tub (ready)",
+        "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
+        "image": "/assets/hydroponics_tub_healthy_ready_plants.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+        "name": "hydroponics tub (nutrient deficient)",
+        "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
+        "image": "/assets/hydroponics_tub_nutrient_deficient_plants.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
+        "name": "bundle of basil leaves",
+        "description": "Fresh-cut 30 g (1 oz) bundle of Genovese basil leaves from hydroponic plants; use or sell soon.",
+        "image": "/assets/bundle_of_basil_leaves_30g.jpg",
+        "price": "2 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "29190faf-8581-4769-b871-f0ee283840e1",
+        "name": "harvested basil plant",
+        "description": "A basil plant that has been freshly harvested. Don't worry, it'll grow back eventually!",
+        "image": "/assets/hydroponic_basil_plant_harvested.jpg",
+        "price": "6 dUSD"
+    },
+    {
+        "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
+        "name": "Green Thumb Award",
+        "description": "Awarded for growing and harvesting your first batch of hydroponic basil!",
+        "image": "/assets/green_thumb_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "5bba251a-d223-4e22-aa30-b65238b17516",
+        "name": "Solarpunk Award",
+        "description": "Awarded for generating dWatt using solar panels!",
+        "image": "/assets/solarpunk_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+        "name": "Lettuce Seeds",
+        "description": "Seeds for growing crisp hydroponic lettuce.",
+        "image": "/assets/hydroponic_lettuce_seeds_packet.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "c687abb3-7b52-4344-97dc-8b7e0881ed9d",
+        "name": "LED grow light (20W)",
+        "description": "Full-spectrum 20 W LED panel lights 0.2 m² for seedlings or herbs; includes kit and 12 V adapter.",
+        "image": "/assets/led_grow_light_20w_panel.jpg",
+        "price": "25 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "092dae11-237a-43cc-b342-246aabbba258",
+        "name": "pH test strip pack",
+        "description": "50 litmus strips for checking hydroponic nutrient solution between pH 4 and 9.",
+        "image": "/assets/hydroponic_ph_test_strip_pack.jpg",
+        "price": "5 dUSD",
+        "unit": "pack",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-08",
+                    "date": "2025-08-08",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+        "name": "50 mL measuring syringe",
+        "description": "Reusable 50 mL polypropylene syringe with 1 mL marks; no needle; ideal for dosing nutrients.",
+        "image": "/assets/measuring_syringe_50ml.jpg",
+        "price": "2.00 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "71655665-4a59-41f4-9084-dad4d976df91",
+        "name": "EC meter",
+        "description": "Handheld EC meter (0–2000 ppm) for monitoring hydroponic nutrient strength.",
+        "image": "/assets/hydroponic_ec_meter_handheld.jpg",
+        "price": "18 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-08",
+                    "date": "2025-08-08",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40",
+        "name": "EC calibration solution (1000 ppm)",
+        "description": "100 mL bottle of 1000 ppm standard for EC meter calibration.",
+        "image": "/assets/ec_calibration_solution_1000ppm_bottle.jpg",
+        "price": "5 dUSD",
+        "unit": "100 mL bottle",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🌀",
+            "history": []
+        }
+    },
+    {
+        "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
+        "name": "digital pH meter",
+        "description": "Pocket-sized meter measures pH 0–14 with ±0.1 accuracy; includes calibration solution.",
+        "image": "/assets/digital_ph_meter_pocket.jpg",
+        "price": "15 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+        "name": "pH down solution (500 mL)",
+        "description": "500 mL bottle of 30% phosphoric acid; add ~1 mL per L to lower reservoir pH; dropper cap included.",
+        "image": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
+        "price": "8 dUSD",
+        "unit": "bottle",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
+        "name": "hydrogen peroxide (3%)",
+        "description": "250 mL amber bottle of 3% hydrogen peroxide for sanitizing hydroponic equipment; child-resistant cap.",
+        "image": "/assets/hydrogen_peroxide_3pct_amber_bottle.jpg",
+        "price": "1.50 dUSD",
+        "unit": "250 mL bottle",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-20",
+                    "date": "2025-08-20",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "9f91173d-2609-4127-896d-7578078135db",
+        "name": "porous air stone",
+        "description": "Porous 5 cm (2 in) ceramic air stone that diffuses air bubbles in hydroponic reservoirs.",
+        "image": "/assets/porous_ceramic_air_stone_5cm.jpg",
+        "price": "3.00 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-24",
+                    "date": "2025-08-24",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "8f7c2e83-285a-4b29-9a3a-312f0dce2745",
+        "name": "mechanical outlet timer",
+        "description": "24 h analog timer with 15 min segments; rated 120 V AC, 15 A. Controls grow lights offline.",
+        "image": "/assets/mechanical_outlet_timer_24h.jpg",
+        "price": "10 dUSD",
+        "unit": "each",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-24",
+                    "date": "2025-08-24",
+                    "score": 65
+                }
+            ]
+        }
+    }
+]

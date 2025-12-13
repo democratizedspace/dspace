@@ -1,0 +1,110 @@
+{
+    "id": "electronics/servo-sweep",
+    "title": "Sweep a Servo",
+    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0° to 180°.",
+    "image": "/assets/quests/electronics_servo_sweep_arduino.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to move beyond LEDs? Gather an Arduino Uno, USB cable, servo motor, jumper wires, and a 5 V supply to sweep a servo arm back and forth.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "What do I connect?"
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Disconnect the USB cable before wiring. Connect the servo signal to digital pin 9, red to 5 V, and brown or black to GND. If it draws over 500 mA, power it from an external 5 V supply and tie the grounds together to avoid brownouts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Wired up!",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 3
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "828d6c3b-66a5-4064-b221-97630274502b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "code",
+            "text": "Reconnect the USB cable, open the Arduino IDE, and load File > Examples > Servo > Sweep. If it's not installed, run the 'Install the Arduino IDE' process. Select the correct board and port, then upload. Secure the servo and keep fingers clear as it sweeps between 0° and 180°.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-ide-install",
+                    "text": "Install the Arduino IDE"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Servo is moving.",
+                    "process": "arduino-servo-sweep"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Servos unlock all kinds of robotics projects.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/arduino-blink"],
+    "hardening": {
+        "passes": 4,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-02",
+                "date": "2025-08-02",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-refinement-2025-02-14",
+                "date": "2025-02-14",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-04",
+                "date": "2025-08-04",
+                "score": 92
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            }
+        ]
+    }
+}

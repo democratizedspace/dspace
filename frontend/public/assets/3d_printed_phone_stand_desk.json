@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/3d_printed_phone_stand_desk.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "3D Printed Phone Stand",
+    "item_id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+    "entity_type": "item",
+    "prompt": "A simple 3D printed phone stand rests on a desk, supporting a smartphone in an upright portrait orientation at a comfortable viewing angle. The stand has a minimalist L-shaped or cradle design with a small lip at the front and a cutout at the bottom to allow a charging cable to pass through. The surface shows fine layer lines in PLA but the geometry is clean, clearly intended for everyday use on a workstation or nightstand.\n\nThe scene is a near-future solarpunk workspace with soft, even lighting, a laptop and plant in the blurred background, and a tidy arrangement of cables and stationery. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable text on the stand or phone, and a composition that centers the printed stand and the resting phone while the rest of the desk environment remains softly out of focus, emphasizing practical, printable organization.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

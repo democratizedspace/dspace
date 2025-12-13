@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/model_rocket_wind_check.jpg",
+    "entity": "frontend/src/pages/quests/json/rocketry/wind-check.json",
+    "item_name": "Check the Launch Winds",
+    "item_id": "rocketry/wind-check",
+    "entity_type": "quest",
+    "prompt": "A compact wind-measuring setup at a model rocket launch field, featuring a handheld digital anemometer held up near shoulder height and a small portable windsock or ribbon streamer mounted on a short pole nearby. In the softly blurred background, a launch pad with a clearly small 35 cm-tall model rocket, built from bright green PLA with dark fins, stands ready but unlit, making it clear that the focus of the scene is checking wind speed and direction before any launches. The anemometer display should be visible as a glowing screen without any readable numbers or text, conveying active measurement without specific data.\n\nPlace the scene in a near-future, solarpunk outdoor environment with clean open terrain, perhaps a grassy field or dry lakebed under a bright but gentle sky. Use photorealistic 512×512 rendering with soft, cinematic lighting that highlights the instruments without harsh glare, and employ a lightly stylized color palette that feels optimistic and high-tech. Avoid brand logos and legible UI text on the device, and if a person is present, limit visibility to their hand and part of their arm holding the anemometer, keeping the rest of the figure out of frame to maintain focus on the tools and procedure.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

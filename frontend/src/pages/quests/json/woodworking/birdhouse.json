@@ -1,0 +1,117 @@
+{
+    "id": "woodworking/birdhouse",
+    "title": "Build a birdhouse",
+    "description": "Use simple tools to craft a home for local birds.",
+    "image": "/assets/quests/woodworking_birdhouse_build.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Now that your bench is ready, let's try a small project. A birdhouse is perfect for practicing basic cuts and assembly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Sounds fun!"
+                }
+            ]
+        },
+        {
+            "id": "gather",
+            "text": "You'll need a pine board, wood glue, your handsaw, and a tape measure. I'll supply missing gear.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Gather materials"
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Materials ready"
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Cut the board into panels, glue the walls together, then attach the roof. After the glue dries, smooth all edges with sandpaper so birds won't get hurt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "The birdhouse is complete"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent craftsmanship! Mount your birdhouse outdoors and watch for new feathered tenants.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Take the birdhouse"
+                },
+                {
+                    "type": "finish",
+                    "text": "Thanks for the lesson!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["woodworking/workbench"],
+    "hardening": {
+        "passes": 1,
+        "score": 80,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 80
+            }
+        ]
+    }
+}

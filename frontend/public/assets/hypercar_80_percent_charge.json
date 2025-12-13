@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hypercar_80_percent_charge.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Hypercar (80% charge)",
+    "item_id": "1498a7a1-2739-4943-a32f-4c277244a825",
+    "entity_type": "item",
+    "prompt": "A sleek, futuristic electric hypercar is parked at a compact curbside charging pedestal, its smooth body lines and aerodynamic profile highlighted by soft reflections. Through the driver-side window or on a narrow dashboard display visible from outside, a stylized battery icon shows a charge level around four out of five segments, clearly suggesting roughly 80% charge without any readable numbers or text. A thin charging cable connects the car to the pedestal, and subtle lighting under the car\u2019s sill hints at advanced Fully Supervised Driving hardware.\n\nThe setting is a near-future solarpunk city street at golden hour, with clean pavement, greenery integrated into building facades, and soft ambient light. The 512\u00d7512 image is photorealistic with gentle stylization, no brand logos or readable text on the vehicle or charger, and a composition that centers the car and its implied 80% battery status while the surrounding smart-city environment remains softly blurred in the background.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

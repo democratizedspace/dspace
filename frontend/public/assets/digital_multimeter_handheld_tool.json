@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/digital_multimeter_handheld_tool.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "digital multimeter",
+    "item_id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+    "entity_type": "item",
+    "prompt": "A handheld digital multimeter with a rotary selector dial and a clear numeric display sits on a workbench, its red and black test probes coiled neatly in front of it. The dial is set to a low DC voltage range, and the display shows a small, generic reading with digits too small to read clearly. Additional markings around the dial suggest higher voltage, current, and resistance ranges, but none of the text is legible, emphasizing the meter\u2019s versatility without focusing on specific ratings.\n\nThe scene is a near-future solarpunk electronics bench with soft, even lighting, a few circuit boards and components scattered nearby, and a plant on a shelf in the softly blurred background. The 512\u00d7512 image is photorealistic with gentle stylization, no visible brand logos or readable labels on the meter, and a composition that centers the multimeter and its probes as an essential diagnostic tool while the rest of the workspace remains subtly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

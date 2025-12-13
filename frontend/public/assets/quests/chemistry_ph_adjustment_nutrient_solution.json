@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/ph-adjustment.json",
+    "item_name": "Adjust Solution pH",
+    "item_id": "chemistry/ph-adjustment",
+    "entity_type": "quest",
+    "prompt": "A transparent mixing container filled with a pale, slightly tinted nutrient solution sits on a lab bench, with a digital pH probe immersed in the liquid showing a small display angled away from the viewer so no numbers are readable. A gloved hand holds a dropper bottle above the surface, releasing a droplet of clear acid or base into the solution. Beside the container are two small bottles with colored bands (one warm, one cool) indicating acid and base, along with a notebook or tablet off to the side used for tracking adjustments.\n\nThe setting is a modern near-future hydroponics chemistry station, blending lab and grow room aesthetics: soft white overhead lighting, subtle green accents, and glimpses of hydroponic equipment or plants blurred in the background. The photorealistic 512×512 framing keeps the nutrient container, probe, and dropper as the main focus, with all labels free of readable text and no brand logos. Human presence is limited to hands and forearms, reinforcing safe, deliberate pH adjustment without revealing a full face.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

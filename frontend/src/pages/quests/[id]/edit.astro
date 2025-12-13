@@ -1,0 +1,15 @@
+---
+import Page from '../../../components/Page.astro';
+import QuestFormPage from '../../../components/svelte/QuestFormPage.svelte';
+
+const { id } = Astro.params;
+---
+
+<Page title="Edit Custom Quest">
+    <QuestFormPage
+        client:load
+        isEdit={true}
+        questId={id}
+        existingQuests={[]}
+    />
+</Page>

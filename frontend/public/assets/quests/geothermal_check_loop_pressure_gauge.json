@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_check_loop_pressure_gauge.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/check-loop-pressure.json",
+    "item_name": "Check Loop Pressure",
+    "item_id": "geothermal/check-loop-pressure",
+    "entity_type": "quest",
+    "prompt": "A close-up view of a pressure gauge installed on a geothermal loop manifold shows the needle resting within a safe, mid-range zone on the dial. The gauge is connected to a short run of piping with shutoff valves and a hose connection nearby, all clean and free of corrosion. A gloved hand steadies the valve handle while the other points toward the gauge, clearly indicating that the current pressure is being checked to verify that the loop is holding steady.\n\nThe environment is a near-future solarpunk mechanical corner: soft practical lighting, neatly labeled but non-readable tags on pipes, and hints of other renewable systems in the blurred background. The 512×512 photorealistic composition centers on the gauge and surrounding manifold, with the rest of the room fading softly into the background. No brand logos or legible text appear anywhere, and no faces are visible—only hands and forearms—emphasizing a quick, routine pressure check of the ground loop.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_small_bookshelf_build.jpg",
+    "entity": "frontend/src/pages/quests/json/woodworking/bookshelf.json",
+    "item_name": "Build a small bookshelf",
+    "item_id": "woodworking/bookshelf",
+    "entity_type": "quest",
+    "prompt": "A small two-shelf bookcase is being assembled on a workbench, with the side panels standing upright and one shelf already fixed in place using pocket screws or dowels. A second shelf lies ready nearby, and a clamp gently squeezes the structure square while a measuring tape and carpenter’s square confirm alignment. The boards are smooth and sanded, with visible grain that suggests this is a simple but functional piece destined to hold books and plants.\n\nThe scene takes place in a bright, near-future woodworking studio with solarpunk touches: organized tool storage, soft overhead lighting, and a hint of potted greenery on a high shelf. The 512×512 photorealistic image focuses on the small bookshelf and clamping setup in the center of the frame, with the rest of the shop softly blurred to reduce clutter. No logos or readable text appear anywhere, and only gloved or bare hands and forearms are visible as they adjust the clamps, highlighting the process of turning cut boards into a usable bookshelf.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

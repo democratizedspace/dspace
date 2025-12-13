@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_monitoring_dashboard.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/monitoring.json",
+    "item_name": "Set Up Monitoring",
+    "item_id": "devops/monitoring",
+    "entity_type": "quest",
+    "prompt": "A wide monitor on a desk shows a colorful monitoring dashboard with multiple time-series graphs, gauges, and small node status panels reminiscent of Prometheus and Grafana, all rendered without readable labels. In the foreground, a tiny Raspberry Pi cluster or micro-server stack sits with blinking LEDs, clearly the source of the metrics. A notebook or tablet rests nearby with a quick sketch of CPU, memory, and network icons, hinting at the cluster’s health being observed in real time.\n\nThe setting is a near-future solarpunk home lab with soft, balanced lighting, pale surfaces, and several plants or biophilic accents visible behind the monitor. The 512×512 photorealistic composition centers to slightly off-center the screen and the cluster, with the rest of the room gently blurred to reduce clutter. No brand logos or legible text are present, and no human faces appear—only a hand on a mouse or keyboard at most—capturing the satisfying sense of having proper monitoring over the Pi cluster.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ethernet_network_cable.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Ethernet cable",
+    "item_id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+    "entity_type": "item",
+    "prompt": "A coiled Ethernet cable lies on a desk beside a compact network switch and a laptop, its molded RJ45 connectors clearly visible at each end with transparent boots showing the arranged wire pairs inside. The cable jacket is a solid color, with no branding or readable text, and the click-tab on one connector is slightly raised to suggest it is ready to plug into a port. The scene makes it obvious that this is a simple cable for wired network connections rather than a power lead.\n\nThe environment is a near-future solarpunk workspace with soft, even lighting, a small plant on the desk, and tidy cable routing around other devices. The 512×512 image is photorealistic with gentle stylization, no logos or legible labels anywhere, and a composition that centers the Ethernet cable and connectors while the switch, laptop, and background elements remain softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

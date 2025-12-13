@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydroponic_basil_plant_harvestable.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "harvestable basil plant",
+    "item_id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+    "entity_type": "item",
+    "prompt": "A mature Genovese basil plant grows from a small 4 cm rockwool cube set into a simple plastic net pot, the stems branching into a lush canopy of bright green leaves about 20 cm tall. The plant looks dense and healthy, with several sets of leaves large enough to pick for cooking while still leaving plenty of growth. The rockwool cube is clearly visible at the base, slightly damp and cradled in the net pot above a hydroponic reservoir or tray.\n\nThe scene is a near-future solarpunk indoor garden, with other herbs and leafy greens in the blurred background lit by soft full-spectrum grow lights. The 512×512 image is photorealistic with subtle stylization, no logos or text, and a composition that centers the harvest-ready basil plant and its rockwool cube while the surrounding hydroponic setup and greenery remain softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

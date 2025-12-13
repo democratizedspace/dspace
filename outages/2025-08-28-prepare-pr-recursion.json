@@ -1,0 +1,13 @@
+{
+  "id": "prepare-pr-recursion",
+  "date": "2025-08-28",
+  "component": "pre-PR script",
+  "rootCause": "prepare-pr scripts invoked \"npm test\", which called run-tests.js recursively and caused \"npm run test:ci\" to hang",
+  "resolution": "Run root tests directly with \"npm run test:root\" and allow skipping via SKIP_UNIT_TESTS to avoid recursion",
+  "references": [
+    "frontend/scripts/prepare-pr.sh",
+    "frontend/scripts/prepare-pr.ps1",
+    "run-tests.js",
+    "scripts/tests/preparePrScripts.test.ts"
+  ]
+}

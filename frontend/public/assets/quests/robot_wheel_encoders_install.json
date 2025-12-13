@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/robot_wheel_encoders_install.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/wheel-encoders.json",
+    "item_name": "Add Wheel Encoders",
+    "item_id": "robotics/wheel-encoders",
+    "entity_type": "quest",
+    "prompt": "A small differential-drive robot is shown on a workbench with one of its wheels removed or partially detached, revealing an encoder disk and an optical or magnetic sensor being installed on the axle. A hand with a screwdriver or hex key is visible, carefully securing the encoder hardware in place. Cables from the encoder run neatly toward a microcontroller board or wiring hub on the robot chassis, emphasizing that the wheel sensors are being added for more precise motion tracking.\n\nThe scene is a bright, organized robotics studio with a solarpunk atmosphere: warm, diffuse lighting, green plants on nearby shelves, and clearly labeled but unreadable storage bins in the background. The 512×512 image is photorealistic with gentle stylization, no visible logos or readable text, and a composition that focuses on the wheel, encoder assembly, and careful installation, while the rest of the workspace is softly blurred to suggest a safe, methodical build process.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

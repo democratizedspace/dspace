@@ -1,0 +1,50 @@
+{
+    "id": "robotics/maze-navigation",
+    "title": "Navigate a Simple Maze",
+    "description": "Program your robot to drive through a basic maze layout.",
+    "image": "/assets/quests/robot_maze_navigation.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to put your line following skills to the test? Let's try a small maze.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "program",
+                    "text": "I'm ready."
+                }
+            ]
+        },
+        {
+            "id": "program",
+            "text": "Extend the PID loop so the robot handles intersections and dead ends.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "It made it through!",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! Complex navigation is within reach.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Onward!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["robotics/line-follower"]
+}

@@ -1,0 +1,32 @@
+import { test, expect } from '@playwright/test';
+import { purgeClientState, waitForHydration } from './test-helpers';
+
+test.describe('Quest Form Live Validation', () => {
+    test.beforeEach(async ({ page }) => {
+        await purgeClientState(page);
+    });
+
+    test('shows inline errors and clears them when inputs become valid', async ({ page }) => {
+        await page.goto('/quests/create');
+        await waitForHydration(page);
+
+        const titleInput = page.getByLabel('Title*');
+        const descriptionInput = page.getByLabel('Description*');
+        const titleError = page.getByTestId('quest-title-error');
+        const descriptionError = page.getByTestId('quest-description-error');
+
+        // Typing too short of a title should surface the length validation copy
+        await titleInput.fill('ab');
+        await expect(titleError).toHaveText('Title must be at least 3 characters');
+
+        // Short descriptions should raise the minimum length validation message
+        await descriptionInput.fill('short');
+        await expect(descriptionError).toHaveText('Description must be at least 10 characters');
+
+        // When both fields become valid, the inline validation should clear
+        await titleInput.fill('Rescue the historian');
+        await descriptionInput.fill('Retrieve the lost archives from the orbital library.');
+        await expect(titleError).toBeHidden();
+        await expect(descriptionError).toBeHidden();
+    });
+});

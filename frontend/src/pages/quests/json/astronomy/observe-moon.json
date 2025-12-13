@@ -1,0 +1,95 @@
+{
+    "id": "astronomy/observe-moon",
+    "title": "Observe the Moon",
+    "description": "Use a basic telescope, mission logbook, quill, ink and red flashlight to sketch lunar craters safely.",
+    "image": "/assets/quests/lunar_crater_sketching_session.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here! Stable telescope, logbook, quill, ink and red flashlight ready? Sun below horizon?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "record",
+                    "text": "I'm ready"
+                }
+            ]
+        },
+        {
+            "id": "record",
+            "text": "Aim at the Moon only. Keep red light dim, watch footing and sketch craters with quill and ink.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log the observation"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Sketch completed",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        },
+                        {
+                            "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Cap ink, wipe quill, close logbook and dry the telescope before packing up.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Onward!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
+    "hardening": {
+        "passes": 3,
+        "score": 92,
+        "emoji": "\ud83d\udcaf",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-09-01",
+                "date": "2025-09-01",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-hardening-2025-09-17",
+                "date": "2025-09-17",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-hardening-2025-09-25",
+                "date": "2025-09-25",
+                "score": 92
+            }
+        ]
+    }
+}

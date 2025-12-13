@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/bundle_of_basil_leaves_30g.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "bundle of basil leaves",
+    "item_id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
+    "entity_type": "item",
+    "prompt": "A fresh-cut bundle of Genovese basil leaves lies on a wooden cutting board, the stems gathered together with a small reusable tie or string. The leaves are vibrant green, slightly glossy and unblemished, clearly harvested from healthy hydroponic plants. A small kitchen scale or shallow bowl off to the side suggests the bundle weighs around 30 g, ready to be used in cooking or quickly sold before losing its aromatic oils.\n\nThe environment is a near-future solarpunk kitchen-garden hybrid space with soft daylight, a glimpse of a hydroponic system and other herbs in the blurred background, and clean, minimal countertops. The 512×512 image is photorealistic with gentle stylization, no logos or text on any objects, and a composition that centers the basil bundle and its lush leaves while the surrounding scene remains softly out of focus, emphasizing freshness and immediacy.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

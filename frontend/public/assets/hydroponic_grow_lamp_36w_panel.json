@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydroponic_grow_lamp_36w_panel.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "hydroponic grow lamp",
+    "item_id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+    "entity_type": "item",
+    "prompt": "A larger 36 W full-spectrum LED grow panel is suspended above a denser bed of seedlings and herbs, bright enough to clearly cover a slightly wider 0.25 m\u00b2 area. The panel is rectangular with a thin housing and is hung from four cables attached to an overhead bar, with a visible hanging kit and a sturdy 12 V power adapter feeding a neatly routed cable. Below, multiple small hydroponic tubs or trays show lush green sprouts, evenly lit across the whole growing surface to suggest strong coverage.\n\nThe setup appears in a near-future solarpunk grow room with clean white walls, reflective panels behind the plants, and a few additional grow stations visible in soft focus. Lighting is a mix of the lamp\u2019s glow and soft ambient light, creating a photorealistic 512\u00d7512 image with subtle stylization. There are no brand logos or readable text on the lamp or hardware, and the composition emphasizes the larger panel and its broader, evenly lit grow area while the rest of the room stays gently blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

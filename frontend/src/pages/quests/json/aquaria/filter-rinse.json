@@ -1,0 +1,67 @@
+{
+    "id": "aquaria/filter-rinse",
+    "title": "Rinse Sponge Filter",
+    "description": "Unplug air pump. Rinse sponge filter in dechlorinated water to restore flow and protect bacteria.",
+    "image": "/assets/quests/rinse_sponge_filter_bucket.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The sponge filter is clogging. Unplug the air pump so you can rinse it and keep flow gentle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "I'll rinse it now."
+                }
+            ]
+        },
+        {
+            "id": "rinse",
+            "text": "Squeeze the sponge in a bucket of dechlorinated water until clear. Skip tap water to save bacteria.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Filter's clean again!",
+                    "process": "rinse-aquarium-filter",
+                    "requiresItems": [
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Clean media keeps beneficial bacteria thriving.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to watching fish."
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["aquaria/sponge-filter"],
+    "hardening": {
+        "passes": 1,
+        "score": 65,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-19",
+                "date": "2025-08-19",
+                "score": 65
+            }
+        ]
+    }
+}

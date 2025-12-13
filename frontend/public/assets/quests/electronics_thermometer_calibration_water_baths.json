@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_thermometer_calibration_water_baths.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/thermometer-calibration.json",
+    "item_name": "Calibrate a Thermometer",
+    "item_id": "electronics/thermometer-calibration",
+    "entity_type": "quest",
+    "prompt": "On a clean countertop, a digital or analog thermometer probe is being used to measure two separate water baths in transparent containers: one filled with ice water and floating ice cubes, and the other emitting a hint of steam to suggest hot but safe water. The same thermometer is shown being moved between the baths, with its probe immersed at a consistent depth, while a simple notepad nearby has two columns of recorded readings and reference values represented as abstract marks rather than readable numbers. A kitchen timer or small lab timer rests beside the containers to suggest waiting for stable readings.\n\nThe scene is styled as a near-future solarpunk kitchen-lab hybrid: soft natural and LED lighting, pale surfaces, and a plant or small herb pot visible in the blurred background. The 512×512 photorealistic composition keeps the thermometer, water baths, and containers as the central focus, with everything else slightly out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands holding the probe—highlighting careful, methodical calibration of a thermometer using cold and hot water reference points.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

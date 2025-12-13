@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/dcarbon_token.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "dCarbon",
+    "item_id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
+    "entity_type": "item",
+    "prompt": "A sleek metallic token lies on a neutral tabletop, its surface etched with a minimalist carbon molecule icon and a subtle \u201c1 kg CO\u2082\u201d symbol implied through tiny geometric marks rather than readable text. The token has a slightly holographic sheen, with faint circuit-like lines around the edge that make it look like a digital asset given physical form. A few additional tokens are softly out of focus in the background, hinting that these are generated and collected over time as emissions are tracked.\n\nThe environment is a near-future solarpunk workspace with soft, indirect lighting, a low-profile keyboard or tablet at the edge of the frame, and a small plant adding a touch of green. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or legible writing, and a composition that keeps the single dCarbon token as the focal point while the background tech and greenery remain blurred, suggesting an in-game or simulation-based carbon accounting system.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

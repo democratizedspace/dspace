@@ -1,0 +1,80 @@
+{
+    "id": "3dprinting/bed-leveling",
+    "title": "Level the Print Bed",
+    "description": "After power-off and cooling, level the FDM bed with a sheet of printer paper.",
+    "image": "/assets/quests/bed_leveling_printer_paper_test.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Unplug the printer and let it cool. We'll check each corner with paper.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "level",
+                    "text": "I'm ready. How do we start?"
+                }
+            ]
+        },
+        {
+            "id": "level",
+            "text": "Slide paper under the nozzle at corners and center; turn knobs until it tugs. Adjust only when cool.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Walk me through the steps."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bed is level and ready!",
+                    "requiresItems": [
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Your first layers should stick like a charm now.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Time to print!"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["3dprinter/start"],
+    "hardening": {
+        "passes": 4,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-12",
+                "date": "2025-08-12",
+                "score": 65
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-14",
+                "date": "2025-08-14",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-24",
+                "date": "2025-08-24",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-27",
+                "date": "2025-08-27",
+                "score": 95
+            }
+        ]
+    }
+}

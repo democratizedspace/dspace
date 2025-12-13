@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/model_rocket_recovery_run_field.jpg",
+    "entity": "frontend/src/pages/quests/json/rocketry/recovery-run.json",
+    "item_name": "Practice Rocket Recovery",
+    "item_id": "rocketry/recovery-run",
+    "entity_type": "quest",
+    "prompt": "A mid-distance view of a grassy field where a small model rocket has just landed under a fully deployed brightly colored parachute, resting upright or gently tilted on the ground. The parachute canopy is open and clearly inflated, with thin suspension lines leading down to the rocket body, showing that the rocket has returned safely and intact. In the background, a simple portable launch pad is visible, and a person’s legs and boots or sneakers can be seen walking toward the rocket, emphasizing the recovery run without showing a full face.\n\nNear-future solarpunk outdoor setting with soft late-afternoon lighting, realistic clouds, and hints of small-scale renewable tech in the distance such as a modest wind turbine or rooftop solar panels. The style is photorealistic but slightly idealized, with clean colors and a clear composition that centers the parachute and rocket. No logos or text are visible; the overall mood is calm, optimistic, and focused on careful reuse and recovery rather than spectacle.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

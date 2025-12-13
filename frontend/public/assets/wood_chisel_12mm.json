@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/wood_chisel_12mm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "wood chisel",
+    "item_id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
+    "entity_type": "item",
+    "prompt": "A 12 mm wood chisel lies on a wooden workbench, its hardened steel blade freshly honed and catching the light along a sharp bevel. The handle is made of smooth wood or comfortable composite, with a ferrule near the blade to prevent splitting. Nearby, a small mortise or chiseled groove in a board shows crisp, clean edges, clearly demonstrating the chisel’s role in carving joinery and cleaning out slots.\n\nThe workshop is a near-future solarpunk space with soft, even lighting, shavings and chips gathered neatly, and other hand tools stored on a wall rack in the background. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the chisel, and a composition that centers the blade and chiseled recess while the rest of the bench and shop remain softly out of focus, emphasizing careful, safe tool use.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,19 @@
+name: ci-sentinel
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  ensure-tests-exist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          test -f .github/workflows/tests.yml
+          test -f .github/workflows/ci.yml
+          grep -q 'npm run coverage' .github/workflows/tests.yml
+          grep -q 'scripts/checkPatchCoverage.cjs' .github/workflows/tests.yml
+          grep -q 'codecov/codecov-action@' .github/workflows/tests.yml
+          grep -q 'fetch-depth: 0' .github/workflows/tests.yml
+          grep -q 'CODECOV_TOKEN' .github/workflows/tests.yml
+

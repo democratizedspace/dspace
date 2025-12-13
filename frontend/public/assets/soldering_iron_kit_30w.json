@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/soldering_iron_kit_30w.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "soldering iron kit",
+    "item_id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+    "entity_type": "item",
+    "prompt": "A 30 W pen-style soldering iron rests in a simple metal stand on an electronics bench, its slender heated tip extending forward and a coiled power cord trailing away. Beside the stand is a small cellulose sponge in a tray, slightly damp and marked from use, and a short length of 0.8 mm lead-free solder wire is laid out in front, hinting at the 1 m of solder included with the kit. The arrangement clearly conveys a basic soldering setup suitable for hobby electronics.\n\nThe environment is a near-future solarpunk workspace with soft, even lighting, an anti-static mat, and a few organized components and tools in the blurred background. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the iron or stand, and a composition that centers the iron, stand, sponge, and solder wire while the rest of the bench remains softly out of focus, emphasizing the kit as a complete beginner-friendly soldering solution.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

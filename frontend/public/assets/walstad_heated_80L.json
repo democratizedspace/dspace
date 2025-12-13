@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/walstad_heated_80L.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Heated Walstad aquarium (80 L, 26°C)",
+    "item_id": "8c0f72a2-db79-4238-b80f-97721def169f",
+    "entity_type": "item",
+    "prompt": "A heated 80-liter Walstad planted aquarium with lush greenery and clear water but no fish yet, a slim black heater and glass thermometer clearly visible on the back panel, rich soil and sand substrate, giving the sense of a freshly prepared, cycling tank at 26°C waiting for livestock.\n\nUltra-detailed, photorealistic 512×512 image inside a 2040s Pacific floating-city habitat: curved white composite walls, integrated LED light strips in cyan and magenta, smart glass window panels with soft abstract reflections, sleek modular furniture with rounded corners, floating or recessed shelves with small plants and gadgets, subtle holographic UI glows and status icons on nearby surfaces, everything clean and clutter-free, background slightly blurred, no people, no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

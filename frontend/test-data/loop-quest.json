@@ -1,0 +1,19 @@
+{
+    "id": "test/loop-no-finish",
+    "title": "Loop Without Finish",
+    "description": "Quest with no finish path",
+    "image": "/assets/test.png",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Start",
+            "options": [{ "type": "goto", "goto": "middle", "text": "Next" }]
+        },
+        {
+            "id": "middle",
+            "text": "Middle",
+            "options": [{ "type": "goto", "goto": "start", "text": "Loop" }]
+        }
+    ]
+}

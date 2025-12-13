@@ -1,0 +1,60 @@
+{
+    "id": "aquaria/thermometer",
+    "title": "Attach Aquarium Thermometer",
+    "description": "Attach a stick-on strip thermometer outside the aquarium glass to monitor water temperature.",
+    "image": "/assets/quests/stick_on_aquarium_thermometer.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Wash and dry your hands. Unplug the heater for 10 min to cool, then dry a 5 cm patch on the outside glass just below the waterline with a clean paper towel, keeping the power cord away from water.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "attach",
+                    "text": "Area is clean and dry.",
+                    "requiresItems": [
+                        { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
+                        { "id": "0b85f058-38f2-4e9a-93e9-d47441608619", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "attach",
+            "text": "Peel the backing without touching adhesive. Align the strip at eye level on the dried spot and press from top to bottom for 30 s to avoid bubbles. Keep it outside the tank and at least 5 cm from heaters or direct sunlight.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Thermometer attached",
+                    "process": "attach-aquarium-thermometer",
+                    "requiresItems": [
+                        { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
+                        { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
+                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Wait a few minutes for the numbers to steady. Plug the heater back in with dry hands and confirm the display shows a safe temperature.",
+            "options": [{ "type": "finish", "text": "All set!" }]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["aquaria/position-tank"],
+    "hardening": {
+        "passes": 4,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            { "task": "codex-quest-hardening-2025-08-13", "date": "2025-08-13", "score": 60 },
+            { "task": "codex-quest-hardening-2025-08-14", "date": "2025-08-14", "score": 80 },
+            { "task": "codex-quest-hardening-2025-08-16", "date": "2025-08-16", "score": 90 },
+            { "task": "codex-quest-hardening-2025-08-16-2", "date": "2025-08-16", "score": 95 }
+        ]
+    }
+}

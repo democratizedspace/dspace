@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/linux_resource_monitoring_dashboard.jpg",
+    "entity": "frontend/src/pages/quests/json/sysadmin/resource-monitoring.json",
+    "item_name": "Monitor System Resources",
+    "item_id": "sysadmin/resource-monitoring",
+    "entity_type": "quest",
+    "prompt": "A curved widescreen monitor sits on a clean desk, showing a dark background with multiple small panels: one with a scrolling process list, another with bar-like CPU and memory usage indicators, and a third with simple disk usage graphs. None of the text is individually legible, but the layout clearly suggests resource monitoring tools similar to top and df. A compact keyboard, mouse, and a small, quiet server box with subtle status LEDs complete the scene, indicating that the system’s performance is actively being watched.\n\nThe workspace has a calm near-future solarpunk feel: soft ambient lighting, a couple of green plants nearby, and well-organized cables and peripherals. The 512×512 image is photorealistic with light stylization, containing no brand logos or readable text, and composed so that the monitoring panels on the screen are the primary focus, with the rest of the desk and room environment softly blurred to frame the idea of attentive system resource monitoring.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

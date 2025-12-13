@@ -1,0 +1,24 @@
+name: link-check
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check links
+        uses: ./.github/actions/run-lychee
+        with:
+          args: >-
+            --accept 403,429
+            --timeout 30
+            --max-retries 2
+            --retry-wait-time 5
+            --no-progress --verbose
+            "**/*.md"
+          format: markdown
+          output: lychee/out.md
+

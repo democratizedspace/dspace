@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/install_aquarium_heater.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/heater-install.json",
+    "item_name": "Install an aquarium heater",
+    "item_id": "aquaria/heater-install",
+    "entity_type": "quest",
+    "prompt": "A 150 W submersible aquarium heater is mounted inside a planted Walstad-style aquarium, its glass tube and control dial clearly visible. A stick-on thermometer strip is pressed against the outside of the glass, showing a reading near 26°C. Tropical fish, such as guppies, swim calmly among aquatic plants and driftwood, while gentle bubbles rise from a corner sponge filter, indicating a stable, well-maintained environment.\n\nThe setting is a near-future solarpunk living space, with soft ambient lighting highlighting the aquarium. The stand beneath the tank is clean, and a few potted houseplants and minimalist furnishings are visible in the softly blurred background. The 512×512 image is photorealistic with mild stylization, no logos or readable text on equipment, and a composition that centers the heater and thermometer while showcasing the healthy aquatic ecosystem around them.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

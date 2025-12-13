@@ -1,0 +1,43 @@
+replicaCount: 3
+env: prod
+image:
+  # Production must pin by digest; tags remain unset for immutability.
+  digest: sha256:83d6ac7e2a6f8c3a21d9130b35f6a4d8c9b52f3e174d0a5c6b8e2f0a1c3d4e5f
+  tag: ""
+ingress:
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-dns01
+  hosts:
+    - host: dspace.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-prod-tls
+      hosts:
+        - dspace.example.com
+metrics:
+  enabled: true
+
+alerts:
+  enabled: true
+
+runtimeEnv:
+  extra:
+    - name: DSPACE_ENABLE_METRICS
+      value: "1"
+    - name: DSPACE_FEATURE_FLAGS
+      value: beta-chat,balance-panel,observability
+serviceMonitor:
+  enabled: true
+  namespaceSelector:
+    matchNames:
+      - dspace
+resources:
+  requests:
+    cpu: 500m
+    memory: 768Mi
+  limits:
+    cpu: "1"
+    memory: 1536Mi

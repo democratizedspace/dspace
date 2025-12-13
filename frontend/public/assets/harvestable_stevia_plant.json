@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/harvestable_stevia_plant.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "harvestable stevia plant",
+    "item_id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+    "entity_type": "item",
+    "prompt": "A mature stevia plant stands in a small pot or net cup, its slender stems covered in many small, serrated green leaves ready for harvest. Some leaves are slightly larger and more prominent near the top, inviting plucking, while the overall plant still looks full and vigorous. The base shows a growing medium such as coco, rockwool, or a lightweight soil blend, making it clear this plant has been nurtured and is now at the ideal stage for leaf harvest.\n\nThe environment is a near-future solarpunk grow nook with soft, diffused lighting, other herbs and leafy plants in the blurred background, and hints of sustainable tech like compact grow lights or a small monitoring sensor nearby. The 512×512 image is photorealistic with light stylization, no logos or text, and a composition that keeps the stevia plant as the clear focus while the rest of the garden space fades into a pleasant soft focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

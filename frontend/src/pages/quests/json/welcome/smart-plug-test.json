@@ -1,0 +1,72 @@
+{
+    "id": "welcome/smart-plug-test",
+    "title": "Smart Plug Test",
+    "description": "Use a smart plug to buy 1 kWh from a wall outlet and mint 1,000 dWatt tokens.",
+    "hardening": {
+        "passes": 1,
+        "score": 60,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-15",
+                "date": "2025-08-15",
+                "score": 60
+            }
+        ]
+    },
+    "image": "/assets/quests/smart_plug_test_dwatt_kwh.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Plug a lamp into the smart plug. Under 15 A and dry. Ready to capture energy?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Sounds fun!"
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Run outlet-dWatt-1e3 with the smart plug and watch 1,000 dWatt appear.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "outlet-dWatt-1e3",
+                    "text": "Start outlet-dWatt-1e3"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wrapup",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 1000
+                        }
+                    ],
+                    "text": "dWatt generated!"
+                }
+            ]
+        },
+        {
+            "id": "wrapup",
+            "text": "Nice surge! Unplug the load—this smart plug will help with bigger quests.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Neat!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "7318a5ba-fac3-476e-a532-c813ed9b18e5",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["welcome/howtodoquests"]
+}

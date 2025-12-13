@@ -1,0 +1,13 @@
+{
+  "id": "duration-compact-units",
+  "date": "2025-08-28",
+  "component": "frontend",
+  "rootCause": "duration parser ignored values when time units lacked spaces",
+  "resolution": "parse duration components with regex to allow compact strings",
+  "references": [
+    "frontend/src/utils.js",
+    "frontend/tests/duration.test.ts",
+    "frontend/src/pages/docs/md/processes.md",
+    "frontend/src/pages/docs/md/process-guidelines.md"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/dwarf_shrimp_glass_closeup.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Dwarf shrimp",
+    "item_id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+    "entity_type": "item",
+    "prompt": "A close-up of a small translucent dwarf shrimp on the front glass of a planted aquarium, its tiny legs and antennae clearly visible as it grazes on a thin film of algae. The shrimp is about 1.5 cm long relative to the scene, with a subtle red or orange tint and a sharply focused body, while lush green plants, smooth river stones, and a dark soil substrate blur into the background. Fine details like the shrimp’s eyes, shell segments, and delicate fan-like tail are crisp, emphasizing its role as an algae grazer.\n\nPhotorealistic near-future aquaria aesthetic in a 512×512 frame: soft, diffuse lighting from an overhead LED fixture, with gentle reflections on the glass and no visible equipment branding. The style is clean and slightly stylized but grounded in reality, with vibrant greens and natural browns that feel like a well-maintained solarpunk home aquarium. The composition keeps the shrimp centered or slightly off-center with no text in the scene, making it instantly recognizable as the core subject.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

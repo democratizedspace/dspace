@@ -1,0 +1,13 @@
+{
+  "id": "duration-infinity",
+  "date": "2025-08-28",
+  "component": "frontend",
+  "rootCause": "sanitizeDuration returned 0 for Infinity causing progress to show 0%",
+  "resolution": "treat infinite durations as 100% in sanitizeDuration",
+  "references": [
+    "frontend/src/utils/strings.js",
+    "tests/strings.test.ts",
+    "frontend/__tests__/strings.test.js",
+    "frontend/README.md"
+  ]
+}

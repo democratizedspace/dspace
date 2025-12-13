@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_reservoir_refresh.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/reservoir-refresh.json",
+    "item_name": "Refresh the Reservoir",
+    "item_id": "hydroponics/reservoir-refresh",
+    "entity_type": "quest",
+    "prompt": "A hydroponic reservoir tub has been drained and partially refilled, with a flexible hose or siphon hanging over the side and a fresh batch of nutrient solution in a nearby mixing bucket. A gloved hand is reconnecting or positioning the hose to finish filling the reservoir, and the inside of the tub looks clean, with smooth surfaces and a faintly tinted liquid. Net cup lids and a small pump or airline tubing are set aside neatly, ready to be reinstalled once the fresh solution is in place.\n\nThe setting is a near-future solarpunk grow space with bright but soft lighting and clean, minimal surfaces, giving the 512×512 image a calm, organized feel. Background details like green plants, shelving, and subtle high-tech controls are present but slightly blurred so the reservoir, hose, and bucket stay as the main focus. No brands or readable text appear anywhere, and only hands and arms are shown to indicate safe, methodical refreshing of the hydroponic reservoir.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

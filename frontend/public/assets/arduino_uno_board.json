@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/arduino_uno_board.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Arduino Uno",
+    "item_id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+    "entity_type": "item",
+    "prompt": "An Arduino Uno–style microcontroller board lies on a wooden desk, its blue PCB, USB connector, power jack, and rows of female headers clearly visible. A USB cable is plugged into the board and leads off frame toward a laptop in the background, and a few jumper wires and a small breadboard sit nearby, hinting at an in-progress beginner electronics project. The silkscreen area uses abstract shapes instead of readable text to avoid specific branding.\n\nNear-future solarpunk electronics workbench aesthetic with warm lighting, a small plant, and maybe a tiny solar panel visible at the edge of the frame. Photorealistic 512×512 rendering, no brand logos or legible labels. The composition should immediately read as a beginner-friendly Arduino Uno–style board as an inventory item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

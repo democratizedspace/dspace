@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/3d_printed_rocket_body_tube.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "3D printed body tube",
+    "item_id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
+    "entity_type": "item",
+    "prompt": "A 3D printed rocket body tube lies on a workbench, its smooth cylindrical shell printed in PLA or PETG with a subtle layer-line texture along its length. One end of the tube has clean internal shoulders or slots designed to mate with a fincan, and the other end is open, ready to accept a nose cone or coupler. A few additional modular rocket parts\u2014nose cone, coupler, and motor mount\u2014sit nearby, making it clear that this is a structural body segment for a modular model rocket.\n\nThe environment is a near-future solarpunk maker space with soft, even lighting, a small FDM printer visible in the blurred background, and neatly organized tools and filaments on shelves. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable text on any parts, and a composition that centers the body tube and its joint features while the printer and surrounding workspace remain softly out of focus, emphasizing precision-printed modular rocketry.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

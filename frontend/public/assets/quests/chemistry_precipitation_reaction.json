@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/chemistry_precipitation_reaction.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/precipitation-reaction.json",
+    "item_name": "Form a Precipitate",
+    "item_id": "chemistry/precipitation-reaction",
+    "entity_type": "quest",
+    "prompt": "Two clear solutions are being mixed in a central glass beaker on a chemistry bench, with one solution being poured from a smaller beaker into the other. As the liquids combine, a cloudy, opaque solid begins to form, swirling into visible clumps and a milky suspension—the emerging precipitate clearly captured mid-reaction. Nearby, there are additional clean beakers and a glass stirring rod, with a white background pad or tile under the main beaker to make the change in appearance easy to see.\n\nThe setting is a refined near-future chemistry lab with solarpunk touches: bright but soft lighting, subtle green or teal accents, and clean, minimal surfaces that give the 512×512 image a crisp photorealistic look. The composition keeps the central beaker and the pouring motion in sharp focus, while the rest of the lab fades slightly into the background. No logos or readable text are visible anywhere, and only hands and forearms are shown so that the emphasis stays on the visual drama of the precipitation reaction itself.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

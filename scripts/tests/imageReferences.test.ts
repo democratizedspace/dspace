@@ -1,0 +1,57 @@
+import { describe, expect, test } from 'vitest';
+import fs from 'fs';
+import path from 'path';
+import { globSync } from 'glob';
+import { listMissingImages } from '../utils/fs-checks';
+
+const questsDir = path.join(__dirname, '../../frontend/src/pages/quests/json');
+const itemsDir = path.join(__dirname, '../../frontend/src/pages/inventory/json/items');
+const npcFile = path.join(
+  __dirname,
+  '../../frontend/src/pages/docs/md/npcs.md'
+);
+
+function collectQuestImages() {
+  const files = globSync(path.join(questsDir, '**/*.json'));
+  const imgs = [];
+  files.forEach((file) => {
+    const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (data.image) imgs.push(data.image);
+    if (data.npc) imgs.push(data.npc);
+  });
+  return imgs;
+}
+
+function collectItemImages() {
+  const files = globSync(path.join(itemsDir, '*.json'));
+  const items = files.flatMap((file) => JSON.parse(fs.readFileSync(file, 'utf8')));
+  return items.map((i) => i.image).filter(Boolean);
+}
+
+function collectNpcImages() {
+  const md = fs.readFileSync(npcFile, 'utf8');
+  const regex = /<img src="(.*?)"/g;
+  const imgs = [];
+  let match;
+  while ((match = regex.exec(md))) {
+    imgs.push(match[1]);
+  }
+  return imgs;
+}
+
+describe('Image references', () => {
+  test('all referenced images exist', () => {
+    const images = [
+      ...collectQuestImages(),
+      ...collectItemImages(),
+      ...collectNpcImages(),
+    ];
+    const missing = listMissingImages(images);
+    const uniqueMissing = [...new Set(missing)];
+    if (uniqueMissing.length) {
+      console.warn('Missing images:', uniqueMissing);
+    }
+    // All referenced images should exist
+    expect(uniqueMissing.length).toBe(0);
+  });
+});

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/goldfish_partial_water_change.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/water-change.json",
+    "item_name": "Perform a partial water change",
+    "item_id": "aquaria/water-change",
+    "entity_type": "quest",
+    "prompt": "A large 150 liter (roughly 40 gallon) rectangular glass goldfish aquarium on a sturdy stand in a bright living room, clearly long and spacious with plenty of horizontal swimming room. The water level is slightly lowered for maintenance, and a siphon hose runs from the tank down into a bucket on the floor, showing water being removed. One or two goldfish calmly swim among live plants and smooth river stones while a hang-on-back filter and heater remain running, clearly indicating a serious, full-sized goldfish setup rather than a tiny desktop tank.\n\nNear-future solarpunk home environment with soft natural light from a nearby window, a few houseplants and simple eco-friendly décor in the background. Photorealistic 512×512 composition, no brand logos or legible labels. A bottle of water conditioner and a container of fresh replacement water are placed beside the bucket, and at most only a partial human hand or arm is visible holding the siphon, emphasizing the safe, routine partial water change process on a large, properly sized goldfish aquarium.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

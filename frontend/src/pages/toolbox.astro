@@ -1,0 +1,206 @@
+---
+import Page from '../components/Page.astro';
+
+const sections = [
+    {
+        title: 'Save management',
+        description: 'Keep your progress portable across browsers and devices.',
+        tools: [
+            {
+                name: 'Gamesave exports',
+                href: '/gamesaves',
+                description:
+                    'Download or import your full game state as portable JSON so you always have a manual backup.',
+            },
+            {
+                name: 'Cloud Sync',
+                href: '/cloudsync',
+                description:
+                    'Push saves to a private GitHub Gist with your personal token or pull them back down when swapping machines.',
+            },
+            {
+                name: 'Custom content backup',
+                href: '/contentbackup',
+                description:
+                    'Archive or restore custom quests, items, and processes as a single bundle when you iterate on content.',
+            },
+        ],
+    },
+    {
+        title: 'Custom content editors',
+        description: 'Create, preview, and refine the material that powers your crew.',
+        tools: [
+            {
+                name: 'Manage Items',
+                href: '/inventory/manage',
+                description:
+                    'Review your custom inventory entries with live previews, duplicate detection, and price validation.',
+            },
+            {
+                name: 'Manage Processes',
+                href: '/processes/manage',
+                description:
+                    'Tune process recipes, durations, and hardening loops before handing them off to the automation team.',
+            },
+            {
+                name: 'Manage Quests',
+                href: '/quests/manage',
+                description:
+                    'Draft branching quest dialogue, hook up rewards, and share simulations before publishing.',
+            },
+            {
+                name: 'Quest PR form',
+                href: '/quests/submit',
+                description:
+                    'Generate a GitHub-ready pull request payload directly from quest JSON without leaving the game.',
+            },
+        ],
+    },
+    {
+        title: 'Diagnostics & insights',
+        description: 'Check the health of your progression and celebrate community support.',
+        tools: [
+            {
+                name: 'Stats dashboard',
+                href: '/stats',
+                description:
+                    'See live counts of quests, dialogue nodes, inventory categories, and processes sourced straight from game data.',
+            },
+            {
+                name: 'Donation leaderboard',
+                href: '/leaderboard',
+                description:
+                    'Track top Metaguild supporters with totals that update as crews contribute.',
+            },
+            {
+                name: 'Docs changelog',
+                href: '/docs/changelog',
+                description:
+                    'Review the latest release notes and documentation callouts whenever you deploy a new toolkit build.',
+            },
+        ],
+    },
+];
+---
+
+<Page title="Toolbox">
+    <li class="intro-card">
+        <p>
+            Use the Toolbox to jump straight to DSPACE utilities that keep your crew productive. Every
+            link below opens an in-game workflow that already ships in this build—no placeholders,
+            no teaser text.
+        </p>
+    </li>
+    {sections.map((section) => (
+        <li class="section-card">
+            <section>
+                <h3>{section.title}</h3>
+                <p>{section.description}</p>
+                <ul class="tool-grid">
+                    {section.tools.map((tool) => (
+                        <li class="tool-card">
+                            <h4><a href={tool.href}>{tool.name}</a></h4>
+                            <p>{tool.description}</p>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        </li>
+    ))}
+</Page>
+
+<style>
+    :global(.link-card-grid-1) {
+        list-style: none;
+    }
+
+    .intro-card,
+    .section-card {
+        background: rgba(7, 43, 18, 0.85);
+        border-radius: 16px;
+        padding: 1.25rem;
+        color: #f4fff6;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .intro-card p {
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .section-card + .section-card {
+        margin-top: 1rem;
+    }
+
+    .section-card h3 {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        font-size: 1.3rem;
+    }
+
+    .section-card p {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .tool-grid {
+        list-style: none;
+        display: grid;
+        gap: 1rem;
+        padding: 0;
+        margin: 0;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .tool-card {
+        background: rgba(6, 26, 13, 0.9);
+        border: 1px solid rgba(121, 232, 154, 0.35);
+        border-radius: 12px;
+        padding: 1rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .tool-card:hover,
+    .tool-card:focus-within {
+        border-color: rgba(121, 232, 154, 0.8);
+        transform: translateY(-2px);
+    }
+
+    .tool-card h4 {
+        margin: 0;
+        font-size: 1.1rem;
+    }
+
+    .tool-card a {
+        color: #9fffbf;
+        text-decoration: none;
+    }
+
+    .tool-card a:hover,
+    .tool-card a:focus {
+        text-decoration: underline;
+    }
+
+    .tool-card p {
+        margin: 0;
+        color: #e4ffea;
+        line-height: 1.5;
+        font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+        .intro-card,
+        .section-card {
+            padding: 1rem;
+        }
+
+        .tool-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

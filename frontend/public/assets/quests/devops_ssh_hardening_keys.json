@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_ssh_hardening_keys.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/ssh-hardening.json",
+    "item_name": "Harden SSH Access",
+    "item_id": "devops/ssh-hardening",
+    "entity_type": "quest",
+    "prompt": "A compact home server or Raspberry Pi sits beside a laptop on a clean desk, while the laptop screen shows a stylized SSH configuration window with an abstract list of user accounts and a highlighted key icon, all without readable text. Next to the laptop, a USB stick labeled only by a small key symbol rests on the desk, hinting at stored SSH keys, and a notepad shows a simple sketch of a padlock and a crossed-out password box. Ethernet and power cables are neatly routed to a small router, suggesting remote access that is now locked down.\n\nThe scene is set in a near-future solarpunk workspace with soft, indirect lighting, pale wood and metal surfaces, and a small plant or two in the background. The 512×512 photorealistic composition focuses on the laptop, server, and key-themed accessories, with background decor gently blurred. No brand logos or legible text appear anywhere, and no faces are visible—only a hand near the keyboard at most—emphasizing the shift from password logins to key-based SSH authentication for hardened access.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

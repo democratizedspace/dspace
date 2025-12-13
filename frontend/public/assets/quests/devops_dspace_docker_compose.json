@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_dspace_docker_compose.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/docker-compose.json",
+    "item_name": "Launch DSPACE in Docker",
+    "item_id": "devops/docker-compose",
+    "entity_type": "quest",
+    "prompt": "A small desktop setup shows a laptop running a container dashboard or stylized terminal, with multiple container icons representing services for a web app stack; the screen includes a simple diagram of a web app, database, and tunnel connection but no readable text. On the desk, a small single-board computer or mini PC labeled only with a subtle icon is connected by Ethernet to a compact router. A sticky note-sized card next to the laptop has a simple cloud-shaped symbol and a tunnel-like arrow, hinting at secure exposure through a remote tunnel service.\n\nThe environment has a sleek near-future solarpunk aesthetic: soft lighting, a clean white or pale wood desk, and touches of greenery or solar-themed decor in the background. The 512\u00d7512 photorealistic composition keeps the laptop screen, mini server, and simple network diagram elements in focus, while cables and background furnishings remain slightly blurred. There are no visible logos or legible words, and no faces\u2014just perhaps a hand resting near the touchpad\u2014conveying the idea of launching DSPACE via Docker Compose and exposing it through a secure cloud tunnel.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

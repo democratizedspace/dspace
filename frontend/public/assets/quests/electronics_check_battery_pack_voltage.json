@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_check_battery_pack_voltage.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/check-battery-voltage.json",
+    "item_name": "Check a battery pack's voltage",
+    "item_id": "electronics/check-battery-voltage",
+    "entity_type": "quest",
+    "prompt": "On a clean, light-colored workbench, a 12 V LiFePO4 battery pack rests on a dry, non-conductive mat, its terminals clearly visible but safely spaced. A digital multimeter is set nearby, with its red and black probes gently touching the positive and negative terminals; the meter\u2019s display shows an abstract bar or segmented shape instead of readable numbers. Safety goggles and a pair of insulated gloves lie next to the mat, reinforcing that the measurement is being done carefully and correctly.\n\nThe scene reflects a near-future solarpunk electronics lab: soft white lighting, tidy cable organization, and discreet high-tech touches like a compact power monitor on the wall. The 512\u00d7512 photorealistic composition focuses on the battery pack, multimeter, and probes, while the background equipment fades into a soft blur. No brand logos or readable text are present anywhere, and no faces are visible\u2014only hands and forearms at most\u2014highlighting safe voltage testing of an off-grid-style battery pack.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/temperature_log_line_chart.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/temp-graph.json",
+    "item_name": "Graph Temperature Data",
+    "item_id": "programming/temp-graph",
+    "entity_type": "quest",
+    "prompt": "A compact desktop scene with a small single-board computer or microcontroller board connected by thin wires to a digital temperature sensor and a neatly labeled breadboard. Beside the hardware, a tablet or small laptop screen shows a clean line graph of temperature readings over time, with a gently rising and falling curve that clearly represents logged data rather than a complex dashboard. A simple USB cable and a coiled sensor lead emphasize that the system is continuously recording ambient temperature from the sensor into a log file for later analysis.\n\nNear-future solarpunk 2040s aesthetic in a bright, tidy home lab: soft window light, indoor plants in the background, and a few 3D-printed cable clips keeping wires organized. Photorealistic 512×512 composition with slightly stylized details, no visible brand logos or text labels on the screen. The layout is uncluttered so the temperature graph and the sensor hardware are clearly readable as the main subjects, with the rest of the lab fading into soft focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

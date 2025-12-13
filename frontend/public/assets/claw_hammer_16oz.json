@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/claw_hammer_16oz.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "claw hammer (16 oz)",
+    "item_id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
+    "entity_type": "item",
+    "prompt": "A 16 oz claw hammer lies on a workbench, its drop-forged steel head showing a smooth striking face on one side and a curved claw on the other for pulling nails. The handle is a durable fiberglass or composite with a comfortable grip and a modest length that matches the described 330 mm size, proportioned realistically. A partially driven nail and a small pile of bent or pulled nails near a scrap board illustrate its dual role in driving and removing fasteners.\n\nThe scene is a near-future solarpunk workshop with soft, even lighting, neatly stored tools in the background, and a hint of greenery from a plant on a shelf. The 512×512 image is photorealistic with gentle stylization, no logos or text on the hammer, and a composition that keeps the hammer, nails, and workpiece as the focal group while the rest of the workbench and shop remain softly blurred, emphasizing it as a reliable, everyday tool.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,51 @@
+import { describe, expect, test } from 'vitest';
+import {
+  getDurationString,
+  getDuration,
+} from '../frontend/src/utils/strings.js';
+
+describe('getDurationString', () => {
+  test('includes remaining time when duration below 100', () => {
+    expect(getDurationString(75.1234, '5s')).toBe('75.12% - 5s');
+  });
+
+  test('omits remaining time when duration is 100', () => {
+    expect(getDurationString(100, '0s')).toBe('100.00%');
+  });
+
+  test('handles missing remaining time gracefully', () => {
+    expect(getDurationString(50, undefined)).toBe('50.00%');
+  });
+
+  test('clamps out-of-range durations', () => {
+    expect(getDurationString(-10, '3s')).toBe('0.00% - 3s');
+    expect(getDurationString(150, '3s')).toBe('100.00%');
+  });
+
+  test('handles infinite durations', () => {
+    expect(getDurationString(Infinity, '3s')).toBe('100.00%');
+    expect(getDurationString(-Infinity, '3s')).toBe('0.00% - 3s');
+  });
+});
+
+describe('getDuration', () => {
+  test('formats to two decimals with percent', () => {
+    expect(getDuration(3)).toBe('3.00%');
+  });
+
+  test('defaults to 0% for invalid numbers', () => {
+    expect(getDuration(NaN)).toBe('0.00%');
+    // undefined should be treated as 0 at runtime
+    expect(getDuration(undefined)).toBe('0.00%');
+  });
+
+  test('clamps values to 0-100%', () => {
+    expect(getDuration(-5)).toBe('0.00%');
+    expect(getDuration(150)).toBe('100.00%');
+  });
+
+  test('handles infinite durations', () => {
+    expect(getDuration(Infinity)).toBe('100.00%');
+    expect(getDuration(-Infinity)).toBe('0.00%');
+  });
+});

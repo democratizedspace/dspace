@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/basic_wound_care_practice.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/wound-care.json",
+    "item_name": "Practice Basic Wound Care",
+    "item_id": "firstaid/wound-care",
+    "entity_type": "quest",
+    "prompt": "A small first-aid practice setup is laid out on a clean tabletop, with a realistic silicone training arm or hand showing a minor superficial “cut” being gently cleaned by a gloved hand using a sterile gauze pad moistened with soapy water. Around the model limb, individually wrapped antiseptic wipes, a tube of antibiotic ointment, and several sizes of adhesive bandages are arranged in an orderly fashion, along with a neatly folded towel to catch any drips. The focus is on the tools and the careful, step-by-step nature of basic wound care rather than on any real injury.\n\nThe environment is a bright, near-future solarpunk learning space or home lab, with smooth composite surfaces, softly glowing task lighting, and hints of educational posters or smart displays blurred in the background. The 512×512 composition should be photorealistic with soft cinematic lighting, using a calm palette of whites, light grays, and soft greens that suggests cleanliness and safety. There are no brand logos or readable text on any packaging, and only the gloved hands and model limb are visible, conveying a safe, instructional practice session for basic wound care.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

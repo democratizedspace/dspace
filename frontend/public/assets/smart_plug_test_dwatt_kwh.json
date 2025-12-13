@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/smart_plug_test_dwatt_kwh.jpg",
+    "entity": "frontend/src/pages/quests/json/welcome/smart-plug-test.json",
+    "item_name": "Smart Plug Test",
+    "item_id": "welcome/smart-plug-test",
+    "entity_type": "quest",
+    "prompt": "A small test setup for a smart plug is arranged on a tidy tabletop near a wall outlet: a smart plug is inserted into the outlet, a simple desk lamp is plugged into the smart plug, and an inline digital energy meter or compact monitoring module sits between them with its tiny display blurred. On the table, a smartphone shows a softly blurred screen with an energy graph creeping toward 1.0 kWh and a row of abstract token-like icons, implying that the user is buying exactly 1 kWh from the wall outlet. A notebook with a pen and a few sketched arrows toward \"grid\" and \"tokens\" is partially visible but with no readable writing, making the experiment feel methodical and deliberate.\n\nPhotorealistic 512×512 near-future lab-meets-living-room aesthetic with soft, neutral lighting and a slightly solarpunk tone: a clean wall, minimal decor, and maybe a small plant in the background. The composition keeps the wall outlet, smart plug, lamp cord, and smartphone as the main focal cluster in the foreground, with background details gently out of focus. No brand logos or explicit labels are visible, and no faces are shown—only a partial view of a person’s hands adjusting the plug or holding the phone. The scene clearly communicates a controlled, tech-savvy test of grid energy usage and token minting in the DSPACE world.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

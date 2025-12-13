@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/jumper_wires_set.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Jumper Wires",
+    "item_id": "3cd82744-d2aa-414e-9f03-80024b624066",
+    "entity_type": "item",
+    "prompt": "A bundle of multicolored jumper wires with pin connectors at each end, loosely coiled on a wooden electronics workbench. Some of the wires are plugged into a nearby breadboard, forming a small temporary circuit that includes a resistor and LED, while the rest of the jumper wires fan out on the table. The metal pins and flexible insulation are clearly visible, emphasizing their use for quick prototyping.\n\nNear-future solarpunk electronics aesthetic with warm, soft lighting, organized tools on a pegboard in the background, and a small plant adding a touch of green. Photorealistic 512×512 rendering with no brand logos or legible text. The composition should clearly highlight the jumper wires as a flexible wiring kit item in the inventory.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
