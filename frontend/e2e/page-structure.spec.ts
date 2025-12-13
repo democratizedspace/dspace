@@ -161,8 +161,9 @@ test.describe('Page Layout Structure', () => {
 
                 const headerCenter = headerBox.x + headerBox.width / 2;
                 const brandCenter = brandBox.x + brandBox.width / 2;
+                const pixelTolerance = 2.01;
 
-                expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(2.01);
+                expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(pixelTolerance);
 
                 const rightmostControl = Math.max(
                     toggleBox.x + toggleBox.width,
@@ -174,7 +175,7 @@ test.describe('Page Layout Structure', () => {
                     Math.abs(
                         toggleBox.x + toggleBox.width - (avatarBox.x + avatarBox.width)
                     )
-                ).toBeLessThan(2.01);
+                ).toBeLessThan(pixelTolerance);
 
                 expect(leftmostControl).toBeGreaterThan(headerCenter - 12);
                 expect(rightmostControl).toBeLessThanOrEqual(headerBox.x + headerBox.width + 2);
