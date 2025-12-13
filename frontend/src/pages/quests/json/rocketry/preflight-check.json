@@ -80,5 +80,6 @@
             "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
             "count": 1
         }
-    ]
+    ],
+    "requiresQuests": ["rocketry/firstlaunch"]
 }

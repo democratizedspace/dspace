@@ -24,7 +24,7 @@
                 "count": 0.98
             }
         ],
-        "duration": "1h"
+        "duration": "5s"
     },
     {
         "id": "outlet-dWatt-1e4",
@@ -52,7 +52,7 @@
                 "count": 9.77
             }
         ],
-        "duration": "10h"
+        "duration": "5s"
     },
     {
         "id": "outlet-dWatt-1e5",
@@ -80,7 +80,7 @@
                 "count": 97.7
             }
         ],
-        "duration": "100h"
+        "duration": "5s"
     },
     {
         "id": "smart-plug-schedule-12h",
@@ -97,7 +97,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -218,25 +218,58 @@
         "id": "repair-clogged-nozzle",
         "title": "Disassemble and clear a clogged 3D printer nozzle",
         "requireItems": [
-            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-            { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 }
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                "count": 1
+            }
         ],
-        "consumeItems": [{ "id": "564a76de-925b-4457-a548-d015168abe0c", "count": 1 }],
-        "createItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
+        "consumeItems": [
+            {
+                "id": "564a76de-925b-4457-a548-d015168abe0c",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
         "duration": "1h"
     },
     {
         "id": "repair-blob-of-death",
         "title": "Remove a blob of plastic and install a new nozzle",
         "requireItems": [
-            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-            { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 }
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                "count": 1
+            }
         ],
         "consumeItems": [
-            { "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54", "count": 1 },
-            { "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c", "count": 1 }
+            {
+                "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                "count": 1
+            },
+            {
+                "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                "count": 1
+            }
         ],
-        "createItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }],
+        "createItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
         "duration": "1h 30m"
     },
     {
@@ -259,7 +292,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -460,7 +493,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-13",
@@ -475,8 +508,14 @@
         "title": "Clone a mint cutting in a soaked starter plug",
         "image": "/assets/hydroponics_tub.jpg",
         "requireItems": [
-            { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 },
-            { "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1", "count": 1 }
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -484,7 +523,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -650,7 +689,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-14",
@@ -716,7 +755,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-harvest-stevia-2025-08-20",
@@ -747,8 +786,14 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
-            "history": [{ "task": "codex-hardening-2025-08-14", "date": "2025-08-14", "score": 60 }]
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
         }
     },
     {
@@ -1152,11 +1197,22 @@
         "id": "suborbital-hop",
         "title": "Simulate a guided model rocket hop",
         "requireItems": [
-            { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
-            { "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64", "count": 1 }
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+                "count": 1
+            }
         ],
         "consumeItems": [],
-        "createItems": [{ "id": "5873d7b0-dd0f-436f-b942-286aedd253d0", "count": 1 }],
+        "createItems": [
+            {
+                "id": "5873d7b0-dd0f-436f-b942-286aedd253d0",
+                "count": 1
+            }
+        ],
         "duration": "12m"
     },
     {
@@ -1164,51 +1220,124 @@
         "title": "Assemble the guided flight stack",
         "requireItems": [],
         "consumeItems": [
-            { "id": "125eaa46-48f1-4cef-adaa-c200892af437", "count": 1 },
-            { "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf", "count": 1 },
-            { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
-            { "id": "dc5897f0-acec-4c3b-ad4d-535054e768f6", "count": 1 },
-            { "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a", "count": 0.2 }
+            {
+                "id": "125eaa46-48f1-4cef-adaa-c200892af437",
+                "count": 1
+            },
+            {
+                "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf",
+                "count": 1
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "dc5897f0-acec-4c3b-ad4d-535054e768f6",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.2
+            }
         ],
-        "createItems": [{ "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 }],
+        "createItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
         "duration": "35m"
     },
     {
         "id": "calibrate-guided-flight-stack",
         "title": "Upload and tune stability firmware",
         "requireItems": [],
-        "consumeItems": [{ "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 }],
+        "consumeItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
         "createItems": [
-            { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
-            { "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64", "count": 1 }
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+                "count": 1
+            }
         ],
         "duration": "20m"
     },
     {
         "id": "install-rocket-camera",
         "title": "Install the nosecone camera module",
-        "requireItems": [{ "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 }],
-        "consumeItems": [
-            { "id": "bdc905f5-c36f-4608-9c7f-da7b0988572f", "count": 1 },
-            { "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a", "count": 0.1 }
+        "requireItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
         ],
-        "createItems": [{ "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792", "count": 1 }],
+        "consumeItems": [
+            {
+                "id": "bdc905f5-c36f-4608-9c7f-da7b0988572f",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            }
+        ],
         "duration": "25m"
     },
     {
         "id": "range-setup-guided-hop",
         "title": "Complete the guided launch pad checks",
         "requireItems": [
-            { "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d", "count": 1 },
-            { "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b", "count": 1 },
-            { "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac", "count": 1 },
-            { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
-            { "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792", "count": 1 }
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            },
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            }
         ],
-        "consumeItems": [{ "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 }],
+        "consumeItems": [
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            }
+        ],
         "createItems": [
-            { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
-            { "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da", "count": 1 }
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da",
+                "count": 1
+            }
         ],
         "duration": "8m"
     },
@@ -1216,34 +1345,84 @@
         "id": "countdown-guided-hop",
         "title": "Walk through the guided countdown",
         "requireItems": [
-            { "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da", "count": 1 },
-            { "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b", "count": 1 }
+            {
+                "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da",
+                "count": 1
+            },
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            }
         ],
         "consumeItems": [],
-        "createItems": [{ "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe", "count": 1 }],
+        "createItems": [
+            {
+                "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe",
+                "count": 1
+            }
+        ],
         "duration": "2m"
     },
     {
         "id": "launch-guided-hop",
         "title": "Launch a guided model rocket hop",
         "requireItems": [
-            { "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b", "count": 1 },
-            { "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d", "count": 1 },
-            { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
-            { "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64", "count": 1 },
-            { "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792", "count": 1 }
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            },
+            {
+                "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                "count": 1
+            },
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+                "count": 1
+            },
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            }
         ],
         "consumeItems": [
-            { "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec", "count": 1 },
-            { "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac", "count": 1 },
-            { "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe", "count": 1 }
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                "count": 1
+            },
+            {
+                "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe",
+                "count": 1
+            }
         ],
         "createItems": [
-            { "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec", "count": 1 },
-            { "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4", "count": 1 },
-            { "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792", "count": 1 },
-            { "id": "60a1e598-084e-4325-9c2c-fb5d95d19f41", "count": 1 },
-            { "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf", "count": 1 }
+            {
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                "count": 1
+            },
+            {
+                "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
+                "count": 1
+            },
+            {
+                "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                "count": 1
+            },
+            {
+                "id": "60a1e598-084e-4325-9c2c-fb5d95d19f41",
+                "count": 1
+            },
+            {
+                "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                "count": 1
+            }
         ],
         "duration": "1m"
     },
@@ -1252,11 +1431,26 @@
         "title": "Install a parachute system on a model rocket",
         "requireItems": [],
         "consumeItems": [
-            { "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d", "count": 1 },
-            { "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8", "count": 1 },
-            { "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6", "count": 1 },
-            { "id": "84324403-0bd8-411a-b575-a3c966c8a73e", "count": 1 },
-            { "id": "9477a618-591b-45e0-9d81-18d60b848490", "count": 1 }
+            {
+                "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+                "count": 1
+            },
+            {
+                "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                "count": 1
+            },
+            {
+                "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6",
+                "count": 1
+            },
+            {
+                "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
+                "count": 1
+            },
+            {
+                "id": "9477a618-591b-45e0-9d81-18d60b848490",
+                "count": 1
+            }
         ],
         "createItems": [
             {
@@ -1530,7 +1724,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -1692,7 +1886,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-14",
@@ -1909,7 +2103,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-22",
@@ -1979,7 +2173,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-20",
@@ -2009,7 +2203,7 @@
     },
     {
         "id": "measure-resistance",
-        "title": "Measure a 220 Ω resistor with a digital multimeter",
+        "title": "Measure a 220 \u03a9 resistor with a digital multimeter",
         "image": "/assets/launch_controller.jpg",
         "requireItems": [
             {
@@ -2119,7 +2313,7 @@
     },
     {
         "id": "calibrate-multimeter",
-        "title": "Calibrate a digital multimeter using a 220 Ω reference resistor",
+        "title": "Calibrate a digital multimeter using a 220 \u03a9 reference resistor",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -2151,7 +2345,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-wear-anti-static-wrist-strap-2025-08-15",
@@ -2184,10 +2378,21 @@
         "title": "Calibrate EC meter with 1000 ppm solution",
         "image": "/assets/aquarium_thermometer.jpg",
         "requireItems": [
-            { "id": "71655665-4a59-41f4-9084-dad4d976df91", "count": 1 },
-            { "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40", "count": 1 }
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40",
+                "count": 1
+            }
         ],
-        "consumeItems": [{ "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40", "count": 1 }],
+        "consumeItems": [
+            {
+                "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40",
+                "count": 1
+            }
+        ],
         "createItems": [],
         "duration": "2m"
     },
@@ -2744,7 +2949,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-14",
@@ -2783,7 +2988,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -2798,10 +3003,21 @@
         "title": "Swap to white PLA filament on an entry-level FDM 3D printer",
         "image": "/assets/pla_white.jpg",
         "requireItems": [
-            { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
         ],
-        "consumeItems": [{ "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 10 }],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 10
+            }
+        ],
         "createItems": [],
         "duration": "10m"
     },
@@ -2830,7 +3046,7 @@
     },
     {
         "id": "solder-led-resistor",
-        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 Ω resistor with two jumper wires",
+        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 \u03a9 resistor with two jumper wires",
         "requireItems": [
             {
                 "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
@@ -2921,7 +3137,7 @@
     },
     {
         "id": "verify-resistor-color-code",
-        "title": "Confirm a 220 Ω resistor's value using a printed color code chart",
+        "title": "Confirm a 220 \u03a9 resistor's value using a printed color code chart",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -3059,7 +3275,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-15",
@@ -3093,9 +3309,18 @@
         "title": "Dry aquarium glass with a paper towel and attach a strip thermometer",
         "image": "/assets/aquarium_thermometer.jpg",
         "requireItems": [
-            { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
-            { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
-            { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3103,7 +3328,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-attach-aquarium-thermometer-2025-08-24",
@@ -3118,8 +3343,14 @@
         "title": "Check aquarium water temperature with an attached strip thermometer",
         "image": "/assets/aquarium_thermometer.jpg",
         "requireItems": [
-            { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
-            { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+            {
+                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3130,9 +3361,18 @@
         "title": "Record aquarium water parameters in a logbook using a liquid test kit",
         "image": "/assets/paperwork.jpg",
         "requireItems": [
-            { "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a", "count": 1 },
-            { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 },
-            { "id": "b8602362-2035-4f00-9376-f48d8668cf38", "count": 1 }
+            {
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "count": 1
+            },
+            {
+                "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                "count": 1
+            },
+            {
+                "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3477,8 +3717,14 @@
         "title": "Wipe the soldering iron tip on a damp sponge to remove oxidation",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3508,7 +3754,7 @@
         "hardening": {
             "passes": 2,
             "score": 70,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -3528,9 +3774,18 @@
         "title": "Heat a through-hole joint and clear it with a spring-loaded pump while wearing safety goggles",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22", "count": 1 },
-            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3538,7 +3793,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-13",
@@ -3553,11 +3808,26 @@
         "title": "Remove solder from a PCB pad with solder wick and a soldering iron",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03", "count": 1 },
-            { "id": "dad7f853-ccc9-40be-b226-89272708db84", "count": 1 },
-            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-            { "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00", "count": 1 }
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+                "count": 1
+            },
+            {
+                "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3565,7 +3835,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -3580,8 +3850,14 @@
         "title": "Bolt a micro servo to a base and attach its plastic horn as an arm with a precision screwdriver set",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c", "count": 1 },
-            { "id": "8299ac3f-c232-46d4-a007-2ad86ec70361", "count": 1 }
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3589,7 +3865,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -3601,23 +3877,46 @@
     },
     {
         "id": "solder-smd-resistor",
-        "title": "Solder a 220 Ω SMD resistor onto a PCB using a flux pen and precision tweezers",
+        "title": "Solder a 220 \u03a9 SMD resistor onto a PCB using a flux pen and precision tweezers",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "dad7f853-ccc9-40be-b226-89272708db84", "count": 1 },
-            { "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00", "count": 1 },
-            { "id": "87f670ce-3630-42bb-84c0-9243cf630d05", "count": 1 },
-            { "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1", "count": 1 },
-            { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                "count": 1
+            },
+            {
+                "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+                "count": 1
+            },
+            {
+                "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+                "count": 1
+            },
+            {
+                "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
         ],
-        "consumeItems": [{ "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 }],
+        "consumeItems": [
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            }
+        ],
         "createItems": [],
         "duration": "5m",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -3625,16 +3924,25 @@
         "id": "test-gfci-outlet",
         "title": "Test a GFCI outlet's wiring with a plug-in tester and its test/reset buttons",
         "image": "/assets/outlet.jpg",
-        "requireItems": [{ "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "3m",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
-                { "task": "codex-test-gfci-outlet-2025-08-16", "date": "2025-08-16", "score": 60 }
+                {
+                    "task": "codex-test-gfci-outlet-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 60
+                }
             ]
         }
     },
@@ -3643,8 +3951,14 @@
         "title": "Place a heat-resistant silicone mat on the workbench before powering the soldering iron",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7", "count": 1 },
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 }
+            {
+                "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
+                "count": 1
+            },
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3652,7 +3966,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-use-soldering-mat-2025-08-18",
@@ -3667,8 +3981,14 @@
         "title": "Place a solder fume extractor near the workspace and switch it on before soldering",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "593fc442-f437-4449-94e5-17b7b4625c41", "count": 1 }
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "593fc442-f437-4449-94e5-17b7b4625c41",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3676,7 +3996,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -3685,8 +4005,14 @@
         "title": "Generate an ed25519 SSH key pair on a laptop and copy it to a Pi cluster node",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 },
-            { "id": "df7e94e2-76b9-4865-b843-2ec21feb258e", "count": 1 }
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3694,7 +4020,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -3702,14 +4028,19 @@
         "id": "harden-sshd-config",
         "title": "Disable password login and root SSH access, then restart sshd",
         "image": "/assets/quests/basic_circuit.svg",
-        "requireItems": [{ "id": "df7e94e2-76b9-4865-b843-2ec21feb258e", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
         "consumeItems": [],
         "createItems": [],
         "duration": "3m",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -3718,8 +4049,14 @@
         "title": "Use a laptop to install UFW on a Pi node and allow only SSH and HTTPS",
         "image": "/assets/settings.jpg",
         "requireItems": [
-            { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 },
-            { "id": "df7e94e2-76b9-4865-b843-2ec21feb258e", "count": 1 }
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3727,7 +4064,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-configure-ufw-firewall-2025-08-24",
@@ -3742,8 +4079,14 @@
         "title": "Measure 1.75 mm PLA filament at three points with digital calipers",
         "image": "/assets/pla_white.jpg",
         "requireItems": [
-            { "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 },
-            { "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 1 }
+            {
+                "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                "count": 1
+            },
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3751,7 +4094,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -3766,8 +4109,14 @@
         "title": "Clean soldering iron tip using a brass wire sponge",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-            { "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0", "count": 1 }
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3775,17 +4124,23 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
     {
         "id": "trim-resistor-leads",
-        "title": "Trim excess leads from a soldered 220 Ω resistor using wire cutters",
+        "title": "Trim excess leads from a soldered 220 \u03a9 resistor using wire cutters",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
-            { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 },
-            { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 }
+            {
+                "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                "count": 1
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 1
+            }
         ],
         "consumeItems": [],
         "createItems": [],
@@ -3795,14 +4150,24 @@
         "id": "replace-launch-controller-battery",
         "title": "Replace the 9 V battery in a model rocket launch controller",
         "image": "/assets/launch_controller.jpg",
-        "requireItems": [{ "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b", "count": 1 }],
-        "consumeItems": [{ "id": "80d30825-a42b-4add-b715-322e1713952c", "count": 1 }],
+        "requireItems": [
+            {
+                "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "80d30825-a42b-4add-b715-322e1713952c",
+                "count": 1
+            }
+        ],
         "createItems": [],
         "duration": "1m",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     }

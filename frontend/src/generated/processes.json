@@ -24,7 +24,7 @@
                 "count": 0.98
             }
         ],
-        "duration": "1h",
+        "duration": "5s",
         "hardening": {
             "passes": 1,
             "score": 60,
@@ -64,7 +64,7 @@
                 "count": 9.77
             }
         ],
-        "duration": "10h",
+        "duration": "5s",
         "hardening": {
             "passes": 1,
             "score": 60,
@@ -104,7 +104,7 @@
                 "count": 97.7
             }
         ],
-        "duration": "100h",
+        "duration": "5s",
         "hardening": {
             "passes": 1,
             "score": 65,
