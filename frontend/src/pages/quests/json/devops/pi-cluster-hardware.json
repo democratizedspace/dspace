@@ -70,5 +70,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": []
+    "requiresQuests": [
+        "sysadmin/basic-commands"
+    ]
 }

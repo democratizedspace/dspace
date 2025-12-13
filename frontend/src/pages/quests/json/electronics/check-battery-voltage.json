@@ -19,7 +19,7 @@
         },
         {
             "id": "measure",
-            "text": "Set the multimeter to the 20 V DC range and confirm the probes are in the voltage ports. Keep fingers behind the guards, touch red to the positive terminal and black to the negative without letting them touch, and stop if the leads warm or spark. A healthy LiFePO4 pack should read 12.4–13.6 V.",
+            "text": "Set the multimeter to the 20 V DC range and confirm the probes are in the voltage ports. Keep fingers behind the guards, touch red to the positive terminal and black to the negative without letting them touch, and stop if the leads warm or spark. A healthy LiFePO4 pack should read 12.4\u201313.6 V.",
             "options": [
                 {
                     "type": "goto",
@@ -45,7 +45,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Disconnect the probes, power down the meter, remove your goggles, and store the battery in a dry, fire-safe spot—your pack looks charged and ready.",
+            "text": "Nice work! Disconnect the probes, power down the meter, remove your goggles, and store the battery in a dry, fire-safe spot\u2014your pack looks charged and ready.",
             "options": [
                 {
                     "type": "finish",
@@ -60,17 +60,39 @@
             "count": 1
         }
     ],
-    "requiresQuests": [],
+    "requiresQuests": [
+        "electronics/basic-circuit"
+    ],
     "hardening": {
         "passes": 5,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
-            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
-            { "task": "codex-upgrade-2025-08-05", "date": "2025-08-05", "score": 80 },
-            { "task": "codex-polish-2025-08-05", "date": "2025-08-05", "score": 92 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 94 },
-            { "task": "codex-refine-2025-08-06", "date": "2025-08-06", "score": 95 }
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-polish-2025-08-05",
+                "date": "2025-08-05",
+                "score": 92
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 94
+            },
+            {
+                "task": "codex-refine-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            }
         ]
     }
 }

@@ -40,5 +40,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": []
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ]
 }

@@ -56,11 +56,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": [],
+    "requiresQuests": [
+        "electronics/basic-circuit"
+    ],
     "hardening": {
         "passes": 2,
         "score": 78,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-refine-2025-08-07",

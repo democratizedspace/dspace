@@ -59,7 +59,11 @@ Organize quests in a **clear progression** from beginner to advanced:
 ### Quest Dependencies
 
 -   Make dependencies clear and logical
--   Each category should have a clear entry point
+-   Only `welcome/howtodoquests` should have an empty `requiresQuests` list. All other quests must
+    depend on it directly or on a downstream quest so new players always learn the mechanics first.
+-   Each category should have a clear entry point that chains back to `welcome/howtodoquests`.
+-   Dependencies should mirror the real learning path (e.g., rocketry quests rely on 3D printing and
+    electronics basics; robotics builds on electronics and programming fundamentals).
 -   Advanced quests should require completion of relevant prerequisites
 
 ## Content Guidelines
@@ -77,6 +81,15 @@ Organize quests in a **clear progression** from beginner to advanced:
 -   Always include appropriate safety warnings
 -   Recommend proper protective equipment when needed
 -   Never encourage dangerous activities or improper handling of materials
+
+### Process Duration Realism
+
+-   Processes introduce time-based play and should reflect real-world timing. Quick setup actions
+    (plugging in a smart plug, scanning a barcode, initiating a download) should resolve in seconds,
+    while longer projects scale sensibly (filling a bucket in under a minute, printing a Benchy in a
+    couple of hours, growing a plant over weeks).
+-   When quests reference processes, double-check durations against the real task to keep the
+    experience grounded and avoid multi-hour waits for introductory tutorials.
 
 ## Examples of Well-Structured Quest Sequences
 
