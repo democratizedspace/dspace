@@ -1,16 +1,17 @@
 <script>
-    import { isBrowser } from '../../utils/ssr.js';
-    // Only access localStorage in browser environment
-    const avatarUrl = isBrowser ? localStorage.getItem('avatarUrl') : null;
+    import { onMount } from 'svelte';
+    import { DEFAULT_AVATAR_URL, resolveAvatarUrl } from '../../utils/avatar';
+
+    let avatarUrl = DEFAULT_AVATAR_URL;
+
+    onMount(() => {
+        avatarUrl = resolveAvatarUrl();
+    });
 </script>
 
 <div>
     <a class="avatar" href="/profile/avatar">
-        {#if avatarUrl}
-            <img src={avatarUrl} alt="your currently selected avatar" />
-        {:else}
-            <div class="text">Choose PFP</div>
-        {/if}
+        <img src={avatarUrl} alt="your currently selected avatar" />
     </a>
 
     <p>click to change</p>
@@ -35,11 +36,6 @@
     .avatar:hover {
         cursor: pointer;
         opacity: 1;
-    }
-
-    .text {
-        font-size: 16px;
-        color: black;
     }
 
     img {

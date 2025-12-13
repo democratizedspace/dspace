@@ -1,6 +1,7 @@
 ---
 import Logo from '../components/Logo.astro';
 import ThemeToggle from './svelte/ThemeToggle.svelte';
+import HeaderAvatar from './svelte/HeaderAvatar.svelte';
 
 export interface Props {
     title: string;
@@ -22,7 +23,10 @@ export interface Props {
             </div>
         </a>
         <div class="header-actions" data-testid="header-actions">
-            <ThemeToggle client:load />
+            <div class="header-actions__stack">
+                <ThemeToggle client:load />
+                <HeaderAvatar client:load />
+            </div>
         </div>
     </div>
 </header>
@@ -64,6 +68,13 @@ export interface Props {
 
     .header-actions {
         justify-self: end;
+    }
+
+    .header-actions__stack {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.35rem;
     }
 
     .text-gradient {

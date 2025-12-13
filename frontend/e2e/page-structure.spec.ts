@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
+const DEFAULT_AVATAR = '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
+
 test.describe('Page Layout Structure', () => {
     test.beforeEach(async ({ page }) => {
         // Clear user data before each test
@@ -39,6 +41,15 @@ test.describe('Page Layout Structure', () => {
 
         // Verify the home link is active
         await expect(page.getByRole('link', { name: 'Home', exact: true })).toHaveClass(/active/);
+    });
+
+    test('shows default avatar in the header when none is selected', async ({ page }) => {
+        await page.goto('/');
+        await waitForHydration(page);
+
+        const avatar = page.getByTestId('header-avatar');
+        await expect(avatar).toBeVisible();
+        await expect(avatar).toHaveAttribute('src', DEFAULT_AVATAR);
     });
 
     test('quests page should have correct structure with action buttons', async ({ page }) => {
@@ -133,34 +144,51 @@ test.describe('Page Layout Structure', () => {
                 const header = page.locator('header.header');
                 const brand = page.locator('[data-testid="brand"]');
                 const toggle = page.getByRole('button', { name: /toggle dark mode/i });
+                const avatar = page.getByTestId('header-avatar');
 
-                const [headerBox, brandBox, toggleBox] = await Promise.all([
+                await Promise.all([expect(toggle).toBeVisible(), expect(avatar).toBeVisible()]);
+
+                const [headerBox, brandBox, toggleBox, avatarBox] = await Promise.all([
                     header.boundingBox(),
                     brand.boundingBox(),
                     toggle.boundingBox(),
+                    avatar.boundingBox(),
                 ]);
 
-                if (!headerBox || !brandBox || !toggleBox) {
+                if (!headerBox || !brandBox || !toggleBox || !avatarBox) {
                     throw new Error('Unable to read header layout');
                 }
 
                 const headerCenter = headerBox.x + headerBox.width / 2;
                 const brandCenter = brandBox.x + brandBox.width / 2;
 
-                expect(Math.abs(brandCenter - headerCenter)).toBeLessThanOrEqual(16);
-                expect(toggleBox.x).toBeGreaterThan(headerCenter - 12);
-                expect(toggleBox.y).toBeGreaterThanOrEqual(headerBox.y - 8);
-                expect(toggleBox.y + toggleBox.height).toBeLessThanOrEqual(
+                expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(0.51);
+
+                const rightmostControl = Math.max(
+                    toggleBox.x + toggleBox.width,
+                    avatarBox.x + avatarBox.width
+                );
+                const leftmostControl = Math.min(toggleBox.x, avatarBox.x);
+
+                expect(leftmostControl).toBeGreaterThan(headerCenter - 12);
+                expect(rightmostControl).toBeLessThanOrEqual(headerBox.x + headerBox.width + 2);
+
+                expect(toggleBox.y + toggleBox.height).toBeLessThanOrEqual(avatarBox.y + 2);
+                expect(avatarBox.y).toBeGreaterThanOrEqual(headerBox.y - 4);
+                expect(avatarBox.y + avatarBox.height).toBeLessThanOrEqual(
                     headerBox.y + headerBox.height + 8
                 );
 
-                const overlaps = !(
-                    brandBox.x + brandBox.width <= toggleBox.x ||
-                    toggleBox.x + toggleBox.width <= brandBox.x ||
-                    brandBox.y + brandBox.height <= toggleBox.y ||
-                    toggleBox.y + toggleBox.height <= brandBox.y
-                );
-                expect(overlaps).toBeFalsy();
+                const overlapsBrand = (boxA: typeof brandBox, boxB: typeof brandBox) =>
+                    !(
+                        boxA.x + boxA.width <= boxB.x ||
+                        boxB.x + boxB.width <= boxA.x ||
+                        boxA.y + boxA.height <= boxB.y ||
+                        boxB.y + boxB.height <= boxA.y
+                    );
+
+                expect(overlapsBrand(brandBox, toggleBox)).toBeFalsy();
+                expect(overlapsBrand(brandBox, avatarBox)).toBeFalsy();
             });
         });
     }
