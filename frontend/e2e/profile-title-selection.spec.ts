@@ -26,7 +26,10 @@ test.describe('Profile title selection', () => {
     test('selects a title and persists it in localStorage', async ({ page }) => {
         await page.goto('/profile');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page, '[data-hydrated="true"]');
+        await waitForHydration(page);
+
+        // Wait for the titles section to be hydrated
+        await page.waitForSelector('.profile-titles[data-hydrated="true"]');
 
         // Wait for titles to load
         const titlesList = page.locator('.profile-titles .list');
@@ -54,7 +57,8 @@ test.describe('Profile title selection', () => {
             await page.waitForLoadState('networkidle');
             await page.goto('/profile');
             await page.waitForLoadState('networkidle');
-            await waitForHydration(page, '[data-hydrated="true"]');
+            await waitForHydration(page);
+            await page.waitForSelector('.profile-titles[data-hydrated="true"]');
 
             // The previously selected title should still be selected
             const selectedTitle = page.locator('.item[data-selected="true"]');
@@ -66,7 +70,10 @@ test.describe('Profile title selection', () => {
     test('supports keyboard navigation with Enter key', async ({ page }) => {
         await page.goto('/profile');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page, '[data-hydrated="true"]');
+        await waitForHydration(page);
+
+        // Wait for the titles section to be hydrated
+        await page.waitForSelector('.profile-titles[data-hydrated="true"]');
 
         // Wait for titles to load
         const titlesList = page.locator('.profile-titles .list');
@@ -92,7 +99,10 @@ test.describe('Profile title selection', () => {
     test('supports keyboard navigation with Space key', async ({ page }) => {
         await page.goto('/profile');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page, '[data-hydrated="true"]');
+        await waitForHydration(page);
+
+        // Wait for the titles section to be hydrated
+        await page.waitForSelector('.profile-titles[data-hydrated="true"]');
 
         // Wait for titles to load
         const titlesList = page.locator('.profile-titles .list');
@@ -118,7 +128,10 @@ test.describe('Profile title selection', () => {
     test('locked titles are not focusable or selectable', async ({ page }) => {
         await page.goto('/profile');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page, '[data-hydrated="true"]');
+        await waitForHydration(page);
+
+        // Wait for the titles section to be hydrated
+        await page.waitForSelector('.profile-titles[data-hydrated="true"]');
 
         // Wait for titles to load
         const titlesList = page.locator('.profile-titles .list');
