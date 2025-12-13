@@ -1,9 +1,9 @@
 <script>
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import items from '../../pages/inventory/json/items';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { prettyPrintNumber } from '../../utils.js';
+    import { buildFullItemList } from './compactItemListHelpers.js';
     import Chip from './Chip.svelte';
     import DelayedRender from './DelayedRender.svelte';
 
@@ -19,18 +19,7 @@
     let fullItemList = [];
     let isMounted = false;
     const itemCounts = writable(getItemCounts(itemList));
-    $: isEmpty = Object.values($itemCounts).every((qty) => qty === 0);
-
-    // Generate the full item list with additional properties
-    function generateFullItemList() {
-        return itemList.map((item) => ({
-            ...items.find((i) => i.id === item.id),
-            count: Object.prototype.hasOwnProperty.call(item, 'count')
-                ? Number(item.count.toFixed(5))
-                : null,
-            total: $itemCounts[item.id],
-        }));
-    }
+    $: isEmpty = fullItemList.length === 0;
 
     // Initial setup and cleanup on mount
     onMount(() => {
@@ -42,7 +31,7 @@
     // Reactive updates
     $: {
         itemCounts.set(getItemCounts(itemList));
-        fullItemList = generateFullItemList();
+        fullItemList = buildFullItemList(itemList, $itemCounts);
     }
 
     function getQty(count) {
