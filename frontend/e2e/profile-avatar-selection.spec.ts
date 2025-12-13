@@ -24,5 +24,13 @@ test.describe('Profile avatar selection', () => {
         await waitForHydration(page);
         await expectLocalStorageValue(page, 'avatarUrl', /(\/assets\/pfp\/|\/_astro\/).+\.jpg$/);
         await expect(page.getByAltText('your currently selected avatar')).toBeVisible();
+
+        const storedAvatarUrl = await page.evaluate(() => localStorage.getItem('avatarUrl'));
+        const headerAvatar = page.getByTestId('header-avatar').locator('img');
+        const escapeForRegex = (value: string) => value.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
+        const escapedAvatarUrl = storedAvatarUrl ? escapeForRegex(storedAvatarUrl) : '';
+
+        expect(storedAvatarUrl).toBeTruthy();
+        await expect(headerAvatar).toHaveAttribute('src', new RegExp(`${escapedAvatarUrl}$`));
     });
 });

@@ -3,12 +3,9 @@
     import { getItemCount } from '../../utils/gameState/inventory.js';
     import { onMount } from 'svelte';
     import { isMenuItemActive } from './menuActive.js';
-    import { isBrowser } from '../../utils/ssr.js';
 
     export let pathname;
 
-    // get avatarUrl from localStorage key of same name (SSR-safe)
-    let avatarUrl = isBrowser ? localStorage.getItem('avatarUrl') : null;
     let mounted = false;
 
     const toggleShowUnpinned = () => {
@@ -63,11 +60,6 @@
 </script>
 
 <div>
-    {#if avatarUrl}
-        <a href="/profile" aria-label="Profile">
-            <img class="pfp" src={avatarUrl} alt="Profile avatar" />
-        </a>
-    {/if}
     <nav>
         {#each pinned as item}
             {#if isActive(item)}
@@ -191,21 +183,5 @@
     .disabled:hover {
         /* make the cursor normal */
         cursor: default;
-    }
-
-    .pfp {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        opacity: 0.8;
-        transition: 1s;
-        border: 2px solid rgb(67, 255, 76);
-    }
-
-    .pfp:hover {
-        opacity: 1;
     }
 </style>

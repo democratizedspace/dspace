@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
+const DEFAULT_AVATAR = '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
+
 test.describe('Page Layout Structure', () => {
     test.beforeEach(async ({ page }) => {
         // Clear user data before each test
@@ -126,44 +128,53 @@ test.describe('Page Layout Structure', () => {
         test.describe(`Header layout (${label})`, () => {
             test.use({ viewport });
 
-            test('keeps the brand centered with toggle on the right', async ({ page }) => {
+            test('centers the brand and stacks actions on the right', async ({ page }) => {
                 await page.goto('/');
                 await waitForHydration(page);
 
                 const header = page.locator('header.header');
                 const brand = page.locator('[data-testid="brand"]');
-                const toggle = page.getByRole('button', { name: /toggle dark mode/i });
+                const toggle = page.getByRole('button', { name: /dark mode/i });
+                const avatar = page.getByTestId('header-avatar');
 
-                const [headerBox, brandBox, toggleBox] = await Promise.all([
+                await expect(avatar).toBeVisible();
+
+                const [headerBox, brandBox, toggleBox, avatarBox] = await Promise.all([
                     header.boundingBox(),
                     brand.boundingBox(),
                     toggle.boundingBox(),
+                    avatar.boundingBox(),
                 ]);
 
-                if (!headerBox || !brandBox || !toggleBox) {
+                if (!headerBox || !brandBox || !toggleBox || !avatarBox) {
                     throw new Error('Unable to read header layout');
                 }
 
                 const headerCenter = headerBox.x + headerBox.width / 2;
                 const brandCenter = brandBox.x + brandBox.width / 2;
+                const centerOffset = Math.abs(brandCenter - headerCenter);
 
-                expect(Math.abs(brandCenter - headerCenter)).toBeLessThanOrEqual(16);
-                expect(toggleBox.x).toBeGreaterThan(headerCenter - 12);
-                expect(toggleBox.y).toBeGreaterThanOrEqual(headerBox.y - 8);
-                expect(toggleBox.y + toggleBox.height).toBeLessThanOrEqual(
-                    headerBox.y + headerBox.height + 8
+                expect(centerOffset).toBeLessThanOrEqual(0.5);
+                expect(toggleBox.x).toBeGreaterThanOrEqual(headerCenter);
+                expect(avatarBox.x).toBeGreaterThanOrEqual(headerCenter);
+                expect(toggleBox.y + toggleBox.height).toBeLessThanOrEqual(avatarBox.y + 1);
+                expect(toggleBox.x + toggleBox.width).toBeLessThanOrEqual(
+                    headerBox.x + headerBox.width
                 );
-
-                const overlaps = !(
-                    brandBox.x + brandBox.width <= toggleBox.x ||
-                    toggleBox.x + toggleBox.width <= brandBox.x ||
-                    brandBox.y + brandBox.height <= toggleBox.y ||
-                    toggleBox.y + toggleBox.height <= brandBox.y
+                expect(avatarBox.x + avatarBox.width).toBeLessThanOrEqual(
+                    headerBox.x + headerBox.width
                 );
-                expect(overlaps).toBeFalsy();
             });
         });
     }
+
+    test('shows a default avatar when none is chosen', async ({ page }) => {
+        await page.goto('/');
+        await waitForHydration(page);
+
+        const avatarImage = page.getByTestId('header-avatar').locator('img');
+        await expect(avatarImage).toHaveAttribute('src', new RegExp(`${DEFAULT_AVATAR}$`));
+    });
 
     test.describe('Navigation cleanup', () => {
         test('omits Flywheel link and blocks direct access', async ({ page }) => {
