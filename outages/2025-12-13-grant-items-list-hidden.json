@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2025-12-13-grant-items-list-hidden",
+  "date": "2025-12-13",
+  "component": "frontend/quests grant-items UI",
+  "rootCause": "Custom quest content work in v3 added an `isEmpty` guard to the shared CompactItemList component that suppresses rendering when the player currently holds zero of each item. GrantItemsOption renders before items are claimed, so every grant option (including the How to do quests tutorial) appeared without its granted item list, hiding the dCarbon and dUSD rewards from players.",
+  "resolution": "Render CompactItemList whenever an item list is provided, even when current counts are zero, so grant and require sections stay visible. Added unit coverage for zero-count rendering and a Playwright regression test that walks the tutorial quest and asserts the grant-items list shows dCarbon and dUSD with their quantities.",
+  "references": [
+    "frontend/src/components/svelte/CompactItemList.svelte",
+    "frontend/src/components/__tests__/CompactItemList.spec.ts",
+    "frontend/e2e/quest-grant-items-list.spec.ts"
+  ]
+}

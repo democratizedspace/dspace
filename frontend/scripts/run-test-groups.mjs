@@ -129,6 +129,7 @@ const TEST_GROUPS = [
             'tutorial-quest.spec.ts',
             'quests.spec.ts',
             'constellations-quest.spec.ts',
+            'quest-grant-items-list.spec.ts',
             'custom-content.spec.ts',
             'quest-form-validation.spec.ts',
             'quest-pr-form.spec.ts',

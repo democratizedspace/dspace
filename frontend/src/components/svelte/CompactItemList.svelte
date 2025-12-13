@@ -19,7 +19,7 @@
     let fullItemList = [];
     let isMounted = false;
     const itemCounts = writable(getItemCounts(itemList));
-    $: isEmpty = Object.values($itemCounts).every((qty) => qty === 0);
+    $: hasItems = Array.isArray(itemList) && itemList.length > 0;
 
     // Generate the full item list with additional properties
     function generateFullItemList() {
@@ -53,7 +53,7 @@
 </script>
 
 {#if isMounted}
-    {#if !isEmpty}
+    {#if hasItems}
         <div class="Container">
             <Chip inverted={!inverted} {disabled} text="">
                 <div class="vertical">
