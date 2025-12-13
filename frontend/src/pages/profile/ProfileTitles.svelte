@@ -37,7 +37,7 @@
                     class="item"
                     data-unlocked={title.unlocked ? 'true' : 'false'}
                     data-selected={selectedTitleId === title.id ? 'true' : 'false'}
-                    {...title.unlocked ? { role: 'button', tabindex: '0' } : {}}
+                    {...title.unlocked ? { role: 'button', tabindex: 0 } : {}}
                     on:click={() => title.unlocked && selectTitle(title)}
                     on:keydown={(e) => {
                         if (title.unlocked && (e.key === 'Enter' || e.key === ' ')) {
