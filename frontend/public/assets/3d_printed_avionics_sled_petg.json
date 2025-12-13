@@ -7,4 +7,4 @@
     "prompt": "A flat 3D printed PETG avionics sled sits on a workbench, shaped to slide into a 35 mm rocket fincan with curved edges that match the inner body diameter. The sled has mounting points and small standoffs sized for an Arduino-style microcontroller, an IMU breakout board, and tidy wiring channels or zip-tie slots along the sides. A few tiny screws, zip ties, and headers are arranged nearby, clearly indicating how the electronics will be fastened to the sled.\n\nThe scene is a near-future solarpunk rocketry and electronics bench with soft, even lighting, a compact FDM printer and a tangle-free wiring harness in the blurred background. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable text on the sled or boards, and a composition that centers the sled and its mounting features while the printer and other rocket parts remain softly out of focus, emphasizing modular avionics integration.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

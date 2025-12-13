@@ -7,4 +7,4 @@
     "prompt": "A powered-off FDM 3D printer shows its print head positioned near one corner of the bed, with a sheet of ordinary printer paper being gently slid between the nozzle and the build surface by a person’s hand. The bed springs or adjustment knobs are visible under the plate, and the nozzle is clean and free of filament, emphasizing that cleaning happened before this leveling step. The paper shows slight resistance as it moves, illustrating the ideal gap for bed leveling.\n\nThe environment is a near-future solarpunk maker space with soft, even lighting, organized shelves of filament and tools in the blurred background, and a plant adding a calm touch. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the printer, and a composition that centers the paper, nozzle, and leveling knobs while the rest of the printer and workspace remain softly out of focus, emphasizing the careful, manual process of leveling the FDM bed.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

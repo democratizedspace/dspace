@@ -1,10 +1,10 @@
 {
-  "filename": "/assets/hydroponic_lettuce_seeds_packet.jpg",
-  "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
-  "item_name": "Lettuce Seeds",
-  "item_id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
-  "entity_type": "item",
-  "prompt": "A small paper seed packet with a simple lettuce icon lies on a work surface, partly opened to reveal a small pile of tiny, light-brown lettuce seeds spilled out in front of it. The packet design is minimal and text-free, clearly suggesting it contains seeds for crisp hydroponic lettuce rather than generic garden greens. Beside the packet is a shallow tray with rockwool plugs or seedling cubes, ready to receive the seeds for germination.\n\nThe scene is a near-future solarpunk grow prep area with soft, even lighting, organized trays and nutrient bottles in the background, and a few healthy hydroponic plants already thriving under LED lights. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the packet, and a composition that centers the seeds, packet, and nearby tray while the rest of the environment remains softly out of focus, emphasizing the start of a hydroponic lettuce cycle.",
-  "image_model": "Nano Banana Pro",
-  "resolution": "512x512"
+    "filename": "/assets/hydroponic_lettuce_seeds_packet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "Lettuce Seeds",
+    "item_id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+    "entity_type": "item",
+    "prompt": "A small paper seed packet with a simple lettuce icon lies on a work surface, partly opened to reveal a small pile of tiny, light-brown lettuce seeds spilled out in front of it. The packet design is minimal and text-free, clearly suggesting it contains seeds for crisp hydroponic lettuce rather than generic garden greens. Beside the packet is a shallow tray with rockwool plugs or seedling cubes, ready to receive the seeds for germination.\n\nThe scene is a near-future solarpunk grow prep area with soft, even lighting, organized trays and nutrient bottles in the background, and a few healthy hydroponic plants already thriving under LED lights. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the packet, and a composition that centers the seeds, packet, and nearby tray while the rest of the environment remains softly out of focus, emphasizing the start of a hydroponic lettuce cycle.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
 }
