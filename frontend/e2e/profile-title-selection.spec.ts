@@ -1,3 +1,20 @@
+/**
+ * Profile Title Selection E2E Tests
+ *
+ * These tests verify the interactive title selection feature on the profile page.
+ * Titles are achievement-based badges that players can earn and select to display
+ * on their profile and throughout the game.
+ *
+ * Test Coverage:
+ * - Click-based selection with localStorage persistence
+ * - Keyboard navigation (Enter key)
+ * - Keyboard navigation (Space key)
+ * - Locked titles remain non-interactive
+ * - Selection persists across page navigation
+ *
+ * Note: Tests handle cases where no titles are unlocked yet, making them
+ * resilient to varying game state conditions.
+ */
 import { test, expect } from '@playwright/test';
 import { clearUserData, expectLocalStorageValue, waitForHydration } from './test-helpers';
 

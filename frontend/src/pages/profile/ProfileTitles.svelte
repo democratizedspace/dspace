@@ -1,4 +1,20 @@
 <script>
+    /**
+     * ProfileTitles Component
+     *
+     * Displays a list of achievement-based titles that players can earn and select.
+     * Titles are earned by completing achievements and can be selected to display
+     * on the user's profile, leaderboard entries, and other public-facing areas.
+     *
+     * Features:
+     * - Interactive selection for unlocked titles (click or keyboard)
+     * - Visual indication of locked/unlocked/selected states
+     * - Persistence of selected title in localStorage
+     * - Full keyboard accessibility (Enter/Space keys)
+     * - Theme-aware styling using CSS variables
+     *
+     * @component
+     */
     import { onMount } from 'svelte';
     import { ready, state } from '../../utils/gameState/common.js';
     import { evaluateTitles } from '../../utils/titles.js';
@@ -7,6 +23,8 @@
 
     let hydrated = false;
     let titles = [];
+
+    // Load the previously selected title from localStorage (SSR-safe)
     let selectedTitleId = isBrowser ? localStorage.getItem('selectedTitle') : null;
 
     onMount(async () => {
@@ -14,10 +32,15 @@
         hydrated = true;
     });
 
+    // Reactively evaluate titles when game state changes
     $: if (hydrated) {
         titles = evaluateTitles($state);
     }
 
+    /**
+     * Handles title selection for unlocked titles
+     * @param {Object} title - The title object to select
+     */
     function selectTitle(title) {
         if (!title.unlocked) return;
         selectedTitleId = title.id;
