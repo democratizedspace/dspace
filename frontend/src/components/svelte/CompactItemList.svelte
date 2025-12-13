@@ -19,7 +19,7 @@
     let fullItemList = [];
     let isMounted = false;
     const itemCounts = writable(getItemCounts(itemList));
-    $: isEmpty = Object.values($itemCounts).every((qty) => qty === 0);
+    $: isEmpty = itemList.length === 0;
 
     // Generate the full item list with additional properties
     function generateFullItemList() {

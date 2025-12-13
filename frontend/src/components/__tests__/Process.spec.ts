@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/svelte';
 import Process from '../svelte/Process.svelte';
-import { vi } from 'vitest';
+import { vi, expect, test } from 'vitest';
 import { tick } from 'svelte';
 
 const ProcessStates = {
@@ -11,6 +11,21 @@ const ProcessStates = {
 };
 
 const stateInfo = { state: ProcessStates.IN_PROGRESS, progress: 0 };
+const getItemCountsMock = vi.fn(() => ({ 'item-1': 0 }));
+
+vi.mock('../../pages/inventory/json/items', () => ({
+    default: [
+        {
+            id: 'item-1',
+            name: 'Test Item',
+            image: '/test.png',
+        },
+    ],
+}));
+
+vi.mock('../../utils/gameState/inventory.js', () => ({
+    getItemCounts: (...args) => getItemCountsMock(...args),
+}));
 
 const pauseProcess = vi.fn(() => {
     stateInfo.state = ProcessStates.PAUSED;
@@ -26,6 +41,19 @@ vi.mock('../../generated/processes.json', () => ({
             title: 'Test Process',
             duration: '10s',
             requireItems: [],
+            consumeItems: [],
+            createItems: [],
+        },
+        {
+            id: 'p2',
+            title: 'Process With Requirements',
+            duration: '1m',
+            requireItems: [
+                {
+                    id: 'item-1',
+                    count: 2,
+                },
+            ],
             consumeItems: [],
             createItems: [],
         },
@@ -60,4 +88,14 @@ test('pauses and resumes a process while showing remaining time', async () => {
     expect(resumeProcess).toHaveBeenCalledWith('p1');
     await tick();
     expect(getByText(/remaining/)).toBeTruthy();
+});
+
+test('shows required items even when counts are zero', async () => {
+    getItemCountsMock.mockReturnValue({ 'item-1': 0 });
+
+    const { getByText } = render(Process, { processId: 'p2' });
+
+    await tick();
+    expect(getByText('Requires:')).toBeTruthy();
+    expect(getByText(/Test Item/)).toBeTruthy();
 });

@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-13-process-requirements-hidden",
+  "date": "2025-12-13",
+  "component": "process page UI",
+  "rootCause": "Process item lists hid whenever inventory counts were zero, so requirements and outputs vanished for empty inventories.",
+  "resolution": "CompactItemList now renders when a process defines items, and a regression test covers zero-count requirements.",
+  "references": [
+    "https://staging.democratized.space/processes/solar-200Wh",
+    "frontend/src/components/__tests__/Process.spec.ts"
+  ]
+}
