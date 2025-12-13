@@ -19,17 +19,26 @@
     let fullItemList = [];
     let isMounted = false;
     const itemCounts = writable(getItemCounts(itemList));
-    $: isEmpty = Object.values($itemCounts).every((qty) => qty === 0);
+    $: isEmpty = itemList.length === 0;
 
     // Generate the full item list with additional properties
     function generateFullItemList() {
-        return itemList.map((item) => ({
-            ...items.find((i) => i.id === item.id),
-            count: Object.prototype.hasOwnProperty.call(item, 'count')
-                ? Number(item.count.toFixed(5))
-                : null,
-            total: $itemCounts[item.id],
-        }));
+        return itemList.map((item) => {
+            const metadata = items.find((i) => i.id === item.id);
+            const normalizedCount = Object.prototype.hasOwnProperty.call(item, 'count')
+                ? Number(Number(item.count).toFixed(5))
+                : null;
+
+            return {
+                ...(metadata ?? {}),
+                ...item,
+                id: item.id,
+                name: metadata?.name ?? item.name ?? item.id,
+                image: metadata?.image ?? item.image,
+                count: normalizedCount,
+                total: $itemCounts[item.id],
+            };
+        });
     }
 
     // Initial setup and cleanup on mount

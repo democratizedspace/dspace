@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2025-12-13-quest-grant-items-hidden",
+  "date": "2025-12-13",
+  "component": "frontend/quests",
+  "rootCause": "CompactItemList hid item lists when inventory was zero, so v3 resets hid tutorial grant-items UI.",
+  "resolution": "Always render defined item lists, tolerate partial metadata, and cover the tutorial grant-items path with unit and Playwright tests.",
+  "references": [
+    "frontend/src/components/svelte/CompactItemList.svelte",
+    "frontend/__tests__/CompactItemList.test.js",
+    "frontend/e2e/quest-grant-items.spec.ts"
+  ]
+}
