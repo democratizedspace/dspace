@@ -56,9 +56,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "electronics/basic-circuit"
-    ],
+    "requiresQuests": ["electronics/basic-circuit"],
     "hardening": {
         "passes": 2,
         "score": 78,

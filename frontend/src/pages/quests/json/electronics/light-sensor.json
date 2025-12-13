@@ -124,9 +124,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "electronics/basic-circuit"
-    ],
+    "requiresQuests": ["electronics/basic-circuit"],
     "hardening": {
         "passes": 6,
         "score": 97,

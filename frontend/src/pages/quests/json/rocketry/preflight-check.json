@@ -81,7 +81,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "rocketry/firstlaunch"
-    ]
+    "requiresQuests": ["rocketry/firstlaunch"]
 }

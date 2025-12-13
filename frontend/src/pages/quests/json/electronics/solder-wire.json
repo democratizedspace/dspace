@@ -97,9 +97,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "electronics/soldering-intro"
-    ],
+    "requiresQuests": ["electronics/tin-soldering-iron"],
     "hardening": {
         "passes": 7,
         "score": 94,

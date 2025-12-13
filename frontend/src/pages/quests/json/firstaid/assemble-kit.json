@@ -76,9 +76,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "welcome/howtodoquests"
-    ],
+    "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 6,
         "score": 95,

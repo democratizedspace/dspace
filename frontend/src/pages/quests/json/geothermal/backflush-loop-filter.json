@@ -67,7 +67,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "geothermal/purge-loop-air"
-    ]
+    "requiresQuests": ["geothermal/purge-loop-air"]
 }
