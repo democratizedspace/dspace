@@ -2,7 +2,6 @@
     import { onMount } from 'svelte';
     import { ready, state } from '../../utils/gameState/common.js';
     import { evaluateTitles } from '../../utils/titles.js';
-    import Chip from '../../components/svelte/Chip.svelte';
 
     let hydrated = false;
     let titles = [];
@@ -18,19 +17,22 @@
 </script>
 
 <section class="profile-titles" data-hydrated={hydrated ? 'true' : 'false'}>
-    <h3>Unlocked titles</h3>
-    <p class="summary">Select a title to wear; locked ones stay disabled until you earn them.</p>
+    <p class="summary">Select a title to display. Earn achievements to unlock more titles.</p>
 
     {#if hydrated}
         <div class="list">
             {#each titles as title}
                 <div class="item" data-unlocked={title.unlocked ? 'true' : 'false'}>
-                    <Chip
-                        text={title.name}
-                        disabled={!title.unlocked}
-                        inverted={title.unlocked}
-                    />
-                    <span class={`status ${title.unlocked ? 'unlocked' : 'locked'}`}>
+                    <span
+                        class={`chip ${title.unlocked ? 'unlocked' : 'locked'}`}
+                        aria-label={`${title.name} ${title.unlocked ? 'unlocked' : 'locked'}`}
+                    >
+                        {title.name}
+                    </span>
+                    <span
+                        class={`status ${title.unlocked ? 'unlocked' : 'locked'}`}
+                        aria-hidden="true"
+                    >
                         {title.unlocked ? 'Unlocked' : 'Locked'}
                     </span>
                     <p class="description">{title.description}</p>
@@ -47,12 +49,6 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
-    }
-
-    h3 {
-        margin: 0;
-        font-size: 1.2rem;
-        color: #dce4ff;
     }
 
     .summary {
@@ -76,6 +72,22 @@
         grid-template-columns: auto 1fr;
         gap: 0.35rem 0.75rem;
         align-items: center;
+    }
+
+    .chip {
+        border-radius: 10px;
+        padding: 0.35rem 0.75rem;
+        font-weight: 700;
+        font-size: 0.95rem;
+        background: rgba(104, 212, 109, 0.25);
+        color: #f8fff8;
+        border: 1px solid rgba(104, 212, 109, 0.45);
+    }
+
+    .chip.locked {
+        background: rgba(87, 95, 87, 0.45);
+        color: #c6c6c6;
+        border-color: rgba(120, 150, 255, 0.2);
     }
 
     .status {

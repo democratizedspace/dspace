@@ -4,7 +4,7 @@ import Avatar from '../../components/svelte/Avatar.svelte';
 import ProfileTitles from './ProfileTitles.svelte';
 ---
 
-<Page title="Profile" message="Pick your avatar and review the titles you've unlocked." columns="1">
+<Page title="Profile" message="Pick your avatar and review the titles you've unlocked.">
     <div class="profile-layout">
         <section class="panel">
             <div class="section-header">
@@ -19,7 +19,7 @@ import ProfileTitles from './ProfileTitles.svelte';
         <section class="panel">
             <div class="section-header">
                 <h2>Titles</h2>
-                <p>Show off what you've earned. Locked titles stay disabled until unlocked.</p>
+                <p>Show off what you've earned. Complete achievements to unlock more titles.</p>
             </div>
             <ProfileTitles client:load />
         </section>
@@ -65,17 +65,22 @@ import ProfileTitles from './ProfileTitles.svelte';
     }
 
     .avatar-card {
+        --avatar-accent-start: rgba(72, 123, 72, 0.35);
+        --avatar-accent-end: rgba(46, 74, 46, 0.5);
+        --avatar-accent-border: rgba(104, 212, 109, 0.35);
+        --avatar-accent-shadow: rgba(104, 212, 109, 0.25);
+
         display: flex;
         justify-content: flex-start;
         padding: 1rem;
         border-radius: 14px;
-        background: linear-gradient(145deg, rgba(72, 123, 72, 0.35), rgba(46, 74, 46, 0.5));
-        border: 1px solid rgba(104, 212, 109, 0.35);
+        background: linear-gradient(145deg, var(--avatar-accent-start), var(--avatar-accent-end));
+        border: 1px solid var(--avatar-accent-border);
     }
 
     .avatar-card :global(.avatar) {
         margin: 0;
-        box-shadow: 0 0 0 4px rgba(104, 212, 109, 0.25);
+        box-shadow: 0 0 0 4px var(--avatar-accent-shadow);
     }
 
     .avatar-card :global(p) {
