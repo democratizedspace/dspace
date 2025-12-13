@@ -64,23 +64,30 @@ import ProfileTitles from './ProfileTitles.svelte';
         line-height: 1.5;
     }
 
+    :global(:root) {
+        --profile-avatar-accent-start: rgba(72, 123, 72, 0.35);
+        --profile-avatar-accent-end: rgba(46, 74, 46, 0.5);
+        --profile-avatar-accent-border: rgba(104, 212, 109, 0.35);
+        --profile-avatar-accent-shadow: rgba(104, 212, 109, 0.25);
+    }
+
     .avatar-card {
-        --avatar-accent-start: rgba(72, 123, 72, 0.35);
-        --avatar-accent-end: rgba(46, 74, 46, 0.5);
-        --avatar-accent-border: rgba(104, 212, 109, 0.35);
-        --avatar-accent-shadow: rgba(104, 212, 109, 0.25);
 
         display: flex;
         justify-content: flex-start;
         padding: 1rem;
         border-radius: 14px;
-        background: linear-gradient(145deg, var(--avatar-accent-start), var(--avatar-accent-end));
-        border: 1px solid var(--avatar-accent-border);
+        background: linear-gradient(
+            145deg,
+            var(--profile-avatar-accent-start),
+            var(--profile-avatar-accent-end)
+        );
+        border: 1px solid var(--profile-avatar-accent-border);
     }
 
     .avatar-card :global(.avatar) {
         margin: 0;
-        box-shadow: 0 0 0 4px var(--avatar-accent-shadow);
+        box-shadow: 0 0 0 4px var(--profile-avatar-accent-shadow);
     }
 
     .avatar-card :global(p) {

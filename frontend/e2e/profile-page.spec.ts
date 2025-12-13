@@ -10,6 +10,6 @@ test.describe('Profile page', () => {
         await page.goto('/profile');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        await expect(page.getByRole('heading', { name: 'Avatar' })).toBeVisible();
+        await expect(page.getByRole('heading', { level: 2, name: 'Avatar', exact: true })).toBeVisible();
     });
 });
