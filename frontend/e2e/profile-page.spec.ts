@@ -10,6 +10,6 @@ test.describe('Profile page', () => {
         await page.goto('/profile');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        await expect(page.getByText('Choose a default avatar')).toBeVisible();
+        await expect(page.getByText('Avatar')).toBeVisible();
     });
 });

@@ -18,19 +18,17 @@
 </script>
 
 <section class="profile-titles" data-hydrated={hydrated ? 'true' : 'false'}>
-    <h3>Unlocked titles</h3>
-    <p class="summary">Select a title to wear; locked ones stay disabled until you earn them.</p>
+    <p class="summary">Select a title to display. Earn achievements to unlock more titles.</p>
 
     {#if hydrated}
         <div class="list">
             {#each titles as title}
                 <div class="item" data-unlocked={title.unlocked ? 'true' : 'false'}>
-                    <Chip
-                        text={title.name}
-                        disabled={!title.unlocked}
-                        inverted={title.unlocked}
-                    />
-                    <span class={`status ${title.unlocked ? 'unlocked' : 'locked'}`}>
+                    <Chip text={title.name} disabled={!title.unlocked} inverted={title.unlocked} />
+                    <span
+                        class={`status ${title.unlocked ? 'unlocked' : 'locked'}`}
+                        aria-hidden="true"
+                    >
                         {title.unlocked ? 'Unlocked' : 'Locked'}
                     </span>
                     <p class="description">{title.description}</p>
@@ -47,12 +45,6 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
-    }
-
-    h3 {
-        margin: 0;
-        font-size: 1.2rem;
-        color: #dce4ff;
     }
 
     .summary {
