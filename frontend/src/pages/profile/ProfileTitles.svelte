@@ -106,18 +106,18 @@
     }
 
     .item[data-selected='true'] {
-        background: rgba(72, 123, 72, 0.65);
-        border: 1px solid rgba(104, 212, 109, 0.5);
-        box-shadow: 0 0 12px rgba(104, 212, 109, 0.3);
+        background: color-mix(in srgb, var(--color-surface) 90%, var(--color-pill-active) 30%);
+        border: 1px solid color-mix(in srgb, var(--color-pill-active) 50%, transparent);
+        box-shadow: 0 0 12px color-mix(in srgb, var(--color-pill-active) 30%, transparent);
     }
 
     .item[data-unlocked='true']:not([data-selected='true']):hover {
-        background: rgba(37, 61, 37, 0.65);
+        background: color-mix(in srgb, var(--color-surface) 65%, transparent);
         cursor: pointer;
     }
 
     .item[data-unlocked='true']:focus-visible {
-        outline: 2px solid rgba(104, 212, 109, 0.8);
+        outline: 2px solid color-mix(in srgb, var(--color-pill-active) 80%, transparent);
         outline-offset: 2px;
     }
 
