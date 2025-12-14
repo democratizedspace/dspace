@@ -1,0 +1,12 @@
+{
+  "id": "docs-canvas-libexpat-missing",
+  "date": "2025-12-27",
+  "component": "docs",
+  "rootCause": "The production runtime image lacked libexpat (and related native deps) required by node-canvas, causing JSDOM to throw during docs SSR and return 500 responses.",
+  "resolution": "Install canvas runtime libraries (expat, cairo, pango, jpeg, png, gif, freetype) in the GHCR runtime image and add a container smoke test that requires canvas and curls /docs/dCarbon.",
+  "references": [
+    "Dockerfile",
+    ".github/workflows/ci-image.yml",
+    "frontend/src/pages/docs/outages/[slug].astro"
+  ]
+}

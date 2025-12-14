@@ -99,6 +99,11 @@ jobs:
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
 
+      - name: Native deps smoke test
+        run: |
+          docker run --rm dspace-test:latest \
+            node -e "require('canvas'); console.log('canvas ok')"
+
       - name: Smoke test - verify container boots and serves requests
         run: |
           # Start container in background with NODE_OPTIONS to show uncaught exceptions
@@ -188,7 +193,28 @@ jobs:
           else
             echo "Root page is responding with HTTP 200!"
           fi
-          
+
+          echo "Testing docs/dCarbon page..."
+          DOC_RESPONSE=$(curl -s -w '\n%{http_code}' --max-time 10 "$BASE_URL/docs/dCarbon" 2>/dev/null || echo -e "\n000")
+          DOC_CODE=$(echo "$DOC_RESPONSE" | tail -n1)
+          DOC_BODY=$(echo "$DOC_RESPONSE" | head -n -1)
+
+          if [ "$DOC_CODE" != "200" ]; then
+            echo "Docs page returned HTTP $DOC_CODE"
+            echo "$DOC_BODY" | head -c 1000
+            docker stop dspace-smoke-test
+            docker rm dspace-smoke-test
+            exit 1
+          fi
+
+          if ! echo "$DOC_BODY" | grep -qi "dcarbon represents the amount of carbon dioxide produced"; then
+            echo "Docs page missing expected dCarbon text"
+            echo "$DOC_BODY" | head -c 1000
+            docker stop dspace-smoke-test
+            docker rm dspace-smoke-test
+            exit 1
+          fi
+
           # Cleanup
           docker stop dspace-smoke-test
           docker rm dspace-smoke-test
