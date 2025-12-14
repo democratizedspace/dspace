@@ -178,9 +178,11 @@ export const addWalletBalance = (req, res, symbol, addBalance) => {
 };
 
 export const fixMarkdownText = (text) => {
-    // replace ' with '
-    const fixedText = text.replace(/'/g, "'");
-    return fixedText;
+    if (typeof text !== 'string') {
+        return typeof text === 'undefined' || text === null ? '' : String(text);
+    }
+
+    return text.replace(/'/g, "'");
 };
 
 export const getPriceStringComponents = (currency) => {

@@ -3,12 +3,9 @@
     import { getItemCount } from '../../utils/gameState/inventory.js';
     import { onMount } from 'svelte';
     import { isMenuItemActive } from './menuActive.js';
-    import { isBrowser } from '../../utils/ssr.js';
 
     export let pathname;
 
-    // get avatarUrl from localStorage key of same name (SSR-safe)
-    let avatarUrl = isBrowser ? localStorage.getItem('avatarUrl') : null;
     let mounted = false;
 
     const toggleShowUnpinned = () => {
@@ -62,61 +59,54 @@
     });
 </script>
 
-<div>
-    {#if avatarUrl}
-        <a href="/profile" aria-label="Profile">
-            <img class="pfp" src={avatarUrl} alt="Profile avatar" />
-        </a>
-    {/if}
-    <nav>
-        {#each pinned as item}
-            {#if isActive(item)}
-                <a class="active" href={item.href} aria-current="page">{item.name}</a>
-            {:else if item.hideIfOwned}
-                {#if showMenuItem(item) && mounted}
-                    <a href={item.href}>{item.name}</a>
+<nav>
+    {#each pinned as item}
+        {#if isActive(item)}
+            <a class="active" href={item.href} aria-current="page">{item.name}</a>
+        {:else if item.hideIfOwned}
+            {#if showMenuItem(item) && mounted}
+                <a href={item.href}>{item.name}</a>
+            {/if}
+        {:else if item.comingSoon === true}
+            <a class="disabled" href={item.href}>{item.name}</a>
+        {:else}
+            <a href={item.href}>{item.name}</a>
+        {/if}
+    {/each}
+
+    <div
+        id="unpinned-menu"
+        hidden={!showUnpinned}
+        style={`display: ${showUnpinned ? 'contents' : 'none'}`}
+        aria-hidden={!showUnpinned}
+        role="region"
+        aria-label="Additional menu items"
+    >
+        {#each unpinned as item}
+            {#if item.hideIfOwned}
+                {#if mounted}
+                    <button class="active" type="button">{item.name}</button>
                 {/if}
             {:else if item.comingSoon === true}
-                <a class="disabled" href={item.href}>{item.name}</a>
+                <button class="disabled" type="button">{item.name}</button>
             {:else}
                 <a href={item.href}>{item.name}</a>
             {/if}
         {/each}
+    </div>
 
-        <div
-            id="unpinned-menu"
-            hidden={!showUnpinned}
-            style={`display: ${showUnpinned ? 'contents' : 'none'}`}
-            aria-hidden={!showUnpinned}
-            role="region"
-            aria-label="Additional menu items"
-        >
-            {#each unpinned as item}
-                {#if item.hideIfOwned}
-                    {#if mounted}
-                        <button class="active" type="button">{item.name}</button>
-                    {/if}
-                {:else if item.comingSoon === true}
-                    <button class="disabled" type="button">{item.name}</button>
-                {:else}
-                    <a href={item.href}>{item.name}</a>
-                {/if}
-            {/each}
-        </div>
-
-        <button
-            id="unpinned-toggle"
-            on:click={toggleShowUnpinned}
-            aria-expanded={showUnpinned}
-            aria-controls="unpinned-menu"
-            aria-label="Toggle additional menu items"
-            type="button"
-            data-hydrated={mounted ? 'true' : 'false'}
-        >
-            {toggleLabel}
-        </button>
-    </nav>
-</div>
+    <button
+        id="unpinned-toggle"
+        on:click={toggleShowUnpinned}
+        aria-expanded={showUnpinned}
+        aria-controls="unpinned-menu"
+        aria-label="Toggle additional menu items"
+        type="button"
+        data-hydrated={mounted ? 'true' : 'false'}
+    >
+        {toggleLabel}
+    </button>
+</nav>
 
 <style>
     nav {
@@ -191,21 +181,5 @@
     .disabled:hover {
         /* make the cursor normal */
         cursor: default;
-    }
-
-    .pfp {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        opacity: 0.8;
-        transition: 1s;
-        border: 2px solid rgb(67, 255, 76);
-    }
-
-    .pfp:hover {
-        opacity: 1;
     }
 </style>
