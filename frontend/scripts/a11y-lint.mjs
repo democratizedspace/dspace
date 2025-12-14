@@ -226,6 +226,47 @@ function attributeHasValue(attribute) {
     });
 }
 
+function attributeEqualsText(attribute, expected) {
+    if (!attribute || !Array.isArray(attribute.value)) {
+        return false;
+    }
+
+    return attribute.value.some(
+        (value) => value.type === 'Text' && value.data.trim().toLowerCase() === expected
+    );
+}
+
+function collectImageAltIssues(source, ast, filename) {
+    if (!ast?.html) {
+        return [];
+    }
+
+    const issues = [];
+    walk(ast.html, {
+        enter(node) {
+            if (node.type !== 'Element' || node.name !== 'img') {
+                return;
+            }
+
+            const altAttr = getAttribute(node, 'alt');
+            const hasAltValue = attributeHasValue(altAttr);
+            const isDecorative = attributeEqualsText(getAttribute(node, 'aria-hidden'), 'true');
+
+            if (!hasAltValue && !isDecorative) {
+                issues.push({
+                    type: 'svelte-warning',
+                    code: 'a11y-missing-attribute',
+                    message: 'Images should include meaningful alt text or be marked aria-hidden.',
+                    filename,
+                    position: getPositionFromIndex(source, node.start ?? -1),
+                });
+            }
+        },
+    });
+
+    return issues;
+}
+
 function collectEmptyAriaLabelIssues(source, ast, filename) {
     if (!ast?.html) {
         return [];
@@ -332,7 +373,7 @@ export function checkSourceForA11yWarnings(source, filename = 'inline.svelte') {
     const issues = [];
 
     try {
-        const { warnings, ast } = compile(source, { filename });
+        const { warnings, ast } = compile(source, { filename, dev: true });
         for (const warning of warnings) {
             if (warning.code && warning.code.startsWith('a11y-')) {
                 issues.push({
@@ -347,6 +388,9 @@ export function checkSourceForA11yWarnings(source, filename = 'inline.svelte') {
 
         const buttonIssues = collectButtonTypeIssues(source, ast, filename);
         issues.push(...buttonIssues);
+
+        const imageAltIssues = collectImageAltIssues(source, ast, filename);
+        issues.push(...imageAltIssues);
 
         const ariaLabelIssues = collectEmptyAriaLabelIssues(source, ast, filename);
         issues.push(...ariaLabelIssues);
