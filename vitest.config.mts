@@ -1,16 +1,11 @@
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [svelte()],
   resolve: {
-    alias: {
-      svelte: path.resolve(__dirname, './frontend/node_modules/svelte')
-    }
+    dedupe: ['svelte'],
+    conditions: ['svelte']
   },
   test: {
     environment: 'jsdom',
@@ -18,6 +13,9 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     include: ['tests/**/*.test.ts', 'scripts/tests/**/*.test.ts', 'backend/**/*.test.ts'],
     exclude: ['frontend/e2e/**', 'frontend/__tests__/**'],
+    deps: {
+      inline: ['svelte']
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'json-summary'],
