@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { compile } from 'svelte/compiler';
 import { walk } from 'estree-walker';
+import { compile } from 'svelte/compiler';
 import postcss from 'postcss';
 import postcssScss from 'postcss-scss';
 
@@ -375,10 +375,11 @@ export function checkSourceForA11yWarnings(source, filename = 'inline.svelte') {
     try {
         const { warnings, ast } = compile(source, { filename, dev: true });
         for (const warning of warnings) {
-            if (warning.code && warning.code.startsWith('a11y-')) {
+            const normalizedCode = warning.code?.replaceAll('_', '-');
+            if (normalizedCode && normalizedCode.startsWith('a11y-')) {
                 issues.push({
                     type: 'svelte-warning',
-                    code: warning.code,
+                    code: normalizedCode,
                     message: warning.message,
                     filename,
                     position: warning.start ?? warning.end,

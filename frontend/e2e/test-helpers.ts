@@ -7,8 +7,10 @@ const CONNECTION_REFUSED_PATTERNS = [
     'Connection refused',
 ];
 
-const DEFAULT_RETRY_ATTEMPTS = 12;
+const DEFAULT_RETRY_ATTEMPTS = 6;
 const DEFAULT_RETRY_DELAY_MS = 300;
+const DEFAULT_MAX_LOG_ATTEMPTS = 4;
+const DEFAULT_MAX_DURATION_MS = 10_000;
 
 const GAME_STATE_MODULE = '/src/utils/gameState/common.js';
 
@@ -27,9 +29,13 @@ export async function navigateWithRetry(
     {
         attempts = DEFAULT_RETRY_ATTEMPTS,
         delayMs = DEFAULT_RETRY_DELAY_MS,
-    }: { attempts?: number; delayMs?: number } = {}
+        maxLogAttempts = DEFAULT_MAX_LOG_ATTEMPTS,
+        maxDurationMs = DEFAULT_MAX_DURATION_MS,
+    }: { attempts?: number; delayMs?: number; maxLogAttempts?: number; maxDurationMs?: number } = {}
 ): Promise<void> {
     let lastError: unknown;
+    const startedAt = Date.now();
+    let suppressedLogCount = 0;
 
     for (let attempt = 1; attempt <= attempts; attempt++) {
         try {
@@ -44,14 +50,37 @@ export async function navigateWithRetry(
                 message.includes(pattern)
             );
 
-            if (!isRetryable || attempt === attempts) {
-                throw error;
+            const elapsedMs = Date.now() - startedAt;
+
+            const exceededDuration = Number.isFinite(maxDurationMs) && elapsedMs > maxDurationMs;
+
+            if (!isRetryable || attempt === attempts || exceededDuration) {
+                const wrappedError =
+                    error instanceof Error
+                        ? error
+                        : new Error(`Failed to navigate to ${url}: ${String(error)}`);
+                const reason = exceededDuration
+                    ? `after ${elapsedMs}ms (limit ${maxDurationMs}ms)`
+                    : `after ${attempt} attempt${attempt === 1 ? '' : 's'}`;
+
+                wrappedError.message = `${wrappedError.message} while navigating to ${url} ${reason}`;
+                throw wrappedError;
             }
 
             const backoffDelay = delayMs * attempt;
-            console.warn(
-                `Retrying navigation to ${url} after connection refusal (attempt ${attempt} of ${attempts})`
-            );
+            if (attempt <= maxLogAttempts) {
+                console.warn(
+                    `Retrying navigation to ${url} after connection refusal (attempt ${attempt} of ${attempts})`
+                );
+            } else {
+                suppressedLogCount += 1;
+
+                if (suppressedLogCount === 1) {
+                    console.warn(
+                        `Suppressing further retry logs for ${url}; attempts ${attempt}-${attempts} will retry silently`
+                    );
+                }
+            }
             await wait(page, backoffDelay);
         }
     }

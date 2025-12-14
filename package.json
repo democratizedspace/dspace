@@ -72,5 +72,15 @@
   "dependencies": {
     "openai": "^5.16.0"
   },
+  "overrides": {
+    "esbuild": "0.25.8",
+    "@esbuild/linux-x64": "0.25.8"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.25.8",
+      "@esbuild/linux-x64": "0.25.8"
+    }
+  },
   "license": "MIT"
 }

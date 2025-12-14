@@ -219,7 +219,7 @@ export default defineConfig({
     // Configure webServer to start the app server before running tests
     webServer: {
         // Use production preview server so grouped E2E tests don't restart the dev server
-        command: `node scripts/ensure-astro-build.mjs && astro preview --host 0.0.0.0 --port ${port}`,
+        command: `node scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
         cwd: frontendDir,
         url: baseURL,
         reuseExistingServer: !isCI,

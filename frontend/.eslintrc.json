@@ -26,8 +26,11 @@
             "files": ["*.svelte"],
             "parser": "svelte-eslint-parser",
             "parserOptions": {
-                "parser": "@typescript-eslint/parser"
+                "parser": "@typescript-eslint/parser",
+                "extraFileExtensions": [".svelte"],
+                "project": "./tsconfig.json"
             },
+            "plugins": ["svelte"],
             "rules": {
                 "@typescript-eslint/no-unused-vars": "off"
             }
@@ -81,5 +84,10 @@
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-require-imports": "off"
+    },
+    "settings": {
+        "svelte": {
+            "ignoreWarnings": []
+        }
     }
 }
