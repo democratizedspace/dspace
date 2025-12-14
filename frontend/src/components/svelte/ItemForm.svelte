@@ -132,7 +132,7 @@
             bind:value={description}
             placeholder="Describe the item in detail"
             class:error={validationErrors.description}
-        />
+        ></textarea>
         {#if validationErrors.description}
             <span class="error-message">{validationErrors.description}</span>
         {/if}
@@ -178,7 +178,7 @@
             id="dependencies"
             bind:value={dependenciesInput}
             placeholder="Enter item IDs separated by commas or new lines"
-        />
+        ></textarea>
         <p class="helper-text">Separate dependencies with commas or new lines.</p>
     </div>
 

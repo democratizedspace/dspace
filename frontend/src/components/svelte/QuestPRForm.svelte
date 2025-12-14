@@ -95,7 +95,7 @@
             rows="10"
             class:error={validationErrors.quest}
             required
-        />
+        ></textarea>
         {#if validationErrors.quest}
             <span class="error-message" data-testid="quest-json-error"
                 >{validationErrors.quest}</span

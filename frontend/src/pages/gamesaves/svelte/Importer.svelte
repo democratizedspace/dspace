@@ -19,7 +19,7 @@
 
         <!-- input block -->
         <div class="input-block">
-            <textarea bind:value={importString} />
+            <textarea bind:value={importString}></textarea>
         </div>
 
         <Chip text="Import" onClick={handleImport} inverted={true} />

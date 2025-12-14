@@ -36,7 +36,8 @@
                         bind:value={field.value}
                     />
                 {:else if field.type === 'textarea'}
-                    <textarea class="input-style" id={field.name} bind:value={field.value} />
+                    <textarea class="input-style" id={field.name} bind:value={field.value}
+                    ></textarea>
                 {:else if field.type === 'steps'}
                     <div id={field.name}>
                         <ul class="vertical steps-list">

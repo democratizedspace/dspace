@@ -51,14 +51,14 @@
             <div
                 class="progress-bar-fill"
                 style="width: {(progressRatio * 100).toFixed(2)}%; transition: none"
-            />
+            ></div>
         </div>
     {:else}
         <div class="progress-bar">
             <div
                 class="progress-bar-fill"
                 style="width: {(progressRatio * 100).toFixed(2)}%; transition: width 0.1s linear"
-            />
+            ></div>
         </div>
     {/if}
     <div class="progress-text">

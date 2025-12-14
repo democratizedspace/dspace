@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { ready, state } from '../../utils/gameState/common.js';
+    import { ready, state as gameState } from '../../utils/gameState/common.js';
     import { TITLES, evaluateTitles } from '../../utils/titles.js';
 
     const categories = [...new Set(TITLES.map((title) => title.category))];
@@ -14,7 +14,7 @@
     });
 
     $: if (hydrated) {
-        summaries = evaluateTitles($state);
+        summaries = evaluateTitles($gameState);
     }
 
     const statusLabel = (summary) => (summary.unlocked ? 'Unlocked' : 'Locked');
@@ -43,7 +43,7 @@
                                     <div
                                         class="fill"
                                         style={`width: ${summary.progress.percent}%`}
-                                    />
+                                    ></div>
                                 </div>
                                 <span class="value">{summary.progress.displayValue}</span>
                             </div>

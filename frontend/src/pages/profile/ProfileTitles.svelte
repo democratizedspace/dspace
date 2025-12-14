@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { ready, state } from '../../utils/gameState/common.js';
+    import { ready, state as gameState } from '../../utils/gameState/common.js';
     import { evaluateTitles } from '../../utils/titles.js';
 
     let hydrated = false;
@@ -12,7 +12,7 @@
     });
 
     $: if (hydrated) {
-        titles = evaluateTitles($state);
+        titles = evaluateTitles($gameState);
     }
 </script>
 

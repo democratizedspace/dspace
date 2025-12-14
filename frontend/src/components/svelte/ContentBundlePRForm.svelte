@@ -115,7 +115,7 @@
             class:error={validationErrors.bundle}
             placeholder={'{\n  "quests": [...],\n  "items": [...],\n  "processes": [...]\n}'}
             required
-        />
+        ></textarea>
         {#if validationErrors.bundle}
             <span class="error-message" data-testid="bundle-json-error"
                 >{validationErrors.bundle}</span
