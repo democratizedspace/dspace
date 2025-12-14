@@ -95,9 +95,12 @@ describe('string and object helpers', () => {
 
     test('getSymbolFromId reads item price', () => {
         const firstId = items[0].id;
-        const secondId = items[1].id;
+        const exemptPriceId = items.find(
+            (item) => !item.price || !String(item.price).includes(' ')
+        ).id;
+
         expect(getSymbolFromId(firstId)).toBe('dUSD');
-        expect(getSymbolFromId(secondId)).toBe('');
+        expect(getSymbolFromId(exemptPriceId)).toBe('');
     });
 
     test('constructLink appends redirect', () => {
