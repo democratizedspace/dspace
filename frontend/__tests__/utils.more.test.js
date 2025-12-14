@@ -84,6 +84,7 @@ describe('string and object helpers', () => {
         expect(fixMarkdownText(undefined)).toBe('');
         expect(fixMarkdownText(null)).toBe('');
         expect(fixMarkdownText(42)).toBe('42');
+        expect(fixMarkdownText(true)).toBe('true');
         expect(fixMarkdownText({ text: 'dCarbon' })).toBe('[object Object]');
     });
 

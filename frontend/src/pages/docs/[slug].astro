@@ -69,6 +69,8 @@ try {
 } catch (error) {
     console.error('Failed to render docs page', slugString, error);
     doc = undefined;
+    title = undefined;
+    html = undefined;
 }
 
 const prettyDocName = slugString
