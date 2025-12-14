@@ -75,7 +75,11 @@
                                 {:else if item.count !== null}
                                     <span class="qty">
                                         {prettyPrintNumber(item.count)}
-                                    </span>/{prettyPrintNumber($itemCounts[item.id])}
+                                    </span>
+                                    /
+                                    <span class="qty">
+                                        {prettyPrintNumber($itemCounts[item.id])}
+                                    </span>
                                 {:else}
                                     {prettyPrintNumber($itemCounts[item.id])}
                                 {/if}
