@@ -1,0 +1,11 @@
+{
+  "id": "docs-dcarbon-500",
+  "date": "2025-12-13",
+  "component": "frontend:docs",
+  "rootCause": "The docs slug handler skipped awaiting markdown and error guards, so dCarbon returned HTTP 500 in staging.",
+  "resolution": "Normalized slug matching, awaited markdown, and added guarded fallbacks so dCarbon loads without crashes.",
+  "references": [
+    "frontend/src/pages/docs/[slug].astro",
+    "frontend/e2e/docs-dcarbon.spec.ts"
+  ]
+}

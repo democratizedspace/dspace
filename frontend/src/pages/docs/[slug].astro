@@ -43,25 +43,33 @@ const buildLatestChangelogHtml = (entries = []) => {
 
 const { slug } = Astro.params;
 let title, html;
+let renderError = '';
+
+const slugString = typeof slug === 'string' ? slug : '';
+const normalizedSlug = slugString.toLowerCase();
 
 const docs = await Astro.glob('./md/*.md');
 
-const doc = docs.find((doc) => doc.frontmatter.slug === slug);
+const doc = docs.find((entry) => entry?.frontmatter?.slug?.toLowerCase() === normalizedSlug);
 
 if (doc) {
-    let compiled = doc.compiledContent();
+    try {
+        let compiled = await doc.compiledContent();
 
-    if (slug === 'changelog') {
-        const changelogEntries = await Astro.glob('./md/changelog/*.md');
-        const latestHtml = buildLatestChangelogHtml(changelogEntries);
-        compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);
+        if (normalizedSlug === 'changelog') {
+            const changelogEntries = await Astro.glob('./md/changelog/*.md');
+            const latestHtml = buildLatestChangelogHtml(changelogEntries);
+            compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);
+        }
+
+        html = fixMarkdownText(compiled);
+        title = doc.frontmatter.title;
+    } catch (error) {
+        console.error(`Failed to render doc ${slugString}`, error);
+        renderError = 'We hit an error loading this doc. Please try again later or open a PR.';
     }
-
-    html = fixMarkdownText(compiled);
-    title = doc.frontmatter.title;
 }
 
-const slugString = typeof slug === 'string' ? slug : '';
 const prettyDocName = slugString
     ? slugString
           .split('-')
@@ -76,7 +84,7 @@ const newDocUrl = slugString
 ---
 
 {
-    doc
+    doc && html
     ?
     <div>
         <Page title={doc.frontmatter.title} columns="1">
@@ -88,13 +96,17 @@ const newDocUrl = slugString
             <span set:html={html} />
         </Page>
     </div>
-     : 
+     :
     <div>
-        <Page title="Doc not found" columns="1">
+        <Page title={renderError ? 'Doc temporarily unavailable' : 'Doc not found'} columns="1">
             <Chip text="Docs" href="/docs" />
             <Card
                 title={docCtaTitle}
-                body={`Should something exist here? Add a file on Github and submit a pull request.`}
+                body={
+                    renderError
+                        ? `${renderError} ${docCtaTitle}.`
+                        : `Should something exist here? Add a file on Github and submit a pull request.`
+                }
                 href={newDocUrl}
                 image="/assets/quill.jpg"
                 imageAlt="Quill pen on paper"

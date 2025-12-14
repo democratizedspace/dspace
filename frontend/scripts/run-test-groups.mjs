@@ -66,6 +66,7 @@ const TEST_GROUPS = [
             'docs-search.spec.ts',
             'glossary-doc.spec.ts',
             'user-journeys-doc.spec.ts',
+            'docs-dcarbon.spec.ts',
         ],
         parallel: true,
         workers: Math.min(MAX_WORKERS, 2),
