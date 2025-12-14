@@ -6,11 +6,18 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [svelte()],
+  plugins: [svelte({
+    configFile: path.resolve(__dirname, './svelte.config.js')
+  })],
   resolve: {
     alias: {
-      svelte: path.resolve(__dirname, './frontend/node_modules/svelte')
-    }
+      svelte: path.resolve(__dirname, './node_modules/svelte')
+    },
+    mainFields: ['svelte', 'browser', 'module', 'main'],
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.svelte']
+  },
+  ssr: {
+    noExternal: ['svelte']
   },
   test: {
     environment: 'jsdom',
