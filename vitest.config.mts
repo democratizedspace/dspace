@@ -45,9 +45,30 @@ export default defineConfig({
     })
   ],
   resolve: {
-    alias: {
-      'svelte': path.resolve(__dirname, './node_modules/svelte/src/index-server.js')
-    }
+    alias: [
+      {
+        find: /^svelte$/,
+        replacement: path.resolve(__dirname, './node_modules/svelte/src/index-client.js')
+      },
+      {
+        find: /^svelte\/internal\/client$/,
+        replacement: path.resolve(
+          __dirname,
+          './node_modules/svelte/src/internal/client/index.js'
+        )
+      },
+      {
+        find: /^svelte\/internal\/server$/,
+        replacement: path.resolve(
+          __dirname,
+          './node_modules/svelte/src/internal/server/index.js'
+        )
+      },
+      {
+        find: /^svelte\/internal/,
+        replacement: path.resolve(__dirname, './node_modules/svelte/src/internal')
+      }
+    ]
   },
   ssr: {
     noExternal: [
