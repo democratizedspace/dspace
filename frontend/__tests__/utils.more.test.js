@@ -1,3 +1,5 @@
+/** @jest-environment node */
+
 import {
     prettyPrintNumber,
     parseBool,
@@ -79,6 +81,15 @@ describe('string and object helpers', () => {
         expect(fixMarkdownText("it's fine")).toBe("it's fine");
     });
 
+    test('fixMarkdownText handles non-string inputs', () => {
+        expect(fixMarkdownText()).toBe('');
+        expect(fixMarkdownText(undefined)).toBe('');
+        expect(fixMarkdownText(null)).toBe('');
+        expect(fixMarkdownText(42)).toBe('42');
+        expect(fixMarkdownText(true)).toBe('true');
+        expect(fixMarkdownText({ text: 'dCarbon' })).toBe('[object Object]');
+    });
+
     test('getPriceStringComponents parses currency', () => {
         expect(getPriceStringComponents('10 dUSD')).toEqual({ price: 10, symbol: 'dUSD' });
         expect(getPriceStringComponents()).toEqual({ price: 0, symbol: '' });
@@ -86,9 +97,12 @@ describe('string and object helpers', () => {
 
     test('getSymbolFromId reads item price', () => {
         const firstId = items[0].id;
-        const secondId = items[1].id;
+        const exemptPriceId = items.find(
+            (item) => !item.price || !String(item.price).includes(' ')
+        ).id;
+
         expect(getSymbolFromId(firstId)).toBe('dUSD');
-        expect(getSymbolFromId(secondId)).toBe('');
+        expect(getSymbolFromId(exemptPriceId)).toBe('');
     });
 
     test('constructLink appends redirect', () => {

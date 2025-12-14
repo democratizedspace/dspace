@@ -63,6 +63,7 @@ const TEST_GROUPS = [
     {
         name: 'Docs Experience',
         files: [
+            'docs-dcarbon.spec.ts',
             'docs-search.spec.ts',
             'glossary-doc.spec.ts',
             'user-journeys-doc.spec.ts',

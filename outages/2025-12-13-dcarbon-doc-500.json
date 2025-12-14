@@ -1,0 +1,12 @@
+{
+  "id": "docs-dcarbon-500",
+  "date": "2025-12-13",
+  "component": "docs",
+  "rootCause": "Docs renderer assumed Markdown compiled to a string; unexpected dCarbon output threw and returned 500.",
+  "resolution": "Normalize slug lookup, await compiled Markdown, guard fixMarkdownText, add Playwright coverage for the dCarbon search flow.",
+  "references": [
+    "frontend/src/pages/docs/[slug].astro",
+    "frontend/src/utils.js",
+    "frontend/e2e/docs-dcarbon.spec.ts"
+  ]
+}
