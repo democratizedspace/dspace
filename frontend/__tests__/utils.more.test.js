@@ -79,6 +79,14 @@ describe('string and object helpers', () => {
         expect(fixMarkdownText("it's fine")).toBe("it's fine");
     });
 
+    test('fixMarkdownText handles non-string inputs', () => {
+        expect(fixMarkdownText()).toBe('');
+        expect(fixMarkdownText(undefined)).toBe('');
+        expect(fixMarkdownText(null)).toBe('');
+        expect(fixMarkdownText(42)).toBe('42');
+        expect(fixMarkdownText({ text: 'dCarbon' })).toBe('[object Object]');
+    });
+
     test('getPriceStringComponents parses currency', () => {
         expect(getPriceStringComponents('10 dUSD')).toEqual({ price: 10, symbol: 'dUSD' });
         expect(getPriceStringComponents()).toEqual({ price: 0, symbol: '' });

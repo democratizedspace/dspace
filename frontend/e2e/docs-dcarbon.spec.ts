@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const D_CARBON_SLUG = '/docs/dCarbon';
+const D_CARBON_SLUG = '/docs/dcarbon';
 
 const waitForDocNavigation = (page: Page) =>
     page.waitForResponse(
@@ -12,7 +12,7 @@ const waitForDocNavigation = (page: Page) =>
 test('dCarbon doc loads from the docs search flow', async ({ page }) => {
     await page.goto('/docs');
 
-    const searchInput = page.getByLabel('Search docs');
+    const searchInput = page.getByRole('searchbox', { name: /search docs/i });
     await expect(searchInput).toBeVisible();
 
     await searchInput.fill('dcarbon');
