@@ -1,0 +1,12 @@
+{
+  "id": "docs-canvas-libexpat-missing",
+  "date": "2025-12-15",
+  "component": "docs",
+  "rootCause": "Runtime Docker image omitted libexpat and related native libraries, causing node-canvas to crash during SSR when docs pages invoked code paths that require chartjs-node-canvas/canvas.",
+  "resolution": "Add the required native libraries to the production runtime image and extend the CI image smoke test to require('canvas') and fetch /docs/dCarbon in the built container.",
+  "references": [
+    "Dockerfile",
+    ".github/workflows/ci-image.yml",
+    "scripts/generate-quest-chart.js"
+  ]
+}

@@ -175,7 +175,35 @@ jobs:
             docker rm dspace-smoke-test
             exit 1
           fi
-          
+
+          echo "Validating canvas native dependencies inside the container..."
+          docker exec dspace-smoke-test node -e "require('canvas'); console.log('canvas ok')"
+
+          echo "Testing docs page..."
+          DOCS_RESPONSE=$(curl -s -w '\n%{http_code}' --max-time 15 "$BASE_URL/docs/dCarbon" 2>/dev/null || echo -e "\n000")
+          DOCS_CODE=$(echo "$DOCS_RESPONSE" | tail -n1)
+          DOCS_BODY=$(echo "$DOCS_RESPONSE" | head -n -1)
+          if [ "$DOCS_CODE" != "200" ]; then
+            echo "Docs page returned HTTP $DOCS_CODE instead of 200"
+            echo "--- Response body ---"
+            echo "$DOCS_BODY" | head -c 1000
+            echo ""
+            echo "--- Container logs ---"
+            docker logs dspace-smoke-test 2>&1 | tail -200
+            docker stop dspace-smoke-test
+            docker rm dspace-smoke-test
+            exit 1
+          fi
+          if ! echo "$DOCS_BODY" | grep -qi "dcarbon"; then
+            echo "Docs page 200 response did not include expected identifier"
+            echo "--- Response body ---"
+            echo "$DOCS_BODY" | head -c 1000
+            echo ""
+            docker stop dspace-smoke-test
+            docker rm dspace-smoke-test
+            exit 1
+          fi
+
           # Also verify the root page loads
           echo "Testing root page..."
           ROOT_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 http://127.0.0.1:8080/ 2>/dev/null || echo "000")

@@ -62,6 +62,13 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
+        libcairo2 \
+        libexpat1 \
+        libfreetype6 \
+        libgif7 \
+        libjpeg62-turbo \
+        libpango-1.0-0 \
+        libpng16-16 \
         dumb-init \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /app \
