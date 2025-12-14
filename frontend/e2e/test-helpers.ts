@@ -7,10 +7,10 @@ const CONNECTION_REFUSED_PATTERNS = [
     'Connection refused',
 ];
 
-const DEFAULT_RETRY_ATTEMPTS = 12;
+const DEFAULT_RETRY_ATTEMPTS = 6;
 const DEFAULT_RETRY_DELAY_MS = 300;
-const DEFAULT_MAX_LOG_ATTEMPTS = 5;
-const DEFAULT_MAX_DURATION_MS = 30_000;
+const DEFAULT_MAX_LOG_ATTEMPTS = 4;
+const DEFAULT_MAX_DURATION_MS = 10_000;
 
 const GAME_STATE_MODULE = '/src/utils/gameState/common.js';
 

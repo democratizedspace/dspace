@@ -20,12 +20,12 @@ function createMockPage(failures: number): Page {
 }
 
 describe('navigateWithRetry', () => {
-    it('handles multiple connection refusals before succeeding with default retries', async () => {
-        const page = createMockPage(7);
+    it('handles a handful of connection refusals before succeeding with default retries', async () => {
+        const page = createMockPage(3);
 
         await expect(navigateWithRetry(page, 'http://127.0.0.1:3000')).resolves.toBeUndefined();
 
-        expect(page.goto).toHaveBeenCalledTimes(8);
+        expect(page.goto).toHaveBeenCalledTimes(4);
         expect(page.waitForTimeout).toHaveBeenCalled();
     });
 
