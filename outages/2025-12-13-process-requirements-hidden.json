@@ -2,8 +2,8 @@
   "id": "2025-12-13-process-requirements-hidden",
   "date": "2025-12-13",
   "component": "process page UI",
-  "rootCause": "Process item lists hid whenever inventory counts were zero, so requirements and outputs vanished for empty inventories.",
-  "resolution": "CompactItemList now renders when a process defines items, and a regression test covers zero-count requirements.",
+  "rootCause": "Two issues: (1) Process item lists hid whenever inventory counts were zero, so requirements and outputs vanished for empty inventories. (2) Required items displayed as inventory/required instead of required/inventory, making it unclear what was needed vs available.",
+  "resolution": "CompactItemList now renders when a process defines items (not when counts > 0), and displays requireItems in the format required/inventory (e.g., 5/10 means need 5, have 10). A regression test covers zero-count requirements and validates the correct format.",
   "references": [
     "https://staging.democratized.space/processes/solar-200Wh",
     "frontend/src/components/__tests__/Process.spec.ts"

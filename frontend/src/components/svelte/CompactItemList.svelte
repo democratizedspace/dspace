@@ -44,12 +44,6 @@
         itemCounts.set(getItemCounts(itemList));
         fullItemList = generateFullItemList();
     }
-
-    function getQty(count) {
-        if (increase) return count;
-        if (decrease) return -count;
-        return count;
-    }
 </script>
 
 {#if isMounted}
@@ -75,17 +69,26 @@
                                 class:disabled={disabled || $itemCounts[item.id] < item.count}
                                 class:inverted
                             >
-                                {prettyPrintNumber($itemCounts[item.id])}
-                                {#if item.count !== null}
-                                    <span
-                                        class="qty {getQty(item.count) < 0 && !noRed ? 'neg' : ''}"
-                                    >
-                                        {#if getQty(item.count) < 0}
-                                            −{prettyPrintNumber(Math.abs(getQty(item.count)))}
-                                        {:else}
-                                            {prettyPrintNumber(getQty(item.count))}
-                                        {/if}
-                                    </span>
+                                {#if increase}
+                                    {prettyPrintNumber($itemCounts[item.id])}
+                                    {#if item.count !== null}
+                                        <span class="qty">
+                                            +{prettyPrintNumber(item.count)}
+                                        </span>
+                                    {/if}
+                                {:else if decrease}
+                                    {prettyPrintNumber($itemCounts[item.id])}
+                                    {#if item.count !== null}
+                                        <span class="qty {!noRed ? 'neg' : ''}">
+                                            −{prettyPrintNumber(item.count)}
+                                        </span>
+                                    {/if}
+                                {:else if item.count !== null}
+                                    <span class="qty">
+                                        {prettyPrintNumber(item.count)}
+                                    </span>/{prettyPrintNumber($itemCounts[item.id])}
+                                {:else}
+                                    {prettyPrintNumber($itemCounts[item.id])}
                                 {/if}
                                 x {item.name}
                             </p>

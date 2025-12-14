@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { compile, walk } from 'svelte/compiler';
+import { compile } from 'svelte/compiler';
+import { walk } from 'estree-walker';
 import postcss from 'postcss';
 import postcssScss from 'postcss-scss';
 
@@ -159,6 +160,17 @@ function collectButtonTypeIssues(source, ast, filename) {
                 return;
             }
 
+            // Defensive check for attributes
+            if (!node.attributes || !Array.isArray(node.attributes)) {
+                issues.push({
+                    type: 'button-type',
+                    message: 'Button elements must declare a type attribute.',
+                    filename,
+                    position: getPositionFromIndex(source, node.start ?? -1),
+                });
+                return;
+            }
+
             const hasTypeAttribute = node.attributes.some((attribute) => {
                 if (attribute.type !== 'Attribute' || attribute.name !== 'type') {
                     return false;
@@ -192,6 +204,9 @@ function collectButtonTypeIssues(source, ast, filename) {
 }
 
 function getAttribute(node, name) {
+    if (!node.attributes || !Array.isArray(node.attributes)) {
+        return undefined;
+    }
     return node.attributes.find((attribute) => {
         return attribute.type === 'Attribute' && attribute.name === name;
     });

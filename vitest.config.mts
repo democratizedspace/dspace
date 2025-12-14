@@ -1,16 +1,60 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vitest/config';
+import { defineConfig, Plugin } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Custom plugin to resolve Svelte subpath imports
+// This runs before vite:import-analysis and resolves the imports correctly
+function svelteSubpathResolver(): Plugin {
+  const svelteBase = path.resolve(__dirname, './node_modules/svelte/src');
+  
+  return {
+    name: 'svelte-subpath-resolver',
+    enforce: 'pre',
+    resolveId(source, importer) {
+      // Map Svelte subpath imports to actual file locations
+      // Return the resolved path directly
+      const mapping: Record<string, string> = {
+        'svelte/compiler': path.join(svelteBase, 'compiler/index.js'),
+        'svelte/store': path.join(svelteBase, 'store/index-server.js'),
+        'svelte/animate': path.join(svelteBase, 'animate/index.js'),
+        'svelte/easing': path.join(svelteBase, 'easing/index.js'),
+        'svelte/internal': path.join(svelteBase, 'internal/index.js'),
+        'svelte/internal/client': path.join(svelteBase, 'internal/client/index.js'),
+        'svelte/internal/server': path.join(svelteBase, 'internal/server/index.js'),
+        'svelte/motion': path.join(svelteBase, 'motion/index.js'),
+        'svelte/transition': path.join(svelteBase, 'transition/index.js'),
+      };
+      
+      if (mapping[source]) {
+        return { id: mapping[source], external: false };
+      }
+      
+      return null;
+    }
+  };
+}
+
 export default defineConfig({
-  plugins: [svelte()],
+  plugins: [
+    svelteSubpathResolver(),
+    svelte({
+      configFile: path.resolve(__dirname, './svelte.config.js')
+    })
+  ],
   resolve: {
     alias: {
-      svelte: path.resolve(__dirname, './frontend/node_modules/svelte')
+      'svelte': path.resolve(__dirname, './node_modules/svelte/src/index-server.js')
     }
+  },
+  ssr: {
+    noExternal: [
+      'svelte',
+      '@testing-library/svelte',
+      /^svelte\//  // Include all svelte subpath imports
+    ]
   },
   test: {
     environment: 'jsdom',

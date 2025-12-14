@@ -97,5 +97,6 @@ test('shows required items even when counts are zero', async () => {
 
     await tick();
     expect(getByText('Requires:')).toBeTruthy();
-    expect(getByText(/Test Item/)).toBeTruthy();
+    // Assert format is "required/inventory" (2/0)
+    expect(getByText(/2\/0.*Test Item/)).toBeTruthy();
 });
