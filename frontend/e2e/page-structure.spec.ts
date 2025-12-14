@@ -173,9 +173,7 @@ test.describe('Page Layout Structure', () => {
                 const leftmostControl = Math.min(toggleBox.x, avatarBox.x);
 
                 expect(
-                    Math.abs(
-                        toggleBox.x + toggleBox.width - (avatarBox.x + avatarBox.width)
-                    )
+                    Math.abs(toggleBox.x + toggleBox.width - (avatarBox.x + avatarBox.width))
                 ).toBeLessThan(alignmentTolerance);
 
                 expect(leftmostControl).toBeGreaterThan(headerCenter - 12);

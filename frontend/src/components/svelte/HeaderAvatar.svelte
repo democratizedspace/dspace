@@ -9,12 +9,7 @@
     });
 </script>
 
-<a
-    class="header-avatar"
-    href="/profile"
-    aria-label="Profile"
-    data-testid="header-avatar-link"
->
+<a class="header-avatar" href="/profile" aria-label="Profile" data-testid="header-avatar-link">
     <img
         class="header-avatar__image"
         src={avatarUrl}

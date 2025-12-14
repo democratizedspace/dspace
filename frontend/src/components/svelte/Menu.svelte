@@ -182,5 +182,4 @@
         /* make the cursor normal */
         cursor: default;
     }
-
 </style>
