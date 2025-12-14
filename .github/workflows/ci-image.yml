@@ -101,6 +101,9 @@ jobs:
 
       - name: Smoke test - verify container boots and serves requests
         run: |
+          docker run --rm dspace-test:latest \
+            node -e "require('canvas'); console.log('canvas ok')"
+
           # Start container in background with NODE_OPTIONS to show uncaught exceptions
           docker run -d --name dspace-smoke-test -p 127.0.0.1:8080:8080 \
             -e NODE_OPTIONS="--unhandled-rejections=warn" \
@@ -188,7 +191,29 @@ jobs:
           else
             echo "Root page is responding with HTTP 200!"
           fi
-          
+
+          echo "Testing docs page..."
+          DOC_RESPONSE=$(curl -s -w '\n%{http_code}' --max-time 10 "$BASE_URL/docs/dCarbon" \
+            2>/dev/null || echo -e "\n000")
+          DOC_CODE=$(echo "$DOC_RESPONSE" | tail -n1)
+          DOC_BODY=$(echo "$DOC_RESPONSE" | head -n -1)
+
+          if [ "$DOC_CODE" != "200" ]; then
+            echo "Docs page returned HTTP $DOC_CODE"
+            echo "--- /docs/dCarbon body ---"
+            echo "$DOC_BODY" | head -c 500
+            docker stop dspace-smoke-test
+            docker rm dspace-smoke-test
+            exit 1
+          fi
+
+          if ! echo "$DOC_BODY" | grep -qi "dCarbon represents"; then
+            echo "Docs page body did not include expected text"
+            docker stop dspace-smoke-test
+            docker rm dspace-smoke-test
+            exit 1
+          fi
+
           # Cleanup
           docker stop dspace-smoke-test
           docker rm dspace-smoke-test

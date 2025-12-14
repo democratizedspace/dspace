@@ -1,0 +1,12 @@
+{
+  "id": "2025-12-16-canvas-libexpat-missing",
+  "date": "2025-12-16",
+  "component": "docs-ssr",
+  "rootCause": "Production runtime image omitted libexpat (and other canvas runtime libs), causing require('canvas') to throw in SSR and return HTTP 500 for /docs routes.",
+  "resolution": "Added missing system libraries to the runtime Docker image and added a container smoke test that requires canvas and curls /docs/dCarbon in CI to prevent regressions.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/pull/2344",
+    "Dockerfile",
+    ".github/workflows/ci-image.yml"
+  ]
+}

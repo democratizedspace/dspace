@@ -63,6 +63,17 @@ RUN apt-get update \
         ca-certificates \
         curl \
         dumb-init \
+        libexpat1 \
+        libcairo2 \
+        libpango-1.0-0 \
+        libpangocairo-1.0-0 \
+        libjpeg62-turbo \
+        libgif7 \
+        libpng16-16 \
+        libpixman-1-0 \
+        libfreetype6 \
+        libfontconfig1 \
+        librsvg2-2 \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /app \
     && chown node:node /app
