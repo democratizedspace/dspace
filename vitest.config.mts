@@ -54,7 +54,11 @@ export default defineConfig({
     conditions: ['default', 'import']
   },
   ssr: {
-    noExternal: ['svelte', '@testing-library/svelte']
+    noExternal: [
+      'svelte',
+      '@testing-library/svelte',
+      /^svelte\//  // Include all svelte subpath imports
+    ]
   },
   test: {
     environment: 'jsdom',
