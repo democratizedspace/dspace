@@ -99,6 +99,11 @@ jobs:
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
 
+      - name: Canvas native deps smoke test
+        run: |
+          docker run --rm --entrypoint node dspace-test:latest \
+            -e "require('canvas'); console.log('canvas ok')"
+
       - name: Smoke test - verify container boots and serves requests
         run: |
           # Start container in background with NODE_OPTIONS to show uncaught exceptions
@@ -188,7 +193,28 @@ jobs:
           else
             echo "Root page is responding with HTTP 200!"
           fi
-          
+
+          echo "Testing docs SSR page..."
+          DOCS_RESPONSE=$(curl -s -w '\n%{http_code}' --max-time 10 "$BASE_URL/docs/dCarbon" 2>/dev/null || echo -e "\n000")
+          DOCS_CODE=$(echo "$DOCS_RESPONSE" | tail -n1)
+          DOCS_BODY=$(echo "$DOCS_RESPONSE" | head -n -1)
+          if [ "$DOCS_CODE" != "200" ]; then
+            echo "ERROR: /docs/dCarbon returned HTTP $DOCS_CODE"
+            echo "--- /docs/dCarbon response ---"
+            echo "$DOCS_BODY" | head -c 2000
+            docker stop dspace-smoke-test
+            docker rm dspace-smoke-test
+            exit 1
+          fi
+
+          if ! echo "$DOCS_BODY" | grep -qi "dCarbon represents the amount of carbon dioxide"; then
+            echo "ERROR: /docs/dCarbon did not contain expected text"
+            docker stop dspace-smoke-test
+            docker rm dspace-smoke-test
+            exit 1
+          fi
+          echo "/docs/dCarbon responded with expected content"
+
           # Cleanup
           docker stop dspace-smoke-test
           docker rm dspace-smoke-test
