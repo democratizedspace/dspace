@@ -8,9 +8,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [svelte()],
   resolve: {
-    alias: {
-      svelte: path.resolve(__dirname, './frontend/node_modules/svelte')
-    }
+    dedupe: ['svelte'],
+    conditions: ['svelte'],
+    mainFields: ['svelte', 'module', 'main']
   },
   test: {
     environment: 'jsdom',
@@ -18,6 +18,13 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     include: ['tests/**/*.test.ts', 'scripts/tests/**/*.test.ts', 'backend/**/*.test.ts'],
     exclude: ['frontend/e2e/**', 'frontend/__tests__/**'],
+    deps: {
+      optimizer: {
+        web: {
+          include: ['svelte']
+        }
+      }
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'json-summary'],
