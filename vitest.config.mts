@@ -13,34 +13,23 @@ function svelteSubpathResolver(): Plugin {
   return {
     name: 'svelte-subpath-resolver',
     enforce: 'pre',
-    resolveId(source, importer, options) {
+    resolveId(source, importer) {
       // Map Svelte subpath imports to actual file locations
-      if (source === 'svelte/compiler') {
-        return this.resolve(path.join(svelteBase, 'compiler/index.js'), importer, { skipSelf: true, ...options });
-      }
-      if (source === 'svelte/store') {
-        return this.resolve(path.join(svelteBase, 'store/index-server.js'), importer, { skipSelf: true, ...options });
-      }
-      if (source === 'svelte/animate') {
-        return this.resolve(path.join(svelteBase, 'animate/index.js'), importer, { skipSelf: true, ...options });
-      }
-      if (source === 'svelte/easing') {
-        return this.resolve(path.join(svelteBase, 'easing/index.js'), importer, { skipSelf: true, ...options });
-      }
-      if (source === 'svelte/internal') {
-        return this.resolve(path.join(svelteBase, 'internal/index.js'), importer, { skipSelf: true, ...options });
-      }
-      if (source === 'svelte/internal/client') {
-        return this.resolve(path.join(svelteBase, 'internal/client/index.js'), importer, { skipSelf: true, ...options });
-      }
-      if (source === 'svelte/internal/server') {
-        return this.resolve(path.join(svelteBase, 'internal/server/index.js'), importer, { skipSelf: true, ...options });
-      }
-      if (source === 'svelte/motion') {
-        return this.resolve(path.join(svelteBase, 'motion/index.js'), importer, { skipSelf: true, ...options });
-      }
-      if (source === 'svelte/transition') {
-        return this.resolve(path.join(svelteBase, 'transition/index.js'), importer, { skipSelf: true, ...options });
+      // Return the resolved path directly
+      const mapping: Record<string, string> = {
+        'svelte/compiler': path.join(svelteBase, 'compiler/index.js'),
+        'svelte/store': path.join(svelteBase, 'store/index-server.js'),
+        'svelte/animate': path.join(svelteBase, 'animate/index.js'),
+        'svelte/easing': path.join(svelteBase, 'easing/index.js'),
+        'svelte/internal': path.join(svelteBase, 'internal/index.js'),
+        'svelte/internal/client': path.join(svelteBase, 'internal/client/index.js'),
+        'svelte/internal/server': path.join(svelteBase, 'internal/server/index.js'),
+        'svelte/motion': path.join(svelteBase, 'motion/index.js'),
+        'svelte/transition': path.join(svelteBase, 'transition/index.js'),
+      };
+      
+      if (mapping[source]) {
+        return { id: mapping[source], external: false };
       }
       
       return null;
