@@ -8,8 +8,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 const sveltePackageDir = path.dirname(require.resolve('svelte/package.json'));
 const svelteStorePath = require.resolve('svelte/store');
-const svelteInternalClientPath = require.resolve('svelte/internal/client');
 const svelteCompilerPath = require.resolve('svelte/compiler');
+
+const svelteInternalPath = (() => {
+  try {
+    return require.resolve('svelte/internal/client');
+  } catch (error) {
+    return require.resolve('svelte/internal');
+  }
+})();
 
 export default defineConfig({
   plugins: [svelte()],
@@ -21,7 +28,7 @@ export default defineConfig({
       },
       {
         find: 'svelte/internal/client',
-        replacement: svelteInternalClientPath
+        replacement: svelteInternalPath
       },
       {
         find: 'svelte/compiler',
