@@ -42,26 +42,35 @@ const buildLatestChangelogHtml = (entries = []) => {
 };
 
 const { slug } = Astro.params;
+const slugString = typeof slug === 'string' ? slug : '';
+const normalizedSlug = slugString.toLowerCase();
 let title, html;
+let matchedDoc, docError;
 
 const docs = await Astro.glob('./md/*.md');
 
-const doc = docs.find((doc) => doc.frontmatter.slug === slug);
+matchedDoc =
+    docs.find((doc) => doc.frontmatter.slug === slugString) ??
+    docs.find((doc) => doc.frontmatter.slug?.toLowerCase?.() === normalizedSlug);
 
-if (doc) {
-    let compiled = doc.compiledContent();
+if (matchedDoc) {
+    try {
+        let compiled = await matchedDoc.compiledContent();
 
-    if (slug === 'changelog') {
-        const changelogEntries = await Astro.glob('./md/changelog/*.md');
-        const latestHtml = buildLatestChangelogHtml(changelogEntries);
-        compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);
+        if (slugString === 'changelog') {
+            const changelogEntries = await Astro.glob('./md/changelog/*.md');
+            const latestHtml = buildLatestChangelogHtml(changelogEntries);
+            compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);
+        }
+
+        html = fixMarkdownText(typeof compiled === 'string' ? compiled : String(compiled ?? ''));
+        title = matchedDoc.frontmatter.title;
+    } catch (error) {
+        console.error(`Failed to render doc: ${slugString}`, error);
+        docError = error;
     }
-
-    html = fixMarkdownText(compiled);
-    title = doc.frontmatter.title;
 }
 
-const slugString = typeof slug === 'string' ? slug : '';
 const prettyDocName = slugString
     ? slugString
           .split('-')
@@ -76,19 +85,19 @@ const newDocUrl = slugString
 ---
 
 {
-    doc
+    matchedDoc && html && !docError
     ?
     <div>
-        <Page title={doc.frontmatter.title} columns="1">
+        <Page title={matchedDoc.frontmatter.title} columns="1">
             <div>
                 <Chip text="Docs" href="/docs" />
                 <span>-></span>
-                <Chip text={title} href={`/docs/${slug}`} />
+                <Chip text={title} href={`/docs/${slugString}`} />
             </div>
             <span set:html={html} />
         </Page>
     </div>
-     : 
+     :
     <div>
         <Page title="Doc not found" columns="1">
             <Chip text="Docs" href="/docs" />

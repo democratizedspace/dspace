@@ -1,0 +1,11 @@
+{
+  "id": "docs-dcarbon-500",
+  "date": "2025-12-13",
+  "component": "frontend:docs",
+  "rootCause": "Docs Markdown rendering threw an unhandled exception during SSR, so requests to /docs/* pages like /docs/dCarbon returned 500 with an empty body on staging.",
+  "resolution": "Wrap doc rendering in defensive checks to tolerate Markdown compilation failures and added an end-to-end test that loads the dCarbon guide through docs search to guard the flow.",
+  "references": [
+    "https://staging.democratized.space/docs/dCarbon",
+    "frontend/e2e/docs-dcarbon.spec.ts"
+  ]
+}
