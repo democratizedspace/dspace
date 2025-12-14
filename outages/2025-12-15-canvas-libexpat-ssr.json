@@ -7,6 +7,6 @@
   "references": [
     "Dockerfile",
     ".github/workflows/ci-image.yml",
-    "frontend/src/pages/docs/outages/[slug].astro"
+    "frontend/src/pages/docs/[slug].astro"
   ]
 }
