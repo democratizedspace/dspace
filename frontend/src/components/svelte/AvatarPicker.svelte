@@ -28,7 +28,7 @@
             {#if selectedIndex >= 0}
                 <img class="preview" src={defaultPFPs[selectedIndex]} alt="Selected Avatar" />
             {:else}
-                <img class="preview hidden" alt="" />
+                <img class="preview hidden" alt="" aria-hidden="true" />
             {/if}
         </div>
         <button

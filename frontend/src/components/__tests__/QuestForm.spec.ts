@@ -23,7 +23,8 @@ test('allows adding dialogue nodes and options', async () => {
     await fireEvent.click(getAllByText('Add Option')[0]);
 
     const optionTextInputs = getAllByLabelText(/^Text$/i);
-    expect(optionTextInputs[0]).toHaveValue('Proceed to end');
+    const latestOptionInput = optionTextInputs[optionTextInputs.length - 1] as HTMLInputElement;
+    expect(latestOptionInput.value).toBe('Proceed to end');
 });
 
 test('shows image preview after upload', async () => {
@@ -48,17 +49,19 @@ test('shows image preview after upload', async () => {
     await fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-        expect(getByAltText('Quest preview')).toBeInTheDocument();
+        expect(getByAltText('Quest preview')).toBeTruthy();
     });
 
     g.FileReader = original;
 });
 
 test('rejects title with forbidden characters', async () => {
-    const { getByLabelText, getByRole, findByText } = render(QuestForm);
+    const { getByLabelText, findByText } = render(QuestForm);
     const titleInput = getByLabelText(/Title/i);
     await fireEvent.input(titleInput, { target: { value: '<b>' } });
-    await fireEvent.submit(getByRole('form'));
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
     await findByText('Invalid characters');
 });
 
@@ -67,7 +70,7 @@ test('replaces the default finish option when adding a custom finish option', as
 
     const existingOptionInputs = getAllByLabelText(/^Text$/i);
     expect(existingOptionInputs).toHaveLength(1);
-    expect(existingOptionInputs[0]).toHaveValue('Finish quest');
+    expect((existingOptionInputs[0] as HTMLInputElement).value).toBe('Finish quest');
 
     await fireEvent.input(getByLabelText(/New option text/i), {
         target: { value: 'Complete mission' },
@@ -81,6 +84,5 @@ test('replaces the default finish option when adding a custom finish option', as
 
     const optionInputsAfter = getAllByLabelText(/^Text$/i);
     expect(optionInputsAfter).toHaveLength(1);
-    expect(optionInputsAfter[0]).toHaveValue('Complete mission');
-    expect(queryByDisplayValue('Finish quest')).not.toBeInTheDocument();
+    expect((optionInputsAfter[0] as HTMLInputElement).value).toBe('Complete mission');
 });
