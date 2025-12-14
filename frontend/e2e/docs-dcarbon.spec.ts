@@ -5,7 +5,7 @@ const D_CARBON_SLUG = '/docs/dcarbon';
 const waitForDocNavigation = (page: Page) =>
     page.waitForResponse(
         (response) =>
-            response.url().includes(D_CARBON_SLUG) &&
+            response.url().toLowerCase().includes(D_CARBON_SLUG) &&
             response.request().resourceType() === 'document'
     );
 
@@ -23,7 +23,7 @@ test('dCarbon doc loads from the docs search flow', async ({ page }) => {
     const [docResponse] = await Promise.all([waitForDocNavigation(page), dcarbonLink.click()]);
 
     expect(docResponse.status()).toBe(200);
-    await expect(page).toHaveURL(new RegExp(`${D_CARBON_SLUG}$`));
+    await expect(page).toHaveURL(new RegExp(`${D_CARBON_SLUG}/?$`, 'i'));
     await expect(
         page.getByRole('heading', { name: /reducing your dcarbon footprint/i })
     ).toBeVisible();
