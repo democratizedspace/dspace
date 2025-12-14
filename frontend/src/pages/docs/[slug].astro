@@ -42,26 +42,34 @@ const buildLatestChangelogHtml = (entries = []) => {
 };
 
 const { slug } = Astro.params;
-let title, html;
+let title, html, doc;
 
 const docs = await Astro.glob('./md/*.md');
 
-const doc = docs.find((doc) => doc.frontmatter.slug === slug);
+const slugString = typeof slug === 'string' ? slug : '';
+const normalizedSlug = slugString.toLowerCase();
 
-if (doc) {
-    let compiled = doc.compiledContent();
+try {
+    doc = docs.find(
+        (entry) => String(entry?.frontmatter?.slug ?? '').toLowerCase() === normalizedSlug
+    );
 
-    if (slug === 'changelog') {
-        const changelogEntries = await Astro.glob('./md/changelog/*.md');
-        const latestHtml = buildLatestChangelogHtml(changelogEntries);
-        compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);
+    if (doc) {
+        let compiled = await doc.compiledContent();
+
+        if (normalizedSlug === 'changelog') {
+            const changelogEntries = await Astro.glob('./md/changelog/*.md');
+            const latestHtml = buildLatestChangelogHtml(changelogEntries);
+            compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);
+        }
+
+        html = fixMarkdownText(compiled);
+        title = doc.frontmatter.title;
     }
-
-    html = fixMarkdownText(compiled);
-    title = doc.frontmatter.title;
+} catch (error) {
+    console.error('Failed to render docs page', slugString, error);
 }
 
-const slugString = typeof slug === 'string' ? slug : '';
 const prettyDocName = slugString
     ? slugString
           .split('-')
