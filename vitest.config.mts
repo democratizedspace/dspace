@@ -11,16 +11,18 @@ const svelteImportResolverPlugin = (): Plugin => ({
   enforce: 'pre',
   resolveId(id, importer) {
     // Map Svelte subpath imports to their actual file locations
+    // Use node_modules/svelte path with explicit mapping
+    const svelteBase = path.resolve(__dirname, './node_modules/svelte');
     const svelteMap: Record<string, string> = {
-      'svelte/compiler': path.resolve(__dirname, './node_modules/svelte/src/compiler/index.js'),
-      'svelte/store': path.resolve(__dirname, './node_modules/svelte/src/store/index-server.js'),
-      'svelte/animate': path.resolve(__dirname, './node_modules/svelte/src/animate/index.js'),
-      'svelte/easing': path.resolve(__dirname, './node_modules/svelte/src/easing/index.js'),
-      'svelte/internal': path.resolve(__dirname, './node_modules/svelte/src/internal/index.js'),
-      'svelte/internal/client': path.resolve(__dirname, './node_modules/svelte/src/internal/client/index.js'),
-      'svelte/internal/server': path.resolve(__dirname, './node_modules/svelte/src/internal/server/index.js'),
-      'svelte/motion': path.resolve(__dirname, './node_modules/svelte/src/motion/index.js'),
-      'svelte/transition': path.resolve(__dirname, './node_modules/svelte/src/transition/index.js')
+      'svelte/compiler': `${svelteBase}/src/compiler/index.js`,
+      'svelte/store': `${svelteBase}/src/store/index-server.js`,
+      'svelte/animate': `${svelteBase}/src/animate/index.js`,
+      'svelte/easing': `${svelteBase}/src/easing/index.js`,
+      'svelte/internal': `${svelteBase}/src/internal/index.js`,
+      'svelte/internal/client': `${svelteBase}/src/internal/client/index.js`,
+      'svelte/internal/server': `${svelteBase}/src/internal/server/index.js`,
+      'svelte/motion': `${svelteBase}/src/motion/index.js`,
+      'svelte/transition': `${svelteBase}/src/transition/index.js`
     };
     
     if (svelteMap[id]) {
