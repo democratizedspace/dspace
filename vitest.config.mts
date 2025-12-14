@@ -1,28 +1,63 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vitest/config';
+import { defineConfig, Plugin } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Custom plugin to resolve Svelte subpath imports
+// This runs before vite:import-analysis and resolves the imports correctly
+function svelteSubpathResolver(): Plugin {
+  const svelteBase = path.resolve(__dirname, './node_modules/svelte/src');
+  
+  return {
+    name: 'svelte-subpath-resolver',
+    enforce: 'pre',
+    resolveId(source, importer, options) {
+      // Map Svelte subpath imports to actual file locations
+      if (source === 'svelte/compiler') {
+        return this.resolve(path.join(svelteBase, 'compiler/index.js'), importer, { skipSelf: true, ...options });
+      }
+      if (source === 'svelte/store') {
+        return this.resolve(path.join(svelteBase, 'store/index-server.js'), importer, { skipSelf: true, ...options });
+      }
+      if (source === 'svelte/animate') {
+        return this.resolve(path.join(svelteBase, 'animate/index.js'), importer, { skipSelf: true, ...options });
+      }
+      if (source === 'svelte/easing') {
+        return this.resolve(path.join(svelteBase, 'easing/index.js'), importer, { skipSelf: true, ...options });
+      }
+      if (source === 'svelte/internal') {
+        return this.resolve(path.join(svelteBase, 'internal/index.js'), importer, { skipSelf: true, ...options });
+      }
+      if (source === 'svelte/internal/client') {
+        return this.resolve(path.join(svelteBase, 'internal/client/index.js'), importer, { skipSelf: true, ...options });
+      }
+      if (source === 'svelte/internal/server') {
+        return this.resolve(path.join(svelteBase, 'internal/server/index.js'), importer, { skipSelf: true, ...options });
+      }
+      if (source === 'svelte/motion') {
+        return this.resolve(path.join(svelteBase, 'motion/index.js'), importer, { skipSelf: true, ...options });
+      }
+      if (source === 'svelte/transition') {
+        return this.resolve(path.join(svelteBase, 'transition/index.js'), importer, { skipSelf: true, ...options });
+      }
+      
+      return null;
+    }
+  };
+}
+
 export default defineConfig({
   plugins: [
+    svelteSubpathResolver(),
     svelte({
       configFile: path.resolve(__dirname, './svelte.config.js')
     })
   ],
   resolve: {
     alias: {
-      'svelte': path.resolve(__dirname, './node_modules/svelte/src/index-server.js'),
-      'svelte/compiler': path.resolve(__dirname, './node_modules/svelte/src/compiler/index.js'),
-      'svelte/store': path.resolve(__dirname, './node_modules/svelte/src/store/index-server.js'),
-      'svelte/animate': path.resolve(__dirname, './node_modules/svelte/src/animate/index.js'),
-      'svelte/easing': path.resolve(__dirname, './node_modules/svelte/src/easing/index.js'),
-      'svelte/internal': path.resolve(__dirname, './node_modules/svelte/src/internal/index.js'),
-      'svelte/internal/client': path.resolve(__dirname, './node_modules/svelte/src/internal/client/index.js'),
-      'svelte/internal/server': path.resolve(__dirname, './node_modules/svelte/src/internal/server/index.js'),
-      'svelte/motion': path.resolve(__dirname, './node_modules/svelte/src/motion/index.js'),
-      'svelte/transition': path.resolve(__dirname, './node_modules/svelte/src/transition/index.js')
+      'svelte': path.resolve(__dirname, './node_modules/svelte/src/index-server.js')
     }
   },
   ssr: {
