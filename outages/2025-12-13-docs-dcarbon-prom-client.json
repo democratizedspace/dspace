@@ -1,0 +1,12 @@
+{
+  "id": "docs-dcarbon-prom-client-missing",
+  "date": "2025-12-13",
+  "component": "docs pages",
+  "rootCause": "prom-client was not installed, so the metrics utility failed to load during the Astro build and SSR routes like /docs/dCarbon returned 500 errors.",
+  "resolution": "Restored the prom-client dependency and added a Playwright test that loads the dCarbon doc via search to guard the flow.",
+  "references": [
+    "frontend/src/utils/metrics.js",
+    "package.json",
+    "frontend/e2e/docs-dcarbon.spec.ts"
+  ]
+}
