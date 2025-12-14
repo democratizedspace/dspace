@@ -22,7 +22,7 @@
                 id={importTextareaId}
                 aria-labelledby={importTextareaLabelId}
                 bind:value={importString}
-            />
+            ></textarea>
         </div>
         <Chip text="Import" on:click={handleImport} inverted={true} />
     </div>
