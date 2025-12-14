@@ -12,3 +12,7 @@ test('resolves svelte compiler in vitest', async () => {
 test('resolves svelte store utilities in vitest', async () => {
   await loadModule('svelte/store');
 });
+
+test('resolves svelte client internals in vitest', async () => {
+  await loadModule('svelte/internal/client');
+});
