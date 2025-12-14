@@ -1,21 +1,55 @@
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { defineConfig } from 'vitest/config';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+const sveltePackageDir = path.dirname(require.resolve('svelte/package.json'));
+const svelteStorePath = require.resolve('svelte/store');
+const svelteCompilerPath = require.resolve('svelte/compiler');
+
+const svelteInternalPath = (() => {
+  try {
+    return require.resolve('svelte/internal/client');
+  } catch (error) {
+    return require.resolve('svelte/internal');
+  }
+})();
 
 export default defineConfig({
   plugins: [svelte()],
   resolve: {
-    alias: {
-      svelte: path.resolve(__dirname, './frontend/node_modules/svelte')
-    }
+    alias: [
+      {
+        find: 'svelte/store',
+        replacement: svelteStorePath
+      },
+      {
+        find: 'svelte/internal/client',
+        replacement: svelteInternalPath
+      },
+      {
+        find: 'svelte/compiler',
+        replacement: svelteCompilerPath
+      },
+      {
+        find: 'svelte',
+        replacement: sveltePackageDir
+      }
+    ],
+    dedupe: ['svelte']
   },
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
+    server: {
+      deps: {
+        inline: ['svelte']
+      }
+    },
     include: ['tests/**/*.test.ts', 'scripts/tests/**/*.test.ts', 'backend/**/*.test.ts'],
     exclude: ['frontend/e2e/**', 'frontend/__tests__/**'],
     coverage: {

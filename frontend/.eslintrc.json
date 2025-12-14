@@ -12,7 +12,7 @@
         "sourceType": "module",
         "extraFileExtensions": [".svelte"]
     },
-    "plugins": ["@typescript-eslint", "svelte3"],
+    "plugins": ["@typescript-eslint"],
     "ignorePatterns": [
         "dist/**/*",
         "node_modules/**/*",
@@ -24,7 +24,13 @@
     "overrides": [
         {
             "files": ["*.svelte"],
-            "processor": "svelte3/svelte3",
+            "parser": "svelte-eslint-parser",
+            "parserOptions": {
+                "parser": "@typescript-eslint/parser",
+                "extraFileExtensions": [".svelte"],
+                "project": "./tsconfig.json"
+            },
+            "plugins": ["svelte"],
             "rules": {
                 "@typescript-eslint/no-unused-vars": "off"
             }
@@ -80,8 +86,8 @@
         "@typescript-eslint/no-require-imports": "off"
     },
     "settings": {
-        "svelte3": {
-            "ignore-warnings": false
+        "svelte": {
+            "ignoreWarnings": []
         }
     }
 }
