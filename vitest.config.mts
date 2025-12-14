@@ -1,41 +1,12 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { defineConfig, Plugin } from 'vitest/config';
+import { defineConfig } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Plugin to resolve Svelte subpath imports before import analysis
-const svelteImportResolverPlugin = (): Plugin => ({
-  name: 'svelte-import-resolver',
-  enforce: 'pre',
-  resolveId(id, importer) {
-    // Map Svelte subpath imports to their actual file locations
-    // Use node_modules/svelte path with explicit mapping
-    const svelteBase = path.resolve(__dirname, './node_modules/svelte');
-    const svelteMap: Record<string, string> = {
-      'svelte/compiler': `${svelteBase}/src/compiler/index.js`,
-      'svelte/store': `${svelteBase}/src/store/index-server.js`,
-      'svelte/animate': `${svelteBase}/src/animate/index.js`,
-      'svelte/easing': `${svelteBase}/src/easing/index.js`,
-      'svelte/internal': `${svelteBase}/src/internal/index.js`,
-      'svelte/internal/client': `${svelteBase}/src/internal/client/index.js`,
-      'svelte/internal/server': `${svelteBase}/src/internal/server/index.js`,
-      'svelte/motion': `${svelteBase}/src/motion/index.js`,
-      'svelte/transition': `${svelteBase}/src/transition/index.js`
-    };
-    
-    if (svelteMap[id]) {
-      return svelteMap[id];
-    }
-    
-    return null;
-  }
-});
-
 export default defineConfig({
   plugins: [
-    svelteImportResolverPlugin(),
     svelte({
       configFile: path.resolve(__dirname, './svelte.config.js')
     })
@@ -52,8 +23,7 @@ export default defineConfig({
       'svelte/internal/server': path.resolve(__dirname, './node_modules/svelte/src/internal/server/index.js'),
       'svelte/motion': path.resolve(__dirname, './node_modules/svelte/src/motion/index.js'),
       'svelte/transition': path.resolve(__dirname, './node_modules/svelte/src/transition/index.js')
-    },
-    conditions: ['default', 'import']
+    }
   },
   ssr: {
     noExternal: [
