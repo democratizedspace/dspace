@@ -10,6 +10,9 @@ test.describe('Process preview', () => {
         await page.goto('/processes/manage');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
+        
+        // Wait for component to be hydrated
+        await page.waitForSelector('[data-hydrated="true"]', { timeout: 10000 });
 
         const firstRow = page.locator('.process-row').first();
         await expect(firstRow).toBeVisible();
@@ -18,9 +21,11 @@ test.describe('Process preview', () => {
         const rowTitle = await firstRow.locator('h3').first().textContent();
 
         await previewButton.click();
-
+        
+        // Wait for the preview to appear
         const preview = firstRow.locator('.process-preview');
-        await expect(preview).toBeVisible();
+        await expect(preview).toBeVisible({ timeout: 10000 });
+        
         if (rowTitle) {
             await expect(preview.locator('h3')).toHaveText(rowTitle.trim());
         }
@@ -35,6 +40,9 @@ test.describe('Process preview', () => {
         await page.goto('/processes/manage');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
+        
+        // Wait for component to be hydrated
+        await page.waitForSelector('[data-hydrated="true"]', { timeout: 10000 });
 
         const rows = page.locator('.process-row');
         await expect(rows.first()).toBeVisible();
@@ -44,12 +52,14 @@ test.describe('Process preview', () => {
         const secondPreviewButton = rows.nth(1).locator('.preview-button');
 
         await firstPreviewButton.click();
+        
         const firstPreview = rows.nth(0).locator('.process-preview');
-        await expect(firstPreview).toBeVisible();
+        await expect(firstPreview).toBeVisible({ timeout: 10000 });
 
         await secondPreviewButton.click();
+        
         const secondPreview = rows.nth(1).locator('.process-preview');
-        await expect(secondPreview).toBeVisible();
+        await expect(secondPreview).toBeVisible({ timeout: 10000 });
         await expect(firstPreview).toBeHidden();
     });
 });
