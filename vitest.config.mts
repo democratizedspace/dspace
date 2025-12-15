@@ -10,6 +10,7 @@ const require = createRequire(import.meta.url);
 const sveltePackageDir = path.dirname(require.resolve('svelte/package.json'));
 const svelteStorePath = require.resolve('svelte/store');
 const svelteCompilerPath = require.resolve('svelte/compiler');
+const svelteInternalServerPath = path.join(sveltePackageDir, 'src/internal/server/index.js');
 
 const svelteInternalPath = (() => {
   try {
@@ -67,6 +68,10 @@ export default defineConfig({
       {
         find: 'svelte/internal/client',
         replacement: svelteInternalPath
+      },
+      {
+        find: 'svelte/internal/server',
+        replacement: svelteInternalServerPath
       },
       {
         find: 'svelte/compiler',
