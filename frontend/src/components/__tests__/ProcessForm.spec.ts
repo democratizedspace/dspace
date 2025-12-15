@@ -3,7 +3,7 @@ import ProcessForm from '../svelte/ProcessForm.svelte';
 
 test('submits text then clears field', async () => {
     // Render with minimal valid data
-    const { getByLabelText, container, getByText } = render(ProcessForm, {
+    const { getByLabelText, container } = render(ProcessForm, {
         props: {
             requireItems: [{ id: 'water', count: 1 }],
         },
@@ -17,8 +17,9 @@ test('submits text then clears field', async () => {
     await fireEvent.input(durationInput, { target: { value: '1h' } });
     await fireEvent.submit(form);
 
-    // Wait for async submission to complete
+    // Wait for async submission to complete and verify all fields are cleared
     await waitFor(() => {
         expect(titleInput.value).toBe('');
+        expect(durationInput.value).toBe('');
     });
 });
