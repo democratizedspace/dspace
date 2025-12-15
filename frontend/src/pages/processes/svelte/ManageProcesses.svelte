@@ -3,7 +3,6 @@
     import Process from '../../../components/svelte/Process.svelte';
     import ProcessPreview from '../../../components/svelte/ProcessPreview.svelte';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
-    import { togglePreviewId } from '../../../utils/preview.js';
 
     export let processes = [];
     let customProcesses = [];
@@ -38,11 +37,15 @@
     }
 
     function togglePreview(id) {
-        previewProcessId = togglePreviewId(previewProcessId, id);
+        if (previewProcessId === id) {
+            previewProcessId = null;
+        } else {
+            previewProcessId = id;
+        }
     }
 </script>
 
-<div class="manage-processes">
+<div class="manage-processes" data-hydrated={mounted ? 'true' : 'false'}>
     {#if mounted}
         <div class="controls">
             <input type="text" bind:value={searchTerm} placeholder="Search processes..." />
@@ -81,13 +84,15 @@
                             {/if}
                         </div>
                         {#if previewProcessId === process.id}
-                            <ProcessPreview
-                                title={process.title}
-                                duration={process.duration}
-                                requireItems={process.requireItems}
-                                consumeItems={process.consumeItems}
-                                createItems={process.createItems}
-                            />
+                            <div data-preview-id={previewProcessId} data-process-id={process.id}>
+                                <ProcessPreview
+                                    title={process.title}
+                                    duration={process.duration}
+                                    requireItems={process.requireItems || []}
+                                    consumeItems={process.consumeItems || []}
+                                    createItems={process.createItems || []}
+                                />
+                            </div>
                         {/if}
                     </div>
                 {/each}

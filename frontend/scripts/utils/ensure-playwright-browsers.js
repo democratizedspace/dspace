@@ -7,10 +7,11 @@ const INSTALL_ARGS = ['install', '--with-deps', 'chromium', 'chromium-headless-s
 const INSTALL_DEPS_ARGS = ['install-deps'];
 const INSTALL_DEPS_SENTINEL = '.playwright-deps-installed';
 
-export function resolvePlaywrightCLI(cwd) {
+export function resolvePlaywrightCLI(cwd, fs = { existsSync }) {
     const cliPath = path.join(cwd, PLAYWRIGHT_RELATIVE_CLI);
+    const fsExistsSync = fs?.existsSync || existsSync;
 
-    if (!existsSync(cliPath)) {
+    if (!fsExistsSync(cliPath)) {
         throw new Error(
             `Playwright CLI not found at ${cliPath}. Have you installed frontend dependencies?`
         );
@@ -145,7 +146,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         return;
     }
 
-    const cliPath = resolvePlaywrightCLI(cwd);
+    const cliPath = resolvePlaywrightCLI(cwd, fs);
 
     if (installSystemDeps) {
         ensurePlaywrightSystemDeps({
@@ -181,11 +182,13 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         cwd = process.cwd(),
         env = process.env,
         platform = process.platform,
-        cliPath = resolvePlaywrightCLI(cwd),
+        cliPath,
         depsStampPath = getSystemDepsSentinelPath(cwd),
         exec = execFileSync,
         fs = { existsSync, writeFileSync },
     } = options;
+
+    const resolvedCliPath = cliPath || resolvePlaywrightCLI(cwd, fs);
 
     const {
         existsSync: fsExistsSync = existsSync,
@@ -205,7 +208,7 @@ export function ensurePlaywrightSystemDeps(options = {}) {
     }
 
     try {
-        exec(process.execPath, [cliPath, ...INSTALL_DEPS_ARGS], {
+        exec(process.execPath, [resolvedCliPath, ...INSTALL_DEPS_ARGS], {
             stdio: 'inherit',
             cwd,
             env,
