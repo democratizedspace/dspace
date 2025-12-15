@@ -10,11 +10,14 @@ test.describe('Process preview', () => {
         await page.goto('/processes/manage');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        
+
         // Wait for component to be fully mounted (not just hydrated)
         await page.waitForSelector('[data-hydrated="true"]', { timeout: 10000 });
         // Extra wait to ensure onMount completes and processes are rendered
-        await page.waitForSelector('.process-row .preview-button', { state: 'visible', timeout: 10000 });
+        await page.waitForSelector('.process-row .preview-button', {
+            state: 'visible',
+            timeout: 10000,
+        });
 
         const firstRow = page.locator('.process-row').first();
         await expect(firstRow).toBeVisible();
@@ -25,11 +28,11 @@ test.describe('Process preview', () => {
 
         // Click to show preview
         await previewButton.click({ timeout: 5000 });
-        
+
         // Wait for preview to appear
         const preview = firstRow.locator('.process-preview');
         await expect(preview).toBeVisible({ timeout: 10000 });
-        
+
         if (rowTitle) {
             await expect(preview.locator('h3')).toHaveText(rowTitle.trim());
         }
@@ -38,10 +41,10 @@ test.describe('Process preview', () => {
 
         // Wait for preview to be fully rendered
         await page.waitForTimeout(500);
-        
+
         // Click to hide preview
         await previewButton.click({ timeout: 5000 });
-        
+
         // Wait for it to disappear
         await expect(preview).toBeHidden({ timeout: 10000 });
     });
@@ -50,11 +53,14 @@ test.describe('Process preview', () => {
         await page.goto('/processes/manage');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        
+
         // Wait for component to be fully mounted (not just hydrated)
         await page.waitForSelector('[data-hydrated="true"]', { timeout: 10000 });
         // Extra wait to ensure onMount completes and processes are rendered
-        await page.waitForSelector('.process-row .preview-button', { state: 'visible', timeout: 10000 });
+        await page.waitForSelector('.process-row .preview-button', {
+            state: 'visible',
+            timeout: 10000,
+        });
 
         const rows = page.locator('.process-row');
         await expect(rows.first()).toBeVisible();
@@ -62,7 +68,7 @@ test.describe('Process preview', () => {
 
         const firstPreviewButton = rows.nth(0).locator('.preview-button');
         const secondPreviewButton = rows.nth(1).locator('.preview-button');
-        
+
         await expect(firstPreviewButton).toBeEnabled();
         await expect(secondPreviewButton).toBeEnabled();
 
