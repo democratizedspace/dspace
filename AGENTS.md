@@ -15,6 +15,7 @@
 DSPACE uses Astro for SSR with file-based routing. All routes served by the application are documented in [docs/ROUTES.md](docs/ROUTES.md).
 
 **Key concepts:**
+
 - Routes are defined by `.astro` files in `frontend/src/pages/`
 - Dynamic routes use bracket syntax: `[slug].astro`, `[id].astro`, `[pathId]/[questId].astro`
 - Internal links (starting with `/`) are validated by `scripts/link-check.mjs`
@@ -22,12 +23,14 @@ DSPACE uses Astro for SSR with file-based routing. All routes served by the appl
 - The link checker resolves dynamic routes without requiring server startup
 
 **Common route patterns:**
+
 - `/docs/[slug]` → documentation pages (e.g., `/docs/about`, `/docs/solar`)
 - `/inventory/item/[itemId]` → item details (e.g., `/inventory/item/37`)
 - `/processes/[processId]` → process pages (e.g., `/processes/launch-rocket`)
 - `/quests/[pathId]/[questId]` → quest pages (e.g., `/quests/play/2`)
 
 **Testing links:**
+
 ```bash
 # Validate all internal links in markdown files
 node scripts/link-check.mjs
@@ -69,24 +72,26 @@ SKIP_E2E=1 npm test
 
 - **Root configs** (`.prettierrc`, `.prettierrc.js`): Basic configs for root-level files
 - **Frontend configs** (`frontend/.prettierrc`, `frontend/.prettierrc.json`): **Primary configs for all frontend code**
-  - `frontend/.prettierrc` is the authoritative config (includes `printWidth: 100`)
-  - `frontend/.prettierrc.json` is legacy and may differ
+    - `frontend/.prettierrc` is the authoritative config (includes `printWidth: 100`)
+    - `frontend/.prettierrc.json` is legacy and may differ
 
 ### Formatting Frontend Files
 
 When formatting files in `frontend/`, Prettier automatically picks up `frontend/.prettierrc`. Always:
 
 1. **Run formatting from the frontend directory**:
-   ```bash
-   cd frontend
-   npm run format        # Format all files
-   npm run format:check  # Check formatting
-   ```
+
+    ```bash
+    cd frontend
+    npm run format        # Format all files
+    npm run format:check  # Check formatting
+    ```
 
 2. **Or use the frontend config explicitly**:
-   ```bash
-   npx prettier --config frontend/.prettierrc --write path/to/file.js
-   ```
+
+    ```bash
+    npx prettier --config frontend/.prettierrc --write path/to/file.js
+    ```
 
 3. **Never use the root config for frontend files** - it has different settings and will cause CI failures.
 
@@ -101,6 +106,7 @@ When formatting files in `frontend/`, Prettier automatically picks up `frontend/
 ### Troubleshooting
 
 If CI formatting checks fail but local checks pass:
+
 1. Ensure you're running prettier from the `frontend/` directory
 2. Check which config prettier is using: `npx prettier --find-config-path src/path/to/file.js`
 3. The config should be `frontend/.prettierrc`, not the root `.prettierrc`
@@ -152,35 +158,38 @@ const value = onBrowser(() => localStorage.getItem('key'), null);
 ### Common SSR Pitfalls
 
 1. **Default parameter values** are evaluated at module import time:
-   ```javascript
-   // BAD - crashes on server
-   function greet(lang = navigator.language) { }
-   
-   // GOOD - check at runtime
-   function greet(lang = undefined) {
-       if (lang === undefined) {
-           lang = typeof navigator !== 'undefined' ? navigator.language : 'en';
-       }
-   }
-   ```
+
+    ```javascript
+    // BAD - crashes on server
+    function greet(lang = navigator.language) {}
+
+    // GOOD - check at runtime
+    function greet(lang = undefined) {
+        if (lang === undefined) {
+            lang = typeof navigator !== 'undefined' ? navigator.language : 'en';
+        }
+    }
+    ```
 
 2. **Top-level code** runs during module import on both server and client:
-   ```javascript
-   // BAD - runs immediately during SSR
-   const theme = localStorage.getItem('theme');
-   
-   // GOOD - guard with isBrowser
-   import { isBrowser } from '../utils/ssr.js';
-   const theme = isBrowser ? localStorage.getItem('theme') : 'dark';
-   ```
+
+    ```javascript
+    // BAD - runs immediately during SSR
+    const theme = localStorage.getItem('theme');
+
+    // GOOD - guard with isBrowser
+    import { isBrowser } from '../utils/ssr.js';
+    const theme = isBrowser ? localStorage.getItem('theme') : 'dark';
+    ```
 
 3. **Browser-only functions** like `atob`, `btoa`, `FileReader`:
-   ```javascript
-   // Use Buffer fallback for server
-   const decoded = typeof atob === 'function' 
-       ? atob(encoded) 
-       : Buffer.from(encoded, 'base64').toString('utf8');
-   ```
+    ```javascript
+    // Use Buffer fallback for server
+    const decoded =
+        typeof atob === 'function'
+            ? atob(encoded)
+            : Buffer.from(encoded, 'base64').toString('utf8');
+    ```
 
 ### For Svelte Components
 
@@ -188,23 +197,45 @@ In Svelte, prefer `onMount()` which only runs in the browser:
 
 ```svelte
 <script>
-import { onMount } from 'svelte';
+    import { onMount } from 'svelte';
 
-let data = null;
+    let data = null;
 
-onMount(() => {
-    // Safe - only runs in browser
-    data = localStorage.getItem('data');
-});
+    onMount(() => {
+        // Safe - only runs in browser
+        data = localStorage.getItem('data');
+    });
 </script>
 ```
 
 ### SSR Safety Tests
 
 The test suite at `frontend/tests/ssrSafety.test.ts` uses static analysis to verify:
+
 - JS utilities import `isBrowser` when accessing browser APIs
 - Svelte components guard `localStorage` with `isBrowser` or `onMount`
 - No unguarded top-level `window`/`document` access
+
+## Svelte 5 Compatibility
+
+DSPACE uses Svelte 5, which introduces new internal module structure. The vitest configuration includes custom import resolution to handle Svelte 5's internal subpath imports.
+
+### Vitest Configuration for Svelte 5
+
+The `vitest.config.mts` file includes:
+
+1. **Custom resolver plugin** (`svelteSubpathResolver`) that maps Svelte 5 internal imports:
+    - `svelte/internal/disclose-version`
+    - `svelte/internal/flags/legacy`
+    - `svelte/internal/flags/async`
+    - `svelte/internal/flags/tracing`
+    - Other internal paths like `svelte/internal/client` and `svelte/internal/server`
+
+2. **Client-side entry point**: The main `svelte` alias points to `src/index-client.js` to ensure browser-like behavior in tests (jsdom environment).
+
+3. **SSR bundling**: The `ssr.noExternal` config includes all `svelte/*` subpaths to ensure proper resolution.
+
+These configurations are essential for Svelte component tests to work correctly. If you encounter import resolution errors related to Svelte internals, verify that the mapping exists in `vitest.config.mts`.
 
 ## Pull Request Guidelines
 
@@ -269,6 +300,7 @@ When the smoke test fails with HTTP 500:
 4. The error may be silently caught by Astro - add error handlers to `entrypoint.mjs`
 
 Common SSR issues in CI:
+
 - `IndexedDB not supported` - Storage code running on server
 - `navigator is not defined` - Browser API in default parameter
 - `window is not defined` - Unguarded window access
@@ -278,6 +310,7 @@ Common SSR issues in CI:
 
 The test at `tests/configConsistency.test.ts` validates that ports and health endpoints
 are consistent across:
+
 - `Dockerfile`
 - `docker-compose.yml`
 - `charts/dspace/values.yaml` (Helm)

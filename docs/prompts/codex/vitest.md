@@ -13,6 +13,11 @@ Vitest looks for `*.test.ts` files in `tests/`, `backend/`, and `scripts/tests/`
 uses the V8 provider with reports in `frontend/coverage`, and the root script sets
 `--testTimeout 20000` to accommodate slower tests.
 
+**Svelte 5 Compatibility**: The vitest configuration includes custom import resolution for Svelte 5's
+internal subpath imports (`svelte/internal/disclose-version`, `svelte/internal/flags/*`, etc.).
+The main `svelte` alias uses the client-side entry point (`src/index-client.js`) for browser-like
+test behavior in the jsdom environment.
+
 > **TL;DR**
 >
 > 1. Choose a module or component that lacks unit tests or needs better coverage.
