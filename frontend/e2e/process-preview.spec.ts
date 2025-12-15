@@ -33,6 +33,7 @@ test.describe('Process preview', () => {
         await expect(preview.locator('li')).not.toHaveCount(0);
 
         await previewButton.click();
+        await page.waitForTimeout(200);
         await expect(preview).toBeHidden();
     });
 
