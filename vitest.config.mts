@@ -28,7 +28,7 @@ function svelteSubpathResolver(): Plugin {
   return {
     name: 'svelte-subpath-resolver',
     enforce: 'pre',
-    resolveId(source, importer) {
+    async resolveId(source, importer) {
       // Map Svelte subpath imports to actual file locations
       // Return the resolved path directly
       const mapping: Record<string, string> = {
@@ -39,6 +39,10 @@ function svelteSubpathResolver(): Plugin {
         'svelte/internal': path.join(svelteBase, 'internal/index.js'),
         'svelte/internal/client': path.join(svelteBase, 'internal/client/index.js'),
         'svelte/internal/server': path.join(svelteBase, 'internal/server/index.js'),
+        'svelte/internal/disclose-version': path.join(svelteBase, 'internal/disclose-version.js'),
+        'svelte/internal/flags/legacy': path.join(svelteBase, 'internal/flags/legacy.js'),
+        'svelte/internal/flags/async': path.join(svelteBase, 'internal/flags/async.js'),
+        'svelte/internal/flags/tracing': path.join(svelteBase, 'internal/flags/tracing.js'),
         'svelte/motion': path.join(svelteBase, 'motion/index.js'),
         'svelte/transition': path.join(svelteBase, 'transition/index.js'),
       };
@@ -74,12 +78,28 @@ export default defineConfig({
         replacement: svelteInternalServerPath
       },
       {
+        find: 'svelte/internal/disclose-version',
+        replacement: path.join(sveltePackageDir, 'src/internal/disclose-version.js')
+      },
+      {
+        find: 'svelte/internal/flags/legacy',
+        replacement: path.join(sveltePackageDir, 'src/internal/flags/legacy.js')
+      },
+      {
+        find: 'svelte/internal/flags/async',
+        replacement: path.join(sveltePackageDir, 'src/internal/flags/async.js')
+      },
+      {
+        find: 'svelte/internal/flags/tracing',
+        replacement: path.join(sveltePackageDir, 'src/internal/flags/tracing.js')
+      },
+      {
         find: 'svelte/compiler',
         replacement: svelteCompilerPath
       },
       {
         find: 'svelte',
-        replacement: sveltePackageDir
+        replacement: path.join(sveltePackageDir, 'src/index-client.js')
       }
     ],
     dedupe: ['svelte']
