@@ -38,10 +38,7 @@
     }
 
     function togglePreview(id) {
-        const newId = togglePreviewId(previewProcessId, id);
-        previewProcessId = newId;
-        // Force reactivity
-        previewProcessId = previewProcessId;
+        previewProcessId = togglePreviewId(previewProcessId, id);
     }
 </script>
 
