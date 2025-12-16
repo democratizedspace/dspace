@@ -31,8 +31,9 @@ test.describe('Process preview', () => {
 
         // Wait for preview to appear
         const preview = firstRow.getByTestId('process-preview');
-        await expect(preview).toBeVisible({ timeout: 10000 });
         await expect(previewButton).toHaveAttribute('aria-expanded', 'true');
+        await expect(preview).toHaveCount(1, { timeout: 10000 });
+        await expect(preview).toBeVisible({ timeout: 10000 });
 
         if (rowTitle) {
             await expect(preview.locator('h3')).toHaveText(rowTitle.trim());
@@ -47,8 +48,8 @@ test.describe('Process preview', () => {
         await previewButton.click({ timeout: 5000 });
 
         // Wait for it to disappear
-        await expect(preview).toBeHidden({ timeout: 10000 });
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
+        await expect(preview).toHaveCount(0, { timeout: 10000 });
     });
 
     test('opening another preview closes the previous one', async ({ page }) => {
@@ -76,6 +77,8 @@ test.describe('Process preview', () => {
         // Click first preview and wait for it to appear
         await firstPreviewButton.click({ timeout: 5000 });
         const firstPreview = rows.nth(0).getByTestId('process-preview');
+        await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'true');
+        await expect(firstPreview).toHaveCount(1, { timeout: 10000 });
         await expect(firstPreview).toBeVisible({ timeout: 10000 });
 
         // Wait a moment before clicking the second button
@@ -84,7 +87,10 @@ test.describe('Process preview', () => {
         // Click second preview and wait for it to appear while first disappears
         await secondPreviewButton.click({ timeout: 5000 });
         const secondPreview = rows.nth(1).getByTestId('process-preview');
+        await expect(secondPreviewButton).toHaveAttribute('aria-expanded', 'true');
+        await expect(secondPreview).toHaveCount(1, { timeout: 10000 });
         await expect(secondPreview).toBeVisible({ timeout: 10000 });
-        await expect(firstPreview).toBeHidden({ timeout: 10000 });
+        await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'false');
+        await expect(firstPreview).toHaveCount(0, { timeout: 10000 });
     });
 });

@@ -19,6 +19,11 @@
     $: filteredProcesses = allProcesses.filter((process) =>
         process.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    $: {
+        if (previewProcessId && !filteredProcesses.some((process) => process.id === previewProcessId)) {
+            previewProcessId = null;
+        }
+    }
 
     function handleEdit(id) {
         window.location.href = `/processes/${id}/edit`;
@@ -63,7 +68,7 @@
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
-                                aria-expanded={previewProcessId === process.id}
+                                aria-expanded={previewProcessId === process.id ? 'true' : 'false'}
                                 aria-controls={`process-preview-${process.id}`}
                                 on:click={() => togglePreview(process.id)}
                             >
