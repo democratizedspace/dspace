@@ -9,15 +9,27 @@
     let mounted = false;
     let searchTerm = '';
     let previewProcessId = null;
+    let filteredProcessIds = new Set();
+
+    const normalizeProcessId = (id) => String(id ?? '');
 
     onMount(async () => {
-        customProcesses = await db.list(ENTITY_TYPES.PROCESS);
-        mounted = true;
+        try {
+            customProcesses = (await db.list(ENTITY_TYPES.PROCESS)) ?? [];
+        } catch (error) {
+            console.error('Failed to load custom processes:', error);
+            customProcesses = [];
+        } finally {
+            mounted = true;
+        }
     });
 
     $: allProcesses = [...processes, ...customProcesses];
     $: filteredProcesses = allProcesses.filter((process) =>
         process.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    $: filteredProcessIds = new Set(
+        filteredProcesses.map((process) => normalizeProcessId(process.id))
     );
 
     function handleEdit(id) {
@@ -37,16 +49,17 @@
     }
 
     $: {
-        if (
-            previewProcessId &&
-            !filteredProcesses.some((process) => String(process.id) === previewProcessId)
-        ) {
+        if (mounted && previewProcessId && !filteredProcessIds.has(previewProcessId)) {
             previewProcessId = null;
         }
     }
 
     function togglePreview(id) {
-        const normalizedId = String(id);
+        if (!mounted) {
+            return;
+        }
+
+        const normalizedId = normalizeProcessId(id);
         previewProcessId = previewProcessId === normalizedId ? null : normalizedId;
     }
 </script>
@@ -57,23 +70,26 @@
             <input type="text" bind:value={searchTerm} placeholder="Search processes..." />
         </div>
 
-        <div class="processes-list">
+        <div
+            class="processes-list"
+            data-testid="processes-list"
+            data-preview-open={previewProcessId ?? ''}
+        >
             {#if filteredProcesses.length === 0}
                 <div class="no-processes">No processes found</div>
             {:else}
                 {#each filteredProcesses as process (process.id)}
-                    <div class="process-row" data-testid="process-row">
+                    {@const processId = normalizeProcessId(process.id)}
+                    <div class="process-row" data-testid="process-row" data-process-id={processId}>
                         <Process processId={process.id} processData={process} />
                         <div class="process-actions">
                             <button
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
-                                aria-expanded={previewProcessId === String(process.id)
-                                    ? 'true'
-                                    : 'false'}
-                                aria-controls={`process-preview-${String(process.id)}`}
-                                on:click={() => togglePreview(process.id)}
+                                aria-expanded={previewProcessId === processId ? 'true' : 'false'}
+                                aria-controls={`process-preview-${processId}`}
+                                on:click={() => togglePreview(processId)}
                             >
                                 Preview
                             </button>
@@ -94,12 +110,12 @@
                                 </button>
                             {/if}
                         </div>
-                        {#if previewProcessId === String(process.id)}
+                        {#if previewProcessId === processId}
                             <div
-                                id={`process-preview-${String(process.id)}`}
+                                id={`process-preview-${processId}`}
                                 data-testid="process-preview"
                                 data-preview-id={previewProcessId}
-                                data-process-id={process.id}
+                                data-process-id={processId}
                             >
                                 <ProcessPreview
                                     title={process.title}
