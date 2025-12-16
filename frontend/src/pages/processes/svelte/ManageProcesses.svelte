@@ -56,12 +56,15 @@
                 <div class="no-processes">No processes found</div>
             {:else}
                 {#each filteredProcesses as process (process.id)}
-                    <div class="process-row">
+                    <div class="process-row" data-testid="process-row">
                         <Process processId={process.id} processData={process} />
                         <div class="process-actions">
                             <button
                                 class="preview-button"
                                 type="button"
+                                data-testid="process-preview-toggle"
+                                aria-expanded={previewProcessId === process.id}
+                                aria-controls={`process-preview-${process.id}`}
                                 on:click={() => togglePreview(process.id)}
                             >
                                 Preview
@@ -84,7 +87,12 @@
                             {/if}
                         </div>
                         {#if previewProcessId === process.id}
-                            <div data-preview-id={previewProcessId} data-process-id={process.id}>
+                            <div
+                                id={`process-preview-${process.id}`}
+                                data-testid="process-preview"
+                                data-preview-id={previewProcessId}
+                                data-process-id={process.id}
+                            >
                                 <ProcessPreview
                                     title={process.title}
                                     duration={process.duration}
