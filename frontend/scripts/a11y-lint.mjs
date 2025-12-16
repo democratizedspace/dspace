@@ -160,6 +160,17 @@ function collectButtonTypeIssues(source, ast, filename) {
                 return;
             }
 
+            // Defensive check for attributes
+            if (!node.attributes || !Array.isArray(node.attributes)) {
+                issues.push({
+                    type: 'button-type',
+                    message: 'Button elements must declare a type attribute.',
+                    filename,
+                    position: getPositionFromIndex(source, node.start ?? -1),
+                });
+                return;
+            }
+
             const hasTypeAttribute = node.attributes.some((attribute) => {
                 if (attribute.type !== 'Attribute' || attribute.name !== 'type') {
                     return false;
@@ -193,6 +204,9 @@ function collectButtonTypeIssues(source, ast, filename) {
 }
 
 function getAttribute(node, name) {
+    if (!node.attributes || !Array.isArray(node.attributes)) {
+        return undefined;
+    }
     return node.attributes.find((attribute) => {
         return attribute.type === 'Attribute' && attribute.name === name;
     });
@@ -210,6 +224,47 @@ function attributeHasValue(attribute) {
 
         return true;
     });
+}
+
+function attributeEqualsText(attribute, expected) {
+    if (!attribute || !Array.isArray(attribute.value)) {
+        return false;
+    }
+
+    return attribute.value.some(
+        (value) => value.type === 'Text' && value.data.trim().toLowerCase() === expected
+    );
+}
+
+function collectImageAltIssues(source, ast, filename) {
+    if (!ast?.html) {
+        return [];
+    }
+
+    const issues = [];
+    walk(ast.html, {
+        enter(node) {
+            if (node.type !== 'Element' || node.name !== 'img') {
+                return;
+            }
+
+            const altAttr = getAttribute(node, 'alt');
+            const hasAltValue = attributeHasValue(altAttr);
+            const isDecorative = attributeEqualsText(getAttribute(node, 'aria-hidden'), 'true');
+
+            if (!hasAltValue && !isDecorative) {
+                issues.push({
+                    type: 'svelte-warning',
+                    code: 'a11y-missing-attribute',
+                    message: 'Images should include meaningful alt text or be marked aria-hidden.',
+                    filename,
+                    position: getPositionFromIndex(source, node.start ?? -1),
+                });
+            }
+        },
+    });
+
+    return issues;
 }
 
 function collectEmptyAriaLabelIssues(source, ast, filename) {
@@ -318,7 +373,7 @@ export function checkSourceForA11yWarnings(source, filename = 'inline.svelte') {
     const issues = [];
 
     try {
-        const { warnings, ast } = compile(source, { filename });
+        const { warnings, ast } = compile(source, { filename, dev: true });
         for (const warning of warnings) {
             const normalizedCode = warning.code?.replaceAll('_', '-');
             if (normalizedCode && normalizedCode.startsWith('a11y-')) {
@@ -334,6 +389,9 @@ export function checkSourceForA11yWarnings(source, filename = 'inline.svelte') {
 
         const buttonIssues = collectButtonTypeIssues(source, ast, filename);
         issues.push(...buttonIssues);
+
+        const imageAltIssues = collectImageAltIssues(source, ast, filename);
+        issues.push(...imageAltIssues);
 
         const ariaLabelIssues = collectEmptyAriaLabelIssues(source, ast, filename);
         issues.push(...ariaLabelIssues);

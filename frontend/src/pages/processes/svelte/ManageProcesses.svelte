@@ -3,7 +3,6 @@
     import Process from '../../../components/svelte/Process.svelte';
     import ProcessPreview from '../../../components/svelte/ProcessPreview.svelte';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
-    import { togglePreviewId } from '../../../utils/preview.js';
 
     export let processes = [];
     let customProcesses = [];
@@ -38,11 +37,15 @@
     }
 
     function togglePreview(id) {
-        previewProcessId = togglePreviewId(previewProcessId, id);
+        if (previewProcessId === id) {
+            previewProcessId = null;
+        } else {
+            previewProcessId = id;
+        }
     }
 </script>
 
-<div class="manage-processes">
+<div class="manage-processes" data-hydrated={mounted ? 'true' : 'false'}>
     {#if mounted}
         <div class="controls">
             <input type="text" bind:value={searchTerm} placeholder="Search processes..." />
@@ -53,12 +56,15 @@
                 <div class="no-processes">No processes found</div>
             {:else}
                 {#each filteredProcesses as process (process.id)}
-                    <div class="process-row">
+                    <div class="process-row" data-testid="process-row">
                         <Process processId={process.id} processData={process} />
                         <div class="process-actions">
                             <button
                                 class="preview-button"
                                 type="button"
+                                data-testid="process-preview-toggle"
+                                aria-expanded={previewProcessId === process.id}
+                                aria-controls={`process-preview-${process.id}`}
                                 on:click={() => togglePreview(process.id)}
                             >
                                 Preview
@@ -81,13 +87,20 @@
                             {/if}
                         </div>
                         {#if previewProcessId === process.id}
-                            <ProcessPreview
-                                title={process.title}
-                                duration={process.duration}
-                                requireItems={process.requireItems}
-                                consumeItems={process.consumeItems}
-                                createItems={process.createItems}
-                            />
+                            <div
+                                id={`process-preview-${process.id}`}
+                                data-testid="process-preview"
+                                data-preview-id={previewProcessId}
+                                data-process-id={process.id}
+                            >
+                                <ProcessPreview
+                                    title={process.title}
+                                    duration={process.duration}
+                                    requireItems={process.requireItems || []}
+                                    consumeItems={process.consumeItems || []}
+                                    createItems={process.createItems || []}
+                                />
+                            </div>
                         {/if}
                     </div>
                 {/each}

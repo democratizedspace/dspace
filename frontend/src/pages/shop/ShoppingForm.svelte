@@ -83,7 +83,7 @@
 
     <br /><br />
 
-    <div id="buylink" data-testid="shop-link-output" aria-live="polite" />
+    <div id="buylink" data-testid="shop-link-output" aria-live="polite"></div>
 </div>
 
 <style>

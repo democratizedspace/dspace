@@ -9,12 +9,15 @@ test('filters items and exposes an accessible label', async () => {
         { id: '2', name: 'Beta' },
     ];
 
-    const { getByLabelText, component } = render(SearchBar, { data });
+    const handler = vi.fn();
+    const { getByLabelText } = render(SearchBar, {
+        props: { data },
+        events: {
+            search: (event: CustomEvent) => handler(event.detail),
+        },
+    });
     await tick();
     const input = getByLabelText('Search items');
-
-    const handler = vi.fn();
-    component.$on('search', (e) => handler(e.detail));
 
     await fireEvent.input(input, { target: { value: 'Al' } });
 

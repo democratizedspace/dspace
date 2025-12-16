@@ -115,7 +115,12 @@
                                 {@html renderItem(item)}
                             {:else}
                                 {#if item.iconSrc}
-                                    <img src={item.iconSrc} alt="" width="24" height="24" />
+                                    <img
+                                        src={item.iconSrc}
+                                        alt={item.label ? `${item.label} icon` : 'Item icon'}
+                                        width="24"
+                                        height="24"
+                                    />
                                 {/if}
                                 <div style="display:flex;flex-direction:column;">
                                     <span>{item.label}</span>
@@ -153,7 +158,12 @@
                         {@html renderItem(item)}
                     {:else}
                         {#if item.iconSrc}
-                            <img src={item.iconSrc} alt="" width="24" height="24" />
+                            <img
+                                src={item.iconSrc}
+                                alt={item.label ? `${item.label} icon` : 'Item icon'}
+                                width="24"
+                                height="24"
+                            />
                         {/if}
                         <div style="display:flex;flex-direction:column;">
                             <span>{item.label}</span>

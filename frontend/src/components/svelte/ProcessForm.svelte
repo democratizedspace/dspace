@@ -186,6 +186,14 @@
             }
 
             successMessage = 'Process created successfully!';
+
+            // Clear the form for next entry
+            title = '';
+            duration = '';
+            requireItems = [];
+            consumeItems = [];
+            createItems = [];
+
             dispatch('submit', formData);
         } catch (error) {
             console.error('Failed to create process:', error);

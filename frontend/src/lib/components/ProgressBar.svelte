@@ -3,7 +3,7 @@
 </script>
 
 <div class="progress-bar-container">
-    <div class="progress-bar-fill" role="progressbar" style="width: {progress}%" />
+    <div class="progress-bar-fill" role="progressbar" style="width: {progress}%"></div>
 </div>
 
 <style>

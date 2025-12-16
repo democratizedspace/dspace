@@ -863,7 +863,7 @@
             placeholder="Describe the quest in detail. What needs to be done?"
             class:error={validationErrors.description}
             on:input={handleDescriptionInput}
-        />
+        ></textarea>
         {#if validationErrors.description}
             <span class="error-message" data-testid="quest-description-error"
                 >{validationErrors.description}</span
@@ -928,7 +928,8 @@
             </div>
             <div class="form-group">
                 <label for="new-node-text">Node text</label>
-                <textarea id="new-node-text" bind:value={newNodeText} placeholder="NPC dialogue" />
+                <textarea id="new-node-text" bind:value={newNodeText} placeholder="NPC dialogue"
+                ></textarea>
             </div>
             <button type="button" class="add-button" on:click={addDialogueNode}>
                 Add Dialogue Node
@@ -970,7 +971,7 @@
                             id={`node-text-${node.id}`}
                             value={node.text}
                             on:input={(event) => updateNodeText(index, event.target.value)}
-                        />
+                        ></textarea>
                     </div>
 
                     <div class="options-list">

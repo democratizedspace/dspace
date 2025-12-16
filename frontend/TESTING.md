@@ -469,6 +469,44 @@ Since DSpace uses Astro SSR with hydrated Svelte components:
 2. Understand that interactivity only works after hydration
 3. Use `page.waitForLoadState('networkidle')` to ensure components are ready
 
+### Svelte 5 Component Unit Tests
+
+DSpace uses Svelte 5 with vitest for component unit tests. The test configuration includes:
+
+- **Testing Library**: `@testing-library/svelte` for component rendering and interaction
+- **Test Location**: Component tests are in `frontend/src/components/__tests__/*.spec.ts`
+- **Import Resolution**: Custom vitest configuration handles Svelte 5 internal imports
+
+**Example test pattern:**
+
+```typescript
+import { render, fireEvent, waitFor } from '@testing-library/svelte';
+import MyComponent from '../svelte/MyComponent.svelte';
+
+test('component behavior', async () => {
+    const { getByLabelText, container } = render(MyComponent, {
+        props: {
+            /* initial props */
+        },
+    });
+
+    const input = getByLabelText('Label*');
+    await fireEvent.input(input, { target: { value: 'test' } });
+
+    // Use waitFor for async operations
+    await waitFor(() => {
+        expect(input.value).toBe('expected value');
+    });
+});
+```
+
+**Key considerations:**
+
+- Use `waitFor` for asynchronous state changes or form submissions
+- Provide complete valid form data in tests (all required fields)
+- Test both synchronous render and async behavior
+- Clean up unused variables to pass linting checks
+
 ## Test Artifacts
 
 Tests generate artifacts for debugging:

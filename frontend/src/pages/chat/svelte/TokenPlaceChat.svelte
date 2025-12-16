@@ -75,7 +75,7 @@
             bind:value={$message}
             on:keydown={handleKeyDown}
             style="font-size: 18px;"
-        />
+        ></textarea>
         <button type="button" on:click={submitMessage}>Send</button>
     </div>
 

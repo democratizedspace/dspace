@@ -42,7 +42,7 @@
   "devDependencies": {
     "@jest/globals": "^29.5.0",
     "@playwright/test": "^1.51.0",
-    "@sveltejs/vite-plugin-svelte": "^2.5.3",
+    "@sveltejs/vite-plugin-svelte": "^4.0.4",
     "@testing-library/svelte": "^5.2.8",
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^29.5.14",
@@ -61,12 +61,13 @@
     "prettier-plugin-svelte": "^2.10.1",
     "prism-svelte": "^0.5.0",
     "prismjs": "^1.30.0",
-    "svelte": "3.59.2",
+    "svelte": "^5.46.0",
     "ts-jest": "^29.4.1",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4",
     "wait-on": "^7.0.1",
-    "yaml": "^2.8.1"
+    "yaml": "^2.8.1",
+    "zimmerframe": "^1.1.4"
   },
   "dependencies": {
     "openai": "^5.16.0"

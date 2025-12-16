@@ -110,7 +110,7 @@
                         {/each}
                     </div>
                 {:else}
-                    <div class="temp-container" />
+                    <div class="temp-container"></div>
                 {/if}
             </div>
         </div>

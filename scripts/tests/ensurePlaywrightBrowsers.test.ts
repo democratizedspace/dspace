@@ -1,5 +1,6 @@
 import path from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { sanitizeProxyEnv } from '../../frontend/scripts/utils/ensure-playwright-browsers.js';
 
 const MODULE_PATH =
   '../../frontend/scripts/utils/ensure-playwright-browsers.js';
@@ -39,6 +40,12 @@ describe('ensurePlaywrightBrowsers', () => {
     let chromeExists = false;
     let depsSentinelExists = false;
     const existingHeadless = new Set<string>();
+    const envWithProxy = {
+      ...process.env,
+      HTTPS_PROXY: 'http://legit-proxy:3128',
+      npm_config_https_proxy: 'http://legit-proxy:3128',
+    };
+    const sanitizedEnv = sanitizeProxyEnv(envWithProxy);
     const execFileSync = vi.fn((_command, args: string[]) => {
       const action = args[1];
       if (action === 'install-deps') {
@@ -90,7 +97,7 @@ describe('ensurePlaywrightBrowsers', () => {
     });
     const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
-    await ensurePlaywrightBrowsers({ cwd: repoRoot, browser });
+    await ensurePlaywrightBrowsers({ cwd: repoRoot, browser, env: envWithProxy });
 
     expect(execFileSync).toHaveBeenCalledTimes(2);
     expect(execFileSync.mock.calls[0]).toEqual([
@@ -104,7 +111,7 @@ describe('ensurePlaywrightBrowsers', () => {
       expect.objectContaining({
         cwd: repoRoot,
         stdio: 'inherit',
-        env: process.env,
+        env: sanitizedEnv,
       }),
     ]);
     expect(execFileSync.mock.calls[1]).toEqual([
@@ -121,12 +128,51 @@ describe('ensurePlaywrightBrowsers', () => {
       expect.objectContaining({
         cwd: repoRoot,
         stdio: 'inherit',
-        env: process.env,
+        env: sanitizedEnv,
       }),
     ]);
     expect(executablePath).toHaveBeenCalledTimes(2);
     expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
     expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
+  });
+
+  it('removes known placeholder proxies before installing', () => {
+    const envWithProxy = {
+      HTTPS_PROXY: 'http://proxy:8080',
+      HTTP_PROXY: 'http://proxy:8080',
+      npm_config_https_proxy: 'http://proxy:8080',
+      npm_config_http_proxy: 'http://proxy:8080',
+      SOME_OTHER: 'value',
+    };
+
+    const result = sanitizeProxyEnv(envWithProxy);
+
+    expect(result).toEqual({ SOME_OTHER: 'value' });
+  });
+
+  it('skips system dependency install when only placeholder proxies are present', async () => {
+    const envWithProxy = {
+      HTTPS_PROXY: 'http://proxy:8080',
+      HTTP_PROXY: 'http://proxy:8080',
+      npm_config_https_proxy: 'http://proxy:8080',
+      npm_config_http_proxy: 'http://proxy:8080',
+    };
+    const execFileSync = vi.fn();
+    const writeFileSync = vi.fn();
+    const existsSync = vi.fn(() => false);
+
+    const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
+
+    const skipped = ensurePlaywrightSystemDeps({
+      cwd: repoRoot,
+      env: envWithProxy,
+      exec: execFileSync,
+      fs: { existsSync, writeFileSync },
+    });
+
+    expect(skipped).toBe(false);
+    expect(execFileSync).not.toHaveBeenCalled();
+    expect(writeFileSync).not.toHaveBeenCalled();
   });
 
   it('warns but continues when headless shell is missing', async () => {
