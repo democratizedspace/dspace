@@ -91,6 +91,33 @@ test('checkPatchCoverage trims whitespace from env var', () => {
   expect(() => getChangedFiles()).not.toThrow();
 });
 
+test('checkPatchCoverage ignores invalid env branch names', () => {
+  process.env.PATCH_COVERAGE_BASE = 'release/v4; rm -rf /';
+  execFileSync.mockImplementation((cmd, args) => {
+    if (cmd === 'git' && args[0] === 'remote' && args[1] === 'show' && args[2] === 'origin') {
+      throw new Error('invalid origin');
+    }
+    if (cmd === 'git' && args[0] === 'remote' && args[1] === 'get-url' && args[2] === 'origin') {
+      throw new Error('no origin');
+    }
+    if (cmd === 'git' && args[0] === 'symbolic-ref') {
+      return Buffer.from('work\n');
+    }
+    if (cmd === 'git' && args[0] === 'merge-base') {
+      expect(args.includes('work')).toBe(true);
+      return Buffer.from('base');
+    }
+    if (cmd === 'git' && args[0] === 'diff') {
+      return Buffer.from('');
+    }
+    throw new Error(`unexpected command: ${cmd} ${args?.join(' ')}`);
+  });
+  delete require.cache[require.resolve('../checkPatchCoverage.cjs')];
+  const { getDefaultBranch, getChangedFiles } = require('../checkPatchCoverage.cjs');
+  expect(getDefaultBranch()).toBe('work');
+  expect(() => getChangedFiles()).not.toThrow();
+});
+
 test('checkPatchCoverage handles missing origin remote', () => {
   execFileSync.mockImplementation((cmd, args) => {
     if (cmd === 'git' && args[0] === 'remote' && args[1] === 'show' && args[2] === 'origin') {

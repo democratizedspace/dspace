@@ -2,10 +2,20 @@ const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
 
+const BRANCH_NAME_PATTERN = /^[\w./-]+$/;
+
+function getSanitizedBranch(value) {
+  if (!value) return '';
+  const trimmed = value.trim();
+  if (!trimmed || !BRANCH_NAME_PATTERN.test(trimmed)) return '';
+  return trimmed;
+}
+
 function getDefaultBranch() {
-  const envBase = process.env.PATCH_COVERAGE_BASE || process.env.GITHUB_BASE_REF;
-  const trimmedEnv = envBase && envBase.trim();
-  if (trimmedEnv) return trimmedEnv;
+  const envBase =
+    getSanitizedBranch(process.env.PATCH_COVERAGE_BASE) ||
+    getSanitizedBranch(process.env.GITHUB_BASE_REF);
+  if (envBase) return envBase;
   try {
     const info = cp.execFileSync('git', ['remote', 'show', 'origin'], {
       stdio: ['pipe', 'pipe', 'ignore']
