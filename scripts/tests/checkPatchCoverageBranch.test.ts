@@ -3,6 +3,12 @@ import { afterEach, expect, test, vi } from 'vitest';
 const execFileSync = vi.fn();
 vi.mock('child_process', () => ({ execFileSync }));
 
+beforeEach(() => {
+  delete process.env.GITHUB_BASE_REF;
+  delete process.env.PATCH_COVERAGE_BASE;
+  execFileSync.mockReset();
+});
+
 afterEach(() => {
   delete process.env.GITHUB_BASE_REF;
   delete process.env.PATCH_COVERAGE_BASE;
