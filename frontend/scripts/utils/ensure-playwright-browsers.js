@@ -6,6 +6,47 @@ const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test',
 const INSTALL_ARGS = ['install', '--with-deps', 'chromium', 'chromium-headless-shell'];
 const INSTALL_DEPS_ARGS = ['install-deps'];
 const INSTALL_DEPS_SENTINEL = '.playwright-deps-installed';
+const PROXY_ENV_KEYS = [
+    'HTTP_PROXY',
+    'http_proxy',
+    'HTTPS_PROXY',
+    'https_proxy',
+    'ALL_PROXY',
+    'all_proxy',
+    'npm_config_http_proxy',
+    'npm_config_https_proxy',
+];
+const PROXY_PLACEHOLDERS = new Set(['http://proxy:8080', 'https://proxy:8080', 'proxy:8080']);
+
+function hasPlaceholderProxyEnv(env = process.env) {
+    return PROXY_ENV_KEYS.some((key) => {
+        const value = env[key];
+        if (!value) {
+            return false;
+        }
+
+        const normalized = String(value).trim().toLowerCase();
+        return PROXY_PLACEHOLDERS.has(normalized) || normalized.endsWith('proxy:8080');
+    });
+}
+
+export function sanitizeProxyEnv(env = process.env) {
+    const sanitized = { ...env };
+
+    for (const key of PROXY_ENV_KEYS) {
+        const value = sanitized[key];
+        if (!value) {
+            continue;
+        }
+
+        const normalized = String(value).trim().toLowerCase();
+        if (PROXY_PLACEHOLDERS.has(normalized) || normalized.endsWith('proxy:8080')) {
+            delete sanitized[key];
+        }
+    }
+
+    return sanitized;
+}
 
 export function resolvePlaywrightCLI(cwd, fs = { existsSync }) {
     const cliPath = path.join(cwd, PLAYWRIGHT_RELATIVE_CLI);
@@ -126,6 +167,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         fs = { existsSync, writeFileSync },
     } = options;
 
+    const sanitizedEnv = sanitizeProxyEnv(env);
     const browser = providedBrowser ?? (await getChromiumBrowser());
 
     if (process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD === '1') {
@@ -151,7 +193,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
     if (installSystemDeps) {
         ensurePlaywrightSystemDeps({
             cwd,
-            env,
+            env: sanitizedEnv,
             cliPath,
             platform,
             depsStampPath,
@@ -163,7 +205,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
     exec(process.execPath, [cliPath, ...installArgs], {
         stdio: 'inherit',
         cwd,
-        env,
+        env: sanitizedEnv,
     });
 
     if (!hasChromiumExecutable(browser)) {
@@ -188,8 +230,6 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         fs = { existsSync, writeFileSync },
     } = options;
 
-    const resolvedCliPath = cliPath || resolvePlaywrightCLI(cwd, fs);
-
     const {
         existsSync: fsExistsSync = existsSync,
         writeFileSync: fsWriteFileSync = writeFileSync,
@@ -207,11 +247,22 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         return false;
     }
 
+    if (hasPlaceholderProxyEnv(env)) {
+        console.warn(
+            'Skipping Playwright system dependency installation because proxy settings point to a placeholder (proxy:8080). ' +
+                'Set valid proxy values or clear proxy environment variables to install browsers.'
+        );
+        return false;
+    }
+
+    const resolvedCliPath = cliPath || resolvePlaywrightCLI(cwd, fs);
+    const sanitizedEnv = sanitizeProxyEnv(env);
+
     try {
         exec(process.execPath, [resolvedCliPath, ...INSTALL_DEPS_ARGS], {
             stdio: 'inherit',
             cwd,
-            env,
+            env: sanitizedEnv,
         });
     } catch (error) {
         if (env.CI === 'true') {
