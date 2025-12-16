@@ -2,16 +2,29 @@ const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
 
+const BRANCH_NAME_PATTERN = /^[\w./-]+$/;
+
+function getSanitizedBranch(value) {
+  if (!value) return '';
+  const trimmed = value.trim();
+  if (!trimmed || !BRANCH_NAME_PATTERN.test(trimmed)) return '';
+  return trimmed;
+}
+
 function getDefaultBranch() {
+  const envBase =
+    getSanitizedBranch(process.env.PATCH_COVERAGE_BASE) ||
+    getSanitizedBranch(process.env.GITHUB_BASE_REF);
+  if (envBase) return envBase;
   try {
-    const info = cp.execSync('git remote show origin', {
+    const info = cp.execFileSync('git', ['remote', 'show', 'origin'], {
       stdio: ['pipe', 'pipe', 'ignore']
     }).toString();
     const match = info.match(/HEAD branch: (.+)/);
     if (match) return match[1].trim();
   } catch {}
   try {
-    return cp.execSync('git symbolic-ref --short HEAD', {
+    return cp.execFileSync('git', ['symbolic-ref', '--short', 'HEAD'], {
       stdio: ['pipe', 'pipe', 'ignore']
     })
       .toString()
@@ -25,7 +38,7 @@ function getChangedFiles() {
   let base = '';
   const hasOrigin = (() => {
     try {
-      cp.execSync('git remote get-url origin', {
+      cp.execFileSync('git', ['remote', 'get-url', 'origin'], {
         stdio: ['pipe', 'pipe', 'ignore']
       });
       return true;
@@ -35,14 +48,19 @@ function getChangedFiles() {
   })();
   try {
     const target = hasOrigin ? `origin/${branch}` : branch;
-    base = cp.execSync(`git merge-base ${target} HEAD`, {
-      stdio: ['pipe', 'pipe', 'ignore']
-    })
+    base = cp
+      .execFileSync('git', ['merge-base', target, 'HEAD'], {
+        stdio: ['pipe', 'pipe', 'ignore']
+      })
       .toString()
       .trim();
   } catch {}
   if (!base) return [];
-  const diff = cp.execSync(`git diff --name-only ${base}`).toString();
+  const diff = cp
+    .execFileSync('git', ['diff', '--name-only', base], {
+      stdio: ['pipe', 'pipe', 'ignore']
+    })
+    .toString();
   return diff.split('\n').filter(Boolean);
 }
 
