@@ -241,7 +241,7 @@ These configurations are essential for Svelte component tests to work correctly.
 
 1. Summarize your changes and whether tests passed.
 2. Keep PRs focused on a single concern.
-3. Ensure `npm run coverage` and `node scripts/checkPatchCoverage.cjs` succeed before merging.
+3. Ensure `npm run coverage` succeeds before merging.
 
 ## Programmatic Checks
 
