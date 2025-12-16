@@ -36,12 +36,18 @@
         }
     }
 
-    function togglePreview(id) {
-        if (previewProcessId === id) {
+    $: {
+        if (
+            previewProcessId &&
+            !filteredProcesses.some((process) => String(process.id) === previewProcessId)
+        ) {
             previewProcessId = null;
-        } else {
-            previewProcessId = id;
         }
+    }
+
+    function togglePreview(id) {
+        const normalizedId = String(id);
+        previewProcessId = previewProcessId === normalizedId ? null : normalizedId;
     }
 </script>
 
@@ -63,8 +69,10 @@
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
-                                aria-expanded={previewProcessId === process.id}
-                                aria-controls={`process-preview-${process.id}`}
+                                aria-expanded={
+                                    previewProcessId === String(process.id) ? 'true' : 'false'
+                                }
+                                aria-controls={`process-preview-${String(process.id)}`}
                                 on:click={() => togglePreview(process.id)}
                             >
                                 Preview
@@ -86,9 +94,9 @@
                                 </button>
                             {/if}
                         </div>
-                        {#if previewProcessId === process.id}
+                        {#if previewProcessId === String(process.id)}
                             <div
-                                id={`process-preview-${process.id}`}
+                                id={`process-preview-${String(process.id)}`}
                                 data-testid="process-preview"
                                 data-preview-id={previewProcessId}
                                 data-process-id={process.id}
