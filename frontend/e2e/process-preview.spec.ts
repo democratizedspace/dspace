@@ -18,7 +18,11 @@ test.describe('Process preview', () => {
             timeout: 10000,
         });
 
-        const firstRow = page.getByTestId('process-row').first();
+        const rows = page.getByTestId('process-row');
+        const rowCount = await rows.count();
+        expect(rowCount).toBeGreaterThan(0);
+
+        const firstRow = rows.first();
         await expect(firstRow).toBeVisible();
 
         const previewButton = firstRow.getByTestId('process-preview-toggle');
@@ -64,6 +68,8 @@ test.describe('Process preview', () => {
         });
 
         const rows = page.getByTestId('process-row');
+        const rowsCount = await rows.count();
+        expect(rowsCount).toBeGreaterThanOrEqual(2);
         await expect(rows.first()).toBeVisible();
         await expect(rows.nth(1)).toBeVisible();
 

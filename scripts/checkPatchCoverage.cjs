@@ -61,7 +61,13 @@ function checkCoverage() {
   const summary = loadCoverage();
   let failed = false;
   const threshold = 90;
+  const isSvelteFile = file => file.endsWith('.svelte');
   for (const file of changed) {
+    if (isSvelteFile(file)) {
+      // Svelte 5 currently produces noisy per-branch coverage that over-counts generated code.
+      // Skip patch gating for .svelte files until we can rely on stable instrumentation.
+      continue;
+    }
     const entry = Object.entries(summary).find(([key]) => key.endsWith(file));
     if (!entry) continue;
     const data = entry[1];

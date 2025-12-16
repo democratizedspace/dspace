@@ -11,8 +11,14 @@
     let previewProcessId = null;
 
     onMount(async () => {
-        customProcesses = await db.list(ENTITY_TYPES.PROCESS);
-        mounted = true;
+        try {
+            customProcesses = await db.list(ENTITY_TYPES.PROCESS);
+        } catch (error) {
+            console.error('Failed to load custom processes, using empty list instead.', error);
+            customProcesses = [];
+        } finally {
+            mounted = true;
+        }
     });
 
     $: allProcesses = [...processes, ...customProcesses];
