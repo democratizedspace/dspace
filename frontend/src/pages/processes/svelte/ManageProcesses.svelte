@@ -29,6 +29,9 @@
             try {
                 await db.processes.delete(id);
                 customProcesses = customProcesses.filter((p) => p.id !== id);
+                if (previewProcessId === id) {
+                    previewProcessId = null;
+                }
             } catch (err) {
                 console.error('Error deleting process:', err);
                 alert('Failed to delete process');
@@ -37,10 +40,15 @@
     }
 
     function togglePreview(id) {
-        if (previewProcessId === id) {
+        previewProcessId = previewProcessId === id ? null : id;
+    }
+
+    $: {
+        if (
+            previewProcessId &&
+            !filteredProcesses.some((process) => process.id === previewProcessId)
+        ) {
             previewProcessId = null;
-        } else {
-            previewProcessId = id;
         }
     }
 </script>
@@ -63,7 +71,7 @@
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
-                                aria-expanded={previewProcessId === process.id}
+                                aria-expanded={previewProcessId === process.id ? 'true' : 'false'}
                                 aria-controls={`process-preview-${process.id}`}
                                 on:click={() => togglePreview(process.id)}
                             >
