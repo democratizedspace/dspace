@@ -3,6 +3,10 @@ const path = require('path');
 const cp = require('child_process');
 
 function getDefaultBranch() {
+  const envBase = process.env.PATCH_COVERAGE_BASE || process.env.GITHUB_BASE_REF;
+  if (envBase) {
+    return envBase.trim();
+  }
   try {
     const info = cp.execSync('git remote show origin', {
       stdio: ['pipe', 'pipe', 'ignore']
