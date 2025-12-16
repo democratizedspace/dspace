@@ -69,9 +69,9 @@
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
-                                aria-expanded={
-                                    previewProcessId === String(process.id) ? 'true' : 'false'
-                                }
+                                aria-expanded={previewProcessId === String(process.id)
+                                    ? 'true'
+                                    : 'false'}
                                 aria-controls={`process-preview-${String(process.id)}`}
                                 on:click={() => togglePreview(process.id)}
                             >
