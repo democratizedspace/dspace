@@ -4,9 +4,8 @@ const cp = require('child_process');
 
 function getDefaultBranch() {
   const envBase = process.env.PATCH_COVERAGE_BASE || process.env.GITHUB_BASE_REF;
-  if (envBase) {
-    return envBase.trim();
-  }
+  const trimmedEnv = envBase && envBase.trim();
+  if (trimmedEnv) return trimmedEnv;
   try {
     const info = cp.execSync('git remote show origin', {
       stdio: ['pipe', 'pipe', 'ignore']
@@ -39,14 +38,15 @@ function getChangedFiles() {
   })();
   try {
     const target = hasOrigin ? `origin/${branch}` : branch;
-    base = cp.execSync(`git merge-base ${target} HEAD`, {
-      stdio: ['pipe', 'pipe', 'ignore']
-    })
+    base = cp
+      .execFileSync('git', ['merge-base', target, 'HEAD'], {
+        stdio: ['pipe', 'pipe', 'ignore']
+      })
       .toString()
       .trim();
   } catch {}
   if (!base) return [];
-  const diff = cp.execSync(`git diff --name-only ${base}`).toString();
+  const diff = cp.execFileSync('git', ['diff', '--name-only', base]).toString();
   return diff.split('\n').filter(Boolean);
 }
 
