@@ -7,14 +7,14 @@ function getDefaultBranch() {
   const trimmedEnv = envBase && envBase.trim();
   if (trimmedEnv) return trimmedEnv;
   try {
-    const info = cp.execSync('git remote show origin', {
+    const info = cp.execFileSync('git', ['remote', 'show', 'origin'], {
       stdio: ['pipe', 'pipe', 'ignore']
     }).toString();
     const match = info.match(/HEAD branch: (.+)/);
     if (match) return match[1].trim();
   } catch {}
   try {
-    return cp.execSync('git symbolic-ref --short HEAD', {
+    return cp.execFileSync('git', ['symbolic-ref', '--short', 'HEAD'], {
       stdio: ['pipe', 'pipe', 'ignore']
     })
       .toString()
@@ -28,7 +28,7 @@ function getChangedFiles() {
   let base = '';
   const hasOrigin = (() => {
     try {
-      cp.execSync('git remote get-url origin', {
+      cp.execFileSync('git', ['remote', 'get-url', 'origin'], {
         stdio: ['pipe', 'pipe', 'ignore']
       });
       return true;
