@@ -10,9 +10,22 @@
     let searchTerm = '';
     let previewProcessId = null;
 
-    onMount(async () => {
-        customProcesses = await db.list(ENTITY_TYPES.PROCESS);
+    onMount(() => {
+        let cancelled = false;
         mounted = true;
+        (async () => {
+            try {
+                const processesList = await db.list(ENTITY_TYPES.PROCESS);
+                if (!cancelled) {
+                    customProcesses = processesList;
+                }
+            } catch (error) {
+                console.error('Failed to load custom processes:', error);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
     });
 
     $: allProcesses = [...processes, ...customProcesses];
@@ -37,11 +50,8 @@
     }
 
     function togglePreview(id) {
-        if (previewProcessId === id) {
-            previewProcessId = null;
-        } else {
-            previewProcessId = id;
-        }
+        const normalizedId = id == null ? null : String(id);
+        previewProcessId = previewProcessId === normalizedId ? null : normalizedId;
     }
 </script>
 
@@ -56,16 +66,17 @@
                 <div class="no-processes">No processes found</div>
             {:else}
                 {#each filteredProcesses as process (process.id)}
+                    {@const processId = String(process.id)}
                     <div class="process-row" data-testid="process-row">
-                        <Process processId={process.id} processData={process} />
+                        <Process processId={processId} processData={process} />
                         <div class="process-actions">
                             <button
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
-                                aria-expanded={previewProcessId === process.id}
-                                aria-controls={`process-preview-${process.id}`}
-                                on:click={() => togglePreview(process.id)}
+                                aria-expanded={previewProcessId === processId ? 'true' : 'false'}
+                                aria-controls={`process-preview-${processId}`}
+                                on:click={() => togglePreview(processId)}
                             >
                                 Preview
                             </button>
@@ -86,12 +97,12 @@
                                 </button>
                             {/if}
                         </div>
-                        {#if previewProcessId === process.id}
+                        {#if previewProcessId === processId}
                             <div
-                                id={`process-preview-${process.id}`}
+                                id={`process-preview-${processId}`}
                                 data-testid="process-preview"
                                 data-preview-id={previewProcessId}
-                                data-process-id={process.id}
+                                data-process-id={processId}
                             >
                                 <ProcessPreview
                                     title={process.title}

@@ -22,6 +22,7 @@ test.describe('Process preview', () => {
         await expect(firstRow).toBeVisible();
 
         const previewButton = firstRow.getByTestId('process-preview-toggle');
+        const preview = firstRow.getByTestId('process-preview');
         await expect(previewButton).toBeEnabled();
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
         const rowTitle = await firstRow.locator('h3').first().textContent();
@@ -29,16 +30,16 @@ test.describe('Process preview', () => {
         // Click to show preview
         await previewButton.click({ timeout: 5000 });
 
-        // Wait for preview to appear
-        const preview = firstRow.getByTestId('process-preview');
-        await expect(preview).toBeVisible({ timeout: 10000 });
         await expect(previewButton).toHaveAttribute('aria-expanded', 'true');
+        await expect(preview).toHaveCount(1);
+        const previewPanel = preview.first();
+        await expect(previewPanel).toBeVisible({ timeout: 10000 });
 
         if (rowTitle) {
-            await expect(preview.locator('h3')).toHaveText(rowTitle.trim());
+            await expect(previewPanel.locator('h3')).toHaveText(rowTitle.trim());
         }
-        await expect(preview).toContainText('Duration:');
-        await expect(preview.locator('li')).not.toHaveCount(0);
+        await expect(previewPanel).toContainText('Duration:');
+        await expect(previewPanel.locator('li')).not.toHaveCount(0);
 
         // Wait for preview to be fully rendered
         await page.waitForTimeout(500);
@@ -46,9 +47,8 @@ test.describe('Process preview', () => {
         // Click to hide preview
         await previewButton.click({ timeout: 5000 });
 
-        // Wait for it to disappear
-        await expect(preview).toBeHidden({ timeout: 10000 });
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
+        await expect(preview).toHaveCount(0);
     });
 
     test('opening another preview closes the previous one', async ({ page }) => {
@@ -77,6 +77,7 @@ test.describe('Process preview', () => {
         await firstPreviewButton.click({ timeout: 5000 });
         const firstPreview = rows.nth(0).getByTestId('process-preview');
         await expect(firstPreview).toBeVisible({ timeout: 10000 });
+        await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'true');
 
         // Wait a moment before clicking the second button
         await page.waitForTimeout(500);
@@ -84,7 +85,10 @@ test.describe('Process preview', () => {
         // Click second preview and wait for it to appear while first disappears
         await secondPreviewButton.click({ timeout: 5000 });
         const secondPreview = rows.nth(1).getByTestId('process-preview');
-        await expect(secondPreview).toBeVisible({ timeout: 10000 });
-        await expect(firstPreview).toBeHidden({ timeout: 10000 });
+        await expect(secondPreviewButton).toHaveAttribute('aria-expanded', 'true');
+        await expect(secondPreview).toHaveCount(1);
+        await expect(secondPreview.first()).toBeVisible({ timeout: 10000 });
+        await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'false');
+        await expect(firstPreview).toHaveCount(0);
     });
 });
