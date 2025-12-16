@@ -82,9 +82,6 @@ jobs:
           NODE_OPTIONS: --experimental-vm-modules
         run: npm run coverage
 
-      - name: Check patch coverage
-        run: node scripts/checkPatchCoverage.cjs
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:

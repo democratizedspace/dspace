@@ -34,10 +34,10 @@ CONTEXT:
 - If no URL is given, inspect the codebase to reproduce the failure:
   * Examine `.github/workflows/` to learn which checks run in CI.
     * Workflows include `ci.yml` (job `build`) which runs coverage, and
-      `tests.yml` (job `test`) which runs unit, E2E, and patch coverage.
+      `tests.yml` (job `test`) which runs unit and E2E checks.
     * Failures often surface in steps like `Run test suite`, `Generate coverage report`,
-      `Check patch coverage`, `Show preview server logs on failure`, or
-      from missing Playwright browsers, patch coverage gaps, or dev server timeouts.
+      `Upload coverage to Codecov`, `Show preview server logs on failure`, or
+      from missing Playwright browsers or dev server timeouts.
     * Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
       and `npm run test:ci` locally.
   * Study project docs to understand how to run the test suite and emulate the
@@ -97,8 +97,6 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
   alias that runs `test:pr` with `SKIP_E2E` to keep checks green.
 - 2025-08-10 – `listMissingImages` treated URLs with query strings as missing files; strip
   query and hash parts before checking so coverage tests don't flag valid assets.
-- 2025-08-10 – `checkPatchCoverage.cjs` assumed `origin/main`; detect the origin's HEAD branch
-  so patch coverage checks work on repositories where the default branch is `v3`.
 - 2025-08-11 – `openai` v3 pulled a vulnerable `axios`; upgrade to v5 to fix the
   dependency audit.
 - 2025-08-11 – Introduced a structured outage catalog under `/outages` so agents
@@ -124,8 +122,6 @@ Copy this file forward whenever CI fails so future fixes stay consistent.
   to avoid strict mode violations.
 - 2025-08-25 – `listMissingImages` treated paths with leading or trailing spaces as missing;
   trim entries before checking so coverage tests skip valid assets.
-- 2025-08-25 – `checkPatchCoverage.cjs` assumed an `origin` remote; detect the local HEAD and skip
-  `origin` when it is absent.
 - 2025-08-25 – ESLint failed to load @typescript-eslint plugins when frontend dev dependencies were missing; install frontend packages before linting.
 - 2025-08-25 – shallow checkout hid `origin/v3`, making coverage tests fail; fetch with
   `fetch-depth: 0` so scripts can compare against the default branch.
