@@ -1,5 +1,18 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import QuestForm from '../svelte/QuestForm.svelte';
+import { vi } from 'vitest';
+
+vi.mock('../../utils/customcontent.js', () => ({
+    db: {
+        list: vi.fn(async () => []),
+        quests: {
+            get: vi.fn(),
+            add: vi.fn(async () => 'quest-123'),
+            update: vi.fn(),
+        },
+    },
+    ENTITY_TYPES: { QUEST: 'quest', ITEM: 'item' },
+}));
 
 test('allows adding dialogue nodes and options', async () => {
     const { getByLabelText, getByText, getAllByLabelText, getAllByText } = render(QuestForm);
@@ -85,4 +98,35 @@ test('replaces the default finish option when adding a custom finish option', as
     const optionInputsAfter = getAllByLabelText(/^Text$/i);
     expect(optionInputsAfter).toHaveLength(1);
     expect((optionInputsAfter[0] as HTMLInputElement).value).toBe('Complete mission');
+});
+
+test('validates title and description', async () => {
+    const { getByLabelText, findByTestId } = render(QuestForm);
+    await fireEvent.input(getByLabelText(/Title/i), { target: { value: 'ok' } });
+    await fireEvent.input(getByLabelText(/Description/i), { target: { value: 'too short' } });
+
+    const form = document.querySelector('form');
+    await fireEvent.submit(form as HTMLFormElement);
+
+    expect(await findByTestId('quest-title-error')).toBeInTheDocument();
+    expect(await findByTestId('quest-description-error')).toBeInTheDocument();
+});
+
+test('shows option validation errors for goto and process types', async () => {
+    const { getByLabelText, getAllByLabelText, getByText, findByText } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/New option text/i), {
+        target: { value: 'Jump elsewhere' },
+    });
+
+    const typeSelects = getAllByLabelText(/^Type$/i);
+    const draftTypeSelect = typeSelects[typeSelects.length - 1];
+
+    await fireEvent.change(draftTypeSelect, { target: { value: 'goto' } });
+    await fireEvent.click(getByText('Add Option'));
+    expect(await findByText('Target node is required for goto options')).toBeInTheDocument();
+
+    await fireEvent.change(draftTypeSelect, { target: { value: 'process' } });
+    await fireEvent.click(getByText('Add Option'));
+    expect(await findByText('Process options require a process ID')).toBeInTheDocument();
 });

@@ -108,3 +108,26 @@ test('shows required items even when counts are zero', async () => {
     expect(normalizedText).toMatch(/Test Item/);
     expect(normalizedText).not.toMatch(/0\s*\/\s*2/);
 });
+
+test('renders custom process without attaching timers', async () => {
+    const customProcess = {
+        id: 'custom-1',
+        title: 'Moonwalk',
+        duration: '5m',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByText, queryByText } = render(Process, {
+        processId: customProcess.id,
+        processData: customProcess,
+    });
+
+    await tick();
+
+    expect(getByText('Moonwalk')).toBeInTheDocument();
+    expect(getByText(/Custom processes/)).toBeInTheDocument();
+    expect(queryByText('Start')).not.toBeInTheDocument();
+});
