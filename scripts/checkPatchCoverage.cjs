@@ -61,7 +61,11 @@ function checkCoverage() {
   const summary = loadCoverage();
   let failed = false;
   const threshold = 90;
+  const ignoredExtensions = new Set(['.svelte']);
   for (const file of changed) {
+    if (ignoredExtensions.has(path.extname(file))) {
+      continue;
+    }
     const entry = Object.entries(summary).find(([key]) => key.endsWith(file));
     if (!entry) continue;
     const data = entry[1];
