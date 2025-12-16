@@ -51,7 +51,11 @@
     }
 </script>
 
-<div class="manage-processes" data-hydrated={mounted ? 'true' : 'false'}>
+<div
+    class="manage-processes"
+    data-testid="manage-processes"
+    data-hydrated={mounted ? 'true' : 'false'}
+>
     {#if mounted}
         <div class="controls">
             <input type="text" bind:value={searchTerm} placeholder="Search processes..." />

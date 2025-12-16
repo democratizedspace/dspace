@@ -8,10 +8,13 @@ test.describe('Process preview', () => {
 
     test('reveals and hides process details from the manage view', async ({ page }) => {
         await navigateWithRetry(page, '/processes/manage');
-        await waitForHydration(page);
+        await waitForHydration(page, 'data-testid=manage-processes');
 
-        // Wait for component to be fully mounted (not just hydrated)
-        await page.waitForSelector('[data-hydrated="true"]', { timeout: 10000 });
+        const manageSection = page.getByTestId('manage-processes');
+        await expect(manageSection).toHaveAttribute('data-hydrated', 'true', {
+            timeout: 15000,
+        });
+
         // Extra wait to ensure onMount completes and processes are rendered
         await page.waitForSelector('.process-row .preview-button', {
             state: 'visible',
@@ -54,10 +57,13 @@ test.describe('Process preview', () => {
 
     test('opening another preview closes the previous one', async ({ page }) => {
         await navigateWithRetry(page, '/processes/manage');
-        await waitForHydration(page);
+        await waitForHydration(page, 'data-testid=manage-processes');
 
-        // Wait for component to be fully mounted (not just hydrated)
-        await page.waitForSelector('[data-hydrated="true"]', { timeout: 10000 });
+        const manageSection = page.getByTestId('manage-processes');
+        await expect(manageSection).toHaveAttribute('data-hydrated', 'true', {
+            timeout: 15000,
+        });
+
         // Extra wait to ensure onMount completes and processes are rendered
         await page.waitForSelector('.process-row .preview-button', {
             state: 'visible',
