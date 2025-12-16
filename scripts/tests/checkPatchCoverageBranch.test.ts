@@ -81,6 +81,30 @@ test('checkPatchCoverage prioritizes PATCH_COVERAGE_BASE over GITHUB_BASE_REF', 
   expect(() => getChangedFiles()).not.toThrow();
 });
 
+test('checkPatchCoverage trims whitespace from env var', () => {
+  process.env.PATCH_COVERAGE_BASE = '  release/v4  ';
+  execSync.mockImplementation(cmd => {
+    if (cmd === 'git remote get-url origin') {
+      return Buffer.from('');
+    }
+    throw new Error(`unexpected command: ${cmd}`);
+  });
+  execFileSync.mockImplementation((cmd, args) => {
+    if (cmd === 'git' && args[0] === 'merge-base') {
+      expect(args.includes('origin/release/v4')).toBe(true);
+      return Buffer.from('base');
+    }
+    if (cmd === 'git' && args[0] === 'diff') {
+      return Buffer.from('');
+    }
+    throw new Error(`unexpected command: ${cmd} ${args?.join(' ')}`);
+  });
+  delete require.cache[require.resolve('../checkPatchCoverage.cjs')];
+  const { getDefaultBranch, getChangedFiles } = require('../checkPatchCoverage.cjs');
+  expect(getDefaultBranch()).toBe('release/v4');
+  expect(() => getChangedFiles()).not.toThrow();
+});
+
 test('checkPatchCoverage handles missing origin remote', () => {
   execSync.mockImplementation(cmd => {
     if (cmd === 'git remote show origin' || cmd === 'git remote get-url origin') {

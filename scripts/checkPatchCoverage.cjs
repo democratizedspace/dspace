@@ -46,7 +46,11 @@ function getChangedFiles() {
       .trim();
   } catch {}
   if (!base) return [];
-  const diff = cp.execFileSync('git', ['diff', '--name-only', base]).toString();
+  const diff = cp
+    .execFileSync('git', ['diff', '--name-only', base], {
+      stdio: ['pipe', 'pipe', 'ignore']
+    })
+    .toString();
   return diff.split('\n').filter(Boolean);
 }
 

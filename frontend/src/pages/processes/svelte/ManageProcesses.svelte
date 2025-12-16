@@ -72,7 +72,7 @@
                                 aria-expanded={
                                     previewProcessId === String(process.id) ? 'true' : 'false'
                                 }
-                                aria-controls={`process-preview-${process.id}`}
+                                aria-controls={`process-preview-${String(process.id)}`}
                                 on:click={() => togglePreview(process.id)}
                             >
                                 Preview
@@ -96,7 +96,7 @@
                         </div>
                         {#if previewProcessId === String(process.id)}
                             <div
-                                id={`process-preview-${process.id}`}
+                                id={`process-preview-${String(process.id)}`}
                                 data-testid="process-preview"
                                 data-preview-id={previewProcessId}
                                 data-process-id={process.id}
