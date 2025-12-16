@@ -15,17 +15,34 @@ export function getItemMetadata(entry) {
 }
 
 export function buildFullItemList(itemList, totals = {}) {
-    return itemList.map((item) => {
+    const mergedItems = new Map();
+
+    itemList.forEach((item) => {
+        if (!item?.id) {
+            return;
+        }
+
         const metadata = getItemMetadata(item);
         const hasCount = Object.prototype.hasOwnProperty.call(item, 'count');
         const rawCount =
             hasCount && item.count !== undefined && item.count !== null ? Number(item.count) : null;
+        const normalizedCount =
+            rawCount !== null && Number.isFinite(rawCount) ? Number(rawCount.toFixed(5)) : null;
 
-        return {
-            ...metadata,
-            count:
-                rawCount !== null && Number.isFinite(rawCount) ? Number(rawCount.toFixed(5)) : null,
-            total: totals[item.id] ?? 0,
-        };
+        const existing = mergedItems.get(item.id) ?? { ...metadata, count: null };
+        const mergedCount =
+            normalizedCount === null
+                ? existing.count
+                : existing.count === null
+                  ? normalizedCount
+                  : Number((existing.count + normalizedCount).toFixed(5));
+
+        mergedItems.set(item.id, {
+            ...existing,
+            count: mergedCount,
+            total: totals[item.id] ?? existing.total ?? 0,
+        });
     });
+
+    return Array.from(mergedItems.values());
 }
