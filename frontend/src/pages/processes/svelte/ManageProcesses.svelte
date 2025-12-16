@@ -11,8 +11,14 @@
     let previewProcessId = null;
 
     onMount(async () => {
-        customProcesses = await db.list(ENTITY_TYPES.PROCESS);
-        mounted = true;
+        try {
+            customProcesses = await db.list(ENTITY_TYPES.PROCESS);
+        } catch (error) {
+            console.error('Error loading custom processes:', error);
+            customProcesses = [];
+        } finally {
+            mounted = true;
+        }
     });
 
     $: allProcesses = [...processes, ...customProcesses];
@@ -51,7 +57,11 @@
     }
 </script>
 
-<div class="manage-processes" data-hydrated={mounted ? 'true' : 'false'}>
+<div
+    class="manage-processes"
+    data-testid="manage-processes"
+    data-hydrated={mounted ? 'true' : 'false'}
+>
     {#if mounted}
         <div class="controls">
             <input type="text" bind:value={searchTerm} placeholder="Search processes..." />
@@ -62,6 +72,7 @@
                 <div class="no-processes">No processes found</div>
             {:else}
                 {#each filteredProcesses as process (process.id)}
+                    {@const processId = String(process.id)}
                     <div class="process-row" data-testid="process-row">
                         <Process processId={process.id} processData={process} />
                         <div class="process-actions">
@@ -69,10 +80,9 @@
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
-                                aria-expanded={previewProcessId === String(process.id)
-                                    ? 'true'
-                                    : 'false'}
-                                aria-controls={`process-preview-${String(process.id)}`}
+                                aria-expanded={previewProcessId === processId ? 'true' : 'false'}
+                                aria-controls={`process-preview-${processId}`}
+                                data-preview-open={previewProcessId === processId ? 'true' : 'false'}
                                 on:click={() => togglePreview(process.id)}
                             >
                                 Preview
@@ -94,9 +104,9 @@
                                 </button>
                             {/if}
                         </div>
-                        {#if previewProcessId === String(process.id)}
+                        {#if previewProcessId === processId}
                             <div
-                                id={`process-preview-${String(process.id)}`}
+                                id={`process-preview-${processId}`}
                                 data-testid="process-preview"
                                 data-preview-id={previewProcessId}
                                 data-process-id={process.id}
