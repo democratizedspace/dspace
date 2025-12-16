@@ -21,13 +21,15 @@ test.describe('Process preview', () => {
         const processList = page.getByTestId('processes-list');
         await expect(processList).toBeVisible();
 
-        const firstRow = processList.getByTestId('process-row').first();
-        await expect(firstRow).toBeVisible();
-        const processId = await firstRow.getAttribute('data-process-id');
+        const firstRowLocator = processList.getByTestId('process-row').first();
+        await expect(firstRowLocator).toBeVisible();
+        const processId = await firstRowLocator.getAttribute('data-process-id');
         expect(processId).toBeTruthy();
         if (!processId) {
             throw new Error('Process row is missing a process id');
         }
+
+        const firstRow = processList.locator(`[data-process-id="${processId}"]`);
 
         const previewButton = firstRow.getByTestId('process-preview-toggle');
         await expect(previewButton).toBeEnabled();
@@ -83,14 +85,23 @@ test.describe('Process preview', () => {
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
         await expect(rows.nth(1)).toBeVisible();
-        const firstProcessId = await rows.nth(0).getAttribute('data-process-id');
-        const secondProcessId = await rows.nth(1).getAttribute('data-process-id');
+
+        const processIds = await rows.evaluateAll((elements) =>
+            elements
+                .map((element) => element.getAttribute('data-process-id'))
+                .filter((value): value is string => Boolean(value))
+        );
+        const [firstProcessId, secondProcessId] = processIds;
+
         if (!firstProcessId || !secondProcessId) {
             throw new Error('Process rows are missing process ids');
         }
 
-        const firstPreviewButton = rows.nth(0).getByTestId('process-preview-toggle');
-        const secondPreviewButton = rows.nth(1).getByTestId('process-preview-toggle');
+        const firstRow = processList.locator(`[data-process-id="${firstProcessId}"]`);
+        const secondRow = processList.locator(`[data-process-id="${secondProcessId}"]`);
+
+        const firstPreviewButton = firstRow.getByTestId('process-preview-toggle');
+        const secondPreviewButton = secondRow.getByTestId('process-preview-toggle');
 
         await expect(firstPreviewButton).toBeEnabled();
         await expect(secondPreviewButton).toBeEnabled();

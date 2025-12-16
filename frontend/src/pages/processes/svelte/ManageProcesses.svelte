@@ -8,8 +8,8 @@
     let customProcesses = [];
     let mounted = false;
     let searchTerm = '';
-    let previewProcessId = null;
-    let filteredProcessIds = new Set();
+    let openPreviewProcessId = '';
+    let availableProcessIds = new Set();
 
     const normalizeProcessId = (id) => String(id ?? '');
 
@@ -25,11 +25,11 @@
     });
 
     $: allProcesses = [...processes, ...customProcesses];
+    $: availableProcessIds = new Set(
+        allProcesses.map((process) => normalizeProcessId(process.id))
+    );
     $: filteredProcesses = allProcesses.filter((process) =>
         process.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    $: filteredProcessIds = new Set(
-        filteredProcesses.map((process) => normalizeProcessId(process.id))
     );
 
     function handleEdit(id) {
@@ -49,8 +49,12 @@
     }
 
     $: {
-        if (mounted && previewProcessId && !filteredProcessIds.has(previewProcessId)) {
-            previewProcessId = null;
+        if (
+            mounted &&
+            openPreviewProcessId &&
+            !availableProcessIds.has(openPreviewProcessId)
+        ) {
+            openPreviewProcessId = '';
         }
     }
 
@@ -60,7 +64,7 @@
         }
 
         const normalizedId = normalizeProcessId(id);
-        previewProcessId = previewProcessId === normalizedId ? null : normalizedId;
+        openPreviewProcessId = openPreviewProcessId === normalizedId ? '' : normalizedId;
     }
 </script>
 
@@ -73,7 +77,7 @@
         <div
             class="processes-list"
             data-testid="processes-list"
-            data-preview-open={previewProcessId ?? ''}
+            data-preview-open={openPreviewProcessId}
         >
             {#if filteredProcesses.length === 0}
                 <div class="no-processes">No processes found</div>
@@ -87,9 +91,9 @@
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
-                                aria-expanded={previewProcessId === processId ? 'true' : 'false'}
+                                aria-expanded={openPreviewProcessId === processId ? 'true' : 'false'}
                                 aria-controls={`process-preview-${processId}`}
-                                on:click={() => togglePreview(processId)}
+                                on:click|stopPropagation={() => togglePreview(processId)}
                             >
                                 Preview
                             </button>
@@ -110,11 +114,11 @@
                                 </button>
                             {/if}
                         </div>
-                        {#if previewProcessId === processId}
+                        {#if openPreviewProcessId === processId}
                             <div
                                 id={`process-preview-${processId}`}
                                 data-testid="process-preview"
-                                data-preview-id={previewProcessId}
+                                data-preview-id={openPreviewProcessId}
                                 data-process-id={processId}
                             >
                                 <ProcessPreview
