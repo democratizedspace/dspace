@@ -1,4 +1,4 @@
-import { afterEach, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 
 const execFileSync = vi.fn();
 vi.mock('child_process', () => ({ execFileSync }));
