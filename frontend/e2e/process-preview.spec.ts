@@ -21,15 +21,20 @@ test.describe('Process preview', () => {
         const processList = page.getByTestId('processes-list');
         await expect(processList).toBeVisible();
 
-        const firstRowLocator = processList.getByTestId('process-row').first();
-        await expect(firstRowLocator).toBeVisible();
-        const processId = await firstRowLocator.getAttribute('data-process-id');
-        expect(processId).toBeTruthy();
+        const rows = processList.getByTestId('process-row');
+        const processIds = await rows.evaluateAll((elements) =>
+            elements
+                .map((element) => element.getAttribute('data-process-id'))
+                .filter((value): value is string => Boolean(value))
+        );
+
+        const processId = processIds[0];
         if (!processId) {
             throw new Error('Process row is missing a process id');
         }
 
         const firstRow = processList.locator(`[data-process-id="${processId}"]`);
+        await expect(firstRow).toBeVisible();
 
         const previewButton = firstRow.getByTestId('process-preview-toggle');
         await expect(previewButton).toBeEnabled();
