@@ -79,7 +79,7 @@
         <div
             class="processes-list"
             data-testid="processes-list"
-            data-preview-open={openPreviewProcessId}
+            data-preview-open={openPreviewProcessId || ''}
         >
             {#if filteredProcesses.length === 0}
                 <div class="no-processes">No processes found</div>
@@ -93,6 +93,7 @@
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
+                                data-process-id={processId}
                                 aria-expanded={openPreviewProcessId === processId
                                     ? 'true'
                                     : 'false'}

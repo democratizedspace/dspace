@@ -37,9 +37,13 @@ test.describe('Process preview', () => {
         );
         await expect(firstRow).toBeVisible();
 
-        const previewButton = firstRow.getByTestId('process-preview-toggle');
+        const previewButton = processList.locator(
+            `[data-testid="process-preview-toggle"][data-process-id="${processId}"]`
+        );
         await previewButton.scrollIntoViewIfNeeded();
+        await expect(previewButton).toBeVisible();
         await expect(previewButton).toBeEnabled();
+        await expect(previewButton).toHaveAttribute('data-process-id', processId);
         await expect(previewButton).toHaveAttribute(
             'aria-controls',
             `process-preview-${processId}`
@@ -112,12 +116,20 @@ test.describe('Process preview', () => {
         await expect(firstRow).toBeVisible();
         await expect(secondRow).toBeVisible();
 
-        const firstPreviewButton = firstRow.getByTestId('process-preview-toggle');
-        const secondPreviewButton = secondRow.getByTestId('process-preview-toggle');
+        const firstPreviewButton = processList.locator(
+            `[data-testid="process-preview-toggle"][data-process-id="${firstProcessId}"]`
+        );
+        const secondPreviewButton = processList.locator(
+            `[data-testid="process-preview-toggle"][data-process-id="${secondProcessId}"]`
+        );
 
         await firstPreviewButton.scrollIntoViewIfNeeded();
+        await expect(firstPreviewButton).toBeVisible();
+        await expect(secondPreviewButton).toBeVisible();
         await expect(firstPreviewButton).toBeEnabled();
         await expect(secondPreviewButton).toBeEnabled();
+        await expect(firstPreviewButton).toHaveAttribute('data-process-id', firstProcessId);
+        await expect(secondPreviewButton).toHaveAttribute('data-process-id', secondProcessId);
 
         // Click first preview and wait for it to appear
         await firstPreviewButton.click({ timeout: 5000, force: true });

@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { navigateWithRetry } from './test-helpers';
 
 // Get the current directory for e2e tests
 const __filename = fileURLToPath(import.meta.url);
@@ -268,6 +269,10 @@ test('verify playwright web server is properly configured', async ({ page }, tes
 });
 
 test('verify browser has necessary capabilities for tests', async ({ page }) => {
+    // Ensure we are on an origin where storage and fetch are available
+    await navigateWithRetry(page, '/');
+    await page.waitForLoadState('networkidle');
+
     // Check that JavaScript is enabled (will always pass if we got this far)
     const jsEnabled = await page.evaluate(() => true);
     expect(jsEnabled).toBeTruthy();
