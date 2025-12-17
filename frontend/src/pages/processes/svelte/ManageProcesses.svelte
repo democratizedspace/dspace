@@ -62,10 +62,6 @@
 
         const normalizedId = normalizeProcessId(id);
 
-        if (!availableProcessIds.has(normalizedId)) {
-            return;
-        }
-
         openPreviewProcessId = openPreviewProcessId === normalizedId ? '' : normalizedId;
     }
 </script>
@@ -101,6 +97,7 @@
                                     ? 'true'
                                     : 'false'}
                                 aria-controls={`process-preview-${processId}`}
+                                aria-pressed={openPreviewProcessId === processId ? 'true' : 'false'}
                                 on:click|stopPropagation={() => togglePreview(processId)}
                             >
                                 Preview

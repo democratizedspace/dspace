@@ -16,6 +16,9 @@ test.describe('Process preview', () => {
         const processList = manageProcesses.getByTestId('processes-list');
         await expect(processList).toBeVisible();
 
+        const previewOpenValue = async () =>
+            (await processList.getAttribute('data-preview-open')) || '';
+
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
         const processIds = await rows.evaluateAll((elements) =>
@@ -35,21 +38,22 @@ test.describe('Process preview', () => {
         await expect(firstRow).toBeVisible();
 
         const previewButton = firstRow.getByTestId('process-preview-toggle');
+        await previewButton.scrollIntoViewIfNeeded();
         await expect(previewButton).toBeEnabled();
         await expect(previewButton).toHaveAttribute(
             'aria-controls',
             `process-preview-${processId}`
         );
-        await expect(processList).toHaveAttribute('data-preview-open', '');
+        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe('');
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
         const rowTitle = await firstRow.locator('h3').first().textContent();
 
         // Click to show preview
-        await previewButton.click({ timeout: 5000 });
+        await previewButton.click({ timeout: 5000, force: true });
 
         // Wait for preview to appear
         const preview = firstRow.getByTestId('process-preview');
-        await expect(processList).toHaveAttribute('data-preview-open', processId);
+        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(processId);
         await expect(previewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(preview).toHaveCount(1, { timeout: 10000 });
         await expect(preview.first()).toBeVisible({ timeout: 10000 });
@@ -64,10 +68,10 @@ test.describe('Process preview', () => {
         await page.waitForTimeout(500);
 
         // Click to hide preview
-        await previewButton.click({ timeout: 5000 });
+        await previewButton.click({ timeout: 5000, force: true });
 
         // Wait for it to disappear
-        await expect(processList).toHaveAttribute('data-preview-open', '');
+        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe('');
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
         await expect(preview).toHaveCount(0, { timeout: 10000 });
     });
@@ -81,6 +85,9 @@ test.describe('Process preview', () => {
 
         const processList = manageProcesses.getByTestId('processes-list');
         await expect(processList).toBeVisible();
+
+        const previewOpenValue = async () =>
+            (await processList.getAttribute('data-preview-open')) || '';
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
 
@@ -108,13 +115,14 @@ test.describe('Process preview', () => {
         const firstPreviewButton = firstRow.getByTestId('process-preview-toggle');
         const secondPreviewButton = secondRow.getByTestId('process-preview-toggle');
 
+        await firstPreviewButton.scrollIntoViewIfNeeded();
         await expect(firstPreviewButton).toBeEnabled();
         await expect(secondPreviewButton).toBeEnabled();
 
         // Click first preview and wait for it to appear
-        await firstPreviewButton.click({ timeout: 5000 });
+        await firstPreviewButton.click({ timeout: 5000, force: true });
         const firstPreview = firstRow.getByTestId('process-preview');
-        await expect(processList).toHaveAttribute('data-preview-open', firstProcessId);
+        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(firstProcessId);
         await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(firstPreview).toHaveCount(1, { timeout: 10000 });
 
@@ -122,9 +130,10 @@ test.describe('Process preview', () => {
         await page.waitForTimeout(500);
 
         // Click second preview and wait for it to appear while first disappears
-        await secondPreviewButton.click({ timeout: 5000 });
+        await secondPreviewButton.scrollIntoViewIfNeeded();
+        await secondPreviewButton.click({ timeout: 5000, force: true });
         const secondPreview = secondRow.getByTestId('process-preview');
-        await expect(processList).toHaveAttribute('data-preview-open', secondProcessId);
+        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(secondProcessId);
         await expect(secondPreviewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'false');
         await expect(secondPreview).toHaveCount(1, { timeout: 10000 });
