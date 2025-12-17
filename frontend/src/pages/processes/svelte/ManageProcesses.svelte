@@ -90,8 +90,6 @@
         const isOpen = openPreviewProcessId === normalizedId;
         const nextPreviewId = isOpen ? '' : normalizedId;
 
-        lastToggleProcessId = normalizedId;
-
         openPreviewProcessId = nextPreviewId;
     }
 </script>
@@ -130,7 +128,10 @@
                                     : 'false'}
                                 aria-controls={`process-preview-${processId}`}
                                 aria-pressed={openPreviewProcessId === processId ? 'true' : 'false'}
-                                on:click|stopPropagation={() => togglePreview(processId)}
+                                on:click|stopPropagation={() => {
+                                    lastToggleProcessId = processId;
+                                    togglePreview(processId);
+                                }}
                             >
                                 Preview
                             </button>

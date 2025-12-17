@@ -54,9 +54,10 @@ test.describe('Process preview', () => {
         const rowTitle = await firstRow.locator('h3').first().textContent();
 
         // Click to show preview
+        await previewButton.click({ trial: true });
         await previewButton.click({ timeout: 5000 });
 
-        // Wait for preview to appear
+        // Wait for preview to appear (verify handler ran first)
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(processId);
         const preview = firstRow.getByTestId('process-preview');
         await expect(previewButton).toHaveAttribute('aria-expanded', 'true');
@@ -132,6 +133,7 @@ test.describe('Process preview', () => {
         await expect(secondPreviewButton).toHaveAttribute('data-process-id', secondProcessId);
 
         // Click first preview and wait for it to appear
+        await firstPreviewButton.click({ trial: true });
         await firstPreviewButton.click({ timeout: 5000 });
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(firstProcessId);
         const firstPreview = firstRow.getByTestId('process-preview');
@@ -144,6 +146,7 @@ test.describe('Process preview', () => {
 
         // Click second preview and wait for it to appear while first disappears
         await waitForPreviewButtonReady(secondPreviewButton);
+        await secondPreviewButton.click({ trial: true });
         await secondPreviewButton.click({ timeout: 5000 });
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(secondProcessId);
         const secondPreview = secondRow.getByTestId('process-preview');
