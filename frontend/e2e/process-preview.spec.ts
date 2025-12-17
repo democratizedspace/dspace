@@ -56,9 +56,9 @@ test.describe('Process preview', () => {
 
         // Wait for preview to appear
         const preview = firstRow.getByTestId('process-preview');
-        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(processId);
         await expect(previewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(preview).toHaveCount(1, { timeout: 10000 });
+        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(processId);
         await expect(preview.first()).toBeVisible({ timeout: 10000 });
 
         if (rowTitle) {
@@ -75,9 +75,9 @@ test.describe('Process preview', () => {
         await previewButton.click({ timeout: 5000 });
 
         // Wait for it to disappear
-        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe('');
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
         await expect(preview).toHaveCount(0, { timeout: 10000 });
+        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe('');
     });
 
     test('opening another preview closes the previous one', async ({ page }) => {
@@ -130,9 +130,9 @@ test.describe('Process preview', () => {
         // Click first preview and wait for it to appear
         await firstPreviewButton.click({ timeout: 5000 });
         const firstPreview = firstRow.getByTestId('process-preview');
-        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(firstProcessId);
         await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(firstPreview).toHaveCount(1, { timeout: 10000 });
+        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(firstProcessId);
 
         // Wait a moment before clicking the second button
         await page.waitForTimeout(500);
@@ -141,10 +141,10 @@ test.describe('Process preview', () => {
         await waitForPreviewButtonReady(secondPreviewButton);
         await secondPreviewButton.click({ timeout: 5000 });
         const secondPreview = secondRow.getByTestId('process-preview');
-        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(secondProcessId);
         await expect(secondPreviewButton).toHaveAttribute('aria-expanded', 'true');
-        await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'false');
         await expect(secondPreview).toHaveCount(1, { timeout: 10000 });
+        await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(secondProcessId);
+        await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'false');
         await expect(firstPreview).toHaveCount(0, { timeout: 10000 });
     });
 });
