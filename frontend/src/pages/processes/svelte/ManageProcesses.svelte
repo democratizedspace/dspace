@@ -69,6 +69,7 @@
         openPreviewProcessId = openPreviewProcessId === normalizedId ? '' : normalizedId;
     }
 </script>
+
 <div
     class="manage-processes"
     data-testid="manage-processes"
