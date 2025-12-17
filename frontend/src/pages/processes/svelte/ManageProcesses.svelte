@@ -25,9 +25,7 @@
     });
 
     $: allProcesses = [...processes, ...customProcesses];
-    $: availableProcessIds = new Set(
-        allProcesses.map((process) => normalizeProcessId(process.id))
-    );
+    $: availableProcessIds = new Set(allProcesses.map((process) => normalizeProcessId(process.id)));
     $: filteredProcesses = allProcesses.filter((process) =>
         process.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -49,11 +47,7 @@
     }
 
     $: {
-        if (
-            mounted &&
-            openPreviewProcessId &&
-            !availableProcessIds.has(openPreviewProcessId)
-        ) {
+        if (mounted && openPreviewProcessId && !availableProcessIds.has(openPreviewProcessId)) {
             openPreviewProcessId = '';
         }
     }
@@ -91,7 +85,9 @@
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
-                                aria-expanded={openPreviewProcessId === processId ? 'true' : 'false'}
+                                aria-expanded={openPreviewProcessId === processId
+                                    ? 'true'
+                                    : 'false'}
                                 aria-controls={`process-preview-${processId}`}
                                 on:click|stopPropagation={() => togglePreview(processId)}
                             >
