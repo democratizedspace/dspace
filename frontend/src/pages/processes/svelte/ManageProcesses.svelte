@@ -55,12 +55,11 @@
 
     $: {
         const previewIsUnavailable =
-            mounted &&
-            openPreviewProcessId &&
-            availableProcessIds.size > 0 &&
-            !availableProcessIds.has(openPreviewProcessId);
+            mounted && openPreviewProcessId && !availableProcessIds.has(openPreviewProcessId);
+        const previewIsAvailable =
+            mounted && openPreviewProcessId && availableProcessIds.has(openPreviewProcessId);
 
-        if (!previewIsUnavailable && pendingPreviewClear) {
+        if ((previewIsAvailable || !openPreviewProcessId) && pendingPreviewClear) {
             clearTimeout(pendingPreviewClear);
             pendingPreviewClear = undefined;
         }
@@ -70,7 +69,6 @@
             pendingPreviewClear = setTimeout(() => {
                 const shouldStillClear =
                     openPreviewProcessId === stalePreviewId &&
-                    availableProcessIds.size > 0 &&
                     !availableProcessIds.has(stalePreviewId);
 
                 if (shouldStillClear) {
@@ -87,6 +85,7 @@
         }
 
         const normalizedId = normalizeProcessId(id);
+        lastToggleProcessId = normalizedId;
         const isOpen = openPreviewProcessId === normalizedId;
         const nextPreviewId = isOpen ? '' : normalizedId;
 
