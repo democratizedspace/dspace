@@ -18,6 +18,7 @@ test.describe('Process preview', () => {
         const processList = manageProcesses.getByTestId('processes-list');
         await expect(processList).toBeVisible();
         await expect(processList).toHaveAttribute('data-preview-open', '', { timeout: 10000 });
+        await expect(processList).toHaveAttribute('data-last-toggle', '');
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
@@ -96,6 +97,7 @@ test.describe('Process preview', () => {
         const processList = manageProcesses.getByTestId('processes-list');
         await expect(processList).toBeVisible();
         await expect(processList).toHaveAttribute('data-preview-open', '', { timeout: 10000 });
+        await expect(processList).toHaveAttribute('data-last-toggle', '');
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';

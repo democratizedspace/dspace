@@ -54,18 +54,18 @@
     }
 
     $: {
-        if (pendingPreviewClear) {
-            clearTimeout(pendingPreviewClear);
-            pendingPreviewClear = undefined;
-        }
-
         const previewIsUnavailable =
             mounted &&
             openPreviewProcessId &&
             availableProcessIds.size > 0 &&
             !availableProcessIds.has(openPreviewProcessId);
 
-        if (previewIsUnavailable) {
+        if (!previewIsUnavailable && pendingPreviewClear) {
+            clearTimeout(pendingPreviewClear);
+            pendingPreviewClear = undefined;
+        }
+
+        if (previewIsUnavailable && !pendingPreviewClear) {
             const stalePreviewId = openPreviewProcessId;
             pendingPreviewClear = setTimeout(() => {
                 const shouldStillClear =
