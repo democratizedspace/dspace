@@ -22,10 +22,10 @@ test.describe('Tutorial Quest', () => {
         await interactWithQuestTutorial(page);
 
         // Confirm completion state is rendered
-        await expect(chatPanel.getByText('Quest Complete!', { exact: false })).toBeVisible({
+        await expect(chatPanel.getByRole('heading', { name: 'Quest Complete!' })).toBeVisible({
             timeout: 10000,
         });
-        await expect(chatPanel.getByText('Complete')).toBeVisible();
+        await expect(chatPanel.getByText('Quest Complete!', { exact: true })).toBeVisible();
 
         // Navigate back to quests page
         await navigateWithRetry(page, '/quests');
