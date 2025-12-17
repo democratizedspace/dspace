@@ -83,8 +83,6 @@ test.describe('Process preview', () => {
 
         const processList = page.getByTestId('processes-list');
         const rows = processList.getByTestId('process-row');
-        await expect(rows.first()).toBeVisible();
-        await expect(rows.nth(1)).toBeVisible();
 
         const processIds = await rows.evaluateAll((elements) =>
             elements
@@ -99,6 +97,9 @@ test.describe('Process preview', () => {
 
         const firstRow = processList.locator(`[data-process-id="${firstProcessId}"]`);
         const secondRow = processList.locator(`[data-process-id="${secondProcessId}"]`);
+
+        await expect(firstRow).toBeVisible();
+        await expect(secondRow).toBeVisible();
 
         const firstPreviewButton = firstRow.getByTestId('process-preview-toggle');
         const secondPreviewButton = secondRow.getByTestId('process-preview-toggle');
