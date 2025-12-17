@@ -40,9 +40,7 @@ test.describe('Process preview', () => {
         );
         await expect(firstRow).toBeVisible();
 
-        const previewButton = processList.locator(
-            `[data-testid="process-preview-toggle"][data-process-id="${processId}"]`
-        );
+        const previewButton = firstRow.getByTestId('process-preview-toggle');
         await waitForPreviewButtonReady(previewButton);
         await expect(previewButton).toHaveAttribute('data-process-id', processId);
         await expect(previewButton).toHaveAttribute(
@@ -121,12 +119,8 @@ test.describe('Process preview', () => {
         await expect(firstRow).toBeVisible();
         await expect(secondRow).toBeVisible();
 
-        const firstPreviewButton = processList.locator(
-            `[data-testid="process-preview-toggle"][data-process-id="${firstProcessId}"]`
-        );
-        const secondPreviewButton = processList.locator(
-            `[data-testid="process-preview-toggle"][data-process-id="${secondProcessId}"]`
-        );
+        const firstPreviewButton = firstRow.getByTestId('process-preview-toggle');
+        const secondPreviewButton = secondRow.getByTestId('process-preview-toggle');
 
         await waitForPreviewButtonReady(firstPreviewButton);
         await waitForPreviewButtonReady(secondPreviewButton);
