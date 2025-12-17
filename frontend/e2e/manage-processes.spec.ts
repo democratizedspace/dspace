@@ -9,10 +9,15 @@ test.describe('Manage Processes', () => {
     test('lists and previews built-in processes', async ({ page }) => {
         await page.goto('/processes/manage');
         await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
-        const firstRow = page.locator('.process-row').first();
+        await waitForHydration(page, 'data-testid=manage-processes');
+
+        const firstRow = page.getByTestId('process-row').first();
         await expect(firstRow).toBeVisible();
-        await firstRow.locator('.preview-button').click();
-        await expect(firstRow.locator('.process-preview')).toBeVisible();
+
+        const previewToggle = firstRow.getByTestId('process-preview-toggle');
+        await expect(previewToggle).toBeVisible();
+
+        await previewToggle.click();
+        await expect(firstRow.getByTestId('process-preview')).toBeVisible();
     });
 });

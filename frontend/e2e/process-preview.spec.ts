@@ -21,6 +21,7 @@ test.describe('Process preview', () => {
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
+        const lastToggleValue = async () => (await processList.getAttribute('data-last-toggle')) || '';
 
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
@@ -48,6 +49,7 @@ test.describe('Process preview', () => {
             `process-preview-${processId}`
         );
         await expect.poll(previewOpenValue, { timeout: 10000 }).toBe('');
+        await expect.poll(lastToggleValue, { timeout: 10000 }).toBe('');
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
         const rowTitle = await firstRow.locator('h3').first().textContent();
 
@@ -59,6 +61,7 @@ test.describe('Process preview', () => {
         await expect(previewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(preview).toHaveCount(1, { timeout: 10000 });
         await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(processId);
+        await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(processId);
         await expect(preview.first()).toBeVisible({ timeout: 10000 });
 
         if (rowTitle) {
@@ -95,6 +98,7 @@ test.describe('Process preview', () => {
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
+        const lastToggleValue = async () => (await processList.getAttribute('data-last-toggle')) || '';
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
 
@@ -133,6 +137,7 @@ test.describe('Process preview', () => {
         await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(firstPreview).toHaveCount(1, { timeout: 10000 });
         await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(firstProcessId);
+        await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(firstProcessId);
 
         // Wait a moment before clicking the second button
         await page.waitForTimeout(500);
@@ -145,6 +150,7 @@ test.describe('Process preview', () => {
         await expect(secondPreview).toHaveCount(1, { timeout: 10000 });
         await expect.poll(previewOpenValue, { timeout: 10000 }).toBe(secondProcessId);
         await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'false');
+        await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(secondProcessId);
         await expect(firstPreview).toHaveCount(0, { timeout: 10000 });
     });
 });

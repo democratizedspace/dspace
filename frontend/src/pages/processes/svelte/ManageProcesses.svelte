@@ -11,7 +11,7 @@
     let openPreviewProcessId = '';
     let availableProcessIds = new Set();
     let pendingPreviewClear;
-    let lastPreviewToggle = '';
+    let lastToggleProcessId = '';
 
     const normalizeProcessId = (id) => String(id ?? '');
 
@@ -90,7 +90,7 @@
         const isOpen = openPreviewProcessId === normalizedId;
         const nextPreviewId = isOpen ? '' : normalizedId;
 
-        lastPreviewToggle = `${normalizedId}:${isOpen ? 'close' : 'open'}`;
+        lastToggleProcessId = normalizedId;
 
         openPreviewProcessId = nextPreviewId;
     }
@@ -110,7 +110,7 @@
             class="processes-list"
             data-testid="processes-list"
             data-preview-open={openPreviewProcessId || ''}
-            data-last-toggle={lastPreviewToggle}
+            data-last-toggle={lastToggleProcessId}
         >
             {#if filteredProcesses.length === 0}
                 <div class="no-processes">No processes found</div>
