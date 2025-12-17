@@ -47,7 +47,10 @@
     }
 
     $: {
-        if (mounted && openPreviewProcessId && !availableProcessIds.has(openPreviewProcessId)) {
+        const previewIsUnavailable =
+            mounted && openPreviewProcessId && !availableProcessIds.has(openPreviewProcessId);
+
+        if (previewIsUnavailable) {
             openPreviewProcessId = '';
         }
     }
@@ -58,11 +61,19 @@
         }
 
         const normalizedId = normalizeProcessId(id);
+
+        if (!availableProcessIds.has(normalizedId)) {
+            return;
+        }
+
         openPreviewProcessId = openPreviewProcessId === normalizedId ? '' : normalizedId;
     }
 </script>
-
-<div class="manage-processes" data-hydrated={mounted ? 'true' : 'false'}>
+<div
+    class="manage-processes"
+    data-testid="manage-processes"
+    data-hydrated={mounted ? 'true' : 'false'}
+>
     {#if mounted}
         <div class="controls">
             <input type="text" bind:value={searchTerm} placeholder="Search processes..." />

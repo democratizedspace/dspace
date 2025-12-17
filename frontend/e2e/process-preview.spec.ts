@@ -8,20 +8,16 @@ test.describe('Process preview', () => {
 
     test('reveals and hides process details from the manage view', async ({ page }) => {
         await navigateWithRetry(page, '/processes/manage');
-        await waitForHydration(page);
+        await waitForHydration(page, 'data-testid=manage-processes');
 
-        // Wait for component to be fully mounted (not just hydrated)
-        await page.waitForSelector('[data-hydrated="true"]', { timeout: 10000 });
-        // Extra wait to ensure onMount completes and processes are rendered
-        await page.waitForSelector('.process-row .preview-button', {
-            state: 'visible',
-            timeout: 10000,
-        });
+        const manageProcesses = page.getByTestId('manage-processes');
+        await expect(manageProcesses).toHaveAttribute('data-hydrated', 'true');
 
-        const processList = page.getByTestId('processes-list');
+        const processList = manageProcesses.getByTestId('processes-list');
         await expect(processList).toBeVisible();
 
         const rows = processList.getByTestId('process-row');
+        await expect(rows.first()).toBeVisible();
         const processIds = await rows.evaluateAll((elements) =>
             elements
                 .map((element) => element.getAttribute('data-process-id'))
@@ -33,7 +29,9 @@ test.describe('Process preview', () => {
             throw new Error('Process row is missing a process id');
         }
 
-        const firstRow = processList.locator(`[data-process-id="${processId}"]`);
+        const firstRow = processList.locator(
+            `[data-testid="process-row"][data-process-id="${processId}"]`
+        );
         await expect(firstRow).toBeVisible();
 
         const previewButton = firstRow.getByTestId('process-preview-toggle');
@@ -76,18 +74,15 @@ test.describe('Process preview', () => {
 
     test('opening another preview closes the previous one', async ({ page }) => {
         await navigateWithRetry(page, '/processes/manage');
-        await waitForHydration(page);
+        await waitForHydration(page, 'data-testid=manage-processes');
 
-        // Wait for component to be fully mounted (not just hydrated)
-        await page.waitForSelector('[data-hydrated="true"]', { timeout: 10000 });
-        // Extra wait to ensure onMount completes and processes are rendered
-        await page.waitForSelector('.process-row .preview-button', {
-            state: 'visible',
-            timeout: 10000,
-        });
+        const manageProcesses = page.getByTestId('manage-processes');
+        await expect(manageProcesses).toHaveAttribute('data-hydrated', 'true');
 
-        const processList = page.getByTestId('processes-list');
+        const processList = manageProcesses.getByTestId('processes-list');
+        await expect(processList).toBeVisible();
         const rows = processList.getByTestId('process-row');
+        await expect(rows.first()).toBeVisible();
 
         const processIds = await rows.evaluateAll((elements) =>
             elements
@@ -100,8 +95,12 @@ test.describe('Process preview', () => {
             throw new Error('Process rows are missing process ids');
         }
 
-        const firstRow = processList.locator(`[data-process-id="${firstProcessId}"]`);
-        const secondRow = processList.locator(`[data-process-id="${secondProcessId}"]`);
+        const firstRow = processList.locator(
+            `[data-testid="process-row"][data-process-id="${firstProcessId}"]`
+        );
+        const secondRow = processList.locator(
+            `[data-testid="process-row"][data-process-id="${secondProcessId}"]`
+        );
 
         await expect(firstRow).toBeVisible();
         await expect(secondRow).toBeVisible();
