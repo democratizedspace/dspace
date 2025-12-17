@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import Process from '../../../components/svelte/Process.svelte';
     import ProcessPreview from '../../../components/svelte/ProcessPreview.svelte';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
@@ -10,17 +10,24 @@
     let searchTerm = '';
     let openPreviewProcessId = '';
     let availableProcessIds = new Set();
+    let pendingPreviewClear;
+    let lastPreviewToggle = '';
 
     const normalizeProcessId = (id) => String(id ?? '');
 
     onMount(async () => {
+        mounted = true;
         try {
             customProcesses = (await db.list(ENTITY_TYPES.PROCESS)) ?? [];
         } catch (error) {
             console.error('Failed to load custom processes:', error);
             customProcesses = [];
-        } finally {
-            mounted = true;
+        }
+    });
+
+    onDestroy(() => {
+        if (pendingPreviewClear) {
+            clearTimeout(pendingPreviewClear);
         }
     });
 
@@ -47,11 +54,30 @@
     }
 
     $: {
+        if (pendingPreviewClear) {
+            clearTimeout(pendingPreviewClear);
+            pendingPreviewClear = undefined;
+        }
+
         const previewIsUnavailable =
-            mounted && openPreviewProcessId && !availableProcessIds.has(openPreviewProcessId);
+            mounted &&
+            openPreviewProcessId &&
+            availableProcessIds.size > 0 &&
+            !availableProcessIds.has(openPreviewProcessId);
 
         if (previewIsUnavailable) {
-            openPreviewProcessId = '';
+            const stalePreviewId = openPreviewProcessId;
+            pendingPreviewClear = setTimeout(() => {
+                const shouldStillClear =
+                    openPreviewProcessId === stalePreviewId &&
+                    availableProcessIds.size > 0 &&
+                    !availableProcessIds.has(stalePreviewId);
+
+                if (shouldStillClear) {
+                    openPreviewProcessId = '';
+                }
+                pendingPreviewClear = undefined;
+            }, 0);
         }
     }
 
@@ -61,8 +87,12 @@
         }
 
         const normalizedId = normalizeProcessId(id);
+        const isOpen = openPreviewProcessId === normalizedId;
+        const nextPreviewId = isOpen ? '' : normalizedId;
 
-        openPreviewProcessId = openPreviewProcessId === normalizedId ? '' : normalizedId;
+        lastPreviewToggle = `${normalizedId}:${isOpen ? 'close' : 'open'}`;
+
+        openPreviewProcessId = nextPreviewId;
     }
 </script>
 
@@ -80,6 +110,7 @@
             class="processes-list"
             data-testid="processes-list"
             data-preview-open={openPreviewProcessId || ''}
+            data-last-toggle={lastPreviewToggle}
         >
             {#if filteredProcesses.length === 0}
                 <div class="no-processes">No processes found</div>
