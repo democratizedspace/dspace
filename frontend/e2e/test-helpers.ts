@@ -1,5 +1,5 @@
-import { Page, Locator, expect } from '@playwright/test';
-export type { Page } from '@playwright/test';
+import { expect } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 const CONNECTION_REFUSED_PATTERNS = [
     'ECONNREFUSED',
@@ -11,8 +11,6 @@ const DEFAULT_RETRY_ATTEMPTS = 6;
 const DEFAULT_RETRY_DELAY_MS = 300;
 const DEFAULT_MAX_LOG_ATTEMPTS = 4;
 const DEFAULT_MAX_DURATION_MS = 10_000;
-
-const GAME_STATE_MODULE = '/src/utils/gameState/common.js';
 
 async function wait(page: Page, ms: number): Promise<void> {
     if (typeof page.waitForTimeout === 'function') {
@@ -98,8 +96,9 @@ import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 
 export async function purgeClientState(page: Page): Promise<void> {
     await navigateWithRetry(page, '/');
+    await page.context().clearCookies();
 
-    await page.evaluate(async (gameStateModule: string) => {
+    await page.evaluate(async () => {
         localStorage.clear();
         sessionStorage.clear();
 
@@ -107,13 +106,7 @@ export async function purgeClientState(page: Page): Promise<void> {
         const anyIndexedDB = indexedDB as unknown as {
             databases?: () => Promise<Array<{ name?: string | null }>>;
         };
-
-        try {
-            const module = await import(/* @vite-ignore */ gameStateModule);
-            await module.closeGameStateDatabaseForTesting?.();
-        } catch (error) {
-            console.warn('Failed to close game state database before purge:', error);
-        }
+        const isCacheAvailable = typeof caches !== 'undefined' && typeof caches.keys === 'function';
 
         const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -186,7 +179,27 @@ export async function purgeClientState(page: Page): Promise<void> {
                 })()
             )
         );
-    }, GAME_STATE_MODULE);
+
+        if (isCacheAvailable) {
+            try {
+                const cacheKeys = await caches.keys();
+                await Promise.all(cacheKeys.map((key) => caches.delete(key)));
+            } catch (error) {
+                console.warn('Failed to clear caches before purge:', error);
+            }
+        }
+
+        const cookieNames = document.cookie
+            ?.split(';')
+            .map((cookie) => cookie.split('=')[0]?.trim())
+            .filter(Boolean);
+
+        if (cookieNames?.length) {
+            cookieNames.forEach((name) => {
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
+            });
+        }
+    });
 
     const waitTargets = ['CustomContent', 'dspaceGameState', 'dspaceDB', 'dspaceGameSaves'];
     await page.waitForFunction(

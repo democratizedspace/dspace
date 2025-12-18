@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import Process from '../../../components/svelte/Process.svelte';
     import ProcessPreview from '../../../components/svelte/ProcessPreview.svelte';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
@@ -8,32 +8,45 @@
     let customProcesses = [];
     let mounted = false;
     let searchTerm = '';
-    let previewProcessId = null;
-    let filteredProcessIds = new Set();
+    let openPreviewProcessId = '';
+    let availableProcessIds = new Set();
+    let lastToggleProcessId = '';
+    let invalidPreviewTimeout;
 
     const normalizeProcessId = (id) => String(id ?? '');
 
     onMount(async () => {
+        mounted = true;
         try {
             customProcesses = (await db.list(ENTITY_TYPES.PROCESS)) ?? [];
         } catch (error) {
             console.error('Failed to load custom processes:', error);
             customProcesses = [];
-        } finally {
-            mounted = true;
         }
     });
 
+    onDestroy(() => {
+        clearInvalidPreviewTimeout();
+    });
+
     $: allProcesses = [...processes, ...customProcesses];
+    $: availableProcessIds = new Set(allProcesses.map((process) => normalizeProcessId(process.id)));
     $: filteredProcesses = allProcesses.filter((process) =>
         process.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    $: filteredProcessIds = new Set(
-        filteredProcesses.map((process) => normalizeProcessId(process.id))
     );
 
     function handleEdit(id) {
         window.location.href = `/processes/${id}/edit`;
+    }
+
+    function incrementWindowCounter(counterName) {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        const globalWindow = window;
+        const currentValue = Number(globalWindow[counterName]) || 0;
+        globalWindow[counterName] = currentValue + 1;
     }
 
     async function handleDelete(id) {
@@ -48,9 +61,43 @@
         }
     }
 
+    function clearInvalidPreviewTimeout() {
+        if (invalidPreviewTimeout) {
+            clearTimeout(invalidPreviewTimeout);
+            invalidPreviewTimeout = undefined;
+        }
+    }
+
     $: {
-        if (mounted && previewProcessId && !filteredProcessIds.has(previewProcessId)) {
-            previewProcessId = null;
+        const hasOpenPreview = mounted && Boolean(openPreviewProcessId);
+        const previewIsUnavailable =
+            hasOpenPreview && !availableProcessIds.has(openPreviewProcessId);
+
+        if (!hasOpenPreview || !previewIsUnavailable) {
+            clearInvalidPreviewTimeout();
+        } else if (!invalidPreviewTimeout) {
+            const stalePreviewId = openPreviewProcessId;
+
+            if (typeof window !== 'undefined') {
+                incrementWindowCounter('__dspace_cleanup_scheduled');
+            }
+
+            invalidPreviewTimeout = setTimeout(() => {
+                const shouldStillClear =
+                    Boolean(openPreviewProcessId) &&
+                    openPreviewProcessId === stalePreviewId &&
+                    !availableProcessIds.has(openPreviewProcessId);
+
+                if (shouldStillClear) {
+                    openPreviewProcessId = '';
+
+                    if (typeof window !== 'undefined') {
+                        incrementWindowCounter('__dspace_cleanup_ran');
+                    }
+                }
+
+                invalidPreviewTimeout = undefined;
+            }, 350);
         }
     }
 
@@ -59,12 +106,32 @@
             return;
         }
 
+        clearInvalidPreviewTimeout();
+
         const normalizedId = normalizeProcessId(id);
-        previewProcessId = previewProcessId === normalizedId ? null : normalizedId;
+        const isOpen = openPreviewProcessId === normalizedId;
+        const nextPreviewId = isOpen ? '' : normalizedId;
+
+        if (typeof window !== 'undefined') {
+            const globalWindow = window;
+            incrementWindowCounter('__dspace_toggle_preview_calls');
+            globalWindow.__dspace_open_preview_before = openPreviewProcessId;
+        }
+
+        openPreviewProcessId = nextPreviewId;
+
+        if (typeof window !== 'undefined') {
+            const globalWindow = window;
+            globalWindow.__dspace_open_preview_after = openPreviewProcessId;
+        }
     }
 </script>
 
-<div class="manage-processes" data-hydrated={mounted ? 'true' : 'false'}>
+<div
+    class="manage-processes"
+    data-testid="manage-processes"
+    data-hydrated={mounted ? 'true' : 'false'}
+>
     {#if mounted}
         <div class="controls">
             <input type="text" bind:value={searchTerm} placeholder="Search processes..." />
@@ -73,7 +140,8 @@
         <div
             class="processes-list"
             data-testid="processes-list"
-            data-preview-open={previewProcessId ?? ''}
+            data-preview-open={openPreviewProcessId || ''}
+            data-last-toggle={lastToggleProcessId || ''}
         >
             {#if filteredProcesses.length === 0}
                 <div class="no-processes">No processes found</div>
@@ -87,9 +155,19 @@
                                 class="preview-button"
                                 type="button"
                                 data-testid="process-preview-toggle"
-                                aria-expanded={previewProcessId === processId ? 'true' : 'false'}
+                                data-process-id={processId}
+                                aria-expanded={openPreviewProcessId === processId
+                                    ? 'true'
+                                    : 'false'}
                                 aria-controls={`process-preview-${processId}`}
-                                on:click={() => togglePreview(processId)}
+                                aria-pressed={openPreviewProcessId === processId ? 'true' : 'false'}
+                                on:click|stopPropagation={() => {
+                                    if (typeof window !== 'undefined') {
+                                        window.__dspace_last_toggle_process_id = processId;
+                                    }
+                                    lastToggleProcessId = processId;
+                                    togglePreview(processId);
+                                }}
                             >
                                 Preview
                             </button>
@@ -110,11 +188,11 @@
                                 </button>
                             {/if}
                         </div>
-                        {#if previewProcessId === processId}
+                        {#if openPreviewProcessId === processId}
                             <div
                                 id={`process-preview-${processId}`}
                                 data-testid="process-preview"
-                                data-preview-id={previewProcessId}
+                                data-preview-id={openPreviewProcessId}
                                 data-process-id={processId}
                             >
                                 <ProcessPreview

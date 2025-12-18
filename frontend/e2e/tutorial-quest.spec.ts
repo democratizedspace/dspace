@@ -1,120 +1,85 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page, Locator } from '@playwright/test';
+import { clearUserData, navigateWithRetry, waitForHydration } from './test-helpers';
 
 test.describe('Tutorial Quest', () => {
     // Configure test timeouts
     test.setTimeout(60000); // 60 seconds timeout
 
+    test.beforeEach(async ({ page }) => {
+        await clearUserData(page);
+    });
+
     test('should complete the How to do quests tutorial', async ({ page }) => {
         // Go directly to the tutorial quest
-        await page.goto('/quests/welcome/howtodoquests');
-        await page.waitForLoadState('networkidle');
+        await navigateWithRetry(page, '/quests/welcome/howtodoquests');
+        await waitForHydration(page);
 
-        // Take a screenshot of the initial state
-        await page.screenshot({ path: './test-artifacts/screenshots/tutorial-quest-initial.png' });
-
-        // Verify the chat container is visible
-        await expect(page.locator('[data-testid="chat-panel"]')).toBeVisible({ timeout: 15000 });
+        // Verify the chat container is visible and ready
+        const chatPanel = page.getByTestId('chat-panel');
+        await expect(chatPanel).toBeVisible({ timeout: 15000 });
 
         // Interact with the tutorial quest
         await interactWithQuestTutorial(page);
 
-        // Test passes if we can interact with the quest and capture screenshots
-        // Since completing the entire quest is brittle, we'll consider this test a success
-        // if we can interact with it and capture the state
+        // Confirm completion state is rendered
+        await expect(chatPanel.getByRole('heading', { name: 'Quest Complete!' })).toBeVisible({
+            timeout: 10000,
+        });
+        await expect(chatPanel.getByText('Quest Complete!', { exact: true })).toBeVisible();
 
         // Navigate back to quests page
-        await page.goto('/quests');
+        await navigateWithRetry(page, '/quests');
         await page.waitForLoadState('networkidle');
-
-        // Take a screenshot at the end
-        await page.screenshot({ path: './test-artifacts/screenshots/tutorial-quest-final.png' });
     });
 });
 
 // Helper function to interact with dialogue options
 async function interactWithQuestTutorial(page: Page): Promise<void> {
-    try {
-        // Maximum number of clicks we'll attempt
-        const maxClicks = 10;
-        let clickCount = 0;
+    const chatPanel = page.getByTestId('chat-panel');
+    const dialogue = chatPanel.locator('.npcDialogue');
 
-        // Take a screenshot of the initial state
-        await page.screenshot({ path: './test-artifacts/screenshots/tutorial-quest-start.png' });
+    await waitForDialogue(dialogue, 'Greetings, adventurer');
+    await clickQuestOption(page, 'A quest, you say? Tell me more.');
 
-        // Look for clickable elements and interact with them
-        while (clickCount < maxClicks) {
-            // Check for claim buttons that might appear
-            const claimButton = page.locator('text=Claim');
-            if ((await claimButton.count()) > 0) {
-                console.log('Clicking claim button');
-                await claimButton.click();
-                await page.waitForTimeout(500);
-                await page.screenshot({
-                    path: `./test-artifacts/screenshots/tutorial-quest-claim${clickCount}.png`,
-                });
-                clickCount++;
-                continue;
-            }
+    await waitForDialogue(dialogue, 'Your quest, dear player');
+    await clickQuestOption(page, 'I got this, no need for a tutorial!');
 
-            // Check for process options
-            const processButton = page.locator('text=Process');
-            if ((await processButton.count()) > 0) {
-                console.log('Clicking process button');
-                await processButton.click();
-                await page.waitForTimeout(500);
-                await page.screenshot({
-                    path: `./test-artifacts/screenshots/tutorial-quest-process${clickCount}.png`,
-                });
-                clickCount++;
-                continue;
-            }
+    await waitForDialogue(dialogue, 'Aha! A seasoned adventurer');
+    await claimItemsForOption(page, "What's this?");
 
-            // Get options container
-            const optionsContainer = page.locator('.options');
-            if ((await optionsContainer.count()) === 0) {
-                console.log('No options container found');
-                await page.screenshot({
-                    path: `./test-artifacts/screenshots/tutorial-quest-nooptions${clickCount}.png`,
-                });
-                break;
-            }
+    const skipButton = page.getByRole('button', { name: 'Alright, now can I skip?' });
+    await expect(skipButton).toBeEnabled({ timeout: 5000 });
+    await skipButton.click();
 
-            // Try to find clickable options - first try with 'a' elements
-            const options = optionsContainer.locator('a');
-            const optionsCount = await options.count();
+    await waitForDialogue(dialogue, "Yes. Alright, well, I'll see you");
 
-            if (optionsCount > 0) {
-                // Click the first option
-                console.log(`Clicking option ${clickCount + 1} of ${optionsCount} available`);
-                await options.first().click();
-                await page.waitForTimeout(500);
-                await page.screenshot({
-                    path: `./test-artifacts/screenshots/tutorial-quest-step${clickCount + 1}.png`,
-                });
-                clickCount++;
-                continue;
-            }
+    const finishButton = page.getByRole('button', { name: 'Bye, dChat!' });
+    await expect(finishButton).toBeEnabled({ timeout: 5000 });
+    await finishButton.click();
+}
 
-            // If no 'a' elements, try with the first div in the options container
-            const anyElement = optionsContainer.locator('div').first();
-            if ((await anyElement.count()) > 0) {
-                console.log('Clicking first div in options container');
-                await anyElement.click();
-                await page.waitForTimeout(500);
-                await page.screenshot({
-                    path: `./test-artifacts/screenshots/tutorial-quest-fallback${clickCount}.png`,
-                });
-                clickCount++;
-                continue;
-            }
+async function waitForDialogue(dialogue: Locator, text: string): Promise<void> {
+    await expect(dialogue).toContainText(text, { timeout: 10000 });
+}
 
-            console.log('No clickable elements found');
-            break;
-        }
+async function clickQuestOption(page: Page, text: string): Promise<void> {
+    const optionButton = page.getByRole('button', { name: text });
+    await expect(optionButton).toBeVisible({ timeout: 5000 });
+    await expect(optionButton).toBeEnabled({ timeout: 5000 });
+    await optionButton.click();
+}
 
-        console.log(`Successfully interacted with ${clickCount} elements in the tutorial quest`);
-    } catch (error) {
-        console.error('Error in tutorial quest interaction:', error);
-        await page.screenshot({ path: './test-artifacts/screenshots/tutorial-quest-error.png' });
-    }
+async function claimItemsForOption(page: Page, optionText: string): Promise<void> {
+    const optionsContainer = page.locator('[data-testid="chat-panel"] .options');
+    const optionGroup = optionsContainer
+        .locator('div')
+        .filter({ has: page.getByRole('button', { name: optionText }) })
+        .first();
+
+    const claimButton = optionGroup.getByRole('button', { name: 'Claim' });
+    await expect(optionGroup).toBeVisible({ timeout: 5000 });
+    await expect(claimButton).toBeVisible({ timeout: 5000 });
+    await expect(claimButton).toBeEnabled({ timeout: 5000 });
+    await claimButton.click();
+    await expect(claimButton).toBeDisabled({ timeout: 5000 });
 }
