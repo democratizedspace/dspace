@@ -5,6 +5,8 @@ type ToggleDebugState = {
     calls: number;
     before: string;
     after: string;
+    cleanupScheduled: number;
+    cleanupRan: number;
 };
 
 function getLastToggleSignal(page: Page): Promise<string> {
@@ -22,12 +24,16 @@ function getToggleDebugState(page: Page): Promise<ToggleDebugState> {
             __dspace_toggle_preview_calls?: number;
             __dspace_open_preview_before?: string;
             __dspace_open_preview_after?: string;
+            __dspace_cleanup_scheduled?: number;
+            __dspace_cleanup_ran?: number;
         };
 
         return {
             calls: globalWindow.__dspace_toggle_preview_calls ?? 0,
             before: globalWindow.__dspace_open_preview_before ?? '',
             after: globalWindow.__dspace_open_preview_after ?? '',
+            cleanupScheduled: globalWindow.__dspace_cleanup_scheduled ?? 0,
+            cleanupRan: globalWindow.__dspace_cleanup_ran ?? 0,
         };
     });
 }
@@ -39,17 +45,29 @@ function resetToggleDebugState(page: Page): Promise<void> {
             __dspace_open_preview_before?: string;
             __dspace_open_preview_after?: string;
             __dspace_last_toggle_process_id?: string;
+            __dspace_cleanup_scheduled?: number;
+            __dspace_cleanup_ran?: number;
         };
 
         globalWindow.__dspace_toggle_preview_calls = 0;
         globalWindow.__dspace_open_preview_before = '';
         globalWindow.__dspace_open_preview_after = '';
         globalWindow.__dspace_last_toggle_process_id = '';
+        globalWindow.__dspace_cleanup_scheduled = 0;
+        globalWindow.__dspace_cleanup_ran = 0;
     });
 }
 
 test.describe('Process preview', () => {
     test.beforeEach(async ({ page }) => {
+        page.on('pageerror', (error) => {
+            console.error(`[pageerror] ${error.message}`);
+        });
+
+        page.on('console', (message) => {
+            console.log(`[console.${message.type()}] ${message.text()}`);
+        });
+
         await clearUserData(page);
     });
 
@@ -102,6 +120,12 @@ test.describe('Process preview', () => {
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe('');
         await expect.poll(async () => (await toggleDebugState()).calls, { timeout: 10000 }).toBe(0);
         await expect.poll(async () => (await toggleDebugState()).after, { timeout: 10000 }).toBe('');
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupScheduled, { timeout: 10000 })
+            .toBe(0);
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupRan, { timeout: 10000 })
+            .toBe(0);
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
         const rowTitle = await firstRow.locator('h3').first().textContent();
 
@@ -117,6 +141,12 @@ test.describe('Process preview', () => {
         await expect
             .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
             .toBe(processId);
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupScheduled, { timeout: 10000 })
+            .toBe(0);
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupRan, { timeout: 10000 })
+            .toBe(0);
         const preview = firstRow.getByTestId('process-preview');
         await expect(previewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(preview).toHaveCount(1, { timeout: 10000 });
@@ -134,6 +164,12 @@ test.describe('Process preview', () => {
 
         // Click to hide preview
         await resetToggleDebugState(page);
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupScheduled, { timeout: 10000 })
+            .toBe(0);
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupRan, { timeout: 10000 })
+            .toBe(0);
         await waitForPreviewButtonReady(previewButton);
         await previewButton.click({ timeout: 5000 });
 
@@ -142,6 +178,12 @@ test.describe('Process preview', () => {
         await expect
             .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
             .toBe('');
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupScheduled, { timeout: 10000 })
+            .toBe(0);
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupRan, { timeout: 10000 })
+            .toBe(0);
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
         await expect(preview).toHaveCount(0, { timeout: 10000 });
         await expect.poll(previewOpenValue, { timeout: 10000 }).toBe('');
@@ -208,6 +250,12 @@ test.describe('Process preview', () => {
         await expect
             .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
             .toBe(firstProcessId);
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupScheduled, { timeout: 10000 })
+            .toBe(0);
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupRan, { timeout: 10000 })
+            .toBe(0);
         const firstPreview = firstRow.getByTestId('process-preview');
         await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(firstPreview).toHaveCount(1, { timeout: 10000 });
@@ -228,6 +276,12 @@ test.describe('Process preview', () => {
         await expect
             .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
             .toBe(secondProcessId);
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupScheduled, { timeout: 10000 })
+            .toBe(0);
+        await expect
+            .poll(async () => (await toggleDebugState()).cleanupRan, { timeout: 10000 })
+            .toBe(0);
         const secondPreview = secondRow.getByTestId('process-preview');
         await expect(secondPreviewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(secondPreview).toHaveCount(1, { timeout: 10000 });

@@ -41,6 +41,16 @@
         window.location.href = `/processes/${id}/edit`;
     }
 
+    function incrementWindowCounter(counterName) {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        const globalWindow = window;
+        const currentValue = Number(globalWindow[counterName]) || 0;
+        globalWindow[counterName] = currentValue + 1;
+    }
+
     async function handleDelete(id) {
         if (confirm('Are you sure you want to delete this process?')) {
             try {
@@ -76,6 +86,7 @@
             clearPendingPreviewCleanup();
         } else if (shouldScheduleCleanup) {
             const stalePreviewId = openPreviewProcessId;
+            incrementWindowCounter('__dspace_cleanup_scheduled');
             pendingPreviewClear = setTimeout(() => {
                 const shouldStillClear =
                     availableProcessIds.size > 0 &&
@@ -83,6 +94,7 @@
                     !availableProcessIds.has(stalePreviewId);
 
                 if (shouldStillClear) {
+                    incrementWindowCounter('__dspace_cleanup_ran');
                     openPreviewProcessId = '';
                 }
                 pendingPreviewClear = undefined;
@@ -101,8 +113,7 @@
 
         if (typeof window !== 'undefined') {
             const globalWindow = window;
-            globalWindow.__dspace_toggle_preview_calls =
-                (globalWindow.__dspace_toggle_preview_calls ?? 0) + 1;
+            incrementWindowCounter('__dspace_toggle_preview_calls');
             globalWindow.__dspace_open_preview_before = openPreviewProcessId;
         }
 
