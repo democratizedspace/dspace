@@ -11,7 +11,14 @@ test.describe('Manage Processes', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page, 'data-testid=manage-processes');
 
-        const firstRow = page.getByTestId('process-row').first();
+        const manageProcesses = page.getByTestId('manage-processes');
+        await expect(manageProcesses).toHaveAttribute('data-hydrated', 'true');
+
+        const processList = manageProcesses.getByTestId('processes-list');
+        await expect(processList).toHaveAttribute('data-preview-open', '');
+        await expect(processList).toHaveAttribute('data-last-toggle', '');
+
+        const firstRow = processList.getByTestId('process-row').first();
         await expect(firstRow).toBeVisible();
 
         const previewToggle = firstRow.getByTestId('process-preview-toggle');

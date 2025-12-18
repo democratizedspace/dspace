@@ -54,12 +54,18 @@
     }
 
     $: {
-        const previewIsUnavailable =
-            mounted && openPreviewProcessId && !availableProcessIds.has(openPreviewProcessId);
+        const hasOpenPreview = mounted && Boolean(openPreviewProcessId);
         const previewIsAvailable =
-            mounted && openPreviewProcessId && availableProcessIds.has(openPreviewProcessId);
+            hasOpenPreview && availableProcessIds.has(openPreviewProcessId);
+        const previewIsUnavailable =
+            hasOpenPreview &&
+            availableProcessIds.size > 0 &&
+            !availableProcessIds.has(openPreviewProcessId);
 
-        if ((previewIsAvailable || !openPreviewProcessId) && pendingPreviewClear) {
+        const shouldCancelPendingClear =
+            pendingPreviewClear && (!hasOpenPreview || previewIsAvailable);
+
+        if (shouldCancelPendingClear) {
             clearTimeout(pendingPreviewClear);
             pendingPreviewClear = undefined;
         }
@@ -68,6 +74,7 @@
             const stalePreviewId = openPreviewProcessId;
             pendingPreviewClear = setTimeout(() => {
                 const shouldStillClear =
+                    availableProcessIds.size > 0 &&
                     openPreviewProcessId === stalePreviewId &&
                     !availableProcessIds.has(stalePreviewId);
 
