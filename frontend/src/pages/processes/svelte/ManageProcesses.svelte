@@ -70,31 +70,34 @@
 
     $: {
         const hasOpenPreview = mounted && Boolean(openPreviewProcessId);
-        const hasKnownProcesses = availableProcessIds.size > 0;
-        const openPreviewIsMissing =
-            hasOpenPreview && hasKnownProcesses && !availableProcessIds.has(openPreviewProcessId);
+        const previewIsUnavailable =
+            hasOpenPreview && !availableProcessIds.has(openPreviewProcessId);
 
-        if (!hasOpenPreview || !hasKnownProcesses) {
+        if (!hasOpenPreview || !previewIsUnavailable) {
             clearInvalidPreviewTimeout();
-        } else if (openPreviewIsMissing) {
-            if (!invalidPreviewTimeout) {
-                const stalePreviewId = openPreviewProcessId;
-                invalidPreviewTimeout = setTimeout(() => {
-                    const shouldStillClear =
-                        Boolean(openPreviewProcessId) &&
-                        availableProcessIds.size > 0 &&
-                        !availableProcessIds.has(openPreviewProcessId) &&
-                        openPreviewProcessId === stalePreviewId;
+        } else if (!invalidPreviewTimeout) {
+            const stalePreviewId = openPreviewProcessId;
 
-                    if (shouldStillClear) {
-                        openPreviewProcessId = '';
-                    }
-
-                    invalidPreviewTimeout = undefined;
-                }, 350);
+            if (typeof window !== 'undefined') {
+                incrementWindowCounter('__dspace_cleanup_scheduled');
             }
-        } else {
-            clearInvalidPreviewTimeout();
+
+            invalidPreviewTimeout = setTimeout(() => {
+                const shouldStillClear =
+                    Boolean(openPreviewProcessId) &&
+                    openPreviewProcessId === stalePreviewId &&
+                    !availableProcessIds.has(openPreviewProcessId);
+
+                if (shouldStillClear) {
+                    openPreviewProcessId = '';
+
+                    if (typeof window !== 'undefined') {
+                        incrementWindowCounter('__dspace_cleanup_ran');
+                    }
+                }
+
+                invalidPreviewTimeout = undefined;
+            }, 350);
         }
     }
 
