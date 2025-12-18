@@ -13,7 +13,7 @@
     let lastToggleProcessId = '';
     let invalidPreviewTimeout;
 
-    const normalizeProcessId = (id) => String(id ?? '');
+    const normalizeProcessId = (id) => String(id ?? '').trim();
 
     onMount(async () => {
         mounted = true;
@@ -29,14 +29,15 @@
         clearInvalidPreviewTimeout();
     });
 
-    $: allProcesses = [...processes, ...customProcesses];
+    $: allProcesses = [...(Array.isArray(processes) ? processes : []), ...customProcesses];
     $: availableProcessIds = new Set(allProcesses.map((process) => normalizeProcessId(process.id)));
     $: filteredProcesses = allProcesses.filter((process) =>
-        process.title.toLowerCase().includes(searchTerm.toLowerCase())
+        (process.title ?? '').toString().toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     function handleEdit(id) {
-        window.location.href = `/processes/${id}/edit`;
+        const normalizedId = normalizeProcessId(id);
+        window.location.href = `/processes/${normalizedId}/edit`;
     }
 
     function incrementWindowCounter(counterName) {
@@ -50,10 +51,13 @@
     }
 
     async function handleDelete(id) {
+        const normalizedId = normalizeProcessId(id);
         if (confirm('Are you sure you want to delete this process?')) {
             try {
-                await db.processes.delete(id);
-                customProcesses = customProcesses.filter((p) => p.id !== id);
+                await db.processes.delete(normalizedId);
+                customProcesses = customProcesses.filter(
+                    (process) => normalizeProcessId(process.id) !== normalizedId
+                );
             } catch (err) {
                 console.error('Error deleting process:', err);
                 alert('Failed to delete process');
@@ -70,10 +74,15 @@
 
     $: {
         const hasOpenPreview = mounted && Boolean(openPreviewProcessId);
+        const hasAvailableProcessIds = availableProcessIds.size > 0;
         const previewIsUnavailable =
-            hasOpenPreview && !availableProcessIds.has(openPreviewProcessId);
+            hasOpenPreview &&
+            hasAvailableProcessIds &&
+            !availableProcessIds.has(openPreviewProcessId);
 
-        if (!hasOpenPreview || !previewIsUnavailable) {
+        const shouldClearTimeout = !hasOpenPreview || !previewIsUnavailable;
+
+        if (shouldClearTimeout) {
             clearInvalidPreviewTimeout();
         } else if (!invalidPreviewTimeout) {
             const stalePreviewId = openPreviewProcessId;
@@ -86,6 +95,7 @@
                 const shouldStillClear =
                     Boolean(openPreviewProcessId) &&
                     openPreviewProcessId === stalePreviewId &&
+                    availableProcessIds.size > 0 &&
                     !availableProcessIds.has(openPreviewProcessId);
 
                 if (shouldStillClear) {
@@ -109,6 +119,7 @@
         clearInvalidPreviewTimeout();
 
         const normalizedId = normalizeProcessId(id);
+        lastToggleProcessId = normalizedId;
         const isOpen = openPreviewProcessId === normalizedId;
         const nextPreviewId = isOpen ? '' : normalizedId;
 
@@ -116,6 +127,7 @@
             const globalWindow = window;
             incrementWindowCounter('__dspace_toggle_preview_calls');
             globalWindow.__dspace_open_preview_before = openPreviewProcessId;
+            globalWindow.__dspace_last_toggle_process_id = normalizedId;
         }
 
         openPreviewProcessId = nextPreviewId;
@@ -149,7 +161,7 @@
                 {#each filteredProcesses as process (process.id)}
                     {@const processId = normalizeProcessId(process.id)}
                     <div class="process-row" data-testid="process-row" data-process-id={processId}>
-                        <Process processId={process.id} processData={process} />
+                        <Process {processId} processData={process} />
                         <div class="process-actions">
                             <button
                                 class="preview-button"
@@ -161,13 +173,7 @@
                                     : 'false'}
                                 aria-controls={`process-preview-${processId}`}
                                 aria-pressed={openPreviewProcessId === processId ? 'true' : 'false'}
-                                on:click|stopPropagation={() => {
-                                    if (typeof window !== 'undefined') {
-                                        window.__dspace_last_toggle_process_id = processId;
-                                    }
-                                    lastToggleProcessId = processId;
-                                    togglePreview(processId);
-                                }}
+                                on:click|stopPropagation={() => togglePreview(processId)}
                             >
                                 Preview
                             </button>

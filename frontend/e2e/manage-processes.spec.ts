@@ -20,11 +20,18 @@ test.describe('Manage Processes', () => {
 
         const firstRow = processList.getByTestId('process-row').first();
         await expect(firstRow).toBeVisible();
+        const processId = await firstRow.getAttribute('data-process-id');
+        if (!processId) {
+            throw new Error('process-row is missing data-process-id');
+        }
 
         const previewToggle = firstRow.getByTestId('process-preview-toggle');
         await expect(previewToggle).toBeVisible();
 
         await previewToggle.click();
+        await expect(processList).toHaveAttribute('data-last-toggle', processId);
+        await expect(previewToggle).toHaveAttribute('aria-expanded', 'true');
+        await expect(processList).toHaveAttribute('data-preview-open', processId);
         await expect(firstRow.getByTestId('process-preview')).toBeVisible();
     });
 });
