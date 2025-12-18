@@ -9,15 +9,6 @@ type ToggleDebugState = {
     cleanupRan: number;
 };
 
-function getLastToggleSignal(page: Page): Promise<string> {
-    return page.evaluate<string>(() => {
-        const globalWindow = window as typeof window & {
-            __dspace_last_toggle_process_id?: string;
-        };
-        return globalWindow.__dspace_last_toggle_process_id ?? '';
-    });
-}
-
 function getToggleDebugState(page: Page): Promise<ToggleDebugState> {
     return page.evaluate<ToggleDebugState>(() => {
         const globalWindow = window as typeof window & {
@@ -88,7 +79,8 @@ test.describe('Process preview', () => {
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
-        const lastToggleValue = async () => getLastToggleSignal(page);
+        const lastToggleValue = async () =>
+            (await processList.getAttribute('data-last-toggle')) || '';
         const toggleDebugState = async () => getToggleDebugState(page);
 
         const rows = processList.getByTestId('process-row');
@@ -119,7 +111,9 @@ test.describe('Process preview', () => {
         await expect.poll(previewOpenValue, { timeout: 10000 }).toBe('');
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe('');
         await expect.poll(async () => (await toggleDebugState()).calls, { timeout: 10000 }).toBe(0);
-        await expect.poll(async () => (await toggleDebugState()).after, { timeout: 10000 }).toBe('');
+        await expect
+            .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
+            .toBe('');
         await expect
             .poll(async () => (await toggleDebugState()).cleanupScheduled, { timeout: 10000 })
             .toBe(0);
@@ -135,9 +129,7 @@ test.describe('Process preview', () => {
 
         // Wait for preview to appear (verify handler ran first)
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(processId);
-        await expect
-            .poll(async () => (await toggleDebugState()).calls, { timeout: 10000 })
-            .toBe(1);
+        await expect.poll(async () => (await toggleDebugState()).calls, { timeout: 10000 }).toBe(1);
         await expect
             .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
             .toBe(processId);
@@ -174,6 +166,7 @@ test.describe('Process preview', () => {
         await previewButton.click({ timeout: 5000 });
 
         // Wait for it to disappear
+        await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(processId);
         await expect.poll(async () => (await toggleDebugState()).calls, { timeout: 10000 }).toBe(1);
         await expect
             .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
@@ -206,7 +199,8 @@ test.describe('Process preview', () => {
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
-        const lastToggleValue = async () => getLastToggleSignal(page);
+        const lastToggleValue = async () =>
+            (await processList.getAttribute('data-last-toggle')) || '';
         const toggleDebugState = async () => getToggleDebugState(page);
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
@@ -244,9 +238,7 @@ test.describe('Process preview', () => {
         await firstPreviewButton.click({ trial: true });
         await firstPreviewButton.click({ timeout: 5000 });
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(firstProcessId);
-        await expect
-            .poll(async () => (await toggleDebugState()).calls, { timeout: 10000 })
-            .toBe(1);
+        await expect.poll(async () => (await toggleDebugState()).calls, { timeout: 10000 }).toBe(1);
         await expect
             .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
             .toBe(firstProcessId);
@@ -270,9 +262,7 @@ test.describe('Process preview', () => {
         await secondPreviewButton.click({ trial: true });
         await secondPreviewButton.click({ timeout: 5000 });
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(secondProcessId);
-        await expect
-            .poll(async () => (await toggleDebugState()).calls, { timeout: 10000 })
-            .toBe(1);
+        await expect.poll(async () => (await toggleDebugState()).calls, { timeout: 10000 }).toBe(1);
         await expect
             .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
             .toBe(secondProcessId);
