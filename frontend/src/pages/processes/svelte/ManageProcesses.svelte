@@ -13,7 +13,7 @@
     let lastToggleProcessId = '';
     let invalidPreviewTimeout;
 
-    const normalizeProcessId = (id) => String(id ?? '');
+    const normalizeProcessId = (id) => String(id ?? '').trim();
 
     onMount(async () => {
         mounted = true;
@@ -30,10 +30,15 @@
     });
 
     $: allProcesses = [...processes, ...customProcesses];
-    $: availableProcessIds = new Set(allProcesses.map((process) => normalizeProcessId(process.id)));
-    $: filteredProcesses = allProcesses.filter((process) =>
-        process.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    $: availableProcessIds = new Set(allProcesses.map((process) => normalizeProcessId(process?.id)));
+    $: filteredProcesses = allProcesses.filter((process) => {
+        if (!process || typeof process !== 'object') {
+            return false;
+        }
+
+        const title = (process.title ?? '').toString();
+        return title.toLowerCase().includes(searchTerm.toLowerCase());
+    });
 
     function handleEdit(id) {
         window.location.href = `/processes/${id}/edit`;
@@ -70,8 +75,9 @@
 
     $: {
         const hasOpenPreview = mounted && Boolean(openPreviewProcessId);
+        const hasKnownIds = availableProcessIds.size > 0;
         const previewIsUnavailable =
-            hasOpenPreview && !availableProcessIds.has(openPreviewProcessId);
+            hasOpenPreview && hasKnownIds && !availableProcessIds.has(openPreviewProcessId);
 
         if (!hasOpenPreview || !previewIsUnavailable) {
             clearInvalidPreviewTimeout();
@@ -86,6 +92,7 @@
                 const shouldStillClear =
                     Boolean(openPreviewProcessId) &&
                     openPreviewProcessId === stalePreviewId &&
+                    availableProcessIds.size > 0 &&
                     !availableProcessIds.has(openPreviewProcessId);
 
                 if (shouldStillClear) {
@@ -111,11 +118,13 @@
         const normalizedId = normalizeProcessId(id);
         const isOpen = openPreviewProcessId === normalizedId;
         const nextPreviewId = isOpen ? '' : normalizedId;
+        lastToggleProcessId = normalizedId;
 
         if (typeof window !== 'undefined') {
             const globalWindow = window;
             incrementWindowCounter('__dspace_toggle_preview_calls');
             globalWindow.__dspace_open_preview_before = openPreviewProcessId;
+            globalWindow.__dspace_last_toggle_process_id = normalizedId;
         }
 
         openPreviewProcessId = nextPreviewId;
@@ -161,13 +170,7 @@
                                     : 'false'}
                                 aria-controls={`process-preview-${processId}`}
                                 aria-pressed={openPreviewProcessId === processId ? 'true' : 'false'}
-                                on:click|stopPropagation={() => {
-                                    if (typeof window !== 'undefined') {
-                                        window.__dspace_last_toggle_process_id = processId;
-                                    }
-                                    lastToggleProcessId = processId;
-                                    togglePreview(processId);
-                                }}
+                                on:click|stopPropagation={() => togglePreview(processId)}
                             >
                                 Preview
                             </button>
@@ -196,11 +199,17 @@
                                 data-process-id={processId}
                             >
                                 <ProcessPreview
-                                    title={process.title}
-                                    duration={process.duration}
-                                    requireItems={process.requireItems || []}
-                                    consumeItems={process.consumeItems || []}
-                                    createItems={process.createItems || []}
+                                    title={process?.title ?? ''}
+                                    duration={process?.duration ?? ''}
+                                    requireItems={Array.isArray(process?.requireItems)
+                                        ? process.requireItems
+                                        : []}
+                                    consumeItems={Array.isArray(process?.consumeItems)
+                                        ? process.consumeItems
+                                        : []}
+                                    createItems={Array.isArray(process?.createItems)
+                                        ? process.createItems
+                                        : []}
                                 />
                             </div>
                         {/if}
