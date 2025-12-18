@@ -4,7 +4,13 @@ import { clearUserData, waitForHydration } from './test-helpers';
 test.describe('Manage Processes', () => {
     test.beforeEach(async ({ page }) => {
         page.on('pageerror', (error) => {
-            console.error(`[pageerror] ${error.message}`);
+            const currentUrl = page.url();
+            const stackOrMessage = error?.stack || error?.message || String(error);
+            console.error(`[pageerror][url=${currentUrl}] ${stackOrMessage}`);
+
+            if (currentUrl.includes('/processes/manage')) {
+                throw error;
+            }
         });
 
         page.on('console', (message) => {

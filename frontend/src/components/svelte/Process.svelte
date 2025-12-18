@@ -27,6 +27,36 @@
     let intervalId;
     let mounted = false;
     let totalDurationSeconds;
+    let safeRequireItems = [];
+    let safeConsumeItems = [];
+    let safeCreateItems = [];
+
+    const normalizeItems = (items) => {
+        const deduped = new Map();
+
+        if (!Array.isArray(items)) {
+            return [];
+        }
+
+        for (const item of items) {
+            const id = String(item?.id ?? '').trim();
+
+            if (!id) {
+                continue;
+            }
+
+            const normalizedCount = Number(item?.count);
+            const count = Number.isFinite(normalizedCount) ? normalizedCount : 0;
+
+            if (deduped.has(id)) {
+                deduped.get(id).count += count;
+            } else {
+                deduped.set(id, { ...item, id, count });
+            }
+        }
+
+        return Array.from(deduped.values());
+    };
 
     const updateState = () => {
         if (isCustomProcess || !process) {
@@ -126,8 +156,15 @@
                 console.warn('Unable to calculate process duration:', error);
                 totalDurationSeconds = 0;
             }
+
+            safeRequireItems = normalizeItems(process.requireItems);
+            safeConsumeItems = normalizeItems(process.consumeItems);
+            safeCreateItems = normalizeItems(process.createItems);
         } else {
             totalDurationSeconds = 0;
+            safeRequireItems = [];
+            safeConsumeItems = [];
+            safeCreateItems = [];
         }
 
         if (intervalId && isCustomProcess) {
@@ -146,19 +183,19 @@
         <div class="container">
             <h3>{process.title}</h3>
 
-            {#if process.requireItems && process.requireItems.length > 0}
+            {#if safeRequireItems.length > 0}
                 <h6>Requires:</h6>
-                <CompactItemList itemList={process.requireItems} noRed={true} />
+                <CompactItemList itemList={safeRequireItems} noRed={true} />
             {/if}
 
-            {#if process.consumeItems && process.consumeItems.length > 0}
+            {#if safeConsumeItems.length > 0}
                 <h6>Consumes:</h6>
-                <CompactItemList itemList={process.consumeItems} noRed={true} decrease={true} />
+                <CompactItemList itemList={safeConsumeItems} noRed={true} decrease={true} />
             {/if}
 
-            {#if process.createItems && process.createItems.length > 0}
+            {#if safeCreateItems.length > 0}
                 <h6>Creates:</h6>
-                <CompactItemList itemList={process.createItems} noRed={true} increase={true} />
+                <CompactItemList itemList={safeCreateItems} noRed={true} increase={true} />
             {/if}
 
             <h4>Duration: {process.duration}</h4>

@@ -1,30 +1,60 @@
 <script>
     import { afterUpdate } from 'svelte';
 
-    export let items = [];
-    export let onSelect = null;
-    export let maxHeight = 320;
-    export let itemHeight = 32;
-    export let className = '';
-    export let renderItem = null;
+export let items = [];
+export let itemList = undefined;
+export let onSelect = null;
+export let maxHeight = 320;
+export let itemHeight = 32;
+export let className = '';
+export let renderItem = null;
 
-    let activeId;
-    let container;
-    let scrollTop = 0;
+let activeId;
+let container;
+let scrollTop = 0;
 
-    $: if (activeId === undefined) {
-        const first = items.find((i) => !i.disabled);
+$: normalizedItems = (() => {
+    const source = Array.isArray(itemList) ? itemList : items;
+    const deduped = new Map();
+
+    if (!Array.isArray(source)) {
+        return [];
+    }
+
+    for (const item of source) {
+        const id = String(item?.id ?? '').trim();
+
+        if (!id) {
+            continue;
+        }
+
+        const normalizedCount = Number(item?.count);
+        const count = Number.isFinite(normalizedCount) ? normalizedCount : 0;
+
+        if (deduped.has(id)) {
+            const existing = deduped.get(id);
+            existing.count = (Number.isFinite(existing.count) ? existing.count : 0) + count;
+        } else {
+            deduped.set(id, { ...item, id, count });
+        }
+    }
+
+    return Array.from(deduped.values());
+})();
+
+$: if (activeId === undefined) {
+        const first = normalizedItems.find((i) => !i.disabled);
         activeId = first && first.id;
     }
 
-    const virtualized = () => items.length * itemHeight > maxHeight;
+    const virtualized = () => normalizedItems.length * itemHeight > maxHeight;
     let start = 0;
-    let end = items.length;
+    let end = normalizedItems.length;
 
     $: if (virtualized()) {
         const perPage = Math.ceil(maxHeight / itemHeight);
         start = Math.floor(scrollTop / itemHeight);
-        end = Math.min(items.length, start + perPage + 1);
+        end = Math.min(normalizedItems.length, start + perPage + 1);
     }
 
     function handleScroll() {
@@ -32,13 +62,13 @@
     }
 
     function setNextActive(delta) {
-        if (!items.length) return;
-        let idx = items.findIndex((i) => i.id === activeId);
+        if (!normalizedItems.length) return;
+        let idx = normalizedItems.findIndex((i) => i.id === activeId);
         if (idx === -1) idx = 0;
-        for (let i = 0; i < items.length; i++) {
-            idx = (idx + delta + items.length) % items.length;
-            if (!items[idx].disabled) {
-                activeId = items[idx].id;
+        for (let i = 0; i < normalizedItems.length; i++) {
+            idx = (idx + delta + normalizedItems.length) % normalizedItems.length;
+            if (!normalizedItems[idx].disabled) {
+                activeId = normalizedItems[idx].id;
                 break;
             }
         }
@@ -57,7 +87,7 @@
             case 'Enter':
             case ' ': {
                 e.preventDefault();
-                const item = items.find((i) => i.id === activeId);
+                const item = normalizedItems.find((i) => i.id === activeId);
                 if (item && !item.disabled && onSelect) onSelect(item.id);
                 break;
             }
@@ -90,9 +120,9 @@
     data-testid={virtualized() ? 'virtualized' : 'static'}
 >
     {#if virtualized()}
-        <div style="height:{items.length * itemHeight}px;position:relative;">
+        <div style="height:{normalizedItems.length * itemHeight}px;position:relative;">
             <div style="position:absolute;top:{start * itemHeight}px;left:0;right:0;">
-                {#each items.slice(start, end) as item (item.id)}
+                {#each normalizedItems.slice(start, end) as item (item.id)}
                     {#key item.id}
                         <div
                             role="option"
@@ -137,7 +167,7 @@
             </div>
         </div>
     {:else}
-        {#each items as item (item.id)}
+        {#each normalizedItems as item (item.id)}
             {#key item.id}
                 <div
                     role="option"

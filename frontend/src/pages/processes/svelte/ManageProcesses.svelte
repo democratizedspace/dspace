@@ -14,6 +14,7 @@
     let invalidPreviewTimeout;
 
     const normalizeProcessId = (id) => String(id ?? '').trim();
+    const asArray = (value) => (Array.isArray(value) ? value : []);
 
     const getProcessTitle = (process) => (typeof process?.title === 'string' ? process.title : '');
 
@@ -35,12 +36,27 @@
         ...(Array.isArray(processes) ? processes : []),
         ...(Array.isArray(customProcesses) ? customProcesses : []),
     ].filter(Boolean);
+    $: uniqueProcesses = (() => {
+        const map = new Map();
+
+        for (const process of Array.isArray(allProcesses) ? allProcesses : []) {
+            const processId = normalizeProcessId(process?.id);
+
+            if (!processId || map.has(processId)) {
+                continue;
+            }
+
+            map.set(processId, process);
+        }
+
+        return Array.from(map.values());
+    })();
     $: availableProcessIds = new Set(
-        allProcesses
+        uniqueProcesses
             .map((process) => normalizeProcessId(process?.id))
             .filter((processId) => Boolean(processId))
     );
-    $: filteredProcesses = allProcesses.filter((process) =>
+    $: filteredProcesses = uniqueProcesses.filter((process) =>
         getProcessTitle(process).toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -132,24 +148,34 @@
             return;
         }
 
-        clearInvalidPreviewTimeout();
-
         const normalizedId = normalizeProcessId(id);
         recordLastToggle(normalizedId);
-        const isOpen = openPreviewProcessId === normalizedId;
-        const nextPreviewId = isOpen ? '' : normalizedId;
 
-        if (typeof window !== 'undefined') {
-            const globalWindow = window;
-            incrementWindowCounter('__dspace_toggle_preview_calls');
-            globalWindow.__dspace_open_preview_before = openPreviewProcessId;
-        }
+        try {
+            clearInvalidPreviewTimeout();
 
-        openPreviewProcessId = nextPreviewId;
+            const isOpen = openPreviewProcessId === normalizedId;
+            const nextPreviewId = isOpen ? '' : normalizedId;
 
-        if (typeof window !== 'undefined') {
-            const globalWindow = window;
-            globalWindow.__dspace_open_preview_after = openPreviewProcessId;
+            if (typeof window !== 'undefined') {
+                const globalWindow = window;
+                incrementWindowCounter('__dspace_toggle_preview_calls');
+                globalWindow.__dspace_open_preview_before = openPreviewProcessId;
+            }
+
+            openPreviewProcessId = nextPreviewId;
+
+            if (typeof window !== 'undefined') {
+                const globalWindow = window;
+                globalWindow.__dspace_open_preview_after = openPreviewProcessId;
+            }
+        } catch (error) {
+            console.error('Failed to toggle process preview', {
+                error,
+                processId: normalizedId,
+                openPreviewProcessId,
+                availableProcessCount: availableProcessIds?.size ?? 0,
+            });
         }
     }
 </script>
@@ -221,9 +247,9 @@
                                 <ProcessPreview
                                     title={getProcessTitle(process)}
                                     duration={process.duration}
-                                    requireItems={process.requireItems || []}
-                                    consumeItems={process.consumeItems || []}
-                                    createItems={process.createItems || []}
+                                    requireItems={asArray(process.requireItems)}
+                                    consumeItems={asArray(process.consumeItems)}
+                                    createItems={asArray(process.createItems)}
                                 />
                             </div>
                         {/if}
