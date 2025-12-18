@@ -10,8 +10,8 @@
     let searchTerm = '';
     let openPreviewProcessId = '';
     let availableProcessIds = new Set();
-    let pendingPreviewClear;
     let lastToggleProcessId = '';
+    let invalidPreviewTimeout;
 
     const normalizeProcessId = (id) => String(id ?? '');
 
@@ -26,9 +26,7 @@
     });
 
     onDestroy(() => {
-        if (pendingPreviewClear) {
-            clearTimeout(pendingPreviewClear);
-        }
+        clearInvalidPreviewTimeout();
     });
 
     $: allProcesses = [...processes, ...customProcesses];
@@ -63,42 +61,40 @@
         }
     }
 
-    function clearPendingPreviewCleanup() {
-        if (pendingPreviewClear) {
-            clearTimeout(pendingPreviewClear);
-            pendingPreviewClear = undefined;
+    function clearInvalidPreviewTimeout() {
+        if (invalidPreviewTimeout) {
+            clearTimeout(invalidPreviewTimeout);
+            invalidPreviewTimeout = undefined;
         }
     }
 
     $: {
         const hasOpenPreview = mounted && Boolean(openPreviewProcessId);
-        const previewIsAvailable =
-            hasOpenPreview && availableProcessIds.has(openPreviewProcessId);
-        const previewIsUnavailable =
-            hasOpenPreview &&
-            availableProcessIds.size > 0 &&
-            !availableProcessIds.has(openPreviewProcessId);
+        const hasKnownProcesses = availableProcessIds.size > 0;
+        const openPreviewIsMissing =
+            hasOpenPreview && hasKnownProcesses && !availableProcessIds.has(openPreviewProcessId);
 
-        const shouldCancelCleanup = (!hasOpenPreview || previewIsAvailable) && pendingPreviewClear;
-        const shouldScheduleCleanup = previewIsUnavailable && !pendingPreviewClear;
+        if (!hasOpenPreview || !hasKnownProcesses) {
+            clearInvalidPreviewTimeout();
+        } else if (openPreviewIsMissing) {
+            if (!invalidPreviewTimeout) {
+                const stalePreviewId = openPreviewProcessId;
+                invalidPreviewTimeout = setTimeout(() => {
+                    const shouldStillClear =
+                        Boolean(openPreviewProcessId) &&
+                        availableProcessIds.size > 0 &&
+                        !availableProcessIds.has(openPreviewProcessId) &&
+                        openPreviewProcessId === stalePreviewId;
 
-        if (shouldCancelCleanup) {
-            clearPendingPreviewCleanup();
-        } else if (shouldScheduleCleanup) {
-            const stalePreviewId = openPreviewProcessId;
-            incrementWindowCounter('__dspace_cleanup_scheduled');
-            pendingPreviewClear = setTimeout(() => {
-                const shouldStillClear =
-                    availableProcessIds.size > 0 &&
-                    openPreviewProcessId === stalePreviewId &&
-                    !availableProcessIds.has(stalePreviewId);
+                    if (shouldStillClear) {
+                        openPreviewProcessId = '';
+                    }
 
-                if (shouldStillClear) {
-                    incrementWindowCounter('__dspace_cleanup_ran');
-                    openPreviewProcessId = '';
-                }
-                pendingPreviewClear = undefined;
-            }, 0);
+                    invalidPreviewTimeout = undefined;
+                }, 350);
+            }
+        } else {
+            clearInvalidPreviewTimeout();
         }
     }
 
@@ -106,6 +102,8 @@
         if (!mounted) {
             return;
         }
+
+        clearInvalidPreviewTimeout();
 
         const normalizedId = normalizeProcessId(id);
         const isOpen = openPreviewProcessId === normalizedId;
