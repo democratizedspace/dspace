@@ -99,7 +99,19 @@
         const isOpen = openPreviewProcessId === normalizedId;
         const nextPreviewId = isOpen ? '' : normalizedId;
 
+        if (typeof window !== 'undefined') {
+            const globalWindow = window;
+            globalWindow.__dspace_toggle_preview_calls =
+                (globalWindow.__dspace_toggle_preview_calls ?? 0) + 1;
+            globalWindow.__dspace_open_preview_before = openPreviewProcessId;
+        }
+
         openPreviewProcessId = nextPreviewId;
+
+        if (typeof window !== 'undefined') {
+            const globalWindow = window;
+            globalWindow.__dspace_open_preview_after = openPreviewProcessId;
+        }
     }
 </script>
 

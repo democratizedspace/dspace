@@ -1,12 +1,50 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 import { clearUserData, waitForHydration, navigateWithRetry } from './test-helpers';
 
+type ToggleDebugState = {
+    calls: number;
+    before: string;
+    after: string;
+};
+
 function getLastToggleSignal(page: Page): Promise<string> {
     return page.evaluate<string>(() => {
         const globalWindow = window as typeof window & {
             __dspace_last_toggle_process_id?: string;
         };
         return globalWindow.__dspace_last_toggle_process_id ?? '';
+    });
+}
+
+function getToggleDebugState(page: Page): Promise<ToggleDebugState> {
+    return page.evaluate<ToggleDebugState>(() => {
+        const globalWindow = window as typeof window & {
+            __dspace_toggle_preview_calls?: number;
+            __dspace_open_preview_before?: string;
+            __dspace_open_preview_after?: string;
+        };
+
+        return {
+            calls: globalWindow.__dspace_toggle_preview_calls ?? 0,
+            before: globalWindow.__dspace_open_preview_before ?? '',
+            after: globalWindow.__dspace_open_preview_after ?? '',
+        };
+    });
+}
+
+function resetToggleDebugState(page: Page): Promise<void> {
+    return page.evaluate(() => {
+        const globalWindow = window as typeof window & {
+            __dspace_toggle_preview_calls?: number;
+            __dspace_open_preview_before?: string;
+            __dspace_open_preview_after?: string;
+            __dspace_last_toggle_process_id?: string;
+        };
+
+        globalWindow.__dspace_toggle_preview_calls = 0;
+        globalWindow.__dspace_open_preview_before = '';
+        globalWindow.__dspace_open_preview_after = '';
+        globalWindow.__dspace_last_toggle_process_id = '';
     });
 }
 
@@ -28,10 +66,12 @@ test.describe('Process preview', () => {
         await expect(processList).toBeVisible();
         await expect(processList).toHaveAttribute('data-preview-open', '', { timeout: 10000 });
         await expect(processList).toHaveAttribute('data-last-toggle', '', { timeout: 10000 });
+        await resetToggleDebugState(page);
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
         const lastToggleValue = async () => getLastToggleSignal(page);
+        const toggleDebugState = async () => getToggleDebugState(page);
 
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
@@ -60,6 +100,8 @@ test.describe('Process preview', () => {
         );
         await expect.poll(previewOpenValue, { timeout: 10000 }).toBe('');
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe('');
+        await expect.poll(async () => (await toggleDebugState()).calls, { timeout: 10000 }).toBe(0);
+        await expect.poll(async () => (await toggleDebugState()).after, { timeout: 10000 }).toBe('');
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
         const rowTitle = await firstRow.locator('h3').first().textContent();
 
@@ -69,6 +111,12 @@ test.describe('Process preview', () => {
 
         // Wait for preview to appear (verify handler ran first)
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(processId);
+        await expect
+            .poll(async () => (await toggleDebugState()).calls, { timeout: 10000 })
+            .toBe(1);
+        await expect
+            .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
+            .toBe(processId);
         const preview = firstRow.getByTestId('process-preview');
         await expect(previewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(preview).toHaveCount(1, { timeout: 10000 });
@@ -85,10 +133,15 @@ test.describe('Process preview', () => {
         await page.waitForTimeout(500);
 
         // Click to hide preview
+        await resetToggleDebugState(page);
         await waitForPreviewButtonReady(previewButton);
         await previewButton.click({ timeout: 5000 });
 
         // Wait for it to disappear
+        await expect.poll(async () => (await toggleDebugState()).calls, { timeout: 10000 }).toBe(1);
+        await expect
+            .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
+            .toBe('');
         await expect(previewButton).toHaveAttribute('aria-expanded', 'false');
         await expect(preview).toHaveCount(0, { timeout: 10000 });
         await expect.poll(previewOpenValue, { timeout: 10000 }).toBe('');
@@ -107,10 +160,12 @@ test.describe('Process preview', () => {
         await expect(processList).toBeVisible();
         await expect(processList).toHaveAttribute('data-preview-open', '', { timeout: 10000 });
         await expect(processList).toHaveAttribute('data-last-toggle', '', { timeout: 10000 });
+        await resetToggleDebugState(page);
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
         const lastToggleValue = async () => getLastToggleSignal(page);
+        const toggleDebugState = async () => getToggleDebugState(page);
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
 
@@ -147,6 +202,12 @@ test.describe('Process preview', () => {
         await firstPreviewButton.click({ trial: true });
         await firstPreviewButton.click({ timeout: 5000 });
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(firstProcessId);
+        await expect
+            .poll(async () => (await toggleDebugState()).calls, { timeout: 10000 })
+            .toBe(1);
+        await expect
+            .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
+            .toBe(firstProcessId);
         const firstPreview = firstRow.getByTestId('process-preview');
         await expect(firstPreviewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(firstPreview).toHaveCount(1, { timeout: 10000 });
@@ -156,10 +217,17 @@ test.describe('Process preview', () => {
         await page.waitForTimeout(500);
 
         // Click second preview and wait for it to appear while first disappears
+        await resetToggleDebugState(page);
         await waitForPreviewButtonReady(secondPreviewButton);
         await secondPreviewButton.click({ trial: true });
         await secondPreviewButton.click({ timeout: 5000 });
         await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(secondProcessId);
+        await expect
+            .poll(async () => (await toggleDebugState()).calls, { timeout: 10000 })
+            .toBe(1);
+        await expect
+            .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
+            .toBe(secondProcessId);
         const secondPreview = secondRow.getByTestId('process-preview');
         await expect(secondPreviewButton).toHaveAttribute('aria-expanded', 'true');
         await expect(secondPreview).toHaveCount(1, { timeout: 10000 });
