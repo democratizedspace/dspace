@@ -20,6 +20,10 @@
     let isMounted = false;
     const itemCounts = writable(getItemCounts(itemList));
     $: isEmpty = fullItemList.length === 0;
+    const getItemKey = (item, index) =>
+        typeof item?.id === 'string' || typeof item?.id === 'number'
+            ? `${item.id}-${index}`
+            : `item-${index}`;
 
     // Initial setup and cleanup on mount
     onMount(() => {
@@ -40,7 +44,7 @@
         <div class="Container">
             <Chip inverted={!inverted} {disabled} text="">
                 <div class="vertical">
-                    {#each fullItemList as item (item.id)}
+                    {#each fullItemList as item, index (getItemKey(item, index))}
                         <div class="horizontal">
                             <DelayedRender delaySeconds={0.1}>
                                 <span slot="content">
