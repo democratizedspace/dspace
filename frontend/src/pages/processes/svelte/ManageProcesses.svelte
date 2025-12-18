@@ -53,6 +53,13 @@
         }
     }
 
+    function clearPendingPreviewCleanup() {
+        if (pendingPreviewClear) {
+            clearTimeout(pendingPreviewClear);
+            pendingPreviewClear = undefined;
+        }
+    }
+
     $: {
         const hasOpenPreview = mounted && Boolean(openPreviewProcessId);
         const previewIsAvailable =
@@ -62,15 +69,9 @@
             availableProcessIds.size > 0 &&
             !availableProcessIds.has(openPreviewProcessId);
 
-        const shouldCancelPendingClear =
-            pendingPreviewClear && (!hasOpenPreview || previewIsAvailable);
-
-        if (shouldCancelPendingClear) {
-            clearTimeout(pendingPreviewClear);
-            pendingPreviewClear = undefined;
-        }
-
-        if (previewIsUnavailable && !pendingPreviewClear) {
+        if (!hasOpenPreview || previewIsAvailable) {
+            clearPendingPreviewCleanup();
+        } else if (previewIsUnavailable && !pendingPreviewClear) {
             const stalePreviewId = openPreviewProcessId;
             pendingPreviewClear = setTimeout(() => {
                 const shouldStillClear =
@@ -114,7 +115,7 @@
             class="processes-list"
             data-testid="processes-list"
             data-preview-open={openPreviewProcessId || ''}
-            data-last-toggle={lastToggleProcessId}
+            data-last-toggle={lastToggleProcessId || ''}
         >
             {#if filteredProcesses.length === 0}
                 <div class="no-processes">No processes found</div>
