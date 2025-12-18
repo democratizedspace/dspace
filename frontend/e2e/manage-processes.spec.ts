@@ -1,11 +1,19 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
+
+function attachFailingPageErrorLogger(page: Page): void {
+    page.on('pageerror', (error) => {
+        const pageUrl = page.url();
+        const details = error?.stack || error?.message || String(error);
+        const message = `[pageerror] url=${pageUrl} ${details}`;
+        console.error(message);
+        throw new Error(message);
+    });
+}
 
 test.describe('Manage Processes', () => {
     test.beforeEach(async ({ page }) => {
-        page.on('pageerror', (error) => {
-            console.error(`[pageerror] ${error.message}`);
-        });
+        attachFailingPageErrorLogger(page);
 
         page.on('console', (message) => {
             console.log(`[console.${message.type()}] ${message.text()}`);
