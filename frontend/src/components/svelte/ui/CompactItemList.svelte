@@ -11,10 +11,28 @@
     let activeId;
     let container;
     let scrollTop = 0;
-    const getItemKey = (item, index) =>
-        typeof item?.id === 'string' || typeof item?.id === 'number'
-            ? `${item.id}-${index}`
-            : String(index);
+    const getStableItemId = (item) =>
+        typeof item?.id === 'string' || typeof item?.id === 'number' ? String(item.id) : null;
+    let itemKeyCounts = new Map();
+    $: itemKeyCounts = items.reduce((counts, item) => {
+        const stableId = getStableItemId(item);
+        if (!stableId) {
+            return counts;
+        }
+
+        counts.set(stableId, (counts.get(stableId) ?? 0) + 1);
+        return counts;
+    }, new Map());
+    const getItemKey = (item, index) => {
+        const stableId = getStableItemId(item);
+        const occurrences = stableId ? itemKeyCounts.get(stableId) ?? 0 : 0;
+
+        if (stableId && occurrences === 1) {
+            return stableId;
+        }
+
+        return `index-${index}`;
+    };
 
     $: if (activeId === undefined) {
         const first = items.find((i) => !i.disabled);

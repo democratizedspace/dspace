@@ -133,7 +133,6 @@
         }
 
         const normalizedId = normalizeProcessId(id);
-        recordLastToggle(normalizedId);
 
         try {
             clearInvalidPreviewTimeout();
@@ -148,6 +147,7 @@
             }
 
             openPreviewProcessId = nextPreviewId;
+            recordLastToggle(normalizedId);
 
             if (typeof window !== 'undefined') {
                 const globalWindow = window;
@@ -160,6 +160,7 @@
                 openPreviewProcessId,
                 availableProcessCount: availableProcessIds?.size ?? 0,
             });
+            throw error;
         }
     }
 </script>
