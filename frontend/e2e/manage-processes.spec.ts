@@ -3,6 +3,14 @@ import { clearUserData, waitForHydration } from './test-helpers';
 
 test.describe('Manage Processes', () => {
     test.beforeEach(async ({ page }) => {
+        page.on('pageerror', (error) => {
+            console.error(`[pageerror] ${error.message}`);
+        });
+
+        page.on('console', (message) => {
+            console.log(`[console.${message.type()}] ${message.text()}`);
+        });
+
         await clearUserData(page);
     });
 
@@ -20,11 +28,19 @@ test.describe('Manage Processes', () => {
 
         const firstRow = processList.getByTestId('process-row').first();
         await expect(firstRow).toBeVisible();
+        const processId = await firstRow.getAttribute('data-process-id');
+        if (!processId) {
+            throw new Error('Process row is missing a process id');
+        }
 
         const previewToggle = firstRow.getByTestId('process-preview-toggle');
         await expect(previewToggle).toBeVisible();
 
         await previewToggle.click();
+        await expect
+            .poll(async () => (await processList.getAttribute('data-last-toggle')) ?? '')
+            .toBe(processId);
+        await expect(previewToggle).toHaveAttribute('aria-expanded', 'true');
         await expect(firstRow.getByTestId('process-preview')).toBeVisible();
     });
 });

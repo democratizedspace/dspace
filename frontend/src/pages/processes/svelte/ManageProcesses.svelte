@@ -13,7 +13,7 @@
     let lastToggleProcessId = '';
     let invalidPreviewTimeout;
 
-    const normalizeProcessId = (id) => String(id ?? '');
+    const normalizeProcessId = (id) => String(id ?? '').trim();
 
     onMount(async () => {
         mounted = true;
@@ -31,9 +31,10 @@
 
     $: allProcesses = [...processes, ...customProcesses];
     $: availableProcessIds = new Set(allProcesses.map((process) => normalizeProcessId(process.id)));
-    $: filteredProcesses = allProcesses.filter((process) =>
-        process.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    $: filteredProcesses = allProcesses.filter((process) => {
+        const processTitle = (process?.title ?? '').toLowerCase();
+        return processTitle.includes(searchTerm.toLowerCase());
+    });
 
     function handleEdit(id) {
         window.location.href = `/processes/${id}/edit`;
@@ -70,8 +71,11 @@
 
     $: {
         const hasOpenPreview = mounted && Boolean(openPreviewProcessId);
+        const hasKnownProcesses = availableProcessIds.size > 0;
         const previewIsUnavailable =
-            hasOpenPreview && !availableProcessIds.has(openPreviewProcessId);
+            hasOpenPreview &&
+            hasKnownProcesses &&
+            !availableProcessIds.has(openPreviewProcessId);
 
         if (!hasOpenPreview || !previewIsUnavailable) {
             clearInvalidPreviewTimeout();
@@ -86,6 +90,7 @@
                 const shouldStillClear =
                     Boolean(openPreviewProcessId) &&
                     openPreviewProcessId === stalePreviewId &&
+                    availableProcessIds.size > 0 &&
                     !availableProcessIds.has(openPreviewProcessId);
 
                 if (shouldStillClear) {
@@ -106,18 +111,24 @@
             return;
         }
 
-        clearInvalidPreviewTimeout();
-
         const normalizedId = normalizeProcessId(id);
-        const isOpen = openPreviewProcessId === normalizedId;
-        const nextPreviewId = isOpen ? '' : normalizedId;
+
+        if (!normalizedId) {
+            return;
+        }
+
+        clearInvalidPreviewTimeout();
+        lastToggleProcessId = normalizedId;
 
         if (typeof window !== 'undefined') {
             const globalWindow = window;
             incrementWindowCounter('__dspace_toggle_preview_calls');
             globalWindow.__dspace_open_preview_before = openPreviewProcessId;
+            globalWindow.__dspace_last_toggle_process_id = normalizedId;
         }
 
+        const isOpen = openPreviewProcessId === normalizedId;
+        const nextPreviewId = isOpen ? '' : normalizedId;
         openPreviewProcessId = nextPreviewId;
 
         if (typeof window !== 'undefined') {
@@ -149,7 +160,7 @@
                 {#each filteredProcesses as process (process.id)}
                     {@const processId = normalizeProcessId(process.id)}
                     <div class="process-row" data-testid="process-row" data-process-id={processId}>
-                        <Process processId={process.id} processData={process} />
+                        <Process processId={processId} processData={process} />
                         <div class="process-actions">
                             <button
                                 class="preview-button"
@@ -161,13 +172,7 @@
                                     : 'false'}
                                 aria-controls={`process-preview-${processId}`}
                                 aria-pressed={openPreviewProcessId === processId ? 'true' : 'false'}
-                                on:click|stopPropagation={() => {
-                                    if (typeof window !== 'undefined') {
-                                        window.__dspace_last_toggle_process_id = processId;
-                                    }
-                                    lastToggleProcessId = processId;
-                                    togglePreview(processId);
-                                }}
+                                on:click|stopPropagation={() => togglePreview(processId)}
                             >
                                 Preview
                             </button>

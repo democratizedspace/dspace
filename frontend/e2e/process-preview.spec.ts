@@ -9,15 +9,6 @@ type ToggleDebugState = {
     cleanupRan: number;
 };
 
-function getLastToggleSignal(page: Page): Promise<string> {
-    return page.evaluate<string>(() => {
-        const globalWindow = window as typeof window & {
-            __dspace_last_toggle_process_id?: string;
-        };
-        return globalWindow.__dspace_last_toggle_process_id ?? '';
-    });
-}
-
 function getToggleDebugState(page: Page): Promise<ToggleDebugState> {
     return page.evaluate<ToggleDebugState>(() => {
         const globalWindow = window as typeof window & {
@@ -88,7 +79,8 @@ test.describe('Process preview', () => {
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
-        const lastToggleValue = async () => getLastToggleSignal(page);
+        const lastToggleValue = async () =>
+            (await processList.getAttribute('data-last-toggle')) || '';
         const toggleDebugState = async () => getToggleDebugState(page);
 
         const rows = processList.getByTestId('process-row');
@@ -174,6 +166,7 @@ test.describe('Process preview', () => {
         await previewButton.click({ timeout: 5000 });
 
         // Wait for it to disappear
+        await expect.poll(lastToggleValue, { timeout: 10000 }).toBe(processId);
         await expect.poll(async () => (await toggleDebugState()).calls, { timeout: 10000 }).toBe(1);
         await expect
             .poll(async () => (await toggleDebugState()).after, { timeout: 10000 })
@@ -206,7 +199,8 @@ test.describe('Process preview', () => {
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
-        const lastToggleValue = async () => getLastToggleSignal(page);
+        const lastToggleValue = async () =>
+            (await processList.getAttribute('data-last-toggle')) || '';
         const toggleDebugState = async () => getToggleDebugState(page);
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
