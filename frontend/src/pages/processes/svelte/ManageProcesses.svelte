@@ -138,6 +138,9 @@
                                 aria-controls={`process-preview-${processId}`}
                                 aria-pressed={openPreviewProcessId === processId ? 'true' : 'false'}
                                 on:click|stopPropagation={() => {
+                                    if (typeof window !== 'undefined') {
+                                        window.__dspace_last_toggle_process_id = processId;
+                                    }
                                     lastToggleProcessId = processId;
                                     togglePreview(processId);
                                 }}

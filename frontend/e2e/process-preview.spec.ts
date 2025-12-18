@@ -1,5 +1,14 @@
-import { test, expect, type Locator } from '@playwright/test';
+import { test, expect, type Locator, type Page } from '@playwright/test';
 import { clearUserData, waitForHydration, navigateWithRetry } from './test-helpers';
+
+function getLastToggleSignal(page: Page): Promise<string> {
+    return page.evaluate<string>(() => {
+        const globalWindow = window as typeof window & {
+            __dspace_last_toggle_process_id?: string;
+        };
+        return globalWindow.__dspace_last_toggle_process_id ?? '';
+    });
+}
 
 test.describe('Process preview', () => {
     test.beforeEach(async ({ page }) => {
@@ -22,7 +31,7 @@ test.describe('Process preview', () => {
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
-        const lastToggleValue = async () => (await processList.getAttribute('data-last-toggle')) || '';
+        const lastToggleValue = async () => getLastToggleSignal(page);
 
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
@@ -101,7 +110,7 @@ test.describe('Process preview', () => {
 
         const previewOpenValue = async () =>
             (await processList.getAttribute('data-preview-open')) || '';
-        const lastToggleValue = async () => (await processList.getAttribute('data-last-toggle')) || '';
+        const lastToggleValue = async () => getLastToggleSignal(page);
         const rows = processList.getByTestId('process-row');
         await expect(rows.first()).toBeVisible();
 
