@@ -217,6 +217,12 @@ export async function purgeClientState(page: Page): Promise<void> {
         },
         { names: waitTargets }
     );
+
+    try {
+        await page.reload({ waitUntil: 'domcontentloaded' });
+    } catch (error) {
+        console.warn('Failed to reload page after purging client state:', error);
+    }
 }
 
 /**

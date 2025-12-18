@@ -4,34 +4,47 @@
     export let requireItems = [];
     export let consumeItems = [];
     export let createItems = [];
+
+    const safeArray = (value) => (Array.isArray(value) ? value.filter(Boolean) : []);
+    const normalizeItems = (items = []) =>
+        safeArray(items).map((item, index) => ({
+            id: item?.id ?? `unknown-item-${index}`,
+            count: typeof item?.count === 'number' ? item.count : item?.count ?? null,
+        }));
+
+    $: safeTitle = typeof title === 'string' ? title : '';
+    $: safeDuration = duration ?? '';
+    $: safeRequireItems = normalizeItems(requireItems);
+    $: safeConsumeItems = normalizeItems(consumeItems);
+    $: safeCreateItems = normalizeItems(createItems);
 </script>
 
 <div class="process-preview">
-    <h3>{title}</h3>
-    <p>Duration: {duration}</p>
+    <h3>{safeTitle}</h3>
+    <p>Duration: {safeDuration}</p>
 
-    {#if requireItems.length > 0}
+    {#if safeRequireItems.length > 0}
         <h4>Requires:</h4>
         <ul>
-            {#each requireItems as item}
+            {#each safeRequireItems as item (item.id)}
                 <li>{item.id} x {item.count}</li>
             {/each}
         </ul>
     {/if}
 
-    {#if consumeItems.length > 0}
+    {#if safeConsumeItems.length > 0}
         <h4>Consumes:</h4>
         <ul>
-            {#each consumeItems as item}
+            {#each safeConsumeItems as item (item.id)}
                 <li>{item.id} x {item.count}</li>
             {/each}
         </ul>
     {/if}
 
-    {#if createItems.length > 0}
+    {#if safeCreateItems.length > 0}
         <h4>Creates:</h4>
         <ul>
-            {#each createItems as item}
+            {#each safeCreateItems as item (item.id)}
                 <li>{item.id} x {item.count}</li>
             {/each}
         </ul>

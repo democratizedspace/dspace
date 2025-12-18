@@ -52,7 +52,13 @@ function resetToggleDebugState(page: Page): Promise<void> {
 test.describe('Process preview', () => {
     test.beforeEach(async ({ page }) => {
         page.on('pageerror', (error) => {
-            console.error(`[pageerror] ${error.message}`);
+            const stack = error.stack || error.message;
+            const url = page.url();
+            console.error(`[pageerror][${url}] ${stack}`);
+
+            if (url.includes('/processes/manage')) {
+                throw error;
+            }
         });
 
         page.on('console', (message) => {
