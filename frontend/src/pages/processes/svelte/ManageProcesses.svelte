@@ -46,6 +46,12 @@
 
     function handleEdit(id) {
         const normalizedId = normalizeProcessId(id);
+
+        if (!normalizedId) {
+            console.error('Invalid process ID provided to handleEdit:', id);
+            return;
+        }
+
         window.location.href = `/processes/${normalizedId}/edit`;
     }
 
