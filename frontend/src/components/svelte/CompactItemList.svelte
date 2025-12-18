@@ -34,7 +34,7 @@
     }, new Map());
     const getItemKey = (item, index) => {
         const stableId = getStableItemId(item);
-        const occurrences = stableId ? itemKeyCounts.get(stableId) ?? 0 : 0;
+        const occurrences = stableId ? (itemKeyCounts.get(stableId) ?? 0) : 0;
 
         if (stableId && occurrences === 1) {
             return stableId;

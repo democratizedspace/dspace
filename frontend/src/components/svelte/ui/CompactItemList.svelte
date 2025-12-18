@@ -25,7 +25,7 @@
     }, new Map());
     const getItemKey = (item, index) => {
         const stableId = getStableItemId(item);
-        const occurrences = stableId ? itemKeyCounts.get(stableId) ?? 0 : 0;
+        const occurrences = stableId ? (itemKeyCounts.get(stableId) ?? 0) : 0;
 
         if (stableId && occurrences === 1) {
             return stableId;
@@ -126,9 +126,7 @@
                         style:opacity={item.disabled ? 0.5 : 1}
                         style:cursor={item.disabled ? 'default' : 'pointer'}
                         style:outline={item.id === activeId ? '2px solid #2684FF' : null}
-                        style:backgroundColor={item.id === activeId
-                            ? 'rgba(38,132,255,0.1)'
-                            : null}
+                        style:backgroundColor={item.id === activeId ? 'rgba(38,132,255,0.1)' : null}
                         on:click={() => handleClick(item)}
                         on:keydown={handleKeyDown}
                     >
@@ -146,7 +144,8 @@
                             <div style="display:flex;flex-direction:column;">
                                 <span>{item.label}</span>
                                 {#if item.subLabel}
-                                    <span style="font-size:0.875em;color:#666">{item.subLabel}</span>
+                                    <span style="font-size:0.875em;color:#666">{item.subLabel}</span
+                                    >
                                 {/if}
                             </div>
                         {/if}
