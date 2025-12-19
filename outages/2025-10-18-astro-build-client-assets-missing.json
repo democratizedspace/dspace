@@ -6,5 +6,6 @@
   "resolution": "Updated ensure-astro-build.mjs to verify both server and client assets exist before skipping a rebuild and added tests that fail when client bundles are absent.",
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18605256329"
-  ]
+  ],
+  "longForm": "outages/2025-10-18-astro-build-client-assets-missing.md"
 }

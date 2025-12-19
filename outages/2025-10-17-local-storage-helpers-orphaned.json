@@ -8,5 +8,6 @@
     "https://github.com/democratizedspace/dspace/actions/runs/18603193494/job/53046387287",
     "frontend/scripts/run-test-groups.mjs",
     "tests/run-test-groups.test.ts"
-  ]
+  ],
+  "longForm": "outages/2025-10-17-local-storage-helpers-orphaned.md"
 }

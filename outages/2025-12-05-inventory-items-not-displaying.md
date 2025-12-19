@@ -1,0 +1,10 @@
+# OUT-2025-12-05-inventory-items-not-displaying
+
+- **Date:** 2025-12-05
+- **Component:** frontend/inventory page
+- **Root cause:** The inventory page failed to display items due to two critical bugs: (1) The items aggregator module (`frontend/src/pages/inventory/json/items/index.js`) used deprecated `assert { type: 'json' }` import syntax. Modern Node.js requires the newer `with { type: 'json' }` import attribute syntax for JSON modules, causing module loading failures. (2) The Svelte reactive statement in `Inventory.svelte` only tracked `isClientSide` changes, not `showAllItems` changes, so checking the 'Show all items' checkbox didn't trigger inventory updates. Users saw an empty inventory page even when 257 items were available.
+- **Resolution:** Updated the items aggregator to use modern import attributes syntax (`with { type: 'json' }` instead of deprecated `assert { type: 'json' }`). Rewrapped the reactive statement in a block `$: { ... }` to ensure Svelte tracks both `isClientSide` and `showAllItems` variables, making the checkbox functional. Added E2E regression test (`inventory-items-bug.spec.ts`) to verify items display correctly when the checkbox is toggled.
+- **References:**
+  - frontend/src/pages/inventory/json/items/index.js
+  - frontend/src/pages/inventory/Inventory.svelte
+  - frontend/e2e/inventory-items-bug.spec.ts

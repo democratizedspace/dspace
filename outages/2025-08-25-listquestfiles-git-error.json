@@ -6,5 +6,6 @@
   "resolution": "listQuestFiles now suppresses git stderr and falls back to HEAD when the ref is missing.",
   "references": [
     "docs/prompts/codex/ci-fix.md"
-  ]
+  ],
+  "longForm": "outages/2025-08-25-listquestfiles-git-error.md"
 }

@@ -6,5 +6,6 @@
   "resolution": "Install Playwright browsers with system dependencies before running tests",
   "references": [
     "docs/prompts/codex/ci-fix.md#lessons-learned"
-  ]
+  ],
+  "longForm": "outages/2025-08-14-playwright-browsers-missing.md"
 }

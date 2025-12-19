@@ -8,5 +8,6 @@
     "https://github.com/democratizedspace/dspace/actions/runs/18627057663/job/53106534684",
     ".github/workflows/tests.yml",
     "frontend/e2e/test-coverage.spec.ts"
-  ]
+  ],
+  "longForm": "outages/2025-10-30-playwright-install-with-deps.md"
 }

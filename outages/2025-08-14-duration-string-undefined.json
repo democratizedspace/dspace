@@ -4,5 +4,9 @@
   "component": "frontend",
   "rootCause": "getDurationString showed 'undefined' when remaining time was absent",
   "resolution": "skip appending remaining time when it is missing",
-  "references": ["frontend/src/utils/strings.js", "tests/strings.test.ts"]
+  "references": [
+    "frontend/src/utils/strings.js",
+    "tests/strings.test.ts"
+  ],
+  "longForm": "outages/2025-08-14-duration-string-undefined.md"
 }

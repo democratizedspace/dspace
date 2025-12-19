@@ -6,5 +6,6 @@
   "resolution": "Set quest list links to use an aria-label equal to the quest title and updated quest cards to describe thumbnails with human-readable alt text referencing the quest title. Added an e2e assertion to ensure the link keeps its aria-label and alt text aligned with the quest title.",
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18637540270"
-  ]
+  ],
+  "longForm": "outages/2025-10-20-quests-custom-link-accessibility.md"
 }

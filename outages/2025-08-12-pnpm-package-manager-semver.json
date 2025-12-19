@@ -6,5 +6,6 @@
   "resolution": "updated package.json to pin pnpm@9.0.0 and added a test to enforce semver",
   "references": [
     "README.md#local-development"
-  ]
+  ],
+  "longForm": "outages/2025-08-12-pnpm-package-manager-semver.md"
 }

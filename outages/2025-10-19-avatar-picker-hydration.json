@@ -8,5 +8,6 @@
     "https://github.com/democratizedspace/dspace/actions/runs/18626214170",
     "frontend/src/components/svelte/AvatarPicker.svelte",
     "frontend/e2e/profile-avatar-selection.spec.ts"
-  ]
+  ],
+  "longForm": "outages/2025-10-19-avatar-picker-hydration.md"
 }

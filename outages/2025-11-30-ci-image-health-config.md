@@ -1,0 +1,9 @@
+# 2025-11-30-ci-image-health-config
+
+- **Date:** 2025-11-30
+- **Component:** docker-image-runtime-endpoints
+- **Root cause:** Built Astro runtime image lacked /config.json, /healthz, and /livez endpoints so smoke tests and probes received 404 responses.
+- **Resolution:** Added middleware-backed runtime endpoints that return JSON health and config payloads and updated tests to cover them.
+- **References:**
+  - https://github.com/democratizedspace/dspace/actions/runs/19794646398
+  - https://github.com/democratizedspace/dspace/pull/2144

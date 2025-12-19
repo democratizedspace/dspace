@@ -8,5 +8,6 @@
     "https://github.com/democratizedspace/dspace/actions/runs/18586257662",
     "frontend/scripts/utils/ensure-playwright-browsers.js",
     "scripts/tests/ensurePlaywrightBrowsers.test.ts"
-  ]
+  ],
+  "longForm": "outages/2025-10-17-playwright-browsers-ci.md"
 }

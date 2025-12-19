@@ -6,5 +6,6 @@
   "resolution": "Always refresh the welcome message using the newly selected persona and update the e2e assertions so they require the active assistant message to contain the persona's welcome copy. This ensures the correct greeting appears after every persona switch.",
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18586257662/job/52990714065"
-  ]
+  ],
+  "longForm": "outages/2025-10-17-chat-persona-welcome-message.md"
 }

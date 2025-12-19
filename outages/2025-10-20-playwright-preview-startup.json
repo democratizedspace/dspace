@@ -6,5 +6,6 @@
   "resolution": "Extended the default retry attempts and delay in navigateWithRetry to cover slow preview startups and added unit tests exercising the longer backoff.",
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18642736123/job/53144470360"
-  ]
+  ],
+  "longForm": "outages/2025-10-20-playwright-preview-startup.md"
 }

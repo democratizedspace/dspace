@@ -4,5 +4,8 @@
   "component": "frontend tests",
   "rootCause": "E2E coverage check failed because frontend/package.json lacked a Jest testMatch pattern.",
   "resolution": "Added Jest testMatch configuration so coverage checks find all Jest test files.",
-  "references": ["e2e/test-coverage.spec.ts"]
+  "references": [
+    "e2e/test-coverage.spec.ts"
+  ],
+  "longForm": "outages/2025-08-14-jest-config-missing.md"
 }

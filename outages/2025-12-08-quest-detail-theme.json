@@ -4,5 +4,8 @@
   "component": "frontend/ui/quests/detail",
   "rootCause": "Quest detail rendered in the bare layout without navigation or theme spacing.",
   "resolution": "Wrapped quest detail content in Page and Card components to restore spacing.",
-  "references": ["frontend/src/pages/quests/[id].astro"]
+  "references": [
+    "frontend/src/pages/quests/[id].astro"
+  ],
+  "longForm": "outages/2025-12-08-quest-detail-theme.md"
 }

@@ -8,5 +8,6 @@
     "https://github.com/democratizedspace/dspace/actions/runs/19592101381",
     "https://github.com/democratizedspace/dspace/pkgs/container/dspace",
     "https://hackmd.io/%40maelvls/fixing-403-forbidden-ghcr"
-  ]
+  ],
+  "longForm": "outages/2025-11-21-ci-image-ghcr-403.md"
 }

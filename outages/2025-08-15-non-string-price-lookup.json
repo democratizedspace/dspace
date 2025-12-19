@@ -7,5 +7,6 @@
   "references": [
     "backend/approximateIrlPrice.ts",
     "backend/approximateIrlPrice.test.ts"
-  ]
+  ],
+  "longForm": "outages/2025-08-15-non-string-price-lookup.md"
 }

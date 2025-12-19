@@ -8,5 +8,6 @@
     "https://github.com/democratizedspace/dspace/actions/runs/18605256329/job/53053162559",
     "frontend/scripts/utils/ensure-playwright-browsers.js",
     "scripts/tests/ensurePlaywrightBrowsers.test.ts"
-  ]
+  ],
+  "longForm": "outages/2025-10-19-playwright-headless-shell-underscore.md"
 }

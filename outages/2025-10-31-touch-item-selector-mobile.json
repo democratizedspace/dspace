@@ -6,5 +6,6 @@
   "resolution": "Make the touch selector test explicitly open the dropdown before asserting and interacting with options, and add expansion state metadata to the ItemSelector component so it advertises its state for automation and assistive technology.",
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18642736123/job/53144470360"
-  ]
+  ],
+  "longForm": "outages/2025-10-31-touch-item-selector-mobile.md"
 }

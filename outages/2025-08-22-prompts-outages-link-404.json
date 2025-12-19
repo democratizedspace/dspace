@@ -7,5 +7,6 @@
   "references": [
     "frontend/src/pages/docs/md/prompts-codex.md",
     "docs/prompts/codex/ci-fix.md"
-  ]
+  ],
+  "longForm": "outages/2025-08-22-prompts-outages-link-404.md"
 }

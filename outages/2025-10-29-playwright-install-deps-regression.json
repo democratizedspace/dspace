@@ -6,5 +6,6 @@
   "resolution": "Teach ensurePlaywrightBrowsers to run playwright install-deps on Linux (with a sentinel file) before downloading browsers, and cover the behavior with vitest mocks.",
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18621659400/job/53093627151"
-  ]
+  ],
+  "longForm": "outages/2025-10-29-playwright-install-deps-regression.md"
 }

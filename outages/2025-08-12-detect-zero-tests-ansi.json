@@ -7,5 +7,6 @@
   "references": [
     "DEVELOPER_GUIDE.md#run-unit-tests",
     "scripts/utils/detect-zero-tests.js"
-  ]
+  ],
+  "longForm": "outages/2025-08-12-detect-zero-tests-ansi.md"
 }

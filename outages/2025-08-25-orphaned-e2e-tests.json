@@ -7,5 +7,6 @@
   "references": [
     "frontend/scripts/run-test-groups.mjs",
     "frontend/e2e/test-coverage.spec.ts"
-  ]
+  ],
+  "longForm": "outages/2025-08-25-orphaned-e2e-tests.md"
 }

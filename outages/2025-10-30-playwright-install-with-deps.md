@@ -1,0 +1,10 @@
+# 2025-10-30-playwright-install-with-deps
+
+- **Date:** 2025-10-30
+- **Component:** ci:e2e
+- **Root cause:** The tests workflow still invoked Playwright's install-deps command through npx, which installs only the bare system packages and skipped the chromium headless shell dependencies after Playwright 1.54 tightened its launcher checks. As a result Chromium aborted immediately on the runner with the generic "Host system is missing dependencies" error before any e2e assertions executed.
+- **Resolution:** Switched the workflow to call the workspace Playwright CLI via pnpm exec with --with-deps so the same version installs chromium and the headless shell together, guaranteeing the required Ubuntu 24 libraries are provisioned before shards launch.
+- **References:**
+  - https://github.com/democratizedspace/dspace/actions/runs/18627057663/job/53106534684
+  - .github/workflows/tests.yml
+  - frontend/e2e/test-coverage.spec.ts

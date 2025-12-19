@@ -1,0 +1,9 @@
+# OUT-2025-10-17-playwright-install-deps-path
+
+- **Date:** 2025-10-17
+- **Component:** ci/e2e
+- **Root cause:** GitHub Actions workflow invoked sudo npx playwright install-deps, but sudo reset PATH so npx was not found. As a result Playwright system dependencies were never installed and Chromium could not launch in CI.
+- **Resolution:** Updated the e2e workflow to preserve PATH when elevating sudo for playwright install-deps and added an automated test to assert the correct command string.
+- **References:**
+  - https://github.com/democratizedspace/dspace/actions/runs/18586257662/job/52990714065
+  - https://github.com/democratizedspace/dspace/actions/runs/18586257662/job/52990714057

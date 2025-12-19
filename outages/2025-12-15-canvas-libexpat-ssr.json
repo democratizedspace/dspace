@@ -8,5 +8,6 @@
     "Dockerfile",
     ".github/workflows/ci-image.yml",
     "frontend/src/pages/docs/[slug].astro"
-  ]
+  ],
+  "longForm": "outages/2025-12-15-canvas-libexpat-ssr.md"
 }

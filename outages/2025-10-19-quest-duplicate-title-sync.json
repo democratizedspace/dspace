@@ -7,5 +7,6 @@
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18622435241/job/53095316970",
     "frontend/e2e/constellations-quest.spec.ts"
-  ]
+  ],
+  "longForm": "outages/2025-10-19-quest-duplicate-title-sync.md"
 }

@@ -8,5 +8,6 @@
     "frontend/src/pages/inventory/json/items/index.js",
     "frontend/src/pages/inventory/Inventory.svelte",
     "frontend/e2e/inventory-items-bug.spec.ts"
-  ]
+  ],
+  "longForm": "outages/2025-12-05-inventory-items-not-displaying.md"
 }

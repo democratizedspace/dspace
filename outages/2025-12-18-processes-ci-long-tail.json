@@ -1,0 +1,28 @@
+{
+  "id": "processes-ci-long-tail",
+  "date": "2025-12-18",
+  "component": "processes + ci",
+  "rootCause": "Svelte 5 upgrade and fragile process preview timing made CI flaky until selectors and cleanup were hardened",
+  "resolution": "Hardened preview locators and cleanup, tuned Svelte/Vitest config, and simplified coverage gates to restore CI",
+  "references": [
+    "https://github.com/democratizedspace/dspace/pull/2336",
+    "https://github.com/democratizedspace/dspace/pull/2345",
+    "https://github.com/democratizedspace/dspace/pull/2343",
+    "https://github.com/democratizedspace/dspace/pull/2356",
+    "https://github.com/democratizedspace/dspace/pull/2357",
+    "https://github.com/democratizedspace/dspace/pull/2360",
+    "https://github.com/democratizedspace/dspace/pull/2362",
+    "https://github.com/democratizedspace/dspace/pull/2369",
+    "https://github.com/democratizedspace/dspace/pull/2372",
+    "https://github.com/democratizedspace/dspace/pull/2374",
+    "https://github.com/democratizedspace/dspace/pull/2380",
+    "https://github.com/democratizedspace/dspace/pull/2384"
+  ],
+  "longForm": "outages/2025-12-18-processes-ci-long-tail.md",
+  "dateRanges": [
+    {
+      "start": "2025-12-13",
+      "end": "2025-12-18"
+    }
+  ]
+}

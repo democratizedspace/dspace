@@ -8,5 +8,6 @@
     "scripts/update-new-quests.mjs",
     "tests/newQuestsList.test.ts",
     "docs/new-quests.md"
-  ]
+  ],
+  "longForm": "outages/2025-12-12-new-quests-path-windows.md"
 }

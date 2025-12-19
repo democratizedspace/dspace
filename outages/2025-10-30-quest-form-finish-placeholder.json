@@ -8,5 +8,6 @@
     "frontend/src/components/svelte/QuestForm.svelte",
     "frontend/src/components/__tests__/QuestForm.spec.ts",
     "frontend/e2e/quests.spec.ts"
-  ]
+  ],
+  "longForm": "outages/2025-10-30-quest-form-finish-placeholder.md"
 }

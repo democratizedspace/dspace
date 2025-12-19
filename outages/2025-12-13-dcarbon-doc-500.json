@@ -8,5 +8,6 @@
     "frontend/src/pages/docs/[slug].astro",
     "frontend/src/utils.js",
     "frontend/e2e/docs-dcarbon.spec.ts"
-  ]
+  ],
+  "longForm": "outages/2025-12-13-dcarbon-doc-500.md"
 }

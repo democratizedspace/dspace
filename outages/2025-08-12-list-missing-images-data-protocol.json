@@ -6,5 +6,6 @@
   "resolution": "ignore data and protocol-relative URLs so coverage checks only verify local assets",
   "references": [
     "docs/prompts/codex/ci-fix.md#lessons-learned"
-  ]
+  ],
+  "longForm": "outages/2025-08-12-list-missing-images-data-protocol.md"
 }

@@ -8,5 +8,6 @@
     "frontend/src/utils/gameState/common.js",
     "frontend/__tests__/githubToken.test.js",
     "frontend/__tests__/gameState/common.test.js"
-  ]
+  ],
+  "longForm": "outages/2025-10-19-github-token-save-race.md"
 }

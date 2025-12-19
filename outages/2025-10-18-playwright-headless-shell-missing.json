@@ -8,5 +8,6 @@
     "frontend/scripts/utils/ensure-playwright-browsers.js",
     "scripts/tests/ensurePlaywrightBrowsers.test.ts",
     "github-actions:e2e-shard-1-18603193494-53046387287"
-  ]
+  ],
+  "longForm": "outages/2025-10-18-playwright-headless-shell-missing.md"
 }

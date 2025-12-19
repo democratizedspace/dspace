@@ -7,5 +7,6 @@
   "references": [
     "frontend/src/components/svelte/ProcessForm.svelte",
     "frontend/__tests__/ProcessForm.test.js"
-  ]
+  ],
+  "longForm": "outages/2025-10-17-process-form-missing-success.md"
 }

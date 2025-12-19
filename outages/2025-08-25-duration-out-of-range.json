@@ -9,5 +9,6 @@
     "tests/strings.test.ts",
     "frontend/__tests__/strings.test.js",
     "frontend/README.md"
-  ]
+  ],
+  "longForm": "outages/2025-08-25-duration-out-of-range.md"
 }

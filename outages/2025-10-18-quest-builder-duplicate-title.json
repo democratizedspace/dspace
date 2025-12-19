@@ -6,5 +6,6 @@
   "resolution": "Generate unique quest titles during the constellations quest e2e flow, update IndexedDB helpers to support string identifiers, and add coverage asserting duplicate titles stay blocked.",
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18611896671/job/53071209401"
-  ]
+  ],
+  "longForm": "outages/2025-10-18-quest-builder-duplicate-title.md"
 }

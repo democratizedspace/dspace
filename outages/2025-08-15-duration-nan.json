@@ -8,5 +8,6 @@
     "frontend/src/utils/strings.js",
     "tests/strings.test.ts",
     "frontend/README.md"
-  ]
+  ],
+  "longForm": "outages/2025-08-15-duration-nan.md"
 }

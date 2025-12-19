@@ -6,5 +6,6 @@
   "resolution": "ran npm run new-quests:update and committed the refreshed docs",
   "references": [
     "docs/prompts/codex/ci-fix.md#lessons-learned"
-  ]
+  ],
+  "longForm": "outages/2025-08-26-new-quests-doc-outdated.md"
 }

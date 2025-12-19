@@ -4,5 +4,6 @@
   "component": "backend",
   "rootCause": "approximateIrlPrice rejected mixed-case or hyphenated item IDs",
   "resolution": "normalized input to lowercase and replaced spaces and hyphens before lookup",
-  "references": []
+  "references": [],
+  "longForm": "outages/2025-08-12-case-insensitive-price-lookup.md"
 }

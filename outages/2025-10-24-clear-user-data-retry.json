@@ -6,5 +6,6 @@
   "resolution": "Added connection-refused retry handling to purgeClientState so clearUserData waits for the preview server before clearing storage, and introduced unit tests that simulate the refusal to ensure the helper keeps retrying.",
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18611896671/job/53071209401"
-  ]
+  ],
+  "longForm": "outages/2025-10-24-clear-user-data-retry.md"
 }

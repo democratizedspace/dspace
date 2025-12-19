@@ -8,5 +8,6 @@
     "scripts/tests/contentIntegrity.test.ts",
     "frontend/src/pages/quests/json",
     "frontend/src/pages/inventory/json/items"
-  ]
+  ],
+  "longForm": "outages/2025-12-12-content-integrity-counting.md"
 }

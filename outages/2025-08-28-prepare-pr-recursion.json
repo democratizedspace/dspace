@@ -9,5 +9,6 @@
     "frontend/scripts/prepare-pr.ps1",
     "run-tests.js",
     "scripts/tests/preparePrScripts.test.ts"
-  ]
+  ],
+  "longForm": "outages/2025-08-28-prepare-pr-recursion.md"
 }

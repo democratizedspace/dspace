@@ -8,5 +8,6 @@
     "scripts/utils/fs-checks.js",
     "scripts/tests/fsChecks.test.ts",
     "docs/prompts/codex/ci-fix.md"
-  ]
+  ],
+  "longForm": "outages/2025-08-25-list-missing-images-whitespace.md"
 }

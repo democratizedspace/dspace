@@ -8,5 +8,6 @@
     "frontend/src/pages/quests/svelte/Quests.svelte",
     "frontend/__tests__/Quests.test.js",
     "frontend/e2e/quests.spec.ts"
-  ]
+  ],
+  "longForm": "outages/2025-10-19-quests-custom-visibility.md"
 }

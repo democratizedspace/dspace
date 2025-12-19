@@ -6,5 +6,6 @@
   "resolution": "Made the E2E locator case-insensitive and added a unit test that asserts the documentation keeps the coverage heading and table entry so future title tweaks remain covered.",
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18622435241/job/53095316970"
-  ]
+  ],
+  "longForm": "outages/2025-10-19-user-journeys-doc-heading.md"
 }

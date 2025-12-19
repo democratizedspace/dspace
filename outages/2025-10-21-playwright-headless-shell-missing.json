@@ -7,5 +7,6 @@
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18610825343/job/53068671174",
     "https://github.com/democratizedspace/dspace/actions/runs/18610825343/job/53068671177"
-  ]
+  ],
+  "longForm": "outages/2025-10-21-playwright-headless-shell-missing.md"
 }

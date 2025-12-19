@@ -9,5 +9,6 @@
     "frontend/src/components/svelte/compactItemListHelpers.js",
     "frontend/e2e/quest-grant-items.spec.ts",
     "tests/compactItemListHelpers.test.ts"
-  ]
+  ],
+  "longForm": "outages/2025-11-06-quests-grant-items-display.md"
 }

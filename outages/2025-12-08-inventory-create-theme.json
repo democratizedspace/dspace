@@ -4,5 +4,8 @@
   "component": "frontend/ui/inventory/create",
   "rootCause": "Inventory creation used bare layout and custom colors, diverging from the shell.",
   "resolution": "Moved the form into Page and Card components with themed framing for consistency.",
-  "references": ["frontend/src/pages/inventory/create.astro"]
+  "references": [
+    "frontend/src/pages/inventory/create.astro"
+  ],
+  "longForm": "outages/2025-12-08-inventory-create-theme.md"
 }

@@ -8,5 +8,6 @@
     "frontend/e2e/custom-backup.spec.ts",
     "frontend/src/pages/contentbackup/svelte/Importer.svelte",
     "tests/customContentBackupImporterAccessibility.test.ts"
-  ]
+  ],
+  "longForm": "outages/2025-10-18-custom-backup-import-label.md"
 }

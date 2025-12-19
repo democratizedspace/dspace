@@ -1,0 +1,8 @@
+# OUT-2025-10-26-playwright-localhost-ipv6
+
+- **Date:** 2025-10-26
+- **Component:** frontend Playwright configuration
+- **Root cause:** Playwright's default baseURL used http://localhost:3000, so Chromium occasionally resolved it to ::1 while the Astro preview server only listened on IPv4. That produced intermittent net::ERR_CONNECTION_REFUSED failures in helpers like clearUserData, causing the cookie-consent E2E test to abort before navigation.
+- **Resolution:** Defaulted the Playwright baseURL to http://127.0.0.1:3000, updated helpers/tests to accept the numeric loopback host, and added a regression test that ensures the configuration does not revert to localhost.
+- **References:**
+  - https://github.com/democratizedspace/dspace/actions/runs/18621659400/job/53093627151

@@ -6,5 +6,6 @@
   "resolution": "Defaulted the Playwright baseURL to http://127.0.0.1:3000, updated helpers/tests to accept the numeric loopback host, and added a regression test that ensures the configuration does not revert to localhost.",
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18621659400/job/53093627151"
-  ]
+  ],
+  "longForm": "outages/2025-10-26-playwright-localhost-ipv6.md"
 }

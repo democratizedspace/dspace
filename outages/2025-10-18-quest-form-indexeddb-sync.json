@@ -7,5 +7,6 @@
   "references": [
     "https://github.com/democratizedspace/dspace/actions/runs/18612605001/job/53072829421",
     "https://github.com/democratizedspace/dspace/actions/runs/18612605001/job/53072829422"
-  ]
+  ],
+  "longForm": "outages/2025-10-18-quest-form-indexeddb-sync.md"
 }

@@ -6,5 +6,6 @@
   "resolution": "use an exact `getByRole` match for the intended avatar button",
   "references": [
     "frontend/e2e/profile-avatar-selection.spec.ts"
-  ]
+  ],
+  "longForm": "outages/2025-08-25-avatar-selector-strict-mode.md"
 }

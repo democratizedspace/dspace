@@ -9,5 +9,6 @@
     "scripts/generate-item-dependencies.js",
     "frontend/src/pages/quests/json",
     "frontend/src/pages/inventory/json/items"
-  ]
+  ],
+  "longForm": "outages/2025-12-12-item-dependencies-test-drift.md"
 }

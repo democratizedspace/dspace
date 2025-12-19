@@ -6,5 +6,6 @@
   "resolution": "added a trivial frontend vitest to ensure the test harness runs",
   "references": [
     "frontend/tests/sanity.test.ts"
-  ]
+  ],
+  "longForm": "outages/2025-08-14-frontend-no-tests.md"
 }

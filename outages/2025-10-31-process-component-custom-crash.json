@@ -8,5 +8,6 @@
     "https://github.com/democratizedspace/dspace/actions/runs/18642736123/job/53144470360",
     "frontend/src/components/svelte/Process.svelte",
     "frontend/__tests__/ProcessCustom.test.js"
-  ]
+  ],
+  "longForm": "outages/2025-10-31-process-component-custom-crash.md"
 }

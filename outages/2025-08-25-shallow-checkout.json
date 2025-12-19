@@ -6,5 +6,6 @@
   "resolution": "set fetch-depth: 0 in ci.yml so scripts can access origin/v3",
   "references": [
     "docs/prompts/codex/ci-fix.md#lessons-learned"
-  ]
+  ],
+  "longForm": "outages/2025-08-25-shallow-checkout.md"
 }

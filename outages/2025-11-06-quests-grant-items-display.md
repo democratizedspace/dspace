@@ -1,0 +1,11 @@
+# quests-grant-items-display
+
+- **Date:** 2025-11-06
+- **Component:** frontend quests
+- **Root cause:** CompactItemList hid item rows whenever inventory counts were zero, blanking grant and require options on fresh v3 saves and when custom items lacked metadata fallbacks.
+- **Resolution:** Always render item rows when option data exists, add safe fallbacks for custom items, and lock in coverage with unit and Playwright checks for the How to do quests grant list.
+- **References:**
+  - frontend/src/components/svelte/CompactItemList.svelte
+  - frontend/src/components/svelte/compactItemListHelpers.js
+  - frontend/e2e/quest-grant-items.spec.ts
+  - tests/compactItemListHelpers.test.ts

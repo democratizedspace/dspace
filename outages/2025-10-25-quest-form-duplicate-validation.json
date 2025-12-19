@@ -8,5 +8,6 @@
     "frontend/src/components/svelte/QuestForm.svelte",
     "frontend/__tests__/QuestFormDuplicateTitleFallback.test.js",
     "frontend/e2e/constellations-quest.spec.ts"
-  ]
+  ],
+  "longForm": "outages/2025-10-25-quest-form-duplicate-validation.md"
 }
