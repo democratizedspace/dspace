@@ -1,0 +1,27 @@
+{
+  "id": "processes-ci-long-tail",
+  "date": "2025-12-18",
+  "component": "processes and CI",
+  "longForm": "outages/2025-12-18-processes-ci-long-tail.md",
+  "rootCause": "Svelte 5 upgrade shifted module resolution and reactivity, breaking process preview tests and CI guardrails until follow-on fixes stabilized imports, wait conditions, and coverage workflows.",
+  "resolution": "Iterative Svelte 5 compatibility fixes, stronger process preview waits, and removal of brittle patch-coverage gating brought CI back to green ahead of GHCR publication and staging validation.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/pull/2336",
+    "https://github.com/democratizedspace/dspace/commit/f39d17ff4e43de429263d17c0e41e232dc454c53",
+    "https://github.com/democratizedspace/dspace/pull/2356",
+    "https://github.com/democratizedspace/dspace/pull/2357",
+    "https://github.com/democratizedspace/dspace/pull/2360",
+    "https://github.com/democratizedspace/dspace/pull/2362",
+    "https://github.com/democratizedspace/dspace/pull/2369",
+    "https://github.com/democratizedspace/dspace/pull/2372",
+    "https://github.com/democratizedspace/dspace/pull/2374",
+    "https://github.com/democratizedspace/dspace/pull/2380",
+    "https://github.com/democratizedspace/dspace/pull/2384"
+  ],
+  "dateRanges": [
+    {
+      "start": "2025-12-13",
+      "end": "2025-12-18"
+    }
+  ]
+}
