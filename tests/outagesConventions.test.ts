@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, readdirSync } from 'fs';
 import path from 'path';
 import Ajv from 'ajv';
+import draft7MetaSchema from 'ajv/dist/refs/json-schema-draft-07.json';
 
 const TIME_API_URL = 'https://worldtimeapi.org/api/timezone/Etc/UTC';
 
@@ -132,7 +133,9 @@ describe('outages', () => {
     it('outage records conform to the schema', () => {
         const schemaPath = path.join(outagesDir, 'schema.json');
         const schema = loadJsonFile(schemaPath);
-        const ajv = new Ajv({ allErrors: true, strict: false });
+        const ajv = new Ajv({ allErrors: true, strict: false, meta: false });
+        ajv.addMetaSchema(draft7MetaSchema);
+        ajv.addSchema(draft7MetaSchema, 'https://json-schema.org/draft-07/schema#');
         ajv.addFormat('date', /^\d{4}-\d{2}-\d{2}$/);
 
         const validate = ajv.compile(schema);
