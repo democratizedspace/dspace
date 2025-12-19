@@ -39,7 +39,7 @@ describe('CompactItemList', () => {
             list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
         );
 
-        const { container, component, unmount } = render(CompactItemList, {
+        const { container, rerender, unmount } = render(CompactItemList, {
             props: { itemList: items },
         });
 
@@ -55,7 +55,7 @@ describe('CompactItemList', () => {
             list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
         );
 
-        component.$set({ itemList: swapped });
+        await rerender({ itemList: swapped });
         await tick();
 
         const swappedRows = Array.from(container.querySelectorAll('.horizontal'));
@@ -78,7 +78,7 @@ describe('CompactItemList', () => {
             list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
         );
 
-        const { container, component, unmount } = render(CompactItemList, {
+        const { container, rerender, unmount } = render(CompactItemList, {
             props: { itemList: duplicateItems },
         });
 
@@ -94,7 +94,7 @@ describe('CompactItemList', () => {
             list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
         );
 
-        component.$set({ itemList: reversed });
+        await rerender({ itemList: reversed });
         await tick();
 
         const reversedRows = Array.from(container.querySelectorAll('.horizontal'));
