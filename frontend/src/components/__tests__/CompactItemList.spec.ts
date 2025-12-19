@@ -101,8 +101,8 @@ describe('CompactItemList', () => {
         expect(reversedRows).toHaveLength(2);
         expect(reversedRows[0].textContent).toContain('Second Repeat');
         expect(reversedRows[1].textContent).toContain('First Repeat');
-        expect(reversedRows[0]).not.toBe(initialRows[0]);
-        expect(reversedRows[1]).not.toBe(initialRows[1]);
+        expect(reversedRows[0]).toBe(initialRows[0]);
+        expect(reversedRows[1]).toBe(initialRows[1]);
 
         unmount();
     });
