@@ -132,24 +132,35 @@
             return;
         }
 
-        clearInvalidPreviewTimeout();
-
         const normalizedId = normalizeProcessId(id);
-        recordLastToggle(normalizedId);
-        const isOpen = openPreviewProcessId === normalizedId;
-        const nextPreviewId = isOpen ? '' : normalizedId;
 
-        if (typeof window !== 'undefined') {
-            const globalWindow = window;
-            incrementWindowCounter('__dspace_toggle_preview_calls');
-            globalWindow.__dspace_open_preview_before = openPreviewProcessId;
-        }
+        try {
+            clearInvalidPreviewTimeout();
 
-        openPreviewProcessId = nextPreviewId;
+            const isOpen = openPreviewProcessId === normalizedId;
+            const nextPreviewId = isOpen ? '' : normalizedId;
 
-        if (typeof window !== 'undefined') {
-            const globalWindow = window;
-            globalWindow.__dspace_open_preview_after = openPreviewProcessId;
+            if (typeof window !== 'undefined') {
+                const globalWindow = window;
+                incrementWindowCounter('__dspace_toggle_preview_calls');
+                globalWindow.__dspace_open_preview_before = openPreviewProcessId;
+            }
+
+            openPreviewProcessId = nextPreviewId;
+            recordLastToggle(normalizedId);
+
+            if (typeof window !== 'undefined') {
+                const globalWindow = window;
+                globalWindow.__dspace_open_preview_after = openPreviewProcessId;
+            }
+        } catch (error) {
+            console.error('Failed to toggle process preview', {
+                error,
+                processId: normalizedId,
+                openPreviewProcessId,
+                availableProcessCount: availableProcessIds?.size ?? 0,
+            });
+            throw error;
         }
     }
 </script>

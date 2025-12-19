@@ -52,7 +52,10 @@ function resetToggleDebugState(page: Page): Promise<void> {
 test.describe('Process preview', () => {
     test.beforeEach(async ({ page }) => {
         page.on('pageerror', (error) => {
-            console.error(`[pageerror] ${error.message}`);
+            const url = page.url();
+            const details = error?.stack || error?.message || String(error);
+            console.error(`[pageerror][${url}] ${details}`);
+            throw error;
         });
 
         page.on('console', (message) => {
