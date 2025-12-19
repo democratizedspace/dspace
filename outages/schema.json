@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft-07/schema#",
   "title": "Outage record",
   "type": "object",
   "required": ["id", "date", "component", "rootCause", "resolution", "references"],
@@ -7,11 +7,27 @@
     "id": { "type": "string" },
     "date": { "type": "string", "format": "date" },
     "component": { "type": "string" },
+    "longForm": {
+      "type": "string",
+      "pattern": ".*\\.md$",
+      "description": "Path to a companion Markdown outage report"
+    },
     "rootCause": { "type": "string" },
     "resolution": { "type": "string" },
     "references": {
       "type": "array",
       "items": { "type": "string" }
+    },
+    "dateRanges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["start", "end"],
+        "properties": {
+          "start": { "type": "string", "format": "date" },
+          "end": { "type": "string", "format": "date" }
+        }
+      }
     }
   }
 }

@@ -1,0 +1,29 @@
+{
+  "id": "processes-ci-long-tail",
+  "date": "2025-12-18",
+  "component": "processes-ui-and-ci",
+  "longForm": "outages/2025-12-18-processes-ci-long-tail.md",
+  "rootCause": "The Svelte 5 upgrade reshaped process UI reactivity and import resolution, exposing race conditions and flaky preview toggles in processes pages. CI gates amplified the churn, with patch coverage enforcement and Playwright timeouts blocking merges until each regression was addressed.",
+  "resolution": "Successive fixes stabilized Svelte 5 imports, hardened process preview toggles, relaxed brittle coverage gates, and tuned Playwright timing. CI passed after PR #2384 landed, and the release is now queued for GHCR publication and staging verification.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/pull/2336",
+    "https://github.com/democratizedspace/dspace/pull/2345",
+    "https://github.com/democratizedspace/dspace/pull/2343",
+    "https://github.com/democratizedspace/dspace/pull/2356",
+    "https://github.com/democratizedspace/dspace/pull/2357",
+    "https://github.com/democratizedspace/dspace/pull/2362",
+    "https://github.com/democratizedspace/dspace/pull/2360",
+    "https://github.com/democratizedspace/dspace/pull/2369",
+    "https://github.com/democratizedspace/dspace/pull/2372",
+    "https://github.com/democratizedspace/dspace/pull/2374",
+    "https://github.com/democratizedspace/dspace/pull/2380",
+    "https://github.com/democratizedspace/dspace/pull/2384",
+    ".github/workflows/ci-image.yml"
+  ],
+  "dateRanges": [
+    {
+      "start": "2025-12-13",
+      "end": "2025-12-18"
+    }
+  ]
+}
