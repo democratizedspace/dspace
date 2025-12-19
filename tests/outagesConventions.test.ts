@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync, readdirSync } from 'fs';
 import path from 'path';
+import Ajv from 'ajv';
 
 const TIME_API_URL = 'https://worldtimeapi.org/api/timezone/Etc/UTC';
 
@@ -19,12 +20,24 @@ async function resolveCurrentUtcDate(): Promise<Date> {
             if (raw) {
                 const normalized = raw.replace('Z', '+00:00');
                 return new Date(normalized);
+            } else {
+                console.warn(
+                    'Warning: Time API response missing "utc_datetime"; falling back to system UTC time.'
+                );
             }
+        } else {
+            console.warn(
+                `Warning: Time API responded with HTTP ${response.status}; falling back to system UTC time.`
+            );
         }
     } catch (error) {
         if (error instanceof Error && error.name === 'AbortError') {
-            // fall back to system time below
+            console.warn('Warning: Time API request aborted (timeout); falling back to system UTC time.');
         }
+        console.warn(
+            'Warning: Failed to fetch current UTC time from time API; falling back to system UTC time.',
+            error
+        );
     }
 
     return new Date();
@@ -60,6 +73,28 @@ describe('outages', () => {
 
             const filenamePrefix = file.split('-').slice(0, 3).join('-');
             expect(filenamePrefix).toBe(recordedDate);
+
+            const dateRanges = content.dateRanges as
+                | { start?: string; end?: string }[]
+                | undefined;
+
+            if (dateRanges) {
+                dateRanges.forEach((window) => {
+                    const { start, end } = window;
+                    expect(start).toBeTruthy();
+                    expect(end).toBeTruthy();
+
+                    const startDate = new Date(`${start}T00:00:00Z`);
+                    const endDate = new Date(`${end}T23:59:59Z`);
+
+                    expect(Number.isNaN(startDate.getTime())).toBe(false);
+                    expect(Number.isNaN(endDate.getTime())).toBe(false);
+
+                    expect(startDate.getTime()).toBeLessThanOrEqual(endDate.getTime());
+                    expect(startDate.getTime()).toBeLessThanOrEqual(today.getTime());
+                    expect(endDate.getTime()).toBeLessThanOrEqual(today.getTime());
+                });
+            }
         }
     });
 
@@ -79,36 +114,39 @@ describe('outages', () => {
 
                 const record = loadJsonFile(jsonRecords.get(jsonName)!);
                 const longForm = record.longForm as string | undefined;
-                if (longForm) {
-                    expect(longForm).toBe(`outages/${markdownFile}`);
-                }
+                expect(longForm).toBe(`outages/${markdownFile}`);
             });
+
+        jsonRecords.forEach((recordPath, fileName) => {
+            const record = loadJsonFile(recordPath);
+            const longForm = record.longForm as string | undefined;
+
+            if (longForm) {
+                expect(files.includes(path.basename(longForm))).toBe(true);
+            } else {
+                expect(files.includes(fileName.replace(/\.json$/, '.md'))).toBe(false);
+            }
+        });
     });
 
     it('outage records conform to the schema', () => {
         const schemaPath = path.join(outagesDir, 'schema.json');
         const schema = loadJsonFile(schemaPath);
-        const requiredFields = (schema.required as string[]) ?? [];
+        const ajv = new Ajv({ allErrors: true, strict: false });
+        ajv.addFormat('date', /^\d{4}-\d{2}-\d{2}$/);
 
-        expect(requiredFields.length).toBeGreaterThan(0);
-
-        const properties = (schema.properties as Record<string, { type?: string }>) ?? {};
+        const validate = ajv.compile(schema);
         const files = readdirSync(outagesDir).filter(
             (file) => file.endsWith('.json') && file !== 'schema.json'
         );
 
         files.forEach((file) => {
             const content = loadJsonFile(path.join(outagesDir, file));
-            const missingFields = requiredFields.filter((field) => !(field in content));
-            expect(missingFields).toEqual([]);
-
-            Object.entries(content).forEach(([fieldName, value]) => {
-                if (properties[fieldName]?.type) {
-                    const expectedType = properties[fieldName].type;
-                    const actualType = Array.isArray(value) ? 'array' : typeof value;
-                    expect(actualType).toBe(expectedType);
-                }
-            });
+            const valid = validate(content);
+            if (!valid) {
+                console.error(validate.errors);
+            }
+            expect(valid).toBe(true);
         });
     });
 
@@ -124,5 +162,16 @@ describe('outages', () => {
         expect(outage.id).toBe(expectedId);
         expect(outage.references).toBeInstanceOf(Array);
         expect((outage.references as unknown[]).length).toBeGreaterThan(0);
+
+        const references = outage.references as string[];
+        references.forEach((reference) => {
+            const isHttpUrl = reference.startsWith('http://') || reference.startsWith('https://');
+            const isRelativePath =
+                !reference.includes('://') &&
+                !path.isAbsolute(reference) &&
+                /^[A-Za-z0-9._\-/]+$/.test(reference);
+
+            expect(isHttpUrl || isRelativePath).toBe(true);
+        });
     });
 });
