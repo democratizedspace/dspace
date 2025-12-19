@@ -1,16 +1,15 @@
 # Outage Catalog
 
 Structured archive of past outages. Each outage is stored as a JSON file using the
-schema in `schema.json`.
+schema in `schema.json` and, when possible, has a matching Markdown narrative.
 
-File naming: `YYYY-MM-DD-<slug>.json`.
+Conventions
+- File naming: `YYYY-MM-DD-<slug>.json` and `YYYY-MM-DD-<slug>.md` share the same basename.
+- `longForm` points at the Markdown file (e.g., `outages/YYYY-MM-DD-slug.md`).
+- Use `dateRanges` to record multi-day investigations while keeping `date` aligned to the
+  primary incident close-out.
+- Keep `references` populated with PRs, issues, or runbooks used during remediation.
 
-Required fields:
-- `id`: unique identifier
-- `date`: ISO date
-- `component`: affected subsystem
-- `rootCause`: brief description of failure cause
-- `resolution`: how it was fixed
-- `references`: array of related links (PRs, issues, docs)
-
-Agents can parse these files to learn from previous incidents.
+Validation
+- Root tests assert JSON files match the schema, dates are not in the future, and Markdown
+  files have JSON companions.

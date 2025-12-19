@@ -1,0 +1,27 @@
+{
+  "id": "processes-ci-long-tail",
+  "date": "2025-12-18",
+  "component": "processes preview UI and CI",
+  "longForm": "outages/2025-12-18-processes-ci-long-tail.md",
+  "rootCause": "Svelte 5 upgrade exposed brittle preview toggles; coverage noise hid issues.",
+  "resolution": "Hardened preview toggles, removed noisy coverage gating, and expanded tests.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/pull/2336",
+    "https://github.com/democratizedspace/dspace/pull/2343",
+    "https://github.com/democratizedspace/dspace/pull/2356",
+    "https://github.com/democratizedspace/dspace/commit/39e2e8a63eee2d45271eb88b338834e3dcef1b7f",
+    "https://github.com/democratizedspace/dspace/pull/2362",
+    "https://github.com/democratizedspace/dspace/pull/2360",
+    "https://github.com/democratizedspace/dspace/pull/2369",
+    "https://github.com/democratizedspace/dspace/pull/2372",
+    "https://github.com/democratizedspace/dspace/pull/2374",
+    "https://github.com/democratizedspace/dspace/pull/2380",
+    "https://github.com/democratizedspace/dspace/pull/2384"
+  ],
+  "dateRanges": [
+    {
+      "start": "2025-12-13",
+      "end": "2025-12-18"
+    }
+  ]
+}
