@@ -27,7 +27,7 @@ test('SSR compiled Svelte components expose a render function', async () => {
   const path = await import('node:path');
   const fs = await import('node:fs/promises');
   const { pathToFileURL } = await import('node:url');
-  const { js } = compile('<h1>Hello!</h1>', { generate: 'ssr' });
+  const { js } = compile('<h1>Hello!</h1>', { generate: 'server' });
 
   const tempDir = path.join(process.cwd(), '.vitest-tmp');
   await fs.mkdir(tempDir, { recursive: true });

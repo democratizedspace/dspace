@@ -230,7 +230,7 @@ We have specialized tests to ensure content quality:
     - Verifies proper quest progression and dependencies. Failures now occur if any quest chain issues are detected.
     - Ensures progression is balanced across quest categories to maintain a consistent difficulty curve
     - Identifies dialogue that doesn't match NPC personalities
-    - Uses simple heuristics for now; integration with the OpenAI API is planned
+    - Uses simple heuristics with local fixtures so no external API access is required
 
 2. **Image Reference Tests** (`scripts/tests/imageReferences.test.ts`):
     - Scans all quest JSON files for image references
