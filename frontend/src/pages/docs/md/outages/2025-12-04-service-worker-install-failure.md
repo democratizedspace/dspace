@@ -1,3 +1,9 @@
+---
+title: 'Service worker install failure (2025-12-04)'
+slug: '2025-12-04-service-worker-install-failure'
+summary: 'Resilient SW install after precache failures broke client assets and offline toasts.'
+---
+
 # Service worker install failure (2025-12-04)
 
 - **Summary**: SW install failed because precache included HTML routes that returned non-OK responses. New SW never activated; old SW served stale HTML referencing removed hashed assets, causing CSS/JS 404s.
