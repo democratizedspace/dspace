@@ -36,7 +36,7 @@ test.describe('Process Creation', () => {
         const createdItemRow = page
             .locator('.form-group:has-text("Created Items") .item-row')
             .first();
-        const selector = new ItemSelectorHelper(page, createdItemRow.locator('.item-selector'));
+        const selector = new ItemSelectorHelper(page, createdItemRow);
 
         const opened = await selector.open();
         expect(opened).toBe(true);
