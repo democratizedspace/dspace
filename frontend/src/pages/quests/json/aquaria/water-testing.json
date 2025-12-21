@@ -68,7 +68,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/thermometer", "aquaria/sponge-filter"],
+    "requiresQuests": ["aquaria/thermometer"],
     "hardening": {
         "passes": 5,
         "score": 95,
