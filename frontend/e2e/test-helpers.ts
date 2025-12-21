@@ -1,6 +1,8 @@
 import { expect } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
 
+export type { Locator, Page };
+
 const CONNECTION_REFUSED_PATTERNS = [
     'ECONNREFUSED',
     'ERR_CONNECTION_REFUSED',
