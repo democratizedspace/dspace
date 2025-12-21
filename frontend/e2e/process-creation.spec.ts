@@ -20,84 +20,49 @@ test.describe('Process Creation', () => {
         await clearUserData(page);
     });
 
-    test('should debug item selector component', async ({ page }) => {
-        test.skip(
-            process.env.CI === 'true',
-            'Skip diagnostic debug flow in CI to deflake the e2e shard'
-        );
-        // First make sure we have some items in the inventory
-        const itemIds = await createTestItems(page, 3);
-        console.log(`Created ${itemIds.length} test items for use in the process`);
+    test('creates a process with a selected created item', async ({ page }) => {
+        await createTestItems(page, 1);
 
-        // Now navigate to the process creation page
         await page.goto('/processes/create');
         await page.waitForLoadState('networkidle');
 
-        // Take a screenshot of the initial form
-        await page.screenshot({
-            path: './test-artifacts/screenshots/debug-process-form-initial.png',
-        });
+        const processTitle = `Created Item Process ${Date.now()}`;
+        await page.fill('#title', processTitle);
+        await page.fill('#duration', '1h 30m');
 
-        // Fill in basic process details using our helper
-        const processTitle = `Debug Process ${Date.now()}`;
-        const success = await fillProcessForm(
-            page,
-            processTitle,
-            '1h 30m',
-            1, // Add 1 required item
-            1, // Add 1 consumed item
-            1 // Add 1 created item
-        );
+        const added = await findAndClickButton(page, 'Add Created Item');
+        expect(added).toBe(true);
 
-        if (success) {
-            console.log('Successfully filled out process form');
+        const createdItemRow = page
+            .locator('.form-group:has-text("Created Items") .item-row')
+            .first();
+        const selector = new ItemSelectorHelper(page, createdItemRow.locator('.item-selector'));
 
-            // Take a screenshot before submission
-            await page.screenshot({
-                path: './test-artifacts/screenshots/debug-process-form-filled.png',
-            });
+        const opened = await selector.open();
+        expect(opened).toBe(true);
 
-            // Submit the form
-            const submitButton = page.locator('button.submit-button');
-            if ((await submitButton.count()) > 0) {
-                await submitButton.click();
-                console.log('Clicked submit button');
+        const selected = await selector.selectItem(0);
+        expect(selected).toBe(true);
 
-                // Wait for redirect or success message
-                await page.waitForTimeout(5000);
-                await page.screenshot({
-                    path: './test-artifacts/screenshots/debug-after-submit.png',
-                });
+        const quantitySet = await selector.setQuantity(2);
+        expect(quantitySet).toBe(true);
+        await expect(createdItemRow.locator('input[type="number"]')).toHaveValue('2');
 
-                // Log the current URL
-                console.log('Current URL after submission:', page.url());
+        await page.locator('button.submit-button').click();
 
-                // Check if we're no longer on the form page
-                const formElement = page.locator('form.process-form');
-                if ((await formElement.count()) === 0) {
-                    console.log('Form is no longer visible, process creation likely succeeded');
+        const successMessage = page.locator('.success-message');
+        await expect(successMessage).toBeVisible();
+        await expect(successMessage).toContainText('Process created successfully');
 
-                    // Check if we're on the processes list page
-                    if (page.url().includes('/processes')) {
-                        console.log('Successfully redirected to processes page');
-                    }
-                } else {
-                    console.log('Form is still visible, process creation may have failed');
+        await expect(page.locator('#title')).toHaveValue('');
+        await expect(page.locator('#duration')).toHaveValue('');
 
-                    // Check if there are any error messages
-                    const errorMessages = page.locator('.error-message');
-                    if ((await errorMessages.count()) > 0) {
-                        console.log('Found error messages:', await errorMessages.textContent());
-                    }
-                }
-            } else {
-                console.log('Submit button not found');
-            }
-        } else {
-            console.log('Failed to fill out process form');
-            await page.screenshot({
-                path: './test-artifacts/screenshots/debug-form-fill-failed.png',
-            });
+        // Ensure the created process persisted the selected item
+        const previewLink = page.locator('.success-link');
+        if ((await previewLink.count()) > 0) {
+            await previewLink.click();
+            await expect(page).toHaveURL(/\/processes\//);
+            await expect(page.locator('body')).toContainText(processTitle);
         }
     });
 

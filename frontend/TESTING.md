@@ -291,6 +291,8 @@ It inserts many items, processes, and quests in parallel and reports how long th
 - E2E test files are in the `e2e/` directory
 - Name your tests with `.spec.ts` extension
 - Use Playwright's `test.describe` and `test` syntax
+- Process creation coverage verifies selecting created items, so keep the ItemSelector stable when
+  updating the form UI
 
 Example:
 

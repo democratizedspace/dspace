@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { navigateWithRetry, type Page } from '../frontend/e2e/test-helpers';
+import { type Page } from '@playwright/test';
+
+import { navigateWithRetry } from '../frontend/e2e/test-helpers';
 
 function createMockPage(failures: number): Page {
     let callCount = 0;
