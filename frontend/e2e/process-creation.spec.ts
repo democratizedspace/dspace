@@ -33,9 +33,9 @@ test.describe('Process Creation', () => {
         const added = await findAndClickButton(page, 'Add Created Item');
         expect(added).toBe(true);
 
-        const createdItemRow = page
-            .locator('.form-group:has-text("Created Items") .item-row')
-            .first();
+        const createdItemsSection = page.locator('.form-group:has-text("Created Items")');
+        const createdItemRow = createdItemsSection.locator('.item-row').first();
+        await expect(createdItemRow).toBeVisible();
         const selector = new ItemSelectorHelper(page, createdItemRow);
 
         const opened = await selector.open();

@@ -536,6 +536,17 @@ export class ItemSelectorHelper {
             return true;
         }
 
+        // For created items, the quantity input may be a sibling of the selector.
+        const itemRowQuantity = container
+            .locator('xpath=ancestor-or-self::*[contains(@class,"item-row")][1]')
+            .locator('input[type="number"]');
+
+        if ((await itemRowQuantity.count()) > 0) {
+            await itemRowQuantity.first().fill(quantity.toString());
+            console.log(`Set quantity to ${quantity} via parent row`);
+            return true;
+        }
+
         console.log('Quantity input not found');
         return false;
     }
