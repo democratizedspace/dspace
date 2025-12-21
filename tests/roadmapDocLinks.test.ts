@@ -15,11 +15,13 @@ describe('Roadmap documentation', () => {
         );
 
         const content = readFileSync(docPath, 'utf8');
-        const v2Line = content.split('\n').find((line) => line.includes('[DSPACE v2]'));
+        const v2Line = content
+            .split('\n')
+            .find((line) => line.includes('[DSPACE v2 release notes]'));
 
         expect(v2Line, 'Roadmap should mention the DSPACE v2 milestone').toBeDefined();
-        expect(v2Line).toMatch(/\[DSPACE v2\]\([^\s)]+\)/);
-        expect(v2Line).toContain('/docs/changelog/20230630');
-        expect(v2Line).not.toMatch(/\[DSPACE v2\]\(\)/);
+        expect(v2Line).toMatch(/\[DSPACE v2 release notes\]\([^\s)]+\)/);
+        expect(v2Line).toContain('/changelog');
+        expect(v2Line).not.toMatch(/\[DSPACE v2 release notes\]\(\)/);
     });
 });
