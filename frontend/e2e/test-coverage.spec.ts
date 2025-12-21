@@ -55,16 +55,14 @@ test('verify no e2e test files are orphaned from test:pr workflow', async () => 
     expect(orphanedFiles.length).toBe(0);
 });
 
-test('verify Jest test files are included in package.json test configuration', async () => {
+test('verify Jest test files are included in Jest configuration', async () => {
     // Path to package.json
     const packageJsonPath = path.resolve(__dirname, '../package.json');
 
-    // Check if file exists before reading
-    if (!fs.existsSync(packageJsonPath)) {
-        console.error(`File not found: ${packageJsonPath}`);
-        test.skip(true, `Could not find file: ${packageJsonPath}`);
-        return;
-    }
+    expect(
+        fs.existsSync(packageJsonPath),
+        `Expected frontend package.json at ${packageJsonPath}`
+    ).toBeTruthy();
 
     const packageJsonContent = fs.readFileSync(packageJsonPath, 'utf8');
     const packageJson = JSON.parse(packageJsonContent);
@@ -137,16 +135,20 @@ test('verify Jest test files are included in package.json test configuration', a
         }
     }
 
-    // Also check if Jest config might be in jest.config.js
-    const jestConfigPath = path.resolve(__dirname, '../jest.config.js');
-    if (fs.existsSync(jestConfigPath)) {
-        const jestConfigContent = fs.readFileSync(jestConfigPath, 'utf8');
-        if (
-            jestConfigContent.includes('**/*.test.js') ||
-            jestConfigContent.includes('**/__tests__/**')
-        ) {
-            jestConfigCapturesAllFiles = true;
-        }
+    // Also check if Jest config is defined at the workspace root
+    const rootJestConfigPath = path.resolve(__dirname, '../../jest.config.cjs');
+    expect(
+        fs.existsSync(rootJestConfigPath),
+        `Expected Jest config at ${rootJestConfigPath}`
+    ).toBeTruthy();
+
+    const rootJestConfigContent = fs.readFileSync(rootJestConfigPath, 'utf8');
+    if (
+        rootJestConfigContent.includes('**/?(*.)+(spec|test).[tj]s?(x)') ||
+        rootJestConfigContent.includes('**/*.test.js') ||
+        rootJestConfigContent.includes('**/__tests__/**')
+    ) {
+        jestConfigCapturesAllFiles = true;
     }
 
     console.log('All Jest test files:', allJestTestFiles);

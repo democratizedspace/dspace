@@ -114,7 +114,7 @@ We have automated checks to ensure no test files are orphaned from the test work
 
 1. The `test-coverage.spec.ts` file verifies:
     - All E2E tests are included in our test groups
-    - Important Jest test files are properly configured
+    - Important Jest test files are covered by the shared `jest.config.cjs`
     - The Playwright config exists so web server settings stay covered
     - Your browser environment supports the capabilities needed for testing
 
