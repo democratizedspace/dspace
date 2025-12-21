@@ -67,7 +67,7 @@
             "count": 3
         }
     ],
-    "requiresQuests": ["aquaria/walstad"],
+    "requiresQuests": ["aquaria/water-testing", "aquaria/heater-install", "aquaria/log-water-parameters"],
     "hardening": {
         "passes": 4,
         "score": 92,
