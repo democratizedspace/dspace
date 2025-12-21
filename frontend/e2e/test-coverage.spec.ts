@@ -122,15 +122,26 @@ test('verify Jest test files are included in Jest configuration', async () => {
     }
     expect(imageReferencesExists).toBeTruthy();
 
+    const coveragePatterns = [
+        '**/?(*.)+(spec|test).[tj]s?(x)',
+        '**/*.test.js',
+        '**/__tests__/**',
+        '**/__tests__/**/*.[jt]s?(x)',
+    ];
+
+    const configHasCoveragePattern = (content) =>
+        coveragePatterns.some((pattern) => content.includes(pattern));
+
     // Check that Jest config in package.json includes our test pattern
     let jestConfigCapturesAllFiles = false;
 
     // Check if Jest is configured in package.json
     if (packageJson.jest) {
         if (packageJson.jest.testMatch) {
-            // Check if the test patterns would match our files
             jestConfigCapturesAllFiles = packageJson.jest.testMatch.some((pattern) => {
-                return pattern.includes('**/*.test.js') || pattern.includes('**/__tests__/**');
+                return coveragePatterns.some((coveragePattern) =>
+                    pattern.includes(coveragePattern)
+                );
             });
         }
     }
@@ -143,11 +154,26 @@ test('verify Jest test files are included in Jest configuration', async () => {
     ).toBeTruthy();
 
     const rootJestConfigContent = fs.readFileSync(rootJestConfigPath, 'utf8');
-    if (
-        rootJestConfigContent.includes('**/?(*.)+(spec|test).[tj]s?(x)') ||
-        rootJestConfigContent.includes('**/*.test.js') ||
-        rootJestConfigContent.includes('**/__tests__/**')
-    ) {
+    const rootConfigCapturesTests = configHasCoveragePattern(rootJestConfigContent);
+    expect(rootConfigCapturesTests, 'Expected root Jest config to capture workspace tests').toBeTruthy();
+    if (rootConfigCapturesTests) {
+        jestConfigCapturesAllFiles = true;
+    }
+
+    // Also check if Jest config is defined for the frontend workspace
+    const frontendJestConfigPath = path.resolve(__dirname, '../jest.config.cjs');
+    expect(
+        fs.existsSync(frontendJestConfigPath),
+        `Expected frontend Jest config at ${frontendJestConfigPath}`
+    ).toBeTruthy();
+
+    const frontendJestConfigContent = fs.readFileSync(frontendJestConfigPath, 'utf8');
+    const frontendConfigCapturesTests = configHasCoveragePattern(frontendJestConfigContent);
+    expect(
+        frontendConfigCapturesTests,
+        'Expected frontend Jest config to capture __tests__ files'
+    ).toBeTruthy();
+    if (frontendConfigCapturesTests) {
         jestConfigCapturesAllFiles = true;
     }
 
