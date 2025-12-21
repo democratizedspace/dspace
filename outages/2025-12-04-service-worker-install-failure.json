@@ -1,0 +1,13 @@
+{
+  "id": "service-worker-install-failure",
+  "date": "2025-12-04",
+  "component": "frontend-service-worker",
+  "longForm": "outages/2025-12-04-service-worker-install-failure.md",
+  "rootCause": "cache.addAll tried to precache HTML routes and stalled installs, leaving old HTML cached without version cleanup and breaking offline toast imports",
+  "resolution": "stop precaching HTML, add resilient safePrecache handling, gate HTML caching by Content-Type, version navigation caches, and fix the offline toast import path",
+  "references": [
+    "frontend/public/service-worker.js",
+    "frontend/public/service-worker.template.js",
+    "docs/ops/offline-first.md"
+  ]
+}
