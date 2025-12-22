@@ -1,18 +1,21 @@
 ---
 import Page from '../components/Page.astro';
 import LogoutPanel from '../components/svelte/LogoutPanel.svelte';
+import DataReset from '../components/svelte/DataReset.svelte';
 ---
 
 <Page title="Settings" message="Manage your DSPACE session" columns="1">
     <div class="settings-content">
         <LogoutPanel client:idle />
+        <DataReset client:idle />
     </div>
 </Page>
 
 <style>
     .settings-content {
-        display: flex;
+        display: grid;
         justify-content: center;
+        gap: 1rem;
         padding: 1rem;
     }
 </style>
