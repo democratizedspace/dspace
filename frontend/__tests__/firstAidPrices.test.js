@@ -2,7 +2,7 @@
 import items from '../src/pages/inventory/json/items';
 import { describe, it, expect } from 'vitest';
 
-const priceOf = (name) => items.find((item) => item.name === name);
+const getItemByName = (name) => items.find((item) => item.name === name);
 
 describe('first aid supply pricing', () => {
     it('prices first aid kit consumables without beta placeholders', () => {
@@ -14,7 +14,7 @@ describe('first aid supply pricing', () => {
         ];
 
         for (const name of consumables) {
-            const item = priceOf(name);
+            const item = getItemByName(name);
             expect(item, `missing inventory item: ${name}`).toBeTruthy();
             expect(
                 item.priceExemptionReason,
