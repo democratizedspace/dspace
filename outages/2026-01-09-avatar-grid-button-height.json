@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-09-avatar-grid-button-height",
+  "date": "2026-01-09",
+  "component": "frontend",
+  "rootCause": "AvatarPicker reused a shared button style with fixed width and 100px height, so avatar option buttons squeezed their images and collapsed the grid rows below the image size.",
+  "resolution": "Scoped styling to the Select button and reset avatar option buttons to transparent, auto-sized containers so the grid rows match the image height.",
+  "references": [
+    "frontend/src/components/svelte/AvatarPicker.svelte",
+    "https://staging.democratized.space/profile/avatar"
+  ]
+}
