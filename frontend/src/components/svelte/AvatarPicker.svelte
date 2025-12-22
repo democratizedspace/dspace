@@ -82,6 +82,8 @@
         opacity: 0.8;
         border: 2px solid transparent;
         cursor: pointer;
+        padding: 0;
+        background: transparent;
     }
 
     .item-wrapper:focus-visible {
@@ -97,6 +99,9 @@
 
     .item {
         width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        display: block;
         border-radius: 20px;
     }
 
@@ -121,7 +126,7 @@
         border: 2px solid #68d46d;
     }
 
-    button {
+    .selectbutton {
         width: 40%;
         margin: 10px;
         border-radius: 20px;
@@ -132,12 +137,12 @@
         color: black;
     }
 
-    button:hover {
+    .selectbutton:hover {
         cursor: pointer;
         opacity: 1;
     }
 
-    button:disabled {
+    .selectbutton:disabled {
         cursor: not-allowed;
         opacity: 0.5;
     }

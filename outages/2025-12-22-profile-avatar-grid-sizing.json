@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-22-profile-avatar-grid-sizing",
+  "date": "2025-12-22",
+  "component": "frontend",
+  "rootCause": "AvatarPicker reused a global button style that set a fixed 100px height, squeezing avatar buttons so the grid rows no longer matched the image dimensions.",
+  "resolution": "Scoped the large Select button styling and let avatar buttons size to square thumbnails with object-fit to preserve their proportions.",
+  "references": [
+    "frontend/src/components/svelte/AvatarPicker.svelte",
+    "https://staging.democratized.space/profile/avatar"
+  ]
+}
