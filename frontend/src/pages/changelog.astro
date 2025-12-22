@@ -14,22 +14,27 @@ function prepareHtml(html, slug) {
 ---
 
 <Page columns="1">
-    {changelogsReversed.map((doc) => (
-        <section id={slugToHeadingId(doc.frontmatter.slug)} class="changelog-entry">
-            <div class="entry-header">
-                <h3>{doc.frontmatter.title}</h3>
-                <a
-                    class="permalink"
-                    href={`#${slugToHeadingId(doc.frontmatter.slug)}`}
-                    aria-label={`Link to ${doc.frontmatter.title}`}
-                >
-                    <span class="permalink-label" aria-hidden="true">Permalink</span>
-                    <span class="visually-hidden">Link to {doc.frontmatter.title}</span>
-                </a>
-            </div>
-            <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
-        </section>
-    ))}
+    <div class="changelog-grid">
+        {changelogsReversed.map((doc) => (
+            <section id={slugToHeadingId(doc.frontmatter.slug)} class="changelog-entry">
+                <div class="entry-header">
+                    <h3>{doc.frontmatter.title}</h3>
+                    <a
+                        class="permalink"
+                        href={`#${slugToHeadingId(doc.frontmatter.slug)}`}
+                        aria-label={`Link to ${doc.frontmatter.title}`}
+                    >
+                        <span class="permalink-label" aria-hidden="true">Permalink</span>
+                        <span class="visually-hidden">Link to {doc.frontmatter.title}</span>
+                    </a>
+                </div>
+                <div
+                    class="entry-body"
+                    set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}
+                ></div>
+            </section>
+        ))}
+    </div>
 </Page>
 
 <style>
@@ -38,17 +43,32 @@ function prepareHtml(html, slug) {
         border-radius: 20px;
     }
 
-    span {
-        background-color: white;
-        color: black;
-        padding: 10px;
-        border-radius: 20px;
+    .changelog-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .changelog-entry {
+        background: var(--color-surface);
+        color: var(--color-text);
+        padding: 1.25rem;
+        border-radius: 1.25rem;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
     }
 
     .entry-header {
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+    }
+
+    .entry-header h3 {
+        margin: 0;
+        color: var(--color-heading);
     }
 
     .permalink {
@@ -61,6 +81,13 @@ function prepareHtml(html, slug) {
     .permalink:hover,
     .permalink:focus-visible {
         opacity: 1;
+    }
+
+    .entry-body {
+        background-color: white;
+        color: black;
+        padding: 10px;
+        border-radius: 20px;
     }
 
     .changelog-entry {

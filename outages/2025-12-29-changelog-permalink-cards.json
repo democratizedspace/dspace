@@ -1,0 +1,10 @@
+{
+  "id": "changelog-permalink-cards",
+  "date": "2025-12-29",
+  "component": "frontend-changelog",
+  "rootCause": "Permalink refactor removed the changelog card wrapper, leaving entries directly on the background.",
+  "resolution": "Added a grid and entry body so each changelog entry keeps a surface backdrop while permalinks stay.",
+  "references": [
+    "frontend/src/pages/changelog.astro"
+  ]
+}
