@@ -53,8 +53,11 @@
             return Array.from(domains);
         })();
 
+        const cookies = document.cookie ? document.cookie.split(';') : [];
+        if (cookies.length === 0) return true;
+
         try {
-            document.cookie.split(';').forEach((cookie) => {
+            cookies.forEach((cookie) => {
                 const [rawName] = cookie.split('=');
                 const name = rawName && rawName.trim();
                 if (!name) return;
