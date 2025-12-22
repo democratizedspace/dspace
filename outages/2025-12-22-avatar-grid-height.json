@@ -1,5 +1,5 @@
 {
-  "id": "2025-12-22-avatar-grid-height",
+  "id": "avatar-grid-height",
   "date": "2025-12-22",
   "component": "frontend",
   "rootCause": "A shared AvatarPicker button style forced every button to 100px tall, so larger avatar images were squished into the grid rows on /profile/avatar.",
