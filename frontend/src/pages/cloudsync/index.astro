@@ -6,16 +6,30 @@ import Syncer from './svelte/Syncer.svelte';
 <Page title="Cloud Sync" columns="1">
     <section class="intro">
         <p>
-            Back up or restore your DSPACE saves using a private GitHub Gist. Nothing is uploaded to
-            the DSPACE servers.
+            Back up or restore your DSPACE saves using a private GitHub Gist. Your token and gist ID
+            are stored only in your browser and never sent to DSPACE servers.
         </p>
         <ol>
             <li>
-                Create a
-                <a href="https://github.com/settings/tokens/new?scopes=gist&description=DSPACE%20Cloud%20Sync">
-                    classic token with the <strong>gist</strong> permission
-                </a>
-                and paste it below.
+                Create a GitHub personal access token and paste it below:
+                <ul>
+                    <li>
+                        Classic PAT (gist scope preselected):
+                        <a
+                            href="https://github.com/settings/tokens/new?scopes=gist&description=DSPACE%20Cloud%20Sync"
+                        >
+                            https://github.com/settings/tokens/new?scopes=gist&description=DSPACE%20Cloud%20Sync
+                        </a>
+                    </li>
+                    <li>
+                        Fine-grained PAT:
+                        <a href="https://github.com/settings/personal-access-tokens/new">
+                            https://github.com/settings/personal-access-tokens/new
+                        </a>
+                        — grant <strong>Gists: Read and write</strong> (or equivalent) and treat this token like
+                        a password.
+                    </li>
+                </ul>
             </li>
             <li>
                 Enter a Gist ID from the end of a
@@ -54,6 +68,13 @@ import Syncer from './svelte/Syncer.svelte';
         padding-left: 1.25rem;
         display: grid;
         gap: 0.35rem;
+    }
+
+    ul {
+        margin: 0.35rem 0;
+        padding-left: 1.25rem;
+        display: grid;
+        gap: 0.25rem;
     }
 
     a {

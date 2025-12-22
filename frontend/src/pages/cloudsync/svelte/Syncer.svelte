@@ -83,7 +83,14 @@
         <div class="form-group">
             <label for="token">GitHub Token*</label>
             <div class="token-input">
-                <input id="token" type="password" bind:value={token} />
+                <input
+                    id="token"
+                    type="password"
+                    bind:value={token}
+                    autocapitalize="none"
+                    spellcheck={false}
+                    autocomplete="new-password"
+                />
                 <div class="chip-row">
                     <Chip text="Save" onClick={saveToken} inverted={true} />
                     <Chip
@@ -98,7 +105,15 @@
         <div class="form-group">
             <label for="gist">Gist ID</label>
             <div class="token-input">
-                <input id="gist" type="text" bind:value={gistId} />
+                <input
+                    id="gist"
+                    class="gist-input"
+                    type="text"
+                    bind:value={gistId}
+                    autocapitalize="none"
+                    spellcheck={false}
+                    placeholder="e.g. 0123456789abcdef..."
+                />
                 <Chip
                     text="Clear"
                     onClick={clearGistId}
@@ -137,7 +152,9 @@
     }
     .token-input {
         display: flex;
+        flex-wrap: wrap;
         gap: 10px;
+        align-items: center;
     }
     .form-group label {
         font-weight: bold;
@@ -159,25 +176,36 @@
         border-radius: 6px;
     }
 
+    .gist-input {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+
     .chip-container {
         text-align: center;
         display: inline-flex;
         flex-wrap: wrap;
         justify-content: center;
-        opacity: 0.8;
         background-color: #007006;
         border-radius: 0.4rem;
         color: white;
         margin: 1px;
         padding: 5px;
     }
-    .chip-container:hover {
-        opacity: 1;
-    }
 
     .chip-row {
         display: flex;
         align-items: center;
         gap: 0.5rem;
+    }
+
+    @media (max-width: 640px) {
+        .token-input {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .chip-row {
+            justify-content: flex-start;
+        }
     }
 </style>
