@@ -59,5 +59,5 @@ failsafe.
 - **Import fails:** Ensure the string is complete (no trimmed whitespace) and comes from the matching
   export path (gamesaves vs. custom content).
 - **Old backup, new client:** The schema is backward compatible. If a restore still fails, try a
-  newer backup or visit `/docs/support` for contact options.
+  newer backup or contact support via the in-app **Help → Contact support** option.
 - **Clipboard blocked:** Manually select and copy the text area contents; the export remains valid.

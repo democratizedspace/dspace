@@ -22,6 +22,7 @@ describe('Roadmap documentation', () => {
         expect(v2Line, 'Roadmap should mention the DSPACE v2 milestone').toBeDefined();
         expect(v2Line).toMatch(/\[DSPACE v2 release notes\]\([^\s)]+\)/);
         expect(v2Line).toContain('/changelog');
+        expect(v2Line).toContain('#20230630');
         expect(v2Line).not.toMatch(/\[DSPACE v2 release notes\]\(\)/);
     });
 });

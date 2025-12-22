@@ -9,7 +9,7 @@ const DOCS_SECTIONS_FILES = [
     path.join(process.cwd(), 'frontend', 'src', 'pages', 'docs', 'sections.json'),
     path.join(process.cwd(), 'frontend', 'src', 'pages', 'docs', 'json', 'sections.json')
 ];
-const DOC_LINK_PATTERN = /\[[^\]]+\]\((\/docs[^)#\s]*)/g;
+const DOC_LINK_PATTERN = /\[[^\]]+\]\((\/(?:docs|changelog)[^)#\s]*)/g;
 
 type Frontmatter = {
     slug?: unknown;
@@ -22,7 +22,7 @@ type FrontmatterResult = {
 
 function readFrontmatter(filePath: string): FrontmatterResult {
     const content = readFileSync(filePath, 'utf8');
-    const match = content.match(/^---\n([\s\S]*?)\n---/);
+    const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
 
     if (!match) {
         return { frontmatter: null, hasFrontmatter: false };
@@ -71,7 +71,7 @@ describe('Docs slugs and references', () => {
             .filter((slug): slug is string => typeof slug === 'string')
             .map((slug) => slug.toLowerCase());
 
-        const knownDocRoutes = new Set<string>(['/docs', '/docs/outages']);
+        const knownDocRoutes = new Set<string>(['/docs', '/docs/outages', '/changelog']);
 
         topLevelDocSlugs.forEach((slug) => knownDocRoutes.add(`/docs/${slug}`));
         outageDocSlugs.forEach((slug) => knownDocRoutes.add(`/docs/outages/${slug}`));
@@ -86,7 +86,8 @@ describe('Docs slugs and references', () => {
             sections?.forEach((section) => {
                 section.links?.forEach((link) => {
                     if (!link.href || link.external) return;
-                    if (!link.href.startsWith('/docs')) return;
+                    if (!link.href.startsWith('/docs') && !link.href.startsWith('/changelog'))
+                        return;
                     referencedDocRoutes.add(normalizeDocPath(link.href));
                 });
             });
@@ -96,8 +97,9 @@ describe('Docs slugs and references', () => {
             const content = readFileSync(filePath, 'utf8');
             const matches: string[] = [];
             let match;
+            const linkPattern = new RegExp(DOC_LINK_PATTERN);
 
-            while ((match = DOC_LINK_PATTERN.exec(content)) !== null) {
+            while ((match = linkPattern.exec(content)) !== null) {
                 matches.push(match[1]);
             }
 
