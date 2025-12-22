@@ -8,40 +8,122 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Polaris anchors the night sky. Let's identify it to orient ourselves.",
+            "text": "Polaris anchors the night sky. Let's identify it so you can orient yourself without a GPS.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "What should I bring?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "locate",
+                    "text": "Walk me through the hop."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Find a clear northern view, give your eyes 10 minutes to adapt, and keep a red flashlight dim. A planisphere, your telescope on a tripod, and a mission logbook make this smoother.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "locate",
-                    "text": "Show me the steps."
+                    "text": "I'm set up with the chart and scope.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "locate",
+                    "text": "I just have binoculars and a chart tonight."
                 }
             ]
         },
         {
             "id": "locate",
-            "text": "Find the Big Dipper and draw a line through its pointer stars to reach Polaris. Confirm with your telescope.",
+            "text": "Find the Big Dipper, draw a line through its pointer stars to reach Polaris, and note how it sits above the horizon at your latitude.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Scanning the stars."
+                    "text": "Star-hopping with the planisphere."
+                },
+                {
+                    "type": "goto",
+                    "goto": "align",
+                    "text": "Used a compass app to set north and spotted Polaris",
+                    "requiresItems": [
+                        {
+                            "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather",
+                    "text": "Haze and streetlights are in the way."
+                }
+            ]
+        },
+        {
+            "id": "weather",
+            "text": "Give your eyes another 10 minutes, cup your hands to block stray light, and recheck. If clouds move in, note the time and try again during the next clear hour.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "locate",
+                    "text": "Conditions improved, trying again."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
+                    "text": "Logged the obstruction and will retry later."
+                }
+            ]
+        },
+        {
+            "id": "align",
+            "text": "Lock your tripod so Polaris sits just above the northern horizon line on your planisphere. Focus gently and avoid sweeping past bright stars to keep your night vision.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Polaris centered and noted in my logbook",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
                         }
-                    ],
-                    "text": "Polaris spotted."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Found it with binoculars and a steady fence post."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent! Polaris now anchors your night sky orientation.",
+            "text": "Excellent! Polaris now anchors your night sky orientation. Keep noting its position through the seasons to see how early evenings shift.",
             "options": [
                 {
                     "type": "finish",
@@ -50,6 +132,15 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+            "count": 1
+        },
+        {
+            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["astronomy/constellations"]
 }

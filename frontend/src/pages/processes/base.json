@@ -4170,5 +4170,54 @@
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
+    },
+    {
+        "id": "assemble-planter-box",
+        "title": "Cut, glue, and clamp a cedar planter box",
+        "requireItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 4
+            },
+            {
+                "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 0.5
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c8e7bb1c-3c5e-4210-b0d3-0b1c88e0ef4f",
+                "count": 1
+            }
+        ],
+        "duration": "8h"
+    },
+    {
+        "id": "track-satellite-pass",
+        "title": "Track a satellite with a telescope during a visible pass",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "15m"
     }
 ]

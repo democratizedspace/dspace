@@ -1,25 +1,46 @@
 {
     "id": "woodworking/planter-box",
     "title": "Build a Planter Box",
-    "description": "Cut and nail a cedar planter box that introduces square joints and waterproof glue-ups.",
+    "description": "Cut, clamp and glue a cedar planter box with square joints and a waterproof liner.",
     "image": "/assets/quests/woodworking_planter_box_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready for another project? Let's make a wooden planter box for your hydroponic experiments.",
+            "text": "Ready for another project? We'll build a cedar planter box sized for countertop greens and square joints that stay aligned even after a rainy season.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "layout",
+                    "text": "What's the layout?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "I can gather supplies now."
+                }
+            ]
+        },
+        {
+            "id": "layout",
+            "text": "We'll make a 400 mm × 200 mm × 180 mm planter. Mark two 400 mm boards for the long sides, two 200 mm boards for the ends, and rip a scrap into 180 mm slats for the bottom. Sand the cut edges lightly so the glue closes gaps.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "gather",
-                    "text": "Sure thing!"
+                    "text": "List the materials again."
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Cuts are marked and square."
                 }
             ]
         },
         {
             "id": "gather",
-            "text": "You'll need a few pine boards, some wood glue, and a 16 oz claw hammer. I'll supply what you lack.",
+            "text": "You'll need four pine boards, waterproof wood glue, a 16 oz claw hammer, and a sanding block. Keep a damp rag nearby to wipe up squeeze-out and set up on a flat surface for a square glue-up.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -33,16 +54,20 @@
                             "count": 1
                         },
                         {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        },
+                        {
                             "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
                             "count": 1
                         }
                     ],
-                    "text": "Gather materials"
+                    "text": "Hand me the kit."
                 },
                 {
                     "type": "goto",
-                    "goto": "build",
-                    "text": "Materials ready",
+                    "goto": "assemble",
+                    "text": "Materials staged and ready",
                     "requiresItems": [
                         {
                             "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
@@ -53,7 +78,43 @@
                             "count": 1
                         },
                         {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        },
+                        {
                             "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "layout",
+                    "text": "I need to re-check measurements."
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Dry fit the pieces, then brush glue onto the end grain, clamp, and pre-drill before tapping in brad nails. Add 6 mm drainage holes along the bottom and wipe off squeeze-out. Let the glue cure before adding soil or a liner.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-planter-box",
+                    "text": "Clamp, glue, and square the box."
+                },
+                {
+                    "type": "goto",
+                    "goto": "drying",
+                    "text": "How long should I let it cure?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Planter assembled, sanded, and lined",
+                    "requiresItems": [
+                        {
+                            "id": "c8e7bb1c-3c5e-4210-b0d3-0b1c88e0ef4f",
                             "count": 1
                         }
                     ]
@@ -61,19 +122,30 @@
             ]
         },
         {
-            "id": "build",
-            "text": "Cut the boards to length, use the hammer and glue to assemble the box, and let everything dry overnight.",
+            "id": "drying",
+            "text": "Keep the planter clamped or strapped until the glue turns translucent. Most PVA glues want 30–60 minutes of clamp time and at least 8 hours before holding wet soil or a hydroponic tote.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Box assembled"
+                    "text": "I'll wait overnight so it stays square.",
+                    "requiresItems": [
+                        {
+                            "id": "c8e7bb1c-3c5e-4210-b0d3-0b1c88e0ef4f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Back to the glue-up."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! This planter will hold soil or even a small hydroponic tub.",
+            "text": "Great job! This planter can hold potting mix for herbs or cradle a small hydroponic tub. Seal the inside with a liner if you want to keep the wood drier over time.",
             "options": [
                 {
                     "type": "finish",
@@ -82,6 +154,15 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+            "count": 1
+        },
+        {
+            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["welcome/howtodoquests"]
 }

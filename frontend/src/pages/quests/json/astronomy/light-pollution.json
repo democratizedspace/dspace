@@ -8,18 +8,39 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Find a dark spot away from traffic. Let eyes adjust. Buddy or phone ready?",
+            "text": "Find a dark spot away from traffic. We'll estimate skyglow by counting Orion's stars and noting a limiting magnitude.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "settle",
+                    "text": "I'll let my eyes adapt first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "I'm already at a dark spot."
+                }
+            ]
+        },
+        {
+            "id": "settle",
+            "text": "Dim your red flashlight, silence notifications, and give your eyes 10 minutes. Face away from streetlights and keep the planisphere ready.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Let's do it."
+                    "text": "Night vision is set; chart in hand."
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "A car pulled in—I'll relocate."
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Use a planisphere to find Orion. Count and log stars. Keep red light low.",
+            "text": "Use a planisphere to find Orion. Count and log stars from Rigel to Bellatrix, noting any you lose to skyglow. Keep the red light low and avoid shining it at others.",
             "options": [
                 {
                     "type": "process",
@@ -28,28 +49,35 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Count noted in my mission logbook.",
+                    "goto": "compare",
+                    "text": "Count noted in my mission logbook with a limiting magnitude estimate.",
                     "requiresItems": [
-                        {
-                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
-                            "count": 1
-                        },
-                        {
-                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
-                            "count": 1
-                        },
-                        {
-                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
-                            "count": 1
-                        }
+                        { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 },
+                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
                     ]
                 }
             ]
         },
         {
+            "id": "compare",
+            "text": "Compare your count to a Bortle scale chart and record trends over a few nights. Note cloud cover and moon phase so the data stays comparable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logged conditions and count for tonight."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Clouds rolled in—saving this draft and retrying tomorrow."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice work! Logbook counts track skyglow trends. Pack up and leave no trace.",
+            "text": "Nice work! Logbook counts track skyglow trends. Pack up, leave no trace, and revisit after new moon to see improvement.",
             "options": [
                 {
                     "type": "finish",
@@ -58,7 +86,10 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        { "id": "280ed361-ac70-4ab9-bcd9-aee481790faf", "count": 1 },
+        { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 }
+    ],
     "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 3,

@@ -1051,6 +1051,13 @@
         "price": "8 dUSD"
     },
     {
+        "id": "c8e7bb1c-3c5e-4210-b0d3-0b1c88e0ef4f",
+        "name": "cedar planter box",
+        "description": "A 400 mm × 200 mm × 180 mm cedar planter with glued butt joints and drainage holes.",
+        "image": "/assets/quests/woodworking_planter_box_build.jpg",
+        "price": "22 dUSD"
+    },
+    {
         "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
         "name": "Birdhouse",
         "description": "A small wooden shelter perfect for backyard birds.",
