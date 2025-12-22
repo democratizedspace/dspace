@@ -7,16 +7,18 @@
     let isClearing = false;
 
     const clearLocalStorage = () => {
-        if (!('localStorage' in globalThis)) return;
+        if (!('localStorage' in globalThis)) return true;
         try {
             localStorage.clear();
+            return true;
         } catch (error) {
             console.error('Failed to clear localStorage', error);
+            return false;
         }
     };
 
     const clearCookies = () => {
-        if (typeof document === 'undefined') return;
+        if (typeof document === 'undefined') return true;
 
         const candidatePaths = (() => {
             if (typeof location === 'undefined' || !location.pathname) {
@@ -51,33 +53,39 @@
             return Array.from(domains);
         })();
 
-        document.cookie.split(';').forEach((cookie) => {
-            const [rawName] = cookie.split('=');
-            const name = rawName && rawName.trim();
-            if (!name) return;
+        try {
+            document.cookie.split(';').forEach((cookie) => {
+                const [rawName] = cookie.split('=');
+                const name = rawName && rawName.trim();
+                if (!name) return;
 
-            candidatePaths.forEach((path) => {
-                candidateDomains.forEach((domain) => {
-                    let cookieString = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}`;
-                    if (domain) {
-                        cookieString += `; domain=${domain}`;
-                    }
-                    document.cookie = cookieString;
+                candidatePaths.forEach((path) => {
+                    candidateDomains.forEach((domain) => {
+                        let cookieString = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}`;
+                        if (domain) {
+                            cookieString += `; domain=${domain}`;
+                        }
+                        document.cookie = cookieString;
+                    });
                 });
             });
-        });
+            return true;
+        } catch (error) {
+            console.error('Failed to clear cookies', error);
+            return false;
+        }
     };
 
     const deleteDatabase = (name) =>
         new Promise((resolve) => {
             try {
                 const request = indexedDB.deleteDatabase(name);
-                request.onsuccess = () => resolve();
-                request.onerror = () => resolve();
-                request.onblocked = () => resolve();
+                request.onsuccess = () => resolve(true);
+                request.onerror = () => resolve(false);
+                request.onblocked = () => resolve(false);
             } catch (error) {
                 console.warn(`Failed to request IndexedDB deletion for ${name}`, error);
-                resolve();
+                resolve(false);
             }
         });
 
@@ -103,12 +111,14 @@
     };
 
     const clearIndexedDB = async () => {
-        if (!('indexedDB' in globalThis)) return;
+        if (!('indexedDB' in globalThis)) return true;
 
         const databaseNames = await listDatabaseNames();
         const uniqueNames = Array.from(new Set(databaseNames));
 
-        await Promise.all(uniqueNames.map((name) => deleteDatabase(name)));
+        const results = await Promise.all(uniqueNames.map((name) => deleteDatabase(name)));
+
+        return results.every(Boolean);
     };
 
     const wipeAppData = async () => {
@@ -125,21 +135,22 @@
         isClearing = true;
         statusMessage = '';
 
-        let hadError = false;
-
         try {
-            clearLocalStorage();
-            clearCookies();
-            await clearIndexedDB();
-        } catch (error) {
-            console.error('Failed to wipe all app data', error);
-            hadError = true;
-        } finally {
+            const storageCleared = clearLocalStorage();
+            const cookiesCleared = clearCookies();
+            const indexedDbCleared = await clearIndexedDB();
+            const hadError = !storageCleared || !cookiesCleared || !indexedDbCleared;
+
             statusMessage = hadError
                 ? 'Some local app data may not have been removed. Please try again or clear your browser data manually.'
                 : 'All local app data was removed.';
-            isClearing = false;
+        } catch (error) {
+            console.error('Failed to wipe all app data', error);
+            statusMessage =
+                'Some local app data may not have been removed. Please try again or clear your browser data manually.';
         }
+
+        isClearing = false;
     };
 </script>
 

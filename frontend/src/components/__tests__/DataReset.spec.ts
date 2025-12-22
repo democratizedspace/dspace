@@ -141,4 +141,39 @@ describe('DataReset', () => {
 
         await findByText('All local app data was removed.');
     });
+
+    it('surfaces a partial failure message when any step fails', async () => {
+        const deleteSpy = vi
+            .spyOn(indexedDBWithDatabases, 'deleteDatabase')
+            .mockImplementation(() => {
+                const request = {
+                    onsuccess: null,
+                    onerror: null,
+                    onblocked: null,
+                } as unknown as IDBOpenDBRequest;
+
+                queueMicrotask(() => request.onerror?.(new Event('error')));
+
+                return request;
+            });
+
+        const databases = vi.fn().mockResolvedValue([{ name: 'db-one' }]);
+        Object.defineProperty(indexedDBWithDatabases, 'databases', {
+            value: databases,
+            writable: true,
+            configurable: true,
+        });
+
+        vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+        const { getByRole, findByText } = render(DataReset);
+
+        await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+
+        await findByText(
+            'Some local app data may not have been removed. Please try again or clear your browser data manually.'
+        );
+
+        expect(deleteSpy).toHaveBeenCalled();
+    });
 });
