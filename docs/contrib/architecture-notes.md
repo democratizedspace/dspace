@@ -12,15 +12,12 @@ active.
 1. **Shared code packages**: Introduce `packages/*` for reusable utilities (types, content schemas,
    telemetry hooks). Existing shared modules under `scripts/`, `tests/`, or `backend/` will migrate
    gradually.
-2. **Infrastructure overlays**: Layer environment-specific configuration inside `infra/` (e.g.,
-   `infra/k8s/environments/production`) and document entry points under `docs/ops/deploy/`. Secrets
-   stay out of the repo, but variable names and expected files belong in docs.
-3. **Offline-first rigor**: Iterate on the offline UX now that a service worker precaches core
+2. **Offline-first rigor**: Iterate on the offline UX now that a service worker precaches core
    routes (`/`, `/play`, `/quests/*`) and versioned cache keys come from the shared
    `@dspace/cache-version` package. Offline toasts now announce when connectivity returns before
    auto-hiding; keep fixtures for legacy save data under `tests/fixtures/save-data/` so migrations
    stay reversible while upcoming work focuses on staged asset cleanup.
-4. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
+3. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
    JSON schemas, snapshot quest/NPC bios, and gate telemetry via explicit opt-in toggles.
 
 ### Current Iteration Focus (2025-09)
@@ -67,3 +64,5 @@ active.
   the runbook that shipped with the live worker.
 - Removed the abandoned `apps/*` relocation experiment to keep the workspace focused on
   `frontend/`, `backend/`, and shared packages.
+- Landed environment-specific kustomize overlays under `infra/k8s/environments/` with a production
+  entrypoint and deployment guide in `docs/ops/deploy/k8s-environments.md`.
