@@ -8,7 +8,8 @@
         inverted = false,
         red = false,
         hazard = false,
-        pressed = undefined;
+        pressed = undefined,
+        dataTestId = undefined;
 
     const dispatch = createEventDispatcher();
 
@@ -22,7 +23,7 @@
 
 <nav>
     {#if href}
-        <a {href}>{text}</a>
+        <a {href} data-testid={dataTestId}>{text}</a>
     {:else}
         <button
             type="button"
@@ -34,6 +35,7 @@
             {disabled}
             aria-disabled={disabled}
             aria-pressed={pressed}
+            data-testid={dataTestId}
         >
             <div class="slot">
                 <slot />

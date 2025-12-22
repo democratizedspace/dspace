@@ -1,4 +1,5 @@
 <script>
+    import Chip from '../../../components/svelte/Chip.svelte';
     import {
         loadCloudGistId,
         uploadGameStateToGist,
@@ -79,28 +80,60 @@
 
 <div class="chip-container" bind:this={root} data-testid="cloud-sync-form">
     <div class="vertical">
+        <div class="instructions">
+            <p>
+                Cloud Sync keeps your saves in a private GitHub Gist. Bring a personal access token
+                with the <code>gist</code> scope and a Gist to store your data.
+            </p>
+            <ol>
+                <li>
+                    Create a token with
+                    <a href="https://github.com/settings/tokens">classic</a>
+                    or
+                    <a href="https://github.com/settings/personal-access-tokens/new">fine-grained</a>
+                    permissions. Only the <code>gist</code> scope is required, and it stays in
+                    your browser.
+                </li>
+                <li>
+                    Make a new secret Gist at
+                    <a href="https://gist.github.com/">gist.github.com</a>
+                    (a blank file is fine). Copy the ID from the URL after saving — it is the
+                    string after <code>gist.github.com/&lt;your-user&gt;/</code>.
+                </li>
+            </ol>
+        </div>
         <div class="form-group">
             <label for="token">GitHub Token*</label>
             <div class="token-input">
                 <input id="token" type="password" bind:value={token} />
-                <button type="button" on:click={saveToken}>Save</button>
-                <button type="button" on:click={clearTokenLocal} data-testid="clear-sync-token"
-                    >Clear</button
-                >
+                <div class="chip-row">
+                    <Chip text="Save" onClick={saveToken} />
+                    <Chip
+                        text="Clear"
+                        onClick={clearTokenLocal}
+                        inverted={true}
+                        dataTestId="clear-sync-token"
+                    />
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label for="gist">Gist ID</label>
             <div class="token-input">
                 <input id="gist" type="text" bind:value={gistId} />
-                <button type="button" on:click={clearGistId} data-testid="clear-gist-id"
-                    >Clear</button
-                >
+                <div class="chip-row">
+                    <Chip
+                        text="Clear"
+                        onClick={clearGistId}
+                        inverted={true}
+                        dataTestId="clear-gist-id"
+                    />
+                </div>
             </div>
         </div>
         <div class="buttons">
-            <button type="button" class="chip" on:click={handleUpload}> Upload </button>
-            <button type="button" class="chip" on:click={handleDownload}> Download </button>
+            <Chip text="Upload" onClick={handleUpload} />
+            <Chip text="Download" onClick={handleDownload} inverted={true} />
         </div>
         {#if message}
             <p
@@ -129,30 +162,40 @@
     .token-input {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
     }
     .form-group label {
         font-weight: bold;
     }
+    .instructions {
+        text-align: left;
+        background: linear-gradient(135deg, #0f3a12, #0a250c);
+        border: 1px solid #68d46d;
+        border-radius: 8px;
+        padding: 12px;
+        display: grid;
+        gap: 8px;
+    }
+    .instructions p {
+        margin: 0;
+    }
+    .instructions ol {
+        margin: 0;
+        padding-left: 20px;
+        display: grid;
+        gap: 6px;
+    }
+    .chip-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
     .buttons {
         display: flex;
         gap: 10px;
-    }
-    .chip {
-        opacity: 0.8;
-        background-color: #68d46d;
-        border-radius: 0.4rem;
-        color: black;
-        border: none;
-        padding: 6px 12px;
-        font-size: 1em;
-        font-weight: 600;
-    }
-    .chip:hover,
-    .chip:focus-visible {
-        opacity: 1;
-        cursor: pointer;
-        outline: 2px solid #fff;
-        outline-offset: 2px;
+        flex-wrap: wrap;
     }
     .message {
         color: #90ee90;
