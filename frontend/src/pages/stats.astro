@@ -84,7 +84,7 @@ const uniqueNpcCount = new Set(quests.map((quest) => quest.npc).filter(Boolean))
 const totalQuests = quests.length;
 
 const inventoryCategoryStats = inventoryItems.reduce((acc, item) => {
-    const category = item.category ?? 'Misc';
+    const category = item.category ?? 'Uncategorized';
     acc.set(category, (acc.get(category) ?? 0) + 1);
     return acc;
 }, new Map());

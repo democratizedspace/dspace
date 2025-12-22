@@ -9,6 +9,19 @@ Your inventory contains all the items you've collected through quests, processes
 
 Items in DSPACE fall into several categories:
 
+- Game economy and tokens: dUSD, dCarbon, dWatt, dPrint, dBI, and other reward tokens
+- Energy and mobility: solar hardware, battery packs, EV chargers, and vehicles
+- Electronics & computing: boards, sensors, cables, laptops, and smart devices
+- 3D printing: filament, printed parts, jigs, and printer accessories
+- Rocketry: airframes, payloads, launch gear, firmware, and consumables
+- Workshop and fabrication: benches, hand tools, adhesives, and finished builds
+- Health & safety: first aid supplies and PPE
+- Laboratory and testing: glassware, reagents, measurement strips, and optics
+- Astronomy and media: telescopes, star charts, lenses, tripods, and cameras
+- Office & media: paper goods, logbooks, ink, posters, and document entries
+- Aquarium and hydroponics: aquatic life, plant starters, and grow outputs
+- Awards and core tools: achievement items and foundational equipment
+
 1. Resources
     - Energy units ([dWatt](/docs/dwatt), [dSolar](/docs/solar))
     - Currency ([dUSD](/docs/dusd))
