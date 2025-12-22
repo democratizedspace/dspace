@@ -1,7 +1,7 @@
 <script>
     import Chip from './Chip.svelte';
 
-    const FALLBACK_DATABASES = ['dspaceGameState', 'dspaceDB'];
+    const FALLBACK_DATABASES = ['dspaceGameState', 'dspaceDB', 'dspaceGameSaves', 'CustomContent'];
 
     let statusMessage = '';
     let isClearing = false;
@@ -16,12 +16,55 @@
     };
 
     const clearCookies = () => {
-        if (typeof document === 'undefined' || !document.cookie) return;
+        if (typeof document === 'undefined') return;
+
+        const candidatePaths = (() => {
+            if (typeof location === 'undefined' || !location.pathname) {
+                return ['/'];
+            }
+
+            const segments = location.pathname.split('/').filter(Boolean);
+            const paths = new Set(['/']);
+            let currentPath = '';
+
+            for (const segment of segments) {
+                currentPath += `/${segment}`;
+                paths.add(currentPath);
+            }
+
+            return Array.from(paths);
+        })();
+
+        const candidateDomains = (() => {
+            if (typeof location === 'undefined' || !location.hostname) {
+                return [undefined];
+            }
+
+            const parts = location.hostname.split('.').filter(Boolean);
+            const domains = new Set([undefined]);
+
+            for (let i = 0; i < parts.length - 1; i++) {
+                const domain = `.${parts.slice(i).join('.')}`;
+                domains.add(domain);
+            }
+
+            return Array.from(domains);
+        })();
 
         document.cookie.split(';').forEach((cookie) => {
-            const [name] = cookie.split('=');
+            const [rawName] = cookie.split('=');
+            const name = rawName && rawName.trim();
             if (!name) return;
-            document.cookie = `${name.trim()}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+
+            candidatePaths.forEach((path) => {
+                candidateDomains.forEach((domain) => {
+                    let cookieString = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}`;
+                    if (domain) {
+                        cookieString += `; domain=${domain}`;
+                    }
+                    document.cookie = cookieString;
+                });
+            });
         });
     };
 
@@ -82,12 +125,21 @@
         isClearing = true;
         statusMessage = '';
 
-        clearLocalStorage();
-        clearCookies();
-        await clearIndexedDB();
+        let hadError = false;
 
-        statusMessage = 'All local app data was removed.';
-        isClearing = false;
+        try {
+            clearLocalStorage();
+            clearCookies();
+            await clearIndexedDB();
+        } catch (error) {
+            console.error('Failed to wipe all app data', error);
+            hadError = true;
+        } finally {
+            statusMessage = hadError
+                ? 'Some local app data may not have been removed. Please try again or clear your browser data manually.'
+                : 'All local app data was removed.';
+            isClearing = false;
+        }
     };
 </script>
 

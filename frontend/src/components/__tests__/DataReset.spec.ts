@@ -76,7 +76,69 @@ describe('DataReset', () => {
 
         await waitFor(() => {
             const deletedNames = deleteSpy.mock.calls.map(([name]) => name);
-            expect(deletedNames).toEqual(expect.arrayContaining(['dspaceGameState', 'dspaceDB']));
+            expect(deletedNames).toEqual(
+                expect.arrayContaining([
+                    'dspaceGameState',
+                    'dspaceDB',
+                    'dspaceGameSaves',
+                    'CustomContent',
+                ])
+            );
         });
+    });
+
+    it('stops when the user cancels the confirmation', async () => {
+        localStorage.setItem('token', 'abc');
+        document.cookie = 'session=123; path=/';
+
+        const deleteSpy = vi.spyOn(indexedDBWithDatabases, 'deleteDatabase');
+        vi.spyOn(window, 'confirm').mockReturnValue(false);
+
+        const { getByRole, queryByText } = render(DataReset);
+
+        await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+
+        expect(deleteSpy).not.toHaveBeenCalled();
+        expect(localStorage.getItem('token')).toBe('abc');
+        expect(document.cookie).toMatch(/session=123/);
+        expect(queryByText(/app data was removed/i)).toBeNull();
+    });
+
+    it('does not start a second wipe while one is in progress', async () => {
+        const pendingRequests: IDBOpenDBRequest[] = [];
+
+        const deleteSpy = vi
+            .spyOn(indexedDBWithDatabases, 'deleteDatabase')
+            .mockImplementation(() => {
+                const request = {
+                    onsuccess: null,
+                    onerror: null,
+                    onblocked: null,
+                } as unknown as IDBOpenDBRequest;
+                pendingRequests.push(request);
+                return request;
+            });
+
+        const databases = vi.fn().mockResolvedValue([{ name: 'db-one' }]);
+        Object.defineProperty(indexedDBWithDatabases, 'databases', {
+            value: databases,
+            writable: true,
+            configurable: true,
+        });
+
+        vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+        const { getByRole, findByText } = render(DataReset);
+        const button = getByRole('button', { name: /wipe all app data/i });
+
+        await fireEvent.click(button);
+        await fireEvent.click(button);
+
+        expect(deleteSpy).toHaveBeenCalledTimes(1);
+        expect(databases).toHaveBeenCalledTimes(1);
+
+        pendingRequests.forEach((request) => request.onsuccess?.(new Event('success')));
+
+        await findByText('All local app data was removed.');
     });
 });

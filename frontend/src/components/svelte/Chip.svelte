@@ -91,13 +91,13 @@
         color: rgb(255, 94, 0);
     }
 
-    .hazard {
+    .hazard:not(.disabled) {
         background-color: #9b1c31;
         color: white;
         opacity: 1;
     }
 
-    .hazard:hover {
+    .hazard:not(.disabled):hover {
         opacity: 0.9;
     }
 
