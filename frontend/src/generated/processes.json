@@ -4301,24 +4301,12 @@
         }
     },
     {
-        "id": "build-birdhouse",
-        "title": "Assemble a pine birdhouse with hand tools",
-        "image": "/assets/door.jpg",
+        "id": "cut-birdhouse-panels",
+        "title": "Cut pine panels for a small birdhouse",
+        "image": "/assets/quests/woodworking_birdhouse_panels.jpg",
         "requireItems": [
             {
                 "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
-                "count": 1
-            },
-            {
-                "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
-                "count": 1
-            },
-            {
-                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                "count": 1
-            },
-            {
-                "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
                 "count": 1
             },
             {
@@ -4330,7 +4318,7 @@
                 "count": 1
             },
             {
-                "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32",
+                "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
                 "count": 1
             }
         ],
@@ -4338,9 +4326,61 @@
             {
                 "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
                 "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "6c7c23c4-8b37-4e36-a7e1-328f3c98797e",
+                "count": 1
+            }
+        ],
+        "duration": "25m"
+    },
+    {
+        "id": "glue-birdhouse-shell",
+        "title": "Glue birdhouse walls and roof panels",
+        "image": "/assets/quests/woodworking_birdhouse_shell.jpg",
+        "requireItems": [
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c7c23c4-8b37-4e36-a7e1-328f3c98797e",
+                "count": 1
             },
             {
                 "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "367197b9-2885-4a7f-a2e3-cc341d603967",
+                "count": 1
+            }
+        ],
+        "duration": "45m"
+    },
+    {
+        "id": "sand-and-finish-birdhouse",
+        "title": "Sand edges and finish the pine birdhouse",
+        "image": "/assets/quests/woodworking_finish_sanding.jpg",
+        "requireItems": [
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "367197b9-2885-4a7f-a2e3-cc341d603967",
                 "count": 1
             },
             {
@@ -4354,19 +4394,7 @@
                 "count": 1
             }
         ],
-        "duration": "1h",
-        "hardening": {
-            "passes": 1,
-            "score": 60,
-            "emoji": "🌀",
-            "history": [
-                {
-                    "task": "codex-hardening-2025-08-12",
-                    "date": "2025-08-12",
-                    "score": 60
-                }
-            ]
-        }
+        "duration": "40m"
     },
     {
         "id": "assemble-planter-box",

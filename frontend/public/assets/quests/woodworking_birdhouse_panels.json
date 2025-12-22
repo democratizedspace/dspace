@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_birdhouse_panels.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Birdhouse panel set",
+    "item_id": "6c7c23c4-8b37-4e36-a7e1-328f3c98797e",
+    "entity_type": "item",
+    "prompt": "A workbench scene shows neatly cut pine panels for a small birdhouse: a square floor, four matching walls, and two roof triangles stacked in order with light pencil marks visible. A tape measure, handsaw, and safety goggles sit nearby, and wood shavings gather around the edges of the bench.\n\nThe setting is a tidy solarpunk garage with warm natural light and organized tool racks in soft focus. The photorealistic 512×512 image keeps the panel pieces and measuring tools in crisp focus, with no logos or readable text anywhere.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

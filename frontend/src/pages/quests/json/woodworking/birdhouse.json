@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "You'll need a pine board, wood glue, your handsaw, and a tape measure. I'll supply missing gear.",
+            "text": "You'll need a pine board, wood glue, your handsaw, tape measure, sandpaper, and safety goggles. I'll supply missing gear.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -39,13 +39,21 @@
                         {
                             "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
                             "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ],
                     "text": "Gather materials"
                 },
                 {
                     "type": "goto",
-                    "goto": "build",
+                    "goto": "cut",
                     "requiresItems": [
                         {
                             "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
@@ -62,6 +70,14 @@
                         {
                             "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
                             "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ],
                     "text": "Materials ready"
@@ -69,13 +85,87 @@
             ]
         },
         {
-            "id": "build",
-            "text": "Cut the board into panels, glue the walls together, then attach the roof. After the glue dries, smooth all edges with sandpaper so birds won't get hurt.",
+            "id": "cut",
+            "text": "Measure a 15 cm square floor, four 20×15 cm walls, and two roof triangles. Cut carefully so edges stay square and ready to glue.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "cut-birdhouse-panels",
+                    "text": "Measure and cut the panels"
+                },
+                {
+                    "type": "goto",
+                    "goto": "glue",
+                    "requiresItems": [
+                        {
+                            "id": "6c7c23c4-8b37-4e36-a7e1-328f3c98797e",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Panels are cut and stacked"
+                },
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Need to grab supplies"
+                }
+            ]
+        },
+        {
+            "id": "glue",
+            "text": "Dry-fit the panels, then spread a thin glue bead on the seams. Clamp lightly or tape while it cures, keeping the roof centered over the walls.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "glue-birdhouse-shell",
+                    "text": "Glue walls and roof together"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sand",
+                    "requiresItems": [
+                        {
+                            "id": "367197b9-2885-4a7f-a2e3-cc341d603967",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Shell is glued and cured"
+                },
+                {
+                    "type": "goto",
+                    "goto": "cut",
+                    "text": "Re-cut a cleaner panel"
+                }
+            ]
+        },
+        {
+            "id": "sand",
+            "text": "Sand all edges flush, soften corners, and clear the entrance hole. Keep strokes with the grain so splinters stay away from visiting birds.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sand-and-finish-birdhouse",
+                    "text": "Sand and finish the birdhouse"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "The birdhouse is complete"
+                    "requiresItems": [
+                        {
+                            "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
+                            "count": 1
+                        }
+                    ],
+                    "text": "The birdhouse is smooth and ready to hang"
+                },
+                {
+                    "type": "goto",
+                    "goto": "glue",
+                    "text": "Need another glue-up"
+                },
+                {
+                    "type": "finish",
+                    "text": "All good, I'll hang it up!"
                 }
             ]
         },
@@ -83,16 +173,6 @@
             "id": "finish",
             "text": "Excellent craftsmanship! Mount your birdhouse outdoors and watch for new feathered tenants.",
             "options": [
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Take the birdhouse"
-                },
                 {
                     "type": "finish",
                     "text": "Thanks for the lesson!"
