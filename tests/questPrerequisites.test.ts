@@ -5,6 +5,11 @@ import path from 'node:path';
 const questsDir = path.join(__dirname, '..', 'frontend', 'src', 'pages', 'quests', 'json');
 const allowedEmptyRequires = new Set(['welcome/howtodoquests']);
 
+const resolveQuestId = (questId: string | undefined, fullPath: string) =>
+    (questId ?? path.relative(questsDir, fullPath))
+        .replace(/\\/g, '/')
+        .replace(/\.json$/, '');
+
 describe('quest prerequisite requirements', () => {
     it('only allows welcome/howtodoquests to omit requiresQuests', () => {
         const questsMissingRequires: string[] = [];
@@ -25,16 +30,10 @@ describe('quest prerequisite requirements', () => {
 
                 const raw = readFileSync(fullPath, 'utf8');
                 const quest = JSON.parse(raw);
-                const requires = quest.requiresQuests ?? [];
+                const requires = Array.isArray(quest.requiresQuests) ? quest.requiresQuests : [];
 
                 if (requires.length === 0) {
-                    const questId =
-                        quest.id ||
-                        path
-                            .relative(questsDir, fullPath)
-                            .replace(/\\/g, '/')
-                            .replace(/\.json$/, '');
-                    questsMissingRequires.push(questId);
+                    questsMissingRequires.push(resolveQuestId(quest.id, fullPath));
                 }
             }
         };
