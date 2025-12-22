@@ -44,7 +44,7 @@ Focusing on maintenance and prep work for the larger features slated for 2026 an
 
 ## June 2023
 
-- [x] [DSPACE v2](/docs/changelog/20230630)
+- [x] [DSPACE v2 release notes](/changelog#20230630)
 
 ## January 2023
 

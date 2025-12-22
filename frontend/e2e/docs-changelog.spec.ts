@@ -118,7 +118,10 @@ test.describe('docs changelog page', () => {
             });
 
             await expect(latestLink).toBeVisible();
-            await expect(latestLink).toHaveAttribute('href', '/changelog');
+            await expect(latestLink).toHaveAttribute(
+                'href',
+                `/changelog#${String(latestChangelog.slug).toLowerCase()}`
+            );
 
             const summaryText = latestChangelog.summary
                 ? latestChangelog.summary.replace(/\s+/g, ' ').trim()

@@ -1,0 +1,62 @@
+---
+import Page from '../../../components/Page.astro';
+import Card from '../../../components/Card.astro';
+import Chip from '../../../components/Chip.astro';
+
+const outages = (await Astro.glob('../md/outages/*.md'))
+    .map((doc) => ({
+        slug: doc?.frontmatter?.slug ?? '',
+        title: doc?.frontmatter?.title ?? doc?.frontmatter?.slug ?? 'Outage',
+        summary: doc?.frontmatter?.summary ?? '',
+    }))
+    .filter((entry) => entry.slug)
+    .sort((a, b) => String(b.slug).localeCompare(String(a.slug)));
+---
+
+<Page title="Outages" columns="1">
+    <div class="breadcrumbs">
+        <Chip text="Docs" href="/docs" />
+        <span>→</span>
+        <Chip text="Outages" href="/docs/outages" />
+    </div>
+
+    {outages.length ? (
+        <div class="outage-grid">
+            {outages.map((entry) => (
+                <Card
+                    title={entry.title}
+                    body={entry.summary}
+                    href={`/docs/outages/${entry.slug}`}
+                    image="/assets/quill.jpg"
+                    imageAlt="Notebook with pen"
+                />
+            ))}
+        </div>
+    ) : (
+        <p class="content">No outages have been published yet.</p>
+    )}
+</Page>
+
+<style>
+    .breadcrumbs {
+        display: flex;
+        gap: 0.35rem;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .outage-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1rem;
+    }
+
+    .content {
+        background-color: white;
+        color: black;
+        padding: 10px;
+        border-radius: 20px;
+        overflow: auto;
+        display: block;
+    }
+</style>
