@@ -45,9 +45,6 @@
             ]
         }
     ],
-    "requiresQuests": [
-        "robotics/pan-tilt",
-        "robotics/ultrasonic-rangefinder"
-    ],
+    "requiresQuests": ["robotics/pan-tilt", "robotics/ultrasonic-rangefinder"],
     "rewards": []
 }

@@ -17,6 +17,11 @@ const decodeSafely = (str) => {
 
 const cleanPath = (img) => img.trim().replace(/[?#].*$/, '');
 const resolveLocalPath = (base) => decodeSafely(base.replace(/^\//, ''));
+const hasJsonSpec = (basePath, publicDir) => {
+  const parsed = path.parse(basePath);
+  const jsonPath = path.join(parsed.dir, `${parsed.name}.json`);
+  return fs.existsSync(path.join(publicDir, jsonPath));
+};
 
 /**
  * Returns image paths that are missing from the public directory.
@@ -34,7 +39,10 @@ function listMissingImages(imagePaths, publicDir = DEFAULT_PUBLIC_DIR) {
     }
 
     const resolved = resolveLocalPath(base);
-    return !fs.existsSync(path.join(publicDir, resolved));
+    const exists = fs.existsSync(path.join(publicDir, resolved));
+    if (exists) return false;
+
+    return !hasJsonSpec(resolved, publicDir);
   });
 }
 
