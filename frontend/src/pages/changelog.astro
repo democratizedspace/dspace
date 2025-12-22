@@ -11,38 +11,69 @@ const slugToHeadingId = (slug) => (slug ? String(slug).toLowerCase() : 'changelo
 function prepareHtml(html, slug) {
     return appendChangelogNotes(html, slug);
 }
+
+const CHANGELOG_SCROLL_BUFFER_PX = 16;
 ---
 
 <Page columns="1">
-    {changelogsReversed.map((doc) => (
-        <section id={slugToHeadingId(doc.frontmatter.slug)} class="changelog-entry">
-            <div class="entry-header">
-                <h3>{doc.frontmatter.title}</h3>
-                <a
-                    class="permalink"
-                    href={`#${slugToHeadingId(doc.frontmatter.slug)}`}
-                    aria-label={`Link to ${doc.frontmatter.title}`}
-                >
-                    <span class="permalink-label" aria-hidden="true">Permalink</span>
-                    <span class="visually-hidden">Link to {doc.frontmatter.title}</span>
-                </a>
-            </div>
-            <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
-        </section>
-    ))}
+    <div class="changelog-list">
+        {changelogsReversed.map((doc) => (
+            <section id={slugToHeadingId(doc.frontmatter.slug)} class="changelog-entry">
+                <div class="changelog-card">
+                    <div class="entry-header">
+                        <h3>{doc.frontmatter.title}</h3>
+                        <a
+                            class="permalink"
+                            href={`#${slugToHeadingId(doc.frontmatter.slug)}`}
+                            aria-label={`Link to ${doc.frontmatter.title}`}
+                        >
+                            <span class="permalink-label" aria-hidden="true">Permalink</span>
+                            <span class="visually-hidden">Link to {doc.frontmatter.title}</span>
+                        </a>
+                    </div>
+                    <div
+                        class="entry-body"
+                        set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}
+                    ></div>
+                </div>
+            </section>
+        ))}
+    </div>
 </Page>
 
+<script is:inline>
+    (() => {
+        const scrollBuffer = ${CHANGELOG_SCROLL_BUFFER_PX};
+        const updateOffset = () => {
+            const header = document.querySelector('header.header');
+            const headerHeight = header?.getBoundingClientRect().height ?? 0;
+            const offset = Math.max(Math.ceil(headerHeight) + scrollBuffer, 0);
+
+            document.documentElement.style.setProperty(
+                '--changelog-scroll-offset',
+                `${offset}px`
+            );
+        };
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            updateOffset();
+        } else {
+            document.addEventListener('DOMContentLoaded', updateOffset, { once: true });
+        }
+
+        window.addEventListener('resize', updateOffset);
+    })();
+</script>
+
 <style>
-    img {
-        width: 100%;
-        border-radius: 20px;
+    :root {
+        --changelog-scroll-offset: clamp(9rem, 14vw, 13rem);
     }
 
-    span {
-        background-color: white;
-        color: black;
-        padding: 10px;
-        border-radius: 20px;
+    .changelog-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
 
     .entry-header {
@@ -64,7 +95,42 @@ function prepareHtml(html, slug) {
     }
 
     .changelog-entry {
-        scroll-margin-top: 1.5rem;
+        scroll-margin-top: var(--changelog-scroll-offset);
+    }
+
+    .changelog-card {
+        background-color: var(--color-surface);
+        color: var(--color-text);
+        border-radius: 20px;
+        padding: 1.25rem;
+        border: 1px solid var(--color-border);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .entry-body :global(p) {
+        margin: 0.75rem 0;
+        line-height: 1.6;
+    }
+
+    .entry-body :global(ul),
+    .entry-body :global(ol) {
+        margin: 0.75rem 0 0.75rem 1.5rem;
+    }
+
+    .entry-body :global(h3),
+    .entry-body :global(h4) {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        color: var(--color-heading);
+    }
+
+    .entry-body :global(a) {
+        color: inherit;
+    }
+
+    .entry-body :global(img) {
+        width: 100%;
+        border-radius: 20px;
     }
 
     .changelog-note {
