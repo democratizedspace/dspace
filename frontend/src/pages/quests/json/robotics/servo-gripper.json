@@ -1,7 +1,7 @@
 {
     "id": "robotics/servo-gripper",
     "title": "Build a Servo Gripper",
-    "description": "Use a small servo to make a claw that can pick up objects.",
+    "description": "Cut and hinge two jaws onto a micro servo so your robot can pinch and release small objects safely.",
     "image": "/assets/quests/servo_gripper_claw.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",

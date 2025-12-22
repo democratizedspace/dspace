@@ -1,7 +1,7 @@
 {
     "id": "woodworking/planter-box",
     "title": "Build a Planter Box",
-    "description": "Cedar guides you through crafting a simple planter for herbs.",
+    "description": "Cut and nail a cedar planter box that introduces square joints and waterproof glue-ups.",
     "image": "/assets/quests/woodworking_planter_box_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
@@ -83,5 +83,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench"]
+    "requiresQuests": ["welcome/howtodoquests"]
 }

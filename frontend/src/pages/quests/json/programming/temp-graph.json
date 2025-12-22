@@ -1,14 +1,14 @@
 {
     "id": "programming/temp-graph",
-    "title": "Graph Temperature Data",
-    "description": "Plot the values from your logger to visualize trends over time.",
+    "title": "Serve a live temperature graph",
+    "description": "Host a simple web page that fetches your JSON endpoint and renders an auto-refreshing temperature chart.",
     "image": "/assets/quests/temperature_log_line_chart.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You've been logging temperatures. Let's turn that data into a simple graph.",
+            "text": "You've been logging temperatures and plotting them locally. Now let's publish a live graph that anyone on the network can open.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "code",
-            "text": "Use a plotting library like matplotlib or chart.js to create a line graph of the readings.",
+            "text": "Add a lightweight web page that calls your temperature JSON endpoint and renders an updating line chart with Chart.js or another browser-friendly library.",
             "options": [
                 {
                     "type": "goto",
@@ -46,5 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-logger"]
+    "requiresQuests": ["programming/graph-temp-data", "programming/temp-json-api"]
 }

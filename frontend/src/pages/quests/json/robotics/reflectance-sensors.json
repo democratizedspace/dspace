@@ -1,0 +1,55 @@
+{
+    "id": "robotics/reflectance-sensors",
+    "title": "Calibrate reflectance sensors",
+    "description": "Dial in IR reflectance sensors so your robot can tell a dark line from the floor before you attempt closed-loop control.",
+    "image": "/assets/quests/robotics_reflectance_sensors.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Line followers need clean sensor signals. Let's mount a pair of reflectance sensors and record how they react to the line versus the floor.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Let's wire them up."
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Attach two or three IR reflectance sensors to the chassis, angled slightly toward the floor. Wire VCC, GND, and the signal pins to your microcontroller so you can sample each one.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Sensors mounted and reading."
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Write a short script that streams the raw sensor values over serial. Sweep the bot across dark tape and the surrounding surface to capture minimum and maximum readings, then pick a threshold (or small deadband) that clearly separates the two.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Threshold dialed in!"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. With calibrated thresholds you can trust the sensors to keep your bot on track.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Ready to follow lines"
+                }
+            ]
+        }
+    ],
+    "rewards": [],
+    "requiresQuests": ["electronics/light-sensor", "programming/hello-sensor"]
+}

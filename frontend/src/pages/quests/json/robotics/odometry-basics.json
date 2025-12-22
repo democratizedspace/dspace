@@ -1,7 +1,7 @@
 {
     "id": "robotics/odometry-basics",
     "title": "Track distance with wheel encoders",
-    "description": "Use encoder pulses to compute how far your robot travels.",
+    "description": "Convert encoder ticks into centimeters traveled so navigation code can estimate position between sensor readings.",
     "image": "/assets/quests/robot_odometry_wheel_encoders.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",

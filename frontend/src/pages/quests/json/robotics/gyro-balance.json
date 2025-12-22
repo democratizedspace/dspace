@@ -1,7 +1,7 @@
 {
     "id": "robotics/gyro-balance",
     "title": "Balance with a gyroscope",
-    "description": "Use a gyroscope and servos to keep a platform upright.",
+    "description": "Pair a gyro with tuned servo control so a two-wheeled platform can catch itself before tipping over.",
     "image": "/assets/quests/robotics_gyro_balance_platform.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -43,6 +43,6 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/servo-control"],
+    "requiresQuests": ["robotics/odometry-basics"],
     "rewards": []
 }

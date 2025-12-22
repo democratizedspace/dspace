@@ -1,7 +1,7 @@
 {
     "id": "robotics/servo-arm",
     "title": "Assemble a Servo Arm",
-    "description": "Build a simple arm that can lift light objects.",
+    "description": "Assemble a two-joint servo arm with a gripper so you can practice smooth pick-and-place moves.",
     "image": "/assets/quests/simple_servo_robot_arm.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",

@@ -1,7 +1,7 @@
 {
     "id": "robotics/obstacle-avoidance",
     "title": "Add Obstacle Avoidance",
-    "description": "Equip your robot with a sensor so it can steer around objects.",
+    "description": "Give your line follower the awareness to pause, scan, and steer around boxes without leaving the track.",
     "image": "/assets/quests/robot_obstacle_avoidance.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -46,5 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/line-follower"]
+    "requiresQuests": ["robotics/line-follower", "robotics/ultrasonic-rangefinder"]
 }

@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 246
-New quests in this release: 224
+Current quest count: 247
+New quests in this release: 225
 
 ### 3dprinting
 
@@ -245,6 +245,7 @@ New quests in this release: 224
 -   robotics/obstacle-avoidance
 -   robotics/odometry-basics
 -   robotics/pan-tilt
+-   robotics/reflectance-sensors
 -   robotics/servo-arm
 -   robotics/servo-control
 -   robotics/servo-gripper

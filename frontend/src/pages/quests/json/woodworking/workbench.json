@@ -1,7 +1,7 @@
 {
     "id": "woodworking/workbench",
     "title": "Build a simple workbench",
-    "description": "Construct a sturdy bench to support future projects.",
+    "description": "Upgrade from a makeshift surface to a level, clamped-together workbench that can handle real projects.",
     "image": "/assets/quests/woodworking_workbench_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
@@ -85,5 +85,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"]
+    "requiresQuests": ["woodworking/step-stool"]
 }

@@ -1,7 +1,7 @@
 {
     "id": "robotics/maze-navigation",
     "title": "Navigate a Simple Maze",
-    "description": "Program your robot to drive through a basic maze layout.",
+    "description": "Layer line following, distance sensing, and encoder feedback to clear a taped maze without getting lost.",
     "image": "/assets/quests/robot_maze_navigation.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -46,5 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/line-follower"]
+    "requiresQuests": ["robotics/obstacle-avoidance", "robotics/odometry-basics"]
 }

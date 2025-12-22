@@ -1,7 +1,7 @@
 {
     "id": "robotics/ultrasonic-rangefinder",
     "title": "Measure distance with an ultrasonic sensor",
-    "description": "Use an HC-SR04 to measure distances with Arduino.",
+    "description": "Wire and test an HC-SR04 so your Arduino can report clear distance readings for navigation code.",
     "image": "/assets/quests/ultrasonic_distance_sensor_setup.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",

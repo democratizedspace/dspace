@@ -1,7 +1,7 @@
 {
     "id": "robotics/pan-tilt",
     "title": "Make a Pan-Tilt Mount",
-    "description": "Use two servos to scan your surroundings.",
+    "description": "Build a two-axis mount so cameras or sensors can pan and tilt to survey the space around your robot.",
     "image": "/assets/quests/pan_tilt_sensor_mount.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
