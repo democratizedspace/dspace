@@ -83,5 +83,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/birdhouse"]
+    "requiresQuests": ["welcome/howtodoquests"]
 }

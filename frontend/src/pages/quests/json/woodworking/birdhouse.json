@@ -101,7 +101,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": ["woodworking/planter-box"],
     "hardening": {
         "passes": 1,
         "score": 80,

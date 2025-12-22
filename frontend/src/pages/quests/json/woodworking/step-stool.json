@@ -109,7 +109,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench", "woodworking/planter-box"],
+    "requiresQuests": ["woodworking/birdhouse", "woodworking/planter-box"],
     "hardening": {
         "passes": 1,
         "score": 65,

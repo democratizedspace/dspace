@@ -48,5 +48,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/reservoir-refresh"]
+    "requiresQuests": ["welcome/howtodoquests"]
 }

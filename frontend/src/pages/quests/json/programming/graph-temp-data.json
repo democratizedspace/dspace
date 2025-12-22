@@ -1,14 +1,14 @@
 {
     "id": "programming/graph-temp-data",
-    "title": "Graph Your Temperature Logs",
-    "description": "Use a short script to plot the readings you've been recording.",
+    "title": "Clean and graph your temperature logs",
+    "description": "Parse your log file, smooth noisy readings, and annotate the highs and lows so the chart tells a clearer story than raw numbers alone.",
     "image": "/assets/quests/programming_graph_temperature_logs_script.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nice work gathering data! Let's visualize it with a simple chart.",
+            "text": "Nice work gathering data! Let's improve that basic chart by cleaning and annotating the readings.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "script",
-            "text": "Install matplotlib and plot your log file to see trends over time.",
+            "text": "Parse the log into timestamps and readings, smooth noisy spikes with a rolling average, and label daily highs and lows before plotting the result.",
             "options": [
                 {
                     "type": "goto",
@@ -46,5 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-logger"]
+    "requiresQuests": ["programming/graph-temp"]
 }

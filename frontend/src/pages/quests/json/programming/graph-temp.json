@@ -1,7 +1,7 @@
 {
     "id": "programming/graph-temp",
     "title": "Graph Temperature Logs",
-    "description": "Visualize the data you recorded with temp-logger.",
+    "description": "Plot the raw log from temp-logger to get a quick visual check that your sensor data looks reasonable.",
     "image": "/assets/quests/programming_graph_temperature_data.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
