@@ -28,7 +28,7 @@
             return 'Custom';
         }
 
-        return 'Misc';
+        return 'Uncategorized';
     };
 
     $: allItems = [...items, ...customItems];

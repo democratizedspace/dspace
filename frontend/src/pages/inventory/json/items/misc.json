@@ -9,7 +9,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -17,19 +17,20 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "3D Printing"
     },
     {
         "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
         "name": "sheet of printer paper",
-        "description": "Single 216 × 279 mm (8.5 × 11 in) sheet of 80 g/m² letter printer paper.",
+        "description": "Single 216 \u00d7 279 mm (8.5 \u00d7 11 in) sheet of 80 g/m\u00b2 letter printer paper.",
         "image": "/assets/letter_printer_paper_sheet.jpg",
         "price": "0.02 dUSD",
         "unit": "sheet",
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -42,7 +43,8 @@
                     "score": 80
                 }
             ]
-        }
+        },
+        "category": "Media & Documentation"
     },
     {
         "id": "8f54a592-09de-4340-829b-7288897eb4c7",
@@ -53,7 +55,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-09",
@@ -61,7 +63,8 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "Transportation"
     },
     {
         "id": "02b32152-a7b2-458e-9643-7b754c722165",
@@ -72,7 +75,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-03",
@@ -85,18 +88,19 @@
                     "score": 80
                 }
             ]
-        }
+        },
+        "category": "Energy & Power"
     },
     {
         "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
         "name": "200 Wh battery pack",
-        "description": "12 V 16 Ah lithium iron phosphate battery pack (≈200 Wh) with built-in BMS for renewable energy storage.",
+        "description": "12 V 16 Ah lithium iron phosphate battery pack (\u2248200 Wh) with built-in BMS for renewable energy storage.",
         "price": "120 dUSD",
         "image": "/assets/200wh_lifepo4_battery_pack.jpg",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-04",
@@ -104,7 +108,8 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "Energy & Power"
     },
     {
         "id": "80d30825-a42b-4add-b715-322e1713952c",
@@ -116,7 +121,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -124,7 +129,8 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Energy & Power"
     },
     {
         "id": "82577af7-6724-4cb2-8922-f7140e550145",
@@ -135,7 +141,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -148,7 +154,8 @@
                     "score": 80
                 }
             ]
-        }
+        },
+        "category": "Electronics & Robotics"
     },
     {
         "id": "743681a7-d2e7-465c-af07-43665079bf4d",
@@ -159,7 +166,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -167,7 +174,8 @@
                     "score": 70
                 }
             ]
-        }
+        },
+        "category": "Energy & Power"
     },
     {
         "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
@@ -179,7 +187,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -187,7 +195,8 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Model Rocketry"
     },
     {
         "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
@@ -199,7 +208,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -207,19 +216,20 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "3D Printing"
     },
     {
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
         "name": "3D printing kit",
-        "description": "Assembled FDM printer, 0.4 mm nozzle, 180×180×180 mm build with 500 g PLA.",
+        "description": "Assembled FDM printer, 0.4 mm nozzle, 180\u00d7180\u00d7180 mm build with 500 g PLA.",
         "image": "/assets/3d_printing_kit_entry_level_printer_and_pla.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -227,7 +237,8 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "3D Printing"
     },
     {
         "id": "0564d441-7367-412e-b709-dad770814a39",
@@ -238,7 +249,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -246,53 +257,59 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
         "name": "dCarbon",
         "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
         "image": "/assets/dcarbon_token.jpg",
-        "priceExemptionReason": "CURRENCY"
+        "priceExemptionReason": "CURRENCY",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "1498a7a1-2739-4943-a32f-4c277244a825",
         "name": "Hypercar (80% charge)",
         "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 80% charged.",
         "image": "/assets/hypercar_80_percent_charge.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Transportation"
     },
     {
         "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
         "name": "dWatt",
         "description": "A token that represents 1 watt of electricity that can be consumed by machines. To acquire 1 dWatt, you need to either prepay the dCarbon cost, or generate and store it in a battery without accruing dCarbon.",
         "image": "/assets/dWatts.jpg",
-        "priceExemptionReason": "CURRENCY"
+        "priceExemptionReason": "CURRENCY",
+        "category": "Energy & Power"
     },
     {
         "id": "c2e3bbb6-0ded-4923-98e1-37e5ac3c7d77",
         "name": "Hypervan",
         "description": "A futuristic electric van with Fully Supervised Driving (FSD) capabilities.",
         "image": "/assets/hypervan.jpg",
-        "price": "75000 dUSD"
+        "price": "75000 dUSD",
+        "category": "Transportation"
     },
     {
         "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
         "name": "dUSD",
         "description": "An in-game tokenized version of the USD currency. Not backed by or in any way associated with actual USD.",
         "image": "/assets/dUSD.jpg",
-        "priceExemptionReason": "CURRENCY"
+        "priceExemptionReason": "CURRENCY",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "799ace33-1336-46c0-904a-9f16778230f1",
         "name": "sink",
-        "description": "Steel sink with faucet; ~50×40×20 cm basin (~5 kg). Provides tap water.",
+        "description": "Steel sink with faucet; ~50\u00d740\u00d720 cm basin (~5 kg). Provides tap water.",
         "image": "/assets/tap.jpg",
         "price": "120 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -300,7 +317,8 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "a5395e29-1862-4eb7-8517-5d161635e032",
@@ -312,7 +330,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -320,7 +338,8 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "Smart Home & IoT"
     },
     {
         "id": "7318a5ba-fac3-476e-a532-c813ed9b18e5",
@@ -332,7 +351,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -340,21 +359,24 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Smart Home & IoT"
     },
     {
         "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
         "name": "3D printed nosecone",
         "description": "A nosecone for a modular model rocket.",
         "image": "/assets/3dprinted_rocket_nosecone.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Model Rocketry"
     },
     {
         "id": "1eac8955-bb70-474b-b6b0-4002ff3aa09a",
         "name": "3D printed body tube",
         "description": "A body tube for a modular model rocket.",
         "image": "/assets/3d_printed_rocket_body_tube.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Model Rocketry"
     },
     {
         "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
@@ -365,7 +387,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -373,25 +395,27 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "Model Rocketry"
     },
     {
         "id": "05c339ee-f50b-419a-804a-341f850b85e9",
         "name": "3D printed nosecone coupler",
         "description": "A nosecone coupler for a modular model rocket.",
         "image": "/assets/3dprinted_rocket_nosecone_coupler.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Model Rocketry"
     },
     {
         "id": "4d817f1c-d78d-4fac-a514-402bce330693",
         "name": "hobbyist solid rocket motor",
-        "description": "Single-use 18 mm (0.7 in) × 70 mm (2.8 in) black powder motor weighing 18 g. Delivers ~31 N peak thrust for 0.8 s with ~2.5 N·s total impulse.",
+        "description": "Single-use 18 mm (0.7 in) \u00d7 70 mm (2.8 in) black powder motor weighing 18 g. Delivers ~31 N peak thrust for 0.8 s with ~2.5 N\u00b7s total impulse.",
         "image": "/assets/rocket_motor.jpg",
         "price": "5 dUSD",
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-04",
@@ -404,18 +428,19 @@
                     "score": 80
                 }
             ]
-        }
+        },
+        "category": "Model Rocketry"
     },
     {
         "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
         "name": "superglue",
-        "description": "Small 3 g tube of cyanoacrylate adhesive for quick repairs. Bonds plastic and wood in seconds—avoid skin contact.",
+        "description": "Small 3 g tube of cyanoacrylate adhesive for quick repairs. Bonds plastic and wood in seconds\u2014avoid skin contact.",
         "image": "/assets/superglue.jpg",
         "price": "3 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -423,7 +448,8 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "0484a3ab-92e7-42fa-a5e6-25a4afe841d6",
@@ -435,7 +461,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -443,7 +469,8 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Model Rocketry"
     },
     {
         "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
@@ -454,7 +481,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -462,18 +489,19 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "Model Rocketry"
     },
     {
         "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
         "name": "rocket launch checklist",
-        "description": "A5 laminated card (148×210 mm, ~25 g) listing pad setup, arming and 10-sec countdown steps.",
+        "description": "A5 laminated card (148\u00d7210 mm, ~25 g) listing pad setup, arming and 10-sec countdown steps.",
         "image": "/assets/rocket_launch_checklist_card.jpg",
         "price": "2 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -481,7 +509,8 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "Model Rocketry"
     },
     {
         "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
@@ -492,7 +521,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -500,26 +529,28 @@
                     "score": 70
                 }
             ]
-        }
+        },
+        "category": "Model Rocketry"
     },
     {
         "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
         "name": "damaged model rocket",
         "description": "Badly damaged and broken in several places.",
         "image": "/assets/rocket_damaged.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Model Rocketry"
     },
     {
         "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
         "name": "pH strip",
-        "description": "Disposable 0–14 pH test strip with 1-unit resolution; 0.3 g each.",
+        "description": "Disposable 0\u201314 pH test strip with 1-unit resolution; 0.3 g each.",
         "image": "/assets/single_ph_test_strip.jpg",
         "price": "0.15 dUSD",
         "unit": "each",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -527,21 +558,24 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Lab Supplies"
     },
     {
         "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
         "name": "dSolar",
         "description": "a token that represents 1 Watt of energy generated using a solar panel.",
         "image": "/assets/dSolar.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
     },
     {
         "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67",
         "name": "dWind",
         "description": "a token that represents 1 Watt of energy generated using a wind turbine.",
         "image": "/assets/dwind_wind_energy_token.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
     },
     {
         "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
@@ -553,7 +587,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-16",
@@ -561,7 +595,8 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Model Rocketry"
     },
     {
         "id": "84324403-0bd8-411a-b575-a3c966c8a73e",
@@ -573,7 +608,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-18",
@@ -581,7 +616,8 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Model Rocketry"
     },
     {
         "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
@@ -593,7 +629,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-24",
@@ -601,28 +637,32 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Model Rocketry"
     },
     {
         "id": "5873d7b0-dd0f-436f-b942-286aedd253d0",
         "name": "guided hop telemetry",
         "description": "CSV export of apogee, attitude hold, and drift estimates from the guided model rocket hop simulator.",
         "image": "/assets/guided_hop_telemetry_csv_panel.jpg",
-        "priceExemptionReason": "SOULBOUND"
+        "priceExemptionReason": "SOULBOUND",
+        "category": "Model Rocketry"
     },
     {
         "id": "125eaa46-48f1-4cef-adaa-c200892af437",
         "name": "servo-ready fincan",
         "description": "3D printed PLA fincan with cutouts for 9 g servos and wiring channels sized for 35 mm rockets.",
         "image": "/assets/servo_ready_rocket_fincan_35mm.jpg",
-        "price": "6 dUSD"
+        "price": "6 dUSD",
+        "category": "Model Rocketry"
     },
     {
         "id": "84a6f736-bff8-4aa5-a2ce-c913e795c9cf",
         "name": "avionics sled",
         "description": "PETG sled that locks into the fincan and holds an Arduino, IMU breakout, and wiring harness.",
         "image": "/assets/3d_printed_avionics_sled_petg.jpg",
-        "price": "4 dUSD"
+        "price": "4 dUSD",
+        "category": "Model Rocketry"
     },
     {
         "id": "dc5897f0-acec-4c3b-ad4d-535054e768f6",
@@ -630,84 +670,96 @@
         "description": "Matched 9 g servos with metal gears and servo horns for thrust-vectoring experiments.",
         "image": "/assets/micro_servo_pair_with_horns.jpg",
         "price": "18 dUSD",
-        "unit": "pair"
+        "unit": "pair",
+        "category": "Model Rocketry"
     },
     {
         "id": "bdc905f5-c36f-4608-9c7f-da7b0988572f",
         "name": "keychain camera kit",
-        "description": "20 g keychain HD camera, lithium cell, and mounting frame sized for 30–35 mm nosecones.",
+        "description": "20 g keychain HD camera, lithium cell, and mounting frame sized for 30\u201335 mm nosecones.",
         "image": "/assets/keychain_camera_kit_30mm_nosecone.jpg",
-        "price": "22 dUSD"
+        "price": "22 dUSD",
+        "category": "Model Rocketry"
     },
     {
         "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
         "name": "guided flight stack",
         "description": "Assembled fincan, avionics sled, servos, and Arduino wired for closed-loop fin steering.",
         "image": "/assets/guided_flight_avionics_stack.jpg",
-        "priceExemptionReason": "SOULBOUND"
+        "priceExemptionReason": "SOULBOUND",
+        "category": "Model Rocketry"
     },
     {
         "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
         "name": "stability firmware",
         "description": "Verified Arduino sketch implementing fin hold routines and range safety tilts for guided hops.",
         "image": "/assets/stability_firmware_code_interface.jpg",
-        "priceExemptionReason": "SOULBOUND"
+        "priceExemptionReason": "SOULBOUND",
+        "category": "Model Rocketry"
     },
     {
         "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
         "name": "nosecone camera module",
         "description": "Keychain camera epoxied into a printed sled with removable hatch for battery swaps.",
         "image": "/assets/nosecone_camera_sled_module.jpg",
-        "price": "24 dUSD"
+        "price": "24 dUSD",
+        "category": "Model Rocketry"
     },
     {
         "id": "daf6573f-804c-46e6-aa70-d9a41c8c81da",
         "name": "guided launch pad checklist",
         "description": "Annotated field checklist covering fin sweep, servo wiggle test, arming plug, and range calls.",
         "image": "/assets/guided_launch_pad_field_checklist.jpg",
-        "priceExemptionReason": "SOULBOUND"
+        "priceExemptionReason": "SOULBOUND",
+        "category": "Model Rocketry"
     },
     {
         "id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe",
         "name": "guided countdown card",
         "description": "T-30 to liftoff script with servo arming callouts and pad clear confirmations.",
         "image": "/assets/guided_countdown_card.jpg",
-        "priceExemptionReason": "SOULBOUND"
+        "priceExemptionReason": "SOULBOUND",
+        "category": "Model Rocketry"
     },
     {
         "id": "60a1e598-084e-4325-9c2c-fb5d95d19f41",
         "name": "guided flight log capsule",
         "description": "Recovered SD card capsule containing post-flight gyro traces and onboard video index.",
         "image": "/assets/guided_flight_log_capsule.jpg",
-        "priceExemptionReason": "SOULBOUND"
+        "priceExemptionReason": "SOULBOUND",
+        "category": "Model Rocketry"
     },
     {
         "id": "d660dc50-7afb-4a2f-9508-a42490aae5e4",
         "name": "Rocket Descent (animated)",
         "description": "A rocket descending to the ground with a parachute.",
         "image": "/assets/rocket_min.gif",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Model Rocketry"
     },
     {
         "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
         "name": "dLaunch",
         "description": "1 dLaunch = 1 launch of a rocket. Any launch counts, even a model rocket launch.",
         "image": "/assets/dLaunch.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "b0ac46e6-6c60-48f0-b753-d9b6ad9935a6",
         "name": "dOffset",
         "description": "1 dOffset is granted for reducing dCarbon with dUSD. ",
         "image": "/assets/dOffset.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
         "name": "dBI",
         "description": "Awarded for every dUSD earned through Basic Income. See the Wallet page for more details.",
         "image": "/assets/dBI.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "5258f098-6cae-4ee5-8888-435b08f1675a",
@@ -719,7 +771,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-24",
@@ -727,42 +779,48 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Energy & Power"
     },
     {
         "id": "5e283c0b-fd3c-4884-ae32-9a237f02a40e",
         "name": "Hypercar (20% charge)",
         "description": "A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 20% charged.",
         "image": "/assets/hypercar_20_percent_charge.jpg",
-        "price": "30000 dUSD"
+        "price": "30000 dUSD",
+        "category": "Transportation"
     },
     {
         "id": "3486ebb3-d262-4e90-8873-b19ed69afee8",
         "name": "Hypercar (animated)",
         "description": "A hypercar driving down the road.",
         "image": "/assets/hypercar.gif",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Transportation"
     },
     {
         "id": "7246c1c8-f22e-4d31-acd3-967f91b8626a",
         "name": "1 kWh battery pack",
         "description": "A 1kWh Wh battery pack that can be used to store energy from a solar panel or a wind turbine.",
         "price": "1000 dUSD",
-        "image": "/assets/battery_1kwh.jpg"
+        "image": "/assets/battery_1kwh.jpg",
+        "category": "Energy & Power"
     },
     {
         "id": "11a2a77a-0c43-47a9-b13a-1412ac475ce2",
         "name": "The grass is always greener (still)",
         "description": "A still image of a Hypercar on a grassy field.",
         "image": "/assets/hypercar_grassy.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Media & Documentation"
     },
     {
         "id": "4910a316-5019-4fcd-b185-1d6ce1c0040b",
         "name": "dChat",
         "description": "An offline-first conversational digital assistant. You ask it questions, it answers! Powered by LLMs!",
         "image": "/assets/npc/dChat.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
@@ -770,70 +828,80 @@
         "description": "30 A PWM controller for 12/24 V batteries; prevents overcharge and reverse current.",
         "image": "/assets/solar_charge_controller.jpg",
         "price": "30 dUSD",
-        "type": "tool"
+        "type": "tool",
+        "category": "Energy & Power"
     },
     {
         "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
         "name": "Small solar enclosure",
         "description": "A solar enclosure with enough room for a single panel, a charge controller, and a 200 Wh battery pack.",
         "image": "/assets/solar_enclosure_small.jpg",
-        "price": "100 dUSD"
+        "price": "100 dUSD",
+        "category": "Energy & Power"
     },
     {
         "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
         "name": "Solar setup (200 Wh)",
         "description": "A 200 W solar panel, charge controller, and 200 Wh battery pack in a weatherproof enclosure. Ready to use!",
         "image": "/assets/solar_setup_200wh_portable_kit.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
     },
     {
         "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
         "name": "Solar setup (1 kWh)",
         "description": "A 200 W solar panel, charge controller, and 1 kWh battery in a weatherproof enclosure. Ready to use!",
         "image": "/assets/solar_setup_1kwh_enclosure.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
     },
     {
         "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
         "name": "Model rocket launchpad",
         "description": "A launchpad for model rockets.",
         "image": "/assets/launchpad.jpg",
-        "price": "35 dUSD"
+        "price": "35 dUSD",
+        "category": "Model Rocketry"
     },
     {
         "id": "9477a618-591b-45e0-9d81-18d60b848490",
         "name": "flame-resistant recovery wadding",
         "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
         "image": "/assets/recovery_wadding.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Model Rocketry"
     },
     {
         "id": "7cbb9db5-1d15-481e-b0bb-a1eed889063b",
         "name": "Early Adopter Token",
         "description": "The early bird gets the worm.",
         "image": "/assets/early_adopter_award.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "1a84a672-e0b7-4f71-af2f-8e742a6777f8",
         "name": "Newcomer Token",
         "description": "You're new here, aren't you?",
         "image": "/assets/newcomer_token.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
         "name": "dPrint",
         "description": "A token that represents 1 gram of 3D pinting filament used while printing.",
         "image": "/assets/dPrint.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
         "name": "Arduino Uno",
         "description": "A beginner-friendly microcontroller board ideal for electronics projects.",
         "image": "/assets/arduino_uno_board.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "d1105b87-8185-4a30-ba55-406384be169f",
@@ -846,51 +914,58 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
-        }
+        },
+        "category": "Electronics & Robotics"
     },
     {
         "id": "3cd82744-d2aa-414e-9f03-80024b624066",
         "name": "Jumper Wires",
         "description": "Flexible wires with pin connectors for building temporary circuits.",
         "image": "/assets/jumper_wires_set.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
         "name": "5 mm LED",
         "description": "A 5 mm red light-emitting diode for basic electronics projects.",
         "image": "/assets/led_5mm_red.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
         "name": "220 Ohm Resistor",
         "description": "A resistor commonly used to limit current to an LED.",
         "image": "/assets/220_ohm_resistor.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
         "name": "resistor color chart",
         "description": "Printed reference sheet for decoding resistor color bands.",
         "image": "/assets/resistor_color_chart_sheet.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
         "name": "LED indicator module",
-        "description": "5 mm red LED pre-wired with a 220 Ω resistor and jumper leads for breadboard projects.",
+        "description": "5 mm red LED pre-wired with a 220 \u03a9 resistor and jumper leads for breadboard projects.",
         "image": "/assets/led_indicator_module.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
         "name": "USB Cable",
         "description": "Standard USB cable for charging or data transfer between devices.",
         "image": "/assets/usb_cable_standard.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
@@ -902,7 +977,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -910,28 +985,32 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Electronics & Robotics"
     },
     {
         "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
         "name": "Laptop Computer",
         "description": "A portable computer capable of running the Arduino IDE and uploading sketches.",
         "image": "/assets/laptop_running_ide_on_desk.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
         "image": "/assets/servo_motor_small_hobby.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
         "name": "Wheel Encoder",
         "description": "Pair of low-resolution quadrature encoders for tracking robot wheel rotation.",
         "image": "/assets/wheel_encoder_pair.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
@@ -942,7 +1021,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -950,282 +1029,328 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Electronics & Robotics"
     },
     {
         "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
         "name": "3D Printed Phone Stand",
         "description": "A simple stand to hold your smartphone upright on a desk.",
         "image": "/assets/3d_printed_phone_stand_desk.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "3D Printing"
     },
     {
         "id": "3326e89c-5883-473d-a68f-3ea560093966",
         "name": "3D printed generator housing",
         "description": "PLA housing that holds the motor and crank.",
         "image": "/assets/3d_printed_generator_housing_pla.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "3D Printing"
     },
     {
         "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
         "name": "3D printed crank handle",
         "description": "PLA crank handle to spin a generator.",
         "image": "/assets/3d_printed_crank_handle_generator.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "3D Printing"
     },
     {
         "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",
         "name": "Potentiometer",
         "description": "Variable resistor for adjusting signal levels in circuits.",
         "image": "/assets/potentiometer_knob.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
         "name": "Guppy group",
         "description": "Three females and one male guppy ready to breed.",
         "image": "/assets/guppy_group_breeding.jpg",
-        "price": "6 dUSD"
+        "price": "6 dUSD",
+        "category": "Aquarium"
     },
     {
         "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
         "name": "Hornwort cuttings",
         "description": "Fast-growing stems that provide cover for fry.",
         "image": "/assets/hornwort_cuttings.jpg",
-        "price": "1 dUSD"
+        "price": "1 dUSD",
+        "category": "Aquarium"
     },
     {
         "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
         "name": "Guppy grass starter",
         "description": "Easy floating plant ideal for breeding tanks.",
         "image": "/assets/guppy_grass_starter.jpg",
-        "price": "1 dUSD"
+        "price": "1 dUSD",
+        "category": "Aquarium"
     },
     {
         "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
         "name": "Duckweed portion",
         "description": "Floating plant that helps absorb excess nutrients.",
         "image": "/assets/duckweed_portion.jpg",
-        "price": "1 dUSD"
+        "price": "1 dUSD",
+        "category": "Aquarium"
     },
     {
         "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
         "name": "Workbench",
         "description": "A sturdy table that provides a safe space for sawing and assembly.",
         "image": "/assets/woodworking_workbench_sturdy.jpg",
-        "price": "120 dUSD"
+        "price": "120 dUSD",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
         "name": "Handsaw",
         "description": "Basic saw for cutting lumber to size.",
         "image": "/assets/hand_saw_for_lumber.jpg",
-        "price": "15 dUSD"
+        "price": "15 dUSD",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
         "name": "wood chisel",
         "description": "12 mm chisel with hardened steel blade for carving joinery and cleaning out slots.",
         "image": "/assets/wood_chisel_12mm.jpg",
-        "price": "12 dUSD"
+        "price": "12 dUSD",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
         "name": "Wood glue",
         "description": "Adhesive designed for bonding wooden pieces.",
         "image": "/assets/wood_glue_bottle.jpg",
-        "price": "5 dUSD"
+        "price": "5 dUSD",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
         "name": "Sandpaper pack",
         "description": "Assorted grits for smoothing rough lumber and finished projects.",
         "image": "/assets/woodworking_sandpaper_pack.jpg",
-        "price": "3 dUSD"
+        "price": "3 dUSD",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
         "name": "Pine board",
         "description": "A lightweight plank ideal for beginner projects.",
         "image": "/assets/pine_board_plank.jpg",
-        "price": "8 dUSD"
+        "price": "8 dUSD",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
         "name": "Birdhouse",
         "description": "A small wooden shelter perfect for backyard birds.",
         "image": "/assets/wooden_birdhouse.jpg",
-        "price": "18 dUSD"
+        "price": "18 dUSD",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "0d4a7b77-f241-4c19-9365-c74647066802",
         "name": "Step stool",
         "description": "A compact stool that helps reach higher shelves safely.",
         "image": "/assets/wooden_step_stool.jpg",
-        "price": "25 dUSD"
+        "price": "25 dUSD",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
         "name": "Pine planter box",
         "description": "12 L pine planter box with drainage holes and waterproof glue joints.",
         "image": "/assets/woodworking_planter_box_build.jpg",
-        "price": "35 dUSD"
+        "price": "35 dUSD",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "619d485d-803f-4875-a048-157ce28d31c4",
         "name": "Bookshelf",
         "description": "A simple wooden shelf ready to hold your growing library.",
         "image": "/assets/simple_wooden_bookshelf.jpg",
-        "price": "45 dUSD"
+        "price": "45 dUSD",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
         "name": "stevia seeds",
         "description": "Seeds of the Stevia rebaudiana plant.",
         "image": "/assets/stevia_seeds_packet.jpg",
-        "price": "5 dUSD"
+        "price": "5 dUSD",
+        "category": "Gardening & Botany"
     },
     {
         "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
         "name": "stevia seedling",
         "description": "A young stevia plant sprouted in rockwool.",
         "image": "/assets/stevia_seedling_in_rockwool.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Gardening & Botany"
     },
     {
         "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
         "name": "harvestable stevia plant",
         "description": "A mature stevia plant ready for leaf harvest.",
         "image": "/assets/harvestable_stevia_plant.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Gardening & Botany"
     },
     {
         "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
         "name": "bundle of stevia leaves",
         "description": "Fresh stevia leaves with natural sweetness.",
         "image": "/assets/bundle_of_stevia_leaves.jpg",
-        "price": "3 dUSD"
+        "price": "3 dUSD",
+        "category": "Gardening & Botany"
     },
     {
         "id": "b2248af9-151b-4268-989d-4bb408a6147c",
         "name": "harvested stevia plant",
         "description": "A stevia plant trimmed of leaves but still alive.",
         "image": "/assets/harvested_stevia_plant.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Gardening & Botany"
     },
     {
         "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
         "name": "stevia extract",
         "description": "Concentrated sweetener derived from stevia leaves.",
         "image": "/assets/stevia_extract_bottle.jpg",
-        "price": "8 dUSD"
+        "price": "8 dUSD",
+        "category": "Gardening & Botany"
     },
     {
         "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
         "name": "Raspberry Pi 5 board",
         "description": "A compact single-board computer with plenty of power for small clusters.",
         "image": "/assets/raspberry_pi5_board_closeup.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
         "name": "M.2 PoE+ HAT",
         "description": "Provides power over Ethernet and an M.2 slot for NVMe drives.",
         "image": "/assets/m2_poe_hat.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
         "name": "1TB 2230 M.2 SSD",
         "description": "A tiny NVMe drive perfect for booting a Pi.",
         "image": "/assets/m2_2230_nvme_module_closeup.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "36042a2b-861a-4192-a991-98778898963a",
         "name": "64GB microSD card",
         "description": "Used to flash the operating system before cloning to the SSD.",
         "image": "/assets/microsd_card_64gb.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
         "name": "PoE+ switch",
         "description": "Powers multiple devices and provides network connectivity.",
         "image": "/assets/poe_plus_switch_on_rack.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
         "name": "Ethernet cable",
         "description": "A simple cable for wired network connections.",
         "image": "/assets/ethernet_network_cable.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
         "name": "fan case",
         "description": "Keeps a Raspberry Pi cool during heavy workloads.",
         "image": "/assets/raspberry_pi_fan_case.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
         "name": "flashed microSD card",
         "description": "Contains Raspberry Pi OS ready for cloning to SSD.",
         "image": "/assets/flashed_microsd_card_with_reader.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "4af856b5-b5c1-494f-8037-9b6559785633",
         "name": "bootable 1TB SSD",
         "description": "An M.2 drive with the OS cloned and ready to boot.",
         "image": "/assets/ssd_1tb_m2.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
         "name": "Pi cluster node",
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
         "image": "/assets/pi_cluster_node_with_hat_and_ssd.jpg",
-        "dependencies": ["129", "131"],
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "dependencies": [
+            "129",
+            "131"
+        ],
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "849eb5e1-9f63-488b-80d3-913492049090",
         "name": "external backup SSD",
         "description": "Stores nightly database dumps from your cluster.",
         "image": "/assets/external_backup_ssd.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Computing & Networking"
     },
     {
         "id": "52593d07-908b-4109-92cf-826b2184ef6f",
         "name": "GitHub repository",
         "description": "A remote Git repository hosted on GitHub.",
         "image": "/assets/github_repository_item.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "306793ac-e420-4859-9742-9076fff6ab57",
         "name": "CI workflow file",
         "description": "A `.github/workflows/ci.yml` that runs tests on push.",
         "image": "/assets/ci_workflow_file.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital Assets & Software"
     },
     {
         "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
         "image": "/assets/basic_refracting_telescope_backyard.jpg",
-        "dependencies": ["0", "3"],
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "dependencies": [
+            "0",
+            "3"
+        ],
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Optics"
     },
     {
         "id": "98f6252e-95c2-468a-b110-69d47604df2c",
         "name": "planisphere star chart",
         "description": "A rotating sky map for matching constellations to the current date and time.",
         "image": "/assets/planisphere_star_chart.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Optics"
     },
     {
         "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
@@ -1237,7 +1362,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -1245,35 +1370,40 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Astronomy & Optics"
     },
     {
         "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
         "name": "first aid kit",
         "description": "Adhesive bandages, sterile gauze pads, antiseptic wipes and nitrile gloves packed for emergencies.",
         "image": "/assets/first_aid_kit.jpg",
-        "price": "35 dUSD"
+        "price": "35 dUSD",
+        "category": "Safety & Medical"
     },
     {
         "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
         "name": "CPR pocket mask",
         "description": "A reusable one-way valve mask for delivering rescue breaths safely.",
         "image": "/assets/cpr_pocket_mask_case_open.jpg",
-        "price": "18 dUSD"
+        "price": "18 dUSD",
+        "category": "Safety & Medical"
     },
     {
         "id": "b397aa70-3503-4e40-b84a-4d5609578d2b",
         "name": "CPR training manikin",
         "description": "Life-size torso manikin for practicing chest compressions and rescue breaths.",
         "image": "/assets/cpr_training_manikin_torso.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Safety & Medical"
     },
     {
         "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
         "name": "stevia crystals",
         "description": "Highly concentrated sweetener purified from stevia extract.",
         "image": "/assets/stevia_crystals_jar.jpg",
-        "price": "12 dUSD"
+        "price": "12 dUSD",
+        "category": "Gardening & Botany"
     },
     {
         "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
@@ -1281,7 +1411,8 @@
         "description": "Sterile strips to cover small cuts and scrapes.",
         "image": "/assets/adhesive_bandages.jpg",
         "price": "0.10 dUSD",
-        "unit": "each"
+        "unit": "each",
+        "category": "Safety & Medical"
     },
     {
         "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
@@ -1289,7 +1420,8 @@
         "description": "Breathable squares for dressing medium wounds.",
         "image": "/assets/sterile_gauze_pads_on_table.jpg",
         "price": "0.35 dUSD",
-        "unit": "each"
+        "unit": "each",
+        "category": "Safety & Medical"
     },
     {
         "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
@@ -1297,7 +1429,8 @@
         "description": "Pre-moistened wipes that kill germs before bandaging.",
         "image": "/assets/antiseptic_wipes_packet_open.jpg",
         "price": "0.15 dUSD",
-        "unit": "each"
+        "unit": "each",
+        "category": "Safety & Medical"
     },
     {
         "id": "0dde854e-7fcb-40ac-88ea-9afd9196f856",
@@ -1309,7 +1442,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-09-07",
@@ -1317,26 +1450,29 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Safety & Medical"
     },
     {
         "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
         "name": "nitrile gloves (pair)",
         "description": "Disposable nitrile gloves to protect hands from chemicals.",
         "image": "/assets/nitrile_gloves_pair_on_table.jpg",
-        "price": "0.50 dUSD"
+        "price": "0.50 dUSD",
+        "category": "Safety & Medical"
     },
     {
         "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
         "name": "biohazard waste bag",
         "description": "1 L red bag for used bandages and gloves; tie shut to contain contaminated waste.",
         "image": "/assets/biohazard_waste_bag_1L_red.jpg",
-        "price": "0.10 dUSD"
+        "price": "0.10 dUSD",
+        "category": "Safety & Medical"
     },
     {
         "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
         "name": "safety goggles",
-        "description": "ANSI Z87.1 polycarbonate goggles with vents, side shields, adjustable strap; fit over glasses, block splashes; 80–100 g.",
+        "description": "ANSI Z87.1 polycarbonate goggles with vents, side shields, adjustable strap; fit over glasses, block splashes; 80\u2013100 g.",
         "image": "/assets/safety_goggles_vented_clear.jpg",
         "price": "8 dUSD",
         "type": "tool",
@@ -1344,7 +1480,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -1352,14 +1488,16 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "Safety & Medical"
     },
     {
         "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
         "name": "250 mL glass beaker",
         "description": "Borosilicate beaker with 50 mL marks and a spout; handles hot liquids without shattering.",
         "image": "/assets/beaker_250ml_glass.jpg",
-        "price": "3 dUSD"
+        "price": "3 dUSD",
+        "category": "Lab Supplies"
     },
     {
         "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
@@ -1371,16 +1509,18 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
-        }
+        },
+        "category": "Lab Supplies"
     },
     {
         "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
         "name": "glass stir rod",
         "description": "25 cm solid glass rod for mixing solutions without introducing contaminants.",
         "image": "/assets/glass_stir_rod_with_beaker.jpg",
-        "price": "1 dUSD"
+        "price": "1 dUSD",
+        "category": "Lab Supplies"
     },
     {
         "id": "96083990-f333-4e42-ab04-7eb2a234570e",
@@ -1392,7 +1532,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-18",
@@ -1400,28 +1540,31 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Electronics & Robotics"
     },
     {
         "id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4",
         "name": "electrical tape",
-        "description": "19 mm × 20 m PVC electrical tape for insulating wire splices.",
+        "description": "19 mm \u00d7 20 m PVC electrical tape for insulating wire splices.",
         "image": "/assets/electrical_tape_roll.jpg",
         "price": "2 dUSD",
         "unit": "roll",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
-        }
+        },
+        "category": "Electronics & Robotics"
     },
     {
         "id": "3455faac-8811-4991-b818-cecb98e8fff7",
         "name": "lab coat",
         "description": "Knee-length cotton lab coat with snap buttons and two pockets; one size fits most.",
         "image": "/assets/lab_coat_white.jpg",
-        "price": "15 dUSD"
+        "price": "15 dUSD",
+        "category": "Lab Supplies"
     },
     {
         "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
@@ -1429,28 +1572,32 @@
         "description": "Lab-grade 37% HCl in a vented plastic bottle; always add acid to water when diluting.",
         "image": "/assets/hydrochloric_acid_37pct_safety_bottle.jpg",
         "price": "12 dUSD",
-        "unit": "bottle"
+        "unit": "bottle",
+        "category": "Lab Supplies"
     },
     {
         "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
         "name": "spill tray",
-        "description": "Polypropylene tray with 2 cm lip to contain acid drips; 300 × 200 mm; ~150 g.",
+        "description": "Polypropylene tray with 2 cm lip to contain acid drips; 300 \u00d7 200 mm; ~150 g.",
         "image": "/assets/lab_spill_tray_on_bench.jpg",
-        "price": "5 dUSD"
+        "price": "5 dUSD",
+        "category": "Lab Supplies"
     },
     {
         "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
         "name": "pH up solution (potassium carbonate)",
         "description": "Alkaline solution used to raise nutrient solution pH.",
         "image": "/assets/ph_up_solution_dropper.jpg",
-        "price": "8 dUSD"
+        "price": "8 dUSD",
+        "category": "Lab Supplies"
     },
     {
         "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
         "name": "liquid soap",
         "description": "Mild hand soap for cleaning skin before treating a wound.",
         "image": "/assets/liquid_soap_pump_bottle.jpg",
-        "price": "3 dUSD"
+        "price": "3 dUSD",
+        "category": "Lab Supplies"
     },
     {
         "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
@@ -1462,7 +1609,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-13",
@@ -1470,67 +1617,75 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Lab Supplies"
     },
     {
         "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
         "name": "Thermistor (10k NTC)",
         "description": "A temperature-sensitive resistor for Arduino voltage dividers.",
         "image": "/assets/thermistor_10k_ntc.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
         "name": "10k Ohm Resistor",
         "description": "A resistor for sensor voltage divider circuits.",
         "image": "/assets/10k_ohm_resistor_through_hole.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
         "name": "Photoresistor",
         "description": "A light-dependent resistor for measuring brightness.",
         "image": "/assets/photoresistor_ldr.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "828d6c3b-66a5-4064-b221-97630274502b",
         "name": "5 V Power Supply",
         "description": "A battery pack or USB adapter that provides a stable 5 V DC output.",
         "image": "/assets/power_supply_5v.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "0254a829-9002-4a75-8af2-03cd961601da",
         "name": "50 mm magnifying lens",
         "description": "Glass lens with ~50 mm focal length used as a telescope objective.",
         "image": "/assets/magnifying_lens_50mm_objective.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Optics"
     },
     {
         "id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
         "name": "20 mm magnifying lens",
         "description": "Small lens with ~20 mm focal length for use as a telescope eyepiece.",
         "image": "/assets/magnifying_lens_20mm_eyepiece.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Optics"
     },
     {
         "id": "2794503d-fbe7-4031-a63e-deac531f9784",
         "name": "cardboard mailing tube",
         "description": "Sturdy cardboard tube about 40 cm long to hold telescope optics.",
         "image": "/assets/cardboard_mailing_tube_telescope_body.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Media & Documentation"
     },
     {
         "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
         "name": "camera tripod",
-        "description": "Aluminum tripod with 3-way pan head; extends 0.5–1.5 m, supports up to 3 kg, weighs 1.2 kg.",
+        "description": "Aluminum tripod with 3-way pan head; extends 0.5\u20131.5 m, supports up to 3 kg, weighs 1.2 kg.",
         "image": "/assets/camera_tripod_astronomy.jpg",
         "price": "30 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -1538,32 +1693,35 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "Media & Documentation"
     },
     {
         "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
         "name": "masking tape",
         "description": "Low-tack paper tape for temporarily securing lenses during assembly.",
         "image": "/assets/masking_tape_roll.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Workshop & Woodworking"
     },
     {
         "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
         "name": "digital camera",
         "description": "Mirrorless camera capable of long-exposure astrophotography.",
         "image": "/assets/digital_camera_astrophotography.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Media & Documentation"
     },
     {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",
         "name": "astronaut poster",
-        "description": "61×91 cm (24×36 in) matte poster on 150 g/m² paper; NASA crew, ~85 g.",
+        "description": "61\u00d791 cm (24\u00d736 in) matte poster on 150 g/m\u00b2 paper; NASA crew, ~85 g.",
         "image": "/assets/astronauts.jpg",
         "price": "12 dUSD",
         "hardening": {
             "passes": 2,
             "score": 78,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -1576,18 +1734,19 @@
                     "score": 78
                 }
             ]
-        }
+        },
+        "category": "Media & Documentation"
     },
     {
         "id": "70bb8d86-2c4e-4330-9705-371891934686",
         "name": "mission logbook",
-        "description": "A5 (148 × 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
+        "description": "A5 (148 \u00d7 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
         "image": "/assets/hardbound_mission_logbook.jpg",
         "price": "8 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -1595,7 +1754,8 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "Media & Documentation"
     },
     {
         "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
@@ -1606,7 +1766,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -1614,7 +1774,8 @@
                     "score": 65
                 }
             ]
-        }
+        },
+        "category": "Media & Documentation"
     },
     {
         "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
@@ -1625,7 +1786,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -1633,7 +1794,8 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Media & Documentation"
     },
     {
         "id": "50ada74c-686d-4818-9421-e02d98444579",
@@ -1644,7 +1806,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-11",
@@ -1652,7 +1814,8 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Media & Documentation"
     },
     {
         "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c",
@@ -1664,7 +1827,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -1672,13 +1835,15 @@
                     "score": 60
                 }
             ]
-        }
+        },
+        "category": "Electronics & Robotics"
     },
     {
         "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
         "name": "mission log entry",
         "description": "One handwritten entry recording a mission event in the logbook.",
         "image": "/assets/mission_log_entry_page.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Media & Documentation"
     }
 ]

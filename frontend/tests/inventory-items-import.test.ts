@@ -12,7 +12,28 @@ describe('inventory items import assertions', () => {
 
     it('tags items with expected categories', () => {
         const categories = new Set(items.map((item) => item.category));
-        expect(categories).toEqual(new Set(['Aquarium', 'Awards', 'Hydroponics', 'Tools', 'Misc']));
+        expect(categories).toEqual(
+            new Set([
+                '3D Printing',
+                'Aquarium',
+                'Astronomy & Optics',
+                'Awards',
+                'Computing & Networking',
+                'Digital Assets & Software',
+                'Electronics & Robotics',
+                'Energy & Power',
+                'Gardening & Botany',
+                'Hydroponics',
+                'Lab Supplies',
+                'Media & Documentation',
+                'Model Rocketry',
+                'Safety & Medical',
+                'Smart Home & IoT',
+                'Tools',
+                'Transportation',
+                'Workshop & Woodworking',
+            ])
+        );
     });
 
     it('includes representative inventory entries', () => {

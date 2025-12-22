@@ -7,28 +7,26 @@ Your inventory contains all the items you've collected through quests, processes
 
 ## Item Types
 
-Items in DSPACE fall into several categories:
+Items in DSPACE fall into categories that also drive the filters on the Inventory page:
 
-1. Resources
-    - Energy units ([dWatt](/docs/dwatt), [dSolar](/docs/solar))
-    - Currency ([dUSD](/docs/dusd))
-    - Raw materials (PLA filament, water)
-
-2. Tools and Equipment
-    - 3D printers
-    - Solar panels and batteries
-    - Aquarium equipment
-    - Hydroponics systems
-
-3. Components
-    - 3D printed parts
-    - Rocket components
-    - Electronic components
-
-4. Consumables
-    - Plant nutrients
-    - Fish food
-    - Rocket fuel
+- 3D Printing (filament, prints, fixtures)
+- Aquarium (fish and aquatic plants)
+- Astronomy & Optics (telescopes, charts, lenses)
+- Awards (achievement badges and tokens)
+- Computing & Networking (Raspberry Pi, storage, networking gear)
+- Digital Assets & Software (dUSD, dCarbon, dChat, repos)
+- Electronics & Robotics (Arduino, LEDs, sensors, motors)
+- Energy & Power (solar, wind, batteries, chargers)
+- Gardening & Botany (stevia plants and harvests)
+- Hydroponics (kits, grow towers)
+- Lab Supplies (beakers, acids, lab safety basics)
+- Media & Documentation (logbooks, cameras, printed media)
+- Model Rocketry (airframes, avionics, firmware, parachutes)
+- Safety & Medical (first aid and PPE)
+- Smart Home & IoT (smart plugs and strips)
+- Tools (machine shop tools)
+- Transportation (EVs)
+- Workshop & Woodworking (workbenches, saws, pine projects)
 
 ## Item Properties
 
