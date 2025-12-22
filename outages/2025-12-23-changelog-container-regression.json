@@ -1,0 +1,10 @@
+{
+  "id": "changelog-container-regression",
+  "date": "2025-12-23",
+  "component": "frontend:astro",
+  "rootCause": "Permalink refactor dropped the entry card, leaving changelog markdown directly on the background.",
+  "resolution": "Added a surface card around each entry for padding, spacing, and preserved permalinks.",
+  "references": [
+    "frontend/src/pages/changelog.astro"
+  ]
+}
