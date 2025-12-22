@@ -32,8 +32,7 @@ const isModelAccessError = (error) => {
 
     const status = error.status ?? error.statusCode;
     const code = error.code ?? error?.error?.code;
-    const message =
-        typeof error.message === 'string' ? error.message.toLowerCase() : undefined;
+    const message = typeof error.message === 'string' ? error.message.toLowerCase() : undefined;
 
     if (status === 404) {
         return true;
