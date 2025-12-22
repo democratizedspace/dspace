@@ -32,9 +32,14 @@ const isModelAccessError = (error) => {
 
     const status = error.status ?? error.statusCode;
     const code = error.code ?? error?.error?.code;
-    const message = typeof error.message === 'string' ? error.message.toLowerCase() : '';
+    const message =
+        typeof error.message === 'string' ? error.message.toLowerCase() : undefined;
 
-    if (status === 404 || status === 403) {
+    if (status === 404) {
+        return true;
+    }
+
+    if (status === 403 && code === 'model_not_found') {
         return true;
     }
 
@@ -42,7 +47,7 @@ const isModelAccessError = (error) => {
         return true;
     }
 
-    return message.includes('model') && message.includes('does not exist');
+    return Boolean(message) && message.includes('model') && message.includes('does not exist');
 };
 
 async function createChatResponse(openai, input) {
@@ -60,8 +65,6 @@ async function createChatResponse(openai, input) {
             }
         }
     }
-
-    throw new Error('No models available for chat response');
 }
 
 export const GPT35Turbo = async (messages, options = {}) => {
