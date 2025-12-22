@@ -7,6 +7,7 @@
         disabled = false,
         inverted = false,
         red = false,
+        hazard = false,
         pressed = undefined;
 
     const dispatch = createEventDispatcher();
@@ -21,17 +22,19 @@
 
 <nav>
     {#if href}
-        <a {href}>{text}</a>
+        <a {href} {...$$restProps}>{text}</a>
     {:else}
         <button
             type="button"
             class:disabled={disabled === true}
             class:inverted={inverted === true}
-            class:red={red === true}
+            class:red={red === true || hazard === true}
+            class:hazard={hazard === true}
             on:click={handleClick}
             {disabled}
             aria-disabled={disabled}
             aria-pressed={pressed}
+            {...$$restProps}
         >
             <div class="slot">
                 <slot />
@@ -87,6 +90,11 @@
 
     .red {
         color: rgb(255, 94, 0);
+    }
+
+    .hazard {
+        background-color: #5f1111;
+        color: #fff;
     }
 
     .inverted {
