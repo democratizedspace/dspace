@@ -44,5 +44,5 @@ kubectl apply -k infra/k8s/environments/production
 ```
 
 Create additional overlays (for example, `staging/`) by adding a folder under
-`infra/k8s/environments/` that points back to `../../k8s` in its `kustomization.yaml` and applies
+`infra/k8s/environments/` that points back to `../..` in its `kustomization.yaml` and applies
 any environment-only patches.

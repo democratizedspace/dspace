@@ -13,6 +13,6 @@ kubectl apply -k infra/k8s/environments/production
 
 Each overlay should:
 
-- Reference the base manifests from `../../k8s`
+- Reference the base manifests from `../..`
 - Capture any environment-only values (e.g., replica counts, hostnames)
 - Avoid storing secrets; use external secret managers or sealed secrets instead

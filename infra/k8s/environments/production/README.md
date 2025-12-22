@@ -1,9 +1,9 @@
 # Production Overlay
 
-This overlay layers production-specific knobs on top of the shared manifests in `infra/k8s/`. It
-tracks the staging deployment documented in
-[`docs/k3s-sugarkube-dev.md`](../../../../docs/k3s-sugarkube-dev.md) so the HA k3s cluster managed by
-sugarkube can run the published `v3` images.
+This overlay layers production-specific knobs on top of the shared manifests in `infra/k8s/`. It is
+derived from the deployment documented in
+[`docs/k3s-sugarkube-dev.md`](../../../../docs/k3s-sugarkube-dev.md) and adapts it for the HA k3s
+production cluster managed by sugarkube to run the published `v3` images.
 
 - Bumps the replica count to 2 for high availability
 - Reuses the published `ghcr.io/democratizedspace/dspace:v3-latest` image

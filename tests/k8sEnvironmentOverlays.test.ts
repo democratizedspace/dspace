@@ -21,7 +21,7 @@ describe('kubernetes environment overlays', () => {
         expect(existsSync(productionOverlayPath)).toBe(true);
 
         const kustomization = readFileSync(productionOverlayPath, 'utf8');
-        expect(kustomization).toContain('../../k8s');
+        expect(kustomization).toContain('../..');
         expect(kustomization).toMatch(/patch-deployment\.yaml/);
     });
 });
