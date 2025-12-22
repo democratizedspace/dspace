@@ -7,6 +7,7 @@
         disabled = false,
         inverted = false,
         red = false,
+        hazard = false,
         pressed = undefined;
 
     const dispatch = createEventDispatcher();
@@ -28,6 +29,7 @@
             class:disabled={disabled === true}
             class:inverted={inverted === true}
             class:red={red === true}
+            class:hazard={hazard === true}
             on:click={handleClick}
             {disabled}
             aria-disabled={disabled}
@@ -87,6 +89,12 @@
 
     .red {
         color: rgb(255, 94, 0);
+    }
+
+    .hazard {
+        background-color: #5f1111;
+        color: #fff;
+        border: 1px solid #ff5e00;
     }
 
     .inverted {
