@@ -1,4 +1,5 @@
 <script>
+    import Chip from '../../../components/svelte/Chip.svelte';
     import {
         loadCloudGistId,
         uploadGameStateToGist,
@@ -79,28 +80,40 @@
 
 <div class="chip-container" bind:this={root} data-testid="cloud-sync-form">
     <div class="vertical">
+        <div class="helper" aria-live="polite">
+            <h2>Set up cloud sync</h2>
+            <ul>
+                <li>
+                    Create a GitHub personal access token with the <code>gist</code> scope at
+                    <a href="https://github.com/settings/tokens">github.com/settings/tokens</a>.
+                    It is only saved in your browser.
+                </li>
+                <li>
+                    You can use any secret gist for backups. Create one at
+                    <a href="https://gist.github.com/">gist.github.com</a> and copy the ID
+                    from the URL (the part after <code>gist.github.com/</code>).
+                    Leave the Gist ID blank and “Upload” will create a new private gist for you.
+                </li>
+            </ul>
+        </div>
         <div class="form-group">
             <label for="token">GitHub Token*</label>
             <div class="token-input">
                 <input id="token" type="password" bind:value={token} />
-                <button type="button" on:click={saveToken}>Save</button>
-                <button type="button" on:click={clearTokenLocal} data-testid="clear-sync-token"
-                    >Clear</button
-                >
+                <Chip text="Save" onClick={saveToken} />
+                <Chip text="Clear" onClick={clearTokenLocal} data-testid="clear-sync-token" />
             </div>
         </div>
         <div class="form-group">
             <label for="gist">Gist ID</label>
             <div class="token-input">
                 <input id="gist" type="text" bind:value={gistId} />
-                <button type="button" on:click={clearGistId} data-testid="clear-gist-id"
-                    >Clear</button
-                >
+                <Chip text="Clear" onClick={clearGistId} data-testid="clear-gist-id" />
             </div>
         </div>
         <div class="buttons">
-            <button type="button" class="chip" on:click={handleUpload}> Upload </button>
-            <button type="button" class="chip" on:click={handleDownload}> Download </button>
+            <Chip text="Upload" onClick={handleUpload} />
+            <Chip text="Download" onClick={handleDownload} />
         </div>
         {#if message}
             <p
@@ -123,37 +136,47 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
+        gap: 0.75rem;
         width: 100%;
     }
+
+    .helper {
+        background: linear-gradient(135deg, #0f3b17, #0b2b12);
+        border-radius: 10px;
+        padding: 1rem;
+        color: #e9f7ec;
+        text-align: left;
+    }
+
+    .helper h2 {
+        margin: 0 0 0.35rem;
+        font-size: 1.1rem;
+    }
+
+    .helper ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 0.35rem;
+    }
+
     .token-input {
         display: flex;
-        gap: 10px;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
     }
+
     .form-group label {
         font-weight: bold;
     }
+
     .buttons {
         display: flex;
-        gap: 10px;
+        gap: 0.5rem;
+        flex-wrap: wrap;
     }
-    .chip {
-        opacity: 0.8;
-        background-color: #68d46d;
-        border-radius: 0.4rem;
-        color: black;
-        border: none;
-        padding: 6px 12px;
-        font-size: 1em;
-        font-weight: 600;
-    }
-    .chip:hover,
-    .chip:focus-visible {
-        opacity: 1;
-        cursor: pointer;
-        outline: 2px solid #fff;
-        outline-offset: 2px;
-    }
+
     .message {
         color: #90ee90;
     }
@@ -161,8 +184,10 @@
     .message.error {
         color: #ff9f9f;
     }
+
     input {
         flex: 1;
+        min-width: 200px;
         padding: 5px;
         border-radius: 6px;
     }
@@ -179,6 +204,7 @@
         margin: 1px;
         padding: 5px;
     }
+
     .chip-container:hover {
         opacity: 1;
     }
