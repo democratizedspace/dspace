@@ -23,8 +23,8 @@ function prepareHtml(html, slug) {
                     href={`#${slugToHeadingId(doc.frontmatter.slug)}`}
                     aria-label={`Link to ${doc.frontmatter.title}`}
                 >
-                    <span aria-hidden="true">#</span>
-                    <span class="visually-hidden">Permalink to {doc.frontmatter.title}</span>
+                    <span class="permalink-label" aria-hidden="true">Permalink</span>
+                    <span class="visually-hidden">Link to {doc.frontmatter.title}</span>
                 </a>
             </div>
             <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
