@@ -24,7 +24,10 @@ describe('DataReset', () => {
         vi.restoreAllMocks();
         localStorage.clear();
         document.cookie = '';
-        Object.defineProperty(globalThis, 'location', { value: originalLocation, configurable: true });
+        Object.defineProperty(globalThis, 'location', {
+            value: originalLocation,
+            configurable: true,
+        });
     });
 
     it('clears storage, cookies, and indexedDB databases', async () => {
