@@ -3,7 +3,28 @@ import Page from '../../components/Page.astro';
 import Syncer from './svelte/Syncer.svelte';
 ---
 
-<Page columns="1">
+<Page title="Cloud Sync" columns="1">
+    <section class="intro">
+        <p>
+            Back up or restore your DSPACE saves using a private GitHub Gist. Nothing is uploaded to
+            the DSPACE servers.
+        </p>
+        <ol>
+            <li>
+                Create a
+                <a href="https://github.com/settings/tokens/new?scopes=gist&description=DSPACE%20Cloud%20Sync">
+                    fine-grained token with the <strong>gist</strong> permission
+                </a>
+                and paste it below.
+            </li>
+            <li>
+                Enter a Gist ID from the end of a
+                <a href="https://gist.github.com/">GitHub Gist URL</a>
+                to restore data, or leave it blank and we will create one when you upload.
+            </li>
+            <li>Use the same token and Gist ID on any device to sync your save data.</li>
+        </ol>
+    </section>
     <div class="vertical">
         <Syncer client:load />
     </div>
@@ -15,5 +36,27 @@ import Syncer from './svelte/Syncer.svelte';
         flex-direction: column;
         align-items: center;
         width: 100%;
+    }
+
+    .intro {
+        display: grid;
+        gap: 0.5rem;
+        margin: 0 auto 1rem;
+        width: min(720px, 100%);
+        background: rgba(0, 0, 0, 0.3);
+        padding: 1rem 1.25rem;
+        border-radius: 0.75rem;
+        line-height: 1.4;
+    }
+
+    ol {
+        margin: 0;
+        padding-left: 1.25rem;
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    a {
+        color: #b2f5bf;
     }
 </style>

@@ -12,6 +12,7 @@
         saveGitHubToken,
         clearGitHubToken,
     } from '../../../utils/githubToken.js';
+    import Chip from '../../../components/svelte/Chip.svelte';
 
     let root;
     let token = '';
@@ -83,24 +84,32 @@
             <label for="token">GitHub Token*</label>
             <div class="token-input">
                 <input id="token" type="password" bind:value={token} />
-                <button type="button" on:click={saveToken}>Save</button>
-                <button type="button" on:click={clearTokenLocal} data-testid="clear-sync-token"
-                    >Clear</button
-                >
+                <div class="chip-row">
+                    <Chip text="Save" onClick={saveToken} inverted={true} />
+                    <Chip
+                        text="Clear"
+                        onClick={clearTokenLocal}
+                        hazard={true}
+                        dataTestId="clear-sync-token"
+                    />
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label for="gist">Gist ID</label>
             <div class="token-input">
                 <input id="gist" type="text" bind:value={gistId} />
-                <button type="button" on:click={clearGistId} data-testid="clear-gist-id"
-                    >Clear</button
-                >
+                <Chip
+                    text="Clear"
+                    onClick={clearGistId}
+                    hazard={true}
+                    dataTestId="clear-gist-id"
+                />
             </div>
         </div>
         <div class="buttons">
-            <button type="button" class="chip" on:click={handleUpload}> Upload </button>
-            <button type="button" class="chip" on:click={handleDownload}> Download </button>
+            <Chip text="Upload" onClick={handleUpload} inverted={true} />
+            <Chip text="Download" onClick={handleDownload} />
         </div>
         {#if message}
             <p
@@ -137,23 +146,6 @@
         display: flex;
         gap: 10px;
     }
-    .chip {
-        opacity: 0.8;
-        background-color: #68d46d;
-        border-radius: 0.4rem;
-        color: black;
-        border: none;
-        padding: 6px 12px;
-        font-size: 1em;
-        font-weight: 600;
-    }
-    .chip:hover,
-    .chip:focus-visible {
-        opacity: 1;
-        cursor: pointer;
-        outline: 2px solid #fff;
-        outline-offset: 2px;
-    }
     .message {
         color: #90ee90;
     }
@@ -181,5 +173,11 @@
     }
     .chip-container:hover {
         opacity: 1;
+    }
+
+    .chip-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 </style>
