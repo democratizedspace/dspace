@@ -8,23 +8,53 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your shrimp are thriving. To keep algae in check, let's add some floating plants that soak up excess nutrients.",
+            "text": "Algae is creeping in. Add floaters to soak up nutrients?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "place",
-                    "text": "Sounds good."
+                    "goto": "prep",
+                    "text": "Yes, help me stage them."
+                },
+                {
+                    "type": "goto",
+                    "goto": "light",
+                    "text": "Let me check the light first."
                 }
             ]
         },
         {
-            "id": "place",
-            "text": "Gently place a handful of guppy grass on the surface. It will multiply quickly and provide shelter for fry.",
+            "id": "light",
+            "text": "Keep floaters off the spray bar, leave open water, and run 6–8 hours light.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Plants added",
+                    "goto": "prep",
+                    "text": "Light timing looks good."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Rinse plants in tank water, check hitchhikers, and set a ring to corral them.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        },
+                        {
+                            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Share a starter mix."
+                },
+                {
+                    "type": "goto",
+                    "goto": "place",
+                    "text": "Plants rinsed and corral ready.",
                     "requiresItems": [
                         {
                             "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
@@ -35,16 +65,52 @@
             ]
         },
         {
+            "id": "place",
+            "text": "Lay guppy grass near the outflow for gentle flow and leave room to vent gas.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "thin",
+                    "text": "Plants placed and floating."
+                },
+                {
+                    "type": "goto",
+                    "goto": "light",
+                    "text": "Need to move them away from the spray bar."
+                }
+            ]
+        },
+        {
+            "id": "thin",
+            "text": "If floaters cover half the surface, scoop a handful weekly to share or toss.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Noted—I'll keep them trimmed."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Keep an eye out so it doesn't block the light for other plants.",
+            "text": "Great! Floaters will gobble up nitrates and give fry a safe canopy.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Surface looks balanced."
                 }
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+            "count": 1
+        },
+        {
+            "id": "092dae11-237a-43cc-b342-246aabbba258",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["aquaria/shrimp"]
 }

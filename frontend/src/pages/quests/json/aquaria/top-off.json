@@ -8,12 +8,61 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The waterline dropped. Raise two 5 gal buckets above the tank and prime the gravel vacuum.",
+            "text": "The waterline dropped. Prep aged top-off water or go straight to topping off?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Walk me through conditioning water."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Buckets and siphon are staged."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Dose two 5 gal buckets, bubble to off-gas chlorine, and match temp if cold.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Water dosed and bubbling.",
+                    "process": "bucket-water-dechlorinated",
+                    "requiresItems": [
+                        {
+                            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "I aged water last night and kept it covered.",
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Raise buckets, prime the gravel vacuum, and match temp so fish avoid shock.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "topoff",
-                    "text": "Setup done.",
+                    "text": "Setup done and siphon primed.",
                     "requiresItems": [
                         {
                             "id": "97317bc3-507a-4e2c-912b-507d586cee87",
@@ -24,23 +73,55 @@
                             "count": 2
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Quick safety check before I start."
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Keep cords dry, move lights off the rim, and seal fish food to block spray.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "topoff",
+                    "text": "Ready to pump water."
                 }
             ]
         },
         {
             "id": "topoff",
-            "text": "Hand-pump water from the buckets until the tank's level is restored.",
+            "text": "Hand-pump until the tank hits its line. Go slow so the substrate stays put.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "refill",
                     "text": "Waterline topped off."
+                },
+                {
+                    "type": "goto",
+                    "goto": "spotclean",
+                    "text": "Saw debris—I'll vacuum a corner while I'm here."
+                }
+            ]
+        },
+        {
+            "id": "spotclean",
+            "text": "Vacuum detritus without exposing roots. Stop if fish stress.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "refill",
+                    "text": "Corner is clean and waterline is back."
                 }
             ]
         },
         {
             "id": "refill",
-            "text": "Refill both buckets with a hose. Let them sit 24–48 h or condition before the next top-off.",
+            "text": "Refill buckets, dose conditioner, cap to stop dust, and note top-off time.",
             "options": [
                 {
                     "type": "goto",
@@ -52,15 +133,24 @@
         },
         {
             "id": "finish",
-            "text": "Nice! You've got water aging for the next evaporation top-off.",
+            "text": "Nice! Stable water levels keep fish breathing easy and bacteria working well.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Job done."
+                    "text": "Top-off kit stays by the tank."
                 }
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+            "count": 1
+        },
+        {
+            "id": "092dae11-237a-43cc-b342-246aabbba258",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["aquaria/water-change"]
 }

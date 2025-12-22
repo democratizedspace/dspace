@@ -1,25 +1,57 @@
 {
     "id": "woodworking/planter-box",
     "title": "Build a Planter Box",
-    "description": "Cut and nail a cedar planter box that introduces square joints and waterproof glue-ups.",
+    "description": "Build a cedar planter box with square corners and waterproof glue.",
     "image": "/assets/quests/woodworking_planter_box_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready for another project? Let's make a wooden planter box for your hydroponic experiments.",
+            "text": "Ready to build a cedar planter box that fits a grow tray or a couple pots?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "What's the game plan?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "I've already stacked lumber and tools."
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Cut 18 in sides and 6 in ends from 1x6s, glue the frame, then nail the base.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Give me a safety refresher first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Let's grab materials and cut."
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Wear eye protection and gloves, clamp the work, and dry-fit so corners close.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "gather",
-                    "text": "Sure thing!"
+                    "text": "Understood—I'll prep the bench and clamps."
                 }
             ]
         },
         {
             "id": "gather",
-            "text": "You'll need a few pine boards, some wood glue, and a 16 oz claw hammer. I'll supply what you lack.",
+            "text": "Grab pine boards, wood glue, a claw hammer, and sandpaper. I can loan gear.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -35,14 +67,18 @@
                         {
                             "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
                             "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
                         }
                     ],
-                    "text": "Gather materials"
+                    "text": "Loan me the basics."
                 },
                 {
                     "type": "goto",
-                    "goto": "build",
-                    "text": "Materials ready",
+                    "goto": "cut",
+                    "text": "Everything is staged on the bench.",
                     "requiresItems": [
                         {
                             "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
@@ -61,27 +97,79 @@
             ]
         },
         {
-            "id": "build",
-            "text": "Cut the boards to length, use the hammer and glue to assemble the box, and let everything dry overnight.",
+            "id": "cut",
+            "text": "Square the ends, cut matching pairs, and label pieces so the grain wraps.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "dryfit",
+                    "text": "Cuts are done. Let me test the fit."
+                },
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Need to double-check lengths before cutting."
+                }
+            ]
+        },
+        {
+            "id": "dryfit",
+            "text": "Dry-fit the rectangle. Swap boards if gaps show, then mark the square side.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Alignment looks good—ready for glue."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Corners still gap—remind me how to clamp this square."
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Glue the end grain, clamp the frame, tack in brads, then nail the bottom.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-planter-box",
+                    "text": "Glue-up underway and brads going in.",
+                    "requiresItems": [
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Box assembled"
+                    "text": "Assembly cured and sanded smooth."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! This planter will hold soil or even a small hydroponic tub.",
+            "text": "Add a liner and drainage holes. The box is ready to plant or hold a tray.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Looks sturdy!"
+                    "text": "Looks sturdy—let's plant it."
                 }
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+            "count": 1
+        },
+        {
+            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+            "count": 2
+        }
+    ],
     "requiresQuests": ["welcome/howtodoquests"]
 }

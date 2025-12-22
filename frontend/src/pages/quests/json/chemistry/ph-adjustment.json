@@ -8,8 +8,13 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Once you know the current pH, we can tweak it to the ideal level.",
+            "text": "We have the pH reading. Want a safety check or to start balancing?",
             "options": [
+                {
+                    "type": "goto",
+                    "goto": "gear",
+                    "text": "Safety first—what do I need?"
+                },
                 {
                     "type": "goto",
                     "goto": "adjust",
@@ -18,21 +23,20 @@
             ]
         },
         {
-            "id": "adjust",
-            "text": "Add a few drops of acid or base, stir, and recheck. Protective gear keeps splashes harmless.",
+            "id": "gear",
+            "text": "Wear gloves and goggles. Set a spill tray, ventilate, keep baking soda ready.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "adjust-ph",
-                    "text": "Carefully adding and stirring."
-                },
-                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "The pH is on target.",
+                    "goto": "adjust",
+                    "text": "Gear on and tray down.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
                             "count": 1
                         }
                     ]
@@ -40,8 +44,54 @@
             ]
         },
         {
+            "id": "adjust",
+            "text": "Add a few drops, stir, wait a minute, then test again to avoid overshoot.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recheck",
+                    "text": "Adding acid in small drops.",
+                    "process": "adjust-ph",
+                    "requiresItems": [
+                        {
+                            "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recheck",
+                    "text": "Adding base to raise pH.",
+                    "process": "adjust-ph",
+                    "requiresItems": [
+                        {
+                            "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recheck",
+            "text": "Stir, wait a minute, test again, and repeat tiny doses until you're in range.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Meter reads in range and stable."
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Still off—I'll tweak again."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great, the solution is balanced and safe to use.",
+            "text": "Great, the solution is balanced. Log the dose so you can repeat it next time.",
             "options": [
                 {
                     "type": "finish",
@@ -50,6 +100,15 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+            "count": 1
+        },
+        {
+            "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["chemistry/ph-test"]
 }
