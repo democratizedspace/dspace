@@ -47,6 +47,7 @@ const TEST_GROUPS = [
             'cookie-consent.spec.ts',
             'docs-navigation.spec.ts',
             'docs-changelog.spec.ts',
+            'changelog-container.spec.ts',
             'failover-status.spec.ts',
             'home-page-basic.spec.ts',
             'inventory-items-bug.spec.ts',

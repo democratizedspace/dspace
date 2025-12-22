@@ -43,6 +43,7 @@ test.describe('Changelog container regression', () => {
             const firstCard = cards.first();
             const firstBody = bodies.first();
             const firstHeader = firstCard.locator('.entry-header h3');
+            const siteHeader = page.locator('header.header');
 
             await expect(firstCard).toBeVisible();
             await expect(firstBody).toBeVisible();
@@ -60,8 +61,19 @@ test.describe('Changelog container regression', () => {
                 await expect(page).toHaveURL(new RegExp(`#${sectionId}$`));
             }
 
-            const headerBox = await firstHeader.boundingBox();
-            expect(headerBox?.y ?? -1).toBeGreaterThanOrEqual(0);
+            const [headerBox, headingBox] = await Promise.all([
+                siteHeader.boundingBox(),
+                firstHeader.boundingBox(),
+            ]);
+
+            const headerHeight = headerBox?.height ?? 0;
+            expect(headingBox?.y ?? -1).toBeGreaterThanOrEqual(Math.max(0, headerHeight - 2));
+            const isHeaderVisible = await firstHeader.evaluate((node) => {
+                const rect = node.getBoundingClientRect();
+                const targetPoint = document.elementFromPoint(rect.left + 1, rect.top + 1);
+                return targetPoint === node || node.contains(targetPoint);
+            });
+            expect(isHeaderVisible).toBe(true);
 
             const cardBackground = await firstCard.evaluate(
                 (node) => getComputedStyle(node).backgroundColor
