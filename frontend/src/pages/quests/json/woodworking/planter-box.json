@@ -40,7 +40,7 @@
         },
         {
             "id": "gather",
-            "text": "Grab four pine boards, waterproof glue, your handsaw, and a sandpaper pack. I'll loan the 16 oz claw hammer.",
+            "text": "Grab four pine boards, waterproof glue, your handsaw, and a fresh sandpaper pack for smoothing the edges. I'll loan the 16 oz claw hammer.",
             "options": [
                 {
                     "type": "grantsItems",
