@@ -133,7 +133,8 @@
         "name": "soaked hydroponic starter plug",
         "description": "A hydroponic starter plug soaked in water. Used to germinate seeds.",
         "image": "/assets/soaked_hydroponic_starter_plug.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "0.35 dUSD",
+        "unit": "each"
     },
     {
         "id": "5712947f-716c-4f71-b28d-fcb811631080",

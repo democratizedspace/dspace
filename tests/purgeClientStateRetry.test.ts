@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('/src/utils/gameState/common.js', () => ({}), { virtual: true });
 
-import type { Page } from '@playwright/test';
+import type { Page } from '../frontend/e2e/test-helpers';
 import { navigateWithRetry } from '../frontend/e2e/test-helpers';
 
 describe('navigateWithRetry', () => {
