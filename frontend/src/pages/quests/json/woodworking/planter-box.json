@@ -1,14 +1,14 @@
 {
     "id": "woodworking/planter-box",
     "title": "Build a Planter Box",
-    "description": "Cedar guides you through crafting a simple planter for herbs.",
+    "description": "Cedar guides you through crafting a simple planter for herbs while practicing square glue joints and clean measuring.",
     "image": "/assets/quests/woodworking_planter_box_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready for another project? Let's make a wooden planter box for your hydroponic experiments.",
+            "text": "Ready for another project? Let's make a wooden planter box for your hydroponic experiments and learn to keep cuts square.",
             "options": [
                 {
                     "type": "goto",
@@ -62,7 +62,7 @@
         },
         {
             "id": "build",
-            "text": "Cut the boards to length, use the hammer and glue to assemble the box, and let everything dry overnight.",
+            "text": "Measure twice, cut the boards to length, then use the hammer and glue to assemble the box. Check for square corners before letting everything dry overnight.",
             "options": [
                 {
                     "type": "goto",
@@ -83,5 +83,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench"]
+    "requiresQuests": ["welcome/howtodoquests"]
 }

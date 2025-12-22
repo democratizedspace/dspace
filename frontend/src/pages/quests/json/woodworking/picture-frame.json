@@ -1,14 +1,14 @@
 {
     "id": "woodworking/picture-frame",
     "title": "Craft a Picture Frame",
-    "description": "Make a simple frame to showcase your favorite photo.",
+    "description": "Make a simple frame to showcase your favorite photo while practicing tight miters and a clean finish.",
     "image": "/assets/quests/woodworking_picture_frame_craft.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Frames make memories pop. Let's craft a wooden one with crisp mitered corners.",
+            "text": "Frames make memories pop. Let's craft a wooden one with crisp mitered corners and a light finish to highlight the grain.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "assemble",
-            "text": "Cut four strips, miter the ends, then glue and clamp the corners square.",
+            "text": "Cut four strips, miter the ends, then glue and clamp the corners square. Check diagonals match so the frame stays flat while drying.",
             "options": [
                 {
                     "type": "goto",
@@ -36,10 +36,10 @@
         },
         {
             "id": "finish",
-            "text": "Great job! Sand any rough edges and add a backing to display your photo.",
+            "text": "Great job! Sand any rough edges, wipe on a quick finish, and add a backing to display your photo.",
             "options": [{ "type": "finish", "text": "Hang it up!" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/tool-rack"]
+    "requiresQuests": ["woodworking/apply-finish"]
 }

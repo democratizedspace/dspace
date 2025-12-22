@@ -65,5 +65,8 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/bookshelf"]
+    "requiresQuests": [
+        "woodworking/apply-finish",
+        "woodworking/bookshelf"
+    ]
 }

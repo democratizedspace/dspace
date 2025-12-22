@@ -93,5 +93,8 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/step-stool"]
+    "requiresQuests": [
+        "woodworking/finish-sanding",
+        "woodworking/workbench"
+    ]
 }

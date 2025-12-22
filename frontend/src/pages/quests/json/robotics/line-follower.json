@@ -1,14 +1,14 @@
 {
     "id": "robotics/line-follower",
     "title": "Build a line-following robot",
-    "description": "Use two light sensors to make a simple robot follow a track.",
+    "description": "Combine your servo and sensor skills to build a robot that follows a taped track using dual infrared detectors.",
     "image": "/assets/quests/line_following_robot_track.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's take your servo skills further. We'll build a tiny robot that follows a dark line on the floor.",
+            "text": "Let's take your servo skills further. We'll build a tiny robot that follows a dark line on the floor by comparing two infrared sensors.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "parts",
-            "text": "You'll need two infrared sensors, a pair of continuous-rotation servos, and an Arduino. Mount everything on a small chassis.",
+            "text": "You'll need two infrared sensors, a pair of continuous-rotation servos, and an Arduino. Mount everything on a small chassis and make sure the sensor brackets sit just above the ground.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "code",
-            "text": "Upload a simple PID loop that adjusts motor speed based on the sensors. Place the bot on a black line and watch it drive!",
+            "text": "Wire each sensor to an analog pin, map the readings to left and right wheel speed, and add a small PID term to smooth out curves. Place the bot on a high-contrast tape line and tune until it tracks cleanly.",
             "options": [
                 {
                     "type": "finish",
@@ -45,7 +45,10 @@
             ]
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "electronics/light-sensor",
+        "robotics/servo-control"
+    ],
     "rewards": [
         {
             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",

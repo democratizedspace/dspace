@@ -1,14 +1,14 @@
 {
     "id": "woodworking/tool-rack",
     "title": "Build a Tool Rack",
-    "description": "Organize your workspace with a simple rack for hand tools.",
+    "description": "Organize your workspace with a simple rack for hand tools and practice precise chisel work.",
     "image": "/assets/quests/wooden_wall_tool_rack.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your workbench is piling up with loose tools. Let's craft a wall-mounted rack to keep everything within reach.",
+            "text": "Your workspace is piling up with loose tools. Let's craft a wall-mounted rack to keep everything within reach and out of the way while you build bigger projects.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "cut",
-            "text": "Measure a pine board to length, carve slots with a wood chisel, then sand the edges smooth.",
+            "text": "Measure a pine board to length, mark the slot spacing, carve the openings with a wood chisel, then sand the edges smooth so tools slide in easily.",
             "options": [
                 {
                     "type": "goto",
@@ -48,7 +48,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Mount the rack near your bench so tools are always organized and easy to grab.",
+            "text": "Nice work! Mount the rack on a stud so tools are organized and easy to grab when you start heavier builds.",
             "options": [
                 {
                     "type": "finish",
@@ -58,5 +58,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench"]
+    "requiresQuests": ["welcome/howtodoquests"]
 }
