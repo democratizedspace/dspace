@@ -42,12 +42,14 @@
                 return [undefined];
             }
 
-            const parts = location.hostname.split('.').filter(Boolean);
-            const domains = new Set([undefined]);
+            const host = location.hostname;
+            const parts = host.split('.').filter(Boolean);
+            const domains = new Set([undefined, host, `.${host}`]);
 
             for (let i = 0; i < parts.length - 1; i++) {
-                const domain = `.${parts.slice(i).join('.')}`;
+                const domain = parts.slice(i).join('.');
                 domains.add(domain);
+                domains.add(`.${domain}`);
             }
 
             return Array.from(domains);

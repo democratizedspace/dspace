@@ -12,6 +12,7 @@ type IndexedDBWithDatabases = IDBFactory & {
 };
 
 const indexedDBWithDatabases = indexedDB as IndexedDBWithDatabases;
+const originalLocation = globalThis.location;
 
 describe('DataReset', () => {
     beforeEach(() => {
@@ -23,6 +24,7 @@ describe('DataReset', () => {
         vi.restoreAllMocks();
         localStorage.clear();
         document.cookie = '';
+        Object.defineProperty(globalThis, 'location', { value: originalLocation, configurable: true });
     });
 
     it('clears storage, cookies, and indexedDB databases', async () => {
@@ -175,5 +177,29 @@ describe('DataReset', () => {
         );
 
         expect(deleteSpy).toHaveBeenCalled();
+    });
+
+    it('expires cookies across hostname and parent-domain combinations', async () => {
+        Object.defineProperty(globalThis, 'location', {
+            value: { hostname: 'app.example.com', pathname: '/foo/bar' },
+            configurable: true,
+        });
+
+        document.cookie = 'session=123; path=/';
+
+        const cookieSetter = vi.spyOn(document, 'cookie', 'set');
+
+        vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+        const { getByRole, findByText } = render(DataReset);
+
+        await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+        await findByText('All local app data was removed.');
+
+        const writes = cookieSetter.mock.calls.map(([value]) => value as string);
+
+        expect(writes.some((value) => value.includes('domain=app.example.com'))).toBe(true);
+        expect(writes.some((value) => value.includes('domain=.example.com'))).toBe(true);
+        expect(writes.some((value) => value.includes('path=/foo'))).toBe(true);
     });
 });
