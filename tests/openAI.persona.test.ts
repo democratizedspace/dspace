@@ -36,7 +36,7 @@ describe('GPT35Turbo persona integration', () => {
 
         expect(responsesCreateMock).toHaveBeenCalledTimes(1);
         const call = responsesCreateMock.mock.calls[0][0];
-        expect(call.model).toBe('gpt-5-chat-latest');
+        expect(call.model).toBe('gpt-5.2');
         expect(call.input[0].content[0].text).toContain('Sydney');
         const lastMessage = call.input.at(-1);
         expect(lastMessage?.role).toBe('assistant');

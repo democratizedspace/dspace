@@ -60,7 +60,7 @@ describe('gpt-5 chat responses utility', () => {
         await GPT35Turbo([]);
         expect(createResponseMock).toHaveBeenCalledTimes(1);
         const call = createResponseMock.mock.calls[0][0];
-        expect(call.model).toBe('gpt-5-chat-latest');
+        expect(call.model).toBe('gpt-5.2');
         expect(call.input[0].role).toBe('system');
         expect(call.input[0].content[0].text).toContain('GPT-5');
         expect(call.input[1]).toEqual(

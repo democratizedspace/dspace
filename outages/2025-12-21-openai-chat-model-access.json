@@ -1,0 +1,12 @@
+{
+  "id": "2025-12-21-openai-chat-model-access",
+  "date": "2025-12-21",
+  "component": "chat-openai-client",
+  "longForm": "outages/2025-12-21-openai-chat-model-access.md",
+  "rootCause": "Chat always called gpt-5-chat-latest; keys without that model hit OpenAI model_not_found.",
+  "resolution": "Switched to primary model gpt-5.2 with fallback to gpt-5-mini on model access errors and covered the behavior with tests.",
+  "references": [
+    "frontend/src/utils/openAI.js",
+    "frontend/tests/openAI.test.ts"
+  ]
+}

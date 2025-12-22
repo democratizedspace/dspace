@@ -24,7 +24,7 @@ describe('scoreQuest', () => {
     expect(score).toBe(0.5);
     expect(createResponseMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        model: 'gpt-5-chat-latest',
+        model: 'gpt-5.2',
       })
     );
     if (originalKey === undefined) {
