@@ -7,7 +7,7 @@ export const customProcessSchema = {
         duration: {
             type: 'string',
             minLength: 1,
-            pattern: '^(\\d+(?:\\.\\d+)?[dhms]\\s*)+$',
+            pattern: '^(\\d+(?:\\.\\d+)?[dhmsDHMS]\\s*)+$',
         },
         requireItems: { $ref: '#/definitions/items' },
         consumeItems: { $ref: '#/definitions/items' },

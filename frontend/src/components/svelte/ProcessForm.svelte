@@ -65,7 +65,7 @@
     function validateDuration(duration) {
         // Accept durations like "1h 30m", "45s", "0.5h" or any combination
         // cspell:ignore dhms
-        const pattern = /^(\d+(?:\.\d+)?[dhms]\s*)+$/;
+        const pattern = /^(\d+(?:\.\d+)?[dhms]\s*)+$/i;
         const trimmed = duration.trim();
         if (!pattern.test(trimmed)) {
             return false;
