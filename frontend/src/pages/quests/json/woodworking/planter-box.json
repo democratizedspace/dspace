@@ -44,9 +44,7 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [
-                        { "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913", "count": 1 }
-                    ],
+                    "grantsItems": [{ "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913", "count": 1 }],
                     "text": "Gather materials"
                 },
                 {
