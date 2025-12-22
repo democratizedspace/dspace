@@ -21,7 +21,6 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-// eslint-disable-next-line import/first
 import { GPT35Turbo } from '../src/utils/openAI.js';
 
 class MockResponseClient {
