@@ -52,7 +52,7 @@
         },
         {
             "id": "layout",
-            "text": "Mark the board into a floor, two walls, a back, and a two-piece roof. Keep the entry hole about 32 mm and leave overhang to shed rain.",
+            "text": "Mark the board into a floor, a front, two side walls, a back, and a two-piece roof. Keep the entry hole about 32 mm and leave overhang to shed rain.",
             "options": [
                 {
                     "type": "goto",

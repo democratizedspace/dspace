@@ -4,7 +4,7 @@
     "item_name": "Birdhouse panel set",
     "item_id": "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a",
     "entity_type": "item",
-    "prompt": "A collection of freshly cut pine panels laid out on a workbench: two matching side pieces, a front panel with a small marked entry hole, a back panel, a roof pair, and a floor board. A tape measure and handsaw rest nearby, showing the pieces were just cut to size for a small backyard birdhouse. The soft grain of the pine is visible and the edges look clean and square.\n\nThe scene is a cozy solarpunk workshop with warm daylight, organized hand tools on a pegboard, and a calm, tidy atmosphere. The 512×512 image is photorealistic with gentle stylization, no logos or text, and keeps the arrangement of panels as the clear focus while the background stays slightly out of focus.",
+    "prompt": "A neat layout of cut pine panels arranged on a workbench for a small backyard birdhouse: two matching side walls, a front panel with a marked round entry hole, a back panel, a recessed floor board, and a two-piece roof with a gentle overhang. A tape measure, pencil, and handsaw sit nearby beside tidy sawdust, showing careful measuring and cutting.\n\nThe solarpunk workshop is warmly lit with organized tools on a pegboard in soft focus. The 512×512 photorealistic image keeps the labeled panel set centered and free of logos or text, with a calm, friendly mood and slightly blurred background.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
 }
