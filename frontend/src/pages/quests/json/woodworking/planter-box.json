@@ -40,7 +40,7 @@
         },
         {
             "id": "gather",
-            "text": "Grab four pine boards and waterproof glue. I'll loan the 16 oz claw hammer and the rest.",
+            "text": "Grab four pine boards, waterproof glue, your handsaw, and a sandpaper pack. I'll loan the 16 oz claw hammer.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -80,7 +80,7 @@
         },
         {
             "id": "drainage",
-            "text": "Drill 8 mm holes every 10 cm and leave 2 mm gaps between slats. Fabric holds soil while it drains.",
+            "text": "Drill 8 mm holes every 10 cm and leave 2 mm gaps between slats. Fabric or a liner helps soil stay put while it drains.",
             "options": [
                 {
                     "type": "goto",
@@ -112,7 +112,7 @@
         },
         {
             "id": "build",
-            "text": "Glue edges, clamp lightly, and drive two 40 mm nails per corner. Wipe squeeze-out and keep it flat.",
+            "text": "Glue edges, clamp lightly if you have them, and drive two 40 mm nails per corner from the kit. Wipe squeeze-out and keep it flat.",
             "options": [
                 {
                     "type": "process",
@@ -128,7 +128,7 @@
         },
         {
             "id": "seal",
-            "text": "Add a liner or staple fabric so the wood can breathe. Keep bottom gaps open so water escapes.",
+            "text": "Optionally add a liner or staple fabric so the wood can breathe. Keep bottom gaps open so water escapes.",
             "options": [
                 {
                     "type": "goto",
