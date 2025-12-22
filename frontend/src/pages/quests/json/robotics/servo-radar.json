@@ -1,7 +1,7 @@
 {
     "id": "robotics/servo-radar",
     "title": "Scan with a servo-mounted sensor",
-    "description": "Sweep an ultrasonic sensor on a servo to map nearby obstacles.",
+    "description": "Combine a pan-tilt mount and ultrasonic sensor to sweep the room and build a quick proximity map.",
     "image": "/assets/quests/servo_ultrasonic_radar_scan.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -45,6 +45,9 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/pan-tilt"],
+    "requiresQuests": [
+        "robotics/pan-tilt",
+        "robotics/ultrasonic-rangefinder"
+    ],
     "rewards": []
 }

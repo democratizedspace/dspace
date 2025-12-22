@@ -1,7 +1,7 @@
 {
     "id": "robotics/wheel-encoders",
     "title": "Add Wheel Encoders",
-    "description": "Install wheel encoders to log wheel rotation for straighter paths. Disconnect power and secure the robot before wiring.",
+    "description": "Install wheel encoders so your robot can measure distance, hold headings, and repeat paths reliably.",
     "image": "/assets/quests/robot_wheel_encoders_install.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -54,7 +54,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/servo-gripper"],
+    "requiresQuests": ["robotics/servo-control"],
     "hardening": {
         "passes": 2,
         "score": 78,

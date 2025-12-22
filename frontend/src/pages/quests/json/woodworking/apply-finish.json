@@ -1,7 +1,7 @@
 {
     "id": "woodworking/apply-finish",
     "title": "Apply a Wood Finish",
-    "description": "Seal your project with a protective coat.",
+    "description": "Brush on a thin protective finish that resists moisture and highlights the grain you just sanded smooth.",
     "image": "/assets/quests/woodworking_apply_finish.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",

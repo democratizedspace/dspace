@@ -1,7 +1,7 @@
 {
     "id": "robotics/servo-control",
     "title": "Control a Servo Motor",
-    "description": "Learn to move a servo with an Arduino.",
+    "description": "Wire a hobby servo to your Arduino and use the Sweep example to understand position control.",
     "image": "/assets/quests/arduino_servo_control.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",

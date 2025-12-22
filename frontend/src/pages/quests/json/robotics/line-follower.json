@@ -1,7 +1,7 @@
 {
     "id": "robotics/line-follower",
     "title": "Build a line-following robot",
-    "description": "Use two light sensors to make a simple robot follow a track.",
+    "description": "Train a two-wheel bot to read line sensors and stay on a taped track while you tune the code.",
     "image": "/assets/quests/line_following_robot_track.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -45,7 +45,11 @@
             ]
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "robotics/servo-control",
+        "programming/hello-sensor",
+        "electronics/light-sensor"
+    ],
     "rewards": [
         {
             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
