@@ -1,14 +1,14 @@
 {
     "id": "robotics/gyro-balance",
     "title": "Balance with a gyroscope",
-    "description": "Use a gyroscope and servos to keep a platform upright.",
+    "description": "Use a gyroscope and tuned drive base to keep a two-wheeled platform upright.",
     "image": "/assets/quests/robotics_gyro_balance_platform.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ever seen a robot balance on two wheels? We'll use a gyro to keep a platform upright.",
+            "text": "Ever seen a robot balance on two wheels? With odometry in place, we'll use a gyro to keep a platform upright.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "parts",
-            "text": "Grab an Arduino Uno, two continuous servos, and an MPU-6050 gyroscope breakout.",
+            "text": "Grab an Arduino Uno, two continuous servos, an MPU-6050 gyroscope breakout, and the encoder-equipped chassis you've already tuned.",
             "options": [
                 {
                     "type": "goto",
@@ -34,7 +34,7 @@
         },
         {
             "id": "code",
-            "text": "Use the MPU6050 and Servo libraries. Read the gyro angle and adjust servo speeds with a simple\nPID loop.",
+            "text": "Use the MPU6050 and Servo libraries. Read the gyro angle and adjust servo speeds with a simple PID loop. Watch encoder feedback to keep the bot centered while you tune the gains.",
             "options": [
                 {
                     "type": "finish",
@@ -43,6 +43,8 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/servo-control"],
+    "requiresQuests": [
+        "robotics/odometry-basics"
+    ],
     "rewards": []
 }

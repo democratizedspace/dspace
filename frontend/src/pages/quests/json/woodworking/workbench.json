@@ -1,14 +1,14 @@
 {
     "id": "woodworking/workbench",
     "title": "Build a simple workbench",
-    "description": "Construct a sturdy bench to support future projects.",
+    "description": "Build a sturdy bench with stretchers and a flat top to support future projects.",
     "image": "/assets/quests/woodworking_workbench_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there! I'm Cedar, your woodworking mentor. Before we dive into fancy projects, you'll need a dependable work surface.",
+            "text": "Hey there! I'm Cedar, your woodworking mentor. With your measuring and cutting skills warmed up, it's time to build a dependable work surface.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "I'll supply a few pine boards and some wood glue. With those you can assemble a basic but solid bench frame.",
+            "text": "I'll supply a few pine boards and some wood glue. With those you can assemble a basic but solid bench frame with stretchers that resist racking.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -85,5 +85,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"]
+    "requiresQuests": ["woodworking/step-stool"]
 }

@@ -1,14 +1,14 @@
 {
     "id": "woodworking/birdhouse",
     "title": "Build a birdhouse",
-    "description": "Use simple tools to craft a home for local birds.",
+    "description": "Use simple tools to craft a birdhouse that builds on your planter-box skills.",
     "image": "/assets/quests/woodworking_birdhouse_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Now that your bench is ready, let's try a small project. A birdhouse is perfect for practicing basic cuts and assembly.",
+            "text": "That planter box came out great. Let's try a small birdhouse to practice accurate cuts and careful assembly.",
             "options": [
                 {
                     "type": "goto",
@@ -101,7 +101,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench"],
+    "requiresQuests": ["woodworking/planter-box"],
     "hardening": {
         "passes": 1,
         "score": 80,

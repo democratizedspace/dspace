@@ -1,14 +1,14 @@
 {
     "id": "robotics/line-follower",
     "title": "Build a line-following robot",
-    "description": "Use two light sensors to make a simple robot follow a track.",
+    "description": "Mount reflectance sensors and tune motor control so your robot hugs a taped course.",
     "image": "/assets/quests/line_following_robot_track.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's take your servo skills further. We'll build a tiny robot that follows a dark line on the floor.",
+            "text": "Let's take your servo skills further. With encoders already dialed in, we'll add dual reflectance sensors so your bot can stay locked onto a taped course.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "parts",
-            "text": "You'll need two infrared sensors, a pair of continuous-rotation servos, and an Arduino. Mount everything on a small chassis.",
+            "text": "You'll need two infrared reflectance sensors, a pair of continuous-rotation servos, wheel encoder mounts, and an Arduino. Mount everything on a small chassis so both sensors sit a few millimeters above the floor.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "code",
-            "text": "Upload a simple PID loop that adjusts motor speed based on the sensors. Place the bot on a black line and watch it drive!",
+            "text": "Upload a proportional or PID loop that adjusts each wheel based on the left/right sensor readings. Calibrate the sensor thresholds on your floor, then place the bot on dark tape and watch it drive!",
             "options": [
                 {
                     "type": "finish",
@@ -45,7 +45,10 @@
             ]
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "robotics/servo-control",
+        "robotics/wheel-encoders"
+    ],
     "rewards": [
         {
             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",

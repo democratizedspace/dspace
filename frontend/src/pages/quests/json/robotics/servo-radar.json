@@ -1,14 +1,14 @@
 {
     "id": "robotics/servo-radar",
     "title": "Scan with a servo-mounted sensor",
-    "description": "Sweep an ultrasonic sensor on a servo to map nearby obstacles.",
+    "description": "Sweep an ultrasonic sensor on a servo to map nearby obstacles and create a simple scan.",
     "image": "/assets/quests/servo_ultrasonic_radar_scan.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to give your bot awareness? We'll sweep a sensor on a servo like radar.",
+            "text": "Ready to give your bot awareness? We'll sweep an ultrasonic sensor on a servo like radar and log the readings.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "build",
-            "text": "Mount the sensor to the servo horn and wire the servo to pin 9 and power.",
+            "text": "Mount the ultrasonic sensor to the servo horn and wire the servo to pin 9 and power. Secure the cables so they don't snag during the sweep.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "code",
-            "text": "Use Servo and NewPing to sweep and log distances, forming a simple radar map.",
+            "text": "Use Servo and NewPing to sweep and log distances, forming a simple radar map. Record the angles alongside the distances so you can plot them later.",
             "options": [
                 {
                     "type": "finish",
@@ -45,6 +45,9 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/pan-tilt"],
+    "requiresQuests": [
+        "robotics/pan-tilt",
+        "robotics/ultrasonic-rangefinder"
+    ],
     "rewards": []
 }

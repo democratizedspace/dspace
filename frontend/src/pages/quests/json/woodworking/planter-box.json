@@ -83,5 +83,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/workbench"]
+    "requiresQuests": ["welcome/howtodoquests"]
 }
