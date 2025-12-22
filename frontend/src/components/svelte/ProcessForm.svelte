@@ -63,8 +63,8 @@
     }
 
     function validateDuration(duration) {
-        // Accept durations like "1h 30m", "45s", "0.5h" or any combination
-        // cspell:ignore dhms
+        // Accept durations like "1h 30m", "1H 30M", "45s", "0.5h" or any combination (both upper- and lowercase units)
+        // cspell:ignore dhms DHMS
         const pattern = /^(\d+(?:\.\d+)?[dhms]\s*)+$/i;
         const trimmed = duration.trim();
         if (!pattern.test(trimmed)) {
