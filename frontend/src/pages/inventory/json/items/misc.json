@@ -1273,14 +1273,16 @@
         "name": "adhesive bandages",
         "description": "Sterile strips to cover small cuts and scrapes.",
         "image": "/assets/adhesive_bandages.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "0.10 dUSD",
+        "unit": "each"
     },
     {
         "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
         "name": "sterile gauze pads",
         "description": "Breathable squares for dressing medium wounds.",
         "image": "/assets/sterile_gauze_pads_on_table.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "0.35 dUSD",
+        "unit": "each"
     },
     {
         "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
