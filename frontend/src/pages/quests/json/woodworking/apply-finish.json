@@ -49,7 +49,7 @@
         },
         {
             "id": "dry",
-            "text": "Let the finish dry 6 hours before handling. For durability, scuff with 320 grit and add a second coat.",
+            "text": "If you're using wipe-on poly, let it dry about 6 hours before handling. Hardwax oil often needs longer—follow the can's instructions. For durability, scuff with 320 grit and add a second coat.",
             "options": [
                 { "type": "goto", "goto": "finish", "text": "Ready after one coat" },
                 { "type": "goto", "goto": "apply", "text": "Applying a second coat" }

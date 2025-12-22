@@ -78,7 +78,7 @@
         },
         {
             "id": "dust",
-            "text": "Wipe with a damp or tack cloth to pull dust from the pores. If you'll stain, stop at 180 for even color.",
+            "text": "Wipe with a damp or tack cloth to pull dust from the pores so your finish goes on smooth.",
             "options": [
                 {
                     "type": "goto",
