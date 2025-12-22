@@ -5,6 +5,7 @@ import {
     fillProcessForm,
     ItemSelectorHelper,
     findAndClickButton,
+    waitForHydration,
 } from './test-helpers';
 
 /**
@@ -20,85 +21,27 @@ test.describe('Process Creation', () => {
         await clearUserData(page);
     });
 
-    test('should debug item selector component', async ({ page }) => {
-        test.skip(
-            process.env.CI === 'true',
-            'Skip diagnostic debug flow in CI to deflake the e2e shard'
-        );
-        // First make sure we have some items in the inventory
-        const itemIds = await createTestItems(page, 3);
-        console.log(`Created ${itemIds.length} test items for use in the process`);
+    test('creates a process end-to-end in CI', async ({ page }) => {
+        const itemIds = await createTestItems(page, 2);
+        expect(itemIds.length).toBeGreaterThanOrEqual(2);
 
-        // Now navigate to the process creation page
         await page.goto('/processes/create');
-        await page.waitForLoadState('networkidle');
+        await waitForHydration(page, '.process-form');
 
-        // Take a screenshot of the initial form
-        await page.screenshot({
-            path: './test-artifacts/screenshots/debug-process-form-initial.png',
-        });
-
-        // Fill in basic process details using our helper
         const processTitle = `Debug Process ${Date.now()}`;
-        const success = await fillProcessForm(
-            page,
-            processTitle,
-            '1h 30m',
-            1, // Add 1 required item
-            1, // Add 1 consumed item
-            1 // Add 1 created item
-        );
+        const success = await fillProcessForm(page, processTitle, '1h 30m', 1, 1, 1);
+        expect(success).toBe(true);
 
-        if (success) {
-            console.log('Successfully filled out process form');
+        const submitButton = page.getByRole('button', { name: /create process/i });
+        await submitButton.click();
 
-            // Take a screenshot before submission
-            await page.screenshot({
-                path: './test-artifacts/screenshots/debug-process-form-filled.png',
-            });
+        const successMessage = page.locator('.success-message');
+        await expect(successMessage).toBeVisible();
+        await expect(successMessage).toContainText('Process created successfully');
 
-            // Submit the form
-            const submitButton = page.locator('button.submit-button');
-            if ((await submitButton.count()) > 0) {
-                await submitButton.click();
-                console.log('Clicked submit button');
-
-                // Wait for redirect or success message
-                await page.waitForTimeout(5000);
-                await page.screenshot({
-                    path: './test-artifacts/screenshots/debug-after-submit.png',
-                });
-
-                // Log the current URL
-                console.log('Current URL after submission:', page.url());
-
-                // Check if we're no longer on the form page
-                const formElement = page.locator('form.process-form');
-                if ((await formElement.count()) === 0) {
-                    console.log('Form is no longer visible, process creation likely succeeded');
-
-                    // Check if we're on the processes list page
-                    if (page.url().includes('/processes')) {
-                        console.log('Successfully redirected to processes page');
-                    }
-                } else {
-                    console.log('Form is still visible, process creation may have failed');
-
-                    // Check if there are any error messages
-                    const errorMessages = page.locator('.error-message');
-                    if ((await errorMessages.count()) > 0) {
-                        console.log('Found error messages:', await errorMessages.textContent());
-                    }
-                }
-            } else {
-                console.log('Submit button not found');
-            }
-        } else {
-            console.log('Failed to fill out process form');
-            await page.screenshot({
-                path: './test-artifacts/screenshots/debug-form-fill-failed.png',
-            });
-        }
+        const successLink = page.locator('.success-link');
+        await expect(successLink).toBeVisible();
+        await expect(successLink).toHaveAttribute('href', /\/processes\//);
     });
 
     test('should create process with seconds duration', async ({ page }) => {
