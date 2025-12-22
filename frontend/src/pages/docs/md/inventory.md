@@ -30,6 +30,24 @@ Items in DSPACE fall into several categories:
     - Fish food
     - Rocket fuel
 
+## Inventory categories and filters
+
+The `/inventory` page groups items into filterable categories so you can narrow down large lists
+quickly. Items now ship with specific categories instead of a single "Misc" bucket:
+
+- 3D Printing & Fabrication
+- Astronomy & Observation
+- Biology & Lab
+- Digital & Records
+- Digital Currency & Tokens
+- Electronics & Robotics
+- Energy & Power
+- Rocketry & Flight
+- Safety & Medical
+- Transportation
+- Workshop & Construction
+- Plus existing categories for Aquarium, Awards, Hydroponics, and Tools
+
 ## Item Properties
 
 Each item has:
