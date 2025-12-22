@@ -1,7 +1,7 @@
 {
     "id": "robotics/line-follower",
     "title": "Build a line-following robot",
-    "description": "Use two light sensors to make a simple robot follow a track.",
+    "description": "Calibrate two reflectance sensors and tune servos so your robot can hug a track on its own.",
     "image": "/assets/quests/line_following_robot_track.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -19,7 +19,7 @@
         },
         {
             "id": "parts",
-            "text": "You'll need two infrared sensors, a pair of continuous-rotation servos, and an Arduino. Mount everything on a small chassis.",
+            "text": "You'll need two infrared sensors, a pair of continuous-rotation servos, and an Arduino. Mount everything on a small chassis and keep the sensor height consistent for reliable readings.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "code",
-            "text": "Upload a simple PID loop that adjusts motor speed based on the sensors. Place the bot on a black line and watch it drive!",
+            "text": "Upload a simple PID loop that adjusts motor speed based on the sensors. Place the bot on a high-contrast line, note where it drifts, and tweak gains until it drives smoothly.",
             "options": [
                 {
                     "type": "finish",
@@ -45,7 +45,7 @@
             ]
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": ["robotics/servo-control", "robotics/ultrasonic-rangefinder"],
     "rewards": [
         {
             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",

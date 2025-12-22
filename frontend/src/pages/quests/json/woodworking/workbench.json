@@ -1,14 +1,14 @@
 {
     "id": "woodworking/workbench",
     "title": "Build a simple workbench",
-    "description": "Construct a sturdy bench to support future projects.",
+    "description": "Construct a sturdy bench to support future projects now that you've practiced square glue-ups.",
     "image": "/assets/quests/woodworking_workbench_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there! I'm Cedar, your woodworking mentor. Before we dive into fancy projects, you'll need a dependable work surface.",
+            "text": "Hey there! I'm Cedar, your woodworking mentor. With your planter box under your belt, let's build a dependable work surface for everything else.",
             "options": [
                 {
                     "type": "goto",
@@ -85,5 +85,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"]
+    "requiresQuests": ["welcome/howtodoquests", "woodworking/planter-box"]
 }

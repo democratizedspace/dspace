@@ -43,6 +43,6 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/servo-control"],
+    "requiresQuests": ["robotics/odometry-basics"],
     "rewards": []
 }

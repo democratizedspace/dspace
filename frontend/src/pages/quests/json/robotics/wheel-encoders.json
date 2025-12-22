@@ -54,7 +54,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/servo-gripper"],
+    "requiresQuests": ["robotics/obstacle-avoidance"],
     "hardening": {
         "passes": 2,
         "score": 78,

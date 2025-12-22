@@ -1,14 +1,14 @@
 {
     "id": "robotics/maze-navigation",
     "title": "Navigate a Simple Maze",
-    "description": "Program your robot to drive through a basic maze layout.",
+    "description": "Blend line following, distance sensing, and encoder feedback to guide your robot through a simple maze.",
     "image": "/assets/quests/robot_maze_navigation.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to put your line following skills to the test? Let's try a small maze.",
+            "text": "Ready to put your line following skills to the test? Let's try a small maze that forces tight turns and quick corrections.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "program",
-            "text": "Extend the PID loop so the robot handles intersections and dead ends.",
+            "text": "Extend the PID loop so the robot handles intersections and dead ends. Use encoder ticks to track distance between turns and the ultrasonic sensor to avoid walls.",
             "options": [
                 {
                     "type": "goto",
@@ -46,5 +46,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/line-follower"]
+    "requiresQuests": ["robotics/obstacle-avoidance", "robotics/odometry-basics"]
 }
