@@ -1,0 +1,8 @@
+{
+  "id": "changelog-content-no-container",
+  "date": "2025-12-22",
+  "component": "frontend/ui/changelog",
+  "rootCause": "Inline span rendering let block markdown escape once permalinks were added.",
+  "resolution": "Render each changelog entry in a card and mount markdown in a block article.",
+  "references": ["frontend/src/pages/changelog.astro"]
+}

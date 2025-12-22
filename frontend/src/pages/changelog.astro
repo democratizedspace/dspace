@@ -27,7 +27,10 @@ function prepareHtml(html, slug) {
                     <span class="visually-hidden">Link to {doc.frontmatter.title}</span>
                 </a>
             </div>
-            <span set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}></span>
+            <article
+                class="changelog-body"
+                set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}
+            ></article>
         </section>
     ))}
 </Page>
@@ -38,17 +41,32 @@ function prepareHtml(html, slug) {
         border-radius: 20px;
     }
 
-    span {
-        background-color: white;
-        color: black;
-        padding: 10px;
+    .changelog-entry {
+        background-color: var(--color-surface, white);
+        color: var(--color-text, black);
         border-radius: 20px;
+        padding: 16px;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .changelog-entry + .changelog-entry {
+        margin-top: 16px;
+    }
+
+    .changelog-body {
+        display: block;
+        background-color: var(--color-surface, white);
+        color: var(--color-text, black);
+        padding: 12px;
+        border-radius: 12px;
+        overflow: auto;
     }
 
     .entry-header {
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        margin-bottom: 0.75rem;
     }
 
     .permalink {
