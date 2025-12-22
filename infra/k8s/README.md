@@ -1,6 +1,8 @@
 # Kubernetes Manifests for DSPACE
 
-These manifests deploy the `dspace-app` container built from the root `Dockerfile`.
+These manifests deploy the `dspace-app` container built from the root `Dockerfile` onto the
+sugarkube-managed Raspberry Pi k3s cluster described in
+[`docs/k3s-sugarkube-dev.md`](../../docs/k3s-sugarkube-dev.md).
 
 The container exposes port **8080** and provides health endpoints at `/healthz` (readiness)
 and `/livez` (liveness).
@@ -15,7 +17,7 @@ kubectl apply -f infra/k8s/
 
 ## Building locally
 
-To build and load the image locally for k3s:
+To build and load the image locally for k3s (matching the sugarkube environment):
 
 ```bash
 docker build -t dspace-app:latest .
@@ -24,6 +26,10 @@ k3s ctr images import dspace-app:latest
 
 Then update `infra/k8s/dspace-deployment.yaml` to use the local image tag.
 
+The `kustomization.yaml` overlays in `infra/k8s/environments/` assume a k3s cluster with Traefik
+ingress installed via sugarkube; see the sugarkube runbook for prerequisites and DNS/Cloudflare
+Tunnel setup.
+
 ## Configuration
 
 - **Port**: 8080
@@ -31,3 +37,16 @@ Then update `infra/k8s/dspace-deployment.yaml` to use the local image tag.
 - **Image**: `ghcr.io/democratizedspace/dspace:v3-latest`
 
 Edit `infra/k8s/dspace-deployment.yaml` if you need to customize the image tag or configuration.
+
+## Environment overlays
+
+Environment-specific kustomize overlays live in `infra/k8s/environments/`. The `production`
+overlay references the base manifests in this directory and bumps replicas for high availability:
+
+```bash
+kubectl apply -k infra/k8s/environments/production
+```
+
+Create additional overlays (for example, `staging/`) by adding a folder under
+`infra/k8s/environments/` that points back to `../../k8s` in its `kustomization.yaml` and applies
+any environment-only patches.
