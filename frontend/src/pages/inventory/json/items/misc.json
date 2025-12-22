@@ -1065,6 +1065,13 @@
         "price": "25 dUSD"
     },
     {
+        "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+        "name": "cedar planter box",
+        "description": "12 L cedar planter box with drainage holes and waterproof glue joints.",
+        "image": "/assets/quests/woodworking_planter_box_build.jpg",
+        "price": "35 dUSD"
+    },
+    {
         "id": "619d485d-803f-4875-a048-157ce28d31c4",
         "name": "Bookshelf",
         "description": "A simple wooden shelf ready to hold your growing library.",

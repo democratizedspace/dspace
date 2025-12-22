@@ -8,35 +8,93 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sanding is the secret to a professional look. Use a light touch and work up to 220 grit for a silky feel.",
+            "text": "Sanding is the secret to a professional look. Grab a dust mask and check the grain before you start.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Show me the plan"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sand",
+                    "text": "I'm ready to sand"
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "Check for glue squeeze-out and pencil high spots. Knock them down with 120 grit so scratches don't show.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "sand",
-                    "text": "Got it."
+                    "text": "High spots marked"
+                },
+                {
+                    "type": "goto",
+                    "goto": "trouble",
+                    "text": "I see tear-out"
                 }
             ]
         },
         {
             "id": "sand",
-            "text": "Move with the grain and wipe away dust between grits. It takes patience but the results are worth it.",
+            "text": "Move with the grain through 120 → 180 → 220 grit. Wipe between passes so fresh grit cuts cleanly.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Looks smooth",
+                    "goto": "dust",
+                    "text": "Surface looks even",
                     "requiresItems": [
                         {
                             "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "trouble",
+                    "text": "Getting swirl marks"
+                }
+            ]
+        },
+        {
+            "id": "trouble",
+            "text": "Rotate to a fresh spot and lighten pressure. If grain fuzzes, mist lightly, let it dry, then hit 220.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sand",
+                    "text": "Retry with lighter pressure"
+                },
+                {
+                    "type": "goto",
+                    "goto": "dust",
+                    "text": "Ready for final cleanup"
+                }
+            ]
+        },
+        {
+            "id": "dust",
+            "text": "Wipe with a damp or tack cloth to pull dust from the pores. If you'll stain, stop at 180 for even color.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Surface is dust-free"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sand",
+                    "text": "Going back one grit"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Beautiful work! A coat of finish will really make the wood shine.",
+            "text": "Beautiful work! A coat of finish will make the wood shine. Keep the mask on while you clear the dust.",
             "options": [
                 {
                     "type": "finish",
@@ -45,6 +103,9 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        { "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32", "count": 1 },
+        { "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093", "count": 1 }
+    ],
     "requiresQuests": ["woodworking/step-stool"]
 }

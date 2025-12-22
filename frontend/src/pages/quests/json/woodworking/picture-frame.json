@@ -8,8 +8,13 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Frames make memories pop. Let's craft a wooden one with crisp mitered corners.",
+            "text": "Frames make memories pop. Let's craft one with crisp miters and a snug backing.",
             "options": [
+                {
+                    "type": "goto",
+                    "goto": "style",
+                    "text": "Help me plan the look"
+                },
                 {
                     "type": "goto",
                     "goto": "assemble",
@@ -18,28 +23,84 @@
             ]
         },
         {
-            "id": "assemble",
-            "text": "Cut four strips, miter the ends, then glue and clamp the corners square.",
+            "id": "style",
+            "text": "Pick a 20×25 cm opening with a 3 cm rail. Decide between a natural finish or a painted accent.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Frame is glued up",
+                    "goto": "assemble",
+                    "text": "Natural grain sounds right"
+                },
+                {
+                    "type": "goto",
+                    "goto": "backer",
+                    "text": "I want a painted accent"
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Cut four strips, miter the ends, then glue and clamp square. Check diagonals match before glue sets.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sanding",
+                    "text": "Miters are clamped",
                     "requiresItems": [
                         { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 1 },
                         { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
                         { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
                         { "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093", "count": 1 }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "backer",
+                    "text": "How do I add hardware?"
+                }
+            ]
+        },
+        {
+            "id": "backer",
+            "text": "Cut a thin backer and add sawtooth hangers 5 cm from the top. Pre-drill so nothing splits.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sanding",
+                    "text": "Backer attached"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Returning to miters"
+                }
+            ]
+        },
+        {
+            "id": "sanding",
+            "text": "Feather corners with 180 grit so seams disappear, then hit 220 grit to prep for finish or paint.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Surface is smooth"
+                },
+                {
+                    "type": "goto",
+                    "goto": "backer",
+                    "text": "Need another hardware check"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! Sand any rough edges and add a backing to display your photo.",
+            "text": "Great job! Drop in the print, slide the backer on, and let glue cure for an hour before hanging.",
             "options": [{ "type": "finish", "text": "Hang it up!" }]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        { "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32", "count": 1 },
+        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 }
+    ],
     "requiresQuests": ["woodworking/tool-rack"]
 }
