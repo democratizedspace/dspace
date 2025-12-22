@@ -38,7 +38,7 @@ describe('gpt-5 chat responses integration', () => {
     new Response(
       JSON.stringify({
         id: 'resp_123',
-        model: 'gpt-5-chat-latest',
+        model: 'gpt-5.2',
         output: [
           {
             id: 'msg_123',
@@ -104,7 +104,7 @@ describe('gpt-5 chat responses integration', () => {
     expect(extractAuthHeader(init?.headers)).toBe(`Bearer ${playerCredentials.session}`);
 
     const payload = JSON.parse(init?.body ?? '{}');
-    expect(payload.model).toBe('gpt-5-chat-latest');
+    expect(payload.model).toBe('gpt-5.2');
     expect(payload.input).toHaveLength(3);
     expect(payload.input[0].role).toBe('system');
     if (!dchatPersona) {
