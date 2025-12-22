@@ -376,7 +376,7 @@
         "description": "A body tube for a modular model rocket.",
         "image": "/assets/3d_printed_rocket_body_tube.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "3D Printing & Fabrication"
+        "category": "Rocketry & Flight"
     },
     {
         "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
@@ -820,7 +820,7 @@
         "description": "An offline-first conversational digital assistant. You ask it questions, it answers! Powered by LLMs!",
         "image": "/assets/npc/dChat.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Digital Currency & Tokens"
+        "category": "Digital & Records"
     },
     {
         "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
@@ -890,7 +890,7 @@
     {
         "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
         "name": "dPrint",
-        "description": "A token that represents 1 gram of 3D pinting filament used while printing.",
+        "description": "A token that represents 1 gram of 3D printing filament used while printing.",
         "image": "/assets/dPrint.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital Currency & Tokens"
@@ -1166,7 +1166,7 @@
         "description": "12 L pine planter box with drainage holes and waterproof glue joints.",
         "image": "/assets/woodworking_planter_box_build.jpg",
         "price": "35 dUSD",
-        "category": "3D Printing & Fabrication"
+        "category": "Workshop & Construction"
     },
     {
         "id": "619d485d-803f-4875-a048-157ce28d31c4",
@@ -1198,7 +1198,7 @@
         "description": "A mature stevia plant ready for leaf harvest.",
         "image": "/assets/harvestable_stevia_plant.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "3D Printing & Fabrication"
+        "category": "Biology & Lab"
     },
     {
         "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
@@ -1214,7 +1214,7 @@
         "description": "A stevia plant trimmed of leaves but still alive.",
         "image": "/assets/harvested_stevia_plant.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "3D Printing & Fabrication"
+        "category": "Biology & Lab"
     },
     {
         "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
@@ -1350,7 +1350,7 @@
         "description": "A rotating sky map for matching constellations to the current date and time.",
         "image": "/assets/planisphere_star_chart.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "3D Printing & Fabrication"
+        "category": "Astronomy & Observation"
     },
     {
         "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
@@ -1421,7 +1421,7 @@
         "image": "/assets/sterile_gauze_pads_on_table.jpg",
         "price": "0.35 dUSD",
         "unit": "each",
-        "category": "Biology & Lab"
+        "category": "Safety & Medical"
     },
     {
         "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
@@ -1597,7 +1597,7 @@
         "description": "Mild hand soap for cleaning skin before treating a wound.",
         "image": "/assets/liquid_soap_pump_bottle.jpg",
         "price": "3 dUSD",
-        "category": "Biology & Lab"
+        "category": "Safety & Medical"
     },
     {
         "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
