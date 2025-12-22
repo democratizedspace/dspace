@@ -27,7 +27,7 @@ describe('quest prerequisite requirements', () => {
                 const quest = JSON.parse(raw);
                 const requires = quest.requiresQuests ?? [];
 
-                if (!requires || requires.length === 0) {
+                if (requires.length === 0) {
                     const questId = quest.id || path.basename(fullPath, '.json');
                     questsMissingRequires.push(questId);
                 }
