@@ -1,10 +1,12 @@
 ---
 import Page from '../components/Page.astro';
+import DataWipePanel from '../components/svelte/DataWipePanel.svelte';
 import LogoutPanel from '../components/svelte/LogoutPanel.svelte';
 ---
 
 <Page title="Settings" message="Manage your DSPACE session" columns="1">
     <div class="settings-content">
+        <DataWipePanel client:idle />
         <LogoutPanel client:idle />
     </div>
 </Page>
@@ -12,7 +14,9 @@ import LogoutPanel from '../components/svelte/LogoutPanel.svelte';
 <style>
     .settings-content {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
         padding: 1rem;
     }
 </style>
