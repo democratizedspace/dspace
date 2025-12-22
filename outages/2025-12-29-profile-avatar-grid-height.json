@@ -1,0 +1,11 @@
+{
+  "id": "2025-12-29-profile-avatar-grid-height",
+  "date": "2025-12-29",
+  "component": "frontend",
+  "rootCause": "The AvatarPicker applied a shared button rule to every button, forcing a 100px fixed height onto the avatar grid tiles even though the thumbnails are taller, which squished and cropped the images.",
+  "resolution": "Scoped the size and color styling to the Select button and reset the avatar tile buttons to auto dimensions with transparent backgrounds so each thumbnail can render at its natural aspect ratio.",
+  "references": [
+    "https://staging.democratized.space/profile/avatar",
+    "frontend/src/components/svelte/AvatarPicker.svelte"
+  ]
+}
