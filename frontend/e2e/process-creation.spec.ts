@@ -21,7 +21,7 @@ test.describe('Process Creation', () => {
         await clearUserData(page);
     });
 
-    test('creates a process end-to-end in CI', async ({ page }) => {
+    test('should create process end-to-end in CI', async ({ page }) => {
         const itemIds = await createTestItems(page, 2);
         expect(itemIds.length).toBeGreaterThanOrEqual(2);
 
@@ -34,6 +34,7 @@ test.describe('Process Creation', () => {
 
         const submitButton = page.getByRole('button', { name: /create process/i });
         await submitButton.click();
+        await page.waitForLoadState('networkidle');
 
         const successMessage = page.locator('.success-message');
         await expect(successMessage).toBeVisible();
