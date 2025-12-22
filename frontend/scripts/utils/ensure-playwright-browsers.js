@@ -247,16 +247,25 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         return false;
     }
 
-    if (hasPlaceholderProxyEnv(env)) {
+    const sanitizedEnv = sanitizeProxyEnv(env);
+    const hadPlaceholderProxy = hasPlaceholderProxyEnv(env);
+    const hasProxiesAfterSanitize = PROXY_ENV_KEYS.some((key) => Boolean(sanitizedEnv[key]));
+
+    if (hadPlaceholderProxy && !hasProxiesAfterSanitize) {
         console.warn(
-            'Skipping Playwright system dependency installation because proxy settings point to a placeholder (proxy:8080). ' +
-                'Set valid proxy values or clear proxy environment variables to install browsers.'
+            'Proxy environment variables point to the placeholder proxy:8080 host. Skipping Playwright system dependency install.'
         );
+
         return false;
     }
 
+    if (hadPlaceholderProxy) {
+        console.warn(
+            'Proxy environment variables point to the placeholder proxy:8080 host. Attempting install with sanitized env.'
+        );
+    }
+
     const resolvedCliPath = cliPath || resolvePlaywrightCLI(cwd, fs);
-    const sanitizedEnv = sanitizeProxyEnv(env);
 
     try {
         exec(process.execPath, [resolvedCliPath, ...INSTALL_DEPS_ARGS], {

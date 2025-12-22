@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/woodworking_planter_box_build.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Pine planter box",
+    "item_id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+    "entity_type": "item",
+    "prompt": "A freshly built pine planter box sits on a woodworking bench. The rectangular box has clean mitred corners, smooth sanded boards, and small drainage holes visible along the bottom edge. A bottle of waterproof wood glue and a clamp lie nearby, hinting at how it was assembled. The solarpunk workshop background is softly blurred with warm light, hints of greenery outside a window, and a few neatly hung tools without any text or logos.\n\nRender a 512×512 photorealistic image with gentle stylization that keeps the planter box as the focal point and communicates that it is ready for soil and plants.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

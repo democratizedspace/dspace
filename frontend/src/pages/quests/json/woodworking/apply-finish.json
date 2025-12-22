@@ -8,8 +8,19 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Time to give your work a durable sheen. Ready to begin?",
-            "options": [{ "type": "goto", "goto": "gather", "text": "What do I need?" }]
+            "text": "Time to give your work a durable sheen. Want to choose a finish type or gather tools first?",
+            "options": [
+                { "type": "goto", "goto": "finish-choice", "text": "Help me pick a finish" },
+                { "type": "goto", "goto": "gather", "text": "What do I need?" }
+            ]
+        },
+        {
+            "id": "finish-choice",
+            "text": "Wipe-on poly dries in 4–6 hours. Hardwax oil feels natural but needs longer between coats.",
+            "options": [
+                { "type": "goto", "goto": "gather", "text": "Poly sounds good" },
+                { "type": "goto", "goto": "apply", "text": "I'm using hardwax oil" }
+            ]
         },
         {
             "id": "gather",
@@ -30,20 +41,29 @@
         },
         {
             "id": "apply",
-            "text": "Brush on a thin coat with the grain, ventilate, and keep sparks away.",
-            "options": [{ "type": "goto", "goto": "dry", "text": "Coat applied" }]
+            "text": "Brush on a thin coat with the grain, ventilate, and keep sparks away. Tip off strokes and chase edge drips.",
+            "options": [
+                { "type": "goto", "goto": "dry", "text": "Coat applied" },
+                { "type": "goto", "goto": "finish-choice", "text": "Need a different finish" }
+            ]
         },
         {
             "id": "dry",
-            "text": "Let the finish dry completely before handling.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "It's dry" }]
+            "text": "If you're using wipe-on poly, let it dry about 6 hours before handling. Hardwax oil often needs longer—follow the can's instructions. For durability, scuff with 320 grit and add a second coat.",
+            "options": [
+                { "type": "goto", "goto": "finish", "text": "Ready after one coat" },
+                { "type": "goto", "goto": "apply", "text": "Applying a second coat" }
+            ]
         },
         {
             "id": "finish",
-            "text": "Your project is protected and gleaming.",
+            "text": "Your project is protected and gleaming. Dispose of oily rags safely by laying them flat to dry.",
             "options": [{ "type": "finish", "text": "Looks great!" }]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+        { "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093", "count": 1 }
+    ],
     "requiresQuests": ["woodworking/finish-sanding"]
 }
