@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_birdhouse_shell.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Birdhouse shell",
+    "item_id": "baacce2f-7c9c-4034-9abb-8a1d437aafaa",
+    "entity_type": "item",
+    "prompt": "A partially built birdhouse stands on a bench: the pine walls and floor are glued square with clamps or painter's tape holding the joints. The round entrance hole is clean, and a small perch is glued below it. Wood glue and a sanding block sit nearby alongside safety goggles, in a bright, plant-filled solarpunk workshop. No text or logos, 512×512 photorealistic render with gentle stylization.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

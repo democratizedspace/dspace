@@ -1051,6 +1051,20 @@
         "price": "8 dUSD"
     },
     {
+        "id": "c9cb0629-b066-476d-9cbb-6599d135f2b1",
+        "name": "Birdhouse panel set",
+        "description": "Measured and labeled pine pieces ready for assembly: floor, walls, roof panels, and perch.",
+        "image": "/assets/quests/woodworking_birdhouse_panels.jpg",
+        "price": "12 dUSD"
+    },
+    {
+        "id": "baacce2f-7c9c-4034-9abb-8a1d437aafaa",
+        "name": "Birdhouse shell",
+        "description": "Birdhouse walls and floor glued square with a clean entry hole, awaiting roof and sanding.",
+        "image": "/assets/quests/woodworking_birdhouse_shell.jpg",
+        "price": "15 dUSD"
+    },
+    {
         "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
         "name": "Birdhouse",
         "description": "A small wooden shelter perfect for backyard birds.",

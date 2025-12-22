@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "You'll need a pine board, wood glue, your handsaw, and a tape measure. I'll supply missing gear.",
+            "text": "You'll need a pine board, wood glue, sandpaper, your handsaw, and a tape measure. I'll supply missing gear.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -38,6 +38,14 @@
                         },
                         {
                             "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                             "count": 1
                         }
                     ],
@@ -62,6 +70,14 @@
                         {
                             "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
                             "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ],
                     "text": "Materials ready"
@@ -70,12 +86,37 @@
         },
         {
             "id": "build",
-            "text": "Cut the board into panels, glue the walls together, then attach the roof. After the glue dries, smooth all edges with sandpaper so birds won't get hurt.",
+            "text": "Measure and cut the pine board into the floor, walls, and roof panels. Keep your fingers well clear of the saw and check each piece against the plan before moving on.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "The birdhouse is complete"
+                    "type": "process",
+                    "process": "measure-cut-birdhouse-panels",
+                    "text": "Panels are cut and labeled",
+                    "goto": "glue"
+                }
+            ]
+        },
+        {
+            "id": "glue",
+            "text": "Dry-fit the pieces, then glue the walls and floor. Make sure the entry hole is clear and the walls sit square before letting the glue set.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "glue-birdhouse-shell",
+                    "text": "Shell glued and clamped",
+                    "goto": "finish-work"
+                }
+            ]
+        },
+        {
+            "id": "finish-work",
+            "text": "Attach the roof panels and smooth every edge so birds don't catch a splinter. Lightly round the perch and wipe away any squeeze-out.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "finish-birdhouse",
+                    "text": "Roof attached and edges smoothed",
+                    "goto": "finish"
                 }
             ]
         },
@@ -84,18 +125,14 @@
             "text": "Excellent craftsmanship! Mount your birdhouse outdoors and watch for new feathered tenants.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "grantsItems": [
+                    "type": "finish",
+                    "text": "Thanks for the lesson!",
+                    "requiresItems": [
                         {
                             "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
                             "count": 1
                         }
-                    ],
-                    "text": "Take the birdhouse"
-                },
-                {
-                    "type": "finish",
-                    "text": "Thanks for the lesson!"
+                    ]
                 }
             ]
         }

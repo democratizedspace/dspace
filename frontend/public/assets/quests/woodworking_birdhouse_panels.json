@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_birdhouse_panels.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Birdhouse panel set",
+    "item_id": "c9cb0629-b066-476d-9cbb-6599d135f2b1",
+    "entity_type": "item",
+    "prompt": "A tidy set of pine birdhouse parts laid out on a workbench: labeled floor, side walls, roof panels, and a small perch dowel. Each piece is cleanly cut with crisp edges and a drilled round entrance hole in one wall. A tape measure and handsaw rest nearby with a pair of clear safety goggles. The solarpunk workshop background shows soft daylight, plants, and organized tools, with no text or logos. 512×512 photorealistic style, gently stylized but grounded in a real hobby workspace.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
