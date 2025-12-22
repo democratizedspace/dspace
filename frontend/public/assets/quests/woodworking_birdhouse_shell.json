@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_birdhouse_shell.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Glued birdhouse shell",
+    "item_id": "6c35d1e3-60eb-412f-8959-b9cd7f83b5d4",
+    "entity_type": "item",
+    "prompt": "A small pine birdhouse shell sits clamped on a workbench: four walls glued together with the roof pieces resting loosely on top. Glue squeeze-out is visible along the seams, and blue painter's tape helps hold the joints. A bottle of wood glue and a small square for checking alignment sit nearby. The solarpunk workshop is warmly lit, tidy, and photorealistic at 512x512 with no logos or text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1051,6 +1051,20 @@
         "price": "8 dUSD"
     },
     {
+        "id": "99a5d9a6-1b50-4edb-acf3-6ff00c09e340",
+        "name": "Birdhouse panel set",
+        "description": "Six cut pine panels ready to assemble into a small birdhouse.",
+        "image": "/assets/quests/woodworking_birdhouse_panels.jpg",
+        "price": "12 dUSD"
+    },
+    {
+        "id": "6c35d1e3-60eb-412f-8959-b9cd7f83b5d4",
+        "name": "Glued birdhouse shell",
+        "description": "A clamped-together birdhouse body waiting for sanding and finishing.",
+        "image": "/assets/quests/woodworking_birdhouse_shell.jpg",
+        "price": "15 dUSD"
+    },
+    {
         "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
         "name": "Birdhouse",
         "description": "A small wooden shelter perfect for backyard birds.",
