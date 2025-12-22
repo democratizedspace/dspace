@@ -112,6 +112,7 @@
                     bind:value={gistId}
                     autocapitalize="none"
                     spellcheck={false}
+                    autocomplete="off"
                     placeholder="e.g. 0123456789abcdef..."
                 />
                 <Chip
@@ -161,7 +162,10 @@
     }
     .buttons {
         display: flex;
+        flex-wrap: wrap;
         gap: 10px;
+        justify-content: flex-start;
+        align-items: center;
     }
     .message {
         color: #90ee90;
@@ -196,6 +200,7 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        flex-wrap: wrap;
     }
 
     @media (max-width: 640px) {
