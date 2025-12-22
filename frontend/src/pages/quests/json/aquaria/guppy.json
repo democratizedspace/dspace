@@ -58,5 +58,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/shrimp"]
+    "requiresQuests": ["aquaria/water-testing", "aquaria/heater-install"]
 }

@@ -50,5 +50,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing"]
+    "requiresQuests": ["aquaria/position-tank"]
 }
