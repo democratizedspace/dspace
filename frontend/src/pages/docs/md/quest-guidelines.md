@@ -61,6 +61,7 @@ Organize quests in a **clear progression** from beginner to advanced:
 -   Make dependencies clear and logical
 -   Only `welcome/howtodoquests` should have an empty `requiresQuests` list. All other quests must
     depend on it directly or on a downstream quest so new players always learn the mechanics first.
+    This rule is enforced by automated repository tests to prevent regressions.
 -   Each category should have a clear entry point that chains back to `welcome/howtodoquests`.
 -   Dependencies should mirror the real learning path (e.g., rocketry quests rely on 3D printing and
     electronics basics; robotics builds on electronics and programming fundamentals).
