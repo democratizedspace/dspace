@@ -11,6 +11,8 @@ const slugToHeadingId = (slug) => (slug ? String(slug).toLowerCase() : 'changelo
 function prepareHtml(html, slug) {
     return appendChangelogNotes(html, slug);
 }
+
+const CHANGELOG_SCROLL_BUFFER_PX = 16;
 ---
 
 <Page columns="1">
@@ -39,7 +41,35 @@ function prepareHtml(html, slug) {
     </div>
 </Page>
 
+<script is:inline>
+    (() => {
+        const scrollBuffer = ${CHANGELOG_SCROLL_BUFFER_PX};
+        const updateOffset = () => {
+            const header = document.querySelector('header.header');
+            const headerHeight = header?.getBoundingClientRect().height ?? 0;
+            const offset = Math.max(Math.ceil(headerHeight) + scrollBuffer, 0);
+
+            document.documentElement.style.setProperty(
+                '--changelog-scroll-offset',
+                `${offset}px`
+            );
+        };
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            updateOffset();
+        } else {
+            document.addEventListener('DOMContentLoaded', updateOffset, { once: true });
+        }
+
+        window.addEventListener('resize', updateOffset);
+    })();
+</script>
+
 <style>
+    :root {
+        --changelog-scroll-offset: clamp(9rem, 14vw, 13rem);
+    }
+
     .changelog-list {
         display: flex;
         flex-direction: column;
@@ -65,7 +95,7 @@ function prepareHtml(html, slug) {
     }
 
     .changelog-entry {
-        scroll-margin-top: clamp(8rem, 12vw, 12rem);
+        scroll-margin-top: var(--changelog-scroll-offset);
     }
 
     .changelog-card {
