@@ -74,6 +74,22 @@
     ],
     "rewards": []
   },
+  "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a": {
+    "requires": [
+      "woodworking/birdhouse"
+    ],
+    "rewards": [
+      "woodworking/birdhouse"
+    ]
+  },
+  "c97f9b74-4d4f-4e83-993c-5df76e9d026e": {
+    "requires": [
+      "woodworking/birdhouse"
+    ],
+    "rewards": [
+      "woodworking/birdhouse"
+    ]
+  },
   "2dfe683c-56f6-4026-b9e9-2d01a03b1878": {
     "requires": [
       "woodworking/step-stool",

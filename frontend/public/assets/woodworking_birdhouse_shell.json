@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/woodworking_birdhouse_shell.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Glued birdhouse shell",
+    "item_id": "c97f9b74-4d4f-4e83-993c-5df76e9d026e",
+    "entity_type": "item",
+    "prompt": "A small pine birdhouse shell sits on a workbench: the walls and roof panels are glued together with neat seams and a round entrance hole in front, but edges are still slightly rough and the perch is not yet installed. A bottle of wood glue and a few clamps rest nearby, and a sheet of sandpaper waits to smooth the corners once the glue cures.\n\nThe setting is a near-future solarpunk shop with warm natural light, pegboard tools in the softly blurred background, and tidy surfaces. The 512×512 image is photorealistic with gentle stylization, free of logos or text, keeping the unfinished birdhouse shell centered in the frame.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

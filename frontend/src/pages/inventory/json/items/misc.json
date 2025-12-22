@@ -1044,11 +1044,25 @@
         "price": "3 dUSD"
     },
     {
+        "id": "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a",
+        "name": "Birdhouse panel set",
+        "description": "Pre-cut front, back, sides, roof, and floor pieces ready to assemble into a birdhouse.",
+        "image": "/assets/woodworking_birdhouse_panels.jpg",
+        "price": "10 dUSD"
+    },
+    {
         "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
         "name": "Pine board",
         "description": "A lightweight plank ideal for beginner projects.",
         "image": "/assets/pine_board_plank.jpg",
         "price": "8 dUSD"
+    },
+    {
+        "id": "c97f9b74-4d4f-4e83-993c-5df76e9d026e",
+        "name": "Glued birdhouse shell",
+        "description": "Walls and roof glued into a birdhouse form, waiting for sanding and final hardware.",
+        "image": "/assets/woodworking_birdhouse_shell.jpg",
+        "price": "14 dUSD"
     },
     {
         "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
