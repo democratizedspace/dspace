@@ -30,13 +30,26 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A stagnant bucket can smell. Wear nitrile gloves and let's give it fresh air.",
+            "text": "A stagnant bucket can smell. Wear nitrile gloves and let's give it fresh air without losing heat.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mix",
                     "text": "I'm ready to turn it."
+                },
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "How deep should I stir?"
                 }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Break up clumps down to the bottom so air reaches every layer. If you see soggy pockets, add browns now before they mat again.",
+            "options": [
+                { "type": "goto", "goto": "mix", "text": "Got it—time to mix." },
+                { "type": "goto", "goto": "start", "text": "I'll grab gloves first." }
             ]
         },
         {
@@ -53,10 +66,7 @@
                     "goto": "temp",
                     "process": "measure-compost-temperature",
                     "requiresItems": [
-                        {
-                            "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
-                            "count": 1
-                        }
+                        { "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8", "count": 1 }
                     ],
                     "text": "Check core temperature"
                 },
@@ -65,10 +75,7 @@
                     "goto": "moisture",
                     "process": "measure-compost-moisture",
                     "requiresItems": [
-                        {
-                            "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
-                            "count": 1
-                        }
+                        { "id": "2b57a38d-0486-40e8-a50d-d893541b50e9", "count": 1 }
                     ],
                     "text": "Measure moisture level"
                 },
@@ -76,10 +83,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        }
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
                     ],
                     "text": "Looks aerated now"
                 }
@@ -89,22 +93,32 @@
             "id": "temp",
             "text": "Thermometer reads 55 °C—ideal. Remove the probe carefully; it may be hot.",
             "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Great, I'll keep turning"
-                }
+                { "type": "goto", "goto": "finish", "text": "Great, I'll keep turning" },
+                { "type": "goto", "goto": "addfuel", "text": "It's dropping after turning." }
+            ]
+        },
+        {
+            "id": "addfuel",
+            "text": "If temps dip after aerating, mix in a scoop of dry leaves and a handful of coffee grounds to refuel the microbes.",
+            "options": [
+                { "type": "goto", "goto": "finish", "text": "Fuel added and mixed." },
+                { "type": "goto", "goto": "mix", "text": "Let me blend it more." }
             ]
         },
         {
             "id": "moisture",
             "text": "Meter shows 55% moisture—ideal for microbes. Rinse the probe after use.",
             "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Moisture looks good"
-                }
+                { "type": "goto", "goto": "finish", "text": "Moisture looks good" },
+                { "type": "goto", "goto": "adjust", "text": "It's drier or wetter than that." }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "If it's dry and dusty, mist lightly and fold in greens. If it's soggy, sprinkle a layer of shredded paper before the next turn.",
+            "options": [
+                { "type": "goto", "goto": "finish", "text": "Adjusted the moisture." },
+                { "type": "goto", "goto": "mix", "text": "I'll keep aerating." }
             ]
         },
         {
@@ -118,6 +132,9 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        { "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb", "count": 1 },
+        { "id": "5247a603-294a-4a34-a884-1ae20969b2a1", "count": 15 }
+    ],
     "requiresQuests": ["composting/start"]
 }

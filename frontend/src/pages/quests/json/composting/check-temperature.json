@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Wondering if your compost is cooking? Let's find out.",
+            "text": "Wondering if your compost is cooking? Let's find out and react to whatever the dial says.",
             "options": [{ "type": "goto", "goto": "probe", "text": "How do I check?" }]
         },
         {
             "id": "probe",
-            "text": "Insert a compost thermometer deep into the bucket to read the core heat.",
+            "text": "Insert a compost thermometer deep into the bucket to read the core heat. Wipe the probe afterward so it stays accurate.",
             "options": [
                 {
                     "type": "goto",
@@ -26,15 +26,37 @@
         },
         {
             "id": "reading",
-            "text": "The dial climbs to a toasty 60 °C—microbes are feasting happily!",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Nice, it's hot!" }]
+            "text": "What did you see? Hot is great, warm means it's slowing, and cool means it needs more air or browns.",
+            "options": [
+                { "type": "goto", "goto": "hot", "text": "It's around 60 °C." },
+                { "type": "goto", "goto": "warm", "text": "It's lukewarm." },
+                { "type": "goto", "goto": "cool", "text": "It's cool to the touch." }
+            ]
+        },
+        {
+            "id": "hot",
+            "text": "Nice! 55–65 °C means microbes are feasting. Keep the lid cracked to vent steam and plan to turn it soon.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "I'll keep an eye on it." }]
+        },
+        {
+            "id": "warm",
+            "text": "A warm reading means fuel is running low. Stir in shredded paper or dry leaves, then check again tomorrow.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "I'll feed it some browns." }]
+        },
+        {
+            "id": "cool",
+            "text": "Cool temps usually mean compacted material. Break up clumps, add a splash of water, and turn the pile for airflow.",
+            "options": [{ "type": "goto", "goto": "finish", "text": "Turning and rechecking." }]
         },
         {
             "id": "finish",
-            "text": "Keep monitoring and turning to maintain that microbial frenzy.",
+            "text": "Keep monitoring weekly and turning as needed to maintain that microbial frenzy.",
             "options": [{ "type": "finish", "text": "Will do!" }]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        { "id": "2b57a38d-0486-40e8-a50d-d893541b50e9", "count": 1 },
+        { "id": "5247a603-294a-4a34-a884-1ae20969b2a1", "count": 10 }
+    ],
     "requiresQuests": ["composting/start"]
 }

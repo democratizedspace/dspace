@@ -8,8 +8,19 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to use your compost? Let's sift out the lumpy bits.",
-            "options": [{ "type": "goto", "goto": "sift", "text": "How do I do that?" }]
+            "text": "Ready to use your compost? Let's sift out the lumpy bits and set aside chunks for another round.",
+            "options": [
+                { "type": "goto", "goto": "sift", "text": "How do I do that?" },
+                { "type": "goto", "goto": "prep", "text": "Any prep tips first?" }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Let the pile dry for a day if it's damp so it flows through the mesh. Stage a bin for fines and another for the chunky bits you plan to re-compost.",
+            "options": [
+                { "type": "goto", "goto": "sift", "text": "Ready to sift." },
+                { "type": "goto", "goto": "start", "text": "I'll wait for it to dry." }
+            ]
         },
         {
             "id": "sift",
@@ -17,7 +28,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "sort",
                     "process": "sift-compost",
                     "requiresItems": [{ "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb", "count": 1 }],
                     "text": "Sift the compost"
@@ -25,11 +36,22 @@
             ]
         },
         {
+            "id": "sort",
+            "text": "Store the fines in a covered bin for potting mix. Toss woody chunks back into the active bucket so they finish breaking down.",
+            "options": [
+                { "type": "goto", "goto": "finish", "text": "Sorted and stored." },
+                { "type": "goto", "goto": "sift", "text": "I'll run another batch." }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! The fine compost is ready for your garden.",
+            "text": "Nice! The fine compost is ready for your garden or seed-starting mix.",
             "options": [{ "type": "finish", "text": "Can't wait to use it!" }]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        { "id": "5247a603-294a-4a34-a884-1ae20969b2a1", "count": 20 },
+        { "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 200 }
+    ],
     "requiresQuests": ["composting/turn-pile"]
 }

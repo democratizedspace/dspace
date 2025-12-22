@@ -3591,6 +3591,22 @@
         "duration": "1h"
     },
     {
+        "id": "assemble-planter-box",
+        "title": "Cut, glue, and nail a cedar planter box with drainage",
+        "image": "/assets/quests/woodworking_planter_box_build.jpg",
+        "requireItems": [
+            { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 4 },
+            { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+            { "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913", "count": 1 }
+        ],
+        "consumeItems": [
+            { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 4 },
+            { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 }
+        ],
+        "createItems": [],
+        "duration": "45m"
+    },
+    {
         "id": "start-compost-bin",
         "title": "Start a kitchen compost bucket using a 5 gallon bucket",
         "image": "/assets/bucket.jpg",

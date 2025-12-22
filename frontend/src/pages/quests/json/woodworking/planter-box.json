@@ -1,87 +1,157 @@
 {
     "id": "woodworking/planter-box",
     "title": "Build a Planter Box",
-    "description": "Cut and nail a cedar planter box that introduces square joints and waterproof glue-ups.",
+    "description": "Cut, glue, and nail a cedar planter box with drainage and square corners.",
     "image": "/assets/quests/woodworking_planter_box_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready for another project? Let's make a wooden planter box for your hydroponic experiments.",
+            "text": "Ready for another project? Let's build a cedar planter box with real drainage and square corners.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Walk me through the plan."
+                },
+                {
+                    "type": "goto",
+                    "goto": "drainage",
+                    "text": "Can we make sure it drains well?"
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "We'll cut four sides and a bottom panel, then glue and nail them into a 45 cm × 20 cm box. Safety glasses on, and mind your fingers when hammering.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "gather",
-                    "text": "Sure thing!"
+                    "text": "Let's grab the materials."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cutlist",
+                    "text": "Give me the exact cut list."
+                }
+            ]
+        },
+        {
+            "id": "drainage",
+            "text": "We'll drill 6 mm drainage holes in the bottom panel and leave a 5 mm gap at the corners so water can escape. A liner is optional if you want to reduce soil contact.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Got it, let's gather."
                 }
             ]
         },
         {
             "id": "gather",
-            "text": "You'll need a few pine boards, some wood glue, and a 16 oz claw hammer. I'll supply what you lack.",
+            "text": "You'll need four pine boards, wood glue, a 16 oz claw hammer, and a pencil. I'll supply what you lack.",
             "options": [
                 {
                     "type": "grantsItems",
                     "grantsItems": [
-                        {
-                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
-                            "count": 4
-                        },
-                        {
-                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
-                            "count": 1
-                        },
-                        {
-                            "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
-                            "count": 1
-                        }
+                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 4 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+                        { "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913", "count": 1 }
                     ],
-                    "text": "Gather materials"
+                    "text": "Pass me the kit."
                 },
                 {
                     "type": "goto",
-                    "goto": "build",
-                    "text": "Materials ready",
+                    "goto": "cutlist",
+                    "text": "Materials are already on the bench.",
                     "requiresItems": [
-                        {
-                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
-                            "count": 4
-                        },
-                        {
-                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
-                            "count": 1
-                        },
-                        {
-                            "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
-                            "count": 1
-                        }
+                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 4 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+                        { "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913", "count": 1 }
                     ]
                 }
             ]
         },
         {
-            "id": "build",
-            "text": "Cut the boards to length, use the hammer and glue to assemble the box, and let everything dry overnight.",
+            "id": "cutlist",
+            "text": "Mark two boards at 45 cm for the long sides, two at 17 cm for the short sides, and one at 40 cm × 17 cm for the bottom. Pre-drill drainage holes in the bottom panel before assembly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "dryfit",
+                    "text": "Cuts and holes are laid out."
+                },
+                {
+                    "type": "goto",
+                    "goto": "drainage",
+                    "text": "Should we add more ventilation?"
+                }
+            ]
+        },
+        {
+            "id": "dryfit",
+            "text": "Dry-fit the pieces so the sides wrap the bottom panel. Check that the corners stay flush before glue-up.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Looks square—let's glue."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cutlist",
+                    "text": "One side is off; re-measuring."
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Spread glue on the mating edges, clamp the corners, and drive brad nails while the glue is wet. Wipe away squeeze-out so finish adheres later.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-planter-box",
+                    "text": "Start the 45-minute glue and nail session."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cure",
+                    "text": "Box is clamped and nailed."
+                }
+            ]
+        },
+        {
+            "id": "cure",
+            "text": "Let the box cure for at least 45 minutes before sanding the edges. If it'll live outdoors, add an exterior oil after the glue fully cures overnight.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Box assembled"
+                    "text": "Cured and lightly sanded."
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Need to fix a loose corner."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! This planter will hold soil or even a small hydroponic tub.",
+            "text": "Great job! This planter will hold soil or a small hydroponic tub. Line it, fill with potting mix, and drill a label for your first planting.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Looks sturdy!"
+                    "text": "Time to plant!"
                 }
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        { "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093", "count": 2 },
+        { "id": "5247a603-294a-4a34-a884-1ae20969b2a1", "count": 40 }
+    ],
     "requiresQuests": ["welcome/howtodoquests"]
 }

@@ -8,8 +8,19 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Waste not, friend! Let's turn scraps into nutrient-rich compost.",
-            "options": [{ "type": "goto", "goto": "bucket", "text": "Sounds good!" }]
+            "text": "Waste not, friend! Let's turn scraps into nutrient-rich compost and keep odors under control.",
+            "options": [
+                { "type": "goto", "goto": "bucket", "text": "Sounds good!" },
+                { "type": "goto", "goto": "placement", "text": "Where should I keep it?" }
+            ]
+        },
+        {
+            "id": "placement",
+            "text": "Keep the bucket shaded, on a washable surface, and away from pets. A tight lid keeps flies out, and a handful of browns on top prevents smells.",
+            "options": [
+                { "type": "goto", "goto": "bucket", "text": "Got it, let's get the bucket." },
+                { "type": "goto", "goto": "start", "text": "Remind me why we're doing this." }
+            ]
         },
         {
             "id": "bucket",
@@ -30,9 +41,14 @@
         },
         {
             "id": "fill",
-            "text": "Add plant trimmings and kitchen scraps, then cover with dry leaves.",
+            "text": "Add chopped veggie scraps and coffee grounds as greens, then cap them with dry leaves or shredded paper so the pile stays airy and balanced.",
             "options": [
-                { "type": "process", "process": "start-compost-bin", "text": "Adding scraps." },
+                { "type": "process", "process": "start-compost-bin", "text": "Layer greens and browns." },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "It's smelling a bit strong."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
@@ -42,11 +58,22 @@
             ]
         },
         {
+            "id": "adjust",
+            "text": "Add two handfuls of dry browns and stir the top layer. If it looks dry and dusty, mist lightly so it feels like a wrung-out sponge.",
+            "options": [
+                { "type": "goto", "goto": "finish", "text": "Balanced now." },
+                { "type": "goto", "goto": "fill", "text": "I'll keep layering." }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Keep layering greens and browns, and soon you'll have rich compost.",
+            "text": "Nice! Keep layering greens and browns, and soon you'll have rich compost ready for temperature checks and turning.",
             "options": [{ "type": "finish", "text": "Can't wait to see it turn." }]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        { "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8", "count": 1 },
+        { "id": "5247a603-294a-4a34-a884-1ae20969b2a1", "count": 10 }
+    ],
     "requiresQuests": ["welcome/howtodoquests"]
 }
