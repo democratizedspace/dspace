@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/robotics_reflectance_sensors.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/reflectance-sensors.json",
+    "item_name": "Calibrate reflectance sensors",
+    "item_id": "robotics/reflectance-sensors",
+    "entity_type": "quest",
+    "prompt": "A two-wheel line-following robot sits on a clean white work surface with a strip of matte black tape curving beneath its front sensors. At the nose of the chassis, two or three downward-facing IR reflectance sensors are mounted on a small bracket, angled slightly toward the floor so their emitters and receivers are clearly visible. Thin wires run from the sensors to a compact microcontroller board on top of the robot, beside a small battery pack strapped to the frame. The wheels are modest in size with a rear caster for balance, and the robot looks mid-calibration with a multimeter probe or USB cable nearby.\n\nBackground: a tidy hobby lab with soft, even lighting, organized parts bins, and a subtle solarpunk touch like a small potted plant. Photorealistic 512x512 render with gently stylized colors, no logos or text, and the composition centered on the sensors hovering above the contrasting black track.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
