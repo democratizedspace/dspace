@@ -33,7 +33,9 @@ Items in DSPACE fall into several categories:
 ## Inventory categories and filters
 
 The `/inventory` page groups items into filterable categories so you can narrow down large lists
-quickly. Items now ship with specific categories instead of a single "Misc" bucket:
+quickly. Categories are defined in the item JSON data under
+`frontend/src/pages/inventory/json/items/`. The filter chips are derived directly from that data—no
+hardcoded lists—so adding or renaming a category only requires updating the items themselves.
 
 - 3D Printing & Fabrication
 - Astronomy & Observation
@@ -47,6 +49,10 @@ quickly. Items now ship with specific categories instead of a single "Misc" buck
 - Transportation
 - Workshop & Construction
 - Plus existing categories for Aquarium, Awards, Hydroponics, and Tools
+
+Items missing an explicit category fall back to the "Uncategorized" label in the UI. When adding a
+new category, update the relevant JSON entries and refresh the assertions in
+`frontend/tests/inventory-items-import.test.ts` so the expected category set stays in sync.
 
 ## Item Properties
 

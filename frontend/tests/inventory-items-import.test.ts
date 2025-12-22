@@ -33,6 +33,15 @@ describe('inventory items import assertions', () => {
         );
     });
 
+    it('never falls back to the deprecated "Misc" label', () => {
+        const categories = items.map((item) => item.category);
+
+        categories.forEach((category) => {
+            expect(typeof category === 'string' && category.trim().length > 0).toBe(true);
+            expect(category).not.toBe('Misc');
+        });
+    });
+
     it('includes representative inventory entries', () => {
         const names = items.map((item) => item.name.toLowerCase());
         expect(names).toContain('aquarium (150 l)');
