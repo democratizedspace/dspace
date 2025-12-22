@@ -31,6 +31,7 @@
 - Settings menu entry now appears as an active destination instead of a disabled placeholder
 - Shop index featured actions now use the correct item slug instead of the numeric placeholder
 - Added pricing for the first aid kit so it no longer ships as a beta placeholder item
+- Priced the soaked hydroponic starter plug so it no longer uses a beta placeholder
 - Svelte 5 compatibility: vitest now properly resolves internal subpath imports (`svelte/internal/disclose-version`, `svelte/internal/flags/*`)
 - Vitest configuration uses client-side Svelte entry point for browser-like test behavior
 - ProcessForm test now provides complete valid form data and uses `waitFor` for async operations
