@@ -7,7 +7,8 @@
 Use this runbook to take [`dspace@v3`](https://github.com/democratizedspace/dspace/tree/v3) from source to a running web server on the sugarkube
 three-server HA k3s cluster. It links directly to the sugarkube recipes, GHCR build workflows,
 and Cloudflare Tunnel notes so you can move from zero to serving traffic without hunting for
-prerequisites.
+prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugarkube, see
+[docs/ops/deploy/k8s-environments.md](./ops/deploy/k8s-environments.md).
 
 ## Source of truth and upstream references
 
