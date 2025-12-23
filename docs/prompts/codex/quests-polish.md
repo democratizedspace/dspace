@@ -3,6 +3,13 @@
 Use this prompt when you need to identify thin or placeholder quests in v3 and
 rebuild them into coherent, realistic stories with multi-step item flows.
 
+## Copy-ready prompt
+```markdown
+# DSPACE quest quality lift (bare → shippable)
+
+You are Codex working in the democratizedspace/dspace repository on branch v3.
+Follow every instruction and stop after delivering the requested artifacts.
+
 ## Gold-standard references (v2.1 and earlier)
 Study these older quests before editing. They show tight gating, grounded
 processes, and playful but clear dialogue. Paths use commit
@@ -29,13 +36,6 @@ abbreviated mentions below:
 - `frontend/src/pages/quests/json/energy/solar-1kWh.json` — pragmatic upgrade
   quest where disassembly and reassembly steps match the storage bump, charges
   through a process instead of auto-granting, and keeps rewards modest.
-
-## Copy-ready prompt
-```markdown
-# DSPACE quest quality lift (bare → shippable)
-
-You are Codex working in the democratizedspace/dspace repository on branch v3.
-Follow every instruction and stop after delivering the requested artifacts.
 
 ## Mission
 Find “bare” quests in `frontend/src/pages/quests/json` and upgrade them so they
