@@ -3,7 +3,8 @@ export const BACKUP_FILE_PREFIX = 'dspace-save';
 
 const TOKEN_PATTERNS = [/^gh[pousr]_[A-Za-z0-9_]{36,}$/i, /^github_pat_[A-Za-z0-9_]{22,}$/i];
 
-const resolveFetch = (fetchImpl?: typeof fetch) => fetchImpl ?? (typeof fetch !== 'undefined' ? fetch : undefined);
+const resolveFetch = (fetchImpl?: typeof fetch) =>
+    fetchImpl ?? (typeof fetch !== 'undefined' ? fetch : undefined);
 
 export const isLikelyGitHubToken = (token?: string) => {
     if (typeof token !== 'string') return false;

@@ -136,7 +136,8 @@
         downloadingId = trimmedId === gistId ? 'manual' : trimmedId;
         try {
             await downloadGameStateFromGist(trimmedToken, trimmedId);
-            const successLabel = trimmedId === gistId ? 'Download successful' : 'Restore successful';
+            const successLabel =
+                trimmedId === gistId ? 'Download successful' : 'Restore successful';
             announce(successLabel, 'success');
         } catch (err) {
             const errorLabel = trimmedId === gistId ? 'Download failed' : 'Restore failed';
@@ -311,11 +312,9 @@
                                 <div class="backup-actions">
                                     <code class="backup-id">{backup.id}</code>
                                     <Chip
-                                        text={
-                                            downloading && downloadingId === backup.id
-                                                ? 'Restoring…'
-                                                : 'Restore'
-                                        }
+                                        text={downloading && downloadingId === backup.id
+                                            ? 'Restoring…'
+                                            : 'Restore'}
                                         onClick={() => handleDownload(backup.id)}
                                         inverted={true}
                                         disabled={downloading || savingToken}
