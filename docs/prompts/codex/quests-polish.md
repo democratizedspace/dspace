@@ -112,7 +112,7 @@ items or processes. Avoid gratuitous churn outside the quests you touch.
 ```markdown
 # Upgrade the quest polish prompt
 
-You are Codex reviewing `docs/prompts/codex/quests-polish.md`. Tighten the copy
+You are Codex reviewing `docs/prompts/codex/quests-polish.md`. Tighten the copy-
 ready prompt so it stays aligned with current quest quality bar and image
 manifest practices.
 
