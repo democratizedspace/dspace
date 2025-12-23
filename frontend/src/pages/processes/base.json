@@ -3440,7 +3440,12 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                "count": 1
+            }
+        ],
         "duration": "10m",
         "hardening": {
             "passes": 2,
@@ -3459,6 +3464,144 @@
                 }
             ]
         }
+    },
+    {
+        "id": "assemble-thermistor-logger",
+        "title": "Wire an Arduino Uno with a thermistor voltage divider and serial logging sketch",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 4
+            },
+            {
+                "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                "count": 1
+            },
+            {
+                "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                "count": 1
+            },
+            {
+                "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                "count": 1
+            }
+        ],
+        "duration": "20m"
+    },
+    {
+        "id": "capture-hourly-temperature-log",
+        "title": "Run the thermistor logger for a day and export readings to CSV while the rig keeps rolling",
+        "requireItems": [
+            {
+                "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                "count": 1
+            }
+        ],
+        "duration": "60m"
+    },
+    {
+        "id": "refine-temperature-graph",
+        "title": "Smooth and annotate temperature logs before sharing",
+        "requireItems": [
+            {
+                "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                "count": 1
+            }
+        ],
+        "duration": "15m"
+    },
+    {
+        "id": "deploy-temperature-json-endpoint",
+        "title": "Serve a live temperature JSON endpoint on the local network without burning the rig",
+        "requireItems": [
+            {
+                "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                "count": 1
+            },
+            {
+                "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                "count": 1
+            },
+            {
+                "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                "count": 1
+            }
+        ],
+        "duration": "20m"
+    },
+    {
+        "id": "publish-live-temperature-graph",
+        "title": "Host an auto-refreshing web chart powered by your live temperature JSON endpoint",
+        "requireItems": [
+            {
+                "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                "count": 1
+            },
+            {
+                "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                "count": 1
+            }
+        ],
+        "duration": "15m"
     },
     {
         "id": "arduino-led-blink",

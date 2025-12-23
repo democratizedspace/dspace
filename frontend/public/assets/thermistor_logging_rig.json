@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/thermistor_logging_rig.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "thermistor logging rig",
+    "item_id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+    "entity_type": "item",
+    "prompt": "An Arduino Uno sits on a clean workbench with a 10k NTC thermistor wired as a voltage divider, its leads tucked into a small breadboard beside a USB cable. A laptop with the Arduino IDE open glows softly in the background, hinting at continuous temperature logging. The solarpunk workspace has warm lighting, tidy tools, and a small plant nearby. The 512×512 image is photorealistic with gentle stylization and no readable text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

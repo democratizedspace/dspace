@@ -3,9 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const schema = require('../frontend/src/pages/quests/jsonSchemas/quest.json');
+const processes = require('../frontend/src/pages/processes/base.json');
 const hardeningSchema = require('../frontend/src/pages/sharedSchemas/hardening.json');
 
 let cachedQuestIds;
+let cachedProcessIds;
 
 function collectQuestIds(dir, ids) {
   if (!fs.existsSync(dir)) {
@@ -62,6 +64,31 @@ function loadDefaultQuestIds() {
   return cachedQuestIds;
 }
 
+function loadProcessIds() {
+  if (cachedProcessIds) {
+    return cachedProcessIds;
+  }
+
+  cachedProcessIds = new Set(processes.map((proc) => proc.id));
+  return cachedProcessIds;
+}
+
+function toProcessIdSet(knownProcessIds) {
+  if (knownProcessIds instanceof Set) {
+    return knownProcessIds;
+  }
+
+  if (Array.isArray(knownProcessIds)) {
+    return new Set(knownProcessIds);
+  }
+
+  if (typeof knownProcessIds === 'string' && knownProcessIds.length > 0) {
+    return new Set([knownProcessIds]);
+  }
+
+  return new Set(loadProcessIds());
+}
+
 function toQuestIdSet(knownQuestIds) {
   if (knownQuestIds instanceof Set) {
     return knownQuestIds;
@@ -92,12 +119,31 @@ function validateQuest(filePath, options = {}) {
   }
 
   const questIdSet = toQuestIdSet(options.knownQuestIds);
+  const processIdSet = toProcessIdSet(options.knownProcessIds);
 
   if (Array.isArray(data.requiresQuests)) {
     const missing = data.requiresQuests.filter((dep) => !questIdSet.has(dep));
     if (missing.length > 0) {
       console.error(
         `Validation failed for ${filePath}: unknown quest dependencies ${missing.join(', ')}`
+      );
+      return false;
+    }
+  }
+
+  for (const node of data.dialogue || []) {
+    if (!Array.isArray(node.options)) {
+      continue;
+    }
+
+    const missingProcessIds = node.options
+      .filter((option) => option.type === 'process')
+      .map((option) => option.process)
+      .filter((processId) => !processIdSet.has(processId));
+
+    if (missingProcessIds.length > 0) {
+      console.error(
+        `Validation failed for ${filePath}: unknown process ids ${missingProcessIds.join(', ')}`
       );
       return false;
     }
