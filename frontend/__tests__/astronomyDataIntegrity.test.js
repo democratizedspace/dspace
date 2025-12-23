@@ -8,7 +8,7 @@ const questIds = [
     'astronomy/iss-flyover.json',
     'astronomy/constellations.json',
     'astronomy/north-star.json',
-    'astronomy/venus-phases.json'
+    'astronomy/venus-phases.json',
 ];
 
 const questsRoot = path.join(__dirname, '../src/pages/quests/json');
@@ -37,7 +37,7 @@ function collectItemsFromProcess(process) {
     return [
         ...(process.requireItems ?? []),
         ...(process.consumeItems ?? []),
-        ...(process.createItems ?? [])
+        ...(process.createItems ?? []),
     ].map((entry) => entry.id);
 }
 
@@ -52,7 +52,9 @@ describe('astronomy quest data integrity', () => {
             const quest = JSON.parse(fs.readFileSync(path.join(questsRoot, questPath), 'utf8'));
             const valid = validate(quest);
             if (!valid) {
-                throw new Error(`${quest.id} failed schema validation: ${JSON.stringify(validate.errors)}`);
+                throw new Error(
+                    `${quest.id} failed schema validation: ${JSON.stringify(validate.errors)}`
+                );
             }
         }
     });
