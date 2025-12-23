@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Phone low? Set up a 200 W panel, charge controller, 200 Wh LiFePO4 battery and USB cable on dry ground. Handle connectors by their insulation and stop if cables warm or weather turns.",
+            "text": "Phone low? Set up a 200 W panel, charge controller, 200 Wh LiFePO4 battery, fused lead kit, and USB cable on dry ground. Handle connectors by their insulation and stop if cables warm or weather turns.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "setup",
+                    "goto": "kit",
                     "text": "Let's give it a try."
                 }
             ]
         },
         {
-            "id": "setup",
-            "text": "Unfold the panel toward the sun, snap its MC4 leads into the charge controller, then connect the controller to the battery. Keep the battery shaded on a nonflammable surface, double-check red to positive and black to negative, and run the USB cable from the controller to your smartphone.",
+            "id": "kit",
+            "text": "Unfold the panel, set the controller, battery, and fused leads on a dry board, and keep metal away from the terminals.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -39,20 +39,127 @@
                         {
                             "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
                             "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
                         }
                     ],
                     "text": "Take the solar kit"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Phone is charging!",
+                    "goto": "wire",
+                    "text": "Everything is staged and dry.",
                     "requiresItems": [
-                        { "id": "02b32152-a7b2-458e-9643-7b754c722165", "count": 1 },
-                        { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
-                        { "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b", "count": 1 },
-                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
-                        { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 }
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Battery first, then panel—keep red to +, black to -, fuse in line, and controller off the ground. If anything sparks or heats up, pull the fuse.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wire-portable-solar-kit",
+                    "text": "Wire and fuse the system"
+                },
+                {
+                    "type": "goto",
+                    "goto": "profile",
+                    "text": "Everything is tight, fused, and quiet.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "profile",
+            "text": "Set LiFePO4 profile: absorb 14.4 V, float 13.6 V, temp sensor attached. Note the settings so you can rebuild this later.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "configure-charge-controller-profile",
+                    "text": "Save the profile"
+                },
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Profile saved; cables cool.",
+                    "requiresItems": [
+                        {
+                            "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "charge",
+            "text": "Face the panel toward the sun, shade the battery, and charge until you collect 200 Wh. Stop if the fuse warms or voltage sags sharply.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "harvest-200Wh-portable",
+                    "text": "Harvest some dSolar"
+                },
+                {
+                    "type": "goto",
+                    "goto": "phone",
+                    "text": "200 Wh harvested and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "phone",
+            "text": "Plug the USB cable into the controller and your phone. Coil slack, keep connectors off wet ground, and stop if the cable warms.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "charge-smartphone-offgrid",
+                    "text": "Charge the phone"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Phone charged and the cable stayed cool.",
+                    "requiresItems": [
+                        {
+                            "id": "2a9083b7-8578-45e3-8d76-7a298462f847",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -69,15 +176,29 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["energy/solar"],
+    "requiresQuests": [
+        "energy/solar"
+    ],
     "hardening": {
         "passes": 3,
-        "score": 90,
+        "score": 95,
         "emoji": "💯",
         "history": [
-            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 60 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 78 },
-            { "task": "codex-offgrid-charger-2025-08-06", "date": "2025-08-06", "score": 90 }
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 78
+            },
+            {
+                "task": "codex-offgrid-charger-2025-08-06",
+                "date": "2025-08-06",
+                "score": 90
+            }
         ]
     }
 }

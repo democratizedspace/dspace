@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A charge controller keeps your battery safe. Ready to set one up?",
+            "text": "A charge controller keeps your battery safe. Ready to wire and program one for LiFePO4?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "wire",
+                    "goto": "layout",
                     "text": "Let's do it!"
                 }
             ]
         },
         {
-            "id": "wire",
-            "text": "Wire controller between panel and battery, match red to + and black to -.",
+            "id": "layout",
+            "text": "Lay out the panel, controller, 200 Wh pack, and fused leads on a dry surface. Keep the fuse pulled until you double-check polarity.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -27,17 +27,63 @@
                         {
                             "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
                             "count": 1
+                        },
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
                         }
                     ],
-                    "text": "Take the controller"
+                    "text": "Borrow my kit"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Polarity checked; fuse still out.",
+                    "requiresItems": [
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Connect battery first, then panel MC4s, keeping red to + and black to -. Torque ring terminals, seat the fuse, and tuck the controller off the ground.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wire-portable-solar-kit",
+                    "text": "Wire and fuse everything"
                 },
                 {
                     "type": "goto",
                     "goto": "configure",
-                    "text": "It's wired up",
+                    "text": "Controller powers up without sparks.",
                     "requiresItems": [
                         {
-                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
                             "count": 1
                         }
                     ]
@@ -46,17 +92,39 @@
         },
         {
             "id": "configure",
-            "text": "Set the controller to LiFePO4 mode and start charging in direct sun.",
+            "text": "Select LiFePO4 mode, set absorb to 14.4 V and float to 13.6 V, then record the settings so you can rebuild this later.",
             "options": [
                 {
                     "type": "process",
-                    "process": "solar-200Wh",
+                    "process": "configure-charge-controller-profile",
+                    "text": "Store the profile"
+                },
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Settings saved and fuse seated.",
+                    "requiresItems": [
+                        {
+                            "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "charge",
+            "text": "Point the panel at the sun and let it soak up 200 Wh. Check the controller display after 10 minutes—cool cables and steady voltage mean you're good.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "harvest-200Wh-portable",
                     "text": "Start charging"
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Battery topped off",
+                    "text": "Controller shows a happy, full pack.",
                     "requiresItems": [
                         {
                             "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
