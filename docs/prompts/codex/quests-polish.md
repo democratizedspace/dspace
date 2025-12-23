@@ -5,6 +5,14 @@ You are Codex working in the democratizedspace/dspace repository (v3). Identify 
 placeholder quests and rebuild them into paced, gated adventures that match our best shipped
 examples.
 
+## Do / Don't
+- Do keep gating coherent so `finish` stays locked behind processes and `requiresItems`.
+- Do make the final item come from a process (not a `finish` grant); reuse intermediates sensibly.
+- Do keep `hardening` present and valid; never invent schema fields.
+- Do add manifests only (no binaries) and mirror nearby manifest keys and ordering.
+- Don't churn IDs or add noise—minimize diff surface while fixing flows.
+- Do run and record all validations/regens you touch.
+
 ## Gold-standard references (v2.1, commit d956e807 on main)
 Open with `git show d956e807:<path>` to study their flow, gating, and tone:
 - hydroponics/basil — setup → water prep → seeding → transplant → lighting with consumables and
@@ -16,13 +24,14 @@ Open with `git show d956e807:<path>` to study their flow, gating, and tone:
 - ubi/basicincome — branching exposition that gates payout behind a timed earn process.
 
 ## Current v3 exemplars (HEAD)
-- rocketry/guided-rocket-build — multi-print chain (fincan, sled, avionics, camera) with
-  requiresItems gating and process-created hardware before finish.
-- chemistry/acid-neutralization — safety-focused gating that enforces PPE and neutralizer steps
-  before declaring the space safe.
-- firstaid/change-bandage — short but complete care loop with consumables, PPE, and a finish gate
-  tied to cleaned/covered state.
-Refresh this list when better shipped quests land.
+- `frontend/src/pages/quests/json/rocketry/guided-rocket-build.json` — tight pacing that chains
+  fincan/avionics/camera sled builds, enforces `requiresItems`, and delivers hardware via processes.
+- `frontend/src/pages/quests/json/chemistry/acid-neutralization.json` — safety-first PPE and neutralizer
+  gates with clear hazard resolution before declaring the area safe.
+- `frontend/src/pages/quests/json/firstaid/change-bandage.json` — concise care loop with consumables,
+  PPE, and a finish gate tied to a cleaned/covered wound state.
+Refresh this list when better shipped quests land; prefer exemplars that already pass all validations
+below.
 
 ## Mission
 - Keep quest IDs stable; only mint new IDs for genuinely new items or processes.
@@ -48,6 +57,16 @@ Refresh this list when better shipped quests land.
 - Keep NPC tone consistent with `frontend/src/pages/docs/md/npcs.md` and write clear, actionable
   lines under 2–3 sentences per node.
 
+## Source-of-truth: schemas + scripts
+- Hardening: use `frontend/src/pages/sharedSchemas/hardening.json` and keep quest/process schemas in
+  sync with `frontend/src/pages/quests/jsonSchemas/quest.json` and
+  `frontend/src/pages/processes/process.schema.json`.
+- Image manifests: locate the live JSON schema or contract for quest/item image manifests in-repo and
+  follow it exactly (no new keys). If the location is unclear, search the repo for `hardening.json`
+  and any “image manifest” schema reference or nearest equivalent; cite the paths you align to in the
+  PR summary.
+- When schema locations change, update this prompt and your PR summary with the new paths.
+
 ## Hardening (quests + processes)
 - Every quest and process must include `hardening` matching
   `frontend/src/pages/sharedSchemas/hardening.json`.
@@ -59,25 +78,32 @@ Refresh this list when better shipped quests land.
 
 ## Images and manifests (no binary assets)
 - Do **not** add `.jpg/.png/.webp` binaries. Add **only** manifest JSON alongside existing files.
-- Inventory items: `frontend/public/assets/<name>.json` with `filename` prefixed `/assets/...`
-  and `entity` pointing to the correct items file (e.g.,
-  `frontend/src/pages/inventory/json/items/*.json`).
-- Quest art: `frontend/public/assets/quests/<name>.json` with `filename` prefixed
-  `/assets/quests/...` and `entity` pointing to the quest file.
-- Schema fields: `filename`, `entity`, `entity_type` (`item` or `quest`), `item_name`, `item_id`
-  (UUID for items; quest id for quests), `prompt`, `image_model` (`Nano Banana Pro` or
-  `Z-Image Turbo` per existing assets), `resolution` (`512x512`). Preserve optional generator knobs
-  (e.g., `steps`, `cfg`) already present in nearby manifests.
-- Reuse existing filenames when updating prompts; keep descriptions accurate to the referenced item
-  or quest and avoid faces/logos/readable text.
+- Before creating/updating a manifest, open 1–2 nearby manifests and match their exact key set and
+  ordering; include optional knobs (e.g., `steps`, `cfg`, `seed`) only if already present nearby.
+- Inventory items: `frontend/public/assets/<name>.json` with `filename` prefixed `/assets/...` and
+  `entity` pointing to the correct items file (e.g., `frontend/src/pages/inventory/json/items/*.json`);
+  `item_id` must be the item UUID.
+- Quest art: `frontend/public/assets/quests/<name>.json` with `filename` prefixed `/assets/quests/...`
+  and `entity` pointing to the quest JSON; `item_id` must be the quest `id`.
+- `entity` must always reference the canonical source JSON (quest file or inventory registry), never a
+  generated output. Keep descriptions accurate to the referenced item or quest and avoid
+  faces/logos/readable text.
 
-## Generated and supporting files
+## Generated files + required checks (derive from repo, don’t guess)
 - Do not hand-edit files under `frontend/src/generated/*`; rerun the owning script if a quest change
-  requires regeneration.
-- After adding/removing quests, run `npm run new-quests:update` to refresh counts/docs and commit
-  the generated outputs it produces.
-- Validate links if you touch markdown (`npm run link-check`).
-- Prefer running `npm run test:ci` or, at minimum, `npm run hardening:validate` before committing.
+  requires regeneration. After adding/removing quests, run `npm run new-quests:update` to refresh
+  counts/docs and commit its outputs.
+- Inspect `package.json` and `.github/workflows/*` for the exact commands CI expects for quest/content
+  changes, then list and run them. As of this revision, required checks include:
+  - `pnpm run coverage`
+  - `pnpm run check`
+  - `pnpm run test:root -- --testTimeout=20000`
+  - `pnpm --dir frontend run build`
+  - `pnpm --dir frontend run setup-test-env`
+  - `pnpm --dir frontend exec playwright install --with-deps chromium chromium-headless-shell firefox webkit`
+  - `npx playwright test --shard=1/2` and `npx playwright test --shard=2/2` (run from `frontend/`)
+- Validate links if you touch markdown (`npm run link-check`). Record every command you ran with its
+  result in the PR summary.
 
 ## PR-ready output
 - List which quests were upgraded and summarize new/changed processes, items, and image manifests
