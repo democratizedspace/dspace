@@ -8,44 +8,92 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Guppies multiply quickly. Dense plants like hornwort and guppy grass keep the fry safe right in the main tank.",
+            "text": "Guppies multiply quickly. Dense floating cover keeps fry safe so adults don't snack on them.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "wait",
-                    "text": "I'll add lots of plants."
+                    "goto": "nursery",
+                    "text": "I'll thicken the cover first.",
+                    "requiresItems": [
+                        {
+                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc761419-6226-419d-90da-74e0070a7a32",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "wait",
-            "text": "Once the fry are born, feed them crushed flakes several times a day so they grow quickly.",
+            "id": "nursery",
+            "text": "Add hornwort to the floating mat and corral it to one side so babies have a thicket to hide in.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "release",
-                    "text": "They're growing fast."
+                    "type": "process",
+                    "process": "propagate-nursery-cover",
+                    "text": "Build the fry nursery.",
+                    "goto": "fry"
                 }
             ]
         },
         {
-            "id": "release",
-            "text": "When they're large enough not to be eaten, just enjoy watching them join the community tank.",
+            "id": "fry",
+            "text": "Spot fry in the thicket and scoop them into a breeder box or floating catch cup.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "collect-guppy-fry",
+                    "text": "Move fry into the nursery cup.",
+                    "goto": "feed",
+                    "requiresItems": [
+                        {
+                            "id": "97102a57-84fe-4a36-bc43-5f63f3d51372",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "feed",
+            "text": "Feed powdered flakes three to four times a day and keep the nursery cover trimmed so water stays oxygenated.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "feed-guppy-fry",
+                    "text": "Grow them until they're juveniles.",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "c67e958a-770b-4c8f-8149-adbaaf58d7d6",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "When they're big enough not to be eaten, release the juveniles back to the main tank and keep the nursery ready for the next drop.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Tiny fish everywhere!"
+                    "text": "Tiny fish everywhere!",
+                    "requiresItems": [
+                        {
+                            "id": "b117f4dd-e879-480b-974d-06fdf0d4749f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
-            "count": 1
-        }
-    ],
-    "requiresQuests": ["aquaria/guppy"],
+    "rewards": [],
+    "requiresQuests": ["aquaria/guppy", "aquaria/floating-plants"],
     "hardening": {
         "passes": 0,
         "score": 80,

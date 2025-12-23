@@ -8,26 +8,49 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your shrimp are thriving. To keep algae in check, let's add some floating plants that soak up excess nutrients.",
+            "text": "Your shrimp are thriving. To keep algae in check, let's float some plants—but we have to rinse them so we don't import pests.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "place",
-                    "text": "Sounds good."
+                    "goto": "rinse",
+                    "text": "Sounds good.",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "place",
-            "text": "Gently place a handful of guppy grass on the surface. It will multiply quickly and provide shelter for fry.",
+            "id": "rinse",
+            "text": "Fill a bucket with dechlorinated water and swish the guppy grass until debris and hitchhikers fall away.",
             "options": [
                 {
-                    "type": "goto",
+                    "type": "process",
+                    "process": "rinse-floating-plants",
+                    "text": "Rinse the guppy grass.",
+                    "goto": "acclimate"
+                }
+            ]
+        },
+        {
+            "id": "acclimate",
+            "text": "Float the rinsed plants on the heated Walstad tank, corral them to half the surface, and watch shrimp explore.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "float-acclimate-plants",
+                    "text": "Float and corral the plants.",
                     "goto": "finish",
-                    "text": "Plants added",
                     "requiresItems": [
                         {
-                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "id": "1eff82e0-013b-4f45-a94d-e2e560b7e1b4",
                             "count": 1
                         }
                     ]
@@ -36,20 +59,28 @@
         },
         {
             "id": "finish",
-            "text": "Great! Keep an eye out so it doesn't block the light for other plants.",
+            "text": "Great! Thin the mat weekly so light reaches your rooted plants, and enjoy how quickly shrimp clean the new leaves.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Will do.",
+                    "requiresItems": [
+                        {
+                            "id": "fc761419-6226-419d-90da-74e0070a7a32",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/shrimp"],
+    "requiresQuests": [
+        "aquaria/shrimp"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 80,
         "emoji": "🛠️",
         "history": []
     }

@@ -262,7 +262,12 @@
     {
         "id": "3dprint-blob-of-death",
         "title": "Miss Z homing and engulf the extruder in a blob of plastic",
-        "requireItems": [],
+        "requireItems": [
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
                 "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -286,7 +291,7 @@
         "duration": "45m",
         "hardening": {
             "passes": 0,
-            "score": 95,
+            "score": 100,
             "emoji": "🛠️",
             "history": []
         }
@@ -4271,6 +4276,182 @@
         }
     },
     {
+        "id": "rinse-floating-plants",
+        "title": "Rinse floating plants in conditioned water before adding them to shrimp",
+        "requireItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "1eff82e0-013b-4f45-a94d-e2e560b7e1b4",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "float-acclimate-plants",
+        "title": "Float-rinse guppy grass on a heated Walstad tank",
+        "requireItems": [
+            {
+                "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                "count": 1
+            },
+            {
+                "id": "1eff82e0-013b-4f45-a94d-e2e560b7e1b4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "1eff82e0-013b-4f45-a94d-e2e560b7e1b4",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fc761419-6226-419d-90da-74e0070a7a32",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "propagate-nursery-cover",
+        "title": "Thicken floating cover so guppy fry can hide",
+        "requireItems": [
+            {
+                "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                "count": 1
+            },
+            {
+                "id": "fc761419-6226-419d-90da-74e0070a7a32",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
+                "count": 1
+            },
+            {
+                "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "97102a57-84fe-4a36-bc43-5f63f3d51372",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "collect-guppy-fry",
+        "title": "Collect guppy fry from dense cover",
+        "requireItems": [
+            {
+                "id": "97102a57-84fe-4a36-bc43-5f63f3d51372",
+                "count": 1
+            },
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "c67e958a-770b-4c8f-8149-adbaaf58d7d6",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "feed-guppy-fry",
+        "title": "Feed guppy fry until they become juveniles",
+        "requireItems": [
+            {
+                "id": "c67e958a-770b-4c8f-8149-adbaaf58d7d6",
+                "count": 1
+            },
+            {
+                "id": "97102a57-84fe-4a36-bc43-5f63f3d51372",
+                "count": 1
+            },
+            {
+                "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "c67e958a-770b-4c8f-8149-adbaaf58d7d6",
+                "count": 1
+            },
+            {
+                "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
+                "count": 0.3
+            }
+        ],
+        "createItems": [
+            {
+                "id": "b117f4dd-e879-480b-974d-06fdf0d4749f",
+                "count": 1
+            }
+        ],
+        "duration": "7d",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "rinse-aquarium-filter",
         "title": "Rinse sponge filter in a bucket of dechlorinated water to preserve beneficial bacteria",
         "requireItems": [
@@ -5933,11 +6114,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "1c7cd08a-fc7a-4935-81cb-80cfd7d9754a",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -5946,6 +6132,102 @@
                     "score": 60
                 }
             ]
+        }
+    },
+    {
+        "id": "slice-temperature-tower",
+        "title": "Slice a temperature tower with stepped nozzle temps",
+        "image": "/assets/quests/temperature_tower_calibration.jpg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "1c7cd08a-fc7a-4935-81cb-80cfd7d9754a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "a242fce1-313e-4aa3-84a2-305ea2af3411",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "print-temperature-tower",
+        "title": "Print a PLA temperature tower and watch for droop or layer shifts",
+        "image": "/assets/quests/temperature_tower_calibration.jpg",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "a242fce1-313e-4aa3-84a2-305ea2af3411",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 30
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c679e37b-8c10-4cba-b5c3-210a5280f76d",
+                "count": 1
+            }
+        ],
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "score-temperature-tower",
+        "title": "Score the tower and log the best nozzle temperature",
+        "image": "/assets/quests/temperature_tower_calibration.jpg",
+        "requireItems": [
+            {
+                "id": "c679e37b-8c10-4cba-b5c3-210a5280f76d",
+                "count": 1
+            },
+            {
+                "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "a322ea87-b656-47b7-9e8e-c136d126d34c",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {

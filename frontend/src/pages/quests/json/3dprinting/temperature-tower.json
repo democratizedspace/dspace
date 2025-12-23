@@ -8,27 +8,90 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's dial in your filament settings with a temperature tower.",
+            "text": "Sydney taps a PLA spool. \"Let's dial in this filament with a proper temperature tower—measure, slice, print, then score it.\"",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "measure",
+                    "text": "Great idea!",
+                    "requiresItems": [
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Calipers out. Measure filament at three spots, average it, and jot the number so flow math is honest.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-filament-diameter",
+                    "text": "Log the filament diameter.",
+                    "goto": "slice"
+                }
+            ]
+        },
+        {
+            "id": "slice",
+            "text": "Slice the tower with 5 °C stepdowns, a slow first layer, and generous labels so you can read the temps later.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "slice-temperature-tower",
+                    "text": "Generate the stepped G-code.",
                     "goto": "print",
-                    "text": "Great idea!"
+                    "requiresItems": [
+                        {
+                            "id": "1c7cd08a-fc7a-4935-81cb-80cfd7d9754a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Slice the tower so each section prints a few degrees cooler than the last.",
+            "text": "Clean the bed, purge the nozzle, and babysit the tower as temps drop to spot stringing or droop in real time.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Tower complete",
+                    "type": "process",
+                    "process": "print-temperature-tower",
+                    "text": "Print the tower under supervision.",
+                    "goto": "inspect",
                     "requiresItems": [
                         {
-                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
-                            "count": 30
+                            "id": "a242fce1-313e-4aa3-84a2-305ea2af3411",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "When it cools, check bridging, overhangs, and layer sheen. Pick the temp band that looks best.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "score-temperature-tower",
+                    "text": "Score the tower and capture the winning temp.",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "c679e37b-8c10-4cba-b5c3-210a5280f76d",
+                            "count": 1
                         }
                     ]
                 }
@@ -36,20 +99,28 @@
         },
         {
             "id": "finish",
-            "text": "Check which layer looks best and use that temp for future prints.",
+            "text": "You now have a nozzle temperature profile to drop into every PLA slicer preset instead of guessing.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Got it, thanks!"
+                    "text": "Lock in the new temp and save the profile.",
+                    "requiresItems": [
+                        {
+                            "id": "a322ea87-b656-47b7-9e8e-c136d126d34c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinting/retraction-test"],
+    "requiresQuests": [
+        "3dprinting/retraction-test"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 80,
         "emoji": "🛠️",
         "history": []
     }

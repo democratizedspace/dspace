@@ -21,6 +21,63 @@
         "category": "3D Printing & Fabrication"
     },
     {
+        "id": "1c7cd08a-fc7a-4935-81cb-80cfd7d9754a",
+        "name": "filament diameter log",
+        "description": "Three-point caliper check of a PLA spool so slicer flow math stays honest.",
+        "image": "/assets/pla_white.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Digital & Records"
+    },
+    {
+        "id": "a242fce1-313e-4aa3-84a2-305ea2af3411",
+        "name": "temperature tower g-code",
+        "description": "Sliced tower that steps nozzle temperature every 5 °C for a single PLA test print.",
+        "image": "/assets/quests/temperature_tower_calibration.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Digital & Records"
+    },
+    {
+        "id": "c679e37b-8c10-4cba-b5c3-210a5280f76d",
+        "name": "temperature tower print",
+        "description": "150 mm calibration tower labeled with nozzle temps; uses ~30 g of 1.75 mm PLA.",
+        "image": "/assets/quests/temperature_tower_calibration.jpg",
+        "price": "0.75 dUSD",
+        "type": "3dprint",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "3D Printing & Fabrication"
+    },
+    {
+        "id": "a322ea87-b656-47b7-9e8e-c136d126d34c",
+        "name": "nozzle temperature profile",
+        "description": "Notes that capture the best-looking temperature band from your latest calibration tower.",
+        "image": "/assets/quests/temperature_tower_calibration.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Digital & Records"
+    },
+    {
         "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
         "name": "sheet of printer paper",
         "description": "Single 216 × 279 mm (8.5 × 11 in) sheet of 80 g/m² letter printer paper.",
@@ -1102,6 +1159,76 @@
         "description": "Floating plant that helps absorb excess nutrients.",
         "image": "/assets/duckweed_portion.jpg",
         "price": "1 dUSD",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "1eff82e0-013b-4f45-a94d-e2e560b7e1b4",
+        "name": "rinsed guppy grass portion",
+        "description": "Guppy grass swished through conditioned water to shake off snails and detritus.",
+        "image": "/assets/guppy_grass_starter.jpg",
+        "price": "1 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "fc761419-6226-419d-90da-74e0070a7a32",
+        "name": "floating plant mat",
+        "description": "Raft of guppy grass and duckweed covering half the surface to soak up nutrients.",
+        "image": "/assets/quests/floating_plants.jpg",
+        "price": "2 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "97102a57-84fe-4a36-bc43-5f63f3d51372",
+        "name": "dense nursery cover",
+        "description": "Tangle of floating guppy grass and hornwort corralled for fry shelter.",
+        "image": "/assets/quests/aquaria_guppy_breeding_plants.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "c67e958a-770b-4c8f-8149-adbaaf58d7d6",
+        "name": "guppy fry clutch",
+        "description": "Dozen newborn guppies corralled in a breeder box, ready for powdered food.",
+        "image": "/assets/quests/aquaria_guppy_breeding_plants.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "b117f4dd-e879-480b-974d-06fdf0d4749f",
+        "name": "juvenile guppy swarm",
+        "description": "Two-week-old guppies past the newborn stage and ready to graze the main tank.",
+        "image": "/assets/guppy_group_breeding.jpg",
+        "price": "8 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
         "category": "Biology & Lab"
     },
     {

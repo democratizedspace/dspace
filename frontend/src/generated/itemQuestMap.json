@@ -118,7 +118,8 @@
       "3dprinting/nozzle-clog",
       "3dprinting/nozzle-cleaning",
       "3dprinting/filament-change",
-      "3dprinting/calibration-cube"
+      "3dprinting/calibration-cube",
+      "3dprinting/blob-of-death"
     ],
     "rewards": [
       "woodworking/step-stool",
@@ -212,6 +213,7 @@
   "8aa6dc27-dc42-4622-ac88-cbd57f48625f": {
     "requires": [
       "3dprinting/x-belt-tension",
+      "3dprinting/temperature-tower",
       "3dprinter/start",
       "3dprinting/spool-holder",
       "3dprinting/phone-stand",
@@ -220,6 +222,7 @@
       "3dprinting/filament-change",
       "3dprinting/calibration-cube",
       "3dprinting/cable-clip",
+      "3dprinting/blob-of-death",
       "3dprinting/bed-leveling"
     ],
     "rewards": [
@@ -522,7 +525,6 @@
       "robotics/wheel-encoders",
       "robotics/odometry-basics",
       "robotics/gyro-balance",
-      "programming/graph-temp-data",
       "geothermal/replace-faulty-thermistor",
       "geothermal/log-heat-pump-warmup",
       "geothermal/log-ground-temperature",
@@ -584,6 +586,7 @@
   "ce140453-c7ef-42c9-b9f9-38acfb4219cf": {
     "requires": [
       "programming/web-server",
+      "programming/temp-json-api",
       "programming/stddev-temp",
       "programming/moving-avg-temp",
       "programming/median-temp",
@@ -616,14 +619,29 @@
     ],
     "rewards": []
   },
-  "8e81b5e5-4aee-402c-bd04-fed9188f8c07": {
+  "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2": {
     "requires": [
       "programming/temp-logger",
       "programming/temp-json-api",
-      "programming/temp-graph",
+      "programming/hello-sensor"
+    ],
+    "rewards": []
+  },
+  "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8": {
+    "requires": [
+      "programming/temp-logger",
+      "programming/temp-json-api",
+      "programming/plot-temp-cli",
+      "programming/hello-sensor",
+      "programming/graph-temp"
+    ],
+    "rewards": []
+  },
+  "8e81b5e5-4aee-402c-bd04-fed9188f8c07": {
+    "requires": [
+      "programming/temp-json-api",
       "programming/temp-email",
       "programming/temp-alert",
-      "programming/graph-temp",
       "hydroponics/temp-check",
       "geothermal/survey-ground-temperature",
       "electronics/thermometer-calibration",
@@ -634,6 +652,49 @@
     "rewards": [
       "geothermal/survey-ground-temperature"
     ]
+  },
+  "f763cb7d-4e1a-4146-b304-4d8bfde4df86": {
+    "requires": [
+      "programming/temp-graph"
+    ],
+    "rewards": []
+  },
+  "50360fd0-e296-4ef8-a3a9-00e049318166": {
+    "requires": [
+      "programming/temp-graph",
+      "programming/hello-sensor",
+      "programming/graph-temp-data"
+    ],
+    "rewards": []
+  },
+  "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d": {
+    "requires": [
+      "programming/temp-graph",
+      "electronics/thermistor-reading",
+      "electronics/potentiometer-dimmer",
+      "electronics/measure-arduino-5v",
+      "electronics/light-sensor",
+      "electronics/arduino-blink",
+      "devops/ssh-hardening",
+      "devops/firewall-rules",
+      "3dprinting/temperature-tower"
+    ],
+    "rewards": []
+  },
+  "c377a2ff-1391-4ad8-a150-1e4531067406": {
+    "requires": [
+      "programming/temp-graph"
+    ],
+    "rewards": []
+  },
+  "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed": {
+    "requires": [
+      "programming/plot-temp-cli",
+      "programming/hello-sensor",
+      "programming/graph-temp",
+      "programming/graph-temp-data"
+    ],
+    "rewards": []
   },
   "71efa72a-8c87-4dc2-8e2c-9119bb28fe50": {
     "requires": [
@@ -646,6 +707,7 @@
       "hydroponics/bucket_10",
       "hydroponics/basil",
       "hydroponics/air-stone-soak",
+      "aquaria/floating-plants",
       "aquaria/filter-rinse"
     ],
     "rewards": [
@@ -1187,18 +1249,6 @@
     ],
     "rewards": []
   },
-  "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d": {
-    "requires": [
-      "electronics/thermistor-reading",
-      "electronics/potentiometer-dimmer",
-      "electronics/measure-arduino-5v",
-      "electronics/light-sensor",
-      "electronics/arduino-blink",
-      "devops/ssh-hardening",
-      "devops/firewall-rules"
-    ],
-    "rewards": []
-  },
   "5562d728-8e62-43b2-9b3d-77cebd2ab481": {
     "requires": [
       "electronics/test-gfci-outlet"
@@ -1676,7 +1726,9 @@
     "rewards": []
   },
   "8c0f72a2-db79-4238-b80f-97721def169f": {
-    "requires": [],
+    "requires": [
+      "aquaria/floating-plants"
+    ],
     "rewards": [
       "aquaria/water-change",
       "aquaria/position-tank"
@@ -1771,7 +1823,9 @@
     "rewards": []
   },
   "21247ab3-427f-4448-8b68-4d8ad742cb7a": {
-    "requires": [],
+    "requires": [
+      "aquaria/breeding"
+    ],
     "rewards": [
       "aquaria/guppy"
     ]
@@ -1788,17 +1842,36 @@
     ],
     "rewards": []
   },
-  "0704e829-ce72-4c7d-91b0-8a774b11575d": {
+  "1eff82e0-013b-4f45-a94d-e2e560b7e1b4": {
     "requires": [
       "aquaria/floating-plants"
     ],
     "rewards": []
   },
-  "3f1cc002-1f7a-4301-a1c6-343f65e7f21a": {
-    "requires": [],
-    "rewards": [
+  "fc761419-6226-419d-90da-74e0070a7a32": {
+    "requires": [
+      "aquaria/floating-plants",
       "aquaria/breeding"
-    ]
+    ],
+    "rewards": []
+  },
+  "97102a57-84fe-4a36-bc43-5f63f3d51372": {
+    "requires": [
+      "aquaria/breeding"
+    ],
+    "rewards": []
+  },
+  "c67e958a-770b-4c8f-8149-adbaaf58d7d6": {
+    "requires": [
+      "aquaria/breeding"
+    ],
+    "rewards": []
+  },
+  "b117f4dd-e879-480b-974d-06fdf0d4749f": {
+    "requires": [
+      "aquaria/breeding"
+    ],
+    "rewards": []
   },
   "62757412-be94-48c0-a1c0-8fad9bdb8c4a": {
     "requires": [
@@ -1813,10 +1886,34 @@
     ],
     "rewards": []
   },
-  "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6": {
+  "e37c86b0-caaf-485d-b5c1-c15f7029973c": {
     "requires": [
       "3dprinting/temperature-tower",
-      "3dprinting/phone-stand"
+      "3dprinting/calibration-cube"
+    ],
+    "rewards": []
+  },
+  "1c7cd08a-fc7a-4935-81cb-80cfd7d9754a": {
+    "requires": [
+      "3dprinting/temperature-tower"
+    ],
+    "rewards": []
+  },
+  "a242fce1-313e-4aa3-84a2-305ea2af3411": {
+    "requires": [
+      "3dprinting/temperature-tower"
+    ],
+    "rewards": []
+  },
+  "c679e37b-8c10-4cba-b5c3-210a5280f76d": {
+    "requires": [
+      "3dprinting/temperature-tower"
+    ],
+    "rewards": []
+  },
+  "a322ea87-b656-47b7-9e8e-c136d126d34c": {
+    "requires": [
+      "3dprinting/temperature-tower"
     ],
     "rewards": []
   },
@@ -1851,6 +1948,13 @@
     ],
     "rewards": []
   },
+  "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6": {
+    "requires": [
+      "3dprinting/phone-stand",
+      "3dprinting/blob-of-death"
+    ],
+    "rewards": []
+  },
   "564a76de-925b-4457-a548-d015168abe0c": {
     "requires": [
       "3dprinting/nozzle-clog"
@@ -1869,9 +1973,9 @@
     ],
     "rewards": []
   },
-  "e37c86b0-caaf-485d-b5c1-c15f7029973c": {
+  "8896a0ef-edd8-4d19-ac14-19ee66470e54": {
     "requires": [
-      "3dprinting/calibration-cube"
+      "3dprinting/blob-of-death"
     ],
     "rewards": []
   }
