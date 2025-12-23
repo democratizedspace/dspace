@@ -1,11 +1,6 @@
-import {
-    exportGameStateString,
-    importGameStateString,
-    loadGameState,
-    saveGameState,
-    ready,
-} from './gameState/common.js';
+import { importGameStateString, loadGameState, saveGameState, ready } from './gameState/common.js';
 import { loadGitHubToken } from './githubToken.js';
+import { createBackupGist, listBackups, sanitizeSaveForBackup } from '../lib/cloudsync/githubGists';
 
 async function loadCloudGistId() {
     await ready;
@@ -30,56 +25,58 @@ async function clearCloudGistId() {
     await saveGameState(state);
 }
 
-async function uploadGameStateToGist(token) {
-    if (!token) {
-        token = await loadGitHubToken();
+const encodeForBackup = (state) => {
+    const jsonStr = JSON.stringify(state);
+    if (typeof btoa === 'function') {
+        return btoa(jsonStr);
     }
-    const gistId = await loadCloudGistId();
-    const headers = {
-        Authorization: `token ${token}`,
-        'Content-Type': 'application/json',
-    };
-    const content = exportGameStateString();
-    let res;
-    if (gistId) {
-        res = await fetch(`https://api.github.com/gists/${gistId}`, {
-            method: 'PATCH',
-            headers,
-            body: JSON.stringify({ files: { 'dspace-save.json': { content } } }),
-        });
-    } else {
-        res = await fetch('https://api.github.com/gists', {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({
-                description: 'DSPACE cloud save',
-                public: false,
-                files: { 'dspace-save.json': { content } },
-            }),
-        });
+    if (typeof Buffer !== 'undefined') {
+        return Buffer.from(jsonStr, 'utf8').toString('base64');
     }
-    if (!res.ok) throw new Error('Failed to upload game state');
-    const data = await res.json();
-    await saveCloudGistId(data.id);
-    return data.id;
+    throw new Error('Base64 encoding is not supported in this environment');
+};
+
+async function uploadGameStateToGist(token, fetchImpl = fetch) {
+    const activeToken = token || (await loadGitHubToken());
+    if (!activeToken) {
+        throw new Error('GitHub token required');
+    }
+
+    await ready;
+    const state = loadGameState();
+    const sanitized = sanitizeSaveForBackup(state);
+    const content = encodeForBackup(sanitized);
+    const gist = await createBackupGist(activeToken, content, fetchImpl);
+    await clearCloudGistId();
+    return gist;
 }
 
-async function downloadGameStateFromGist(token, gistId) {
-    if (!gistId) {
-        gistId = await loadCloudGistId();
-    }
-    if (!gistId) throw new Error('No gist id specified');
-    if (!token) {
-        token = await loadGitHubToken();
-    }
-    const headers = token ? { Authorization: `token ${token}` } : {};
-    const res = await fetch(`https://api.github.com/gists/${gistId}`, { headers });
+async function downloadGameStateFromGist(token, gistId, fetchImpl = fetch) {
+    const resolvedGistId = gistId || (await loadCloudGistId());
+    if (!resolvedGistId) throw new Error('No gist id specified');
+    const activeToken = token || (await loadGitHubToken());
+    const headers = activeToken ? { Authorization: `token ${activeToken}` } : {};
+    const res = await fetchImpl(`https://api.github.com/gists/${resolvedGistId}`, { headers });
     if (!res.ok) throw new Error('Failed to download game state');
     const data = await res.json();
-    const content = data.files['dspace-save.json']?.content;
+    const content = Object.values(data.files || {})[0]?.content;
     if (!content) throw new Error('Invalid gist content');
     await importGameStateString(content);
-    await saveCloudGistId(gistId);
+    await saveCloudGistId('');
 }
 
-export { loadCloudGistId, uploadGameStateToGist, downloadGameStateFromGist, clearCloudGistId };
+async function listCloudBackups(token, fetchImpl = fetch) {
+    const activeToken = token || (await loadGitHubToken());
+    if (!activeToken) {
+        throw new Error('GitHub token required');
+    }
+    return listBackups(activeToken, fetchImpl);
+}
+
+export {
+    loadCloudGistId,
+    uploadGameStateToGist,
+    downloadGameStateFromGist,
+    clearCloudGistId,
+    listCloudBackups,
+};

@@ -8,6 +8,7 @@ import {
     loadCloudGistId,
     clearCloudGistId,
 } from '../src/utils/cloudSync.js';
+import { formatBackupFilename } from '../src/lib/cloudsync/githubGists';
 import { saveGameState, loadGameState, resetGameState } from '../src/utils/gameState/common.js';
 import { saveGitHubToken } from '../src/utils/githubToken.js';
 
@@ -17,35 +18,25 @@ describe('cloudSync', () => {
         global.fetch = jest.fn();
     });
 
-    test('uploadGameStateToGist creates gist when none exists', async () => {
-        await saveGitHubToken('ghp_x');
-        global.fetch.mockResolvedValueOnce({
+    test('uploadGameStateToGist always creates a new gist and clears stored id', async () => {
+        await saveGitHubToken('ghp_mocktokenmocktoken1234');
+        const fetchSpy = jest.fn().mockResolvedValue({
             ok: true,
-            json: () => Promise.resolve({ id: '1' }),
+            json: () =>
+                Promise.resolve({
+                    id: '1',
+                    html_url: 'https://gist.github.com/1',
+                    created_at: '2024',
+                }),
         });
-        const id = await uploadGameStateToGist();
-        expect(id).toBe('1');
-        expect(await loadCloudGistId()).toBe('1');
-        expect(global.fetch).toHaveBeenCalledWith(
-            'https://api.github.com/gists',
-            expect.any(Object)
-        );
-    });
 
-    test('uploadGameStateToGist patches existing gist', async () => {
-        const state = loadGameState();
-        state.cloudSync = { gistId: 'a' };
-        await saveGameState(state);
-        await saveGitHubToken('ghp_x');
-        global.fetch.mockResolvedValueOnce({
-            ok: true,
-            json: () => Promise.resolve({ id: 'a' }),
-        });
-        await uploadGameStateToGist();
-        expect(global.fetch).toHaveBeenCalledWith(
-            'https://api.github.com/gists/a',
-            expect.any(Object)
+        const gist = await uploadGameStateToGist(undefined, fetchSpy);
+        expect(gist.id).toBe('1');
+        expect(fetchSpy).toHaveBeenCalledWith(
+            'https://api.github.com/gists',
+            expect.objectContaining({ method: 'POST' })
         );
+        expect(await loadCloudGistId()).toBe('');
     });
 
     test('downloadGameStateFromGist updates state', async () => {
@@ -53,11 +44,14 @@ describe('cloudSync', () => {
         const encoded = btoa(JSON.stringify({ quests: { q: true }, inventory: {}, processes: {} }));
         global.fetch.mockResolvedValueOnce({
             ok: true,
-            json: () => Promise.resolve({ files: { 'dspace-save.json': { content: encoded } } }),
+            json: () =>
+                Promise.resolve({
+                    files: { [formatBackupFilename(new Date(0))]: { content: encoded } },
+                }),
         });
         await downloadGameStateFromGist('ghp_x', '1');
         expect(loadGameState().quests.q).toBe(true);
-        expect(await loadCloudGistId()).toBe('1');
+        expect(await loadCloudGistId()).toBe('');
     });
 
     test('clearCloudGistId resets stored id', async () => {
@@ -67,5 +61,36 @@ describe('cloudSync', () => {
         await clearCloudGistId();
         expect(await loadCloudGistId()).toBe('');
         expect(loadGameState().cloudSync.gistId).toBe('');
+    });
+
+    test('upload payload omits github token', async () => {
+        await saveGitHubToken('ghp_mocktokenmocktoken1234');
+        const state = loadGameState();
+        state.github = { token: 'secret' };
+        await saveGameState(state);
+
+        const fetchSpy = jest.fn().mockResolvedValue({
+            ok: true,
+            json: () =>
+                Promise.resolve({
+                    id: '2',
+                    html_url: 'https://gist.github.com/2',
+                    created_at: '2024',
+                }),
+        });
+
+        await uploadGameStateToGist(undefined, fetchSpy);
+
+        const [, options] = fetchSpy.mock.calls[0];
+        const body = JSON.parse(options.body);
+        const filename = Object.keys(body.files)[0];
+        const decoded = JSON.parse(atob(body.files[filename].content));
+        expect(decoded.github).toBeUndefined();
+    });
+
+    test('formatBackupFilename uses safe timestamp', () => {
+        const filename = formatBackupFilename(new Date('2025-12-22T20:31:12Z'));
+        expect(filename).toBe('dspace-save-2025-12-22T20-31-12Z.txt');
+        expect(filename).not.toContain(':');
     });
 });
