@@ -155,11 +155,10 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                         })();
                 </script>
 
-                <script is:inline type="module">
-                        import { registerOfflineWorker } from '../scripts/offlineWorkerRegistration.js';
-
-                        registerOfflineWorker();
-                </script>
+                <script
+                        type="module"
+                        src={Astro.resolve('../scripts/offlineWorkerRegistration.js')}
+                ></script>
         </body>
 </html>
 <style>

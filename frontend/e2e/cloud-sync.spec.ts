@@ -1,74 +1,100 @@
 import { test, expect } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
-const MOCK_GIST_ID = 'gist-ci-1234567890';
-const MOCK_EXPORT_DATA = {
-    files: {
-        'dspace-save.json': {
-            content: JSON.stringify({ quests: {}, inventory: {}, processes: {} }),
-        },
-    },
-};
-const MOCK_EXPORT = JSON.stringify(MOCK_EXPORT_DATA);
-
 test.describe('Cloud Sync', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
     });
 
-    test('uploads and downloads backup data with mocked network', async ({ page }) => {
-        await page.route('**/cloud-sync/**', (route) =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
-        );
-        let uploadIntercepted = false;
-        let downloadIntercepted = false;
+    test('validates tokens, uploads new gists, and lists backups', async ({ page }) => {
+        const uploadedBodies: unknown[] = [];
+        let createdCounter = 0;
+        const backups: Array<{ id: string; created_at: string; html_url: string; files: object }> =
+            [];
+        let validationCalls = 0;
+        let offlineWorkerRequests = 0;
 
-        const handleGistRoute = async (route) => {
+        await page.route('**/scripts/offlineWorkerRegistration.js', (route) => {
+            offlineWorkerRequests += 1;
+            route.abort();
+        });
+
+        await page.route('**/gists?per_page=1', async (route) => {
+            validationCalls += 1;
+            await route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+        });
+
+        await page.route('**/gists', async (route) => {
             const request = route.request();
-            const method = request.method();
-
-            if (method === 'POST' || method === 'PATCH') {
-                uploadIntercepted = true;
+            if (request.method() === 'GET') {
                 await route.fulfill({
                     status: 200,
                     contentType: 'application/json',
-                    body: JSON.stringify({ id: MOCK_GIST_ID, ...MOCK_EXPORT_DATA }),
+                    body: JSON.stringify(backups),
                 });
                 return;
             }
 
-            if (method === 'GET') {
-                downloadIntercepted = true;
+            if (request.method() === 'POST') {
+                createdCounter += 1;
+                const body = await request.postDataJSON();
+                uploadedBodies.push(body);
+                const id = `gist-${createdCounter}`;
+                const created_at = new Date(Date.now() + createdCounter * 1_000).toISOString();
+                backups.unshift({
+                    id,
+                    created_at,
+                    html_url: `https://gist.github.com/${id}`,
+                    files: body.files,
+                });
                 await route.fulfill({
-                    status: 200,
+                    status: 201,
                     contentType: 'application/json',
-                    body: MOCK_EXPORT,
+                    body: JSON.stringify({
+                        id,
+                        created_at,
+                        html_url: `https://gist.github.com/${id}`,
+                        files: body.files,
+                    }),
                 });
                 return;
             }
 
             await route.continue();
-        };
-
-        await page.route('**/gists', handleGistRoute);
-        await page.route('**/gists/*', handleGistRoute);
+        });
 
         await page.goto('/cloudsync');
         await waitForHydration(page);
         await expect.poll(() => page.evaluate(() => window.__cloudSyncReady === true)).toBeTruthy();
 
-        const token = `ghp_${'a'.repeat(36)}`;
+        const token = `ghp_${'a'.repeat(20)}`;
         const tokenField = page.getByLabel(/GitHub Token/i);
-        await expect(tokenField).toBeVisible();
+        const saveButton = page.getByTestId('save-github-token');
         await tokenField.fill(token);
-        await page.getByRole('button', { name: /save/i }).click();
 
-        await page.getByRole('button', { name: /upload/i }).click();
-        await expect(page.getByTestId('sync-success')).toHaveText('Upload successful');
-        await expect.poll(() => page.getByLabel(/Gist ID/i).inputValue()).toBe(MOCK_GIST_ID);
+        const validationResponse = page.waitForResponse('**/gists?per_page=1');
+        await saveButton.click();
+        await validationResponse;
+        await expect(saveButton).toBeEnabled();
+        await expect(page.getByTestId('sync-success')).toHaveText(/Token saved/);
 
-        await page.getByRole('button', { name: /download/i }).click();
-        await expect(page.getByTestId('sync-success')).toHaveText('Download successful');
-        await expect.poll(() => uploadIntercepted && downloadIntercepted).toBe(true);
+        const uploadButton = page.getByTestId('upload-backup');
+        await uploadButton.click();
+        await expect(page.getByTestId('sync-success')).toHaveText(/Upload successful/);
+        await expect(page.getByLabel(/Gist ID/i)).toHaveValue('');
+
+        await uploadButton.click();
+        await expect(page.getByTestId('sync-success')).toHaveText(/Upload successful/);
+
+        await page.getByTestId('refresh-backups').click();
+        const backupItems = page.getByTestId('backups-list').locator('li');
+        await expect(backupItems).toHaveCount(2);
+        await expect(backupItems.nth(0).getByRole('link')).toHaveAttribute('href', /gist-2/);
+
+        expect(uploadedBodies).toHaveLength(2);
+        expect(JSON.stringify(uploadedBodies[0])).not.toContain('github');
+        expect(createdCounter).toBe(2);
+        expect(validationCalls).toBeGreaterThan(0);
+        expect(offlineWorkerRequests).toBe(0);
     });
 });
