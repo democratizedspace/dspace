@@ -63,7 +63,7 @@ describe('ensurePlaywrightSystemDeps', () => {
 
         const { ensurePlaywrightSystemDeps } = await importModule();
 
-        const env = { ...process.env };
+        const env = { PLAYWRIGHT_SKIP_INSTALL_DEPS: '0' };
 
         const result = ensurePlaywrightSystemDeps({
             cwd,
@@ -134,7 +134,7 @@ describe('ensurePlaywrightSystemDeps', () => {
         expect(() =>
             ensurePlaywrightSystemDeps({
                 cwd,
-                env: { ...process.env, CI: 'true' },
+                env: { PLAYWRIGHT_SKIP_INSTALL_DEPS: '0', CI: 'true' },
                 platform: 'linux',
                 cliPath,
                 depsStampPath,

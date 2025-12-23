@@ -28,6 +28,7 @@ describe('inventory items import assertions', () => {
                 'Safety & Medical',
                 'Tools',
                 'Transportation',
+                'Uncategorized',
                 'Workshop & Construction',
             ])
         );
