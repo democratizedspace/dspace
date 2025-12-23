@@ -8,26 +8,53 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Now that you've read a sensor, let's automate data collection with a short program that logs temperature over time.",
+            "text": "You've taken single readings. Now let's wire a logger that quietly records the room every hour so we can graph it later.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Let's code."
+                    "goto": "wire",
+                    "text": "I've got my Arduino kit ready."
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Use your favorite language to read the thermistor every hour and append the value to a file. We'll graph it later.",
+            "id": "wire",
+            "text": "Build the divider on a breadboard and flash a sketch that streams readings over USB. A tidy rig now makes the log trustworthy later.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-thermistor-logger",
+                    "text": "Wire the Uno and thermistor"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Rig is wired and sketch uploaded",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Let it run for a day, then roll the readings into a CSV so we can reuse them in the plotting quests.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Collect and export the log"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Script running",
+                    "text": "CSV saved",
                     "requiresItems": [
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
                             "count": 1
                         }
                     ]

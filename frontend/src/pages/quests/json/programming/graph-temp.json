@@ -8,26 +8,37 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Now that you've been collecting temperature readings, let's learn how to turn that list of numbers into a useful chart. Visualization makes trends easy to spot.",
+            "text": "Now that you've been collecting temperature readings, let's turn that list of numbers into a chart. Visualization makes trends easy to spot.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "Let's create a graph."
+                    "goto": "prep",
+                    "text": "Let's create a graph.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "script",
-            "text": "Use any plotting library you like to read the log file and generate a simple line chart. Seeing the data over time will help you diagnose issues later.",
+            "id": "prep",
+            "text": "Point your plotting script at the CSV from your logger. Even a quick CLI run beats eyeballing raw numbers.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Run the plotting script"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "My chart looks great!",
                     "requiresItems": [
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
                             "count": 1
                         }
                     ]

@@ -13,7 +13,13 @@
                 {
                     "type": "goto",
                     "goto": "script",
-                    "text": "Show me how."
+                    "text": "Show me how.",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -22,12 +28,17 @@
             "text": "Parse the log into timestamps and readings, smooth noisy spikes with a rolling average, and label daily highs and lows before plotting the result.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Clean and annotate"
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Graph generated!",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
                             "count": 1
                         }
                     ]

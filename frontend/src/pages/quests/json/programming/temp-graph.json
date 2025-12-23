@@ -13,7 +13,11 @@
                 {
                     "type": "goto",
                     "goto": "code",
-                    "text": "Show me how."
+                    "text": "Show me how.",
+                    "requiresItems": [
+                        { "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86", "count": 1 },
+                        { "id": "50360fd0-e296-4ef8-a3a9-00e049318166", "count": 1 }
+                    ]
                 }
             ]
         },
@@ -22,12 +26,17 @@
             "text": "Add a lightweight web page that calls your temperature JSON endpoint and renders an updating line chart with Chart.js or another browser-friendly library.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "publish-live-temperature-graph",
+                    "text": "Publish the live dashboard"
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Graph generated!",
                     "requiresItems": [
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
                             "count": 1
                         }
                     ]
