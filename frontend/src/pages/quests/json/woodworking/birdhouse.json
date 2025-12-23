@@ -83,9 +83,7 @@
                 {
                     "type": "goto",
                     "goto": "assemble",
-                    "requiresItems": [
-                        { "id": "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a", "count": 1 }
-                    ],
+                    "requiresItems": [{ "id": "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a", "count": 1 }],
                     "text": "Panels are cut"
                 }
             ]
@@ -107,9 +105,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [
-                        { "id": "c97f9b74-4d4f-4e83-993c-5df76e9d026e", "count": 1 }
-                    ],
+                    "requiresItems": [{ "id": "c97f9b74-4d4f-4e83-993c-5df76e9d026e", "count": 1 }],
                     "text": "Shell is glued up"
                 }
             ]
@@ -131,9 +127,7 @@
                 {
                     "type": "goto",
                     "goto": "complete",
-                    "requiresItems": [
-                        { "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8", "count": 1 }
-                    ],
+                    "requiresItems": [{ "id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8", "count": 1 }],
                     "text": "Ready to mount"
                 }
             ]
