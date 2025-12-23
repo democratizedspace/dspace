@@ -33,12 +33,13 @@ For fundamental design tips see the
 - **Run process tests**
   - Web: not supported yet.
   - CLI:
-    ```bash
-    codex exec "npm run lint && npm run type-check && npm run build && \
-    npm run test:ci && \
-    npm run test:ci -- processQuality && \
-    git diff --cached | ./scripts/scan-secrets.py"
-    ```
+  ```bash
+  codex exec "npm run lint && npm run type-check && npm run build && \
+  npm run test:ci && \
+  npm run test:ci -- processQuality && \
+  npm run hardening:validate && \
+  git diff --cached | ./scripts/scan-secrets.py"
+  ```
 
 See the [OpenAI CLI repository][openai-cli] for more flags.
 
@@ -77,8 +78,17 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files.
 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Run `npm run test:ci -- processQuality` and fix any failures.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-8. Update docs or items if needed.
+7. Normalize and validate hardening with `npm run hardening:fix` then
+   `npm run hardening:validate`.
+8. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+9. Update docs or items if needed.
+
+HARDENING
+- Schema matches items and quests: `hardening: { passes, score (0–100), emoji, history[] }`.
+- Emoji thresholds: 0 passes → 🛠️; ≥1 pass & score ≥60 → 🌀; ≥2 passes & score ≥75 → ✅;
+  ≥3 passes & score ≥90 → 💯.
+- Default backfill is `passes: 0, score: 0, emoji: 🛠️, history: []`; keep `passes` equal to
+  history length and let the fixer lift `score` to the evaluator output.
 
 OUTPUT
 A pull request with the completed process and passing checks.
@@ -94,11 +104,12 @@ You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/base.json` with corresponding
 hardening files in `frontend/src/pages/processes/hardening`. Ensure realistic
 steps, durations, item references, and passing checks (`npm run lint`,
-`npm run type-check`, `npm run build`, `npm run test:ci`, and
-`npm run test:ci -- processQuality`).
-Verify the process links to existing quests or items, add missing registry
-entries if needed, reuse existing image assets, and scan for secrets with
-`git diff --cached | ./scripts/scan-secrets.py` before committing.
+`npm run type-check`, `npm run build`, `npm run test:ci`,
+`npm run test:ci -- processQuality`, `npm run hardening:fix`, and
+`npm run hardening:validate`). Verify the process links to existing quests or
+items, add missing registry entries if needed, reuse existing image assets, and
+scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
+committing.
 
 USER:
 1. Follow the steps above.

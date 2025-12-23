@@ -101,7 +101,7 @@
     "hardening": {
         "passes": 7,
         "score": 94,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-refine-2025-08-07",

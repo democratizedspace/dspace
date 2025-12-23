@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Ready to use your compost? Let's sift out the lumpy bits.",
-            "options": [{ "type": "goto", "goto": "sift", "text": "How do I do that?" }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sift",
+                    "text": "How do I do that?"
+                }
+            ]
         },
         {
             "id": "sift",
@@ -19,7 +25,12 @@
                     "type": "goto",
                     "goto": "finish",
                     "process": "sift-compost",
-                    "requiresItems": [{ "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
+                            "count": 1
+                        }
+                    ],
                     "text": "Sift the compost"
                 }
             ]
@@ -27,9 +38,20 @@
         {
             "id": "finish",
             "text": "Nice! The fine compost is ready for your garden.",
-            "options": [{ "type": "finish", "text": "Can't wait to use it!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait to use it!"
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["composting/turn-pile"]
+    "requiresQuests": ["composting/turn-pile"],
+    "hardening": {
+        "passes": 0,
+        "score": 76,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

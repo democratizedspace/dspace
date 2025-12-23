@@ -3,8 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const schema = require('../frontend/src/pages/inventory/jsonSchemas/item.json');
+const hardeningSchema = require('../common/hardening.schema.json');
+const { validateHardening } = require('../common/hardening.js');
 
-const ajv = new Ajv();
+const ajv = new Ajv({ allErrors: true });
+ajv.addSchema(hardeningSchema);
 const validate = ajv.compile(schema);
 
 function validateItem(filePath) {
@@ -15,6 +18,15 @@ function validateItem(filePath) {
     if (!ok) {
       console.error(`Validation failed for ${filePath}`);
       console.error(validate.errors);
+      return false;
+    }
+
+    if (item.hardening) {
+      const hardeningErrors = validateHardening(item.hardening);
+      if (hardeningErrors.length > 0) {
+        console.error(`Validation failed for ${filePath}: ${hardeningErrors.join('; ')}`);
+        return false;
+      }
     }
     return ok;
   });

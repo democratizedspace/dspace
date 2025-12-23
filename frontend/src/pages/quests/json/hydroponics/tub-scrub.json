@@ -51,5 +51,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/reservoir-refresh"]
+    "requiresQuests": ["hydroponics/reservoir-refresh"],
+    "hardening": {
+        "passes": 0,
+        "score": 75,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

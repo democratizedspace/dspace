@@ -4,7 +4,7 @@
     "description": "Use a smart plug to buy 1 kWh from a wall outlet and mint 1,000 dWatt tokens.",
     "hardening": {
         "passes": 1,
-        "score": 60,
+        "score": 86,
         "emoji": "🌀",
         "history": [
             {

@@ -67,5 +67,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/preflight-check"]
+    "requiresQuests": ["rocketry/preflight-check"],
+    "hardening": {
+        "passes": 0,
+        "score": 88,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

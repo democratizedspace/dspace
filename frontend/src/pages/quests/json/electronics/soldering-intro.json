@@ -61,7 +61,7 @@
     "requiresQuests": ["electronics/basic-circuit"],
     "hardening": {
         "passes": 3,
-        "score": 60,
+        "score": 66,
         "emoji": "🌀",
         "history": [
             {

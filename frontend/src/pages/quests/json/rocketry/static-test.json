@@ -46,5 +46,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["rocketry/parachute"]
+    "requiresQuests": ["rocketry/parachute"],
+    "hardening": {
+        "passes": 0,
+        "score": 66,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

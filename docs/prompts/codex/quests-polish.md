@@ -104,8 +104,22 @@ items or processes. Avoid gratuitous churn outside the quests you touch.
   runs (lint/type-check/build/tests) relevant to quest edits. If checks are
   heavy, at least run JSON validation scripts referenced in README or existing
   prompt docs.
+- Quests must carry a `hardening` block `{ passes, score, emoji, history[] }`.
+  Use `npm run hardening:fix` after dialogue changes to refresh the score and
+  `npm run hardening:validate` before committing.
 - If `scripts/scan-secrets.py` exists, scan staged changes for secrets with
   `git diff --cached | ./scripts/scan-secrets.py`.
+
+## Hardening metadata
+- Schema: `hardening: { passes: number, score: 0–100, emoji: 🛠️|🌀|✅|💯, history: [{ task, date (YYYY-MM-DD), score }] }`.
+- Emoji thresholds mirror the item guide:
+  - 0 passes → 🛠️
+  - ≥1 pass & score ≥60 → 🌀
+  - ≥2 passes & score ≥75 → ✅
+  - ≥3 passes & score ≥90 → 💯
+- Default backfill is `passes: 0, score: 0, emoji: 🛠️, history: []`; the fixer
+  lifts `score` to the evaluator output while keeping `passes` aligned with
+  history length.
 
 ## Output for your PR
 - List upgraded quests and summarize new/changed processes, items, and manifests

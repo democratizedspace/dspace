@@ -17,6 +17,7 @@
   "include": [
     "backend/**/*.ts",
     "common/**/*.ts",
+    "common/**/*.d.ts",
     "src/**/*.ts",
     "tests/**/*.ts",
     "tests/**/*.d.ts",

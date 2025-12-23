@@ -61,5 +61,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["energy/solar"]
+    "requiresQuests": ["energy/solar"],
+    "hardening": {
+        "passes": 0,
+        "score": 75,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

@@ -27,9 +27,18 @@
                     "text": "Battery reads 9 V",
                     "process": "check-flashlight-battery",
                     "requiresItems": [
-                        { "id": "9a72fb16-fc69-45c5-beca-f25c27028977", "count": 1 },
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-                        { "id": "80d30825-a42b-4add-b715-322e1713952c", "count": 1 }
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "80d30825-a42b-4add-b715-322e1713952c",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -37,9 +46,20 @@
         {
             "id": "finish",
             "text": "Great! Replace the battery if it drops below 7.5 V.",
-            "options": [{ "type": "finish", "text": "Will do." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/assemble-kit"]
+    "requiresQuests": ["firstaid/assemble-kit"],
+    "hardening": {
+        "passes": 0,
+        "score": 76,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

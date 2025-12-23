@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import hardening from '../../common/hardening.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -9,11 +10,20 @@ const hardeningDir = path.join(root, 'src/pages/processes/hardening');
 const outPath = path.join(root, 'src/generated/processes.json');
 
 const processes = JSON.parse(fs.readFileSync(basePath, 'utf8'));
+fs.mkdirSync(hardeningDir, { recursive: true });
+
 for (const proc of processes) {
   const hardPath = path.join(hardeningDir, `${proc.id}.json`);
-  if (fs.existsSync(hardPath)) {
-    proc.hardening = JSON.parse(fs.readFileSync(hardPath, 'utf8'));
-  }
+  const hasFile = fs.existsSync(hardPath);
+  const existing = hasFile
+    ? JSON.parse(fs.readFileSync(hardPath, 'utf8'))
+    : proc.hardening;
+  const evaluationScore = hardening.evaluateProcessQuality(proc);
+  const normalized = hardening.normalizeHardening(existing ?? hardening.defaultHardening, {
+    minimumScore: evaluationScore,
+  });
+  proc.hardening = normalized;
+  fs.writeFileSync(hardPath, JSON.stringify(normalized, null, 4) + '\n');
 }
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, JSON.stringify(processes, null, 4) + '\n');

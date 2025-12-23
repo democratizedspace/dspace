@@ -25,9 +25,20 @@
         {
             "id": "finish",
             "text": "A molten glob encases the nozzle. Next time, watch the first layer to catch issues early.",
-            "options": [{ "type": "finish", "text": "Ugh." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Ugh."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"]
+    "requiresQuests": ["3dprinter/start"],
+    "hardening": {
+        "passes": 0,
+        "score": 71,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

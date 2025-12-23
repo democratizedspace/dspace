@@ -1,13 +1,18 @@
 import { describe, it, expect } from 'vitest';
 import processes from '../frontend/src/generated/processes.json' assert { type: 'json' };
-import fs from 'fs';
-import path from 'path';
+import hardening from '../common/hardening.js';
+
+const { validateHardening, evaluateProcessQuality } = hardening;
 
 describe('process hardening metadata', () => {
-  it('reinjects all hardening files', () => {
-    const hardeningDir = path.join(__dirname, '../frontend/src/pages/processes/hardening');
-    const hardeningFiles = fs.readdirSync(hardeningDir);
-    const withHardening = (processes as Array<any>).filter(p => p.hardening).length;
-    expect(withHardening).toBe(hardeningFiles.length);
-  });
+    it('includes a normalized hardening block for every process', () => {
+        for (const proc of processes as Array<any>) {
+            expect(proc.hardening).toBeDefined();
+            const errors = validateHardening(proc.hardening);
+            expect(errors).toEqual([]);
+            expect(proc.hardening.passes).toBe(proc.hardening.history.length);
+            const evaluationScore = evaluateProcessQuality(proc);
+            expect(proc.hardening.score).toBeGreaterThanOrEqual(evaluationScore);
+        }
+    });
 });

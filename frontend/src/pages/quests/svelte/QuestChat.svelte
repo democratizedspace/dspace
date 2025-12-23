@@ -6,6 +6,7 @@
     import { questFinished } from '../../../utils/gameState.js';
     import { state } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
+    import HardeningBadge from '../../../components/svelte/HardeningBadge.svelte';
 
     export let quest;
     export let pointer;
@@ -72,6 +73,7 @@
     <div class="horizontal">
         <div class="vertical">
             <h3>{quest?.title}</h3>
+            <HardeningBadge hardening={quest?.hardening} />
         </div>
     </div>
     {#if $finished}

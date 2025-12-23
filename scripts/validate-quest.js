@@ -3,6 +3,12 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const schema = require('../frontend/src/pages/quests/jsonSchemas/quest.json');
+const hardeningSchema = require('../common/hardening.schema.json');
+const {
+  validateHardening,
+  normalizeHardening,
+  evaluateQuestQuality,
+} = require('../common/hardening.js');
 
 let cachedQuestIds;
 
@@ -77,7 +83,8 @@ function toQuestIdSet(knownQuestIds) {
   return new Set(loadDefaultQuestIds());
 }
 
-const ajv = new Ajv();
+const ajv = new Ajv({ allErrors: true, $data: true });
+ajv.addSchema(hardeningSchema);
 const validate = ajv.compile(schema);
 
 function validateQuest(filePath, options = {}) {
@@ -99,6 +106,29 @@ function validateQuest(filePath, options = {}) {
       );
       return false;
     }
+  }
+
+  const hardeningErrors = validateHardening(data.hardening);
+  if (hardeningErrors.length > 0) {
+    console.error(`Validation failed for ${filePath}: ${hardeningErrors.join('; ')}`);
+    return false;
+  }
+
+  const evaluationScore = evaluateQuestQuality(data);
+  const normalizedHardening = normalizeHardening(data.hardening, {
+    minimumScore: evaluationScore,
+  });
+
+  if (normalizedHardening.score < evaluationScore) {
+    console.error(
+      `Validation failed for ${filePath}: hardening score ${normalizedHardening.score} below evaluator ${evaluationScore}`
+    );
+    return false;
+  }
+
+  if (normalizedHardening.passes !== normalizedHardening.history.length) {
+    console.error(`Validation failed for ${filePath}: passes must equal history length`);
+    return false;
   }
 
   return true;

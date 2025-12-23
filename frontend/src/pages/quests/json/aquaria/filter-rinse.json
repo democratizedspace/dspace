@@ -54,7 +54,7 @@
     "requiresQuests": ["aquaria/sponge-filter"],
     "hardening": {
         "passes": 1,
-        "score": 65,
+        "score": 76,
         "emoji": "🌀",
         "history": [
             {

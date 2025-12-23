@@ -50,5 +50,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/filter-clean"]
+    "requiresQuests": ["hydroponics/filter-clean"],
+    "hardening": {
+        "passes": 0,
+        "score": 60,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

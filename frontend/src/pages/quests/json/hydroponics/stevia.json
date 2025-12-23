@@ -78,5 +78,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/lettuce"]
+    "requiresQuests": ["hydroponics/lettuce"],
+    "hardening": {
+        "passes": 0,
+        "score": 93,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

@@ -26,6 +26,7 @@ test('returns true for valid quest json', () => {
                 options: [{ type: 'finish', text: 'done' }],
             },
         ],
+        hardening: { passes: 0, score: 0, emoji: '🛠️', history: [] },
     };
     const file = writeQuestFile(validQuest);
     const result = validateQuest(file);
@@ -47,6 +48,7 @@ test('returns false for invalid quest json', () => {
                 options: [{ type: 'finish', text: 'done' }],
             },
         ],
+        hardening: { passes: 0, score: 0, emoji: '🛠️', history: [] },
     };
     const file = writeQuestFile(invalidQuest);
     const result = validateQuest(file);
@@ -69,6 +71,7 @@ test('fails when quest depends on an unknown quest id', () => {
                 options: [{ type: 'finish', text: 'done' }],
             },
         ],
+        hardening: { passes: 0, score: 0, emoji: '🛠️', history: [] },
         requiresQuests: ['quests/unknown'],
     };
     const file = writeQuestFile(questWithMissingDep);
@@ -92,6 +95,7 @@ test('passes when dependencies exist in the known quest set', () => {
                 options: [{ type: 'finish', text: 'done' }],
             },
         ],
+        hardening: { passes: 0, score: 0, emoji: '🛠️', history: [] },
         requiresQuests: ['quests/existing'],
     };
     const file = writeQuestFile(questWithValidDeps);

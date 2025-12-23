@@ -62,5 +62,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/water-change"]
+    "requiresQuests": ["aquaria/water-change"],
+    "hardening": {
+        "passes": 0,
+        "score": 84,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

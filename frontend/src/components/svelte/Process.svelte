@@ -16,6 +16,7 @@
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
+    import HardeningBadge from './HardeningBadge.svelte';
 
     export let processId;
     export let processData = null;
@@ -145,6 +146,7 @@
     <Chip text="">
         <div class="container">
             <h3>{process.title}</h3>
+            <HardeningBadge hardening={process.hardening} />
 
             {#if process.requireItems && process.requireItems.length > 0}
                 <h6>Requires:</h6>

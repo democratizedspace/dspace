@@ -66,5 +66,11 @@
             "count": 10
         }
     ],
-    "requiresQuests": ["hydroponics/basil", "3dprinter/start"]
+    "requiresQuests": ["hydroponics/basil", "3dprinter/start"],
+    "hardening": {
+        "passes": 0,
+        "score": 79,
+        "emoji": "🛠️",
+        "history": []
+    }
 }
