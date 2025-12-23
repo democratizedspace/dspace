@@ -56,7 +56,7 @@ describe('cloudSync', () => {
         });
         await downloadGameStateFromGist('ghp_x', '1');
         expect(loadGameState().quests.q).toBe(true);
-        expect(await loadCloudGistId()).toBe('1');
+        expect(await loadCloudGistId()).toBe('');
     });
 
     test('clearCloudGistId resets stored id', async () => {

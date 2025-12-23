@@ -25,14 +25,6 @@ async function loadCloudGistId() {
     return state.cloudSync?.gistId || '';
 }
 
-async function saveCloudGistId(id) {
-    await ready;
-    const state = loadGameState();
-    state.cloudSync = state.cloudSync || {};
-    state.cloudSync.gistId = id;
-    await saveGameState(state);
-}
-
 async function clearCloudGistId() {
     await ready;
     const state = loadGameState();
@@ -67,7 +59,8 @@ async function downloadGameStateFromGist(token, gistId) {
     if (!token) {
         token = await loadGitHubToken();
     }
-    const headers = token ? { Authorization: `token ${token}` } : {};
+    const trimmedToken = token?.trim?.();
+    const headers = trimmedToken ? { Authorization: `token ${trimmedToken}` } : {};
     const res = await fetch(`https://api.github.com/gists/${gistId}`, { headers });
     if (!res.ok) throw new Error('Failed to download game state');
     const data = await res.json();
@@ -78,7 +71,6 @@ async function downloadGameStateFromGist(token, gistId) {
     const content = backupFile?.content;
     if (!content) throw new Error('Invalid gist content');
     await importGameStateString(content);
-    await saveCloudGistId(gistId);
 }
 
 async function fetchBackupList(token) {

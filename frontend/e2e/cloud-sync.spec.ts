@@ -13,6 +13,18 @@ test.describe('Cloud Sync', () => {
             html_url: string;
             filename: string;
         }[] = [];
+        const offlineRequests: string[] = [];
+        let restoredId = '';
+
+        page.on('request', (request) => {
+            const url = request.url();
+            if (url.includes('/scripts/offlineWorkerRegistration.js')) {
+                offlineRequests.push(url);
+            }
+            if (/\/gists\/[^/?]+$/i.test(url) && request.method() === 'GET') {
+                restoredId = url.split('/').pop() || '';
+            }
+        });
 
         await page.route('**/gists?per_page=1', (route) =>
             route.fulfill({ status: 200, contentType: 'application/json', body: '[]' })
@@ -41,7 +53,10 @@ test.describe('Cloud Sync', () => {
                 const fileName = Object.keys(payload.files || {})[0];
                 const content = payload.files[fileName]?.content || '';
                 const decoded = Buffer.from(content, 'base64').toString('utf8');
-                expect(decoded.includes('github')).toBe(false);
+                const parsed = JSON.parse(decoded);
+                expect(parsed.github?.token).toBeUndefined();
+                expect(JSON.stringify(parsed)).not.toMatch(/gh[pousr]_[A-Za-z0-9_]{20,}/i);
+                expect(JSON.stringify(parsed)).not.toMatch(/github_pat_[A-Za-z0-9_]{22,}/i);
 
                 const newId = `gist-${created.length + 1}`;
                 const created_at = `2024-01-0${created.length + 1}T12:00:00Z`;
@@ -112,8 +127,10 @@ test.describe('Cloud Sync', () => {
         await expect(page.getByTestId('backup-list')).toContainText(created[0].id);
         expect(created[0].id).not.toBe(created[1].id);
 
-        await page.getByLabel(/Gist ID/i).fill(created[0].id);
-        await page.getByRole('button', { name: /download/i }).click();
-        await expect(page.getByTestId('sync-success')).toHaveText('Download successful');
+        await page.getByTestId(`restore-backup-${created[0].id}`).click();
+        await expect(page.getByTestId('sync-success')).toHaveText(/Restore successful/);
+        await expect.poll(() => restoredId).toBe(created[0].id);
+
+        expect(offlineRequests).toHaveLength(0);
     });
 });

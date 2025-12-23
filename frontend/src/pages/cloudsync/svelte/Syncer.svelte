@@ -5,7 +5,6 @@
         clearCloudGistId,
         downloadGameStateFromGist,
         fetchBackupList,
-        loadCloudGistId,
         uploadGameStateToGist,
     } from '../../../utils/cloudSync.js';
     import {
@@ -27,6 +26,7 @@
     let savingToken = false;
     let uploading = false;
     let downloading = false;
+    let downloadingId = '';
     let refreshing = false;
     let backups = [];
     let backupError = '';
@@ -52,8 +52,7 @@
         try {
             backups = await fetchBackupList(trimmedToken);
         } catch (err) {
-            console.error(err);
-            backupError = 'Unable to load backups right now.';
+            backupError = err?.message || 'Unable to load backups right now.';
         } finally {
             refreshing = false;
         }
@@ -61,7 +60,8 @@
 
     onMount(async () => {
         token = await loadGitHubToken();
-        gistId = await loadCloudGistId();
+        gistId = '';
+        await clearCloudGistId();
         root?.setAttribute('data-hydrated', 'true');
         if (token) {
             await loadBackups(token);
@@ -84,7 +84,6 @@
             announce('Token saved and validated', 'success');
             await loadBackups(trimmedToken);
         } catch (err) {
-            console.error(err);
             await clearGitHubToken();
             token = '';
             announce('Token validation failed', 'error');
@@ -115,7 +114,6 @@
                 backups = [result, ...backups];
             }
         } catch (err) {
-            console.error(err);
             announce('Upload failed', 'error');
         } finally {
             uploading = false;
@@ -127,20 +125,25 @@
         await clearCloudGistId();
     };
 
-    const handleDownload = async () => {
-        if (!gistId) {
+    const handleDownload = async (targetGistId = gistId) => {
+        const trimmedId = targetGistId?.trim?.();
+        if (!trimmedId) {
             announce('Gist ID required', 'error');
             return;
         }
+        const trimmedToken = token?.trim?.();
         downloading = true;
+        downloadingId = trimmedId === gistId ? 'manual' : trimmedId;
         try {
-            await downloadGameStateFromGist(token, gistId);
-            announce('Download successful', 'success');
+            await downloadGameStateFromGist(trimmedToken, trimmedId);
+            const successLabel = trimmedId === gistId ? 'Download successful' : 'Restore successful';
+            announce(successLabel, 'success');
         } catch (err) {
-            console.error(err);
-            announce('Download failed', 'error');
+            const errorLabel = trimmedId === gistId ? 'Download failed' : 'Restore failed';
+            announce(errorLabel, 'error');
         } finally {
             downloading = false;
+            downloadingId = '';
         }
     };
 
@@ -153,7 +156,6 @@
             await navigator.clipboard.writeText(id);
             announce('Gist ID copied', 'success');
         } catch (err) {
-            console.error(err);
             announce('Failed to copy Gist ID', 'error');
         }
     };
@@ -211,7 +213,7 @@
             <p class="hint">Token is stored locally after validation.</p>
         </div>
         <div class="form-group">
-            <label for="gist">Gist ID</label>
+            <label for="gist">Gist ID (optional)</label>
             <div class="token-input">
                 <input
                     id="gist"
@@ -231,6 +233,7 @@
                     disabled={uploading || downloading}
                 />
             </div>
+            <p class="hint">Optional: paste a gist ID if you need a manual restore.</p>
         </div>
         <div class="buttons">
             <Chip
@@ -244,11 +247,11 @@
                 {/if}
             </Chip>
             <Chip
-                text={downloading ? 'Downloading…' : 'Download'}
+                text={downloading && downloadingId === 'manual' ? 'Downloading…' : 'Download'}
                 onClick={handleDownload}
                 disabled={downloading || savingToken}
             >
-                {#if downloading}
+                {#if downloading && downloadingId === 'manual'}
                     <span class="spinner" aria-hidden="true"></span>
                 {/if}
             </Chip>
@@ -307,6 +310,21 @@
                                 </div>
                                 <div class="backup-actions">
                                     <code class="backup-id">{backup.id}</code>
+                                    <Chip
+                                        text={
+                                            downloading && downloadingId === backup.id
+                                                ? 'Restoring…'
+                                                : 'Restore'
+                                        }
+                                        onClick={() => handleDownload(backup.id)}
+                                        inverted={true}
+                                        disabled={downloading || savingToken}
+                                        dataTestId={`restore-backup-${backup.id}`}
+                                    >
+                                        {#if downloading && downloadingId === backup.id}
+                                            <span class="spinner" aria-hidden="true"></span>
+                                        {/if}
+                                    </Chip>
                                     <Chip
                                         text="Copy ID"
                                         onClick={() => copyGistId(backup.id)}

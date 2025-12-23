@@ -6,8 +6,10 @@ import Syncer from './svelte/Syncer.svelte';
 <Page title="Cloud Sync" columns="1">
     <section class="intro">
         <p>
-            Back up or restore your DSPACE saves using a private GitHub Gist. Your token and gist ID
-            are stored only in your browser and never sent to DSPACE servers.
+            Back up or restore your DSPACE saves using a private GitHub Gist. Your credentials are
+            stored only in your browser and never sent to DSPACE servers. Create a separate PAT per
+            device (recommended). Backups are discovered by listing your GitHub gists created by
+            DSPACE.
         </p>
         <ol>
             <li>
@@ -32,11 +34,14 @@ import Syncer from './svelte/Syncer.svelte';
                 </ul>
             </li>
             <li>
-                Enter a Gist ID from the end of a
-                <a href="https://gist.github.com/">GitHub Gist URL</a>
-                to restore data, or leave it blank and we will create one when you upload.
+                Connect your token to load the list of backups below. Use the “Restore” action next
+                to a backup to recover it.
             </li>
-            <li>Use the same token and Gist ID on any device to sync your save data.</li>
+            <li>
+                Optional advanced restore: paste a Gist ID from the end of a
+                <a href="https://gist.github.com/">GitHub Gist URL</a>
+                if you need to restore manually.
+            </li>
         </ol>
     </section>
     <div class="vertical">
