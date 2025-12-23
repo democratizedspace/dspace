@@ -12,6 +12,7 @@
         saveGitHubToken,
         clearGitHubToken,
     } from '../../../utils/githubToken.js';
+    import Chip from '../../../components/svelte/Chip.svelte';
 
     let root;
     let token = '';
@@ -82,25 +83,44 @@
         <div class="form-group">
             <label for="token">GitHub Token*</label>
             <div class="token-input">
-                <input id="token" type="password" bind:value={token} />
-                <button type="button" on:click={saveToken}>Save</button>
-                <button type="button" on:click={clearTokenLocal} data-testid="clear-sync-token"
-                    >Clear</button
-                >
+                <input
+                    id="token"
+                    type="password"
+                    bind:value={token}
+                    autocapitalize="none"
+                    spellcheck={false}
+                    autocomplete="new-password"
+                />
+                <div class="chip-row">
+                    <Chip text="Save" onClick={saveToken} inverted={true} />
+                    <Chip
+                        text="Clear"
+                        onClick={clearTokenLocal}
+                        hazard={true}
+                        dataTestId="clear-sync-token"
+                    />
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label for="gist">Gist ID</label>
             <div class="token-input">
-                <input id="gist" type="text" bind:value={gistId} />
-                <button type="button" on:click={clearGistId} data-testid="clear-gist-id"
-                    >Clear</button
-                >
+                <input
+                    id="gist"
+                    class="gist-input"
+                    type="text"
+                    bind:value={gistId}
+                    autocapitalize="none"
+                    spellcheck={false}
+                    autocomplete="off"
+                    placeholder="e.g. 0123456789abcdef..."
+                />
+                <Chip text="Clear" onClick={clearGistId} hazard={true} dataTestId="clear-gist-id" />
             </div>
         </div>
         <div class="buttons">
-            <button type="button" class="chip" on:click={handleUpload}> Upload </button>
-            <button type="button" class="chip" on:click={handleDownload}> Download </button>
+            <Chip text="Upload" onClick={handleUpload} inverted={true} />
+            <Chip text="Download" onClick={handleDownload} />
         </div>
         {#if message}
             <p
@@ -128,31 +148,19 @@
     }
     .token-input {
         display: flex;
+        flex-wrap: wrap;
         gap: 10px;
+        align-items: center;
     }
     .form-group label {
         font-weight: bold;
     }
     .buttons {
         display: flex;
+        flex-wrap: wrap;
         gap: 10px;
-    }
-    .chip {
-        opacity: 0.8;
-        background-color: #68d46d;
-        border-radius: 0.4rem;
-        color: black;
-        border: none;
-        padding: 6px 12px;
-        font-size: 1em;
-        font-weight: 600;
-    }
-    .chip:hover,
-    .chip:focus-visible {
-        opacity: 1;
-        cursor: pointer;
-        outline: 2px solid #fff;
-        outline-offset: 2px;
+        justify-content: flex-start;
+        align-items: center;
     }
     .message {
         color: #90ee90;
@@ -167,19 +175,37 @@
         border-radius: 6px;
     }
 
+    .gist-input {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+
     .chip-container {
         text-align: center;
         display: inline-flex;
         flex-wrap: wrap;
         justify-content: center;
-        opacity: 0.8;
         background-color: #007006;
         border-radius: 0.4rem;
         color: white;
         margin: 1px;
         padding: 5px;
     }
-    .chip-container:hover {
-        opacity: 1;
+
+    .chip-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+        .token-input {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .chip-row {
+            justify-content: flex-start;
+        }
     }
 </style>
