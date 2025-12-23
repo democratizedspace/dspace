@@ -2764,7 +2764,7 @@
     },
     {
         "id": "capture-hourly-temperature-log",
-        "title": "Run the thermistor logger for a day and export readings to CSV",
+        "title": "Run the thermistor logger for a day and export readings to CSV while the rig keeps rolling",
         "requireItems": [
             {
                 "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
@@ -2808,7 +2808,7 @@
     },
     {
         "id": "deploy-temperature-json-endpoint",
-        "title": "Serve your latest reading as JSON on the local network",
+        "title": "Serve a live temperature JSON endpoint on the local network without burning the rig",
         "requireItems": [
             {
                 "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
@@ -2834,7 +2834,7 @@
     },
     {
         "id": "publish-live-temperature-graph",
-        "title": "Host an auto-refreshing web chart powered by your JSON endpoint",
+        "title": "Host an auto-refreshing web chart powered by your live temperature JSON endpoint",
         "requireItems": [
             {
                 "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",

@@ -1658,7 +1658,7 @@
         "description": "Hourly temperature readings with timestamps exported from your thermistor logging rig.",
         "image": "/assets/quests/programming_temperature_logger_script.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Digital & Records"
     },
     {
         "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
@@ -1666,7 +1666,7 @@
         "description": "A simple Matplotlib graph showing your logged temperature readings over time.",
         "image": "/assets/quests/programming_graph_temperature_data.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Digital & Records"
     },
     {
         "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
@@ -1674,7 +1674,7 @@
         "description": "A cleaned plot with rolling averages and high/low annotations to make trends pop.",
         "image": "/assets/quests/programming_graph_temperature_logs_script.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Digital & Records"
     },
     {
         "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
@@ -1682,7 +1682,7 @@
         "description": "A lightweight API route that serves the latest thermistor reading as JSON on your network.",
         "image": "/assets/quests/programming_temperature_json_api.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Digital & Records"
     },
     {
         "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
@@ -1690,7 +1690,7 @@
         "description": "An auto-refreshing web page that charts your live JSON endpoint for anyone on the LAN.",
         "image": "/assets/quests/temperature_log_line_chart.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Digital & Records"
     },
     {
         "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",

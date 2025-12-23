@@ -1,7 +1,7 @@
 {
     "id": "programming/temp-graph",
     "title": "Serve a live temperature graph",
-    "description": "Host a simple web page that fetches your JSON endpoint and renders an auto-refreshing temperature chart.",
+    "description": "Host a simple web page that fetches your live temperature JSON endpoint and renders an auto-refreshing temperature chart.",
     "image": "/assets/quests/temperature_log_line_chart.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -24,7 +24,7 @@
         },
         {
             "id": "code",
-            "text": "Add a lightweight web page that calls your temperature JSON endpoint and renders an updating line chart with Chart.js or another browser-friendly library.",
+            "text": "Add a lightweight web page that calls your live temperature JSON endpoint and renders an updating line chart with Chart.js or another browser-friendly library.",
             "options": [
                 {
                     "type": "process",

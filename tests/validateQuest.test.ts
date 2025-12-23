@@ -100,3 +100,53 @@ test('passes when dependencies exist in the known quest set', () => {
     expect(result).toBe(true);
 });
 
+test('fails when a process option references an unknown process id', () => {
+    const questWithMissingProcess = {
+        id: 'q-missing-proc',
+        title: 'Needs Process',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [
+                    { type: 'process', process: 'non-existent-process', text: 'run it' },
+                    { type: 'finish', text: 'done' },
+                ],
+            },
+        ],
+    };
+    const file = writeQuestFile(questWithMissingProcess);
+    const result = validateQuest(file, { knownProcessIds: new Set(['existing-process']) });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(false);
+});
+
+test('passes when all process references exist in the known process set', () => {
+    const questWithValidProcess = {
+        id: 'q-valid-proc',
+        title: 'Has Process',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [
+                    { type: 'process', process: 'existing-process', text: 'run it' },
+                    { type: 'finish', text: 'done' },
+                ],
+            },
+        ],
+    };
+    const file = writeQuestFile(questWithValidProcess);
+    const result = validateQuest(file, { knownProcessIds: new Set(['existing-process']) });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(true);
+});
+

@@ -1,7 +1,7 @@
 {
     "id": "programming/temp-json-api",
     "title": "Serve Temperature as JSON",
-    "description": "Expose the latest sensor reading at a JSON endpoint.",
+    "description": "Expose the latest sensor reading at a live temperature JSON endpoint.",
     "image": "/assets/quests/programming_temperature_json_api.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -24,7 +24,7 @@
         },
         {
             "id": "code",
-            "text": "Read the sensor and respond with JSON like `{ \"temp\": 22.5 }` at `/temp`. Keep it lightweight so it can run alongside the logger.",
+            "text": "Read the sensor and respond with JSON like `{ \"temp\": 22.5 }` at `/temp`. Keep it lightweight so it can run alongside the logger and stay worthy of being called a live temperature JSON endpoint.",
             "options": [
                 {
                     "type": "process",
