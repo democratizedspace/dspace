@@ -1,0 +1,26 @@
+{
+    "$id": "https://democratizedspace.com/schemas/hardening.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "passes": { "type": "integer", "minimum": 0 },
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "emoji": { "type": "string", "enum": ["🛠️", "🌀", "✅", "💯"] },
+        "history": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "task": { "type": "string" },
+                    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+                    "score": { "type": "integer", "minimum": 0, "maximum": 100 }
+                },
+                "required": ["task", "date", "score"],
+                "additionalProperties": false
+            },
+            "default": []
+        }
+    },
+    "required": ["passes", "score", "emoji", "history"],
+    "additionalProperties": false
+}

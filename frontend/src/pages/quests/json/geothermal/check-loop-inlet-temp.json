@@ -9,7 +9,13 @@
         {
             "id": "start",
             "text": "Curious how cool the loop returns? Let's measure the inlet temperature.",
-            "options": [{ "type": "goto", "goto": "setup", "text": "Show me how." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Show me how."
+                }
+            ]
         },
         {
             "id": "setup",
@@ -20,16 +26,32 @@
                     "goto": "finish",
                     "text": "Temperature recorded",
                     "process": "arduino-thermistor-read",
-                    "requiresItems": [{ "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice work! Logging inlet temps helps spot loop performance issues early.",
-            "options": [{ "type": "finish", "text": "Can't wait to analyze." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait to analyze."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/survey-ground-temperature"]
+    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "hardening": {
+        "passes": 0,
+        "score": 64,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

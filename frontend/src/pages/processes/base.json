@@ -97,11 +97,11 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
-                    "task": "codex-process-hardening-2025-08-18",
-                    "date": "2025-08-18",
+                    "task": "codex-process-hardening-2025-08-06",
+                    "date": "2025-08-06",
                     "score": 60
                 }
             ]
@@ -292,7 +292,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -493,7 +493,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-13",
@@ -523,7 +523,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -688,8 +688,8 @@
         "duration": "28d",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 66,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-14",
@@ -755,7 +755,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-harvest-stevia-2025-08-20",
@@ -786,7 +786,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-14",
@@ -1723,8 +1723,8 @@
         "duration": "8h",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 57,
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1886,7 +1886,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-14",
@@ -2103,7 +2103,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-22",
@@ -2173,7 +2173,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-20",
@@ -2203,7 +2203,7 @@
     },
     {
         "id": "measure-resistance",
-        "title": "Measure a 220 \u03a9 resistor with a digital multimeter",
+        "title": "Measure a 220 Ω resistor with a digital multimeter",
         "image": "/assets/launch_controller.jpg",
         "requireItems": [
             {
@@ -2313,7 +2313,7 @@
     },
     {
         "id": "calibrate-multimeter",
-        "title": "Calibrate a digital multimeter using a 220 \u03a9 reference resistor",
+        "title": "Calibrate a digital multimeter using a 220 Ω reference resistor",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -2345,7 +2345,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-wear-anti-static-wrist-strap-2025-08-15",
@@ -2949,7 +2949,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-14",
@@ -2988,7 +2988,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -3046,7 +3046,7 @@
     },
     {
         "id": "solder-led-resistor",
-        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 \u03a9 resistor with two jumper wires",
+        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 Ω resistor with two jumper wires",
         "requireItems": [
             {
                 "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
@@ -3137,7 +3137,7 @@
     },
     {
         "id": "verify-resistor-color-code",
-        "title": "Confirm a 220 \u03a9 resistor's value using a printed color code chart",
+        "title": "Confirm a 220 Ω resistor's value using a printed color code chart",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -3275,7 +3275,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-15",
@@ -3328,7 +3328,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-attach-aquarium-thermometer-2025-08-24",
@@ -3834,7 +3834,7 @@
         "hardening": {
             "passes": 2,
             "score": 70,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -3873,7 +3873,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-13",
@@ -3915,7 +3915,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -3944,20 +3944,20 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 70,
-            "emoji": "\ud83c\udf00",
+            "score": 65,
+            "emoji": "🌀",
             "history": [
                 {
-                    "task": "codex-process-hardening-2025-08-15",
+                    "task": "codex-assemble-servo-arm-2025-08-15",
                     "date": "2025-08-15",
-                    "score": 70
+                    "score": 65
                 }
             ]
         }
     },
     {
         "id": "solder-smd-resistor",
-        "title": "Solder a 220 \u03a9 SMD resistor onto a PCB using a flux pen and precision tweezers",
+        "title": "Solder a 220 Ω SMD resistor onto a PCB using a flux pen and precision tweezers",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -3995,8 +3995,8 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 56,
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4016,7 +4016,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-test-gfci-outlet-2025-08-16",
@@ -4046,7 +4046,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-use-soldering-mat-2025-08-18",
@@ -4075,8 +4075,8 @@
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 36,
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4099,8 +4099,8 @@
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 36,
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4119,8 +4119,8 @@
         "duration": "3m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 33,
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4144,7 +4144,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-configure-ufw-firewall-2025-08-24",
@@ -4174,7 +4174,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -4203,14 +4203,14 @@
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 36,
+            "emoji": "🛠️",
             "history": []
         }
     },
     {
         "id": "trim-resistor-leads",
-        "title": "Trim excess leads from a soldered 220 \u03a9 resistor using wire cutters",
+        "title": "Trim excess leads from a soldered 220 Ω resistor using wire cutters",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -4246,8 +4246,8 @@
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 44,
+            "emoji": "🛠️",
             "history": []
         }
     }

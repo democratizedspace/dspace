@@ -74,6 +74,15 @@
             <h3>{quest?.title}</h3>
         </div>
     </div>
+    {#if quest?.hardening}
+        <div class="hardening" data-testid="quest-hardening">
+            <span class="hardening-emoji" aria-label="hardening status"
+                >{quest.hardening.emoji}</span
+            >
+            <span class="hardening-score">Score {quest.hardening.score}/100</span>
+            <span class="hardening-passes">{quest.hardening.passes} passes</span>
+        </div>
+    {/if}
     {#if $finished}
         <div class="chat" data-testid="chat-panel">
             <div class="vertical">
@@ -188,6 +197,26 @@
         object-fit: cover;
         margin-left: -10%;
         margin-top: -10%;
+    }
+
+    .hardening {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 8px 12px;
+        background-color: #e9f8ea;
+        border: 1px solid #24cf2f;
+        border-radius: 12px;
+        margin-top: 8px;
+    }
+
+    .hardening-emoji {
+        font-size: 1.4rem;
+    }
+
+    .hardening-score,
+    .hardening-passes {
+        font-weight: 600;
     }
 
     @media only screen and (max-width: 600px) {

@@ -62,5 +62,11 @@
             "count": 100000
         }
     ],
-    "requiresQuests": ["3dprinting/benchy_25"]
+    "requiresQuests": ["3dprinting/benchy_25"],
+    "hardening": {
+        "passes": 0,
+        "score": 71,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

@@ -109,7 +109,11 @@
             "items": {
                 "type": "string"
             }
+        },
+        "hardening": {
+            "$ref": "https://democratizedspace.com/schemas/hardening.json"
         }
     },
-    "required": ["id", "title", "description", "image", "npc", "start", "dialogue"]
+    "required": ["id", "title", "description", "image", "npc", "start", "dialogue", "hardening"],
+    "additionalProperties": false
 }

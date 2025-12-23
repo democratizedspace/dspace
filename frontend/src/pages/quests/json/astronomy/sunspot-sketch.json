@@ -50,5 +50,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/basic-telescope"]
+    "requiresQuests": ["astronomy/basic-telescope"],
+    "hardening": {
+        "passes": 0,
+        "score": 58,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

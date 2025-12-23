@@ -93,5 +93,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["woodworking/step-stool"]
+    "requiresQuests": ["woodworking/step-stool"],
+    "hardening": {
+        "passes": 0,
+        "score": 74,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

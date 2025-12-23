@@ -55,5 +55,11 @@
             "count": 5
         }
     ],
-    "requiresQuests": ["3dprinter/start"]
+    "requiresQuests": ["3dprinter/start"],
+    "hardening": {
+        "passes": 0,
+        "score": 59,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

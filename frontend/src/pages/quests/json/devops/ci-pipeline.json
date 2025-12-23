@@ -4,7 +4,7 @@
     "description": "Configure GitHub Actions to run tests whenever you push.",
     "hardening": {
         "passes": 1,
-        "score": 60,
+        "score": 76,
         "emoji": "🌀",
         "history": [
             {

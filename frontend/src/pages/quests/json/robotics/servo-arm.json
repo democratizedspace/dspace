@@ -55,5 +55,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/servo-gripper"]
+    "requiresQuests": ["robotics/servo-gripper"],
+    "hardening": {
+        "passes": 0,
+        "score": 80,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

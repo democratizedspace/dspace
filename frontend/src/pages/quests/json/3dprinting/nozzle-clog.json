@@ -31,9 +31,18 @@
                     "process": "repair-clogged-nozzle",
                     "text": "Unclog and reinstall the nozzle.",
                     "requiresItems": [
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 },
-                        { "id": "564a76de-925b-4457-a548-d015168abe0c", "count": 1 }
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                            "count": 1
+                        },
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
                     ]
                 },
                 {
@@ -41,26 +50,54 @@
                     "process": "repair-clogged-nozzle",
                     "text": "Swap in a new nozzle.",
                     "requiresItems": [
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 },
-                        { "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c", "count": 1 },
-                        { "id": "564a76de-925b-4457-a548-d015168abe0c", "count": 1 }
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                            "count": 1
+                        },
+                        {
+                            "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                            "count": 1
+                        },
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Extrusion restored.",
-                    "requiresItems": [{ "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "The printer is ready again. Watch the first layer on future prints to avoid blobs of death.",
-            "options": [{ "type": "finish", "text": "Back to printing." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to printing."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start", "3dprinting/blob-of-death"]
+    "requiresQuests": ["3dprinter/start", "3dprinting/blob-of-death"],
+    "hardening": {
+        "passes": 0,
+        "score": 82,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

@@ -62,5 +62,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/firstlaunch"]
+    "requiresQuests": ["rocketry/firstlaunch"],
+    "hardening": {
+        "passes": 0,
+        "score": 71,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

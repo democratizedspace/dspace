@@ -13,6 +13,9 @@ const schema = JSON.parse(
     'utf8'
   )
 );
+const hardeningSchema = JSON.parse(
+  readFileSync(join(__dirname, '../frontend/src/shared/hardening.schema.json'), 'utf8')
+);
 const itemsDir = join(__dirname, '../frontend/src/pages/inventory/json/items');
 const items = readdirSync(itemsDir)
   .filter((f) => f.endsWith('.json'))
@@ -20,6 +23,7 @@ const items = readdirSync(itemsDir)
 
 test('items conform to schema', () => {
   const ajv = new Ajv({ allErrors: true });
+  ajv.addSchema(hardeningSchema, hardeningSchema.$id);
   const validate = ajv.compile(schema);
   for (const item of items) {
     const valid = validate(item);

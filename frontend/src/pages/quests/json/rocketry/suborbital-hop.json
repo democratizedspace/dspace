@@ -171,5 +171,11 @@
         "rocketry/recovery-run",
         "rocketry/preflight-check",
         "rocketry/guided-rocket-build"
-    ]
+    ],
+    "hardening": {
+        "passes": 0,
+        "score": 99,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

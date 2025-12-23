@@ -3,8 +3,10 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const schema = require('../frontend/src/pages/inventory/jsonSchemas/item.json');
+const hardeningSchema = require('../frontend/src/shared/hardening.schema.json');
 
-const ajv = new Ajv();
+const ajv = new Ajv({ allErrors: true });
+ajv.addSchema(hardeningSchema, hardeningSchema.$id);
 const validate = ajv.compile(schema);
 
 function validateItem(filePath) {

@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
+
+const require = createRequire(import.meta.url);
+const { DEFAULT_HARDENING, normalizeHardening } = require('../../scripts/hardening.js');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -12,7 +16,11 @@ const processes = JSON.parse(fs.readFileSync(basePath, 'utf8'));
 for (const proc of processes) {
   const hardPath = path.join(hardeningDir, `${proc.id}.json`);
   if (fs.existsSync(hardPath)) {
-    proc.hardening = JSON.parse(fs.readFileSync(hardPath, 'utf8'));
+    proc.hardening = normalizeHardening(JSON.parse(fs.readFileSync(hardPath, 'utf8')));
+  } else if (proc.hardening) {
+    proc.hardening = normalizeHardening(proc.hardening);
+  } else {
+    proc.hardening = { ...DEFAULT_HARDENING };
   }
 }
 fs.mkdirSync(path.dirname(outPath), { recursive: true });

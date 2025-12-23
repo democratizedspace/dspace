@@ -8,6 +8,7 @@ describe('process hardening metadata', () => {
     const hardeningDir = path.join(__dirname, '../frontend/src/pages/processes/hardening');
     const hardeningFiles = fs.readdirSync(hardeningDir);
     const withHardening = (processes as Array<any>).filter(p => p.hardening).length;
-    expect(withHardening).toBe(hardeningFiles.length);
+    expect(hardeningFiles.length).toBe(processes.length);
+    expect(withHardening).toBe(processes.length);
   });
 });

@@ -136,6 +136,7 @@ const TEST_GROUPS = [
             'quest-form-validation.spec.ts',
             'quest-pr-form.spec.ts',
             'quest-success-message.spec.ts',
+            'quest-hardening.spec.ts',
         ],
         grep: 'create and view a custom quest|Quest Management|quest PR form',
         parallel: true,

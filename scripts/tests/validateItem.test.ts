@@ -2,11 +2,18 @@ import { describe, it, expect } from 'vitest';
 import path from 'path';
 import fs from 'fs';
 const validateItem = require('../validate-item');
+const { DEFAULT_HARDENING } = require('../hardening');
 
 describe('validateItem script', () => {
   it('returns true for a valid item file', () => {
     const tempPath = path.join(__dirname, 'temp-item.json');
-    const item = { id: '1', name: 'test', description: 'ok item', image: 'foo.jpg' };
+    const item = {
+      id: '1',
+      name: 'test',
+      description: 'ok item',
+      image: 'foo.jpg',
+      hardening: { ...DEFAULT_HARDENING, score: 60 }
+    };
     fs.writeFileSync(tempPath, JSON.stringify(item));
     expect(validateItem(tempPath)).toBe(true);
     fs.unlinkSync(tempPath);

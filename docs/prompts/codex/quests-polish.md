@@ -72,6 +72,10 @@ items or processes. Avoid gratuitous churn outside the quests you touch.
   add intermediate items when needed instead of overloading existing ones.
 - Respect existing quest IDs and only add new IDs for genuinely new items or
   processes.
+- Keep each quest's `hardening` block up to date: `{ passes, score, emoji,
+  history[] }` with emoji thresholds 🛠️ < 🌀 < ✅ < 💯 and `passes` equal to the
+  history length. Hardening scores should meet or exceed the automated
+  evaluator output.
 
 ## Images (NO BINARY ASSETS)
 - Do **not** add `.jpg`, `.png`, `.webp`, etc. Add **only** image manifest
@@ -103,7 +107,9 @@ items or processes. Avoid gratuitous churn outside the quests you touch.
 - Inspect `.github/workflows/` and `package.json` to run the same checks CI
   runs (lint/type-check/build/tests) relevant to quest edits. If checks are
   heavy, at least run JSON validation scripts referenced in README or existing
-  prompt docs.
+  prompt docs. When quests or processes change, run `npm run hardening:fix`,
+  `npm run questValidation`, and `npm run processValidation` to refresh and
+  validate hardening metadata.
 - If `scripts/scan-secrets.py` exists, scan staged changes for secrets with
   `git diff --cached | ./scripts/scan-secrets.py`.
 

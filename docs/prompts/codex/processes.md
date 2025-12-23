@@ -17,8 +17,9 @@ For fundamental design tips see the
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`;
->    scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
->    commit with an emoji prefix.
+>    refresh process hardening with `npm run hardening:fix` and
+>    `npm run processValidation`; scan staged changes with
+>    `git diff --cached | ./scripts/scan-secrets.py`; commit with an emoji prefix.
 
 ---
 
@@ -74,11 +75,16 @@ REQUIREMENTS
 2. Use realistic durations and item relationships grounded in real-world timing.
 3. Ensure the process is referenced by at least one quest or item; create
    missing items or quest hooks as needed.
-4. Use only existing image assets; do not add new image files.
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-6. Run `npm run test:ci -- processQuality` and fix any failures.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-8. Update docs or items if needed.
+4. Maintain a `hardening` block (`passes`, `score`, `emoji`, `history[]`) that
+   matches the shared item/quest hardening schema. Keep `passes` equal to the
+   history length, clamp scores to 0–100, and use emoji thresholds
+   (🛠️ draft, 🌀 ≥60 with ≥1 pass, ✅ ≥75 with ≥2 passes, 💯 ≥90 with ≥3 passes).
+5. Use only existing image assets; do not add new image files.
+6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+7. Run `npm run test:ci -- processQuality`, `npm run hardening:fix`, and
+   `npm run processValidation`, fixing any failures.
+8. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+9. Update docs or items if needed.
 
 OUTPUT
 A pull request with the completed process and passing checks.

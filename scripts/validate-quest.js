@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const schema = require('../frontend/src/pages/quests/jsonSchemas/quest.json');
+const hardeningSchema = require('../frontend/src/shared/hardening.schema.json');
+const { validateHardening, evaluateQuestQuality } = require('./hardening.js');
 
 let cachedQuestIds;
 
@@ -77,7 +79,8 @@ function toQuestIdSet(knownQuestIds) {
   return new Set(loadDefaultQuestIds());
 }
 
-const ajv = new Ajv();
+const ajv = new Ajv({ allErrors: true });
+ajv.addSchema(hardeningSchema, hardeningSchema.$id);
 const validate = ajv.compile(schema);
 
 function validateQuest(filePath, options = {}) {
@@ -86,6 +89,20 @@ function validateQuest(filePath, options = {}) {
   if (!valid) {
     console.error(`Validation failed for ${filePath}`);
     console.error(validate.errors);
+    return false;
+  }
+
+  const hardening = validateHardening(data.hardening);
+  if (!hardening.valid) {
+    console.error(`Validation failed for ${filePath}: ${hardening.errors.join('; ')}`);
+    return false;
+  }
+
+  const expectedScore = evaluateQuestQuality(data);
+  if (data.hardening.score < expectedScore) {
+    console.error(
+      `Validation failed for ${filePath}: hardening score ${data.hardening.score} below evaluator ${expectedScore}`
+    );
     return false;
   }
 

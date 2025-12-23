@@ -38,9 +38,20 @@
         {
             "id": "finish",
             "text": "Sweet! Now your sensor's ready for long-term ground monitoring.",
-            "options": [{ "type": "finish", "text": "Time to bury it." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Time to bury it."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/survey-ground-temperature"]
+    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "hardening": {
+        "passes": 0,
+        "score": 64,
+        "emoji": "🛠️",
+        "history": []
+    }
 }
