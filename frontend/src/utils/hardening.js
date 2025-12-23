@@ -59,50 +59,57 @@ export const normalizeHardening = (hardening, options = {}) => {
 
 export const validateHardening = (hardening, expectedScore) => {
     const issues = [];
+
     if (!hardening) {
         issues.push('missing hardening block');
         return issues;
     }
 
-    const passesMismatch =
-        hardening &&
-        Array.isArray(hardening.history) &&
-        Number.isInteger(hardening.passes) &&
-        hardening.passes !== hardening.history.length;
+    const { passes, score, emoji, history } = hardening;
+    const historyEntries = Array.isArray(history)
+        ? history.filter((entry) => entry && typeof entry === 'object')
+        : [];
 
-    const normalized = normalizeHardening(hardening, {
-        expectedScore,
-    });
-
-    if (!Number.isInteger(normalized.passes) || normalized.passes < 0) {
+    if (!Number.isInteger(passes) || passes < 0) {
         issues.push('passes must be a non-negative integer');
     }
 
-    if (!Number.isInteger(normalized.score) || normalized.score < 0 || normalized.score > 100) {
+    const clampedScore = clampScore(score);
+
+    if (!Number.isInteger(score) || score < 0 || score > 100) {
         issues.push('score must be an integer between 0 and 100');
     }
 
-    if (!HARDENING_EMOJIS.includes(normalized.emoji)) {
-        issues.push(`emoji must be one of ${HARDENING_EMOJIS.join(', ')}`);
-    }
-
-    if (passesMismatch || normalized.passes !== normalized.history.length) {
-        issues.push('passes must equal history length');
-    }
-
-    normalized.history.forEach((entry, idx) => {
-        if (!HARDENING_DATE_REGEX.test(entry.date)) {
+    historyEntries.forEach((entry, idx) => {
+        if (!entry.task) {
+            issues.push(`history[${idx}] task is required`);
+        }
+        if (!HARDENING_DATE_REGEX.test(String(entry.date ?? ''))) {
             issues.push(`history[${idx}] has invalid date format`);
         }
         if (!Number.isInteger(entry.score) || entry.score < 0 || entry.score > 100) {
             issues.push(`history[${idx}] score must be an integer between 0 and 100`);
         }
-        if (!entry.task) {
-            issues.push(`history[${idx}] task is required`);
-        }
     });
 
-    if (expectedScore !== undefined && normalized.score < clampScore(expectedScore)) {
+    if (historyEntries.length !== passes) {
+        issues.push('passes must equal history length');
+    }
+
+    const normalized = normalizeHardening(hardening, {
+        expectedScore,
+    });
+    const expectedEmoji = emojiForHardening(normalized.passes, normalized.score);
+
+    if (!HARDENING_EMOJIS.includes(emoji)) {
+        issues.push(`emoji must be one of ${HARDENING_EMOJIS.join(', ')}`);
+    }
+
+    if (emoji && emoji !== expectedEmoji) {
+        issues.push('emoji must match hardening thresholds');
+    }
+
+    if (expectedScore !== undefined && clampedScore < clampScore(expectedScore)) {
         issues.push('score must meet or exceed the evaluator output');
     }
 
