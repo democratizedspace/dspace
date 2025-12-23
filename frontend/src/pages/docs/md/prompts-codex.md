@@ -40,6 +40,7 @@ canonical Markdown files and keep them in sync.
 - **Processes:** [Process prompts][processes]
 - **Items:** [Item prompts][items]
 - **Quests:** [Quest prompts][quests]
+- **Quest polish sweeps:** [Quest polish prompt][quests-polish]
 - **NPCs:** [NPC prompts][npcs]
 
 ## Keeping the library current
@@ -74,6 +75,7 @@ Have ideas for improving the prompts? Open a pull request that updates the Markd
 [processes]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/processes.md
 [items]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/items.md
 [quests]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/quests.md
+[quests-polish]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/quests-polish.md
 [npcs]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/npcs.md
 [implementation]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/implement.md
 [polish]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/polish.md

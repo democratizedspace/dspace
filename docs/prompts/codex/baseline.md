@@ -6,15 +6,15 @@ file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
 For task-specific templates see [Quest prompts](quests.md),
-[Item prompts](items.md), [Process prompts](processes.md),
-[NPC prompts](npcs.md), [Outage prompts](outages.md),
-[Backup prompts](backups.md), [Monitoring prompts](monitoring.md),
-[Audit prompts](audit.md), [Secret scanning prompts](secrets.md),
-[Docs prompts](docs.md),
+[Quest polish prompt](quests-polish.md), [Item prompts](items.md),
+[Process prompts](processes.md), [NPC prompts](npcs.md),
+[Outage prompts](outages.md), [Backup prompts](backups.md),
+[Monitoring prompts](monitoring.md), [Audit prompts](audit.md),
+[Secret scanning prompts](secrets.md), [Docs prompts](docs.md),
 [Playwright test prompts](playwright-tests.md),
-[Vitest test prompts](vitest.md), [Frontend prompts](frontend.md), [Chat UI prompts](chat-ui.md),
-[Backend prompts](backend.md), [Refactor prompts](refactors.md),
-[Implementation prompt](implement.md),
+[Vitest test prompts](vitest.md), [Frontend prompts](frontend.md),
+[Chat UI prompts](chat-ui.md), [Backend prompts](backend.md),
+[Refactor prompts](refactors.md), [Implementation prompt](implement.md),
 [Accessibility prompts](accessibility.md), and the
 [Structural polish playbook](polish.md).
 For specialized workflows use the [Codex CI-failure fix prompt](ci-fix.md),
@@ -44,6 +44,7 @@ When adding a new prompt doc, link it here and in
 - [Item Prompts](items.md)
 - [Process Prompts](processes.md)
 - [Quest Prompts](quests.md)
+- [Quest polish prompt](quests-polish.md)
 - [NPC Prompts](npcs.md)
 - [Outage Prompts](outages.md)
 - [Backup Prompts](backups.md)
