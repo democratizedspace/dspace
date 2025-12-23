@@ -46,6 +46,9 @@ function runTests(exec = execSync, platform = os.platform()) {
             );
         }
 
+        console.log(`${colors.yellow}Validating hardening metadata...${colors.reset}`);
+        exec('npm run hardening:validate', { stdio: 'inherit' });
+
         const scripts = {
             win32: {
                 message: `${colors.yellow}Detected Windows OS, running PowerShell script...${colors.reset}`,

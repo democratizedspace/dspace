@@ -4,7 +4,7 @@
     "description": "Start DSPACE with Docker Compose and expose it securely through a Cloudflare Tunnel.",
     "hardening": {
         "passes": 3,
-        "score": 90,
+        "score": 95,
         "emoji": "💯",
         "history": [
             {

@@ -27,10 +27,22 @@
                     "text": "Gear ready. Let's measure.",
                     "process": "measure-arduino-5v",
                     "requiresItems": [
-                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
-                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 },
-                        { "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612", "count": 1 },
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 }
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -57,6 +69,17 @@
             ]
         }
     ],
-    "rewards": [{ "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c", "count": 1 }],
-    "requiresQuests": ["electronics/arduino-blink"]
+    "rewards": [
+        {
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/arduino-blink"],
+    "hardening": {
+        "passes": 0,
+        "score": 80,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

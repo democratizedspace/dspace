@@ -45,5 +45,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["ubi/first-payment"]
+    "requiresQuests": ["ubi/first-payment"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

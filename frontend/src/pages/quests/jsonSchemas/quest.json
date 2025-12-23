@@ -109,7 +109,10 @@
             "items": {
                 "type": "string"
             }
+        },
+        "hardening": {
+            "$ref": "https://dspace.local/schemas/hardening.json"
         }
     },
-    "required": ["id", "title", "description", "image", "npc", "start", "dialogue"]
+    "required": ["id", "title", "description", "image", "npc", "start", "dialogue", "hardening"]
 }

@@ -1,11 +1,11 @@
 {
     "passes": 1,
-    "score": 60,
+    "score": 80,
     "emoji": "🌀",
     "history": [
         {
-            "task": "codex-process-hardening-2025-08-06",
-            "date": "2025-08-06",
+            "task": "codex-process-hardening-2025-08-18",
+            "date": "2025-08-18",
             "score": 60
         }
     ]

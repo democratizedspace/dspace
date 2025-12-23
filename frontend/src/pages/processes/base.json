@@ -24,7 +24,19 @@
                 "count": 0.98
             }
         ],
-        "duration": "5s"
+        "duration": "5s",
+        "hardening": {
+            "passes": 1,
+            "score": 80,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "outlet-dWatt-1e4",
@@ -52,7 +64,19 @@
                 "count": 9.77
             }
         ],
-        "duration": "5s"
+        "duration": "5s",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-upgrade-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "outlet-dWatt-1e5",
@@ -80,7 +104,19 @@
                 "count": 97.7
             }
         ],
-        "duration": "5s"
+        "duration": "5s",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "smart-plug-schedule-12h",
@@ -96,8 +132,8 @@
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 80,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -129,7 +165,24 @@
                 "count": 1
             }
         ],
-        "duration": "3m"
+        "duration": "3m",
+        "hardening": {
+            "passes": 2,
+            "score": 95,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                },
+                {
+                    "task": "codex-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 80
+                }
+            ]
+        }
     },
     {
         "id": "3dprint-benchy",
@@ -160,7 +213,19 @@
                 "count": 15
             }
         ],
-        "duration": "1h 30m"
+        "duration": "1h 30m",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "3dprint-nozzle-clog",
@@ -186,7 +251,13 @@
                 "count": 1
             }
         ],
-        "duration": "30m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-blob-of-death",
@@ -212,7 +283,13 @@
                 "count": 1
             }
         ],
-        "duration": "45m"
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "repair-clogged-nozzle",
@@ -239,7 +316,13 @@
                 "count": 1
             }
         ],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "repair-blob-of-death",
@@ -270,7 +353,13 @@
                 "count": 1
             }
         ],
-        "duration": "1h 30m"
+        "duration": "1h 30m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "level-3d-printer-bed",
@@ -291,8 +380,8 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -328,7 +417,19 @@
                 "count": 1
             }
         ],
-        "duration": "13h"
+        "duration": "13h",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "bucket-water-dechlorinated",
@@ -347,7 +448,19 @@
                 "count": 1
             }
         ],
-        "duration": "48h"
+        "duration": "48h",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "condition-bucket-water",
@@ -375,7 +488,19 @@
                 "count": 1
             }
         ],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 95,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "rockwool-soak",
@@ -399,7 +524,19 @@
                 "count": 11
             }
         ],
-        "duration": "30m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "germinate-basil",
@@ -426,7 +563,19 @@
                 "count": 10
             }
         ],
-        "duration": "7d"
+        "duration": "7d",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "prepare-hydroponic-tub",
@@ -453,7 +602,19 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-upgrade-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "refresh-hydroponic-tub",
@@ -492,8 +653,8 @@
         "duration": "15m",
         "hardening": {
             "passes": 1,
-            "score": 65,
-            "emoji": "\ud83c\udf00",
+            "score": 95,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-13",
@@ -522,8 +683,8 @@
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -567,7 +728,19 @@
                 "count": 1
             }
         ],
-        "duration": "28d"
+        "duration": "28d",
+        "hardening": {
+            "passes": 1,
+            "score": 95,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "regrow-basil",
@@ -598,7 +771,19 @@
                 "count": 1
             }
         ],
-        "duration": "14d"
+        "duration": "14d",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "harvest-basil",
@@ -621,7 +806,13 @@
                 "count": 11
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "germinate-stevia",
@@ -649,7 +840,19 @@
                 "count": 11
             }
         ],
-        "duration": "7d"
+        "duration": "7d",
+        "hardening": {
+            "passes": 1,
+            "score": 95,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "grow-stevia",
@@ -688,8 +891,8 @@
         "duration": "28d",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 95,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-14",
@@ -728,7 +931,19 @@
                 "count": 1
             }
         ],
-        "duration": "14d"
+        "duration": "14d",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "harvest-stevia",
@@ -754,8 +969,8 @@
         "duration": "3m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 90,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-harvest-stevia-2025-08-20",
@@ -785,8 +1000,8 @@
         "duration": "1h",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 100,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-14",
@@ -812,7 +1027,13 @@
                 "count": 1
             }
         ],
-        "duration": "6h"
+        "duration": "6h",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "sink",
@@ -825,7 +1046,13 @@
                 "count": 1
             }
         ],
-        "duration": "10s"
+        "duration": "10s",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-rocket-body-tube",
@@ -859,7 +1086,13 @@
                 "count": 18.48
             }
         ],
-        "duration": "2h 8m 11s"
+        "duration": "2h 8m 11s",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-rocket-nosecone-coupler",
@@ -893,7 +1126,13 @@
                 "count": 6.32
             }
         ],
-        "duration": "54m 12s"
+        "duration": "54m 12s",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-rocket-nosecone",
@@ -927,7 +1166,13 @@
                 "count": 13.9
             }
         ],
-        "duration": "1h 47m 15s"
+        "duration": "1h 47m 15s",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-rocket-fincan",
@@ -961,7 +1206,13 @@
                 "count": 52.3
             }
         ],
-        "duration": "8h 3m 13s"
+        "duration": "8h 3m 13s",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-guided-fincan",
@@ -995,7 +1246,13 @@
                 "count": 58.4
             }
         ],
-        "duration": "8h 45m"
+        "duration": "8h 45m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-guidance-sled",
@@ -1029,7 +1286,13 @@
                 "count": 24.8
             }
         ],
-        "duration": "3h 20m"
+        "duration": "3h 20m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "mask-rocket-body-tube",
@@ -1048,7 +1311,13 @@
             }
         ],
         "createItems": [],
-        "duration": "3m"
+        "duration": "3m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "assemble-rocket",
@@ -1090,7 +1359,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "launch-rocket",
@@ -1129,7 +1404,13 @@
                 "count": 1
             }
         ],
-        "duration": "30s"
+        "duration": "30s",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "repair-model-rocket",
@@ -1152,7 +1433,13 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "launch-rocket-parachute",
@@ -1191,7 +1478,13 @@
                 "count": 1
             }
         ],
-        "duration": "45s"
+        "duration": "45s",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "suborbital-hop",
@@ -1213,7 +1506,13 @@
                 "count": 1
             }
         ],
-        "duration": "12m"
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "assemble-guided-flight-stack",
@@ -1247,7 +1546,13 @@
                 "count": 1
             }
         ],
-        "duration": "35m"
+        "duration": "35m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "calibrate-guided-flight-stack",
@@ -1269,7 +1574,13 @@
                 "count": 1
             }
         ],
-        "duration": "20m"
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "install-rocket-camera",
@@ -1296,7 +1607,13 @@
                 "count": 1
             }
         ],
-        "duration": "25m"
+        "duration": "25m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "range-setup-guided-hop",
@@ -1339,7 +1656,13 @@
                 "count": 1
             }
         ],
-        "duration": "8m"
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "countdown-guided-hop",
@@ -1361,7 +1684,13 @@
                 "count": 1
             }
         ],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "launch-guided-hop",
@@ -1424,7 +1753,13 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "assemble-rocket-parachute",
@@ -1458,7 +1793,13 @@
                 "count": 1
             }
         ],
-        "duration": "60s"
+        "duration": "60s",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "setup-solar-enclosure-200Wh",
@@ -1488,7 +1829,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "disassemble-enclosure-200Wh",
@@ -1518,7 +1865,13 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "setup-solar-enclosure-1kWh",
@@ -1548,7 +1901,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "disassemble-enclosure-1kWh",
@@ -1578,7 +1937,13 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "solar-200Wh",
@@ -1600,7 +1965,13 @@
                 "count": 200
             }
         ],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "solar-1000Wh",
@@ -1622,7 +1993,13 @@
                 "count": 1000
             }
         ],
-        "duration": "5h"
+        "duration": "5h",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "prepare-aquarium",
@@ -1668,7 +2045,13 @@
                 "count": 1
             }
         ],
-        "duration": "2h"
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "add-goldfish",
@@ -1696,7 +2079,13 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "feed-goldfish",
@@ -1723,8 +2112,8 @@
         "duration": "8h",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 100,
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1748,7 +2137,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "stock-guppies",
@@ -1770,7 +2165,13 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "dCarbon-dOffset-1",
@@ -1792,7 +2193,13 @@
                 "count": 1
             }
         ],
-        "duration": "5s"
+        "duration": "5s",
+        "hardening": {
+            "passes": 0,
+            "score": 75,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "dCarbon-dOffset-10",
@@ -1814,7 +2221,13 @@
                 "count": 10
             }
         ],
-        "duration": "5s"
+        "duration": "5s",
+        "hardening": {
+            "passes": 0,
+            "score": 75,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "basic-income",
@@ -1831,7 +2244,13 @@
                 "count": 100
             }
         ],
-        "duration": "1d"
+        "duration": "1d",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "charge-hypercar",
@@ -1858,7 +2277,13 @@
                 "count": 1
             }
         ],
-        "duration": "2h"
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "flash-sd-card",
@@ -1885,8 +2310,8 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 95,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-14",
@@ -1916,7 +2341,13 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "assemble-pi-node",
@@ -1946,7 +2377,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "create-ci-workflow",
@@ -1964,7 +2401,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "run-docker-compose",
@@ -1977,7 +2420,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "create-cloudflare-tunnel",
@@ -1994,7 +2443,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "join-k3s-cluster",
@@ -2007,7 +2462,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "install-monitoring-stack",
@@ -2025,7 +2486,13 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "configure-daily-backups",
@@ -2042,7 +2509,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "assemble-basic-telescope",
@@ -2076,7 +2549,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "measure-ph",
@@ -2102,8 +2581,8 @@
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 90,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-22",
@@ -2129,7 +2608,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "measure-battery-voltage",
@@ -2151,7 +2636,24 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 2,
+            "score": 85,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 65
+                },
+                {
+                    "task": "codex-hardening-2025-09-25",
+                    "date": "2025-09-25",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "measure-solar-panel-current",
@@ -2172,8 +2674,8 @@
         "duration": "3m",
         "hardening": {
             "passes": 1,
-            "score": 70,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-20",
@@ -2199,11 +2701,17 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "measure-resistance",
-        "title": "Measure a 220 \u03a9 resistor with a digital multimeter",
+        "title": "Measure a 220 Ω resistor with a digital multimeter",
         "image": "/assets/launch_controller.jpg",
         "requireItems": [
             {
@@ -2221,7 +2729,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "check-led-polarity",
@@ -2243,7 +2763,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "assemble-led-indicator-module",
@@ -2287,7 +2819,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "measure-photoresistor",
@@ -2309,11 +2847,23 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "calibrate-multimeter",
-        "title": "Calibrate a digital multimeter using a 220 \u03a9 reference resistor",
+        "title": "Calibrate a digital multimeter using a 220 Ω reference resistor",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -2327,7 +2877,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "3m"
+        "duration": "3m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "wear-anti-static-wrist-strap",
@@ -2344,8 +2906,8 @@
         "duration": "1m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-wear-anti-static-wrist-strap-2025-08-15",
@@ -2371,7 +2933,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "calibrate-ec-meter",
@@ -2394,7 +2962,13 @@
             }
         ],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "adjust-ph",
@@ -2419,7 +2993,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "wash-hands",
@@ -2442,7 +3022,19 @@
             }
         ],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "dry-hands",
@@ -2461,7 +3053,19 @@
             }
         ],
         "createItems": [],
-        "duration": "30s"
+        "duration": "30s",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "pack-first-aid-kit",
@@ -2491,7 +3095,13 @@
                 "count": 1
             }
         ],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "clean-minor-cut",
@@ -2530,7 +3140,24 @@
             }
         ],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 2,
+            "score": 90,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                },
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "practice-cpr",
@@ -2555,7 +3182,24 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "20m"
+        "duration": "20m",
+        "hardening": {
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-03",
+                    "date": "2025-08-03",
+                    "score": 60
+                },
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 80
+                }
+            ]
+        }
     },
     {
         "id": "observe-jupiter-moons",
@@ -2572,7 +3216,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "20m"
+        "duration": "20m",
+        "hardening": {
+            "passes": 1,
+            "score": 80,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "identify-constellations",
@@ -2589,7 +3245,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "30m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "observe-meteor-shower",
@@ -2602,7 +3270,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "photograph-lunar-eclipse",
@@ -2623,7 +3303,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "45m"
+        "duration": "45m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "arduino-ide-install",
@@ -2636,7 +3328,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 80,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-upgrade-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "arduino-servo-sweep",
@@ -2666,7 +3370,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "arduino-thermistor-read",
@@ -2699,7 +3415,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "15m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 80,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "plot-temperature-data",
@@ -2718,7 +3446,24 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 2,
+            "score": 85,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                },
+                {
+                    "task": "codex-process-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "assemble-thermistor-logger",
@@ -2894,7 +3639,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "arduino-potentiometer-dimmer",
@@ -2935,7 +3692,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 80,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "raspberry-pi-serial-log",
@@ -2957,7 +3726,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "15m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "pyserial-install",
@@ -2970,7 +3745,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "drip-acclimate-shrimp",
@@ -2995,7 +3776,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "rinse-aquarium-filter",
@@ -3013,7 +3806,19 @@
             }
         ],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "partial-water-change",
@@ -3043,7 +3848,19 @@
             }
         ],
         "createItems": [],
-        "duration": "30m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 95,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "print-calibration-cube",
@@ -3061,7 +3878,19 @@
             }
         ],
         "createItems": [],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 95,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "measure-calibration-cube",
@@ -3091,8 +3920,8 @@
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 65,
-            "emoji": "\ud83c\udf00",
+            "score": 90,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-14",
@@ -3130,8 +3959,8 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 90,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -3162,7 +3991,13 @@
             }
         ],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "print-benchy",
@@ -3185,11 +4020,23 @@
                 "count": 1
             }
         ],
-        "duration": "1h 30m"
+        "duration": "1h 30m",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "solder-led-resistor",
-        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 \u03a9 resistor with two jumper wires",
+        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 Ω resistor with two jumper wires",
         "requireItems": [
             {
                 "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
@@ -3216,7 +4063,19 @@
                 "count": 1
             }
         ],
-        "duration": "15m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "strip-jumper-wire",
@@ -3238,7 +4097,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "30s"
+        "duration": "30s",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-strip-jumper-wire-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "solder-wire-connection",
@@ -3276,11 +4147,23 @@
             }
         ],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-refine-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "verify-resistor-color-code",
-        "title": "Confirm a 220 \u03a9 resistor's value using a printed color code chart",
+        "title": "Confirm a 220 Ω resistor's value using a printed color code chart",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -3294,7 +4177,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-verify-resistor-color-code-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "print-phone-stand",
@@ -3317,7 +4212,19 @@
                 "count": 1
             }
         ],
-        "duration": "2h"
+        "duration": "2h",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "print-generator-housing",
@@ -3340,7 +4247,19 @@
                 "count": 1
             }
         ],
-        "duration": "4h"
+        "duration": "4h",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "print-crank-handle",
@@ -3363,7 +4282,19 @@
                 "count": 1
             }
         ],
-        "duration": "2h"
+        "duration": "2h",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "check-iss-pass",
@@ -3386,7 +4317,29 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 3,
+            "score": 90,
+            "emoji": "💯",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                },
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 80
+                },
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 85
+                }
+            ]
+        }
     },
     {
         "id": "write-mission-log-entry",
@@ -3417,8 +4370,8 @@
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 95,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-15",
@@ -3445,7 +4398,24 @@
             }
         ],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 2,
+            "score": 90,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                },
+                {
+                    "task": "codex-measure-aquarium-ph-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 75
+                }
+            ]
+        }
     },
     {
         "id": "attach-aquarium-thermometer",
@@ -3470,8 +4440,8 @@
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-attach-aquarium-thermometer-2025-08-24",
@@ -3497,7 +4467,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "30s"
+        "duration": "30s",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-09-15",
+                    "date": "2025-09-15",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "log-aquarium-test-results",
@@ -3519,7 +4501,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-17",
+                    "date": "2025-08-17",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "stop-nosebleed",
@@ -3546,7 +4540,19 @@
             }
         ],
         "createItems": [],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "hand-crank-50Wh",
@@ -3568,7 +4574,19 @@
                 "count": 50
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "charge-smartphone",
@@ -3595,7 +4613,19 @@
             }
         ],
         "createItems": [],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-08",
+                    "date": "2025-08-08",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "charge-battery-pack-solar",
@@ -3626,7 +4656,19 @@
                 "count": 200
             }
         ],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-09",
+                    "date": "2025-08-09",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "test-cable-continuity",
@@ -3648,7 +4690,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-09",
+                    "date": "2025-08-09",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "charge-battery-pack-wind",
@@ -3675,7 +4729,19 @@
                 "count": 200
             }
         ],
-        "duration": "30m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 70
+                }
+            ]
+        }
     },
     {
         "id": "cut-birdhouse-panels",
@@ -3707,7 +4773,13 @@
                 "count": 1
             }
         ],
-        "duration": "35m"
+        "duration": "35m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "glue-birdhouse-shell",
@@ -3743,7 +4815,13 @@
                 "count": 1
             }
         ],
-        "duration": "45m"
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "build-birdhouse",
@@ -3775,7 +4853,19 @@
                 "count": 1
             }
         ],
-        "duration": "30m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "assemble-planter-box",
@@ -3811,7 +4901,13 @@
                 "count": 1
             }
         ],
-        "duration": "8h"
+        "duration": "8h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "start-compost-bin",
@@ -3825,7 +4921,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-11",
+                    "date": "2025-08-11",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "measure-arduino-5v",
@@ -3851,7 +4959,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "turn-compost-bucket",
@@ -3869,7 +4989,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "measure-compost-temperature",
@@ -3883,7 +5015,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "measure-compost-moisture",
@@ -3897,7 +5041,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "sift-compost",
@@ -3911,7 +5067,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "tin-soldering-iron-tip",
@@ -3933,7 +5095,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
     },
     {
         "id": "clean-soldering-iron-tip",
@@ -3951,7 +5125,19 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-08-30",
+                    "date": "2025-08-30",
+                    "score": 65
+                }
+            ]
+        }
     },
     {
         "id": "check-flashlight-battery",
@@ -3976,8 +5162,8 @@
         "duration": "2m",
         "hardening": {
             "passes": 2,
-            "score": 70,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -4015,8 +5201,8 @@
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-13",
@@ -4057,8 +5243,8 @@
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -4087,8 +5273,8 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 70,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -4100,7 +5286,7 @@
     },
     {
         "id": "solder-smd-resistor",
-        "title": "Solder a 220 \u03a9 SMD resistor onto a PCB using a flux pen and precision tweezers",
+        "title": "Solder a 220 Ω SMD resistor onto a PCB using a flux pen and precision tweezers",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -4138,8 +5324,8 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 90,
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4158,8 +5344,8 @@
         "duration": "3m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-test-gfci-outlet-2025-08-16",
@@ -4188,8 +5374,8 @@
         "duration": "1m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-use-soldering-mat-2025-08-18",
@@ -4218,8 +5404,8 @@
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 85,
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4242,8 +5428,8 @@
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 85,
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4262,8 +5448,8 @@
         "duration": "3m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 85,
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4286,8 +5472,8 @@
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-configure-ufw-firewall-2025-08-24",
@@ -4316,8 +5502,8 @@
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 60,
-            "emoji": "\ud83c\udf00",
+            "score": 85,
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -4346,14 +5532,14 @@
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 85,
+            "emoji": "🛠️",
             "history": []
         }
     },
     {
         "id": "trim-resistor-leads",
-        "title": "Trim excess leads from a soldered 220 \u03a9 resistor using wire cutters",
+        "title": "Trim excess leads from a soldered 220 Ω resistor using wire cutters",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -4367,7 +5553,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "replace-launch-controller-battery",
@@ -4389,8 +5581,8 @@
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "score": 90,
+            "emoji": "🛠️",
             "history": []
         }
     }

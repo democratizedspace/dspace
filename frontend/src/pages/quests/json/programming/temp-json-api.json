@@ -35,16 +35,32 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Endpoint streaming data!",
-                    "requiresItems": [{ "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice! Clients can now fetch the current temperature from your server.",
-            "options": [{ "type": "finish", "text": "API live." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "API live."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/json-api"]
+    "requiresQuests": ["programming/json-api"],
+    "hardening": {
+        "passes": 0,
+        "score": 75,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

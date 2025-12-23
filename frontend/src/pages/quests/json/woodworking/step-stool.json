@@ -112,7 +112,7 @@
     "requiresQuests": ["woodworking/birdhouse", "woodworking/planter-box"],
     "hardening": {
         "passes": 1,
-        "score": 65,
+        "score": 85,
         "emoji": "🌀",
         "history": [
             {
