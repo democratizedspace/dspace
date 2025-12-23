@@ -60,6 +60,7 @@ When adding a new prompt doc, link it here and in
 - [Vitest Test Prompts](vitest.md)
 - [Refactor Prompts](refactors.md)
 - [Implementation Prompt](implement.md)
+- [Quest polish prompt](quests-polish.md)
 - [Structural polish playbook](polish.md)
 - [Codex CI-Failure Fix Prompt](ci-fix.md)
 - [Codex Merge Conflict Prompt](merge-conflicts.md)
