@@ -129,6 +129,7 @@ test('fails when a process option references an unknown process id', () => {
                 ],
             },
         ],
+        hardening: defaultHardening,
     };
     const file = writeQuestFile(questWithMissingProcess);
     const result = validateQuest(file, { knownProcessIds: new Set(['existing-process']) });
@@ -154,6 +155,7 @@ test('passes when all process references exist in the known process set', () => 
                 ],
             },
         ],
+        hardening: defaultHardening,
     };
     const file = writeQuestFile(questWithValidProcess);
     const result = validateQuest(file, { knownProcessIds: new Set(['existing-process']) });

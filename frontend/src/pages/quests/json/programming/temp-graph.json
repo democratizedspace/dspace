@@ -58,9 +58,20 @@
     "rewards": [],
     "requiresQuests": ["programming/graph-temp-data", "programming/temp-json-api"],
     "hardening": {
-        "passes": 0,
-        "score": 80,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 2,
+        "score": 98,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-hardening-2025-12-08",
+                "date": "2025-12-08",
+                "score": 95
+            },
+            {
+                "task": "codex-hardening-2025-12-18",
+                "date": "2025-12-18",
+                "score": 98
+            }
+        ]
     }
 }
