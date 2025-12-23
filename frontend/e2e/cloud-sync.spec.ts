@@ -104,7 +104,7 @@ test.describe('Cloud Sync', () => {
         await waitForHydration(page);
         await expect.poll(() => page.evaluate(() => window.__cloudSyncReady === true)).toBeTruthy();
 
-        const token = `ghp_${'a'.repeat(24)}`;
+        const token = `ghp_${'a'.repeat(36)}`;
         const tokenField = page.getByLabel(/GitHub Token/i);
         await tokenField.fill(token);
         const saveButton = page.getByTestId('save-token');
