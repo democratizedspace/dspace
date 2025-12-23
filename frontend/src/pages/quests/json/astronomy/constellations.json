@@ -19,7 +19,7 @@
         },
         {
             "id": "plan",
-            "text": "Mark this season's guide stars on the planisphere and keep red light low for dark adaptation.",
+            "text": "Mark this season's guide stars on the planisphere and keep red light low so you can move safely.",
             "options": [
                 {
                     "type": "process",
@@ -41,7 +41,7 @@
         },
         {
             "id": "chart",
-            "text": "Find Orion, Ursa Major, and Cassiopeia, then sketch their bright stars and orientation.",
+            "text": "Find Orion, Ursa Major, and Cassiopeia, then sketch their bright stars and orientation without stepping into hazards.",
             "options": [
                 {
                     "type": "process",
@@ -72,6 +72,11 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["astronomy/jupiter-moons"]
 }

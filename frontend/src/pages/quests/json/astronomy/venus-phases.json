@@ -1,7 +1,7 @@
 {
     "id": "astronomy/venus-phases",
     "title": "Observe Venus's Phases",
-    "description": "Use a planisphere and basic telescope to track Venus through its lunar-like phases.",
+    "description": "Use a planisphere and basic telescope to plan, view, and sketch Venus's shifting phase.",
     "image": "/assets/quests/venus_phases_telescope_sequence.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
@@ -23,7 +23,7 @@
         },
         {
             "id": "plan",
-            "text": "Use the planisphere and an app to pick a time when Venus is high enough for a crisp view.",
+            "text": "Use the planisphere and an app to pick a time when Venus is high enough for a crisp view and your path is well lit.",
             "options": [
                 {
                     "type": "process",
@@ -61,6 +61,8 @@
             "options": [{ "type": "finish", "text": "Can't wait for the next phase." }]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        { "id": "85d4fb76-9591-4b70-b88d-e74ff133215d", "count": 1 }
+    ],
     "requiresQuests": ["astronomy/saturn-rings"]
 }

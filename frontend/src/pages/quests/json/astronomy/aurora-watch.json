@@ -1,14 +1,14 @@
 {
     "id": "astronomy/aurora-watch",
     "title": "Watch the Aurora",
-    "description": "Check the aurora forecast and step outside with a red flashlight to log the lights.",
+    "description": "Pick a safe aurora window, pack red light and layers, and log what you spot.",
     "image": "/assets/quests/aurora_watch_red_flashlight.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Solar winds may trigger auroras tonight. Let's plan before we stomp out into the cold.",
+            "text": "Solar winds may trigger auroras tonight. Let's plan before stepping into the cold.",
             "options": [
                 {
                     "type": "goto",
@@ -41,7 +41,7 @@
         },
         {
             "id": "kit",
-            "text": "Layer up, clip the red flashlight, tell a buddy your spot, and keep the logbook dry.",
+            "text": "Layer up, clip the red flashlight, text a buddy with your spot, and keep the logbook dry.",
             "options": [
                 {
                     "type": "process",
@@ -63,7 +63,7 @@
         },
         {
             "id": "observe",
-            "text": "Let eyes adjust, sweep the northern horizon for arcs or curtains, and note color and time.",
+            "text": "Let eyes adjust, sweep the northern horizon for arcs or curtains, and note color and time while staying aware of your footing.",
             "options": [
                 {
                     "type": "process",
@@ -76,7 +76,7 @@
                     "text": "Entry written with colors and timestamps.",
                     "requiresItems": [
                         {
-                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
                             "count": 1
                         }
                     ]
@@ -94,6 +94,11 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["astronomy/light-pollution"]
 }

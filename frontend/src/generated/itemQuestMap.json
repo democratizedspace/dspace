@@ -1489,6 +1489,14 @@
     ],
     "rewards": []
   },
+  "85d4fb76-9591-4b70-b88d-e74ff133215d": {
+    "requires": [
+      "astronomy/venus-phases"
+    ],
+    "rewards": [
+      "astronomy/venus-phases"
+    ]
+  },
   "98f6252e-95c2-468a-b110-69d47604df2c": {
     "requires": [
       "astronomy/venus-phases",
@@ -1529,12 +1537,6 @@
     ],
     "rewards": []
   },
-  "85d4fb76-9591-4b70-b88d-e74ff133215d": {
-    "requires": [
-      "astronomy/venus-phases"
-    ],
-    "rewards": []
-  },
   "70bb8d86-2c4e-4330-9705-371891934686": {
     "requires": [
       "astronomy/sunspot-sketch",
@@ -1557,18 +1559,22 @@
     ],
     "rewards": []
   },
+  "6102f07b-384b-437f-b78f-d1e9b5431e97": {
+    "requires": [
+      "astronomy/north-star"
+    ],
+    "rewards": [
+      "astronomy/north-star"
+    ]
+  },
   "b73f795b-7abb-4a0c-950b-7f8ad82012b8": {
     "requires": [
       "astronomy/north-star",
       "astronomy/constellations"
     ],
-    "rewards": []
-  },
-  "6102f07b-384b-437f-b78f-d1e9b5431e97": {
-    "requires": [
-      "astronomy/north-star"
-    ],
-    "rewards": []
+    "rewards": [
+      "astronomy/constellations"
+    ]
   },
   "49fb255e-a4c3-48e4-bca7-4c3781fdb98b": {
     "requires": [
@@ -1577,6 +1583,14 @@
     ],
     "rewards": []
   },
+  "067aa8eb-b5a4-4bef-a307-7dde10e981f5": {
+    "requires": [
+      "astronomy/iss-flyover"
+    ],
+    "rewards": [
+      "astronomy/iss-flyover"
+    ]
+  },
   "16478015-5213-4b3f-960c-c0fdaaa91297": {
     "requires": [
       "astronomy/iss-flyover"
@@ -1584,12 +1598,6 @@
     "rewards": []
   },
   "bb97e755-4337-4e9d-8063-4a0cff4649b5": {
-    "requires": [
-      "astronomy/iss-flyover"
-    ],
-    "rewards": []
-  },
-  "067aa8eb-b5a4-4bef-a307-7dde10e981f5": {
     "requires": [
       "astronomy/iss-flyover"
     ],
@@ -1625,6 +1633,14 @@
     ],
     "rewards": []
   },
+  "682c9b29-b16f-4cf1-aaad-861a4aa133f4": {
+    "requires": [
+      "astronomy/aurora-watch"
+    ],
+    "rewards": [
+      "astronomy/aurora-watch"
+    ]
+  },
   "808f8298-ba98-43d6-907b-1b34a7daffb8": {
     "requires": [
       "astronomy/aurora-watch"
@@ -1632,12 +1648,6 @@
     "rewards": []
   },
   "0ce0d0d4-d734-4099-b903-92e9b1c52b05": {
-    "requires": [
-      "astronomy/aurora-watch"
-    ],
-    "rewards": []
-  },
-  "280ed361-ac70-4ab9-bcd9-aee481790faf": {
     "requires": [
       "astronomy/aurora-watch"
     ],

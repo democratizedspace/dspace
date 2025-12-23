@@ -1398,6 +1398,14 @@
         "category": "Astronomy & Observation"
     },
     {
+        "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
+        "name": "aurora sighting log",
+        "description": "Mission log entry with the aurora's time, color, and where you watched from.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
         "name": "seasonal star hop plan",
         "description": "Plotted arrows from bright seasonal stars to the constellations you're practicing tonight.",
