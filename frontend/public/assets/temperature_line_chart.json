@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_line_chart.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature line chart",
+    "item_id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+    "entity_type": "item",
+    "prompt": "A clean Matplotlib-style line chart shows temperature readings over time, with axes clearly labeled and gentle grid lines. A USB-connected microcontroller and small breadboard sit nearby on the desk to hint at data origin, framed by a tidy solarpunk workspace with warm light and a small plant. The 512×512 image is photorealistic with soft stylization and no text beyond chart labels.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
