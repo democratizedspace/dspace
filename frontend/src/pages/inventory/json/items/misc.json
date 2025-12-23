@@ -1301,10 +1301,7 @@
         "name": "Pi cluster node",
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
         "image": "/assets/pi_cluster_node_with_hat_and_ssd.jpg",
-        "dependencies": [
-            "129",
-            "131"
-        ],
+        "dependencies": ["129", "131"],
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1337,10 +1334,7 @@
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
         "image": "/assets/basic_refracting_telescope_backyard.jpg",
-        "dependencies": [
-            "0",
-            "3"
-        ],
+        "dependencies": ["0", "3"],
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
