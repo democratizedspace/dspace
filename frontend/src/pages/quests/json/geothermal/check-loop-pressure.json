@@ -9,24 +9,46 @@
         {
             "id": "start",
             "text": "Healthy pressure keeps flow steady. Want to check it?",
-            "options": [{ "type": "goto", "goto": "measure", "text": "Let's read the gauge." }]
-        },
-        {
-            "id": "measure",
-            "text": "Connect a pressure gauge and note the loop reading.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "hookup",
+                    "text": "Let's read the gauge.",
+                    "requiresItems": [
+                        { "id": "c7f34d7a-8666-4ef0-bab0-2b6f8d2f2612", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "hookup",
+            "text": "Bleed the port, thread on the gauge, and watch the needle settle before writing it down.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-loop-pressure",
                     "goto": "finish",
-                    "text": "Gauge reads steady.",
-                    "process": "pressure-gauge-read"
+                    "text": "Capture today's pressure reading.",
+                    "requiresItems": [
+                        { "id": "c7f34d7a-8666-4ef0-bab0-2b6f8d2f2612", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Great! Logging pressure helps spot leaks early.",
-            "options": [{ "type": "finish", "text": "I'll keep monitoring." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll keep monitoring.",
+                    "requiresItems": [
+                        { "id": "df873ed2-736f-4b6d-b9c0-99d5cbbcc8da", "count": 1 }
+                    ]
+                }
+            ]
         }
     ],
     "rewards": [],

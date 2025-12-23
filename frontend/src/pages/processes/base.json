@@ -215,6 +215,28 @@
         "duration": "45m"
     },
     {
+        "id": "document-blob-of-death",
+        "title": "Power down the blobbing print and log the failure",
+        "requireItems": [
+            {
+                "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
         "id": "repair-clogged-nozzle",
         "title": "Disassemble and clear a clogged 3D printer nozzle",
         "requireItems": [
@@ -2592,6 +2614,54 @@
         "duration": "30m"
     },
     {
+        "id": "plan-venus-phase-window",
+        "title": "Use a planisphere to pick a Venus viewing window",
+        "requireItems": [
+            {
+                "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "sketch-venus-phase",
+        "title": "Sketch the current phase of Venus through a telescope",
+        "requireItems": [
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            },
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "1c9dd1a5-1c0c-4fba-a3b8-f08f5c0c9c5a",
+                "count": 1
+            }
+        ],
+        "duration": "20m"
+    },
+    {
         "id": "observe-meteor-shower",
         "title": "Watch a meteor shower with your telescope",
         "requireItems": [
@@ -2698,7 +2768,12 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "e4b8c0f2-3c47-4e2c-9ff1-20c808d9cbca",
+                "count": 1
+            }
+        ],
         "duration": "15m"
     },
     {
@@ -2714,6 +2789,58 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "10m"
+    },
+    {
+        "id": "deploy-temp-json-endpoint",
+        "title": "Serve thermistor data as live JSON at /temp",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "e4b8c0f2-3c47-4e2c-9ff1-20c808d9cbca",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "9df8ae84-56f2-4aef-8c79-98d2ca38d09e",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "curl-temp-json-endpoint",
+        "title": "Request the live temperature endpoint and log the response",
+        "requireItems": [
+            {
+                "id": "9df8ae84-56f2-4aef-8c79-98d2ca38d09e",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
     },
     {
         "id": "arduino-led-blink",
@@ -3757,6 +3884,34 @@
         "duration": "1m"
     },
     {
+        "id": "bucket-cured-compost",
+        "title": "Fill a bucket with cured, sweet-smelling compost",
+        "image": "/assets/bucket.jpg",
+        "requireItems": [
+            {
+                "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "17f31d9e-9e8e-4e11-9b3c-fd5c72edbba9",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
         "id": "sift-compost",
         "title": "Separate finished compost using a mesh sifter",
         "image": "/assets/bucket.jpg",
@@ -3764,11 +3919,71 @@
             {
                 "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
                 "count": 1
+            },
+            {
+                "id": "17f31d9e-9e8e-4e11-9b3c-fd5c72edbba9",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "17f31d9e-9e8e-4e11-9b3c-fd5c72edbba9",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "5d1c3570-2cea-4f83-9c1c-3db1792c6fda",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "record-sifted-compost",
+        "title": "Log how much screened compost you produced",
+        "image": "/assets/compost_sifter_wooden_frame.jpg",
+        "requireItems": [
+            {
+                "id": "5d1c3570-2cea-4f83-9c1c-3db1792c6fda",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
             }
         ],
         "consumeItems": [],
-        "createItems": [],
-        "duration": "5m"
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "3m"
+    },
+    {
+        "id": "log-loop-pressure",
+        "title": "Attach a gauge and log closed-loop geothermal pressure",
+        "image": "/assets/geothermal_check_loop_pressure_gauge.jpg",
+        "requireItems": [
+            {
+                "id": "c7f34d7a-8666-4ef0-bab0-2b6f8d2f2612",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "df873ed2-736f-4b6d-b9c0-99d5cbbcc8da",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
     },
     {
         "id": "tin-soldering-iron-tip",

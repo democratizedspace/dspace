@@ -9,25 +9,80 @@
         {
             "id": "start",
             "text": "Ready to use your compost? Let's sift out the lumpy bits.",
-            "options": [{ "type": "goto", "goto": "sift", "text": "How do I do that?" }]
-        },
-        {
-            "id": "sift",
-            "text": "Place the sifter over a tub and shake compost through the mesh.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "prep",
+                    "text": "What do I need?",
+                    "requiresItems": [
+                        { "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb", "count": 1 },
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Set the sifter over the bucket, break up any clumps, and make sure the pile is actually cured.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-cured-compost",
+                    "goto": "sift",
+                    "text": "Scoop cured compost into the bucket.",
+                    "requiresItems": [
+                        { "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8", "count": 1 },
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
+                        { "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "sift",
+            "text": "Shake the sifter so fines rain into the bucket while sticks and stones stay behind.",
+            "options": [
+                {
+                    "type": "process",
                     "process": "sift-compost",
-                    "requiresItems": [{ "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb", "count": 1 }],
-                    "text": "Sift the compost"
+                    "goto": "log",
+                    "requiresItems": [
+                        { "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb", "count": 1 },
+                        { "id": "17f31d9e-9e8e-4e11-9b3c-fd5c72edbba9", "count": 1 }
+                    ],
+                    "text": "Screen out the chunky bits."
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Bag the woody leftovers for the next pile and jot down how much finished compost you harvested.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "record-sifted-compost",
+                    "goto": "finish",
+                    "text": "Note the volume and moisture.",
+                    "requiresItems": [
+                        { "id": "5d1c3570-2cea-4f83-9c1c-3db1792c6fda", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice! The fine compost is ready for your garden.",
-            "options": [{ "type": "finish", "text": "Can't wait to use it!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Smells earthy and ready.",
+                    "requiresItems": [
+                        { "id": "5d1c3570-2cea-4f83-9c1c-3db1792c6fda", "count": 1 },
+                        { "id": "280ed361-ac70-4ab9-bcd9-aee481790faf", "count": 1 }
+                    ]
+                }
+            ]
         }
     ],
     "rewards": [],

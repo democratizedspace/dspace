@@ -9,24 +9,85 @@
         {
             "id": "start",
             "text": "Your API returns static data. Let's feed it live temperature readings.",
-            "options": [{ "type": "goto", "goto": "code", "text": "Sounds great." }]
-        },
-        {
-            "id": "code",
-            "text": "Read the sensor and respond with JSON like `{ \"temp\": 22.5 }` at `/temp`.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "wire",
+                    "text": "Let's wire the sensor.",
+                    "requiresItems": [
+                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
+                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
+                        { "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c", "count": 1 },
+                        { "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac", "count": 1 },
+                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Breadboard a thermistor voltage divider and stream the analog readings into your laptop.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "goto": "api",
+                    "text": "Flash the sketch and capture readings.",
+                    "requiresItems": [
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 },
+                        { "id": "72b4448e-27d9-4746-bd3a-967ff13f501b", "count": 1 },
+                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
+                        { "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "api",
+            "text": "Now turn those readings into JSON served at `/temp` and make sure the response updates each request.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "deploy-temp-json-endpoint",
+                    "goto": "verify",
+                    "text": "Expose the live endpoint.",
+                    "requiresItems": [
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 },
+                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
+                        { "id": "e4b8c0f2-3c47-4e2c-9ff1-20c808d9cbca", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Hit the route with a quick GET to make sure you're returning the latest reading instead of stale data.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "curl-temp-json-endpoint",
                     "goto": "finish",
-                    "text": "Endpoint streaming data!",
-                    "requiresItems": [{ "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }]
+                    "text": "Request the endpoint and log the response.",
+                    "requiresItems": [
+                        { "id": "9df8ae84-56f2-4aef-8c79-98d2ca38d09e", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice! Clients can now fetch the current temperature from your server.",
-            "options": [{ "type": "finish", "text": "API live." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "API live.",
+                    "requiresItems": [
+                        { "id": "9df8ae84-56f2-4aef-8c79-98d2ca38d09e", "count": 1 },
+                        { "id": "280ed361-ac70-4ab9-bcd9-aee481790faf", "count": 1 }
+                    ]
+                }
+            ]
         }
     ],
     "rewards": [],

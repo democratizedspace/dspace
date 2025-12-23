@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/bucket_cured_compost.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "5 gallon bucket of cured compost",
+    "item_id": "17f31d9e-9e8e-4e11-9b3c-fd5c72edbba9",
+    "entity_type": "item",
+    "prompt": "A 5 gallon white bucket brimming with dark, finished compost sits on a patio. The compost looks moist but crumbly with no visible sticks, steam-free and smelling earthy. A compost thermometer is resting across the rim and a small hand trowel is leaned nearby. Scene is a bright, solarpunk garden nook with green plants in soft focus. Photorealistic, 512x512, no logos or text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

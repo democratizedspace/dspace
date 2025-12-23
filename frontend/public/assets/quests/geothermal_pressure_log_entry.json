@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_pressure_log_entry.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "loop pressure log entry",
+    "item_id": "df873ed2-736f-4b6d-b9c0-99d5cbbcc8da",
+    "entity_type": "item",
+    "prompt": "A clipboard page records a geothermal loop pressure check: date, outdoor temperature, pump status, and psi reading handwritten in a neat table. A small pressure gauge kit rests beside it with a faintly coiled hose. Workshop background softly blurred, photorealistic 512x512 solarpunk aesthetic, no visible company logos or extra text beyond the log entry.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

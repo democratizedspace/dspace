@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_loop_pressure_gauge.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "loop pressure gauge kit",
+    "item_id": "c7f34d7a-8666-4ef0-bab0-2b6f8d2f2612",
+    "entity_type": "item",
+    "prompt": "A glycerin-filled pressure gauge labeled 0–100 psi is attached to a short hose with quick-connect fittings, laid out on a workbench beside Teflon tape. The kit looks ready to thread onto a geothermal loop service port. Industrial solarpunk workshop lighting, photorealistic 512x512, no brand logos or text aside from the gauge numbers.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

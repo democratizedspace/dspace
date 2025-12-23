@@ -261,6 +261,22 @@
         "category": "Workshop & Construction"
     },
     {
+        "id": "17f31d9e-9e8e-4e11-9b3c-fd5c72edbba9",
+        "name": "5 gallon bucket of cured compost",
+        "description": "Bucket filled with dark, earthy compost that no longer smells like ammonia and runs at ambient temps.",
+        "image": "/assets/quests/bucket_cured_compost.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Gardening & Compost"
+    },
+    {
+        "id": "5d1c3570-2cea-4f83-9c1c-3db1792c6fda",
+        "name": "5 gallon bucket of sifted compost",
+        "description": "Fine, screened compost with sticks and rocks removed; perfect for seed starting and topdressing.",
+        "image": "/assets/quests/bucket_sifted_compost.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Gardening & Compost"
+    },
+    {
         "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
         "name": "dCarbon",
         "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
@@ -997,6 +1013,22 @@
         "category": "Electronics & Robotics"
     },
     {
+        "id": "e4b8c0f2-3c47-4e2c-9ff1-20c808d9cbca",
+        "name": "thermistor temperature log",
+        "description": "A short CSV exported from the Arduino serial monitor with timestamped thermistor readings.",
+        "image": "/assets/quests/thermistor_temperature_log.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "9df8ae84-56f2-4aef-8c79-98d2ca38d09e",
+        "name": "live temperature JSON endpoint",
+        "description": "A tiny web route that responds with the latest sensor reading as `{ \"temp_c\": 22.5 }`.",
+        "image": "/assets/quests/live_temp_json_endpoint.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Software & APIs"
+    },
+    {
         "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
@@ -1379,6 +1411,14 @@
                 }
             ]
         },
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "1c9dd1a5-1c0c-4fba-a3b8-f08f5c0c9c5a",
+        "name": "Venus phase sketch",
+        "description": "A quick pencil sketch of Venus's crescent with notes on illumination and seeing conditions.",
+        "image": "/assets/quests/venus_phase_sketch.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
     {
@@ -1845,6 +1885,14 @@
             ]
         },
         "category": "Electronics & Robotics"
+    },
+    {
+        "id": "df873ed2-736f-4b6d-b9c0-99d5cbbcc8da",
+        "name": "loop pressure log entry",
+        "description": "Noted closed-loop geothermal pressure with date, outdoor temp, and whether pumps were running.",
+        "image": "/assets/quests/geothermal_pressure_log_entry.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
     },
     {
         "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",

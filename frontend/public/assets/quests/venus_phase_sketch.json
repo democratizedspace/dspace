@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/venus_phase_sketch.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Venus phase sketch",
+    "item_id": "1c9dd1a5-1c0c-4fba-a3b8-f08f5c0c9c5a",
+    "entity_type": "item",
+    "prompt": "A small notebook page shows a pencil sketch of Venus as a bright crescent, annotated with date, time, and seeing notes. A red flashlight and small refracting telescope sit nearby on a backyard table under twilight. Soft, cozy solarpunk vibe, photorealistic 512x512, no logos or readable brand names beyond the hand-written notes.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

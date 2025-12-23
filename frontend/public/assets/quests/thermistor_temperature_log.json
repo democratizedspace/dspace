@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/thermistor_temperature_log.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "thermistor temperature log",
+    "item_id": "e4b8c0f2-3c47-4e2c-9ff1-20c808d9cbca",
+    "entity_type": "item",
+    "prompt": "A laptop screen displays a short CSV of timestamped thermistor temperature readings in a simple text editor. A connected Arduino Uno and breadboard with a thermistor voltage divider sit beside the keyboard with a USB cable attached. Minimal UI, clean desk, soft lighting, solarpunk aesthetic, no visible logos or readable brand text. 512x512 photorealistic style.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

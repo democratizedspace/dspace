@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/live_temp_json_endpoint.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "live temperature JSON endpoint",
+    "item_id": "9df8ae84-56f2-4aef-8c79-98d2ca38d09e",
+    "entity_type": "item",
+    "prompt": "A minimalist web browser window shows a JSON response `{ \"temp_c\": 22.5, \"source\": \"thermistor\" }` on a clean localhost URL bar. A USB-connected Arduino and breadboard sit blurred in the background hinting at the data source. Bright solarpunk workspace lighting, no logos or readable branding, 512x512 photorealistic rendering.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

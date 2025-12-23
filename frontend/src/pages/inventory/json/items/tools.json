@@ -579,6 +579,20 @@
         }
     },
     {
+        "id": "c7f34d7a-8666-4ef0-bab0-2b6f8d2f2612",
+        "name": "loop pressure gauge kit",
+        "description": "0–100 psi glycerin-filled gauge with hoses and fittings for geothermal loop service ports.",
+        "image": "/assets/quests/geothermal_loop_pressure_gauge.jpg",
+        "price": "45 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
         "name": "needle-nose pliers",
         "description": "125 mm steel pliers with 1 mm tips for gripping and bending leads in tight spaces.",

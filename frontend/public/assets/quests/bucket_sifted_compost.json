@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/bucket_sifted_compost.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "5 gallon bucket of sifted compost",
+    "item_id": "5d1c3570-2cea-4f83-9c1c-3db1792c6fda",
+    "entity_type": "item",
+    "prompt": "A clean 5 gallon bucket filled with fine, screened compost. The surface is smooth and uniform with tiny dark particles and no twigs or stones. A wooden mesh sifter leans beside the bucket with a small pile of coarse leftovers on top. The background shows raised garden beds and soft morning light. Photorealistic 512x512 with gentle solarpunk vibes and no visible text or logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
