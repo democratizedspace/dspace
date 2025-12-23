@@ -13,13 +13,17 @@ const schema = JSON.parse(
     'utf8'
   )
 );
+const hardeningSchema = JSON.parse(
+  readFileSync(join(__dirname, '../frontend/src/pages/sharedSchemas/hardening.json'), 'utf8')
+);
 const itemsDir = join(__dirname, '../frontend/src/pages/inventory/json/items');
 const items = readdirSync(itemsDir)
   .filter((f) => f.endsWith('.json'))
   .flatMap((f) => JSON.parse(readFileSync(join(itemsDir, f), 'utf8')));
 
 test('items conform to schema', () => {
-  const ajv = new Ajv({ allErrors: true });
+  const ajv = new Ajv({ allErrors: true, strict: false });
+  ajv.addSchema(hardeningSchema, hardeningSchema.$id);
   const validate = ajv.compile(schema);
   for (const item of items) {
     const valid = validate(item);

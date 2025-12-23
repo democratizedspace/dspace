@@ -40,5 +40,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/arduino-blink"]
+    "requiresQuests": ["electronics/arduino-blink"],
+    "hardening": {
+        "passes": 0,
+        "score": 80,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

@@ -46,5 +46,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/graph-temp-data", "programming/temp-json-api"]
+    "requiresQuests": ["programming/graph-temp-data", "programming/temp-json-api"],
+    "hardening": {
+        "passes": 0,
+        "score": 80,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

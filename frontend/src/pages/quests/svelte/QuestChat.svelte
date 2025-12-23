@@ -122,6 +122,15 @@
         {:else}
             <p class="orange">In Progress</p>
         {/if}
+        <h5>Hardening:</h5>
+        {#if quest?.hardening}
+            <p data-testid="quest-hardening-status">
+                {quest.hardening.emoji} Score {quest.hardening.score}/100
+            </p>
+            <p data-testid="quest-hardening-passes">Passes: {quest.hardening.passes}</p>
+        {:else}
+            <p data-testid="quest-hardening-status">Hardening pending</p>
+        {/if}
         <h5>Rewards:</h5>
         {#each rewardItems as item}
             <div class="horizontal">

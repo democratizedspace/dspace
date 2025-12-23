@@ -61,8 +61,8 @@
     "requiresQuests": ["electronics/basic-circuit"],
     "hardening": {
         "passes": 3,
-        "score": 60,
-        "emoji": "🌀",
+        "score": 75,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-14",

@@ -51,5 +51,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/pump-install"]
+    "requiresQuests": ["hydroponics/pump-install"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

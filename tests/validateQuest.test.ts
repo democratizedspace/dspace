@@ -4,6 +4,13 @@ import path from 'node:path';
 import { expect, test } from 'vitest';
 import validateQuest from '../scripts/validate-quest.js';
 
+const defaultHardening = {
+    passes: 0,
+    score: 0,
+    emoji: '🛠️',
+    history: [],
+};
+
 function writeQuestFile(data: object): string {
     const dir = mkdtempSync(path.join(tmpdir(), 'quest-'));
     const file = path.join(dir, 'quest.json');
@@ -26,6 +33,7 @@ test('returns true for valid quest json', () => {
                 options: [{ type: 'finish', text: 'done' }],
             },
         ],
+        hardening: defaultHardening,
     };
     const file = writeQuestFile(validQuest);
     const result = validateQuest(file);
@@ -47,6 +55,7 @@ test('returns false for invalid quest json', () => {
                 options: [{ type: 'finish', text: 'done' }],
             },
         ],
+        hardening: defaultHardening,
     };
     const file = writeQuestFile(invalidQuest);
     const result = validateQuest(file);
@@ -70,6 +79,7 @@ test('fails when quest depends on an unknown quest id', () => {
             },
         ],
         requiresQuests: ['quests/unknown'],
+        hardening: defaultHardening,
     };
     const file = writeQuestFile(questWithMissingDep);
     const result = validateQuest(file, { knownQuestIds: new Set(['quests/existing']) });
@@ -93,6 +103,7 @@ test('passes when dependencies exist in the known quest set', () => {
             },
         ],
         requiresQuests: ['quests/existing'],
+        hardening: defaultHardening,
     };
     const file = writeQuestFile(questWithValidDeps);
     const result = validateQuest(file, { knownQuestIds: new Set(['quests/existing']) });

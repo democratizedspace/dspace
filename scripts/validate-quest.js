@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const schema = require('../frontend/src/pages/quests/jsonSchemas/quest.json');
+const hardeningSchema = require('../frontend/src/pages/sharedSchemas/hardening.json');
 
 let cachedQuestIds;
 
@@ -77,7 +78,8 @@ function toQuestIdSet(knownQuestIds) {
   return new Set(loadDefaultQuestIds());
 }
 
-const ajv = new Ajv();
+const ajv = new Ajv({ allErrors: true, strict: false });
+ajv.addSchema(hardeningSchema, hardeningSchema.$id);
 const validate = ajv.compile(schema);
 
 function validateQuest(filePath, options = {}) {

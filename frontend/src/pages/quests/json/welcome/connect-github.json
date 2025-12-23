@@ -41,5 +41,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"]
+    "requiresQuests": ["welcome/howtodoquests"],
+    "hardening": {
+        "passes": 0,
+        "score": 75,
+        "emoji": "🛠️",
+        "history": []
+    }
 }
