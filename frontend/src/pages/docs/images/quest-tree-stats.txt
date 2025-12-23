@@ -3,7 +3,7 @@ electronics: 22 quests, 2264 lines
 astronomy: 21 quests, 1454 lines
 energy: 21 quests, 1647 lines
 aquaria: 19 quests, 1532 lines
-programming: 18 quests, 1034 lines
+programming: 18 quests, 1170 lines
 3dprinting: 16 quests, 1215 lines
 devops: 15 quests, 1068 lines
 geothermal: 15 quests, 981 lines
