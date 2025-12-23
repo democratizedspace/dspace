@@ -8,26 +8,67 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've graphed your data, now let's add an alert for high temperatures.",
+            "text": "You've graphed your data, now let's set an alert that fires before the room turns into a sauna.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "script",
-                    "text": "I'm ready."
+                    "text": "Open the dashboard and JSON feed",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        },
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        },
+                        {
+                            "id": "7c9b814d-93fb-4b7f-8a4f-89f1de6f1fcf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "script",
-            "text": "Watch the sensor and trigger a notification if the reading goes above your limit.",
+            "text": "Use your moving average to pick a sane threshold, debounce noisy spikes, and write a watcher that logs why it tripped.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "configure-temperature-alert-rule",
+                    "text": "Draft the alert rule"
+                },
+                {
+                    "type": "goto",
+                    "goto": "test",
+                    "text": "Rule is coded and ready",
+                    "requiresItems": [
+                        {
+                            "id": "1f52b3ae-8d96-4b53-9b7f-9dd7ba1e5c13",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "test",
+            "text": "Heat the sensor a few degrees, watch the dashboard cross the threshold, and make sure the alert logs the event cleanly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "simulate-temperature-alert",
+                    "text": "Trigger a test alert"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Alert works!",
+                    "text": "Alerts firing with logs",
                     "requiresItems": [
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "8bba1aaf-fdf9-401b-b6a3-2ad5b8c9b7dc",
                             "count": 1
                         }
                     ]
@@ -36,7 +77,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! Now your system can warn you before things overheat.",
+            "text": "Great job! Now your system can warn you before things overheat instead of after your thermometer melts.",
             "options": [
                 {
                     "type": "finish",
@@ -46,11 +87,20 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-graph"],
+    "requiresQuests": [
+        "programming/temp-graph",
+        "programming/moving-avg-temp"
+    ],
     "hardening": {
-        "passes": 0,
-        "score": 75,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 1,
+        "score": 90,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-03-02",
+                "date": "2025-03-02",
+                "score": 85
+            }
+        ]
     }
 }

@@ -1749,6 +1749,14 @@
         "category": "Digital & Records"
     },
     {
+        "id": "5b0c1e31-7e10-4d3e-9b41-3dc984d9d4d9",
+        "name": "daily temperature summary",
+        "description": "A cleaned report with the day's average, min, max, and a quick sanity check on missing readings.",
+        "image": "/assets/daily_temperature_summary.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
         "name": "temperature line chart",
         "description": "A simple Matplotlib graph showing your logged temperature readings over time.",
@@ -1757,10 +1765,26 @@
         "category": "Digital & Records"
     },
     {
+        "id": "b58c2ce5-7934-4f5a-9e6d-0f6f2ecb3d83",
+        "name": "moving average temperature series",
+        "description": "A rolling-average dataset that smooths out spikes while flagging any gaps in sensor data.",
+        "image": "/assets/moving_average_temperature_series.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
         "name": "annotated temperature graph",
         "description": "A cleaned plot with rolling averages and high/low annotations to make trends pop.",
         "image": "/assets/annotated_temperature_graph.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "7c9b814d-93fb-4b7f-8a4f-89f1de6f1fcf",
+        "name": "moving average temperature plot",
+        "description": "A smoothed chart overlay that highlights sustained climbs, drops, and any data outages.",
+        "image": "/assets/moving_average_temperature_plot.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1777,6 +1801,30 @@
         "name": "live temperature dashboard",
         "description": "An auto-refreshing web page that charts your live JSON endpoint for anyone on the LAN.",
         "image": "/assets/live_temperature_dashboard.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "1f52b3ae-8d96-4b53-9b7f-9dd7ba1e5c13",
+        "name": "temperature alert rule",
+        "description": "A threshold and debounce config tied to your live feed, ready to log and notify when crossed.",
+        "image": "/assets/temperature_alert_rule.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "8bba1aaf-fdf9-401b-b6a3-2ad5b8c9b7dc",
+        "name": "temperature alert service",
+        "description": "A running watcher that tests itself, logs events, and keeps your sensor from roasting unnoticed.",
+        "image": "/assets/temperature_alert_service.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "3f57f40c-7e3c-4d63-b511-fefb92ce409a",
+        "name": "temperature email notifier",
+        "description": "An email integration that fires from your alert service using env-sourced credentials and masked logs.",
+        "image": "/assets/temperature_email_notifier.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },

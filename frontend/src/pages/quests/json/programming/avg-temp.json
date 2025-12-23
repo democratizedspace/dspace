@@ -8,26 +8,67 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've been logging data. Let's crunch the numbers for an average.",
+            "text": "You've been logging data. Let's sanity-check the file and crunch a daily average before we trust any graphs.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "code",
-                    "text": "Let's calculate."
+                    "text": "Load up the CSV and laptop",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "code",
-            "text": "Parse the temperature log and compute the mean for the day.",
+            "text": "Parse the temperature log, toss any obvious outliers, and compute the mean for the day so we have a baseline.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "compute-daily-temperature-summary",
+                    "text": "Generate the daily summary"
+                },
+                {
+                    "type": "goto",
+                    "goto": "chart",
+                    "text": "Summary looks solid",
+                    "requiresItems": [
+                        {
+                            "id": "5b0c1e31-7e10-4d3e-9b41-3dc984d9d4d9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "chart",
+            "text": "Plot the readings so you can spot drift or missing chunks before moving on to fancier stats.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Render a quick line chart"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Average computed!",
+                    "text": "Chart and mean both checked",
                     "requiresItems": [
                         {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "id": "5b0c1e31-7e10-4d3e-9b41-3dc984d9d4d9",
+                            "count": 1
+                        },
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
                             "count": 1
                         }
                     ]
@@ -36,7 +77,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Those stats will help spot trends.",
+            "text": "Nice work! Clean stats and a quick plot mean every later graph starts from trustworthy data.",
             "options": [
                 {
                     "type": "finish",
@@ -46,11 +87,19 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-logger"],
+    "requiresQuests": [
+        "programming/temp-logger"
+    ],
     "hardening": {
-        "passes": 0,
-        "score": 80,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 1,
+        "score": 95,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-03-02",
+                "date": "2025-03-02",
+                "score": 83
+            }
+        ]
     }
 }

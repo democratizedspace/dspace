@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_alert_service.jpg",
+    "entity_type": "item",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature alert service",
+    "item_id": "8bba1aaf-fdf9-401b-b6a3-2ad5b8c9b7dc",
+    "prompt": "A terminal dashboard shows a running temperature alert service with recent trigger logs and health checks. Nearby sits a Raspberry Pi with status LEDs, thermistor wiring, and a calm solarpunk workspace with greenery. Photorealistic 512x512.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

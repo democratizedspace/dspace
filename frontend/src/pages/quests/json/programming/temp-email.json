@@ -8,26 +8,41 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've set up a local alert. Let's send yourself an email when things get too warm.",
+            "text": "You've set up a local alert. Let's wire it to an email so you get pinged even when you're away from the LAN.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "code",
-                    "text": "Sounds useful."
+                    "text": "Point me to the alert service",
+                    "requiresItems": [
+                        {
+                            "id": "8bba1aaf-fdf9-401b-b6a3-2ad5b8c9b7dc",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "code",
-            "text": "Use a mail API to send a message when the script detects high temperature.",
+            "text": "Use a mail API key or SMTP account stored in env vars, send a test message when the alert fires, and redact secrets from logs.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "connect-temperature-email-notifier",
+                    "text": "Hook up the mailer"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Email sent!",
+                    "text": "Inbox received the alert",
                     "requiresItems": [
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "3f57f40c-7e3c-4d63-b511-fefb92ce409a",
                             "count": 1
                         }
                     ]
@@ -36,7 +51,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice! Remote notifications keep you informed wherever you are.",
+            "text": "Nice! Remote notifications keep you informed wherever you are and your logs stay clean for audits.",
             "options": [
                 {
                     "type": "finish",
@@ -46,11 +61,19 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-alert"],
+    "requiresQuests": [
+        "programming/temp-alert"
+    ],
     "hardening": {
-        "passes": 0,
-        "score": 75,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 1,
+        "score": 95,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-03-02",
+                "date": "2025-03-02",
+                "score": 90
+            }
+        ]
     }
 }

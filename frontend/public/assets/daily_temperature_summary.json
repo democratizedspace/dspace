@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/daily_temperature_summary.jpg",
+    "entity_type": "item",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "daily temperature summary",
+    "item_id": "5b0c1e31-7e10-4d3e-9b41-3dc984d9d4d9",
+    "prompt": "A laptop screen shows a concise daily temperature report with min, max, average, and a small sparkline. The desk has a thermistor rig and notebook nearby in a cozy solarpunk workspace with warm light and a small plant. Photorealistic 512x512, clean UI, no distracting text outside the summary.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

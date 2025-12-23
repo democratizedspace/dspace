@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_email_notifier.jpg",
+    "entity_type": "item",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature email notifier",
+    "item_id": "3f57f40c-7e3c-4d63-b511-fefb92ce409a",
+    "prompt": "A smartphone lock screen shows a temperature alert email notification while a laptop nearby displays masked SMTP environment variables. A Raspberry Pi and sensor rig sit on the desk, surrounded by warm light and plants for a solarpunk feel. Photorealistic 512x512.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,12 +1,12 @@
 {
     "passes": 1,
-    "score": 85,
+    "score": 87,
     "emoji": "🌀",
     "history": [
         {
             "task": "codex-process-hardening-2025-03-02",
             "date": "2025-03-02",
-            "score": 83
+            "score": 87
         }
     ]
 }

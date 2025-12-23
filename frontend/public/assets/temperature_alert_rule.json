@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_alert_rule.jpg",
+    "entity_type": "item",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature alert rule",
+    "item_id": "1f52b3ae-8d96-4b53-9b7f-9dd7ba1e5c13",
+    "prompt": "A configuration screen shows a temperature alert rule with threshold, debounce, and logging options. The interface appears on a small monitor next to a Raspberry Pi and sensor rig, with a mug and plant adding cozy solarpunk vibes. Photorealistic 512x512.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

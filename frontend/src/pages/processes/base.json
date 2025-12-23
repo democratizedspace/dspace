@@ -3250,7 +3250,19 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-02-19",
+                    "date": "2025-02-19",
+                    "score": 90
+                }
+            ]
+        }
     },
     {
         "id": "pack-dark-sky-kit",
@@ -3272,7 +3284,19 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-02-20",
+                    "date": "2025-02-20",
+                    "score": 90
+                }
+            ]
+        }
     },
     {
         "id": "log-aurora-sighting",
@@ -3298,7 +3322,19 @@
                 "count": 1
             }
         ],
-        "duration": "15m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-02-21",
+                    "date": "2025-02-21",
+                    "score": 90
+                }
+            ]
+        }
     },
     {
         "id": "check-iss-pass",
@@ -3320,7 +3356,29 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 3,
+            "score": 90,
+            "emoji": "💯",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                },
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 80
+                },
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 85
+                }
+            ]
+        }
     },
     {
         "id": "stage-iss-spotting-station",
@@ -3350,7 +3408,19 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-02-22",
+                    "date": "2025-02-22",
+                    "score": 90
+                }
+            ]
+        }
     },
     {
         "id": "log-iss-pass",
@@ -3376,7 +3446,19 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-02-23",
+                    "date": "2025-02-23",
+                    "score": 90
+                }
+            ]
+        }
     },
     {
         "id": "draft-seasonal-star-plan",
@@ -3402,7 +3484,19 @@
                 "count": 1
             }
         ],
-        "duration": "15m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-02-24",
+                    "date": "2025-02-24",
+                    "score": 90
+                }
+            ]
+        }
     },
     {
         "id": "identify-constellations",
@@ -3427,7 +3521,7 @@
         "duration": "30m",
         "hardening": {
             "passes": 1,
-            "score": 90,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -3470,7 +3564,19 @@
                 "count": 1
             }
         ],
-        "duration": "15m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-02-25",
+                    "date": "2025-02-25",
+                    "score": 90
+                }
+            ]
+        }
     },
     {
         "id": "plan-venus-window",
@@ -3496,7 +3602,19 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-02-26",
+                    "date": "2025-02-26",
+                    "score": 90
+                }
+            ]
+        }
     },
     {
         "id": "sketch-venus-phase",
@@ -3522,7 +3640,19 @@
                 "count": 1
             }
         ],
-        "duration": "20m"
+        "duration": "20m",
+        "hardening": {
+            "passes": 1,
+            "score": 90,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-02-27",
+                    "date": "2025-02-27",
+                    "score": 90
+                }
+            ]
+        }
     },
     {
         "id": "observe-meteor-shower",
@@ -3714,7 +3844,7 @@
         "duration": "10m",
         "hardening": {
             "passes": 2,
-            "score": 85,
+            "score": 90,
             "emoji": "✅",
             "history": [
                 {
@@ -3770,7 +3900,19 @@
                 "count": 1
             }
         ],
-        "duration": "20m"
+        "duration": "20m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-02",
+                    "date": "2025-03-02",
+                    "score": 80
+                }
+            ]
+        }
     },
     {
         "id": "capture-hourly-temperature-log",
@@ -3792,7 +3934,129 @@
                 "count": 1
             }
         ],
-        "duration": "60m"
+        "duration": "60m",
+        "hardening": {
+            "passes": 1,
+            "score": 95,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-02",
+                    "date": "2025-03-02",
+                    "score": 82
+                }
+            ]
+        }
+    },
+    {
+        "id": "compute-daily-temperature-summary",
+        "title": "Compute daily temperature statistics from the exported CSV",
+        "requireItems": [
+            {
+                "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "5b0c1e31-7e10-4d3e-9b41-3dc984d9d4d9",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-02",
+                    "date": "2025-03-02",
+                    "score": 84
+                }
+            ]
+        }
+    },
+    {
+        "id": "compute-moving-average-series",
+        "title": "Generate a rolling average series and flag missing samples",
+        "requireItems": [
+            {
+                "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                "count": 1
+            },
+            {
+                "id": "5b0c1e31-7e10-4d3e-9b41-3dc984d9d4d9",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "b58c2ce5-7934-4f5a-9e6d-0f6f2ecb3d83",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-02",
+                    "date": "2025-03-02",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "render-moving-average-chart",
+        "title": "Overlay the moving average on your temperature chart and label gaps",
+        "requireItems": [
+            {
+                "id": "b58c2ce5-7934-4f5a-9e6d-0f6f2ecb3d83",
+                "count": 1
+            },
+            {
+                "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "7c9b814d-93fb-4b7f-8a4f-89f1de6f1fcf",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 86,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-02",
+                    "date": "2025-03-02",
+                    "score": 86
+                }
+            ]
+        }
     },
     {
         "id": "refine-temperature-graph",
@@ -3814,7 +4078,19 @@
                 "count": 1
             }
         ],
-        "duration": "15m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-02",
+                    "date": "2025-03-02",
+                    "score": 83
+                }
+            ]
+        }
     },
     {
         "id": "deploy-temperature-json-endpoint",
@@ -3840,7 +4116,24 @@
                 "count": 1
             }
         ],
-        "duration": "20m"
+        "duration": "20m",
+        "hardening": {
+            "passes": 2,
+            "score": 88,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-02",
+                    "date": "2025-03-02",
+                    "score": 86
+                },
+                {
+                    "task": "codex-process-hardening-2025-03-03",
+                    "date": "2025-03-03",
+                    "score": 88
+                }
+            ]
+        }
     },
     {
         "id": "publish-live-temperature-graph",
@@ -3866,7 +4159,138 @@
                 "count": 1
             }
         ],
-        "duration": "15m"
+        "duration": "15m",
+        "hardening": {
+            "passes": 2,
+            "score": 90,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-02",
+                    "date": "2025-03-02",
+                    "score": 87
+                },
+                {
+                    "task": "codex-process-hardening-2025-03-03",
+                    "date": "2025-03-03",
+                    "score": 90
+                }
+            ]
+        }
+    },
+    {
+        "id": "configure-temperature-alert-rule",
+        "title": "Configure a temperature alert rule using your moving average and live endpoint",
+        "requireItems": [
+            {
+                "id": "7c9b814d-93fb-4b7f-8a4f-89f1de6f1fcf",
+                "count": 1
+            },
+            {
+                "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                "count": 1
+            },
+            {
+                "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "1f52b3ae-8d96-4b53-9b7f-9dd7ba1e5c13",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 86,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-02",
+                    "date": "2025-03-02",
+                    "score": 86
+                }
+            ]
+        }
+    },
+    {
+        "id": "simulate-temperature-alert",
+        "title": "Trigger and log a temperature alert without damaging the rig",
+        "requireItems": [
+            {
+                "id": "1f52b3ae-8d96-4b53-9b7f-9dd7ba1e5c13",
+                "count": 1
+            },
+            {
+                "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                "count": 1
+            },
+            {
+                "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "8bba1aaf-fdf9-401b-b6a3-2ad5b8c9b7dc",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 87,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-02",
+                    "date": "2025-03-02",
+                    "score": 87
+                }
+            ]
+        }
+    },
+    {
+        "id": "connect-temperature-email-notifier",
+        "title": "Send temperature alerts via email without leaking credentials",
+        "requireItems": [
+            {
+                "id": "8bba1aaf-fdf9-401b-b6a3-2ad5b8c9b7dc",
+                "count": 1
+            },
+            {
+                "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "3f57f40c-7e3c-4d63-b511-fefb92ce409a",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 88,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-03-03",
+                    "date": "2025-03-03",
+                    "score": 88
+                }
+            ]
+        }
     },
     {
         "id": "arduino-led-blink",

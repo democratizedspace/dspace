@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/moving_average_temperature_series.jpg",
+    "entity_type": "item",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "moving average temperature series",
+    "item_id": "b58c2ce5-7934-4f5a-9e6d-0f6f2ecb3d83",
+    "prompt": "A code notebook displays a rolling-average temperature series with highlighted gaps in the data. The scene is a tidy desktop with a laptop, thermistor sensor rig, and sticky note reminding to check for missing samples. Soft depth of field, solarpunk touches, photorealistic 512x512.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

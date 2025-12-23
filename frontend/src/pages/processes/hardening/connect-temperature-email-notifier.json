@@ -1,13 +1,8 @@
 {
-    "passes": 2,
+    "passes": 1,
     "score": 88,
-    "emoji": "✅",
+    "emoji": "🌀",
     "history": [
-        {
-            "task": "codex-process-hardening-2025-03-02",
-            "date": "2025-03-02",
-            "score": 86
-        },
         {
             "task": "codex-process-hardening-2025-03-03",
             "date": "2025-03-03",

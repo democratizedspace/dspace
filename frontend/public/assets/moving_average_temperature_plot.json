@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/moving_average_temperature_plot.jpg",
+    "entity_type": "item",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "moving average temperature plot",
+    "item_id": "7c9b814d-93fb-4b7f-8a4f-89f1de6f1fcf",
+    "prompt": "An annotated temperature chart overlays a smooth moving-average line and shaded bands marking sensor dropouts. Displayed on a tablet beside a Raspberry Pi and thermistor rig in a bright, organized solarpunk lab. Photorealistic 512x512, crisp lines, minimal text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

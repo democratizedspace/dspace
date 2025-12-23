@@ -8,26 +8,63 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your average gives a big picture. Let's watch trends with a moving window.",
+            "text": "Your average gives a big picture. Let's smooth the bumps with a moving window so you can watch trends in motion.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "code",
-                    "text": "Let's smooth it out."
+                    "text": "Load the log and summary",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "5b0c1e31-7e10-4d3e-9b41-3dc984d9d4d9",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "code",
-            "text": "Calculate a moving average over the last N readings in your log.",
+            "text": "Calculate a moving average over the last N readings in your log, flagging any gaps so alerts won't miss a stalled sensor.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "compute-moving-average-series",
+                    "text": "Generate the rolling series"
+                },
+                {
+                    "type": "goto",
+                    "goto": "visualize",
+                    "text": "Series verified",
+                    "requiresItems": [
+                        {
+                            "id": "b58c2ce5-7934-4f5a-9e6d-0f6f2ecb3d83",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "visualize",
+            "text": "Overlay the moving average on your existing chart and mark any periods where the window went blind.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "render-moving-average-chart",
+                    "text": "Plot the smoothed trend"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Moving average computed!",
+                    "text": "Smoothed chart ready",
                     "requiresItems": [
                         {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "id": "7c9b814d-93fb-4b7f-8a4f-89f1de6f1fcf",
                             "count": 1
                         }
                     ]
@@ -36,7 +73,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice! The moving average reveals trends in real time.",
+            "text": "Nice! The moving average reveals trends in real time without letting brief spikes boss you around.",
             "options": [
                 {
                     "type": "finish",
@@ -46,11 +83,19 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/avg-temp"],
+    "requiresQuests": [
+        "programming/avg-temp"
+    ],
     "hardening": {
-        "passes": 0,
-        "score": 75,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 1,
+        "score": 90,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2025-03-02",
+                "date": "2025-03-02",
+                "score": 84
+            }
+        ]
     }
 }
