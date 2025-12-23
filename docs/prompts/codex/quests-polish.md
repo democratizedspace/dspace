@@ -5,8 +5,11 @@ rebuild them into coherent, realistic stories with multi-step item flows.
 
 ## Gold-standard references (v2.1 and earlier)
 Study these older quests before editing. They show tight gating, grounded
-processes, and playful but clear dialogue. Paths use commit `d956e807` on the
-`main` branch (v2.1 release):
+processes, and playful but clear dialogue. Paths use commit
+`d956e807d49114da2d0ff28aacef91341813bf82` on the `main` branch (v2.1
+release). To open any reference, run `git show
+d956e807d49114da2d0ff28aacef91341813bf82:<path>`; reuse `d956e807` for
+abbreviated mentions below:
 
 - `frontend/src/pages/quests/json/hydroponics/basil.json` — deep multi-node
   sequence that paces setup → water prep → seeding → transplant → lighting, with
@@ -71,9 +74,10 @@ items or processes. Avoid gratuitous churn outside the quests you touch.
   processes.
 
 ## Images (NO BINARY ASSETS)
-- Do **not** add `.jpg`, `.png`, `.webp`, etc. Instead, add image **manifest
-  JSON files** matching existing examples under `frontend/public/assets/` or
-  `frontend/public/assets/quests/`.
+- Do **not** add `.jpg`, `.png`, `.webp`, etc. Add **only** image manifest
+  JSON files matching existing examples under `frontend/public/assets/` or
+  `frontend/public/assets/quests/`. The human maintainer will generate the
+  actual images locally with Nano Banana Pro and commit them later.
 - Find an existing manifest JSON and mirror its schema exactly. Typical shape:
   {
     "filename": "/assets/quests/example.jpg",
@@ -96,10 +100,12 @@ items or processes. Avoid gratuitous churn outside the quests you touch.
   configs already in the repo.
 
 ## Validation & hygiene
-- Run repository-standard checks (lint/type-check/build/tests) relevant to quest
-  edits. If checks are heavy, at least run JSON validation scripts referenced in
-  README or existing prompt docs.
-- Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+- Inspect `.github/workflows/` and `package.json` to run the same checks CI
+  runs (lint/type-check/build/tests) relevant to quest edits. If checks are
+  heavy, at least run JSON validation scripts referenced in README or existing
+  prompt docs.
+- If `scripts/scan-secrets.py` exists, scan staged changes for secrets with
+  `git diff --cached | ./scripts/scan-secrets.py`.
 
 ## Output for your PR
 - List upgraded quests and summarize new/changed processes, items, and manifests
