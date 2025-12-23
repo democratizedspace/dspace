@@ -5,7 +5,7 @@ import hydroponics from './hydroponics.json' assert { type: 'json' };
 import tools from './tools.json' assert { type: 'json' };
 import misc from './misc.json' assert { type: 'json' };
 
-const withCategory = (items, category) =>
+export const withCategory = (items, category) =>
     items.map((item) => ({
         ...item,
         category: item.category ?? category,

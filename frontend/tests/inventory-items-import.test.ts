@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import items from '../src/pages/inventory/json/items/index.js';
+import items, { withCategory } from '../src/pages/inventory/json/items/index.js';
 
 // Regression coverage for OUT-2025-12-05-inventory-items-not-displaying
 // Verifies JSON imports using `assert { type: "json" }` still load correctly
@@ -40,6 +40,21 @@ describe('inventory items import assertions', () => {
             expect(typeof category === 'string' && category.trim().length > 0).toBe(true);
             expect(category).not.toBe('Misc');
         });
+    });
+
+    it('applies the Uncategorized fallback when a category is missing', () => {
+        const itemWithoutCategory = [
+            {
+                id: 'fallback-test',
+                name: 'placeholder item',
+                description: 'Temporary item missing category metadata.',
+                image: '/assets/placeholder.jpg',
+            },
+        ];
+
+        const [taggedItem] = withCategory(itemWithoutCategory, 'Uncategorized');
+
+        expect(taggedItem.category).toBe('Uncategorized');
     });
 
     it('includes representative inventory entries', () => {
