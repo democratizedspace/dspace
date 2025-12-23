@@ -3085,6 +3085,101 @@
         }
     },
     {
+        "id": "print-servo-gripper-fingers",
+        "title": "3D print a pair of gripper fingers for a 9 g servo",
+        "image": "/assets/quests/servo_gripper_claw.jpg",
+        "requireItems": [
+            {
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 12
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 120
+            }
+        ],
+        "createItems": [
+            {
+                "id": "a6e47b4f-9ee6-4239-8b2d-2042c0eae479",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 12
+            }
+        ],
+        "duration": "1h"
+    },
+    {
+        "id": "assemble-servo-gripper",
+        "title": "Glue printed jaws to a hobby servo horn and secure wiring",
+        "image": "/assets/quests/servo_gripper_claw.jpg",
+        "requireItems": [
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 1
+            },
+            {
+                "id": "a6e47b4f-9ee6-4239-8b2d-2042c0eae479",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "b3db5378-9eb0-4e3e-b9b1-c4b6a19e8a4d",
+                "count": 1
+            }
+        ],
+        "duration": "20m"
+    },
+    {
+        "id": "calibrate-servo-gripper",
+        "title": "Sweep a servo gripper on an Arduino to set a neutral midpoint",
+        "image": "/assets/quests/servo_gripper_claw.jpg",
+        "requireItems": [
+            {
+                "id": "b3db5378-9eb0-4e3e-b9b1-c4b6a19e8a4d",
+                "count": 1
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "5af0ef1b-67b8-478c-8cd2-fcbb4ae938f6",
+                "count": 1
+            }
+        ],
+        "duration": "15m"
+    },
+    {
         "id": "arduino-thermistor-read",
         "title": "Log temperature from a thermistor using an Arduino Uno",
         "requireItems": [
@@ -4146,6 +4241,61 @@
         }
     },
     {
+        "id": "inspect-battery-pack-terminals",
+        "title": "Check a 200 Wh battery pack for swelling, corrosion, and resting voltage",
+        "image": "/assets/quests/solar_battery_pack_200Wh_maintenance.jpg",
+        "requireItems": [
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "55e197c2-7c81-4b66-8516-3fa193f3b0e6",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "draw-down-battery-pack",
+        "title": "Discharge a 200 Wh pack by topping off a smartphone over USB",
+        "image": "/assets/quests/solar_battery_pack_200Wh_maintenance.jpg",
+        "requireItems": [
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 15
+            }
+        ],
+        "createItems": [
+            {
+                "id": "35c2975f-9841-4c38-9e96-1f19b94a06d7",
+                "count": 1
+            }
+        ],
+        "duration": "45m"
+    },
+    {
         "id": "charge-smartphone",
         "title": "Fully charge a smartphone from a 200 Wh battery pack using a USB cable",
         "image": "/assets/battery.jpg",
@@ -4226,6 +4376,126 @@
                 }
             ]
         }
+    },
+    {
+        "id": "cycle-and-recharge-200wh-pack",
+        "title": "Cycle a 200 Wh pack by partial discharge then recharge on a 200 W solar kit",
+        "image": "/assets/quests/solar_battery_pack_200Wh_maintenance.jpg",
+        "requireItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "35c2975f-9841-4c38-9e96-1f19b94a06d7",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 200
+            },
+            {
+                "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                "count": 200
+            },
+            {
+                "id": "7a3a6c58-8b0a-4a75-8b53-337c1a8a04e7",
+                "count": 1
+            }
+        ],
+        "duration": "1h"
+    },
+    {
+        "id": "stage-offgrid-charger",
+        "title": "Lay out a 200 W folding panel, charge controller, and 200 Wh pack for off-grid charging",
+        "image": "/assets/quests/offgrid_phone_charging_200Wh.jpg",
+        "requireItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "2a7a18f8-6f16-4a3f-ae99-239ace9132dd",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "wire-and-safety-check-offgrid-charger",
+        "title": "Connect the solar panel to the controller and battery, verify polarity, and strain-relieve leads",
+        "image": "/assets/quests/offgrid_phone_charging_200Wh.jpg",
+        "requireItems": [
+            {
+                "id": "2a7a18f8-6f16-4a3f-ae99-239ace9132dd",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "c198de14-611f-4427-9d70-b42f5f5173f0",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "charge-phone-offgrid",
+        "title": "Charge a smartphone from the staged off-grid solar kit over USB",
+        "image": "/assets/quests/offgrid_phone_charging_200Wh.jpg",
+        "requireItems": [
+            {
+                "id": "c198de14-611f-4427-9d70-b42f5f5173f0",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            },
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "3f09a2ad-5599-4613-8c03-c9b993c337e1",
+                "count": 1
+            }
+        ],
+        "duration": "45m"
     },
     {
         "id": "test-cable-continuity",
@@ -4543,9 +4813,9 @@
         }
     },
     {
-        "id": "measure-compost-temperature",
-        "title": "Check core temperature of a compost pile with a compost thermometer",
-        "image": "/assets/aquarium_thermometer.jpg",
+        "id": "sanitize-compost-thermometer",
+        "title": "Clean and zero a compost thermometer before probing a pile",
+        "image": "/assets/quests/compost_check_temperature.jpg",
         "requireItems": [
             {
                 "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
@@ -4553,7 +4823,35 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "4e548a3c-26c0-4f40-8e51-787a6bef4749",
+                "count": 1
+            }
+        ],
+        "duration": "2m"
+    },
+    {
+        "id": "measure-compost-temperature",
+        "title": "Check core temperature of a compost pile with a compost thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+                "count": 1
+            },
+            {
+                "id": "4e548a3c-26c0-4f40-8e51-787a6bef4749",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "605bfa74-3ecb-4b33-a8f7-decd83c94292",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 1,
@@ -5118,5 +5416,78 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "dark-adapt-and-plot-pointers",
+        "title": "Use a planisphere under red light to adapt eyes before finding Polaris",
+        "image": "/assets/quests/constellation_mapping_logbook.jpg",
+        "requireItems": [
+            {
+                "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                "count": 1
+            },
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "96b7899a-679e-4e3f-86a4-8cd1a2d80445",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "trace-big-dipper-to-polaris",
+        "title": "Sketch the Big Dipper pointer line toward Polaris",
+        "image": "/assets/quests/constellation_mapping_logbook.jpg",
+        "requireItems": [
+            {
+                "id": "96b7899a-679e-4e3f-86a4-8cd1a2d80445",
+                "count": 1
+            },
+            {
+                "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                "count": 1
+            },
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "d38f41b6-40ac-4e1a-9bff-ded38e84ae1b",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "log-polaris-sighting",
+        "title": "Center Polaris in a telescope and record the observation",
+        "image": "/assets/quests/north_star_polaris_location.jpg",
+        "requireItems": [
+            {
+                "id": "d38f41b6-40ac-4e1a-9bff-ded38e84ae1b",
+                "count": 1
+            },
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "bdfbe239-e7a4-4e78-b9b0-5532675b95b2",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
     }
 ]

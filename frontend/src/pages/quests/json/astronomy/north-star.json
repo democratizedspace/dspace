@@ -8,44 +8,77 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Polaris anchors the night sky. Let's identify it to orient ourselves.",
+            "text": "Polaris anchors the night sky. Grab a planisphere, red flashlight, and your basic telescope so we can trace the pointer stars without ruining night vision.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "dark-adapt-and-plot-pointers",
+                    "text": "Match the sky to the planisphere"
+                },
                 {
                     "type": "goto",
                     "goto": "locate",
-                    "text": "Show me the steps."
+                    "text": "Eyes adjusted",
+                    "requiresItems": [
+                        { "id": "96b7899a-679e-4e3f-86a4-8cd1a2d80445", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "locate",
-            "text": "Find the Big Dipper and draw a line through its pointer stars to reach Polaris. Confirm with your telescope.",
+            "text": "Find the Big Dipper, draw a line through its pointer stars, and walk that line to a solitary star that barely drifts—Polaris. Double-check against your chart before you celebrate.",
             "options": [
                 {
                     "type": "process",
-                    "process": "identify-constellations",
-                    "text": "Scanning the stars."
+                    "process": "trace-big-dipper-to-polaris",
+                    "text": "Sketch the pointer line",
+                    "requiresItems": [
+                        { "id": "96b7899a-679e-4e3f-86a4-8cd1a2d80445", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "confirm",
+                    "text": "Pointer line traced",
+                    "requiresItems": [
+                        { "id": "d38f41b6-40ac-4e1a-9bff-ded38e84ae1b", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "confirm",
+            "text": "Center Polaris in your eyepiece, nudge the focus, and log the bearing. The steady star should hold still while other field stars drift.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-polaris-sighting",
+                    "text": "Lock Polaris in the scope",
+                    "requiresItems": [
+                        { "id": "d38f41b6-40ac-4e1a-9bff-ded38e84ae1b", "count": 1 }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
+                    "text": "Polaris logged",
                     "requiresItems": [
-                        {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Polaris spotted."
+                        { "id": "bdfbe239-e7a4-4e78-b9b0-5532675b95b2", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent! Polaris now anchors your night sky orientation.",
+            "text": "Excellent! Polaris now anchors your night sky orientation. Use the same trick to find true north any clear night.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Navigation feels easier now."
+                    "text": "Navigation feels easier now.",
+                    "requiresItems": [
+                        { "id": "bdfbe239-e7a4-4e78-b9b0-5532675b95b2", "count": 1 }
+                    ]
                 }
             ]
         }

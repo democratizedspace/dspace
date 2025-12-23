@@ -1853,5 +1853,117 @@
         "image": "/assets/mission_log_entry_page.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
+    },
+    {
+        "id": "55e197c2-7c81-4b66-8516-3fa193f3b0e6",
+        "name": "battery pack inspection log",
+        "description": "Notes from checking a 200 Wh LiFePO4 pack for swelling, loose lugs, and resting voltage before cycling.",
+        "image": "/assets/quests/solar_battery_pack_200Wh_maintenance.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
+        "id": "35c2975f-9841-4c38-9e96-1f19b94a06d7",
+        "name": "200 Wh pack partial discharge",
+        "description": "Record showing the pack was gently drained 10–15% via USB load before a maintenance recharge.",
+        "image": "/assets/quests/solar_battery_pack_200Wh_maintenance.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
+        "id": "7a3a6c58-8b0a-4a75-8b53-337c1a8a04e7",
+        "name": "200 Wh pack cycle record",
+        "description": "Signed-off log noting the pack was inspected, partially discharged, and topped off on solar.",
+        "image": "/assets/quests/solar_battery_pack_200Wh_maintenance.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
+        "id": "2a7a18f8-6f16-4a3f-ae99-239ace9132dd",
+        "name": "off-grid solar kit staged",
+        "description": "Panel, charge controller, and 200 Wh pack laid out on dry ground with leads identified before wiring.",
+        "image": "/assets/quests/offgrid_phone_charging_200Wh.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
+        "id": "c198de14-611f-4427-9d70-b42f5f5173f0",
+        "name": "off-grid charger wired",
+        "description": "Solar kit connected with correct polarity, strain relief, and shaded battery ready for USB output.",
+        "image": "/assets/quests/offgrid_phone_charging_200Wh.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
+        "id": "3f09a2ad-5599-4613-8c03-c9b993c337e1",
+        "name": "off-grid phone charge record",
+        "description": "Logged session showing a smartphone topped off from the portable solar kit without overheating.",
+        "image": "/assets/quests/offgrid_phone_charging_200Wh.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
+        "id": "4e548a3c-26c0-4f40-8e51-787a6bef4749",
+        "name": "sanitized compost thermometer",
+        "description": "Probe wiped clean and zeroed before being inserted into an active compost bucket.",
+        "image": "/assets/quests/compost_check_temperature.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Agriculture & Food"
+    },
+    {
+        "id": "605bfa74-3ecb-4b33-a8f7-decd83c94292",
+        "name": "compost temperature log",
+        "description": "Recorded core reading for a compost pile, used to decide when to turn or add moisture.",
+        "image": "/assets/quests/compost_check_temperature.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Agriculture & Food"
+    },
+    {
+        "id": "a6e47b4f-9ee6-4239-8b2d-2042c0eae479",
+        "name": "printed servo gripper fingers",
+        "description": "Pair of 3D-printed jaws sized for a 9 g hobby servo horn, ready for sanding and mounting.",
+        "image": "/assets/quests/servo_gripper_claw.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "b3db5378-9eb0-4e3e-b9b1-c4b6a19e8a4d",
+        "name": "assembled servo gripper",
+        "description": "Servo with jaws glued to the horn, leads strain-relieved, and hinge tested for smooth travel.",
+        "image": "/assets/quests/servo_gripper_claw.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "5af0ef1b-67b8-478c-8cd2-fcbb4ae938f6",
+        "name": "calibrated servo gripper",
+        "description": "Servo gripper swept on an Arduino sketch with neutral midpoint set and no buzzing at the end stops.",
+        "image": "/assets/quests/servo_gripper_claw.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "96b7899a-679e-4e3f-86a4-8cd1a2d80445",
+        "name": "red-light sky map notes",
+        "description": "Planisphere alignment and dark-adaptation checklist scribbled under a red flashlight before Polaris hunt.",
+        "image": "/assets/quests/constellation_mapping_logbook.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "d38f41b6-40ac-4e1a-9bff-ded38e84ae1b",
+        "name": "pointer star sketch",
+        "description": "Notebook sketch tracing the Big Dipper's pointer stars toward Polaris for quick orientation.",
+        "image": "/assets/quests/constellation_mapping_logbook.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "bdfbe239-e7a4-4e78-b9b0-5532675b95b2",
+        "name": "Polaris log entry",
+        "description": "Eyepiece note confirming Polaris centered, focus set, and bearing recorded for navigation practice.",
+        "image": "/assets/quests/north_star_polaris_location.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
     }
 ]

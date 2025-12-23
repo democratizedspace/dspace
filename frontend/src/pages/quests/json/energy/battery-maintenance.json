@@ -8,39 +8,77 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A battery lasts longer when you cycle it occasionally. Ready for a quick health check?",
+            "text": "A battery lasts longer when you cycle it occasionally. Grab your 200 Wh pack, charge controller, folding panel, USB cable, smartphone, and a multimeter so we can inspect before we feed it sunlight.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "inspect-battery-pack-terminals",
+                    "text": "Inspect for swelling or loose lugs"
+                },
+                {
                     "type": "goto",
-                    "goto": "cycle",
-                    "text": "Let's give it some exercise."
+                    "goto": "discharge",
+                    "text": "Inspection logged",
+                    "requiresItems": [
+                        { "id": "55e197c2-7c81-4b66-8516-3fa193f3b0e6", "count": 1 }
+                    ]
                 }
             ]
         },
         {
-            "id": "cycle",
-            "text": "Discharge your pack a bit, then hook it to the solar kit and top it off.",
+            "id": "discharge",
+            "text": "Take the pack down 10–15% by charging your phone until the voltage dips a hair. Stop if anything warms up and keep the pack shaded while you draw it down.",
             "options": [
                 {
                     "type": "process",
-                    "process": "charge-battery-pack-solar",
-                    "text": "Charge with solar"
+                    "process": "draw-down-battery-pack",
+                    "text": "Sip a few watt-hours into the phone",
+                    "requiresItems": [
+                        { "id": "55e197c2-7c81-4b66-8516-3fa193f3b0e6", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recharge",
+                    "text": "Pack is partially discharged",
+                    "requiresItems": [
+                        { "id": "35c2975f-9841-4c38-9e96-1f19b94a06d7", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recharge",
+            "text": "Now park the panel in direct sun, wire controller → battery → USB output, and watch the multimeter climb back toward full. Keep cables strain-relieved and out of puddles.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "cycle-and-recharge-200wh-pack",
+                    "text": "Top it off with solar",
+                    "requiresItems": [
+                        { "id": "35c2975f-9841-4c38-9e96-1f19b94a06d7", "count": 1 }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Battery cycled",
-                    "requiresItems": [{ "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 }]
+                    "text": "Cycle complete",
+                    "requiresItems": [
+                        { "id": "7a3a6c58-8b0a-4a75-8b53-337c1a8a04e7", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Your pack is ready for more adventures.",
+            "text": "Nice work! Your pack is balanced, topped off, and ready for more adventures. Log the date so you remember when to repeat the exercise.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Power up!"
+                    "text": "Power up!",
+                    "requiresItems": [
+                        { "id": "7a3a6c58-8b0a-4a75-8b53-337c1a8a04e7", "count": 1 }
+                    ]
                 }
             ]
         }

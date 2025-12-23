@@ -8,39 +8,77 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A gripper is a simple way to interact with the world. Let's add one to your robot using a standard servo motor.",
+            "text": "A gripper is a simple way to interact with the world. Let's add one to your robot using a standard servo motor and a few printed jaws.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "print-servo-gripper-fingers",
+                    "text": "Print a pair of jaws"
+                },
                 {
                     "type": "goto",
                     "goto": "attach",
-                    "text": "Sounds fun."
+                    "text": "Fresh prints in hand",
+                    "requiresItems": [
+                        { "id": "a6e47b4f-9ee6-4239-8b2d-2042c0eae479", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "attach",
-            "text": "Mount the servo vertically and connect two fingers with a linkage so they open and close when the servo turns.",
+            "text": "Mount the servo vertically, glue the jaws to opposite sides of the horn, and run the leads clear of the hinge. Keep fingers out of the sweep range while the glue sets.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-servo-gripper",
+                    "text": "Attach the jaws to the horn",
+                    "requiresItems": [
+                        { "id": "a6e47b4f-9ee6-4239-8b2d-2042c0eae479", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Claw glued and wired",
+                    "requiresItems": [
+                        { "id": "b3db5378-9eb0-4e3e-b9b1-c4b6a19e8a4d", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Test open/close travel with an Arduino sweep sketch before you let the claw grab anything delicate. Watch current draw and stop if the horn hits the end stops.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-servo-gripper",
+                    "text": "Run the servo sweep",
+                    "requiresItems": [
+                        { "id": "b3db5378-9eb0-4e3e-b9b1-c4b6a19e8a4d", "count": 1 }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Works great",
+                    "text": "Jaw travel looks good",
                     "requiresItems": [
-                        {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 1
-                        }
+                        { "id": "5af0ef1b-67b8-478c-8cd2-fcbb4ae938f6", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! You can now grab and carry small parts for future builds.",
+            "text": "Nice! You can now grab and carry small parts for future builds. Keep the claw unloaded when you power down so it doesn't strain the servo gears.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Sweet!"
+                    "text": "Sweet!",
+                    "requiresItems": [
+                        { "id": "5af0ef1b-67b8-478c-8cd2-fcbb4ae938f6", "count": 1 }
+                    ]
                 }
             ]
         }

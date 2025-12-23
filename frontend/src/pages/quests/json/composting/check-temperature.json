@@ -8,31 +8,71 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Wondering if your compost is cooking? Let's find out.",
-            "options": [{ "type": "goto", "goto": "probe", "text": "How do I check?" }]
+            "text": "Wondering if your compost is cooking? Grab the long thermometer, wipe the probe clean, and let's log the core temp before you turn the pile.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sanitize-compost-thermometer",
+                    "text": "Clean and zero the probe"
+                },
+                {
+                    "type": "goto",
+                    "goto": "probe",
+                    "text": "Probe is ready",
+                    "requiresItems": [
+                        { "id": "4e548a3c-26c0-4f40-8e51-787a6bef4749", "count": 1 }
+                    ]
+                }
+            ]
         },
         {
             "id": "probe",
-            "text": "Insert a compost thermometer deep into the bucket to read the core heat.",
+            "text": "Slide the probe deep into the bucket to read the core heat without hitting the sides. Wait for the dial to steady before you decide your next move.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "measure-compost-temperature",
+                    "text": "Take the temperature",
+                    "requiresItems": [
+                        { "id": "4e548a3c-26c0-4f40-8e51-787a6bef4749", "count": 1 }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "reading",
-                    "process": "measure-compost-temperature",
-                    "requiresItems": [{ "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8", "count": 1 }],
-                    "text": "Take the temperature"
+                    "text": "Logged the reading",
+                    "requiresItems": [
+                        { "id": "605bfa74-3ecb-4b33-a8f7-decd83c94292", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "reading",
-            "text": "The dial climbs to a toasty 60 °C—microbes are feasting happily!",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Nice, it's hot!" }]
+            "text": "The dial climbs to a toasty 60 °C—microbes are feasting happily! If it dips below 50 °C tomorrow, mix in browns and add a splash of water.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Note the result",
+                    "requiresItems": [
+                        { "id": "605bfa74-3ecb-4b33-a8f7-decd83c94292", "count": 1 }
+                    ]
+                }
+            ]
         },
         {
             "id": "finish",
-            "text": "Keep monitoring and turning to maintain that microbial frenzy.",
-            "options": [{ "type": "finish", "text": "Will do!" }]
+            "text": "Keep monitoring and turning to maintain that microbial frenzy. Next check-in? After your next turn or moisture top-up.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do!",
+                    "requiresItems": [
+                        { "id": "605bfa74-3ecb-4b33-a8f7-decd83c94292", "count": 1 }
+                    ]
+                }
+            ]
         }
     ],
     "rewards": [],

@@ -11,48 +11,60 @@
             "text": "Phone low? Set up a 200 W panel, charge controller, 200 Wh LiFePO4 battery and USB cable on dry ground. Handle connectors by their insulation and stop if cables warm or weather turns.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "stage-offgrid-charger",
+                    "text": "Lay out the panel, controller, and pack"
+                },
+                {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Let's give it a try."
+                    "goto": "wire",
+                    "text": "Gear staged and inspected",
+                    "requiresItems": [
+                        { "id": "2a7a18f8-6f16-4a3f-ae99-239ace9132dd", "count": 1 }
+                    ]
                 }
             ]
         },
         {
-            "id": "setup",
-            "text": "Unfold the panel toward the sun, snap its MC4 leads into the charge controller, then connect the controller to the battery. Keep the battery shaded on a nonflammable surface, double-check red to positive and black to negative, and run the USB cable from the controller to your smartphone.",
+            "id": "wire",
+            "text": "Unfold the panel toward the sun, snap MC4 leads into the controller, then clip controller output to the LiFePO4 pack. Shade the battery on a nonflammable surface and check polarity before you touch USB ports.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
-                            "count": 1
-                        },
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        },
-                        {
-                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
-                            "count": 1
-                        },
-                        {
-                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Take the solar kit"
+                    "type": "process",
+                    "process": "wire-and-safety-check-offgrid-charger",
+                    "text": "Strain-relief the connectors",
+                    "requiresItems": [
+                        { "id": "2a7a18f8-6f16-4a3f-ae99-239ace9132dd", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Controller is live and stable",
+                    "requiresItems": [
+                        { "id": "c198de14-611f-4427-9d70-b42f5f5173f0", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "charge",
+            "text": "Plug the USB cable into the controller and your phone. Verify the pack stays cool and the charge current is steady before you pocket the device.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "charge-phone-offgrid",
+                    "text": "Top off the phone off-grid",
+                    "requiresItems": [
+                        { "id": "c198de14-611f-4427-9d70-b42f5f5173f0", "count": 1 }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Phone is charging!",
                     "requiresItems": [
-                        { "id": "02b32152-a7b2-458e-9643-7b754c722165", "count": 1 },
-                        { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
-                        { "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b", "count": 1 },
-                        { "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 },
-                        { "id": "82577af7-6724-4cb2-8922-f7140e550145", "count": 1 }
+                        { "id": "3f09a2ad-5599-4613-8c03-c9b993c337e1", "count": 1 }
                     ]
                 }
             ]
@@ -63,7 +75,10 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Handy!"
+                    "text": "Handy!",
+                    "requiresItems": [
+                        { "id": "3f09a2ad-5599-4613-8c03-c9b993c337e1", "count": 1 }
+                    ]
                 }
             ]
         }
