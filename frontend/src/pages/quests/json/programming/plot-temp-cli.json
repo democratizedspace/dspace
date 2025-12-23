@@ -13,13 +13,19 @@
                 {
                     "type": "goto",
                     "goto": "script",
-                    "text": "Show me the script"
+                    "text": "Show me the script",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "script",
-            "text": "Run a Python script to read the log and draw a line graph with Matplotlib.",
+            "text": "Run a Python script to read the log and draw a line graph with Matplotlib. Aim for a CLI you can cron without opening a notebook.",
             "options": [
                 {
                     "type": "process",
@@ -29,7 +35,13 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "The chart is rendered"
+                    "text": "The chart is rendered",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -45,5 +57,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-logger"]
+    "requiresQuests": ["programming/temp-logger"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

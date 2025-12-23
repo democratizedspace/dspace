@@ -74,11 +74,15 @@ REQUIREMENTS
 2. Use realistic durations and item relationships grounded in real-world timing.
 3. Ensure the process is referenced by at least one quest or item; create
    missing items or quest hooks as needed.
-4. Use only existing image assets; do not add new image files.
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-6. Run `npm run test:ci -- processQuality` and fix any failures.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-8. Update docs or items if needed.
+4. Ensure every process includes a `hardening` block using the shared item
+   schema (passes equals history length, integer score 0–100, emoji thresholds
+   🛠️/🌀/✅/💯). Run `npm run hardening:fix` and `npm run hardening:validate`
+   after edits.
+5. Use only existing image assets; do not add new image files.
+6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+7. Run `npm run test:ci -- processQuality` and fix any failures.
+8. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+9. Update docs or items if needed.
 
 OUTPUT
 A pull request with the completed process and passing checks.
@@ -94,8 +98,10 @@ You are an automated contributor for the DSPACE repository. Edit or create
 processes under `frontend/src/pages/processes/base.json` with corresponding
 hardening files in `frontend/src/pages/processes/hardening`. Ensure realistic
 steps, durations, item references, and passing checks (`npm run lint`,
-`npm run type-check`, `npm run build`, `npm run test:ci`, and
-`npm run test:ci -- processQuality`).
+`npm run type-check`, `npm run build`, `npm run hardening:validate`,
+`npm run test:ci`, and `npm run test:ci -- processQuality`). Normalize metadata
+with `npm run hardening:fix` so `passes` matches `history.length` and `score`
+meets the shared evaluator for each process.
 Verify the process links to existing quests or items, add missing registry
 entries if needed, reuse existing image assets, and scan for secrets with
 `git diff --cached | ./scripts/scan-secrets.py` before committing.
@@ -142,10 +148,11 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-6. Run `npm run test:ci -- processQuality`. Update docs or items if needed.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-8. Use an emoji-prefixed commit message like `📝 : – refine process details`.
+5. Run `npm run hardening:fix` to sync `passes` and `score` with the evaluator.
+6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+7. Run `npm run hardening:validate` and `npm run test:ci -- processQuality`.
+8. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+9. Use an emoji-prefixed commit message like `📝 : – refine process details`.
 
 OUTPUT:
 A pull request with the refined process, updated hardening block and passing tests.

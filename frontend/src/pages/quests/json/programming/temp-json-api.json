@@ -1,7 +1,7 @@
 {
     "id": "programming/temp-json-api",
     "title": "Serve Temperature as JSON",
-    "description": "Expose the latest sensor reading at a JSON endpoint.",
+    "description": "Expose the latest sensor reading at a live temperature JSON endpoint.",
     "image": "/assets/quests/programming_temperature_json_api.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -9,26 +9,69 @@
         {
             "id": "start",
             "text": "Your API returns static data. Let's feed it live temperature readings.",
-            "options": [{ "type": "goto", "goto": "code", "text": "Sounds great." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Sounds great.",
+                    "requiresItems": [
+                        { "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8", "count": 1 },
+                        { "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2", "count": 1 },
+                        { "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf", "count": 1 }
+                    ]
+                }
+            ]
         },
         {
             "id": "code",
-            "text": "Read the sensor and respond with JSON like `{ \"temp\": 22.5 }` at `/temp`.",
+            "text": "Read the sensor and respond with JSON like `{ \"temp\": 22.5 }` at `/temp`. Keep it lightweight so it can run alongside the logger and stay worthy of being called a live temperature JSON endpoint.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "deploy-temperature-json-endpoint",
+                    "text": "Publish the JSON route"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Endpoint streaming data!",
-                    "requiresItems": [{ "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Nice! Clients can now fetch the current temperature from your server.",
-            "options": [{ "type": "finish", "text": "API live." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "API live."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/json-api"]
+    "requiresQuests": ["programming/json-api"],
+    "hardening": {
+        "passes": 2,
+        "score": 95,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-hardening-2025-12-01",
+                "date": "2025-12-01",
+                "score": 92
+            },
+            {
+                "task": "codex-hardening-2025-12-15",
+                "date": "2025-12-15",
+                "score": 95
+            }
+        ]
+    }
 }

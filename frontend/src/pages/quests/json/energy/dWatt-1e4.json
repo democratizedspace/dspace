@@ -51,5 +51,11 @@
             "count": 3
         }
     ],
-    "requiresQuests": ["energy/dWatt-1e3"]
+    "requiresQuests": ["energy/dWatt-1e3"],
+    "hardening": {
+        "passes": 0,
+        "score": 85,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

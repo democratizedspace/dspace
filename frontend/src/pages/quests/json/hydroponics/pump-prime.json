@@ -30,7 +30,12 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Pump is primed",
-                    "requiresItems": [{ "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -46,5 +51,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/pump-install"]
+    "requiresQuests": ["hydroponics/pump-install"],
+    "hardening": {
+        "passes": 0,
+        "score": 80,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

@@ -47,5 +47,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/install-backup-thermistor"]
+    "requiresQuests": ["geothermal/install-backup-thermistor"],
+    "hardening": {
+        "passes": 0,
+        "score": 75,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

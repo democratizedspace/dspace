@@ -100,8 +100,8 @@
     "requiresQuests": ["electronics/tin-soldering-iron"],
     "hardening": {
         "passes": 7,
-        "score": 94,
-        "emoji": "\ud83d\udcaf",
+        "score": 100,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-refine-2025-08-07",

@@ -1,7 +1,7 @@
 {
     "id": "programming/temp-graph",
     "title": "Serve a live temperature graph",
-    "description": "Host a simple web page that fetches your JSON endpoint and renders an auto-refreshing temperature chart.",
+    "description": "Host a simple web page that fetches your live temperature JSON endpoint and renders an auto-refreshing temperature chart.",
     "image": "/assets/quests/temperature_log_line_chart.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -13,21 +13,31 @@
                 {
                     "type": "goto",
                     "goto": "code",
-                    "text": "Show me how."
+                    "text": "Show me how.",
+                    "requiresItems": [
+                        { "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86", "count": 1 },
+                        { "id": "50360fd0-e296-4ef8-a3a9-00e049318166", "count": 1 },
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
+                    ]
                 }
             ]
         },
         {
             "id": "code",
-            "text": "Add a lightweight web page that calls your temperature JSON endpoint and renders an updating line chart with Chart.js or another browser-friendly library.",
+            "text": "Add a lightweight web page that calls your live temperature JSON endpoint and renders an updating line chart with Chart.js or another browser-friendly library.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "publish-live-temperature-graph",
+                    "text": "Publish the live dashboard"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Graph generated!",
                     "requiresItems": [
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
                             "count": 1
                         }
                     ]
@@ -46,5 +56,22 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/graph-temp-data", "programming/temp-json-api"]
+    "requiresQuests": ["programming/graph-temp-data", "programming/temp-json-api"],
+    "hardening": {
+        "passes": 2,
+        "score": 98,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-hardening-2025-12-08",
+                "date": "2025-12-08",
+                "score": 95
+            },
+            {
+                "task": "codex-hardening-2025-12-18",
+                "date": "2025-12-18",
+                "score": 98
+            }
+        ]
+    }
 }

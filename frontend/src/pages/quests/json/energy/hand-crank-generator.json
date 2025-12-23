@@ -4,12 +4,24 @@
     "description": "Print parts and assemble a hand crank generator to charge a 200 Wh battery pack.",
     "hardening": {
         "passes": 3,
-        "score": 85,
-        "emoji": "✅",
+        "score": 95,
+        "emoji": "💯",
         "history": [
-            { "task": "codex-hardening-2025-08-06", "date": "2025-08-06", "score": 60 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 78 },
-            { "task": "codex-upgrade-2025-08-06b", "date": "2025-08-06", "score": 85 }
+            {
+                "task": "codex-hardening-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 78
+            },
+            {
+                "task": "codex-upgrade-2025-08-06b",
+                "date": "2025-08-06",
+                "score": 85
+            }
         ]
     },
     "image": "/assets/quests/hand_crank_generator_200Wh.jpg",
@@ -46,8 +58,14 @@
                     "goto": "materials",
                     "text": "Printed parts ready",
                     "requiresItems": [
-                        { "id": "d715cf3d-c616-47a6-b753-ae24c87714f3", "count": 1 },
-                        { "id": "3326e89c-5883-473d-a68f-3ea560093966", "count": 1 }
+                        {
+                            "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
+                            "count": 1
+                        },
+                        {
+                            "id": "3326e89c-5883-473d-a68f-3ea560093966",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -71,10 +89,22 @@
                     "goto": "assemble",
                     "text": "Parts ready—time to assemble",
                     "requiresItems": [
-                        { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
-                        { "id": "6caa08d8-815c-4a0e-9297-0fda4516659d", "count": 1 },
-                        { "id": "d715cf3d-c616-47a6-b753-ae24c87714f3", "count": 1 },
-                        { "id": "3326e89c-5883-473d-a68f-3ea560093966", "count": 1 }
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
+                            "count": 1
+                        },
+                        {
+                            "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
+                            "count": 1
+                        },
+                        {
+                            "id": "3326e89c-5883-473d-a68f-3ea560093966",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -103,7 +133,12 @@
                     "type": "goto",
                     "goto": "fin",
                     "text": "Battery's charged with 50 dWatts!",
-                    "requiresItems": [{ "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 50 }]
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 50
+                        }
+                    ]
                 }
             ]
         },

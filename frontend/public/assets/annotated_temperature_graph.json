@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/annotated_temperature_graph.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "annotated temperature graph",
+    "item_id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+    "entity_type": "item",
+    "prompt": "A temperature chart displays rolling averages with high/low markers and brief annotations, styled in a clean dashboard aesthetic. The graph sits on a laptop screen angled on a tidy solarpunk desk with a thermistor rig and notebook nearby. Warm lighting, soft depth of field, and a small plant keep the 512×512 scene photorealistic with gentle stylization and no distracting text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

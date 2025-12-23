@@ -75,7 +75,7 @@
     "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
         "passes": 8,
-        "score": 98,
+        "score": 100,
         "emoji": "💯",
         "history": [
             {

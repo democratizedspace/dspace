@@ -5,9 +5,11 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const schema = require('../src/pages/inventory/jsonSchemas/item.json');
+const hardeningSchema = require('../src/pages/sharedSchemas/hardening.json');
 const itemsDir = path.join(__dirname, '../src/pages/inventory/json/items');
 
-const ajv = new Ajv();
+const ajv = new Ajv({ allErrors: true, strict: false });
+ajv.addSchema(hardeningSchema, hardeningSchema.$id);
 const validate = ajv.compile(schema);
 
 describe('item validation', () => {

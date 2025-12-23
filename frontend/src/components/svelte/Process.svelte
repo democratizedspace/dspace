@@ -163,6 +163,13 @@
 
             <h4>Duration: {process.duration}</h4>
 
+            {#if process.hardening}
+                <p class="hardening" data-testid={`process-hardening-${process.id}`}>
+                    {process.hardening.emoji} Score {process.hardening.score}/100 · Passes
+                    {process.hardening.passes}
+                </p>
+            {/if}
+
             {#if isCustomProcess}
                 <p class="custom-process-note">
                     Custom processes are displayed for reference and managed separately.
@@ -198,6 +205,12 @@
     .container {
         display: flex;
         flex-direction: column;
+        gap: 12px;
+    }
+
+    .hardening {
+        font-weight: 600;
+        margin: 4px 0;
     }
 
     h3,
