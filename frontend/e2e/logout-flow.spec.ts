@@ -92,6 +92,10 @@ test.describe('Logout flow', () => {
         const token = 'ghp_' + 'a'.repeat(36);
         const gistId = 'gist1234567890';
 
+        await page.route('**/gists?per_page=1', (route) =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: '[]' })
+        );
+
         await page.goto('/cloudsync');
         await waitForHydration(page);
 
