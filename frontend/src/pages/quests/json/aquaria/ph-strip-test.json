@@ -1,14 +1,14 @@
 {
     "id": "aquaria/ph-strip-test",
     "title": "Check aquarium pH",
-    "description": "Use a disposable strip to confirm your tank's pH.",
+    "description": "Grab gloves, dip a strip, and log the pH reading before it drifts.",
     "image": "/assets/quests/aquarium_ph_strip_test.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's make sure your aquarium's pH is in range. Grab a test strip.",
+            "text": "Let's make sure your aquarium's pH is in range. Put on nitrile gloves so you don't contaminate the sample, then grab a strip and keep the color chart nearby.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -24,44 +24,64 @@
                     "type": "goto",
                     "goto": "dip",
                     "requiresItems": [
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        }
+                        { "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 }
                     ],
-                    "text": "Strip ready."
+                    "text": "Strip and gloves ready."
                 }
             ]
         },
         {
             "id": "dip",
-            "text": "Dip it in tank water and compare the color chart.",
+            "text": "Dip the strip for 2 seconds mid-water column, flick off drips, and read the color within 30 seconds while the chart is right beside you.",
             "options": [
                 {
                     "type": "process",
                     "process": "measure-aquarium-ph",
-                    "text": "Measure pH."
+                    "text": "Dip and read the strip.",
+                    "goto": "log",
+                    "requiresItems": [
+                        { "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Reading recorded from the strip.",
+                    "requiresItems": [{ "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Note the pH, date, and time so you can spot trends instead of guessing. If it swings, we can course-correct before the fish notice.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-ph-reading",
+                    "text": "Write it in the logbook.",
+                    "goto": "finish",
+                    "requiresItems": [
+                        { "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9", "count": 1 },
+                        { "id": "b8602362-2035-4f00-9376-f48d8668cf38", "count": 1 }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Looks stable."
+                    "text": "Entry logged and dated.",
+                    "requiresItems": [{ "id": "9c392043-4067-4f49-8038-38eef00e0b24", "count": 1 }]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Check weekly to keep fish happy.",
+            "text": "Great! Check weekly to keep fish happy, and flag any drift toward 6.5 or 8.0 so we can act before it stresses them.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "I'll keep the weekly habit."
                 }
             ]
         }

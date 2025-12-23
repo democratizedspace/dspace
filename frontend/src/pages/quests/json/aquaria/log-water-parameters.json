@@ -1,59 +1,76 @@
 {
     "id": "aquaria/log-water-parameters",
     "title": "Log Water Parameters",
-    "description": "Use a liquid test kit and logbook to track ammonia, nitrite, nitrate and pH. Wear nitrile gloves.",
+    "description": "Run a full liquid test panel, then log ammonia, nitrite, nitrate, and pH so trends stay visible.",
     "image": "/assets/quests/paperwork.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Water tests are done. Keep nitrile gloves on and log today's ammonia, nitrite, nitrate and pH.",
+            "text": "Water tests only help if we write them down. Gloves on, liquid kit ready, and let's capture today's ammonia, nitrite, nitrate, and pH.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "log",
-                    "text": "Open the water test logbook."
-                }
-            ]
-        },
-        {
-            "id": "log",
-            "text": "Rinse test tubes, avoid skin contact, then log the date plus ammonia, nitrite, nitrate and pH.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "log-aquarium-test-results",
-                    "text": "Record the results in the logbook."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "All readings logged.",
+                    "goto": "measure",
+                    "text": "Bench is clear and kit is open.",
                     "requiresItems": [
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
-                            "count": 1
-                        },
-                        {
-                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
-                            "count": 1
-                        },
-                        {
-                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
-                            "count": 1
-                        }
+                        { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 }
                     ]
                 }
             ]
         },
         {
+            "id": "measure",
+            "text": "Rinse the vials in tank water, fill to the line, add the right drops, and wait the full time for each reagent before reading. Keep gloves on so skin oils stay out of the sample.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-liquid-parameters",
+                    "text": "Run the liquid tests.",
+                    "goto": "log",
+                    "requiresItems": [
+                        { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Readings are ready to log.",
+                    "requiresItems": [
+                        { "id": "9748fccc-ec16-4664-982e-c79b1c082e5e", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Write the numbers, date, and time in the logbook. Circle anything over 0 ppm ammonia or nitrite, or nitrate above 40 ppm, so we can act fast.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-test-results",
+                    "text": "Record the results in the logbook.",
+                    "goto": "finish",
+                    "requiresItems": [
+                        { "id": "9748fccc-ec16-4664-982e-c79b1c082e5e", "count": 1 },
+                        { "id": "b8602362-2035-4f00-9376-f48d8668cf38", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Entry logged with today's readings.",
+                    "requiresItems": [{ "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c", "count": 1 }]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great recordkeeping! Regular logs help catch issues early.",
+            "text": "Great recordkeeping! If numbers creep up, you can schedule a water change or adjust feeding before the fish even notice.",
             "options": [
                 {
                     "type": "finish",

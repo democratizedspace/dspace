@@ -1,54 +1,154 @@
 {
     "id": "aquaria/breeding",
     "title": "Breed your guppies",
-    "description": "Raise the next generation of fish among dense plants.",
+    "description": "Thicken surface cover, portion fry food, and raise a brood of guppy juveniles.",
     "image": "/assets/quests/aquaria_guppy_breeding_plants.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Guppies multiply quickly. Dense plants like hornwort and guppy grass keep the fry safe right in the main tank.",
+            "text": "Guppies multiply quickly, but only if the fry have a leafy hideout and tiny meals. We'll bulk up your floating mat, powder some food, and give the babies time to grow.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        },
+                        {
+                            "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Send extra stems to weave in."
+                },
+                {
                     "type": "goto",
-                    "goto": "wait",
-                    "text": "I'll add lots of plants."
+                    "goto": "cover",
+                    "text": "Floating mat and warm tank are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                            "count": 1
+                        },
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "wait",
-            "text": "Once the fry are born, feed them crushed flakes several times a day so they grow quickly.",
+            "id": "cover",
+            "text": "Pack hornwort and guppy grass at the surface so newborns can dodge curious adults. Keep the mat away from the filter intake so they don't get trapped.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "prepare-guppy-fry-cover",
+                    "text": "Thicken the floating cover.",
+                    "goto": "feed",
+                    "requiresItems": [
+                        {
+                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                            "count": 1
+                        },
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        },
+                        {
+                            "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "goto",
-                    "goto": "release",
-                    "text": "They're growing fast."
+                    "goto": "feed",
+                    "text": "Cover is dense and sheltering the fry.",
+                    "requiresItems": [
+                        {
+                            "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "release",
-            "text": "When they're large enough not to be eaten, just enjoy watching them join the community tank.",
+            "id": "feed",
+            "text": "Crush flakes into powder and offer tiny pinches two to three times daily while keeping temperature steady. Siphon leftovers so water stays clean.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "portion-fry-food",
+                    "text": "Powder a week's worth of fry food.",
+                    "requiresItems": [
+                        {
+                            "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "raise-guppy-fry",
+                    "text": "Feed and watch them grow out.",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
+                            "count": 1
+                        },
+                        {
+                            "id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
+                            "count": 1
+                        },
+                        {
+                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Juveniles are ready to rehome.",
+                    "requiresItems": [
+                        {
+                            "id": "18a20f4e-a351-448e-837b-3caca90f71f4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. Dense cover and tiny meals kept the parents from snacking on the babies, and now you have healthy juveniles to trade or keep.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Tiny fish everywhere!"
+                    "text": "Time to share some guppies."
                 }
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
-            "count": 1
-        }
+    "rewards": [],
+    "requiresQuests": [
+        "aquaria/guppy",
+        "aquaria/floating-plants"
     ],
-    "requiresQuests": ["aquaria/guppy"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

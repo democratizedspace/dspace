@@ -1,33 +1,109 @@
 {
     "id": "aquaria/floating-plants",
     "title": "Add Floating Plants",
-    "description": "Introduce guppy grass to help balance nutrients in your tank.",
+    "description": "Rinse guppy grass in dechlorinated water, then float it so it soaks up excess nutrients and shelters fry.",
     "image": "/assets/quests/floating_plants.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your shrimp are thriving. To keep algae in check, let's add some floating plants that soak up excess nutrients.",
+            "text": "Your shrimp are thriving, but nutrient levels creep up fast. Let's rinse some guppy grass and float it to act like a natural nutrient sponge and fry nursery.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prep a bucket of dechlorinated water for rinsing."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Bucket, net, and guppy grass ready.",
+                    "requiresItems": [
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rinse",
+            "text": "Swirl the guppy grass in dechlorinated water, pick off snails or eggs, and toss any brown stems. Keep the rinsed bundle wet until it hits the tank.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-floating-plants",
+                    "text": "Rinse and inspect the plants.",
+                    "goto": "place",
+                    "requiresItems": [
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "place",
-                    "text": "Sounds good."
+                    "text": "Rinsed bundle ready for the tank.",
+                    "requiresItems": [
+                        {
+                            "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "place",
-            "text": "Gently place a handful of guppy grass on the surface. It will multiply quickly and provide shelter for fry.",
+            "text": "Float the rinsed stems under the light, keep them away from the filter intake, and leave a gap so shrimp can reach the surface. Thin them weekly to keep the mat breathable.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "place-floating-plants",
+                    "text": "Float and spread the guppy grass.",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+                            "count": 1
+                        },
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Plants added",
+                    "text": "Mat is floating and clear of the intake.",
                     "requiresItems": [
                         {
-                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
                             "count": 1
                         }
                     ]
@@ -36,20 +112,22 @@
         },
         {
             "id": "finish",
-            "text": "Great! Keep an eye out so it doesn't block the light for other plants.",
+            "text": "Perfect. That mat will soak up nutrients, cast dappled shade, and give future fry a safe ceiling to hide in.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "I'll keep it thinned and happy."
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/shrimp"],
+    "requiresQuests": [
+        "aquaria/shrimp"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

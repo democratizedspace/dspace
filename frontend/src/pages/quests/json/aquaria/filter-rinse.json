@@ -1,31 +1,54 @@
 {
     "id": "aquaria/filter-rinse",
     "title": "Rinse Sponge Filter",
-    "description": "Unplug air pump. Rinse sponge filter in dechlorinated water to restore flow and protect bacteria.",
+    "description": "Stage a bucket of dechlorinated water, rinse the sponge core, and restart gentle flow without crashing the biofilter.",
     "image": "/assets/quests/rinse_sponge_filter_bucket.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The sponge filter is clogging. Unplug the air pump so you can rinse it and keep flow gentle.",
+            "text": "Flow is slowing and the shrimp look annoyed. Set out dechlorinated water, kill power to the air pump, and keep the sponge wet while you work.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Leave out a 5 gal bucket to gas off chlorine first."
+                },
+                {
                     "type": "goto",
-                    "goto": "rinse",
-                    "text": "I'll rinse it now."
+                    "goto": "prep",
+                    "text": "Bucket's ready and the pump is unplugged.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
+                        },
+                        {
+                            "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "rinse",
-            "text": "Squeeze the sponge in a bucket of dechlorinated water until clear. Skip tap water to save bacteria.",
+            "id": "prep",
+            "text": "Lift the sponge out with the airline still attached, dunk it in your dechlorinated bucket, and squeeze gently until the water runs mostly clear. Keep everything submerged so the nitrifiers stay alive.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Filter's clean again!",
+                    "type": "process",
                     "process": "rinse-aquarium-filter",
+                    "text": "Squeeze the sponge only in dechlorinated water.",
+                    "goto": "restart",
                     "requiresItems": [
                         {
                             "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
@@ -34,6 +57,58 @@
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                             "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "restart",
+                    "text": "Media is rinsed and still wet.",
+                    "requiresItems": [
+                        {
+                            "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "restart",
+            "text": "Slide the sponge back, reconnect the airline, crack the valve open, and watch for steady bubbles instead of a sandblaster.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "restart-sponge-filter",
+                    "text": "Prime the air line and restart the flow.",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+                            "count": 1
+                        },
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        },
+                        {
+                            "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Flow is restored without blasting the inhabitants.",
+                    "requiresItems": [
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
                         }
                     ]
                 }
@@ -41,20 +116,22 @@
         },
         {
             "id": "finish",
-            "text": "Nice! Clean media keeps beneficial bacteria thriving.",
+            "text": "Clean sponge, quiet pump, happy bacteria. Rinse weekly or when the bubbles slow, and you avoid a full cycling restart.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to watching fish."
+                    "text": "Set a reminder for the next rinse."
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/sponge-filter"],
+    "requiresQuests": [
+        "aquaria/sponge-filter"
+    ],
     "hardening": {
         "passes": 1,
-        "score": 80,
+        "score": 95,
         "emoji": "🌀",
         "history": [
             {
