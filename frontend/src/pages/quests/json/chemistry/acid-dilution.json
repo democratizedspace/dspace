@@ -4,12 +4,24 @@
     "description": "Slowly stir 37% hydrochloric acid into water in full PPE over a spill tray. Never add water to acid.",
     "hardening": {
         "passes": 3,
-        "score": 90,
+        "score": 95,
         "emoji": "💯",
         "history": [
-            { "task": "codex-quest-hardening-2025-08-19", "date": "2025-08-19", "score": 60 },
-            { "task": "codex-quest-hardening-2025-08-23", "date": "2025-08-23", "score": 80 },
-            { "task": "codex-quest-hardening-2025-08-27", "date": "2025-08-27", "score": 90 }
+            {
+                "task": "codex-quest-hardening-2025-08-19",
+                "date": "2025-08-19",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-23",
+                "date": "2025-08-23",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-27",
+                "date": "2025-08-27",
+                "score": 90
+            }
         ]
     },
     "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
@@ -41,14 +53,38 @@
                     "goto": "finish",
                     "text": "Solution mixed safely.",
                     "requiresItems": [
-                        { "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09", "count": 1 },
-                        { "id": "c46e98b4-0c1a-478b-988c-8c9260dce434", "count": 1 },
-                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "3455faac-8811-4991-b818-cecb98e8fff7", "count": 1 },
-                        { "id": "13167d6a-5617-4931-8a6e-6f463c6b8835", "count": 1 },
-                        { "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a", "count": 1 },
-                        { "id": "97b735d8-0d76-4fe5-908c-781178ff6308", "count": 1 }
+                        {
+                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                            "count": 1
+                        },
+                        {
+                            "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "3455faac-8811-4991-b818-cecb98e8fff7",
+                            "count": 1
+                        },
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+                            "count": 1
+                        },
+                        {
+                            "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                            "count": 1
+                        }
                     ]
                 }
             ]

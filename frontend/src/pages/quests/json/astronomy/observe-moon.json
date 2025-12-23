@@ -70,8 +70,8 @@
     "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 3,
-        "score": 92,
-        "emoji": "\ud83d\udcaf",
+        "score": 95,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-09-01",

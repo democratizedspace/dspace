@@ -52,5 +52,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/change-bandage"]
+    "requiresQuests": ["firstaid/change-bandage"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

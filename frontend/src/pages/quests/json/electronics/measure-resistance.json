@@ -8,8 +8,14 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into V\u03a9mA, then set the meter to resistance (\u03a9) mode at a range above the resistor's expected value.",
-            "options": [{ "type": "goto", "goto": "measure", "text": "Ready." }]
+            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into VΩmA, then set the meter to resistance (Ω) mode at a range above the resistor's expected value.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Ready."
+                }
+            ]
         },
         {
             "id": "measure",
@@ -21,9 +27,18 @@
                     "text": "It reads about what the color bands predicted.",
                     "process": "measure-resistance",
                     "requiresItems": [
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-                        { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -31,15 +46,20 @@
         {
             "id": "finish",
             "text": "Label the resistor's value, turn off the meter, unplug the probes, and store everything.",
-            "options": [{ "type": "finish", "text": "Thanks, Orion!" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
         }
     ],
     "rewards": [],
     "requiresQuests": ["electronics/resistor-color-check"],
     "hardening": {
         "passes": 2,
-        "score": 78,
-        "emoji": "\u2705",
+        "score": 80,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-refine-2025-08-12",

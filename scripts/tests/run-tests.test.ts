@@ -17,11 +17,15 @@ describe('runTests', () => {
     const exec = vi
       .fn()
       .mockReturnValueOnce('Test Files  1 passed\nTests  1 passed')
+      .mockReturnValueOnce('')
       .mockReturnValueOnce('');
     const code = runTests(exec, 'linux');
     expect(code).toBe(0);
+    expect(exec).toHaveBeenNthCalledWith(2, 'npm run hardening:validate', {
+      stdio: 'inherit'
+    });
     expect(exec).toHaveBeenNthCalledWith(
-      2,
+      3,
       'bash ./frontend/scripts/prepare-pr.sh',
       expect.objectContaining({
         stdio: 'inherit',

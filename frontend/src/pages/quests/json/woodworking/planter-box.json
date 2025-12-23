@@ -44,7 +44,12 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [{ "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913", "count": 1 }],
+                    "grantsItems": [
+                        {
+                            "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
+                            "count": 1
+                        }
+                    ],
                     "text": "Gather materials"
                 },
                 {
@@ -152,8 +157,20 @@
         }
     ],
     "rewards": [
-        { "id": "ea830e47-5996-4886-b5ee-74bb2b932988", "count": 1 },
-        { "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e", "count": 1 }
+        {
+            "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+            "count": 1
+        },
+        {
+            "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
+            "count": 1
+        }
     ],
-    "requiresQuests": ["welcome/howtodoquests"]
+    "requiresQuests": ["welcome/howtodoquests"],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

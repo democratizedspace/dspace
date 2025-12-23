@@ -73,6 +73,18 @@ items or processes. Avoid gratuitous churn outside the quests you touch.
 - Respect existing quest IDs and only add new IDs for genuinely new items or
   processes.
 
+## Hardening breadcrumbs (quests + processes)
+- Every quest and process must include a `hardening` block mirroring the item
+  schema: `{ "passes": number, "score": number, "emoji": string, "history":
+  [{ "task": string, "date": "YYYY-MM-DD", "score": number }] }`.
+- Enforce the shared rules: `passes === history.length`, `score` is an integer
+  between 0–100, and `emoji` follows the item thresholds (0 → 🛠️, ≥1 pass &
+  score ≥ 60 → 🌀, ≥2 passes & score ≥ 75 → ✅, ≥3 passes & score ≥ 90 → 💯).
+- When editing quest or process text, run `npm run hardening:fix` to normalize
+  scores and `npm run hardening:validate` before committing. These commands
+  reuse the shared evaluator so `hardening.score` stays at or above the
+  computed quality score.
+
 ## Images (NO BINARY ASSETS)
 - Do **not** add `.jpg`, `.png`, `.webp`, etc. Add **only** image manifest
   JSON files matching existing examples under `frontend/public/assets/` or

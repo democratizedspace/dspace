@@ -4,7 +4,7 @@
     "description": "Track meteors during a peak shower using a basic telescope, planisphere, red flashlight and mission logbook.",
     "hardening": {
         "passes": 1,
-        "score": 60,
+        "score": 95,
         "emoji": "🌀",
         "history": [
             {
