@@ -1,0 +1,150 @@
+export const BACKUP_DESCRIPTION = 'DSPACE Cloud Sync backup';
+export const BACKUP_FILE_PREFIX = 'dspace-save';
+
+const DEFAULT_FETCH = (typeof fetch !== 'undefined' && fetch) || undefined;
+
+const TOKEN_PATTERNS = [/^gh[pousr]_[A-Za-z0-9_]{20,}$/i, /^github_pat_[A-Za-z0-9_]{22,}$/i];
+
+export const isLikelyGitHubToken = (token?: string) => {
+    if (typeof token !== 'string') return false;
+    const trimmed = token.trim();
+    if (!trimmed) return false;
+    return TOKEN_PATTERNS.some((pattern) => pattern.test(trimmed)) || trimmed.length >= 8;
+};
+
+export function formatBackupFilename(date = new Date()) {
+    const timestamp = date.toISOString().replace(/:/g, '-');
+    return `${BACKUP_FILE_PREFIX}-${timestamp}.txt`;
+}
+
+function removeSensitiveFields(subject: unknown): void {
+    if (!subject || typeof subject !== 'object') return;
+    if (Array.isArray(subject)) {
+        subject.forEach((item) => removeSensitiveFields(item));
+        return;
+    }
+
+    for (const key of Object.keys(subject)) {
+        const lowered = key.toLowerCase();
+        if (lowered.includes('token') || lowered.includes('session') || lowered === 'auth') {
+            delete (subject as Record<string, unknown>)[key];
+            continue;
+        }
+        removeSensitiveFields((subject as Record<string, unknown>)[key]);
+    }
+}
+
+export function sanitizeSaveForBackup(save: unknown) {
+    const source = save ?? {};
+    const clone =
+        typeof structuredClone === 'function'
+            ? structuredClone(source)
+            : JSON.parse(JSON.stringify(source));
+    removeSensitiveFields(clone);
+    return clone;
+}
+
+export async function validateToken(token: string, fetchImpl = DEFAULT_FETCH) {
+    if (!fetchImpl) throw new Error('Fetch implementation unavailable');
+    if (!isLikelyGitHubToken(token)) {
+        throw new Error('Token is missing or appears invalid');
+    }
+
+    const response = await fetchImpl('https://api.github.com/gists?per_page=1', {
+        headers: {
+            Authorization: `token ${token.trim()}`,
+            Accept: 'application/vnd.github+json',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Token validation failed');
+    }
+
+    return true;
+}
+
+export async function listBackups(token: string, fetchImpl = DEFAULT_FETCH) {
+    if (!fetchImpl) throw new Error('Fetch implementation unavailable');
+
+    const response = await fetchImpl('https://api.github.com/gists?per_page=30', {
+        headers: {
+            Authorization: `token ${token.trim()}`,
+            Accept: 'application/vnd.github+json',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to load gists');
+    }
+
+    const payload = await response.json();
+    if (!Array.isArray(payload)) return [];
+
+    return payload
+        .filter((gist) => {
+            const hasDescription = gist?.description === BACKUP_DESCRIPTION;
+            const fileNames = Object.keys(gist?.files || {});
+            const hasBackupFile = fileNames.some((name) => name.startsWith(BACKUP_FILE_PREFIX));
+            return hasDescription || hasBackupFile;
+        })
+        .map((gist) => {
+            const files = gist?.files || {};
+            const filename = Object.keys(files).find((name) => name.startsWith(BACKUP_FILE_PREFIX));
+            return {
+                id: gist?.id,
+                createdAt: gist?.created_at,
+                htmlUrl: gist?.html_url,
+                filename,
+            };
+        })
+        .filter((item) => Boolean(item.id))
+        .sort(
+            (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+        );
+}
+
+export async function createBackupGist({
+    token,
+    content,
+    description = BACKUP_DESCRIPTION,
+    date = new Date(),
+    fetchImpl = DEFAULT_FETCH,
+}: {
+    token: string;
+    content: string;
+    description?: string;
+    date?: Date;
+    fetchImpl?: typeof fetch;
+}) {
+    if (!fetchImpl) throw new Error('Fetch implementation unavailable');
+
+    const filename = formatBackupFilename(date);
+    const response = await fetchImpl('https://api.github.com/gists', {
+        method: 'POST',
+        headers: {
+            Authorization: `token ${token.trim()}`,
+            'Content-Type': 'application/json',
+            Accept: 'application/vnd.github+json',
+        },
+        body: JSON.stringify({
+            description,
+            public: false,
+            files: {
+                [filename]: { content },
+            },
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to create backup gist');
+    }
+
+    const body = await response.json();
+    return {
+        id: body?.id,
+        createdAt: body?.created_at,
+        htmlUrl: body?.html_url,
+        filename,
+    };
+}
