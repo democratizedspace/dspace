@@ -1,5 +1,5 @@
 {
-    "filename": "/assets/quests/woodworking_birdhouse_build.jpg",
+    "filename": "/assets/wooden_birdhouse.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "Glued birdhouse shell",
     "item_id": "c97f9b74-4d4f-4e83-993c-5df76e9d026e",
