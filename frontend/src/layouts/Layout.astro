@@ -9,7 +9,10 @@ export interface Props {
 const { title } = Astro.props as Props;
 
 const sitewideTitle = `DSPACE (democratized.space)`;
-const offlineWorkerScript = Astro.resolve('../scripts/offlineWorkerRegistrationClient.js');
+const offlineWorkerScript = new URL(
+        '../scripts/offlineWorkerRegistrationClient.js',
+        import.meta.url
+).pathname;
 ---
 
 <!DOCTYPE html>
