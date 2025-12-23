@@ -1,143 +1,87 @@
-# Quest polish prompt for turning bare quests into shippable adventures
-
-Use this prompt when you need to identify thin or placeholder quests in v3 and
-rebuild them into coherent, realistic stories with multi-step item flows.
-
-## Copy-ready prompt
 ```markdown
-# DSPACE quest quality lift (bare → shippable)
+# DSPACE quest polish (bare → shippable)
 
-You are Codex working in the democratizedspace/dspace repository on branch v3.
-Follow every instruction and stop after delivering the requested artifacts.
+You are Codex working in the democratizedspace/dspace repository. Identify thin quests and
+upgrade them into grounded, multi-step stories that meet the current quest schema, hardening,
+and asset practices.
 
-## Gold-standard references (v2.1 and earlier)
-Study these older quests before editing. They show tight gating, grounded
-processes, and playful but clear dialogue. Paths use commit
-`d956e807d49114da2d0ff28aacef91341813bf82` on the `main` branch (v2.1
-release). To open any reference, run `git show
-d956e807d49114da2d0ff28aacef91341813bf82:<path>`; reuse `d956e807` for
-abbreviated mentions below:
+## Gold-standard references (v2.1)
+Study these quests at commit `d956e807d49114da2d0ff28aacef91341813bf82` (use `git show
+d956e807:<path>`) to mirror their pacing, gating, and item/process realism:
+- `frontend/src/pages/quests/json/hydroponics/basil.json` — staged setup → water prep → seeding
+  → transplant → lighting, with intermediate consumables and playful coaching.
+- `frontend/src/pages/quests/json/rocketry/firstlaunch.json` — modular printing, assembly,
+  launch gating, and rewards that flow from created components instead of handouts.
+- `frontend/src/pages/quests/json/aquaria/goldfish.json` — clear supply list, setup before fish,
+  and repeatable care steps that reinforce timing and safety.
+- `frontend/src/pages/quests/json/energy/solar-1kWh.json` — realistic teardown/rebuild path,
+  charging gated through a process, and modest rewards aligned to the work.
+- `frontend/src/pages/quests/json/ubi/basicincome.json` — branching exposition plus a timed earn
+  process that balances lore with a simple mechanic.
 
-- `frontend/src/pages/quests/json/hydroponics/basil.json` — deep multi-node
-  sequence that paces setup → water prep → seeding → transplant → lighting, with
-  processes that consume and create intermediate items (rockwool, seedlings,
-  nutrient mix) and humorous coaching that reinforces gating.
-- `frontend/src/pages/quests/json/rocketry/firstlaunch.json` — modular build and
-  launch path that forces you to print four components, assemble with adhesives
-  and cords, then gate launch on having pad, igniter, and controller before
-  rewarding the flown rocket.
-- `frontend/src/pages/quests/json/aquaria/goldfish.json` — approachable tutorial
-  with clear supply list, separate setup and feeding processes, and gating that
-  requires a prepared aquarium before adding fish and completing.
-- `frontend/src/pages/quests/json/ubi/basicincome.json` — branching exposition
-  that answers “why” questions about UBI, keeps optional lore loops, then gates
-  payout behind a timed process, illustrating how to mix narrative with a simple
-  mechanic.
-- `frontend/src/pages/quests/json/energy/solar-1kWh.json` — pragmatic upgrade
-  quest where disassembly and reassembly steps match the storage bump, charges
-  through a process instead of auto-granting, and keeps rewards modest.
+## Mission and scope
+- Work in `frontend/src/pages/quests/json`. Keep quest IDs stable unless you introduce truly new
+  items or processes.
+- Limit each PR to 5–10 upgraded quests. Avoid touching unrelated files or renaming existing
+  assets without cause.
 
-## Mission
-Find “bare” quests in `frontend/src/pages/quests/json` and upgrade them so they
-play like the v2.1 exemplars. Keep IDs stable unless you add new intermediate
-items or processes. Avoid gratuitous churn outside the quests you touch.
-
-## References
-- Review the v2.1 gold-standard quests at commit `d956e807`:
-  - hydroponics/basil — staged setup, consumable use, and intermediate outputs.
-  - rocketry/firstlaunch — modular prints → assembly → gated launch.
-  - aquaria/goldfish — supplies list, setup → fish → feeding.
-  - ubi/basicincome — branching lore plus a timed earn process.
-  - energy/solar-1kWh — realistic teardown/rebuild → charge process.
-- Mirror their pacing, gating, item semantics, and voice (playful but clear).
-
-## Candidate discovery (pick 5–10 quests max per PR)
-- Prioritize quests with very short dialogue chains, no mid-quest gating, or a
-  single `finish` branch.
-- Flag processes that don’t consume inputs or never create the final item.
-- Look for rewards given without doing work (grantsItems straight to finish).
-- Catch gating mismatches: `requiresItems` that don’t match earlier processes or
-  missing intermediate items that should be produced.
-- Identify placeholder media: missing quest images or items that lack image
-  manifests alongside similar items.
+## Detecting bare or drifting quests
+- Single-node or single-`finish` paths with no mid-quest gating or missing `requiresItems`.
+- Rewards granted via `grantsItems` without a preceding process that **creates** the final item.
+- `requiresItems` or `requiresQuests` that do not line up with earlier nodes, produced items, or
+  real progression.
+- Missing or stale `hardening` blocks (score/passes mismatch, no history entry, emoji off).
+- Quests referencing items/processes that lack registry entries or use placeholder copy.
+- Image references that point to absent manifests or to binary files added in Git history.
 
 ## Upgrade recipe
-- Add sequential processes that require tools/materials, **consume**
-  consumables, and **create** intermediate items where useful (parts → assembly
-  → final product). The final process should **create** the finished item instead
-  of granting it outright.
-- Gate dialogue using `requiresItems` so players must finish prior steps before
-  advancing or finishing. Keep branching coherent and avoid dead ends.
-- Reconcile items: ensure `requiresItems` match what earlier processes create;
-  add intermediate items when needed instead of overloading existing ones.
-- Respect existing quest IDs and only add new IDs for genuinely new items or
-  processes.
+- Add stepwise processes that consume materials, use tools, and create intermediate outputs so the
+  final process **creates** the finished item instead of granting it outright.
+- Gate dialogue with `requiresItems`/`requiresQuests` so players must finish prior steps; keep
+  branches coherent and avoid dead ends.
+- Reconcile item flow: align `createsItems` and `requiresItems`, add intermediate items when
+  needed, and keep IDs consistent with the item registry.
+- Keep tone clear, encouraging, and concrete; ensure each node advances the build or knowledge in
+  believable increments.
 
-## Hardening breadcrumbs (quests + processes)
-- Every quest and process must include a `hardening` block mirroring the item
-  schema: `{ "passes": number, "score": number, "emoji": string, "history":
-  [{ "task": string, "date": "YYYY-MM-DD", "score": number }] }`.
-- Enforce the shared rules: `passes === history.length`, `score` is an integer
-  between 0–100, and `emoji` follows the item thresholds (0 → 🛠️, ≥1 pass &
-  score ≥ 60 → 🌀, ≥2 passes & score ≥ 75 → ✅, ≥3 passes & score ≥ 90 → 💯).
-- When editing quest or process text, run `npm run hardening:fix` to normalize
-  scores and `npm run hardening:validate` before committing. These commands
-  reuse the shared evaluator so `hardening.score` stays at or above the
-  computed quality score.
+## Hardening requirements
+- Every quest and nested process must include a `hardening` block matching the shared item schema:
+  `{ "passes": number, "score": number, "emoji": string, "history": [{ "task": string, "date":
+  "YYYY-MM-DD", "score": number }] }`.
+- Enforce the rules: `passes === history.length`; `score` is an integer 0–100; emoji thresholds:
+  0 → 🛠️, ≥1 pass & score ≥ 60 → 🌀, ≥2 passes & score ≥ 75 → ✅, ≥3 passes & score ≥ 90 → 💯.
+- After edits run `npm run hardening:fix` then `npm run hardening:validate` so the evaluator and
+  metadata stay in sync.
 
-## Images (NO BINARY ASSETS)
-- Do **not** add `.jpg`, `.png`, `.webp`, etc. Add **only** image manifest
-  JSON files matching existing examples under `frontend/public/assets/` or
-  `frontend/public/assets/quests/`. The human maintainer will generate the
-  actual images locally with Nano Banana Pro and commit them later.
-- Find an existing manifest JSON and mirror its schema exactly. Typical shape:
+## Images (manifests only, no binaries)
+- Do **not** add `.jpg/.png/.webp` files. Add only manifest JSON under `frontend/public/assets/`
+  or `frontend/public/assets/quests/`.
+- Manifest shape (extend only with fields already used in repo such as `steps` or `cfg`):
   {
-    "filename": "/assets/quests/example.jpg",
-    "entity_type": "item",
-    "entity": "frontend/src/pages/inventory/json/items/<category>.json",
-    "item_name": "Example item name",
-    "item_id": "<uuid>",
-    "prompt": "<detailed Nano Banana Pro prompt>",
+    "filename": "/assets/quests/<slug>.jpg",
+    "entity_type": "quest",            // or "item" when targeting the item registry
+    "entity": "frontend/src/pages/quests/json/<tree>/<id>.json",
+    "item_name": "<quest or item name>",
+    "item_id": "<quest id or item uuid>",
+    "prompt": "<detailed Nano Banana Pro or Z-Image Turbo prompt>",
     "image_model": "Nano Banana Pro",
-    "resolution": "512x512"
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
   }
-- Point manifests at the correct item registry entry and reuse existing
-  filenames if the asset already exists.
+- Point manifests at the authoritative registry entry, reuse filenames if the asset exists, and
+  leave image generation to the maintainer.
 
-## Generated vs source-of-truth files
-- Locate `frontend/src/generated/*` counterparts. Prefer regenerating via the
-  documented scripts (search `package.json`/`README.md`/prompt docs) instead of
-  hand-editing generated JSON.
-- Run JSON parse checks after edits; keep formatting consistent with Prettier
-  configs already in the repo.
-
-## Validation & hygiene
-- Inspect `.github/workflows/` and `package.json` to run the same checks CI
-  runs (lint/type-check/build/tests) relevant to quest edits. If checks are
-  heavy, at least run JSON validation scripts referenced in README or existing
-  prompt docs.
-- If `scripts/scan-secrets.py` exists, scan staged changes for secrets with
-  `git diff --cached | ./scripts/scan-secrets.py`.
+## Generated files and required checks
+- Prefer regeneration over manual edits: `npm run new-quests:update` (refreshes `/docs/new-quests.md`
+  and its frontend copy) and `npm run quest:count` when counts change.
+- Run `npm run lint`, `npm run type-check`, `npm run build`, and
+  `npm run test:ci -- questCanonical questQuality`. Fix any failures.
+- Normalize and validate hardening (`npm run hardening:fix` and `npm run hardening:validate`).
+- Scan staged changes before committing: `git diff --cached | ./scripts/scan-secrets.py`.
 
 ## Output for your PR
-- List upgraded quests and summarize new/changed processes, items, and manifests
-  (no binary images added).
-- Note commands run and their results. Keep scope limited to 5–10 quests with
-  coherent item flows and realistic processes.
-```
-
-## Upgrade prompt
-```markdown
-# Upgrade the quest polish prompt
-
-You are Codex reviewing `docs/prompts/codex/quests-polish.md`. Tighten the copy-
-ready prompt so it stays aligned with current quest quality bar and image
-manifest practices.
-
-- Keep the v2.1 reference list fresh; swap in better exemplars as they emerge.
-- Refine bare-quest heuristics and the upgrade recipe as schemas evolve.
-- Ensure the manifest JSON guidance matches the live schema and paths.
-- Verify instructions about generated files and required checks reflect current
-  scripts.
-- Output a single fenced code block replacing the existing prompt content.
+- Summarize upgraded quests, newly added or adjusted items/processes, and any manifests (no binary
+  images).
+- List commands run and their results. Keep the scope tight and progression believable.
 ```
